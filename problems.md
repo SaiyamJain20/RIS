@@ -1,0 +1,14 @@
+| Problem | Why it matters | Suggested fix |
+|---|---|---|
+| **1. “First formal definition” overclaimed** | Mediated/server-aided ABE already formalizes mandatory online participation. | Claim **first HMBAC-specific authorization → transform security definition**, not first mediated-decryption definition. |
+| **2. Threshold gatekeeper not broadly novel** | Threshold mediated crypto and threshold proxy transformation already exist. | Claim novelty specifically in **thresholding Janus’s enforcement/system-attribute secret**. |
+| **3. Verifiable outsourced decryption not novel** | Existing ABE work already provides verifiable outsourced transforms. | Treat verifiability as a supporting feature, not a headline novelty claim. |
+| **4. Missing close recent literature** | 2024–2026 decentralized/server-aided/blockchain ABE work weakens current claims. | Add these papers and differentiate Cerberus by its **authorization-bound enforcement transform**. |
+| **5. BMHADS comparison inaccurate** | Its DKG/BLS machinery is mainly for collaborative authentication, not simply a “threshold issuance key.” | Rewrite the comparison; emphasize that Cerberus distributes the **mandatory enforcement secret**. |
+| **6. `Sign_proxy` creates another trusted key** | A single proxy signing key reintroduces a central compromise point. | Use **Fabric endorsement signatures or threshold signatures** as the capability proof. |
+| **7. Capability replay problem** | One valid capability could potentially authorize multiple transforms. | Bind it to `H(ciphertext)`, `GID`, tx ID, nonce, epoch, expiry and make it **single-use**. |
+| **8. S3 verification underspecified** | Two secrets `(α_i, y_i)` are involved; “use Chaum–Pedersen” is not a full construction. | Define the exact public commitments and proof relation for each transform share. |
+| **9. “160 → 256 bit” migration oversimplified** | Modern pairings such as BLS12-381 are Type-3; Janus assumes older symmetric pairings. | Properly reinstantiate LW11 for modern pairings, or move curve migration to future work. |
+| **10. ROR/AKE proof is mostly irrelevant** | The contribution is authorization enforcement, not a new key-exchange protocol. | Prove **successful transform ⇒ valid authorization** instead. |
+| **11. Scope too large** | DKG + PSS + NIZKs + ProVerif + ROR + signatures + curve migration + implementation is too much for 8 weeks. | Drop **PSS, aggregate signatures, ROR proof**, and possibly curve migration. |
+| **12. Core research story diluted** | Too many independent extensions obscure the main contribution. | Center the project on: **blockchain authorization must be cryptographically necessary for decryption, even with < t malicious stakeholders.** |

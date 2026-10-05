@@ -1,0 +1,5224 @@
+arXiv:2506.05290v4 [cs.CR] 13 Sep 2026
+
+Big Bird: Resilient Privacy Budgeting Across Untrusted
+Web Domains
+Pierre Tholoniat∗
+
+Alison Caulfield∗
+
+Giorgio Cavicchioli
+
+Columbia University
+
+Columbia University
+
+Columbia University
+
+Mark Chen
+
+Benjamin Case
+
+Asaf Cidon
+
+Columbia University
+
+Meta Platforms, Inc.
+
+Columbia University
+
+Roxana Geambasu∗
+
+Mathias Lécuyer
+
+Martin Thomson
+
+Columbia University
+
+University of British Columbia
+
+Mozilla
+
+Abstract
+
+CCS Concepts: • Security and privacy;
+
+The W3C Attribution API is an emerging standard for
+privacy-preserving advertising measurement. Its current
+privacy architecture enforces individual differential privacy
+(IDP) independently for each domain (e.g., an advertiser)
+issuing queries. We show that this guarantee is unsound
+under realistic system behavior: it fails under cross-querier
+data adaptivity and can also fail when shared limits are
+enforced across queriers. The issue is not the on-device
+accounting model itself – device-epoch IDP – but treating
+each querying domain in isolation. We propose Big Bird, a
+privacy-budget manager that makes global device-epoch
+IDP – enforced jointly across all domains – both sound and
+deployable for Attribution. Big Bird addresses the main obstacle to global enforcement in open multi-querier systems:
+denial-of-service depletion of a shared global budget by
+Sybil web domains. Its key insight is that benign Attribution
+workloads have a stock-and-flow structure: impressions
+create potential privacy loss, conversions realize it, and
+meaningful budget consumption should be tied to genuine
+user actions across distinct web domains. Big Bird enforces
+this structure with privacy-loss-based quotas on impression
+and conversion sites and a per-user-action cap on how many
+quotas can be activated, ensuring that adversarial impact
+scales with genuine user interactions rather than with the
+number of Sybil domains. We implement Big Bird in Rust,
+integrate it into Firefox’s Attribution prototype, and evaluate
+it theoretically and empirically on real ad-tech data. We
+show that Big Bird provides rigorous global device-epoch
+IDP, formal resilience to depletion attacks, and utility for
+benign queriers under attack.
+
+Keywords: Differential Privacy, Web, Measurement
+
+∗ Contributions made at Columbia University. P.T. is now at Google. A.C.
+
+and R.G. were also affiliated with Microsoft and Meta, respectively.
+
+This work is licensed under a Creative Commons Attribution 4.0 International License.
+SOSP ’26, Prague, Czech Republic
+© 2026 Copyright held by the owner/author(s).
+ACM ISBN 979-8-4007-2585-2/26/09
+https://doi.org/10.1145/3830418.3843897
+
+ACM Reference Format:
+Pierre Tholoniat, Alison Caulfield, Giorgio Cavicchioli, Mark Chen,
+Benjamin Case, Asaf Cidon, Roxana Geambasu, Mathias Lécuyer,
+and Martin Thomson. 2026. Big Bird: Resilient Privacy Budgeting Across Untrusted Web Domains. In Symposium on Operating Systems Principles (SOSP ’26), September 29–October 2, 2026,
+Prague, Czech Republic. ACM, New York, NY, USA, 35 pages. https:
+//doi.org/10.1145/3830418.3843897
+
+1
+
+Introduction
+
+An important new standard is taking shape at the W3C: the
+Attribution API, designed to enable privacy-preserving advertising measurement at web scale [33, 43]. Advertising
+measurement is a core economic function of the web, yet
+today it relies heavily on cross-site tracking mechanisms
+such as third-party cookies and fingerprinting, which undermine user privacy and have proven difficult to regulate or
+replace. Attribution aims to provide a principled alternative:
+a browser-mediated interface for cross-site measurement
+that replaces raw data collection with structured, differentially private aggregation.
+At a high level, Attribution enables tasks such as conversion attribution measurement – linking ads viewed on
+content sites to purchases on seller sites – while ensuring
+that only noisy aggregate statistics are released. Browsers
+mediate all raw-data flows, store user activity locally, and release encrypted reports that are aggregated with differential
+privacy (DP), eliminating the need for cross-site tracking or
+centralized user-level data collection.
+A key feature of Attribution is device-side privacy accounting based on individual differential privacy (IDP), which we
+developed for Attribution in prior work, Cookie Monster [43].
+Each browser enforces a per-epoch privacy budget for each
+querier (e.g., an advertiser), deducting privacy loss before
+releasing reports. This design offers strong utility by charging privacy loss only when a user meaningfully contributes
+to a query, and it has been adopted as the foundation of the
+emerging standard – including its per-querier enforcement
+scope. The standard is being developed with participation
+
+from all major browsers; as of August 2026 it is in Wide-Area
+Review, en route to Candidate Recommendation.
+Given its role as a web standard – not merely an implementation, and likely to be deployed across billions of devices
+– scrutinizing Attribution’s privacy guarantees is essential
+and urgent. We therefore ask: are its guarantees sound, and
+can they be enforced robustly in practice?
+Contribution 1: We show that Attribution’s central privacy
+guarantee – device-epoch IDP enforced per querier – is fundamentally unsound under realistic system behavior. The
+issue is not IDP or the device-epoch unit, but per-querier
+enforcement. In multi-querier systems, privacy guarantees
+must account for interactions across queriers. We identify
+two failure modes: (1) cross-querier data adaptivity in streaming settings causes privacy loss to exceed per-querier bounds,
+even without collusion; and (2) introducing shared limits
+across queriers, a common defense against collusion, also
+violates per-querier guarantees. We prove these results in a
+general DP system model, showing that the problem is not
+specific to Attribution but reflects a fundamental mismatch
+between per-querier enforcement and deployment realities.
+Focusing on Attribution, we therefore advocate global
+device-epoch IDP – enforced across all queriers – as the
+sound privacy foundation. However, global enforcement introduces a key systems challenge. In open environments
+where any domain can invoke the API, a shared global privacy budget becomes vulnerable to denial-of-service depletion: adversarial domains can exhaust users’ budgets, preventing benign measurement.
+Contribution 2: We present Big Bird, a global privacybudget manager for Attribution that provides both rigorous
+global IDP enforcement and resilience to depletion attacks by
+untrusted web domains. Big Bird is based on a key structural
+insight: legitimate Attribution workloads exhibit a stockand-flow pattern of privacy consumption, where impressions
+create potential privacy loss (stock) and conversions realize
+it (flow), tied to genuine user actions across sites. Attacks
+violate this structure by generating stock and flow without
+corresponding user activity.
+Big Bird restores this structure using coordinated, IDPaligned quotas on impression sites, conversion sites, and
+per-user-action domain participation. These constraints ensure that privacy-budget consumption – whether benign or
+adversarial – scales with genuine user interactions rather
+than with the number of attacker-controlled (Sybil) domains.
+We implement Big Bird in Rust as a generic IDP budget
+management library, pdslib, integrate it into Firefox’s Attribution prototype, analyze it theoretically, and evaluate
+it empirically on real ad-tech data. Our results show that
+Big Bird enforces rigorous global device-epoch IDP, achieves
+formal resilience to depletion attacks, and preserves utility
+for benign workloads under attack.
+
+impression
+sites
+
+conversion
+sites
+
+news.ex blog.ex
+
+shoes.ex
+$60
+
+②
+
+①
+
+intermediary
+sites
+ad-tech1.
+adtech1.
+ex
+ex
+
+⑨ aggregate results
+
+⑤
+
+⑥ encrypted reports
+
+③
+
+saveImpression()
+measureConversion()
+saveImpression()
+
+aggregation
+service
+
+batch
+
+⑦
+
+MPC / TEE
+
++
+
+⑧ DP
+
+encrypted report
+
+user’s browser
+Attribution
+
+④
+
+Report Generation Algorithm
+
+another
+user’s
+browser
+
+(Alg. 1 of Cookie Monster paper)
+(4.1) Retrieve matching impressions per epoch,
+excluding ones from the current user action.
+(4.2) Compute epoch-level IDP loss. Check
+and deduct:
+● Per-querier, per-epoch budgets
+● Global, per-epoch budgets
+Suppress epoch contribution if out of budget.
+(4.3) Generate histogram attributing conversion
+value to impressions across all epochs.
+
+Attribution
+
+Attribution histogram returned
+encrypted to adtech1.ex:
+
+Impression Store
+
+{ impression_1: $30,
+impression_2: $30,
+… other imp.: $0 }
+
+Fig. 1. Attribution API architecture.
+
+Both contributions are now part of the Attribution draft.1
+Following the recommendation in §3.4, the specification
+added a section recording our results as limitations of perquerier semantics and discussing their implications [35].
+The draft also adopted the Big Bird algorithm from §4 (Alg.
+2) as its budget-management mechanism [34]. The latter
+resolved an open issue [19]—DoS depletion of the global
+safety limits—that the editors had flagged as a blocker to
+the standard’s reaching the Wide-Area Review stage, which
+it has since reached. We also release our source code as a
+reference implementation for the standard as well as for
+broader use cases: pdslib at https://github.com/columbia/
+pdslib, Firefox integration at https://github.com/columbia/
+pdslib-firefox, and experimental infrastructure at https://
+github.com/columbia/bigbird. Indeed, while we focus on
+Attribution, our results have broader implications for DP
+systems in untrusted querier settings: (1) multi-granularity
+enforcement is fundamentally unsound, and (2) global budget management requires depletion defenses aligned with
+the structure of benign workloads. We view Big Bird as one
+step toward this broader design space.
+
+2
+
+Background
+
+2.1
+
+Attribution API Architecture
+
+W3C Attribution is a privacy-preserving, browser-based
+interface for cross-site conversion measurement. Figure 1
+shows the workflow, involving four principals, where .ex
+denotes fictional example domains: (1) impression sites (e.g.,
+news.ex, blog.ex) register shown ads via saveImpression();
+(2) conversion sites (e.g., shoes.ex) call measureConversion()
+to request encrypted reports of which ads a user saw; (3)
+intermediaries (e.g., adtech.ex) receive encrypted reports; and
+(4) aggregation services (e.g., divviup.org) aggregate reports
+1 B.C. and M.T. are specification editors [33]. All changes described here
+were proposed, discussed, and adopted through the W3C public process.
+
+and add DP noise using trusted MPC or TEE.
+The browser mediates all information flows: impressions
+are stored locally, conversions trigger encrypted reports, and
+aggregators release only DP-protected statistics. A typical
+sequence is: 1 – 2 impression sites record ads; 3 a conversion site calls measureConversion(); 4 the browser fetches
+relevant impressions, checks local privacy budgets, and 5
+generates encrypted reports; 6 – 9 reports are batched, aggregated, and released with DP noise via an aggregation
+service.
+Critically, privacy enforcement happens on-device. Before
+releasing a report, the browser deducts the corresponding privacy loss from a local privacy budget store, returning null reports when budget is exhausted (4.2). This enforcement uses
+an algorithm presented in the Cookie Monster paper [43].
+2.2
+
+Cookie Monster Accounting
+
+Our prior work, Cookie Monster [43], proposed using individual differential privacy (IDP) [13, 14, 22] for efficient, ondevice privacy accounting in Attribution, and the accounting
+it introduced is the one the standard adopted. We summarize
+it here because both of this paper’s contributions build on it:
+§3 revisits the scope of its guarantee, and §4 builds a budget
+manager on top of its accounting.
+Under IDP, each browser maintains its own privacy budgets and deducts privacy loss based on the user’s actual
+data contribution (the individual sensitivity), rather than a
+population-wide worst-case bound (the sensitivity) as in traditional DP. This distinction enables a crucial optimization
+for Attribution. Advertising signals are sparse: many users
+see ads but never convert; many conversions have no matching impression; and users purchase different products and
+therefore participate in different queries. Cookie Monster’s
+accounting exploits this sparsity. Each device partitions its
+data into non-overlapping epochs (e.g., one week), and when
+a conversion occurs, the browser charges privacy loss only
+for epochs containing at least one impression relevant to that
+conversion. If an epoch contains no such impression, the conversion incurs zero privacy loss for that device-epoch. When
+a charge is applied, it is bounded by (value / maxValue) × 𝜖,
+using parameters from the measureConversion() call.
+This contrasts with traditional DP, where privacy loss
+is charged for every query based on population-level sensitivity, even if a device contributed no relevant data. For
+Attribution, avoiding charges in irrelevant epochs is essential for utility: it reduces privacy loss for typical users and
+allows many measurements before budgets are exhausted.
+2.3
+
+Queriers and Privacy Guarantees
+
+Attribution performs privacy accounting with respect to a
+querier – the entity on whose behalf aggregation occurs. In
+today’s API, the querier is the advertiser measuring its own
+conversions. A planned extension will add intermediaries
+as queriers for cross-advertiser queries (e.g., for training
+
+ad-placement models). Each browser therefore maintains
+per-epoch budgets per querier. We showed in Cookie Monster
+that, when queriers are modeled in isolation, such per-querier
+budgets satisfy device-epoch-level IDP [43].
+The Attribution specification acknowledges a well-known
+limitation: if queriers collude, their privacy losses add. To
+mitigate this, the API introduces global safety limits – perepoch budgets spanning all queriers. In the current design,
+per-querier budgets remain the primary enforcement mechanism, with global limits viewed as defense-in-depth.
+
+3
+
+Contribution 1: Per-Querier DP Analysis
+
+Attribution’s focus on per-querier enforcement, with global
+limits as defense-in-depth, is not unique. Several DP systems
+have similarly proposed per-querier or per-analyst enforcement [15, 16, 24, 43, 44] to align guarantees with organizational boundaries. Such guarantees are intuitively appealing,
+especially when queriers can reasonably be assumed to act
+independently and not collude (e.g., competing organizations
+or scientists under IRB restrictions). Some of these systems
+also, like Attribution, enforce DP at multiple granularities
+for defense-in-depth [15, 24, 44].
+Our analysis of per-querier guarantees – developed initially for Attribution but generalized here to broader DP
+systems – shows that their limitations extend beyond collusion. Any DP analysis has three components: (1) a formal privacy property (definition, privacy unit, enforcement
+scope), (2) a model of system behavior specifying how data
+is generated and queried, and (3) a proof that the modeled
+system satisfies the property. If the behavioral model omits
+deployment-relevant behaviors that affect data generation
+or querying, the proof may still be correct relative to the
+model, while the stated privacy property fails to capture the
+system’s actual semantics.
+We identify two recurring modeling gaps in analyses of
+per-querier DP. First, existing models typically treat each
+querier in isolation, neglecting cross-querier influences on
+data generation that naturally arise in streaming systems.
+Second, when per-querier budgets and shared limits coexist,
+prior work has generally modeled them separately, overlooking how their joint enforcement shapes system behavior.
+When these omitted behaviors are modeled, per-querier
+guarantees become unsound: even without collusion, a single querier’s view can reveal more about the dataset than
+the per-querier budget permits. This does not render perquerier budgets useless – they remain valuable engineering
+constraints – but it does mean their formal guarantees rest
+on stronger assumptions than previously recognized. More
+broadly, these results reinforce a key takeaway: rigorous
+privacy analysis relies as much on faithful system modeling
+as on the mathematics of the DP proof itself.
+
+3.1
+
+Alg. 1 Formal model of a generic multi-querier, pure-DP system
+
+Multi-Querier System Model
+
+We define a generic model for a multi-querier DP system, not
+specific to Attribution. Alg. 1 shows a system with 𝐾 queriers
+(𝑄 1, . . . , 𝑄 𝐾 ), each with its own privacy budget F 𝑘 , interacting with a shared database 𝐷 over discrete time steps 𝑡. The
+model accommodates both streams and static databases: a
+data generation process G may append new data to 𝐷 at
+each step, while in the static case G outputs nothing after
+the initial step. It supports both per-querier enforcement,
+via F 𝑘 , and an abstract shared limit L, which can represent
+a global budget. At each step, querier 𝑘 selects a query 𝑄𝑡𝑘
+based only on its own past results, thereby explicitly excluding intentional collusion. The query executes only if both F 𝑘
+and L approve, in which case the querier receives result 𝑉𝑡𝑘 ;
+otherwise it receives a data-independent result ⊥.
+To analyze DP, we introduce a challenge bit 𝜒 that governs
+whether a particular record 𝑥 0 is added to the database at
+time 𝑡 0 . Neither the queriers nor G see 𝜒, but as queriers
+issue queries, their views may reveal information about it,
+modeling the leakage of an individual’s presence through DP
+query results. Privacy loss quantifies how hard it is for an adversary to distinguish between 𝜒 = 0 and 𝜒 = 1, whether the
+adversary controls a single querier (per-querier guarantees)
+or all queriers (global guarantees).
+Formally, Alg. 1 satisfies 𝜖-DP for querier 𝑘 ∈ [𝐾] if for
+∀𝑥 0 ∈ X, ∀𝑡 0 ∈ [𝑡 max ], ∀G, ∀(Q 1, . . . , Q𝑛+1 ), ∀𝑆 ⊆ R 𝑡max :
+
+ln
+
+Pr[𝑉 𝑘,( 𝜒 =0) ∈ 𝑆 ]
+Pr[𝑉 𝑘,( 𝜒 =1) ∈ 𝑆 ]
+
+
+≤ 𝜖.
+
+( 𝜒 =0) ∈𝑆 ]
+By contrast, a global guarantee would bound Pr[𝑉
+, if
+Pr[𝑉 ( 𝜒 =1) ∈𝑆 ]
+
+for example L were implemented as a global budget.
+We next analyze per-querier guarantees and show two
+orthogonal cases in which they degrade linearly with the
+number of queriers. These correspond to conditions (A) and
+(B) in Alg. 1: adaptive data generation in streaming settings,
+and the presence of a shared limit in addition to per-querier
+budgets. By toggling these conditions on and off, we isolate
+the effect of each on per-querier guarantees. Appendix A.3
+extends these results to IDP budgets, as used in Attribution.
+3.2
+
+Failure Mode 1: Adaptive Data Generation
+
+We first consider the case where data is generated over time
+with no shared limits (L always outputs TRUE). Adaptivity
+in data generation – where new data depends on past DP
+query results – has been studied in both streaming [11, 18,
+21] and interactive [16, 26, 28, 43] systems. Modeling such
+adaptivity is essential because it both directly affects DP
+analyses, as prior work shows, and is inevitable in streaming
+systems. For instance, a movie recommender may use prior
+DP measurements to suggest a film, and the user’s decision
+to watch it then becomes new data for future measurement.
+Line 9 of Alg. 1 captures data adaptivity for multi-querier
+1 , . . . , 𝑉 𝐾 ), meaning data can depend
+systems: 𝐷𝑡 ← G(𝑉<𝑡
+<𝑡
+not only on one querier’s past results but also on others’.
+This cross-querier dependency arises even without collu-
+
+1: Input
+2: Challenge bit 𝜒 ∈ {0, 1}
+3: In-or-out record 𝑥 0 to be inserted at time 𝑡 0
+4: Data generation process G
+5: Queriers Q 1 , . . . , Q 𝐾
+6: Per-querier budgets (modeled as pure-DP filters) F 1 , . . . , F 𝐾
+7: Shared limit L
+8: for 𝑡 ∈ [𝑡 max ] do
+// Data generation model:
+// (A) Cross-querier data adaptivity
+1 , . . . 𝑉 𝐾 ) // new data depends on all past results
+9: 𝐷𝑡 ← G (𝑉<𝑡
+<𝑡
+10: if 𝑡 = 𝑡 0 and 𝜒 = 1 then // insert in-or-out record on challenge
+11: 𝐷𝑡 ← 𝐷𝑡 + 𝑥 0
+// Query execution model:
+12: for 𝑘 ∈ [𝐾 ] do
+𝑘 ) // 𝑄 𝑘 selects query based on its own past results
+13: 𝑞𝑡𝑘 ← Q𝑘 (𝑉<𝑡
+// (B) Shared-limit enforcement
+𝑘
+14:
+if F𝑘 (𝑞𝑘1 , · · · , 𝑞𝑡𝑘 )∧L (𝑞 11 , · · · , 𝑞𝐾
+1 , · · · 𝑞𝑡 ) then
+𝑘
+𝑘
+15:
+𝑉𝑡 ← 𝑞𝑡 (𝐷 ≤𝑡 )
+16:
+else
+17:
+𝑉𝑡𝑘 ← ⊥
+18: return 𝑉 1 , . . . , 𝑉 𝐾
+
+sion, through user behavior or mechanisms like auctions.
+For example, news.ex may show an impression for either
+shoes.ex or hats.ex, depending on bids shaped by prior DP
+results from both sites.
+We prove that under this model, per-querier budgets (formalized as privacy filters [38]) with capacity 𝜖 do not suffice:
+Theorem 3.1 (Per-querier guarantees are unsound under adaptive data generation). Consider Alg. 1, with 𝐾 = 𝑛+1 queriers, where each F𝑘 is a pure-DP
+filter with capacity 𝜖 > 0, and where L always outputs TRUE (i.e., no shared
+limit). Denote by 𝑉 𝑛+1,( 𝜒 ) the view of Q𝑛+1 on challenge bit 𝜒. Then, there
+exists 𝜖 ′ > 0 such that ∃𝑥 0 ∈ X, ∃𝑡 0 ∈ [𝑡 max ], ∃ G, ∃ Q 1 , . . . , Q𝑛+1 , ∃𝑆 ⊆
+R 𝑡max :
+
+
+Pr[𝑉 𝑛+1,( 𝜒 =0) ∈ 𝑆 ]
+ln
+≥ 𝜖 + 𝑛𝜖 ′ .
+𝑛+1,(
+𝜒
+=1)
+Pr[𝑉
+∈ 𝑆]
+
+Thm. 3.1 shows that with per-querier budgets of capacity
+𝜖, privacy loss can exceed 𝜖, with excess loss growing linearly
+in the number of queriers. This arises not from collusion but
+from worst-case analysis that DP must account for. The proof,
+given in Appendix A.1, works by constructing an example
+of data generation and querying processes that exhibits that
+much excess loss. While the theorem addresses only pureDP guarantees (yielding a linear increase in excess loss), the
+result likely extends to approximate DP (with excess loss
+growing with the square root of the number of queriers).
+Prior analyses overlooked this point. ARA’s implementation supports multiple adtechs [17], but its proof models
+only a single querier [16], effectively defining data genera𝑘 ) for a fixed 𝑘 rather than our more general
+tion as G(𝑉<𝑡
+1
+𝐾 ). Cookie Monster, by contrast, allowed mulG(𝑉<𝑡 , . . . , 𝑉<𝑡
+tiple queriers but modeled a static dataset in its proof [43].
+3.3
+
+Failure Mode 2: Shared Limits
+
+We next consider the case where a shared limit is added to
+a system with per-querier enforcement (line 14 in Alg. 1).
+
+Such limits have been proposed in both static [15, 44] and
+streaming [24] DP systems as defense-in-depth against collusion. We instantiate L as a pure-DP filter shared across
+all queriers, which lets us quantify the excess privacy loss.
+The same reasoning, however, applies to other shared-limit
+mechanisms, such as caps on the total number of queries or
+rate limiters or quotas spanning subsets of queriers.
+We show that even without data adaptivity, per-querier
+privacy loss can exceed 𝜖 in the presence of a shared budget.
+To isolate this effect from Thm. 3.1, we restrict attention to
+static databases (G returns ∅ after the first time step). In this
+setting, the shared budget acts as a cross-querier leakage
+channel, enabling excess loss that, as before, grows linearly
+with the number of queriers covered by the shared limit:
+Theorem 3.2 (Per-querier guarantees are unsound under adaptive query
+budgets with shared limits). Take 𝑛 + 1 queriers, with per-querier filters with
+capacity 𝜖, and a shared filter with capacity 𝜖𝑔 < (𝑛+1)𝜖. There exists 𝜖 ′ > 0
+4 ln 2
+such that for all 𝑛 ≥
+−𝜖/2 2 , there exists G that returns ∅ after the first
+(1−𝑒
+
+)
+
+time step, such that ∃𝑥 0 ∈ X, ∃𝑡 0 ∈ [𝑡 max ], ∃ Q 1 , . . . , Q𝑛+1 , ∃𝑆 ⊆ R 𝑡max :
+
+
+Pr[𝑉 𝑛+1,( 𝜒 =0) ∈ 𝑆 ]
+ln
+≥ 𝜖 + 𝑛𝜖 ′ .
+Pr[𝑉 𝑛+1,( 𝜒 =1) ∈ 𝑆 ]
+
+The proof constructs an attack that induces this excess loss.
+While it may appear to rely on collusion, the same leakage
+can arise inadvertently. At a high level, multiple queriers
+spend part of their budgets on an initial measurement and
+issue a follow-up query only when the result is high (e.g.,
+measuring ad exposure and conditionally computing a histogram). The shared filter then encodes this signal: it is more
+likely to be exhausted when the true value is high, since more
+queriers issue follow-up queries. A new querier can thus infer this information from whether its own query is accepted
+or rejected, exceeding the privacy bound of its local budget.
+For IDP, rejection is not directly observable, requiring a more
+subtle argument (see §A.2 for DP and IDP proofs).
+This effect has been missed in prior work on multigranularity enforcement, either because it was not formalized at all [15] or because per-querier and global limits were
+analyzed in isolation or under non-adaptive queriers [24, 44].
+Conceptually, this is like treating the two conditions in
+F 𝑘 (𝑞𝑘1 , · · · , 𝑞𝑡𝑘 ) ∧ L (𝑞 11, . . . , 𝑞𝐾1 , . . . , 𝑞𝑡𝑘 ) as if they acted independently, when in real systems they are necessarily
+enforced jointly.
+3.4
+
+Siloing Assumption and Takeaways
+
+It is natural to ask whether any conditions – realistic or not
+– could make per-querier enforcement sound. Appendix A.4
+presents one such condition (Thm. A.3), the siloing assumption: each querier operates on a completely disjoint data
+stream, and shared limits are disabled or so loose that they
+never block queries. Under these constraints, per-querier DP
+is sound in our general model (Alg. 1).
+These constraints are almost certainly unattainable in
+practice. Worse, attempting to engineer them – for example
+by weakening or removing shared limits – undermines the
+
+goal of strong user privacy. We therefore strongly recommend against doing so.
+Instead, the takeaways are three-fold. First, Attribution should explicitly acknowledge the semantic limitations
+of per-querier enforcement. Second, per-querier budgets
+should be complemented with global enforcement; our second contribution – and the remainder of this paper – shows
+how to do so robustly and efficiently. Attribution has since
+adopted both: the specification now records the semantic
+limitations of per-querier enforcement [35], and specifies
+global enforcement managed by the algorithm of §4 [34].
+Third, a broader lesson for the research community: rigorous
+privacy analysis depends as much on faithful system modeling as on DP mathematics. While this is well-understood in
+formal methods, the DP literature often relies on oversimplified models to keep proofs simple. Our results highlight
+why modeling fidelity must become a first-class concern in
+DP systems research.
+
+4
+
+Contribution 2: Global IDP with Big Bird
+
+Global enforcement escapes the failures of §3 because both
+are failures of scope, not of DP accounting. Thm. 3.1 and
+Thm. 3.2 exhibit leakage that a per-querier budget cannot see:
+information routed through the data stream or through the
+shared limit, and thus outside the budget meant to bound it. A
+global budget has no analogous outside channel—it accounts
+for the joint information released across all queriers, so crossquerier channels are inside the quantity being bounded, not
+a way around it. This section therefore claims a global guarantee only, and shows that sound global device-epoch IDP
+is achievable under a system model we make as comprehensive as we can (Thm. 4.2). Per-querier budgets remain in
+the design as engineering constraints protecting utility, not
+privacy; the caveats of §3 apply to them here as anywhere.
+Global enforcement does, however, introduce a new systems challenge: in open, multi-querier settings with untrusted participants, a shared global budget becomes vulnerable to depletion attacks—a denial-of-service (DoS) on
+utility rather than privacy. In Attribution, any web domain
+can invoke the API, allowing an attacker controlling many
+Sybil domains to act as distinct queriers, exhaust users’ budgets, and block benign measurement. Although Attribution
+introduces global safety limits for privacy, it leaves their
+management unspecified and identifies DoS depletion as a
+key roadblock to deployment [19].
+We present Big Bird, a global budget manager for Attribution that makes device-epoch IDP both sound and deployable.
+Its key idea is to align budget consumption with the structure of legitimate workloads: impressions create potential
+privacy loss, conversions realize it, and meaningful consumption should scale with genuine user actions across distinct
+sites. Big Bird enforces this via IDP-aligned quotas on impression and conversion sites and a per-user-action cap on
+
+(same user)
+page
+visit
+
+auto-redirects
+
+(same user)
+page
+visit
+
+page
+visit
+
+y.ex
+
+x.ex
+
+saveImpres
+measureConversion()
+sion()
+
+null
+report
+
+Attribution API
+
+x.ex sybil1. sybil2. sybil3. y.ex
+ex
+ex
+ex
+
+x.ex
+
+embedded in
+page
+
+page
+visit
+
+sybil1.ex
+sybil2.ex
+sybil3.ex
+
+y.ex
+
+null
+report
+
+Attribution API
+
+global
+
+x.ex sybil1. sybil2. sybil3. y.ex
+ex
+ex
+ex
+
+global
+
+(a) Sybils as conversion sites
+(b) Sybils as intermediaries
+Fig. 2. Example attacks. Sybils deplete the global budget from a single user
+action by acting as (a) conversion sites or (b) intermediaries. Per-querier and
+global budgets are shown as batteries (filled = available, empty = drained).
+
+domain participation, while preserving device-epoch IDP.
+4.1
+
+Threat Model
+
+Global budgets are a shared resource, and on the web, attacker
+identities are weak (Attribution uses eTLD+1 domain names)
+and browser API use is generally open. An attacker can
+exploit this by registering many Sybil domain names and
+coordinating them to deplete a device’s global budget. If this
+occurs on many devices, benign queriers are locked out of
+measurement, yielding a DoS based on the privacy layer.
+Example attacks. Fig. 2 shows two example DoS depletion attacks effective against current Attribution. In Fig. 2a,
+a malicious site x.ex uses aggressive redirection: when a
+user visits x.ex, it registers impressions under many Sybil
+domains posing as conversion sites, then auto-redirects the
+user through them. Each Sybil calls measureConversion(),
+consuming global budget. Since Attribution does per-querier
+checks, it can spend up to 𝜖querier ; with 𝜖global /𝜖querier Sybils,
+x.ex can exhaust a user’s global budget from a single visit.
+When the user later visits a legitimate merchant (e.g., y.ex),
+that merchant receives null reports – both useless and biased. If x.ex attracts many users even once, it can disable
+Attribution for benign queriers across the epoch.
+Attacks need not be so overt. An attacker can instead
+embed many Sybil intermediaries (Fig. 2b), each requesting
+reports and drawing from distinct per-querier budgets. More
+subtly, it can pace Sybil activity over time or across repeated
+visits to gradually drain users’ budgets, making the attack
+harder to detect.
+Generic attack model. The preceding examples illustrate
+specific tactics that an attacker can use to deplete global
+budgets in Attribution. Our objective, however, is to build
+defenses at the budget-management layer that withstand a
+broader class of attackers, regardless of how tactics evolve.
+We thus model a generic attacker that controls a set of domains visited by genuine users and aims to degrade the
+accuracy of benign queriers’ measurements on genuine user
+data by exhausting the global budget on users’ devices. We
+characterize the attacker’s strength along three dimensions:
+(i) how many domains it controls; (ii) how many intentional
+
+user actions it can induce across those domains; and (iii) how
+many distinct genuine users perform these actions.
+Resilience goal. The attacker’s impact in the Fig. 2 examples
+is disproportionate to its strength: the attacker is weak along
+one or more dimensions yet still depletes a device’s global
+budget. Our goal is to restore proportionality along all three
+dimensions of strength: depletion should scale not with Sybil
+count alone, but with genuine user actions and with the
+number of users it is able to attract, so that an attacker must
+be strong along all three dimensions to deplete substantially.
+We further require that this holds regardless of how the
+attacker behaves or what it knows, without assuming that
+benign traffic looks any particular way.
+Assumptions. We exclude two classes of threats from our
+model. First, we do not address bot-driven poisoning attacks
+in which adversaries fabricate impressions or conversions
+(including null reports) to skew aggregates. These attacks
+degrade data quality rather than deplete global budgets on
+genuine devices, and defending against them requires mechanisms orthogonal to global-budget management, such as
+recently proposed fraud prevention for Attribution [6]. Our
+focus is on preserving measurement availability for genuineuser data – a prerequisite for meaningful measurement even
+without the poisoning threat.
+Second, we protect only benign sites that do not directly
+or transitively partner with malicious ones (e.g., by embedding attacker-controlled intermediaries or serving their
+ads). Big Bird operates purely at the global-budget layer and
+has no visibility into partner relationships or ad-network
+governance; attacks that exploit such partnerships require
+ecosystem-level controls (registration, contracts), not budget logic. Our aim is to confine adversarial impact to sites
+that interact with Sybils, while unrelated benign sites retain
+utility.
+4.2
+
+Candidate Approaches
+
+The research challenge is to add DoS depletion resilience
+without overconstraining benign workloads, violating
+device-epoch IDP, or undermining its optimizations. Naïve
+approaches fail on at least one of these fronts.
+Rate-limit API calls. One could cap how many impressions
+a site may log or how many reports it may request per time
+unit. However, API calls are a poor proxy for privacy loss.
+Under IDP, consumption depends on a user’s actual data contribution, and many events incur zero loss: most impressions
+never lead to conversions, and many conversions have no
+attributable impression. These would still count against an
+API-call limit, disabling IDP’s sparsity benefits. Worse, sites
+cannot know in advance which events will incur loss, so such
+caps force conservative throttling of legitimate activity and
+degrade utility. Any fixed limit therefore either suppresses
+benign workloads or must be set so loosely that attackers
+operate beneath it.
+
+Rate-limit total budget consumption. A more aligned
+approach is to cap budget consumption itself, e.g., by limiting how much global budget can be spent over short time
+windows. This blocks bursty attacks like those in Fig. 2, but
+fails against paced strategies that spread consumption over
+time. For example, a site can exploit repeated or prolonged
+user presence (e.g., an open tab) to gradually drain budget
+via redirects or intermediary requests. Extending the time
+window to catch such attacks risks making the limiter itself a DoS target. Moreover, setting the cap below 𝜖querier
+harms benign workloads, especially small advertisers that
+may legitimately consume their budget in bursts.
+Cap total budget consumption per user action. A key
+weakness in Fig. 2 is that a single user action can drain
+a user’s entire global budget. A natural fix is to cap budget per user action: each action initializes a budget 𝜖action ,
+shared across all queriers triggered by that action. This ties
+consumption to a meaningful unit, but still allows a single
+high-engagement site to deplete budget over many interactions with the same user. Among candidate approaches, this
+is closest to Big Bird.
+Interactions of caps with device-epoch IDP. We find it
+easy to define caps that violate device-epoch IDP by coupling
+decisions across epochs. For example, §C presents a natural
+but IDP-violating variant of the preceding approach: capping
+total budget consumption across all epochs following a user
+action. Any defense must therefore ensure that both checks
+and consequences are confined to a single epoch; in this
+paper, we show how to do so.
+4.3
+
+Big Bird Design
+
+Based on the limitations of alternative approaches, we establish four principles for Big Bird’s design. P1: Limits should
+track IDP budget consumption, not proxies such as API-call
+counts, since IDP budget consumption is not always correlated to the number of API calls. P2: Defenses should target
+minimal, intrinsic properties of legitimate Attribution use, not
+specific attack tactics (e.g., redirection chains, embedded
+intermediaries, fast-fire vs. slow-burn attacks) or speculative assumptions about benign workloads (e.g., that benign
+traffic will never involve redirections or more than 𝑥 intermediaries). This keeps defenses robust as both attacks and
+benign workloads evolve. P3: Global-budget use should be
+ultimately tied to intentional user actions across distinct firstparty sites, since that is what Attribution is meant to measure.
+P4: Attribution’s device-epoch IDP must be preserved.
+Key insight: stock-and-flow. Fig. 3 illustrates this pattern.
+The Attribution API is intended to measure user interactions
+across distinct first-party sites, such as impression and conversion sites. In normal Attribution use (Fig. 3a), privacy
+loss should only be consumed when there is something to
+measure: a user visits one site (and sees an ad) and later visits
+a distinct site (and converts there). That creates a stock-andflow pattern for privacy budget consumption: (1) stock is
+
+(same user)
+
+page visit
+news.ex
+
+page visit
+shoes.ex
+
+saveImpression() measureConversion()
+
+creates stock
+
+triggers flow
+
+page visit
+x.ex
+automated
+stocks &
+flows
+
+global
+budget
+
+global
+budget
+
+Attribution API
+
+Attribution API
+
+(a) Privacy loss in normal use
+(b) Privacy loss in attack
+Fig. 3. Stock-and-flow pattern of budget consumption in Attribution.
+(a) Normal use: user actions on impression sites create stock and user
+actions on conversion sites trigger flows. (b) Attacks break this pattern by
+automatically creating many stocks and flows from very few user actions.
+
+created when the user visits an impression site and the site
+saves an impression; and (2) flow is triggered when a user visits a conversion site and the site requests a report. Non-zero
+privacy loss is realized only when both steps occur, a property
+afforded by the IDP mechanism. By contrast, attacks disrupt
+this structure (Fig. 3b) by coalescing domains or automating stock creation and flow triggering (e.g., via automatic
+redirections or embedded intermediaries), allowing substantial global budget consumption from minimal user actions.
+Big Bird restores this pattern with privacy-loss-based quotas
+that cap stock creation and flow triggering for every caller
+alike, ultimately tying both to intentional user actions.
+Big Bird architecture. Fig. 4 shows the Big Bird architecture.
+It sits as a management layer around Attribution’s global
+budgets and protects them from depletion by enforcing quotas that restore the expected stock-and-flow pattern, in each
+epoch: (1) impression-site quotas limit how much stock any
+one domain can contribute; (2) conversion-site quotas limit
+how much flow a domain can trigger; and (3) a per-action
+domain cap limits how many new domains can create quotas
+in the context of a single user action.
+The first two quotas are privacy budgets implemented as
+IDP filters, just like global and per-querier budgets. However, their purpose is not privacy; they protect the global
+budget from depletion. These quotas account for individual privacy loss in a manner aligned with the global budget
+(principle P1), and constrain stock creation and flow triggering according to the expected structure of benign behavior
+(P2). The per-action domain cap is not a privacy budget;
+it simply restricts the number of quota budgets activated
+under different domains from a single user action. Together,
+these three quotas constrain consumption of the global budget, forcing the attacker to behave within the bounds of
+expected workload, and tie this restricted consumption to
+something tangible, such as intentional user actions across
+sites (P3). §4.4 formalizes the resilience properties afforded
+by this quota architecture, while our evaluation quantifies
+
+(all actions are from
+the same user)
+
+②
+
+①
+news.ex
+
+③
+
+blog.ex
+
+adtech2.ex
+
+shoes.ex
+
+adtech.ex
+saveImpression()
+
+saveImpression()
+
+measureConversion()
+(i)
+
+(j)
+
+encrypted
+reports
+(i)
+
+⑤
+(j)
+
+④ Report Generation Process
+(4.1) (~as in Attribution) Retrieve matching impressions
+per epoch, excluding ones from the current user action.
+(4.2) Big Bird per-epoch resilience checks and privacy
+loss accounting (Alg. 2):
+
+Big Bird
+per-action domain cap
+
+impression-site
+quota budgets
+
+conversion-site
+quota budgets
+shoes.ex
+
+blog.ex
+books.ex
+
+ad
+
+sh
+
+oe
+s
+
+.ex
+tec
+h.e
+x
+ad
+tec
+h2
+.ex
+bo
+ok
+s.e
+x
+
+news.ex
+
+per-querier budgets
+(as in Attribution)
+
+social.ex
+
+global
+budget
+
+(4.3) (as in Attribution) Generate histogram attributing
+the conversion’s value to impressions across all epochs.
+Fig. 4. Big Bird architecture. Depicts budget structure for a single epoch,
+though in reality privacy and quota budgets exist for each epoch.
+
+them empirically. Finally, our quota enforcement is done
+separately for each epoch, ensuring that Big Bird preserves
+device-epoch IDP, a property we discuss in §4.5 (P4).
+Example execution. Fig. 4 shows the workflow. 1 – 2 A
+user sees ads on news.ex and blog.ex. 3 After purchasing
+on shoes.ex, two measureConversion() calls are issued: (i)
+one for shoes.ex (to measure a creative) and (j) one for
+adtech.ex (to optimize its placement model). 4 Big Bird
+processes each call by selecting relevant impressions and
+attempting to deduct budgets atomically per epoch: querier,
+global, conversion-site, and matching impression-site quotas.
+If any deduction fails, that epoch’s contribution is dropped.
+5 Two encrypted reports are returned, one per querier.
+Reports (i) and (j) use parameters: epsilon=0.2 (privacy budget requested), value=75 (conversion value), and
+maxValue=150 (maximum conversion value). Assume the
+relevant impressions occur in epochs 𝑒1 and 𝑒2, while the
+conversion occurs in 𝑒3. Tab. 1 shows the remaining budget and quota capacities after releasing reports (i) and (j),
+assuming all budgets start at the listed capacities. For report
+(i), following the IDP rule used in Attribution, each relevant epoch incurs privacy loss (value/maxValue) · 𝜖 = 0.1,
+while other epochs incur none. Only sites with matching
+impressions (news.ex in 𝑒1 and blog.ex in 𝑒2) consume
+
+querier
+𝜖querier = 0.5
+shoes.ex
+
+adtech.ex
+
+adtech2.ex
+
+global
+𝜖global = 4
+
+0.4
+0.4
+0.5
+
+0.4
+0.4
+0.5
+
+0.4
+0.4
+0.5
+
+3.8
+3.8
+4
+
+epoch
+e1
+e2
+e3
+
+imp-quota
+𝜖imp-quota = 2
+
+conv-quota
+𝜖conv-quota = 0.75
+
+news.ex
+
+blog.ex
+
+shoes.ex
+
+1.8
+2
+2
+
+2
+1.8
+2
+
+0.55
+0.55
+0.75
+
+Tab. 1. Quota and budget states after example execution.
+
+impression-site quota. Since all budgets for 𝑒1 and 𝑒2 have
+sufficient capacity, deductions commit atomically in each
+epoch, and the histogram is generated from these epochs.
+Report (j) performs the same computation but deducts from
+adtech.ex’s querier budget instead of shoes.ex’s.
+Big Bird algorithm. Alg. 2 enforces quotas while preserving
+device-epoch IDP. Each user action creates a context uaCtx,
+shared across all API calls causally triggered by that action.
+Browsers already have notions of intentional user action,
+namely the user-activation API [5], often used to gate access
+to various APIs. Within each uaCtx, Big Bird bounds the
+number of distinct first-party domains, not API calls. This
+prevents attackers from spawning many Sybil domains while
+allowing arbitrary activity within each domain. This matches
+normal web behavior: a benign user action may involve
+one or two redirects (e.g., email links or short URLs), but is
+not expected to traverse many domains. As a result, small
+per-action domain cap values (e.g., 2–3) should comfortably
+support benign workloads while preventing attackers from
+spawning many distinct quotas to fuel depletion.
+Privacy accounting occurs in measureConversion(). For
+each epoch in the attribution window, the function (i)
+matches impressions, (ii) computes device-epoch IDP loss
+for the conversion and the finer-grained device-epoch–
+impression-site losses used by impression-site quotas, and
+(iii) attempts to deduct all relevant budgets in a single atomic
+transaction. The finer-grained accounting prevents wasting
+quota on impression sites that displayed no relevant impressions. If any deduction fails, that epoch’s data contribution
+is dropped with no budget impact; otherwise, all deductions
+commit atomically. This prevents budget waste, preserves
+the stock-and-flow structure, and ensures that decisions
+based on one epoch’s data never affect another’s privacy
+accounting.
+A subtle but critical constraint shapes Alg.2’s structure.
+A natural alternative would be to enforce the per-action domain cap by computing, inside measureConversion(), how
+many impression-site quotas supply stock and how many
+conversion-site quotas trigger flow for the report, and to
+nullify the entire report if this exceeds a threshold. Big Bird
+deliberately avoids this. A single report may aggregate impressions and conversions from multiple epochs, and any
+check that reasons about those epochs jointly would couple
+their outcomes and thus their privacy losses. Because deviceepoch IDP requires each epoch’s privacy loss to depend only
+on that epoch’s data, such cross-epoch checks are unsound.
+Instead, Big Bird enforces the per-action domain cap using strict per-epoch separation. The count of activated quotas
+
+Alg. 2 Big Bird algorithm
+def onUserAction(uaCtx)
+accessedSites[uaCtx][e] ← ∅ for each epoch e
+def saveImpression(uaCtx, impSite, impression)
+e = getCurrentEpoch()
+if |accessedSites[uaCtx][e] ∪ {impSite}| > 𝜅 action then
+return // can’t allow new quotas from this user action
+accessedSites[uaCtx][e] ∪ = {impSite}
+ImpressionStore[e].add(uaCtx, impression) // save uaCtx
+return
+def measureConversion(uaCtx, impSites, querier, convSite, params)
+// Separately for each epoch, match impressions and do budget
+// checks and privacy accounting (Steps (4.1)-(4.3) in Fig. 4).
+for 𝑒 ∈ params.attributionWindow do
+// Check the per-action domain cap.
+if |accessedSites[uaCtx][e] ∪ convSite| > 𝜅 action then
+𝐼𝑒 ← ∅ // drop epoch’s impression data from consideration
+CONTINUE
+accessedSites[uaCtx][e] ∪ = {convSite}
+// Match impressions, filtering out impressions that querier and convSite
+// are not permitted to measure, including impressions from this uaCtx.
+𝐼𝑒 ← MatchingFn(uaCtx, ImpressionStore[e], params)
+// Compute IDP loss at two granularities w/ Cookie Monster algo.
+𝜖𝑒 ← computeEpochLoss(𝐼𝑒 , params)
+for 𝑖 ∈ impSites do
+𝜖𝑒𝑖 ← computeEpochImpSiteLoss(𝐼𝑒 [𝑖 ], params)
+// Execute budget checks & deductions as a transaction.
+tx = beginTransaction()
+if querierBudget[e][querier].tryConsume(𝜖𝑒 , tx) and
+globalBudget[e].tryConsume(𝜖𝑒 , tx) and
+convQuota[e][convSite].tryConsume(𝜖𝑒 , tx) and
+(impQuota[e][𝑖].tryConsume(𝜖𝑒𝑖 , tx) ∀𝑖 ∈ impSites) then
+tx.commit() // all budgets deducted successfully
+else // a budget deduction failed
+tx.abort() // undo any other budget deductions
+𝐼𝑒 ← ∅ // drop epoch’s impression data from consideration
+// Generate attribution histogram from remaining impressions
+return AttributionFn(𝐼𝑒1 , . . . , 𝐼𝑒 𝑤 ) // 𝑒𝑖 ∈ params.attributionWindow
+
+is maintained not only per uaCtx but also per epoch. If the
+cap is exceeded in epoch 𝑒, Big Bird nullifies only epoch 𝑒’s
+data contribution, forcing its privacy loss to zero while leaving all other epochs unaffected. No check aggregates privacy
+consumption across epochs, and no failure in one epoch propagates to another. This preserves device-epoch IDP while
+still enforcing meaningful DoS limits tied to user actions.
+Finally, we note a subtlety of the atomic check-and-deduct
+procedure, specifically for impression-site quota deductions
+within an epoch. As shown in §5, atomicity strengthens resilience by forcing attackers to be selective about which
+Sybil impressions they declare as relevant: a single impression whose impression-site quota is exhausted suffices to
+nullify the entire epoch’s contribution, preventing any globalbudget consumption. This same mechanism can, however,
+harm benign workloads: if multiple impression sites are relevant in an epoch and one exhausts its quota, the querier
+cannot obtain attribution information from the remaining
+sites even if they retain budget. Supporting finer-grained
+
+“Normal” workload parameters:
+M: max # of impression sites contributing nonzero loss in an epoch.
+N: max # of conversion sites requesting nonzero loss from an epoch.
+n: max # of conversion sites requesting nonzero loss from (epoch, impSite).
+r: max budget consumed by an intermediary’s cross-advertiser queries on a single
+conversion site, as a fraction of the intermediary’s 𝜖querier .
+
+Cap
+Capacity configuration
+Per-querier filter
+𝜖querier : configuration parameter
+Global filter
+𝜖global = max(𝑁 , 𝑛 · 𝑀 ) (1 + 𝑟 )𝜖querier
+Impression-site quota
+𝜖imp-quota = 𝑛 (1 + 𝑟 )𝜖querier
+Conversion-site quota 𝜖conv-quota = (1 + 𝑟 )𝜖querier
+per-action domain cap 𝜅 action = 2 or 3
+Tab. 2. Big Bird budget configurations.
+
+behavior – e.g., selectively nullifying only the depleted impression site’s contribution while preserving device-epoch
+IDP – appears feasible, but we leave its design to future work.
+Our strongest-attacker experimental results in §5 provide
+an upper bound on resilience if impression-site quotas are
+removed from the atomic transaction.
+Quota configuration. We choose quota capacities via a
+utility-first approach: specify workload requirements, then
+select the smallest values that satisfy them. Taking the
+querier budget 𝜖querier and intermediary fraction 𝑟 as base
+parameters, and using browser-tunable parameters that
+reflect expected benign workload scale, we define four constraints: (i) a conversion site must be able to spend its full
+querier budget, and intermediaries may spend a fraction
+𝑟 of that, giving 𝜖conv-quota ≥ (1 + 𝑟 )𝜖querier ; (ii) no single
+conversion site should drain the global budget, so with 𝑁
+expected conversion sites per epoch, 𝜖global ≥ 𝑁 𝜖conv-quota ;
+(iii) likewise, the global budget should exceed an impression site’s stock, so with 𝑀 expected impression sites,
+𝜖global ≥ 𝑀𝜖imp-quota ; and (iv) because multiple conversion
+sites may query the same impression site, a fan-out parameter 𝑛 requires 𝜖imp-quota ≥ 𝑛𝜖conv-quota .
+We then minimize 𝜖global subject to these constraints, yielding the capacities in Tab. 2 and a tight global-privacy guarantee consistent with utility. Configuring Big Bird is thus a
+three-step procedure: (1) choose the base parameters 𝜖querier
+and 𝑟 ; (2) conservatively estimate the workload parameters
+𝑀, 𝑁 , 𝑛 from a production sample at a chosen percentile; and
+(3) derive all quota capacities in closed form from Tab. 2. The
+percentile is the only real knob, trading utility against the
+tightness of 𝜖global . §5.2 instantiates this procedure on Criteo.
+4.4
+
+Resilience Guarantee
+
+Big Bird restores proportionality between attacker impact
+and strength along the three dimensions in §4.1. Its resilience, stated in Thm. 4.1, stems from: (a) per-domain
+quota limits, (b) user-action-based quota creation, and (c)
+bounded-sensitivity DP aggregation. Indeed, Attribution
+serves population-level DP queries in which each deviceepoch contributes only through a report with bounded
+sensitivity. As a result, even if an attacker depletes budget on
+some device-epochs, the resulting error in a benign query
+
+scales only with the number of affected device-epochs.
+Theorem 4.1 (Resilience to DoS depletion – proof in B.4). Consider an
+attacker who (1) creates 𝑀 adv and 𝑁 adv imp-quota and conv-quota
+quotas, respectively; (2) collects 𝑈 adv user actions across the quotas’ domains
+for device 𝑑; and (3) depletes budget from 𝑘 device-epochs.
+adv the maximum budget that the attacker can consume
+Denote by 𝜖global
+from the global budget on any epoch from 𝑑. Denote by ∥𝑄 (𝐷 ) − 𝑄˜ (𝐷 ) ∥
+the error induced by the attacker, for a query 𝑄 where reports have sensitivity
+Δ and at most 𝑚 reports belong to any single device. Then, we have:
+adv
+(i) 𝜖global
+≤ min(𝑀 adv𝜖imp-quota , 𝑁 adv𝜖conv-quota )
+adv
+(ii) 𝜖global
+≤ (1 + 𝑟 )𝜖querier · 𝜅 action · 𝑈 adv
+𝜖global
+
+(iii) ∥𝑄 (𝐷 ) − 𝑄˜ (𝐷 ) ∥ ≤ 𝑚 · 𝑘 · Δ, and 𝑘 ≤ 𝑈 adv /⌈ 𝑛 (1+𝑟 )𝜖
+
+querier ·𝜅 action
+
+⌉.
+
+(i) Even if user actions were free, the global budget that
+an attacker can drain on a given device-epoch is capped
+by how many impression-site and conversion-site quotas
+it has managed to create, scaled by their capacities. This is
+the stock-and-flow constraint: to move global budget, the
+attacker must both create stock (impression-site quotas) and
+trigger flow (conversion-site quotas), and each is individually
+bounded. (ii) We connect this to intentional user actions
+via the per-action domain cap. Each user action can create
+at most 𝜅 action new quotas of each type, and only within a
+single epoch. Across 𝑈 adv actions, the attacker can therefore
+unlock at most 𝑂 (𝜅 action · 𝑈 adv ) useful quotas, which yields
+adv . This enforces proportionality
+the stated bound on 𝜖global
+to user actions: substantial depletion now requires many
+genuine user interactions, not just many cheap domains.
+(iii) We lift the guarantee from a single device-epoch to the
+query level. With bounded report sensitivity Δ, even if the
+attacker fully depletes the global budget on 𝑘 device-epochs,
+its impact on any aggregate is linear in 𝑘. 𝑘 itself is bounded
+by the number of actions across devices.
+Limitations. We identify two limitations of the resilience
+guarantees provided by Big Bird. First, resilience assumes
+the attacker cannot scale simultaneously along all three
+strength dimensions. Enforcing this ultimately requires APIgovernance mechanisms beyond budget management. For instance, browsers could require API invokers to register with
+trusted authorities to limit Sybil domains, or adopt a conservative definition of user activation to ensure that interactions
+the user did not intend as attribution actions (e.g., clickjacking, deceptive UI, automatic redirects, or invisible frames)
+do not trigger budget consumption. Our contribution is to
+expose the necessary control points within the privacy-budget
+layer so that, when combined with governance mechanisms,
+Attribution can be rigorously hardened against attacks.
+Second, Thm. 4.1 bounds depletion of the global budget,
+but quota budgets themselves may still be targeted – albeit only in ways excluded by our threat model (§4.1). For
+example, a malicious intermediary could exhaust its own
+conversion-site quota to block other intermediaries, or target
+the impression-site quota of a site that embeds its ads. These
+attacks are localized: the impact is confined to queriers inter-
+
+acting (directly or transitively) with the affected site, while
+unrelated sites retain access to the global budget. Moreover,
+our quota configuration dampens such effects: exhausting
+an impression-site quota requires fan-out across 𝑛 conversion sites, while exhausting a conversion-site quota requires
+(1+𝑟 ) queriers. Fully addressing quota-targeting attacks will
+require Attribution to support mechanisms for managing
+and subdividing quotas (e.g., per-partner allocation) to prevent abuse. We leave this to future work, as it likely requires
+integration with ecosystem-level constructs such as business
+relationships and auction pricing.
+4.5
+
+Privacy Guarantee
+
+Our privacy analysis of Big Bird aims for a high-fidelity
+model that provides confidence that the design satisfies
+global device-epoch-level IDP. We capture: individual DP;
+on-device report generation with centralized noise addition;
+all public information exposed by the protocol; query, budget, and data adaptivity; multiple epochs and queriers; the
+atomic interaction of multiple budgets within a single transaction; and user-action-based limits on how many quotas
+may be invoked. To our knowledge, this is one of the most
+faithful system models in the DP literature. Appendix B gives
+two versions: a simplified one for educational use (§B.5) and
+the complete version for formal analysis (§B.2). Using the
+complete model, we prove that Big Bird preserves global
+device-epoch IDP: Here and below, Pr[𝑉 = 𝑣] denotes the
+joint density or probability mass at 𝑣, as appropriate.
+Theorem 4.2 (Global IDP Guarantee – proof in §B.3). Consider 𝑥 ∈ X
+with global budget capacity 𝜖global . Then, Big Bird satisfies individual deviceepoch 𝜖global -DP for 𝑥 under public information C. That is, for every data
+generation process G and all queriers A 1 , . . . , A𝑘 , the output 𝑉 ( 𝜒 ) of Alg. 7
+under challenge bit 𝜒 satisfies, for all 𝑣 ∈ R 𝑒max × (𝑡max +1) ×𝐵 :
+
+
+Pr[𝑉 (0) = 𝑣 ]
+≤ 𝜖global .
+ln
+Pr[𝑉 (1) = 𝑣 ]
+
+4.6
+
+Prototype as Reference Implementation
+
+We implement Big Bird both as a reference implementation
+for the emerging W3C standard and as a foundation for
+broader deployments, including in mobile OS location analytics. The implementation has two components. (1) pdslib
+is a general-purpose IDP Rust library that subsumes Cookie
+Monster and Big Bird while exposing a generic interface
+beyond Attribution. Clients (websites or mobile apps) register events (e.g., ad views, location visits), request reports
+(e.g., attributions, model updates), and receive encrypted,
+privacy-budgeted responses. (2) An integration in Firefox’s
+Attribution prototype [32] replaces report counting with full
+IDP and resilient enforcement based on pdslib. Mobile recommendation workloads, which share sparsity and structure
+with advertising, are a promising future instantiation.
+
+5
+
+Evaluation
+
+We evaluate Big Bird’s utility and resilience on a real-world
+Criteo dataset, simulating DoS attackers inspired by Fig. 2a.
+
+Our evaluation asks two questions: (1) How do quota configurations affect benign-query utility, both without attack
+and under a fixed-strength attack? (2) How does attacker
+strength along different resource dimensions translate into
+damage to benign queries?
+5.1
+
+Methodology
+
+Dataset. CriteoPrivateAd [40] is a 30-day snapshot of production traffic (104M impressions across 220k publisher sites
+and 10k conversion sites) released for benchmarking W3C’s
+Attribution API. To our knowledge, it is the only real-world
+dataset with multiple conversion sites—a requirement for
+exercising Big Bird’s conversion-site quotas. The dataset includes timing, contextual features, conversions, and a dailyreset device ID. Because impressions are subsampled, most
+devices appear only once. Using Criteo’s resampling method,
+we reconstruct the device-level distribution, yielding 1.4M
+devices, 4.6M impressions, and 5.6M conversions. The median
+device has 2 impressions and 4 conversions. While realistic,
+the dataset reflects a single intermediary and likely underestimates load in multi-intermediary deployments.
+Benign workload. We evaluate single-advertiser measurement, where each batch of conversions produces a DP histogram over five contextual buckets. We evaluate utility using RMSRE𝜏 [2], the root mean squared relative error across
+buckets, clipping counts below 𝜏 = 5% of batch size. This
+captures both DP noise (common across baselines) and bias
+from budget/quota depletion. To ensure low-noise baselines,
+we (i) restrict to advertisers with ≥ 100 conversions/day (526
+total), (ii) batch ∼10 days of conversions (capped at 8,000),
+and (iii) set 𝜖 to target RMSRE𝜏 ≈ 5%, similar to how we
+expect an advertiser would tune their measurement.
+Attack workload. We inject synthetic adversarial traffic
+atop real events. The attacker is given impression and conversion streams for the 10 busiest sites, reusing timestamps and
+device IDs to simulate organic traffic. Each event is treated
+as a user action enabling budget depletion. The attacker controls a pool of Sybil domains (25 by default) and, per user
+action, triggers a redirection chain (bounded by 𝜅 action ). Each
+Sybil registers one fresh impression and requests a report
+on a previously unqueried impression with 𝜖 = 𝜖querier .
+A naive attacker that references all Sybils per action is
+neutralized by Big Bird’s atomic deductions: a single overquota Sybil invalidates the entire request, consuming zero
+global budget. We confirm this empirically and focus on
+two stronger strategies. The Random Attacker samples a
+subset of Sybils per conversion (35% by default, minimizing
+atomic rejection), modeling limited tracking capabilities. The
+Omniscient Attacker has perfect knowledge of each device’s remaining quotas and uses only Sybils with remaining
+quota, eliminating rejection waste and representing the optimal attack within the Attribution interface. Because these
+capabilities—perfect repeat-user recognition and full visibility into every device’s quota state—are ones real attackers
+
+will likely lack, we read omniscient-attacker error as a deliberate worst-case ceiling rather than a typical operating
+point; real attackers fall between the two extremes.
+Baselines and defaults. We compare Big Bird to two baselines spanning the utility–privacy spectrum: (1) Attribution
+w/o global budget (Cookie Monster [43]), which enforces perquerier IDP but no shared limit. It is immune to depletion
+and serves as the utility ceiling, but lacks global privacy guarantees. (2) Attribution w/ global budget, which adds a shared
+privacy filter but no quota mechanisms, representing the
+strongest defense without Big Bird.
+Unless stated otherwise, we set 𝜖querier = 1.0, 𝜖global = 8.0,
+𝜖imp-quota = 2.0, and 𝜖conv-quota = 1.0. We use 𝜅 action = 2
+and 25 Sybils at maximum popularity. Epochs are one day,
+matching Criteo’s daily device-ID reset.
+5.2
+
+Quota Configuration on Criteo
+
+Tab. 3. Workload params in Criteo.
+We instantiate the threestep configuration pro%ile 𝑁˜ 𝑀˜ 𝑛˜ 𝜖global 𝜖imp-quota
+cedure of §4.3 (“Quota
+p50 2 1 2
+2
+2
+configuration” header)
+4
+2
+p80 4 2 2
+on Criteo. Step (1): we
+p85 4 2 4
+8
+4
+use 𝜖querier = 1 (our
+p90 4 3 4 12
+4
+p95 6 3 4 12
+4
+default from §5.1) and,
+8
+p99 8 4 8 32
+because our evaluation
+models only single-advertiser queries, 𝑟 = 0, giving
+𝜖conv-quota = 𝜖querier ; general workloads would set 𝑟 > 0. Step
+(2): the distributions of 𝑁 , 𝑀, 𝑛 across devices could be computed exactly by running full conversion attribution, but a deployer can instead use cheap, conservative per-device statistics that upper-bound them: unique impression sites (𝑀˜ ≥ 𝑀),
+unique conversion sites (𝑁˜ ≥ 𝑁 ), and unique conversion sites
+per (device, impression-site) pair (𝑛˜ ≥𝑛); Tab. 3 reports these
+statistics at several percentiles. Step (3): the same table shows
+˜ 𝑛)
+˜ =
+the resulting capacities; e.g., the p85 estimates ( 𝑁˜ , 𝑀,
+˜ (1 + 𝑟 )𝜖querier = 8 and
+(4, 2, 4) yield 𝜖global = max( 𝑁˜ , 𝑛˜ 𝑀)
+˜ + 𝑟 )𝜖querier = 4. Only these values are
+𝜖imp-quota = 𝑛(1
+Criteo-specific: the procedure itself is dataset-driven, and
+any browser vendor can run it on its own production sample.
+The percentile choice governs the tradeoff between quota
+size (and thus utility) and the tightness of the global DP guarantee 𝜖global . Supporting 100% of devices maximizes utility,
+since it expects no quota-induced errors, but yields very loose
+𝜖global . The 85th percentile offers a balanced configuration:
+tight enough for a single-digit 𝜖global = 8 while avoiding
+quota errors for the vast majority of devices. As in §5.3,
+setting 𝜖imp-quota below the table value (e.g., 𝜖imp-quota = 2
+instead of 4) substantially improves resilience at a negligible utility cost: the resulting slack in 𝜖global ensures enough
+budget is left for benign queries even under attack.
+
+5.3
+
+Utility and Resilience with Quota Configuration
+
+We fix all default parameters and sweep the impression-site
+quota 𝜖imp-quota and per-action domain cap 𝜅 action to deter-
+
+(a) Benign error without attack
+
+(b) Error causes without attack
+
+(c) Benign error under attack
+
+(d) Error causes under attack
+
+Fig. 5. Utility and resilience with quota configuration. (a), (b): Benign
+error and root causes without attack. (c), (d): Benign error and root causes
+under the random attacker.
+
+mine the range of quota values that preserve benign utility
+while confining the attacker.
+Benign error without attack (Fig. 5a, Fig. 5b). We first
+measure utility in a purely benign setting, varying the
+impression-site quota at 𝜖global = 8 (derived from the p85
+workload in Tab. 3 with 𝜖querier = 1). Fig. 5a plots median and
+95th-percentile RMSRE𝜏 as 𝜖imp-quota grows. Both Attribution
+baselines, which lack impression-site quotas, show constant
+and identical error across 𝜖imp-quota (median 5.2%). Their
+agreement confirms that the global budget alone does not
+reduce utility without an attack, an important sanity check
+that isolates quota effects from global-budget effects. In
+contrast, Big Bird performs poorly at 𝜖imp-quota = 0.5, where
+aggressive quota exhaustion produces null reports (median
+error 14.0%, a 2.7× increase). Once 𝜖imp-quota reaches 2, quotas
+no longer affect accuracy: Big Bird matches the baselines
+at 5.2%. This holds through arbitrarily large quota values,
+including Big Bird with the impression-site quota disabled
+entirely. The p85 quotas from Tab. 3 therefore suffice for
+normal operation and appear conservative, suggesting that
+true workload parameters for most devices are well below
+the upper-bound estimates we use to size 𝑁 , 𝑀, and 𝑛.
+Fig. 5b breaks down the bias component of Big Bird’s
+RMSRE𝜏 by attributing each blocked report to the first budget
+in priority order that was exhausted. At 𝜖imp-quota = 0.5, the
+impression-site quota blocks 16.2% of reports, explaining the
+elevated error in Fig. 5a. At 𝜖imp-quota = 1, this drops to 0.8%.
+For 𝜖imp-quota ≥ 2, the impression-site quota blocks fewer
+than 0.002% of reports; the only residual blocking comes from
+per-querier budgets (2.8% of reports). This residual appears
+in all baselines, and is inherent to IDP systems when device
+contributions exhaust the querier’s budget. The takeaway
+is that, once quotas are sized to the p85 workload, Big Bird
+
+introduces no bias beyond what the underlying Attribution
+accounting already imposes.
+Benign error under attack (Fig. 5c, Fig. 5d). We next evaluate resilience when an attacker targets the global budget.
+Fig. 5c reports error for benign queries.
+Attribution w/o global budget is unaffected (median 5.2%),
+as expected: without a global budget, there is nothing to
+deplete. But this immunity comes at the cost of no global
+privacy guarantee (§3). Attribution w/ global budget suffers
+severe degradation: its median RMSRE𝜏 reaches 48.5%, a 9.3×
+increase, and its p95 reaches 87.6%. This confirms Big Bird’s
+premise: simply adding a global budget to fix per-querier
+unsoundness is trivially defeated by Sybil attacks.
+In contrast, Big Bird achieves near-baseline utility and the
+privacy guarantee of a system with a global budget. With a
+well-sized quota, it nearly matches Attribution w/o global
+budget at a median of 5.5% and a p95 of 14.8%. Moreover,
+Big Bird is robust across a meaningful range of impressionsite quota values 𝜖imp-quota ∈ [1, 2], for which the budget
+the attacker can consume remains well below 𝜖global , leaving
+substantial slack in the global budget even after the attack.
+We also observe that, as in the benign case, quotas that are
+too small degrade utility. But under attack, quotas that are too
+large also degrade utility, for a fundamentally different reason: they allow the attacker to route enough traffic through
+Sybils to drain the global budget despite the quota mechanism. At 𝜖imp-quota = 3, median error rises to 12.5% and by
+𝜖imp-quota = 5 it plateaus near 20.1%. Fig. 5d corroborates this
+transition: for 𝜖imp-quota up to 2, fewer than 1% of benign reports are blocked by global-budget depletion; at 𝜖imp-quota = 3
+this rises to approximately 11%, and at 𝜖imp-quota = 4 to approximately 19%, dominating all other error sources.
+Impact of per-action domain cap and attacker strategy.
+We now fix 𝜖imp-quota = 2 (our default) and sweep 𝜅 action from
+1 to 4 to evaluate how the per-action domain cap impacts utility under attack. Additionally, we compare the omniscient
+attacker to the random attacker, revealing how adversary
+sophistication affects resilience. Fig. 6a shows that across
+both attackers, 𝜅 action = 1 keeps median benign RMSRE𝜏
+at or below 10.0%, and 𝜅 action = 2 (our default) at or below
+28.6%. Both remain far below the unprotected Attribution
+API (48.3–48.4%). 𝜅 action = 1 minimizes worst-case error at
+the expense of flexibility in the benign case, allowing only
+one site per user action. Big Bird’s quota mechanism provides
+the structural foundation for resilience, bounding depletion
+even against the optimal attacker. Atomic deduction dramatically reduces damage against more realistic adversaries: the
+random attacker achieves only 5.4% at 𝜅 action = 2, versus the
+omniscient attacker’s 28.6%.
+5.4
+
+Impact of Attacker Strength
+
+The preceding section fixed attacker strength and varied
+the defense configuration. We now fix the defense (𝜅 action =
+
+(a) Impact of per-action domain cap
+(b) Impact of Sybil domains
+(c) Impact of site popularity
+Fig. 6. (a) Impact of per-action domain cap and (b), (c) attacker strength on resilience. (b) Number of attacker-controlled Sybil domains capable of
+accessing the API and (c) popularity of the attacker-controlled sites in terms of number of user actions across all distinct users in the Criteo dataset.
+
+2, 𝜖imp-quota = 2) and vary attacker resources to test the
+guarantee from §4.1: damage should scale with the number
+of Sybil domains (dimension (i)) and the volume of genuine
+user traffic the attacker attracts (dimensions (ii) and (iii)).
+Number of Sybil domains (Fig. 6b). We vary the attacker’s
+Sybil pool from 5 to 100 domains, holding site popularity
+at maximum. The random attacker rises only from 5.2% at
+5 Sybils to 6.4% at 100, as the tight 𝜖imp-quota = 2 quota
+sharply limits per-domain budget consumption regardless of
+pool size. The omniscient attacker saturates early: RMSRE𝜏
+reaches 29.4% at 10 Sybils and remains flat through 100. With
+perfect tracking, 10 domains already exhaust the available
+per-device quota headroom; additional Sybils provide no
+benefit once the global budget becomes the bottleneck. This
+matches Thm. 4.1(i): depletion is bounded by the product of
+domain count and quota capacity, so once 𝑀 adv · 𝜖imp-quota
+exceeds the global budget, extra Sybils add nothing.
+Site popularity (Fig. 6c). We vary which of Criteo’s busiest
+sites the attacker controls, from the top 10 sites to ranks
+41–50. Lower-ranked sites have fewer user actions and fewer
+distinct users, jointly exercising dimensions (ii) and (iii) of
+the threat model. The random attacker falls from 5.4% to 5.2%,
+remaining near baseline across all ranks — the tight source
+quota renders the random attacker essentially harmless regardless of popularity. The omniscient attacker falls from
+29.0% to 10.9%, a 2.7× reduction. This confirms that damage
+scales with the volume of genuine user traffic the attacker
+attracts, as Thm. 4.1(ii–iii) bounds depletion as a function of
+𝑈 adv and the number of affected devices. This dimension is
+critical: attracting genuine traffic requires costly real-world
+investment, unlike cheap domain registration.
+
+6
+
+Additional Related Work
+
+§3 covers DP enforcement granularities. Other work follows.
+Ad-measurement APIs. Our primary application is the
+W3C Attribution API. Cookie Monster [43] introduced
+device-epoch IDP accounting. Google’s ARA line [2, 10, 16],
+IPA [30], PAM [3], and Hybrid [31] explored alternative,
+albeit now obsolete, privacy architectures. In these proposals, per-querier enforcement is treated as a natural
+semantic, with collusion recognized as the primary limitation. We show that even without collusion, per-querier DP
+is unsound. Attribution’s measurement-only scope, with
+
+targeting unsupported, is being debated [20]; the debate
+concerns what the standard should protect, not whether its
+guarantees hold. We argue that measurement is a sensible
+place to start, separable from targeting and already treated
+distinctly by some U.S. privacy laws [8].
+Privacy budget management. This paper contributes to
+the broad challenge of privacy budget management, a crucial
+but understudied area in DP. Budget allocation within a query
+is well studied [1, 27], but managing budgets across queriers,
+especially untrusted ones, remains relatively unexplored. Pujol et al. [36, 37] balance utility across analysts sharing a
+global budget, but without per-analyst utility assurances.
+Relevant systems include those for global budget scheduling [23, 28, 42], but none of these works address a Sybil DoS
+threat. Finally, work on privacy filters [12, 14, 25, 29, 38] provides building blocks on which Big Bird implements budgets.
+DoS and quota mechanisms. DoS defense is studied extensively in systems and networking (e.g., [4, 9, 39, 41]), and
+quotas are ubiquitous for conventional resources. But these
+approaches do not apply directly to privacy budgets, whose
+consumption reflects data contribution, not request volume.
+To our knowledge, no work treats privacy budgets as a DoS
+target and provides Sybil-resilient budget management that
+preserves DP semantics and utility. Big Bird’s novelty does
+not rest on the notion of quota, but on how the quota architecture is shaped by DP semantics and workload structure.
+
+7
+
+Conclusions
+
+We study DP enforcement in the W3C Attribution draft standard for privacy-preserving advertising and find that its current reliance on per-querier device-epoch IDP is not a sound
+foundation: even without collusion, realistic multi-querier
+behaviors such as cross-querier adaptivity and shared limits can violate its guarantees. We therefore advocate global
+device-epoch IDP and present Big Bird, a budget manager
+that makes it deployable by tying privacy-budget consumption to the stock-and-flow structure of benign workloads
+via IDP-aligned quotas and per-action domain caps. Our results show that Big Bird achieves rigorous global privacy,
+resilience to depletion attacks, and strong utility under adversarial conditions. Both contributions are now part of the
+draft standard and have broader implications for DP systems
+in open, untrusted environments.
+
+Acknowledgments
+We thank the anonymous reviewers and the PATCG/PATWG
+participants for their constructive feedback. Nikos Goutzoulias contributed to the implementation of an early prototype.
+This work was supported by NSF grant CNS-2143868, NSF
+Cooperative Agreement No. EEC-2133516, and Google, Meta,
+Microsoft, and Sloan Faculty Fellowships. Co-author Lécuyer
+acknowledges the Canada CIFAR AI Chair program and Amii.
+Co-author Geambasu was partially employed by Meta during this project, and subsequently by Google; the work was
+done exclusively in the context of Geambasu’s Columbia
+University research.
+
+References
+[1] John M. Abowd, Robert Ashmead, Ryan Cumings-Menon, Simson
+Garfinkel, Micah Heineck, Christine Heiss, Robert Johns, Daniel Kifer,
+Philip Leclerc, Ashwin Machanavajjhala, Brett Moran, William Sexton,
+Matthew Spence, and Pavel Zhuravlev. 2022. The 2020 Census Disclosure Avoidance System TopDown Algorithm. Harvard Data Science
+Review Special Issue 2 (6 2022). doi:10.1162/99608f92.529e3cb9
+[2] Hidayet Aksu, Badih Ghazi, Pritish Kamath, Ravi Kumar, Pasin Manurangsi, Adam Sealfon, and Avinash V. Varadarajan. 2024. Summary Reports Optimization in the Privacy Sandbox Attribution Reporting API. Proc. Priv. Enhancing Technol. 2024, 4 (2024), 605–621.
+doi:10.56553/POPETS-2024-0132
+[3] Apple. 2023. Private Ad Measurement (PAM). https://github.com/
+patcg-individual-drafts/private-ad-measurement.
+[4] Nirav Atre, Hugo Sadok, Erica Chiang, Weina Wang, and Justine
+Sherry. 2022. SurgeProtector: Mitigating Temporal Algorithmic
+Complexity Attacks using Adversarial Scheduling. In Proceedings
+of the 2022 Conference of the ACM Special Interest Group on Data
+Communication (SIGCOMM). ACM, New York, NY, USA, 723–738.
+doi:10.1145/3544216.3544250
+[5] Marcos Caceres. 2023. The User Activation API. https://webkit.org/
+blog/13862/the-user-activation-api/.
+[6] Rutchathon Chairattana-Apirom, Stefano Tessaro, and Nirvan Tyagi.
+2025. Fraud Mitigation in Privacy-Preserving Attribution. Cryptology
+ePrint Archive, Paper 2025/1891. https://eprint.iacr.org/2025/1891
+[7] T.-H. Hubert Chan, Elaine Shi, and Dawn Song. 2011. Private and
+Continual Release of Statistics. ACM Transactions on Information and
+System Security 14, 3 (2011), 26:1–26:24. doi:10.1145/2043621.2043626
+[8] Colorado General Assembly. 2025. Colorado Privacy Act, Section 61-1303 (25)(b)(IV). https://law.justia.com/codes/colorado/title-6/fairtrade-and-restraint-of-trade/article-1/part-13/section-6-1-1303/.
+[9] Scott A. Crosby and Dan S. Wallach. 2003.
+Denial of Service via Algorithmic Complexity Attacks. In 12th USENIX Security
+Symposium (USENIX Security 03). USENIX Association, Washington, D.C. https://www.usenix.org/conference/12th-usenix-securitysymposium/denial-service-algorithmic-complexity-attacks
+[10] Matthew Dawson, Badih Ghazi, Pritish Kamath, Kapil Kumar, Ravi
+Kumar, Bo Luan, Pasin Manurangsi, Nishanth Mundru, Harikesh
+Nair, Adam Sealfon, and Shengyu Zhu. 2023. Optimizing Hierarchical Queries for the Attribution Reporting API. In Proceedings of the
+Workshop on Data Mining for Online Advertising (AdKDD 2023) CoLocated with the 29th ACM SIGKDD Conference on Knowledge Discovery
+and Data Mining (KDD 2023), Long Beach, CA, USA, August 7, 2023
+(2023) (CEUR Workshop Proceedings, Vol. 3556), Abraham Bagherjeiran,
+Nemanja Djuric, Kuang-chih Lee, Linsey Pang, Vladan Radosavljevic, and Suju Rajan (Eds.). CEUR-WS.org. https://ceur-ws.org/Vol3556/adkdd23-dawson-optimizing-ceur-paper.pdf
+[11] Sergey Denisov, H. Brendan McMahan, John Rush, Adam Smith,
+
+and Abhradeep Guha Thakurta. 2022. Improved Differential Privacy for SGD via Optimal Private Linear Operators on Adaptive
+Streams. Advances in Neural Information Processing Systems 35 (2022),
+5910–5924.
+https://papers.nips.cc/paper_files/paper/2022/hash/
+271ec4d1a9ff5e6b81a6e21d38b1ba96-Abstract-Conference.html
+[12] David Durfee and Ryan M Rogers. 2019. Practical Differentially Private
+Top-k Selection with Pay-what-you-get Composition. In Advances
+in Neural Information Processing Systems, H. Wallach, H. Larochelle,
+A. Beygelzimer, F. d'Alché-Buc, E. Fox, and R. Garnett (Eds.), Vol. 32.
+Curran Associates, Inc., 3527–3537.
+[13] Hamid Ebadi, David Sands, and Gerardo Schneider. 2015. Differential
+Privacy: Now It’s Getting Personal. In Proceedings of the 42nd Annual
+ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages (Mumbai India, 2015-01-14). ACM, 69–81. doi:10.1145/2676726.
+2677005
+[14] Vitaly Feldman and Tijana Zrnic. 2021. Individual Privacy Accounting
+via a Rényi Filter. In Advances in Neural Information Processing Systems (2021), M. Ranzato, A. Beygelzimer, Y. Dauphin, P.S. Liang, and
+J. Wortman Vaughan (Eds.), Vol. 34. Curran Associates, Inc., 28080–
+28091. https://proceedings.neurips.cc/paper_files/paper/2021/file/
+ec7f346604f518906d35ef0492709f78-Paper.pdf
+[15] Marco Gaboardi, James Honaker, Gary King, Jack Murtagh, Kobbi
+Nissim, Jonathan Ullman, and Salil Vadhan. 2018. PSI ({\Psi}): A Private
+Data Sharing Interface. (2018). arXiv:1609.04340 [cs, stat] http://arxiv.
+org/abs/1609.04340
+[16] Badih Ghazi, Charlie Harrison, Arpana Hosabettu, Pritish Kamath,
+Alexander Knop, Ravi Kumar, Ethan Leeman, Pasin Manurangsi, Mariana Raykova, Vikas Sahu, and Phillipp Schoppmann. 2025. On the
+Differential Privacy and Interactivity of Privacy Sandbox Reports. Proceedings on Privacy Enhancing Technologies 2025, 3 (2025), 382–397.
+doi:10.56553/popets-2025-0104
+[17] Google. 2022. Attribution Reporting: Full System Overview. Privacy
+Sandbox. https://privacysandbox.google.com/private-advertising/
+attribution-reporting/system-overview
+[18] Abhradeep Guha Thakurta and Adam Smith. 2013. (Nearly) Optimal
+Algorithms for Private Online Learning in Full-information and Bandit
+Settings. In Advances in Neural Information Processing Systems (2013),
+Vol. 26. Curran Associates, Inc. https://proceedings.neurips.cc/paper/
+2013/hash/c850371fda6892fbfd1c5a5b457e5777-Abstract.html
+[19] Charlie Harrison. 2025. Safety limits enable possible DOS attacks.
+https://github.com/w3c/attribution/issues/69.
+[20] Kyle Hogan, Alishah Chator, Gabriel Kaptchuk, Mayank Varia, and
+Srinivas Devadas. 2026. Making Sense of Private Advertising: A Principled Approach to a Complex Ecosystem. Proc. Priv. Enhancing Technol.
+2026, 1 (2026), 450–469. doi:10.56553/POPETS-2026-0023
+[21] Palak Jain, Sofya Raskhodnikova, Satchit Sivakumar, and Adam Smith.
+2023. The Price of Differential Privacy under Continual Observation.
+In Proceedings of the 40th International Conference on Machine Learning
+(2023-07-03). PMLR, 14654–14678. https://proceedings.mlr.press/v202/
+jain23b.html
+[22] Zach Jorgensen, Ting Yu, and Graham Cormode. 2015. Conservative or Liberal? Personalized Differential Privacy. In 2015 IEEE 31st
+International Conference on Data Engineering (2015-04). 1023–1034.
+doi:10.1109/ICDE.2015.7113353
+[23] Nicolas Küchler, Emanuel Opel, Hidde Lycklama, Alexander Viand,
+and Anwar Hithnawi. 2024. Cohere: Managing Differential Privacy in
+Large Scale Systems. In 2024 IEEE Symposium on Security and Privacy
+(SP). IEEE, 991–1008. doi:10.1109/SP54263.2024.00122
+[24] Nicolas Küchler, Alexander Viand, Hidde Lycklama, and Anwar Hithnawi. 2025. DPolicy: Managing Privacy Risks Across Multiple Releases
+with Differential Privacy. In 2025 IEEE Symposium on Security and
+Privacy (SP) (2025-05). 3950–3968. doi:10.1109/SP61157.2025.00256
+[25] Mathias Lécuyer. 2021. Practical Privacy Filters and Odometers with
+Rényi Differential Privacy and Applications to Differentially Private
+
+Deep Learning. arXiv:2103.01379 [stat.ML] https://arxiv.org/abs/2103.
+01379
+[26] Mathias Lécuyer, Riley Spahn, Kiran Vodrahalli, Roxana Geambasu,
+and Daniel Hsu. 2019. Privacy Accounting and Quality Control in the
+Sage Differentially Private Machine Learning Platform. In Proceedings
+of the 27th ACM Symposium on Operating Systems Principles (SOSP).
+ACM, 181–195. doi:10.1145/3341301.3359639
+[27] Chao Li, Michael Hay, Vibhor Rastogi, Gerome Miklau, and Andrew
+McGregor. 2010. Optimizing linear counting queries under differential
+privacy. In Proceedings of the Twenty-Ninth ACM SIGMOD-SIGACTSIGART Symposium on Principles of Database Systems (Indianapolis,
+Indiana, USA) (PODS ’10). Association for Computing Machinery, New
+York, NY, USA, 123–134. doi:10.1145/1807085.1807104
+[28] Tao Luo, Mingen Pan, Pierre Tholoniat, Asaf Cidon, Roxana Geambasu,
+and Mathias Lécuyer. 2021. Privacy Budget Scheduling. In 15th USENIX
+Symposium on Operating Systems Design and Implementation (OSDI
+21). USENIX Association, 55–74. https://www.usenix.org/conference/
+osdi21/presentation/luo
+[29] Ryan McKenna, Brett Mullins, Daniel Sheldon, and Gerome Miklau.
+2022. AIM: an adaptive and iterative mechanism for differentially
+private synthetic data. Proc. VLDB Endow. 15, 11 (July 2022), 2599–
+2612. doi:10.14778/3551793.3551817
+[30] Meta and Mozilla. 2022. Interoperable Private Attribution (IPA). https:
+//github.com/patcg-individual-drafts/ipa.
+[31] Meta and Mozilla. 2024. Hybrid Proposal. https://github.com/patcgindividual-drafts/hybrid-proposal.
+[32] Mozilla. 2024. Experiment: Privacy-Preserving Attribution Measurement API. https://github.com/mozilla/explainers/tree/main/archive/
+ppa-experiment.
+[33] Andrew Paseltiner, Andy Leiserson, Benjamin Case, Benjamin Savage,
+Charlie Harrison, and Martin Thomson. 2026. Attribution Level 1.
+https://w3c.github.io/attribution/.
+[34] Andrew Paseltiner, Andy Leiserson, Benjamin Case, Benjamin Savage,
+Charlie Harrison, and Martin Thomson. 2026. Attribution Level 1, 4.2.1.
+Privacy Budget Store. https://www.w3.org/TR/2026/WD-attribution20260813/#s-privacy-budget-store.
+[35] Andrew Paseltiner, Andy Leiserson, Benjamin Case, Benjamin Savage,
+Charlie Harrison, and Martin Thomson. 2026. Attribution Level 1, 7.1.1.
+Formal Analysis of Privacy Properties and Their Limitations. https:
+//www.w3.org/TR/2026/WD-attribution-20260813/#formal-analysis.
+[36] David Pujol, Albert Sun, Brandon Fain, and Ashwin Machanavajjhala.
+2022. Multi-Analyst Differential Privacy for Online Query Answering.
+Proc. VLDB Endow. 16, 4 (2022), 816–828. doi:10.14778/3574245.3574265
+[37] David Pujol, Yikai Wu, Brandon Fain, and Ashwin Machanavajjhala.
+2021. Budget sharing for multi-analyst differential privacy. Proc. VLDB
+Endow. 14, 10 (June 2021), 1805–1817. doi:10.14778/3467861.3467870
+[38] Ryan Rogers, Aaron Roth, Jonathan Ullman, and Salil Vadhan. 2016.
+Privacy odometers and filters: pay-as-you-go composition. In Proceedings of the 30th International Conference on Neural Information
+Processing Systems (Barcelona, Spain) (NIPS’16). Curran Associates
+Inc., Red Hook, NY, USA, 1921–1929.
+[39] C.L. Schuba, I.V. Krsul, M.G. Kuhn, E.H. Spafford, A. Sundaram, and
+D. Zamboni. 1997. Analysis of a denial of service attack on TCP.
+In Proceedings. 1997 IEEE Symposium on Security and Privacy (Cat.
+No.97CB36097). 208–223. doi:10.1109/SECPRI.1997.601338
+[40] Mehdi Sebbar, Corentin Odic, Mathieu Léchine, Aloïs Bissuel, Nicolas
+Chrysanthos, Anthony D’Amato, Alexandre Gilotte, Fabian Höring,
+Sarah Nogueira, and Maxime Vono. 2025. CriteoPrivateAds: A
+Real-World Bidding Dataset to Design Private Advertising Systems.
+arXiv:2502.12103 [cs.CR] https://arxiv.org/abs/2502.12103
+[41] Oliver Spatscheck and Larry L. Peterson. 1999. Defending Against
+Denial of Service Attacks in Scout. In 3rd Symposium on Operating
+Systems Design and Implementation (OSDI 99). USENIX Association,
+New Orleans, LA, 59–72. https://www.usenix.org/conference/osdi-
+
+99/defending-against-denial-service-attacks-scout
+[42] Pierre Tholoniat, Kelly Kostopoulou, Mosharaf Chowdhury, Asaf
+Cidon, Roxana Geambasu, Mathias Lécuyer, and Junfeng Yang. 2025.
+DPack: Efficiency-Oriented Privacy Budget Scheduling. In Proceedings
+of the Twentieth European Conference on Computer Systems (Rotterdam,
+Netherlands) (EuroSys ’25). Association for Computing Machinery,
+New York, NY, USA, 1194–1209. doi:10.1145/3689031.3696096
+[43] Pierre Tholoniat, Kelly Kostopoulou, Peter McNeely, Prabhpreet Singh
+Sodhi, Anirudh Varanasi, Benjamin Case, Asaf Cidon, Roxana Geambasu, and Mathias Lécuyer. 2024. Cookie Monster: Efficient On-Device
+Budgeting for Differentially-Private Ad-Measurement Systems. In Proceedings of the ACM SIGOPS 30th Symposium on Operating Systems
+Principles (New York, NY, USA, 2024-11-15) (SOSP ’24). Association for
+Computing Machinery, 693–708. doi:10.1145/3694715.3695965
+[44] Shufan Zhang and Xi He. 2023. DProvDB: Differentially Private Query
+Processing with Multi-Analyst Provenance. Proc. ACM Manag. Data 1,
+4, Article 267 (Dec. 2023), 27 pages. doi:10.1145/3626761
+
+Note: This appendix has not been peer-reviewed.
+
+A
+
+Per-Querier DP Analysis (§3 Proofs)
+
+A.1
+
+Data Adaptivity
+
+We provide more details on the model introduced in §3.2.
+Our formalism with a data generation process follows existing work [26]. Other adaptive stream definitions have
+been proposed [18, 21]. Adaptive data generation definitions
+capture stronger adversaries than non-adaptive adjacency
+definitions for streams [7]. Note that when there is only one
+querier, a single adversary can be both the data generation
+process and the querier.
+Without loss of generality, the opt-out record and the time
+at which it is inserted are known upfront. We could let G
+adaptively decide when and what to insert, while enforcing
+that this happens at most once, but this decision would not
+actually depend on the challenge bit and would therefore
+follow a distribution known by G upfront.
+Thm. 3.1 shows that data adaptivity results in excess
+per-querier privacy loss growing linearly in the number
+of queriers. The proof exhibits queriers and a data generation process, where results from queriers Q 1, . . . , Q𝑛 are
+first encoded into the dataset itself. Q𝑛+1 later decodes this
+information to gain additional confidence about the value
+of 𝜒 beyond what its own queries should allow according to
+the per-querier filter.
+Theorem 3.1. Consider Alg. 1, where F 𝑘 are instantiated with
+pure DP filters [38], each with capacity 𝜖. Denote by 𝑉 ( 𝜒 ) the
+output of the algorithm on challenge bit 𝜒.
+When 𝐾 = 1, Alg. 1 reduces to single-querier fully adaptive
+composition on adaptively generated streams. We have:
+∀𝑥 0 ∈ X, ∀𝑡 ∈ [𝑡 max ], ∀G, ∀Q 1,
+
+
+Pr[𝑉 1,(0) ∈ 𝑆]
+∀𝑆 ⊆ R 𝑡max , ln
+≤ 𝜖.
+Pr[𝑉 1,(1) ∈ 𝑆]
+However, for 𝐾 = 𝑛 + 1 > 1, there exists 𝜖 ′ > 0 such that:
+∃𝑥 0 ∈ X, ∃𝑡 0 ∈ [𝑡 max ], ∃G, ∃(Q 1, . . . , Q𝑛+1 ),
+
+
+Pr[𝑉 𝑛+1,(0) ∈ 𝑆]
+𝑡 max
+= 𝜖 + 𝑛𝜖 ′ > 𝜖.
+∃𝑆 ⊆ R , ln
+Pr[𝑉 𝑛+1,(1) ∈ 𝑆]
+Proof. When 𝐾 = 1, we are exactly in the setting of Lécuyer
+et al. [26]. Briefly, when data can change adaptively based
+on past results, inserting a single record can have cascading
+effects on future data and future queries. Still, after conditioning on a prefix 𝑉11, . . . , 𝑉𝑡𝑡 , the databases in both worlds
+differ only by at most one record.
+Now, consider 𝐾 = 𝑛 + 1 with 𝑛 > 0. Take 𝑥 0 = 1 and
+𝑡 0 = 1. Without loss of generality, take 𝑡 max = 2 and X = {1}.
+We use histogram notation for the database, but since X is a
+singleton, we write 𝐷 ∈ N instead of 𝐷 ∈ N X . In multiset noÍ
+tation, we could take 𝑥 ∈𝐷 𝑥 to get an integer representation
+of the database. Define G and Q 1, . . . , Q𝑛 , Q𝑛+1 as follows:
+
+1. At 𝑡 = 1:
+a. The data generation process does not return any
+data: G(∅, . . . , ∅) = ∅. Thus 𝐷 1 = 1 if 𝜒 = 1, and
+𝐷 1 = 0 otherwise, that is:
+𝐷1 = 𝜒
+
+(1)
+
+b. For 𝑘 ∈ {1..𝑛}, Q𝑘 submits 𝑞𝑘1 : 𝐷 ↦→ 𝐷 + Lap(1/𝜖),
+which consumes 𝜖 from the per-querier filter F 𝑘 .
+c. Q 𝐾 submits a query that consumes no budget from
+the per-querier filter: Q 𝐾 (∅) = 𝑞𝐾1 : 𝐷 ↦→ 0.
+2. At 𝑡 = 2:
+a. The data generation process inserts up to 𝑛 new
+records, conditionally on outputs 𝑉11, . . . , 𝑉1𝑛 from
+Q 1, . . . , Q𝑛 : G(𝑉11, . . . , 𝑉1𝐾 ) = |{𝑘 ∈ {1..𝑛} : 𝑉1𝑘 >
+1/2}|. That is:
+𝑛
+∑︁
+𝐷2 =
+1[𝐷 1 + 𝑍𝑘 > 1/2]
+(2)
+𝑘=1
+
+where 𝑍𝑘 ∼ Lap(1/𝜖). Since 𝑉1𝑘 is more likely to be
+greater than 1/2 if 𝜒 = 1, 𝐷 2 is more likely to be high
+if 𝜒 = 1. In other words, G encodes what Q 1, . . . , Q𝑛
+have learned into the dataset itself.
+b. For 𝑘 ∈ {1..𝑛}, Q𝑘 submits a query that consumes
+no budget from the per-querier filter: Q𝑘 (𝑉1𝑘 ) = 𝑞𝑘2 :
+𝐷 ↦→ 0.
+c. Q 𝐾 submits a query that consumes 𝜖 from the
+per-querier filter F 𝐾 : Q 𝐾 (𝑉1𝐾 ) = 𝑞𝐾2 : 𝐷 ↦→
+𝐷 + Lap(1/𝜖), and therefore:
+𝑉2𝐾 = 𝐷 1 + 𝐷 2 + 𝑍
+
+(3)
+
+where 𝑍 ∼ Lap(1/𝜖). We will show that 𝑉2𝐾 is disproportionally more likely to be high if 𝜒 = 1. In other
+words, Q 𝐾 retrieves the information encoded into
+the dataset, that originally came from Q 1, . . . , Q𝑛 .
+Recall that Pr[𝑍𝑘 > 1/2] = 12 𝑒 −𝜖/2 . Also, Pr[1 + 𝑍𝑘 >
+1/2] = Pr[−𝑍𝑘 < 1/2] = 1 − 21 𝑒 −𝜖/2 , since −𝑍𝑘 ∼ 𝑍𝑘 . Set 𝑝 :=
+1 −𝜖/2
+. 𝐷 2 follows a binomial distribution: 𝐷 2(0) ∼ B (𝑛, 𝑝)
+2𝑒
+(1)
+and 𝐷 2 ∼ B (𝑛, 1 − 𝑝) ∼ 𝑛 − B (𝑛, 𝑝). Hence, Eq. 3 gives:
+(
+𝑉2𝐾,(0) ∼ B (𝑛, 𝑝) + Lap(1/𝜖)
+(4)
+𝑉2𝐾,(1) ∼ 1 + 𝑛 − B (𝑛, 𝑝) + Lap(1/𝜖)
+We already have E[𝑉2𝐾,(0) ] = 𝑛𝑝 < 𝑛/2 and E[𝑉2𝐾,(1) ] =
+1 + 𝑛(1 − 𝑝) > 1 + 𝑛/2. We now exhibit an event for which
+𝑉2𝐾,(0) ≪ 𝑉2𝐾,(1) .
+Take 𝐵 ∼ B (𝑛, 𝑝). Take 𝑁 ≥ 𝑛 + 1. Recall that since
+𝑍 ∼ Lap(𝜖), for all 𝑧 ≥ 0 and 𝑡 ∈ R such that 𝑧 + 𝑡 ≥ 0, we
+have:
+Pr[𝑍 ≥ 𝑧] = 𝑒 𝜖𝑡 Pr[𝑍 ≥ 𝑧 + 𝑡]
+
+(5)
+
+On one hand, we have Pr[𝑉 0 ≥ 𝑁 ] = Pr[𝐵 + 𝑍 ≥ 𝑁 ] =
+
+Pr[𝑍 ≥ 𝑁 − 𝐵]. On the other hand, Pr[𝑉 1 ≥ 𝑁 ] = Pr[1 + 𝑛 −
+𝐵 + 𝑍 ≥ 𝑁 ] = Pr[𝑍 ≥ 𝑁 − 1 − 𝑛 + 𝐵]. Since 𝑁 − 1 − 𝑛 + 𝐵 ≥ 0,
+we have: Pr[𝑍 ≥ 𝑁 − 1 − 𝑛 + 𝐵] = 𝑒 𝜖 Pr[𝑍 ≥ 𝑁 − 𝑛 + 𝐵].
+Hence,
+Pr[𝑍 ≥ 𝑁 − 𝑛 + 𝐵]
+Pr[𝑉 1 ≥ 𝑁 ]
+= 𝑒𝜖
+(6)
+Pr[𝑉 0 ≥ 𝑁 ]
+Pr[𝑍 ≥ 𝑁 − 𝐵]
+For all 𝑘 ∈ [0, 𝑛] we have 𝑁 − 𝑛 + 𝑘 ≥ 0 and 𝑁 − 𝑘 ≥ 0,
+so we can compute the exact probabilities:
+Pr[𝑍 ≥ 𝑁 − 𝑛 + 𝐵] =
+
+𝑛  
+∑︁
+𝑛
+
+Alg. 3 Formal model for shared limits
+𝑝 𝑘 (1 − 𝑝)𝑛−𝑘 Pr[𝑍 ≥ 𝑁 − 𝑛 + 𝑘]
+
+1: Input
+2: Database 𝐷
+3: Queriers Q 1, . . . , Q 𝐾
+4: Per-querier filters F 1, . . . , F 𝐾
+
+𝑘
+𝑘=0
+𝑛  
+∑︁
+𝑛 𝑘
+1
+=
+𝑝 (1 − 𝑝)𝑛−𝑘 𝑒 − (𝑁 −𝑛+𝑘 )𝜖
+𝑘
+2
+𝑘=0
+𝑛  
+∑︁
+𝑛 𝑘
+1
+𝑝 (1 − 𝑝)𝑛−𝑘 (𝑒 𝜖 )𝑛−𝑘
+= 𝑒 −𝑁 𝜖
+2
+𝑘
+
+5:
+
+𝑘=0
+
+View 𝑉 = (𝑉 1, . . . , 𝑉 𝐾 ) ∈ R 𝑡max ×𝐾 of all Q𝑘
+8: for 𝑡 ∈ [𝑡 max ] do
+9: for 𝑘 ∈ [𝐾] do
+// Query based on Q𝑘 ’s own previous results
+𝑘 )
+10:
+𝑞𝑡𝑘 ← Q𝑘 (𝑉<𝑡
+// Execute if (1) Q𝑘 has enough budget and (2) shared
+limit accepts the query.
+11:
+if F 𝑘 (𝑞𝑘1 , . . . , 𝑞𝑡𝑘 ) ∧ L (𝑞 11, . . . , 𝑞𝐾1 , . . . 𝑞𝑡𝑘 ) then
+12:
+𝑉𝑡𝑘 ← 𝑞𝑡𝑘 (𝐷)
+13:
+else
+14:
+𝑉𝑡𝑘 ← ⊥
+7:
+
+Similarly,
+𝑛  
+∑︁
+𝑛
+
+𝑝 𝑘 (1 − 𝑝)𝑛−𝑘 Pr[𝑍 ≥ 𝑁 − 𝑘]
+
+𝑘
+𝑘=0
+𝑛  
+1 −𝑁 𝜖 ∑︁ 𝑛 𝑘
+𝑝 (1 − 𝑝)𝑛−𝑘 (𝑒 𝜖 )𝑘
+= 𝑒
+2
+𝑘
+𝑘=0
+
+= (𝑝𝑒 𝜖 + 1 − 𝑝)𝑛
+
+Hence,
+
+𝜖 𝑛
+Pr[𝑉 1 ≥ 𝑁 ]
+𝜖 𝑝 + (1 − 𝑝)𝑒
+=
+𝑒
+Pr[𝑉 0 ≥ 𝑁 ]
+𝑝𝑒 𝜖 + 1 − 𝑝
+
+Theorem 3.2. Take 𝐾 = 𝑛 + 1 > 1, per-querier filters with capacity 𝜖 and shared filter with capacity 𝜖𝑔 < (𝑛 +1)𝜖 (allowing
+executions that trigger the shared limit).
+For 𝑛 large enough that ⌈ 𝑛2 𝑒 −𝜖/2 ⌉ < 𝑛/2, there exists neighboring databases 𝐷, 𝐷 ′ such that:
+
+Moreover, we have:
+𝑝 + (1 − 𝑝)𝑒 𝜖 − (𝑝𝑒 𝜖 + 1 − 𝑝) = (1 − 2𝑝)𝑒 𝜖 − (1 − 2𝑝)
+= (1 − 2𝑝) (𝑒 𝜖 − 1)
+>0
+
+
+𝑝+(1−𝑝 )𝑒 𝜖
+since 𝑝 < 1/2 and 𝜖 > 0. Define 𝜖 ′ := ln 𝑝𝑒 𝜖 +1−𝑝
+
+
+
+> 0.
+
+Then:
+
+Pr[𝑉 1 ≥ 𝑁 ]
+ln
+= 𝜖 + 𝑛𝜖 ′
+Pr[𝑉 0 ≥ 𝑁 ]
+
+
+□
+A.2
+
+Shared limit L
+
+6: Output
+
+= (𝑝 + (1 − 𝑝)𝑒 𝜖 )𝑛
+
+Pr[𝑍 ≥ 𝑁 − 𝐵] =
+
+serving whether its own queries get rejected by the shared filter. This gives Q𝑛+1 additional information about the dataset,
+beyond what its own per-querier filter allows. This happens
+without different queriers sharing their DP outputs, which is
+what people have referred to as collusion before. In fact, even
+if Q1, . . . , Q𝑛 do not follow a particular strategy, and Q𝑛+1
+doesn’t know about them, Q𝑛+1 ’s view can still be impacted
+beyond what its per-querier filter allows.
+
+Shared Limits
+
+Since we know that data adaptivity already threatens perquerier budget semantics, we consider a simpler setting
+where data is known upfront. Alg. 3 presents this variant
+of Alg. 1. Thm. 3.2 then shows that adding a shared filter
+results in excess per-querier privacy loss, also growing linearly in the number of queriers. The proof exhibits 𝑛 queriers
+Q1, . . . , Q𝑛 that first ask queries. These queriers then adaptively encode what they have learned into the privacy parameters of their next queries. The shared privacy filter tracks
+privacy loss across queriers, so the state of that filter now
+depends on all queriers’ past queries. Finally, a querier Q𝑛+1
+can decode the information stored into the shared filter by ob-
+
+∃(Q 1, . . . , Q𝑛+1 ), ∃𝑆 ⊆ R 𝑡max ,
+
+
+Pr[𝑉 𝑛+1,(0) ∈ 𝑆]
+ln
+> 𝜖.
+Pr[𝑉 𝑛+1,(1) ∈ 𝑆]
+Moreover, there exists 𝜖 ′ > 0 and neighboring databases
+4 ln 2
+𝐷, 𝐷 ′ such that for all 𝑛 ≥ (1−𝑒
+−𝜖/2 ) 2 ,
+∃(Q 1, . . . , Q𝑛+1 ), ∃𝑆 ⊆ R 𝑡max ,
+
+
+Pr[𝑉 𝑛+1,(0) ∈ 𝑆]
+ln
+≥ 𝜖 + 𝑛𝜖 ′ .
+Pr[𝑉 𝑛+1,(1) ∈ 𝑆]
+Proof. Consider 𝐷 = 0, 𝐷 ′ = 1 from N X = N with X = {1}.
+Define Q 1, . . . , Q𝑛 as follows. Take 𝜖0, 𝜖1, 𝜖2 > 0 that we will
+calibrate later.
+1. At 𝑡 = 1:
+a. For 𝑘 ∈ {1..𝑛}, Q𝑘 submits 𝑞𝑘1 : 𝐷 ↦→ 𝐷 + Lap(1/𝜖1 ),
+which consumes 𝜖1 .
+b. Then, Q𝑛+1 submits a query that consumes all but
+𝜖0 from its budget: Q𝑛+1 (∅) = 𝑞𝑛+1
+: 𝐷 ↦→ 𝐷 +
+1
+Lap(1/(𝜖 − 𝜖0 )).
+2. At 𝑡 = 2:
+
+a. For 𝑘 ∈ {1..𝑛}, Q𝑘 submits a query that consumes
+no budget if 𝑉1𝑘 was small, or 𝜖2 if 𝑉1𝑘 was large:
+Q𝑘 (𝑉1𝑘 ) = 𝑞𝑘2 : 𝐷 ↦→ 1[𝑉1𝑘 > 1/2] (𝐷 + Lap(1/𝜖2 )).
+In other words, Q𝑘 encodes the information it
+learned at 𝑡 = 1 into the shared limit itself, through
+the adaptively chosen budget associated with its
+request at time 𝑡 = 2.
+b. Q𝑛+1 submits a query that attempts to consume
+𝜖0 : Q𝑛+1 (𝑉1𝑛+1 ) = 𝑞𝑛+1
+: 𝐷 ↦→ 𝐷 + Lap(1/𝜖0 ), and
+2
+therefore 𝑉2𝑛+1 ∼ 𝐷 + Lap(1/𝜖0 ) if the shared limit
+and the per-querier filter both accept the query, and
+𝑉2𝑛+1 = ⊥ otherwise. In other words, Q𝑛+1 retrieves
+the information encoded into the shared limit that
+originally came from Q 1, . . . , Q𝑛 ’s own requests.
+Now, we configure 𝜖1 and 𝜖2 to ensure that no query prior
+to 𝑉2𝑛+1 gets filtered. That is, 𝜖 − 𝜖0 + 𝑛(𝜖1 + 𝜖2 ) ≤ 𝜖𝑔 = 𝑛 0𝜖
+and 𝜖1 + 𝜖2 ≤ 𝜖. To saturate the global filter when the first 𝑛
+queriers all ask for 𝜖2 , we want:
+𝜖 − 𝜖0 + 𝑛(𝜖1 + 𝜖2 ) = 𝜖𝑔
+
+(7)
+
+𝑛,( 𝜒 )
+
+𝑘=1
+
+Set 𝑝 = 21 𝑒 −𝜖/2 . We have:
+𝑓2𝑛,(0) ∼ 𝑛𝜖1 + 𝜖 − 𝜖0 + B (𝑛, 𝑝)𝜖2
+𝑓2𝑛,(1) ∼ 𝑛𝜖1 + 𝜖 − 𝜖0 + (𝑛 − B (𝑛, 𝑝))𝜖2
+
+(9)
+
+In particular, E[𝑓2𝑛,(0) ] = 𝜖−𝜖0 +𝑛(𝜖1 +𝑝𝜖2 ) and E[𝑓2𝑛,(1) ] =
+𝜖 − 𝜖0 + 𝑛(𝜖1 + (1 − 𝑝)𝜖2 ). We take 𝜖2 so that Q𝑛+1 is more
+likely to trigger the global filter on 𝐷 (1) and more likely to
+succeed on 𝐷 (0) :
+𝑛𝜖1 + 𝜖 − 𝜖0 + 𝑛𝜖2 /2 + 𝜖0 = 𝜖𝑔
+
+Pr[𝐵 (0) > 𝑛/2] = Pr[𝐵 > 𝑛/2]
+
+(16)
+
+≤ Pr[𝐵 ≥ 𝑛/2]
+
+(17)
+
+= Pr[𝐵 − 𝑛𝑝 ≥ 𝑛(1/2 − 𝑝)]
+2
+
+≤ exp (−2(1/2 − 𝑝) 𝑛)
+Similarly:
+Pr[𝐵 (1) > 𝑛/2] = Pr[𝑛 − 𝐵 > 𝑛/2]
+
+= ⊥ ⇐⇒ 𝑓2𝑛,(0) + 𝜖0 > 𝜖𝑔
+
+(11)
+
+⇐⇒ 𝑛𝜖1 + 𝜖 − 𝜖0 + 𝐵 ( 𝜒 ) 𝜖2 + 𝜖0 > 𝜖 − 𝜖0 + 𝑛(𝜖1 + 𝜖2 )
+(12)
+⇐⇒ 𝐵 ( 𝜒 ) 𝜖2 + 𝜖0 > 𝑛𝜖2
+⇐⇒ 2𝐵
+
+(𝜒)
+
+/𝑛 + 1 > 2
+
+⇐⇒ 𝐵 ( 𝜒 ) > 𝑛/2
+
+(21)
+
+= 1 − Pr[𝐵 ≥ 𝑛/2]
+
+(22)
+2
+
+≥ 1 − exp (−2(1/2 − 𝑝) 𝑛)
+
+(23)
+
+Finally, set 𝑆 = {(𝑣, ⊥), 𝑣 > 1}. Since Pr[𝑉1𝑛+1,(1) > 1] =
+𝑛+1,( 𝜒 )
+𝑛+1,( 𝜒 )
+𝑒 𝜖 −𝜖0 Pr[𝑉1𝑛+1,(0) > 1] and 𝑉1
+and 𝑉2
+are independent, we get:
+𝑛+1,(1)
+= ⊥]
+Pr[𝑉 𝑛+1,(1) ∈ 𝑆]
+𝜖 −𝜖0 Pr[𝑉2
+=𝑒
+𝑛+1,(0)
+𝑛+1,(0)
+Pr[𝑉
+∈ 𝑆]
+Pr[𝑉
+= ⊥]
+
+Pr[𝐵 (1) > 𝑛/2]
+Pr[𝐵 (0) > 𝑛/2]
+
+𝜖 −𝜖0
+≥𝑒
+exp (2(1/2 − 𝑝) 2𝑛) − 1
+
+= 𝑒 𝜖 −𝜖0
+
+(24)
+
+(13)
+(14)
+(15)
+
+We now upper-bound Pr[𝐵 (0) > 𝑛/2] and lower-bound
+
+(25)
+(26)
+
+Now, since the median of 𝐵 is ⌊𝑛𝑝⌋ or ⌈𝑛𝑝⌉, we already
+have Pr[𝐵 (0) > 𝑛/2] < 1/2 < Pr[𝐵 (1) > 𝑛/2] when ⌈𝑛𝑝⌉ <
+𝑛/2, which happens for 𝑛 large enough or 𝑝 small enough
+(i.e., 𝜖 large enough).
+We can get a more informative bound asymptotically. Set
+𝑛+1,(1) ∈𝑆 ]
+𝛼𝑛 := exp ((1/2 − 𝑝) 2𝑛). We have Pr[𝑉
+≥ 𝛼𝑛2 − 1. For
+Pr[𝑉 𝑛+1,(0) ∈𝑆 ]
+𝛼𝑛 large enough, for instance any 𝛼𝑛 ≥ 2, we have 𝛼𝑛2 −1 ≥ 𝛼𝑛 .
+ln 2
+4 ln 2
+We have 𝛼𝑛 ≥ 2 ⇐⇒ 𝑛 ≥ (1/2−𝑝
+= (1−𝑒
+−𝜖/2 ) 2 , so for such
+)2
+𝑛 we get:
+Pr[𝑉 𝑛+1,(1) ∈ 𝑆]
+Pr[𝑉 𝑛+1,(0) ∈ 𝑆]
+≥ 𝑒 𝜖 −𝜖0 𝛼𝑛
+=𝑒
+
+𝜖 −𝜖0
+
+(27)
+(28)
+2
+
+𝑛
+
+(29)
+
+≥ 𝜖 + 𝑛𝜖 ′ > 𝜖
+
+(30)
+
+(exp (1/2 − 𝑝) ))
+
+That is:
+
+
+𝑛+1,( 𝜒 )
+
+(19)
+(20)
+
+(10)
+
+Subtracting Eq. 7 from Eq. 10, we get 𝜖0 − 𝑛𝜖2 /2 = 0,
+i.e., 𝜖2 = 2𝜖0 /𝑛.
+Define 𝐵 ( 𝜒 ) ∼ 𝜒 (𝑛 − 𝐵) + (1 − 𝜒)𝐵, the number of queriers
+that ask for 𝜖2 at 𝑡 = 2, with 𝐵 ∼ B (𝑛, 𝑝) as in the proof of
+Thm. 3.1. By construction, 𝜖0 passes Q𝑛+1 ’s per-querier filter,
+so we can only return ⊥ if 𝜖0 hits the shared filter’s capacity:
+𝑉2
+
+(18)
+
+2
+
+This means that the state 𝑓2
+of the shared filter just
+before query 𝑡 = 2, 𝑘 = 𝑛 + 1, on input 𝐷 ( 𝜒 ) , is:
+𝑛
+∑︁
+𝑓2𝑛 = 𝑛𝜖1 + 𝜖 − 𝜖0 +
+Pr[𝑉1𝑘 > 1/2]𝜖0
+(8)
+
+(
+
+Pr[𝐵 (1) > 𝑛/2]. By Hoeffding’s inequality, we have:
+
+ln
+
+Pr[𝑉 𝑛+1,(0) ∈ 𝑆]
+Pr[𝑉 𝑛+1,(1) ∈ 𝑆]
+
+
+
+with 𝜖 ′ := (1/2 − 𝑝) 2 > 0.
+□
+Remark about atomicity. We clarify notation for Alg. 1,
+Line 14, where a query is executed only if both the perquerier filter and the shared limit permit it. The joint condition
+F 𝑘 (𝑞𝑘1 , . . . , 𝑞𝑡𝑘 ) ∧ L (𝑞 11, . . . , 𝑞𝐾1 , . . . , 𝑞𝑡𝑘 )
+
+means that each filter takes its decision independently. In
+particular, if F 𝑘 accepts a query 𝑞𝑡𝑘 while L rejects it, 𝑞𝑡𝑘 will
+not be executed, but F 𝑘 will not know that fact when it is
+time to make a decision about 𝑞𝑡𝑘+1 . That means F 𝑘 can be
+overly conservative, by deducting budget for queries that
+are in fact not executed. While this preserves privacy, it can
+hurt utility. We propose a solution to this conundrum in §4,
+thanks to a new form of atomic filter that is designed to
+avoid spending per-querier budget needlessly. This can be
+modeled by a new object (F 𝑘 ◦ L) (𝑞 11, . . . , 𝑞𝐾1 , . . . 𝑞𝑡𝑘 ) that
+has access to all the previous queries. The shared state in
+this object means that per-querier budgets act as heuristics
+(as opposed to formal per-querier DP guarantees) unless a
+dedicated siloing assumption holds.
+A.3
+
+Extension to Individual DP filters
+
+The model from Alg. 1 considers standard filters [38], where
+queriers can directly observe whether a query gets rejected.
+However, systems such as Cookie Monster [43] or ARA [16]
+operate under individual DP filters [14], which behave differently. Because an IDP budget depends on the data itself, IDP
+filters cannot return ⊥ explicitly when they are out of budget. Instead, they silently drop the out-of-budget individuals
+from the dataset and return a noisy answer.
+This raises the question: since filter outputs are not visible
+under IDP, do shared limits still leak extra information? We
+give a positive answer. First, we adapt the formalism to IDP
+filters in Alg. 4, with changes from Alg. 3 in blue. Next,
+Thm. A.1 shows a variant of Thm. 3.2 for IDP filters. Finally,
+Thm. 3.1 immediately applies since the counterexample from
+the proof does not trigger any filter, and therefore works
+identically under IDP filters.
+Theorem A.1. Take 𝐾 = 𝑛 + 1 > 1, per-querier individual
+filters with capacity 𝜖 and shared individual filter with capacity
+𝜖𝑔 < (𝑛+1)𝜖 (allowing executions that trigger the shared limit).
+There exists 𝜖 ′ > 0 and neighboring databases 𝐷, 𝐷 ′ such
+that
+
+Alg. 4 Formal model for shared limits with IDP filters
+1: Input
+2: Database 𝐷
+3: Queriers Q 1, . . . , Q 𝐾
+
+Per-querier individual filters (F𝑥1, . . . , F𝑥𝐾 )𝑥 ∈𝐷
+Shared limit (L𝑥 )𝑥 ∈𝐷
+6: Output
+7: View 𝑉 = (𝑉 1, . . . , 𝑉 𝐾 ) ∈ R 𝑡 max ×𝐾 of all Q 𝑘
+8: for 𝑡 ∈ [𝑡 max ] do
+9: for 𝑘 ∈ [𝐾] do
+// Query based on Q𝑘 ’s own previous results
+𝑘 )
+10:
+𝑞𝑡𝑘 ← Q𝑘 (𝑉<𝑡
+// Execute if (1) Q𝑘 has enough budget and (2) shared
+limit accepts the query.
+11:
+𝑆𝑡𝑘 ← 𝐷
+12:
+for 𝑥 ∈ 𝐷 do
+13:
+if F𝑥𝑘 (𝑞𝑘1 , . . . , 𝑞𝑡𝑘 ) ∧ L𝑥 (𝑞 11, . . . , 𝑞𝐾1 , . . . 𝑞𝑡𝑘 ) then
+// Drop out-of-budget records.
+14:
+𝑆𝑡𝑘 ← 𝑆𝑡𝑘 \ {𝑥 }
+15:
+𝑉𝑡𝑘 ← 𝑞𝑡𝑘 (𝑆𝑡𝑘 )
+4:
+5:
+
+𝑥 0 }| + Lap(1/𝜖). This consumes 𝑥 0 ’s full individual
+budget.
+• At 𝑡 = 2:
+– For 𝑘 ∈ [𝑛], querier 𝑘 requests 𝑥𝑘 with full budget,
+conditionally on past results. That is:
+Q𝑘 (𝑉1𝑘 ) = 𝑞𝑘2 : 𝐷 ↦→ 1[𝑉1𝑘 ≤ 1/2] · (|{𝑥 ∈ 𝐷 : 𝑥 =
+𝑥𝑘 }| + Lap(1/𝜖))
+– Finally, querier 𝑛 + 1 requests all the records
+𝑥 1, . . . , 𝑥𝑛 :
+Q𝑛+1 (𝑉1𝑛+1 ) = 𝑞𝑛+1
+: 𝐷 ↦→ |{𝑥 ∈ 𝐷 : 𝑥 ∈
+2
+{𝑥 1, . . . , 𝑥𝑛 }}| + Lap(1/𝜖)
+Since {𝑥 1, . . . , 𝑥𝑛 } are present in both worlds, 𝑉 𝑛+1,(1) and
+𝑛+1,(0)
+𝑉
+differ only by the points that get dropped at Line 14.
+Point 𝑥𝑘 gets dropped only if 𝑉1𝑘 ≤ 1/2, which is more likely
+to happen in world 0 (on input 𝐷). More precisely, we have:
+
+∃(Q 1, . . . , Q𝑛+1 ), ∃𝑆 ⊆ R 𝑡max ,
+
+
+Pr[𝑉 𝑛+1,(0) ∈ 𝑆]
+ln
+≥ 𝜖 + 𝑛𝜖 ′ .
+Pr[𝑉 𝑛+1,(1) ∈ 𝑆]
+Proof. We modify the execution from the proof for Thm. 3.2
+to match IDP semantics, where records get dropped conditionally on past results. This emulates a form of data adaptivity, except that datasets 𝑆 2𝑛+1 now differ because of shared
+filters for various records, instead of through a data generation process. We then reuse the calculation from the proof
+of Thm. 3.2.
+The changes in execution are as follows:
+• 𝐷 ′ contains 𝑛 +1 distinct records {𝑥 0, 𝑥 1, . . . , 𝑥𝑛 } and 𝐷
+only contains {𝑥 1, . . . , 𝑥𝑛 }. We no longer have 𝐷 ∈ N,
+instead 𝐷 ∈ N X with X = {𝑥 0, . . . , 𝑥𝑛 }.
+• At 𝑡 = 1, queriers submit 𝑞𝑘1 : 𝐷 ↦→ |{𝑥 ∈ 𝐷 : 𝑥 =
+
+𝑉 𝑛+1,(0) ∼ 𝐵 + 𝑍 and 𝑉 𝑛+1,(1) ∼ 𝑛 − 𝐵 + 𝑍
+
+(31)
+
+with 𝐵 ∼ B (𝑛, 𝑝) with 𝑝 = 21 exp(−𝜖/2) and 𝑍 ∼
+Lap(1/𝜖).
+This is exactly the same situation as Eq. 6, where the 𝑒 𝜖
+factor comes from the privacy loss at 𝑡 = 1. We conclude the
+same way.
+□
+A.4
+
+Querier-Siloing Assumption
+
+Lemma A.2. Consider Alg. 1 with 𝐾 ∈ N, per-querier filters
+with capacity 𝜖 > 0 and shared limit L. Suppose that the
+
+following assumption holds:
+𝑡
+
+𝑘
+
+𝑘
+
+∀𝑘 ∈ [𝐾], ∀𝑢, 𝑤 ∈ R : 𝑢 = 𝑤 ,
+(32)
+
+
+1
+L 𝑞 11, . . . , 𝑞𝐾1 , . . . , 𝑞𝑡1 (𝑢 <𝑡
+), . . . 𝑞𝑡𝑘 (𝑢 𝑘<𝑡 ) · 𝑞𝑡𝑘 (𝐷 ≤𝑡 (𝑢 <𝑡 ))
+
+
+1
+= L 𝑞 11, . . . , 𝑞𝐾1 , . . . , 𝑞𝑡1 (𝑤 <𝑡
+), . . . 𝑞𝑡𝑘 (𝑤 𝑘<𝑡 ) · 𝑞𝑡𝑘 (𝐷 ≤𝑡 (𝑤 <𝑡 ))
+
+to Eq. 33 with explicit conditioning on all past results, we
+have:
+
+Pr[𝑉𝑡𝑘 = 𝑣𝑡𝑘 |𝑉1𝑘 = 𝑣 𝑘1 , . . . , 𝑉𝑡𝑘−1 = 𝑣𝑡𝑘−1, 𝑉 ≠𝑘 = 𝑣 ≠𝑘 ]
+= F 𝑘 (𝑞𝑘1 , . . . , 𝑞𝑡𝑘 (𝑢 𝑘<𝑡 ))
+
+
+1
+· L 𝑞 11, . . . , 𝑞𝐾1 , . . . , 𝑞𝑡1 (𝑢 <𝑡
+), . . . 𝑞𝑡𝑘 (𝑢 𝑘<𝑡 )
+
+Then, for all 𝑘 ∈ [𝐾]:
+∀𝑥 0 ∈ X, ∀𝑡 0 ∈ [𝑡 max ], ∀G, ∀(Q 1, . . . , Q𝑛+1 ),
+
+
+Pr[𝑉 𝑘,(0) ∈ 𝑆]
+≤ 𝜖.
+∀𝑆 ⊆ R 𝑡max , ln
+Pr[𝑉 𝑘,(1) ∈ 𝑆]
+In other words, if querier 𝑘’s results don’t depend on other
+queriers, either through data or shared limits, then Alg. 1 is
+per-querier 𝜖-DP for querier 𝑘.
+Proof. Take 𝑥 ∈ X, G, Q 1, . . . , Q 𝐾 , 𝑘 ∈ [𝐾], and 𝑣 𝑘 ∈ R 𝑡max .
+We have:
+
+𝑘
+
+𝑘
+
+Pr[𝑉 = 𝑣 ] =
+
+𝑡 max
+Ö
+
+· 𝑞𝑡𝑘 (𝐷 ≤𝑡 (𝑢 <𝑡 ))
+
+Define 𝑣˜ ∈ R 𝑡 ×𝐾 by concatenating 𝑣 𝑘 and (⊥, . . . , ⊥) ∈
+R 𝑡 × (𝐾 −1) . We have 𝑣˜𝑘 = 𝑢 𝑘 , so by Eq. 32, Eq. 36 becomes:
+
+Pr[𝑉𝑡𝑘 = 𝑣𝑡𝑘 |𝑉1𝑘 = 𝑣 𝑘1 , . . . , 𝑉𝑡𝑘−1 = 𝑣𝑡𝑘−1, 𝑉 ≠𝑘 = 𝑣 ≠𝑘 ]
+
+(37)
+
+= F 𝑘 (𝑞𝑘1 , . . . , 𝑞𝑡𝑘 (𝑣˜𝑘<𝑡 ))
+
+
+1
+· L 𝑞 11, . . . , 𝑞𝐾1 , . . . , 𝑞𝑡1 (𝑣˜<𝑡
+), . . . 𝑞𝑡𝑘 (𝑣˜𝑘<𝑡 )
+
+(38)
+
+Pr[𝑉𝑡𝑘 = 𝑣𝑡𝑘 |𝑉1𝑘 = 𝑣 𝑘1 , . . . , 𝑉𝑡𝑘−1 = 𝑣𝑡𝑘−1 ]
+
+𝑡 =1
+
+Take 𝑡 ∈ [𝑡 max ]. We now express 𝑉𝑡𝑘 in terms of queries
+and filter decisions, since the filter properties are necessary
+for the privacy proof. Without loss of generality, we treat
+filters as functions that return 0 for reject and 1 for accept at
+Line 14, and we output 0 instead of ⊥ at Line 17. Hence, we
+can express 𝑉𝑡𝑘 as:
+𝑉𝑡𝑘 = F 𝑘 (𝑞𝑘1 , . . . , 𝑞𝑡𝑘 ) · L (𝑞 11, . . . , 𝑞𝐾1 , . . . 𝑞𝑡𝑘 ) · 𝑞𝑡𝑘 (𝐷 ≤𝑡 ) (33)
+The terms in this expression depend on various variables:
+• Once we condition on 𝑣 𝑘1 , . . . , 𝑣𝑡𝑘−1 , we know the
+queries asked by Q𝑘 :
+
+(36)
+
+· 𝑞𝑡𝑘 (𝐷 ≤𝑡 (𝑣˜<𝑡 ))
+
+(39)
+(40)
+
+This term is independent of 𝑣 ≠𝑘 , so we can express it as a
+function of 𝑣 𝑘<𝑡 and take it out of the integral at Eq. 35, which
+gives:
+
+Pr[𝑉𝑡𝑘 = 𝑣𝑡𝑘 |𝑉1𝑘 = 𝑣 𝑘1 , . . . , 𝑉𝑡𝑘−1 = 𝑣𝑡𝑘−1 ]
+(41)
+
+ 
+= F 𝑘 (𝑞𝑘1 , . . . , 𝑞𝑡𝑘 ) · L (𝑞 11, . . . , 𝑞𝑡𝑘 ) · 𝑞𝑡𝑘 (𝐷 ≤𝑡 ) 𝑣 𝑘<𝑡 (42)
+Now we can bound the per-querier privacy loss:
+
+𝑞𝑘1 = Q𝑘 (), 𝑞𝑘2 = Q𝑘 (𝑣 𝑘1 ), . . . , 𝑞𝑡𝑘 = Q𝑘 (𝑣 𝑘1 , . . . , 𝑣𝑡𝑘−1 ).
+
+(34)
+
+• As a consequence, F 𝑘 (𝑞𝑘1 , . . . , 𝑞𝑡𝑘 ) is also fully determined by 𝑣 𝑘1 , . . . , 𝑣𝑡𝑘−1 .
+• However, L (𝑞 11, . . . , 𝑞𝐾1 , . . . 𝑞𝑡𝑘 ) can depend on other
+queriers’ past results 𝑉𝑡𝑖 for 𝑖 ≠ 𝑘, since these outputs
+are used to select 𝑞𝑡𝑖 .
+• Similarly, 𝐷 ≤𝑡 can also depend on other queriers’ past
+results.
+Pose 𝑉 ≠𝑘 := (𝑉𝑖 𝑗 )𝑖 ∈ [𝑡 ],𝑗 ∈ [𝐾 ]\{𝑘 } . By the law of total probability, we have:
+𝑘
+Pr[𝑉𝑡𝑘 = 𝑣𝑡𝑘 | 𝑉<𝑡
+= 𝑣 𝑘<𝑡 ]
+∫
+𝑘
+=
+Pr[𝑉𝑡𝑘 = 𝑣𝑡𝑘 | 𝑉<𝑡
+= 𝑣 𝑘<𝑡 , 𝑉 ≠𝑘 = 𝑣 ≠𝑘 ]
+𝑣 ≠𝑘 ∈ R 𝑡 × (𝐾 −1)
+
+· Pr[𝑉 ≠𝑘 = 𝑣 ≠𝑘 ]𝑑𝑣 ≠𝑘
+
+(35)
+
+Take any 𝑣 ≠𝑘 ∈ R 𝑡 × (𝐾 −1) . Define 𝑢 ∈ R 𝑡 ×𝐾 by concatenating 𝑣 𝑘 and 𝑣 ≠𝑘 such that 𝑢 𝑘 = 𝑣 𝑘 and 𝑢 ≠𝑘 = 𝑣 ≠𝑘 . Thanks
+
+
+
+
+Pr[𝑉 𝑘 = 𝑣 𝑘 ]
+Pr[𝑉 𝑘 = 𝑣 𝑘 ]
+!
+𝑡 max
+𝑘
+Ö
+Pr[𝑉𝑡𝑘,(0) = 𝑣𝑡𝑘 |𝑉1𝑘,(0) = 𝑣 𝑘1 , . . . , 𝑉𝑡𝑘,(0)
+−1 = 𝑣 𝑡 −1 ]
+= ln
+𝑘,(1)
+𝑘
+= 𝑣𝑡𝑘 |𝑉1𝑘,(1) = 𝑣 𝑘1 , . . . , 𝑉𝑡𝑘,(1)
+𝑡 =1 Pr[𝑉𝑡
+−1 = 𝑣 𝑡 −1 ]
+
+
+F𝑘 (𝑞𝑘1 ,...,𝑞𝑡𝑘 ) · L (𝑞 11 ,...,𝑞𝑡𝑘 )
+© Pr
+ª
+(0)
+𝑡 max
+∑︁
+·𝑞𝑡𝑘 (𝐷 ≤𝑡 ) {𝑣𝑘<𝑡 }=𝑣𝑡𝑘
+­
+®
+­
+ ®®
+≤
+ln ­ 
+𝑘
+𝑘
+𝑘
+1
+𝑘
+­ Pr F (𝑞1 ,...,𝑞𝑡 ) · L (𝑞1 ,...,𝑞𝑡 ) ®
+𝑡 =1
+(1)
+·𝑞𝑡𝑘 (𝐷 ≤𝑡 ) {𝑣𝑘<𝑡 }=𝑣𝑡𝑘
+«
+¬
+!
+(0)
+𝑡 max
+∑︁
+Pr[F 𝑘 (𝑞𝑘1 , . . . , 𝑞𝑡𝑘 ) · 𝑞𝑡𝑘 (𝐷 ≤𝑡
+){𝑣 𝑘<𝑡 } = 𝑣𝑡𝑘 ]
+(43)
+≤
+ln
+(1)
+Pr[F 𝑘 (𝑞𝑘1 , . . . , 𝑞𝑡𝑘 ) · 𝑞𝑡𝑘 (𝐷 ≤𝑡
+){𝑣 𝑘<𝑡 } = 𝑣𝑡𝑘 ]
+𝑡 =1
+ln
+
+The last inequality comes from what follows. L (𝑞 11, . . . , 𝑞𝑡𝑘 )
+is entirely determined by 𝑣 𝑘<𝑡 and thus identical in the numerator and denominator. For 𝑡 where L (𝑞 11, . . . , 𝑞𝑡𝑘 ) = 1,
+the L factor is one and can be omitted from the product. For
+
+𝑡 where L (𝑞 11, . . . , 𝑞𝑡𝑘 ) = 0, we have:
+
+
+F𝑘 (𝑞𝑘1 ,...,𝑞𝑡𝑘 ) · L (𝑞 11 ,...,𝑞𝑡𝑘 )
+© Pr
+ª
+(0)
+·𝑞𝑡𝑘 (𝐷 ≤𝑡 ) {𝑣𝑘<𝑡 }=𝑣𝑡𝑘
+­
+®
+ ®®
+ln ­­ 
+­ Pr F𝑘 (𝑞𝑘1 ,...,𝑞𝑡𝑘 ) · L (𝑞11,...,𝑞𝑡𝑘 ) ®
+(1)
+·𝑞𝑡𝑘 (𝐷 ≤𝑡 ) {𝑣𝑘<𝑡 }=𝑣𝑡𝑘
+«
+¬
+!
+(0)
+𝑘
+𝑘
+𝑘
+Pr[F (𝑞 1 , . . . , 𝑞𝑡 ) · 𝑞𝑡𝑘 (𝐷 ≤𝑡
+){𝑣 𝑘<𝑡 } = 𝑣𝑡𝑘 ]
+= 0 ≤ ln
+(1)
+Pr[F 𝑘 (𝑞𝑘1 , . . . , 𝑞𝑡𝑘 ) · 𝑞𝑡𝑘 (𝐷 ≤𝑡
+){𝑣 𝑘<𝑡 } = 𝑣𝑡𝑘 ]
+
+Combining this with the second point, we directly get the
+assumption:
+
+The rest of the proof is identical to standard filter guarantees on adaptively generated data. Suppose the filter uses
+an upper bound 𝜖𝑖 on the privacy loss for each query at step
+𝑖 ∈ [𝑡 max ]:
+
+B
+
+Global IDP with Big Bird (§4 Proofs)
+
+B.1
+
+Data and query model for Big Bird
+
+ln
+
+(0)
+Pr[𝑞𝑖𝑘 (𝐷 ≤𝑖
+){𝑣 𝑘<𝑖 } = 𝑣𝑖𝑘 ]
+(1)
+Pr[𝑞𝑖𝑘 (𝐷 ≤𝑖
+){𝑣 𝑘<𝑖 } = 𝑣𝑖𝑘 ]
+
+∀𝑘 ∈ [𝐾], ∀𝑢, 𝑤 ∈ R 𝑡 : 𝑢 𝑘 = 𝑤 𝑘 ,
+(45)
+
+
+1
+L 𝑞 11, . . . , 𝑞𝐾1 , . . . , 𝑞𝑡1 (𝑢 <𝑡
+), . . . 𝑞𝑡𝑘 (𝑢 𝑘<𝑡 ) · 𝑞𝑡𝑘 (𝐷 ≤𝑡 (𝑢 <𝑡 ))
+
+
+1
+= L 𝑞 11, . . . , 𝑞𝐾1 , . . . , 𝑞𝑡1 (𝑤 <𝑡
+), . . . 𝑞𝑡𝑘 (𝑤 𝑘<𝑡 ) · 𝑞𝑡𝑘 (𝐷 ≤𝑡 (𝑤 <𝑡 ))
+□
+
+!
+≤ 𝜖𝑖 (𝑣 𝑘<𝑖 )
+
+(44)
+
+Then, by definition of pure DP filters, we get the following
+recursive property for 𝑡 ∈ [𝑡 max ]: F 𝑘 (𝑞𝑘1 , . . . , 𝑞𝑡𝑘 ) = 1 iff
+Í
+𝑘 𝑘
+𝑘
+𝑘
+𝑘
+𝑖<𝑡 F (𝑞 1 , . . . , 𝑞𝑡 ) · 𝜖𝑖 (𝑣 <𝑖 ) + 𝜖𝑡 (𝑣 <𝑡 ) ≤ 𝜖.
+We conclude by applying this property at 𝑡 = 𝑡 max in
+Eq. 43:
+
+Pr[𝑉 𝑘 = 𝑣 𝑘 ]
+≤𝜖
+ln
+Pr[𝑉 𝑘 = 𝑣 𝑘 ]
+
+
+□
+Theorem A.3. Suppose that the following two assumptions
+hold:
+1. Querier 𝑘’s queries operate on a restricted data stream
+that only depends on its own past results. That is, 𝐷𝑡 ←
+1 , . . . 𝑉 𝐾 ) is of the following form:
+G(𝑉<𝑡
+<𝑡
+1
+𝐾
+𝐷𝑡1 ← G(𝑉<𝑡
+), . . . , 𝐷𝑡𝐾 ← G(𝑉<𝑡
+)
+𝑘
+𝑘
+𝑘
+with 𝑞𝑡 (𝐷 ≤𝑡 ) = 𝑞𝑡 (𝐷 ≤𝑡 ).
+2. Shared limits do not filter 𝑘’s reports depending on other
+queriers’ results:
+
+∀𝑘 ∈ [𝐾], ∀𝑢, 𝑤 ∈ R 𝑡 : 𝑢 𝑘 = 𝑤 𝑘 ,
+
+
+1
+L 𝑞 11, . . . , 𝑞𝐾1 , . . . , 𝑞𝑡1 (𝑢 <𝑡
+), . . . 𝑞𝑡𝑘 (𝑢 𝑘<𝑡 )
+
+
+1
+= L 𝑞 11, . . . , 𝑞𝐾1 , . . . , 𝑞𝑡1 (𝑤 <𝑡
+), . . . 𝑞𝑡𝑘 (𝑤 𝑘<𝑡 )
+Sufficient conditions for this property include queriers
+being non-adaptive, never reaching the shared limit, or
+operating on disjoint sets of devices (for on-device accounting with IDP filters).
+Then condition Eq. 32 holds, and thus per-querier guarantees
+hold.
+Proof. The first point implies:
+𝑞𝑡𝑘 (𝑣 𝑘<𝑡 ) (𝐷 ≤𝑡 (𝑣 <𝑡 )) = 𝑞𝑡𝑘 (𝑣 𝑘<𝑡 ) (𝐷 ≤𝑡 (𝑣 𝑘<𝑡 ))
+
+This section sets up the formalism that underpins the main
+theorems, proved in subsequent sections and evoked in the
+body of the paper. We begin by defining Big Bird’s data
+and query model, broadly adapted from Cookie Monster’s
+formalism. We then provide useful properties that will be
+needed in subsequent sections. Indeed, while Cookie Monster
+analyzes global and individual sensitivities of queries at the
+device-epoch level, Big Bird additionally needs such analyses
+at the device-epoch-site level.
+Definition B.1 (User actions, sites and events). Let U be
+the set of user-action identifiers, S the set of site identifiers,
+I the set of impression payloads and C the set of conversion
+payloads.
+An event is either an impression event (𝑢, 𝑖, imp) or a conversion event (𝑢, 𝑐, b, conv):
+• 𝑢 ∈ U is the user action that caused the impression or
+conversion. The same user action can cause multiple
+events, and is denoted uaCtx in the body of the paper.
+On a fixed device, all accepted impression events carrying the same user-action identifier occur in a single
+epoch.
+• 𝑖 ∈ S (resp. 𝑐 ∈ S) is the impression (resp. conversion)
+site where the event occurred.
+• Conversions contain the set of queriers b ⊂ S that will
+receive the conversion report. (b is a singleton unless
+we use the optimization from §D.)
+• The payload imp ∈ I or conv ∈ C can be used to
+define concrete attribution functions.
+We write sets of all impression events and all conversion
+events as follows:
+Fimp := U × S × I,
+
+Fconv := U × S × P (S) × C,
+
+and we write F := Fimp ∪ Fconv for the set of all events.
+Definition B.2 (Database of device-epoch records). Let D
+be the set of device identifiers and E the set of epoch identifiers. A database 𝐷 is a set of device-epoch records where
+each record 𝑥 = (𝑑, 𝑒, 𝐹 ) ∈ X = D × E × P (F) contains a
+device 𝑑, an epoch 𝑒 and a set of impression and conversion
+events 𝐹 ⊂ F. We write D for the set of all databases where
+each (𝑑, 𝑒) pair appears at most once.
+
+Definition B.3 (Conversion-site and impression-site event
+sets from events). For any event set 𝐹 , define:
+ImpSites(𝐹 ) := {𝑖 ∈ S : ∃𝑢 ∈ U, imp ∈ I, (𝑢, 𝑖, imp) ∈ 𝐹 },
+ConvSites(𝐹 ) := {𝑐 ∈ S : ∃𝑢 ∈ U, b ⊂ S, conv ∈ C,
+(𝑢, 𝑐, b, conv) ∈ 𝐹 }.
+Furthermore, for any user action 𝑢 ∈ U, define the useraction-scoped variants of these sets:
+ImpSites𝑢 (𝐹 ) := {𝑖 ∈ S : ∃imp ∈ I, (𝑢, 𝑖, imp) ∈ 𝐹 },
+ConvSites𝑢 (𝐹 ) := {𝑐 ∈ S : ∃b ⊂ S, conv ∈ C,
+(𝑢, 𝑐, b, conv) ∈ 𝐹 },
+and let AccessedSites𝑢 (𝐹 ) := ImpSites𝑢 (𝐹 ) ∪ConvSites𝑢 (𝐹 ).
+We also write ImpActions(𝐹 ) := {𝑢 ∈ U : ∃𝑖 ∈ S, imp ∈
+I, (𝑢, 𝑖, imp) ∈ 𝐹 } for the user actions that saved the impressions of 𝐹 .
+We now define queries and reports, with a slight adaptation of Cookie Monster’s definitions to our per-site semantics. While Cookie Monster comes with an arbitrary
+set of public events 𝑃 for each querier 𝑏, here for simplicity
+we assume that all the conversions for a querier are public. Using Cookie Monster’s terminology, that means we set
+𝑃 := {(𝑢, 𝑐, b, conv) ∈ Fconv : 𝑏 ∈ b}. Also, while Cookie
+Monster defines a set of relevant events, potentially including
+conversions, in Def. B.5 we only consider relevant impressions for simplicity. In particular, this hardcodes "Case 1"
+from [43, Thm. 1].
+Definition B.4 (Neighboring databases). 𝐷 ∼𝑥 𝐷 ′ iff database 𝐷 ′ is obtained from 𝐷 by removing all impression events
+of a single device-epoch 𝑥. All conversion events are identical
+for 𝐷 and 𝐷 ′ .
+Definition B.5 (Attribution function, adapted from Cookie
+Monster). Fix a set of relevant impressions 𝐹𝐴 ⊂ Fimp such
+that there exists 𝐺𝐴 ⊂ S × I with 𝐹𝐴 = U × 𝐺𝐴 (i.e., user
+actions play no role in defining relevant impressions). Fix
+𝑘, 𝑚 ∈ N∗ where 𝑘 is a number of epochs. An attribution
+function is a function 𝐴 : P (F)𝑘 → R𝑚 that takes 𝑘 event
+sets 𝐹 1, . . . , 𝐹𝑘 from 𝑘 epochs and outputs an 𝑚-dimensional
+vector 𝐴(𝐹 1, . . . , 𝐹𝑘 ), such that only relevant events contribute
+to 𝐴. That is, for all (𝐹 1, . . . , 𝐹𝑘 ) ∈ P (F)𝑘 , we have:
+𝐴(𝐹 1, . . . , 𝐹𝑘 ) = 𝐴(𝐹 1 ∩ 𝐹𝐴 , . . . , 𝐹𝑘 ∩ 𝐹𝐴 ).
+
+𝜌𝑟 : 𝐷 ∈ D ↦→ 𝐴(𝐷𝑑𝐸𝑟 ),
+
+(47)
+
+When several reports are in play, we write 𝐴𝑟 , 𝐸𝑟 and 𝐹𝐴𝑟
+for the attribution function, the set of epochs and the set of
+relevant impressions attached to report 𝑟 , so that 𝜌𝑟 : 𝐷 ↦→
+𝐴𝑟 (𝐷𝑑𝐸𝑟𝑟 ). The mechanism also stores, with each identifier,
+the conversion site 𝑐𝑟 and the opaque action context 𝑢𝑟 of the
+measureConversion request that created 𝑟 (Alg. 7). Neither
+changes the function 𝜌𝑟 : 𝑢𝑟 is only used for the per-action
+domain cap.
+Definition B.7 (Query, same as Cookie Monster). Consider
+a set of report identifiers 𝑅 ⊂ Z, and a set of attribution reports (𝜌𝑟 )𝑟 ∈𝑅 each with output in R𝑚 . The queryÍfor (𝜌𝑟 )𝑟 ∈𝑅
+is the function 𝑄 : D → R𝑚 defined as 𝑄 (𝐷) := 𝑟 ∈𝑅 𝜌𝑟 (𝐷)
+for 𝐷 ∈ D.
+Definition B.8 (Device-epoch sensitivity, same as Cookie
+Monster). Fix a report 𝜌 : D → R𝑚 for some 𝑚. We define
+the individual 𝐿1 sensitivity of 𝜌 for a device-epoch 𝑥 ∈ X as
+follows:
+Δ𝑥 (𝜌) :=
+
+max
+
+𝐷,𝐷 ′ ∈D:𝐷 ′ ∼𝑥 𝐷
+
+∥𝜌 (𝐷) − 𝜌 (𝐷 ′ ) ∥ 1 .
+
+(48)
+
+We also define the device-epoch global 𝐿1 sensitivity of 𝜌
+as follows:
+Δ(𝜌) := max Δ𝑥 (𝜌)
+𝑥∈X
+
+(49)
+
+Definition B.9 (Device-epoch-impression-site sensitivity).
+Fix a report 𝜌 : D → R𝑚 for some 𝑚, and an impression
+site 𝑖 ∈ S. We define the individual 𝐿1 sensitivity of 𝜌 for a
+device-epoch-site 𝑥 ∈ X, 𝑖 ∈ S as follows:
+Δ𝑥,𝑖 (𝜌) :=
+
+max
+
+𝐷,𝐷 ′ ∈D:𝐷 ′ ∼𝑥,𝑖 𝐷
+
+∥𝜌 (𝐷) − 𝜌 (𝐷 ′ ) ∥ 1
+
+(50)
+
+where 𝐷 ∼𝑥,𝑖 𝐷 ′ iff database 𝐷 ′ is obtained from 𝐷 by
+removing all impression events on a single site 𝑖 of a single
+device-epoch 𝑥. Equivalently, there exists 𝐷 0 ∈ D, a record
+𝑥 ∈ X such that {𝐷, 𝐷 ′ } = {𝐷 0 + 𝑥, 𝐷 0 + 𝑥 𝑖→∅ }, where
+𝑥 𝑖→∅ := (𝑑, 𝑒, 𝐹 𝑖→∅ ) is the record obtained by removing all
+the impressions on 𝑖 from 𝑥.
+We also define the device-epoch-site global 𝐿1 sensitivity of
+𝜌 as follows:
+
+(46)
+
+In particular, conversion events never contribute to 𝐴.
+Definition B.6 (Report identifier and attribution report,
+same as Cookie Monster). Fix a domain of report identifiers
+Z. Consider a mapping 𝑑 (·) : Z → D from report identifiers
+to devices that gives the device 𝑑𝑟 that generated a report 𝑟 .
+Given an attribution function 𝐴, a set of epochs 𝐸 and a
+report identifier 𝑟 ∈ Z, the attribution report 𝜌𝑟,𝐴,𝐸 , or 𝜌𝑟 for
+short, is a function over the whole database 𝐷 defined by:
+
+Δ𝑖 (𝜌) := max Δ𝑥,𝑖 (𝜌)
+𝑥∈X
+
+(51)
+
+To simplify subsequent results, we define some notation:
+Definition B.10 (Zeroing-out). Fix a vector of impression
+sets F = (𝐹 1, . . . , 𝐹𝑘 ) ∈ P (Fimp )𝑘 for any 𝑘 > 0. For 𝑖 ∈ S
+and 𝑗 ∈ [𝑘] we define:
+• F 𝑗→∅ := (𝐹 1, . . . , 𝐹 𝑗 −1, ∅, 𝐹 𝑗+1, . . . , 𝐹𝑘 ), i.e., we zero-out
+the 𝑗th epoch.
+
+• F 𝑗,𝑖→∅ := (𝐹 1, . . . , 𝐹 𝑗 −1, 𝐹 𝑗 \ I𝑖 , 𝐹 𝑗+1, . . . , 𝐹𝑘 ), i.e., we
+zero-out all the impressions I𝑖 := {(𝑢, 𝑖, imp) : 𝑢 ∈
+U, imp ∈ I} belonging to site 𝑖 from the 𝑗th epoch.
+Plugging Def. B.5 into Def. B.8 and Def. B.9 immediately
+gives:
+Lemma B.11 (Global sensitivity of reports). Fix a device 𝑑,
+a set of 𝑘 epochs 𝐸, an attribution function 𝐴 and the corresponding report 𝜌 : 𝐷 ↦→ 𝐴(𝐷𝑑𝐸 ). We have:
+Δ(𝜌) =
+
+max
+
+F∈ P (Fimp ) 𝑘 ,𝑗 ∈ [𝑘 ]
+
+∥𝐴(F) − 𝐴(F 𝑗→∅ ) ∥ 1 .
+
+(52)
+
+Moreover, for any impression site 𝑖 ∈ S we have:
+Δ𝑖 (𝜌) =
+
+max
+
+F∈ P (Fimp ) 𝑘 ,𝑗 ∈ [𝑘 ]
+
+∥𝐴(F) − 𝐴(F 𝑗,𝑖→∅ ) ∥ 1 .
+
+(53)
+
+Theorem B.12 (Individual sensitivity of reports per epoch-site).
+Fix a report identifier 𝑟 , with device 𝑑𝑟 , epochs 𝐸𝑟 = {𝑒 1(𝑟 ) , . . . , 𝑒𝑘(𝑟 ) },
+attribution function 𝐴𝑟 and relevant impressions 𝐹𝐴𝑟 , and let
+𝜌𝑟 be the corresponding report from Eq. 47. Fix an impression
+site 𝑖 ∈ S and a device-epoch record 𝑥 = (𝑑, 𝑒, 𝐹 ) ∈ X, and
+write 𝐹𝑖 := 𝐹 ∩ I𝑖 for the impressions of 𝑥 on site 𝑖. Finally, let
+𝐼𝑟 (𝑥) := ImpSites(𝐹 ∩ 𝐹𝐴𝑟 )
+
+(54)
+
+be the impression sites of 𝑥 that can contribute to 𝜌𝑟 . We can
+upper bound the individual sensitivity of 𝜌𝑟 per epoch-site as
+follows:
+
+0
+
+
+
+
+
+
+
+
+
+
+∥𝐴 (𝐹 ) − 𝐴𝑟 (∅) ∥ 1
+
+ 𝑟 𝑖
+
+Δ𝑥,𝑖 (𝜌𝑟 ) ≤
+
+
+
+Δ𝑖 (𝜌𝑟 )
+
+
+
+
+
+
+
+
+
+
+
+if 𝑑 ≠ 𝑑𝑟 , 𝑒 ∉ 𝐸𝑟 ,
+or 𝑖 ∉ 𝐼𝑟 (𝑥),
+if 𝑑 = 𝑑𝑟 , 𝐸𝑟 = {𝑒}
+and 𝐼𝑟 (𝑥) = {𝑖},
+if 𝑑 = 𝑑𝑟 , 𝑒 ∈ 𝐸𝑟 ,
+𝑖 ∈ 𝐼𝑟 (𝑥), and
+|𝐸𝑟 | ≥ 2 or |𝐼𝑟 (𝑥)| ≥ 2.
+(55)
+
+• Case 2: 𝑑 = 𝑑𝑟 , 𝐸𝑟 = {𝑒} and 𝐼𝑟 (𝑥) = {𝑖}. Here 𝑘 = 1
+and 𝜌𝑟 (𝐷) = 𝐴𝑟 (𝐷𝑑𝑒 𝑟 ). As 𝐷 0 has no record at (𝑑𝑟 , 𝑒),
+we get 𝐷𝑑𝑒 𝑟 = 𝐹 and (𝐷 ′ )𝑑𝑒 𝑟 = 𝐹 \ I𝑖 . Since site 𝑖 has all
+the relevant impressions of 𝑥, we have 𝐹 ∩ 𝐹𝐴𝑟 ⊆ I𝑖 ,
+and therefore
+𝐹 ∩ 𝐹𝐴𝑟 = 𝐹𝑖 ∩ 𝐹𝐴𝑟 ,
+
+(𝐹 \ I𝑖 ) ∩ 𝐹𝐴𝑟 = ∅.
+
+(57)
+
+Eq. 46 then gives 𝐴𝑟 (𝐹 ) = 𝐴𝑟 (𝐹𝑖 ) and 𝐴𝑟 (𝐹 \ I𝑖 ) =
+𝐴𝑟 (∅), so every pair (𝐷, 𝐷 ′ ) yields the same value
+∥𝐴𝑟 (𝐹𝑖 ) − 𝐴𝑟 (∅) ∥ 1 .
+• Case 3: 𝑑 = 𝑑𝑟 , 𝑒 ∈ 𝐸𝑟 , 𝑖 ∈ 𝐼𝑟 (𝑥), and |𝐸𝑟 | ≥ 2 or
+|𝐼𝑟 (𝑥)| ≥ 2. Let 𝑗 ∈ [𝑘] be the index of 𝑒 in 𝐸𝑟 and
+F := 𝐷𝑑𝐸𝑟𝑟 , so that (𝐷 ′ )𝑑𝐸𝑟𝑟 = F 𝑗,𝑖→∅ and
+∥𝜌𝑟 (𝐷) − 𝜌𝑟 (𝐷 ′ ) ∥ 1 = ∥𝐴𝑟 (F) − 𝐴𝑟 (F 𝑗,𝑖→∅ ) ∥ 1 ≤ Δ𝑖 (𝜌𝑟 ),
+(58)
+by Eq. 53. Unlike in the first two cases, this quantity depends on 𝐷 0 (through the events that the other epochs
+of 𝐸𝑟 contribute to F). Taking the maximum over 𝐷 0
+can only give back the global bound Δ𝑖 (𝜌𝑟 ) in the
+worst case.
+□
+Next, we show that Δ𝑖 (𝜌) ≤ 2Δ(𝜌) for any report. For
+reports using certain attribution functions, we can have a
+tighter Δ𝑖 (𝜌) = Δ(𝜌) bound, but it does not hold in general.
+Lemma B.13 (Relation between Device-Epoch-Site and Device-Epoch Sensitivities). For any report 𝜌 with attribution
+function 𝐴, let 𝐹 denote the full dataset, 𝐹 𝑗 denote all data in 𝐹
+pertaining to epoch 𝑗, and 𝐹 𝑗,𝑖 denote all data in 𝐹 𝑗 pertaining
+to site 𝑖. The following inequality holds:
+Δ𝑖 (𝜌) ≤ 2Δ(𝜌)
+
+(59)
+
+Proof. Recall the definition of device-epoch-site global sensitivity:
+Δ𝑖 (𝜌) =
+
+Proof. By Def. B.9, each pair (𝐷, 𝐷 ′ ) in the maximum defin-
+
+max
+
+F∈ P (Fimp ) 𝑘 ,𝑗 ∈ [𝑘 ]
+
+∥𝐴(F 𝑗,𝑖→∅ ) − 𝐴(F) ∥ 1 .
+
+(60)
+
+ing Δ𝑥,𝑖 (𝜌𝑟 ) satisfies {𝐷, 𝐷 ′ } = {𝐷 0 + 𝑥, 𝐷 0 + 𝑥 𝑖→∅ } for some
+𝐷 0 ∈ D, where 𝑥 𝑖→∅ = (𝑑, 𝑒, 𝐹 \ I𝑖 ). Since 𝐷 0 + 𝑥 ∈ D,
+the database 𝐷 0 has no record at (𝑑, 𝑒). W.l.o.g we assume
+𝐷 = 𝐷 0 +𝑥 and 𝐷 ′ = 𝐷 0 +𝑥 𝑖→∅ . We now take the three cases
+in turn.
+• Case 1: 𝑑 ≠ 𝑑𝑟 , or 𝑒 ∉ 𝐸𝑟 , or 𝑖 ∉ 𝐼𝑟 (𝑥). If 𝑑 ≠ 𝑑𝑟 ,
+then 𝐷 and 𝐷 ′ only differ in a record of device 𝑑, so
+𝐷𝑑𝐸𝑟𝑟 = (𝐷 0 )𝑑𝐸𝑟𝑟 = (𝐷 ′ )𝑑𝐸𝑟𝑟 . If 𝑒 ∉ 𝐸𝑟 , then 𝐷 and 𝐷 ′ only
+differ in an epoch that 𝜌𝑟 does not read, and again
+𝐷𝑑𝐸𝑟𝑟 = (𝐷 ′ )𝑑𝐸𝑟𝑟 . Finally, suppose 𝑖 ∉ 𝐼𝑟 (𝑥), and assume
+𝑑 = 𝑑𝑟 and 𝑒 ∈ 𝐸𝑟 . The records at (𝑑, 𝑒) do differ, but
+not in any relevant impression: 𝐹 ∩ 𝐹𝐴𝑟 contains no
+impression on site 𝑖, so
+
+We can decompose this expression using the triangle inequality:
+
+(𝐹 \ I𝑖 ) ∩ 𝐹𝐴𝑟 = (𝐹 ∩ 𝐹𝐴𝑟 ) \ I𝑖 = 𝐹 ∩ 𝐹𝐴𝑟 .
+
+∥𝐴(F 𝑗,𝑖→∅ ) − 𝐴(F 𝑗→∅ ) ∥ 1 ≤ Δ(𝜌).
+
+Then Eq. 46 gives 𝐴𝑟 (𝐷𝑑𝐸𝑟𝑟 ) = 𝐴𝑟 ((𝐷 ′ )𝑑𝐸𝑟𝑟 ).
+
+(56)
+
+∥𝐴(F 𝑗,𝑖→∅ ) − 𝐴(F) ∥ 1
+=∥𝐴(F
+
+𝑗,𝑖→∅
+
+≤∥𝐴(F
+
+𝑗,𝑖→∅
+
+) − 𝐴(F
+
+𝑗→∅
+
+) − 𝐴(F
+
+𝑗→∅
+
+(61)
+) + 𝐴(F
+
+𝑗→∅
+
+) ∥ 1 + ∥𝐴(F
+
+) − 𝐴(F) ∥ 1
+
+(62)
+
+𝑗→∅
+
+(63)
+
+) − 𝐴(F) ∥ 1
+
+For the first term, note that 𝐴(F 𝑗,𝑖→∅ ) uses events 𝐹
+
+𝑗,¬𝑖
+
+from epoch 𝑗 where 𝐹 𝑗,¬𝑖 = 𝐹 𝑗 \ 𝐹 𝑗,𝑖 , while 𝐴(F 𝑗→∅ ) uses
+no events from epoch 𝑗. Since 𝐹 𝑗,¬𝑖 ⊆ 𝐹 𝑗 and all events
+from epoch 𝑗 for a given device come from a single deviceepoch record, we can view this as the change from adding a
+single record containing events 𝐹 𝑗,¬𝑖 . This is bounded by the
+definition of Δ(𝜌):
+(64)
+
+The second term represents the sensitivity to removing
+
+events from the entire epoch 𝑗. In the individual DP setting
+with device-epoch records, all events from epoch 𝑗 for a given
+device come from a single device-epoch record. Removing
+this entire record corresponds exactly to one of the cases
+considered in the definition of Δ(𝜌). Therefore:
+∥𝐴(F 𝑗→∅ ) − 𝐴(F) ∥ 1 ≤ Δ(𝜌).
+
+(65)
+
+Therefore, substituting the two upper bounds into Eq. (63):
+Δ𝑖 (𝜌) ≤ Δ(𝜌) + Δ(𝜌) = 2Δ(𝜌).
+
+(66)
+□
+
+B.2
+
+Comprehensive Big Bird Model
+
+Overview. Big Bird manages per-site and global privacy filters using the quota mechanisms described in §4.3. Alg. 5 depicts the functionality triggered on receiving a report request
+(i.e., measureConversion() and getReport()). Big Bird
+checks and consumes budget from the relevant filters and
+prunes the resulting report based on filter status. First,
+Big Bird ensures all filters and quotas are initialized. Second, it computes the privacy losses incurred both at the
+epoch level [43, §C] and at the epoch-impression-site level
+(Def. B.14). Third, it checks whether all filters have sufficient
+budget and attempts to consume it. To avoid wasting budget
+from some filters (or quotas) when other filters are out of
+budget, Big Bird uses a transactional protocol to deduct privacy losses from multiple filters atomically. Alg. 6 formalizes
+this: if any filter cannot afford its share of the privacy loss,
+the report is zeroed out, and no budget is consumed from
+any filter for that report.
+Enforcing the per-action domain cap. In addition
+to the filter-based budget checks, Big Bird enforces a
+per-action domain cap cap on the number of distinct sites
+that can access the Attribution API within a single user
+action context (Def. B.1). This mechanism limits adversarial creation of quota filters. As formalized in Alg. 5, the
+per-action domain cap check occurs before the atomic filter
+check: if the check fails, the epoch’s data is zeroed out
+(𝐹𝑒 ← ∅, using the zeroing-out notation from Appendix B.1),
+and no filters are accessed for that epoch.
+Subroutines. Def. B.15, B.14, B.16 and Alg. 6 define subroutines used in Alg. 5. The first two definitions rely on the
+sensitivity bounds from Thm. B.12 (for the impression-site
+quota) and [43] (for the filters and the other quotas).
+Definition B.14 (EpochImpSiteBudget). Let 𝑥 = (𝑑, 𝑒, 𝐹 ) ∈
+X be a device-epoch record, 𝑖 ∈ S an impression site, 𝜌 an
+attribution report, and 𝜆 > 0 the Laplace noise scale applied
+to 𝜌. Given the upper bound Δ̃𝑥,𝑖 (𝜌) ≥ Δ𝑥,𝑖 (𝜌) on the perepoch-site individual sensitivity given by Thm. B.12, we can
+upper bound the epoch-site privacy loss consumed by 𝜌 at
+(𝑥, 𝑖) by
+EpochImpSiteBudget(𝑥, 𝑖, 𝜌, 𝜆) :=
+
+Δ̃𝑥,𝑖 (𝜌)
+.
+𝜆
+
+(67)
+
+Definition B.15 (EpochBudget, from [43]). Fix a deviceepoch record 𝑥 ∈ X, 𝜌 an attribution report, and 𝜆 > 0
+the Laplace noise scale applied to 𝜌. Given the upper bound
+Δ̃𝑥 (𝜌) ≥ Δ𝑥 (𝜌) on the per-epoch individual sensitivity given
+by [43], the individual privacy loss for device-epoch record
+𝑥 is:
+Δ̃𝑥 (𝜌)
+(68)
+𝜆
+Definition B.16 (Privacy filter F , adapted from [38]). Privacy filters track privacy loss of adaptively chosen mechanisms against a predetermined budget. We adapt the standard
+definition for pure DP privacy filters and define a filter F as
+a stateful object storing its remaining capacity, initialized to
+𝜖initial (the filter capacity).
+We then recursively define F . canConsume, F . tryConsume
+and pass F,𝑗 , the indicator that the 𝑗th budget was granted, for
+a sequence of adaptively chosen privacy budgets 𝜖 1, 𝜖 2, . . . ,
+as follows:
+• F . canConsume(𝜖 𝑗 ): Returns TRUE if the filter can accommodate additional privacy loss 𝜖 𝑗 , i.e., 𝜖 𝑗 ≤ 𝜖initial −
+Í
+𝑗′
+𝑗 ′ < 𝑗 𝜖 · pass F,𝑗 ′ where 𝜖 initial is the filter capacity.
+• F . tryConsume(𝜖 𝑗 ): Calls canConsume(𝜖 𝑗 ). If successful, sets pass F,𝑗 = 1 to deduct 𝜖 𝑗 from the filter’s
+remaining capacity; otherwise, sets pass F,𝑗 = 0.
+By definition of canConsume we obtain the following capacity invariant:
+∑︁
+𝜖 𝑗 pass F,𝑗 ≤ 𝜖initial .
+(69)
+EpochBudget(𝑥, 𝜌, 𝜆) :=
+
+𝑗
+
+Definition B.17 (Per-action domain cap K). We define a
+domain cap as a stateful object K ⊆ S, initialized to ∅ with
+a cap 𝜅 action and two methods, for a domain 𝑠 ∈ S:
+• K. canAdmit(𝑠) ⇐⇒ |K ∪ {𝑠}| ≤ 𝜅 action ,
+• K. tryAdmit(𝑠): if K. canAdmit(𝑠), set K ← K ∪ {𝑠};
+otherwise leave K unchanged.
+Note that only the first admission for a given domain
+can be rejected, and the invariant |K | ≤ 𝜅 action bounds the
+number of distinct domains.
+Definition B.18 (Per-device-epoch state F(𝑑,𝑒 ) ). For each
+device-epoch record 𝑥 = (𝑑, 𝑒, 𝐹 ), we maintain four families
+of pure DP filters (global, per querier 𝑏, per conversion site 𝑐,
+per impression site 𝑖) and domain caps for each user action
+𝑢. We denote the resulting state F𝑑,𝑒 :
+
+global
+querier[𝑏 ] 
+conv-quota[𝑐 ] 
+F𝑑,𝑒 := F𝑑,𝑒 , F𝑑,𝑒
+𝑏 ∈ S , F𝑑,𝑒
+𝑐 ∈ S,
+
+
+imp-quota[𝑖 ] 
+F𝑑,𝑒
+(70)
+𝑖 ∈ S , K𝑑,𝑒 [𝑢] 𝑢 ∈ U ,
+We lazily initialize these filters/cap instantiated with respective capacities 𝜖global, 𝜖querier, 𝜖imp-quota , 𝜖conv-quota , 𝜅 action .
+We make two remarks. First, the state F𝑑,𝑒 can change
+depending on the adversary’s queries, even when the under-
+
+Alg. 5 Big Bird algorithm on a single device
+1: Input
+2: Device 𝑑 with growing on-device database 𝐷𝑑 ← ∅
+3: State
+( F𝑑,𝑒 )𝑒 ∈E
+lazily
+initialized
+caps 𝜖global , 𝜖querier , 𝜖imp-quota , 𝜖conv-quota , 𝜅 action
+
+Alg. 6 AtomicFilterCheckAndConsume
+
+with
+
+4: def SaveImpression(𝑖, imp, 𝑢)
+5: 𝑒 ← CurrentEpoch( )
+6: if F𝑑,𝑒 .K [𝑢 ]. canAdmit(𝑖 ) = FALSE then
+7: return // Silently reject impression if cap exceeded
+8: F𝑑,𝑒 .K [𝑢 ]. tryAdmit(𝑖 )
+9: // Store impression event
+10: 𝐷𝑑𝑒 ← 𝐷𝑑𝑒 ∪ { (𝑢, 𝑖, imp) }
+11: return
+// Generate report and update on-device budget
+12: def GenerateReport(𝐷, 𝜌, 𝜆, 𝑢, 𝑏)
+13: Read 𝜌 to get device 𝑑, conversion site 𝑐, target epochs 𝐸, attribution
+function 𝐴 with relevant impressions 𝐹𝐴 .
+14: for 𝑒 ∈ 𝐸 do
+15: 𝑥 ← (𝑑, 𝑒, 𝐷𝑑𝑒 )
+16: if F𝑑,𝑒 .K [𝑢 ]. canAdmit(𝑐 ) = FALSE then // Def. B.18
+17:
+𝐹𝑒 ← ∅ // Zero out epoch if per-action domain cap exceeded
+18:
+continue // Skip to next epoch
+19:
+F𝑑,𝑒 .K [𝑢 ]. tryAdmit(𝑐 )
+20: 𝐹𝑒 ← 𝐷𝑑𝑒 ∩ 𝐹𝐴 // Effective relevant impressions
+21:
+i𝑒 ← ImpSites(𝐹𝑒 ) // Effective impression sites
+22: 𝜖𝑥 ← EpochBudget(𝑥, 𝜌, 𝜆) // Def. B.15
+23: 𝜖xi ← { }
+24: for 𝑖 ∈ i𝑒 do
+25:
+𝜖𝑥𝑖 ← EpochImpSiteBudget(𝑥, 𝑖, 𝜌, 𝜆) // Def. B.14
+26:
+𝜖xi [𝑖 ] ← 𝜖𝑥𝑖
+// Check and update filters/quotas atomically (Alg. 6)
+if AtomicFilterCheckAndConsume( F𝑥 , 𝑏, 𝑐, i𝑒 , 𝜖𝑥 , 𝜖xi ) = FALSE
+then
+28:
+𝐹𝑒 ← ∅ // Empty the epoch if any check fails
+29: 𝜌ˆ ← 𝐴( (𝐹𝑒 )𝑒 ∈𝐸 ) // Clipped attribution report
+30: return 𝜌ˆ
+31:
+
+27:
+
+lying data is fixed (e.g., when the data is generated in chunks
+epoch by epoch). Second, since the pair (𝑑, 𝑒) appears only
+once in valid databases, we can index by 𝑥 = (𝑑, 𝑒, 𝐹 ) to
+obtain the same F𝑥 even as 𝐹 changes, e.g., when new events
+are added to the same device.
+B.3 Global Privacy Guarantees
+We now state and prove the privacy guarantees, stated for
+a formal privacy game modeling Alg. 5 execution over the
+whole system.
+Execution model. Alg. 7 presents an abstract model of
+Big Bird’s operation, capturing how it answers queries sequentially for all queriers. At each time step 𝑡, querier 𝑘 can
+formulate a query 𝑄𝑡𝑘 , which is a batch of reports as defined
+in Def. B.7. When a querier has nothing to ask, it can send
+an empty query with zero sensitivity. AnswerQuery then processes each individual report 𝜌𝑟 (for 𝑟 ∈ 𝑅, where 𝑅 is the set
+of report identifiers in 𝑄𝑡𝑘 ). For each report, GenerateReport
+creates an individual clipped attribution report. Finally, re-
+
+1: Input
+2: Budgets F𝑥 , querier 𝑏, conversion site 𝑐, impression
+
+sites i
+𝜖𝑥 : epoch-level privacy loss
+𝜖xi : epoch-site-level privacy loss
+5: // Phase 1: check if all filters can consume (Def. B.16)
+querier[𝑏 ]
+6: if F𝑥
+. canConsume(𝜖𝑥 ) = FALSE then
+7: return FALSE
+global
+8: if F𝑥
+. canConsume(𝜖𝑥 ) = FALSE then
+9: return FALSE
+conv-quota[𝑐 ]
+10: if F𝑥
+. canConsume(𝜖𝑥 ) = FALSE then
+11: return FALSE
+12: for 𝑖 ∈ i do
+imp-quota[𝑖 ]
+13: if F𝑥
+. canConsume(𝜖xi [𝑖]) = FALSE then
+14:
+return FALSE
+15: // Phase 2: consume from all filters (Def. B.16)
+querier[𝑏 ]
+16: F𝑥
+. tryConsume(𝜖𝑥 )
+global
+17: F𝑥
+. tryConsume(𝜖𝑥 )
+conv-quota[𝑐 ]
+18: F𝑥
+. tryConsume(𝜖𝑥 )
+19: for 𝑖 ∈ i do
+imp-quota[𝑖 ]
+20: F𝑥
+. tryConsume(𝜖xi [𝑖])
+21: return TRUE
+3:
+4:
+
+ports are summed and noised before returning the query
+result.
+At Line 13, world 𝜒 = 0 skips all the impressions on
+(𝑑 0, 𝑒 0 ), following the neighboring relation from Def. B.4,
+and every other call is executed identically in both worlds.
+Theorem 4.2. Consider 𝑥 ∈ X with global filter capacity
+𝜖global . Then, Big Bird satisfies individual device-epoch 𝜖global DP for 𝑥 with respect to the neighboring relation in Definition B.4. That is, for all data generation processes G, for all
+queriers Q 1, . . . , Q 𝐾 , the output 𝑉 ( 𝜒 ) of Alg. 7 under challenge
+bit 𝜒 verifies:
+
+∀𝑣 ∈ R 𝑒max × (𝑡max +1) ×𝐾 , ln
+
+
+
+Pr[𝑉 (0) = 𝑣]
+Pr[𝑉 (1) = 𝑣]
+
+
+≤ 𝜖global .
+
+(71)
+
+Proof. Take the in-or-out device-epoch 𝑥 = (𝑑 0, 𝑒 0, 𝐹 ) ∈
+X. Denote by 𝑥 C = (𝑑 0, 𝑒 0, 𝐹 ∩ Fconv ) the device-epoch
+obtained by keeping only public events from 𝑥, where
+public events are the set of all conversions. Take 𝑣 ∈
+R 𝑒max × (𝑡max +1) ×𝐾 and 𝜒 ∈ {0, 1}. 𝑣 is the vector of values returned at different points in Alg. 7. We split it
+into 𝑣 = (𝑣 1,0, 𝑣 1,1, . . . , 𝑣 1,𝑡max , . . . , 𝑣𝑒,0, . . . 𝑣𝑒,𝑡 ) where 𝑣𝑒,0 =
+1 , . . . , 𝑣 𝐾 ) is a value for the output from Line 22 of Alg. 7
+(𝑣𝑒,0
+𝑒,0
+(public events from epoch 𝑒 for each querier 𝑘 ∈ [𝐾]),
+1 , . . . , 𝑣 𝐾 ), where 𝑣 𝑘 is the output for the
+and 𝑣𝑒,𝑡 = (𝑣𝑒,𝑡
+𝑒,𝑡
+𝑒,𝑡
+query 𝑄𝑡𝑘 for querier 𝑘 at step 𝑡 from epoch 𝑒 (Line 27). By
+conditioning over past outputs at each time step (𝑒, 𝑡, 𝑘) ∈
+
+Alg. 7 Formalism for DP analysis
+1: Input
+2: Challenge bit 𝜒 ∈ {0, 1}
+3: In-or-out device-epoch (𝑑 0 , 𝑒 0 )
+4: Data generation process G
+5: Queriers Q 1 , . . . , Q 𝐾
+6: Output
+7: View 𝑉 = (𝑉 1 , . . . , 𝑉 𝐾 ) ∈ R 𝑒max × (𝑡max +1) ×𝐾 of all Q𝑘
+8: for 𝑒 ∈ [𝑒 max ] do
+// Devices and events for epoch 𝑒, generated from all previous results
+1 , . . .𝑉𝐾 )
+9: 𝐺 ← G (𝑉<𝑒
+<𝑒
+// View of each querier, initialized empty for conversions
+𝑘 )
+10: (𝑉𝑒,0
+𝑘 ∈ [𝐾 ] = ( ∅ )𝑘 ∈ [𝐾 ]
+11: for (𝑑, 𝑓 ) ∈ 𝐺 do
+12: if 𝑓 = (𝑢, 𝑖, imp) ∈ Fimp then
+13:
+if 𝜒 = 0 and 𝑑 = 𝑑 0 , 𝑒 = 𝑒 0 then
+14:
+skip // Keep impression events out in World 0
+15:
+else
+16:
+SaveImpression(𝑖, imp, 𝑢 ) on 𝑑
+17: else
+// Each querier receives its conversions and corresponding report identifiers
+18:
+𝐷𝑑𝑒 ← 𝐷𝑑𝑒 + 𝑓 , with 𝑓 = (𝑢, 𝑐, b, conv)
+19:
+20:
+21:
+22:
+
+$
+
+Generate report identifier 𝑟 ← 𝑈 (Z)
+// Save the device and action context that generated 𝑟
+(𝑑𝑟 , 𝑢𝑟 ) ← (𝑑, 𝑢 )
+for 𝑘 ∈ b do
+𝑘 ← 𝑉 𝑘 ∪ { (𝑟, 𝑓 ) } // Output conversion and report identifier
+𝑉𝑒,0
+𝑒,0
+
+23:
+24:
+25:
+
+// Queriers ask queries, round robin
+for 𝑡 ∈ [𝑡 max ] do
+for 𝑘 ∈ [𝐾 ] do
+// Querier 𝑘 chooses based on its own previous results
+𝑘
+26:
+𝑄𝑡𝑘 , 𝜆𝑡𝑘 ← Q𝑘 (𝑉≤𝑒,<𝑡
+)
+𝑘
+27:
+𝑉𝑒,𝑡 ← AnswerQuery(𝐷 ≤𝑒 , 𝑄𝑡𝑘 , 𝜆𝑡𝑘 , 𝑘 )
+28: // Collect, aggregate and noise reports to answer 𝑄
+29: def AnswerQuery(𝐷, 𝑄, 𝜆, 𝑏)
+30: (𝜌𝑟 )𝑟 ∈𝑅 ← 𝑄 // Get report identifiers from 𝑄
+31: for 𝑟 ∈ 𝑅 do
+32:
+𝜌ˆ𝑟 ← GenerateReport(𝐷, 𝜌𝑟 , 𝜆, 𝑢𝑟 , 𝑏 )
+33: Sample 𝑋 ∼ Lap(𝜆)
+Í
+34: return 𝑟 ∈𝑅 𝜌ˆ𝑟 + 𝑋
+
+(72)
+𝑘,( 𝜒 )
+
+Pr[𝑉𝑒,𝑡
+
+each step only depends on past queries, which are identical
+in both worlds once we condition on 𝑣 <𝑘
+≤𝑒,<𝑡 , and on the
+record 𝑥 ′ itself, which is identical in both worlds. This is
+thanks to device-epoch level accounting in Def. B.15, B.14.
+The same holds for domain caps K𝑑 ′ ,𝑒 ′ [𝑢]: even though
+GenerateReport iterates over the whole window 𝐸, each
+iteration reads and writes only K𝑑 ′ ,𝑒 ′ [𝑢], decides from that
+entry, and skips only that epoch if it hits the cap.
+Let 𝜌𝑟 (𝐷; F ) = GenerateReport(𝐷, 𝜌𝑟 , 𝜆; F ) denote the
+filtered report returned by Alg. 5, which maintains the state
+F . Then:
+𝑘,( 𝜒 )
+
+𝑘
+= 𝑣𝑒,𝑡
+|𝑣 <𝑘
+≤𝑒,<𝑡 ]
+ ∑︁
+
+
+
+(𝜒)
+(𝜒)
+𝑘 
+
+= Pr 
+𝜌𝑟 (𝐷 ; F𝑒,𝑡,𝑟 ) + 𝑋𝑒,𝑡 = 𝑣𝑒,𝑡  ,
+(77)
+𝑟 ∈𝑅𝑘
+
+ 𝑒,𝑡
+
+where 𝑋𝑒,𝑡 is the Laplace noise added at time 𝑒, 𝑡.
+We omit the 𝑒, 𝑡, 𝑘 indices when they are clear from context.
+We denote by 𝐷 the database generated conditionally on
+(0) =
+𝑣 <𝑘
+≤𝑒,<𝑡 before adding the in-or-out record, giving: 𝐷
+𝐷 + 𝑥 C and 𝐷 (1) = 𝐷 + 𝑥 for 𝑒 ≥ 𝑒 0 (and 𝐷 (0) = 𝐷 (1) for
+𝑒 < 𝑒 0 ). By Def. B.5, since 𝐹𝐴 ⊆ Fimp and 𝐹 ∩ Fconv ∩ Fimp = ∅,
+we have:
+
+Pr[𝑉𝑒,𝑡
+
+𝑘
+= 𝑣𝑒,𝑡
+|𝑣 <𝑘
+≤𝑒,<𝑡 ].
+
+By Alg. 5, remark that the state (F𝑟 (0) )𝑥 ′ for 𝑥 ′ ∈ {𝑥, 𝑥 C }
+has no impact on the output: replacing the corresponding
+data by ∅ at Line 17 (when hitting a per-action domain cap)
+or Line 28 (when running out of budget or quota) is a no-op.
+Combining this observation with Eq. 76 gives:
+
+(73)
+
+𝑒=1 𝑡 =0 𝑘=1
+
+𝜌𝑟 (𝐷 (0) ; F𝑟 (0) ) = 𝜌𝑟 (𝐷; F𝑟 (1) )
+
+Take 𝑒 ∈ [𝑒 max ], 𝑡 ∈ [𝑡 max ] and 𝑘 ∈ [𝐾]. By Algorithm 7,
+we have:
+𝑘,( 𝜒 )
+
+Pr[𝑉𝑒,𝑡
+
+𝑘
+= 𝑣𝑒,𝑡
+|𝑣 <𝑘
+≤𝑒,<𝑡 ]
+𝑘,( 𝜒 )
+
+𝑘
+) = 𝑣𝑒,𝑡
+],
+
+(75)
+
+where the database 𝐷 ( 𝜒 ) , the query 𝑄𝑡𝑘 with associated noise
+𝑘,( 𝜒 )
+<𝑘 .
+𝜆𝑡𝑘 and the state F𝑒,𝑡
+are functions of past results 𝑣 ≤𝑒,<𝑡
+The generated data and the queries are chosen by G and Q𝑘
+conditionally on past results but independently of 𝜒. The
+database can depend on 𝜒, but only at (𝑑 0, 𝑒 0 ), since world 0
+skips the impression saves on that device-epoch at Line 13.
+
+(78)
+
+We can now bound the privacy loss at step 𝑒, 𝑡, 𝑘:
+
+(74)
+
+= Pr[AnswerQuery(𝐷 ( 𝜒 ) , 𝑄𝑡𝑘 , 𝜆𝑡𝑘 , 𝑘; F𝑒,𝑡
+
+(76)
+
+Indeed, Alg. 5 shows that the budget spent for 𝑥 ′ at
+
+= 𝜌𝑟 (𝐷; F𝑟 (0) )
+
+Pr[𝑉 ( 𝜒 ) = 𝑣]
+=
+
+𝑘,(0)
+𝑘,(1)
+∀𝑥 ′ ∈ 𝐷 (0) ∩ 𝐷 (1) , (F𝑒,𝑡
+)𝑥 ′ = (F𝑒,𝑡
+)𝑥 ′
+
+𝜌𝑟 (𝐷 (0) ; F𝑟 (0) ) = 𝜌𝑟 (𝐷 + (𝑑 0, 𝑒 0, 𝐹 ∩ Fconv ∩ 𝐹𝐴 ))
+
+[𝑒 max ] × {0, ..., 𝑡 max } × [𝐾] we get:
+
+𝑒Ö
+𝑡 max Ö
+𝐾
+max Ö
+
+The state can also depend on 𝜒, albeit in a limited fashion,
+since we have:
+
+ln
+
+𝑘,(0)
+𝑘 |𝑣 <𝑘 ]
+Pr[𝑉𝑒,𝑡
+= 𝑣𝑒,𝑡
+≤𝑒,<𝑡
+
+!
+
+𝑘,(1)
+𝑘 |𝑣 <𝑘 ]
+Pr[𝑉𝑒,𝑡
+= 𝑣𝑒,𝑡
+≤𝑒,<𝑡
+hÍ
+i
+(1)
+𝑘
+Pr
+𝜌
+(𝐷;
+F
+)
++
+𝑋
+=
+𝑣
+𝑘
+𝑟
+𝑒,𝑡
+𝑟
+©
+ª
+𝑒,𝑡
+𝑟 ∈𝑅𝑒,𝑡
+i ®®
+≤ ln ­­ hÍ
+(1)
+𝑘
+Pr 𝑟 ∈𝑅𝑒,𝑡
+) + 𝑋𝑒,𝑡 = 𝑣𝑒,𝑡
+𝑘 𝜌𝑟 (𝐷 + 𝑥; F𝑟
+«
+¬
+
+(79)
+
+(80)
+
+We now omit F𝑟 (1) since it is present on both sides. Take
+𝑟 ∈ 𝑅𝑡 . We define the boolean pass𝑟 by pass𝑟 = 0 if 𝐹𝑒 is ze-
+
+roed out (either by the domain cap at Line 17 or by the atomic
+check at Line 28), in the world where 𝑥 is present. If pass𝑟 = 0,
+we have 𝜌𝑟 (𝐷 + 𝑥) = 𝜌𝑟 (𝐷) because of Alg. 5, Line 28. Otherwise, if pass𝑟 = 1, we have ∥𝜌𝑟 (𝐷 + 𝑥) − 𝜌𝑟 (𝐷) ∥ 1 ≤ Δ𝑥 (𝜌𝑟 ).
+Hence,
+∥𝜌𝑟 (𝐷) − 𝜌𝑟 (𝐷 + 𝑥) ∥ ≤ Δ𝑥 (𝜌𝑟 )pass𝑟
+
+(81)
+
+Thus by triangle inequality followed by Def. B.15 we have:
+∑︁
+∑︁
+∑︁
+∥
+𝜌𝑟 (𝐷) −
+𝜌𝑟 (𝐷 + 𝑥) ∥ ≤
+Δ𝑥 (𝜌𝑟 )pass𝑟 (82)
+𝑟 ∈𝑅𝑡
+
+𝑟 ∈𝑅𝑡
+
+𝑟 ∈𝑅𝑡
+
+≤
+
+∑︁
+
+𝜆𝑡𝑘 · 𝜖𝑟 pass𝑟
+
+(83)
+
+𝑟 ∈𝑅𝑡
+
+And since 𝑋𝑡 ∼ Lap(𝜆𝑡𝑘 ), by property of the Laplace distribution Eq. 80 becomes:
+!
+𝑘,(0)
+𝑘 |𝑣 <𝑘 ]
+∑︁
+Pr[𝑉𝑒,𝑡
+= 𝑣𝑒,𝑡
+≤𝑒,<𝑡
+≤
+𝜖𝑟 pass𝑟
+(84)
+ln
+𝑘,(1)
+𝑘 |𝑣 <𝑘 ]
+Pr[𝑉𝑒,𝑡
+= 𝑣𝑒,𝑡
+𝑟 ∈𝑅𝑡
+≤𝑒,<𝑡
+We can now bound the total privacy loss. First, we use
+𝑘 at Line 22 are identical
+Eq. 72 and the fact that the outputs 𝑣𝑒,0
+across both worlds by definition of 𝑥 C to drop indices where
+𝑡 = 0:
+
+
+Pr[𝑉 (0) = 𝑣]
+(85)
+ln
+Pr[𝑉 (1) = 𝑣]
+!
+𝑘,(0)
+𝑒Ö
+𝑡 max Ö
+𝐾
+𝑘 |𝑣 <𝑘 ]
+max Ö
+Pr[𝑉𝑒,𝑡
+= 𝑣𝑒,𝑡
+≤𝑒,<𝑡
+= ln
+(86)
+𝑘,(1)
+𝑘
+= 𝑣𝑒,𝑡 |𝑣 <𝑘
+𝑒=1 𝑡 =0 𝑘=1 Pr[𝑉𝑒,𝑡
+≤𝑒,<𝑡 ]
+!
+𝑘,(0)
+𝑡 max ∑︁
+𝑒∑︁
+𝐾
+𝑘 |𝑣 <𝑘 ]
+max ∑︁
+Pr[𝑉𝑒,𝑡
+= 𝑣𝑒,𝑡
+≤𝑒,<𝑡
+ln
+(87)
+=
+𝑘,(1)
+𝑘 |𝑣 <𝑘 ]
+Pr[𝑉𝑒,𝑡
+= 𝑣𝑒,𝑡
+𝑒=1 𝑡 =1 𝑘=1
+≤𝑒,<𝑡
+By triangle inequality and Eq. 84, we get:
+
+
+Pr[𝑉 (0) = 𝑣]
+ln
+Pr[𝑉 (1) = 𝑣]
+𝑡 max ∑︁
+𝑒∑︁
+𝐾 ∑︁
+max ∑︁
+≤
+𝜖𝑟 pass𝑟
+
+(88)
+(89)
+
+𝑒=1 𝑡 =1 𝑘=1 𝑟 ∈𝑅𝑡
+global
+
+Finally, each 𝜖𝑟 pass𝑟 is an amount granted by F𝑑0,𝑒0 , so
+its capacity invariant Eq. 69 gives:
+𝑒∑︁
+𝑡 max ∑︁
+𝐾 ∑︁
+max ∑︁
+
+𝜖𝑟 pass𝑟 ≤ 𝜖global
+
+(90)
+
+𝑒=1 𝑡 =1 𝑘=1 𝑟 ∈𝑅𝑡
+
+Hence we have shown Eq. 71.
+B.4
+
+□
+
+DoS Resilience
+
+This section proves our main resilience result for Big Bird’s
+quota-based online algorithm: Thm. 4.1. First, Lem. B.19
+shows that the 2-PC check (Alg. 6) ensures (1) atomic consumption across all filters relevant to a query, and (2) when
+all filters have sufficient budget, each consumes an amount
+proportional to its level-specific sensitivity either at epoch
+or at epoch-site level. Next, Lem. B.21 and B.23 bound the
+
+total privacy budget the adversary can consume from the
+global budget at any device-epoch, using the atomic consumption guarantees of Lem. B.19. These first two lemmas
+give Thm. 4.1(i). Lem. B.24 then connects user actions to obtain Thm. 4.1(ii), and Lem. B.25 lifts the bound to the query
+level for Thm. 4.1(iii).
+B.4.1 Preliminaries.
+Notation. Everything in this section (§B.4) is stated inside
+one fixed execution of Alg. 7. Let 𝑠 max := 𝑒 max𝑡 max𝐾. We
+index the queries from Alg. 7 by 𝑠 ∈ [𝑠 max ] instead of triples
+(𝑒, 𝑡, 𝑘), so each execution of AnswerQuery is associated
+with a unique 𝑠, with corresponding report identifiers 𝑅𝑠 and
+querier 𝑏𝑠 .
+For a device-epoch 𝑥 = (𝑑, 𝑒, 𝐹 ), a query 𝑠 and 𝑟 ∈ 𝑅𝑠 we
+write 𝑐𝑟 for the conversion site of 𝑟 , i𝑟,𝑒 = ImpSites(𝐹 ∩ 𝐹𝐴𝑟 )
+for its effective impression sites (i.e., 𝐼𝑟 (𝑥) from Thm. B.12),
+𝑖 (for 𝑖 ∈ i ) for the losses computed at Line 22
+𝜖𝑟,𝑠 and 𝜖𝑟,𝑠
+𝑟,𝑒
+and Line 25, and pass𝑟,𝑠 ∈ {0, 1} for the indicator that
+GenerateReport zeroes 𝐹𝑒 at neither Line 17 nor Line 28.
+𝑖 is 0 when Alg. 5 does not compute it at
+Each of 𝜖𝑟,𝑠 and 𝜖𝑟,𝑠
+𝑥. When the report index is clear from context, we drop 𝑟
+and write 𝑐𝑠 , i𝑠 , 𝜖𝑠𝑖 and pass𝑠 .
+Lemma B.19 (Atomic filter check guarantees). Fix a deviceepoch record 𝑥 = (𝑑, 𝑒, 𝐹 ), a query 𝑠 and 𝑟 ∈ 𝑅𝑠 , with querier
+𝑏 = 𝑏𝑠 . Using the definition of pass𝑟,𝑠 and Alg. 6, we have:
+querier[𝑏 ]
+
+global
+
+(a) F𝑑,𝑒
+, F𝑑,𝑒
+actly 𝜖𝑟,𝑠 pass𝑟,𝑠 ;
+
+conv-quota[𝑐𝑟 ]
+
+and F𝑑,𝑒
+
+each grant ex-
+
+imp-quota[𝑖 ]
+
+𝑖 pass .
+grants exactly 𝜖𝑟,𝑠
+𝑟,𝑠
+
+(b) for each 𝑖 ∈ i𝑟,𝑒 , F𝑑,𝑒
+
+Proof. We prove both properties together. Fix 𝑟 ∈ 𝑅𝑠 with
+pass𝑟,𝑠 = 1. By Alg. 6, the atomic check returns TRUE exactly
+when all Phase 1 checks pass and all Phase 2 operations
+execute. For this report, with conversion site 𝑐𝑟 , querier 𝑏𝑠 ,
+and impression sites i𝑟,𝑒 , Phase 2 calls:
+querier[𝑏 ]
+
+𝑠
+• F𝑥
+. tryConsume(𝜖𝑟,𝑠 )
+global
+• F𝑥
+. tryConsume(𝜖𝑟,𝑠 )
+conv-quota[𝑐𝑟 ]
+• F𝑥
+. tryConsume(𝜖𝑟,𝑠 )
+imp-quota[𝑖 ]
+𝑖 )
+• For each 𝑖 ∈ i𝑟,𝑒 : F𝑥
+. tryConsume(𝜖𝑟,𝑠
+Note that 𝜖𝑟,𝑠 is the device-epoch-level individual privacy loss
+computed for this specific report 𝑟 (e.g., , via EpochBudget in
+𝑖 is the device-epoch-siteLine 22 of Alg. 5). Similarly, each 𝜖𝑟,𝑠
+level individual privacy loss for impression site 𝑖 relevant to
+this report 𝑟 (via EpochImpSiteBudget in Alg. 5). Therefore,
+when pass𝑟,𝑠 = 1, the conversion-site quota filter (for 𝑐𝑟 ),
+the per-site filter (for 𝑏𝑠 ), and the global budget all consume
+exactly the same amount 𝜖𝑟,𝑠 . Concurrently, each relevant
+impression-site quota filter (for 𝑖 ∈ i𝑟,𝑒 ) consumes its specific
+𝑖 , which is proportional to its sensitivity at the
+amount 𝜖𝑟,𝑠
+epoch-impression-site level for this report 𝑟 .
+□
+
+B.4.2 Number of sites. With these atomic guarantees we
+can bound how much of the global budget can be depleted
+
+at any device-epoch 𝑥 ∈ X. The main isolation result is in
+Thm. 4.1, which uses Lem. B.21, B.22 and B.23.
+Definition B.20 (Budget consumed and quotas charged).
+Fix a device-epoch 𝑥 = (𝑑, 𝑒, 𝐹 ), and any set of reports R𝑠 ⊆
+𝑅𝑠 for each query 𝑠 ∈ [𝑠 max ].
+Let R + := {(𝑠, 𝑟 ) : 𝑠 ∈ [𝑠 max ], 𝑟 ∈ R𝑠 , pass𝑟,𝑠 = 1} the
+reports that pass the filters. Then, we define:
+𝜖global (R) :=
+
+∑︁
+
+(91)
+
+𝜖𝑟,𝑠 ,
+
+(𝑠,𝑟 ) ∈ R +
+
+𝐶 (R) :=
+
+Ø
+
+{𝑐𝑟 },
+
+(𝑠,𝑟 ) ∈ R +
+
+𝑁 (R) := |𝐶 (R)|,
+Ø
+𝐼 (R) :=
+i𝑟,𝑒 ,
+(𝑠,𝑟 ) ∈ R +
+
+𝑀 (R) := |𝐼 (R)|.
+
+(92)
+
+adv
+𝜖global
+≤
+
+∑︁
+
+∑︁
+
+∑︁
+
+𝜖𝑟,𝑠 pass𝑟,𝑠
+
+𝑐 ∈𝐶 adv 𝑠 ∈ [𝑠 max ] 𝑟 ∈𝑅𝑠
+𝑐𝑟 =𝑐
+
+≤
+
+∑︁
+
+𝜖conv-quota
+
+𝑐 ∈𝐶 adv
+
+where the last step comes from Lem. B.19(a): each 𝑟 grants
+global
+conv-quota[𝑐𝑟 ]
+𝜖𝑟,𝑠 pass𝑟,𝑠 to F𝑑,𝑒 and the same amount to F𝑑,𝑒
+,
+followed by the capacity invariant Eq. 69.
+adv ≤ 𝑁 adv𝜖
+The definition of 𝑁 adv finally gives 𝜖global
+conv-quota .
+□
+Lemma B.22 (Impression-site quota allocation consistency).
+Fix a device-epoch 𝑥 = (𝑑, 𝑒, 𝐹 ), a query 𝑠 and a report 𝑟 ∈ 𝑅𝑠 ,
+and take Δ̃𝑥,𝑖 (𝜌𝑟 ) as in Eq. 55 with 2Δ(𝜌𝑟 ) as an upper bound
+for Δ𝑖 (𝜌𝑟 ) (Lem. B.13). We have:
+∑︁
+𝑖
+𝜖𝑟,𝑠 ≤
+𝜖𝑟,𝑠
+(94)
+𝑖 ∈i𝑟,𝑒
+
+Def. B.20 defines what a group of report consumes. When
+reports are associated with an attacker, this defines the impact of the attacker, but the definition itself does not involved
+any notion of attacker. By Lem. B.19, reports R consume
+global
+𝜖global (R) from F𝑑,𝑒 , and they charge the domains 𝐶 (R)
+and 𝐼 (R). In the lemmas below, we take R to be the reports
+an adversary elicits and note: R adv = (𝑅𝑠adv )𝑠 ∈ [𝑠max ] with
+adv := 𝜖
++
+𝑅𝑠adv ⊆ 𝑅𝑠 , writing 𝜖global
+global (R adv ) and likewise R adv ,
+𝐶 adv , 𝑁 adv , 𝐼 adv , 𝑀 adv . Note that 𝐼 adv contains every impression site charged by an attacker-elicited report, even honest
+impression sites that happen to allow malicious conversion
+sites to query their impressions. This corresponds to the
+threat model from §4.1, where 𝐼 adv ∪ 𝐶 adv is the set of domains directly controlled by, or transitively partnering with
+the attacker.
+Lemma B.21 (Conversion-site quotas bound). Fix a deviceepoch 𝑥 = (𝑑, 𝑒, 𝐹 ) and an adversary that elicits the reports
+R adv . By Def. B.20, these charge 𝑁 adv distinct conv-quota filadv from F global .
+ters and consume 𝜖global
+𝑑,𝑒
+Then, we have:
+adv
+𝜖global
+≤ 𝑁 adv𝜖conv-quota .
+
+(93)
+
+adv we have:
+Proof. By definition of 𝜖global
+
+adv
+𝜖global
+=
+
+∑︁
+
+∑︁
+
+𝜖𝑟,𝑠
+
+𝑠 ∈ [𝑠 max ] 𝑟 ∈ R𝑠 :pass𝑟,𝑠 =1
+
+=
+
+∑︁
+
+∑︁
+
+𝜖𝑟,𝑠 pass𝑟,𝑠
+
+𝑠 ∈ [𝑠 max ] 𝑟 ∈ R𝑠
+
+Then we use the definition of 𝐶 adv to sum over all reports
+𝑅𝑠 instead of R𝑠 ⊂ 𝑅𝑠 :
+
+Proof. Write 𝜆 for the noise scale of query 𝑠, so that 𝜖𝑟,𝑠 =
+𝑖
+Δ̃𝑥 (𝜌𝑟 )/𝜆 and 𝜖𝑟,𝑠
+= Δ̃𝑥,𝑖 (𝜌𝑟 )/𝜆 (Def. B.15, B.14). We go
+through the different cases for the upper bound on Δ𝑥 (𝜌𝑟 ):
+• If 𝑑 ≠ 𝑑𝑟 , 𝑒 ∉ 𝐸𝑟 , or 𝐹 ∩ 𝐹𝐴𝑟 = ∅, then 𝜖𝑟,𝑠 = 0. In that
+𝑖 = 0 for all 𝑖. This
+case, by Thm. B.12 we also have 𝜖𝑟,𝑠
+covers in particular i𝑟,𝑒 = ∅, since i𝑟,𝑒 = ImpSites(𝐹 ∩
+𝐹𝐴𝑟 ).
+• Otherwise i𝑟,𝑒 ≠ ∅, and we fix any 𝑖 ∈ i𝑟,𝑒 :
+– If 𝑑 = 𝑑𝑟 and 𝐸𝑟 = {𝑒}:
+𝑖
+∗ If i𝑟,𝑒 = {𝑖}, we have 𝜖𝑟,𝑠 = 𝜖𝑟,𝑠
+= ∥𝐴𝑟 (𝐹 ) −
+𝐴𝑟 (∅) ∥ 1 /𝜆.
+𝑖
+∗ Else, we have 𝜖𝑟,𝑠
+= 2Δ(𝜌𝑟 )/𝜆 ≥ ∥𝐴𝑟 (𝐹 ) −
+𝐴𝑟 (∅) ∥ 1 /𝜆 = 𝜖𝑟,𝑠 .
+𝑖 = 2Δ(𝜌 )/𝜆 ≥ Δ(𝜌 )/𝜆 ≥ 𝜖 .
+– Else, we have 𝜖𝑟,𝑠
+𝑟
+𝑟
+𝑟,𝑠
+𝑖 , and the remaining terms of the
+In each case 𝜖𝑟,𝑠 ≤ 𝜖𝑟,𝑠
+sum are non-negative.
+□
+Note that the upper bound in Lem. B.22 can be quite loose.
+Since the impression-site quota has no privacy meaning and
+is only used through Lem. B.22 to obtain isolation guarantees,
+instead of using per-epoch-site privacy loss we Í
+could use
+𝑖 .
+any heuristic that also satisfies Lem. B.22’s 𝜖𝑟,𝑠 ≤ 𝑖 ∈i𝑟,𝑒 𝜖𝑟,𝑠
+For instance, we could divide 𝜖𝑟,𝑠 uniformly across i𝑟,𝑒 .
+Lemma B.23 (Impression-site quotas bound). Fix a deviceepoch 𝑥 = (𝑑, 𝑒, 𝐹 ) and an adversary that elicits the reports
+R adv . By Def. B.20, these charge 𝑀 adv distinct imp-quota filters
+adv from F global .
+and consume 𝜖global
+𝑑,𝑒
+Then, we have:
+adv
+𝜖global
+≤ 𝑀 adv𝜖imp-quota .
+
+(95)
+
+adv , and then by Lem. B.22 applied
+Proof. By definition of 𝜖global
+to each report, we have:
+
+adv
+𝜖global
+=
+
+∑︁
+
+∑︁
+
+𝜖𝑟,𝑠 pass𝑟,𝑠
+
+𝑠 ∈ [𝑠 max ] 𝑟 ∈ R𝑠
+
+≤
+
+∑︁
+
+∑︁ ∑︁
+
+𝑖
+𝜖𝑟,𝑠
+pass𝑟,𝑠
+
+𝑠 ∈ [𝑠 max ] 𝑟 ∈ R𝑠 𝑖 ∈i𝑟,𝑒
+
+Then we use the definition of 𝐼 adv , which contains i𝑟,𝑒 for
+every report with pass𝑟,𝑠 = 1, to sum over all reports 𝑅𝑠
+instead of R𝑠 ⊂ 𝑅𝑠 :
+adv
+𝜖global
+≤
+
+∑︁
+
+∑︁
+
+∑︁
+
+𝑖
+𝜖𝑟,𝑠
+pass𝑟,𝑠
+
+𝑖 ∈𝐼 adv 𝑠 ∈ [𝑠 max ] 𝑟 ∈𝑅𝑠
+𝑖 ∈i𝑟,𝑒
+
+≤
+
+∑︁
+
+𝜖imp-quota
+
+𝑖 ∈𝐼 adv
+
+where the last step comes from Lem. B.19(b): each 𝑟 grants
+imp-quota[𝑖 ]
+𝑖
+𝜖𝑟,𝑠 pass𝑟,𝑠 to F𝑑,𝑒
+for each 𝑖 ∈ i𝑟,𝑒 , followed by the
+capacity invariant Eq. 69.
+adv ≤ 𝑀 adv𝜖
+The definition of 𝑀 adv finally gives 𝜖global
+imp-quota .
+□
+We can now combine Lem. B.21 and B.23 to obtain our
+main isolation theorem:
+Theorem 4.1(i) (Resilience to DoS depletion). Fix a
+device-epoch 𝑥 = (𝑑, 𝑒, 𝐹 ) and an adversary that elicits the reports R adv . By Def. B.20, these charge 𝑀 adv distinct imp-quota
+filters and 𝑁 adv distinct conv-quota filters.
+adv from F global satThen, the adversary’s consumption 𝜖global
+𝑑,𝑒
+isfies:
+adv
+𝜖global
+≤ min(𝑀 adv𝜖imp-quota, 𝑁 adv𝜖conv-quota ).
+
+B.4.3 Number of user actions. We now bound the number of sites by the user actions that resulted in quota deductions.
+Lemma B.24 (Quotas per user action). Fix a device-epoch
+𝑥 = (𝑑, 𝑒, 𝐹 ) and an adversary that elicits the reports R adv .
+Separate the actions that carry their conversions from those
+that saved the impressions they read at 𝑥:
+
++
+(𝑠,𝑟 ) ∈ R adv
+
+adv := |U adv |, 𝑈 adv := |U adv |, and 𝑈 adv :=
+Write 𝑈 conv
+conv
+imp
+imp
+adv ∪ U adv |. Then,
+|Uconv
+imp
+
+adv
+𝑀 ≤ 𝜅 action𝑈 imp
+,
+adv
+adv
+adv
+𝑁 , 𝑀 ≤ 𝜅 action𝑈 .
+
+adv
+𝜖global
+≤ (1 + 𝑟 )𝜖querier × 𝜅 action × 𝑈 adv .
+
+(97)
+(98)
+(99)
+
+(100)
+
+Proof. By Lem. B.24, and using the configuration from Table 2, where 𝜖imp-quota = 𝑛(1 + 𝑟 )𝜖querier and 𝜖conv-quota =
+(1 + 𝑟 )𝜖querier ,
+𝑀 adv𝜖imp-quota ≤ 𝑛(1 + 𝑟 )𝜖querier × 𝜅 action × 𝑈 adv
+𝑁 adv𝜖conv-quota ≤ (1 + 𝑟 )𝜖querier × 𝜅 action × 𝑈 adv .
+The limiting factor is 𝑁 adv𝜖conv-quota , and applying part (i)
+of Thm. 4.1 yields the result.
+□
+Note that under the additional assumption that no domain
+both saves an impression and measures a conversion under the same user action, each charged quota filter would
+occupy a distinct domain cap slot, giving 𝑀 adv + 𝑁 adv ≤
+adv ≤ (1 +
+𝜅 action𝑈 adv . Part (i) of Thm. 4.1 would then give 𝜖global
+𝑛
+𝑟 )𝜖querier min(𝑛𝑀 adv, 𝑁 adv ) ≤ 𝑛+1
+(1 + 𝑟 )𝜖querier𝜅 action𝑈 adv .
+We do not make this assumption, and Thm. 4.1(ii) uses the
+weaker bound above.
+
+B.4.4
+
+adv
++
+Uconv
+:= {𝑢𝑟 : (𝑠, 𝑟 ) ∈ R adv
+},
+Ø
+adv
+Uimp :=
+ImpActions(𝐹 ∩ 𝐹𝐴𝑟 ).
+
+adv
+
+We now prove the main graceful degradation theorem,
+which bounds the adversary’s budget consumption as a function of the number of user actions they can elicit.
+Theorem 4.1(ii) (Graceful degradation). Consider an attacker collecting 𝑈 adv user actions across their domains for
+adv
+device 𝑑. Under the configuration of Table 2, the budget 𝜖global
+that this attacker can consume from the global budget is upperbounded by:
+
+(96)
+
+Proof. The conversion-side bound is Lem. B.21 and the
+impression-side bound is Lem. B.23, and we take their
+minimum.
+□
+
+adv
+𝑁 adv ≤ 𝜅 action𝑈 conv
+,
+
++ has 𝑐 = 𝑐, so the
+Proof. For any 𝑐 ∈ 𝐶 adv , some (𝑠, 𝑟 ) ∈ R adv
+𝑟
+GenerateReport path for that measureConversion request
+passed F𝑑,𝑒 .K [𝑢𝑟 ]. canAdmit(𝑐). Hence 𝑐 ∈ K𝑑,𝑒 [𝑢𝑟 ] with
+adv .
+𝑢𝑟 ∈ Uconv
+Similarly, for any 𝑖 ∈ 𝐼 adv , there is 𝑟 such that 𝑖 ∈ i𝑟,𝑒 =
+ImpSites(𝐹 ∩ 𝐹𝐴𝑟 ). Hence 𝐹 ∩ 𝐹𝐴𝑟 contains an impression
+adv . That event
+(𝑢, 𝑖, imp) with 𝑢 ∈ ImpActions(𝐹 ∩𝐹𝐴𝑟 ) ⊆ Uimp
+was stored by an accepted SaveImpression, which passed
+F𝑑,𝑒 .K [𝑢]. canAdmit(𝑖), so 𝑖 ∈ K𝑑,𝑒 [𝑢].
+Finally, each cap contains at most 𝜅 action domains (Def. B.17).
+Hence the first bound (Eq. 97) comes from 𝐶 adv with the
+adv , and the second bound (Eq. 98) comes
+caps indexed by Uconv
+adv .
+from 𝐼 adv with the caps indexed by Uimp
+The third bound (Eq. 99) takes the union.
+□
+
+Number of devices.
+
+Lemma B.25 (Query error from depleted device-epochs).
+Take a database 𝐷 with filter state F , and let F̃ be obtained
+from F by depleting 𝜖global at 𝑘 distinct device-epochs. Let
+Í
+𝑄 = 𝑟 ∈𝑅 𝜌𝑟 be a query in which Δ(𝜌𝑟 ) ≤ Δ for every 𝑟 , and
+at most 𝑚 reports belong to any one device. Then
+∥𝑄 (𝐷; F ) − 𝑄 (𝐷; F̃ ) ∥ 1 ≤ 𝑚 · 𝑘 · Δ.
+Í
+Proof. Take a query 𝑄 : 𝐷 ↦→ 𝑟 ∈𝑅 𝜌𝑟 (𝐷) as defined in
+Def. B.7. Take a database 𝐷 and filter states F , F̃ where F̃
+
+is obtained from F by depleting 𝜖global for 𝑘 distinct deviceepochs. For a report 𝜌𝑟 , we denote by 𝜌𝑟 (𝐷; F ) the filtered
+report returned by GenerateReport
+in Alg. 5. Similarly, we deÍ
+note by 𝑄 (𝐷; F ) := 𝑟 ∈𝑅 𝜌𝑟 (𝐷; F ) the filtered query before
+adding noise.
+Consider a single report identifier 𝑟 ∈ 𝑅, with attribution function 𝐴𝑟 over 𝑛𝑟 := |𝐸𝑟 | epochs. We have
+𝜌𝑟 (𝐷; F ) = 𝐴𝑟 (𝐹 1, . . . , 𝐹𝑛𝑟 ) where 𝐹 1, . . . , 𝐹𝑛𝑟 are the relevant events from 𝐷 after passing the filter check based on
+F in Alg. 5. Now, without loss of generality, suppose that
+the first 𝑘𝑟 epochs for that report are depleted in F̃ . This
+causes the filter check to fail for these epochs, returning:
+
+where
+𝑘 ≤ 𝑈 adv /⌈
+
+𝜖global
+⌉.
+𝑛(1 + 𝑟 )𝜖querier · 𝜅 action
+
+Proof. Lemma B.25 covers the first statement.
+Denote by 𝑋 dep the 𝑘 depleted device-epochs, and take
+adv (𝑥) for the corresponding
+𝑥 ∈ 𝑋 dep , writing 𝑀𝑥adv and 𝑈 imp
+quantities at 𝑥. The attacker’s own reports consume the
+global
+adv = 𝜖
+whole capacity of F𝑥
+, so 𝜖global
+global at 𝑥. By Lem. B.23
+and Eq. 98, and using the configuration from Table 2 where
+𝜖imp-quota = 𝑛(1 + 𝑟 )𝜖querier :
+adv
+𝜖global ≤ 𝑀𝑥adv𝜖imp-quota ≤ 𝑛(1 + 𝑟 )𝜖querier × 𝜅 action × 𝑈 imp
+(𝑥).
+adv (𝑥)
+Rearranging gives 𝑈 imp
+
+𝜌𝑟 (𝐷; F̃ ) = 𝐴𝑟 (∅, . . . , ∅, 𝐹𝑘𝑟 +1, . . . , 𝐹𝑛𝑟 ).
+For 𝑗 ∈ {0, . . . , 𝑘𝑟 }, write F ( 𝑗 ) := (∅, . . . , ∅, 𝐹 𝑗+1, . . . , 𝐹𝑛𝑟 )
+for the input with the first 𝑗 epochs zeroed out, so that
+𝜌𝑟 (𝐷; F ) = 𝐴𝑟 (F (0) ) and 𝜌𝑟 (𝐷; F̃ ) = 𝐴𝑟 (F (𝑘𝑟 ) ). Consecutive inputs F ( 𝑗 −1) and F ( 𝑗 ) differ in a single epoch, so by
+definition of global sensitivity (Def. B.8) each step is bounded
+by Δ(𝜌𝑟 ) ≤ Δ. After telescoping over the 𝑘𝑟 depleted epochs
+and applying the triangle inequality we get:
+
+≥
+
+𝜖global
+𝑛 (1+𝑟 )𝜖querier ·𝜅 action ,
+
+is an integer, so we can round the right-hand
+side up. By Def. B.1, all the impressions of one action on 𝑑
+belong to a single device-epoch. The device-epochs of 𝑋 dep
+therefore draw disjoint sets of actions from the 𝑈 adv actions
+collected on 𝑑:
+
+
+∑︁
+𝜖global
+adv
+adv
+𝑈
+≥
+𝑈 imp (𝑥) ≥ 𝑘
+,
+𝑛(1 + 𝑟 )𝜖querier · 𝜅 action
+𝑥 ∈𝑋
+dep
+
+which gives the bound on 𝑘.
+∥𝜌𝑟 (𝐷; F ) − 𝜌𝑟 (𝐷; F̃ ) ∥ 1 =
+
+𝑘𝑟
+∑︁
+
+𝐴𝑟 (F ( 𝑗 −1) ) − 𝐴𝑟 (F ( 𝑗 ) )
+1
+
+𝑗=1
+
+≤
+
+𝑘𝑟
+∑︁
+
+∥𝐴𝑟 (F ( 𝑗 −1) ) − 𝐴𝑟 (F ( 𝑗 ) ) ∥ 1
+
+𝑗=1
+
+≤ 𝑘𝑟 · Δ
+Putting this together, we get:
+∥𝑄 (𝐷; F ) − 𝑄 (𝐷; F̃ ) ∥ 1 =
+
+∑︁
+
+𝜌𝑟 (𝐷; F ) − 𝜌𝑟 (𝐷; F̃ )
+
+𝑟 ∈𝑅
+
+≤
+
+∑︁
+
+1
+
+∥𝜌𝑟 (𝐷; F ) − 𝜌𝑟 (𝐷; F̃ ) ∥ 1
+
+𝑟 ∈𝑅
+
+≤
+
+∑︁
+
+𝑘𝑟 · Δ
+
+𝑟 ∈𝑅
+
+≤𝑚 ·𝑘 ·Δ
+Í
+
+where 𝑟 ∈𝑅 𝑘𝑟 ≤ 𝑚 · 𝑘: each report reads depleted epochs
+only on its own device, so each of the 𝑘 depleted deviceepochs is counted by at most the 𝑚 reports belonging to that
+device.
+□
+Theorem 4.1(iii) (Bounded query impact). Consider the
+setting of Lemma B.25 with an attacker collecting 𝑈 adv user
+actions across their domains for device 𝑑, whose own reports
+deplete the global budget at each of the 𝑘 device-epochs. Under
+the configuration of Table 2, the error induced by the attacker
+is bounded by:
+∥𝑄 (𝐷; F ) − 𝑄 (𝐷; F̃ ) ∥ 1 ≤ 𝑚 · 𝑘 · Δ,
+
+and
+
+adv (𝑥)
+𝑈 imp
+
+B.5
+
+□
+
+Simplified model (for educational purposes)
+
+Alg. 8 shows a simplified version of the full Big Bird system model that we analyze formally, but one in line with
+the generic model from §3.1. The purpose of including this
+simplified version is educational: it provides easy-to-read understanding of how one can represent key aspects of system
+behavior in modeling.
+First, the budgets’ IDP semantics are visible in the 𝑥 ∈
+X subscript at Line 7, where 𝑥 corresponds to a deviceepoch. This indicates that the filters are each maintained
+on each device and for each epoch. Second, privacy loss
+is computed at a finer granularity (Line 21) for imp-quota
+than for the other budgets. Third, Big Bird uses a shared
+limit (L in §3) consisting of a collection of privacy budglobal
+gets and quota budgets, denoted F . At Line 22, (F𝑥
+◦
+imp-quota
+· · · ◦ F𝑥
+[𝑖]) (𝜖𝑥 , 𝜖𝑥𝑖 ) denotes the atomic check and
+consumption of budgets performed for each record (deviceglobal
+imp-quota
+epoch). For comparison, F𝑥
+(𝜖𝑥 ) ∧ · · · ∧ F𝑥
+[𝑖] (𝜖𝑥𝑖 )
+would check budgets independently, potentially spending
+from one but not the other, which harms utility. We show
+that this atomicity, never previously studied, preserves global
+IDP.
+
+C
+
+Examples of Cap Interactions with
+Device-Epoch IDP
+
+To illustrate how easy it is for seemingly reasonable DoS
+caps to violate device-epoch IDP, we present a natural but incorrect instantiation of “capping global-budget consumption
+per user action,” followed by its corrected form.
+
+Alg. 8 Simplified version of Big Bird formal model.
+1: Input
+2: Challenge bit 𝜒 ∈ {0, 1}
+3: In-or-out record 𝑥 0 to be inserted at time 𝑡 0
+
+Public information C
+Data generation process G
+Queriers Q 1, . . . , Q 𝐾
+global
+querier
+, (F𝑥
+[𝑘])𝑘 ∈ [𝐾 ] ,
+7: IDP budgets for each 𝑥 ∈ X: F𝑥
+conv-quota
+imp-quota
+(F𝑥
+[𝑐])𝑐 ∈ [ S ] , (F𝑥
+[𝑖])𝑖 ∈ [ S ]
+4:
+5:
+6:
+
+8: for 𝑡 ∈ [𝑡 max ] do
+9:
+10:
+11:
+12:
+13:
+14:
+15:
+16:
+17:
+18:
+
+// Data generation model:
+1 , . . . 𝑉 𝐾 ) // new data depends on all past results
+𝐷𝑡 ← G(𝑉<𝑡
+<𝑡
+if 𝑡 = 𝑡 0 then
+// On challenge, insert in-or-out record...
+if 𝜒 = 0 then
+𝐷𝑡 ← 𝐷𝑡 + 𝑥 0 ∩ C // ...with public events only
+else
+𝐷𝑡 ← 𝐷𝑡 + 𝑥 0 // ...with public and private events
+// Query execution model:
+for 𝑘 ∈ [𝐾] do
+𝑘 ) // Abstract query over whole database
+𝑞𝑡𝑘 ← Q𝑘 (𝑉<𝑡
+𝑘
+𝑆𝑡 ← 𝐷
+for 𝑥 ∈ 𝐷 do
+// Compute device-epoch loss and device-epoch-impSite loss (for
+imp-quota)
+
+𝜖𝑥 ← EpochBudget(𝑥, 𝑞𝑡𝑘 )
+for 𝑖 ∈ i do
+21:
+𝜖𝑥𝑖 ← EpochImpSiteBudget(𝑥, 𝑖, 𝑞𝑡𝑘 )
+// Atomic transaction across all budgets
+global
+querier
+conv-quota
+22:
+if (F𝑥
+◦ F𝑥
+[𝑘] ◦ F𝑥
+[𝑐] ◦
+imp-quota
+F𝑥
+[i]) (𝜖𝑥 , 𝜖𝑥i ) then
+23:
+𝑆𝑡𝑘 ← 𝑆𝑡𝑘 \ {𝑥 } // Drop out-of-budget record
+24:
+𝑉𝑡𝑘 ← 𝑞𝑡𝑘 (𝑆𝑡𝑘 )
+25: return 𝑉 1, . . . , 𝑉 𝐾
+19:
+20:
+
+Faulty instantiation. Alg. 9 tries to cap the total
+privacy consumption generated by all reports within a
+single user-action context. A natural approach would be
+to cap the cumulative privacy loss across all epochs accessed by reports following that user action. The algorithm
+does exactly this by maintaining a single accumulator,
+consumedPrivacy[uaCtx], that aggregates privacy
+loss over every epoch touched by any report in that uaCtx.
+If, during the execution of a report, this cumulative loss
+would exceed the cap 𝜖action , the algorithm halts and returns
+a null report, AttributionFn(∅, . . . , ∅).
+While intuitive, this design inadvertently couples epochs:
+whether data from epoch 𝑒 is included in the report now
+depends on privacy consumption in other epochs accessed
+earlier in the same uaCtx. This violates device-epoch IDP,
+which requires that privacy loss in epoch 𝑒 depend only on
+that epoch’s data. In effect, a querier’s interactions in epoch
+
+Alg. 9 Non-IDP capping of budget consumption per user
+action
+def onUserAction( )
+uaCtx = createUserContext()
+consumedPrivacy[uaCtx] ← 0
+return uaCtx
+def measureConversion(uaCtx, impSites, querier, convSite, params)
+for 𝑒 ∈ params.attributionWindow do
+𝐼𝑒 ← MatchingFn(ImpressionStore[e], params)
+// Compute IDP loss w/ Cookie Monster algo.
+𝜖𝑒 ← computeEpochLoss(𝐼𝑒 , params)
+// Ensure that total privacy consumed in this user-action context across
+// all epochs stays within the cap. If it exceeds, stop execution and return
+// a null report.
+if consumedPrivacy[uaCtx] + 𝜖𝑒 > 𝜖𝑎𝑐𝑡𝑖𝑜𝑛 then
+return AttributionFn( ∅, . . . , ∅ ) // cap exceeded, return null report
+consumedPrivacy[uaCtx] + = 𝜖𝑒
+// Then deduct from per-epoch global budgets and per-querier budgets.
+tx = beginTransaction()
+if querierBudget[e][querier].tryConsume(𝜖𝑒 , tx) and
+globalBudget[e].tryConsume(𝜖𝑒 , tx) then
+tx.commit()
+else
+tx.abort()
+𝐼𝑒 ← ∅
+// Generate attribution histogram from remaining impressions
+return AttributionFn(𝐼𝑒1 , . . . , 𝐼𝑒 𝑤 ) // 𝑒𝑖 ∈ params.attributionWindow
+
+𝑒 1 can suppress contributions from epoch 𝑒 2 , which means
+that privacy loss accounted for 𝑒 2 now depends on data in
+𝑒 1 , violating IDP.
+Correct instantiation. Alg. 10 restores IDP soundness
+for this candidate approach by isolating caps per epoch. Each
+user-action context maintains a separate tracker for every
+epoch:
+consumedPrivacy[uaCtx][e].
+When epoch 𝑒’s loss in this uaCtx exceeds 𝜖action , only that
+epoch’s contribution is nullified; all other epochs proceed
+independently. This preserves the required per-epoch separability: the decision to include or exclude epoch 𝑒 depends
+solely on that epoch’s data and budgets, not on privacy loss
+incurred elsewhere. This same principle underlies Big Bird’s
+per-action domain cap design (Alg. 2), where checks are
+carefully partitioned per epoch and user-action contexts
+never span epoch boundaries. Together, these mechanisms
+ensure that resilience mechanisms do not inadvertently break
+device-epoch IDP.
+
+D
+
+Cross-report Privacy Loss Optimization
+
+In §B, we presented a general algorithm where queriers
+pay for each report separately. It is common for conversion sites to embed multiple intermediaries and to perform
+attribution once across impressions displayed by all intermediaries. When multiple reports for the same conversion
+involve disjoint impression sets (e.g., across intermediaries),
+
+Alg. 10 Correct, IDP-respecting capping of budget consumption
+per user action
+def onUserAction( )
+uaCtx = createUserContext()
+consumedPrivacy[uaCtx][𝑒] ← 0 for each epoch 𝑒
+return uaCtx
+
+uted value 60, because adtech.ex and adtech2.ex receive
+disjoint bins of the histogram. Leveraging this observation,
+we show that it is possible to deduct only 0.6 from the global
+budget. The same optimization applies to shared quotas.
+D.2
+
+def measureConversion(uaCtx, impSites, querier, convSite, params)
+for 𝑒 ∈ params.attributionWindow do
+𝐼𝑒 ← MatchingFn(ImpressionStore[e], params)
+// Compute IDP loss w/ Cookie Monster algo.
+𝜖𝑒 ← computeEpochLoss(𝐼𝑒 , params)
+// Ensure that privacy consumed per epoch in this user-action context
+// stays within the cap. If it exceeds, eliminate the epoch’s data from
+// consideration for this report.
+if consumedPrivacy[uaCtx][e] + 𝜖𝑒 > 𝜖𝑎𝑐𝑡𝑖𝑜𝑛 then
+𝐼𝑒 ← ∅ // nullify contribution of this epoch to the report
+consumedPrivacy[uaCtx][e] + = 𝜖𝑒
+// Then deduct from per-epoch global budgets and per-querier budgets.
+tx = beginTransaction()
+if querierBudget[e][querier].tryConsume(𝜖𝑒 , tx) and
+globalBudget[e].tryConsume(𝜖𝑒 , tx) then
+tx.commit()
+else
+tx.abort()
+𝐼𝑒 ← ∅
+// Generate attribution histogram from remaining impressions
+return AttributionFn(𝐼𝑒1 , . . . , 𝐼𝑒 𝑤 ) // 𝑒𝑖 ∈ params.attributionWindow
+def onEpochChange(uaCtx)
+destroyUserContext(uaCtx)
+
+we prove that one need not double-count against shared
+budgets (global, conversion-site, and impression-site quotas).
+Indeed, the combination of reports from different intermediaries reveals no more than a single attribution across intermediaries. We present the intuition first with an example
+and then with detailed formalism and proofs.
+D.1
+
+Example
+
+We modify the example in Fig. 4 and §4.3 as follows. Instead
+of working with a single intermediary adtech.ex, shoes.ex
+works with both adtech.ex and adtech2.ex. adtech.ex displays impressions on news.ex, and adtech2.ex on blog.ex.
+Upon conversion, attribution is still computed across all relevant impressions, spanning both intermediaries. For shoes
+.ex’s own measurement queries, accounting is unchanged
+since intermediaries operate on shoes.ex’s behalf and are
+not queriers themselves. As before, adtech.ex can request
+an additional report (j) measuring its own impressions for
+placement optimization purposes. Here, adtech.ex receives
+a report containing a histogram with attributed value 30 (for
+the impression on news.ex). Additionally, adtech2.ex can
+measure its own impressions and receive a report (k) containing a histogram with attributed value 30. Naively, one
+would expect a cumulative deduction of 0.9 from the global
+budget (three reports). Yet, one can observe that the two
+intermediary reports are shards of a single report with attrib-
+
+Problem Statement
+
+The example in §D.1 admits a cross-report optimization,
+which we formalize here. We define variations of Alg. 7
+and Alg. 5 in §D.3. We focus on histogram reports, defined
+in §D.4, and show that paying only once for a sequence of
+properly correlated histogram reports still satisfies global
+IDP guarantees in §D.5. We leave the generalization to other
+queries for future work.
+D.3
+
+Algorithm
+
+Overview. Alg. 11 updates the formalism from Alg. 7. Instead
+of generating a report immediately upon conversion, the
+first querier to request a report attached to a report identifier
+𝑟 calls MeasureConversion to create a stateful attribution
+object 𝛼𝑟 , which pays upfront for any valid sequence of
+histogram reports over non-overlapping impressions.
+MeasureConversion performs attribution using the prespecified attribution function 𝑎 and the noise scale 𝜆, which
+give an upper bound on the total leakage of any sequence
+of future reports applying 𝑎 on disjoint sets of impressions.
+All shared privacy loss is charged upfront and atomically at
+MeasureConversion time, before any querier-specific interaction occurs. We run a modified two-phase commit protocol
+to deduct budget from all shared filters (global and quota
+filters), but not from querier-local filters, which are charged
+separately. 2 Finally, 𝛼𝑟 stores the attribution function 𝑎 F
+with corresponding impressions F, the privacy parameters 𝜆,
+and the support 𝑆 of impressions requested so far.
+GetReport allows a querier to receive a report from 𝑟 ,
+once the attribution object 𝛼𝑟 has been created. 𝛼𝑟 is only
+created once, and is reused every time a querier requests
+a report from 𝑟 . GetReport checks that privacy parameters
+match what was committed in the attribution object, and
+that impressions are not queried twice. If these checks pass,
+GetReport spends querier budget and computes the report
+using the predefined attribution function 𝑎 stored in 𝛼𝑟 . We
+update the support of impressions 𝑆 ← 𝑆 ⊔ 𝑆 𝜌 in 𝛼𝑟 each
+time a new report 𝜌 requests impressions in 𝑆 𝜌 ⊂ I.
+Subroutine. We define AtomicFilterCheckAndConsume2 as
+in Alg. 6, except that querier filters are not part of the atomic
+commit. That is, we do not take 𝑏 as an input, and we delete
+Line 6 and Line 16 from Alg. 6.
+
+2 The querier budget is left out of the 2PC because we don’t know ahead of
+
+time which queriers will request a report, and we don’t want to block some
+queriers if other queriers are out of budget.
+
+Alg. 11 Updated formalism for cross-report optimization
+(diff with Alg. 7)
+
+1: Input
+2: Filter and quota capacities 𝜖 global , 𝜖 querier , 𝜖 imp-quota ,
+
+1: // Collect, aggregate and noise reports to answer 𝑄
+2: def AnswerQuery(𝐷, 𝑄, 𝜆, 𝑏)
+
+(𝜌𝑟𝑏 )𝑟 ∈𝑅 ← 𝑄 // Get report identifiers from 𝑄
+for 𝑟 ∈ 𝑅 do
+5:
+if 𝛼𝑟 is not defined then
+6:
+// Initialize attribution object
+7:
+𝛼𝑟 ← MeasureConversion(𝐷, 𝜌𝑟𝑏 , 𝜆)
+8:
+𝜌𝑟𝑏 (𝐷), 𝛼𝑟 ← GetReport(𝛼𝑟 , 𝜌𝑟𝑏 , 𝜆, 𝑏)
+9: Sample 𝑋 ∼ L (𝜆)
+Í
+10: return 𝑟 ∈𝑅 𝜌𝑟𝑏 (𝐷) + 𝑋
+3:
+4:
+
+D.4
+
+𝜖conv-quota
+3: def MeasureConversion(𝐷, 𝜌, 𝜆, b)
+4: Read 𝜌 to get device 𝑑, epoch 𝐸, conversion site 𝑐, im-
+
+Histogram reports definition and properties
+
+The following definitions (Def. D.1 and D.2) are adapted from
+[43, Thm. 18]. Histogram reports distribute a positive value
+across impressions, map each impression to a bucket, and
+then sum up the attributed value in each bucket. Lem. D.3
+gives the global sensitivity of such histogram reports, which
+is bounded by the maximum attributable value.
+Definition D.1 (Scalar attribution function). Fix a number
+of epochs 𝑘 > 0. A scalar attribution function is a function
+𝑎 : P (I)𝑘 × I → R+ that attributes a positive value 𝑎 F (𝑓 )
+to each impression 𝑓 ∈ I, depending on all the impressions
+in 𝑘 epochs F ∈ P (I)𝑘 .
+For a scalar attribution function 𝑎, we define its maximum
+attributable value 𝑎 max as follows:
+
+𝑎 max := max
+
+𝑘 ∑︁
+∑︁
+
+F∈ P ( I ) 𝑘 𝑗=1
+
+𝑎 F (𝑓 )
+
+(101)
+
+𝑓 ∈F 𝑗
+
+Definition D.2 (Histogram report). Consider a scalar attribution function 𝑎 : P (I)𝑘 × I → R+ , a support set of impressions 𝑆 ⊂ I, an output dimension 𝑚 > 0, and a one-hot
+encoding function 𝐻 that maps each event 𝑓 to one of 𝑚 buckets. That is, 𝐻 : I → {0, 1}𝑚 such that ∀𝑓 ∈ I, ||𝐻 (𝑓 )|| 1 = 1.
+First, we define 𝐴𝑎,𝑆,𝐻 : P (I)𝑘 → R𝑚 as follows:
+
+𝐴(F) =
+
+𝑘 ∑︁
+∑︁
+
+1[𝑓 ∈ 𝑆]𝑎 F (𝑓 ) · 𝐻 (𝑓 )
+
+Alg. 12 Big Bird algorithm (on-device) with cross-report
+optimization for histogram reports
+
+(102)
+
+𝑗=1 𝑓 ∈F 𝑗
+
+pression sites i, histogram attribution function 𝐴𝑎𝜌 ,𝑆 𝜌 ,𝐻𝜌
+with scalar attribution function 𝑎, support impressions
+𝑆 and histogram bin mapping 𝐻 .
+5: for 𝑒 ∈ 𝐸 do
+6:
+𝑥 ← (𝑑, 𝑒, 𝐷𝑑𝑒 )
+7:
+if F𝑥 is not defined then
+8:
+F𝑥 ← InitializeFilters(𝜖global, 𝜖querier,
+𝜖imp-quota, 𝜖conv-quota )
+𝜖𝑥 ← 2𝑎 max /𝜆
+𝜖xi ← {𝑖 : 2𝑎 max /𝜆, 𝑖 ∈ i}
+if AtomicFilterCheckAndConsume2(F𝑥 , 𝑐, i, 𝜖𝑥 , 𝜖xi ) =
+FALSE then
+12:
+𝐹𝑒 ← ∅ // Empty the epoch if any filter check fails
+13: return 𝛼 = (𝑎 F, F, 𝜆, ∅) // Start with 𝑆𝛼 = ∅
+
+9:
+10:
+11:
+
+14:
+15: def GetReport(𝛼, 𝜌, 𝜆)
+16: Read 𝛼 to get attribution function 𝑎𝛼 , impressions F𝛼 ,
+
+noise scale 𝜆𝛼 .
+Read 𝜌 to get device 𝑑, querier 𝑏, target epochs 𝐸, histogram attribution function 𝐴𝑎,𝑆,𝐻 with scalar attribution function 𝑎, support impressions 𝑆 and histogram
+bin mapping 𝐻 .
+18: if 𝑆 ∩ 𝑆𝛼 ≠ ∅ ∨ 𝜆 ≠ 𝜆𝛼 ∨ 𝑎 𝜌 ≠ 𝑎𝛼 then
+19:
+𝜌 ← 𝐴(∅, . . . , ∅) // Null report if inconsistent with 𝛼
+20:
+return 𝜌
+21: for 𝑒 ∈ 𝐸 do
+22:
+𝑥 ← (𝑑, 𝑒, F𝛼 𝑒 )
+23:
+𝜖𝑥 ← EpochBudget(𝑥, 𝜌, 𝜆) // Querier budget only
+querier[𝑏 ]
+24:
+if F𝑥
+. tryConsume(𝜖𝑥𝑡 ) = FALSE then
+25:
+𝐹𝑒 ← ∅
+26:
+else
+27:
+𝐹𝑒 ← F𝛼 𝑒
+28: 𝛼 ← (𝑎𝛼 , F, 𝜆, 𝑆𝛼 ⊔ 𝑆 𝜌 ) // Update impression support
+29: 𝜌 ← 𝐴𝑎,𝑆,𝐻 ((𝐹𝑒 )𝑒 ∈𝐸 ) // Clipped attribution report
+30: return 𝜌, 𝛼
+17:
+
+𝐴𝑎,𝑆,𝐻 is a well-defined attribution function (in the sense
+of Def. B.5).
+Second, for a device 𝑑 and a set of epochs 𝐸, we define the
+histogram report associated with 𝐴𝑎,𝑆,𝐻 as in Def. B.6:
+
+report 𝜌 with associated attribution function 𝐴𝑎,𝑆,𝐻 . We have:
+
+𝜌 : 𝐷 ↦→ 𝐴𝑎,𝑆,𝐻 (𝐷𝑑𝐸 )
+
+Δ(𝜌) ≤ 2𝑎 max
+
+(103)
+
+Next, Lem. D.3 and D.4 give two preliminary properties
+of histogram reports that will be used in Thm. D.5.
+Lemma D.3 (Histogram sensitivity). Consider a histogram
+
+(104)
+
+Proof. Take a report 𝜌 with scalar attribution function 𝑎,
+device 𝑑 and epochs 𝐸. Consider two neighboring databases
+
+𝐷, 𝐷 ′ and denote F := 𝐷𝑑𝐸 and F′ := 𝐷 ′𝑑𝐸 . We have:
+𝑛
+∑︁
+
+∥𝜌𝑖 (𝐷) − 𝜌𝑖 (𝐷 + 𝑥) ∥/𝜆𝑖
+
+(110)
+
+∑︁
+
+(111)
+
+𝑖=1
+
+∥𝜌 (𝐷) − 𝜌 (𝐷 ′ ) ∥ 1 = ∥𝐴𝑎,𝑆,𝐻 (F) − 𝐴𝑎,𝑆,𝐻 (F′ ) ∥ 1
+=
+
+𝑘 ∑︁
+∑︁
+
+𝑎 F (𝑓 ) · 𝐻 (𝑓 ) −
+
+𝑘 ∑︁
+∑︁
+
+𝑎 F (𝑓 ) ∥𝐻 (𝑓 ) ∥ +
+
+𝑘 ∑︁
+∑︁
+
+=
+
+𝑎 F′ (𝑓 ) · 𝐻 (𝑓 )
+
+(106)
+
+=
+
+1
+
+𝑎 F′ (𝑓 ) ∥𝐻 (𝑓 )∥
+
+≤ 2𝑎 max
+
+𝑘 ∑︁
+∑︁ ∑︁
+1[𝑓 ∈ 𝑆𝑖 ]𝑎 F (𝑓 )𝐻𝑖 (𝑓 )−
+∥
+𝑖 ∈𝐼
+
+(112)
+
+𝑗=1 𝑓 ∈F 𝑗
+
+𝑘 ∑︁
+∑︁
+
+(107)
+
+𝑗=1 𝑓 ∈F′𝑗
+
+𝑗=1 𝑓 ∈F 𝑗
+
+∥𝜌𝑖 (𝐷) − 𝜌𝑖 (𝐷 + 𝑥) ∥/𝜆1
+
+𝑖 ∈𝐼
+
+𝑗=1 𝑓 ∈F′𝑗
+
+𝑗=1 𝑓 ∈F 𝑗
+
+≤
+
+𝑘 ∑︁
+∑︁
+
+(105)
+
+1[𝑓 ∈ 𝑆𝑖 ]𝑎 F′ (𝑓 )𝐻𝑖 (𝑓 ) ∥/𝜆1
+
+(113)
+
+𝑗=1 𝑓 ∈F′𝑗
+
+(108)
+≤
+
+𝑘 ∑︁
+∑︁ ∑︁
+
+1[𝑓 ∈ 𝑆𝑖 ] (𝑎 F (𝑓 ) + 𝑎 F′ (𝑓 ))/𝜆1
+
+(114)
+
+1[𝑓 ∈ ⊔𝑖 ∈𝐼 𝑆𝑖 ] (𝑎 F (𝑓 ) + 𝑎 F′ (𝑓 ))/𝜆1
+
+(115)
+
+𝑖 ∈𝐼 𝑗=1 𝑓 ∈F 𝑗
+
+Even though this bound holds even for non-neighboring
+databases, [43, Thm. 18] provides mild conditions under
+which the bound is tight.
+□
+
+≤
+
+𝑘 ∑︁
+∑︁
+𝑗=1 𝑓 ∈F 𝑗
+
+≤ 2𝑎 max /𝜆1
+D.5
+
+Privacy proof
+
+Lemma D.4 (Correlated histogram sensitivity). Fix a deviceepoch 𝑥 = (𝑑, 𝑒, 𝐹 ) and a database 𝐷. Fix a report identifier
+𝑟 ∈ Z corresponding to a histogram attribution object 𝛼𝑟 . Fix
+a sequence of reports 𝜌 1, . . . , 𝜌𝑛 that request a report from 𝑟 ,
+ordered lexicographically by time and querier (𝑡, 𝑏). In particular, MeasureConversion
+Í is called for 𝜌 1 and then reused for
+subsequent reports. 𝑛𝑖=1 ∥𝜌𝑖 (𝐷) − 𝜌𝑖 (𝐷 + 𝑥) ∥/𝜆𝑖 represents
+the total contribution over reports computed from 𝛼𝑟 , each with
+its own requested noise scale 𝜆𝑖 . Denote by pass1 the output of
+the 2PC for 𝑥 in Alg. 12.
+We have:
+
+𝑛
+∑︁
+
+∥𝜌𝑖 (𝐷) − 𝜌𝑖 (𝐷 + 𝑥) ∥/𝜆𝑖
+
+by Def. D.1 and using the fact that the 𝑆𝑖 are disjoint so
+each impression is counted at most once.
+□
+Theorem D.5. Consider 𝑥 ∈ X with global budget capacity 𝜖global . For simplicity, because we are considering a global
+guarantee, we consider a non-adaptive data generation process
+in Alg. 11, which defines a mechanism 𝑞. Then, 𝑞 satisfies individual device-epoch 𝜖global -DP for 𝑥 under public information
+C.
+Proof. Denote by 𝑥 C = (𝑑, 𝑒, 𝐹 ∩ C) the device-epoch obtained by keeping only public events C from 𝑥, where public
+events are the set of all conversions.
+Take 𝑣 ∈ Range(𝑞). As in Thm. 4.2, we want to show that:
+
+
+Pr[𝑞(𝐷 + 𝑥 C ) = 𝑣]
+ln
+≤ 𝜖global .
+(117)
+Pr[𝑞(𝐷 + 𝑥) = 𝑣]
+Using Bayes’ rule and 𝜌 (𝐷 + 𝑥 C ) = 𝜌 (𝐷), as in Thm. 4.2,
+we have:
+
+𝑖=1
+
+≤ pass1 · 2𝑎 max /𝜆1
+
+(116)
+
+(109)
+
+
+
+Pr[𝑞(𝐷 + 𝑥 C ) = 𝑣]
+(118)
+Pr[𝑞(𝐷 + 𝑥) = 𝑣]
+!
+Î𝑡max Î
+Í
+𝑏
+𝑏
+𝑏
+𝑏 ∈𝑆 Pr[ 𝑟 ∈𝑅𝑡𝑏 𝜌𝑟,𝑡 (𝐷) + 𝑋𝑡 = 𝑣 𝑡 ]
+𝑡 =1
+= ln Î𝑡max Î
+Í
+𝑏
+𝑏
+𝑏
+𝑏 ∈𝑆 Pr[ 𝑟 ∈𝑅𝑡𝑏 𝜌𝑟,𝑡 (𝐷 + 𝑥) + 𝑋𝑡 = 𝑣 𝑡 ]
+𝑡 =1
+(119)
+!
+Í
+𝑏
+𝑏
+𝑏
+𝑡∑︁
+max ∑︁
+Pr[ 𝑟 ∈𝑅𝑡𝑏 𝜌𝑟,𝑡 (𝐷) + 𝑋𝑡 = 𝑣𝑡 ]
+≤
+(120)
+ln
+Í
+𝑏 (𝐷 + 𝑥) + 𝑋 𝑏 = 𝑣 𝑏 ]
+Pr[ 𝑟 ∈𝑅𝑡𝑏 𝜌𝑟,𝑡
+𝑡
+𝑡
+𝑡 =1 𝑏 ∈𝑆
+ln
+
+Proof. If pass1 = 0, then 𝜌𝑖 (𝐷) = 𝜌𝑖 (𝐷 + 𝑥) because in both
+cases the data for 𝑥 is zeroed out (𝐹𝑒 = ∅ at Line 12), which
+completes the proof in this case.
+Now, suppose that pass1 = 1. Take a report 𝜌𝑖 with scalar
+attribution function 𝑎𝑖 and support impressions 𝑆𝑖 . These
+only depend on past results 𝑣 <𝑡𝑖 ,𝑏𝑖 . If 𝑆𝑖 ∩ (𝑆 1 ∪ · · · ∪𝑆𝑖 −1 ) ≠ ∅,
+𝜆𝑖 ≠ 𝜆1 or 𝑎𝑖 ≠ 𝑎 1 , then 𝜌𝑖 (𝐷) = 𝐴(∅, . . . , ∅) = 𝜌𝑖 (𝐷 + 𝑥).
+Also, if 𝑥 = (𝑑, 𝑒, 𝐹 ) is not queried by 𝜌𝑖 (𝑑 ≠ 𝑑𝑖 or 𝑒 ∉ 𝐸𝑖 ),
+then 𝜌𝑖 (𝐷) = 𝜌𝑖 (𝐷 + 𝑥).
+Denote by 𝐼 the set of remaining reports satisfying 𝑆𝑖 ∩
+(𝑆 1 ⊔ · · · ⊔ 𝑆𝑖 −1 ) = ∅, 𝜆𝑖 = 𝜆1 , 𝑎𝑖 = 𝑎 1 , 𝑑𝑖 = 𝑑, and 𝑒 ∈ 𝐸𝑖 . We
+have:
+
+𝑏 , 𝑟 ∈ 𝑅𝑏 } is chosen adaptively,
+where each query 𝑄𝑡𝑏 = {𝜌𝑟,𝑡
+𝑡
+potentially based on previous results 𝑣 𝑏1 , . . . , 𝑣𝑡𝑏−1 . Since the
+filters and attribution functions are identical for 𝐷 and 𝐷 + 𝑥
+𝑏 (𝐷) for
+when we condition on past results, we write 𝜌𝑟,𝑡
+
+𝑏 (𝐷; F , 𝛼
+simplicity instead of 𝜌𝑟,𝑡
+𝑣<𝑡 𝑣<𝑡 )).
+Fix 𝑡 ∈ [𝑡 max ] and 𝑏 ∈ S. Without the optimization, as
+in Eq. 84, the device would pay for each report sent to any
+querier, which would give:
+!
+Í
+𝑏 (𝐷) + 𝑋 𝑏 = 𝑣 𝑏 ]
+Pr[ 𝑟 ∈𝑅𝑡𝑏 𝜌𝑟,𝑡
+𝑡
+𝑡
+ln
+(121)
+Í
+𝑏 (𝐷 + 𝑥) + 𝑋 𝑏 = 𝑣 𝑏 ]
+Pr[ 𝑟 ∈𝑅𝑡𝑏 𝜌𝑟,𝑡
+𝑡
+𝑡
+∑︁
+𝑏
+≤
+Δ𝑥 (𝜌𝑟,𝑡
+)pass𝑏𝑟 /𝜆𝑡𝑏
+(122)
+𝑟 ∈𝑅𝑡𝑏
+𝑏 (𝐷) −
+Instead of upper-bounding the difference ∥𝜌𝑟,𝑡
+𝑏
+𝜌𝑟,𝑡 (𝐷 + 𝑥) ∥ for each report by Δ𝑥 (𝜌𝑟 ) separately, which
+
+takes a maximum over all 𝐷 right away, we keep information
+about 𝐷 a bit longer. This will allow us to leverage the fact
+𝑏 across different time steps and queriers tied
+that reports 𝜌𝑟,𝑡
+to the same identifier 𝑟 are correlated:
+!
+Í
+𝑏 (𝐷) + 𝑋 𝑏 = 𝑣 𝑏 ]
+Pr[ 𝑟 ∈𝑅𝑡𝑏 𝜌𝑟,𝑡
+𝑡
+𝑡
+ln
+Í
+𝑏 (𝐷 + 𝑥) + 𝑋 𝑏 = 𝑣 𝑏 ]
+Pr[ 𝑟 ∈𝑅𝑡𝑏 𝜌𝑟,𝑡
+𝑡
+𝑡
+∑︁
+𝑏
+𝑏
+𝑏
+≤
+∥𝜌𝑟 (𝐷) − 𝜌𝑟 (𝐷 + 𝑥) ∥/𝜆𝑡
+
+(123)
+(124)
+
+𝑟 ∈𝑅𝑡𝑏
+
+For a report identifier 𝑟 ∈ Z, we now define T𝑟 , which
+keeps track of all queriers that requested a report from 𝑟 and
+the time steps at which they requested it:
+T𝑟 := {(𝑡, 𝑏) ∈ [𝑡 max ] × S : 𝑟 ∈ 𝑅𝑡𝑏 }
+
+(125)
+
+This notation allows us to swap the sums, after putting
+Eq. 124 into Eq. 120:
+
+
+Pr[𝑞(𝐷 + 𝑥 C ) = 𝑣]
+ln
+(126)
+Pr[𝑞(𝐷 + 𝑥) = 𝑣]
+𝑡 max ∑︁ ∑︁
+∑︁
+≤
+∥𝜌𝑟𝑏 (𝐷) − 𝜌𝑟𝑏 (𝐷 + 𝑥) ∥/𝜆𝑡𝑏
+(127)
+𝑡 =1 𝑏 ∈𝑆 𝑟 ∈𝑅𝑏
+𝑡
+
+=
+
+∑︁ ∑︁
+
+∥𝜌𝑟𝑏 (𝐷) − 𝜌𝑟𝑏 (𝐷 + 𝑥) ∥/𝜆𝑡𝑏
+
+(128)
+
+𝑟 ∈Z (𝑡,𝑏 ) ∈ T𝑟
+
+Fix a report identifier 𝑟 ∈ Z corresponding to a histogram attribution object 𝛼𝑟 . Denote by (𝑡 0, 𝑏 0 ) the first
+time-step/querier pair that requests a report from 𝑟 , thereby
+calling MeasureConversion. By Lem. D.4, we have:
+∑︁
+
+∥𝜌𝑟𝑏 (𝐷) − 𝜌𝑟𝑏 (𝐷 + 𝑥) ∥/𝜆𝑡𝑏 ≤ pass𝑏𝑟,𝑡0 0 · Δ𝑥 (𝛼𝑟 )/𝜆𝑡𝑏00
+
+(𝑡,𝑏 ) ∈ T𝑟
+
+(129)
+𝑏0
+Finally, since pass𝑏𝑟,𝑡0 0 implies that 𝜖𝑟,𝑡
+= Δ𝑥 (𝛼𝑟 )/𝜆𝑡𝑏00 passes
+0
+the global budget, by the definition of global budget, Eq. 128
+becomes:
+
+
+
+Pr[𝑞(𝐷 + 𝑥 C ) = 𝑣]
+ln
+Pr[𝑞(𝐷 + 𝑥) = 𝑣]
+∑︁
+𝑏0
+≤
+pass𝑏𝑟,𝑡0 0 𝜖𝑟,𝑡
+0
+
+
+(130)
+(131)
+
+𝑟 ∈Z
+
+≤ 𝜖global
+which concludes the proof.
+
+(132)
+□
+
+Remark. Lem. D.3 and D.4 show that for histogram reports
+with 𝑘 > 1 epochs, Alg. 12 spends up to |b| times less budget
+than Alg. 5 when |b| queriers request reports from the same
+conversion with a single report identifier 𝑟 . This is because
+the privacy loss in these cases is proportional to Δ(𝜌) =
+2𝑎 max . For histogram reports with a single epoch, we can use
+the individual sensitivity, which renders this optimization
+unnecessary.
+
+
