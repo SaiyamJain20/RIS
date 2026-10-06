@@ -6,7 +6,7 @@
 
 1. Read [PLAN.md](PLAN.md) for the ordered tasks, tests and completion gates.
 2. Read [SPEC.md](SPEC.md) for the research questions, assumptions and experiment design.
-3. Give each coding agent its [start prompt](communication/README.md). Agents must read [AGENTS.md](AGENTS.md), the [interface contract](interfaces/README.md), and the [communication protocol](communication/PROTOCOL.md).
+3. Give each coding agent its [complete start prompt](communication/README.md): one file includes the shared context, its role, independent-work instructions and Git workflow. The canonical [common context](communication/COMMON_AGENT_CONTEXT.md) is maintained once and bundled with each role. Agents must also read live [AGENTS.md](AGENTS.md), the [interface contract](interfaces/README.md), and the [communication protocol](communication/PROTOCOL.md).
 
 | Agent | Module | Responsibility throughout E, F and G |
 |---|---|---|

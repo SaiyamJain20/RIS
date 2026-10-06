@@ -4,9 +4,9 @@
 
 | Writer | Owned paths | Reads |
 |---|---|---|
-| Agent 1 | `ledger/**`, `communication/agent-1/**` | shared contracts, board, agent 2/3 outboxes and exported manifests |
-| Agent 2 | `protocol/**`, `communication/agent-2/**` | shared contracts, board, agent 1/3 outboxes and exported manifests |
-| Agent 3 | `evaluation/**`, `interfaces/**`, root configuration/docs, shared `communication/*.md`, `communication/agent-3/**` | every handoff and module's exported artifacts |
+| Agent 1 | `ledger/**`, its STATUS/HANDOFF and `communication/agent-1/outbox/**` | shared contracts, board, agent 2/3 outboxes and exported manifests |
+| Agent 2 | `protocol/**`, its STATUS/HANDOFF and `communication/agent-2/outbox/**` | shared contracts, board, agent 1/3 outboxes and exported manifests |
+| Agent 3 | `evaluation/**`, `interfaces/**`, root configuration/docs, shared communication files, prompt builder and all ROLE/START_PROMPT templates, its own runtime mailbox | every handoff and module's exported artifacts |
 
 Nobody writes `archive/**`. A module review proposes a change to the owner; it does not edit the reviewed file. To transfer ownership of a file, agent 3 records a dated decision after both affected agents acknowledge it. Only one current writer is permitted.
 
@@ -41,7 +41,7 @@ Use `QUESTION` for a missing implementation detail, `RFC` for a shared interface
 4. Read new messages after a test batch, before changing an interface consumer, and before handoff. An agent need not interrupt a running command every few seconds.
 5. Publish messages for a dependency-ready artifact, blocker, interface proposal or review result. Acknowledge messages by ID in your own outbox; do not edit the sender's file.
 6. Before READY, update `HANDOFF.md` with exact exported artifacts, hashes, commands, results, limitations and the consumer's next action.
-7. If waiting, improve current-RQ tests/evidence within your ownership or stop with a clear status. Do not start the next RQ or spin on repeated no-change polling.
+7. If waiting, improve current-RQ tests/evidence within your ownership. When an active peer is producing the needed dependency, remain in the session using host waits or 30–60-second pauses between file/message checks and resume automatically on its handoff. Do not stop merely because one task batch finished or spin in a tight polling loop. If a missing producer/external blocker requires human action and no independent work remains, publish a restartable handoff with that concrete dependency. Do not start the next RQ early.
 
 ## 4. Shared interface changes
 
@@ -75,6 +75,8 @@ Selected gate evidence is copied to a versioned `evaluation/evidence/frozen/<rq>
 
 ## 7. Shared checkout / Git rules
 
-Agents 1/2 do not write Git metadata. Agent 3 serializes any user-authorized staging/commit and names the exact files. No worktrees, branch switches, destructive checkout/reset/clean, global stashes or blanket staging. Do not commit an agent's partial unreviewed work or attribute old archived work to a new experiment.
+Agents 1/2 do not write Git metadata, including fetch/pull or indirect staging by dependency tools. Agent 3 uses the full serialized checkpoint procedure in [COMMON_AGENT_CONTEXT.md](COMMON_AGENT_CONTEXT.md): freeze/ACK exact reviewed files, acquire the coordinator lock, inspect remote ancestry, stage explicit paths, check source/evidence, commit, push normally and verify the remote result. No worktrees, branch switches, destructive checkout/reset/clean, global stashes or blanket staging. An owner READY handoff permits the coordinator to include those exact reviewed files; it does not transfer ownership of the module.
+
+When the human supplies a complete START_PROMPT as the assignment, its scoped agent-3 commit/push instruction is the authorization for reviewed `origin/main` checkpoints. The presence of the template on disk alone does not authorize publication. Push failures preserve the local commit and get a concrete status message; never force push or change protections to bypass a failure.
 
 This protocol uses repository files. It does not authorize email, issue publication or external messages.
