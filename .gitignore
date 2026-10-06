@@ -1,4 +1,4 @@
-# Third-party clones under analysis (re-clone from upstream - see README.md)
+# Optional historical third-party clones (not part of active HMBC work)
 artifacts/janus-repo/
 artifacts/vault-secrets-abe-janus/
 
@@ -10,5 +10,13 @@ __pycache__/
 node_modules/
 .venv/
 *.log
-work/**/build/
-work/**/out/
+
+# Rebuildable module output and local private state
+ledger/cache/
+ledger/out/
+ledger/broadcast/
+protocol/.state/
+evaluation/runs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
