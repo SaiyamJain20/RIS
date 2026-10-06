@@ -1,17 +1,43 @@
 # Agent 1 handoff
 
-Status: NOT READY. No implementation or tests have been run.
+Status: **READY FOR REVIEW (E0 ledger deliverables + A-E1 draft); not DONE.** Interface v0 is not
+frozen and no integration has run. Full detail: outbox A1-0004.
 
-Fill before READY:
-
-- RQ/task and interface version:
-- Changed owned files and SHA-256/source manifest:
-- Exported artifacts and consumers:
-- Exact test commands, exit codes and evidence paths:
-- Valid controls and deliberately failing mutants:
-- Remaining assumptions, failures and blockers:
-- Interface RFCs/ACK message IDs:
-- Reproduction steps for the receiving agent:
-- Files to freeze and integration prerequisites:
+- **RQ/task and interface version:** E / E0 (toolchain, vectors, ABI, source review) and an A-E1
+  draft. Interface v0 proposed; the ledger's v1 proposal is A1-0003.
+- **Changed owned files and source manifest:** `ledger/**` (68 files) listed with SHA-256 in
+  `ledger/evidence/source-manifest.sha256` (file sha256
+  6ac5726ab87cc992b8afba5ad4e1d2a7677cdfcc835c312dec601afc29e8c9b2). Messages A1-0001..A1-0004.
+  Branch `agent-1` on origin (user's multi-machine instruction, A1-0001).
+- **Exported artifacts and consumers:** `ledger/exports/abi/*.json` + `manifest.json` (agent 2,
+  agent 3); `ledger/exports/vectors/eip712-v0-ledger.json` + `typed/*.json` (agent 2 digest check,
+  agent 3 freeze); `ledger/exports/deployments/sample-{repaired-e,paper-strict}/deployment.json`
+  (sample manifest schema; machine-local addresses); `ledger/tools/deploy_local.sh` (agent 3 runner).
+- **Exact commands, exit codes, evidence:** run from the repository root, Foundry v1.8.5, solc 0.8.37:
+  - `forge test --root ledger` -> exit 0, 88 passed / 0 failed (`ledger/evidence/forge-test.txt`)
+  - `forge script ledger/script/ExportVectors.s.sol:ExportVectors --root ledger` -> exit 0
+  - `python3 -I ledger/tools/crosscheck_cast.py` -> exit 0, 166 checks / 0 failures
+  - `python3 -I ledger/tools/mutation_smoke.py ledger/evidence/ae1-mutation-smoke.json` -> exit 0, 15/15 detected
+  - `forge build --root ledger && python3 -I ledger/tools/export_abi.py` -> exit 0
+  - `DEPLOYER_PK=<anvil key 0> ledger/tools/deploy_local.sh http://127.0.0.1:38545 http://127.0.0.1:48545 <profile> complete-details sample-<profile>`
+    then `ledger/tools/e2e_smoke.sh ... <nonce>` for nonces 1, 2 -> all exit 0 (two Anvil chains, `--block-time 1`)
+- **Valid controls and deliberately failing mutants:** Alice positive grant in all 3 profiles and on
+  live chains; Bob, temporal-only and unregistered denials. 15 throwaway check-removal edits are each
+  detected (`tools/mutation_smoke.py`). These are not the A-E2 `mutant-*` profiles.
+- **Remaining assumptions, failures and blockers:** the A-E1 tests were not written failing-first
+  (stated in A1-0004). Waiting on: the agent 3 v1 freeze and decisions (A1-0002 section 4, A1-0003
+  section 6, the clock-domain rule) and agent 2's Python vector check. The KSSC holds no secrets
+  (SPEC section 3). Single DBC. The live smoke signs inside Forge. A first live run failed STALE_STATE
+  because of a cross-chain clock skew (explained in A1-0004).
+- **Interface RFCs/ACK message IDs:** RFCs A1-0001 (Git convention) and A1-0003 (v1 ledger types);
+  REVIEW A1-0002. No ACKs received yet.
+- **Reproduction steps for the receiving agent:** install Foundry v1.8.5 (verify the release-asset
+  hash in `ledger/toolchain.json`), `git fetch origin agent-1`, check out `ledger/` in a scratch
+  clone, and run the commands above. Python tools need only the standard library; cast must be on
+  PATH for the crosscheck.
+- **Files to freeze and integration prerequisites:** `ledger/src/**`, `ledger/script/**`,
+  `ledger/foundry.toml`, `ledger/exports/abi/**` once v1 is frozen. Integration needs two chains with
+  ids 18545/28545 and interval mining (or a runner-controlled clock), and a funded deployer key on
+  both.
 
 Writer: agent 1 only. This snapshot never replaces the immutable READY message.

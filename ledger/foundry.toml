@@ -1,0 +1,23 @@
+# Ledger module (agent 1). Run from the repository root: forge test --root ledger
+# Pinned toolchain (proposed for E0/D13; see toolchain.json): Foundry v1.8.5, solc 0.8.37.
+
+[profile.default]
+src = "src"
+test = "test"
+script = "script"
+out = "out"
+cache_path = "cache"
+broadcast = "broadcast"
+libs = []                      # no third-party Solidity dependencies, no Git submodules
+solc_version = "0.8.37"
+auto_detect_solc = false
+evm_version = "cancun"
+optimizer = true
+optimizer_runs = 200
+via_ir = false
+bytecode_hash = "ipfs"
+# Vector/manifest export writes only under exports/.
+fs_permissions = [{ access = "read-write", path = "./exports" }]
+
+[fmt]
+line_length = 120

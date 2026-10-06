@@ -1,0 +1,272 @@
+{
+  "tool": "ledger/tools/mutation_smoke.py",
+  "mutants": [
+    {
+      "id": "grant-all-policy",
+      "file": "src/ACSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "83",
+        "5"
+      ],
+      "expectedFailing": [
+        "test_BobWithoutDoctorRoleIsDeniedAndGetsNoGrant",
+        "test_TemporalRoleWithoutLongTermDoctorIsDenied"
+      ],
+      "failing": [
+        "test_BobWithoutDoctorRoleIsDeniedAndGetsNoGrant",
+        "test_TemporalRoleWithoutLongTermDoctorIsDenied",
+        "test_WitnessAllowForPolicyDeniedSubjectIsRejected"
+      ],
+      "detected": true
+    },
+    {
+      "id": "deny-all-policy",
+      "file": "src/ACSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "80",
+        "8"
+      ],
+      "expectedFailing": [
+        "test_AliceRegisteredDoctorOnDutyGetsGrant"
+      ],
+      "failing": [
+        "test_AliceRegisteredDoctorOnDutyGetsGrant",
+        "test_OutcomeRequiresRelayForwardedRequestAndMatchingGrant",
+        "test_PaperRelayDuplicateForwardIsReplay",
+        "test_ReplayedCertificateIsRejected"
+      ],
+      "detected": true
+    },
+    {
+      "id": "unscoped-ca-admin",
+      "file": "src/TMSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "79",
+        "9"
+      ],
+      "expectedFailing": [
+        "test_H1AdminCannotReplaceH2TemporalAcl",
+        "test_H1AdminCannotReplaceH2RevocationList",
+        "test_NonAdminCannotUpdateEvenWithIssuerSignature"
+      ],
+      "failing": [
+        "test_H1AdminCannotReplaceH2RevocationList",
+        "test_H1AdminCannotReplaceH2TemporalAcl",
+        "test_NonAdminCannotUpdateEvenWithIssuerSignature"
+      ],
+      "detected": true
+    },
+    {
+      "id": "no-list-signature",
+      "file": "src/TMSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "86",
+        "2"
+      ],
+      "expectedFailing": [
+        "test_ListNotSignedByIssuerRootKey"
+      ],
+      "failing": [
+        "test_ListNotSignedByIssuerRootKey"
+      ],
+      "detected": true
+    },
+    {
+      "id": "no-crl-check",
+      "file": "src/TMSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "85",
+        "3"
+      ],
+      "expectedFailing": [
+        "test_CrlRevocationTakesEffectAtPbc"
+      ],
+      "failing": [
+        "test_CrlRevocationTakesEffectAtPbc"
+      ],
+      "detected": true
+    },
+    {
+      "id": "no-gid-possession",
+      "file": "src/RSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "85",
+        "3"
+      ],
+      "expectedFailing": [
+        "test_RegistrationWithoutGidPossessionFails"
+      ],
+      "failing": [
+        "test_RegistrationWithoutGidPossessionFails"
+      ],
+      "detected": true
+    },
+    {
+      "id": "no-user-signature",
+      "file": "src/PSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "85",
+        "3"
+      ],
+      "expectedFailing": [
+        "test_RequestSignedByAnotherKeyIsDenied"
+      ],
+      "failing": [
+        "test_RequestSignedByAnotherKeyIsDenied"
+      ],
+      "detected": true
+    },
+    {
+      "id": "request-expiry-off-by-one",
+      "file": "src/PSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "85",
+        "3"
+      ],
+      "expectedFailing": [
+        "test_RequestAtExactExpiryIsDenied"
+      ],
+      "failing": [
+        "test_RequestAtExactExpiryIsDenied"
+      ],
+      "detected": true
+    },
+    {
+      "id": "no-pbc-destination-check",
+      "file": "src/PSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "85",
+        "3"
+      ],
+      "expectedFailing": [
+        "test_WrongDestinationRequestIsDenied"
+      ],
+      "failing": [
+        "test_WrongDestinationRequestIsDenied"
+      ],
+      "detected": true
+    },
+    {
+      "id": "no-pbc-replay-check",
+      "file": "src/PSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "85",
+        "3"
+      ],
+      "expectedFailing": [
+        "test_DuplicateForwardedRequestIsReplayAndBothAreLogged"
+      ],
+      "failing": [
+        "test_DuplicateForwardedRequestIsReplayAndBothAreLogged"
+      ],
+      "detected": true
+    },
+    {
+      "id": "denial-reverts-log",
+      "file": "src/PSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "60",
+        "28"
+      ],
+      "expectedFailing": [
+        "test_UnregisteredUserIsDeniedAtPbcButRequestIsLogged"
+      ],
+      "failing": [
+        "test_CrlRevocationTakesEffectAtPbc",
+        "test_DuplicateForwardedRequestIsReplayAndBothAreLogged",
+        "test_OnDutyOutsideEffectivePeriodIsExpired",
+        "test_RecipientKeyMustMatchRegistration",
+        "test_RepairedRequiresPublishedFreshCrl",
+        "test_RequestAtExactExpiryIsDenied",
+        "test_RequestSignedByAnotherKeyIsDenied",
+        "test_TempAclRemovalRevokesOnDuty",
+        "test_UnregisteredUserIsDeniedAtPbcButRequestIsLogged",
+        "test_WrongDestinationRequestIsDenied"
+      ],
+      "detected": true
+    },
+    {
+      "id": "unauthenticated-outcome",
+      "file": "src/PSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "85",
+        "3"
+      ],
+      "expectedFailing": [
+        "test_OutcomeRequiresRelayForwardedRequestAndMatchingGrant"
+      ],
+      "failing": [
+        "test_OutcomeRequiresRelayForwardedRequestAndMatchingGrant"
+      ],
+      "detected": true
+    },
+    {
+      "id": "unauthenticated-relay",
+      "file": "src/ACSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "86",
+        "2"
+      ],
+      "expectedFailing": [
+        "test_TableActuatorRestrictions"
+      ],
+      "failing": [
+        "test_TableActuatorRestrictions"
+      ],
+      "detected": true
+    },
+    {
+      "id": "no-witness-quorum",
+      "file": "src/DecisionVerifier.sol",
+      "exit": 1,
+      "passedFailed": [
+        "87",
+        "1"
+      ],
+      "expectedFailing": [
+        "test_RejectedCertificateChangesNoState"
+      ],
+      "failing": [
+        "test_RejectedCertificateChangesNoState"
+      ],
+      "detected": true
+    },
+    {
+      "id": "no-nonce-consumption",
+      "file": "src/KSSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "87",
+        "1"
+      ],
+      "expectedFailing": [
+        "test_AliceRegisteredDoctorOnDutyGetsGrant"
+      ],
+      "failing": [
+        "test_AliceRegisteredDoctorOnDutyGetsGrant"
+      ],
+      "detected": true
+    }
+  ],
+  "baseline": {
+    "exit": 0,
+    "failing": [],
+    "passedFailed": [
+      "88",
+      "0"
+    ]
+  }
+}

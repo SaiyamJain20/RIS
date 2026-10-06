@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "hmbc-ledger-toolchain/v0",
+  "status": "proposed by agent 1 for E0/D13; agent 3 freezes the shared toolchain",
+  "observedOn": {
+    "date": "2026-10-07",
+    "machine": "agent-1 host (Linux 7.0.11-76070011-generic x86_64)",
+    "python": "3.14.7 (ledger tools use the standard library only)"
+  },
+  "foundry": {
+    "version": "v1.8.5",
+    "commit": "51a52c59cffd940f76eddd0b4bb1791aa4b5ac7f",
+    "release": "https://github.com/foundry-rs/foundry/releases/tag/v1.8.5",
+    "asset": "foundry_v1.8.5_linux_amd64.tar.gz",
+    "assetSha256": "6c66ffcc55fa4249197721baa3098bc208014ea1d8aa04b2ed50ac6bccffb226",
+    "binarySha256": {
+      "forge": "06c477aee83d0996e57aa92b0841fdf06382cb172fd69bbb88920bb0054dfd7f",
+      "anvil": "00f97668e1ae0fcca118fd7d2d1b6d25c0496447a523ca6bc2dfd10958c99604",
+      "cast": "1eb1eecfdadaad8da2173ccf0c7c0be86fe237b0a267042a40d7ca12d0fa2af7"
+    },
+    "install": "download the asset, verify assetSha256, extract forge/cast/anvil/chisel into ~/.foundry/bin (no install script used)"
+  },
+  "solc": {
+    "version": "0.8.37+commit.f401782d",
+    "binary": "https://binaries.soliditylang.org/linux-amd64/solc-linux-amd64-v0.8.37+commit.f401782d",
+    "sha256": "5de843c2c93563cc66425c99a4fb13fdbf32b4c4ae07469480faaf126e14404a",
+    "location": "~/.svm/0.8.37/solc-0.8.37 (Forge's solc manager also downloads and checksums it)"
+  },
+  "compilerSettings": {
+    "evmVersion": "cancun",
+    "optimizer": true,
+    "optimizerRuns": 200,
+    "viaIR": false,
+    "bytecodeHash": "ipfs"
+  },
+  "solidityDependencies": "none (no forge-std, no submodules; test/utils/Vm.sol declares the cheatcodes used)",
+  "anvilForLocalSmoke": "anvil --port <p> --chain-id 18545|28545 --block-time 1 (interval mining keeps block.timestamp near wall time on both chains)"
+}
