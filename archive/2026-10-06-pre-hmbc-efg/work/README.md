@@ -1,6 +1,8 @@
 # work/ - our implementation workspace
 
 Empty scaffold, prepared for the default direction (**E+F+G: executed analysis + formal models + repairs**, plan Section 9.2).
+The direction is not yet selected. The current audit in `research/audit-2026-10-06/AUDIT.md` identifies specification gates;
+the folder contents below are proposals, not implemented components or inherited HMBC specifications.
 If the team picks **D** or **A** instead, keep the same folders and rename the contents (see plan Sections 9.1 and 7).
 
 | Folder | Intended contents |
@@ -14,4 +16,5 @@ If the team picks **D** or **A** instead, keep the same folders and rename the c
 | `notes/` | Weekly log, meeting notes, decisions |
 
 Rules: keep resident memory under about 3.5 GB; one heavy job at a time; no building the libpbc plugin or the full Fabric/Kubernetes stack on a laptop;
-synthetic data only; read the plan's Section 9.2 gate: **by the end of week 2, at least 3 HIGH findings must reproduce at mock-stub level.**
+synthetic data only; proposed Section 9.2 gate: **by the end of week 2, at least 3 HIGH findings and at least 6 of the 10 selected findings must reproduce at mock-stub level.**
+Define attacker prerequisites and distinguish function-level confirmation from deployed exploitability.
