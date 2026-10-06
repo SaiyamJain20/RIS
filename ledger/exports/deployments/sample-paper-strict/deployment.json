@@ -2,29 +2,31 @@
   "schemaVersion": "hmbc-ledger-deployment/v0",
   "interfaceVersion": "v0 proposed",
   "producer": "agent-1 ledger/tools/deploy_local.sh",
-  "createdAt": "2026-10-06T20:28:11Z",
+  "createdAt": "2026-10-06T20:43:43Z",
   "profile": "paper-strict",
   "profileEnum": "0",
+  "mutations": "0",
+  "mutantNote": "non-zero only for mutant-* deployments: a deliberate check removal, never HMBC evidence",
   "logDetailMode": "complete-details",
   "chains": {
     "pbc": {
       "chainId": "18545",
       "rpcUrl": "http://127.0.0.1:38545",
-      "deployBlock": "85",
+      "deployBlock": "21",
       "contracts": {
-        "LSC": "0x959922be3caee4b8cd9a407cc3ac1c251c2007b1",
-        "TMSC": "0x9a9f2ccfde556a7e9ff0848998aa4a0cfd8863ae",
-        "RSC": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
-        "PSC": "0x3aa5ebb10dc797cac828524e59a333d0a371443c"
+        "LSC": "0x5fbdb2315678afecb367f032d93f642f64180aa3",
+        "TMSC": "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512",
+        "RSC": "0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0",
+        "PSC": "0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9"
       }
     },
     "dbc": {
       "chainId": "28545",
       "rpcUrl": "http://127.0.0.1:48545",
-      "deployBlock": "102",
+      "deployBlock": "38",
       "contracts": {
-        "ACSC": "0x610178da211fef7d417bc0e6fed39f05609ad788",
-        "KSSC": "0x8a791620dd6260079bf849dc5567adc3f2fdc318"
+        "ACSC": "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512",
+        "KSSC": "0x5fbdb2315678afecb367f032d93f642f64180aa3"
       }
     }
   },
@@ -114,42 +116,42 @@
       "abi": "exports/abi/LSC.json",
       "abiSha256": "3c9acabbb8978e6330f5878b9a979326ca22f1519300a5277cffeea3911d42de",
       "runtimeBytes": 3724,
-      "runtimeSha256": "ece8df836eb52c8abe92966ca0548be680cb66251828196e0d3e45279831a2b8",
+      "runtimeSha256": "8f3b5d33db01533ae3b5cfbb965ef9b646723d981df603b5ff36b55b0b8a1837",
       "source": "src/LSC.sol"
     },
     "TMSC": {
       "abi": "exports/abi/TMSC.json",
-      "abiSha256": "b1745f4f2f149162d4c8b551d60255ca8caf8e49749ce8068bb1bca987c9e7c2",
-      "runtimeBytes": 12478,
-      "runtimeSha256": "8cc109bd5cfef9c5cbe140a8f08650606aa3894bfd03c3c500153c574255e50f",
+      "abiSha256": "a6f6273c8dcff51bb8834c8fa0f354d5e9b6bb7b5d7d39ca89c5d7f9975a225d",
+      "runtimeBytes": 12588,
+      "runtimeSha256": "e4ae8db23e826a64280aa74e79ecd2937821696d199b03abd12520e913628011",
       "source": "src/TMSC.sol"
     },
     "RSC": {
       "abi": "exports/abi/RSC.json",
       "abiSha256": "f0bc3732ee5646db945a68e06434cd46ba2637df04e4fe2260cf0d16bde1eebc",
       "runtimeBytes": 4174,
-      "runtimeSha256": "3fe952787d02dd4b8bb3968f7666f3e8a128fbb2dbaaf2923a1cdfc9a2acf998",
+      "runtimeSha256": "9181b597645939e71fb3803b38f3119e44a22069b7dede39f808278c33107bdf",
       "source": "src/RSC.sol"
     },
     "PSC": {
       "abi": "exports/abi/PSC.json",
       "abiSha256": "d5bd25dd0e2084efa580e4afedfc163eb03d9b61e80aea3ae42dd46935dbc0db",
       "runtimeBytes": 9080,
-      "runtimeSha256": "a72f8df521b1bcab199f29fe3b6454053462a419433655963f4809c84a7ad422",
+      "runtimeSha256": "3fdee76693ce587671e7177009daf1018a489479d5583bdb677ad0dc9f0a49d3",
       "source": "src/PSC.sol"
     },
     "ACSC": {
       "abi": "exports/abi/ACSC.json",
-      "abiSha256": "ab05aee0106cd4fc69941723ad8ed1733d1306ffd8c6417908165c07d2da1f51",
-      "runtimeBytes": 12030,
-      "runtimeSha256": "f1baeeb08ffb8303a63c35613189431fbeee2f705bdd5c45676cbbcfd4e9b3f1",
+      "abiSha256": "d5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08dbf8ad9a568",
+      "runtimeBytes": 12202,
+      "runtimeSha256": "e3934c31f36322a2b130ba780507a19cf63722da8ab8b325b91417967b1a7517",
       "source": "src/ACSC.sol"
     },
     "KSSC": {
       "abi": "exports/abi/KSSC.json",
-      "abiSha256": "a4d3d80b5199eae44351a2215ded88a73212c3e6f249595bcb1f845498d86b09",
-      "runtimeBytes": 7312,
-      "runtimeSha256": "f46cdb0d2a67058603bb2d48a467a54d9a86b6b061095106c077c95b4aca4e4a",
+      "abiSha256": "391841544b43c967bd8004c95376f139baaa2dd8c553f13310accecd83e1c6e7",
+      "runtimeBytes": 7407,
+      "runtimeSha256": "1d47baba33f2b4b938627fa5f068dcf987216c8f377ee2a76657b4be7c9ff74a",
       "source": "src/KSSC.sol"
     }
   },
@@ -162,18 +164,18 @@
     },
     "viaIR": false
   },
-  "foundryTomlSha256": "fcc1bc127a47a4cfff6740f27af948f1a0265a65957f6e9bb2f02e606173ec6d",
+  "foundryTomlSha256": "ec079168ffda0196d5f71d8d17e8783d260a80512582b1880fac30d050266d4c",
   "sources": {
-    "src/ACSC.sol": "917bc87fb0a7bfd22c5c1ee96404e91e16ab4016cb6a3ee7ea5167114044a12b",
-    "src/DecisionVerifier.sol": "3dfebd3172d632a0bbcab0ba0beaeeeae4366e0dbf95dc469f85d25da8b636bd",
-    "src/KSSC.sol": "d79926b881e6f245de392db0161a36974497055f25e6f819ce1a44ca98106a88",
+    "src/ACSC.sol": "87db4b68b49c495d950fd83b255b7e10473e012ab7aeaa303396948375ce5493",
+    "src/DecisionVerifier.sol": "b5c92a6bf2fbe8a504adfbf05a07675af1569d45ecdd7cc869f9d825e19ff114",
+    "src/KSSC.sol": "4b8f195f279f0dcd72c434c36b04c6caf65659e63c13ea95170a9a3b4af38321",
     "src/LSC.sol": "de1f9850c81786beb23f4ab85d2b33023bc294c7474ee8c300e18e92977f5224",
     "src/PSC.sol": "3fdf4a3c906fa537e925f8683974d1b98b97540028d94e9536774ff134b0b8c9",
     "src/RSC.sol": "083e6e5f24f190be95a3fcfd8cc79d3763512c07badf2762c96522e3b3fb4c96",
-    "src/TMSC.sol": "3f80d8af173127a3e5e5e1ce9019c4ad0c4e11a798bed371de0975d269d4a889",
+    "src/TMSC.sol": "7a245c952b6b148df274d19e582360804ca6c14f48b49395f9c2375eb147f2ff",
     "src/lib/Bootstrapped.sol": "6184f2d07075d19dee617ae3a239ec259533b9c006f366be57b7639bd719ee4f",
     "src/lib/SigLib.sol": "c08a87ea13045f03ec4f456f9ebbeb38eed801448ad70348e7dd3cbb39535830",
-    "src/types/ProtocolTypes.sol": "453bbec1e6a6ff8ab83254a44a577165d3b5f24f1b70ca10aaf7fd98e64bedcf"
+    "src/types/ProtocolTypes.sol": "e56890b0d5e1efdd52dcb64256edef26ff70b5a6fdc2ff39447e55184a7f9a46"
   },
   "errorCodes": {
     "0": "NONE",

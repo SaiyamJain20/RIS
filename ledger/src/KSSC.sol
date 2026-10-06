@@ -1,7 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.37;
 
-import {ErrorCode, Rejected, Profile, HMBCHash, StateCheckpoint} from "./types/ProtocolTypes.sol";
+import {
+    ErrorCode, Rejected, Profile, HMBCHash, StateCheckpoint, MUT_NO_NONCE, MUT_ALL
+} from "./types/ProtocolTypes.sol";
 import {QuorumLib} from "./lib/SigLib.sol";
 import {Bootstrapped} from "./lib/Bootstrapped.sol";
 
@@ -43,6 +45,7 @@ contract KSSC is Bootstrapped {
     }
 
     Profile public immutable profile;
+    uint256 public immutable mutations;
     uint256 public immutable dbcChainId;
     uint256 public immutable sourceChainId;
     address public immutable sourcePsc;
@@ -80,37 +83,45 @@ contract KSSC is Bootstrapped {
         uint256 nonce
     );
 
-    constructor(
-        Profile profile_,
-        uint256 dbcChainId_,
-        uint256 sourceChainId_,
-        address sourcePsc_,
-        uint64 witnessSetVersion_,
-        address[] memory witnesses_,
-        uint256 threshold_,
-        uint64 maxCheckpointTtl_
-    ) {
-        if (dbcChainId_ != block.chainid) revert Rejected(ErrorCode.WRONG_DESTINATION);
-        if (sourcePsc_ == address(0) || sourceChainId_ == dbcChainId_) revert Rejected(ErrorCode.MALFORMED);
-        if (profile_ == Profile.REPAIRED_E) {
-            if (threshold_ == 0 || threshold_ > witnesses_.length || maxCheckpointTtl_ == 0) {
+    /// Deployment configuration (a struct keeps the constructor ABI decoder within stack limits).
+    struct Config {
+        Profile profile;
+        uint256 mutations;
+        uint256 dbcChainId;
+        uint256 sourceChainId;
+        address sourcePsc;
+        uint64 witnessSetVersion;
+        address[] witnesses;
+        uint256 threshold;
+        uint64 maxCheckpointTtl;
+    }
+
+    constructor(Config memory c) {
+        if (c.dbcChainId != block.chainid) revert Rejected(ErrorCode.WRONG_DESTINATION);
+        if (c.sourcePsc == address(0) || c.sourceChainId == c.dbcChainId) revert Rejected(ErrorCode.MALFORMED);
+        if (c.mutations & ~MUT_ALL != 0 || (c.mutations != 0 && c.profile != Profile.REPAIRED_E)) {
+            revert Rejected(ErrorCode.MALFORMED);
+        }
+        if (c.profile == Profile.REPAIRED_E) {
+            if (c.threshold == 0 || c.threshold > c.witnesses.length || c.maxCheckpointTtl == 0) {
                 revert Rejected(ErrorCode.MALFORMED);
             }
-            for (uint256 i = 0; i < witnesses_.length; i++) {
-                if (witnesses_[i] == address(0)) revert Rejected(ErrorCode.MALFORMED);
+            for (uint256 i = 0; i < c.witnesses.length; i++) {
+                if (c.witnesses[i] == address(0)) revert Rejected(ErrorCode.MALFORMED);
                 for (uint256 j = 0; j < i; j++) {
-                    if (witnesses_[j] == witnesses_[i]) revert Rejected(ErrorCode.DUPLICATE_SIGNER);
+                    if (c.witnesses[j] == c.witnesses[i]) revert Rejected(ErrorCode.DUPLICATE_SIGNER);
                 }
             }
         }
-        profile = profile_;
-        dbcChainId = dbcChainId_;
-        sourceChainId = sourceChainId_;
-        sourcePsc = sourcePsc_;
-        witnessSetVersion = witnessSetVersion_;
-        _witnesses = witnesses_;
-        threshold = threshold_;
-        maxCheckpointTtl = maxCheckpointTtl_;
+        profile = c.profile;
+        mutations = c.mutations;
+        dbcChainId = c.dbcChainId;
+        sourceChainId = c.sourceChainId;
+        sourcePsc = c.sourcePsc;
+        witnessSetVersion = c.witnessSetVersion;
+        _witnesses = c.witnesses;
+        threshold = c.threshold;
+        maxCheckpointTtl = c.maxCheckpointTtl;
     }
 
     function wire(address acsc_) external onlyBootstrap {
@@ -167,7 +178,7 @@ contract KSSC is Bootstrapped {
         if (msg.sender != acsc) revert Rejected(ErrorCode.UNAUTHORIZED_CALLER);
         grantId = HMBCHash.grantId(p.requestDigest, address(this), dbcChainId);
         if (_grants[grantId].exists) revert Rejected(ErrorCode.REPLAY);
-        if (p.consumeNonce) {
+        if (p.consumeNonce && mutations & MUT_NO_NONCE == 0) {
             if (nonceConsumed[p.gid][p.nonce]) revert Rejected(ErrorCode.REPLAY);
             nonceConsumed[p.gid][p.nonce] = true;
         }

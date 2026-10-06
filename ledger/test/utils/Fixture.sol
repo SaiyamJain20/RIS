@@ -20,6 +20,7 @@ import {
     AccessDecision,
     DecisionCertificate,
     StateCheckpoint,
+    ForwardedRequest,
     ACTION_READ,
     CREDENTIAL_LONG_TERM,
     CREDENTIAL_TEMPORAL
@@ -94,6 +95,11 @@ abstract contract HMBCFixture is TestBase {
 
     function profile() internal pure virtual returns (Profile);
 
+    /// Non-zero only in test-mutants/ suites (mutant-* deployments of REPAIRED_E).
+    function mutations() internal pure virtual returns (uint256) {
+        return 0;
+    }
+
     function logDetailMode() internal pure virtual returns (LogDetailMode) {
         return LogDetailMode.COMPLETE_DETAILS;
     }
@@ -145,15 +151,17 @@ abstract contract HMBCFixture is TestBase {
     function _deploy(Profile p, LogDetailMode mode) internal {
         vm.chainId(PBC_CHAIN_ID);
         lsc = new LSC(mode);
-        tmsc = new TMSC(p, PBC_CHAIN_ID, lsc, _authorityConfig());
+        tmsc = new TMSC(p, mutations(), lsc, _authorityConfig());
         rsc = new RSC(PBC_CHAIN_ID, tmsc, lsc);
         psc = new PSC(p, PBC_CHAIN_ID, rsc, tmsc, lsc, relay, POLICY_VERSION, REQUEST_TTL);
 
         vm.chainId(DBC_CHAIN_ID);
         address[] memory ws = new address[](1);
         ws[0] = witness;
-        kssc = new KSSC(p, DBC_CHAIN_ID, PBC_CHAIN_ID, address(psc), WITNESS_SET_VERSION, ws, 1, CHECKPOINT_TTL);
-        acsc = new ACSC(p, DBC_CHAIN_ID, PBC_CHAIN_ID, address(psc), POLICY_VERSION, GRANT_TTL);
+        kssc = new KSSC(
+            KSSC.Config(p, mutations(), DBC_CHAIN_ID, PBC_CHAIN_ID, address(psc), WITNESS_SET_VERSION, ws, 1, CHECKPOINT_TTL)
+        );
+        acsc = new ACSC(p, mutations(), DBC_CHAIN_ID, PBC_CHAIN_ID, address(psc), POLICY_VERSION, GRANT_TTL);
         kssc.wire(address(acsc));
         acsc.wire(kssc, relay);
         uint256 policyId = acsc.addPolicy(emergencyPolicy());
@@ -397,5 +405,34 @@ abstract contract HMBCFixture is TestBase {
         c.decision = d;
         c.signatures = new bytes[](1);
         c.signatures[0] = sig(pk, HMBCHash.accessDecisionDigest(d, DBC_CHAIN_ID, address(kssc)));
+    }
+
+    // -------------------------------------------------------------- delivery (profile-specific)
+
+    /// Carries a PBC-forwarded request to the DBC the way this profile does. Returns the grant id
+    /// (zero for a logged denial).
+    function deliver(AccessRequest memory r, CredentialRecord[] memory recs, bytes32 requestDigest, uint8 witnessResult)
+        internal
+        returns (bytes32 grantId)
+    {
+        if (profile() == Profile.REPAIRED_E) {
+            StateCheckpoint memory cp = acceptCheckpoint();
+            DecisionCertificate memory c = certify(decisionFor(r, witnessResult, recs, cp), witnessPk);
+            vm.prank(relay);
+            return acsc.consumeDecision(r, c, recs);
+        }
+        vm.prank(relay);
+        (, grantId) = acsc.policyEnf(ForwardedRequest(requestDigest, r.gid, r.dataId, r.action), recs);
+    }
+
+    function aliceForwarded(uint256 nonce)
+        internal
+        returns (AccessRequest memory r, bytes32 digest, CredentialRecord[] memory recs)
+    {
+        r = aliceRequest(nonce);
+        ErrorCode code;
+        (digest, code) = submit(r, signRequest(r, alicePk), aliceBundle());
+        assertCode(code, ErrorCode.NONE, "PBC accepts Alice");
+        recs = verifiedRecords(alice, aliceBundle());
     }
 }

@@ -1,0 +1,92 @@
+first run 2026-10-06T20:39:18Z
+command: forge test --root ledger --match-path 'ledger/test/{Freshness,DecisionBinding,Audit}.t.sol'
+Compiling 17 files with Solc 0.8.37
+Solc 0.8.37 finished in 7.48s
+Compiler run successful!
+Ran 5 tests for test/Audit.t.sol:AuditRepairedTest
+[PASS] test_E03_DroppedOutcomeStaysVisiblyPending() (gas: 3008722)
+[PASS] test_E03_EventsCorrelateWithPbcRequest() (gas: 2982738)
+[PASS] test_E03_LogDetailMode() (gas: 2400118)
+[PASS] test_E03_OutcomeWithoutDbcGrantIsCurrentlyRecorded() (gas: 2730466)
+[PASS] test_E03_TrustedWitnessBoundaryUnloggedRequest() (gas: 2371663)
+Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 11.63ms (11.87ms CPU time)
+Ran 4 tests for test/Audit.t.sol:AuditPaperStrictTest
+[PASS] test_E03_DroppedOutcomeStaysVisiblyPending() (gas: 2679061)
+[PASS] test_E03_EventsCorrelateWithPbcRequest() (gas: 2646654)
+[PASS] test_E03_LogDetailMode() (gas: 2395010)
+[PASS] test_E03_OutcomeWithoutDbcGrantIsCurrentlyRecorded() (gas: 2724312)
+Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 12.82ms (16.03ms CPU time)
+Ran 4 tests for test/DecisionBinding.t.sol:DecisionBindingPaperStrictTest
+[PASS] test_E01_RelayDeliveryAfterRequestExpiry() (gas: 2635520)
+[PASS] test_E01_RelayFabricatedRequest() (gas: 257969)
+[PASS] test_E01_RelayReplayUnderNewReference() (gas: 2853722)
+[PASS] test_E01_RelaySubjectSubstitution() (gas: 2651408)
+Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 12.90ms (9.72ms CPU time)
+Ran 4 tests for test/Audit.t.sol:AuditPaperMinimalTest
+[PASS] test_E03_DroppedOutcomeStaysVisiblyPending() (gas: 2667379)
+[PASS] test_E03_EventsCorrelateWithPbcRequest() (gas: 2634972)
+[PASS] test_E03_LogDetailMode() (gas: 2383328)
+[PASS] test_E03_OutcomeWithoutDbcGrantIsCurrentlyRecorded() (gas: 2712630)
+Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 14.23ms (7.78ms CPU time)
+Ran 4 tests for test/Audit.t.sol:AuditPaperStrictHashOnlyTest
+[PASS] test_E03_DroppedOutcomeStaysVisiblyPending() (gas: 1802276)
+[PASS] test_E03_EventsCorrelateWithPbcRequest() (gas: 1769869)
+[PASS] test_E03_LogDetailMode() (gas: 1500595)
+[PASS] test_E03_OutcomeWithoutDbcGrantIsCurrentlyRecorded() (gas: 1735021)
+Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 14.23ms (12.78ms CPU time)
+Ran 7 tests for test/Freshness.t.sol:FreshnessPaperStrictTest
+[PASS] test_E02_DelayedDeliveryAcrossPbcRevocationBeforeBarrier() (gas: 3024640)
+[PASS] test_E02_DeliveryAfterOnDutyEntryEnds() (gas: 2636436)
+[PASS] test_E02_EqualVersionDifferentContent() (gas: 869152)
+[PASS] test_E02_ExpiredListInstall() (gas: 489477)
+[PASS] test_E02_ListExpiryAtUse() (gas: 2349382)
+[PASS] test_E02_StaleSignedCrlReplay() (gas: 3104043)
+[PASS] test_E02_StaleSignedTempAclReplay() (gas: 3078068)
+Suite result: ok. 7 passed; 0 failed; 0 skipped; finished in 14.20ms (15.13ms CPU time)
+Ran 10 tests for test/DecisionBinding.t.sol:DecisionBindingRepairedTest
+[PASS] test_E01_DecisionDomainBinding() (gas: 354547)
+[PASS] test_E01_DecisionExpiryBoundary() (gas: 591473)
+[PASS] test_E01_DecisionFieldSubstitution() (gas: 1465209)
+[PASS] test_E01_NonceReuseAcrossDifferentRequests() (gas: 1224302)
+[PASS] test_E01_PositiveControl() (gas: 401450)
+[PASS] test_E01_RecordSubstitution() (gas: 356635)
+[PASS] test_E01_RequestExpiryAtDbc() (gas: 179875)
+[PASS] test_E01_RequestFieldSubstitution() (gas: 2744609)
+[PASS] test_E01_RequestForOtherDestinationCertifiedHere() (gas: 177733)
+[PASS] test_E01_SignatureEncodings() (gas: 645342)
+Suite result: ok. 10 passed; 0 failed; 0 skipped; finished in 14.23ms (10.79ms CPU time)
+Ran 7 tests for test/Freshness.t.sol:FreshnessPaperMinimalTest
+[PASS] test_E02_DelayedDeliveryAcrossPbcRevocationBeforeBarrier() (gas: 3009084)
+[PASS] test_E02_DeliveryAfterOnDutyEntryEnds() (gas: 2624754)
+[PASS] test_E02_EqualVersionDifferentContent() (gas: 861364)
+[PASS] test_E02_ExpiredListInstall() (gas: 485583)
+[PASS] test_E02_ListExpiryAtUse() (gas: 2337720)
+[PASS] test_E02_StaleSignedCrlReplay() (gas: 3084573)
+[PASS] test_E02_StaleSignedTempAclReplay() (gas: 3058618)
+Suite result: ok. 7 passed; 0 failed; 0 skipped; finished in 14.81ms (12.23ms CPU time)
+Ran 10 tests for test/Freshness.t.sol:FreshnessRepairedTest
+[PASS] test_E02_CheckpointMonotonicityAndFreshness() (gas: 736619)
+[PASS] test_E02_DecisionMayNotOutliveCheckpoint() (gas: 2729134)
+[PASS] test_E02_DelayedDeliveryAcrossPbcRevocationBeforeBarrier() (gas: 3357342)
+[PASS] test_E02_DeliveryAfterOnDutyEntryEnds() (gas: 2737474)
+[PASS] test_E02_EqualVersionDifferentContent() (gas: 540506)
+[PASS] test_E02_ExpiredListInstall() (gas: 74998)
+[PASS] test_E02_ListExpiryAtUse() (gas: 2206763)
+[PASS] test_E02_RevocationBarrierBlocksOlderDecision() (gas: 3204710)
+[PASS] test_E02_StaleSignedCrlReplay() (gas: 2654529)
+[PASS] test_E02_StaleSignedTempAclReplay() (gas: 2612960)
+Suite result: ok. 10 passed; 0 failed; 0 skipped; finished in 14.84ms (23.90ms CPU time)
+Ran 4 tests for test/DecisionBinding.t.sol:DecisionBindingPaperMinimalTest
+[PASS] test_E01_RelayDeliveryAfterRequestExpiry() (gas: 2623838)
+[PASS] test_E01_RelayFabricatedRequest() (gas: 257969)
+[PASS] test_E01_RelayReplayUnderNewReference() (gas: 2842040)
+[PASS] test_E01_RelaySubjectSubstitution() (gas: 2639726)
+Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 14.87ms (10.37ms CPU time)
+Ran 4 tests for test/Audit.t.sol:AuditRepairedHashOnlyTest
+[PASS] test_E03_DroppedOutcomeStaysVisiblyPending() (gas: 2131915)
+[PASS] test_E03_EventsCorrelateWithPbcRequest() (gas: 2105953)
+[PASS] test_E03_LogDetailMode() (gas: 1505681)
+[PASS] test_E03_OutcomeWithoutDbcGrantIsCurrentlyRecorded() (gas: 1741175)
+Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 15.12ms (16.64ms CPU time)
+Ran 11 test suites in 15.74ms (153.88ms CPU time): 63 tests passed, 0 failed, 0 skipped (63 total tests)
+exit=0

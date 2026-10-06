@@ -17,7 +17,9 @@ import {
     CREDENTIAL_LONG_TERM,
     CREDENTIAL_TEMPORAL,
     ANCHOR_CRL,
-    ANCHOR_TEMP_ACL
+    ANCHOR_TEMP_ACL,
+    MUT_NO_VERSION_MONOTONE,
+    MUT_ALL
 } from "./types/ProtocolTypes.sol";
 import {SigLib} from "./lib/SigLib.sol";
 import {Bootstrapped} from "./lib/Bootstrapped.sol";
@@ -59,6 +61,7 @@ contract TMSC is Bootstrapped {
     }
 
     Profile public immutable profile;
+    uint256 public immutable mutations;
     uint256 public immutable pbcChainId;
     LSC public immutable lsc;
     address public psc;
@@ -87,10 +90,14 @@ contract TMSC is Bootstrapped {
         address submitter
     );
 
-    constructor(Profile profile_, uint256 pbcChainId_, LSC lsc_, AuthorityConfig[] memory authorities_) {
-        if (pbcChainId_ != block.chainid) revert Rejected(ErrorCode.WRONG_DESTINATION);
+    /// The PBC chain id is the chain this contract is deployed on.
+    constructor(Profile profile_, uint256 mutations_, LSC lsc_, AuthorityConfig[] memory authorities_) {
+        if (mutations_ & ~MUT_ALL != 0 || (mutations_ != 0 && profile_ != Profile.REPAIRED_E)) {
+            revert Rejected(ErrorCode.MALFORMED);
+        }
         profile = profile_;
-        pbcChainId = pbcChainId_;
+        mutations = mutations_;
+        pbcChainId = block.chainid;
         lsc = lsc_;
         for (uint256 i = 0; i < authorities_.length; i++) {
             address a = authorities_[i].authority;
@@ -179,7 +186,9 @@ contract TMSC is Bootstrapped {
 
     function _checkFreshness(AnchorState storage st, uint64 version, uint64 validUntil) internal view {
         if (profile != Profile.REPAIRED_E) return;
-        if (st.published && version <= st.version) revert Rejected(ErrorCode.STALE_ANCHOR);
+        if (st.published && version <= st.version && mutations & MUT_NO_VERSION_MONOTONE == 0) {
+            revert Rejected(ErrorCode.STALE_ANCHOR);
+        }
         if (block.timestamp >= validUntil) revert Rejected(ErrorCode.STALE_ANCHOR);
     }
 

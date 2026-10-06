@@ -12,7 +12,8 @@ import {
     StateCheckpoint,
     ForwardedRequest,
     ACTION_READ,
-    RESULT_ALLOW
+    RESULT_ALLOW,
+    MUT_ALL
 } from "./types/ProtocolTypes.sol";
 import {Bootstrapped} from "./lib/Bootstrapped.sol";
 import {DecisionVerifier} from "./DecisionVerifier.sol";
@@ -50,6 +51,7 @@ contract ACSC is Bootstrapped {
     }
 
     Profile public immutable profile;
+    uint256 public immutable mutations;
     uint256 public immutable dbcChainId;
     uint256 public immutable sourceChainId;
     address public immutable sourcePsc;
@@ -77,6 +79,7 @@ contract ACSC is Bootstrapped {
 
     constructor(
         Profile profile_,
+        uint256 mutations_,
         uint256 dbcChainId_,
         uint256 sourceChainId_,
         address sourcePsc_,
@@ -85,7 +88,11 @@ contract ACSC is Bootstrapped {
     ) {
         if (dbcChainId_ != block.chainid) revert Rejected(ErrorCode.WRONG_DESTINATION);
         if (sourcePsc_ == address(0) || grantTtl_ == 0) revert Rejected(ErrorCode.MALFORMED);
+        if (mutations_ & ~MUT_ALL != 0 || (mutations_ != 0 && profile_ != Profile.REPAIRED_E)) {
+            revert Rejected(ErrorCode.MALFORMED);
+        }
         profile = profile_;
+        mutations = mutations_;
         dbcChainId = dbcChainId_;
         sourceChainId = sourceChainId_;
         sourcePsc = sourcePsc_;
@@ -198,7 +205,8 @@ contract ACSC is Bootstrapped {
             kssc.witnesses(),
             has,
             cp,
-            uint64(block.timestamp)
+            uint64(block.timestamp),
+            mutations
         );
     }
 

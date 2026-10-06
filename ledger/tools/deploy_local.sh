@@ -4,20 +4,28 @@
 #
 # Usage (from the repository root):
 #   DEPLOYER_PK=0x... ledger/tools/deploy_local.sh <pbc-rpc-url> <dbc-rpc-url> <profile> <log-mode> <run-id>
-#     profile:  paper-strict | paper-minimal | repaired-e
+#     profile:  paper-strict | paper-minimal | repaired-e | mutant-<name> (repaired-e with one check
+#               removed: no-destination-binding, no-state-barrier, no-record-freshness, no-nonce,
+#               no-version-monotone; mutants exist only to show that checks/oracles detect them)
 #     log-mode: hash-only | complete-details
 # Output: ledger/exports/deployments/<run-id>/{pbc-stage,dbc-stage,deployment}.json
 # Chain ids default to 18545 (PBC) and 28545 (DBC); override with PBC_CHAIN_ID / DBC_CHAIN_ID.
 set -euo pipefail
 
 if [ "$#" -ne 5 ]; then
-  sed -n '2,11p' "$0" >&2
+  sed -n '2,12p' "$0" >&2
   exit 2
 fi
 PBC_RPC="$1"; DBC_RPC="$2"; PROFILE_NAME="$3"; LOG_NAME="$4"; RUN_ID="$5"
 : "${DEPLOYER_PK:?set DEPLOYER_PK to a funded key on both chains}"
+MUTATIONS=0
 case "$PROFILE_NAME" in
   paper-strict) PROFILE=0 ;; paper-minimal) PROFILE=1 ;; repaired-e) PROFILE=2 ;;
+  mutant-no-destination-binding) PROFILE=2; MUTATIONS=1 ;;
+  mutant-no-state-barrier) PROFILE=2; MUTATIONS=2 ;;
+  mutant-no-record-freshness) PROFILE=2; MUTATIONS=4 ;;
+  mutant-no-nonce) PROFILE=2; MUTATIONS=8 ;;
+  mutant-no-version-monotone) PROFILE=2; MUTATIONS=16 ;;
   *) echo "unknown profile $PROFILE_NAME" >&2; exit 2 ;;
 esac
 case "$LOG_NAME" in
@@ -30,7 +38,7 @@ esac
 
 LEDGER="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 export PBC_CHAIN_ID="${PBC_CHAIN_ID:-18545}" DBC_CHAIN_ID="${DBC_CHAIN_ID:-28545}"
-export PROFILE LOG_MODE DEPLOYER_PK
+export PROFILE MUTATIONS LOG_MODE DEPLOYER_PK
 export OUT_DIR="exports/deployments/$RUN_ID"
 mkdir -p "$LEDGER/$OUT_DIR"
 

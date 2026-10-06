@@ -14,7 +14,11 @@ import pathlib
 import sys
 
 LEDGER = pathlib.Path(__file__).resolve().parent.parent
-PROFILES = {"paper-strict": 0, "paper-minimal": 1, "repaired-e": 2}
+PROFILES = {"paper-strict": 0, "paper-minimal": 1, "repaired-e": 2,
+            "mutant-no-destination-binding": 2, "mutant-no-state-barrier": 2, "mutant-no-record-freshness": 2,
+            "mutant-no-nonce": 2, "mutant-no-version-monotone": 2}
+MUTATIONS = {"mutant-no-destination-binding": 1, "mutant-no-state-barrier": 2, "mutant-no-record-freshness": 4,
+             "mutant-no-nonce": 8, "mutant-no-version-monotone": 16}
 LOG_MODES = {"hash-only": 0, "complete-details": 1}
 ERROR_CODES = [
     "NONE", "BAD_SIGNATURE", "WRONG_SUBJECT", "WRONG_DESTINATION", "UNKNOWN_AUTHORITY", "STALE_ANCHOR",
@@ -44,6 +48,8 @@ def main(argv):
         "createdAt": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "profile": profile,
         "profileEnum": str(PROFILES[profile]),
+        "mutations": str(MUTATIONS.get(profile, 0)),
+        "mutantNote": "non-zero only for mutant-* deployments: a deliberate check removal, never HMBC evidence",
         "logDetailMode": log_mode,
         "chains": {
             "pbc": {

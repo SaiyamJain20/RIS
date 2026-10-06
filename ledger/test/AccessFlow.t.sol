@@ -25,35 +25,6 @@ import {KSSC} from "../src/KSSC.sol";
 
 /// A-E1: legitimate access flow and the basic denials, run once per profile.
 abstract contract AccessFlowBase is HMBCFixture {
-    // -------------------------------------------------------------- delivery (profile-specific)
-
-    /// Carries a PBC-forwarded request to the DBC the way this profile does. Returns the grant id
-    /// (zero for a logged denial).
-    function deliver(AccessRequest memory r, CredentialRecord[] memory recs, bytes32 requestDigest, uint8 witnessResult)
-        internal
-        returns (bytes32 grantId)
-    {
-        if (profile() == Profile.REPAIRED_E) {
-            StateCheckpoint memory cp = acceptCheckpoint();
-            DecisionCertificate memory c = certify(decisionFor(r, witnessResult, recs, cp), witnessPk);
-            vm.prank(relay);
-            return acsc.consumeDecision(r, c, recs);
-        }
-        vm.prank(relay);
-        (, grantId) = acsc.policyEnf(ForwardedRequest(requestDigest, r.gid, r.dataId, r.action), recs);
-    }
-
-    function aliceForwarded(uint256 nonce)
-        internal
-        returns (AccessRequest memory r, bytes32 digest, CredentialRecord[] memory recs)
-    {
-        r = aliceRequest(nonce);
-        ErrorCode code;
-        (digest, code) = submit(r, signRequest(r, alicePk), aliceBundle());
-        assertCode(code, ErrorCode.NONE, "PBC accepts Alice");
-        recs = verifiedRecords(alice, aliceBundle());
-    }
-
     // -------------------------------------------------------------- positive control
 
     function test_AliceRegisteredDoctorOnDutyGetsGrant() public {

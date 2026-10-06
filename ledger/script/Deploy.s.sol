@@ -60,7 +60,7 @@ contract Deploy {
 
         vm.startBroadcast(vm.envUint("DEPLOYER_PK"));
         LSC lsc = new LSC(LogDetailMode(mode));
-        TMSC tmsc = new TMSC(p, pbcChainId, lsc, cfg);
+        TMSC tmsc = new TMSC(p, vm.envOr("MUTATIONS", uint256(0)), lsc, cfg);
         RSC rsc = new RSC(pbcChainId, tmsc, lsc);
         PSC psc = new PSC(
             p, pbcChainId, rsc, tmsc, lsc, _actor("relay"), FixtureConfig.POLICY_VERSION, FixtureConfig.REQUEST_TTL
@@ -98,17 +98,22 @@ contract Deploy {
         ws[0] = _actor("witness-1");
 
         vm.startBroadcast(vm.envUint("DEPLOYER_PK"));
+        uint256 mutations = vm.envOr("MUTATIONS", uint256(0));
         KSSC kssc = new KSSC(
-            p,
-            dbcChainId,
-            pbcChainId,
-            psc,
-            FixtureConfig.WITNESS_SET_VERSION,
-            ws,
-            1,
-            FixtureConfig.CHECKPOINT_TTL
+            KSSC.Config(
+                p,
+                mutations,
+                dbcChainId,
+                pbcChainId,
+                psc,
+                FixtureConfig.WITNESS_SET_VERSION,
+                ws,
+                1,
+                FixtureConfig.CHECKPOINT_TTL
+            )
         );
-        ACSC acsc = new ACSC(p, dbcChainId, pbcChainId, psc, FixtureConfig.POLICY_VERSION, FixtureConfig.GRANT_TTL);
+        ACSC acsc =
+            new ACSC(p, mutations, dbcChainId, pbcChainId, psc, FixtureConfig.POLICY_VERSION, FixtureConfig.GRANT_TTL);
         kssc.wire(address(acsc));
         acsc.wire(kssc, _actor("relay"));
         uint256 policyId = acsc.addPolicy(FixtureConfig.emergencyPolicy());

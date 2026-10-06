@@ -55,6 +55,16 @@ uint8 constant CREDENTIAL_TEMPORAL = 2;
 uint8 constant ANCHOR_CRL = 1;
 uint8 constant ANCHOR_TEMP_ACL = 2;
 
+// Deliberate check removals for `mutant-*` deployments (REPAIRED_E only). They exist to show that
+// tests and the evaluation oracle detect a missing check; a mutant result is never evidence about
+// HMBC. Paper profiles reject any non-zero mutation set.
+uint256 constant MUT_NO_DESTINATION_BINDING = 1 << 0; // DecisionVerifier step 2 skipped
+uint256 constant MUT_NO_STATE_BARRIER = 1 << 1; // stateSequence and authEpoch vs checkpoint skipped
+uint256 constant MUT_NO_RECORD_FRESHNESS = 1 << 2; // DecisionVerifier step 13 skipped
+uint256 constant MUT_NO_NONCE = 1 << 3; // KSSC neither checks nor consumes (gid, nonce)
+uint256 constant MUT_NO_VERSION_MONOTONE = 1 << 4; // TMSC accepts non-increasing list versions
+uint256 constant MUT_ALL = (1 << 5) - 1;
+
 /// Possession proof signed by the GID key (III-D2 "signed challenge"; GID = address, IV-D).
 struct Registration {
     address gid;

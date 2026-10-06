@@ -3,44 +3,56 @@
     "type": "constructor",
     "inputs": [
       {
-        "name": "profile_",
-        "type": "uint8",
-        "internalType": "enum Profile"
-      },
-      {
-        "name": "dbcChainId_",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "sourceChainId_",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "sourcePsc_",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "witnessSetVersion_",
-        "type": "uint64",
-        "internalType": "uint64"
-      },
-      {
-        "name": "witnesses_",
-        "type": "address[]",
-        "internalType": "address[]"
-      },
-      {
-        "name": "threshold_",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "maxCheckpointTtl_",
-        "type": "uint64",
-        "internalType": "uint64"
+        "name": "c",
+        "type": "tuple",
+        "internalType": "struct KSSC.Config",
+        "components": [
+          {
+            "name": "profile",
+            "type": "uint8",
+            "internalType": "enum Profile"
+          },
+          {
+            "name": "mutations",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "dbcChainId",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "sourceChainId",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "sourcePsc",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "witnessSetVersion",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "witnesses",
+            "type": "address[]",
+            "internalType": "address[]"
+          },
+          {
+            "name": "threshold",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "maxCheckpointTtl",
+            "type": "uint64",
+            "internalType": "uint64"
+          }
+        ]
       }
     ],
     "stateMutability": "nonpayable"
@@ -369,6 +381,19 @@
         "name": "",
         "type": "uint64",
         "internalType": "uint64"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "mutations",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "stateMutability": "view"
