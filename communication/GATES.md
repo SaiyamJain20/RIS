@@ -42,3 +42,7 @@ Evidence run: not created. ACKs: none. Decision: NOT RUN.
 - [ ] Integrated freeze run, source/tool hashes and three ACKs recorded. Study/reproduction guide assembled.
 
 Evidence run: not created. ACKs: none. Decision: NOT RUN.
+
+## E0 partial checkpoint (2026-10-07)
+
+See `evaluation/reports/E0-progress.md` and A3-0003 for locally verified source/schema/vector/toolchain preparation. Exact three-agent ACKs and agent-2 service/flow support are unavailable. E0 is not closed; gate E remains NOT RUN. The runner/gate preflight exits 2/BLOCKED. Ledger-only tests and ProVerif toolchain smoke do not satisfy real integration/correspondence requirements above.

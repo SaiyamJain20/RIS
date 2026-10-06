@@ -1,0 +1,1022 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HMBC v1 candidate NOT frozen",
+  "$defs": {
+    "Address": {
+      "type": "string",
+      "pattern": "^0x[0-9a-f]{40}$"
+    },
+    "Hash": {
+      "type": "string",
+      "pattern": "^0x[0-9a-f]{64}$"
+    },
+    "Signature": {
+      "type": "string",
+      "pattern": "^0x[0-9a-f]{130}$",
+      "format": "canonical-signature"
+    },
+    "Uint8": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$",
+      "maxLength": 3,
+      "format": "uint8"
+    },
+    "Uint64": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$",
+      "maxLength": 20,
+      "format": "uint64"
+    },
+    "Uint256": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$",
+      "maxLength": 78,
+      "format": "uint256"
+    },
+    "AccessRequest": {
+      "type": "object",
+      "properties": {
+        "sourceChainId": {
+          "$ref": "#/$defs/Uint256"
+        },
+        "destinationChainId": {
+          "$ref": "#/$defs/Uint256"
+        },
+        "psc": {
+          "$ref": "#/$defs/Address"
+        },
+        "kssc": {
+          "$ref": "#/$defs/Address"
+        },
+        "gid": {
+          "$ref": "#/$defs/Address"
+        },
+        "dataId": {
+          "$ref": "#/$defs/Hash"
+        },
+        "action": {
+          "$ref": "#/$defs/Uint8"
+        },
+        "policyVersion": {
+          "$ref": "#/$defs/Uint64"
+        },
+        "authEpoch": {
+          "$ref": "#/$defs/Uint64"
+        },
+        "keyEpoch": {
+          "const": "0"
+        },
+        "nonce": {
+          "$ref": "#/$defs/Uint256"
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/Uint64"
+        },
+        "recipientKeyHash": {
+          "$ref": "#/$defs/Hash"
+        }
+      },
+      "required": [
+        "sourceChainId",
+        "destinationChainId",
+        "psc",
+        "kssc",
+        "gid",
+        "dataId",
+        "action",
+        "policyVersion",
+        "authEpoch",
+        "keyEpoch",
+        "nonce",
+        "expiresAt",
+        "recipientKeyHash"
+      ],
+      "additionalProperties": false
+    },
+    "AccessDecision": {
+      "type": "object",
+      "properties": {
+        "requestDigest": {
+          "$ref": "#/$defs/Hash"
+        },
+        "result": {
+          "enum": [
+            "0",
+            "1"
+          ]
+        },
+        "credentialDigest": {
+          "$ref": "#/$defs/Hash"
+        },
+        "stateSequence": {
+          "$ref": "#/$defs/Uint64"
+        },
+        "witnessSetVersion": {
+          "const": "1"
+        },
+        "sourceBlockNumber": {
+          "$ref": "#/$defs/Uint256"
+        },
+        "sourceBlockHash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/Uint64"
+        }
+      },
+      "required": [
+        "requestDigest",
+        "result",
+        "credentialDigest",
+        "stateSequence",
+        "witnessSetVersion",
+        "sourceBlockNumber",
+        "sourceBlockHash",
+        "expiresAt"
+      ],
+      "additionalProperties": false
+    },
+    "StateCheckpoint": {
+      "type": "object",
+      "properties": {
+        "sequence": {
+          "$ref": "#/$defs/Uint64"
+        },
+        "authEpoch": {
+          "$ref": "#/$defs/Uint64"
+        },
+        "policyVersion": {
+          "$ref": "#/$defs/Uint64"
+        },
+        "keyEpoch": {
+          "const": "0"
+        },
+        "witnessSetVersion": {
+          "const": "1"
+        },
+        "sourceChainId": {
+          "$ref": "#/$defs/Uint256"
+        },
+        "psc": {
+          "$ref": "#/$defs/Address"
+        },
+        "sourceBlockNumber": {
+          "$ref": "#/$defs/Uint256"
+        },
+        "sourceBlockHash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/Uint64"
+        }
+      },
+      "required": [
+        "sequence",
+        "authEpoch",
+        "policyVersion",
+        "keyEpoch",
+        "witnessSetVersion",
+        "sourceChainId",
+        "psc",
+        "sourceBlockNumber",
+        "sourceBlockHash",
+        "expiresAt"
+      ],
+      "additionalProperties": false
+    },
+    "Registration": {
+      "type": "object",
+      "properties": {
+        "gid": {
+          "$ref": "#/$defs/Address"
+        },
+        "certDigest": {
+          "$ref": "#/$defs/Hash"
+        },
+        "recipientKeyHash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "expiresAt": {
+          "$ref": "#/$defs/Uint64"
+        }
+      },
+      "required": [
+        "gid",
+        "certDigest",
+        "recipientKeyHash",
+        "expiresAt"
+      ],
+      "additionalProperties": false
+    },
+    "RoleCertificate": {
+      "type": "object",
+      "properties": {
+        "issuer": {
+          "$ref": "#/$defs/Address"
+        },
+        "gid": {
+          "$ref": "#/$defs/Address"
+        },
+        "serial": {
+          "$ref": "#/$defs/Uint64"
+        },
+        "validFrom": {
+          "$ref": "#/$defs/Uint64"
+        },
+        "validUntil": {
+          "$ref": "#/$defs/Uint64"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Hash"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "issuer",
+        "gid",
+        "serial",
+        "validFrom",
+        "validUntil",
+        "roles"
+      ],
+      "additionalProperties": false
+    },
+    "SignedRoleCertificate": {
+      "type": "object",
+      "properties": {
+        "cert": {
+          "$ref": "#/$defs/RoleCertificate"
+        },
+        "signature": {
+          "$ref": "#/$defs/Signature"
+        }
+      },
+      "required": [
+        "cert",
+        "signature"
+      ],
+      "additionalProperties": false
+    },
+    "RevocationList": {
+      "type": "object",
+      "properties": {
+        "authority": {
+          "$ref": "#/$defs/Address"
+        },
+        "version": {
+          "$ref": "#/$defs/Uint64"
+        },
+        "validUntil": {
+          "$ref": "#/$defs/Uint64"
+        },
+        "revokedSerials": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Uint64"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "authority",
+        "version",
+        "validUntil",
+        "revokedSerials"
+      ],
+      "additionalProperties": false
+    },
+    "TempAclEntry": {
+      "type": "object",
+      "properties": {
+        "gid": {
+          "$ref": "#/$defs/Address"
+        },
+        "role": {
+          "$ref": "#/$defs/Hash"
+        },
+        "validFrom": {
+          "$ref": "#/$defs/Uint64"
+        },
+        "validUntil": {
+          "$ref": "#/$defs/Uint64"
+        }
+      },
+      "required": [
+        "gid",
+        "role",
+        "validFrom",
+        "validUntil"
+      ],
+      "additionalProperties": false
+    },
+    "TemporalAcl": {
+      "type": "object",
+      "properties": {
+        "authority": {
+          "$ref": "#/$defs/Address"
+        },
+        "version": {
+          "$ref": "#/$defs/Uint64"
+        },
+        "validUntil": {
+          "$ref": "#/$defs/Uint64"
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TempAclEntry"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "authority",
+        "version",
+        "validUntil",
+        "entries"
+      ],
+      "additionalProperties": false
+    },
+    "TemporalClaim": {
+      "type": "object",
+      "properties": {
+        "authority": {
+          "$ref": "#/$defs/Address"
+        },
+        "role": {
+          "$ref": "#/$defs/Hash"
+        }
+      },
+      "required": [
+        "authority",
+        "role"
+      ],
+      "additionalProperties": false
+    },
+    "CredentialBundle": {
+      "type": "object",
+      "properties": {
+        "certificates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SignedRoleCertificate"
+          },
+          "minItems": 0
+        },
+        "temporalClaims": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TemporalClaim"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "certificates",
+        "temporalClaims"
+      ],
+      "additionalProperties": false
+    },
+    "CredentialRecord": {
+      "type": "object",
+      "properties": {
+        "issuer": {
+          "$ref": "#/$defs/Address"
+        },
+        "role": {
+          "$ref": "#/$defs/Hash"
+        },
+        "kind": {
+          "enum": [
+            "1",
+            "2"
+          ]
+        },
+        "serial": {
+          "$ref": "#/$defs/Uint64"
+        },
+        "anchorVersion": {
+          "$ref": "#/$defs/Uint64"
+        },
+        "validUntil": {
+          "$ref": "#/$defs/Uint64"
+        }
+      },
+      "required": [
+        "issuer",
+        "role",
+        "kind",
+        "serial",
+        "anchorVersion",
+        "validUntil"
+      ],
+      "additionalProperties": false
+    },
+    "CredentialRecords": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/CredentialRecord"
+      },
+      "minItems": 0
+    },
+    "DecisionCertificate": {
+      "type": "object",
+      "properties": {
+        "decision": {
+          "$ref": "#/$defs/AccessDecision"
+        },
+        "signatures": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Signature"
+          },
+          "minItems": 1,
+          "maxItems": 1
+        }
+      },
+      "required": [
+        "decision",
+        "signatures"
+      ],
+      "additionalProperties": false
+    },
+    "ForwardedRequest": {
+      "type": "object",
+      "properties": {
+        "pbcRequestId": {
+          "$ref": "#/$defs/Hash"
+        },
+        "gid": {
+          "$ref": "#/$defs/Address"
+        },
+        "dataId": {
+          "$ref": "#/$defs/Hash"
+        },
+        "action": {
+          "$ref": "#/$defs/Uint8"
+        }
+      },
+      "required": [
+        "pbcRequestId",
+        "gid",
+        "dataId",
+        "action"
+      ],
+      "additionalProperties": false
+    },
+    "GrantReceipt": {
+      "type": "object",
+      "properties": {
+        "requestDigest": {
+          "$ref": "#/$defs/Hash"
+        },
+        "grantId": {
+          "$ref": "#/$defs/Hash"
+        },
+        "dbcResult": {
+          "const": "1"
+        },
+        "keyEpoch": {
+          "const": "0"
+        },
+        "grantExpiresAt": {
+          "$ref": "#/$defs/Uint64"
+        },
+        "dbcChainId": {
+          "$ref": "#/$defs/Uint256"
+        },
+        "kssc": {
+          "$ref": "#/$defs/Address"
+        },
+        "dbcBlockNumber": {
+          "$ref": "#/$defs/Uint256"
+        },
+        "dbcBlockHash": {
+          "$ref": "#/$defs/Hash"
+        }
+      },
+      "required": [
+        "requestDigest",
+        "grantId",
+        "dbcResult",
+        "keyEpoch",
+        "grantExpiresAt",
+        "dbcChainId",
+        "kssc",
+        "dbcBlockNumber",
+        "dbcBlockHash"
+      ],
+      "additionalProperties": false
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "enum": [
+            "BAD_SIGNATURE",
+            "WRONG_SUBJECT",
+            "WRONG_DESTINATION",
+            "UNKNOWN_AUTHORITY",
+            "STALE_ANCHOR",
+            "STALE_STATE",
+            "EXPIRED",
+            "REPLAY",
+            "POLICY_DENIED",
+            "INSUFFICIENT_QUORUM",
+            "DUPLICATE_SIGNER",
+            "WRONG_EPOCH",
+            "NOT_COMMITTED",
+            "ADAPTER_UNAVAILABLE",
+            "NOT_IMPLEMENTED_IN_PHASE",
+            "UNAUTHORIZED_CALLER",
+            "NOT_REGISTERED",
+            "ALREADY_REGISTERED",
+            "REVOKED",
+            "MALFORMED",
+            "WRONG_PROFILE"
+          ]
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "additionalProperties": false
+    },
+    "AdapterResponse": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "v1"
+        },
+        "ok": {
+          "type": "boolean"
+        },
+        "result": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "error": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Error"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "ok",
+        "result",
+        "error"
+      ],
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "ok": {
+              "const": true
+            },
+            "result": {
+              "type": "object"
+            },
+            "error": {
+              "type": "null"
+            }
+          }
+        },
+        {
+          "properties": {
+            "ok": {
+              "const": false
+            },
+            "result": {
+              "type": "null"
+            },
+            "error": {
+              "$ref": "#/$defs/Error"
+            }
+          }
+        }
+      ]
+    },
+    "FileHash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "FileHashes": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/FileHash"
+      }
+    },
+    "EventName": {
+      "enum": [
+        "REQUEST_LOGGED",
+        "PBC_DECIDED",
+        "DBC_AUTHORIZED",
+        "RELEASE_INTENT",
+        "RELEASE_SENT",
+        "OUTCOME_RECORDED"
+      ]
+    },
+    "ControlPolicy": {
+      "type": "object",
+      "properties": {
+        "longTerm": {
+          "const": "Doctor"
+        },
+        "temporal": {
+          "const": "OnDuty"
+        },
+        "issuerMode": {
+          "const": "SAME_AS_FIRST"
+        },
+        "emergencyContext": {
+          "const": "assumed synthetic"
+        }
+      },
+      "required": [
+        "longTerm",
+        "temporal",
+        "issuerMode",
+        "emergencyContext"
+      ],
+      "additionalProperties": false
+    },
+    "ControlFixture": {
+      "type": "object",
+      "properties": {
+        "actor": {
+          "enum": [
+            "Alice",
+            "Bob",
+            "WrongIssuerAdmin"
+          ]
+        },
+        "requestDigest": {
+          "$ref": "#/$defs/Hash"
+        },
+        "grantId": {
+          "$ref": "#/$defs/Hash"
+        },
+        "gid": {
+          "$ref": "#/$defs/Address"
+        },
+        "dataId": {
+          "$ref": "#/$defs/Hash"
+        },
+        "kssc": {
+          "$ref": "#/$defs/Address"
+        },
+        "destinationChainId": {
+          "$ref": "#/$defs/Uint256"
+        },
+        "recipientKeyHash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "keyEpoch": {
+          "const": "0"
+        },
+        "policy": {
+          "$ref": "#/$defs/ControlPolicy"
+        }
+      },
+      "required": [
+        "actor",
+        "requestDigest",
+        "grantId",
+        "gid",
+        "dataId",
+        "kssc",
+        "destinationChainId",
+        "recipientKeyHash",
+        "keyEpoch",
+        "policy"
+      ],
+      "additionalProperties": false
+    },
+    "Fault": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "step": {
+          "$ref": "#/$defs/Uint64"
+        }
+      },
+      "required": [
+        "kind",
+        "step"
+      ],
+      "additionalProperties": false
+    },
+    "Scenario": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rq": {
+          "const": "E"
+        },
+        "profile": {
+          "enum": [
+            "paper-strict",
+            "paper-minimal",
+            "repaired-e",
+            "mutant-no-destination-binding",
+            "mutant-no-state-barrier",
+            "mutant-no-record-freshness",
+            "mutant-no-nonce",
+            "mutant-no-version-monotone"
+          ]
+        },
+        "sourceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "fixture": {
+          "$ref": "#/$defs/ControlFixture"
+        },
+        "faultSchedule": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Fault"
+          },
+          "minItems": 0
+        },
+        "expectedClass": {
+          "enum": [
+            "SUPPORTED",
+            "SPEC_GAP",
+            "RECONSTRUCTION_FAILURE",
+            "REPAIR_SUPPORTED",
+            "REFUTED",
+            "BLOCKED"
+          ]
+        },
+        "expectedEvents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EventName"
+          },
+          "minItems": 0
+        },
+        "expectedError": {
+          "anyOf": [
+            {
+              "enum": [
+                "BAD_SIGNATURE",
+                "WRONG_SUBJECT",
+                "WRONG_DESTINATION",
+                "UNKNOWN_AUTHORITY",
+                "STALE_ANCHOR",
+                "STALE_STATE",
+                "EXPIRED",
+                "REPLAY",
+                "POLICY_DENIED",
+                "INSUFFICIENT_QUORUM",
+                "DUPLICATE_SIGNER",
+                "WRONG_EPOCH",
+                "NOT_COMMITTED",
+                "ADAPTER_UNAVAILABLE",
+                "NOT_IMPLEMENTED_IN_PHASE",
+                "UNAUTHORIZED_CALLER",
+                "NOT_REGISTERED",
+                "ALREADY_REGISTERED",
+                "REVOKED",
+                "MALFORMED",
+                "WRONG_PROFILE"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "adapterMode": {
+          "const": "symbolic"
+        }
+      },
+      "required": [
+        "id",
+        "rq",
+        "profile",
+        "sourceRefs",
+        "assumptions",
+        "fixture",
+        "faultSchedule",
+        "expectedClass",
+        "expectedEvents",
+        "expectedError",
+        "adapterMode"
+      ],
+      "additionalProperties": false
+    },
+    "Command": {
+      "type": "object",
+      "properties": {
+        "argv": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "cwd": {
+          "type": "string",
+          "minLength": 1
+        },
+        "startedAt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "endedAt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "exitCode": {
+          "type": "integer"
+        },
+        "timedOut": {
+          "type": "boolean"
+        },
+        "elapsedSeconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "outputSha256": {
+          "$ref": "#/$defs/FileHash"
+        }
+      },
+      "required": [
+        "argv",
+        "cwd",
+        "startedAt",
+        "endedAt",
+        "exitCode",
+        "timedOut",
+        "elapsedSeconds",
+        "outputSha256"
+      ],
+      "additionalProperties": false
+    },
+    "RunManifest": {
+      "type": "object",
+      "properties": {
+        "runId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rq": {
+          "const": "E"
+        },
+        "profile": {
+          "enum": [
+            "paper-strict",
+            "paper-minimal",
+            "repaired-e",
+            "mutant-no-destination-binding",
+            "mutant-no-state-barrier",
+            "mutant-no-record-freshness",
+            "mutant-no-nonce",
+            "mutant-no-version-monotone"
+          ]
+        },
+        "interfaceVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "adapterMode": {
+          "const": "symbolic"
+        },
+        "executionMode": {
+          "enum": [
+            "preflight",
+            "provided-traces",
+            "real-integrated"
+          ]
+        },
+        "status": {
+          "enum": [
+            "BLOCKED",
+            "PASS",
+            "FAIL"
+          ]
+        },
+        "sourceManifest": {
+          "$ref": "#/$defs/FileHashes"
+        },
+        "sourceStable": {
+          "type": "boolean"
+        },
+        "toolVersions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Command"
+          },
+          "minItems": 0
+        },
+        "inputHashes": {
+          "$ref": "#/$defs/FileHashes"
+        },
+        "seed": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "startedAt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "endedAt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "exitCodes": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "resultFiles": {
+          "$ref": "#/$defs/FileHashes"
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "dirtyTree": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "runId",
+        "rq",
+        "profile",
+        "interfaceVersion",
+        "adapterMode",
+        "executionMode",
+        "status",
+        "sourceManifest",
+        "sourceStable",
+        "toolVersions",
+        "commands",
+        "inputHashes",
+        "seed",
+        "startedAt",
+        "endedAt",
+        "exitCodes",
+        "resultFiles",
+        "blockers",
+        "commit",
+        "dirtyTree"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

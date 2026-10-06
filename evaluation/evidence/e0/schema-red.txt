@@ -1,0 +1,214 @@
+.FFFFFFFFFFFFFFFF                                                        [100%]
+=================================== FAILURES ===================================
+_________________ test_reject_invalid_wire_request[action-256] _________________
+
+field = 'action', value = '256'
+
+    @pytest.mark.parametrize('field,value', [('action','256'), ('action',1), ('nonce','-1'), ('nonce','01'), ('nonce','1.0'), ('nonce',str(2**256)), ('expiresAt',str(2**64)), ('gid','0x'+'AB'*20), ('dataId','0x00'), ('unexpected','x'), ('keyEpoch','1')])
+    def test_reject_invalid_wire_request(field, value):
+        request = copy.deepcopy(REQUEST)
+        request[field] = value
+>       with pytest.raises((ValidationError, ValueError)):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE any of (<class 'jsonschema.exceptions.ValidationError'>, <class 'ValueError'>)
+
+evaluation/tests/test_schemas.py:20: Failed
+__________________ test_reject_invalid_wire_request[action-1] __________________
+
+field = 'action', value = 1
+
+    @pytest.mark.parametrize('field,value', [('action','256'), ('action',1), ('nonce','-1'), ('nonce','01'), ('nonce','1.0'), ('nonce',str(2**256)), ('expiresAt',str(2**64)), ('gid','0x'+'AB'*20), ('dataId','0x00'), ('unexpected','x'), ('keyEpoch','1')])
+    def test_reject_invalid_wire_request(field, value):
+        request = copy.deepcopy(REQUEST)
+        request[field] = value
+>       with pytest.raises((ValidationError, ValueError)):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE any of (<class 'jsonschema.exceptions.ValidationError'>, <class 'ValueError'>)
+
+evaluation/tests/test_schemas.py:20: Failed
+__________________ test_reject_invalid_wire_request[nonce--1] __________________
+
+field = 'nonce', value = '-1'
+
+    @pytest.mark.parametrize('field,value', [('action','256'), ('action',1), ('nonce','-1'), ('nonce','01'), ('nonce','1.0'), ('nonce',str(2**256)), ('expiresAt',str(2**64)), ('gid','0x'+'AB'*20), ('dataId','0x00'), ('unexpected','x'), ('keyEpoch','1')])
+    def test_reject_invalid_wire_request(field, value):
+        request = copy.deepcopy(REQUEST)
+        request[field] = value
+>       with pytest.raises((ValidationError, ValueError)):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE any of (<class 'jsonschema.exceptions.ValidationError'>, <class 'ValueError'>)
+
+evaluation/tests/test_schemas.py:20: Failed
+__________________ test_reject_invalid_wire_request[nonce-01] __________________
+
+field = 'nonce', value = '01'
+
+    @pytest.mark.parametrize('field,value', [('action','256'), ('action',1), ('nonce','-1'), ('nonce','01'), ('nonce','1.0'), ('nonce',str(2**256)), ('expiresAt',str(2**64)), ('gid','0x'+'AB'*20), ('dataId','0x00'), ('unexpected','x'), ('keyEpoch','1')])
+    def test_reject_invalid_wire_request(field, value):
+        request = copy.deepcopy(REQUEST)
+        request[field] = value
+>       with pytest.raises((ValidationError, ValueError)):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE any of (<class 'jsonschema.exceptions.ValidationError'>, <class 'ValueError'>)
+
+evaluation/tests/test_schemas.py:20: Failed
+_________________ test_reject_invalid_wire_request[nonce-1.0] __________________
+
+field = 'nonce', value = '1.0'
+
+    @pytest.mark.parametrize('field,value', [('action','256'), ('action',1), ('nonce','-1'), ('nonce','01'), ('nonce','1.0'), ('nonce',str(2**256)), ('expiresAt',str(2**64)), ('gid','0x'+'AB'*20), ('dataId','0x00'), ('unexpected','x'), ('keyEpoch','1')])
+    def test_reject_invalid_wire_request(field, value):
+        request = copy.deepcopy(REQUEST)
+        request[field] = value
+>       with pytest.raises((ValidationError, ValueError)):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE any of (<class 'jsonschema.exceptions.ValidationError'>, <class 'ValueError'>)
+
+evaluation/tests/test_schemas.py:20: Failed
+_ test_reject_invalid_wire_request[nonce-115792089237316195423570985008687907853269984665640564039457584007913129639936] _
+
+field = 'nonce'
+value = '115792089237316195423570985008687907853269984665640564039457584007913129639936'
+
+    @pytest.mark.parametrize('field,value', [('action','256'), ('action',1), ('nonce','-1'), ('nonce','01'), ('nonce','1.0'), ('nonce',str(2**256)), ('expiresAt',str(2**64)), ('gid','0x'+'AB'*20), ('dataId','0x00'), ('unexpected','x'), ('keyEpoch','1')])
+    def test_reject_invalid_wire_request(field, value):
+        request = copy.deepcopy(REQUEST)
+        request[field] = value
+>       with pytest.raises((ValidationError, ValueError)):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE any of (<class 'jsonschema.exceptions.ValidationError'>, <class 'ValueError'>)
+
+evaluation/tests/test_schemas.py:20: Failed
+_______ test_reject_invalid_wire_request[expiresAt-18446744073709551616] _______
+
+field = 'expiresAt', value = '18446744073709551616'
+
+    @pytest.mark.parametrize('field,value', [('action','256'), ('action',1), ('nonce','-1'), ('nonce','01'), ('nonce','1.0'), ('nonce',str(2**256)), ('expiresAt',str(2**64)), ('gid','0x'+'AB'*20), ('dataId','0x00'), ('unexpected','x'), ('keyEpoch','1')])
+    def test_reject_invalid_wire_request(field, value):
+        request = copy.deepcopy(REQUEST)
+        request[field] = value
+>       with pytest.raises((ValidationError, ValueError)):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE any of (<class 'jsonschema.exceptions.ValidationError'>, <class 'ValueError'>)
+
+evaluation/tests/test_schemas.py:20: Failed
+_ test_reject_invalid_wire_request[gid-0xABABABABABABABABABABABABABABABABABABABAB] _
+
+field = 'gid', value = '0xABABABABABABABABABABABABABABABABABABABAB'
+
+    @pytest.mark.parametrize('field,value', [('action','256'), ('action',1), ('nonce','-1'), ('nonce','01'), ('nonce','1.0'), ('nonce',str(2**256)), ('expiresAt',str(2**64)), ('gid','0x'+'AB'*20), ('dataId','0x00'), ('unexpected','x'), ('keyEpoch','1')])
+    def test_reject_invalid_wire_request(field, value):
+        request = copy.deepcopy(REQUEST)
+        request[field] = value
+>       with pytest.raises((ValidationError, ValueError)):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE any of (<class 'jsonschema.exceptions.ValidationError'>, <class 'ValueError'>)
+
+evaluation/tests/test_schemas.py:20: Failed
+________________ test_reject_invalid_wire_request[dataId-0x00] _________________
+
+field = 'dataId', value = '0x00'
+
+    @pytest.mark.parametrize('field,value', [('action','256'), ('action',1), ('nonce','-1'), ('nonce','01'), ('nonce','1.0'), ('nonce',str(2**256)), ('expiresAt',str(2**64)), ('gid','0x'+'AB'*20), ('dataId','0x00'), ('unexpected','x'), ('keyEpoch','1')])
+    def test_reject_invalid_wire_request(field, value):
+        request = copy.deepcopy(REQUEST)
+        request[field] = value
+>       with pytest.raises((ValidationError, ValueError)):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE any of (<class 'jsonschema.exceptions.ValidationError'>, <class 'ValueError'>)
+
+evaluation/tests/test_schemas.py:20: Failed
+________________ test_reject_invalid_wire_request[unexpected-x] ________________
+
+field = 'unexpected', value = 'x'
+
+    @pytest.mark.parametrize('field,value', [('action','256'), ('action',1), ('nonce','-1'), ('nonce','01'), ('nonce','1.0'), ('nonce',str(2**256)), ('expiresAt',str(2**64)), ('gid','0x'+'AB'*20), ('dataId','0x00'), ('unexpected','x'), ('keyEpoch','1')])
+    def test_reject_invalid_wire_request(field, value):
+        request = copy.deepcopy(REQUEST)
+        request[field] = value
+>       with pytest.raises((ValidationError, ValueError)):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE any of (<class 'jsonschema.exceptions.ValidationError'>, <class 'ValueError'>)
+
+evaluation/tests/test_schemas.py:20: Failed
+_________________ test_reject_invalid_wire_request[keyEpoch-1] _________________
+
+field = 'keyEpoch', value = '1'
+
+    @pytest.mark.parametrize('field,value', [('action','256'), ('action',1), ('nonce','-1'), ('nonce','01'), ('nonce','1.0'), ('nonce',str(2**256)), ('expiresAt',str(2**64)), ('gid','0x'+'AB'*20), ('dataId','0x00'), ('unexpected','x'), ('keyEpoch','1')])
+    def test_reject_invalid_wire_request(field, value):
+        request = copy.deepcopy(REQUEST)
+        request[field] = value
+>       with pytest.raises((ValidationError, ValueError)):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE any of (<class 'jsonschema.exceptions.ValidationError'>, <class 'ValueError'>)
+
+evaluation/tests/test_schemas.py:20: Failed
+_____________________ test_missing_required_field_rejects ______________________
+
+    def test_missing_required_field_rejects():
+        request = copy.deepcopy(REQUEST)
+        del request['recipientKeyHash']
+>       with pytest.raises(ValidationError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'jsonschema.exceptions.ValidationError'>
+
+evaluation/tests/test_schemas.py:27: Failed
+_________ test_credential_record_order_rejects_duplicates_and_reversal _________
+
+    def test_credential_record_order_rejects_duplicates_and_reversal():
+        records = next(v['records'] for v in V['vectors'] if 'records' in v)
+        validate('CredentialRecords', records)
+        for invalid in (records[::-1], [records[0],records[0]]):
+>           with pytest.raises(ValueError):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE <class 'ValueError'>
+
+evaluation/tests/test_schemas.py:35: Failed
+_________________________ test_signature_canonicality __________________________
+
+    def test_signature_canonicality():
+        signature = V['vectors'][0]['signature']
+        validate('Signature', signature)
+        for invalid in ('0x'+'00'*65, signature[:-2]+'00', '0x'+'01'*32+'ff'*32+'1b'):
+>           with pytest.raises((ValidationError, ValueError)):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE any of (<class 'jsonschema.exceptions.ValidationError'>, <class 'ValueError'>)
+
+evaluation/tests/test_schemas.py:43: Failed
+_________________ test_adapter_response_exclusive_result_error _________________
+
+    def test_adapter_response_exclusive_result_error():
+        validate('AdapterResponse', {'schemaVersion':'v1','ok':False,'result':None,'error':{'code':'ADAPTER_UNAVAILABLE','message':'unavailable'}})
+>       with pytest.raises(ValidationError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'jsonschema.exceptions.ValidationError'>
+
+evaluation/tests/test_schemas.py:49: Failed
+__________ test_non_grant_receipt_rejected_on_candidate_success_path ___________
+
+    def test_non_grant_receipt_rejected_on_candidate_success_path():
+        receipt={'requestDigest':'0x'+'11'*32,'grantId':'0x'+'22'*32,'dbcResult':'0','keyEpoch':'0','grantExpiresAt':'1800000030','dbcChainId':'28545','kssc':'0x'+'33'*20,'dbcBlockNumber':'1','dbcBlockHash':'0x'+'44'*32}
+>       with pytest.raises(ValidationError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'jsonschema.exceptions.ValidationError'>
+
+evaluation/tests/test_schemas.py:55: Failed
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_schemas.py::test_reject_invalid_wire_request[action-256]
+FAILED evaluation/tests/test_schemas.py::test_reject_invalid_wire_request[action-1]
+FAILED evaluation/tests/test_schemas.py::test_reject_invalid_wire_request[nonce--1]
+FAILED evaluation/tests/test_schemas.py::test_reject_invalid_wire_request[nonce-01]
+FAILED evaluation/tests/test_schemas.py::test_reject_invalid_wire_request[nonce-1.0]
+FAILED evaluation/tests/test_schemas.py::test_reject_invalid_wire_request[nonce-115792089237316195423570985008687907853269984665640564039457584007913129639936]
+FAILED evaluation/tests/test_schemas.py::test_reject_invalid_wire_request[expiresAt-18446744073709551616]
+FAILED evaluation/tests/test_schemas.py::test_reject_invalid_wire_request[gid-0xABABABABABABABABABABABABABABABABABABABAB]
+FAILED evaluation/tests/test_schemas.py::test_reject_invalid_wire_request[dataId-0x00]
+FAILED evaluation/tests/test_schemas.py::test_reject_invalid_wire_request[unexpected-x]
+FAILED evaluation/tests/test_schemas.py::test_reject_invalid_wire_request[keyEpoch-1]
+FAILED evaluation/tests/test_schemas.py::test_missing_required_field_rejects
+FAILED evaluation/tests/test_schemas.py::test_credential_record_order_rejects_duplicates_and_reversal
+FAILED evaluation/tests/test_schemas.py::test_signature_canonicality - Failed...
+FAILED evaluation/tests/test_schemas.py::test_adapter_response_exclusive_result_error
+FAILED evaluation/tests/test_schemas.py::test_non_grant_receipt_rejected_on_candidate_success_path
+16 failed, 1 passed in 0.11s

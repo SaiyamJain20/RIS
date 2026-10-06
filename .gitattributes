@@ -1,3 +1,7 @@
 # Preserve the pre-existing CRLF encoding of the archived audit registers.
 # Git's whitespace checker should treat these carriage returns as line endings.
 archive/2026-10-06-pre-hmbc-efg/research/audit-2026-10-06/*.csv whitespace=cr-at-eol
+
+# Preserve exact raw test/proverif output, including diagnostic whitespace.
+evaluation/evidence/e0/*.txt whitespace=-blank-at-eol,-blank-at-eof
+evaluation/evidence/e0/**/*.txt whitespace=-blank-at-eol,-blank-at-eof

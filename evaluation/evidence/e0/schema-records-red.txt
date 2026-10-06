@@ -1,0 +1,50 @@
+.................FF                                                      [100%]
+=================================== FAILURES ===================================
+_ test_all_declared_positive_scenarios_validate_and_unknown_nested_field_fails _
+
+    def test_all_declared_positive_scenarios_validate_and_unknown_nested_field_fails():
+        scenarios=json.loads(Path('evaluation/scenarios/e_positive.json').read_text())
+>       for scenario in scenarios: validate('Scenario',scenario)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_schemas.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'Scenario'
+value = {'adapterMode': 'symbolic', 'assumptions': ['A01', 'A02', 'A03', 'A06'], 'expectedClass': 'SUPPORTED', 'expectedError': None, ...}
+
+    def validate(name,value):
+        if not re.fullmatch(r'[A-Za-z0-9]+',name): raise ValueError('Unknown schema name')
+        schema=json.loads((SCHEMAS/'hmbc.schema.json').read_text())
+>       if name not in schema['$defs']: raise ValueError('Unknown schema name')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ValueError: Unknown schema name
+
+evaluation/schema.py:59: ValueError
+____ test_run_manifest_schema_rejects_unknown_fields_and_accepts_preflight _____
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_run_manifest_schema_rejec0')
+
+    def test_run_manifest_schema_rejects_unknown_fields_and_accepts_preflight(tmp_path):
+        from evaluation.run import run
+        manifest=run('E','repaired-e',tmp_path/'run')
+>       validate('RunManifest',manifest)
+
+evaluation/tests/test_schemas.py:69: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'RunManifest'
+value = {'adapterMode': 'symbolic', 'blockers': ['E0 exact three-agent ACK/source/schema/vector freeze is absent', 'ledger/exp...nt contract; no E1 integration is claimed'], 'commands': [], 'commit': 'a657a8c458c830dd1a84957415c0fc5bdef4968c', ...}
+
+    def validate(name,value):
+        if not re.fullmatch(r'[A-Za-z0-9]+',name): raise ValueError('Unknown schema name')
+        schema=json.loads((SCHEMAS/'hmbc.schema.json').read_text())
+>       if name not in schema['$defs']: raise ValueError('Unknown schema name')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ValueError: Unknown schema name
+
+evaluation/schema.py:59: ValueError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_schemas.py::test_all_declared_positive_scenarios_validate_and_unknown_nested_field_fails
+FAILED evaluation/tests/test_schemas.py::test_run_manifest_schema_rejects_unknown_fields_and_accepts_preflight
+2 failed, 17 passed in 0.53s

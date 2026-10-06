@@ -1,0 +1,157 @@
+.FFFFFFFFFFFFF                                                           [100%]
+=================================== FAILURES ===================================
+_________________ test_deny_everything_fails_positive_control __________________
+
+    def test_deny_everything_fails_positive_control():
+        s=next(s for s in SCENARIOS if s['fixture']['actor']=='Alice')
+>       assert not evaluate(s,{'adapterMode':'symbolic','events':[],'error':'POLICY_DENIED'})['ok']
+E       assert not True
+
+evaluation/tests/test_access_oracle.py:28: AssertionError
+__________________ test_grant_everything_fails_denial_control __________________
+
+    def test_grant_everything_fails_denial_control():
+        bob=next(s for s in SCENARIOS if s['fixture']['actor']=='Bob')
+        alice=next(s for s in SCENARIOS if s['fixture']['actor']=='Alice')
+>       assert not evaluate(bob,trace(alice))['ok']
+E       assert not True
+
+evaluation/tests/test_access_oracle.py:34: AssertionError
+______________ test_corrupted_grant_binding_fails[requestDigest] _______________
+
+field = 'requestDigest'
+
+    @pytest.mark.parametrize('field',['requestDigest','grantId','gid','dataId','kssc','destinationChainId','recipientKeyHash','keyEpoch'])
+    def test_corrupted_grant_binding_fails(field):
+        s=next(s for s in SCENARIOS if s['fixture']['actor']=='Alice')
+        t=trace(s);e=next(e for e in t['events'] if e['type']=='DBC_AUTHORIZED');e[field]='wrong'
+>       assert not evaluate(s,t)['ok']
+E       assert not True
+
+evaluation/tests/test_access_oracle.py:41: AssertionError
+_________________ test_corrupted_grant_binding_fails[grantId] __________________
+
+field = 'grantId'
+
+    @pytest.mark.parametrize('field',['requestDigest','grantId','gid','dataId','kssc','destinationChainId','recipientKeyHash','keyEpoch'])
+    def test_corrupted_grant_binding_fails(field):
+        s=next(s for s in SCENARIOS if s['fixture']['actor']=='Alice')
+        t=trace(s);e=next(e for e in t['events'] if e['type']=='DBC_AUTHORIZED');e[field]='wrong'
+>       assert not evaluate(s,t)['ok']
+E       assert not True
+
+evaluation/tests/test_access_oracle.py:41: AssertionError
+___________________ test_corrupted_grant_binding_fails[gid] ____________________
+
+field = 'gid'
+
+    @pytest.mark.parametrize('field',['requestDigest','grantId','gid','dataId','kssc','destinationChainId','recipientKeyHash','keyEpoch'])
+    def test_corrupted_grant_binding_fails(field):
+        s=next(s for s in SCENARIOS if s['fixture']['actor']=='Alice')
+        t=trace(s);e=next(e for e in t['events'] if e['type']=='DBC_AUTHORIZED');e[field]='wrong'
+>       assert not evaluate(s,t)['ok']
+E       assert not True
+
+evaluation/tests/test_access_oracle.py:41: AssertionError
+__________________ test_corrupted_grant_binding_fails[dataId] __________________
+
+field = 'dataId'
+
+    @pytest.mark.parametrize('field',['requestDigest','grantId','gid','dataId','kssc','destinationChainId','recipientKeyHash','keyEpoch'])
+    def test_corrupted_grant_binding_fails(field):
+        s=next(s for s in SCENARIOS if s['fixture']['actor']=='Alice')
+        t=trace(s);e=next(e for e in t['events'] if e['type']=='DBC_AUTHORIZED');e[field]='wrong'
+>       assert not evaluate(s,t)['ok']
+E       assert not True
+
+evaluation/tests/test_access_oracle.py:41: AssertionError
+___________________ test_corrupted_grant_binding_fails[kssc] ___________________
+
+field = 'kssc'
+
+    @pytest.mark.parametrize('field',['requestDigest','grantId','gid','dataId','kssc','destinationChainId','recipientKeyHash','keyEpoch'])
+    def test_corrupted_grant_binding_fails(field):
+        s=next(s for s in SCENARIOS if s['fixture']['actor']=='Alice')
+        t=trace(s);e=next(e for e in t['events'] if e['type']=='DBC_AUTHORIZED');e[field]='wrong'
+>       assert not evaluate(s,t)['ok']
+E       assert not True
+
+evaluation/tests/test_access_oracle.py:41: AssertionError
+____________ test_corrupted_grant_binding_fails[destinationChainId] ____________
+
+field = 'destinationChainId'
+
+    @pytest.mark.parametrize('field',['requestDigest','grantId','gid','dataId','kssc','destinationChainId','recipientKeyHash','keyEpoch'])
+    def test_corrupted_grant_binding_fails(field):
+        s=next(s for s in SCENARIOS if s['fixture']['actor']=='Alice')
+        t=trace(s);e=next(e for e in t['events'] if e['type']=='DBC_AUTHORIZED');e[field]='wrong'
+>       assert not evaluate(s,t)['ok']
+E       assert not True
+
+evaluation/tests/test_access_oracle.py:41: AssertionError
+_____________ test_corrupted_grant_binding_fails[recipientKeyHash] _____________
+
+field = 'recipientKeyHash'
+
+    @pytest.mark.parametrize('field',['requestDigest','grantId','gid','dataId','kssc','destinationChainId','recipientKeyHash','keyEpoch'])
+    def test_corrupted_grant_binding_fails(field):
+        s=next(s for s in SCENARIOS if s['fixture']['actor']=='Alice')
+        t=trace(s);e=next(e for e in t['events'] if e['type']=='DBC_AUTHORIZED');e[field]='wrong'
+>       assert not evaluate(s,t)['ok']
+E       assert not True
+
+evaluation/tests/test_access_oracle.py:41: AssertionError
+_________________ test_corrupted_grant_binding_fails[keyEpoch] _________________
+
+field = 'keyEpoch'
+
+    @pytest.mark.parametrize('field',['requestDigest','grantId','gid','dataId','kssc','destinationChainId','recipientKeyHash','keyEpoch'])
+    def test_corrupted_grant_binding_fails(field):
+        s=next(s for s in SCENARIOS if s['fixture']['actor']=='Alice')
+        t=trace(s);e=next(e for e in t['events'] if e['type']=='DBC_AUTHORIZED');e[field]='wrong'
+>       assert not evaluate(s,t)['ok']
+E       assert not True
+
+evaluation/tests/test_access_oracle.py:41: AssertionError
+_________ test_missing_or_reordered_request_authorization_intent_fails _________
+
+    def test_missing_or_reordered_request_authorization_intent_fails():
+        s=SCENARIOS[0];t=trace(s)
+        for name in ('REQUEST_LOGGED','PBC_DECIDED','DBC_AUTHORIZED','RELEASE_INTENT'):
+            altered=copy.deepcopy(t);altered['events']=[e for e in altered['events'] if e['type']!=name]
+>           assert not evaluate(s,altered)['ok']
+E           assert not True
+
+evaluation/tests/test_access_oracle.py:48: AssertionError
+______________ test_denial_requires_correct_reason_and_no_release ______________
+
+    def test_denial_requires_correct_reason_and_no_release():
+        s=next(s for s in SCENARIOS if s['expectedError']=='UNAUTHORIZED_CALLER');t=trace(s)
+>       t['error']='BAD_SIGNATURE';assert not evaluate(s,t)['ok']
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       assert not True
+
+evaluation/tests/test_access_oracle.py:55: AssertionError
+______________ test_wrong_mode_or_repeated_grant_transition_fails ______________
+
+    def test_wrong_mode_or_repeated_grant_transition_fails():
+>       s=SCENARIOS[0];t=trace(s);t['adapterMode']='abe-real';assert not evaluate(s,t)['ok']
+                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       assert not True
+
+evaluation/tests/test_access_oracle.py:61: AssertionError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_access_oracle.py::test_deny_everything_fails_positive_control
+FAILED evaluation/tests/test_access_oracle.py::test_grant_everything_fails_denial_control
+FAILED evaluation/tests/test_access_oracle.py::test_corrupted_grant_binding_fails[requestDigest]
+FAILED evaluation/tests/test_access_oracle.py::test_corrupted_grant_binding_fails[grantId]
+FAILED evaluation/tests/test_access_oracle.py::test_corrupted_grant_binding_fails[gid]
+FAILED evaluation/tests/test_access_oracle.py::test_corrupted_grant_binding_fails[dataId]
+FAILED evaluation/tests/test_access_oracle.py::test_corrupted_grant_binding_fails[kssc]
+FAILED evaluation/tests/test_access_oracle.py::test_corrupted_grant_binding_fails[destinationChainId]
+FAILED evaluation/tests/test_access_oracle.py::test_corrupted_grant_binding_fails[recipientKeyHash]
+FAILED evaluation/tests/test_access_oracle.py::test_corrupted_grant_binding_fails[keyEpoch]
+FAILED evaluation/tests/test_access_oracle.py::test_missing_or_reordered_request_authorization_intent_fails
+FAILED evaluation/tests/test_access_oracle.py::test_denial_requires_correct_reason_and_no_release
+FAILED evaluation/tests/test_access_oracle.py::test_wrong_mode_or_repeated_grant_transition_fails
+13 failed, 1 passed in 0.03s

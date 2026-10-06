@@ -1,0 +1,383 @@
+[
+  {
+    "id": "E-control-Alice-paper-strict",
+    "rq": "E",
+    "profile": "paper-strict",
+    "sourceRefs": [
+      "S04",
+      "S06",
+      "S12",
+      "S19"
+    ],
+    "assumptions": [
+      "A01",
+      "A02",
+      "A03",
+      "A06"
+    ],
+    "fixture": {
+      "actor": "Alice",
+      "requestDigest": "0x1111111111111111111111111111111111111111111111111111111111111111",
+      "grantId": "0x2222222222222222222222222222222222222222222222222222222222222222",
+      "gid": "0x3333333333333333333333333333333333333333",
+      "dataId": "0x4444444444444444444444444444444444444444444444444444444444444444",
+      "kssc": "0x5555555555555555555555555555555555555555",
+      "destinationChainId": "28545",
+      "recipientKeyHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "keyEpoch": "0",
+      "policy": {
+        "longTerm": "Doctor",
+        "temporal": "OnDuty",
+        "issuerMode": "SAME_AS_FIRST",
+        "emergencyContext": "assumed synthetic"
+      }
+    },
+    "faultSchedule": [],
+    "expectedClass": "SUPPORTED",
+    "expectedEvents": [
+      "REQUEST_LOGGED",
+      "PBC_DECIDED",
+      "DBC_AUTHORIZED",
+      "RELEASE_INTENT",
+      "RELEASE_SENT",
+      "OUTCOME_RECORDED"
+    ],
+    "expectedError": null,
+    "adapterMode": "symbolic"
+  },
+  {
+    "id": "E-control-Bob-paper-strict",
+    "rq": "E",
+    "profile": "paper-strict",
+    "sourceRefs": [
+      "S04",
+      "S06",
+      "S12",
+      "S19"
+    ],
+    "assumptions": [
+      "A01",
+      "A02",
+      "A03",
+      "A06"
+    ],
+    "fixture": {
+      "actor": "Bob",
+      "requestDigest": "0x1111111111111111111111111111111111111111111111111111111111111111",
+      "grantId": "0x2222222222222222222222222222222222222222222222222222222222222222",
+      "gid": "0x3333333333333333333333333333333333333333",
+      "dataId": "0x4444444444444444444444444444444444444444444444444444444444444444",
+      "kssc": "0x5555555555555555555555555555555555555555",
+      "destinationChainId": "28545",
+      "recipientKeyHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "keyEpoch": "0",
+      "policy": {
+        "longTerm": "Doctor",
+        "temporal": "OnDuty",
+        "issuerMode": "SAME_AS_FIRST",
+        "emergencyContext": "assumed synthetic"
+      }
+    },
+    "faultSchedule": [],
+    "expectedClass": "SUPPORTED",
+    "expectedEvents": [
+      "REQUEST_LOGGED",
+      "PBC_DECIDED"
+    ],
+    "expectedError": "POLICY_DENIED",
+    "adapterMode": "symbolic"
+  },
+  {
+    "id": "E-control-WrongIssuerAdmin-paper-strict",
+    "rq": "E",
+    "profile": "paper-strict",
+    "sourceRefs": [
+      "S04",
+      "S06",
+      "S12",
+      "S19"
+    ],
+    "assumptions": [
+      "A01",
+      "A02",
+      "A03",
+      "A06"
+    ],
+    "fixture": {
+      "actor": "WrongIssuerAdmin",
+      "requestDigest": "0x1111111111111111111111111111111111111111111111111111111111111111",
+      "grantId": "0x2222222222222222222222222222222222222222222222222222222222222222",
+      "gid": "0x3333333333333333333333333333333333333333",
+      "dataId": "0x4444444444444444444444444444444444444444444444444444444444444444",
+      "kssc": "0x5555555555555555555555555555555555555555",
+      "destinationChainId": "28545",
+      "recipientKeyHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "keyEpoch": "0",
+      "policy": {
+        "longTerm": "Doctor",
+        "temporal": "OnDuty",
+        "issuerMode": "SAME_AS_FIRST",
+        "emergencyContext": "assumed synthetic"
+      }
+    },
+    "faultSchedule": [],
+    "expectedClass": "SUPPORTED",
+    "expectedEvents": [],
+    "expectedError": "UNAUTHORIZED_CALLER",
+    "adapterMode": "symbolic"
+  },
+  {
+    "id": "E-control-Alice-paper-minimal",
+    "rq": "E",
+    "profile": "paper-minimal",
+    "sourceRefs": [
+      "S04",
+      "S06",
+      "S12",
+      "S19"
+    ],
+    "assumptions": [
+      "A01",
+      "A02",
+      "A03",
+      "A06"
+    ],
+    "fixture": {
+      "actor": "Alice",
+      "requestDigest": "0x1111111111111111111111111111111111111111111111111111111111111111",
+      "grantId": "0x2222222222222222222222222222222222222222222222222222222222222222",
+      "gid": "0x3333333333333333333333333333333333333333",
+      "dataId": "0x4444444444444444444444444444444444444444444444444444444444444444",
+      "kssc": "0x5555555555555555555555555555555555555555",
+      "destinationChainId": "28545",
+      "recipientKeyHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "keyEpoch": "0",
+      "policy": {
+        "longTerm": "Doctor",
+        "temporal": "OnDuty",
+        "issuerMode": "SAME_AS_FIRST",
+        "emergencyContext": "assumed synthetic"
+      }
+    },
+    "faultSchedule": [],
+    "expectedClass": "SUPPORTED",
+    "expectedEvents": [
+      "REQUEST_LOGGED",
+      "PBC_DECIDED",
+      "DBC_AUTHORIZED",
+      "RELEASE_INTENT",
+      "RELEASE_SENT",
+      "OUTCOME_RECORDED"
+    ],
+    "expectedError": null,
+    "adapterMode": "symbolic"
+  },
+  {
+    "id": "E-control-Bob-paper-minimal",
+    "rq": "E",
+    "profile": "paper-minimal",
+    "sourceRefs": [
+      "S04",
+      "S06",
+      "S12",
+      "S19"
+    ],
+    "assumptions": [
+      "A01",
+      "A02",
+      "A03",
+      "A06"
+    ],
+    "fixture": {
+      "actor": "Bob",
+      "requestDigest": "0x1111111111111111111111111111111111111111111111111111111111111111",
+      "grantId": "0x2222222222222222222222222222222222222222222222222222222222222222",
+      "gid": "0x3333333333333333333333333333333333333333",
+      "dataId": "0x4444444444444444444444444444444444444444444444444444444444444444",
+      "kssc": "0x5555555555555555555555555555555555555555",
+      "destinationChainId": "28545",
+      "recipientKeyHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "keyEpoch": "0",
+      "policy": {
+        "longTerm": "Doctor",
+        "temporal": "OnDuty",
+        "issuerMode": "SAME_AS_FIRST",
+        "emergencyContext": "assumed synthetic"
+      }
+    },
+    "faultSchedule": [],
+    "expectedClass": "SUPPORTED",
+    "expectedEvents": [
+      "REQUEST_LOGGED",
+      "PBC_DECIDED"
+    ],
+    "expectedError": "POLICY_DENIED",
+    "adapterMode": "symbolic"
+  },
+  {
+    "id": "E-control-WrongIssuerAdmin-paper-minimal",
+    "rq": "E",
+    "profile": "paper-minimal",
+    "sourceRefs": [
+      "S04",
+      "S06",
+      "S12",
+      "S19"
+    ],
+    "assumptions": [
+      "A01",
+      "A02",
+      "A03",
+      "A06"
+    ],
+    "fixture": {
+      "actor": "WrongIssuerAdmin",
+      "requestDigest": "0x1111111111111111111111111111111111111111111111111111111111111111",
+      "grantId": "0x2222222222222222222222222222222222222222222222222222222222222222",
+      "gid": "0x3333333333333333333333333333333333333333",
+      "dataId": "0x4444444444444444444444444444444444444444444444444444444444444444",
+      "kssc": "0x5555555555555555555555555555555555555555",
+      "destinationChainId": "28545",
+      "recipientKeyHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "keyEpoch": "0",
+      "policy": {
+        "longTerm": "Doctor",
+        "temporal": "OnDuty",
+        "issuerMode": "SAME_AS_FIRST",
+        "emergencyContext": "assumed synthetic"
+      }
+    },
+    "faultSchedule": [],
+    "expectedClass": "SUPPORTED",
+    "expectedEvents": [],
+    "expectedError": "UNAUTHORIZED_CALLER",
+    "adapterMode": "symbolic"
+  },
+  {
+    "id": "E-control-Alice-repaired-e",
+    "rq": "E",
+    "profile": "repaired-e",
+    "sourceRefs": [
+      "S04",
+      "S06",
+      "S12",
+      "S19"
+    ],
+    "assumptions": [
+      "A01",
+      "A02",
+      "A03",
+      "A06"
+    ],
+    "fixture": {
+      "actor": "Alice",
+      "requestDigest": "0x1111111111111111111111111111111111111111111111111111111111111111",
+      "grantId": "0x2222222222222222222222222222222222222222222222222222222222222222",
+      "gid": "0x3333333333333333333333333333333333333333",
+      "dataId": "0x4444444444444444444444444444444444444444444444444444444444444444",
+      "kssc": "0x5555555555555555555555555555555555555555",
+      "destinationChainId": "28545",
+      "recipientKeyHash": "0x6666666666666666666666666666666666666666666666666666666666666666",
+      "keyEpoch": "0",
+      "policy": {
+        "longTerm": "Doctor",
+        "temporal": "OnDuty",
+        "issuerMode": "SAME_AS_FIRST",
+        "emergencyContext": "assumed synthetic"
+      }
+    },
+    "faultSchedule": [],
+    "expectedClass": "REPAIR_SUPPORTED",
+    "expectedEvents": [
+      "REQUEST_LOGGED",
+      "PBC_DECIDED",
+      "DBC_AUTHORIZED",
+      "RELEASE_INTENT",
+      "RELEASE_SENT",
+      "OUTCOME_RECORDED"
+    ],
+    "expectedError": null,
+    "adapterMode": "symbolic"
+  },
+  {
+    "id": "E-control-Bob-repaired-e",
+    "rq": "E",
+    "profile": "repaired-e",
+    "sourceRefs": [
+      "S04",
+      "S06",
+      "S12",
+      "S19"
+    ],
+    "assumptions": [
+      "A01",
+      "A02",
+      "A03",
+      "A06"
+    ],
+    "fixture": {
+      "actor": "Bob",
+      "requestDigest": "0x1111111111111111111111111111111111111111111111111111111111111111",
+      "grantId": "0x2222222222222222222222222222222222222222222222222222222222222222",
+      "gid": "0x3333333333333333333333333333333333333333",
+      "dataId": "0x4444444444444444444444444444444444444444444444444444444444444444",
+      "kssc": "0x5555555555555555555555555555555555555555",
+      "destinationChainId": "28545",
+      "recipientKeyHash": "0x6666666666666666666666666666666666666666666666666666666666666666",
+      "keyEpoch": "0",
+      "policy": {
+        "longTerm": "Doctor",
+        "temporal": "OnDuty",
+        "issuerMode": "SAME_AS_FIRST",
+        "emergencyContext": "assumed synthetic"
+      }
+    },
+    "faultSchedule": [],
+    "expectedClass": "REPAIR_SUPPORTED",
+    "expectedEvents": [
+      "REQUEST_LOGGED",
+      "PBC_DECIDED"
+    ],
+    "expectedError": "POLICY_DENIED",
+    "adapterMode": "symbolic"
+  },
+  {
+    "id": "E-control-WrongIssuerAdmin-repaired-e",
+    "rq": "E",
+    "profile": "repaired-e",
+    "sourceRefs": [
+      "S04",
+      "S06",
+      "S12",
+      "S19"
+    ],
+    "assumptions": [
+      "A01",
+      "A02",
+      "A03",
+      "A06"
+    ],
+    "fixture": {
+      "actor": "WrongIssuerAdmin",
+      "requestDigest": "0x1111111111111111111111111111111111111111111111111111111111111111",
+      "grantId": "0x2222222222222222222222222222222222222222222222222222222222222222",
+      "gid": "0x3333333333333333333333333333333333333333",
+      "dataId": "0x4444444444444444444444444444444444444444444444444444444444444444",
+      "kssc": "0x5555555555555555555555555555555555555555",
+      "destinationChainId": "28545",
+      "recipientKeyHash": "0x6666666666666666666666666666666666666666666666666666666666666666",
+      "keyEpoch": "0",
+      "policy": {
+        "longTerm": "Doctor",
+        "temporal": "OnDuty",
+        "issuerMode": "SAME_AS_FIRST",
+        "emergencyContext": "assumed synthetic"
+      }
+    },
+    "faultSchedule": [],
+    "expectedClass": "REPAIR_SUPPORTED",
+    "expectedEvents": [],
+    "expectedError": "UNAUTHORIZED_CALLER",
+    "adapterMode": "symbolic"
+  }
+]

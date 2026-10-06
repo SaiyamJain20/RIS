@@ -1,0 +1,39 @@
+{
+  "status": "candidate v1, NOT frozen",
+  "respondsTo": [
+    "A1-0003",
+    "A1-0005",
+    "A3-0002"
+  ],
+  "files": {
+    "interfaces/proposals/build_schemas.py": "6b882d77c4c5eba46413f57179cbe72c52dd673042fb518771afe6c5cd15b65b",
+    "interfaces/proposals/v1/hmbc.schema.json": "9964bee2ead451054eff8d5cc990dba3e25cc4ece96a81333bd012f8cd8f0be9",
+    "interfaces/proposals/v1/README.md": "ebb3460ef628303a10e474ae83daf4947fc35298bbb689d33b8b14808590c1cf",
+    "interfaces/vectors/eip712-agent1-candidate.json": "803f560d08ebef9a49f4ae2b8f4fd17840ddc9b201a51445116ca36a96d39f71",
+    "interfaces/vectors/schema-candidate.json": "53d9d0e25aea5dd5bab6a25a4e17924bfec2350bf3d28e892b99b11e905b245c",
+    "evaluation/schema.py": "6468c122d4e2541f7ab632e9f015f62baf048b83aa68f98e5b0b5e8a6b94acd1",
+    "evaluation/vectors.py": "e34810cad407ead86ddf9715736cc2301d0ecf51fb8459ddc1bf65dfc5687921",
+    "evaluation/scenarios/e_positive.json": "065feef25d8072da12e4a40149097367ca70912984fc170056a655a54562a177",
+    "evaluation/evidence/source-map.csv": "92513743bd9eada522872d9d610e7124e8e356b5470fdc7ed5bc90b3aad935c2",
+    "evaluation/evidence/assumptions.csv": "0ad97eaa5f4a172497414ab563a5850797a99fd413ce6416f5e53ef16aa9e9bf",
+    "evaluation/toolchain.json": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746",
+    "pyproject.toml": "1d839e80b8acdef35d878740cb5d212b464cc30f4adfdd3f56b69b162badd0ca",
+    "uv.lock": "1fb4777a5d4078434af8e7fe4a88f2f3afbe1d8f65d30e8a182999d7a7a29cbe",
+    "communication/agent-3/outbox/0002-rfc-e0-semantics-toolchain-receipt.md": "fcc22f394cdbe1492be2d01bafda161b2f0ecf80a3be92740b7e6c031ae5c9db"
+  },
+  "peerCommit": "f643805e21c996bbf4bd73212c85c8a5a85b655d",
+  "peerVectorsOriginalSha256": "6e931f83c53303350d847f61b192d57fe0f9c30f9d815effa57e36c279278cdf",
+  "independentChecks": {
+    "report": "evaluation/evidence/e0/final-checks/checks.json",
+    "sha256": "cf1df9402ea4f0b46afa22a986a6b172652b8a277c7e5b32a31a64212f977710",
+    "sourceManifestSha256": "43c7fab7075d0ee5ec33514d3a75561d1b34da7b6c48d4e500711ad45c860707"
+  },
+  "openItems": [
+    "agent-2 source-flow/dependency/vector review and exact ACK",
+    "agent-1 exact semantic/schema/source ACK",
+    "grant receipt amendment/capability ACK",
+    "operation-specific adapter input/result/ScenarioResult/deployment schemas",
+    "deployment metadata numeric fields versus wire uint strings"
+  ],
+  "freezeRule": "No interfaces/v1/INTERFACE_READY until exact affected-party ACKs and common E0 smoke acceptance."
+}

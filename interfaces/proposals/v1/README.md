@@ -1,0 +1,13 @@
+# Candidate v1 — NOT FROZEN
+
+These schemas instantiate A1-0003 and A3-0002 for review. The live normative interface remains v0. No ACK is inferred from publication. Run `python interfaces/proposals/build_schemas.py` to regenerate `hmbc.schema.json`; use `evaluation.schema.validate(name, value)` to apply JSON Schema and semantic checks. The custom uint formats enforce the exact unsigned width; pattern-only JSON Schema consumers must implement equivalent range checks. Canonical signatures require r in 1..n-1, low s and v=27/28. Recovery/signature identity is checked separately.
+
+JSON uses decimal-string integers and lowercase hex. Credential records sort by `(kind, issuer, role)`; certificates sort by issuer; temporal claims/entries by `(authority-or-gid, role)`; roles and revoked serials strictly increase. Intervals require validFrom < validUntil. E keyEpoch=0 and witness set=1. Decision signatures must be sorted by recovered address; the schema cannot recover keys or check dynamic witness membership. TTL/current epoch/checkpoint/revocation rules require state validation, not merely schemas.
+
+Candidate grant receipts describe only an authorized grant (dbcResult=1) under A3-0002's amendment. Agent-1/2 acceptance is pending; do not assume that overload exists. Denial outcomes and a commitment's interpretation remain separate.
+
+The adapter response envelope validates exclusivity and known error classes. Operation-specific input/result/deployment schema is OPEN until agent-2 supplies its source-flow review and sample exports. An opaque result object is not claimed to have strict internal validation. Deployment manifests/ABIs currently remain agent-1's proposed exports, not frozen schema contracts. Unsupported nested fields in defined signed/bundle types reject.
+
+Positive/mutated cryptographic vectors retain agent-1 producer provenance and TEST-ONLY keys. Agent-3 recomputes them using eth-account/eth-abi. A full v1 freeze needs both peers to ACK the exact signed types, ABI placement, clock/retry/profile rules, schema/vector hashes and source map.
+
+The schema document has 33 definitions. Evaluation record numbers (exit codes, elapsed time, optional schedule seed) are measurement metadata; ABI/EIP-712 unsigned values remain decimal strings. This distinction is an explicit RFC proposal, not a silent v0 reinterpretation. The positive-control Scenario schema is intentionally a provisional fixture schema; E01/E02/E03 fault/input schemas require the post-E1 reviewed scenario expansion. RunManifest currently describes preflight evidence. ScenarioResult and complete operation/deployment schemas remain OPEN; no successful provider result is generated to bypass those gaps.

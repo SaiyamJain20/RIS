@@ -1,0 +1,42 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+________ test_missing_protocol_stops_with_manifest_and_no_fake_success _________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-4/test_missing_protocol_stops_wi0')
+
+    def test_missing_protocol_stops_with_manifest_and_no_fake_success(tmp_path):
+        output=tmp_path/'run'
+        result=run('E','repaired-e',output)
+>       assert result['status']=='BLOCKED'
+E       AssertionError: assert 'PASS' == 'BLOCKED'
+E         
+E         - BLOCKED
+E         + PASS
+
+evaluation/tests/test_run.py:9: AssertionError
+__________________ test_existing_output_is_never_overwritten ___________________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-4/test_existing_output_is_never_0')
+
+    def test_existing_output_is_never_overwritten(tmp_path):
+        (tmp_path/'manifest.json').write_text('keep')
+>       with pytest.raises(FileExistsError):run('E','paper-strict',tmp_path)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'FileExistsError'>
+
+evaluation/tests/test_run.py:20: Failed
+_________________ test_unimplemented_phase_rejects_explicitly __________________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-4/test_unimplemented_phase_rejec0')
+
+    def test_unimplemented_phase_rejects_explicitly(tmp_path):
+>       with pytest.raises(ValueError,match='NOT_IMPLEMENTED_IN_PHASE'):run('F','repaired-e',tmp_path/'f')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+evaluation/tests/test_run.py:25: Failed
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_run.py::test_missing_protocol_stops_with_manifest_and_no_fake_success
+FAILED evaluation/tests/test_run.py::test_existing_output_is_never_overwritten
+FAILED evaluation/tests/test_run.py::test_unimplemented_phase_rejects_explicitly
+3 failed in 0.01s

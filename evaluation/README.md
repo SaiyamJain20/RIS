@@ -1,23 +1,29 @@
-# Module 3: Models, evaluation and integration
+# Agent 3 evaluation — E0 candidate foundation
 
-Owner: **agent 3**. This folder currently contains a plan only; implementation has not started.
+This is a **paper-derived HMBC2020 reconstruction**. E0 remains open; no E/F/G gate has passed. Agent 1's exact READY handoff has been reproduced locally; agent 2's branch/flow review/adapter is unavailable at the recorded checkpoint.
 
-Read [the root plan](../PLAN.md), [specification](../SPEC.md), [interfaces](../interfaces/README.md), and [communication rules](../communication/PROTOCOL.md).
+Implemented owned preparation:
 
-## Scope across E, F and G
+- Independent EIP-712/array hash/signature/mutation verification using eth-account/eth-abi, not ledger imports.
+- Strict candidate schemas with integer widths, canonical encodings, signatures and ordering; candidate control/result record envelopes.
+- Positive/denial access oracles that reject grant-all/deny-all, corrupted bindings, missing/reordered evidence and duplicate grant/outcome transitions.
+- Source/assumption registers, input/output hashes, command failure/timeout records, newest-communication provenance scan.
+- Fail-closed runner/gate preflights. These record blockers; they do **not** implement the real C-E1 provider runner or final RQ adjudication.
+- ProVerif toolchain smoke only; the E correspondence model is an E2 deliverable after E1 integration.
 
-Own independent scenarios/oracles, formal models, integration, run manifests and RQ reports. You coordinate shared files; you do not fix another module by editing it. Keep expected behavior independent of observed implementation results.
+Reproduce from the repository root:
 
-First task: E0. Produce the source map/assumption register, versioned schemas and positive/mutated vectors; coordinate toolchain smoke tests and dependency locks. Require agents 1/2 to ACK matching digests before v1. Then start C-E1 and integrate the real modules as soon as their legitimate path is ready.
+```bash
+uv sync --frozen
+.venv/bin/python -m pytest evaluation/tests -q
+.venv/bin/python -m evaluation.vectors interfaces/vectors/eip712-agent1-candidate.json
+.venv/bin/python -m evaluation.peers --output /tmp/hmbc-peer-state.json
+.venv/bin/python -m evaluation.run --rq E --profile repaired-e --output evaluation/runs/new-e0-preflight
+.venv/bin/python -m evaluation.gate --rq E --run evaluation/runs/new-e0-preflight
+```
 
-Module tests use `python -m pytest evaluation/tests -q`. Create `python -m evaluation.run` and `python -m evaluation.gate` as specified. You alone control integration processes, root dependencies, the board and gates. Require all three ACKs and stable source hashes before advancing from E to F or F to G.
+The last two commands exit **2/BLOCKED** while E0/agent-2 dependencies are unresolved. Output directories must be new; existing evidence is never overwritten. Fetch `origin` separately before scanning peers. The scan reads every remote communication tree without switching branches; it preserves file-changing commit hashes and flags incomparable content. An immutable outbox message is delivered only after its sender pushes it.
 
-## Assigned tasks
+`toolchain.json` records exact local versions, primary download/docs URLs and artifact hashes. The shared toolchain/schema freeze is still pending. Public vector keys are synthetic TEST-ONLY fixtures. Candidate schemas live under `interfaces/proposals/v1`; they do not change the normative v0 interface. Positive trace fixtures use abstract synthetic bindings to test the oracle; they are not executable live-chain transactions. Agent-2's frozen result/deployment/input schemas are required before the real collector can normalize ledger/worker events.
 
-C-E1, C-E2, C-F1, C-G1; all E0/F0/G0 and gate coordination. The authoritative task steps and file lists are in `PLAN.md`; do not keep a divergent copy here.
-
-## Module handoff
-
-Publish a READY message in `communication/agent-3/outbox/` with files, interface version, hashes, test command/output and limits. Update your STATUS/HANDOFF. Request cross-module fixes through the owner's mailbox. During an integration freeze, acknowledge and stop editing the frozen paths until agent 3 releases them.
-
-No F implementation before gate E; no G implementation before gate F. If blocked, work on same-RQ tests/evidence or publish the specific blocker. Do not implement JANUS or create a worktree.
+Read `reports/E0-progress.md` for completed evidence, missing requirements and next steps. Never use these unit/toolchain results as a two-chain service integration, measured ABE implementation or Byzantine-consensus claim.

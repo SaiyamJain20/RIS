@@ -1,0 +1,23 @@
+id,kind,statement,source,limit
+A01,paper,Secure isolation/honest majorities/secure primitives/uncompromised external keys,V-A1 PDF14,No reconstruction theorem refutes a violated assumption.
+A02,choice,E has one trusted independently checking witness; paper profiles trust configured relay hop,SPEC4/A3-0002,Not decentralized authentication or a light-client proof.
+A03,deviation,Trusted off-chain worker holds temporal secrets; no EVM secrets,SPEC3/III-E2 PDF11,Worker compromise bypasses release policy; E symbolic.
+A04,choice,Fresh dedicated local state and separately owned PBC/DBC processes,SPEC3,No production/scaling result; processes cohosted.
+A05,choice,Fixture and fault schedules deterministic; cryptographic performance not measured in E,SPEC7,No fixed randomness for future real crypto.
+A06,choice,Symbolic adapter in E/F; no abe-real until G0,SPEC3/6,Positive decryptability is modeled only.
+A07,choice,Doctor AND OnDuty same issuer; synthetic emergency context assumed,Rule2 PDF7/A3-0002,Does not implement complete patient emergency/treating semantics.
+A08,choice,Issuer-scoped CA admin in all profiles; signature checking differs strict/minimal,III-C5/III-D1 PDF8-9,Minimal verification omission is explicit conservative comparison.
+A09,choice,Paper latest append; repaired monotone version and unexpired trust list,III-D1/A3-0002,Anti-rollback not attributed to paper.
+A10,choice,GID=signing address; signed certificate and possession proof bind recipient key,III-D2/IV-D/A1-0003,Submitter may differ from signing subject; mapping is a fill.
+A11,EVM limit,Denied request path returns rather than reverts to preserve logs,Table2/V-A5,Reverted/invalid transactions do not preserve contract logs.
+A12,choice,"Grant, durable intent, send attempt and reconciliation separate",SPEC4,Eventual outcome requires eventual delivery and honest reconciler; receipt pending.
+A13,ambiguity,Both hash-only and complete-details log modes preserved,III-D4/V-B3,Neither content interpretation proves delivery.
+A14,choice,PSC cross-chain actuator is configured local relay,Table3/Fig6,"Malicious/deviating relay is isolation stress, not original implementation defect."
+A15,ambiguity,Optional System attribute conjoins every branch; base Figure5 need not,III-E2 Remark,Do not assume universal temporal mediation or static ciphertext update.
+A16,choice,Foundry/Anvil tests reconstruct HMBC; no authors code reproduction,IV-C/D,No consensus correctness/performance claim.
+A17,choice,New-grant revocation at accepted DBC checkpoint; consumed unexpired grants may complete,interfaces v0/A3-0002,Measure pre-barrier lag; no instant cross-chain revocation or plaintext recall.
+A18,phase limit,Authority/governance/retrieval/witness rotation not implemented in E,PLAN E/F gates,"No F until E PASS, no G until F PASS."
+A19,choice,Canonical EIP-712 signed fields/JSON and TTLs are project protocol,A1-0003/A3-0002,Peer exact ACKs needed for normative v1.
+A20,choice,DBC-time checkpoint/decision; request checked on both synchronized experiment clocks,A1-0005/A3-0002,"Skew measured, no universal clock synchronization guarantee."
+A21,choice,Cached retries only while original grant unexpired; no new capability on retry,A3-0002,Previously obtained output remains usable; delivery may be uncertain after crash.
+A22,choice,Sequence equality additionally invalidates in-flight decisions on non-revoking checkpoints,A1-0005/A3-0002,Explicit availability cost beyond authEpoch revocation protection.
