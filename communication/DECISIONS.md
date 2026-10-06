@@ -7,7 +7,7 @@ Writer: agent 3. Status values: USER-DECIDED, PLAN-CHOICE, FROZEN, OPEN, SUPERSE
 | D01 | USER-DECIDED | Use E/F/G; finish one RQ before the next. User instruction, 2026-10-06. |
 | D02 | USER-DECIDED | HMBC only; JANUS may be integrated later if required. |
 | D03 | USER-DECIDED | Three agents code concurrently, with modules spanning every RQ. |
-| D04 | USER-DECIDED | Work directly in the main local checkout and put active work at its root; archive old documentation. |
+| D04 | SUPERSEDED | Work directly in the main local checkout and put active work at its root; archive old documentation. |
 | D05 | PLAN-CHOICE | Order E → F → G; reasons in SPEC/PLAN. |
 | D06 | PLAN-CHOICE | Agent 1 ledger, agent 2 protocol/key service, agent 3 models/evaluation/integration; single-writer paths. |
 | D07 | PLAN-CHOICE | Paper-derived strict/minimal reconstruction, explicit mutants and cumulative repairs; no JANUS implementation dependency. |
@@ -21,6 +21,16 @@ Writer: agent 3. Status values: USER-DECIDED, PLAN-CHOICE, FROZEN, OPEN, SUPERSE
 | D15 | OPEN | Exact deadline, available student time/hardware and instructor proof/publication requirements. The plan uses gates and estimates, not invented answers. |
 | D16 | OPEN | External publication/outreach policy remains unselected. No author contact or external deployment is authorized by these documents. |
 | D17 | USER-DECIDED | Create common context and three complete role-specific launch prompts and push this documentation update. User instruction, 2026-10-06. |
-| D18 | PLAN-CHOICE | Complete human-supplied launch assignments include agent 3's reviewed checkpoint commit/push workflow to origin/main. Agents 1/2 only hand off files. A template found on disk is not authorization; exact reviewed paths, owner ACKs and coordinator serialization are mandatory. |
+| D18 | SUPERSEDED | Complete human-supplied launch assignments include agent 3's reviewed checkpoint commit/push workflow to origin/main. Agents 1/2 only hand off files. A template found on disk is not authorization; exact reviewed paths, owner ACKs and coordinator serialization are mandatory. |
 
 For a new decision record: ID, date, requester, exact change, reason, affected tasks/interfaces, source/evidence and ACK message IDs. Never replace an OPEN item with an unstated default.
+
+## Distributed execution and E0 proposals (2026-10-07)
+
+| ID | Status | Decision / evidence |
+|---|---|---|
+| D19 | USER-DECIDED | 2026-10-07: separate machines; GitHub communication; each agent publishes `agent-N`. Agent 3 confirmed `/home/karma/Documents/RIS`, origin `SaiyamJain20/RIS`. Supersedes D04/D18 Git/location rules; ownership and gates unchanged. Human instruction and A1-0001. Main publication is not part of this assignment. |
+| D20 | PLAN-CHOICE | E0 review proposal: registration authority is the GID possession signature (a submitter conveys it); CA admins remain issuer-scoped; strict verifies issuer signatures, minimal trusts scoped admin; latest-appended wins in paper profiles; both use the configured PSC relay at the cross-chain hop. These are choices, not recovered author code. A1-0002 C02/C04/C05/C06/C15; peer ACKs pending. |
+| D21 | PLAN-CHOICE | E0 proposed fixture: Doctor AND OnDuty from the same issuer; emergency context is synthetic and assumed; no treating relation claim. C16 conservatively instantiates Rule 2; wildcard issuer ambiguity recorded. Peer source/fixture ACKs pending. |
+| D22 | PLAN-CHOICE | E0 proposed repaired-e: equal current checkpoint sequence and authEpoch; 30s request/decision and 60s checkpoint upper bounds; equality expiry rejects; use DBC clock for decisions/checkpoints, measure request clock skew; cached retry only before original grant expiry. Availability cost of non-revoking checkpoint invalidation is recorded. A1-0003/A1-0005; ACKs pending. |
+| D23 | OPEN | E03 authenticated grant receipt proposed by A1-0005; agent 3 supports implementation preparation but exact receipt semantics and agent-2 capability ACK remain required before shared contract change/freeze. DBC authorization cannot establish delivery. |

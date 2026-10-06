@@ -57,7 +57,7 @@ Agent 3 owns the service processes and the integration record. Shared ports star
 
 For each integration run:
 
-1. Agent 3 publishes FREEZE with RQ, candidate interface version, run ID and affected paths. Agents 1/2 finish their current write/test, publish READY or a blocker, and stop editing frozen paths.
+1. Agent 3 publishes FREEZE with RQ, candidate interface version, run ID and affected paths. Agents 1/2 finish their current write/test, publish READY or a blocker, and ACK pinned commits/manifests.
 2. All agents publish source manifests/ACKs. Agent 3 hashes the complete relevant tree, including uncommitted files and dependency locks. A dirty checkout is expected, so a commit ID alone is insufficient.
 3. Agent 3 runs fresh-state integration, formal commands and required mutations/positive controls, saving exact commands, logs, exit codes, hashes and tool versions.
 4. Agent 3 compares pre/post source hashes. Changed input files invalidate the run; refresh the freeze and rerun affected checks. Never claim a result for a tree that changed underneath it.
@@ -73,10 +73,8 @@ Selected gate evidence is copied to a versioned `evaluation/evidence/frozen/<rq>
 - RQ progression is **E → F → G**. Reopening E/F later requires a decision describing the invalidated claim and regression work.
 - The user may change scope. Record the instruction and update board/spec before implementing the change.
 
-## 7. Shared checkout / Git rules
+## 7. Distributed Git workflow
 
-Agents 1/2 do not write Git metadata, including fetch/pull or indirect staging by dependency tools. Agent 3 uses the full serialized checkpoint procedure in [COMMON_AGENT_CONTEXT.md](COMMON_AGENT_CONTEXT.md): freeze/ACK exact reviewed files, acquire the coordinator lock, inspect remote ancestry, stage explicit paths, check source/evidence, commit, push normally and verify the remote result. No worktrees, branch switches, destructive checkout/reset/clean, global stashes or blanket staging. An owner READY handoff permits the coordinator to include those exact reviewed files; it does not transfer ownership of the module.
+The human changed execution to separate machines and branches on 2026-10-07. Each agent fetches and pushes exact owned paths on `agent-N` at `SaiyamJain20/RIS`. Read the latest `communication/**` across branches, with file-changing commit provenance. Publish immutable outboxes on the sender branch; ACK in the recipient's branch. No peer mailbox edits, blanket staging, destructive resets, stashes, cleaning, rebases or force pushes.
 
-When the human supplies a complete START_PROMPT as the assignment, its scoped agent-3 commit/push instruction is the authorization for reviewed `origin/main` checkpoints. The presence of the template on disk alone does not authorize publication. Push failures preserve the local commit and get a concrete status message; never force push or change protections to bypass a failure.
-
-This protocol uses repository files. It does not authorize email, issue publication or external messages.
+Agent 3 uses pinned, hash-verified READY snapshots for integration and publishes owned/shared artifacts on `agent-3`. The full serialized workflow is in COMMON_AGENT_CONTEXT. Logical freezes bind exact commit manifests rather than stopping unrelated work on another machine. Interface changes still require affected owners' exact ACKs. This assignment does not authorize a push to `main`, issue/email messages, or deployments.

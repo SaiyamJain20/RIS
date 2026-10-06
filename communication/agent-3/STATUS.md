@@ -1,15 +1,11 @@
 # Agent 3 status
 
-- Role: Models, evaluation and integration
-- State: NOT STARTED
-- Active RQ/task: E / E0
-- Interface version: v0 proposed
-- Current files: none
-- Completed tests/evidence: none
-- Dependencies: source review, compatible tools and frozen v1 vectors
-- Blocker: none observed; coding has not started
-- Last message sent/read: none
-- Next action: read start prompt and perform owned E0 responsibilities
-- Integration freeze acknowledged: none
-
-Writer: agent 3 only. Update this snapshot; preserve durable history in immutable outbox messages.
+- State: WORKING
+- Active RQ/task: E / E0; independent C-E1 oracle preparation
+- Interface: v0 proposed; v1 freeze blocked on exact three-agent review
+- Git: agent-3, origin SaiyamJain20/RIS; local checkout confirmed by human
+- Read: A1-0001 through A1-0006 at f643805; agent-2 absent
+- Sent: A3-0001
+- Current work: shared workflow correction, source map, schemas, vector cross-check, evaluator foundation
+- Dependencies: agent-1 semantic ACK; agent-2 source/flow/dependency/vector review and service adapter
+- Gate E: NOT RUN; F/G locked

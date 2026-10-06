@@ -12,7 +12,7 @@
 
 ## 1. Global constraints
 
-- Work directly in `/home/karma/Documents/RIS-course-project`.
+- Work directly in `/home/karma/Documents/RIS`.
 - HMBC2020 only. JANUS remains archived.
 - Finish and freeze E/RQ1 before F/RQ2; finish and freeze F/RQ2 before G/RQ3.
 - Preserve strict/minimal source completions and tag all chosen details. A constructed attack does not establish an original-paper implementation defect.
@@ -20,7 +20,7 @@
 - Source/destination ledgers and the key worker remain explicit trust boundaries; ordinary EVM storage is not secret storage.
 - A real ABE compatibility gate is mandatory before G makes implemented cryptographic claims.
 - All agents contribute to the same active RQ; code ownership stays fixed across phases.
-- Shared checkout: only the owner edits a module. Only agent 3 changes root integration files, shared interfaces, lockfiles and the board, or runs shared services.
+- Separate checkouts: only the owner edits a module. Only agent 3 changes root integration files, shared interfaces, lockfiles and the board, or runs shared services.
 - No dates or eight-week completion commitment are inferred. Close evidence gates, not calendar boxes.
 
 ## 2. Why this order and what “complete” means

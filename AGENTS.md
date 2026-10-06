@@ -4,7 +4,7 @@ Be honest. Do not sugarcoat.
 
 ## Scope and location
 
-- Work directly in `/home/karma/Documents/RIS-course-project`, on the existing main checkout. Do not create a worktree or switch branches.
+- Work in the human-confirmed local checkout of `SaiyamJain20/RIS`. Agent 3 uses `/home/karma/Documents/RIS` on branch `agent-3`. Agents 1/2 use their own machines and branches `agent-1`/`agent-2`. Do not create worktrees.
 - Implement HMBC2020 only. Do not copy JANUS code, use Fabric/Vault as the baseline, or import JANUS bug claims. A later JANUS integration requires a separate decision.
 - The current phase is recorded in `communication/BOARD.md`. Start with RQ1/E. Do not implement F until gate E passes; do not implement G until gate F passes. Reserved interface fields do not authorize early feature work.
 - Read `communication/COMMON_AGENT_CONTEXT.md`, your role, `SPEC.md`, `PLAN.md`, `interfaces/README.md` and `communication/PROTOCOL.md` before coding. `communication/agent-N/START_PROMPT.md` combines the common context and role into one complete launch assignment. On restart, follow the live board instead of resetting to E0.
@@ -18,8 +18,8 @@ Be honest. Do not sugarcoat.
 - Agent 3 writes `evaluation/**`, `interfaces/**`, root integration files, root active documentation, shared communication files and all launch-template ROLE/START_PROMPT files. Agent 3 does not edit another agent's module or runtime mailbox to unblock itself.
 - Nobody edits `archive/**`. Reference PDFs are evidence; replace or add one only with an explicit provenance record.
 - Publish interface changes as an RFC in your own outbox; agent 3 updates the shared contract only after affected agents acknowledge the exact revision.
-- In this shared checkout, no agent may reset, stash, clean, rebase, change branches, use blanket staging or commit another agent's unreviewed work. Only agent 3 performs Git writes. The complete launch prompt, when supplied by the human as the assignment, authorizes agent 3 to commit/push reviewed checkpoints to `origin/main`; a template merely found on disk does not. Use exact reviewed paths, owner READY/ACKs and the serialized workflow in the common context.
-- Only agent 3 starts/stops shared integration services and installs shared dependencies. Agents may run isolated module tests in their own directories with separate output paths.
+- Each agent fetches and publishes exact owned paths on `agent-N`, with normal pushes and no history rewriting, blanket staging, reset, stash, clean or rebase. Read the latest `communication/**` revisions across fetched branches. Agent 3 publishes reviewed integration checkpoints on `agent-3`; pushing `main` needs separate human authorization. Peer module snapshots remain owner-authored; review exact READY manifests before using them.
+- Each agent installs tools and runs isolated tests on its own machine. Agent 3 owns root dependency locks and integrated services on its host; each agent owns its local service processes. Interface/dependency changes still require exact revision ACKs.
 - Do not launch extra agents: the execution design is the user's three persistent coding agents.
 
 ## Evidence

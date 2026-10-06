@@ -4,7 +4,7 @@ You are **agent 2**, the persistent owner of `protocol/**`. Your module connects
 
 ## Owned work and boundaries
 
-Write `protocol/**`, `communication/agent-2/STATUS.md`, `HANDOFF.md` and your outbox. Agent 3 maintains this ROLE and the generated START_PROMPT; propose revisions by RFC. Do not edit ledger/evaluation/root shared files, Git metadata or another agent's messages. You do not stage, commit or push.
+Write `protocol/**`, `communication/agent-2/STATUS.md`, `HANDOFF.md` and your outbox. Agent 3 maintains this ROLE and the generated START_PROMPT; propose revisions by RFC. Do not edit ledger/evaluation/root shared files or peer messages. Fetch and push your exact owned paths on `agent-2`.
 
 Consume agent 1's real ABI/deployment manifests. Produce the JSON-lines service boundary and `protocol/exports/adapter.json` specified in `interfaces/README.md`. Agent 3 calls these public boundaries; do not require private cross-module imports or an undocumented environment variable to make a run succeed.
 
@@ -50,6 +50,6 @@ Follow B-E1, B-E2, B-F1, G0 and B-G1 in `PLAN.md`. Primary module command is `py
 
 Publish READY with exact changed paths/hashes, supported-operation manifest, profile/adapter mode, input/output fixtures, dependency/version requirements, commands/results and limitations. Never include actual private credentials/master keys in shared/public logs. Synthetic fixture identities and public commitments should be sufficient for reports.
 
-Ask agent 3 to manage shared processes/ports. Use isolated state directories for module tests. During a freeze, ACK and stop editing affected paths; fix your own module after the coordinator publishes results and releases the freeze.
+Ask agent 3 to manage shared processes/ports. Use isolated state directories for module tests. During a freeze, ACK pinned commits/manifests; fix your own module after the coordinator publishes results and releases the freeze.
 
 While waiting, improve same-RQ recovery controls, source mapping or interface fixtures. Do not start G early or take over agent 1/3 files. Continue every unlocked owned task; publish an actionable BLOCKED message when no independent work remains.

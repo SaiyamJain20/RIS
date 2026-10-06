@@ -1,6 +1,6 @@
 # HMBC E/F/G research specification
 
-Status: executable research design proposed on 2026-10-06. The user selected E/F/G, HMBC-only scope, three concurrent agents, sequential RQ completion and the main checkout. The implementation choices below are explicit project choices; they are not attributed to HMBC or presented as completed results.
+Status: executable research design proposed on 2026-10-06. The user selected E/F/G, HMBC-only scope, three concurrent agents, sequential RQ completion and separate agent branches. The implementation choices below are explicit project choices; they are not attributed to HMBC or presented as completed results.
 
 ## 1. Research questions and order
 
