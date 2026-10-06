@@ -14,3 +14,5 @@
 - Gate E: NOT RUN; E1 not unlocked; F/G locked
 - Services: none started; no integration freeze active
 - Next action: fetch latest communication across branches on peer change, respond to exact ACK/RFCs; freeze v1 only after reviewed complete definitions/three ACKs. No takeover.
+
+- Verified payload publication: 7af866da025bbc963677d67ec4c8d9f8f13575a0 on origin/agent-3; A3-0001/0002/0003 delivered; post-push peer heads unchanged, agent-2 still absent.

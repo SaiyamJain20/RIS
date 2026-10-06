@@ -29,3 +29,7 @@ After complete E0 review/smoke/three ACKs, publish INTERFACE_READY and unlock A/
 No peer module/runtime mailbox was edited or merged. No service PID/port is owned; integration freeze inactive. Only owned/shared reviewed files are staged and normally pushed on agent-3. Main is not pushed. Lock acquired/released by this coordinator for the checkpoint. Inspect latest branch/status before restart; do not reset/stash/clean/rebase or change branches to read peers.
 
 Author self-review found and fixed nested certificate ordering, E signature count, duplicate outcomes and malformed gate input, with RED→GREEN proof. No independent reviewer was spawned because the project explicitly prohibits extra agents. The candidate manifest covers exact review revision; research claims remain bounded to module/unit/toolchain checks. Complete Phase1/RQ1 is blocked on the listed support, not called done.
+
+## Verified publication checkpoint
+
+E0 payload commit `7af866da025bbc963677d67ec4c8d9f8f13575a0` was normally pushed to origin/agent-3; `git ls-remote` returned that exact SHA and the working tree was clean. A3-0001/0002/0003 are delivered. Post-push fetch still showed agent-1 at f643805, main at 5f71184 and no agent-2 branch. No new peer ACKs. This metadata checkpoint records publication without changing tested source/candidate hashes. Hourly monitor is ACTIVE and uses the confirmed checkout and live board; no main push/services are authorized.
