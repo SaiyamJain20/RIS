@@ -17,7 +17,7 @@ and [communication rules](../communication/PROTOCOL.md). Source and actuator cho
 | `src/{ACSC,KSSC}.sol` | DBC roles: policy enforcement, grant/checkpoint/nonce state |
 | `src/DecisionVerifier.sol` | repaired-e decision-certificate checks (fixed check order) |
 | `src/lib/` | canonical signature recovery + quorum check, one-time bootstrap wiring |
-| `test/` | A-E1 `AccessFlow.t.sol`, `TrustAnchors.t.sol`; A-E2 `DecisionBinding.t.sol` (E01), `Freshness.t.sol` (E02), `Audit.t.sol` and `OutcomeEvidence.t.sol` (E03); fixture, cheatcode interface. Every suite runs per profile. |
+| `test/` | A-E1 `AccessFlow.t.sol`, `TrustAnchors.t.sol`; A-E2 `DecisionBinding.t.sol` (E01), `Freshness.t.sol` (E02), `Audit.t.sol` and `OutcomeEvidence.t.sol` (E03); `Policy.t.sol` (revision-4 policy encoding); fixture, cheatcode interface. Every suite runs per profile. |
 | `test-mutants/` | `mutant-*` deployments re-running repaired-e suites; named tests must FAIL (`FOUNDRY_PROFILE=mutants`) |
 | `script/` | `Deploy.s.sol` (staged two-chain deployment), `ExportVectors.s.sol`, `E2ESmoke.s.sol`, `FixtureConfig.sol` |
 | `tools/` | `deploy_local.sh`, `e2e_smoke.sh`, `export_abi.py`, `crosscheck_cast.py`, `mutation_smoke.py`, `check_mutants.py` (stdlib Python) |

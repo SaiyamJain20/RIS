@@ -1,0 +1,23 @@
+policy first run (before ACSC change) 2026-10-07T21:58:29Z
+command: forge test --root ledger --match-path test/Policy.t.sol
+Compiling 15 files with Solc 0.8.37
+Solc 0.8.37 finished in 1.37s
+Compiler run successful!
+Ran 2 tests for test/Policy.t.sol:PolicyPaperStrictTest
+[PASS] test_RegisteredPolicyDigestMatchesBoundaryEncoding() (gas: 37211)
+[FAIL: next call did not revert as expected] test_SameAsFirstInFirstPositionIsMalformed() (gas: 193708)
+Suite result: FAILED. 1 passed; 1 failed; 0 skipped; finished in 8.16ms (1.52ms CPU time)
+Ran 2 tests for test/Policy.t.sol:PolicyRepairedTest
+[PASS] test_RegisteredPolicyDigestMatchesBoundaryEncoding() (gas: 37211)
+[FAIL: next call did not revert as expected] test_SameAsFirstInFirstPositionIsMalformed() (gas: 193709)
+Suite result: FAILED. 1 passed; 1 failed; 0 skipped; finished in 8.16ms (1.52ms CPU time)
+Ran 2 test suites in 10.14ms (16.33ms CPU time): 2 tests passed, 2 failed, 0 skipped (4 total tests)
+Failing tests:
+Encountered 1 failing test in test/Policy.t.sol:PolicyPaperStrictTest
+[FAIL: next call did not revert as expected] test_SameAsFirstInFirstPositionIsMalformed() (gas: 193708)
+Encountered 1 failing test in test/Policy.t.sol:PolicyRepairedTest
+[FAIL: next call did not revert as expected] test_SameAsFirstInFirstPositionIsMalformed() (gas: 193709)
+Encountered a total of 2 failing tests, 2 tests succeeded
+Tip: Run `forge test --rerun` to retry only the 2 failed tests
+Tip: Run `forge test --debug --match-test <TEST_NAME>` to inspect one failing test in the debugger
+exit=1

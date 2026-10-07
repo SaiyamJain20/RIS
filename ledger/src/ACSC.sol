@@ -112,6 +112,8 @@ contract ACSC is Bootstrapped {
         _policies.push();
         for (uint256 i = 0; i < clauses.length; i++) {
             if (clauses[i].length == 0) revert Rejected(ErrorCode.MALFORMED);
+            // SAME_AS_FIRST needs an anchor: it cannot be a clause's first requirement (A32).
+            if (clauses[i][0].issuerMode == IssuerMode.SAME_AS_FIRST) revert Rejected(ErrorCode.MALFORMED);
             _policies[policyId].push();
             for (uint256 j = 0; j < clauses[i].length; j++) {
                 _policies[policyId][i].push(clauses[i][j]);
@@ -253,7 +255,7 @@ contract ACSC is Bootstrapped {
     {
         if (a.role != q.role || a.kind != q.kind) return false;
         if (q.issuerMode == IssuerMode.DATA_OWNER) return a.issuer == owner;
-        if (q.issuerMode == IssuerMode.SAME_AS_FIRST && anchor != address(0)) return a.issuer == anchor;
+        if (q.issuerMode == IssuerMode.SAME_AS_FIRST) return a.issuer == anchor; // anchored (addPolicy)
         return true;
     }
 
