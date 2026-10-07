@@ -82,3 +82,31 @@ def test_e_certificate_cannot_have_more_than_one_witness_signature():
     v=next(v for v in V['vectors'] if v['name']=='AccessDecision')
     cert={'decision':v['typedData']['message'],'signatures':[v['signature'],v['signature']]}
     with pytest.raises(ValidationError):validate('DecisionCertificate',cert)
+
+
+@pytest.mark.parametrize('name', ['Registration','RoleCertificate','RevocationList','TemporalAcl','AccessRequest','AccessDecision','StateCheckpoint'])
+def test_schema_signing_metadata_matches_producer_vectors(name):
+    from evaluation.vectors import type_string
+    schema=json.loads(Path('interfaces/proposals/v1/hmbc.schema.json').read_text())['$defs'][name]
+    typed=next(v['typedData'] for v in V['vectors'] if v['name']==name)
+    assert schema.get('x-eip712Type')==type_string(name,typed['types'])
+    assert list(schema['properties'])==[field['name'] for field in typed['types'][name]]
+
+
+def test_empty_credential_bundle_is_malformed():
+    # A bundle with one temporal claim is structurally valid; membership is a state check.
+    validate('CredentialBundle',{'certificates':[],'temporalClaims':[{'authority':REQUEST['gid'],'role':REQUEST['dataId']}]})
+    with pytest.raises(ValueError,match='MALFORMED'):
+        validate('CredentialBundle',{'certificates':[],'temporalClaims':[]})
+
+
+@pytest.mark.parametrize('nested',[False,True])
+def test_zero_subject_in_temporal_acl_is_malformed(nested):
+    acl=copy.deepcopy(next(v['typedData']['message'] for v in V['vectors'] if v['name']=='TemporalAcl'))
+    entry=acl['entries'][0]
+    validate('TempAclEntry',entry)
+    entry['gid']='0x'+'00'*20
+    # One entry avoids confounding this check with the separate canonical-order constraint.
+    acl['entries']=[entry]
+    with pytest.raises(ValueError,match='MALFORMED'):
+        validate('TemporalAcl' if nested else 'TempAclEntry',acl if nested else entry)

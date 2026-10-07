@@ -40,6 +40,7 @@ def semantics(name,value):
             if record['kind']=='2' and record['serial']!='0': raise ValueError('MALFORMED: temporal serial must be zero')
     elif name=='SignedRoleCertificate':semantics('RoleCertificate',value['cert'])
     elif name=='CredentialBundle':
+        if not value['certificates'] and not value['temporalClaims']: raise ValueError('MALFORMED: empty credential bundle')
         ordered(value['certificates'],lambda v:v['cert']['issuer'])
         ordered(value['temporalClaims'],lambda v:(v['authority'],v['role']))
         for signed in value['certificates']: semantics('RoleCertificate',signed['cert'])
@@ -51,6 +52,7 @@ def semantics(name,value):
         ordered(value['entries'],lambda v:(v['gid'],v['role']))
         for entry in value['entries']: semantics('TempAclEntry',entry)
     elif name=='TempAclEntry':
+        if value['gid']=='0x'+'00'*20: raise ValueError('MALFORMED: zero temporal subject')
         if int(value['validFrom'])>=int(value['validUntil']): raise ValueError('MALFORMED: invalid temporal interval')
 
 

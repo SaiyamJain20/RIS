@@ -1,39 +1,52 @@
 {
-  "status": "candidate v1, NOT frozen",
+  "status": "candidate v1 revision 2, NOT frozen",
   "respondsTo": [
-    "A1-0003",
-    "A1-0005",
-    "A3-0002"
+    "A1-0007",
+    "A1-0008",
+    "A3-0003"
   ],
+  "supersedes": {
+    "commit": "14d54aa505388bac85a1fb495e69f18da55c9143",
+    "reviewManifestSha256": "abbeca1df4284fa31b3396020d7340f6bcd9461c5996e21419e95da80a7f0cb4"
+  },
   "files": {
-    "interfaces/proposals/build_schemas.py": "6b882d77c4c5eba46413f57179cbe72c52dd673042fb518771afe6c5cd15b65b",
-    "interfaces/proposals/v1/hmbc.schema.json": "9964bee2ead451054eff8d5cc990dba3e25cc4ece96a81333bd012f8cd8f0be9",
-    "interfaces/proposals/v1/README.md": "ebb3460ef628303a10e474ae83daf4947fc35298bbb689d33b8b14808590c1cf",
+    "interfaces/proposals/build_schemas.py": "6a5578465888becf7a8c3b29fdb5b3f2e26a7150926f19bebe7d1a77785d09a4",
+    "interfaces/proposals/v1/hmbc.schema.json": "9bdecbd8b378f83c989beeac8bcef47cf0db4f696d3cf5f425b7b23380c9d54f",
+    "interfaces/proposals/v1/README.md": "6c1e2a76bdd8799520a8118fcf9f3c701deb0ff15ea04150c3c7407e92601887",
     "interfaces/vectors/eip712-agent1-candidate.json": "803f560d08ebef9a49f4ae2b8f4fd17840ddc9b201a51445116ca36a96d39f71",
-    "interfaces/vectors/schema-candidate.json": "53d9d0e25aea5dd5bab6a25a4e17924bfec2350bf3d28e892b99b11e905b245c",
-    "evaluation/schema.py": "6468c122d4e2541f7ab632e9f015f62baf048b83aa68f98e5b0b5e8a6b94acd1",
+    "interfaces/vectors/schema-candidate.json": "c64071a0ac676379d17a4c446d3cab2949a8a19b9064ed2676b89bf3b507f64e",
+    "evaluation/schema.py": "c4a73d7b1cfbd7e659d792fcde5114062f4a3c1d8319a75366e3f6e69b2296df",
     "evaluation/vectors.py": "e34810cad407ead86ddf9715736cc2301d0ecf51fb8459ddc1bf65dfc5687921",
     "evaluation/scenarios/e_positive.json": "065feef25d8072da12e4a40149097367ca70912984fc170056a655a54562a177",
-    "evaluation/evidence/source-map.csv": "92513743bd9eada522872d9d610e7124e8e356b5470fdc7ed5bc90b3aad935c2",
-    "evaluation/evidence/assumptions.csv": "0ad97eaa5f4a172497414ab563a5850797a99fd413ce6416f5e53ef16aa9e9bf",
+    "evaluation/evidence/source-map.csv": "25337ee2846b13791bf971281d885f6300a6ce1407f156ddeb4e5cb85f54a07c",
+    "evaluation/evidence/assumptions.csv": "08afb07bb1c4fabaddea0f294393a26d61b39a0c0ad10c7580ff6d57dd76a160",
     "evaluation/toolchain.json": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746",
     "pyproject.toml": "1d839e80b8acdef35d878740cb5d212b464cc30f4adfdd3f56b69b162badd0ca",
     "uv.lock": "1fb4777a5d4078434af8e7fe4a88f2f3afbe1d8f65d30e8a182999d7a7a29cbe",
-    "communication/agent-3/outbox/0002-rfc-e0-semantics-toolchain-receipt.md": "fcc22f394cdbe1492be2d01bafda161b2f0ecf80a3be92740b7e6c031ae5c9db"
+    "communication/agent-3/outbox/0002-rfc-e0-semantics-toolchain-receipt.md": "fcc22f394cdbe1492be2d01bafda161b2f0ecf80a3be92740b7e6c031ae5c9db",
+    "evaluation/tests/test_schemas.py": "c8f5124dd43ebb39c96ce3eb0f83754f569d2034d6e78f342d44fc203f7a37dd",
+    "communication/agent-3/outbox/0005-ack-a1-0008-receipt-revision-2.md": "74e0b23c80c893f849c0f4176df67e388f7e7df09ef8a13e9fe9888c7ed2ff55"
   },
-  "peerCommit": "f643805e21c996bbf4bd73212c85c8a5a85b655d",
+  "peerCommunicationReviewedCommit": "589a05331a1a9a9cfe99eee2da70b980a44e5317",
+  "peerModuleExecutedCommit": "f643805e21c996bbf4bd73212c85c8a5a85b655d",
   "peerVectorsOriginalSha256": "6e931f83c53303350d847f61b192d57fe0f9c30f9d815effa57e36c279278cdf",
   "independentChecks": {
+    "report": "evaluation/evidence/e0/review-a1-0007/checks.json",
+    "sha256": "08a26fa290feed61f024dac17f18a751841f126ca60502d9eb49c9ef6ce0a10e",
+    "sourceManifestSha256": "d744c94e12e6254951493e55125d91858e1a32af1a091f1b31287bf79baf61b7"
+  },
+  "historicalModuleChecks": {
     "report": "evaluation/evidence/e0/final-checks/checks.json",
     "sha256": "cf1df9402ea4f0b46afa22a986a6b172652b8a277c7e5b32a31a64212f977710",
     "sourceManifestSha256": "43c7fab7075d0ee5ec33514d3a75561d1b34da7b6c48d4e500711ad45c860707"
   },
   "openItems": [
-    "agent-2 source-flow/dependency/vector review and exact ACK",
-    "agent-1 exact semantic/schema/source ACK",
-    "grant receipt amendment/capability ACK",
+    "agent-2 branch/source-flow/dependency/vector/capability ACK absent",
+    "agent-1 exact revised candidate schema/source ACK",
+    "A1-0008 receipt field migration pending agent-2 ACK; existing receipt schema superseded",
     "operation-specific adapter input/result/ScenarioResult/deployment schemas",
-    "deployment metadata numeric fields versus wire uint strings"
+    "agent-2 deployment unsigned decimal-string rule review",
+    "fresh exact READY for agent-1 589a053 before module execution/adoption"
   ],
   "freezeRule": "No interfaces/v1/INTERFACE_READY until exact affected-party ACKs and common E0 smoke acceptance."
 }

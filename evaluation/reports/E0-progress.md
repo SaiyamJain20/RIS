@@ -4,13 +4,13 @@
 
 ## Source and choices
 
-`evaluation/evidence/source-map.csv` maps 32 source/property rows; `assumptions.csv` separates 22 paper assumptions, ambiguities, reconstruction fills and deliberate deviations. PDF page 1 is journal page 134393. Source provenance hashes and visual checks of Figures 5/6 and Tables 2/3 are recorded in `evidence/e0/source-provenance.json`.
+`evaluation/evidence/source-map.csv` maps 37 source/property rows; `assumptions.csv` separates 27 paper assumptions, ambiguities, reconstruction fills and deliberate deviations. PDF page 1 is journal page 134393. Source provenance hashes and visual checks of Figures 5/6 and Tables 2/3 are recorded in `evidence/e0/source-provenance.json`.
 
 The source supports the six contract roles, GID possession, signed issuer-owned trust lists, long-term/temporal combinations, log-first access processing and isolated temporal key use. It does not give our EIP-712 wire formats, nonce/checkpoint rules, atomic cross-chain delivery logging or precise cryptographic split. The complete-details versus hash-only logging interpretations, optional System-mediated policy, wildcard issuer interpretation and majorityConsent placement remain explicit ambiguities. No JANUS finding/code is used.
 
-A3-0002 proposes the conservative same-issuer emergency fixture, signature-authorized submission, issuer-scoped admin rules, paper latest-appended lists, shared paper-profile relay hop, repaired checkpoint/epoch equality, measured clock skew and expiry-bounded cached retries. D20-D22 are proposals pending peer ACK. A1-0005's GrantReceipt is an E03 extension; A3-0002 proposes a grant-only success path, separate denial handling and no claim of recipient delivery. D23 remains OPEN until agent-1 publishes an exact accepted revision and agent-2 confirms capability.
+A3-0002 proposes the conservative same-issuer emergency fixture, signature-authorized submission, issuer-scoped admin rules, paper latest-appended lists, shared paper-profile relay hop, repaired checkpoint/epoch equality, measured clock skew and expiry-bounded cached retries. A1-0007 ACKs the ledger items for D20-D22; agent-2 agreement is pending. A1-0008 revision 2 supersedes the old receipt proposal; agent 3 ACKs the exact RFC in A3-0005. D23 remains OPEN until agent-2 confirms capability/semantics. No receipt schema field migration or implementation is authorized yet.
 
-## Locally executed evidence
+## Original checkpoint evidence (unchanged historical scope)
 
 | Check | Result | Scope |
 |---|---|---|
@@ -30,10 +30,22 @@ The vector verifier's first attempt missed the AccessRequest domain dependence o
 
 ## What remains mandatory
 
-1. Agent 1 must review the exact schema/vector/source proposal and reply to A3-0002/A3-0003; candidate publication does not replace its ACK.
+1. Agent 1 must ACK the revised candidate schema/source manifest after A1-0007 corrections; its partial item ACK is not a full interface ACK. Publish a refreshed exact READY for 589a053: HANDOFF still names the old 86-entry manifest, but the current 87-entry file hashes to 1c4f4fc8679ba8a71179bec7ee09a6b7d597985e915bc8abacd604c6096b327b. All 87 entries match Git blobs; the newer module was not executed or integrated here.
 2. Agent 2 must publish `agent-2`, review source/key/credential flow, propose dependencies, reproduce digests/signatures/mutations and agree to exact schemas, clocks/retry rules and receipt capability.
-3. Resolve operation-specific JSON-lines input/result/deployment schemas and ABI/error/retry ambiguities. The envelope's opaque result is explicitly not a fully validated internal record. Existing deployment metadata integer representation still needs explicit review against wire decimal-string rules.
+3. Resolve operation-specific JSON-lines input/result/deployment schemas and ABI/error/retry ambiguities. The envelope's opaque result is explicitly not a fully validated internal record. Agent 3 agrees with A1-0007 that deployment ABI unsigned values stay decimal strings; agent-2 and the full deployment schema review remain pending.
 4. Only after three exact ACKs and module smoke checks: freeze `interfaces/v1`, publish INTERFACE_READY, unlock E1 and implement the real adapter runner/service lifecycle against reviewed public exports.
 5. Run Alice/Bob/wrong-issuer controls across actual two-chain services; then E2 case matrix/recovery, correspondence model and negative control, repaired receipts, RQ1 report and E3 freeze/ACK gate.
 
 No F/G feature has been implemented. Phase 1 is not complete. Agent 3 has exhausted the currently independent E0 work identified here; the next normative step needs peer artifacts/ACKs. Hourly branch monitoring resumes on meaningful new support. Author self-review is recorded; no independent reviewer was launched because the project explicitly prohibits extra agents.
+
+## A1-0007 review follow-up
+
+Reviewed owner messages from file-changing commit 589a05331a1a9a9cfe99eee2da70b980a44e5317. A1-0007 SHA-256 7489f8ec3b5b196573bb1748ed43faa208802eb9048c384bd878e992d8f61e49; A1-0008 SHA-256 c42d064ce31a6c482f26640e67d1c541e3681db7239b89147b10e6b2e35aefea. The full across-branch provenance snapshot and peer manifest inspection are under evaluation/evidence/e0/review-a1-0007/. No new agent-2 branch was present.
+
+S-1: explicit EIP-712 encodeType annotations and RoleCertificate property order match owner vectors; S-2: empty CredentialBundle is MALFORMED; S-3: direct/nested zero-GID temporal entries are MALFORMED. Ten regression cases failed before fixes and passed afterward (31 schema tests). S-4 is an owner-side change reported as 154 ledger tests; this count is not independently reproduced for the newer unready revision. Historical 151-test evidence remains tied to f643805.
+
+M-1 corrects implemented E validation/update/registration functions. M-2 adds explicit certificate-time, paper-grant lifetime/recipient, partial replay and log-variable fills. M-3 fixes signed CRL wording and ACSC page 10–11. M-4 records registration attempt/success logging-order ambiguity. Rows S33–S37 and assumptions A23–A27 are gap fills/ambiguities, not discovered paper vulnerabilities.
+
+No integration or formal correspondence claim follows from these revisions. Author self-review only; receipt revision 2 and complete interface freeze still need agent-2 support. Final owned verification and the revised candidate hash are recorded by the subsequent READY message A3-0006.
+
+Current follow-up verification: full owned suite 67 passed; independent vector checks333/0; schema fixtures53 (10 valid/43 invalid), zero mismatches; prompt/diff checks exit0; runner/gate expected2/BLOCKED. Checks SHA-256 08a26fa290feed61f024dac17f18a751841f126ca60502d9eb49c9ef6ce0a10e. Revised 16-file candidate manifest SHA-256 e2dde1994fb1146e0df979a955cc2c2ada7ce05e88eb55bf26c26fdf91a815c7. Packaging metadata is added after stable command inputs; no runtime/fixture changes follow verification.

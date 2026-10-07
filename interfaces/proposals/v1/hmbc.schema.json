@@ -91,7 +91,8 @@
         "expiresAt",
         "recipientKeyHash"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "x-eip712Type": "AccessRequest(uint256 sourceChainId,uint256 destinationChainId,address psc,address kssc,address gid,bytes32 dataId,uint8 action,uint64 policyVersion,uint64 authEpoch,uint64 keyEpoch,uint256 nonce,uint64 expiresAt,bytes32 recipientKeyHash)"
     },
     "AccessDecision": {
       "type": "object",
@@ -134,7 +135,8 @@
         "sourceBlockHash",
         "expiresAt"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "x-eip712Type": "AccessDecision(bytes32 requestDigest,uint8 result,bytes32 credentialDigest,uint64 stateSequence,uint64 witnessSetVersion,uint256 sourceBlockNumber,bytes32 sourceBlockHash,uint64 expiresAt)"
     },
     "StateCheckpoint": {
       "type": "object",
@@ -182,7 +184,8 @@
         "sourceBlockHash",
         "expiresAt"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "x-eip712Type": "StateCheckpoint(uint64 sequence,uint64 authEpoch,uint64 policyVersion,uint64 keyEpoch,uint64 witnessSetVersion,uint256 sourceChainId,address psc,uint256 sourceBlockNumber,bytes32 sourceBlockHash,uint64 expiresAt)"
     },
     "Registration": {
       "type": "object",
@@ -206,7 +209,8 @@
         "recipientKeyHash",
         "expiresAt"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "x-eip712Type": "Registration(address gid,bytes32 certDigest,bytes32 recipientKeyHash,uint64 expiresAt)"
     },
     "RoleCertificate": {
       "type": "object",
@@ -217,6 +221,13 @@
         "gid": {
           "$ref": "#/$defs/Address"
         },
+        "roles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Hash"
+          },
+          "minItems": 1
+        },
         "serial": {
           "$ref": "#/$defs/Uint64"
         },
@@ -225,24 +236,18 @@
         },
         "validUntil": {
           "$ref": "#/$defs/Uint64"
-        },
-        "roles": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/Hash"
-          },
-          "minItems": 1
         }
       },
       "required": [
         "issuer",
         "gid",
+        "roles",
         "serial",
         "validFrom",
-        "validUntil",
-        "roles"
+        "validUntil"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "x-eip712Type": "RoleCertificate(address issuer,address gid,bytes32[] roles,uint64 serial,uint64 validFrom,uint64 validUntil)"
     },
     "SignedRoleCertificate": {
       "type": "object",
@@ -286,7 +291,8 @@
         "validUntil",
         "revokedSerials"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "x-eip712Type": "RevocationList(address authority,uint64 version,uint64 validUntil,uint64[] revokedSerials)"
     },
     "TempAclEntry": {
       "type": "object",
@@ -310,7 +316,8 @@
         "validFrom",
         "validUntil"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "x-eip712Type": "TempAclEntry(address gid,bytes32 role,uint64 validFrom,uint64 validUntil)"
     },
     "TemporalAcl": {
       "type": "object",
@@ -338,7 +345,8 @@
         "validUntil",
         "entries"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "x-eip712Type": "TemporalAcl(address authority,uint64 version,uint64 validUntil,TempAclEntry[] entries)TempAclEntry(address gid,bytes32 role,uint64 validFrom,uint64 validUntil)"
     },
     "TemporalClaim": {
       "type": "object",
@@ -413,7 +421,8 @@
         "anchorVersion",
         "validUntil"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "x-eip712Type": "CredentialRecord(address issuer,bytes32 role,uint8 kind,uint64 serial,uint64 anchorVersion,uint64 validUntil)"
     },
     "CredentialRecords": {
       "type": "array",
@@ -509,7 +518,9 @@
         "dbcBlockNumber",
         "dbcBlockHash"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "x-status": "Superseded proposal; A1-0008 revision 2 awaits agent-2 ACK before fields change. Not usable for implementation/freeze.",
+      "x-eip712Type": "GrantReceipt(bytes32 requestDigest,bytes32 grantId,uint8 dbcResult,uint64 keyEpoch,uint64 grantExpiresAt,uint256 dbcChainId,address kssc,uint256 dbcBlockNumber,bytes32 dbcBlockHash)"
     },
     "Error": {
       "type": "object",

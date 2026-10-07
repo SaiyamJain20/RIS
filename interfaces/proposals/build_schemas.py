@@ -6,6 +6,20 @@ ROOT = Path(__file__).parent / 'v1'
 DRAFT = 'https://json-schema.org/draft/2020-12/schema'
 ERRORS = ['BAD_SIGNATURE','WRONG_SUBJECT','WRONG_DESTINATION','UNKNOWN_AUTHORITY','STALE_ANCHOR','STALE_STATE','EXPIRED','REPLAY','POLICY_DENIED','INSUFFICIENT_QUORUM','DUPLICATE_SIGNER','WRONG_EPOCH','NOT_COMMITTED','ADAPTER_UNAVAILABLE','NOT_IMPLEMENTED_IN_PHASE','UNAUTHORIZED_CALLER','NOT_REGISTERED','ALREADY_REGISTERED','REVOKED','MALFORMED','WRONG_PROFILE']
 PROFILES = ['paper-strict','paper-minimal','repaired-e','mutant-no-destination-binding','mutant-no-state-barrier','mutant-no-record-freshness','mutant-no-nonce','mutant-no-version-monotone']
+# Exact encodeType strings, independent of JSON property order. The seven implemented
+# signed types match A1-0003 and its producer vectors; nested types are included below.
+EIP712_TYPES = {
+    'Registration':'Registration(address gid,bytes32 certDigest,bytes32 recipientKeyHash,uint64 expiresAt)',
+    'RoleCertificate':'RoleCertificate(address issuer,address gid,bytes32[] roles,uint64 serial,uint64 validFrom,uint64 validUntil)',
+    'RevocationList':'RevocationList(address authority,uint64 version,uint64 validUntil,uint64[] revokedSerials)',
+    'TempAclEntry':'TempAclEntry(address gid,bytes32 role,uint64 validFrom,uint64 validUntil)',
+    'TemporalAcl':'TemporalAcl(address authority,uint64 version,uint64 validUntil,TempAclEntry[] entries)TempAclEntry(address gid,bytes32 role,uint64 validFrom,uint64 validUntil)',
+    'AccessRequest':'AccessRequest(uint256 sourceChainId,uint256 destinationChainId,address psc,address kssc,address gid,bytes32 dataId,uint8 action,uint64 policyVersion,uint64 authEpoch,uint64 keyEpoch,uint256 nonce,uint64 expiresAt,bytes32 recipientKeyHash)',
+    'CredentialRecord':'CredentialRecord(address issuer,bytes32 role,uint8 kind,uint64 serial,uint64 anchorVersion,uint64 validUntil)',
+    'AccessDecision':'AccessDecision(bytes32 requestDigest,uint8 result,bytes32 credentialDigest,uint64 stateSequence,uint64 witnessSetVersion,uint256 sourceBlockNumber,bytes32 sourceBlockHash,uint64 expiresAt)',
+    'StateCheckpoint':'StateCheckpoint(uint64 sequence,uint64 authEpoch,uint64 policyVersion,uint64 keyEpoch,uint64 witnessSetVersion,uint256 sourceChainId,address psc,uint256 sourceBlockNumber,bytes32 sourceBlockHash,uint64 expiresAt)',
+    'GrantReceipt':'GrantReceipt(bytes32 requestDigest,bytes32 grantId,uint8 dbcResult,uint64 keyEpoch,uint64 grantExpiresAt,uint256 dbcChainId,address kssc,uint256 dbcBlockNumber,bytes32 dbcBlockHash)',
+}
 
 
 def obj(properties, optional=()):
@@ -44,7 +58,7 @@ def definitions():
     struct('StateCheckpoint',[(k,'Uint64') for k in ('sequence','authEpoch','policyVersion','keyEpoch','witnessSetVersion')]+[('sourceChainId','Uint256'),('psc','Address'),('sourceBlockNumber','Uint256'),('sourceBlockHash','Hash'),('expiresAt','Uint64')])
     d['StateCheckpoint']['properties']['keyEpoch']={'const':'0'};d['StateCheckpoint']['properties']['witnessSetVersion']={'const':'1'}
     struct('Registration',[('gid','Address'),('certDigest','Hash'),('recipientKeyHash','Hash'),('expiresAt','Uint64')])
-    struct('RoleCertificate',[('issuer','Address'),('gid','Address'),('serial','Uint64'),('validFrom','Uint64'),('validUntil','Uint64')]); d['RoleCertificate']['properties']['roles']=array('Hash',1);d['RoleCertificate']['required'].append('roles')
+    struct('RoleCertificate',[('issuer','Address'),('gid','Address'),('roles','Hash'),('serial','Uint64'),('validFrom','Uint64'),('validUntil','Uint64')]); d['RoleCertificate']['properties']['roles']=array('Hash',1)
     d['SignedRoleCertificate']=obj({'cert':ref('RoleCertificate'),'signature':ref('Signature')})
     struct('RevocationList',[('authority','Address'),('version','Uint64'),('validUntil','Uint64')]); d['RevocationList']['properties']['revokedSerials']=array('Uint64');d['RevocationList']['required'].append('revokedSerials')
     struct('TempAclEntry',[('gid','Address'),('role','Hash'),('validFrom','Uint64'),('validUntil','Uint64')])
@@ -57,6 +71,8 @@ def definitions():
     d['DecisionCertificate']['properties']['signatures']['maxItems']=1
     struct('ForwardedRequest',[('pbcRequestId','Hash'),('gid','Address'),('dataId','Hash'),('action','Uint8')])
     struct('GrantReceipt',[('requestDigest','Hash'),('grantId','Hash'),('dbcResult','Uint8'),('keyEpoch','Uint64'),('grantExpiresAt','Uint64'),('dbcChainId','Uint256'),('kssc','Address'),('dbcBlockNumber','Uint256'),('dbcBlockHash','Hash')]);d['GrantReceipt']['properties']['dbcResult']={'const':'1'};d['GrantReceipt']['properties']['keyEpoch']={'const':'0'}
+    d['GrantReceipt']['x-status']='Superseded proposal; A1-0008 revision 2 awaits agent-2 ACK before fields change. Not usable for implementation/freeze.'
+    for name,type_string in EIP712_TYPES.items(): d[name]['x-eip712Type']=type_string
     d['Error']=obj({'code':enum(*ERRORS),'message':{'type':'string'}})
     # Operation-specific input/result/deployment schemas require agent-2's exact revision.
     # Opaque result is explicitly a boundary gap, not claimed strict internal validation.
