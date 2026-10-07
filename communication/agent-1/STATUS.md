@@ -1,16 +1,16 @@
 # Agent 1 status
 
 - Role: Ledger and policy
-- State: WAITING (E0 deliverables, A-E1 draft and A-E2 preparation published READY for review; waiting on v1 freeze, decisions and peer cross-checks)
-- Active RQ/task: E / E0 -> A-E1 (draft) -> A-E2 (prepared early; see A1-0006 deviation note)
-- Interface version: v0 proposed; ledger proposals A1-0003 (types/ABI) and A1-0005 (GrantReceipt, mutants, clock domain); no v1 ACK given
-- Git: branch `agent-1` on origin (https://github.com/SaiyamJain20/RIS.git), per user instruction 2026-10-07 (A1-0001)
-- Current files: `ledger/**` (manifest `ledger/evidence/source-manifest.sha256`, 86 files), `communication/agent-1/**`
-- Completed tests/evidence: forge test 151/0; A-E2 first run 63/63 vs pre-written expectations; mutants 6/6 suites detected; source mutation smoke 15/15; cast crosscheck 166/0; live two-chain smoke 4/4 profiles; pending E03 control fails as expected
-- Dependencies: agent 3 v1 freeze + decisions (A1-0002 section 4, A1-0003 section 6, A1-0005 items 1/4/5); agent 2 Python vector reproduction and witness capabilities (A1-0005)
-- Blocker: none for owned work. The E03 outcome-evidence repair waits for an ACK of A1-0005 item 1 before implementation.
-- Last message sent: A1-0006. Last read: none from agent 2/3 (no agent-2/agent-3 branches on origin as of 2026-10-07 ~02:35 IST)
-- Next action: watch origin for agent-2/agent-3 branches (monitor armed); respond to RFC/ACK requests; implement A1-0005 item 1 after ACK; re-run against frozen v1 vectors
+- State: WAITING (E0 review answered; waiting on agent-3 revised candidate manifest, agent-2 publication/ACKs)
+- Active RQ/task: E / E0 (v1 candidate review); A-E1 draft and A-E2 preparation published
+- Interface version: candidate v1 on agent-3 (NOT frozen). Agent 1 ACKed A3-0002 items 1, 2 and 5 and amended item 3 (A1-0008). Candidate manifest abbeca1d.. is NOT ACKed: findings in A1-0007.
+- Git: branch `agent-1` on origin; distributed workflow recorded as D19 (agent-3)
+- Current files: `ledger/**` (manifest `ledger/evidence/source-manifest.sha256`), `communication/agent-1/**`
+- Completed tests/evidence: forge test 154/0; mutant suites 6/6 detected; cast crosscheck 166/0; source mutation smoke (see evidence); pending E03 control fails as expected; agent 3 independently reproduced 151/0, 166/0, mutants and the pending failure (A3-0003)
+- Dependencies: agent-3 revised candidate (S-1..S-3, M-1..M-4) for exact ACK; agent-2 branch, vector reproduction, A1-0008 capability ACK; v1 freeze before E1
+- Blocker: none for owned work. The A1-0008 receipt implementation waits for agent 2 and agent 3 ACKs.
+- Last message sent: A1-0008. Read: A3-0001..A3-0004 (origin/agent-3 14d54aa). agent-2: no branch on origin yet.
+- Next action: monitor origin; ACK the revised candidate hash after review; implement A1-0008 after ACKs; re-verify against frozen v1 vectors
 - Integration freeze acknowledged: none
 
 Writer: agent 1 only. Update this snapshot; preserve durable history in immutable outbox messages.

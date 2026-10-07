@@ -135,6 +135,17 @@ abstract contract TrustAnchorsBase is HMBCFixture {
         assertCode(code, ErrorCode.EXPIRED, "TempACL entry effective period ended (equality rejects)");
     }
 
+    /// Aligns with candidate schema (A3-0003): a certificate whose validFrom >= validUntil is
+    /// structurally invalid (MALFORMED), not merely expired.
+    function test_CertificateWithEmptyIntervalIsMalformed() public {
+        publishTrustLists(one(alice));
+        SignedRoleCertificate memory c = aliceCert();
+        c.cert.validFrom = c.cert.validUntil;
+        c.signature = sig(h1Pk, HMBCHash.roleCertificateDigest(c.cert, PBC_CHAIN_ID, address(tmsc)));
+        (ErrorCode code,) = tmsc.validateCertificate(c, uint64(block.timestamp));
+        assertCode(code, ErrorCode.MALFORMED, "empty validity interval");
+    }
+
     function test_VerifiedRecordsAreCanonical() public {
         publishTrustLists(one(alice));
         CredentialRecord[] memory recs = verifiedRecords(alice, aliceBundle());

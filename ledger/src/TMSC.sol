@@ -292,6 +292,7 @@ contract TMSC is Bootstrapped {
         returns (ErrorCode, uint64 crlVersion, uint64 validUntil)
     {
         if (!isAuthority[c.issuer]) return (ErrorCode.UNKNOWN_AUTHORITY, 0, 0);
+        if (c.validFrom >= c.validUntil) return (ErrorCode.MALFORMED, 0, 0); // never-valid interval
         bytes32 digest = HMBCHash.roleCertificateDigest(c, pbcChainId, address(this));
         if (!SigLib.isValid(digest, signature, c.issuer)) return (ErrorCode.BAD_SIGNATURE, 0, 0);
         if (atTime < c.validFrom || atTime >= c.validUntil) return (ErrorCode.EXPIRED, 0, 0);
