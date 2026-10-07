@@ -7,7 +7,7 @@
 - Peer latest: agent-1 e351be5, A1-0009 scoped exact candidate ACK + A1-0010 corrected READY; agent-2 absent
 - Peer executed: pinned589a053/A1-0010; 87-entry manifest unchanged pre/post; ledger154/Cast166/six mutants reproduced
 - Read: A1-0001 through A1-0010 with exact file-changing provenance
-- Sent: A3-0001 through A3-0006 delivered by verified normal push; A3-0005 exact receipt ACK + A3-0006 revised READY
+- Sent: A3-0001 through A3-0007 delivered by verified normal pushes; latest is A1-0010 pinned module review
 - Current tests: 67 passed; 333 vector checks; 53 schema fixtures (10 valid/43 invalid), zero mismatches; ten review regressions RED→GREEN
 - Current evidence: evaluation/evidence/e0/review-a1-0007/checks.json SHA-256 08a26fa290feed61f024dac17f18a751841f126ca60502d9eb49c9ef6ce0a10e
 - Candidate manifest: interfaces/proposals/v1/review-manifest.json SHA-256 e2dde1994fb1146e0df979a955cc2c2ada7ce05e88eb55bf26c26fdf91a815c7 (16 files)
@@ -20,4 +20,6 @@
 
 - Verified publication: payload d9fb969089ad7a5fa828dc6cb746bf388835497a on origin/agent-3; clean after push; post-push peers unchanged (agent-1 589a053, agent-2 absent).
 
-- New pinned compatibility evidence: evaluation/evidence/e0/ready-a1-0010/checks.json SHA-256 1b9283db8d6b08d80234e60eacad3067aaa0a981cce7f7e8e93af3a1c795cf8c; source stable, all ten expected outcomes; E03 exit1 and preflights2/BLOCKED preserved. A3-0007 review drafted for this push. Candidate hash unchanged.
+- New pinned compatibility evidence: evaluation/evidence/e0/ready-a1-0010/checks.json SHA-256 1b9283db8d6b08d80234e60eacad3067aaa0a981cce7f7e8e93af3a1c795cf8c; source stable, all ten expected outcomes; E03 exit1 and preflights2/BLOCKED preserved. A3-0007 delivered in verified payload2cf345c. Candidate hash unchanged.
+
+- Latest verified publication: payload 2cf345c39e831ed5ca33c7fd5d58c98152222452; clean after normal push; post-push agent-1 unchangede351be5, agent-2 absent.
