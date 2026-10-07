@@ -15,10 +15,12 @@ from eth_account import Account
 from eth_account.messages import _hash_eip191_message
 from eth_utils import keccak, to_checksum_address
 
-_ADDR = re.compile(r"^0x[0-9a-f]{40}$")
-_HASH = re.compile(r"^0x[0-9a-f]{64}$")
-_DEC = re.compile(r"^(0|[1-9][0-9]*)$")
-_ARRAY = re.compile(r"^(.*)\[\]$")
+# All wire patterns are applied with fullmatch(): a `$` anchor would accept a trailing "\n".
+_ADDR = re.compile(r"0x[0-9a-f]{40}")
+_HASH = re.compile(r"0x[0-9a-f]{64}")
+_SIG = re.compile(r"0x[0-9a-f]{130}")
+_DEC = re.compile(r"(0|[1-9][0-9]*)")
+_ARRAY = re.compile(r"(.*)\[\]", re.DOTALL)
 SECP256K1_N = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
 
 
@@ -27,24 +29,22 @@ class EncodingError(ValueError):
 
 
 def _uint(value: Any, bits: int) -> int:
-    if isinstance(value, bool) or not isinstance(value, (str, int)):
-        raise EncodingError(f"uint{bits}: unsupported JSON type {type(value).__name__}")
-    if isinstance(value, str):
-        if not _DEC.match(value):
-            raise EncodingError(f"uint{bits}: non-canonical decimal string {value!r}")
-        value = int(value)
-    if value < 0 or value >= 1 << bits:
+    # interfaces v0: unsigned integers are canonical decimal STRINGS on the wire; JSON numbers reject.
+    if not isinstance(value, str) or not _DEC.fullmatch(value):
+        raise EncodingError(f"uint{bits}: expected a canonical decimal string, got {value!r}")
+    value = int(value)
+    if value >= 1 << bits:
         raise EncodingError(f"uint{bits}: out of range")
     return value
 
 
 def _atomic(type_name: str, value: Any) -> bytes:
     if type_name == "address":
-        if not isinstance(value, str) or not _ADDR.match(value):
+        if not isinstance(value, str) or not _ADDR.fullmatch(value):
             raise EncodingError(f"address: expected lowercase 0x+40 hex, got {value!r}")
         return bytes(12) + bytes.fromhex(value[2:])
     if type_name == "bytes32":
-        if not isinstance(value, str) or not _HASH.match(value):
+        if not isinstance(value, str) or not _HASH.fullmatch(value):
             raise EncodingError(f"bytes32: expected lowercase 0x+64 hex, got {value!r}")
         return bytes.fromhex(value[2:])
     if type_name.startswith("uint"):
@@ -82,7 +82,7 @@ def type_hash(primary: str, types: dict) -> bytes:
 
 
 def _encode_value(type_name: str, value: Any, types: dict) -> bytes:
-    arr = _ARRAY.match(type_name)
+    arr = _ARRAY.fullmatch(type_name)
     if arr:
         if not isinstance(value, list):
             raise EncodingError("array expected")
@@ -147,9 +147,9 @@ def sign_digest(private_key: str, dig: bytes) -> str:
 
 def recover(dig: bytes, signature: str) -> str:
     """Recover the lowercase signer address, enforcing the contract-side canonical form."""
-    raw = bytes.fromhex(signature[2:]) if isinstance(signature, str) and signature.startswith("0x") else b""
-    if len(raw) != 65:
-        raise EncodingError("signature must be 65 bytes r||s||v")
+    if not isinstance(signature, str) or not _SIG.fullmatch(signature):
+        raise EncodingError("signature must be lowercase 0x + 130 hex digits (65 bytes r||s||v)")
+    raw = bytes.fromhex(signature[2:])
     r, s, v = int.from_bytes(raw[:32], "big"), int.from_bytes(raw[32:64], "big"), raw[64]
     if v not in (27, 28) or r == 0 or s == 0 or s > SECP256K1_N // 2:
         raise EncodingError("non-canonical signature (v in {27,28}, 0<r, 0<s<=n/2 required)")

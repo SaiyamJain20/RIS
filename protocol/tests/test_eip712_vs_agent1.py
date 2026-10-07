@@ -1,4 +1,4 @@
-"""Byte-exact comparison against agent 1's ledger vectors (pinned copy of origin/agent-1 e351be5).
+"""Byte-exact comparison against agent 1's ledger vectors (pinned copies of origin/agent-1 e351be5 and 54262c2).
 
 Three-way check per signed vector: this module's independent encoder, eth_account's encoder, and
 the stored Solidity/cast values. Signatures are RFC 6979 deterministic, so equal signature bytes
@@ -16,21 +16,36 @@ from eth_account.messages import encode_typed_data
 
 from hmbc_protocol import eip712
 
-FIX = pathlib.Path(__file__).parent / "fixtures" / "eip712-agent1-e351be5.json"
-PINNED_SHA256 = "6e931f83c53303350d847f61b192d57fe0f9c30f9d815effa57e36c279278cdf"
-DOC = json.loads(FIX.read_text())
-SIGNED = [v for v in DOC["vectors"] if "typedData" in v]
+FIXDIR = pathlib.Path(__file__).parent / "fixtures"
+FIXTURES = {  # tag -> (file, sha256 of the byte copy of agent-1's ledger/exports/vectors/eip712-v0-ledger.json)
+    "e351be5": ("eip712-agent1-e351be5.json", "6e931f83c53303350d847f61b192d57fe0f9c30f9d815effa57e36c279278cdf"),
+    "54262c2": ("eip712-agent1-54262c2.json", "6aa399e038be204a0420e7503f11300196fcaaf4bc7acbaef2724163f8cf0574"),
+}
+DOCS = {tag: json.loads((FIXDIR / f).read_text()) for tag, (f, _) in FIXTURES.items()}
+SIGNED = [dict(v, _tag=tag) for tag, d in DOCS.items() for v in d["vectors"] if "typedData" in v]
+IDS = lambda v: f'{v["_tag"]}-{v["name"]}'  # noqa: E731
 
 
 def hx(b: bytes) -> str:
     return "0x" + b.hex()
 
 
-def test_fixture_is_the_pinned_agent1_file():
-    assert hashlib.sha256(FIX.read_bytes()).hexdigest() == PINNED_SHA256
+@pytest.mark.parametrize("tag", FIXTURES)
+def test_fixture_is_the_pinned_agent1_file(tag):
+    f, sha = FIXTURES[tag]
+    assert hashlib.sha256((FIXDIR / f).read_bytes()).hexdigest() == sha
 
 
-@pytest.mark.parametrize("v", SIGNED, ids=lambda v: v["name"])
+def test_new_file_only_adds_the_receipt_vector():
+    """A1-0011: the 9 earlier vectors are byte-unchanged; GrantReceipt is the only addition."""
+    old = {v["name"]: v for v in DOCS["e351be5"]["vectors"]}
+    new = {v["name"]: v for v in DOCS["54262c2"]["vectors"]}
+    assert set(new) - set(old) == {"GrantReceipt"} and set(old) <= set(new)
+    for name, v in old.items():
+        assert v == new[name], name
+
+
+@pytest.mark.parametrize("v", SIGNED, ids=IDS)
 def test_digest_components_match(v):
     td = v["typedData"]
     types = {k: x for k, x in td["types"].items() if k != "EIP712Domain"}
@@ -40,7 +55,7 @@ def test_digest_components_match(v):
     assert hx(eip712.digest(td)) == v["digest"]
 
 
-@pytest.mark.parametrize("v", SIGNED, ids=lambda v: v["name"])
+@pytest.mark.parametrize("v", SIGNED, ids=IDS)
 def test_matches_eth_account_encoder(v):
     td = copy.deepcopy(v["typedData"])
     td["domain"]["chainId"] = int(td["domain"]["chainId"])
@@ -59,7 +74,7 @@ def test_matches_eth_account_encoder(v):
     assert hx(_hash_eip191_message(signable)) == v["digest"]
 
 
-@pytest.mark.parametrize("v", SIGNED, ids=lambda v: v["name"])
+@pytest.mark.parametrize("v", SIGNED, ids=IDS)
 def test_signature_bytes_and_signer_match(v):
     dig = bytes.fromhex(v["digest"][2:])
     assert eip712.sign_digest(v["signerPrivateKey"], dig) == v["signature"]
@@ -87,7 +102,7 @@ def apply_mutation(td, path, value):
             obj = obj[key]
 
 
-@pytest.mark.parametrize("v", SIGNED, ids=lambda v: v["name"])
+@pytest.mark.parametrize("v", SIGNED, ids=IDS)
 def test_every_mutation_changes_digest_and_signer(v):
     base_sig = v["signature"]
     for m in v["mutations"]:
@@ -101,8 +116,9 @@ def test_every_mutation_changes_digest_and_signer(v):
         assert eip712.recover(d, base_sig) != v["signer"]
 
 
-def test_credential_digest_vector_and_mutations():
-    cv = next(v for v in DOC["vectors"] if "credentialDigest" in v)
+@pytest.mark.parametrize("tag", FIXTURES)
+def test_credential_digest_vector_and_mutations(tag):
+    cv = next(v for v in DOCS[tag]["vectors"] if "credentialDigest" in v)
     assert hx(eip712.credential_digest(cv["records"])) == cv["credentialDigest"]
     for m in cv["mutations"]:
         recs = copy.deepcopy(cv["records"])
@@ -154,3 +170,69 @@ def test_rejects_noncanonical_signatures():
     bad_v = bytes(raw[:64]) + bytes([0])
     with pytest.raises(eip712.EncodingError):
         eip712.recover(dig, "0x" + bad_v.hex())
+
+
+# --- A3-0009 item 3: strict canonical wire validation (written before the fix) -------------------
+
+def _req():
+    return copy.deepcopy(next(x for x in SIGNED if x["name"] == "AccessRequest")["typedData"])
+
+
+@pytest.mark.parametrize("field,bad", [
+    ("gid", None), ("dataId", None), ("recipientKeyHash", None),     # final-LF variants built below
+])
+def test_trailing_newline_rejected_for_address_and_bytes32(field, bad):
+    td = _req()
+    td["message"][field] = td["message"][field] + "\n"
+    with pytest.raises(eip712.EncodingError):
+        eip712.digest(td)
+
+
+def test_trailing_newline_rejected_for_uint_string():
+    td = _req()
+    td["message"]["nonce"] = td["message"]["nonce"] + "\n"
+    with pytest.raises(eip712.EncodingError):
+        eip712.digest(td)
+
+
+@pytest.mark.parametrize("field", ["nonce", "expiresAt", "action", "authEpoch"])
+def test_json_integers_rejected_on_the_wire(field):
+    """interfaces v0: unsigned integers are decimal STRINGS in JSON; a JSON number must reject."""
+    td = _req()
+    td["message"][field] = int(td["message"][field])
+    with pytest.raises(eip712.EncodingError):
+        eip712.digest(td)
+
+
+def test_domain_fields_are_validated_too():
+    td = _req()
+    td["domain"]["chainId"] = int(td["domain"]["chainId"])
+    with pytest.raises(eip712.EncodingError):
+        eip712.digest(td)
+    td = _req()
+    td["domain"]["verifyingContract"] += "\n"
+    with pytest.raises(eip712.EncodingError):
+        eip712.digest(td)
+
+
+def test_signature_hex_must_be_canonical():
+    v = SIGNED[0]
+    dig = bytes.fromhex(v["digest"][2:])
+    for bad in (v["signature"] + "\n", v["signature"].upper().replace("0X", "0x"), v["signature"][2:]):
+        with pytest.raises(eip712.EncodingError):
+            eip712.recover(dig, bad)
+
+
+def test_grant_receipt_vector_is_complete_and_consistent():
+    """Receipt reproduction at 54262c2: 13 mutations (11 fields + 2 domain), grantId rule, A1-0008 type string."""
+    r = next(v for v in SIGNED if v["_tag"] == "54262c2" and v["name"] == "GrantReceipt")
+    td = r["typedData"]
+    assert eip712.encode_type("GrantReceipt", {k: x for k, x in td["types"].items() if k != "EIP712Domain"}) == (
+        "GrantReceipt(bytes32 requestDigest,bytes32 grantId,address gid,bytes32 dataId,uint64 keyEpoch,"
+        "uint64 grantExpiresAt,uint64 witnessSetVersion,uint256 dbcChainId,address kssc,uint256 dbcBlockNumber,"
+        "bytes32 dbcBlockHash)")
+    assert td["domain"]["name"] == "HMBCReceipt" and td["domain"]["version"] == "1"
+    assert len(r["mutations"]) == 13
+    m = td["message"]
+    assert m["grantId"] == hx(eip712.grant_id(bytes.fromhex(m["requestDigest"][2:]), m["kssc"], int(m["dbcChainId"])))
+    assert r["signerLabel"] == "witness-1"

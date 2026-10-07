@@ -1,23 +1,28 @@
 # Module 2: Protocol and key services
 
-Owner: **agent 2**. This folder currently contains a plan only; implementation has not started.
+Owner: **agent 2**. Paper-derived reconstruction of HMBC2020's client/relay/witness/key-service side. Synthetic data only.
 
 Read [the root plan](../PLAN.md), [specification](../SPEC.md), [interfaces](../interfaces/README.md), and [communication rules](../communication/PROTOCOL.md).
 
-## Scope across E, F and G
+## State (E0, 2026-10-07; interface candidate v1 revision 3, NOT frozen)
 
-Own client signing, the relay, independently verifying witness workers, durable release state and the eventual real cryptographic adapter. Every service consumes versioned manifests rather than reaching into agent 1's internals.
+Implemented and tested: strict EIP-712 encoder (`hmbc_protocol/eip712.py`), strict wire validators (`wire.py`), typed-message builders (`messages.py`),
+opaque key handles (`keys.py`), and the JSON-lines adapter (`adapter.py`) with only `prepare_request` behaving. Every other E operation answers
+`ADAPTER_UNAVAILABLE` and `rotate_epoch` answers `NOT_IMPLEMENTED_IN_PHASE`: B-E1 (client/relay/witness/key worker) is locked until E0 unlocks E1.
+No service, relay, witness, durable worker or live-chain code exists yet.
 
-First task: E0. Read HMBC Figures 5/6 and III-C6/E2; review GID/key ownership and explicit isolation assumptions. Match the Solidity digest vectors and define the credential-bundle encoding with the other agents. Then start B-E1 with visibly symbolic decryption tokens. Do not begin G's cryptographic feature work before the F gate.
+- Run tests (repo root, Python 3.13, `pip install -r protocol/requirements.txt`): `python -m pytest protocol/tests -q -c protocol/pytest.ini --rootdir protocol`
+- Regenerate/check exports: `PYTHONPATH=protocol python -m hmbc_protocol.export [--check]` (adapter.json and examples are produced by running the adapter)
+- Mutation check of the boundary code: `python protocol/tools/mutation_check.py`
+- Run the adapter: `cd protocol && python -m hmbc_protocol.adapter --state-dir <private dir>` (JSON lines on stdin/stdout)
 
-Module tests use `python -m pytest protocol/tests -q`. Test recovery at intent/send/outcome boundaries, independent decision verification, signature/recipient binding and the stated revocation checkpoint. A retry must follow the same grant/cache policy. G0 must reproduce actual source-mapped decryption, not a boolean authorization lookup.
+Fixtures under `tests/fixtures/` are byte copies of peer files at exact commits (hashes pinned in the tests); they are TEST-ONLY synthetic keys.
 
 ## Assigned tasks
 
 B-E1, B-E2, B-F1, G0 (adapter lead), B-G1. The authoritative task steps and file lists are in `PLAN.md`; do not keep a divergent copy here.
+No F implementation before gate E; no G implementation before gate F. Do not implement JANUS or create a worktree.
 
 ## Module handoff
 
-Publish a READY message in `communication/agent-2/outbox/` with files, interface version, hashes, test command/output and limits. Update your STATUS/HANDOFF. Request cross-module fixes through the owner's mailbox. During an integration freeze, acknowledge and stop editing the frozen paths until agent 3 releases them.
-
-No F implementation before gate E; no G implementation before gate F. If blocked, work on same-RQ tests/evidence or publish the specific blocker. Do not implement JANUS or create a worktree.
+READY messages go in `communication/agent-2/outbox/`; `communication/agent-2/HANDOFF.md` records exact hashes, commands and limits.

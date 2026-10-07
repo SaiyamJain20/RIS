@@ -1,0 +1,207 @@
+{
+  "schemaVersion": "hmbc-protocol-adapter/v0",
+  "interfaceVersion": "candidate v1 revision 3 (NOT frozen)",
+  "producer": "agent-2 protocol/hmbc_protocol/export.py",
+  "adapterMode": "symbolic",
+  "supportedAdapterModes": [
+    "symbolic"
+  ],
+  "note": "Paper-derived reconstruction. symbolic = modeled decryptability only; no real ABE and no performance claim.",
+  "startup": {
+    "command": [
+      "python",
+      "-m",
+      "hmbc_protocol.adapter",
+      "--state-dir",
+      "<private directory, mode 0700>"
+    ],
+    "workingDirectory": "protocol (or set PYTHONPATH to it)",
+    "requiredEnvironmentVariables": [],
+    "python": ">=3.13,<3.14",
+    "requirements": "protocol/requirements.txt"
+  },
+  "transport": {
+    "format": "JSON lines over stdin/stdout, UTF-8, one request object per line, one response per request line, max 1048576 bytes per line",
+    "request": [
+      "schemaVersion",
+      "operation",
+      "input",
+      "deploymentManifest"
+    ],
+    "response": [
+      "schemaVersion",
+      "ok",
+      "result",
+      "error"
+    ],
+    "schemaVersionValue": "v1",
+    "strictness": "duplicate JSON keys, NaN/Infinity, unknown or missing fields, JSON-number integers, non-lowercase hex and trailing newlines all answer MALFORMED"
+  },
+  "keyHandles": {
+    "pattern": "keyref:<user|witness|worker|authority>:<label [a-z0-9-]{1,64}>",
+    "resolution": "inside the adapter process only; E0/E1 keys are TEST-ONLY synthetic keys derived like agent 1's fixtures",
+    "neverReturned": [
+      "private keys",
+      "temporal key material",
+      "master secrets",
+      "plaintext keys"
+    ]
+  },
+  "errorChoices": [
+    "No error class exists for a wrong SOURCE chain/PSC; the signer reports WRONG_DESTINATION for any chain/contract mismatch with the deployment manifest (agent-2 choice, RFC if agent 3 prefers another class).",
+    "Unknown operation, bad envelope and every wire-format violation answer MALFORMED (no dedicated code in the v0 list).",
+    "An unbuilt E operation answers ADAPTER_UNAVAILABLE, not NOT_IMPLEMENTED_IN_PHASE, because the limit is E1 not being unlocked, not a later phase."
+  ],
+  "operations": [
+    {
+      "name": "prepare_request",
+      "status": "implemented-e0",
+      "example": "examples/prepare_request.json",
+      "inputFields": {
+        "request": "AccessRequest (wire form, decimal-string uints)",
+        "signingKeyRef": "keyref:user:<label>"
+      },
+      "resultFields": [
+        "schemaVersion",
+        "adapterMode",
+        "request",
+        "requestDigest",
+        "signature",
+        "signer"
+      ],
+      "errors": [
+        "MALFORMED",
+        "WRONG_SUBJECT",
+        "WRONG_DESTINATION",
+        "WRONG_EPOCH",
+        "ADAPTER_UNAVAILABLE"
+      ],
+      "behaviour": "Signs the EIP-712 AccessRequest only if gid equals the referenced user key's address and the chains/contracts/keyEpoch/policyVersion equal the deployment manifest. Does not check expiry or authEpoch (the PSC and clock rules own those)."
+    },
+    {
+      "name": "collect_decision",
+      "status": "planned-b-e1",
+      "example": "examples/collect_decision.json",
+      "inputFields": {
+        "requestDigest": "bytes32",
+        "witnessSetVersion": "optional, E: 1"
+      },
+      "draftResultFields": [
+        "schemaVersion",
+        "adapterMode",
+        "decision (AccessDecision)",
+        "signatures (sorted by signer)",
+        "credentialRecords (CredentialRecord[])"
+      ],
+      "errors": [
+        "ADAPTER_UNAVAILABLE (now)",
+        "STALE_STATE",
+        "EXPIRED",
+        "POLICY_DENIED",
+        "REVOKED",
+        "WRONG_SUBJECT",
+        "NOT_REGISTERED",
+        "INSUFFICIENT_QUORUM"
+      ],
+      "behaviour": "Planned: witness recomputes the decision from PBC state at the decision's block (checkCredentials at that block tag and its timestamp, A1-0011); relays never supply attributes. At most one re-collection per newly accepted checkpoint while the request is unexpired (D24).",
+      "draftNote": "DRAFT, NOT EXECUTED: shape proposed for agent 3's schema work; B-E1 is locked until E0 unlocks E1, so no success example exists and none is invented."
+    },
+    {
+      "name": "release",
+      "status": "planned-b-e1",
+      "example": "examples/release.json",
+      "inputFields": {
+        "grantId": "bytes32"
+      },
+      "draftResultFields": [
+        "schemaVersion",
+        "adapterMode",
+        "requestDigest",
+        "grantId",
+        "dataId",
+        "keyEpoch",
+        "ciphertextDigest",
+        "recipientKeyHash",
+        "responseEnvelope"
+      ],
+      "errors": [
+        "ADAPTER_UNAVAILABLE (now)",
+        "NOT_COMMITTED",
+        "EXPIRED",
+        "WRONG_SUBJECT",
+        "REPLAY (never: a retry returns the cached response)"
+      ],
+      "behaviour": "Planned: loads the committed grant from the DBC, persists release intent before sending, returns the same cached response on retry while the original grant is unexpired, and fails EXPIRED on the first call after expiry. Grant, send and reconciled outcome are separate recorded events.",
+      "draftNote": "DRAFT, NOT EXECUTED: shape proposed for agent 3's schema work; B-E1 is locked until E0 unlocks E1, so no success example exists and none is invented."
+    },
+    {
+      "name": "encrypt_record",
+      "status": "planned-b-e1",
+      "example": "examples/encrypt_record.json",
+      "inputFields": {
+        "record": "object",
+        "policy": "object",
+        "keyEpoch": "decimal string, E: 0"
+      },
+      "draftResultFields": [
+        "schemaVersion",
+        "adapterMode=symbolic",
+        "dataId",
+        "keyEpoch",
+        "ciphertextDigest",
+        "policyDigest"
+      ],
+      "errors": [
+        "ADAPTER_UNAVAILABLE (now)",
+        "WRONG_EPOCH",
+        "MALFORMED"
+      ],
+      "behaviour": "Planned: symbolic token only. A result asserts modeled decryptability, never ABE confidentiality.",
+      "draftNote": "DRAFT, NOT EXECUTED: shape proposed for agent 3's schema work; B-E1 is locked until E0 unlocks E1, so no success example exists and none is invented."
+    },
+    {
+      "name": "finish_decryption",
+      "status": "planned-b-e1",
+      "example": "examples/finish_decryption.json",
+      "inputFields": {
+        "response": "release result",
+        "userKeyRef": "keyref:user:<label>"
+      },
+      "draftResultFields": [
+        "schemaVersion",
+        "adapterMode=symbolic",
+        "decryptable (boolean, modeled)",
+        "dataId",
+        "ciphertextDigest"
+      ],
+      "errors": [
+        "ADAPTER_UNAVAILABLE (now)",
+        "WRONG_SUBJECT",
+        "MALFORMED"
+      ],
+      "behaviour": "Planned: symbolic two-step completion; checks recipientKeyHash against the user key handle.",
+      "draftNote": "DRAFT, NOT EXECUTED: shape proposed for agent 3's schema work; B-E1 is locked until E0 unlocks E1, so no success example exists and none is invented."
+    },
+    {
+      "name": "rotate_epoch",
+      "status": "not-implemented-in-phase",
+      "example": "examples/rotate_epoch.json",
+      "inputFields": {
+        "targetEpoch": "decimal string"
+      },
+      "draftResultFields": [],
+      "errors": [
+        "NOT_IMPLEMENTED_IN_PHASE"
+      ],
+      "behaviour": "Always NOT_IMPLEMENTED_IN_PHASE before G; no fake rotation.",
+      "draftNote": "DRAFT, NOT EXECUTED: shape proposed for agent 3's schema work; B-E1 is locked until E0 unlocks E1, so no success example exists and none is invented."
+    }
+  ],
+  "sourceSha256": {
+    "hmbc_protocol/adapter.py": "3317d6f411e5752226053b609c8263490b9445e404ade1ef59cce886e262cbf0",
+    "hmbc_protocol/eip712.py": "42801cebf1cfd36da711ee659c723654c5447ccde7fb11af5e9f27878e2dd085",
+    "hmbc_protocol/keys.py": "86970bcfd0b096be277e49ae384770885805a78f2ea706f44acdb8d5f46762f6",
+    "hmbc_protocol/messages.py": "6cb2dfc4ea7f5c92073da9f8502ab97236fdb86482268c515a5477a23fa4d883",
+    "hmbc_protocol/wire.py": "5e5c2ca063a7998ca6a3deb212656696108813c3620327fa2248fb6795b9d0c9"
+  }
+}
