@@ -574,54 +574,53 @@
       "additionalProperties": false
     },
     "AdapterResponse": {
-      "type": "object",
-      "properties": {
-        "schemaVersion": {
-          "const": "v1"
-        },
-        "ok": {
-          "type": "boolean"
-        },
-        "result": {
-          "type": [
-            "object",
-            "null"
-          ]
-        },
-        "error": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/Error"
-            },
-            {
-              "type": "null"
-            }
-          ]
-        }
-      },
-      "required": [
-        "schemaVersion",
-        "ok",
-        "result",
-        "error"
-      ],
-      "additionalProperties": false,
       "oneOf": [
         {
+          "type": "object",
           "properties": {
+            "schemaVersion": {
+              "const": "v1"
+            },
             "ok": {
               "const": true
             },
             "result": {
-              "type": "object"
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/PrepareRequestResult"
+                },
+                {
+                  "$ref": "#/$defs/CollectDecisionResult"
+                },
+                {
+                  "$ref": "#/$defs/ReleaseResult"
+                },
+                {
+                  "$ref": "#/$defs/EncryptRecordResult"
+                },
+                {
+                  "$ref": "#/$defs/FinishDecryptionResult"
+                }
+              ]
             },
             "error": {
               "type": "null"
             }
-          }
+          },
+          "required": [
+            "schemaVersion",
+            "ok",
+            "result",
+            "error"
+          ],
+          "additionalProperties": false
         },
         {
+          "type": "object",
           "properties": {
+            "schemaVersion": {
+              "const": "v1"
+            },
             "ok": {
               "const": false
             },
@@ -631,7 +630,14 @@
             "error": {
               "$ref": "#/$defs/Error"
             }
-          }
+          },
+          "required": [
+            "schemaVersion",
+            "ok",
+            "result",
+            "error"
+          ],
+          "additionalProperties": false
         }
       ]
     },
@@ -1113,7 +1119,10 @@
           "const": "hmbc-ledger-deployment/v0"
         },
         "interfaceVersion": {
-          "const": "v0 proposed"
+          "enum": [
+            "v0 proposed",
+            "v1"
+          ]
         },
         "producer": {
           "type": "string",
@@ -1881,6 +1890,1409 @@
         "dirtyTree"
       ],
       "additionalProperties": false
+    },
+    "UserKeyRef": {
+      "type": "string",
+      "format": "user-key-ref",
+      "maxLength": 76
+    },
+    "SymbolicRecord": {
+      "type": "object",
+      "properties": {
+        "dataId": {
+          "$ref": "#/$defs/Hash"
+        },
+        "owner": {
+          "$ref": "#/$defs/Address"
+        },
+        "payloadDigest": {
+          "$ref": "#/$defs/Hash"
+        }
+      },
+      "required": [
+        "dataId",
+        "owner",
+        "payloadDigest"
+      ],
+      "additionalProperties": false
+    },
+    "PolicyRequirement": {
+      "type": "object",
+      "properties": {
+        "role": {
+          "$ref": "#/$defs/Hash"
+        },
+        "kind": {
+          "enum": [
+            "1",
+            "2"
+          ]
+        },
+        "issuerMode": {
+          "enum": [
+            "0",
+            "1",
+            "2"
+          ]
+        }
+      },
+      "required": [
+        "role",
+        "kind",
+        "issuerMode"
+      ],
+      "additionalProperties": false
+    },
+    "SymbolicPolicy": {
+      "type": "object",
+      "properties": {
+        "clauses": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/PolicyRequirement"
+            },
+            "minItems": 1
+          }
+        }
+      },
+      "required": [
+        "clauses"
+      ],
+      "additionalProperties": false
+    },
+    "SymbolicEnvelope": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "symbolic-partial/v1"
+        },
+        "token": {
+          "$ref": "#/$defs/Hash"
+        }
+      },
+      "required": [
+        "kind",
+        "token"
+      ],
+      "additionalProperties": false
+    },
+    "PrepareRequestInput": {
+      "type": "object",
+      "properties": {
+        "request": {
+          "$ref": "#/$defs/AccessRequest"
+        },
+        "signingKeyRef": {
+          "$ref": "#/$defs/UserKeyRef"
+        }
+      },
+      "required": [
+        "request",
+        "signingKeyRef"
+      ],
+      "additionalProperties": false
+    },
+    "CollectDecisionInput": {
+      "type": "object",
+      "properties": {
+        "requestDigest": {
+          "$ref": "#/$defs/Hash"
+        },
+        "witnessSetVersion": {
+          "const": "1"
+        }
+      },
+      "required": [
+        "requestDigest"
+      ],
+      "additionalProperties": false
+    },
+    "ReleaseInput": {
+      "type": "object",
+      "properties": {
+        "grantId": {
+          "$ref": "#/$defs/Hash"
+        }
+      },
+      "required": [
+        "grantId"
+      ],
+      "additionalProperties": false
+    },
+    "EncryptRecordInput": {
+      "type": "object",
+      "properties": {
+        "record": {
+          "$ref": "#/$defs/SymbolicRecord"
+        },
+        "policy": {
+          "$ref": "#/$defs/SymbolicPolicy"
+        },
+        "keyEpoch": {
+          "const": "0"
+        }
+      },
+      "required": [
+        "record",
+        "policy",
+        "keyEpoch"
+      ],
+      "additionalProperties": false
+    },
+    "FinishDecryptionInput": {
+      "type": "object",
+      "properties": {
+        "response": {
+          "$ref": "#/$defs/ReleaseResult"
+        },
+        "userKeyRef": {
+          "$ref": "#/$defs/UserKeyRef"
+        }
+      },
+      "required": [
+        "response",
+        "userKeyRef"
+      ],
+      "additionalProperties": false
+    },
+    "RotateEpochInput": {
+      "type": "object",
+      "properties": {
+        "targetEpoch": {
+          "$ref": "#/$defs/Uint64"
+        }
+      },
+      "required": [
+        "targetEpoch"
+      ],
+      "additionalProperties": false
+    },
+    "PrepareRequestResult": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "v1"
+        },
+        "adapterMode": {
+          "const": "symbolic"
+        },
+        "request": {
+          "$ref": "#/$defs/AccessRequest"
+        },
+        "requestDigest": {
+          "$ref": "#/$defs/Hash"
+        },
+        "signature": {
+          "$ref": "#/$defs/Signature"
+        },
+        "signer": {
+          "$ref": "#/$defs/Address"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "adapterMode",
+        "request",
+        "requestDigest",
+        "signature",
+        "signer"
+      ],
+      "additionalProperties": false
+    },
+    "CollectDecisionResult": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "v1"
+        },
+        "adapterMode": {
+          "const": "symbolic"
+        },
+        "decision": {
+          "$ref": "#/$defs/AccessDecision"
+        },
+        "signatures": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Signature"
+          },
+          "minItems": 1,
+          "maxItems": 1
+        },
+        "credentialRecords": {
+          "$ref": "#/$defs/CredentialRecords"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "adapterMode",
+        "decision",
+        "signatures",
+        "credentialRecords"
+      ],
+      "additionalProperties": false
+    },
+    "ReleaseResult": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "v1"
+        },
+        "adapterMode": {
+          "const": "symbolic"
+        },
+        "requestDigest": {
+          "$ref": "#/$defs/Hash"
+        },
+        "grantId": {
+          "$ref": "#/$defs/Hash"
+        },
+        "dataId": {
+          "$ref": "#/$defs/Hash"
+        },
+        "ciphertextDigest": {
+          "$ref": "#/$defs/Hash"
+        },
+        "recipientKeyHash": {
+          "$ref": "#/$defs/Hash"
+        },
+        "keyEpoch": {
+          "const": "0"
+        },
+        "responseEnvelope": {
+          "$ref": "#/$defs/SymbolicEnvelope"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "adapterMode",
+        "requestDigest",
+        "grantId",
+        "dataId",
+        "ciphertextDigest",
+        "recipientKeyHash",
+        "keyEpoch",
+        "responseEnvelope"
+      ],
+      "additionalProperties": false
+    },
+    "EncryptRecordResult": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "v1"
+        },
+        "adapterMode": {
+          "const": "symbolic"
+        },
+        "dataId": {
+          "$ref": "#/$defs/Hash"
+        },
+        "keyEpoch": {
+          "const": "0"
+        },
+        "ciphertextDigest": {
+          "$ref": "#/$defs/Hash"
+        },
+        "policyDigest": {
+          "$ref": "#/$defs/Hash"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "adapterMode",
+        "dataId",
+        "keyEpoch",
+        "ciphertextDigest",
+        "policyDigest"
+      ],
+      "additionalProperties": false
+    },
+    "FinishDecryptionResult": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "v1"
+        },
+        "adapterMode": {
+          "const": "symbolic"
+        },
+        "decryptable": {
+          "type": "boolean"
+        },
+        "dataId": {
+          "$ref": "#/$defs/Hash"
+        },
+        "ciphertextDigest": {
+          "$ref": "#/$defs/Hash"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "adapterMode",
+        "decryptable",
+        "dataId",
+        "ciphertextDigest"
+      ],
+      "additionalProperties": false
+    },
+    "PrepareRequestRequest": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "v1"
+        },
+        "operation": {
+          "const": "prepare_request"
+        },
+        "input": {
+          "$ref": "#/$defs/PrepareRequestInput"
+        },
+        "deploymentManifest": {
+          "$ref": "#/$defs/LedgerDeployment"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "operation",
+        "input",
+        "deploymentManifest"
+      ],
+      "additionalProperties": false
+    },
+    "PrepareRequestResponse": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": "v1"
+            },
+            "ok": {
+              "const": true
+            },
+            "result": {
+              "$ref": "#/$defs/PrepareRequestResult"
+            },
+            "error": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "ok",
+            "result",
+            "error"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": "v1"
+            },
+            "ok": {
+              "const": false
+            },
+            "result": {
+              "type": "null"
+            },
+            "error": {
+              "$ref": "#/$defs/Error"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "ok",
+            "result",
+            "error"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "CollectDecisionRequest": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "v1"
+        },
+        "operation": {
+          "const": "collect_decision"
+        },
+        "input": {
+          "$ref": "#/$defs/CollectDecisionInput"
+        },
+        "deploymentManifest": {
+          "$ref": "#/$defs/LedgerDeployment"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "operation",
+        "input",
+        "deploymentManifest"
+      ],
+      "additionalProperties": false
+    },
+    "CollectDecisionResponse": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": "v1"
+            },
+            "ok": {
+              "const": true
+            },
+            "result": {
+              "$ref": "#/$defs/CollectDecisionResult"
+            },
+            "error": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "ok",
+            "result",
+            "error"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": "v1"
+            },
+            "ok": {
+              "const": false
+            },
+            "result": {
+              "type": "null"
+            },
+            "error": {
+              "$ref": "#/$defs/Error"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "ok",
+            "result",
+            "error"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "ReleaseRequest": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "v1"
+        },
+        "operation": {
+          "const": "release"
+        },
+        "input": {
+          "$ref": "#/$defs/ReleaseInput"
+        },
+        "deploymentManifest": {
+          "$ref": "#/$defs/LedgerDeployment"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "operation",
+        "input",
+        "deploymentManifest"
+      ],
+      "additionalProperties": false
+    },
+    "ReleaseResponse": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": "v1"
+            },
+            "ok": {
+              "const": true
+            },
+            "result": {
+              "$ref": "#/$defs/ReleaseResult"
+            },
+            "error": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "ok",
+            "result",
+            "error"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": "v1"
+            },
+            "ok": {
+              "const": false
+            },
+            "result": {
+              "type": "null"
+            },
+            "error": {
+              "$ref": "#/$defs/Error"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "ok",
+            "result",
+            "error"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "EncryptRecordRequest": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "v1"
+        },
+        "operation": {
+          "const": "encrypt_record"
+        },
+        "input": {
+          "$ref": "#/$defs/EncryptRecordInput"
+        },
+        "deploymentManifest": {
+          "$ref": "#/$defs/LedgerDeployment"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "operation",
+        "input",
+        "deploymentManifest"
+      ],
+      "additionalProperties": false
+    },
+    "EncryptRecordResponse": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": "v1"
+            },
+            "ok": {
+              "const": true
+            },
+            "result": {
+              "$ref": "#/$defs/EncryptRecordResult"
+            },
+            "error": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "ok",
+            "result",
+            "error"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": "v1"
+            },
+            "ok": {
+              "const": false
+            },
+            "result": {
+              "type": "null"
+            },
+            "error": {
+              "$ref": "#/$defs/Error"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "ok",
+            "result",
+            "error"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "FinishDecryptionRequest": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "v1"
+        },
+        "operation": {
+          "const": "finish_decryption"
+        },
+        "input": {
+          "$ref": "#/$defs/FinishDecryptionInput"
+        },
+        "deploymentManifest": {
+          "$ref": "#/$defs/LedgerDeployment"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "operation",
+        "input",
+        "deploymentManifest"
+      ],
+      "additionalProperties": false
+    },
+    "FinishDecryptionResponse": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": "v1"
+            },
+            "ok": {
+              "const": true
+            },
+            "result": {
+              "$ref": "#/$defs/FinishDecryptionResult"
+            },
+            "error": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "ok",
+            "result",
+            "error"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": "v1"
+            },
+            "ok": {
+              "const": false
+            },
+            "result": {
+              "type": "null"
+            },
+            "error": {
+              "$ref": "#/$defs/Error"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "ok",
+            "result",
+            "error"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "RotateEpochRequest": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "v1"
+        },
+        "operation": {
+          "const": "rotate_epoch"
+        },
+        "input": {
+          "$ref": "#/$defs/RotateEpochInput"
+        },
+        "deploymentManifest": {
+          "$ref": "#/$defs/LedgerDeployment"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "operation",
+        "input",
+        "deploymentManifest"
+      ],
+      "additionalProperties": false
+    },
+    "RotateEpochResponse": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": "v1"
+            },
+            "ok": {
+              "const": false
+            },
+            "result": {
+              "type": "null"
+            },
+            "error": {
+              "$ref": "#/$defs/Error"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "ok",
+            "result",
+            "error"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "AdapterRequest": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/PrepareRequestRequest"
+        },
+        {
+          "$ref": "#/$defs/CollectDecisionRequest"
+        },
+        {
+          "$ref": "#/$defs/ReleaseRequest"
+        },
+        {
+          "$ref": "#/$defs/EncryptRecordRequest"
+        },
+        {
+          "$ref": "#/$defs/FinishDecryptionRequest"
+        },
+        {
+          "$ref": "#/$defs/RotateEpochRequest"
+        }
+      ]
+    },
+    "EvidencePath": {
+      "type": "string",
+      "format": "evidence-path",
+      "minLength": 1
+    },
+    "ObservedEvent": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "REQUEST_LOGGED"
+            },
+            "requestDigest": {
+              "$ref": "#/$defs/Hash"
+            },
+            "timestamp": {
+              "$ref": "#/$defs/Uint64"
+            }
+          },
+          "required": [
+            "type",
+            "requestDigest",
+            "timestamp"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "PBC_DECIDED"
+            },
+            "requestDigest": {
+              "$ref": "#/$defs/Hash"
+            },
+            "timestamp": {
+              "$ref": "#/$defs/Uint64"
+            }
+          },
+          "required": [
+            "type",
+            "requestDigest",
+            "timestamp"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "DBC_AUTHORIZED"
+            },
+            "requestDigest": {
+              "$ref": "#/$defs/Hash"
+            },
+            "timestamp": {
+              "$ref": "#/$defs/Uint64"
+            },
+            "grantId": {
+              "$ref": "#/$defs/Hash"
+            },
+            "gid": {
+              "$ref": "#/$defs/Address"
+            },
+            "dataId": {
+              "$ref": "#/$defs/Hash"
+            },
+            "kssc": {
+              "$ref": "#/$defs/Address"
+            },
+            "destinationChainId": {
+              "$ref": "#/$defs/Uint256"
+            },
+            "recipientKeyHash": {
+              "$ref": "#/$defs/Hash"
+            },
+            "keyEpoch": {
+              "const": "0"
+            }
+          },
+          "required": [
+            "type",
+            "requestDigest",
+            "timestamp",
+            "grantId",
+            "gid",
+            "dataId",
+            "kssc",
+            "destinationChainId",
+            "recipientKeyHash",
+            "keyEpoch"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "RELEASE_INTENT"
+            },
+            "requestDigest": {
+              "$ref": "#/$defs/Hash"
+            },
+            "timestamp": {
+              "$ref": "#/$defs/Uint64"
+            },
+            "grantId": {
+              "$ref": "#/$defs/Hash"
+            },
+            "gid": {
+              "$ref": "#/$defs/Address"
+            },
+            "dataId": {
+              "$ref": "#/$defs/Hash"
+            }
+          },
+          "required": [
+            "type",
+            "requestDigest",
+            "timestamp",
+            "grantId",
+            "gid",
+            "dataId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "RELEASE_SENT"
+            },
+            "requestDigest": {
+              "$ref": "#/$defs/Hash"
+            },
+            "timestamp": {
+              "$ref": "#/$defs/Uint64"
+            },
+            "grantId": {
+              "$ref": "#/$defs/Hash"
+            },
+            "gid": {
+              "$ref": "#/$defs/Address"
+            },
+            "dataId": {
+              "$ref": "#/$defs/Hash"
+            }
+          },
+          "required": [
+            "type",
+            "requestDigest",
+            "timestamp",
+            "grantId",
+            "gid",
+            "dataId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "OUTCOME_RECORDED"
+            },
+            "requestDigest": {
+              "$ref": "#/$defs/Hash"
+            },
+            "timestamp": {
+              "$ref": "#/$defs/Uint64"
+            },
+            "grantId": {
+              "$ref": "#/$defs/Hash"
+            },
+            "gid": {
+              "$ref": "#/$defs/Address"
+            },
+            "dataId": {
+              "$ref": "#/$defs/Hash"
+            }
+          },
+          "required": [
+            "type",
+            "requestDigest",
+            "timestamp",
+            "grantId",
+            "gid",
+            "dataId"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "Assertion": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "passed": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "name",
+        "passed"
+      ],
+      "additionalProperties": false
+    },
+    "ScenarioResult": {
+      "type": "object",
+      "properties": {
+        "scenarioId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "classification": {
+          "enum": [
+            "SUPPORTED",
+            "SPEC_GAP",
+            "RECONSTRUCTION_FAILURE",
+            "REPAIR_SUPPORTED",
+            "REFUTED",
+            "BLOCKED"
+          ]
+        },
+        "observedEvents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ObservedEvent"
+          },
+          "minItems": 0
+        },
+        "assertions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Assertion"
+          },
+          "minItems": 0
+        },
+        "latencyMs": {
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "gasUsed": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Uint256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "encodedBytes": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "evidencePaths": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EvidencePath"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "scenarioId",
+        "classification",
+        "observedEvents",
+        "assertions",
+        "latencyMs",
+        "gasUsed",
+        "encodedBytes",
+        "limitations",
+        "evidencePaths"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "classification": {
+                "enum": [
+                  "SUPPORTED",
+                  "REPAIR_SUPPORTED"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "assertions": {
+                "minItems": 1,
+                "items": {
+                  "properties": {
+                    "passed": {
+                      "const": true
+                    }
+                  }
+                }
+              },
+              "evidencePaths": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "classification": {
+                "not": {
+                  "const": "BLOCKED"
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "evidencePaths": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "E0CaseStep": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "enum": [
+            "REQUEST_ACCESS",
+            "SUBSTITUTE_SUBJECT",
+            "REPLAY_REQUEST",
+            "ADVANCE_CLOCK",
+            "INSTALL_NEW_LIST",
+            "REPLAY_OLD_LIST",
+            "WRONG_ISSUER_UPDATE",
+            "REVOKE_ON_PBC",
+            "ACCEPT_CHECKPOINT",
+            "FORWARD_OR_CONSUME",
+            "RELEASE",
+            "DROP_OUTCOME",
+            "FABRICATE_OUTCOME",
+            "REPORT_OUTCOME",
+            "DUPLICATE_OUTCOME",
+            "CRASH_RESTART"
+          ]
+        },
+        "offsetSeconds": {
+          "$ref": "#/$defs/Uint64"
+        }
+      },
+      "required": [
+        "action",
+        "offsetSeconds"
+      ],
+      "additionalProperties": false
+    },
+    "E0CaseFixture": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "caseFamily": {
+          "enum": [
+            "E01",
+            "E02",
+            "E03"
+          ]
+        },
+        "profile": {
+          "enum": [
+            "paper-strict",
+            "paper-minimal",
+            "repaired-e"
+          ]
+        },
+        "sourceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "baseScenarioId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "variant": {
+          "type": "string",
+          "minLength": 1
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/E0CaseStep"
+          },
+          "minItems": 1
+        },
+        "expected": {
+          "type": "object",
+          "properties": {
+            "property": {
+              "enum": [
+                "decision-provenance",
+                "trust-freshness",
+                "audit-correspondence"
+              ]
+            },
+            "outcome": {
+              "enum": [
+                "ACCEPT",
+                "REJECT",
+                "PENDING",
+                "NO_NEW_GRANT",
+                "NO_NEW_OUTCOME",
+                "CONDITIONAL",
+                "UNPROVED"
+              ]
+            },
+            "classification": {
+              "enum": [
+                "SUPPORTED",
+                "SPEC_GAP",
+                "RECONSTRUCTION_FAILURE",
+                "REPAIR_SUPPORTED",
+                "REFUTED",
+                "BLOCKED"
+              ]
+            },
+            "error": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "BAD_SIGNATURE",
+                    "WRONG_SUBJECT",
+                    "WRONG_DESTINATION",
+                    "UNKNOWN_AUTHORITY",
+                    "STALE_ANCHOR",
+                    "STALE_STATE",
+                    "EXPIRED",
+                    "REPLAY",
+                    "POLICY_DENIED",
+                    "INSUFFICIENT_QUORUM",
+                    "DUPLICATE_SIGNER",
+                    "WRONG_EPOCH",
+                    "NOT_COMMITTED",
+                    "ADAPTER_UNAVAILABLE",
+                    "NOT_IMPLEMENTED_IN_PHASE",
+                    "UNAUTHORIZED_CALLER",
+                    "NOT_REGISTERED",
+                    "ALREADY_REGISTERED",
+                    "REVOKED",
+                    "MALFORMED",
+                    "WRONG_PROFILE"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "qualification": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "property",
+            "outcome",
+            "classification",
+            "error",
+            "qualification"
+          ],
+          "additionalProperties": false
+        },
+        "adapterMode": {
+          "const": "symbolic"
+        },
+        "executionStatus": {
+          "const": "NOT_RUN"
+        }
+      },
+      "required": [
+        "id",
+        "caseFamily",
+        "profile",
+        "sourceRefs",
+        "assumptions",
+        "baseScenarioId",
+        "variant",
+        "steps",
+        "expected",
+        "adapterMode",
+        "executionStatus"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "caseFamily": {
+                "const": "E01"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "variant": {
+                "enum": [
+                  "subject-substitution",
+                  "nonce-replay",
+                  "expiry-boundary"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "caseFamily": {
+                "const": "E02"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "variant": {
+                "enum": [
+                  "signed-list-rollback",
+                  "wrong-issuer",
+                  "pre-barrier-revocation",
+                  "post-barrier-revocation",
+                  "expired-duty"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "caseFamily": {
+                "const": "E03"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "variant": {
+                "enum": [
+                  "dropped-outcome",
+                  "fabricated-outcome",
+                  "duplicate-outcome",
+                  "crash-after-intent",
+                  "crash-after-send"
+                ]
+              }
+            }
+          }
+        }
+      ]
     }
   }
 }

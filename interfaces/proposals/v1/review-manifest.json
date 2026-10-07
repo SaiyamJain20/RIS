@@ -1,61 +1,51 @@
 {
-  "status": "candidate v1 revision 3, NOT frozen",
+  "status": "candidate v1 revision 4, NOT frozen",
   "respondsTo": [
-    "A1-0011",
-    "A2-0002",
-    "A1-0008"
+    "A1-0012",
+    "A2-0003",
+    "A2-0004",
+    "A2-0005"
   ],
   "supersedes": {
-    "commit": "31dd9465ab3b24e67e20e8a9f9f6cb0ca8a6b074",
-    "reviewManifestSha256": "e2dde1994fb1146e0df979a955cc2c2ada7ce05e88eb55bf26c26fdf91a815c7"
+    "commit": "3e153a8698ceb651ed3081670912fa1581732947",
+    "reviewManifestSha256": "8665132949b8db88ef2cc0e9ddc233e1d628232c6ac869d460e44e3d96c8be32"
   },
   "files": {
-    "interfaces/proposals/build_schemas.py": "0457543c915a968a7eed3d2798a2cbeadb278921e2a7f4af2c44cdcf631b755a",
-    "interfaces/proposals/v1/hmbc.schema.json": "6be244335aef3ceffb6977849db8b9013d144a0babf47981cc8a9ec2edf2a14c",
-    "interfaces/proposals/v1/README.md": "26144d20ea5f68942fe9f96cfa59d9348adaa3c1799f6631c7511354c22fa728",
+    "communication/agent-3/outbox/0002-rfc-e0-semantics-toolchain-receipt.md": "fcc22f394cdbe1492be2d01bafda161b2f0ecf80a3be92740b7e6c031ae5c9db",
+    "communication/agent-3/outbox/0005-ack-a1-0008-receipt-revision-2.md": "74e0b23c80c893f849c0f4176df67e388f7e7df09ef8a13e9fe9888c7ed2ff55",
+    "evaluation/check_schema_vectors.py": "4cf3ee57a6bbba8c2bc99103fa4844b788149a87b2792dfbcc5c70bd06e78e05",
+    "evaluation/e0_verify.py": "b73beeb1fc46ea993e2108d6f1f47e2458bc533c8ea7a6bce47a74fccdaf9ee5",
+    "evaluation/evidence/assumptions.csv": "76be6d628a029ea892917c809413ea3d50f46dad44cf04aea02df1e942a63ffa",
+    "evaluation/evidence/source-map.csv": "25337ee2846b13791bf971281d885f6300a6ce1407f156ddeb4e5cb85f54a07c",
+    "evaluation/scenarios/e0_cases.json": "be77c5608095ac1d09d0ebf607b7e3f971f5f49a609fc0f821c2730c1efb4fd5",
+    "evaluation/scenarios/e_positive.json": "065feef25d8072da12e4a40149097367ca70912984fc170056a655a54562a177",
+    "evaluation/schema.py": "3543d49bdd19e7f804cb7c1507df077070b7dae72eb5815f035bf9e96bef8ec8",
+    "evaluation/tests/test_boundary_schemas.py": "4f35c4a307cf8469ff763b2aba132f4dd1ea9b70f739159d6509eed771741d45",
+    "evaluation/tests/test_deployments.py": "2dd4a624d7ff967ab01e69a6d18fff6ccf5e5109c3c373b7a8d5abb357939c0b",
+    "evaluation/tests/test_schemas.py": "e7bcb77edc222d59fb4f82f4e9e348bf0b8a1553f292feb249d48d04a33660c8",
+    "evaluation/tests/test_vectors.py": "8833a4831fa198900c82200a6bd68a9534921b2c83611a234d96f7abc0234fce",
+    "evaluation/toolchain.json": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746",
+    "evaluation/vectors.py": "e7791eb24367032b3ed2932e1d84b5135fa4af145833bb1a68fa965d2cb53266",
+    "interfaces/proposals/boundaries.py": "ae3b924e1d1155d1c04651a48cbabda5779c66934c7be682614ae46fad4547c6",
+    "interfaces/proposals/build_boundary_vectors.py": "1e13e14c66b619b9216e4313abbd6368db228c69a9a6723aa8ea197ecf091ddb",
+    "interfaces/proposals/build_schemas.py": "3cfa472da1d13e547015aa724c6dae588fc21de63f8c330711a8eba27ab57514",
+    "interfaces/proposals/v1/ACCEPTANCE.md": "c2e885baa9f33db0fd92efdd172004aa0cb0198c9d0e19a87485343a96c52c91",
+    "interfaces/proposals/v1/BOUNDARY.md": "45585dc6671b78d5c7630a6522bdf892b66db7ef6aecc88d12349ba55ab92982",
+    "interfaces/proposals/v1/README.md": "434d797b89bf1fff5e7645ab11adc8da8a9794b6984ceaa2b4009cad3a436590",
+    "interfaces/proposals/v1/hmbc.schema.json": "3922a5c42fc38768d88dde0996ac6e2c11f02270f774dbf191a893417645ffa4",
+    "interfaces/vectors/adapter-agent2-candidate.json": "e248fceb7455ebc3ae328da294ab7b328e2a69fc43eb4975d3b35e0016f5d0b7",
+    "interfaces/vectors/boundary-candidate.json": "36749f925a4dd7deb1a8ac1dcbeaa49800c8a80e9205b9cdd2816f6a5ae84994",
+    "interfaces/vectors/deployment-agent1-candidate.json": "16181e1b5825a1ad00b23f7bb5f0610f6db7ed95dafcb8e21451609b59561329",
     "interfaces/vectors/eip712-agent1-candidate.json": "f211c65fe9c0ea0d7c7ed3fe6904ab04b36224f5bfcd41d3bd140e6165f0bf61",
     "interfaces/vectors/schema-candidate.json": "49a9dc29298495513340db2f4e4f78d7611e52c7b42409531bc5ed97f421e4d8",
-    "evaluation/schema.py": "c4a73d7b1cfbd7e659d792fcde5114062f4a3c1d8319a75366e3f6e69b2296df",
-    "evaluation/vectors.py": "e7791eb24367032b3ed2932e1d84b5135fa4af145833bb1a68fa965d2cb53266",
-    "evaluation/scenarios/e_positive.json": "065feef25d8072da12e4a40149097367ca70912984fc170056a655a54562a177",
-    "evaluation/evidence/source-map.csv": "25337ee2846b13791bf971281d885f6300a6ce1407f156ddeb4e5cb85f54a07c",
-    "evaluation/evidence/assumptions.csv": "24c655c620ae8d347e18bf08270f2de750a6befb468c79b152724a4af61f3a69",
-    "evaluation/toolchain.json": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746",
     "pyproject.toml": "1d839e80b8acdef35d878740cb5d212b464cc30f4adfdd3f56b69b162badd0ca",
-    "uv.lock": "1fb4777a5d4078434af8e7fe4a88f2f3afbe1d8f65d30e8a182999d7a7a29cbe",
-    "communication/agent-3/outbox/0002-rfc-e0-semantics-toolchain-receipt.md": "fcc22f394cdbe1492be2d01bafda161b2f0ecf80a3be92740b7e6c031ae5c9db",
-    "evaluation/tests/test_schemas.py": "e7bcb77edc222d59fb4f82f4e9e348bf0b8a1553f292feb249d48d04a33660c8",
-    "communication/agent-3/outbox/0005-ack-a1-0008-receipt-revision-2.md": "74e0b23c80c893f849c0f4176df67e388f7e7df09ef8a13e9fe9888c7ed2ff55",
-    "evaluation/tests/test_vectors.py": "8833a4831fa198900c82200a6bd68a9534921b2c83611a234d96f7abc0234fce",
-    "evaluation/e0_verify.py": "1ccbcb3b8f131f2b865c85aafeba66e0f7c8c9acbec1e2b0dcdc64048154b05c",
-    "interfaces/vectors/deployment-agent1-candidate.json": "16181e1b5825a1ad00b23f7bb5f0610f6db7ed95dafcb8e21451609b59561329",
-    "evaluation/tests/test_deployments.py": "2dd4a624d7ff967ab01e69a6d18fff6ccf5e5109c3c373b7a8d5abb357939c0b"
+    "uv.lock": "1fb4777a5d4078434af8e7fe4a88f2f3afbe1d8f65d30e8a182999d7a7a29cbe"
   },
-  "peerCommunicationReviewedCommits": {
-    "agent-1": "54262c2e4a1cfad26ba3a9445fcbda584f6eb491",
-    "agent-2": "b734a0abd47c5241b5ef94ee952fbf47cde0f13f"
-  },
-  "peerModuleExecutedCommit": "54262c2e4a1cfad26ba3a9445fcbda584f6eb491",
-  "peerReadyManifestSha256": "19273f507edb22fbbb9205ca2a587f764b5d79465fdfd327d751a31c3910f1a0",
-  "peerVectorsOriginalSha256": "6aa399e038be204a0420e7503f11300196fcaaf4bc7acbaef2724163f8cf0574",
-  "independentChecks": {
-    "report": "evaluation/evidence/e0/ready-a1-0011-published/checks.json",
-    "publicationProvenance": "evaluation/evidence/e0/ready-a1-0011-published/publication-provenance.json",
-    "note": "Command output/source hashes are separate evidence to avoid self-referential manifest hashes; no gate PASS."
-  },
-  "unchangedHistoricalVectors": "First nine producer vector objects exactly equal e351be5; receipt appended. Wrapper marks candidate revision3.",
-  "scopedAcknowledgements": [
-    "A1-0009: revision2 non-receipt ledger semantics only",
-    "A2-0002: old 8 signed types + credentialDigest; source/key/bundle/package choices; A1-0008 receipt capability/semantics only",
-    "A3-0005: exact A1-0008 receipt revision2"
+  "scope": "Strict E0 boundary/result/observation/case proposal. New choices need exact affected-party ACKs. No E1 service success or gate.",
+  "oldDefinitionChanges": [
+    "AdapterResponse: opaque result replaced by closed E operations",
+    "LedgerDeployment: interfaceVersion legacy-v0/frozen-v1 label compatibility only"
   ],
-  "openItems": [
-    "Renewed exact affected-party revision3 schema/vector ACKs",
-    "agent-2 receipt vector reproduction",
-    "agent-2 sample adapter.json + all six operation request/responses + executable source READY",
-    "Exact LedgerDeployment proposal ACKs; operation-specific input/result/ScenarioResult schemas",
-    "Complete three-agent source/toolchain/schema/interface review and E0 acceptance"
-  ],
-  "freezeRule": "No interfaces/v1/INTERFACE_READY until exact affected-party ACKs and common E0 smoke acceptance.",
-  "canonicalHexFix": "Length bound rejects final LF accepted by regex dollar anchors; Address/Hash/FileHash RED then GREEN."
+  "unchangedSignedDefinitionsAndVectors": true,
+  "fixtureExecutionLimit": "Only prepare_request example is owner-executed; all other success shapes/39 case expectations are constructed NOT_RUN fixtures."
 }

@@ -1,6 +1,7 @@
 """Generate draft v1 JSON Schemas; publishing these does not freeze v1."""
 import json
 from pathlib import Path
+from boundaries import extend
 
 ROOT = Path(__file__).parent / 'v1'
 DRAFT = 'https://json-schema.org/draft/2020-12/schema'
@@ -104,6 +105,8 @@ def definitions():
         d[name]=obj({'chainId':ref('Uint256'),'rpcUrl':{'type':'string','format':'uri'},'deployBlock':ref('Uint256'),'contracts':obj({member:ref('Address') for member in members})})
     d['LedgerDeployment']=obj({'schemaVersion':{'const':'hmbc-ledger-deployment/v0'},'interfaceVersion':{'const':'v0 proposed'},'producer':string(),'createdAt':{'type':'string','format':'date-time'},'profile':enum(*PROFILES),'profileEnum':enum('0','1','2'),'mutations':ref('Uint256'),'mutantNote':string(),'logDetailMode':enum('hash-only','complete-details'),'chains':obj({'pbc':ref('LedgerPbcChain'),'dbc':ref('LedgerDbcChain')}),'fixture':ref('LedgerFixture'),'abi':ref('LedgerAbiContracts'),'compiler':ref('LedgerCompiler'),'foundryTomlSha256':ref('FileHash'),'sources':ref('LedgerSourceHashes'),'errorCodes':obj({str(i):{'const':name} for i,name in enumerate(['NONE']+ERRORS)}),'errorEncoding':string()})
     mutation_bits={'paper-strict':('0','0'),'paper-minimal':('1','0'),'repaired-e':('2','0'),**{name:('2',str(1<<i)) for i,name in enumerate(PROFILES[3:])}}
+    # Preserve owner E0 samples while allowing explicitly reviewed frozen-v1 exports.
+    d['LedgerDeployment']['properties']['interfaceVersion']=enum('v0 proposed','v1')
     d['LedgerDeployment']['allOf']=[{'if':{'properties':{'profile':{'const':name}}},'then':{'properties':{'profileEnum':{'const':profile},'mutations':{'const':bits}}}} for name,(profile,bits) in mutation_bits.items()]
     d['LedgerDeployment']['x-status']='Candidate revision3 from A1-0011; exact affected-party ACK pending. Sample consistency is not a live deployment.'
     d['EventName']=enum('REQUEST_LOGGED','PBC_DECIDED','DBC_AUTHORIZED','RELEASE_INTENT','RELEASE_SENT','OUTCOME_RECORDED')
@@ -114,6 +117,7 @@ def definitions():
     d['Command']=obj({'argv':{'type':'array','items':{'type':'string'},'minItems':1},'cwd':string(),'startedAt':string(),'endedAt':string(),'exitCode':{'type':'integer'},'timedOut':{'type':'boolean'},'elapsedSeconds':{'type':'number','minimum':0},'outputSha256':ref('FileHash')})
     # Numbers here are measurement metadata/exit status, not ABI/EIP-712 uint wire fields.
     d['RunManifest']=obj({'runId':string(),'rq':{'const':'E'},'profile':enum(*PROFILES),'interfaceVersion':string(),'adapterMode':{'const':'symbolic'},'executionMode':enum('preflight','provided-traces','real-integrated'),'status':enum('BLOCKED','PASS','FAIL'),'sourceManifest':ref('FileHashes'),'sourceStable':{'type':'boolean'},'toolVersions':{'type':'object','additionalProperties':{'type':'string'}},'commands':array('Command'),'inputHashes':ref('FileHashes'),'seed':{'type':['integer','null']},'startedAt':string(),'endedAt':string(),'exitCodes':{'type':'array','items':{'type':'integer'}},'resultFiles':ref('FileHashes'),'blockers':{'type':'array','items':string()},'commit':{'type':'string','pattern':'^[0-9a-f]{40}$'},'dirtyTree':{'type':'array','items':{'type':'string'}}})
+    extend(d, obj, ref, array, string, enum)
     return d
 
 

@@ -1,6 +1,6 @@
 # Agent 3 evaluation — E0 candidate foundation
 
-This is a **paper-derived HMBC2020 reconstruction**. E0 remains open; no E/F/G gate has passed. Agent 1's exact READY handoff has been reproduced locally; agent 2's branch/flow review/adapter is unavailable at the recorded checkpoint.
+This is a **paper-derived HMBC2020 reconstruction**. E0 remains open; no E/F/G gate has passed. Agent 1's exact READY handoff has been reproduced locally; Agent 2's E0 public adapter and scoped review are available and independently reproduced; final E0 boundary acceptance remains pending.
 
 Implemented owned preparation:
 

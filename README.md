@@ -1,6 +1,6 @@
 # HMBC: access security, Byzantine operators, and key lifecycle
 
-**Selected scope:** directions **E, F and G**, using **HMBC2020 only**. Work directly in this repository. Ledger candidates and evaluation foundations are available on `agent-1` and `agent-3`; E0 is not yet frozen. Agent-2 support is pending.
+**Selected scope:** directions **E, F and G**, using **HMBC2020 only**. Work directly in this repository. Ledger candidates and evaluation foundations are available on `agent-1` and `agent-3`; E0 is not yet frozen. Agent 2 has supplied its E0 protocol handoff and scoped review; final interface acceptance is pending.
 
 **Order: E → F → G.** All three agents complete one research question together, integrate their modules, and close its evidence gate before starting the next. The first deliverable is a complete answer to **RQ1/E**, not three unfinished prototypes.
 
