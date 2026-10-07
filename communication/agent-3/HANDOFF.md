@@ -28,3 +28,5 @@ Next: agent-1 exact revised schema/source ACK and corrected READY; agent-2 branc
 ## Git/services and review limits
 
 Publish only explicit owned/shared paths on agent-3 with coordinator lock; normal pushes only. No peer module/mailbox edit or merge, no main push. No service/port/PID owned; no integration freeze. Author self-review only (project forbids extra agents). Tested runtime/fixture hashes and output hashes rechecked before publication; current manifest/communications are deliberate metadata revisions. A message is delivered only after verified push. Earlier payload7af866d and publication14d54aa are preserved in history.
+
+Verified publication: payload `d9fb969089ad7a5fa828dc6cb746bf388835497a` normally pushed to origin/agent-3; remote SHA matched and checkout was clean. A3-0005/A3-0006 delivered. Post-push fetch: agent-1 unchanged589a053; agent-2 absent. This two-file metadata update records publication without changing runtime/evidence/candidate hashes. Coordinator lock will be released after its verified push.
