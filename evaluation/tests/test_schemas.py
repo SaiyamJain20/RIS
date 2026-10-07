@@ -50,10 +50,26 @@ def test_adapter_response_exclusive_result_error():
         validate('AdapterResponse', {'schemaVersion':'v1','ok':True,'result':None,'error':None})
 
 
-def test_non_grant_receipt_rejected_on_candidate_success_path():
-    receipt={'requestDigest':'0x'+'11'*32,'grantId':'0x'+'22'*32,'dbcResult':'0','keyEpoch':'0','grantExpiresAt':'1800000030','dbcChainId':'28545','kssc':'0x'+'33'*20,'dbcBlockNumber':'1','dbcBlockHash':'0x'+'44'*32}
-    with pytest.raises(ValidationError):
-        validate('GrantReceipt', receipt)
+RECEIPT = next(v['typedData']['message'] for v in V['vectors'] if v['name']=='GrantReceipt')
+
+
+def test_matching_past_grant_receipt_wire_form_is_valid():
+    validate('GrantReceipt',RECEIPT)
+    # A past grant may be reconciled late. Wire validation has no wall-clock expiry check.
+    receipt=copy.deepcopy(RECEIPT);receipt['grantExpiresAt']='1'
+    validate('GrantReceipt',receipt)
+
+
+@pytest.mark.parametrize('field,value',[('dbcResult','1'),('keyEpoch','1'),('witnessSetVersion','2'),('grantExpiresAt','0')])
+def test_receipt_obsolete_result_and_invalid_e_constants_reject(field,value):
+    receipt=copy.deepcopy(RECEIPT);receipt[field]=value
+    with pytest.raises((ValidationError,ValueError)):validate('GrantReceipt',receipt)
+
+
+@pytest.mark.parametrize('field',['gid','dataId','witnessSetVersion'])
+def test_receipt_added_bindings_are_required(field):
+    receipt=copy.deepcopy(RECEIPT);del receipt[field]
+    with pytest.raises(ValidationError):validate('GrantReceipt',receipt)
 
 
 def test_all_declared_positive_scenarios_validate_and_unknown_nested_field_fails():
@@ -84,7 +100,7 @@ def test_e_certificate_cannot_have_more_than_one_witness_signature():
     with pytest.raises(ValidationError):validate('DecisionCertificate',cert)
 
 
-@pytest.mark.parametrize('name', ['Registration','RoleCertificate','RevocationList','TemporalAcl','AccessRequest','AccessDecision','StateCheckpoint'])
+@pytest.mark.parametrize('name', ['Registration','RoleCertificate','RevocationList','TemporalAcl','AccessRequest','AccessDecision','StateCheckpoint','GrantReceipt'])
 def test_schema_signing_metadata_matches_producer_vectors(name):
     from evaluation.vectors import type_string
     schema=json.loads(Path('interfaces/proposals/v1/hmbc.schema.json').read_text())['$defs'][name]
@@ -110,3 +126,9 @@ def test_zero_subject_in_temporal_acl_is_malformed(nested):
     acl['entries']=[entry]
     with pytest.raises(ValueError,match='MALFORMED'):
         validate('TemporalAcl' if nested else 'TempAclEntry',acl if nested else entry)
+
+
+@pytest.mark.parametrize('name,value',[('Address','0x'+'11'*20),('Hash','0x'+'22'*32),('FileHash','33'*32)])
+def test_canonical_hex_rejects_trailing_newline(name,value):
+    validate(name,value)
+    with pytest.raises(ValidationError):validate(name,value+'\n')

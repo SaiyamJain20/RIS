@@ -1,0 +1,42 @@
+Process 0 (that is, the initial process):
+{1}out(c, publicToken)
+
+-- Query not attacker(publicToken[]) in process 0.
+Translating the process into Horn clauses...
+Completing...
+Starting query not attacker(publicToken[])
+goal reachable: attacker(publicToken[])
+
+Derivation:
+
+1. The attacker initially knows publicToken[].
+attacker(publicToken[]).
+
+2. By 1, attacker(publicToken[]).
+The goal is reached, represented in the following fact:
+attacker(publicToken[]).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+out(c, ~M) with ~M = publicToken at {1}
+
+The attacker has the message publicToken.
+A trace has been found.
+RESULT not attacker(publicToken[]) is false.
+-- Query not attacker(secretToken[]) in process 0.
+Translating the process into Horn clauses...
+Completing...
+Starting query not attacker(secretToken[])
+RESULT not attacker(secretToken[]) is true.
+
+--------------------------------------------------------------
+Verification summary:
+
+Query not attacker(publicToken[]) is false.
+
+Query not attacker(secretToken[]) is true.
+
+--------------------------------------------------------------
+

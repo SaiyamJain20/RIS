@@ -1,6 +1,6 @@
 # Phase 1 / E0 progress — 2026-10-07
 
-**Status: E0 PARTIAL, E1 NOT UNLOCKED, gate E NOT RUN.** This report is a restartable progress record, not the RQ1 conclusion or an interface freeze. The user confirmed `/home/karma/Documents/RIS`, `SaiyamJain20/RIS`, branch `agent-3`, independent machines, and review of latest communication files across all branches.
+**Status: E0 PARTIAL, E1 NOT UNLOCKED, gate E NOT RUN.** **Current checkpoint: receipt/deployment candidate revision3; both peer branches present. Read the latest section below; earlier dated sections are historical.** This report is a restartable progress record, not the RQ1 conclusion or an interface freeze. The user confirmed `/home/karma/Documents/RIS`, `SaiyamJain20/RIS`, branch `agent-3`, independent machines, and review of latest communication files across all branches.
 
 ## Source and choices
 
@@ -53,3 +53,17 @@ Current follow-up verification: full owned suite 67 passed; independent vector c
 ## Corrected ledger READY and scoped candidate ACK
 
 A1-0009/A1-0010 from file-changing commit e351be5 resolve the prior metadata blocker. A1-0009 ACKs exact candidate e2dde199.. for non-receipt ledger semantics only; its stated exclusions remain open. A1-0010 pins ledger589a053/hash1c4f4fc8.. (87 files), superseding A1-0006. Agent3 now independently reproduced ledger154/0, Cast166/0 and six mutant suites; owned67/0/vector333/0; source/peer hashes stable. E03 pending test still exits1, runner/gate2 BLOCKED, PV trivial smoke only. All ten expected outcomes match, checks SHA-256 1b9283db8d6b08d80234e60eacad3067aaa0a981cce7f7e8e93af3a1c795cf8c under evaluation/evidence/e0/ready-a1-0010/. No15-edit source mutation smoke, current deployments, E correspondence or real integration was rerun. Candidate bytes remain unchanged; no full freeze. Missing agent2 and complete schema/receipt agreement still prevent E0 completion/E1 entry.
+
+## Current checkpoint — A1-0011 and A2-0002, candidate revision3
+
+Both agents are available. Agent1 is READY at54262c2 with implemented success-only receipt and fresh ABI/deployment exports. Agent2 is WORKING atb734a0a; source/key/bundle/package/timing and old-vector review is present, but schema review/adapter samples and executable READY are pending. The old missing-agent2 blocker is cleared. Its37 encoder tests are owner-reported, not executed by agent3. No full-interface ACK is inferred.
+
+D23 now IMPLEMENTED-PENDING-FREEZE after both affected receipt-semantics ACKs. The schema migrates exact A1-0008 fields; one new required producer signed vector has13 mutations. All first9 historical vector objects are unchanged. Past-grant late reconciliation is valid; dynamic grant/request/membership checks stay ledger responsibilities. Outcome receipts cannot prove release/delivery/decryption; E trusted-witness/safe-ledger assumptions remain explicit.
+
+Agent3 drafted strict LedgerDeployment from all4 current owner samples (4positive/11negative tests), including unsigned decimal strings and compiler/runtime numeric metadata, exact nested keys and E profile/witness/TTL constants. The proposal is not frozen; sample addresses are machine-local. Added maxLength to Address/Hash/FileHash after3 RED regressions showed regex dollar anchors accepted a final newline. No peer module was modified.
+
+Latest owned94/0; independent393checks/0 (9signed,83mutations,1array); wire schema68cases (12valid,56invalid), no mismatch. Agent1 pinned98-file manifest verified unchanged; ledger162/0; Cast196/0; seven mutant suites detected exactly; eight receipt controls pass. Separate33 static export checks confirm six compiled ABIs/runtime hashes and4 samples match source. No live chains/services or formal correspondence proof were run by agent3; owner17-edit mutation smoke and historical read demonstration remain owner evidence. Historical pending E03 failure preserved; new implemented receipt controls replace the removed pending profile. ProVerif token smoke0; promptcheck0; runner/gate2 BLOCKED.
+
+Exact commands/exits/fixtures/source/tool/output hashes and before/after stability are in ready-a1-0011-published/checks.json; RED/GREEN logs in receipt-revision-2/. Final candidate20-file manifest and checks hashes are in current STATUS/HANDOFF and A3-0009. Source map37; assumptions31; D24/D25/A28-A31 explicitly capture bounded checkpoint retry, opaque keyref custody, historical state/timestamp consistency and grant+policy key selection. These are choices/limits, not author implementation discoveries.
+
+Mandatory remaining work: Agent2 six-operation adapter examples/executable READY, receipt-vector reproduction and exact schema/toolchain review; exact LedgerDeployment consumer ACKs; operation input/result/ScenarioResult definitions; complete three-agent E0 ACK/freeze acceptance. Then E1 real positive/denied two-chain service flows; E2 cases/recovery/models; E3 report/gate. Phase1 remains incomplete and F/G locked. A3-0008/0009 communicate scoped review and concrete RFC via agent3 only.

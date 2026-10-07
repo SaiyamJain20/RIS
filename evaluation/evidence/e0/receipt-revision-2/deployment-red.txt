@@ -1,0 +1,96 @@
+FFFF...........                                                          [100%]
+=================================== FAILURES ===================================
+__ test_current_owner_deployment_samples_validate[mutant-no-receipt-binding] ___
+
+deployment = {'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08d...bled': True, 'runs': 200}, 'solc': '0.8.37+commit.f401782d', 'viaIR': False}, 'createdAt': '2026-10-07T10:49:19Z', ...}
+
+    @pytest.mark.parametrize('deployment',DEPLOYMENTS,ids=lambda d:d['profile'])
+    def test_current_owner_deployment_samples_validate(deployment):
+>       validate('LedgerDeployment',deployment)
+
+evaluation/tests/test_deployments.py:13: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'LedgerDeployment'
+value = {'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08d...bled': True, 'runs': 200}, 'solc': '0.8.37+commit.f401782d', 'viaIR': False}, 'createdAt': '2026-10-07T10:49:19Z', ...}
+
+    def validate(name,value):
+        if not re.fullmatch(r'[A-Za-z0-9]+',name): raise ValueError('Unknown schema name')
+        schema=json.loads((SCHEMAS/'hmbc.schema.json').read_text())
+>       if name not in schema['$defs']: raise ValueError('Unknown schema name')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ValueError: Unknown schema name
+
+evaluation/schema.py:62: ValueError
+________ test_current_owner_deployment_samples_validate[paper-minimal] _________
+
+deployment = {'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08d...bled': True, 'runs': 200}, 'solc': '0.8.37+commit.f401782d', 'viaIR': False}, 'createdAt': '2026-10-07T10:47:08Z', ...}
+
+    @pytest.mark.parametrize('deployment',DEPLOYMENTS,ids=lambda d:d['profile'])
+    def test_current_owner_deployment_samples_validate(deployment):
+>       validate('LedgerDeployment',deployment)
+
+evaluation/tests/test_deployments.py:13: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'LedgerDeployment'
+value = {'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08d...bled': True, 'runs': 200}, 'solc': '0.8.37+commit.f401782d', 'viaIR': False}, 'createdAt': '2026-10-07T10:47:08Z', ...}
+
+    def validate(name,value):
+        if not re.fullmatch(r'[A-Za-z0-9]+',name): raise ValueError('Unknown schema name')
+        schema=json.loads((SCHEMAS/'hmbc.schema.json').read_text())
+>       if name not in schema['$defs']: raise ValueError('Unknown schema name')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ValueError: Unknown schema name
+
+evaluation/schema.py:62: ValueError
+_________ test_current_owner_deployment_samples_validate[paper-strict] _________
+
+deployment = {'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08d...bled': True, 'runs': 200}, 'solc': '0.8.37+commit.f401782d', 'viaIR': False}, 'createdAt': '2026-10-07T10:46:08Z', ...}
+
+    @pytest.mark.parametrize('deployment',DEPLOYMENTS,ids=lambda d:d['profile'])
+    def test_current_owner_deployment_samples_validate(deployment):
+>       validate('LedgerDeployment',deployment)
+
+evaluation/tests/test_deployments.py:13: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'LedgerDeployment'
+value = {'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08d...bled': True, 'runs': 200}, 'solc': '0.8.37+commit.f401782d', 'viaIR': False}, 'createdAt': '2026-10-07T10:46:08Z', ...}
+
+    def validate(name,value):
+        if not re.fullmatch(r'[A-Za-z0-9]+',name): raise ValueError('Unknown schema name')
+        schema=json.loads((SCHEMAS/'hmbc.schema.json').read_text())
+>       if name not in schema['$defs']: raise ValueError('Unknown schema name')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ValueError: Unknown schema name
+
+evaluation/schema.py:62: ValueError
+__________ test_current_owner_deployment_samples_validate[repaired-e] __________
+
+deployment = {'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08d...bled': True, 'runs': 200}, 'solc': '0.8.37+commit.f401782d', 'viaIR': False}, 'createdAt': '2026-10-07T10:48:07Z', ...}
+
+    @pytest.mark.parametrize('deployment',DEPLOYMENTS,ids=lambda d:d['profile'])
+    def test_current_owner_deployment_samples_validate(deployment):
+>       validate('LedgerDeployment',deployment)
+
+evaluation/tests/test_deployments.py:13: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'LedgerDeployment'
+value = {'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08d...bled': True, 'runs': 200}, 'solc': '0.8.37+commit.f401782d', 'viaIR': False}, 'createdAt': '2026-10-07T10:48:07Z', ...}
+
+    def validate(name,value):
+        if not re.fullmatch(r'[A-Za-z0-9]+',name): raise ValueError('Unknown schema name')
+        schema=json.loads((SCHEMAS/'hmbc.schema.json').read_text())
+>       if name not in schema['$defs']: raise ValueError('Unknown schema name')
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       ValueError: Unknown schema name
+
+evaluation/schema.py:62: ValueError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_deployments.py::test_current_owner_deployment_samples_validate[mutant-no-receipt-binding]
+FAILED evaluation/tests/test_deployments.py::test_current_owner_deployment_samples_validate[paper-minimal]
+FAILED evaluation/tests/test_deployments.py::test_current_owner_deployment_samples_validate[paper-strict]
+FAILED evaluation/tests/test_deployments.py::test_current_owner_deployment_samples_validate[repaired-e]
+4 failed, 11 passed in 0.07s

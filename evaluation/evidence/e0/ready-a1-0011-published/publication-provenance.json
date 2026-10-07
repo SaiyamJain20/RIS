@@ -1,0 +1,62 @@
+{
+  "peerReady": {
+    "commit": "54262c2e4a1cfad26ba3a9445fcbda584f6eb491",
+    "manifestSha256": "19273f507edb22fbbb9205ca2a587f764b5d79465fdfd327d751a31c3910f1a0",
+    "entries": 98
+  },
+  "peerMessages": {
+    "communication/agent-1/outbox/0011-ready-receipt-implemented-fresh-exports.md": {
+      "ref": "origin/agent-1",
+      "changeCommit": "54262c2e4a1cfad26ba3a9445fcbda584f6eb491",
+      "sha256": "04fc74a6816a2e67ce57d134d667112d7b4e7ad80a9a775fa88653490c8848e8"
+    },
+    "communication/agent-2/outbox/0001-ack-distributed-startup.md": {
+      "ref": "origin/agent-2",
+      "changeCommit": "b734a0abd47c5241b5ef94ee952fbf47cde0f13f",
+      "sha256": "d5e10fbd1d46260e55f576715b5daec85de6ba19fc2aa68b816e8713dca784d0"
+    },
+    "communication/agent-2/outbox/0002-review-e0-source-flow-bundle-vectors.md": {
+      "ref": "origin/agent-2",
+      "changeCommit": "b734a0abd47c5241b5ef94ee952fbf47cde0f13f",
+      "sha256": "08a7362de7d5d23891d4223c4e8ffd29b1090de6cf91037b1ddb37e2e648fe3a"
+    }
+  },
+  "candidateManifestSha256": "8665132949b8db88ef2cc0e9ddc233e1d628232c6ac869d460e44e3d96c8be32",
+  "checksSha256": "794c4b80d4f284ddf7bb1b7f3e3e3bf15ae34dd9c9f736d110d26c48e951eb5e",
+  "testedSourceManifestSha256": "3ac4060887d3f9381a6f0f8889f01516ad43f54313a653158dcac63eee17e64b",
+  "exportIntegrityCommandSha256": "4891e7467881dcbcbd6b8adf943c318c1ee04ad39e28db97df779ee652ace730",
+  "packagingOnlyAfterTests": [
+    "communication/BOARD.md evidence-path correction",
+    "evaluation/reports/E0-progress.md current checkpoint",
+    "communication/agent-3/STATUS.md",
+    "communication/agent-3/HANDOFF.md",
+    "new immutable outbox messages",
+    "evidence publication/communication provenance",
+    "communication/DECISIONS.md table formatting only"
+  ],
+  "limits": [
+    "No E0 freeze/E1 integration/gate proof",
+    "Agent2 reported tests not independently executed",
+    "Owner17-edit source mutations and historical/live sample evidence not rerun here"
+  ],
+  "publication": "Prepared; delivery only after verified normal push on agent-3",
+  "testedToPackagedSourceDifferences": {
+    "communication/BOARD.md": {
+      "tested": "0537c6d53e84cdd7549e3c4c3dfdafdc34d10c9fd47c3ba870b1d09c535bf64f",
+      "packaged": "a3c674c68008eb56d8da98926a37129bc0e2cdb238ed255d00afc4b7b3297426"
+    },
+    "evaluation/reports/E0-progress.md": {
+      "tested": "2b32ea85dde4d2967104e1044e07cc46204d00ea519d956dd1d6e339bd301aea",
+      "packaged": "571883dc3e19f7856d175d15f7565c209f9c071d4248599954a829c37b0b6ab8"
+    },
+    "communication/DECISIONS.md": {
+      "tested": "89023c9666251caed9a03eb143b354583673c932f3a8b242b18287f973b6fca3",
+      "packaged": "8639d57074bf8b127d074dc5f3d2953d85d77565d8938c45925510892b6f8e59"
+    }
+  },
+  "candidateFileHashesReverified": true,
+  "newOutboxHashes": {
+    "communication/agent-3/outbox/0008-ack-a2-review-a1-receipt-ready.md": "2e9cdf750112c24a7377187a8a78920b0a8b53320662bcad4594c621b5ecc6b8",
+    "communication/agent-3/outbox/0009-rfc-candidate-revision-3-receipt-deployment.md": "67c890385784988502c7382a0b9d1bcb2645cd6a68ff3b72089fdaf8298099e6"
+  }
+}

@@ -67,7 +67,7 @@ def verify_vectors(document):
         report['checks'] += 1
         if actual != expected:
             report['failures'].append({'check': label, 'actual': actual, 'expected': expected})
-    expected={'Registration','RoleCertificate','RevocationList','TemporalAcl','AccessRequest','CredentialRecord[] credentialDigest','CredentialSet','AccessDecision','StateCheckpoint'}
+    expected={'Registration','RoleCertificate','RevocationList','TemporalAcl','AccessRequest','CredentialRecord[] credentialDigest','CredentialSet','AccessDecision','StateCheckpoint','GrantReceipt'}
     vectors=document.get('vectors',[])
     check('complete unique vector inventory',len(vectors)==len(expected) and {v.get('name') for v in vectors}==expected,True)
     for vector in vectors:
