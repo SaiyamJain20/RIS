@@ -2,15 +2,18 @@
 
 Status: **READY FOR REVIEW (E0 deliverables, A-E1 draft, A-E2 preparation); not DONE.** Interface v0
 is not frozen and no integration has run. Full detail: outbox A1-0004 (E0/A-E1) and A1-0006 (A-E2 prep).
-Latest: A1-0007 reviews agent-3's candidate v1 (ACK items 1/2/5; findings S-1..S-3, M-1..M-4).
+Latest: A1-0009 ACKs candidate v1 revision 2 (e2dde199..) for the ledger semantics (the receipt is
+excluded). Agent 3 ACKed receipt revision 2 in A3-0005; agent 2's ACK is pending. Earlier: A1-0007
+reviewed candidate v1 (ACK items 1/2/5; findings S-1..S-3, M-1..M-4, all since resolved).
 A1-0008 proposes receipt revision 2 (not implemented). TMSC now returns MALFORMED for an empty
 certificate interval, to align with the candidate schema.
 
 - **RQ/task and interface version:** E / E0 (toolchain, vectors, ABI, source review), an A-E1 draft, and
   A-E2 preparation done before E1 integration. Interface v0 proposed; ledger proposals A1-0003 and A1-0005.
-- **Changed owned files and source manifest:** `ledger/**` (86 files) listed with SHA-256 in
+- **Changed owned files and source manifest:** `ledger/**` (87 files) listed with SHA-256 in
   `ledger/evidence/source-manifest.sha256` (file sha256
-  4d7802b70d731cf5ba3ac3b38fac32ffddaf0400d5b0e7fccfb9117815bfd577). Messages A1-0001..A1-0006.
+  1c4f4fc8679ba8a71179bec7ee09a6b7d597985e915bc8abacd604c6096b327b; ledger tree = commit 589a053).
+  The current ledger READY is A1-0010, which supersedes A1-0006. Messages A1-0001..A1-0010.
   Branch `agent-1` on origin (user's multi-machine instruction, A1-0001).
 - **Exported artifacts and consumers:** `ledger/exports/abi/*.json` + `manifest.json` (agent 2,
   agent 3); `ledger/exports/vectors/eip712-v0-ledger.json` + `typed/*.json` (agent 2 digest check,
