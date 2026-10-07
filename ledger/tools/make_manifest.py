@@ -16,9 +16,9 @@ import sys
 LEDGER = pathlib.Path(__file__).resolve().parent.parent
 PROFILES = {"paper-strict": 0, "paper-minimal": 1, "repaired-e": 2,
             "mutant-no-destination-binding": 2, "mutant-no-state-barrier": 2, "mutant-no-record-freshness": 2,
-            "mutant-no-nonce": 2, "mutant-no-version-monotone": 2}
+            "mutant-no-nonce": 2, "mutant-no-version-monotone": 2, "mutant-no-receipt-binding": 2}
 MUTATIONS = {"mutant-no-destination-binding": 1, "mutant-no-state-barrier": 2, "mutant-no-record-freshness": 4,
-             "mutant-no-nonce": 8, "mutant-no-version-monotone": 16}
+             "mutant-no-nonce": 8, "mutant-no-version-monotone": 16, "mutant-no-receipt-binding": 32}
 LOG_MODES = {"hash-only": 0, "complete-details": 1}
 ERROR_CODES = [
     "NONE", "BAD_SIGNATURE", "WRONG_SUBJECT", "WRONG_DESTINATION", "UNKNOWN_AUTHORITY", "STALE_ANCHOR",

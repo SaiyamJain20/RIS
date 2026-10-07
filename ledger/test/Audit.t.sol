@@ -40,10 +40,10 @@ abstract contract AuditBase is HMBCFixture {
     }
 
     /// The relay reports a "released" outcome for a request the DBC never authorized (the relay
-    /// dropped the delivery). Current behavior in ALL profiles: the PBC records it. Paper: SPEC_GAP
-    /// (III-D3 logs whatever response arrives). Repaired-e: REPAIR PENDING (RFC A1-0005; the desired
-    /// property is test-pending/OutcomeEvidence.t.sol, which fails until implemented).
-    function test_E03_OutcomeWithoutDbcGrantIsCurrentlyRecorded() public {
+    /// dropped the delivery). Paper: the PBC records it (SPEC_GAP; III-D3 logs whatever response
+    /// arrives). Repaired-e: the unattested path is disabled (A1-0008), so nothing is recorded;
+    /// attested-path cases are in OutcomeEvidence.t.sol.
+    function test_E03_OutcomeWithoutDbcGrant() public {
         publishTrustLists(one(alice));
         registerAlice();
         (, bytes32 digest,) = aliceForwarded(1);
@@ -51,8 +51,12 @@ abstract contract AuditBase is HMBCFixture {
         (,,,,, bool allowed) = kssc.getGrant(g);
         assertFalse(allowed, "no DBC grant exists");
         vm.prank(relay);
+        if (profile() == Profile.REPAIRED_E) expectRejected(ErrorCode.WRONG_PROFILE);
         psc.reportOutcome(digest, g, keccak256("synthetic-outcome:released"));
-        assertTrue(lsc.outcomeLogId(digest) != 0, "PBC recorded an outcome with no DBC authorization");
+        assertTrue(
+            (lsc.outcomeLogId(digest) != 0) != (profile() == Profile.REPAIRED_E),
+            "outcome without DBC authorization: recorded in paper profiles only"
+        );
     }
 
     /// Cross-chain correlation of a legitimate access: the DBC's GrantIssued and AccessLog carry the

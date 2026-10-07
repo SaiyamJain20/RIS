@@ -3,44 +3,66 @@
     "type": "constructor",
     "inputs": [
       {
-        "name": "profile_",
-        "type": "uint8",
-        "internalType": "enum Profile"
-      },
-      {
-        "name": "pbcChainId_",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "rsc_",
-        "type": "address",
-        "internalType": "contract RSC"
-      },
-      {
-        "name": "tmsc_",
-        "type": "address",
-        "internalType": "contract TMSC"
-      },
-      {
-        "name": "lsc_",
-        "type": "address",
-        "internalType": "contract LSC"
-      },
-      {
-        "name": "relay_",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "policyVersion_",
-        "type": "uint64",
-        "internalType": "uint64"
-      },
-      {
-        "name": "maxRequestTtl_",
-        "type": "uint64",
-        "internalType": "uint64"
+        "name": "c",
+        "type": "tuple",
+        "internalType": "struct PSC.Config",
+        "components": [
+          {
+            "name": "profile",
+            "type": "uint8",
+            "internalType": "enum Profile"
+          },
+          {
+            "name": "mutations",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "rsc",
+            "type": "address",
+            "internalType": "contract RSC"
+          },
+          {
+            "name": "tmsc",
+            "type": "address",
+            "internalType": "contract TMSC"
+          },
+          {
+            "name": "lsc",
+            "type": "address",
+            "internalType": "contract LSC"
+          },
+          {
+            "name": "relay",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "policyVersion",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "maxRequestTtl",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "witnessSetVersion",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "witnesses",
+            "type": "address[]",
+            "internalType": "address[]"
+          },
+          {
+            "name": "threshold",
+            "type": "uint256",
+            "internalType": "uint256"
+          }
+        ]
       }
     ],
     "stateMutability": "nonpayable"
@@ -258,6 +280,19 @@
   },
   {
     "type": "function",
+    "name": "mutations",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "pbcChainId",
     "inputs": [],
     "outputs": [
@@ -307,6 +342,97 @@
       }
     ],
     "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "reportAttestedOutcome",
+    "inputs": [
+      {
+        "name": "requestDigest",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      },
+      {
+        "name": "outcomeDigest",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      },
+      {
+        "name": "receipt",
+        "type": "tuple",
+        "internalType": "struct GrantReceipt",
+        "components": [
+          {
+            "name": "requestDigest",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "grantId",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "gid",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "dataId",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "keyEpoch",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "grantExpiresAt",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "witnessSetVersion",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "dbcChainId",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "kssc",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "dbcBlockNumber",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "dbcBlockHash",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          }
+        ]
+      },
+      {
+        "name": "signatures",
+        "type": "bytes[]",
+        "internalType": "bytes[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "logId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable"
   },
   {
     "type": "function",
@@ -528,6 +654,19 @@
   },
   {
     "type": "function",
+    "name": "threshold",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "tmsc",
     "inputs": [],
     "outputs": [
@@ -664,6 +803,32 @@
     "stateMutability": "view"
   },
   {
+    "type": "function",
+    "name": "witnessSetVersion",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint64",
+        "internalType": "uint64"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "witnesses",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address[]",
+        "internalType": "address[]"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
     "type": "event",
     "name": "AccessDenied",
     "inputs": [
@@ -780,6 +945,43 @@
       },
       {
         "name": "requestLogId",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "AttestedOutcomeRecorded",
+    "inputs": [
+      {
+        "name": "requestDigest",
+        "type": "bytes32",
+        "indexed": true,
+        "internalType": "bytes32"
+      },
+      {
+        "name": "grantId",
+        "type": "bytes32",
+        "indexed": true,
+        "internalType": "bytes32"
+      },
+      {
+        "name": "outcomeDigest",
+        "type": "bytes32",
+        "indexed": false,
+        "internalType": "bytes32"
+      },
+      {
+        "name": "dbcBlockNumber",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "logId",
         "type": "uint256",
         "indexed": false,
         "internalType": "uint256"

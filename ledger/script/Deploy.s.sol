@@ -62,8 +62,22 @@ contract Deploy {
         LSC lsc = new LSC(LogDetailMode(mode));
         TMSC tmsc = new TMSC(p, vm.envOr("MUTATIONS", uint256(0)), lsc, cfg);
         RSC rsc = new RSC(pbcChainId, tmsc, lsc);
+        address[] memory ws = new address[](1);
+        ws[0] = _actor("witness-1");
         PSC psc = new PSC(
-            p, pbcChainId, rsc, tmsc, lsc, _actor("relay"), FixtureConfig.POLICY_VERSION, FixtureConfig.REQUEST_TTL
+            PSC.Config(
+                p,
+                vm.envOr("MUTATIONS", uint256(0)),
+                rsc,
+                tmsc,
+                lsc,
+                _actor("relay"),
+                FixtureConfig.POLICY_VERSION,
+                FixtureConfig.REQUEST_TTL,
+                FixtureConfig.WITNESS_SET_VERSION,
+                ws,
+                1
+            )
         );
         lsc.wire(address(rsc), address(tmsc), address(psc));
         tmsc.wire(address(psc), address(rsc));

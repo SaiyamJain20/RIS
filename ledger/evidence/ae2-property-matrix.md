@@ -7,8 +7,10 @@ classification.
 
 **Test-first record.** I wrote the expected per-profile outcomes into the tests before the first run.
 The first-run output is saved verbatim in `ae2-first-run.txt`: 63/63 matched, with no edits after
-observing results. The one repaired-e property that is not implemented is a failing control in
-`test-pending/` (`pending-run.txt`).
+observing results. The E03 outcome-evidence repair was first a failing control (`pending-first-run.txt`,
+`pending-run.txt`). It was implemented later as A1-0008 revision 2 (ACK A3-0005 and A2-0002): the
+tests were written against a reverting stub and seen failing (`receipt-first-run.txt`, 11 failures)
+before the implementation passed them.
 
 **Prerequisite skipped.** PLAN schedules A-E2 after E1 integration. I did this while waiting for
 agents 2/3 (independent same-RQ work), so it may need revision after the v1 freeze.
@@ -69,12 +71,12 @@ So `mutant-no-state-barrier` removes both. Implication for A1-0003 section 6.2: 
 alone already enforces revocation, and sequence equality additionally invalidates decisions on every
 non-revoking checkpoint (availability cost).
 
-## E03 audit correspondence (`test/Audit.t.sol`, `test-pending/OutcomeEvidence.t.sol`)
+## E03 audit correspondence (`test/Audit.t.sol`, `test/OutcomeEvidence.t.sol`)
 
 | Test | Property | paper-strict | paper-minimal | repaired-e |
 |---|---|---|---|---|
 | DroppedOutcomeStaysVisiblyPending | a granted request with no outcome is visibly pending | HOLDS | HOLDS | HOLDS. Reconciliation needs an honest reporter; nothing times it out. |
-| OutcomeWithoutDbcGrantIsCurrentlyRecorded | PBC outcome implies DBC authorization | VIOLATED | VIOLATED | VIOLATED -> **PENDING** repair (RFC A1-0005); `test-pending` fails until implemented |
+| OutcomeWithoutDbcGrant (+ `OutcomeEvidence.t.sol`) | PBC outcome implies DBC authorization | VIOLATED | VIOLATED | HOLDS (A1-0008): the unattested path is disabled (WRONG_PROFILE); a witness-signed GrantReceipt must match the forwarded record and the grant (10 field substitutions rejected with stable codes; signature/quorum/caller/replay checks); late reconciliation allowed. Mutant: no-receipt-binding |
 | EventsCorrelateWithPbcRequest | DBC GrantIssued/AccessLog carry the logged PBC digest | HOLDS for an honest relay (reference is relay-supplied) | same | HOLDS (digest recomputed from the user-signed request) |
 | LogDetailMode (complete + hash-only suites) | III-D4 vs V-B3 content | stored details match encoding / only hash | same | same |
 | TrustedWitnessBoundaryUnloggedRequest | DBC grant implies PBC request log | (paper: VIOLATED via RelayFabricatedRequest) | same | BOUNDARY: a witness-signed decision for a never-submitted request is granted; correspondence rests on the trusted witness (E: 1 witness; F: q = 3 of 4) |
@@ -85,7 +87,6 @@ recovery (agent 2), and cross-module correspondence over real runs (agent 3).
 ## Commands (repository root)
 
 ```bash
-forge test --root ledger                                   # 151 passed, 0 failed (A-E1 88 + A-E2 63)
-python3 -I ledger/tools/check_mutants.py ledger/evidence/ae2-mutants.json   # 6/6 mutant suites detected
-FOUNDRY_PROFILE=pending forge test --root ledger           # expected exit 1: 1 pending property fails
+forge test --root ledger                                   # 162 passed, 0 failed (current tree)
+python3 -I ledger/tools/check_mutants.py ledger/evidence/ae2-mutants.json   # 7/7 mutant suites detected
 ```

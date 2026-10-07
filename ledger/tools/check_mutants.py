@@ -27,6 +27,7 @@ EXPECTED = {
     "MutantNoNonceAccessFlowTest": {"test_AliceRegisteredDoctorOnDutyGetsGrant"},
     "MutantNoVersionMonotoneTest": {"test_E02_StaleSignedTempAclReplay", "test_E02_StaleSignedCrlReplay",
                                     "test_E02_EqualVersionDifferentContent"},
+    "MutantNoReceiptBindingTest": {"test_E03_ReceiptFieldSubstitution"},
 }
 
 

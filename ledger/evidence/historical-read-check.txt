@@ -1,0 +1,16 @@
+A2-0002 question: is TMSC.checkCredentials usable at a historical block? (agent 1, 2026-10-07)
+Deployment: ledger/exports/deployments/sample-repaired-e (local Anvil, chain 18545, --block-time 1).
+1. ledger/tools/e2e_smoke.sh ... sample-repaired-e ... 1  -> request accepted; the request stage saved
+   smoke-nonce-1/checkcreds.calldata = abi.encodeCall(TMSC.checkCredentials, (alice, bundle, atTime=request-time block timestamp)).
+   Request-time PBC block N = 169 (from smoke-nonce-1/request.hex).
+2. H1 root signed TemporalAcl v2 (no entries) with `cast wallet sign --data`; H1 CA-Admin sent
+   TMSC.updateTemporalAcl -> tx status 1, mined in block 282 (Alice removed from duty).
+3. cast call <TMSC> <checkcreds.calldata> --block 169  -> code 0 (NONE), 2 records:
+   (H1, Doctor, kind 1, serial 101, anchorVersion 1, validUntil 1791456487),
+   (H1, OnDuty, kind 2, serial 0, anchorVersion 1, validUntil 1791398887)
+   cast call <TMSC> <checkcreds.calldata>  (latest)     -> code 19 (REVOKED), 0 records
+   authEpoch() at block 169 = 3; at latest = 4
+Conclusion: checkCredentials is a `view` with an explicit atTime argument; a witness obtains the
+historical decision by eth_call at the decision's PBC block AND atTime = that block's timestamp.
+List generation/versions come from the block's state; atTime only drives the time comparisons. This
+needs a node that serves historical state (Anvil does by default; a pruned node may not).

@@ -18,6 +18,7 @@ run() { STAGE="$1" forge script "$LEDGER/script/E2ESmoke.s.sol:E2ESmoke" --root 
 if [ "$(cast call "$TMSC" 'authEpoch()(uint64)' --rpc-url "$PBC_RPC")" = "0" ]; then run pbc-setup "$PBC_RPC"; fi
 run pbc-request "$PBC_RPC"
 run dbc-deliver "$DBC_RPC"
+run dbc-receipt "$DBC_RPC"
 run pbc-outcome "$PBC_RPC"
 DIGEST_GRANT="$(cast abi-decode 'f()(bytes32,bytes32)' "$(cat "$LEDGER/$OUT_DIR/grant.hex")")"
 DIGEST="$(echo "$DIGEST_GRANT" | sed -n 1p)"; GRANT="$(echo "$DIGEST_GRANT" | sed -n 2p)"

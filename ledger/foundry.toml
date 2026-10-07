@@ -22,10 +22,6 @@ fs_permissions = [{ access = "read-write", path = "./exports" }]
 [fmt]
 line_length = 120
 
-# Desired-but-unimplemented properties (failing controls). Not part of the default suite.
-[profile.pending]
-test = "test-pending"
-
 # mutant-* deployment suites: named repaired-e property tests are expected to FAIL here.
 [profile.mutants]
 test = "test-mutants"

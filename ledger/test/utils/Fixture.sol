@@ -21,6 +21,7 @@ import {
     DecisionCertificate,
     StateCheckpoint,
     ForwardedRequest,
+    GrantReceipt,
     ACTION_READ,
     CREDENTIAL_LONG_TERM,
     CREDENTIAL_TEMPORAL
@@ -153,11 +154,13 @@ abstract contract HMBCFixture is TestBase {
         lsc = new LSC(mode);
         tmsc = new TMSC(p, mutations(), lsc, _authorityConfig());
         rsc = new RSC(PBC_CHAIN_ID, tmsc, lsc);
-        psc = new PSC(p, PBC_CHAIN_ID, rsc, tmsc, lsc, relay, POLICY_VERSION, REQUEST_TTL);
-
-        vm.chainId(DBC_CHAIN_ID);
         address[] memory ws = new address[](1);
         ws[0] = witness;
+        psc = new PSC(
+            PSC.Config(p, mutations(), rsc, tmsc, lsc, relay, POLICY_VERSION, REQUEST_TTL, WITNESS_SET_VERSION, ws, 1)
+        );
+
+        vm.chainId(DBC_CHAIN_ID);
         kssc = new KSSC(
             KSSC.Config(p, mutations(), DBC_CHAIN_ID, PBC_CHAIN_ID, address(psc), WITNESS_SET_VERSION, ws, 1, CHECKPOINT_TTL)
         );
@@ -434,5 +437,44 @@ abstract contract HMBCFixture is TestBase {
         (digest, code) = submit(r, signRequest(r, alicePk), aliceBundle());
         assertCode(code, ErrorCode.NONE, "PBC accepts Alice");
         recs = verifiedRecords(alice, aliceBundle());
+    }
+
+    // ------------------------------------------------------------------ grant receipts (A1-0008)
+
+    /// The witness duty (A2-0002): copy KSSC.getGrant(grantId) for an allowed grant at an observed block.
+    function receiptFor(bytes32 grantId) internal view returns (GrantReceipt memory g) {
+        (bytes32 req, bytes32 dataId, address gid, uint64 keyEpoch, uint64 expiresAt, bool allowed) = kssc.getGrant(grantId);
+        assertTrue(allowed, "fixture witness only attests allowed grants");
+        g = GrantReceipt(
+            req,
+            grantId,
+            gid,
+            dataId,
+            keyEpoch,
+            expiresAt,
+            WITNESS_SET_VERSION,
+            DBC_CHAIN_ID,
+            address(kssc),
+            block.number,
+            keccak256(abi.encode("synthetic-dbc-block", block.number))
+        );
+    }
+
+    function signReceipt(GrantReceipt memory g, uint256 pk) internal view returns (bytes[] memory sigs) {
+        sigs = new bytes[](1);
+        sigs[0] = sig(pk, HMBCHash.grantReceiptDigest(g, PBC_CHAIN_ID, address(psc)));
+    }
+
+    /// Records the outcome the way this profile does: paper = unattested relay report;
+    /// repaired-e = relay report carrying the witness-signed GrantReceipt.
+    function reportOutcomeFor(bytes32 digest, bytes32 grantId, bytes32 outcome) internal returns (uint256 logId) {
+        if (profile() == Profile.REPAIRED_E) {
+            GrantReceipt memory g = receiptFor(grantId);
+            bytes[] memory sigs = signReceipt(g, witnessPk);
+            vm.prank(relay);
+            return psc.reportAttestedOutcome(digest, outcome, g, sigs);
+        }
+        vm.prank(relay);
+        return psc.reportOutcome(digest, grantId, outcome);
     }
 }

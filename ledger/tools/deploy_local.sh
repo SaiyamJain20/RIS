@@ -6,14 +6,15 @@
 #   DEPLOYER_PK=0x... ledger/tools/deploy_local.sh <pbc-rpc-url> <dbc-rpc-url> <profile> <log-mode> <run-id>
 #     profile:  paper-strict | paper-minimal | repaired-e | mutant-<name> (repaired-e with one check
 #               removed: no-destination-binding, no-state-barrier, no-record-freshness, no-nonce,
-#               no-version-monotone; mutants exist only to show that checks/oracles detect them)
+#               no-version-monotone, no-receipt-binding; mutants exist only to show that checks/oracles
+#               detect them)
 #     log-mode: hash-only | complete-details
 # Output: ledger/exports/deployments/<run-id>/{pbc-stage,dbc-stage,deployment}.json
 # Chain ids default to 18545 (PBC) and 28545 (DBC); override with PBC_CHAIN_ID / DBC_CHAIN_ID.
 set -euo pipefail
 
 if [ "$#" -ne 5 ]; then
-  sed -n '2,12p' "$0" >&2
+  sed -n '2,13p' "$0" >&2
   exit 2
 fi
 PBC_RPC="$1"; DBC_RPC="$2"; PROFILE_NAME="$3"; LOG_NAME="$4"; RUN_ID="$5"
@@ -26,6 +27,7 @@ case "$PROFILE_NAME" in
   mutant-no-record-freshness) PROFILE=2; MUTATIONS=4 ;;
   mutant-no-nonce) PROFILE=2; MUTATIONS=8 ;;
   mutant-no-version-monotone) PROFILE=2; MUTATIONS=16 ;;
+  mutant-no-receipt-binding) PROFILE=2; MUTATIONS=32 ;;
   *) echo "unknown profile $PROFILE_NAME" >&2; exit 2 ;;
 esac
 case "$LOG_NAME" in

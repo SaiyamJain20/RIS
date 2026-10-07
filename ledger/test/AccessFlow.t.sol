@@ -54,8 +54,7 @@ abstract contract AccessFlowBase is HMBCFixture {
             assertFalse(kssc.nonceConsumed(alice, 1), "paper profiles do not track nonces");
         }
 
-        vm.prank(relay);
-        uint256 outcomeLog = psc.reportOutcome(digest, grantId, keccak256("synthetic-outcome:released"));
+        uint256 outcomeLog = reportOutcomeFor(digest, grantId, keccak256("synthetic-outcome:released"));
         assertTrue(outcomeLog > lsc.firstRequestLogId(digest), "outcome logged after request");
         assertTrue(psc.getRequest(digest).status == PSC.RequestStatus.OUTCOME_RECORDED, "PBC outcome recorded");
     }
@@ -203,7 +202,10 @@ abstract contract AccessFlowBase is HMBCFixture {
 
     // -------------------------------------------------------------- outcome
 
+    /// Unattested (paper) outcome path. Repaired-e disables it; its attested equivalents are in
+    /// OutcomeEvidence.t.sol, so this test only exercises the paper profiles.
     function test_OutcomeRequiresRelayForwardedRequestAndMatchingGrant() public {
+        if (profile() == Profile.REPAIRED_E) return;
         publishTrustLists(one(alice));
         registerAlice();
         (AccessRequest memory r, bytes32 digest, CredentialRecord[] memory recs) = aliceForwarded(1);

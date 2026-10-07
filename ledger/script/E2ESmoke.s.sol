@@ -20,6 +20,7 @@ import {
     DecisionCertificate,
     StateCheckpoint,
     ForwardedRequest,
+    GrantReceipt,
     ACTION_READ,
     RESULT_ALLOW
 } from "../src/types/ProtocolTypes.sol";
@@ -36,7 +37,8 @@ import {FixtureConfig} from "./FixtureConfig.sol";
 ///   STAGE=pbc-setup    PBC: H1/H2 CRLs, H1 TempACL (Alice on duty), Alice registers
 ///   STAGE=pbc-request  PBC: relay submits Alice's signed request; saves request + records
 ///   STAGE=dbc-deliver  DBC: repaired-e: witness checkpoint + decision; paper: relay policyEnf
-///   STAGE=pbc-outcome  PBC: relay reports the outcome
+///   STAGE=dbc-receipt  DBC: the witness reads the mined grant and prepares a GrantReceipt
+///   STAGE=pbc-outcome  PBC: relay reports the outcome (repaired-e: with the witness-signed receipt)
 /// Env: STAGE, OUT_DIR, NONCE, and the deployed addresses TMSC, RSC, PSC (PBC) / ACSC, KSSC (DBC).
 contract E2ESmoke {
     Vm internal constant vm = Vm(VM_ADDRESS);
@@ -46,6 +48,7 @@ contract E2ESmoke {
         if (stage == keccak256("pbc-setup")) _setup();
         else if (stage == keccak256("pbc-request")) _request();
         else if (stage == keccak256("dbc-deliver")) _deliver();
+        else if (stage == keccak256("dbc-receipt")) _receipt();
         else if (stage == keccak256("pbc-outcome")) _outcome();
         else revert("unknown STAGE");
     }
@@ -140,6 +143,12 @@ contract E2ESmoke {
             string.concat(vm.envString("OUT_DIR"), "/request.hex"),
             vm.toString(abi.encode(r, recs, digest, block.number, blockhash(block.number - 1)))
         );
+        // For the historical-read check (A2-0002 question): the same witness view, callable later via
+        // eth_call at a past block with atTime = that block's timestamp.
+        vm.writeFile(
+            string.concat(vm.envString("OUT_DIR"), "/checkcreds.calldata"),
+            vm.toString(abi.encodeCall(TMSC.checkCredentials, (alice, b, uint64(block.timestamp))))
+        );
     }
 
     struct Pending {
@@ -220,14 +229,42 @@ contract E2ESmoke {
         c.signatures[0] = _sig(_pk("witness-1"), HMBCHash.accessDecisionDigest(c.decision, block.chainid, address(kssc)));
     }
 
+    /// Witness duty (A1-0008/A2-0002): read the allowed grant at an already-mined DBC block.
+    function _receipt() internal {
+        KSSC kssc = KSSC(vm.envAddress("KSSC"));
+        (bytes32 digest, bytes32 grantId) = abi.decode(
+            vm.parseBytes(vm.readFile(string.concat(vm.envString("OUT_DIR"), "/grant.hex"))), (bytes32, bytes32)
+        );
+        (bytes32 req, bytes32 dataId, address gid, uint64 keyEpoch, uint64 expiresAt, bool allowed) = kssc.getGrant(grantId);
+        require(allowed && req == digest, "no matching allowed grant to attest");
+        uint256 observed = block.number - 1;
+        GrantReceipt memory g = GrantReceipt(
+            digest, grantId, gid, dataId, keyEpoch, expiresAt, FixtureConfig.WITNESS_SET_VERSION, block.chainid,
+            address(kssc), observed, blockhash(observed)
+        );
+        vm.writeFile(string.concat(vm.envString("OUT_DIR"), "/receipt.hex"), vm.toString(abi.encode(g)));
+    }
+
     function _outcome() internal {
         PSC psc = PSC(vm.envAddress("PSC"));
         (bytes32 digest, bytes32 grantId) = abi.decode(
             vm.parseBytes(vm.readFile(string.concat(vm.envString("OUT_DIR"), "/grant.hex"))), (bytes32, bytes32)
         );
-        vm.startBroadcast(_pk("relay"));
-        psc.reportOutcome(digest, grantId, keccak256("HMBC.smoke.outcome.released"));
-        vm.stopBroadcast();
+        bytes32 outcome = keccak256("HMBC.smoke.outcome.released");
+        if (psc.profile() == Profile.REPAIRED_E) {
+            GrantReceipt memory g = abi.decode(
+                vm.parseBytes(vm.readFile(string.concat(vm.envString("OUT_DIR"), "/receipt.hex"))), (GrantReceipt)
+            );
+            bytes[] memory sigs = new bytes[](1);
+            sigs[0] = _sig(_pk("witness-1"), HMBCHash.grantReceiptDigest(g, block.chainid, address(psc)));
+            vm.startBroadcast(_pk("relay"));
+            psc.reportAttestedOutcome(digest, outcome, g, sigs);
+            vm.stopBroadcast();
+        } else {
+            vm.startBroadcast(_pk("relay"));
+            psc.reportOutcome(digest, grantId, outcome);
+            vm.stopBroadcast();
+        }
         require(psc.getRequest(digest).status == PSC.RequestStatus.OUTCOME_RECORDED, "outcome not recorded");
     }
 }

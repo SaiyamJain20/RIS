@@ -13,6 +13,7 @@ import {
     CredentialRecord,
     AccessDecision,
     StateCheckpoint,
+    GrantReceipt,
     ACTION_READ,
     RESULT_ALLOW,
     CREDENTIAL_LONG_TERM,
@@ -65,6 +66,7 @@ contract ExportVectors {
         _credentialSetCheck(h1);
         _accessDecision(HMBCHash.accessRequestDigest(req), credentialDigest, witness);
         _stateCheckpoint(witness);
+        _grantReceipt(HMBCHash.accessRequestDigest(req), alice);
 
         string memory doc = string.concat(
             "{",
@@ -465,6 +467,64 @@ contract ExportVectors {
             '{"StateCheckpoint":[{"name":"sequence","type":"uint64"},{"name":"authEpoch","type":"uint64"},{"name":"policyVersion","type":"uint64"},{"name":"keyEpoch","type":"uint64"},{"name":"witnessSetVersion","type":"uint64"},{"name":"sourceChainId","type":"uint256"},{"name":"psc","type":"address"},{"name":"sourceBlockNumber","type":"uint256"},{"name":"sourceBlockHash","type":"bytes32"},{"name":"expiresAt","type":"uint64"}]}',
             HMBCHash.STATE_DOMAIN, DBC, KSSC_ADDR, message,
             HMBCHash.STATE_CHECKPOINT_TYPEHASH, sh, "witness-1", muts
+        );
+    }
+
+    /// A1-0008 revision 2 (ACK A3-0005, A2-0002). Domain {HMBCReceipt, 1, PBC, PSC}; signer = witness.
+    function _grantReceipt(bytes32 requestDigest, address alice) internal {
+        GrantReceipt memory m = GrantReceipt(
+            requestDigest,
+            HMBCHash.grantId(requestDigest, KSSC_ADDR, DBC),
+            alice,
+            keccak256("HMBC.data.P1.MHR"),
+            0,
+            T0 + 30,
+            1,
+            DBC,
+            KSSC_ADDR,
+            4321,
+            keccak256("HMBC.vector.dbc-block-4321")
+        );
+        bytes32 ds = HMBCHash.domainSeparator(HMBCHash.RECEIPT_DOMAIN, PBC, PSC_ADDR);
+        string[] memory muts = new string[](13);
+        for (uint256 i = 0; i < 11; i++) {
+            GrantReceipt memory x = GrantReceipt(
+                m.requestDigest, m.grantId, m.gid, m.dataId, m.keyEpoch, m.grantExpiresAt, m.witnessSetVersion,
+                m.dbcChainId, m.kssc, m.dbcBlockNumber, m.dbcBlockHash
+            );
+            string memory f;
+            string memory v;
+            if (i == 0) (f, v, x.requestDigest) = ("requestDigest", _b32(_flip(m.requestDigest)), _flip(m.requestDigest));
+            if (i == 1) (f, v, x.grantId) = ("grantId", _b32(_flip(m.grantId)), _flip(m.grantId));
+            if (i == 2) (f, v, x.gid) = ("gid", _addr(_flip(m.gid)), _flip(m.gid));
+            if (i == 3) (f, v, x.dataId) = ("dataId", _b32(_flip(m.dataId)), _flip(m.dataId));
+            if (i == 4) (f, v, x.keyEpoch) = ("keyEpoch", _u(m.keyEpoch ^ 1), m.keyEpoch ^ 1);
+            if (i == 5) (f, v, x.grantExpiresAt) = ("grantExpiresAt", _u(m.grantExpiresAt ^ 1), m.grantExpiresAt ^ 1);
+            if (i == 6) (f, v, x.witnessSetVersion) = ("witnessSetVersion", _u(m.witnessSetVersion ^ 1), m.witnessSetVersion ^ 1);
+            if (i == 7) (f, v, x.dbcChainId) = ("dbcChainId", _u(m.dbcChainId ^ 1), m.dbcChainId ^ 1);
+            if (i == 8) (f, v, x.kssc) = ("kssc", _addr(_flip(m.kssc)), _flip(m.kssc));
+            if (i == 9) (f, v, x.dbcBlockNumber) = ("dbcBlockNumber", _u(m.dbcBlockNumber ^ 1), m.dbcBlockNumber ^ 1);
+            if (i == 10) (f, v, x.dbcBlockHash) = ("dbcBlockHash", _b32(_flip(m.dbcBlockHash)), _flip(m.dbcBlockHash));
+            muts[i] = _mutation(f, v, HMBCHash.toTypedDigest(ds, HMBCHash.hashGrantReceipt(x)));
+        }
+        bytes32 sh = HMBCHash.hashGrantReceipt(m);
+        muts[11] = _mutation("domain.chainId", _u(PBC ^ 1), HMBCHash.toTypedDigest(HMBCHash.domainSeparator(HMBCHash.RECEIPT_DOMAIN, PBC ^ 1, PSC_ADDR), sh));
+        muts[12] = _mutation("domain.verifyingContract", _addr(_flip(PSC_ADDR)), HMBCHash.toTypedDigest(HMBCHash.domainSeparator(HMBCHash.RECEIPT_DOMAIN, PBC, _flip(PSC_ADDR)), sh));
+        string memory message = string.concat(
+            "{", _kv("requestDigest", _b32(m.requestDigest)), ",", _kv("grantId", _b32(m.grantId)), ",",
+            _kv("gid", _addr(m.gid)), ",", _kv("dataId", _b32(m.dataId)), ",", _kv("keyEpoch", _u(m.keyEpoch)), ",",
+            _kv("grantExpiresAt", _u(m.grantExpiresAt)), ","
+        );
+        message = string.concat(
+            message, _kv("witnessSetVersion", _u(m.witnessSetVersion)), ",", _kv("dbcChainId", _u(m.dbcChainId)), ",",
+            _kv("kssc", _addr(m.kssc)), ",", _kv("dbcBlockNumber", _u(m.dbcBlockNumber)), ",",
+            _kv("dbcBlockHash", _b32(m.dbcBlockHash)), "}"
+        );
+        _emit(
+            "GrantReceipt",
+            '{"GrantReceipt":[{"name":"requestDigest","type":"bytes32"},{"name":"grantId","type":"bytes32"},{"name":"gid","type":"address"},{"name":"dataId","type":"bytes32"},{"name":"keyEpoch","type":"uint64"},{"name":"grantExpiresAt","type":"uint64"},{"name":"witnessSetVersion","type":"uint64"},{"name":"dbcChainId","type":"uint256"},{"name":"kssc","type":"address"},{"name":"dbcBlockNumber","type":"uint256"},{"name":"dbcBlockHash","type":"bytes32"}]}',
+            HMBCHash.RECEIPT_DOMAIN, PBC, PSC_ADDR, message,
+            HMBCHash.GRANT_RECEIPT_TYPEHASH, sh, "witness-1", muts
         );
     }
 

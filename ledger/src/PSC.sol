@@ -9,9 +9,12 @@ import {
     AccessRequest,
     CredentialBundle,
     CredentialRecord,
-    ACTION_READ
+    GrantReceipt,
+    ACTION_READ,
+    MUT_ALL,
+    MUT_NO_RECEIPT_BINDING
 } from "./types/ProtocolTypes.sol";
-import {SigLib} from "./lib/SigLib.sol";
+import {SigLib, QuorumLib} from "./lib/SigLib.sol";
 import {Bootstrapped} from "./lib/Bootstrapped.sol";
 import {LSC} from "./LSC.sol";
 import {TMSC} from "./TMSC.sol";
@@ -48,7 +51,23 @@ contract PSC is Bootstrapped {
         uint256 outcomeLogId;
     }
 
+    /// Deployment configuration. The witness set (repaired-e) verifies GrantReceipts (A1-0008).
+    struct Config {
+        Profile profile;
+        uint256 mutations;
+        RSC rsc;
+        TMSC tmsc;
+        LSC lsc;
+        address relay;
+        uint64 policyVersion;
+        uint64 maxRequestTtl;
+        uint64 witnessSetVersion;
+        address[] witnesses;
+        uint256 threshold;
+    }
+
     Profile public immutable profile;
+    uint256 public immutable mutations;
     uint256 public immutable pbcChainId;
     RSC public immutable rsc;
     TMSC public immutable tmsc;
@@ -56,6 +75,9 @@ contract PSC is Bootstrapped {
     address public immutable relay;
     uint64 public immutable policyVersion;
     uint64 public immutable maxRequestTtl;
+    uint64 public immutable witnessSetVersion;
+    uint256 public immutable threshold;
+    address[] internal _witnesses;
 
     mapping(uint256 => address) public ksscForChain;
     uint256 public destinationCount;
@@ -77,27 +99,38 @@ contract PSC is Bootstrapped {
     /// PBC_DECIDED (deny). `claimedGid` is unauthenticated when code is BAD_SIGNATURE.
     event AccessDenied(bytes32 indexed requestDigest, address indexed claimedGid, ErrorCode code, uint256 requestLogId);
     event OutcomeRecorded(bytes32 indexed requestDigest, bytes32 indexed grantId, bytes32 outcomeDigest, uint256 logId);
+    /// OUTCOME_RECORDED with witness-attested DBC grant evidence (repaired-e).
+    event AttestedOutcomeRecorded(
+        bytes32 indexed requestDigest, bytes32 indexed grantId, bytes32 outcomeDigest, uint256 dbcBlockNumber, uint256 logId
+    );
 
-    constructor(
-        Profile profile_,
-        uint256 pbcChainId_,
-        RSC rsc_,
-        TMSC tmsc_,
-        LSC lsc_,
-        address relay_,
-        uint64 policyVersion_,
-        uint64 maxRequestTtl_
-    ) {
-        if (pbcChainId_ != block.chainid) revert Rejected(ErrorCode.WRONG_DESTINATION);
-        if (relay_ == address(0) || maxRequestTtl_ == 0) revert Rejected(ErrorCode.MALFORMED);
-        profile = profile_;
-        pbcChainId = pbcChainId_;
-        rsc = rsc_;
-        tmsc = tmsc_;
-        lsc = lsc_;
-        relay = relay_;
-        policyVersion = policyVersion_;
-        maxRequestTtl = maxRequestTtl_;
+    /// The PBC chain id is the chain this contract is deployed on.
+    constructor(Config memory c) {
+        if (c.relay == address(0) || c.maxRequestTtl == 0) revert Rejected(ErrorCode.MALFORMED);
+        if (c.mutations & ~MUT_ALL != 0 || (c.mutations != 0 && c.profile != Profile.REPAIRED_E)) {
+            revert Rejected(ErrorCode.MALFORMED);
+        }
+        if (c.profile == Profile.REPAIRED_E) {
+            if (c.threshold == 0 || c.threshold > c.witnesses.length) revert Rejected(ErrorCode.MALFORMED);
+            for (uint256 i = 0; i < c.witnesses.length; i++) {
+                if (c.witnesses[i] == address(0)) revert Rejected(ErrorCode.MALFORMED);
+                for (uint256 j = 0; j < i; j++) {
+                    if (c.witnesses[j] == c.witnesses[i]) revert Rejected(ErrorCode.DUPLICATE_SIGNER);
+                }
+            }
+        }
+        profile = c.profile;
+        mutations = c.mutations;
+        pbcChainId = block.chainid;
+        rsc = c.rsc;
+        tmsc = c.tmsc;
+        lsc = c.lsc;
+        relay = c.relay;
+        policyVersion = c.policyVersion;
+        maxRequestTtl = c.maxRequestTtl;
+        witnessSetVersion = c.witnessSetVersion;
+        _witnesses = c.witnesses;
+        threshold = c.threshold;
     }
 
     /// Registers the KSSC of a Domain Blockchain (one Hospital DBC in this study).
@@ -185,6 +218,8 @@ contract PSC is Bootstrapped {
         whenSealed
         returns (uint256 logId)
     {
+        // Repaired-e records outcomes only with DBC grant evidence (reportAttestedOutcome, A1-0008).
+        if (profile == Profile.REPAIRED_E) revert Rejected(ErrorCode.WRONG_PROFILE);
         if (msg.sender != relay) revert Rejected(ErrorCode.UNAUTHORIZED_CALLER);
         RequestRecord storage rec = _requests[requestDigest];
         if (rec.status == RequestStatus.NONE) revert Rejected(ErrorCode.WRONG_SUBJECT);
@@ -196,6 +231,53 @@ contract PSC is Bootstrapped {
         rec.status = RequestStatus.OUTCOME_RECORDED;
         rec.outcomeLogId = logId;
         emit OutcomeRecorded(requestDigest, grantId, outcomeDigest, logId);
+    }
+
+    /// A1-0008 revision 2 (repaired-e): record an outcome only with a witness-signed GrantReceipt that
+    /// matches this PBC's forwarded record and attests an existing allowed DBC grant. The receipt is
+    /// evidence of DBC authorization, not of release or delivery; `outcomeDigest` stays opaque.
+    /// Late reconciliation after grant expiry is allowed; one outcome per request.
+    function reportAttestedOutcome(
+        bytes32 requestDigest,
+        bytes32 outcomeDigest,
+        GrantReceipt calldata receipt,
+        bytes[] calldata signatures
+    ) external whenSealed returns (uint256 logId) {
+        if (profile != Profile.REPAIRED_E) revert Rejected(ErrorCode.WRONG_PROFILE);
+        if (msg.sender != relay) revert Rejected(ErrorCode.UNAUTHORIZED_CALLER);
+        RequestRecord storage rec = _requests[requestDigest];
+        if (rec.status == RequestStatus.NONE) revert Rejected(ErrorCode.WRONG_SUBJECT);
+        if (rec.status == RequestStatus.OUTCOME_RECORDED) revert Rejected(ErrorCode.REPLAY);
+        GrantReceipt memory g = receipt;
+        ErrorCode code = _checkReceipt(requestDigest, rec, g, signatures);
+        if (code != ErrorCode.NONE) revert Rejected(code);
+        logId = lsc.outcomeLog(requestDigest, abi.encode(requestDigest, outcomeDigest, g, msg.sender));
+        rec.status = RequestStatus.OUTCOME_RECORDED;
+        rec.outcomeLogId = logId;
+        emit AttestedOutcomeRecorded(requestDigest, g.grantId, outcomeDigest, g.dbcBlockNumber, logId);
+    }
+
+    /// A1-0008 steps 4-9 (first failing check wins).
+    function _checkReceipt(
+        bytes32 requestDigest,
+        RequestRecord storage rec,
+        GrantReceipt memory g,
+        bytes[] calldata signatures
+    ) internal view returns (ErrorCode) {
+        if (
+            mutations & MUT_NO_RECEIPT_BINDING == 0
+                && (g.requestDigest != requestDigest || g.gid != rec.gid || g.dataId != rec.dataId)
+        ) return ErrorCode.WRONG_SUBJECT;
+        if (
+            g.dbcChainId != rec.destinationChainId || g.kssc != rec.kssc
+                || g.grantId != HMBCHash.grantId(requestDigest, rec.kssc, rec.destinationChainId)
+        ) return ErrorCode.WRONG_DESTINATION;
+        if (g.keyEpoch != 0) return ErrorCode.WRONG_EPOCH;
+        if (g.grantExpiresAt == 0 || g.grantExpiresAt > rec.expiresAt) return ErrorCode.MALFORMED;
+        if (g.witnessSetVersion != witnessSetVersion) return ErrorCode.STALE_STATE;
+        return QuorumLib.verify(
+            HMBCHash.grantReceiptDigest(g, pbcChainId, address(this)), signatures, _witnesses, threshold
+        );
     }
 
     // ------------------------------------------------------------------ other Table 2 rows
@@ -217,5 +299,9 @@ contract PSC is Bootstrapped {
 
     function getRequest(bytes32 requestDigest) external view returns (RequestRecord memory) {
         return _requests[requestDigest];
+    }
+
+    function witnesses() external view returns (address[] memory) {
+        return _witnesses;
     }
 }

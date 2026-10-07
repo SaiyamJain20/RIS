@@ -17,8 +17,7 @@ and [communication rules](../communication/PROTOCOL.md). Source and actuator cho
 | `src/{ACSC,KSSC}.sol` | DBC roles: policy enforcement, grant/checkpoint/nonce state |
 | `src/DecisionVerifier.sol` | repaired-e decision-certificate checks (fixed check order) |
 | `src/lib/` | canonical signature recovery + quorum check, one-time bootstrap wiring |
-| `test/` | A-E1 `AccessFlow.t.sol`, `TrustAnchors.t.sol`; A-E2 `DecisionBinding.t.sol` (E01), `Freshness.t.sol` (E02), `Audit.t.sol` (E03); fixture, cheatcode interface. Every suite runs per profile. |
-| `test-pending/` | Desired repaired-e properties not yet implemented (failing controls; `FOUNDRY_PROFILE=pending`) |
+| `test/` | A-E1 `AccessFlow.t.sol`, `TrustAnchors.t.sol`; A-E2 `DecisionBinding.t.sol` (E01), `Freshness.t.sol` (E02), `Audit.t.sol` and `OutcomeEvidence.t.sol` (E03); fixture, cheatcode interface. Every suite runs per profile. |
 | `test-mutants/` | `mutant-*` deployments re-running repaired-e suites; named tests must FAIL (`FOUNDRY_PROFILE=mutants`) |
 | `script/` | `Deploy.s.sol` (staged two-chain deployment), `ExportVectors.s.sol`, `E2ESmoke.s.sol`, `FixtureConfig.sol` |
 | `tools/` | `deploy_local.sh`, `e2e_smoke.sh`, `export_abi.py`, `crosscheck_cast.py`, `mutation_smoke.py`, `check_mutants.py` (stdlib Python) |
@@ -32,7 +31,7 @@ and [communication rules](../communication/PROTOCOL.md). Source and actuator cho
 
 `0 PAPER_STRICT`, `1 PAPER_MINIMAL`, `2 REPAIRED_E`. `mutant-*` = REPAIRED_E plus one constructor
 mutation bit (`MUT_*` in `ProtocolTypes.sol`): no-destination-binding (1), no-state-barrier (2),
-no-record-freshness (4), no-nonce (8), no-version-monotone (16). Mutants exist only to show that tests
+no-record-freshness (4), no-nonce (8), no-version-monotone (16), no-receipt-binding (32). Mutants exist only to show that tests
 and oracles detect a missing check; they are never HMBC evidence. The `tools/mutation_smoke.py`
 source edits are a separate throwaway sensitivity check. `LogDetailMode`: `0 HASH_ONLY` (V-B3),
 `1 COMPLETE_DETAILS` (III-D4).
@@ -45,7 +44,7 @@ forge script ledger/script/ExportVectors.s.sol:ExportVectors --root ledger   # r
 python3 -I ledger/tools/crosscheck_cast.py                 # vectors vs cast's EIP-712 encoder
 python3 -I ledger/tools/mutation_smoke.py ledger/evidence/ae1-mutation-smoke.json
 python3 -I ledger/tools/check_mutants.py ledger/evidence/ae2-mutants.json   # mutant-* suites detected
-FOUNDRY_PROFILE=pending forge test --root ledger           # expected to FAIL until RFC A1-0005 lands
+ledger/tools/e2e_smoke.sh ... <nonce>                      # live flow incl. dbc-receipt stage
 forge build --root ledger && python3 -I ledger/tools/export_abi.py           # regenerate ABIs
 # Two running chains (owned by the caller). Never run this against chains you do not own:
 DEPLOYER_PK=0x... ledger/tools/deploy_local.sh <pbc-rpc> <dbc-rpc> <profile> <log-mode> <run-id>
@@ -64,8 +63,9 @@ The ledger has no Solidity dependencies: no forge-std and no submodules, so noth
   relay reporting it.
 - The witness/relay/user signing in `E2ESmoke.s.sol` runs inside Forge with TEST-ONLY keys. It is a
   ledger smoke, not the integration run.
-- A-E2 suites were prepared before E1 integration (while waiting on agents 2/3). PBC outcome
-  evidence (E03 repair) is not implemented; RFC A1-0005 proposes it.
+- A-E2 suites were prepared before E1 integration (while waiting on agents 2/3). The E03 outcome
+  evidence repair is the A1-0008 GrantReceipt (repaired-e only). It proves DBC authorization, not
+  delivery.
 
 ## Assigned tasks
 

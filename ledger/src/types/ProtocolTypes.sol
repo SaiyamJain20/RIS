@@ -63,7 +63,8 @@ uint256 constant MUT_NO_STATE_BARRIER = 1 << 1; // stateSequence and authEpoch v
 uint256 constant MUT_NO_RECORD_FRESHNESS = 1 << 2; // DecisionVerifier step 13 skipped
 uint256 constant MUT_NO_NONCE = 1 << 3; // KSSC neither checks nor consumes (gid, nonce)
 uint256 constant MUT_NO_VERSION_MONOTONE = 1 << 4; // TMSC accepts non-increasing list versions
-uint256 constant MUT_ALL = (1 << 5) - 1;
+uint256 constant MUT_NO_RECEIPT_BINDING = 1 << 5; // PSC skips receipt requestDigest/gid/dataId checks
+uint256 constant MUT_ALL = (1 << 6) - 1;
 
 /// Possession proof signed by the GID key (III-D2 "signed challenge"; GID = address, IV-D).
 struct Registration {
@@ -183,6 +184,23 @@ struct StateCheckpoint {
     uint64 expiresAt;
 }
 
+/// A1-0008 revision 2 (ACK A3-0005, A2-0002): witness attestation that an allowed KSSC grant
+/// matching the PBC's forwarded record existed at an observed DBC block. Success-only; it does not
+/// prove release, delivery or decryption.
+struct GrantReceipt {
+    bytes32 requestDigest;
+    bytes32 grantId;
+    address gid;
+    bytes32 dataId;
+    uint64 keyEpoch;
+    uint64 grantExpiresAt;
+    uint64 witnessSetVersion;
+    uint256 dbcChainId;
+    address kssc;
+    uint256 dbcBlockNumber;
+    bytes32 dbcBlockHash;
+}
+
 /// Paper-profile relay tuple: Fig. 6 step (4) [GID, verified attributes, data_id] plus the PBC
 /// request reference (Fig. 6 step (9) carries trans_hash). Not signed: the paper specifies no
 /// PBC->DBC message authentication beyond the PSC actuator.
@@ -204,6 +222,7 @@ library HMBCHash {
     string internal constant REQUEST_DOMAIN = "HMBCRequest"; // chain source(PBC), contract PSC
     string internal constant DECISION_DOMAIN = "HMBCDecision"; // chain destination(DBC), contract KSSC
     string internal constant STATE_DOMAIN = "HMBCState"; // chain destination(DBC), contract KSSC
+    string internal constant RECEIPT_DOMAIN = "HMBCReceipt"; // chain PBC, contract PSC
 
     bytes32 internal constant REGISTRATION_TYPEHASH =
         keccak256("Registration(address gid,bytes32 certDigest,bytes32 recipientKeyHash,uint64 expiresAt)");
@@ -234,6 +253,12 @@ library HMBCHash {
         "StateCheckpoint(uint64 sequence,uint64 authEpoch,uint64 policyVersion,uint64 keyEpoch,"
         "uint64 witnessSetVersion,uint256 sourceChainId,address psc,uint256 sourceBlockNumber,"
         "bytes32 sourceBlockHash,uint64 expiresAt)"
+    );
+
+    bytes32 internal constant GRANT_RECEIPT_TYPEHASH = keccak256(
+        "GrantReceipt(bytes32 requestDigest,bytes32 grantId,address gid,bytes32 dataId,uint64 keyEpoch,"
+        "uint64 grantExpiresAt,uint64 witnessSetVersion,uint256 dbcChainId,address kssc,uint256 dbcBlockNumber,"
+        "bytes32 dbcBlockHash)"
     );
 
     function domainSeparator(string memory name, uint256 chainId, address verifyingContract)
@@ -348,6 +373,13 @@ library HMBCHash {
         return keccak256(bytes.concat(head, tail));
     }
 
+    function hashGrantReceipt(GrantReceipt memory g) internal pure returns (bytes32) {
+        bytes memory head =
+            abi.encode(GRANT_RECEIPT_TYPEHASH, g.requestDigest, g.grantId, g.gid, g.dataId, g.keyEpoch, g.grantExpiresAt);
+        bytes memory tail = abi.encode(g.witnessSetVersion, g.dbcChainId, g.kssc, g.dbcBlockNumber, g.dbcBlockHash);
+        return keccak256(bytes.concat(head, tail));
+    }
+
     // ---- full typed digests (domain + struct) ----
 
     function registrationDigest(Registration memory r, uint256 pbcChainId, address rsc)
@@ -401,6 +433,14 @@ library HMBCHash {
         returns (bytes32)
     {
         return toTypedDigest(domainSeparator(STATE_DOMAIN, dbcChainId, kssc), hashStateCheckpoint(s));
+    }
+
+    function grantReceiptDigest(GrantReceipt memory g, uint256 pbcChainId, address psc)
+        internal
+        pure
+        returns (bytes32)
+    {
+        return toTypedDigest(domainSeparator(RECEIPT_DOMAIN, pbcChainId, psc), hashGrantReceipt(g));
     }
 
     /// grantId = keccak256(abi.encode(requestDigest, kssc, destinationChainId)) (v0).

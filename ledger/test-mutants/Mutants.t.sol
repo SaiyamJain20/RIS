@@ -6,11 +6,13 @@ import {
     MUT_NO_STATE_BARRIER,
     MUT_NO_RECORD_FRESHNESS,
     MUT_NO_NONCE,
-    MUT_NO_VERSION_MONOTONE
+    MUT_NO_VERSION_MONOTONE,
+    MUT_NO_RECEIPT_BINDING
 } from "../src/types/ProtocolTypes.sol";
 import {DecisionBindingRepairedTest} from "../test/DecisionBinding.t.sol";
 import {FreshnessRepairedTest} from "../test/Freshness.t.sol";
 import {AccessFlowRepairedTest} from "../test/AccessFlow.t.sol";
+import {OutcomeEvidenceRepairedTest} from "../test/OutcomeEvidence.t.sol";
 
 /// mutant-* deployments: REPAIRED_E with exactly one check removed. Each suite re-runs the repaired
 /// property tests against the mutant; the named property tests are EXPECTED TO FAIL (that is the
@@ -50,5 +52,11 @@ contract MutantNoNonceAccessFlowTest is AccessFlowRepairedTest {
 contract MutantNoVersionMonotoneTest is FreshnessRepairedTest {
     function mutations() internal pure override returns (uint256) {
         return MUT_NO_VERSION_MONOTONE;
+    }
+}
+
+contract MutantNoReceiptBindingTest is OutcomeEvidenceRepairedTest {
+    function mutations() internal pure override returns (uint256) {
+        return MUT_NO_RECEIPT_BINDING;
     }
 }
