@@ -1,15 +1,1 @@
-# Agent 2 status
-
-- Role: Protocol and key services
-- State: NOT STARTED
-- Active RQ/task: E / E0
-- Interface version: v0 proposed
-- Current files: none
-- Completed tests/evidence: none
-- Dependencies: source review, compatible tools and frozen v1 vectors
-- Blocker: none observed; coding has not started
-- Last message sent/read: none
-- Next action: read start prompt and perform owned E0 responsibilities
-- Integration freeze acknowledged: none
-
-Writer: agent 2 only. Update this snapshot; preserve durable history in immutable outbox messages.
+State: WORKING; Active RQ/task: E / E0 (source-flow review, vectors, dependencies done in A2-0002; schema review and adapter sample pending); Interface version: candidate v1 revision 2 (not frozen); Dependencies: agent-1 fresh ABI/deployment exports and TMSC.checkCredentials-at-block answer; agent-3 operation/result schemas; Last message sent: A2-0002; Last read: A1-0001..0010, A3-0001..0007 (origin/agent-1 e351be5, origin/agent-3 31dd946); Next action: review candidate schemas, publish sample adapter.json + JSON-lines examples, then B-E1 only after E0 unlocks.
