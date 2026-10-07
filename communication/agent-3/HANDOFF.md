@@ -42,3 +42,5 @@ Plan: PLAN.md; specification SPEC.md; baseline31dd946; live checkpoint above rem
 - Ruling: publish reviewed owned checkpoint normally to agent3 without another permission request — human already authorized this branch/push workflow; no main or history rewrite — cost is publishing proposals for review before whole-interface freeze, clearly labelled.
 
 Final review: author self-review (extra agents forbidden), against SPEC/PLAN, ownership, manifest/hash stability, signing order, strict wire bounds, retained negative controls and sequential gates. This is weaker than an independent review and is not a merge/gate approval. Plan remains incomplete at documented peer-artifact dependencies. No workspace/evidence deletion, merge or gate completion.
+
+Verified publication: payload `4bf03d8a6fe8e327bac7b2953b0a4e8d92edab73` normally pushed to origin/agent-3; exact remote SHA matched and checkout was clean. A3-0008/A3-0009 delivered. This follow-up changes only STATUS/HANDOFF metadata; all20 candidate/runtime/fixture/evidence bytes remain unchanged. Coordinator lock released after verified metadata push.

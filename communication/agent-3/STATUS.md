@@ -15,5 +15,7 @@
 - Historical failures preserved: pending E03 plus receipt/deployment/canonical-hex RED logs. PV is tool smoke only.
 - Blockers: agent2 adapter samples, complete operation/result/ScenarioResult schemas and schema review; exact deployment/schema/vector ACKs; protocol executable READY; common E0 acceptance
 - Gate E: NOT RUN. Runner/gate preflights2/BLOCKED. No services started or integration freeze.
-- Outbox: A3-0001..0007 already delivered. A3-0008 REVIEW and A3-0009 RFC prepared in this checkpoint; delivery requires verified normal push.
+- Outbox: A3-0001..0007 already delivered. A3-0008 scoped ACK/REVIEW and A3-0009 RFC delivered in verified normal push of payload 4bf03d8a6fe8e327bac7b2953b0a4e8d92edab73.
 - Next: fetch/read new exact artifacts; continue owned schema work; unlock E1 only with complete E0 freeze/ACK acceptance. No peer takeover.
+
+Verified publication: payload `4bf03d8a6fe8e327bac7b2953b0a4e8d92edab73` normally pushed to origin/agent-3; exact remote SHA matched and checkout was clean. A3-0008/A3-0009 delivered. This follow-up changes only STATUS/HANDOFF metadata; all20 candidate/runtime/fixture/evidence bytes remain unchanged. Coordinator lock released after verified metadata push.
