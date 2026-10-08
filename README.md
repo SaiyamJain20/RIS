@@ -1,6 +1,6 @@
 # HMBC: access security, Byzantine operators, and key lifecycle
 
-**Selected scope:** directions **E, F and G**, using **HMBC2020 only**. Work directly in this repository. Interface v1 has been frozen from exact scoped peer ACKs and verified owner snapshots. E0 closure and E1 unlock await both peers’ exact frozen byte/version mapping ACKs; all RQ gates remain NOT_RUN.
+**Selected scope:** directions **E, F and G**, using **HMBC2020 only**. Work directly in this repository. Interface v1 has been frozen from exact scoped peer ACKs and verified owner snapshots. Both peers’ exact frozen mapping ACKs are verified; E0 is closed and E1 is unlocked. C-E1 real runner/integration remains pending; all RQ gates remain NOT_RUN.
 
 **Order: E → F → G.** All three agents complete one research question together, integrate their modules, and close its evidence gate before starting the next. The first deliverable is a complete answer to **RQ1/E**, not three unfinished prototypes.
 
@@ -23,6 +23,6 @@ references/                       HMBC and two cryptography references
 archive/                          all previous documents, papers and audit evidence
 ```
 
-The live board is **E0: frozen v1 publication; exact peer mapping ACKs pending**. Read the latest `communication/**` revisions across fetched branches, preserving exact commit provenance. Each agent publishes its owned work on `agent-N` from its own machine. See [E0 progress](evaluation/reports/E0-progress.md) for executed evidence, limitations and missing peer ACKs. The root evaluator preflight is available; the real two-chain service runner and RQ gates are not yet complete.
+The live board is **E1: unlocked; real runner/service integration pending**. Read the latest `communication/**` revisions across fetched branches, preserving exact commit provenance. Each agent publishes its owned work on `agent-N` from its own machine. See [E0 progress](evaluation/reports/E0-progress.md) for historical verification and limitations; current mapping completion is recorded in communication/E0_MAPPING_ACKS.json. The root evaluator preflight is available; the real two-chain service runner and RQ gates are not yet complete.
 
 All previous content, including the uncommitted citation audit, is preserved under [archive/2026-10-06-pre-hmbc-efg/](archive/2026-10-06-pre-hmbc-efg/ARCHIVE.md). Its 51 archived files were checked against a SHA-256 manifest. JANUS, DP and abandoned directions are historical material; they are not active requirements.

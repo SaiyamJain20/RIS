@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "hmbc-live-mapping-acks/v1",
+  "updatedAt": "2026-10-08T15:30:10.698106+00:00",
+  "interfaceVersion": "v1",
+  "freezeId": "E0-v1-r6-20261008",
+  "frozenManifest": {
+    "path": "interfaces/v1/FREEZE.json",
+    "sha256": "f700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2",
+    "publicationCommit": "f7b8f3fd74ae3dd52e385cd013a6429415b519a2",
+    "immutable": true
+  },
+  "peerMappingAcks": {
+    "agent-1": {
+      "messageId": "A1-0027",
+      "path": "communication/agent-1/outbox/0027-ack-frozen-v1-mapping.md",
+      "commit": "70f704da9bf1a7ed4aa2fc3fa8e7292e6eb7b37a",
+      "changeCommit": "70f704da9bf1a7ed4aa2fc3fa8e7292e6eb7b37a",
+      "sha256": "93f8e6681225b7392af0e9e76eb45dd6ce26f09285a19b4048b8143e67692f26",
+      "scope": "all15 frozenCopies, metadataPolicy and version mapping; ledger-facing acceptance only",
+      "exclusions": [
+        "protocol operations/tool/worker semantics beyond ledger facts",
+        "A33/A37 symbolic meanings and worker counts",
+        "ScenarioResult/RunManifest/evaluator internals",
+        "ProVerif material",
+        "root dependency locks",
+        "non-ledger E0 acceptance rows"
+      ],
+      "reviewEvidence": "evaluation/evidence/e0/a1-frozen-mapping-ack-20261008/review.json",
+      "reviewEvidenceSha256": "ccfe633eb9bab8dad5545d447e9f44c81fee2abcf16d43ee004d2580f7565244"
+    },
+    "agent-2": {
+      "messageId": "A2-0013",
+      "path": "communication/agent-2/outbox/0013-ack-frozen-v1-mapping-and-v1-export-successor.md",
+      "commit": "e30d00d840e76526d8f12845054bfbf92fc0621b",
+      "changeCommit": "e30d00d840e76526d8f12845054bfbf92fc0621b",
+      "sha256": "dea71c476c105965f53e849a5343c0de5278f09defefa52b9fcdb154b3d0fcf0",
+      "scope": "all15 frozenCopies, protocol inventory and bundled six-ABI agreement, metadataPolicy/version mapping, D35/A38/--at-block/expiry restatement; earlier source/tool/case reviews retained for identical bytes",
+      "exclusions": [
+        "evaluator internals",
+        "Scenario/ScenarioResult/WorkerExpectation/RunManifest beyond wire checks",
+        "whole package approval",
+        "Agent3 verification reruns and ProVerif",
+        "ledger-only classifications",
+        "scenario/runtime results and four unproved paper crash cases",
+        "owner service READY/integration FREEZE/RQ gate decisions"
+      ],
+      "reviewEvidence": "evaluation/evidence/e0/a1-frozen-mapping-ack-20261008/successor-review.json",
+      "reviewEvidenceSha256": "5ea7a9bca96aa33c26df555593283597f7bcfafff6b3b2c0c5d56217432e6c45"
+    }
+  },
+  "e0Closed": true,
+  "e1Unlocked": true,
+  "integrationFreezeActive": false,
+  "ownerPins": {
+    "ledger": {
+      "commit": "91add8cc6000d1413bad2ed0aa119a5f26e8c776",
+      "manifestSha256": "407c86331072bdad63562541230fdd3078608287eccb373cb2f974e3bde20fc1",
+      "entries": 101
+    },
+    "protocol": {
+      "commit": "e30d00d840e76526d8f12845054bfbf92fc0621b",
+      "manifestSha256": "140bb7623bbba5f64c7e3e0a5f08d7c972a94ec50d20cc9e50a0e21aad404063",
+      "entries": 98,
+      "adapterSha256": "7146495b4dfbe351d73299223efdb853c41895ac880f9a6c13e2a525656a9220",
+      "supersedesFrozenOwnerPin": true,
+      "serviceReadyForIntegration": false
+    }
+  },
+  "note": "Live ACK receipt/status/successor record. FREEZE.json and its15 copies retain immutable publication-time bytes and nulls/status. Both exact mapping ACKs verified; all seven pre-publication E0 rows retain their evidence/exclusions. A-E1/B-E1/C-E1 unlock together. Owner service READY and exact integration FREEZE ACKs precede actual two-chain services; no RQ gate passed."
+}

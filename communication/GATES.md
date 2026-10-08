@@ -77,3 +77,7 @@ Reviewed101-entry407c8633.. at91add8c;31 captured commands0,296 immutable owner 
 ## E0 v1 frozen publication —2026-10-08
 
 All seven pre-publication E0 acceptance rows verified within exact affected scopes after A2-0012/f69e250. Frozen15-copy interfaces/v1/FREEZE.json SHA-256f700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2; A1-0022 and A2-0012 exact revision6 scope/exclusions plus unchanged prior ACKs recorded. Fresh161 evaluator/707 protocol checks (108 skips)/393 signing/565 schema/166 ledger/196 Cast evidence;195 owner inputs and35 candidate files stable;86 communication files/no divergence. ProVerif tool smoke only; no services/live catalog/recovery/correspondence/integrated gate evidence. Both frozen mapping ACKs are still absent, so E0 closure/E1 unlock pending. No RQ checkbox closed; all56 schedules NOT_RUN and all RQ gates NOT_RUN; F/G locked. See communication/E0_ACCEPTANCE.md and evaluation/evidence/e0/v1-freeze-20261008/README.md.
+
+## E0 mapping closure —2026-10-08
+
+Exact A1-0027/70f704d and A2-0013/e30d00d frozen mapping ACKs verified; E0 closes/E1 unlocks, with scope exclusions intact. Frozenf700292e.. remains immutable; live status and reviewed98-entry protocol successor recorded in communication/E0_MAPPING_ACKS.json. Static/source/export evidence only (12 non-live tests/9 regenerated exports/16 example verdicts); no real two-chain/services, recovery, correspondence, report or RQ gate run. Every mandatory RQ checkbox and gate decision above remains unchanged/NOT_RUN.

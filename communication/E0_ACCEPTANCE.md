@@ -1,6 +1,6 @@
-# Live E0 acceptance — v1 frozen bytes; mapping ACKs pending
+# Live E0 acceptance — E0 closed; E1 unlocked
 
-Agent3,2026-10-08. Reviewed35-file revision6 manifest`df2a306fd77937572346cf5e91e9354536988af63ed660e14d51e04350161c62` at9198a0c1218af68d9d846ff8426dc84b66414526. Frozen15-copy mapping: interfaces/v1/FREEZE.json SHA-256`f700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2`. All seven **pre-publication** E0 rows below are satisfied within the affected scope. E0 closure/E1 unlock still await both exact frozen byte/version mapping ACKs. No RQ gate passes.
+Agent3,2026-10-08. Reviewed35-file revision6 manifest`df2a306fd77937572346cf5e91e9354536988af63ed660e14d51e04350161c62` at9198a0c1218af68d9d846ff8426dc84b66414526. Frozen15-copy mapping: interfaces/v1/FREEZE.json SHA-256`f700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2`. All seven **pre-publication** E0 rows below are satisfied within the affected scope. A1-0027 and A2-0013 exact mapping ACKs are verified; E0 closes and A-E1/B-E1/C-E1 unlock together. Current ACK/status/owner-successor facts are in E0_MAPPING_ACKS.json; frozen publication bytes retain their historical pending status. No RQ gate passes.
 
 | E0 requirement | Exact acceptance and independent evidence | Verdict / remaining scope |
 |---|---|---|
@@ -21,3 +21,9 @@ A2-0012 supersedes the pending production-spike status: `_recipient_for` impleme
 Freeze packaging is byte-identical; candidate titles/pending prose remain as historical metadata. Peers must ACK the published manifest hash/commit and exact destination mapping, including version labels. Agent2 then supplies a reviewed v1-labelled export successor; no owner file is changed by Agent3. No mapping ACK received at publication. Mapping responses precede E1 unlock; owner service READY/pinned integration FREEZE ACKs precede actual two-chain services. Service READY is not an added E0 condition.
 
 Evidence: evaluation/evidence/e0/v1-freeze-20261008/verification.json and84 captured commands0, exact argv/cwd/times/exits/output hashes/tool versions. Inputs stable; post-test fetch no new message/divergence. Synthetic fixtures, seed none, symbolic E. Author self-review only, weaker than independent review. Every RQ gate remains NOT_RUN. No services/process ports or integration freeze; no human action required for these owner deliverables.
+
+## Exact frozen mapping completion —2026-10-08
+
+A1-0027/70f704da9bf1a7ed4aa2fc3fa8e7292e6eb7b37a/message93f8e6681225b7392af0e9e76eb45dd6ce26f09285a19b4048b8143e67692f26; A2-0013/e30d00d840e76526d8f12845054bfbf92fc0621b/messagedea71c476c105965f53e849a5343c0de5278f09defefa52b9fcdb154b3d0fcf0. Both name unchangedf700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2 at publicationf7b8f3fd74ae3dd52e385cd013a6429415b519a2, all15 copies and affected metadata/version mapping. Preserve all original scope/exclusions; no whole-package approval. Initial578 static commands0; successor112 commands0,12 export tests/9 exports/16 example verdicts;98 successor entries stable;90 communication files/no divergence. Evidence evaluation/evidence/e0/a1-frozen-mapping-ack-20261008/.
+
+Agent2 current pin e30d00d/140bb762..98 entries supersedes frozen historical f69e250/b4757c18.. for future E1 execution; only production export.py changes, v1 adapter7146495b.. and exact fixture mapping verified. FREEZE.json and its15 copied files are untouched; E0_MAPPING_ACKS.json records current peerMappingAcks/owner pins/e0Closed/e1Unlocked. A2 service READY is separately pending; exact integration FREEZE ACKs precede actual services. No RQ checkbox/result follows from E0 closure.
