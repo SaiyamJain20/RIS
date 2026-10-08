@@ -27,6 +27,9 @@ class WitnessError(Exception):
 class Witness:
     def __init__(self, led: Ledger, key_label: str | None = None):
         self.led = led
+        # Checkpoints, witness decisions and receipts exist only in repaired-e (A1-0016); paper profiles never use them.
+        if led.pbc.call(led.PSC, "profile") != "2" or led.dbc.call(led.ACSC, "profile") != "2":
+            raise WitnessError("WRONG_PROFILE", "witness artifacts exist only in the repaired-e profile; this deployment is a paper profile")
         fx = led.deployment["fixture"]
         label = key_label or fx["witnessSet"]["keyLabels"][0]
         self._key = keys.synthetic_private_key(label)

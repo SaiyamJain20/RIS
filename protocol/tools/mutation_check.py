@@ -17,7 +17,8 @@ TESTS = {"wire": ["protocol/tests/test_candidate_schema_review.py", "protocol/te
          "adapter": ["protocol/tests/test_adapter.py", "protocol/tests/test_adapter_hardening.py"], "keys": ["protocol/tests/test_messages_keys.py"],
          "witness": ["protocol/tests/test_witness.py", "protocol/tests/test_witness_policy.py", "protocol/tests/test_witness_hardening.py"],
          "worker": ["protocol/tests/test_worker.py", "protocol/tests/test_worker_hardening.py"],
-         "chain": ["protocol/tests/test_chain.py", "protocol/tests/test_ledger.py", "protocol/tests/test_edges.py", "protocol/tests/test_chain_hardening.py", "protocol/tests/test_chain_stub.py"], "adapter_live": ["protocol/tests/test_adapter_live.py"], "eip712": ["protocol/tests/test_eip712_vs_agent1.py"]}
+         "chain": ["protocol/tests/test_chain.py", "protocol/tests/test_ledger.py", "protocol/tests/test_edges.py", "protocol/tests/test_chain_hardening.py", "protocol/tests/test_chain_stub.py"], "adapter_live": ["protocol/tests/test_adapter_live.py"],
+         "controls": ["protocol/tests/test_paper_profile.py", "protocol/tests/test_supplement_controls.py"], "eip712": ["protocol/tests/test_eip712_vs_agent1.py"]}
 
 M = [  # (suite, file, old, new, equivalent-reason or None)
     ("wire", "protocol/hmbc_protocol/wire.py", "    if any(a >= b for a, b in zip(keys, keys[1:])):", "    if False:", None),
@@ -72,6 +73,11 @@ M = [  # (suite, file, old, new, equivalent-reason or None)
     ("worker", "protocol/hmbc_protocol/worker.py", 'self.db.execute("update releases set sent_count=sent_count+1 where grant_id=?", (grant_id,))', "pass", None),
     ("worker", "protocol/hmbc_protocol/worker.py", 'self.db.execute("update releases set completed_count=completed_count+1 where grant_id=?", (grant_id,))', "pass", None),
     ("wire", "protocol/hmbc_protocol/wire.py", 'def _one_signature(x):\n    if len(_list(x, "signatures")) != 1:', 'def _one_signature(x):\n    if False:', None),
+    ("controls", "protocol/hmbc_protocol/witness.py", 'if led.pbc.call(led.PSC, "profile") != "2" or led.dbc.call(led.ACSC, "profile") != "2":', "if False:", None),
+    ("controls", "protocol/testtools/deviating_witness.py", 'if "TEST-ONLY" not in str(led.deployment.get("fixture", {}).get("keyDerivation", "")):', "if False:", None),
+    ("controls", "protocol/testtools/deviating_witness.py", "if field not in BOUND_FIELDS:", "if False:", None),
+    ("controls", "protocol/testtools/deviating_witness.py", "if not allowed:", "if False:",
+     "redundant with wire.grant_receipt: a missing grant reads as all zeros (grantExpiresAt 0), which the receipt validator rejects, so the tool still refuses"),
     ("eip712", "protocol/hmbc_protocol/eip712.py", "_ADDR.fullmatch(value)", "_ADDR.match(value)", None),
     ("eip712", "protocol/hmbc_protocol/eip712.py", "if not isinstance(value, str) or not _DEC.fullmatch(value):", "if not isinstance(value, (str, int)) or (isinstance(value, str) and not _DEC.fullmatch(value)):", None),
     ("adapter", "protocol/hmbc_protocol/adapter.py", 'if req["gid"] != signer:', "if False:", None),

@@ -40,14 +40,15 @@ def _wait(url: str):
     raise RuntimeError(f"anvil at {url} did not start")
 
 
-@pytest.fixture(scope="session")
-def ledger_chains(tmp_path_factory):
+def _deploy_profile(tmp_path_factory, profile: str):
+    """Start two Anvil nodes and deploy agent-1's pinned ledger in `profile` ('repaired-e', 'paper-strict', 'mutant-no-nonce', ...). Generator: yields the
+    deployment namespace, then stops ONLY the two processes it started."""
     anvil, forge = foundry("anvil"), foundry("forge")
     if not anvil or not forge:
         pytest.skip("Foundry (anvil/forge) not installed")
     if subprocess.run(["git", "cat-file", "-e", LEDGER_COMMIT], cwd=REPO, capture_output=True).returncode != 0:
         pytest.skip(f"pinned ledger commit {LEDGER_COMMIT} not available locally (git fetch origin)")
-    root = tmp_path_factory.mktemp("ledger-snapshot")
+    root = tmp_path_factory.mktemp(f"ledger-snapshot-{profile}")
     tar = subprocess.run(["git", "archive", LEDGER_COMMIT], cwd=REPO, capture_output=True, check=True).stdout
     tmp_tar = root / "snap.tar"
     tmp_tar.write_bytes(tar)
@@ -63,11 +64,11 @@ def ledger_chains(tmp_path_factory):
         for u in urls:
             _wait(u)
         env = {**os.environ, "PATH": f"{pathlib.Path(forge).parent}:{os.environ['PATH']}", "DEPLOYER_PK": ANVIL_KEY0}
-        run = subprocess.run(["bash", "ledger/tools/deploy_local.sh", urls[0], urls[1], "repaired-e", "complete-details", "protocol-tests"],
+        run = subprocess.run(["bash", "ledger/tools/deploy_local.sh", urls[0], urls[1], profile, "complete-details", "protocol-tests"],
                              cwd=src, env=env, capture_output=True, text=True, timeout=600)
         assert run.returncode == 0, run.stdout[-1500:] + run.stderr[-1500:]
         dep = json.loads((src / "ledger/exports/deployments/protocol-tests/deployment.json").read_text())
-        yield SimpleNamespace(deployment=dep, pbc_url=urls[0], dbc_url=urls[1], root=src)
+        yield SimpleNamespace(deployment=dep, pbc_url=urls[0], dbc_url=urls[1], root=src, profile=profile)
     finally:
         for p in procs:
             p.terminate()
@@ -76,6 +77,33 @@ def ledger_chains(tmp_path_factory):
                 p.wait(timeout=10)
             except subprocess.TimeoutExpired:
                 p.kill()
+
+
+@pytest.fixture(scope="session")
+def ledger_chains(tmp_path_factory):
+    yield from _deploy_profile(tmp_path_factory, "repaired-e")
+
+
+@pytest.fixture(scope="session")
+def ledger_chains_paper(tmp_path_factory):
+    yield from _deploy_profile(tmp_path_factory, "paper-strict")
+
+
+@pytest.fixture(scope="session")
+def ledger_chains_no_nonce(tmp_path_factory):
+    yield from _deploy_profile(tmp_path_factory, "mutant-no-nonce")
+
+
+@pytest.fixture(scope="session")
+def ledger_chains_no_receipt_binding(tmp_path_factory):
+    yield from _deploy_profile(tmp_path_factory, "mutant-no-receipt-binding")
+
+
+def _isolated(chains):
+    ids = [rpc(u, "evm_snapshot") for u in (chains.pbc_url, chains.dbc_url)]
+    yield chains
+    for u, i in zip((chains.pbc_url, chains.dbc_url), ids):
+        assert rpc(u, "evm_revert", [i]) is True
 
 
 @pytest.fixture
@@ -94,3 +122,40 @@ def world(ledger):
     import ledger_setup
     led = ledger_mod.Ledger.from_deployment(ledger.deployment)
     return led, ledger_setup.setup_pbc(led)
+
+
+def _world(chains):
+    from hmbc_protocol import ledger as ledger_mod
+    import ledger_setup
+    led = ledger_mod.Ledger.from_deployment(chains.deployment)
+    return led, ledger_setup.setup_pbc(led)
+
+
+@pytest.fixture
+def ledger_paper(ledger_chains_paper):
+    yield from _isolated(ledger_chains_paper)
+
+
+@pytest.fixture
+def world_paper(ledger_paper):
+    return _world(ledger_paper)
+
+
+@pytest.fixture
+def ledger_no_nonce(ledger_chains_no_nonce):
+    yield from _isolated(ledger_chains_no_nonce)
+
+
+@pytest.fixture
+def world_no_nonce(ledger_no_nonce):
+    return _world(ledger_no_nonce)
+
+
+@pytest.fixture
+def ledger_no_receipt_binding(ledger_chains_no_receipt_binding):
+    yield from _isolated(ledger_chains_no_receipt_binding)
+
+
+@pytest.fixture
+def world_no_receipt_binding(ledger_no_receipt_binding):
+    return _world(ledger_no_receipt_binding)

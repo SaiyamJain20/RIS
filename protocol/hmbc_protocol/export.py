@@ -147,7 +147,7 @@ def build_manifest() -> dict:
         ops.append(entry)
     return {
         "schemaVersion": "hmbc-protocol-adapter/v0",
-        "interfaceVersion": "candidate v1 revision 3 (NOT frozen)",
+        "interfaceVersion": "candidate v1 revision 5 (NOT frozen)",
         "producer": "agent-2 protocol/hmbc_protocol/export.py",
         "adapterMode": adapter.ADAPTER_MODE,
         "supportedAdapterModes": ["symbolic"],

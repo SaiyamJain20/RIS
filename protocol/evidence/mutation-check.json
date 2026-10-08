@@ -524,11 +524,43 @@
       "status": "SURVIVED-EQUIVALENT",
       "equivalentReason": "NaN/Infinity become floats that the strict wire validators then reject as non-strings",
       "pytestTail": "64 passed in 35.97s"
+    },
+    {
+      "file": "protocol/hmbc_protocol/witness.py",
+      "old": "if led.pbc.call(led.PSC, \"profile\") != \"2\" or led.dbc.call(led.ACSC, \"profile\") != \"2\":",
+      "new": "if False:",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 1 passed in 27.31s"
+    },
+    {
+      "file": "protocol/testtools/deviating_witness.py",
+      "old": "if \"TEST-ONLY\" not in str(led.deployment.get(\"fixture\", {}).get(\"keyDerivation\", \"\")):",
+      "new": "if False:",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 17 passed in 84.33s (0:01:24)"
+    },
+    {
+      "file": "protocol/testtools/deviating_witness.py",
+      "old": "if field not in BOUND_FIELDS:",
+      "new": "if False:",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 18 passed in 87.07s (0:01:27)"
+    },
+    {
+      "file": "protocol/testtools/deviating_witness.py",
+      "old": "if not allowed:",
+      "new": "if False:",
+      "status": "SURVIVED-EQUIVALENT",
+      "equivalentReason": "redundant with wire.grant_receipt: a missing grant reads as all zeros (grantExpiresAt 0), which the receipt validator rejects, so the tool still refuses",
+      "pytestTail": "22 passed in 121.66s (0:02:01)"
     }
   ],
-  "detected": 59,
-  "total": 65,
-  "survivedEquivalent": 6,
+  "detected": 62,
+  "total": 69,
+  "survivedEquivalent": 7,
   "survivedGap": 0,
-  "provenance": "Two runs on scratch copies of this module (the tool edits sources in place). Run 1 (all mutants) baseline: 1282 passed, 201 skipped in 114.59s (0:01:54). It found one real gap (no test for exactly-one-signature on the two revision-5 witness results). A test was added and the 15 'wire' mutants were re-run (baseline 1284 passed, 201 skipped in 113.67s (0:01:53)); their results replace run 1's wire entries."
+  "provenance": "Two runs on scratch copies of this module (the tool edits sources in place). Run 1 (all mutants) baseline: 1282 passed, 201 skipped in 114.59s (0:01:54). It found one real gap (no test for exactly-one-signature on the two revision-5 witness results). A test was added and the 15 'wire' mutants were re-run (baseline 1284 passed, 201 skipped in 113.67s (0:01:53)); their results replace run 1's wire entries. A third run (--only controls, baseline 1307 passed, 201 skipped in 216.99s (0:03:36)) added the 4 mutants for the paper-profile guard and the TEST-ONLY deviating-witness tool: 3 detected, 1 documented equivalent."
 }

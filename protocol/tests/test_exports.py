@@ -29,6 +29,13 @@ def test_manifest_lists_all_eight_operations_and_only_symbolic_mode():
     assert all(s == "candidate-b-e1-not-unlocked" for k, s in statuses.items() if k in {"collect_decision", "collect_checkpoint", "attest_grant", "release", "encrypt_record", "finish_decryption"})
 
 
+def test_manifest_names_the_interface_revision_it_was_reviewed_against():
+    """A3-0016: the label was stale (revision 3) after revision 5 was reviewed. Keep it tied to the reviewed candidate, and never to 'frozen'."""
+    m = json.loads((ROOT / "exports" / "adapter.json").read_text())
+    assert m["interfaceVersion"] == "candidate v1 revision 5 (NOT frozen)"
+    assert "frozen" not in m["interfaceVersion"].replace("NOT frozen", "")
+
+
 def test_manifest_documents_the_worker_log_evidence_export_without_tokens():
     m = json.loads((ROOT / "exports" / "adapter.json").read_text())
     ev = m["evidence"]["workerLog"]
