@@ -2,10 +2,10 @@
 
 - State: WAITING — exact affected-party revision5 ACKs/common E0 acceptance. Current RQ E/E0; E1 not unlocked; E gate NOT RUN; F/G locked.
 - Interface: normative v0 proposed; candidate v1 revision5,87 definitions/eight operations/seven E results,32-file manifest SHA-256 124b95eb2830e422e79d0cee4b4b7ae28bf235239740980b984d7f9de2f9d8d0; NOT frozen.
-- Git: agent-3 at /home/karma/Documents/RIS, origin SaiyamJain20/RIS. Reviewed owned checkpoint prepared; normal publication/delivery verification follows.
+- Git: agent-3 at /home/karma/Documents/RIS, origin SaiyamJain20/RIS. Payload 5620c863f354a180c820a790b03a8459d8dd748c normally pushed; exact remote SHA matched and checkout was clean. Publication metadata follows on the same branch.
 - Latest fetched peers: Agent1 tip4e9c700, A1-0013..0017; ledger A1-0014/e6cf4ff/100-file manifest5866921a.. freshly reproduced. Agent2 tipada6378, A2-0006..0008; newer adapter/witness candidate has no integration READY. No prototype executed by Agent3.
 - Read: A1-0011..0017, A2-0001..0008, A3-0001..0011/live handoff; all61 latest communication files scanned across4 fetched branches, no divergent shared revisions.
-- Sent: A3-0001..0011 delivered previously. A3-0012 RFC prepared; delivered only after verified normal agent3 push.
+- Sent: A3-0001..0011 delivered previously. A3-0012 RFC delivered by verified normal push.
 - Changes: registered role/policy/P1-H2 fixture, unchanged-certificate WRONG_SUBJECT, native PSC outcome joins, paper barrier omission,3 added E01 variants, preserved wrong-issuer baseline classification; closed workerHook/crashPoint and one-intent/send-attempt/cache/expiry expectations; repaired Bob native denial+nonce oracle checks.48 prospective schedules remain NOT_RUN.
 - Proposed witness boundary: collect_checkpoint/attest_grant per A2-0008/A1-0016, Option A runner relay/admin TEST-ONLY custody, DBC time/state/interleaving constraints and policy-aware ALLOW. Recipient convention accepted exactly per A1-0015/A2-0007; signed bytes unchanged.
 - Verified:148 owned tests;565 schema verdicts108valid/457invalid,0 mismatches;393 independent signing checks; ledger166 tests,196 Cast checks,7 expected mutant suites,8 receipt controls;33 static export checks.100 peer entries stable. Initial schema command timed out124/60s, preserved; unchanged180s-budget retry0 after67s. Protocol TTLs unchanged.
@@ -13,3 +13,5 @@
 - Tools/locks unchanged: Python3.13.13/root uv.lock; Foundry1.8.5/solc0.8.37/ProVerif2.05; binary/lock hashes rechecked. Source map37; assumptions37 (A35–A37); D28/D29/D30/D31/D33 remain open for promotion; D32 records existing recipient convention.
 - No real service integration/recovery, correspondence model or ABE result. Runner/gate2 BLOCKED; ProVerif smoke only. No services/PIDs/ports/active integration freeze, peer edits/merge, main push, worktree/extra agent or history rewrite.
 - Next permitted action: fetch/read exact revision5 responses, revise only owned proposal if needed; when every E0 acceptance row and frozen-byte mapping is ACKed, publish interfaces/v1/INTERFACE_READY and unlock E1 together. Require current reviewed service READY and integration FREEZE/ACK pins before real C-E1 execution.
+
+Publication verified: payload `5620c863f354a180c820a790b03a8459d8dd748c` pushed normally to origin/agent-3; exact remote SHA matched; all32 reviewed package bytes unchanged. Coordinator lock released after verified metadata publication.
