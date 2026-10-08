@@ -18,7 +18,8 @@ TESTS = {"wire": ["protocol/tests/test_candidate_schema_review.py", "protocol/te
          "witness": ["protocol/tests/test_witness.py", "protocol/tests/test_witness_policy.py", "protocol/tests/test_witness_hardening.py"],
          "worker": ["protocol/tests/test_worker.py", "protocol/tests/test_worker_hardening.py"],
          "chain": ["protocol/tests/test_chain.py", "protocol/tests/test_ledger.py", "protocol/tests/test_edges.py", "protocol/tests/test_chain_hardening.py", "protocol/tests/test_chain_stub.py"], "adapter_live": ["protocol/tests/test_adapter_live.py"],
-         "controls": ["protocol/tests/test_paper_profile.py", "protocol/tests/test_paper_release.py", "protocol/tests/test_supplement_controls.py"], "eip712": ["protocol/tests/test_eip712_vs_agent1.py"]}
+         "controls": ["protocol/tests/test_paper_profile.py", "protocol/tests/test_paper_release.py", "protocol/tests/test_supplement_controls.py"], "eip712": ["protocol/tests/test_eip712_vs_agent1.py"],
+         "bootstrap": ["protocol/tests/test_bootstrap_fixture.py"]}
 
 M = [  # (suite, file, old, new, equivalent-reason or None)
     ("wire", "protocol/hmbc_protocol/wire.py", "    if any(a >= b for a, b in zip(keys, keys[1:])):", "    if False:", None),
@@ -95,6 +96,27 @@ M = [  # (suite, file, old, new, equivalent-reason or None)
     ("adapter", "protocol/hmbc_protocol/adapter.py", "if not isinstance(op, str) or op not in OPERATIONS:", "if op not in OPERATIONS:", None),
     ("keys", "protocol/hmbc_protocol/keys.py", 'if role not in allowed_roles:', "if False:", None),
     ("adapter", "protocol/hmbc_protocol/adapter.py", 'if eip712.recover(digest, signature) != signer:', "if False:", None),
+    ("bootstrap", "protocol/testtools/bootstrap_fixture.py", 'ROLE_RESEARCHER = "0x" + keccak(text="HMBC.role.Researcher").hex()', 'ROLE_RESEARCHER = ROLE_DOCTOR', None),
+    ("bootstrap", "protocol/testtools/bootstrap_fixture.py", '"temporalClaims": [{"authority": h1, "role": ROLE_ON_DUTY}]}', '"temporalClaims": []}', None),
+    ("bootstrap", "protocol/testtools/bootstrap_fixture.py", '"entries": [{"gid": _addr("alice"), ', '"entries": [{"gid": _addr("bob"), ', None),
+    ("bootstrap", "protocol/testtools/bootstrap_fixture.py", '"possessionSignature": _sign(led, "Registration", reg_alice, "alice")', '"possessionSignature": _sign(led, "Registration", reg_alice, "relay")', None),
+    ("bootstrap", "protocol/testtools/bootstrap_fixture.py", 'REGISTRATION_SECONDS = 3600', 'REGISTRATION_SECONDS = 600', None),
+    ("bootstrap", "protocol/testtools/bootstrap_fixture.py", '        require_test_only(dep)\n        led = Ledger.from_deployment(dep)', '        led = Ledger.from_deployment(dep)', None),
+    ("bootstrap", "protocol/testtools/bootstrap_fixture.py", '    require_test_only(led.deployment)\n    h1, h2', '    h1, h2', None),
+    ("bootstrap", "protocol/testtools/bootstrap_fixture.py", '_step("register-alice", "relay",', '_step("register-alice", "H1-ca-admin",', None),
+    ("bootstrap", "protocol/testtools/bootstrap_fixture.py", 'contract.calldata(function, *args.values())', 'contract.calldata(function, *reversed(list(args.values())))', None),
+    ("bootstrap", "protocol/testtools/bootstrap_fixture.py", '"recipientKeyHash": keys.recipient_key_hash(f"keyref:user:{subject_label}"),', '"recipientKeyHash": keys.recipient_key_hash("keyref:user:alice"),', None),
+    ("bootstrap", "protocol/testtools/bootstrap_fixture.py", '"validFrom": str(now - 60)', '"validFrom": str(now + 60)', None),
+    ("bootstrap", "protocol/testtools/bootstrap_fixture.py", '"steps": steps, "credentialBundles": bundles, "notes": NOTES}', '"steps": steps, "credentialBundles": bundles, "notes": NOTES, "debug": keys.synthetic_private_key("alice")}', None),
+    ("bootstrap", "protocol/testtools/bootstrap_fixture.py", 'plan = build_plan(led, led.pbc.now())', 'plan = build_plan(led, led.dbc.now())', None),
+    ("bootstrap", "protocol/testtools/bootstrap_fixture.py", 'crl1 = {"authority": h1, "version": "1", "validUntil": str(now + LIST_SECONDS)', 'crl1 = {"authority": h1, "version": "1", "validUntil": str(now - LIST_SECONDS)', None),
+    ("bootstrap", "protocol/testtools/bootstrap_fixture.py", '_signed_cert(led, "H2-root", "bob", ROLE_RESEARCHER, "201")', '_signed_cert(led, "H1-root", "bob", ROLE_RESEARCHER, "201")', None),
+    ("bootstrap", "protocol/testtools/bootstrap_fixture.py", 'return {"schemaVersion": SCHEMA, "testOnly": True,', 'return {"schemaVersion": SCHEMA, "testOnly": False,', None),
+    ("bootstrap", "protocol/testtools/bootstrap_fixture.py", '_step("wrong-issuer-admin-h2-list", "H1-ca-admin",', '_step("wrong-issuer-admin-h2-list", "H2-ca-admin",', None),
+    ("bootstrap", "protocol/testtools/bootstrap_fixture.py", 'crl2_next = {"authority": h2, "version": "2"', 'crl2_next = {"authority": h2, "version": "1"', None),
+    ("bootstrap", "protocol/testtools/bootstrap_fixture.py", 'control["expected"] = "UNAUTHORIZED_CALLER"', 'control["expected"] = "BAD_SIGNATURE"', None),
+    ("bootstrap", "protocol/testtools/bootstrap_fixture.py", 'crl2_next = {"authority": h2, "version"', 'crl2_next = {"authority": h1, "version"', None),
+    ("bootstrap", "protocol/testtools/bootstrap_fixture.py", '"controls": [control],', '"controls": [],', None),
     ("adapter", "protocol/hmbc_protocol/adapter.py", "parse_constant=_reject_constant", "parse_constant=None",
      "NaN/Infinity become floats that the strict wire validators then reject as non-strings"),
 ]
