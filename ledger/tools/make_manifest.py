@@ -43,7 +43,7 @@ def main(argv):
     low = str.lower
     manifest = {
         "schemaVersion": "hmbc-ledger-deployment/v0",
-        "interfaceVersion": "v0 proposed",
+        "interfaceVersion": "v1",
         "producer": "agent-1 ledger/tools/deploy_local.sh",
         "createdAt": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "profile": profile,

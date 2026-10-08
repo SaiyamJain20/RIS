@@ -1,23 +1,26 @@
 # Agent 1 handoff
 
-Status: **READY FOR REVIEW; not DONE.** Current ledger READY is **A1-0014** (manifest 5866921a..,
-100 entries; supersedes A1-0011). Interface: candidate v1 revision 4 on agent-3 (NOT frozen),
-reviewed in A1-0013: scoped ACK, plus change requests F-1..F-3. E1 is not unlocked and no
-integration has run.
+Status: **READY FOR INTEGRATION; not DONE.** Current ledger READY is **A1-0024** (manifest 731a5eb0..,
+101 entries; supersedes A1-0014 only by the v1 export label and its evidence file). Interface: candidate
+v1 revision 6 (df2a306f..), adopted as the Phase E sprint working interface in A1-0023 (human
+directive: complete E by 00:10 IST 2026-10-09). Agent-1 revision-6 ledger ACK: A1-0022. No integrated
+run has happened yet.
 
-- **RQ/task and interface version:** E / E0 (freeze pending). The ledger has: E0 deliverables, an A-E1
+- **RQ/task and interface version:** E / sprint E0 close -> E1 integration (A1-0023). The ledger has: E0 deliverables, an A-E1
   draft, and A-E2 suites prepared before E1 integration, including the E03 GrantReceipt repair
   (A1-0008 revision 2, ACKed by agent 3 in A3-0005 and agent 2 in A2-0002, implemented in A1-0011).
 - **Changed owned files and source manifest:** `ledger/**` (100 files) with SHA-256 in
-  `ledger/evidence/source-manifest.sha256` (file sha256
-  5866921aa8ba4716a24afb4144123295f0e5f809296ed488a06bc84f07c277a9). Since 54262c2 the only source
-  change is the ACSC first-position SAME_AS_FIRST rejection (A1-0014). Messages A1-0001..A1-0014.
+  `ledger/evidence/source-manifest.sha256` (101 entries; file sha256
+  731a5eb03e80a7ef21a48624edd73cbee4b632f1bb66fc203429ef2780abc57d). Solidity sources, tests,
+  scripts, foundry.toml and vectors are byte-identical to e6cf4ff (A1-0014). A1-0024 changes only the
+  export label "v0 proposed" -> "v1" and regenerates the samples (`ledger/evidence/v1-export-run.txt`).
+  Messages A1-0001..A1-0024.
 - **Exported artifacts and consumers:**
-  - ABIs: `ledger/exports/abi/*.json` + `manifest.json` (e75f1d71..; ABI JSON unchanged since 54262c2).
+  - ABIs: `ledger/exports/abi/*.json` + `manifest.json` (cea42704.., label v1; ABI JSON unchanged since 54262c2).
   - Vectors: `ledger/exports/vectors/eip712-v0-ledger.json` (6aa399e0..; 9 signed types incl.
     GrantReceipt, plus credentialDigest) + `typed/*.json`.
   - Samples: `ledger/exports/deployments/sample-{paper-strict,paper-minimal,repaired-e,mutant-no-receipt-binding}/`
-    (current with the sources; machine-local RPC/addresses).
+    (labelled `interfaceVersion: "v1"`, valid against revision-6 `LedgerDeployment`; machine-local RPC/addresses).
   - Tools: `ledger/tools/deploy_local.sh` and `e2e_smoke.sh`.
   - Consumers: agent 2 (relay, witness, worker), agent 3 (runner, schema).
 - **Exact commands, exit codes, evidence** (repository root, Foundry v1.8.5, solc 0.8.37):

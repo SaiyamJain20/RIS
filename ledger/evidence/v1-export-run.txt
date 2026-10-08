@@ -1,0 +1,33 @@
+v1-labelled ledger exports: regeneration run (agent 1, 2026-10-08 ~19:15 IST / 13:45 UTC)
+Interface: candidate v1 revision 6 (agent-3 9198a0c, review-manifest df2a306f..), the sprint working interface adopted in A1-0023.
+Toolchain: Foundry v1.8.5 (forge/anvil/cast), solc 0.8.37, Python 3.14.7 (standard library); schema validation uses jsonschema 4.26.0 in a scratch venv.
+
+Change: only the export label. In tools/export_abi.py and tools/make_manifest.py, interfaceVersion "v0 proposed" -> "v1".
+Unchanged against e6cf4ff (A1-0014): ledger/src, ledger/script, ledger/test, ledger/test-mutants, ledger/foundry.toml, ledger/exports/vectors.
+`git diff --quiet e6cf4ff -- <those paths>` exits 0. Bytecode, ABI JSON and signed bytes are therefore unchanged.
+The vector file eip712-v0-ledger.json keeps its original label and bytes: sha256 6aa399e038be204a0420e7503f11300196fcaaf4bc7acbaef2724163f8cf0574.
+
+Commands (repository root) and exit codes:
+  anvil --port 38545 --chain-id 18545 --block-time 1   (isolated, agent-1 machine only)
+  anvil --port 48545 --chain-id 28545 --block-time 1
+  forge build --root ledger                                            -> exit 0
+  python3 -I ledger/tools/export_abi.py                                 -> exit 0; exports/abi/manifest.json sha256 cea42704..; only the interfaceVersion line differs
+  for p in paper-strict paper-minimal repaired-e mutant-no-receipt-binding (this order, on fresh chains):
+    DEPLOYER_PK=<anvil default key 0> ledger/tools/deploy_local.sh http://127.0.0.1:38545 http://127.0.0.1:48545 $p complete-details sample-$p   -> exit 0 (x4)
+    ledger/tools/e2e_smoke.sh http://127.0.0.1:38545 http://127.0.0.1:48545 ledger/exports/deployments/sample-$p/deployment.json 1         -> exit 0 (x4)
+  forge test --root ledger --offline                                    -> exit 0; 21 suites, 166 passed / 0 failed / 0 skipped
+  python3 -I ledger/tools/check_mutants.py <scratch>.json              -> exit 0; ALL MUTANTS DETECTED BY THEIR EXPECTED TESTS (7/7)
+  python3 -I ledger/tools/crosscheck_cast.py                            -> exit 0; 196 checks, 0 failures
+
+Sample deployment diffs vs the previous (v0-labelled) samples: interfaceVersion, createdAt, deployBlock, block-dependent
+smoke values (request digests/expiry/grant ids/summary). Contract addresses are identical (same deployer nonces and order).
+repaired-e smoke summary: pbc.requestLogId=5, pbc.outcomeLogId=6, pbc.lscLogCount=6, dbc.getGrant allowed=true, dbc.accessLogCount=1.
+
+Schema check: each of the 4 deployment.json files was validated against $defs/LedgerDeployment of
+revision-6 interfaces/proposals/v1/hmbc.schema.json (file sha256 4c22092dead0982716d68acf0ad7f4a5a737568e8e2d0c37d06595add36d6fea),
+using Draft 2020-12 with a format checker:
+  sample-paper-strict v1 VALID; sample-paper-minimal v1 VALID; sample-repaired-e v1 VALID; sample-mutant-no-receipt-binding v1 VALID
+Negative controls on a copy of sample-repaired-e: interfaceVersion "v2" REJECTED; profile "mutant-none" REJECTED; extra top-level field REJECTED.
+
+Limits: machine-local RPC URLs and addresses; a ledger-only smoke that signs inside Forge (TEST-ONLY keys); not the integration run.
+The isolated Anvil chains were stopped after the run.

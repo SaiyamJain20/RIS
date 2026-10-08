@@ -26,7 +26,7 @@ def main() -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
     manifest = {
         "schemaVersion": "hmbc-ledger-abi/v0",
-        "interfaceVersion": "v0 proposed",
+        "interfaceVersion": "v1",
         "producer": "agent-1 ledger/tools/export_abi.py",
         "contracts": {},
         "sources": {},

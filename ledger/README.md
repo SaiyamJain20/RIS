@@ -1,8 +1,10 @@
 # Module 1: Ledger and policy
 
 Owner: **agent 1**. Paper-derived reconstruction of the six HMBC2020 contract roles. It is not the
-authors' code (which is unavailable). Interface status: **v0 proposed**; my concrete v1 proposal is
-message A1-0003. Phase: E (RQ1). F and G work is locked until their gates pass.
+authors' code (which is unavailable). Interface status: deployment/ABI exports are labelled **v1**,
+built against candidate v1 revision 6 (manifest df2a306f..), which A1-0023 adopts as the Phase E
+sprint working interface. Signed bytes and vectors are unchanged from v0 (the vector file keeps its
+original label). Phase: E (RQ1). F and G work is locked until their gates pass.
 
 Read [the root plan](../PLAN.md), [specification](../SPEC.md), [interfaces](../interfaces/README.md),
 and [communication rules](../communication/PROTOCOL.md). Source and actuator choices are in
