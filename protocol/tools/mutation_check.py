@@ -20,7 +20,8 @@ TESTS = {"wire": ["protocol/tests/test_candidate_schema_review.py", "protocol/te
          "chain": ["protocol/tests/test_chain.py", "protocol/tests/test_ledger.py", "protocol/tests/test_edges.py", "protocol/tests/test_chain_hardening.py", "protocol/tests/test_chain_stub.py"], "adapter_live": ["protocol/tests/test_adapter_live.py"],
          "controls": ["protocol/tests/test_paper_profile.py", "protocol/tests/test_paper_release.py", "protocol/tests/test_supplement_controls.py"], "eip712": ["protocol/tests/test_eip712_vs_agent1.py"],
          "bootstrap": ["protocol/tests/test_bootstrap_fixture.py"],
-         "worker_log": ["protocol/tests/test_worker_log.py", "protocol/tests/test_adapter_process_paper.py"]}
+         "worker_log": ["protocol/tests/test_worker_log.py", "protocol/tests/test_adapter_process_paper.py"],
+         "faulty": ["protocol/tests/test_faulty_adapter.py"]}
 
 M = [  # (suite, file, old, new, equivalent-reason or None)
     ("wire", "protocol/hmbc_protocol/wire.py", "    if any(a >= b for a, b in zip(keys, keys[1:])):", "    if False:", None),
@@ -121,6 +122,15 @@ M = [  # (suite, file, old, new, equivalent-reason or None)
     ("worker_log", "protocol/hmbc_protocol/worker_log.py", 'nested, direct = os.path.join(state_dir, "worker", "worker.sqlite"), os.path.join(state_dir, "worker.sqlite")', 'nested, direct = os.path.join(state_dir, "no-such-dir", "worker.sqlite"), os.path.join(state_dir, "worker.sqlite")', None),
     ("worker_log", "protocol/hmbc_protocol/worker_log.py", '    if len(found) == 2:\n        raise SystemExit(f"ambiguous', '    if False:\n        raise SystemExit(f"ambiguous', None),
     ("worker_log", "protocol/hmbc_protocol/worker_log.py", '    if not found:\n        raise SystemExit(f"no worker.sqlite', '    if False:\n        raise SystemExit(f"no worker.sqlite', None),
+    ("faulty", "protocol/testtools/faulty_adapter.py", 'os._exit(CRASH_EXIT)', 'os._exit(0)', None),
+    ("faulty", "protocol/testtools/faulty_adapter.py", 'super().release(grant_id, transmit=send if self.point == "after_send" else transmit)', 'super().release(grant_id, transmit=transmit)', None),
+    ("faulty", "protocol/testtools/faulty_adapter.py", 'CRASH_EXIT = 86', 'CRASH_EXIT = 87', None),
+    ("faulty", "protocol/testtools/faulty_adapter.py", 'faults={"crash_" + point}', 'faults={"crash_after_intent"}', None),
+    ("faulty", "protocol/testtools/faulty_adapter.py", '    if args.crash_at not in POINTS:\n        raise SystemExit', '    if False:\n        raise SystemExit', None),
+    ("faulty", "protocol/testtools/faulty_adapter.py", '        require_test_only(deployment)\n', '        pass\n', None),
+    ("faulty", "protocol/testtools/faulty_adapter.py", '    adapter._worker = lambda led: CrashingWorker(led, os.path.join(adapter._STATE_DIR, "worker"), led.dbc.now, point)\n', '    pass\n', None),
+    ("faulty", "protocol/testtools/faulty_adapter.py", '            sys.stdout.write(json.dumps(adapter._response(result=response), separators=(",", ":")) + "\\n")\n            sys.stdout.flush()', '            sys.stdout.write(json.dumps(adapter._response(result=response), separators=(",", ":")) + "\\n")', None),
+    ("faulty", "protocol/testtools/faulty_adapter.py", '        except SimulatedCrash:\n            os._exit(CRASH_EXIT)', '        except SimulatedCrash:\n            raise', None),
     ("adapter", "protocol/hmbc_protocol/adapter.py", "parse_constant=_reject_constant", "parse_constant=None",
      "NaN/Infinity become floats that the strict wire validators then reject as non-strings"),
 ]
