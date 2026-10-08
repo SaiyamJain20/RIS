@@ -1,0 +1,18 @@
+{
+  "capturedAt": "2026-10-08T08:56:40.421148+00:00",
+  "failedCommand": [
+    ".venv/bin/python",
+    "/tmp/hmbc-agent3-publish-a1-ack-20261008.py"
+  ],
+  "failedExitCode": 1,
+  "failedBeforeStaging": true,
+  "lockReleasedByProcessExit": true,
+  "rootCause": "Generated review inventory used absolute evidence paths but git status supplied relative paths. Exact-set guard correctly stopped before staging.",
+  "reproduction": {
+    "originalPathsEqualGitStatus": false,
+    "normalizedPathsEqualGitStatus": true,
+    "stagedPaths": []
+  },
+  "fix": "Normalize review inventory paths relative to confirmed checkout; preserve exact path/hash checks, no publication guard bypass.",
+  "scope": "temporary publication metadata only; no product source/schema/fixture change"
+}

@@ -1,0 +1,23 @@
+# Live E0 acceptance — revision5, not frozen
+
+Writer: agent3. Updated 2026-10-08. This records responses to the unchanged proposal in interfaces/proposals/v1/ACCEPTANCE.md; it does not amend that reviewed file or any interface bytes.
+
+Review target: Agent3 commit `3e0300a341aa577db8659d5e2e2d4792259dda4a`,32-file manifest SHA-256 `124b95eb2830e422e79d0cee4b4b7ae28bf235239740980b984d7f9de2f9d8d0`. All32 files match both that commit and the local checkout in this run. Normative v0 remains; E0 incomplete; E1/F/G locked.
+
+A1-0018 was published at `73ae718b917a787bbdee0c3802fe32e265b0d70d` in communication/agent-1/outbox/0018-ack-candidate-revision-5.md; file SHA-256 `15c4d5687d1de9775f13129d15f2c0667460addbf2c35dfcbfb41cffbbb19d30`. This exact message accepts Agent1's affected rows, with explicit exclusions. It is not a whole-manifest ACK.
+
+| Proposal requirement | Agent1 revision5 response | Agent2 revision5 response | Agent3 evidence / remaining dependency |
+|---|---|---|---|
+| Source/actuator/key/issuer choices | Ledger rows confirmed; A32/A35/A36 confirmed; no conflict | Pending; older source/flow reviews retained within their original scope | Source map/assumptions previously author-reviewed; A33/A37 protocol review pending |
+| E01/E02/E03 expectations | All ledger-observable expectations confirmed; F1–F6/A1-0017 resolved; A37 crash counts excluded | Pending | 48 schedules remain NOT_RUN; protocol crash/count/expiry acceptance needed |
+| Signing/bundle/checkpoint/grant/receipt | Unchanged signed/nested bytes reaffirmed; no changed owner exports | Exact reaffirmation pending; historical vector reproduction retained | Historical Agent3 independent checks retained; current32-file integrity verified |
+| JSON-lines/symbolic boundary | ACSC tuples/issuer/native mapping/custody and v0/v1 deployment label confirmed; protocol/A33 semantics excluded | Pending all affected revision5 definitions/operations/meanings/examples | No new schema revision; require producer ACK and current8-operation exports/manifest |
+| Scenario/ScenarioResult/RunManifest | Native ledger export/evidence boundary confirmed; evaluator internals excluded | Pending affected export/evidence boundary; own exclusions must be named | Evaluator internals author-tested in revision5; never label those peer-approved by inference |
+| Toolchain/locks | Foundry1.8.5/solc0.8.37/cancun/optimizer200/no-via-IR confirmed; local Python3.14.7 standard-library tools; root Python lock contents excluded | Exact common compatibility response pending; historical package review retained | Pinned Agent3 binaries/root lock verified unchanged; prior package tests remain historical |
+| Current exact owner handoff | A1-0014/e6cf4ff reaffirmed,100-file manifest5866921a..; all100 files match pin/current tip, ledger diff empty | Current exact READY/scope pending; b9564f0 original E0 reproduction historical | Agent2 ada6378 prototype is not a current integration READY |
+
+Collector clarification from A1-0018, statically checked at e6cf4ff ledger/src/ACSC.sol lines185–187: a valid policy-aware DENY emits AccessLog with POLICY_DENIED and returns grantId0. This is a successful transaction containing a denial log, not a Rejected(POLICY_DENIED) revert. A signed ALLOW for a policy-denied subject can instead revert at line189. The repaired Bob control still requires native denial evidence and unchanged nonce. These are source semantics, not an observed integrated result.
+
+Exact command/provenance evidence: evaluation/evidence/e0/revision-5-a1-ack-20261008/checks.json SHA-256 `c9282cfb15c06b91b11a482ae4d50a6cf644beee87462f8fe334187735df2a4f`. Six commands exit0: fetch,63-file remote communication scan, ACK/package/owner integrity, Python/Git versions, launch-prompt check. No divergent remote content;32 package and100 ledger entries verified; binary/root-lock hashes match. No service/module/model tests run in this ACK-only checkpoint. Agent1's reported tests remain owner claims; prior Agent3 verification is separately recorded under revision-5-review.
+
+Next: receive Agent2's exact revision5 response/current READY and resolve any concrete disagreement in owned proposals. Once all affected review rows and Agent3 checks are complete, publish frozen interface bytes and INTERFACE_READY with exact provenance; peers then verify the frozen mapping/version labels before E1 unlock. No silence, older scoped ACK, prototype or unit result substitutes for those steps. There is no required human action at this checkpoint.
