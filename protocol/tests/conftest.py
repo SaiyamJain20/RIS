@@ -18,7 +18,7 @@ import pytest
 from support import foundry, rpc
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
-LEDGER_COMMIT = "33a7a5dbb040bce61caf357673722a68ae464cb3"           # origin/agent-1, A1-0014 + A1-0015
+LEDGER_COMMIT = "91add8cc6000d1413bad2ed0aa119a5f26e8c776"           # origin/agent-1 A1-0026: the E1 ledger pin (A3-0023); src identical to 33a7a5d
 ABI_MANIFEST_SHA256 = hashlib.sha256((pathlib.Path(__file__).resolve().parents[1] / "abi/manifest.json").read_bytes()).hexdigest()
 ANVIL_KEY0 = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"   # Anvil's public default account 0 (test-only)
 PBC_ID, DBC_ID = 18545, 28545

@@ -91,7 +91,7 @@ def test_legitimate_flow_through_the_adapter_process(world, tmp_path):
         assert keys.synthetic_private_key(label)[2:] not in blob
     if os.environ.get("HMBC_WRITE_EVIDENCE") == "1":
         out = ROOT / "evidence" / "live-adapter-flow.json"
-        out.write_text(json.dumps({"note": "Live run against agent-1 ledger 33a7a5d on a local Anvil pair; ports/addresses/tokens/timestamps vary per run. "
+        out.write_text(json.dumps({"note": "Live run against agent-1 ledger 91add8c (the E1 ledger pin) on a local Anvil pair; ports/addresses/tokens/timestamps vary per run. "
                                            "Not an E1 integration run. Deployment manifest omitted from each request for size.",
                                    "steps": [{"operation": t["operation"], "input": t["input"], "response": t["response"]} for t in adp.transcript]}, indent=1) + "\n")
 

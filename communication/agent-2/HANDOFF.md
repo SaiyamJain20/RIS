@@ -1,4 +1,4 @@
-# Agent 2 handoff (2026-10-08, updated for A2-0013): frozen v1 mapping ACKed (protocol scope); v1-labelled export successor published; candidate B-E1/B-E2 built; NOT E1-unlocked, NOT integration-ready
+# Agent 2 handoff (2026-10-08, updated for A2-0014): E0 closed and E1 unlocked by agent-3 (A3-0023); owner service READY published (A2-0014); candidate symbolic-mode service, no integration FREEZE ACK yet. (Older bullets below describe earlier states; A2-0013/A2-0014 bullets at the end are current.)
 
 - RQ/task: E / E0 (acceptance pending) with CANDIDATE B-E1/B-E2 code built ahead of the unlock at the user's instruction. Interface: candidate v1 revision 5
   (agent-3 A3-0012, manifest 124b95eb..., 32 files), NOT frozen. No INTERFACE_READY, E1 unlock or gate is claimed. F and G are untouched (locked).
@@ -33,3 +33,8 @@
 - Messages sent: A2-0001..A2-0013. Read: A1-0001..A1-0027 (A1-0027 = ledger frozen-mapping ACK), A3-0001..A3-0022.
 - Mutation check not re-run for this commit (mutated sources unchanged since f69e250; 65/73, 8 documented equivalents, 0 gaps).
 - Service READY is NOT published; it follows the E1 unlock as a separate owner statement naming the exact commit and manifest. START CONTRACT unchanged (A2-0012 section 4).
+
+- A2-0014 (owner service READY for E1): pin = the commit carrying the message; `hmbc_protocol/**`, `testtools/**`, `tools/**`, `exports/**` byte-identical to e30d00d (the pin in agent-3's E0_MAPPING_ACKS.json). Changes since: live-fixture ledger pin 33a7a5d -> 91add8c (the E1 ledger pin) in `tests/conftest.py`; `abi/manifest.json` refreshed as a byte copy of agent-1's 91add8c file (label-only difference, six ABIs identical); evidence. Full suite at 91add8c: exit 0, 1318 passed, 201 skipped (`evidence/pytest-e0.txt`); `export --check` exit 0; manifest 30f76dda.. (98 files); adapter.json 7146495b.. unchanged.
+- START: runner deploys ledger 91add8c, performs registrations, then `cd protocol && PYTHONPATH=. python -m hmbc_protocol.adapter --state-dir <new 0700 dir> --deployment <exact deployment.json>`; one adapter and one NEW state dir per deployment; evidence `python -m hmbc_protocol.worker_log --state-dir <dir>`. Runner submits all transactions (Option A); witness/user/worker keys stay in the adapter. Runner pre-registers records with `encrypt_record` before adversarial schedules (A41).
+- Known gaps (see A2-0014 section 3): no crash/fault hook through the adapter process (named-point crashes are an in-process test seam; kill/restart of the process was not tested end to end; a TEST-ONLY startup flag is NOT built and needs agent-3's decision); symbolic mode; one trusted witness; encrypt_record unauthenticated; no paper case executed; no real two-chain run yet.
+- Messages sent: A2-0001..A2-0014. Read: A1-0001..A1-0028 (A1-0028 = ledger A-E1 READY, pin unchanged), A3-0001..A3-0023.
