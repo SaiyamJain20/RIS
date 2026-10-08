@@ -1,9 +1,44 @@
 {
- "snapshot": "/tmp/claude-1000/-home-manav-Desktop-RIS/0a948378-3989-4248-927a-25118ca89914/scratchpad/a3",
+ "snapshot": "/tmp/claude-1000/-home-manav-Desktop-RIS/0a948378-3989-4248-927a-25118ca89914/scratchpad/a3r5",
  "cases": [
   {
+   "operation": "attest_grant",
+   "case": "well-formed request, no ledger running",
+   "a3RequestValid": true,
+   "a3ResponseValid": true,
+   "agent2ResponseCode": "ADAPTER_UNAVAILABLE"
+  },
+  {
+   "operation": "attest_grant",
+   "case": "refused: empty input is MALFORMED",
+   "a3RequestValid": false,
+   "a3ResponseValid": true,
+   "agent2ResponseCode": "MALFORMED"
+  },
+  {
+   "operation": "collect_checkpoint",
+   "case": "well-formed request, no ledger running",
+   "a3RequestValid": true,
+   "a3ResponseValid": true,
+   "agent2ResponseCode": "ADAPTER_UNAVAILABLE"
+  },
+  {
+   "operation": "collect_checkpoint",
+   "case": "well-formed with the optional version",
+   "a3RequestValid": true,
+   "a3ResponseValid": true,
+   "agent2ResponseCode": "ADAPTER_UNAVAILABLE"
+  },
+  {
+   "operation": "collect_checkpoint",
+   "case": "refused: a relay-supplied sequence is never accepted",
+   "a3RequestValid": false,
+   "a3ResponseValid": true,
+   "agent2ResponseCode": "MALFORMED"
+  },
+  {
    "operation": "collect_decision",
-   "case": "well-formed request; B-E1 locked",
+   "case": "well-formed request, no ledger running",
    "a3RequestValid": true,
    "a3ResponseValid": true,
    "agent2ResponseCode": "ADAPTER_UNAVAILABLE"
@@ -17,7 +52,7 @@
   },
   {
    "operation": "encrypt_record",
-   "case": "well-formed request; B-E1 locked",
+   "case": "well-formed request, no ledger running",
    "a3RequestValid": true,
    "a3ResponseValid": true,
    "agent2ResponseCode": "ADAPTER_UNAVAILABLE"
@@ -31,7 +66,7 @@
   },
   {
    "operation": "finish_decryption",
-   "case": "well-formed request; B-E1 locked",
+   "case": "well-formed request, no ledger running",
    "a3RequestValid": true,
    "a3ResponseValid": true,
    "agent2ResponseCode": "ADAPTER_UNAVAILABLE"
@@ -66,7 +101,7 @@
   },
   {
    "operation": "release",
-   "case": "well-formed request; B-E1 locked",
+   "case": "well-formed request, no ledger running",
    "a3RequestValid": true,
    "a3ResponseValid": true,
    "agent2ResponseCode": "ADAPTER_UNAVAILABLE"

@@ -94,7 +94,8 @@ def test_a_failure_while_recording_the_send_does_not_wedge_the_connection(world,
     with pytest.raises(sqlite3.OperationalError):
         w.release(grant_id)
     again = w.release(grant_id)                                                  # must work: the failed transaction was rolled back
-    assert again["grantId"] == grant_id and w.status(grant_id)["delivery"] == "sent"
+    st = w.status(grant_id)
+    assert again["grantId"] == grant_id and (st["sendAttempts"], st["completedAttempts"]) == (1, 1)   # the failed attempt was rolled back, not counted
 
 
 def test_durability_pragmas_are_on(world, tmp_path):

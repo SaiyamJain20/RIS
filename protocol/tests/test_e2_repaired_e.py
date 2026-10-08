@@ -1,26 +1,45 @@
-"""E2 (agent 2): the 13 repaired-e cases of agent 3's pinned prospective catalog, executed live against agent 1's repaired-e ledger.
+"""E2 (agent 2): the 16 repaired-e cases of agent 3's pinned prospective catalog (candidate revision 5), executed live against agent 1's repaired-e ledger.
 
 Provenance: paper-derived reconstruction; synthetic TEST-ONLY keys; no external services. Every expectation (`error`, `outcome`,
-`classification`) is read from protocol/tests/fixtures/e0-cases-a3-c982d04.json (SHA-256 pinned in e2_support) at run time, so a test
-cannot tune its expectation to what the ledger does. Each test performs the catalog's ordered directives (checked against the catalog)
+`classification`, and the closed `worker` record of the two crash cases) is read from protocol/tests/fixtures/e0-cases-a3-3e0300a.json
+(SHA-256 pinned in e2_support) at run time, so a test cannot tune its expectation to what the ledger does. Each test performs the catalog's
+ordered directives (checked against the catalog; a different schedule, step field, delay or unreviewed expected field raises StepScheduleError)
 with agent 2's honest components; where a directive is adversarial the test plays the deviating relay with raw transactions.
 
-A case whose catalog expectation differs from the observed behaviour is marked xfail(strict=True) with the exact observed result;
-the expectation is never edited. OBSERVED (case id -> record) and EXECUTED are in e2_support and the last test checks that every
-catalog id was concluded exactly once (run the whole module; a `-k` subset fails that final test by design).
+A case whose catalog expectation differs from the observed behaviour is marked xfail(strict=True) with the exact observed result; the
+expectation is never edited. Revision 5 has none (XFAILED is empty; the final test asserts that disagreements == XFAILED). OBSERVED (case id
+-> record) and EXECUTED are in e2_support and the last test checks that every catalog id was concluded exactly once (run the whole module; a
+`-k` subset fails that final test by design).
 
 How the catalog's directives are realised (a choice of this executor, stated so it can be reviewed):
   REQUEST_ACCESS      the user signs; the honest relay forwards to the PBC; the witness checkpoint is accepted by the DBC; the witness's
                       decision (the "certificate") is collected NOW. Cases that stop at the PBC (rollback, fabricated outcome) omit the DBC part.
   FORWARD_OR_CONSUME  the (possibly deviating) relay submits request + certificate + records to ACSC.consumeDecision with a raw transaction.
   ADVANCE_CLOCK       the next DBC block is mined at an exact timestamp (evm_setNextBlockTimestamp), so "expiresAt exactly" is literal.
-  RELEASE / CRASH_RESTART / REPORT_OUTCOME  agent 2's durable Worker (fault hooks crash_after_intent / crash_after_send), a new Worker on
-                      the same state directory, and the honest relay reporting the witness's GrantReceipt.
+  SUBSTITUTE_SUBJECT  request.gid only (Alice -> Bob); the ORIGINAL certificate is presented unchanged (catalog qualification). Rewriting
+                      decision.requestDigest as well is a separate control (supplement), which is where BAD_SIGNATURE arises.
+  FABRICATE_TUPLE     the relay invents a request, credential records and decision for a subject (Mallory) who never asked the PBC (asserted:
+                      no PSC record, no LSC log), built from the DBC's CURRENT checkpoint so every field matches; the decision is signed by a
+                      NON-witness key. Control: the identical tuple signed with the witness key is accepted, so the signature alone is what
+                      is rejected (this also shows the DBC verifies the witness quorum, not the existence of a PBC request).
+  SUBSTITUTE_DESTINATION  the relay points the same signed material at another destination: destinationChainId, kssc, and both (three variants),
+                      with the user's signature and the witness certificate untouched (agent 1's DecisionBinding field-substitution
+                      realisation). A supplement adds the request-for-another-destination-certified-here variant.
+  REPLAY_NEW_REFERENCE  in repaired-e the reference IS the digest of the user-signed request, so a fresh reference needs a freshly signed
+                      request, which the catalog excludes. The relay can only reuse the original signed gid/nonce/certificate: (1) resubmit
+                      them to the ACSC, (2) ask the honest witness for another certificate for the same request. Both must end in REPLAY. The
+                      freshly-signed-same-nonce variant is a supplement (nonce reuse under a new digest).
+  RELEASE / CRASH_RESTART / REPORT_OUTCOME  agent 2's durable Worker. The fault hook is the one the catalog's CRASH_RESTART names (crashPoint),
+                      armed BEFORE the immediately preceding RELEASE (scheduleSemantics); a new Worker on the same state directory retries before
+                      the grant expires; the honest relay reports the witness's GrantReceipt. A second grant, crashed the same way and retried
+                      only after its expiry, yields expiredRetryError and shows that the expired retry emits no worker event and no new token.
+                      The observed worker record has exactly the catalog's fields and is compared with equality.
 """
 import pytest
 from eth_utils import keccak
 
-from hmbc_protocol import chain, eip712, messages
+from hmbc_protocol import chain, eip712, keys, messages
+from hmbc_protocol.client import UserClient
 from hmbc_protocol.worker import SimulatedCrash, Worker
 from hmbc_protocol import ledger as ledger_mod
 import ledger_setup as setup
@@ -28,7 +47,7 @@ import e2_support as e2
 from e2_support import Case, Flow, Obs, check_error, db_rows, grant_id_of, observe, pbc_code, request_digest, revert, snapshot
 
 OBSERVED = e2.OBSERVED
-XFAILED = {"E01-subject-substitution-repaired-e"}                  # the cases marked xfail(strict) above, each with its observed result
+XFAILED: set[str] = set()                                         # cases marked xfail(strict) with their observed result: none in revision 5
 OUTCOME = "0x" + "ab" * 32
 P1_POLICY = {"clauses": [[{"role": setup.ROLE_DOCTOR, "kind": "1", "issuerMode": "0"}, {"role": setup.ROLE_ON_DUTY, "kind": "2", "issuerMode": "2"}]]}
 H2_ROOT = setup.addr("H2-root")                                                              # data owner in the fixture
@@ -42,19 +61,13 @@ def agree(*obs: Obs) -> str | None:
 
 
 def worker(led, state_dir, **kw) -> Worker:
-    return Worker(led, state_dir, clock=lambda: led.dbc.get_block()["timestamp"], **kw)
+    return Worker(led, state_dir, clock=led.dbc.now, **kw)
 
 
 # =================================================================================================================================
 # E01  decision provenance
 # =================================================================================================================================
 
-@pytest.mark.xfail(strict=True, raises=AssertionError, reason=(
-    "catalog expects BAD_SIGNATURE, observed WRONG_SUBJECT (first run, E01-subject-substitution-repaired-e): the deviating relay "
-    "substitutes request.gid (Alice -> Bob) and presents the ORIGINAL witness certificate to ACSC.consumeDecision; DecisionVerifier "
-    "check 4 (decision.requestDigest != digest(request)) fires before the quorum-signature check 6, so the ledger reverts "
-    "Rejected(WRONG_SUBJECT) with no grant, nonce or access-log change. BAD_SIGNATURE is reached only by other substitutions "
-    "(see test_supplement_E01_substitution_variants_where_BAD_SIGNATURE_arises)"))
 def test_E01_subject_substitution(world):
     led, ctx = world
     f, case = Flow(led, ctx), Case("E01-subject-substitution-repaired-e")
@@ -112,6 +125,77 @@ def test_E01_expiry_boundary(world):
     case.finish(obs.error, "REJECT" if obs.error is not None and before == after else "ACCEPT", boundary=expiry,
                 requestExpiresAt=signed["request"]["expiresAt"], decisionExpiresAt=d["decision"]["expiresAt"],
                 acceptedAtBoundaryMinusOne=True)
+
+
+def test_E01_forged_tuple(world):
+    led, ctx = world
+    f, case = Flow(led, ctx), Case("E01-forged-tuple-repaired-e")
+    case.step("FABRICATE_TUPLE")                                      # a request, records and decision for a subject who never asked the PBC
+    f.accept_checkpoint()                                             # ambient honest DBC state: a live checkpoint, which concerns no request
+    mallory = setup.addr("mallory")
+    request = {**f.client.build_request(data_id=setup.DATA_P1, nonce="77", expires_at=str(led.pbc.now() + 30),
+                                        auth_epoch=led.pbc.call(led.TMSC, "authEpoch")),
+               "gid": mallory, "recipientKeyHash": "0x" + keccak(text="HMBC.recipient-key.mallory").hex()}
+    until = str(led.pbc.now() + 86400)
+    records = [{"issuer": ctx.h1, "role": setup.ROLE_DOCTOR, "kind": "1", "serial": "999", "anchorVersion": "1", "validUntil": until},
+               {"issuer": ctx.h1, "role": setup.ROLE_ON_DUTY, "kind": "2", "serial": "0", "anchorVersion": "1", "validUntil": until}]
+    forged = f.decision_for(request, records, signer="mallory")      # every field matches; only the signer is not a witness
+    digest = request_digest(led, request)
+    assert led.pbc.call(led.PSC, "getRequest", digest)["status"] == "0" and led.pbc.call(led.LSC, "firstRequestLogId", digest) == "0"   # no PBC request, no PBC log
+    case.step("FORWARD_OR_CONSUME")
+    before = f.probe(digest, "77", mallory)
+    obs = observe(f.consume_raw, request, forged)
+    after = f.probe(digest, "77", mallory)
+    # control: the SAME tuple signed with the witness key is accepted, so the signature alone caused the rejection. That is a compromised witness,
+    # which E's single trusted witness does not defend against: the DBC verifies the witness quorum, not the existence of a PBC request.
+    snap = snapshot(led.dbc)
+    f.consume_raw(request, f.decision_for(request, records, signer="witness-1"))
+    control_grants = led.dbc.call(led.KSSC, "getGrant", grant_id_of(led, digest))[5] is True
+    revert(led.dbc, snap)
+    assert control_grants, "the witness-signed control was refused, so the forged tuple was not 'otherwise matching' and BAD_SIGNATURE proves nothing"
+    case.finish(obs.error, "REJECT" if obs.error is not None and before == after and after["grant"][5] is False else "ACCEPT",
+                stateUnchanged=before == after, noPbcRequestOrLog=True, sameTupleWitnessSignedIsAccepted=control_grants)
+
+
+def test_E01_wrong_destination(world):
+    led, ctx = world
+    f, case = Flow(led, ctx), Case("E01-wrong-destination-repaired-e")
+    case.step("REQUEST_ACCESS")
+    signed, d = f.certified()
+    case.step("SUBSTITUTE_DESTINATION")                               # the relay points the SAME signed material at another destination
+    mallory = setup.addr("mallory")
+    variants = {"otherChain": {**signed["request"], "destinationChainId": "38545"},
+                "otherKssc": {**signed["request"], "kssc": mallory},
+                "otherChainAndKssc": {**signed["request"], "destinationChainId": "38545", "kssc": mallory}}
+    assert all(request_digest(led, v) != signed["requestDigest"] for v in variants.values())
+    case.step("FORWARD_OR_CONSUME")                                   # nothing signed is rewritten: same user signature, same witness certificate
+    before = f.probe(signed["requestDigest"], "1")
+    obs = {name: observe(f.consume_raw, v, d) for name, v in variants.items()}
+    after = f.probe(signed["requestDigest"], "1")
+    assert f.relay.deliver(signed, d) is not None                     # control: the unsubstituted request still consumes here
+    case.finish(agree(*obs.values()), "REJECT" if all(o.error for o in obs.values()) and before == after else "ACCEPT",
+                variants={k: o.error for k, o in obs.items()}, stateUnchanged=before == after, genuineStillConsumes=True)
+
+
+def test_E01_new_reference_replay(world):
+    led, ctx = world
+    f, case = Flow(led, ctx), Case("E01-new-reference-replay-repaired-e")
+    case.step("REQUEST_ACCESS")
+    signed, d = f.certified()
+    case.step("FORWARD_OR_CONSUME")
+    grant_id = f.relay.deliver(signed, d)
+    assert grant_id is not None
+    case.step("REPLAY_NEW_REFERENCE")
+    # In repaired-e the reference IS the digest of the user-signed request, so the relay cannot mint a fresh one without a freshly signed
+    # request (excluded by the catalog). It can only reuse the original signed gid/nonce/certificate, by two routes:
+    grant_before = led.dbc.call(led.KSSC, "grantDetails", grant_id)
+    before = f.probe(signed["requestDigest"], "1")
+    resubmit = observe(f.consume_raw, signed["request"], d)           # (1) the original request + certificate again, straight to the ACSC
+    second_certificate = observe(f.decide, signed)                    # (2) ask the honest witness for another certificate for the same signed request
+    after = f.probe(signed["requestDigest"], "1")
+    no_new = led.dbc.call(led.KSSC, "grantDetails", grant_id) == grant_before and before == after
+    case.finish(agree(resubmit, second_certificate), "NO_NEW_GRANT" if no_new and resubmit.error and second_certificate.error else "NEW_GRANT",
+                resubmitOriginal=resubmit.error, secondCertificateFromWitness=second_certificate.error, stateUnchanged=before == after)
 
 
 # =================================================================================================================================
@@ -326,10 +410,13 @@ def test_E03_duplicate_outcome(world, tmp_path):
     assert again.error == "REPLAY"
 
 
-def _crash_case(world, tmp_path, case_id: str, fault: str):
-    """Shared schedule of the two crash cases: release crashes at `fault`, the worker restarts on the same state directory and retries."""
+def _crash_case(world, tmp_path, case_id: str):
+    """Shared schedule of the two crash cases. The hook is the one the CATALOG names (crashPoint), armed before the first RELEASE;
+    the worker is then restarted on the same state directory and retries before the grant expires. A separate grant is crashed the same
+    way and retried only after its expiry. Returns the raw observations; the catalog's `expected.worker` record is built from them."""
     led, ctx = world
     f, case = Flow(led, ctx), Case(case_id)
+    fault = case.crash_fault()
     state = tmp_path / "state"
     case.step("REQUEST_ACCESS")
     case.step("FORWARD_OR_CONSUME")
@@ -340,17 +427,18 @@ def _crash_case(world, tmp_path, case_id: str, fault: str):
     sent = []
     with pytest.raises(SimulatedCrash):
         w.release(grant_id, transmit=sent.append)
-    persisted = db_rows(state, "select delivery, token from releases")
+    persisted = db_rows(state, "select delivery, token, ciphertext_digest from releases")
     events_at_crash = [e[0] for e in db_rows(state, "select type from events order by id")]
+    sent_at_crash = len(sent)
     case.step("CRASH_RESTART")                                        # a new process on the same durable state
     w2 = worker(led, state)
-    case.step("RELEASE")                                              # the retry
+    case.step("RELEASE")                                              # the retry, before the original expiry
     resp = w2.release(grant_id, transmit=sent.append)
     case.step("REPORT_OUTCOME")
     receipt = f.witness.attest_grant(grant_id)
     f.relay.report_outcome(signed["requestDigest"], OUTCOME, receipt)
     reported = f.probe(signed["requestDigest"], "1")
-    # the retry is bounded by the ORIGINAL grant expiry: a second request, same crash, then the clock passes the grant's expiry
+    # a SEPARATE grant, crashed the same way and retried only after its original expiry
     signed_b, d_b, grant_b = f.granted(nonce="2")
     state_b = tmp_path / "state-b"
     wb = worker(led, state_b, faults={fault})
@@ -358,38 +446,47 @@ def _crash_case(world, tmp_path, case_id: str, fault: str):
     sent_b = []
     with pytest.raises(SimulatedCrash):
         wb.release(grant_b, transmit=sent_b.append)
-    token_b = db_rows(state_b, "select token from releases")
+    tokens_b = db_rows(state_b, "select token from releases")
+    events_b = [e[0] for e in db_rows(state_b, "select type from events order by id")]
     setup.advance(led, 40)
     late = observe(worker(led, state_b).release, grant_b)
     after_b = (db_rows(state_b, "select token from releases"), [e[0] for e in db_rows(state_b, "select type from events order by id")])
-    return case, dict(sent=sent, persisted=persisted, events_at_crash=events_at_crash, resp=resp, w2=w2, grant_id=grant_id, reported=reported,
-                      late=late, token_b=token_b, after_b=after_b, f=f, signed=signed, receipt=receipt)
+    events = [e["type"] for e in w2.events()]
+    row = persisted[0]
+    record = {                                                        # the SAME closed field set as the catalog's expected.worker
+        "releaseIntentCount": str(events.count("RELEASE_INTENT")), "releaseSentCount": str(events.count("RELEASE_SENT")),
+        "sameCachedResponse": resp["responseEnvelope"]["token"] == row[1] and resp["ciphertextDigest"] == row[2] and all(x == resp for x in sent),
+        "delivery": w2.status(grant_id)["delivery"], "expiredRetryError": late.error}
+    expired_emits_no_event = after_b[1] == events_b and after_b[0] == tokens_b
+    return case, record, dict(persisted=persisted, events_at_crash=events_at_crash, sent_at_crash=sent_at_crash, sent=sent, events=events,
+                              reported=reported, expired_emits_no_event=expired_emits_no_event, f=f, signed=signed, receipt=receipt, w2=w2,
+                              grant_id=grant_id)
+
+
+def _crash_checks(r) -> bool:
+    """Facts the catalog's qualification states in prose, checked from the observations (not hard-coded per crash point): the crash left
+    delivery unknown, exactly one intent exists, the retry added exactly one attempt record, and the expired retry emitted nothing."""
+    at_crash_sent = r["events_at_crash"].count("RELEASE_SENT")
+    return (r["persisted"][0][0] == "unknown" and r["events_at_crash"].count("RELEASE_INTENT") == 1 and r["events"].count("RELEASE_INTENT") == 1
+            and r["events"].count("RELEASE_SENT") == at_crash_sent + 1 and len(r["sent"]) == r["sent_at_crash"] + 1 and r["expired_emits_no_event"]
+            and r["reported"]["pscStatus"] == "2")
 
 
 def test_E03_crash_after_intent(world, tmp_path):
-    case, r = _crash_case(world, tmp_path, "E03-crash-after-intent-repaired-e", "crash_after_intent")
-    token = r["persisted"][0][1]
-    assert r["persisted"] == [("unknown", token)] and r["events_at_crash"] == ["RELEASE_INTENT"] and r["sent"] == [r["resp"]]   # nothing left the process before the crash
-    same_capability = r["resp"]["responseEnvelope"]["token"] == token
-    bounded = r["late"].error == "EXPIRED" and r["after_b"][0] == r["token_b"] and r["after_b"][1] == ["RELEASE_INTENT"]
-    recorded = r["reported"]["pscStatus"] == "2"
-    case.finish(None, "CONDITIONAL" if same_capability and recorded and bounded else "UNCONDITIONAL", retryReusedPersistedToken=same_capability,
-                expiryBoundsRetry=r["late"].error, outcomeRecorded=recorded, eventsAfterRetry=[e["type"] for e in r["w2"].events()])
+    case, record, r = _crash_case(world, tmp_path, "E03-crash-after-intent-repaired-e")
+    conditional = _crash_checks(r) and record["expiredRetryError"] == "EXPIRED" and record["sameCachedResponse"]
+    case.finish(None, "CONDITIONAL" if conditional else "UNCONDITIONAL", worker=record, eventsAtCrash=r["events_at_crash"],
+                transmittedBeforeCrash=r["sent_at_crash"], eventsAfterRetry=r["events"], expiredRetryEmitsNoEvent=r["expired_emits_no_event"],
+                outcomeRecorded=r["reported"]["pscStatus"] == "2")
 
 
 def test_E03_crash_after_send(world, tmp_path):
-    case, r = _crash_case(world, tmp_path, "E03-crash-after-send-repaired-e", "crash_after_send")
-    token = r["persisted"][0][1]
-    assert r["persisted"] == [("unknown", token)] and r["events_at_crash"] == ["RELEASE_INTENT"]     # delivery is UNKNOWN, not sent, after the crash
-    assert len(r["sent"]) == 2 and r["sent"][0] == r["sent"][1] == r["resp"]                          # the response left once, then was re-sent: at-least-once
-    same_capability = r["resp"]["responseEnvelope"]["token"] == token
-    status = r["w2"].status(r["grant_id"])
-    bounded = r["late"].error == "EXPIRED" and r["after_b"][0] == r["token_b"] and r["after_b"][1] == ["RELEASE_INTENT"]
-    recorded = r["reported"]["pscStatus"] == "2"
+    case, record, r = _crash_case(world, tmp_path, "E03-crash-after-send-repaired-e")
     dup = observe(r["f"].relay.report_outcome, r["signed"]["requestDigest"], OUTCOME, r["receipt"])      # reconciliation is idempotent
-    case.finish(None, "CONDITIONAL" if same_capability and recorded and bounded and dup.error == "REPLAY" else "UNCONDITIONAL",
-                retryResentSameResponse=same_capability, transmissions=len(r["sent"]), deliveryAfterRetry=status["delivery"],
-                expiryBoundsRetry=r["late"].error, outcomeRecorded=recorded, idempotentReconcile=dup.error)
+    conditional = _crash_checks(r) and record["expiredRetryError"] == "EXPIRED" and record["sameCachedResponse"] and dup.error == "REPLAY"
+    case.finish(None, "CONDITIONAL" if conditional else "UNCONDITIONAL", worker=record, eventsAtCrash=r["events_at_crash"],
+                transmittedBeforeCrash=r["sent_at_crash"], transmissionsTotal=len(r["sent"]), eventsAfterRetry=r["events"],
+                expiredRetryEmitsNoEvent=r["expired_emits_no_event"], idempotentReconcile=dup.error, outcomeRecorded=r["reported"]["pscStatus"] == "2")
 
 
 # =================================================================================================================================
@@ -423,19 +520,76 @@ def test_supplement_E01_nonce_reuse_with_a_new_digest_is_rejected_by_the_dbc_non
     f = Flow(led, ctx)
     signed, d = f.certified(nonce="1", ttl=30)
     assert f.relay.deliver(signed, d) is not None
-    second = f.request(nonce="1", ttl=20)                             # same (gid, nonce), expiry 10 s earlier (not a 1 s coincidence) -> a different digest
-    assert second["requestDigest"] != signed["requestDigest"]
-    cp = f.accept_checkpoint()["checkpoint"]
+    second = f.sign_until("1", int(signed["request"]["expiresAt"]) - 10)   # same (gid, nonce), explicit expiry 10 s earlier -> a different digest
+    assert second["requestDigest"] != signed["requestDigest"] and f.forward(second).code == "NONE"
+    f.accept_checkpoint()
     with pytest.raises(WitnessError) as e:
         f.decide(second)
     assert e.value.code == "REPLAY"                                   # the honest witness never signs an ALLOW the DBC would revert
-    decision = {"requestDigest": second["requestDigest"], "result": "1", "credentialDigest": d["decision"]["credentialDigest"],
-                "stateSequence": cp["sequence"], "witnessSetVersion": "1", "sourceBlockNumber": cp["sourceBlockNumber"],
-                "sourceBlockHash": cp["sourceBlockHash"], "expiresAt": str(min(int(second["request"]["expiresAt"]), int(cp["expiresAt"])))}
-    sig = eip712.sign_digest(setup.key("witness-1"), messages.digest_of("AccessDecision", decision, messages.domain_for("AccessDecision", decision, led.deployment)))
-    forged = {"decision": decision, "signatures": [sig], "credentialRecords": d["credentialRecords"]}
+    forged = f.decision_for(second["request"], d["credentialRecords"], signer="witness-1")          # a deviating witness signs ALLOW anyway
     assert observe(f.consume_raw, second["request"], forged).error == "REPLAY"
     assert led.dbc.call(led.KSSC, "getGrant", grant_id_of(led, second["requestDigest"]))[5] is False
+
+
+def test_supplement_E01_request_for_another_destination_certified_here_is_still_wrong_destination(world):
+    """The request's own destination binding is enforced independently of any signature: even a decision signed with the witness key
+    (a deviating signer, outside E's single trusted witness) for a request that names another DBC is refused, and the identical
+    construction for THIS destination is accepted, so the destination fields alone caused the rejection (agent 1's DecisionBinding variant)."""
+    led, ctx = world
+    f = Flow(led, ctx)
+    signed, d = f.certified()
+    records = d["credentialRecords"]
+    mallory = setup.addr("mallory")
+    base = f.client.build_request(data_id=setup.DATA_P1, nonce="5", expires_at=str(led.pbc.now() + 30), auth_epoch=led.pbc.call(led.TMSC, "authEpoch"))
+    foreign = {**base, "destinationChainId": "38545", "kssc": mallory}
+    refused = observe(f.consume_raw, foreign, f.decision_for(foreign, records, signer="witness-1"))
+    assert refused.error == "WRONG_DESTINATION"
+    assert led.dbc.call(led.KSSC, "getGrant", grant_id_of(led, request_digest(led, foreign)))[5] is False
+    f.consume_raw(base, f.decision_for(base, records, signer="witness-1"))
+    assert led.dbc.call(led.KSSC, "getGrant", grant_id_of(led, request_digest(led, base)))[5] is True
+
+
+def register_bob(led) -> dict:
+    """Fixture user Bob: a Researcher certificate from H2 (valid credentials, but the record's policy needs Doctor AND OnDuty)."""
+    dep, t = led.deployment, led.pbc.now()
+    bob, h2 = setup.addr("bob"), setup.addr("H2-root")
+    cert = {"issuer": h2, "gid": bob, "roles": ["0x" + keccak(text="HMBC.role.Researcher").hex()], "serial": "201",
+            "validFrom": "1700000000", "validUntil": "2100000000"}
+    signed_cert = {"cert": cert, "signature": setup.sign("RoleCertificate", cert, dep, "H2-root")}
+    cert_digest = "0x" + messages.digest_of("RoleCertificate", cert, messages.domain_for("RoleCertificate", cert, dep)).hex()
+    reg = {"gid": bob, "certDigest": cert_digest, "recipientKeyHash": keys.recipient_key_hash("keyref:user:bob"), "expiresAt": str(t + 600)}
+    led.pbc.send(setup.key("relay"), led.RSC, "register", reg, setup.sign("Registration", reg, dep, "bob"), signed_cert)
+    return {"certificates": [signed_cert], "temporalClaims": []}
+
+
+def test_supplement_bob_valid_credentials_but_insufficient_policy_is_a_signed_deny_the_dbc_audits(world):
+    """A1-0017 / A3-0012 control: Bob's credentials are VALID but do not satisfy the record's policy. The honest witness signs DENY; the DBC
+    logs it (AccessLog +1) without reverting, issues no grant and leaves the nonce unconsumed. A deviating witness signing ALLOW for Bob
+    makes consumeDecision revert POLICY_DENIED with no AccessLog and no state change."""
+    led, ctx = world
+    f = Flow(led, ctx)
+    bob = setup.addr("bob")
+    bundle = register_bob(led)
+    client = UserClient("bob", led.deployment)
+    signed = client.sign_request(setup.make_request(led, ctx, client, nonce="1"))
+    assert f.relay.forward(signed, bundle).code == "NONE"            # the PBC accepts Bob: his credentials are valid
+    f.accept_checkpoint()
+    d = f.decide(signed)
+    assert d["decision"]["result"] == "0" and len(d["credentialRecords"]) == 1      # signed DENY; the valid Researcher record is still attested
+    digest = signed["requestDigest"]
+    before = f.probe(digest, "1", bob)
+    assert before["nonceConsumed"] is False
+    rc = f.consume_raw(signed["request"], d)                          # (1) the honest DENY: raw submission, so a revert would raise
+    after = f.probe(digest, "1", bob)
+    logs = [led.ACSC.decode_log(lg) for lg in rc["logs"] if lg["address"].lower() == led.ACSC.address]
+    assert [n for n, _ in logs] == ["AccessLog"] and logs[0][1]["allowed"] is False and logs[0][1]["gid"] == bob
+    assert chain.ERROR_NAMES[int(logs[0][1]["code"])] == "POLICY_DENIED"
+    assert int(after["accessLogCount"]) == int(before["accessLogCount"]) + 1       # AccessLog +1
+    assert after["grant"][5] is False and after["nonceConsumed"] is False         # no grant; NONCE_UNCHANGED
+    forged = f.decision_for(signed["request"], d["credentialRecords"], signer="witness-1", result="1")      # (2) a deviating witness signs ALLOW
+    rejected = observe(f.consume_raw, signed["request"], forged)
+    assert rejected.error == "POLICY_DENIED"
+    assert f.probe(digest, "1", bob) == after                                     # no AccessLog, no grant, nonce still unconsumed
 
 
 # =================================================================================================================================
@@ -503,10 +657,11 @@ def test_zz_every_catalog_case_was_executed_exactly_once():
     expected_ids = sorted(f"{c}-repaired-e" for c in (
         "E01-subject-substitution", "E01-nonce-replay", "E01-expiry-boundary", "E02-signed-list-rollback", "E02-wrong-issuer",
         "E02-pre-barrier-revocation", "E02-post-barrier-revocation", "E02-expired-duty", "E03-dropped-outcome", "E03-fabricated-outcome",
-        "E03-duplicate-outcome", "E03-crash-after-intent", "E03-crash-after-send"))
+        "E03-duplicate-outcome", "E03-crash-after-intent", "E03-crash-after-send",
+        "E01-forged-tuple", "E01-wrong-destination", "E01-new-reference-replay"))               # the last three are new in revision 5
     import json
     print("\nOBSERVED " + json.dumps(OBSERVED, indent=1, sort_keys=True))
-    assert e2.REPAIRED_E_IDS == expected_ids and len(expected_ids) == 13                 # the pinned catalog holds exactly these repaired-e cases
+    assert e2.REPAIRED_E_IDS == expected_ids and len(expected_ids) == 16                 # the pinned catalog holds exactly these repaired-e cases
     assert sorted(e2.EXECUTED) == expected_ids, f"cases never concluded: {sorted(set(expected_ids) - set(e2.EXECUTED))}"
     assert all(n == 1 for n in e2.EXECUTED.values()), dict(e2.EXECUTED)
     assert sorted(OBSERVED) == expected_ids
@@ -516,3 +671,5 @@ def test_zz_every_catalog_case_was_executed_exactly_once():
         assert {"classificationExpected", "expectedError", "observedError", "observedOutcome"} <= set(rec), cid
         assert rec["stepsExecuted"] == [s["action"] for s in e2.CATALOG[cid]["steps"]], cid
         assert rec["expectedError"] == e2.CATALOG[cid]["expected"]["error"] and rec["classificationExpected"] == e2.CATALOG[cid]["expected"]["classification"]
+        assert rec["workerExpected"] == e2.CATALOG[cid]["expected"].get("worker") and rec["workerObserved"] == rec["workerExpected"], cid
+    assert sorted(c for c, r in OBSERVED.items() if r["workerExpected"] is not None) == ["E03-crash-after-intent-repaired-e", "E03-crash-after-send-repaired-e"]

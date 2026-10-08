@@ -1,9 +1,9 @@
 """Whole legitimate flow through the real adapter PROCESS (JSON lines over stdin/stdout) against the live ledger.
 
-Roles: the test plays the runner/relay with raw ledger transactions (Option A of A2-0008); every honest-party signature and every worker
-action comes from the adapter subprocess. Responses are validated with the revision-4 response rules and the transcript is recorded
-(HMBC_WRITE_EVIDENCE=1) as evidence; it is NOT an E1 integration run (E0 is not accepted; two operations the flow needs, checkpoint and receipt
-signing, are not in the six-operation interface yet - A2-0008 - so those two steps use the in-process witness).
+Roles (Option A, accepted into candidate revision 5, A3-0012): the test plays the runner/relay with raw ledger transactions; EVERY honest-party
+signature (user, witness checkpoint, witness decision, witness receipt) and every worker action comes from the adapter subprocess, which was started the way a
+runner must start it: private state dir + the deployment PINNED out of band. Responses are validated with the revision-5 response rules and the transcript is recorded
+(HMBC_WRITE_EVIDENCE=1) as evidence. It is NOT an E1 integration run: E0 is not accepted, the ledger is a local Anvil pair, and the runner role is played by this test.
 """
 import json
 import os
@@ -15,7 +15,6 @@ from eth_utils import keccak
 
 from hmbc_protocol import eip712, wire
 from hmbc_protocol.relay import Relay
-from hmbc_protocol.witness import Witness
 import ledger_setup as setup
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -57,10 +56,12 @@ def test_legitimate_flow_through_the_adapter_process(world, tmp_path):
         req = adp.call("prepare_request", {"request": setup_request(led), "signingKeyRef": "keyref:user:alice"})
         assert req["ok"], req
         signed = {"request": req["result"]["request"], "requestDigest": req["result"]["requestDigest"], "signature": req["result"]["signature"]}
-        # 2. the (honest) relay submits it to the PBC; 3. witness checkpoint (in-process: no operation yet) accepted by the DBC
+        # 2. the (honest) relay submits it to the PBC; 3. the adapter's witness signs a checkpoint, which the runner submits to the DBC
         assert Relay(led, "relay").forward(signed, ctx.bundle).code == "NONE"
-        witness, relay = Witness(led), Relay(led, "relay")
-        relay.accept_state(witness.checkpoint())
+        relay = Relay(led, "relay")
+        cp = adp.call("collect_checkpoint", {})
+        assert cp["ok"], cp
+        relay.accept_state({"checkpoint": cp["result"]["checkpoint"], "signatures": cp["result"]["signatures"]})
         # 4. decision from the adapter's witness; 5. relay consumes it on the DBC
         dec = adp.call("collect_decision", {"requestDigest": signed["requestDigest"]})
         assert dec["ok"], dec
@@ -73,8 +74,10 @@ def test_legitimate_flow_through_the_adapter_process(world, tmp_path):
         assert rel["ok"], rel
         fin = adp.call("finish_decryption", {"response": rel["result"], "userKeyRef": "keyref:user:alice"})
         assert fin["ok"] and fin["result"]["decryptable"] is True
-        # 7. receipt (in-process witness) and attested outcome on the PBC
-        relay.report_outcome(signed["requestDigest"], "0x" + "ab" * 32, witness.attest_grant(grant_id))
+        # 7. the adapter's witness attests the grant; the runner reports the attested outcome on the PBC
+        att = adp.call("attest_grant", {"grantId": grant_id})
+        assert att["ok"], att
+        relay.report_outcome(signed["requestDigest"], "0x" + "ab" * 32, {"receipt": att["result"]["receipt"], "signatures": att["result"]["signatures"]})
         assert led.pbc.call(led.PSC, "getRequest", signed["requestDigest"])["status"] == "2"
         # negative controls through the same process: another user's key cannot complete; a forged token cannot complete
         assert adp.call("finish_decryption", {"response": rel["result"], "userKeyRef": "keyref:user:bob"})["error"]["code"] == "WRONG_SUBJECT"

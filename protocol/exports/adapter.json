@@ -55,6 +55,20 @@
     "Unknown operation, bad envelope and every wire-format violation answer MALFORMED (no dedicated code in the v0 list).",
     "An unbuilt E operation answers ADAPTER_UNAVAILABLE, not NOT_IMPLEMENTED_IN_PHASE, because the limit is E1 not being unlocked, not a later phase."
   ],
+  "evidence": {
+    "workerLog": {
+      "command": [
+        "python",
+        "-m",
+        "hmbc_protocol.worker_log",
+        "--state-dir",
+        "<the adapter's state directory>"
+      ],
+      "output": "JSON: append-only worker events (RELEASE_INTENT / RELEASE_SENT with requestDigest, grantId, gid, dataId, timestamp), one row per release with sendAttempts/completedAttempts/delivery/tokenDigest, and counts {releaseIntentCount, releaseSentCount}",
+      "tokens": "The symbolic capability is REDACTED: only keccak256(token) is exported, so a collector can check 'same cached response' without holding it.",
+      "semantics": "RELEASE_SENT is a write-ahead record of an ATTEMPTED send (durable before the response can leave); delivery is never acknowledged and stays 'unknown'. Opened read-only; safe to run while the adapter is up."
+    }
+  },
   "operations": [
     {
       "name": "prepare_request",
@@ -106,7 +120,51 @@
         "NOT_REGISTERED",
         "INSUFFICIENT_QUORUM"
       ],
-      "behaviour": "Witness recomputes the decision from PBC state at the decision's block (checkCredentials at that block tag and its timestamp, A1-0011); relays never supply attributes. At most one re-collection per newly accepted checkpoint while the request is unexpired (D24).",
+      "behaviour": "Requires the DBC's CURRENT checkpoint (unexpired, describing the PBC state the witness verifies, not older than the request). Witness recomputes the decision from PBC state at the decision's block (checkCredentials at that block tag and its timestamp, A1-0011); relays never supply attributes. At most one re-collection per newly accepted checkpoint while the request is unexpired (D24).",
+      "draftNote": "CANDIDATE B-E1 code: implemented while E1 is not unlocked and NOT offered for integration or claimed as an E1 result. It needs a configured --state-dir and a reachable loopback ledger (rpcUrl in the deployment manifest); otherwise it answers ADAPTER_UNAVAILABLE. The examples below are generated with no ledger running, so they show the refusal paths only; successful runs are recorded as evidence from live-ledger tests, never invented here."
+    },
+    {
+      "name": "collect_checkpoint",
+      "status": "candidate-b-e1-not-unlocked",
+      "example": "examples/collect_checkpoint.json",
+      "inputFields": {
+        "witnessSetVersion": "optional, E: \"1\" ({} is valid); a sequence, block or timestamp is never accepted from the caller"
+      },
+      "draftResultFields": [
+        "schemaVersion",
+        "adapterMode",
+        "checkpoint (StateCheckpoint)",
+        "signatures (exactly one)"
+      ],
+      "errors": [
+        "ADAPTER_UNAVAILABLE",
+        "MALFORMED",
+        "STALE_STATE",
+        "WRONG_DESTINATION"
+      ],
+      "behaviour": "Witness signs a StateCheckpoint of the latest PBC block it treats as final (authEpoch, policyVersion, source block number/hash read from the PBC), with sequence = the DBC's current sequence + 1 read from the DBC, keyEpoch 0, expiresAt = the DBC clock (pending block) + 60. The RUNNER submits KSSC.acceptState (A2-0008 Option A, accepted in A3-0012).",
+      "draftNote": "CANDIDATE B-E1 code: implemented while E1 is not unlocked and NOT offered for integration or claimed as an E1 result. It needs a configured --state-dir and a reachable loopback ledger (rpcUrl in the deployment manifest); otherwise it answers ADAPTER_UNAVAILABLE. The examples below are generated with no ledger running, so they show the refusal paths only; successful runs are recorded as evidence from live-ledger tests, never invented here."
+    },
+    {
+      "name": "attest_grant",
+      "status": "candidate-b-e1-not-unlocked",
+      "example": "examples/attest_grant.json",
+      "inputFields": {
+        "grantId": "bytes32"
+      },
+      "draftResultFields": [
+        "schemaVersion",
+        "adapterMode",
+        "receipt (GrantReceipt)",
+        "signatures (exactly one)"
+      ],
+      "errors": [
+        "ADAPTER_UNAVAILABLE",
+        "MALFORMED",
+        "NOT_COMMITTED",
+        "WRONG_SUBJECT"
+      ],
+      "behaviour": "Witness signs a GrantReceipt only for an ALLOWED grant it reads from the DBC at the latest block (grant id re-derived, cross-checked against the PBC's FORWARDED record); NOT_COMMITTED for a missing/denied grant, WRONG_SUBJECT once an outcome is recorded. A receipt is grant evidence, never delivery evidence. The RUNNER submits PSC.reportAttestedOutcome (only the configured relay may).",
       "draftNote": "CANDIDATE B-E1 code: implemented while E1 is not unlocked and NOT offered for integration or claimed as an E1 result. It needs a configured --state-dir and a reachable loopback ledger (rpcUrl in the deployment manifest); otherwise it answers ADAPTER_UNAVAILABLE. The examples below are generated with no ledger running, so they show the refusal paths only; successful runs are recorded as evidence from live-ledger tests, never invented here."
     },
     {
@@ -200,10 +258,10 @@
     }
   ],
   "sourceSha256": {
-    "hmbc_protocol/adapter.py": "750a95352238065a032bff18869b2eb4e7381da5e4d24fbf9930db21a165faa7",
+    "hmbc_protocol/adapter.py": "7fa01a39909ee9b94555d5f3c616bc89488d649b4731993ef80e7f4235267ce0",
     "hmbc_protocol/eip712.py": "eb70dd51e82c1374f9629bb18b063b05835ca983101d5ebc47a327220b43d03c",
     "hmbc_protocol/keys.py": "cf953bea08d9658ba0917d2f1c99dc039b9b269f765f52a775b043cddcae48ab",
     "hmbc_protocol/messages.py": "54bfeda86ea4b52ce279cee52e69721c794b68f1644f856fc7641db75abe8da8",
-    "hmbc_protocol/wire.py": "e7eb78d800b53d8f1b8bc1fcc3e51fe3953bf857b3941276acf9a0bde661810a"
+    "hmbc_protocol/wire.py": "ee3e8d78326bba54db56f0ecd54025e1f88748ff60cf5a1b9ec31f504e504dbb"
   }
 }

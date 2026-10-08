@@ -15,9 +15,10 @@ def test_committed_exports_equal_regeneration():
     assert r.returncode == 0, r.stdout + r.stderr
 
 
-def test_manifest_lists_all_six_operations_and_only_symbolic_mode():
+def test_manifest_lists_all_eight_operations_and_only_symbolic_mode():
     m = json.loads((ROOT / "exports" / "adapter.json").read_text())
-    assert [o["name"] for o in m["operations"]] == ["prepare_request", "collect_decision", "release", "encrypt_record", "finish_decryption", "rotate_epoch"]
+    assert [o["name"] for o in m["operations"]] == ["prepare_request", "collect_decision", "collect_checkpoint", "attest_grant", "release", "encrypt_record",
+                                                    "finish_decryption", "rotate_epoch"]
     assert m["supportedAdapterModes"] == ["symbolic"] and m["adapterMode"] == "symbolic"
     assert m["startup"]["requiredEnvironmentVariables"] == []
     cmd = m["startup"]["command"]
@@ -25,13 +26,20 @@ def test_manifest_lists_all_six_operations_and_only_symbolic_mode():
     assert "pinned" in m["startup"]["deploymentPinning"].lower() and "never from a request" in m["startup"]["deploymentPinning"]
     statuses = {o["name"]: o["status"] for o in m["operations"]}
     assert statuses["prepare_request"] == "implemented-e0" and statuses["rotate_epoch"] == "not-implemented-in-phase"
-    assert all(s == "candidate-b-e1-not-unlocked" for k, s in statuses.items() if k in {"collect_decision", "release", "encrypt_record", "finish_decryption"})
+    assert all(s == "candidate-b-e1-not-unlocked" for k, s in statuses.items() if k in {"collect_decision", "collect_checkpoint", "attest_grant", "release", "encrypt_record", "finish_decryption"})
+
+
+def test_manifest_documents_the_worker_log_evidence_export_without_tokens():
+    m = json.loads((ROOT / "exports" / "adapter.json").read_text())
+    ev = m["evidence"]["workerLog"]
+    assert ev["command"][:3] == ["python", "-m", "hmbc_protocol.worker_log"] and "--state-dir" in ev["command"]
+    assert "redacted" in ev["tokens"].lower() and "RELEASE_SENT" in ev["semantics"] and "attempt" in ev["semantics"].lower()
 
 
 def test_candidate_operations_are_declared_with_their_state_requirements():
     m = json.loads((ROOT / "exports" / "adapter.json").read_text())
     ops = {o["name"]: o for o in m["operations"]}
-    for name in ("collect_decision", "release", "encrypt_record", "finish_decryption"):
+    for name in ("collect_decision", "collect_checkpoint", "attest_grant", "release", "encrypt_record", "finish_decryption"):
         note = ops[name]["draftNote"] if "draftNote" in ops[name] else ops[name].get("candidateNote", "")
         assert "CANDIDATE" in note and "E1 is not unlocked" in note and "--state-dir" in note, name
 

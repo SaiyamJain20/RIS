@@ -1,21 +1,16 @@
-# agent-2 E0 evidence: full test run (after recipient_key_hash adoption)
-# date: 2026-10-08T07:39:28Z
-# base commit before this change: 579e535132e81d299ccf2e874d2be3b47c779f1c
+# agent-2 full test run (candidate B-E1/B-E2 + E0 artifacts)
+# date: 2026-10-08T09:54:34Z
+# base commit (HEAD before the commit that carries this file): e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b
 # python: Python 3.13.15
 eth-abi                   6.0.0
 eth-account               0.14.0
-eth-hash                  0.8.0
-eth-keyfile               0.10.0
-eth-keys                  0.8.0
-eth-rlp                   3.0.0
-eth-typing                6.0.0
 eth-utils                 6.0.0
 jsonschema                4.26.0
-jsonschema-specifications 2025.9.1
 pytest                    9.0.2
-# command: python -m pytest protocol/tests -q -c protocol/pytest.ini --rootdir protocol
-..........................s............................................. [ 87%]
-........................................................................ [ 97%]
-.................                                                        [100%]
-636 passed, 101 skipped in 2.25s
+# foundry: forge Version: 1.8.5 Commit SHA: 51a52c59cffd940f76eddd0b4bb1791aa4b5ac7f 
+# command: python -m pytest protocol/tests -q -c protocol/pytest.ini --rootdir protocol -p no:cacheprovider -rxXfE
+........................................................................ [ 92%]
+........................................................................ [ 96%]
+.............................................                            [100%]
+1284 passed, 201 skipped in 115.74s (0:01:55)
 # exit: 0

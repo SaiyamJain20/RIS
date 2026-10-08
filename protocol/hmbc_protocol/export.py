@@ -33,7 +33,19 @@ OPS = {
         "inputFields": {"requestDigest": "bytes32", "witnessSetVersion": "optional, E: \"1\""},
         "draftResultFields": ["schemaVersion", "adapterMode", "decision (AccessDecision)", "signatures (sorted by signer)", "credentialRecords (CredentialRecord[])"],
         "errors": ["ADAPTER_UNAVAILABLE", "STALE_STATE", "EXPIRED", "POLICY_DENIED", "REVOKED", "WRONG_SUBJECT", "NOT_REGISTERED", "INSUFFICIENT_QUORUM"],
-        "behaviour": "Witness recomputes the decision from PBC state at the decision's block (checkCredentials at that block tag and its timestamp, A1-0011); relays never supply attributes. At most one re-collection per newly accepted checkpoint while the request is unexpired (D24).",
+        "behaviour": "Requires the DBC's CURRENT checkpoint (unexpired, describing the PBC state the witness verifies, not older than the request). Witness recomputes the decision from PBC state at the decision's block (checkCredentials at that block tag and its timestamp, A1-0011); relays never supply attributes. At most one re-collection per newly accepted checkpoint while the request is unexpired (D24).",
+    },
+    "collect_checkpoint": {
+        "inputFields": {"witnessSetVersion": "optional, E: \"1\" ({} is valid); a sequence, block or timestamp is never accepted from the caller"},
+        "draftResultFields": ["schemaVersion", "adapterMode", "checkpoint (StateCheckpoint)", "signatures (exactly one)"],
+        "errors": ["ADAPTER_UNAVAILABLE", "MALFORMED", "STALE_STATE", "WRONG_DESTINATION"],
+        "behaviour": "Witness signs a StateCheckpoint of the latest PBC block it treats as final (authEpoch, policyVersion, source block number/hash read from the PBC), with sequence = the DBC's current sequence + 1 read from the DBC, keyEpoch 0, expiresAt = the DBC clock (pending block) + 60. The RUNNER submits KSSC.acceptState (A2-0008 Option A, accepted in A3-0012).",
+    },
+    "attest_grant": {
+        "inputFields": {"grantId": "bytes32"},
+        "draftResultFields": ["schemaVersion", "adapterMode", "receipt (GrantReceipt)", "signatures (exactly one)"],
+        "errors": ["ADAPTER_UNAVAILABLE", "MALFORMED", "NOT_COMMITTED", "WRONG_SUBJECT"],
+        "behaviour": "Witness signs a GrantReceipt only for an ALLOWED grant it reads from the DBC at the latest block (grant id re-derived, cross-checked against the PBC's FORWARDED record); NOT_COMMITTED for a missing/denied grant, WRONG_SUBJECT once an outcome is recorded. A receipt is grant evidence, never delivery evidence. The RUNNER submits PSC.reportAttestedOutcome (only the configured relay may).",
     },
     "release": {
         "inputFields": {"grantId": "bytes32"},
@@ -90,6 +102,9 @@ def _example_cases() -> dict[str, list[tuple[str, dict]]]:
             ("refused: wrong destination KSSC", {"request": _pbc_request(kssc="0x" + "11" * 20), "signingKeyRef": "keyref:user:alice"}),
             ("refused: JSON number instead of decimal string", {"request": _pbc_request(nonce=1), "signingKeyRef": "keyref:user:alice"}),
         ],
+        "collect_checkpoint": [("well-formed request, no ledger running", {}), ("well-formed with the optional version", {"witnessSetVersion": "1"}),
+                               ("refused: a relay-supplied sequence is never accepted", {"sequence": "9"})],
+        "attest_grant": [("well-formed request, no ledger running", {"grantId": _h(2)}), ("refused: empty input is MALFORMED", {})],
         "collect_decision": [("well-formed request, no ledger running", {"requestDigest": _h(1)}),
                              ("refused: empty input is MALFORMED, not unavailable", {})],
         "release": [("well-formed request, no ledger running", {"grantId": _h(2)})],
@@ -127,7 +142,7 @@ def build_manifest() -> dict:
     ops = []
     for name, spec in OPS.items():
         entry = {"name": name, "status": adapter.OPERATIONS[name]["status"], "example": f"examples/{name}.json", **spec}
-        if name in ("collect_decision", "release", "encrypt_record", "finish_decryption"):
+        if name in ("collect_decision", "collect_checkpoint", "attest_grant", "release", "encrypt_record", "finish_decryption"):
             entry["draftNote"] = CANDIDATE_NOTE
         ops.append(entry)
     return {
@@ -151,6 +166,11 @@ def build_manifest() -> dict:
         "errorChoices": ["No error class exists for a wrong SOURCE chain/PSC; the signer reports WRONG_DESTINATION for any chain/contract mismatch with the deployment manifest (agent-2 choice, RFC if agent 3 prefers another class).",
                          "Unknown operation, bad envelope and every wire-format violation answer MALFORMED (no dedicated code in the v0 list).",
                          "An unbuilt E operation answers ADAPTER_UNAVAILABLE, not NOT_IMPLEMENTED_IN_PHASE, because the limit is E1 not being unlocked, not a later phase."],
+        "evidence": {"workerLog": {
+            "command": ["python", "-m", "hmbc_protocol.worker_log", "--state-dir", "<the adapter's state directory>"],
+            "output": "JSON: append-only worker events (RELEASE_INTENT / RELEASE_SENT with requestDigest, grantId, gid, dataId, timestamp), one row per release with sendAttempts/completedAttempts/delivery/tokenDigest, and counts {releaseIntentCount, releaseSentCount}",
+            "tokens": "The symbolic capability is REDACTED: only keccak256(token) is exported, so a collector can check 'same cached response' without holding it.",
+            "semantics": "RELEASE_SENT is a write-ahead record of an ATTEMPTED send (durable before the response can leave); delivery is never acknowledged and stays 'unknown'. Opened read-only; safe to run while the adapter is up."}},
         "operations": ops,
         "sourceSha256": {p: hashlib.sha256((ROOT / p).read_bytes()).hexdigest() for p in SOURCES},
     }

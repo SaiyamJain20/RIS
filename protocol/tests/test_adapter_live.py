@@ -158,3 +158,46 @@ def test_no_adapter_response_contains_key_material_or_a_foreign_token(world, con
     for label in ("alice", "witness-1", "relay", "H1-root"):
         k = keys.synthetic_private_key(label)
         assert k not in blob and k[2:] not in blob
+
+
+# --- revision 5 witness operations (A2-0008 / A3-0012) --------------------------------------------------------------------------
+
+def test_collect_checkpoint_is_a_witness_signed_checkpoint_the_dbc_accepts(world, configured):
+    led, ctx = world
+    r = call(led, "collect_checkpoint", {})
+    assert r["ok"], r
+    cp = r["result"]["checkpoint"]
+    dig = messages.digest_of("StateCheckpoint", cp, messages.domain_for("StateCheckpoint", cp, led.deployment))
+    assert eip712.recover(dig, r["result"]["signatures"][0]) == Account.from_key(keys.synthetic_private_key("witness-1")).address.lower()
+    assert (cp["sequence"], cp["keyEpoch"], cp["witnessSetVersion"]) == ("1", "0", "1") and cp["authEpoch"] == "3"
+    Relay(led, "relay").accept_state({"checkpoint": cp, "signatures": r["result"]["signatures"]})        # the runner submits it; the ledger accepts it
+    assert led.dbc.call(led.KSSC, "currentCheckpoint")[1]["sequence"] == "1"
+    assert call(led, "collect_checkpoint", {"witnessSetVersion": "1"})["result"]["checkpoint"]["sequence"] == "2"   # sequence comes from the DBC
+
+
+@pytest.mark.parametrize("bad", [{"witnessSetVersion": "2"}, {"witnessSetVersion": 1}, {"sequence": "9"}, {"sourceBlockNumber": "1"}, {"expiresAt": "9999999999"}, []])
+def test_collect_checkpoint_accepts_no_relay_supplied_state(world, configured, bad):
+    led, ctx = world
+    line = json.dumps({"schemaVersion": "v1", "operation": "collect_checkpoint", "input": bad, "deploymentManifest": led.deployment})
+    r = adapter.handle_line(line)
+    assert not r["ok"] and r["error"]["code"] == "MALFORMED"
+
+
+def test_attest_grant_and_the_runner_reports_the_attested_outcome(world, configured):
+    led, ctx = world
+    signed, grant_id = grant(led, ctx)
+    r = call(led, "attest_grant", {"grantId": grant_id})
+    assert r["ok"], r
+    rc = r["result"]["receipt"]
+    assert (rc["grantId"], rc["requestDigest"], rc["gid"], rc["dataId"], rc["keyEpoch"]) == (grant_id, signed["requestDigest"], ctx.alice, setup.DATA_P1, "0")
+    Relay(led, "relay").report_outcome(signed["requestDigest"], "0x" + "ab" * 32, {"receipt": rc, "signatures": r["result"]["signatures"]})
+    assert led.pbc.call(led.PSC, "getRequest", signed["requestDigest"])["status"] == "2"
+
+
+def test_attest_grant_for_an_unknown_grant_is_not_committed_and_after_the_outcome_is_wrong_subject(world, configured):
+    led, ctx = world
+    assert call(led, "attest_grant", {"grantId": "0x" + "55" * 32})["error"]["code"] == "NOT_COMMITTED"
+    signed, grant_id = grant(led, ctx)
+    r = call(led, "attest_grant", {"grantId": grant_id})
+    Relay(led, "relay").report_outcome(signed["requestDigest"], "0x" + "ab" * 32, {"receipt": r["result"]["receipt"], "signatures": r["result"]["signatures"]})
+    assert call(led, "attest_grant", {"grantId": grant_id})["error"]["code"] == "WRONG_SUBJECT"          # no second receipt once the outcome is recorded

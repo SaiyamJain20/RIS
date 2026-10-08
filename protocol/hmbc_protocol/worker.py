@@ -35,7 +35,8 @@ create table if not exists records(data_id text primary key, owner text not null
   policy_json text not null, policy_digest text not null, ciphertext_digest text not null);
 create table if not exists releases(grant_id text primary key, request_digest text not null, data_id text not null, gid text not null,
   recipient_key_hash text not null, key_epoch text not null, ciphertext_digest text not null, token text not null,
-  grant_expires_at integer not null, created_at integer not null, delivery text not null, sent_count integer not null default 0);
+  grant_expires_at integer not null, created_at integer not null, delivery text not null, sent_count integer not null default 0,
+  completed_count integer not null default 0);
 create table if not exists meta(key text primary key, value text not null);
 create table if not exists events(id integer primary key autoincrement, type text not null, request_digest text not null,
   grant_id text not null, gid text not null, data_id text not null, timestamp integer not null);
@@ -133,7 +134,7 @@ class Worker:
             created = row is None
             if created:
                 token = "0x" + os.urandom(32).hex()
-                self.db.execute("insert into releases values(?,?,?,?,?,?,?,?,?,?,?,0)",
+                self.db.execute("insert into releases values(?,?,?,?,?,?,?,?,?,?,?,0,0)",
                                 (grant_id, g["requestDigest"], g["dataId"], g["gid"], g["recipientKeyHash"], g["keyEpoch"], rec[0],
                                  token, int(g["expiresAt"]), now, "unknown"))
                 self._event("RELEASE_INTENT", ident, now)
@@ -149,19 +150,22 @@ class Worker:
         response = {"schemaVersion": "v1", "adapterMode": "symbolic", "requestDigest": g["requestDigest"], "grantId": grant_id,
                     "dataId": g["dataId"], "ciphertextDigest": rec[0], "recipientKeyHash": g["recipientKeyHash"], "keyEpoch": "0",
                     "responseEnvelope": {"kind": "symbolic-partial/v1", "token": token}}
-        if transmit is not None:
-            transmit(response)
-        if "crash_after_send" in self.faults:
-            self.faults.discard("crash_after_send")
-            raise SimulatedCrash("crash after send, before the acknowledgement was recorded")
+        # Write-ahead: the ATTEMPT is durable before the response can leave, exactly like the intent, so the audit log can never lack a send that happened.
+        # RELEASE_SENT therefore means "a send was attempted", never "delivered": the protocol has no recipient acknowledgement, so delivery stays "unknown".
         self.db.execute("begin immediate")
         try:
-            self.db.execute("update releases set delivery='sent', sent_count=sent_count+1 where grant_id=?", (grant_id,))
+            self.db.execute("update releases set sent_count=sent_count+1 where grant_id=?", (grant_id,))
             self._event("RELEASE_SENT", ident, self.clock())
             self.db.execute("commit")
         except BaseException:
             self.db.execute("rollback")
             raise
+        if transmit is not None:
+            transmit(response)
+        if "crash_after_send" in self.faults:
+            self.faults.discard("crash_after_send")
+            raise SimulatedCrash("crash after the send, before it was recorded as completed")
+        self.db.execute("update releases set completed_count=completed_count+1 where grant_id=?", (grant_id,))
         return response
 
     # -- completion ---------------------------------------------------------------------------------------------------------
@@ -183,8 +187,8 @@ class Worker:
 
     # -- observation --------------------------------------------------------------------------------------------------------
     def status(self, grant_id: str) -> dict | None:
-        r = self.db.execute("select delivery, sent_count, grant_expires_at from releases where grant_id=?", (grant_id,)).fetchone()
-        return None if r is None else {"delivery": r[0], "sentCount": r[1], "grantExpiresAt": str(r[2])}
+        r = self.db.execute("select delivery, sent_count, completed_count, grant_expires_at from releases where grant_id=?", (grant_id,)).fetchone()
+        return None if r is None else {"delivery": r[0], "sendAttempts": r[1], "completedAttempts": r[2], "grantExpiresAt": str(r[3])}
 
     def events(self) -> list[dict]:
         return [{"type": t, "requestDigest": rd, "timestamp": str(ts), "grantId": gi, "gid": gid, "dataId": did}

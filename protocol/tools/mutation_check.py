@@ -13,10 +13,11 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 PY = sys.executable
-TESTS = {"wire": ["protocol/tests/test_candidate_schema_review.py", "protocol/tests/test_eip712_vs_agent1.py", "protocol/tests/test_boundary_review.py"],
-         "adapter": ["protocol/tests/test_adapter.py"], "keys": ["protocol/tests/test_messages_keys.py"],
-         "witness": ["protocol/tests/test_witness.py", "protocol/tests/test_witness_policy.py"], "worker": ["protocol/tests/test_worker.py"],
-         "chain": ["protocol/tests/test_chain.py", "protocol/tests/test_ledger.py", "protocol/tests/test_edges.py"], "adapter_live": ["protocol/tests/test_adapter_live.py"], "eip712": ["protocol/tests/test_eip712_vs_agent1.py"]}
+TESTS = {"wire": ["protocol/tests/test_candidate_schema_review.py", "protocol/tests/test_eip712_vs_agent1.py", "protocol/tests/test_boundary_review.py", "protocol/tests/test_boundary_review_r5.py"],
+         "adapter": ["protocol/tests/test_adapter.py", "protocol/tests/test_adapter_hardening.py"], "keys": ["protocol/tests/test_messages_keys.py"],
+         "witness": ["protocol/tests/test_witness.py", "protocol/tests/test_witness_policy.py", "protocol/tests/test_witness_hardening.py"],
+         "worker": ["protocol/tests/test_worker.py", "protocol/tests/test_worker_hardening.py"],
+         "chain": ["protocol/tests/test_chain.py", "protocol/tests/test_ledger.py", "protocol/tests/test_edges.py", "protocol/tests/test_chain_hardening.py", "protocol/tests/test_chain_stub.py"], "adapter_live": ["protocol/tests/test_adapter_live.py"], "eip712": ["protocol/tests/test_eip712_vs_agent1.py"]}
 
 M = [  # (suite, file, old, new, equivalent-reason or None)
     ("wire", "protocol/hmbc_protocol/wire.py", "    if any(a >= b for a, b in zip(keys, keys[1:])):", "    if False:", None),
@@ -26,7 +27,7 @@ M = [  # (suite, file, old, new, equivalent-reason or None)
     ("wire", "protocol/hmbc_protocol/wire.py", 'if not v["certificates"] and not v["temporalClaims"]:', "if False:", None),
     ("wire", "protocol/hmbc_protocol/wire.py", 'if int(v["grantExpiresAt"]) == 0:', "if False:", None),
     ("wire", "protocol/hmbc_protocol/wire.py", 'if reqs[0]["issuerMode"] == "2":', "if False:", None),
-    ("wire", "protocol/hmbc_protocol/wire.py", 'if len(_list(x, "signatures")) != 1:', "if False:", None),
+    ("wire", "protocol/hmbc_protocol/wire.py", 'def sigs(x):\n        if len(_list(x, "signatures")) != 1:', 'def sigs(x):\n        if False:', None),
     ("wire", "protocol/hmbc_protocol/wire.py", 'recipientKeyHash=hash32, keyEpoch=_e_const("0"),', "recipientKeyHash=hash32, keyEpoch=lambda x: None,", None),
     ("wire", "protocol/hmbc_protocol/wire.py", "if not isinstance(x, bool):", "if False:", None),
     ("wire", "protocol/hmbc_protocol/wire.py", 'code=lambda c: _enum(c, tuple(ERROR_CODES), "code")', "code=lambda c: None", None),
@@ -51,9 +52,26 @@ M = [  # (suite, file, old, new, equivalent-reason or None)
     ("worker", "protocol/hmbc_protocol/worker.py", 'if not g["exists"] or not g["allowed"] or bound != grant_id:', 'if not g["exists"]:', 'unreachable with the real KSSC: every stored grant has allowed=true and grantId is derived from its own requestDigest, so only `exists` can fail'),
     ("worker", "protocol/hmbc_protocol/worker.py", 'if int(g["recipientKeyHash"], 16) == 0 or g["recipientKeyHash"] != led.pbc.call(led.RSC, "recipientKeyHash", g["gid"]):', "if False:", 'repaired-e PSC already forces request.recipientKeyHash == RSC.recipientKeyHash(gid) and the grant copies it; the zero/mismatch case only arises for paper-profile grants, which the fixture does not deploy'),
     ("chain", "protocol/hmbc_protocol/chain.py", 'if got != self.chain_id:', "if False:", None),
-    ("chain", "protocol/hmbc_protocol/chain.py", 'if tag != "latest" and int(tag, 16) > self.block_number():', "if False:", None),
-    ("chain", "protocol/hmbc_protocol/ledger.py", 'parts.hostname not in ("127.0.0.1", "localhost", "::1")', "False", None),
+    ("chain", "protocol/hmbc_protocol/chain.py", 'if tag != "latest" and _hex(tag) > self.block_number():', "if False:", None),
+    ("chain", "protocol/hmbc_protocol/chain.py", 'parts.hostname not in ("127.0.0.1", "localhost", "::1")', "False", None),
     ("chain", "protocol/hmbc_protocol/ledger.py", 'if hashlib.sha256(raw).hexdigest() != dep["abi"][name]["abiSha256"]:', "if False:", None),
+    ("witness", "protocol/hmbc_protocol/witness.py", 'if str(tx.get("to", "")).lower() != led.PSC.address:', "if False:", None),
+    ("witness", "protocol/hmbc_protocol/witness.py", 'if led.dbc.call(led.KSSC, "nonceConsumed", request["gid"], request["nonce"]) is True:', "if False:", None),
+    ("witness", "protocol/hmbc_protocol/witness.py", 'if code == "0" and any(int(r["validUntil"]) <= dbc_now for r in records):', "if False:", None),
+    ("witness", "protocol/hmbc_protocol/witness.py", 'if request["destinationChainId"] != str(led.dbc.chain_id) or request["kssc"] != led.KSSC.address:', "if False:",
+     "unreachable with the real PSC: it only forwards requests whose destination chain and KSSC it has configured, and the digest recomputation precedes this check"),
+    ("witness", "protocol/hmbc_protocol/witness.py", 'if eip712.recover(digest, sig) != self.address:', "if False:", None),
+    ("worker", "protocol/hmbc_protocol/worker.py", 'if stored != fp:', "if False:", None),
+    ("worker", "protocol/hmbc_protocol/worker.py", 'fcntl.flock(lock, fcntl.LOCK_EX)', "pass", None),
+    ("chain", "protocol/hmbc_protocol/chain.py", "        return None\n\n\n# No proxies", "        return super().redirect_request(*a, **k)\n\n\n# No proxies", None),
+    ("chain", "protocol/hmbc_protocol/chain.py", "return max(latest, pending)", "return latest", None),
+    ("chain", "protocol/hmbc_protocol/chain.py", 'if not isinstance(out, dict):', "if False:", None),
+    ("adapter", "protocol/hmbc_protocol/adapter.py", 'if _PINNED is not None and dep != _PINNED:', "if False:", None),
+    ("adapter", "protocol/hmbc_protocol/adapter.py", 'if not chunk.endswith(b"\\n") and len(chunk) > MAX_LINE_BYTES:', "if False:", None),
+    ("adapter", "protocol/hmbc_protocol/eip712.py", "if len(value) > 78:", "if False:", None),   # tested via the adapter/wire hardening tests
+    ("worker", "protocol/hmbc_protocol/worker.py", 'self.db.execute("update releases set sent_count=sent_count+1 where grant_id=?", (grant_id,))', "pass", None),
+    ("worker", "protocol/hmbc_protocol/worker.py", 'self.db.execute("update releases set completed_count=completed_count+1 where grant_id=?", (grant_id,))', "pass", None),
+    ("wire", "protocol/hmbc_protocol/wire.py", 'def _one_signature(x):\n    if len(_list(x, "signatures")) != 1:', 'def _one_signature(x):\n    if False:', None),
     ("eip712", "protocol/hmbc_protocol/eip712.py", "_ADDR.fullmatch(value)", "_ADDR.match(value)", None),
     ("eip712", "protocol/hmbc_protocol/eip712.py", "if not isinstance(value, str) or not _DEC.fullmatch(value):", "if not isinstance(value, (str, int)) or (isinstance(value, str) and not _DEC.fullmatch(value)):", None),
     ("adapter", "protocol/hmbc_protocol/adapter.py", 'if req["gid"] != signer:', "if False:", None),
@@ -65,10 +83,8 @@ M = [  # (suite, file, old, new, equivalent-reason or None)
     ("adapter", "protocol/hmbc_protocol/adapter.py", 'if len(line.encode("utf-8", "replace")) > MAX_LINE_BYTES:', "if False:", None),
     ("adapter", "protocol/hmbc_protocol/adapter.py", 'if req["schemaVersion"] != SCHEMA_VERSION:', "if False:", None),
     ("adapter", "protocol/hmbc_protocol/adapter.py", "if not isinstance(op, str) or op not in OPERATIONS:", "if op not in OPERATIONS:", None),
-    ("adapter", "protocol/hmbc_protocol/adapter.py", 'raise AdapterError("ADAPTER_UNAVAILABLE", f"{name} is B-E1', 'return {"ok": 1}; raise AdapterError("ADAPTER_UNAVAILABLE", f"{name} is B-E1', None),
     ("keys", "protocol/hmbc_protocol/keys.py", 'if role not in allowed_roles:', "if False:", None),
-    ("adapter", "protocol/hmbc_protocol/adapter.py", "    assert eip712.recover(digest, signature) == signer  # never emit a signature that does not verify\n", "",
-     "defence-in-depth assertion: deterministic signing of the digest cannot recover a different key"),
+    ("adapter", "protocol/hmbc_protocol/adapter.py", 'if eip712.recover(digest, signature) != signer:', "if False:", None),
     ("adapter", "protocol/hmbc_protocol/adapter.py", "parse_constant=_reject_constant", "parse_constant=None",
      "NaN/Infinity become floats that the strict wire validators then reject as non-strings"),
 ]

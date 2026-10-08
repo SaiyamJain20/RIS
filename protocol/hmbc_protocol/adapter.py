@@ -161,6 +161,21 @@ def collect_decision(inp: Any, led: Ledger) -> dict:
 
 
 @_ledger_op
+def collect_checkpoint(inp: Any, led: Ledger) -> dict:
+    w = Witness(led)
+    if "witnessSetVersion" in inp and inp["witnessSetVersion"] != w.witness_set_version:
+        raise AdapterError("STALE_STATE", "witnessSetVersion differs from the configured witness set")
+    c = w.checkpoint()
+    return {"schemaVersion": SCHEMA_VERSION, "adapterMode": ADAPTER_MODE, "checkpoint": c["checkpoint"], "signatures": c["signatures"]}
+
+
+@_ledger_op
+def attest_grant(inp: Any, led: Ledger) -> dict:
+    r = Witness(led).attest_grant(inp["grantId"])
+    return {"schemaVersion": SCHEMA_VERSION, "adapterMode": ADAPTER_MODE, "receipt": r["receipt"], "signatures": r["signatures"]}
+
+
+@_ledger_op
 def release(inp: Any, led: Ledger) -> dict:
     return _worker(led).release(inp["grantId"])
 
@@ -182,6 +197,8 @@ def rotate_epoch(inp: Any, dep: dict) -> dict:
 OPERATIONS = {
     "prepare_request": {"handler": prepare_request, "status": "implemented-e0"},
     "collect_decision": {"handler": collect_decision, "status": "candidate-b-e1-not-unlocked"},
+    "collect_checkpoint": {"handler": collect_checkpoint, "status": "candidate-b-e1-not-unlocked"},
+    "attest_grant": {"handler": attest_grant, "status": "candidate-b-e1-not-unlocked"},
     "release": {"handler": release, "status": "candidate-b-e1-not-unlocked"},
     "encrypt_record": {"handler": encrypt_record, "status": "candidate-b-e1-not-unlocked"},
     "finish_decryption": {"handler": finish_decryption, "status": "candidate-b-e1-not-unlocked"},

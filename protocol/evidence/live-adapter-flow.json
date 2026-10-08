@@ -16,7 +16,7 @@
      "authEpoch": "3",
      "keyEpoch": "0",
      "nonce": "1",
-     "expiresAt": "1791446582",
+     "expiresAt": "1791450270",
      "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
     },
     "signingKeyRef": "keyref:user:alice"
@@ -39,12 +39,40 @@
       "authEpoch": "3",
       "keyEpoch": "0",
       "nonce": "1",
-      "expiresAt": "1791446582",
+      "expiresAt": "1791450270",
       "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
      },
-     "requestDigest": "0xdeaa34c7364655bf2c6e4a5c68c19d84494b84b66b5c278323ea3e6fbaf68516",
-     "signature": "0xd3ef03bc6b5263ed90eb3c6a441330d297cd82716eafcae5f62cec53171eac662ca8c18a2ced67860c67eb880e01946472e730489f25340814e239b73e0cfadc1b",
+     "requestDigest": "0x3936afff943909be9c411be71c6d6d9808607bfe0b48a34791d580da7868495f",
+     "signature": "0x073aad71a15250c322dcd377324e844d75f499a07d6914302296d817a67a596d24d6358b18527398b67d49050f1f2fe14536fd26c98ca982f58f32a52d92ad881b",
      "signer": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+    },
+    "error": null
+   }
+  },
+  {
+   "operation": "collect_checkpoint",
+   "input": {},
+   "response": {
+    "schemaVersion": "v1",
+    "ok": true,
+    "result": {
+     "schemaVersion": "v1",
+     "adapterMode": "symbolic",
+     "checkpoint": {
+      "sequence": "1",
+      "authEpoch": "3",
+      "policyVersion": "1",
+      "keyEpoch": "0",
+      "witnessSetVersion": "1",
+      "sourceChainId": "18545",
+      "psc": "0xcf7ed3acca5a467e9e704c703e8d87f634fb0fc9",
+      "sourceBlockNumber": "22",
+      "sourceBlockHash": "0x55bac31e0e5181c52d09e4cc332e9c7826f5314360a9dc781cf97c7a8a075f5e",
+      "expiresAt": "1791450301"
+     },
+     "signatures": [
+      "0xc931d51fd4449933e16e8c17b493e77fd2f5d75ae07191868c6e8d3d2f237c1953dc9b2fc7fe9410d15097ffe5fb62a4ce7e7bbb02c69d23bb7244b8590535941b"
+     ]
     },
     "error": null
    }
@@ -52,7 +80,7 @@
   {
    "operation": "collect_decision",
    "input": {
-    "requestDigest": "0xdeaa34c7364655bf2c6e4a5c68c19d84494b84b66b5c278323ea3e6fbaf68516"
+    "requestDigest": "0x3936afff943909be9c411be71c6d6d9808607bfe0b48a34791d580da7868495f"
    },
    "response": {
     "schemaVersion": "v1",
@@ -61,17 +89,17 @@
      "schemaVersion": "v1",
      "adapterMode": "symbolic",
      "decision": {
-      "requestDigest": "0xdeaa34c7364655bf2c6e4a5c68c19d84494b84b66b5c278323ea3e6fbaf68516",
+      "requestDigest": "0x3936afff943909be9c411be71c6d6d9808607bfe0b48a34791d580da7868495f",
       "result": "1",
-      "credentialDigest": "0xccb82ca8e7b35492974bac6cec48683a37ff78dbd358cd2a5069836970b44a63",
+      "credentialDigest": "0x86bf0f52bcdaf77375147983832765a555b960c0efed09965d94e3b281b2be94",
       "stateSequence": "1",
       "witnessSetVersion": "1",
-      "sourceBlockNumber": "21",
-      "sourceBlockHash": "0x22040848364c5984a25e273e20182190e0380222dfedc09b2fbd7ee296f2405f",
-      "expiresAt": "1791446582"
+      "sourceBlockNumber": "22",
+      "sourceBlockHash": "0x55bac31e0e5181c52d09e4cc332e9c7826f5314360a9dc781cf97c7a8a075f5e",
+      "expiresAt": "1791450270"
      },
      "signatures": [
-      "0x75a4e8575776251e18cbe3841d8299708382650ac29dad03a57fb0ab73bb2e971cb8c1dd2fbc1db95081614792b36b4aefaa7768b678b79b04f7d81cc429a8aa1c"
+      "0x128550ea96d3b2c990ff73eb70bb525c94fda0fe1a4ca4f87f973e6ace43f67b53ced89183113f9ee30af51319a430bd6f3f41810727dc6a82000a9ed74285401b"
      ],
      "credentialRecords": [
       {
@@ -80,7 +108,7 @@
        "kind": "1",
        "serial": "101",
        "anchorVersion": "1",
-       "validUntil": "1791532951"
+       "validUntil": "1791536640"
       },
       {
        "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
@@ -88,7 +116,7 @@
        "kind": "2",
        "serial": "0",
        "anchorVersion": "1",
-       "validUntil": "1791475351"
+       "validUntil": "1791479040"
       }
      ]
     },
@@ -138,7 +166,7 @@
   {
    "operation": "release",
    "input": {
-    "grantId": "0xdbcc364b745e09b6fea4fc346180ec2bfc2d99cecfc839105ea46e4176c39d71"
+    "grantId": "0x87eec1eeb61a38cad524c2e3e4ed9e359dfc8fdec0e7b107cb19fe3d01132f61"
    },
    "response": {
     "schemaVersion": "v1",
@@ -146,15 +174,15 @@
     "result": {
      "schemaVersion": "v1",
      "adapterMode": "symbolic",
-     "requestDigest": "0xdeaa34c7364655bf2c6e4a5c68c19d84494b84b66b5c278323ea3e6fbaf68516",
-     "grantId": "0xdbcc364b745e09b6fea4fc346180ec2bfc2d99cecfc839105ea46e4176c39d71",
+     "requestDigest": "0x3936afff943909be9c411be71c6d6d9808607bfe0b48a34791d580da7868495f",
+     "grantId": "0x87eec1eeb61a38cad524c2e3e4ed9e359dfc8fdec0e7b107cb19fe3d01132f61",
      "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
      "ciphertextDigest": "0xf6ca9be2e0ce865ab9d6237df041e6f5200ec077f064d0354781b000cc66d19d",
      "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d",
      "keyEpoch": "0",
      "responseEnvelope": {
       "kind": "symbolic-partial/v1",
-      "token": "0x32384c8de58693251c3faecfabb387db70d9e5b544429df5ff02b2ee26db0eb5"
+      "token": "0xe6b8d5aed6390c208632080528927e9d75ae12e02563e6930a557897cf807412"
      }
     },
     "error": null
@@ -166,15 +194,15 @@
     "response": {
      "schemaVersion": "v1",
      "adapterMode": "symbolic",
-     "requestDigest": "0xdeaa34c7364655bf2c6e4a5c68c19d84494b84b66b5c278323ea3e6fbaf68516",
-     "grantId": "0xdbcc364b745e09b6fea4fc346180ec2bfc2d99cecfc839105ea46e4176c39d71",
+     "requestDigest": "0x3936afff943909be9c411be71c6d6d9808607bfe0b48a34791d580da7868495f",
+     "grantId": "0x87eec1eeb61a38cad524c2e3e4ed9e359dfc8fdec0e7b107cb19fe3d01132f61",
      "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
      "ciphertextDigest": "0xf6ca9be2e0ce865ab9d6237df041e6f5200ec077f064d0354781b000cc66d19d",
      "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d",
      "keyEpoch": "0",
      "responseEnvelope": {
       "kind": "symbolic-partial/v1",
-      "token": "0x32384c8de58693251c3faecfabb387db70d9e5b544429df5ff02b2ee26db0eb5"
+      "token": "0xe6b8d5aed6390c208632080528927e9d75ae12e02563e6930a557897cf807412"
      }
     },
     "userKeyRef": "keyref:user:alice"
@@ -193,20 +221,51 @@
    }
   },
   {
+   "operation": "attest_grant",
+   "input": {
+    "grantId": "0x87eec1eeb61a38cad524c2e3e4ed9e359dfc8fdec0e7b107cb19fe3d01132f61"
+   },
+   "response": {
+    "schemaVersion": "v1",
+    "ok": true,
+    "result": {
+     "schemaVersion": "v1",
+     "adapterMode": "symbolic",
+     "receipt": {
+      "requestDigest": "0x3936afff943909be9c411be71c6d6d9808607bfe0b48a34791d580da7868495f",
+      "grantId": "0x87eec1eeb61a38cad524c2e3e4ed9e359dfc8fdec0e7b107cb19fe3d01132f61",
+      "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+      "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+      "keyEpoch": "0",
+      "grantExpiresAt": "1791450270",
+      "witnessSetVersion": "1",
+      "dbcChainId": "28545",
+      "kssc": "0x5fbdb2315678afecb367f032d93f642f64180aa3",
+      "dbcBlockNumber": "11",
+      "dbcBlockHash": "0xd9fdb8fc56c0e6fef360bd1d8c6a2254479eb8961d908e90f823920e281681a6"
+     },
+     "signatures": [
+      "0x017551ce200cf8884748c30f9cdfa3f6492a11a72e190bd70c011a94d65c435551ec68f7a69708356bd2f090468d61924d4374d66c03da168528081e3d77baca1c"
+     ]
+    },
+    "error": null
+   }
+  },
+  {
    "operation": "finish_decryption",
    "input": {
     "response": {
      "schemaVersion": "v1",
      "adapterMode": "symbolic",
-     "requestDigest": "0xdeaa34c7364655bf2c6e4a5c68c19d84494b84b66b5c278323ea3e6fbaf68516",
-     "grantId": "0xdbcc364b745e09b6fea4fc346180ec2bfc2d99cecfc839105ea46e4176c39d71",
+     "requestDigest": "0x3936afff943909be9c411be71c6d6d9808607bfe0b48a34791d580da7868495f",
+     "grantId": "0x87eec1eeb61a38cad524c2e3e4ed9e359dfc8fdec0e7b107cb19fe3d01132f61",
      "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
      "ciphertextDigest": "0xf6ca9be2e0ce865ab9d6237df041e6f5200ec077f064d0354781b000cc66d19d",
      "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d",
      "keyEpoch": "0",
      "responseEnvelope": {
       "kind": "symbolic-partial/v1",
-      "token": "0x32384c8de58693251c3faecfabb387db70d9e5b544429df5ff02b2ee26db0eb5"
+      "token": "0xe6b8d5aed6390c208632080528927e9d75ae12e02563e6930a557897cf807412"
      }
     },
     "userKeyRef": "keyref:user:bob"
@@ -227,8 +286,8 @@
     "response": {
      "schemaVersion": "v1",
      "adapterMode": "symbolic",
-     "requestDigest": "0xdeaa34c7364655bf2c6e4a5c68c19d84494b84b66b5c278323ea3e6fbaf68516",
-     "grantId": "0xdbcc364b745e09b6fea4fc346180ec2bfc2d99cecfc839105ea46e4176c39d71",
+     "requestDigest": "0x3936afff943909be9c411be71c6d6d9808607bfe0b48a34791d580da7868495f",
+     "grantId": "0x87eec1eeb61a38cad524c2e3e4ed9e359dfc8fdec0e7b107cb19fe3d01132f61",
      "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
      "ciphertextDigest": "0xf6ca9be2e0ce865ab9d6237df041e6f5200ec077f064d0354781b000cc66d19d",
      "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d",

@@ -273,6 +273,17 @@ def prepare_request_input(v):
     return _obj(v, dict(request=access_request, signingKeyRef=user_key_ref), "PrepareRequestInput")
 
 
+def collect_checkpoint_input(v):
+    """{} or {witnessSetVersion: "1"} (A3-0012). Never a relay-supplied sequence, timestamp or source block: unknown fields reject."""
+    if isinstance(v, dict) and "witnessSetVersion" in v:
+        return _obj(v, dict(witnessSetVersion=_e_const("1")), "CollectCheckpointInput")
+    return _obj(v, {}, "CollectCheckpointInput")
+
+
+def attest_grant_input(v):
+    return _obj(v, dict(grantId=hash32), "AttestGrantInput")
+
+
 def collect_decision_input(v):
     if isinstance(v, dict) and "witnessSetVersion" in v:
         return _obj(v, dict(requestDigest=hash32, witnessSetVersion=_e_const("1")), "CollectDecisionInput")
@@ -311,6 +322,23 @@ def collect_decision_result(v):
     return v
 
 
+def _one_signature(x):
+    if len(_list(x, "signatures")) != 1:                     # E: q = 1 of 1
+        _fail("E carries exactly one witness signature")
+    for sig in x:
+        signature(sig)
+
+
+def collect_checkpoint_result(v):
+    return _obj(v, dict(schemaVersion=_e_const("v1"), adapterMode=_e_const("symbolic"), checkpoint=state_checkpoint,
+                        signatures=_one_signature), "CollectCheckpointResult")
+
+
+def attest_grant_result(v):
+    return _obj(v, dict(schemaVersion=_e_const("v1"), adapterMode=_e_const("symbolic"), receipt=grant_receipt,
+                        signatures=_one_signature), "AttestGrantResult")
+
+
 def encrypt_record_result(v):
     return _obj(v, dict(schemaVersion=_e_const("v1"), adapterMode=_e_const("symbolic"), dataId=hash32,
                         keyEpoch=_e_const("0"), ciphertextDigest=hash32, policyDigest=hash32), "EncryptRecordResult")
@@ -329,9 +357,11 @@ def error_obj(v):
     return v
 
 
-INPUTS = {"prepare_request": prepare_request_input, "collect_decision": collect_decision_input, "release": release_input,
+INPUTS = {"prepare_request": prepare_request_input, "collect_decision": collect_decision_input,
+          "collect_checkpoint": collect_checkpoint_input, "attest_grant": attest_grant_input, "release": release_input,
           "encrypt_record": encrypt_record_input, "finish_decryption": finish_decryption_input, "rotate_epoch": rotate_epoch_input}
 RESULTS = {"prepare_request": prepare_request_result, "collect_decision": collect_decision_result,
+           "collect_checkpoint": collect_checkpoint_result, "attest_grant": attest_grant_result,
            "release": release_result, "encrypt_record": encrypt_record_result, "finish_decryption": finish_decryption_result}
 
 
@@ -396,14 +426,18 @@ VALIDATORS.update({
     "UserKeyRef": user_key_ref, "SymbolicRecord": symbolic_record, "PolicyRequirement": policy_requirement,
     "SymbolicPolicy": symbolic_policy, "SymbolicEnvelope": symbolic_envelope, "ReleaseResult": release_result,
     "PrepareRequestInput": prepare_request_input, "CollectDecisionInput": collect_decision_input, "ReleaseInput": release_input,
+    "CollectCheckpointInput": collect_checkpoint_input, "AttestGrantInput": attest_grant_input,
+    "CollectCheckpointResult": collect_checkpoint_result, "AttestGrantResult": attest_grant_result,
     "EncryptRecordInput": encrypt_record_input, "FinishDecryptionInput": finish_decryption_input, "RotateEpochInput": rotate_epoch_input,
     "PrepareRequestResult": prepare_request_result, "CollectDecisionResult": collect_decision_result,
     "EncryptRecordResult": encrypt_record_result, "FinishDecryptionResult": finish_decryption_result,
     "AdapterRequest": adapter_request, "AdapterResponse": adapter_response, "ObservedEvent": observed_event,
     **{f"{n}Request": (lambda v, _op=op: (adapter_request(v), v["operation"] == _op or _fail("operation does not match request type")))
-       for n, op in (("PrepareRequest", "prepare_request"), ("CollectDecision", "collect_decision"), ("Release", "release"),
+       for n, op in (("PrepareRequest", "prepare_request"), ("CollectDecision", "collect_decision"), ("CollectCheckpoint", "collect_checkpoint"),
+                     ("AttestGrant", "attest_grant"), ("Release", "release"),
                      ("EncryptRecord", "encrypt_record"), ("FinishDecryption", "finish_decryption"), ("RotateEpoch", "rotate_epoch"))},
     **{f"{n}Response": (lambda v, _op=op: adapter_response(v, _op))
-       for n, op in (("PrepareRequest", "prepare_request"), ("CollectDecision", "collect_decision"), ("Release", "release"),
+       for n, op in (("PrepareRequest", "prepare_request"), ("CollectDecision", "collect_decision"), ("CollectCheckpoint", "collect_checkpoint"),
+                     ("AttestGrant", "attest_grant"), ("Release", "release"),
                      ("EncryptRecord", "encrypt_record"), ("FinishDecryption", "finish_decryption"), ("RotateEpoch", "rotate_epoch"))},
 })

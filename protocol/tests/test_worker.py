@@ -105,10 +105,10 @@ def test_release_persists_intent_before_transmitting_and_binds_every_field(world
 
     def transmit(resp):
         seen["intent_rows_at_send_time"] = rows(tmp_path, "select grant_id, delivery from releases")          # a SECOND connection: must already be durable
-        seen["events_at_send_time"] = [r[0] for r in rows(tmp_path, "select type from events order by id")]
+        seen["events_at_send_time"] = [r[0] for r in rows(tmp_path, "select type from events order by id")]   # write-ahead: intent AND this attempt
 
     resp = w.release(grant_id, transmit=transmit)
-    assert seen["intent_rows_at_send_time"] == [(grant_id, "unknown")] and seen["events_at_send_time"] == ["RELEASE_INTENT"]
+    assert seen["intent_rows_at_send_time"] == [(grant_id, "unknown")] and seen["events_at_send_time"] == ["RELEASE_INTENT", "RELEASE_SENT"]
     g = led.dbc.call(led.KSSC, "grantDetails", grant_id)
     assert resp == {"schemaVersion": "v1", "adapterMode": "symbolic", "requestDigest": signed["requestDigest"], "grantId": grant_id,
                     "dataId": setup.DATA_P1, "ciphertextDigest": enc["ciphertextDigest"], "recipientKeyHash": g["recipientKeyHash"],
@@ -118,7 +118,8 @@ def test_release_persists_intent_before_transmitting_and_binds_every_field(world
     ev = w.events()
     assert [e["type"] for e in ev] == ["RELEASE_INTENT", "RELEASE_SENT"]
     assert all((e["requestDigest"], e["grantId"], e["gid"], e["dataId"]) == (signed["requestDigest"], grant_id, ctx.alice, setup.DATA_P1) for e in ev)
-    assert w.status(grant_id)["delivery"] == "sent"
+    st = w.status(grant_id)
+    assert (st["delivery"], st["sendAttempts"], st["completedAttempts"]) == ("unknown", 1, 1)      # delivery to the recipient is never acknowledged
 
 
 def test_a_retry_returns_the_same_cached_response_without_a_new_intent(world, tmp_path):
@@ -129,6 +130,7 @@ def test_a_retry_returns_the_same_cached_response_without_a_new_intent(world, tm
     first, second = w.release(grant_id), w.release(grant_id)
     assert first == second
     assert [e["type"] for e in w.events()] == ["RELEASE_INTENT", "RELEASE_SENT", "RELEASE_SENT"]
+    assert w.status(grant_id)["sendAttempts"] == 2
 
 
 def test_distinct_grants_get_distinct_unpredictable_tokens(world, tmp_path):
@@ -174,6 +176,7 @@ def test_crash_after_intent_then_restart_reuses_the_persisted_response(world, tm
     with pytest.raises(SimulatedCrash):
         w.release(grant_id)
     assert rows(tmp_path, "select delivery from releases") == [("unknown",)]
+    assert [r[0] for r in rows(tmp_path, "select type from events order by id")] == ["RELEASE_INTENT"]      # nothing was attempted yet
     persisted = rows(tmp_path, "select token from releases")[0][0]
     restarted = worker(led, tmp_path)
     resp = restarted.release(grant_id)
@@ -181,7 +184,7 @@ def test_crash_after_intent_then_restart_reuses_the_persisted_response(world, tm
     assert [e["type"] for e in restarted.events()] == ["RELEASE_INTENT", "RELEASE_SENT"]
 
 
-def test_crash_after_send_leaves_delivery_unknown_and_a_retry_resends_the_same_response(world, tmp_path):
+def test_crash_after_send_leaves_delivery_unknown_and_a_retry_is_a_second_recorded_attempt_with_the_same_response(world, tmp_path):
     led, ctx = world
     _, grant_id = grant(led, ctx)
     sent = []
@@ -190,12 +193,14 @@ def test_crash_after_send_leaves_delivery_unknown_and_a_retry_resends_the_same_r
     with pytest.raises(SimulatedCrash):
         w.release(grant_id, transmit=sent.append)
     assert len(sent) == 1                                                                        # the response DID leave the process
-    assert worker(led, tmp_path).status(grant_id)["delivery"] == "unknown"                       # ...but the worker cannot know it arrived
+    st = worker(led, tmp_path).status(grant_id)
+    assert (st["delivery"], st["sendAttempts"], st["completedAttempts"]) == ("unknown", 1, 0)    # attempt recorded write-ahead; completion never seen
     restarted = worker(led, tmp_path)
     again = restarted.release(grant_id, transmit=sent.append)
     assert len(sent) == 2 and sent[0] == sent[1] == again                                        # at-least-once, same capability
-    assert [e["type"] for e in restarted.events()] == ["RELEASE_INTENT", "RELEASE_SENT"]         # SENT counts acknowledged transmissions only
-    assert restarted.status(grant_id)["delivery"] == "sent"
+    assert [e["type"] for e in restarted.events()] == ["RELEASE_INTENT", "RELEASE_SENT", "RELEASE_SENT"]   # one record per ATTEMPT (A3-0012)
+    st = restarted.status(grant_id)
+    assert (st["delivery"], st["sendAttempts"], st["completedAttempts"]) == ("unknown", 2, 1)
 
 
 # --- finish_decryption ---------------------------------------------------------------------------------------------------------

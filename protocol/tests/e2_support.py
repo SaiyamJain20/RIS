@@ -31,14 +31,17 @@ from hmbc_protocol.witness import Witness, WitnessError
 from hmbc_protocol.worker import WorkerError
 import ledger_setup as setup
 
-CATALOG_PATH = pathlib.Path(__file__).resolve().parent / "fixtures" / "e0-cases-a3-c982d04.json"
-CATALOG_SHA256 = "be77c5608095ac1d09d0ebf607b7e3f971f5f49a609fc0f821c2730c1efb4fd5"
+CATALOG_PATH = pathlib.Path(__file__).resolve().parent / "fixtures" / "e0-cases-a3-3e0300a.json"       # candidate revision 5 (supersedes c982d04)
+CATALOG_SHA256 = "66b5c4f0cb9bdd3ae8bb4795ac9e9771890572c6e238d29516be6668a4218a0f"
 PROFILE = "repaired-e"
 
 DIRECTIVES = frozenset({
     "REQUEST_ACCESS", "SUBSTITUTE_SUBJECT", "FORWARD_OR_CONSUME", "REPLAY_REQUEST", "ADVANCE_CLOCK", "REVOKE_ON_PBC", "INSTALL_NEW_LIST",
     "REPLAY_OLD_LIST", "WRONG_ISSUER_UPDATE", "ACCEPT_CHECKPOINT", "RELEASE", "REPORT_OUTCOME", "DROP_OUTCOME", "FABRICATE_OUTCOME",
-    "DUPLICATE_OUTCOME", "CRASH_RESTART"})
+    "DUPLICATE_OUTCOME", "CRASH_RESTART", "FABRICATE_TUPLE", "SUBSTITUTE_DESTINATION", "REPLAY_NEW_REFERENCE"})
+STEP_KEYS = frozenset({"action", "offsetSeconds", "workerHook", "crashPoint"})                 # a new step field must be reviewed, not ignored
+EXPECTED_KEYS = frozenset({"property", "outcome", "classification", "error", "qualification", "worker"})
+CRASH_FAULTS = {"after-intent": "crash_after_intent", "after-send": "crash_after_send"}       # catalog crashPoint -> Worker fault hook
 
 OBSERVED: dict[str, dict] = {}          # case id -> {classificationExpected, expectedError, observedError, observedOutcome, ...}
 EXECUTED: Counter = Counter()           # case id -> number of times a test concluded it
@@ -97,15 +100,31 @@ class Case:
         self.case = CATALOG[case_id]
         assert self.case["profile"] == PROFILE, f"{case_id} is not a {PROFILE} case"
         self.expected = self.case["expected"]
-        self.catalog_steps = [s["action"] for s in self.case["steps"]]
+        self.schedule = self.case["steps"]
+        self.catalog_steps = [s["action"] for s in self.schedule]
         assert set(self.catalog_steps) <= DIRECTIVES, f"unknown directive in {case_id}"
+        for s in self.schedule:
+            if set(s) - STEP_KEYS or s["offsetSeconds"] != "0":
+                raise StepScheduleError(f"{case_id}: step {s} has a field or delay this executor does not realise")
+        if set(self.expected) - EXPECTED_KEYS:
+            raise StepScheduleError(f"{case_id}: unreviewed expected fields {sorted(set(self.expected) - EXPECTED_KEYS)}")
         self.performed: list[str] = []
+
+    def crash_fault(self) -> str:
+        """The Worker fault hook the catalog's CRASH_RESTART names. Per scheduleSemantics it is armed BEFORE the immediately preceding RELEASE."""
+        idx = [i for i, s in enumerate(self.schedule) if s["action"] == "CRASH_RESTART"]
+        if len(idx) != 1 or idx[0] == 0 or idx[0] + 1 >= len(self.schedule):
+            raise StepScheduleError(f"{self.id}: expected exactly one CRASH_RESTART between two steps")
+        before, step, after = self.schedule[idx[0] - 1], self.schedule[idx[0]], self.schedule[idx[0] + 1]
+        if (before["action"], after["action"], step.get("workerHook")) != ("RELEASE", "RELEASE", "release") or step.get("crashPoint") not in CRASH_FAULTS:
+            raise StepScheduleError(f"{self.id}: CRASH_RESTART is not RELEASE / hook=release / known crashPoint / RELEASE: {step}")
+        return CRASH_FAULTS[step["crashPoint"]]
 
     def step(self, action: str) -> None:
         assert action in DIRECTIVES, action
         self.performed.append(action)
 
-    def finish(self, error: str | None, outcome: str, **detail) -> None:
+    def finish(self, error: str | None, outcome: str, worker: dict | None = None, **detail) -> None:
         """Record the observation FIRST (so a disagreement is still on the record), then compare with the catalog's expectation."""
         if self.performed != self.catalog_steps:
             raise StepScheduleError(f"{self.id}: performed {self.performed}, catalog says {self.catalog_steps}")
@@ -114,10 +133,13 @@ class Case:
             OBSERVED[self.id] = {
                 "classificationExpected": self.expected["classification"], "expectedError": self.expected["error"],
                 "observedError": error, "observedOutcome": outcome, "expectedOutcome": self.expected["outcome"],
+                "workerExpected": self.expected.get("worker"), "workerObserved": worker,
                 "stepsExecuted": list(self.performed), "detail": detail}
             EXECUTED[self.id] += 1
         check_error(Obs(error), self.expected["error"], f"{self.id}: catalog ")
         assert outcome == self.expected["outcome"], f"{self.id}: catalog expects outcome {self.expected['outcome']!r}, observed {outcome!r}"
+        # a closed record: every catalog field is compared, and an observation without a catalog record (or the reverse) is itself a failure
+        assert worker == self.expected.get("worker"), f"{self.id}: catalog worker record {self.expected.get('worker')}, observed {worker}"
 
 
 # --- exact-timestamp raw transaction (controlled DBC clock) ---------------------------------------------------------------------
@@ -246,6 +268,28 @@ class Flow:
         gid = self.relay.deliver(signed, d)
         assert gid is not None, "the honest flow did not produce a grant"
         return signed, d, gid
+
+    def sign_until(self, nonce: str, expires_at: int) -> dict:
+        """Alice signs a request with an EXPLICIT expiry: two requests with one nonce then differ in digest whatever second they are built in."""
+        req = self.client.build_request(data_id=setup.DATA_P1, nonce=nonce, expires_at=str(expires_at),
+                                        auth_epoch=self.led.pbc.call(self.led.TMSC, "authEpoch"))
+        return self.client.sign_request(req)
+
+    def decision_for(self, request: dict, records: list, signer: str, result: str = "1") -> dict:
+        """A decision bundle for `request` built from the DBC's CURRENT checkpoint and signed by the key labelled `signer`.
+
+        The honest witness never produces one for an unforwarded or foreign request; tests use this to play a deviating or compromised signer
+        and to prove that a rejection is caused by the one thing under test (the control signs the same bytes with the real witness key).
+        """
+        led = self.led
+        exists, cp = led.dbc.call(led.KSSC, "currentCheckpoint")
+        assert exists, "no DBC checkpoint: accept one first"
+        dec = {"requestDigest": request_digest(led, request), "result": result,
+               "credentialDigest": "0x" + eip712.credential_digest(records).hex(), "stateSequence": cp["sequence"],
+               "witnessSetVersion": cp["witnessSetVersion"], "sourceBlockNumber": cp["sourceBlockNumber"], "sourceBlockHash": cp["sourceBlockHash"],
+               "expiresAt": str(min(int(request["expiresAt"]), int(cp["expiresAt"]), led.dbc.now() + 30))}
+        digest = messages.digest_of("AccessDecision", dec, messages.domain_for("AccessDecision", dec, led.deployment))
+        return {"decision": dec, "signatures": [eip712.sign_digest(setup.key(signer), digest)], "credentialRecords": records}
 
     # PBC trust-list leg
     def install_acl(self, acl: dict, admin: str = "H1-ca-admin", root: str = "H1-root") -> dict:

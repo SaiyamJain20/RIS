@@ -144,7 +144,8 @@ def test_proxy_environment_variables_are_ignored(monkeypatch):
 
 # --- finding 8: failures map to ChainError, never a raw exception ---------------------------------------------------------------
 
-@pytest.mark.parametrize("raw", [{"jsonrpc": "2.0", "id": 1}, {"jsonrpc": "2.0", "id": 1, "result": None}, ["not", "an", "object"], "just a string"])
+@pytest.mark.parametrize("raw", [{"jsonrpc": "2.0", "id": 1}, {"jsonrpc": "2.0", "id": 1, "result": None}, ["not", "an", "object"], "just a string",
+                                 "an error occurred", ["error", "result"]])      # the last two CONTAIN the keys: only an explicit object check stops out["error"] raising TypeError
 def test_malformed_node_replies_are_chain_errors(raw):
     class Bad(BaseHTTPRequestHandler):
         def log_message(self, *a):

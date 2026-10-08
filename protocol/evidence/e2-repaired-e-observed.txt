@@ -1,0 +1,373 @@
+......................
+OBSERVED {
+ "E01-expiry-boundary-repaired-e": {
+  "classificationExpected": "REPAIR_SUPPORTED",
+  "detail": {
+   "acceptedAtBoundaryMinusOne": true,
+   "boundary": 1791453445,
+   "decisionExpiresAt": "1791453445",
+   "requestExpiresAt": "1791453445"
+  },
+  "expectedError": "EXPIRED",
+  "expectedOutcome": "REJECT",
+  "observedError": "EXPIRED",
+  "observedOutcome": "REJECT",
+  "stepsExecuted": [
+   "REQUEST_ACCESS",
+   "ADVANCE_CLOCK",
+   "FORWARD_OR_CONSUME"
+  ],
+  "workerExpected": null,
+  "workerObserved": null
+ },
+ "E01-forged-tuple-repaired-e": {
+  "classificationExpected": "REPAIR_SUPPORTED",
+  "detail": {
+   "noPbcRequestOrLog": true,
+   "sameTupleWitnessSignedIsAccepted": true,
+   "stateUnchanged": true
+  },
+  "expectedError": "BAD_SIGNATURE",
+  "expectedOutcome": "REJECT",
+  "observedError": "BAD_SIGNATURE",
+  "observedOutcome": "REJECT",
+  "stepsExecuted": [
+   "FABRICATE_TUPLE",
+   "FORWARD_OR_CONSUME"
+  ],
+  "workerExpected": null,
+  "workerObserved": null
+ },
+ "E01-new-reference-replay-repaired-e": {
+  "classificationExpected": "REPAIR_SUPPORTED",
+  "detail": {
+   "resubmitOriginal": "REPLAY",
+   "secondCertificateFromWitness": "REPLAY",
+   "stateUnchanged": true
+  },
+  "expectedError": "REPLAY",
+  "expectedOutcome": "NO_NEW_GRANT",
+  "observedError": "REPLAY",
+  "observedOutcome": "NO_NEW_GRANT",
+  "stepsExecuted": [
+   "REQUEST_ACCESS",
+   "FORWARD_OR_CONSUME",
+   "REPLAY_NEW_REFERENCE"
+  ],
+  "workerExpected": null,
+  "workerObserved": null
+ },
+ "E01-nonce-replay-repaired-e": {
+  "classificationExpected": "REPAIR_SUPPORTED",
+  "detail": {
+   "dbcLeg": "REPLAY",
+   "pbcLeg": "REPLAY"
+  },
+  "expectedError": "REPLAY",
+  "expectedOutcome": "NO_NEW_GRANT",
+  "observedError": "REPLAY",
+  "observedOutcome": "NO_NEW_GRANT",
+  "stepsExecuted": [
+   "REQUEST_ACCESS",
+   "FORWARD_OR_CONSUME",
+   "REPLAY_REQUEST"
+  ],
+  "workerExpected": null,
+  "workerObserved": null
+ },
+ "E01-subject-substitution-repaired-e": {
+  "classificationExpected": "REPAIR_SUPPORTED",
+  "detail": {
+   "genuineStillConsumes": true,
+   "stateUnchangedByRejection": true
+  },
+  "expectedError": "WRONG_SUBJECT",
+  "expectedOutcome": "REJECT",
+  "observedError": "WRONG_SUBJECT",
+  "observedOutcome": "REJECT",
+  "stepsExecuted": [
+   "REQUEST_ACCESS",
+   "SUBSTITUTE_SUBJECT",
+   "FORWARD_OR_CONSUME"
+  ],
+  "workerExpected": null,
+  "workerObserved": null
+ },
+ "E01-wrong-destination-repaired-e": {
+  "classificationExpected": "REPAIR_SUPPORTED",
+  "detail": {
+   "genuineStillConsumes": true,
+   "stateUnchanged": true,
+   "variants": {
+    "otherChain": "WRONG_DESTINATION",
+    "otherChainAndKssc": "WRONG_DESTINATION",
+    "otherKssc": "WRONG_DESTINATION"
+   }
+  },
+  "expectedError": "WRONG_DESTINATION",
+  "expectedOutcome": "REJECT",
+  "observedError": "WRONG_DESTINATION",
+  "observedOutcome": "REJECT",
+  "stepsExecuted": [
+   "REQUEST_ACCESS",
+   "SUBSTITUTE_DESTINATION",
+   "FORWARD_OR_CONSUME"
+  ],
+  "workerExpected": null,
+  "workerObserved": null
+ },
+ "E02-expired-duty-repaired-e": {
+  "classificationExpected": "REPAIR_SUPPORTED",
+  "detail": {
+   "checkpointExpiresAt": "1791453482",
+   "decisionExpiresAt": "1791453452",
+   "dutyEnd": 1791453448,
+   "requestExpiresAt": "1791453452",
+   "secondsUsedBeforeBoundary": 1
+  },
+  "expectedError": "EXPIRED",
+  "expectedOutcome": "REJECT",
+  "observedError": "EXPIRED",
+  "observedOutcome": "REJECT",
+  "stepsExecuted": [
+   "REQUEST_ACCESS",
+   "ADVANCE_CLOCK",
+   "FORWARD_OR_CONSUME"
+  ],
+  "workerExpected": null,
+  "workerObserved": null
+ },
+ "E02-post-barrier-revocation-repaired-e": {
+  "classificationExpected": "REPAIR_SUPPORTED",
+  "detail": {
+   "noGrantNoNonceNoLog": true,
+   "witnessRecollection": "STALE_STATE"
+  },
+  "expectedError": "STALE_STATE",
+  "expectedOutcome": "REJECT",
+  "observedError": "STALE_STATE",
+  "observedOutcome": "REJECT",
+  "stepsExecuted": [
+   "REQUEST_ACCESS",
+   "REVOKE_ON_PBC",
+   "ACCEPT_CHECKPOINT",
+   "FORWARD_OR_CONSUME"
+  ],
+  "workerExpected": null,
+  "workerObserved": null
+ },
+ "E02-pre-barrier-revocation-repaired-e": {
+  "classificationExpected": "REPAIR_SUPPORTED",
+  "detail": {
+   "afterWindowConsume": "EXPIRED",
+   "consumedDbcTimestamp": 1791453420,
+   "firstRefusedTimestamp": 1791453450,
+   "immediateConsumeDelaySeconds": 0,
+   "lastAcceptedAfterRevocationSeconds": 29,
+   "lastSecondAccepted": true,
+   "newRequestOnPbc": "REVOKED",
+   "note": "PBC and DBC are separate Anvil clocks; second-level differences between them are indicative only",
+   "revocationPbcTimestamp": 1791453420
+  },
+  "expectedError": null,
+  "expectedOutcome": "ACCEPT",
+  "observedError": null,
+  "observedOutcome": "ACCEPT",
+  "stepsExecuted": [
+   "REQUEST_ACCESS",
+   "REVOKE_ON_PBC",
+   "FORWARD_OR_CONSUME"
+  ],
+  "workerExpected": null,
+  "workerObserved": null
+ },
+ "E02-signed-list-rollback-repaired-e": {
+  "classificationExpected": "REPAIR_SUPPORTED",
+  "detail": {
+   "aclReplay": "STALE_ANCHOR",
+   "crlReplay": "STALE_ANCHOR",
+   "requestAfterReplay": "REVOKED",
+   "v2Retained": true
+  },
+  "expectedError": "STALE_ANCHOR",
+  "expectedOutcome": "REJECT",
+  "observedError": "STALE_ANCHOR",
+  "observedOutcome": "REJECT",
+  "stepsExecuted": [
+   "INSTALL_NEW_LIST",
+   "REPLAY_OLD_LIST",
+   "REQUEST_ACCESS"
+  ],
+  "workerExpected": null,
+  "workerObserved": null
+ },
+ "E02-wrong-issuer-repaired-e": {
+  "classificationExpected": "SUPPORTED",
+  "detail": {
+   "aclUpdate": "UNAUTHORIZED_CALLER",
+   "crlUpdate": "UNAUTHORIZED_CALLER",
+   "h2StateUnchanged": true,
+   "ownAdminAccepted": true
+  },
+  "expectedError": "UNAUTHORIZED_CALLER",
+  "expectedOutcome": "REJECT",
+  "observedError": "UNAUTHORIZED_CALLER",
+  "observedOutcome": "REJECT",
+  "stepsExecuted": [
+   "WRONG_ISSUER_UPDATE"
+  ],
+  "workerExpected": null,
+  "workerObserved": null
+ },
+ "E03-crash-after-intent-repaired-e": {
+  "classificationExpected": "REPAIR_SUPPORTED",
+  "detail": {
+   "eventsAfterRetry": [
+    "RELEASE_INTENT",
+    "RELEASE_SENT"
+   ],
+   "eventsAtCrash": [
+    "RELEASE_INTENT"
+   ],
+   "expiredRetryEmitsNoEvent": true,
+   "outcomeRecorded": true,
+   "transmittedBeforeCrash": 0
+  },
+  "expectedError": null,
+  "expectedOutcome": "CONDITIONAL",
+  "observedError": null,
+  "observedOutcome": "CONDITIONAL",
+  "stepsExecuted": [
+   "REQUEST_ACCESS",
+   "FORWARD_OR_CONSUME",
+   "RELEASE",
+   "CRASH_RESTART",
+   "RELEASE",
+   "REPORT_OUTCOME"
+  ],
+  "workerExpected": {
+   "delivery": "unknown",
+   "expiredRetryError": "EXPIRED",
+   "releaseIntentCount": "1",
+   "releaseSentCount": "1",
+   "sameCachedResponse": true
+  },
+  "workerObserved": {
+   "delivery": "unknown",
+   "expiredRetryError": "EXPIRED",
+   "releaseIntentCount": "1",
+   "releaseSentCount": "1",
+   "sameCachedResponse": true
+  }
+ },
+ "E03-crash-after-send-repaired-e": {
+  "classificationExpected": "REPAIR_SUPPORTED",
+  "detail": {
+   "eventsAfterRetry": [
+    "RELEASE_INTENT",
+    "RELEASE_SENT",
+    "RELEASE_SENT"
+   ],
+   "eventsAtCrash": [
+    "RELEASE_INTENT",
+    "RELEASE_SENT"
+   ],
+   "expiredRetryEmitsNoEvent": true,
+   "idempotentReconcile": "REPLAY",
+   "outcomeRecorded": true,
+   "transmissionsTotal": 2,
+   "transmittedBeforeCrash": 1
+  },
+  "expectedError": null,
+  "expectedOutcome": "CONDITIONAL",
+  "observedError": null,
+  "observedOutcome": "CONDITIONAL",
+  "stepsExecuted": [
+   "REQUEST_ACCESS",
+   "FORWARD_OR_CONSUME",
+   "RELEASE",
+   "CRASH_RESTART",
+   "RELEASE",
+   "REPORT_OUTCOME"
+  ],
+  "workerExpected": {
+   "delivery": "unknown",
+   "expiredRetryError": "EXPIRED",
+   "releaseIntentCount": "1",
+   "releaseSentCount": "2",
+   "sameCachedResponse": true
+  },
+  "workerObserved": {
+   "delivery": "unknown",
+   "expiredRetryError": "EXPIRED",
+   "releaseIntentCount": "1",
+   "releaseSentCount": "2",
+   "sameCachedResponse": true
+  }
+ },
+ "E03-dropped-outcome-repaired-e": {
+  "classificationExpected": "REPAIR_SUPPORTED",
+  "detail": {
+   "localEvents": [
+    "RELEASE_INTENT",
+    "RELEASE_SENT"
+   ],
+   "pscStatusWhileDropped": "1",
+   "reconciledAfterEventualDelivery": true
+  },
+  "expectedError": null,
+  "expectedOutcome": "PENDING",
+  "observedError": null,
+  "observedOutcome": "PENDING",
+  "stepsExecuted": [
+   "REQUEST_ACCESS",
+   "FORWARD_OR_CONSUME",
+   "RELEASE",
+   "DROP_OUTCOME"
+  ],
+  "workerExpected": null,
+  "workerObserved": null
+ },
+ "E03-duplicate-outcome-repaired-e": {
+  "classificationExpected": "REPAIR_SUPPORTED",
+  "detail": {
+   "duplicateGrantAttempt": "REPLAY",
+   "sameReceipt": "REPLAY",
+   "secondValidReceiptNewOutcomeDigest": "REPLAY",
+   "witnessAttestsAgainAfterOutcome": "WRONG_SUBJECT"
+  },
+  "expectedError": "REPLAY",
+  "expectedOutcome": "NO_NEW_OUTCOME",
+  "observedError": "REPLAY",
+  "observedOutcome": "NO_NEW_OUTCOME",
+  "stepsExecuted": [
+   "REQUEST_ACCESS",
+   "FORWARD_OR_CONSUME",
+   "RELEASE",
+   "REPORT_OUTCOME",
+   "DUPLICATE_OUTCOME"
+  ],
+  "workerExpected": null,
+  "workerObserved": null
+ },
+ "E03-fabricated-outcome-repaired-e": {
+  "classificationExpected": "REPAIR_SUPPORTED",
+  "detail": {
+   "forgedReceipt": "BAD_SIGNATURE",
+   "honestWitness": "NOT_COMMITTED",
+   "unattestedPath": "WRONG_PROFILE"
+  },
+  "expectedError": "WRONG_PROFILE",
+  "expectedOutcome": "REJECT",
+  "observedError": "WRONG_PROFILE",
+  "observedOutcome": "REJECT",
+  "stepsExecuted": [
+   "REQUEST_ACCESS",
+   "FABRICATE_OUTCOME"
+  ],
+  "workerExpected": null,
+  "workerObserved": null
+ }
+}
+.
+23 passed in 43.47s
