@@ -35,3 +35,16 @@ def resolve(ref: object, allowed_roles: tuple[str, ...]) -> tuple[str, str]:
         raise KeyRefError(f"a {role} key cannot be used for this operation")
     key = synthetic_private_key(label)
     return key, Account.from_key(key).address.lower()
+
+
+def recipient_key_hash(ref: object) -> str:
+    """Fixture convention (A1-0015): keccak256("HMBC.recipient-key." || label) for a `keyref:user:<label>` handle.
+
+    In E (symbolic mode) this is a commitment to a SYMBOLIC recipient key, not a hash of real key bytes. The ledger never
+    derives it: RSC stores the value carried by the GID-signed Registration and PSC requires request.recipientKeyHash to
+    equal it. G0 must replace this with a hash of the actual recipient public key (a new reviewed field meaning).
+    """
+    role, label = parse(ref)
+    if role != "user":
+        raise KeyRefError("only user key references have a recipient key hash")
+    return "0x" + keccak(b"HMBC.recipient-key." + label.encode()).hex()

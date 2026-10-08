@@ -47,3 +47,25 @@ def test_domain_comes_from_deployment_not_caller():
     assert messages.domain_for("AccessDecision", msg, dep) == {
         "name": "HMBCDecision", "version": "1", "chainId": "28545", "verifyingContract": "0x" + "33" * 20}
     assert messages.domain_for("GrantReceipt", msg, dep)["verifyingContract"] == "0x" + "11" * 20
+
+
+# A1-0015: fixture convention recipientKeyHash = keccak256("HMBC.recipient-key." || label); a commitment to a SYMBOLIC
+# recipient key in E (G0 replaces it with a hash of a real public key). Values below are agent-1's `cast keccak` results.
+@pytest.mark.parametrize("label,expected", [
+    ("alice", "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"),
+    ("bob", "0x5fe346cd69926d7120dff3cc020f4d36ad8093b7c9bb95c6ecea9705a3f8c537"),
+])
+def test_recipient_key_hash_matches_agent1_fixture_convention(label, expected):
+    assert keys.recipient_key_hash(f"keyref:user:{label}") == expected
+
+
+def test_recipient_key_hash_matches_the_registration_and_request_vectors():
+    alice = keys.recipient_key_hash("keyref:user:alice")
+    for name in ("Registration", "AccessRequest"):
+        assert VECS[name]["typedData"]["message"]["recipientKeyHash"] == alice
+
+
+@pytest.mark.parametrize("bad", ["keyref:witness:witness-1", "alice", "keyref:user:Alice", "keyref:user:alice\n", None])
+def test_recipient_key_hash_only_for_user_refs(bad):
+    with pytest.raises(keys.KeyRefError):
+        keys.recipient_key_hash(bad)
