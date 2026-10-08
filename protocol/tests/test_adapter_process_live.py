@@ -26,7 +26,9 @@ RECORD = {"dataId": setup.DATA_P1, "owner": setup.addr("H2-root"), "payloadDiges
 class AdapterProcess:
     def __init__(self, state_dir, dep):
         self.dep, self.transcript = dep, []
-        self.p = subprocess.Popen([sys.executable, "-m", "hmbc_protocol.adapter", "--state-dir", str(state_dir)], cwd=ROOT,
+        dep_file = pathlib.Path(str(state_dir) + ".deployment.json")
+        dep_file.write_text(json.dumps(dep))
+        self.p = subprocess.Popen([sys.executable, "-m", "hmbc_protocol.adapter", "--state-dir", str(state_dir), "--deployment", str(dep_file)], cwd=ROOT,
                                   env={"PYTHONPATH": str(ROOT), "PATH": "/usr/bin:/bin"}, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                   stderr=subprocess.PIPE, text=True)
 

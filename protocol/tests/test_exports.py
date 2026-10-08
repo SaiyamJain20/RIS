@@ -20,6 +20,9 @@ def test_manifest_lists_all_six_operations_and_only_symbolic_mode():
     assert [o["name"] for o in m["operations"]] == ["prepare_request", "collect_decision", "release", "encrypt_record", "finish_decryption", "rotate_epoch"]
     assert m["supportedAdapterModes"] == ["symbolic"] and m["adapterMode"] == "symbolic"
     assert m["startup"]["requiredEnvironmentVariables"] == []
+    cmd = m["startup"]["command"]
+    assert "--state-dir" in cmd and "--deployment" in cmd, "ledger-backed operations need a pinned deployment (A2-0009)"
+    assert "pinned" in m["startup"]["deploymentPinning"].lower() and "never from a request" in m["startup"]["deploymentPinning"]
     statuses = {o["name"]: o["status"] for o in m["operations"]}
     assert statuses["prepare_request"] == "implemented-e0" and statuses["rotate_epoch"] == "not-implemented-in-phase"
     assert all(s == "candidate-b-e1-not-unlocked" for k, s in statuses.items() if k in {"collect_decision", "release", "encrypt_record", "finish_decryption"})

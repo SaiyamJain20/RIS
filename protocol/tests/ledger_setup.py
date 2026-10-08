@@ -54,7 +54,7 @@ def setup_pbc(led, duty_seconds: int = 8 * 3600) -> SimpleNamespace:
 
 
 def make_request(led, ctx, client, nonce="1", ttl=30, **over):
-    now = led.pbc.get_block()["timestamp"]
+    now = led.pbc.now()
     return client.build_request(data_id=DATA_P1, nonce=nonce, auth_epoch=led.pbc.call(led.TMSC, "authEpoch"), expires_at=str(now + ttl), **over)
 
 

@@ -43,7 +43,8 @@ class Witness:
     def _sign(self, name: str, message: dict) -> str:
         digest = messages.digest_of(name, message, messages.domain_for(name, message, self.led.deployment))
         sig = eip712.sign_digest(self._key, digest)
-        assert eip712.recover(digest, sig) == self.address
+        if eip712.recover(digest, sig) != self.address:          # an explicit check: `assert` is stripped by python -O
+            raise WitnessError("BAD_SIGNATURE", "refusing to emit a signature that does not recover to the witness address")
         return sig
 
     # -- checkpoint --------------------------------------------------------------------------------------------------------------
@@ -58,7 +59,7 @@ class Witness:
               "keyEpoch": "0", "witnessSetVersion": self.witness_set_version,
               "sourceChainId": str(led.pbc.chain_id), "psc": led.PSC.address,
               "sourceBlockNumber": str(head["number"]), "sourceBlockHash": head["hash"],
-              "expiresAt": str(led.dbc.get_block()["timestamp"] + self.checkpoint_ttl)}
+              "expiresAt": str(led.dbc.now() + self.checkpoint_ttl)}
         wire.state_checkpoint(cp)
         return {"checkpoint": cp, "signatures": [self._sign("StateCheckpoint", cp)]}
 
@@ -76,7 +77,10 @@ class Witness:
         if len(logs) != 1:
             raise WitnessError("WRONG_SUBJECT", "expected exactly one AccessForwarded log for this digest")
         try:
-            name, args = led.PSC.decode_input(bytes.fromhex(led.pbc.get_transaction(logs[0]["transactionHash"])["input"][2:]))
+            tx = led.pbc.get_transaction(logs[0]["transactionHash"])
+            if str(tx.get("to", "")).lower() != led.PSC.address:    # a wrapper/multicall could hand the PSC a different bundle than the calldata shows
+                raise WitnessError("WRONG_SUBJECT", "the forwarding transaction was not sent directly to the PSC")
+            name, args = led.PSC.decode_input(bytes.fromhex(tx["input"][2:]))
         except (AbiError, ChainError):
             raise WitnessError("WRONG_SUBJECT", "the forwarding transaction is not a direct requestAccess call") from None
         if name != "requestAccess":
@@ -98,7 +102,7 @@ class Witness:
             raise WitnessError("MALFORMED", str(e)) from None
         request, bundle, forwarded_at = self._forwarded_request(request_digest)
         exists, cp = led.dbc.call(led.KSSC, "currentCheckpoint")
-        dbc_now, pbc_now = led.dbc.get_block()["timestamp"], led.pbc.get_block()["timestamp"]
+        dbc_now, pbc_now = led.dbc.now(), led.pbc.now()
         if not exists or dbc_now >= int(cp["expiresAt"]):
             raise WitnessError("STALE_STATE", "the DBC holds no fresh checkpoint; collect and accept a new one")
         src = int(cp["sourceBlockNumber"])
@@ -110,6 +114,10 @@ class Witness:
             raise WitnessError("STALE_STATE", "request authEpoch/policyVersion differ from the DBC checkpoint")
         if request["keyEpoch"] != cp["keyEpoch"]:
             raise WitnessError("WRONG_EPOCH", "request keyEpoch differs from the DBC checkpoint")
+        if request["destinationChainId"] != str(led.dbc.chain_id) or request["kssc"] != led.KSSC.address:
+            raise WitnessError("WRONG_DESTINATION", "the request names another destination than this DBC")
+        if led.dbc.call(led.KSSC, "nonceConsumed", request["gid"], request["nonce"]) is True:
+            raise WitnessError("REPLAY", "the DBC already consumed this (gid, nonce); an ALLOW would revert")
         if max(dbc_now, pbc_now) >= int(request["expiresAt"]):
             raise WitnessError("EXPIRED", "the request has expired on at least one chain's clock")
         # Independent credential evaluation at the checkpoint's PBC block, with that block's own timestamp (A1-0011 answer 1; A29).
@@ -117,6 +125,10 @@ class Witness:
         code, records = led.pbc.call(led.TMSC, "checkCredentials", request["gid"], bundle, str(at), block=src)
         # ALLOW needs valid credentials AND a policy the DBC will accept (A1-0017): an ALLOW the ACSC rejects reverts POLICY_DENIED and
         # loses the DBC's own audit record, whereas a signed DENY is logged there. The ACSC still reverts a forged ALLOW (defence in depth).
+        # DecisionVerifier step 13 re-checks every record at DBC `now`: a record that lapsed since the checkpoint block would make even a DENY
+        # revert EXPIRED, so a lapsed set is attested as "no valid credentials" (empty records) and denied.
+        if code == "0" and any(int(r["validUntil"]) <= dbc_now for r in records):
+            code, records = "REVOKED-BY-TIME", []
         satisfied = code == "0" and led.dbc.call(led.ACSC, "evaluate", request["dataId"], records) is True
         decision = {"requestDigest": request_digest, "result": "1" if satisfied else "0",
                     "credentialDigest": "0x" + eip712.credential_digest(records).hex(), "stateSequence": cp["sequence"],

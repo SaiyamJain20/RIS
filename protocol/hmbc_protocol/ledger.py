@@ -10,11 +10,10 @@ import hashlib
 import json
 import pathlib
 import re
-from urllib.parse import urlsplit
 
 from . import eip712
 from .abi import Contract
-from .chain import Chain
+from .chain import Chain, ChainError, validate_url
 
 ABI_DIR = pathlib.Path(__file__).resolve().parents[1] / "abi"
 CONTRACTS = (("PSC", "pbc"), ("RSC", "pbc"), ("TMSC", "pbc"), ("LSC", "pbc"), ("ACSC", "dbc"), ("KSSC", "dbc"))
@@ -25,10 +24,10 @@ class LedgerError(ValueError):
 
 
 def _url(u: object) -> str:
-    parts = urlsplit(u) if isinstance(u, str) else None
-    if not parts or parts.scheme not in ("http", "https") or parts.hostname not in ("127.0.0.1", "localhost", "::1") or not parts.port:
-        raise LedgerError("rpcUrl must be an http(s) loopback URL with an explicit port")
-    return u
+    try:
+        return validate_url(u)
+    except ChainError as e:
+        raise LedgerError(str(e)) from None
 
 
 class Ledger:

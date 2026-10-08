@@ -32,6 +32,8 @@ def _uint(value: Any, bits: int) -> int:
     # interfaces v0: unsigned integers are canonical decimal STRINGS on the wire; JSON numbers reject.
     if not isinstance(value, str) or not _DEC.fullmatch(value):
         raise EncodingError(f"uint{bits}: expected a canonical decimal string, got {value!r}")
+    if len(value) > 78:                       # 2**256 has 78 digits; also avoids int()'s 4300-digit ValueError on absurd inputs
+        raise EncodingError(f"uint{bits}: out of range")
     value = int(value)
     if value >= 1 << bits:
         raise EncodingError(f"uint{bits}: out of range")

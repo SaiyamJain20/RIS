@@ -39,5 +39,6 @@ class UserClient:
             raise ClientError("WRONG_EPOCH", "request keyEpoch/policyVersion differ from the deployment's fixed values")
         digest = messages.digest_of("AccessRequest", req, messages.domain_for("AccessRequest", req, self.deployment))
         signature = eip712.sign_digest(self._key, digest)
-        assert eip712.recover(digest, signature) == self.address
+        if eip712.recover(digest, signature) != self.address:       # explicit: `assert` is stripped by python -O
+            raise ClientError("BAD_SIGNATURE", "refusing to emit a signature that does not recover to this user's address")
         return {"request": req, "requestDigest": "0x" + digest.hex(), "signature": signature, "signer": self.address}

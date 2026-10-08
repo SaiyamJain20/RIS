@@ -13,8 +13,11 @@
       "-m",
       "hmbc_protocol.adapter",
       "--state-dir",
-      "<private directory, mode 0700>"
+      "<private directory, mode 0700>",
+      "--deployment",
+      "<deployment.json to pin>"
     ],
+    "deploymentPinning": "The deployment given at startup is PINNED: RPC URLs, contract addresses and the witness key label come only from it, never from a request. A request whose deploymentManifest differs answers WRONG_DESTINATION before any connection is made; without --deployment the ledger-backed operations answer ADAPTER_UNAVAILABLE.",
     "workingDirectory": "protocol (or set PYTHONPATH to it)",
     "requiredEnvironmentVariables": [],
     "python": ">=3.13,<3.14",
@@ -197,8 +200,8 @@
     }
   ],
   "sourceSha256": {
-    "hmbc_protocol/adapter.py": "64b9bd374f5e2693344d1ab032e5236c28f4274ccbfcb04012906341908c95ee",
-    "hmbc_protocol/eip712.py": "42801cebf1cfd36da711ee659c723654c5447ccde7fb11af5e9f27878e2dd085",
+    "hmbc_protocol/adapter.py": "750a95352238065a032bff18869b2eb4e7381da5e4d24fbf9930db21a165faa7",
+    "hmbc_protocol/eip712.py": "eb70dd51e82c1374f9629bb18b063b05835ca983101d5ebc47a327220b43d03c",
     "hmbc_protocol/keys.py": "cf953bea08d9658ba0917d2f1c99dc039b9b269f765f52a775b043cddcae48ab",
     "hmbc_protocol/messages.py": "54bfeda86ea4b52ce279cee52e69721c794b68f1644f856fc7641db75abe8da8",
     "hmbc_protocol/wire.py": "e7eb78d800b53d8f1b8bc1fcc3e51fe3953bf857b3941276acf9a0bde661810a"

@@ -16,8 +16,10 @@ P1_RECORD = {"dataId": setup.DATA_P1, "owner": setup.addr("H2-root"), "payloadDi
 
 
 @pytest.fixture
-def configured(tmp_path):
-    adapter.configure(str(tmp_path / "adapter-state"))
+def configured(world, tmp_path):
+    """Start the adapter the way a runner must: a private state dir and the deployment PINNED out of band."""
+    led, ctx = world
+    adapter.configure(str(tmp_path / "adapter-state"), led.deployment)
     yield
     adapter.configure(None)
 
@@ -117,28 +119,28 @@ def test_collect_decision_for_an_unforwarded_digest_is_refused(world, configured
     assert not r["ok"] and r["error"]["code"] == "WRONG_SUBJECT"
 
 
-def test_unreachable_ledger_is_adapter_unavailable_not_a_crash(world, configured):
+def test_unreachable_ledger_is_adapter_unavailable_not_a_crash(world, tmp_path):
     led, ctx = world
     dep = json.loads(json.dumps(led.deployment))
     dep["chains"]["dbc"]["rpcUrl"] = "http://127.0.0.1:1"                                      # nothing listens here
-    r = call(led, "release", {"grantId": "0x" + "55" * 32}, dep=dep)
-    assert not r["ok"] and r["error"]["code"] == "ADAPTER_UNAVAILABLE"
+    adapter.configure(str(tmp_path / "s"), dep)                                                # pinned: the operator chose this (dead) ledger
+    try:
+        r = call(led, "release", {"grantId": "0x" + "55" * 32}, dep=dep)
+        assert not r["ok"] and r["error"]["code"] == "ADAPTER_UNAVAILABLE"
+    finally:
+        adapter.configure(None)
 
 
-def test_a_non_loopback_rpc_url_in_the_manifest_is_malformed(world, configured):
+@pytest.mark.parametrize("mutate", [lambda d: d["chains"]["dbc"].__setitem__("rpcUrl", "http://169.254.169.254:80"),
+                                    lambda d: d["abi"]["KSSC"].__setitem__("abiSha256", "0" * 64)])
+def test_in_band_changes_to_the_manifest_are_refused_as_a_different_destination(world, configured, mutate):
+    """Superseded the earlier 'non-loopback / different ABI is MALFORMED' tests: with a pinned deployment ANY in-band difference is WRONG_DESTINATION,
+    and the loader-level checks (loopback URL, ABI hash) are tested directly in test_ledger.py / test_chain_hardening.py."""
     led, ctx = world
     dep = json.loads(json.dumps(led.deployment))
-    dep["chains"]["dbc"]["rpcUrl"] = "http://169.254.169.254:80"
+    mutate(dep)
     r = call(led, "release", {"grantId": "0x" + "55" * 32}, dep=dep)
-    assert not r["ok"] and r["error"]["code"] == "MALFORMED"
-
-
-def test_a_deployment_with_different_abis_is_refused(world, configured):
-    led, ctx = world
-    dep = json.loads(json.dumps(led.deployment))
-    dep["abi"]["KSSC"]["abiSha256"] = "0" * 64
-    r = call(led, "release", {"grantId": "0x" + "55" * 32}, dep=dep)
-    assert not r["ok"] and r["error"]["code"] == "MALFORMED"
+    assert not r["ok"] and r["error"]["code"] == "WRONG_DESTINATION"
 
 
 def test_without_a_configured_state_dir_ledger_operations_are_unavailable(world):

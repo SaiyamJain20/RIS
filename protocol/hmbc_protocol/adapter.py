@@ -98,31 +98,42 @@ def prepare_request(inp: Any, dep: dict) -> dict:
     domain = messages.domain_for("AccessRequest", req, dep)
     digest = messages.digest_of("AccessRequest", req, domain)
     signature = eip712.sign_digest(private_key, digest)
-    assert eip712.recover(digest, signature) == signer  # never emit a signature that does not verify
+    if eip712.recover(digest, signature) != signer:           # never emit a signature that does not verify (explicit: `assert` is stripped by -O)
+        raise AdapterError("ADAPTER_UNAVAILABLE", "internal signing self-check failed")
     return {"schemaVersion": SCHEMA_VERSION, "adapterMode": ADAPTER_MODE, "request": req,
             "requestDigest": "0x" + digest.hex(), "signature": signature, "signer": signer}
 
 
 _STATE_DIR: str | None = None
+_PINNED: dict | None = None
+_LEDGER: Ledger | None = None
 
 
-def configure(state_dir: str | None) -> None:
-    """Set (or clear) the private directory that holds durable worker state. Called once at startup by main()."""
-    global _STATE_DIR
-    _STATE_DIR = state_dir
+def configure(state_dir: str | None, deployment: dict | None = None) -> None:
+    """Set (or clear) the private worker-state directory and the PINNED deployment. Called once at startup by main().
+
+    The pinned deployment is the trust root for every ledger-backed operation: RPC URLs, contract addresses and the witness key label come
+    from it, never from a request. A request whose deploymentManifest differs from it is refused before any connection is made (A2-0009)."""
+    global _STATE_DIR, _PINNED, _LEDGER
+    _STATE_DIR, _PINNED, _LEDGER = state_dir, None, None
+    if deployment is not None:
+        try:
+            _LEDGER = Ledger.from_deployment(deployment)
+        except LedgerError as e:
+            raise ValueError(f"pinned deployment unusable: {e}") from None
+        _PINNED = json.loads(json.dumps(deployment))
 
 
 def _ledger(dep: dict) -> Ledger:
-    try:
-        return Ledger.from_deployment(dep)
-    except LedgerError as e:
-        raise AdapterError("MALFORMED", str(e)) from None
+    if _LEDGER is None:
+        raise AdapterError("ADAPTER_UNAVAILABLE", "no deployment is pinned (start the adapter with --deployment)")
+    return _LEDGER                                               # `dep` was already checked equal to the pinned manifest in handle_line
 
 
 def _worker(led: Ledger) -> Worker:
     if _STATE_DIR is None:
         raise AdapterError("ADAPTER_UNAVAILABLE", "no worker state directory is configured (start with --state-dir)")
-    return Worker(led, os.path.join(_STATE_DIR, "worker"), clock=lambda: led.dbc.get_block()["timestamp"])
+    return Worker(led, os.path.join(_STATE_DIR, "worker"), clock=led.dbc.now)
 
 
 def _ledger_op(fn):
@@ -195,6 +206,8 @@ def handle_line(line: str) -> dict:
         if not isinstance(op, str) or op not in OPERATIONS:
             raise AdapterError("MALFORMED", "unknown operation")
         dep = _deployment(req["deploymentManifest"])
+        if _PINNED is not None and dep != _PINNED:
+            raise AdapterError("WRONG_DESTINATION", "deploymentManifest differs from the deployment this adapter was started with")
         # Revision 4: every operation's input is a closed, canonical type, validated before dispatch; a bad request is
         # MALFORMED, never "unavailable". Unbuilt operations only answer ADAPTER_UNAVAILABLE for a well-formed request.
         try:
@@ -208,14 +221,32 @@ def handle_line(line: str) -> dict:
         return _response(error=AdapterError("ADAPTER_UNAVAILABLE", "internal adapter failure"))
 
 
-def serve(stdin: TextIO, stdout: TextIO) -> int:
-    for line in stdin:
-        if not line.strip():
-            stdout.write(json.dumps(_response(error=AdapterError("MALFORMED", "empty request line")), separators=(",", ":")) + "\n")
+def _emit(stdout: TextIO, resp: dict) -> None:
+    stdout.write(json.dumps(resp, separators=(",", ":")) + "\n")      # ensure_ascii: the output is always plain ASCII
+    stdout.flush()
+
+
+def serve(stdin, stdout: TextIO) -> int:
+    """Serve JSON lines. `stdin` is a BINARY stream: lines are read with a bounded readline and decoded here, so invalid UTF-8 or a giant
+    line yields one MALFORMED response instead of killing the process (one response per request line always holds)."""
+    while True:
+        chunk = stdin.readline(MAX_LINE_BYTES + 2)
+        if not chunk:
+            return 0
+        if not chunk.endswith(b"\n") and len(chunk) > MAX_LINE_BYTES:
+            while chunk and not chunk.endswith(b"\n"):                # discard the rest of the oversized line without buffering it
+                chunk = stdin.readline(1 << 16)
+            _emit(stdout, _response(error=AdapterError("MALFORMED", "request line exceeds 1 MiB")))
+            continue
+        try:
+            text = chunk.decode("utf-8")
+        except UnicodeDecodeError:
+            _emit(stdout, _response(error=AdapterError("MALFORMED", "request is not valid UTF-8")))
+            continue
+        if not text.strip():
+            _emit(stdout, _response(error=AdapterError("MALFORMED", "empty request line")))
         else:
-            stdout.write(json.dumps(handle_line(line.rstrip("\n")), separators=(",", ":")) + "\n")
-        stdout.flush()
-    return 0
+            _emit(stdout, handle_line(text.rstrip("\n")))
 
 
 def _private_state_dir(path: str) -> str:
@@ -227,10 +258,15 @@ def _private_state_dir(path: str) -> str:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="HMBC agent-2 JSON-lines adapter (symbolic mode)")
-    ap.add_argument("--state-dir", required=True, help="private directory for durable worker state (unused at E0)")
+    ap.add_argument("--state-dir", required=True, help="private directory (mode 0700) for durable worker state")
+    ap.add_argument("--deployment", help="JSON deployment manifest to PIN: the only ledger this process will talk to (required for ledger-backed operations)")
     args = ap.parse_args(argv)
-    configure(_private_state_dir(args.state_dir))
-    return serve(sys.stdin, sys.stdout)
+    deployment = None
+    if args.deployment:
+        with open(args.deployment, "rb") as f:
+            deployment = strict_loads(f.read().decode("utf-8"))
+    configure(_private_state_dir(args.state_dir), deployment)
+    return serve(sys.stdin.buffer, sys.stdout)
 
 
 if __name__ == "__main__":

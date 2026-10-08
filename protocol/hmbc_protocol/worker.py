@@ -7,7 +7,10 @@ TEST-ONLY random handle with no cryptographic confidentiality (A33).
 """
 from __future__ import annotations
 
+import fcntl
+import hashlib
 import hmac
+import json
 import os
 import sqlite3
 import stat
@@ -33,6 +36,7 @@ create table if not exists records(data_id text primary key, owner text not null
 create table if not exists releases(grant_id text primary key, request_digest text not null, data_id text not null, gid text not null,
   recipient_key_hash text not null, key_epoch text not null, ciphertext_digest text not null, token text not null,
   grant_expires_at integer not null, created_at integer not null, delivery text not null, sent_count integer not null default 0);
+create table if not exists meta(key text primary key, value text not null);
 create table if not exists events(id integer primary key autoincrement, type text not null, request_digest text not null,
   grant_id text not null, gid text not null, data_id text not null, timestamp integer not null);
 """
@@ -46,12 +50,26 @@ class Worker:
             raise WorkerError("MALFORMED", "worker state directory must not be accessible to group/other (chmod 700)")
         old = os.umask(0o077)
         try:
-            self.db = sqlite3.connect(os.path.join(state_dir, "worker.sqlite"), isolation_level=None)
+            # Serialise first-time initialisation (WAL switch + schema + deployment fingerprint) across threads/processes sharing a state dir:
+            # SQLite does not apply the busy timeout to the journal-mode switch, so concurrent first opens could fail "database is locked".
+            with open(os.path.join(state_dir, ".init.lock"), "a") as lock:
+                fcntl.flock(lock, fcntl.LOCK_EX)
+                self.db = sqlite3.connect(os.path.join(state_dir, "worker.sqlite"), isolation_level=None, timeout=15)
+                self.db.execute("pragma journal_mode=wal")
+                self.db.execute("pragma synchronous=full")                           # a commit is on disk when it returns
+                self.db.executescript(_SCHEMA)
+                # State belongs to ONE deployment: a worker pointed at another (e.g. fake) ledger must not mint capabilities from this DB.
+                dep = led.deployment["chains"]
+                fp = hashlib.sha256(json.dumps({"pbc": [dep["pbc"]["chainId"], dep["pbc"]["contracts"]["PSC"], dep["pbc"]["contracts"]["RSC"]],
+                                                "dbc": [dep["dbc"]["chainId"], dep["dbc"]["contracts"]["KSSC"], dep["dbc"]["contracts"]["ACSC"]]},
+                                               sort_keys=True).encode()).hexdigest()
+                self.db.execute("insert or ignore into meta values('deployment', ?)", (fp,))
+                stored = self.db.execute("select value from meta where key='deployment'").fetchone()[0]
         finally:
             os.umask(old)
-        self.db.execute("pragma journal_mode=wal")
-        self.db.execute("pragma synchronous=full")                                   # a commit is on disk when it returns
-        self.db.executescript(_SCHEMA)
+        if stored != fp:
+            raise WorkerError("WRONG_DESTINATION", "this worker state belongs to a different ledger deployment")
+        self.db.execute("pragma synchronous=full")
 
     # -- encrypt_record -----------------------------------------------------------------------------------------------------
     def encrypt_record(self, record: dict, policy: dict, key_epoch: str) -> dict:
@@ -68,11 +86,17 @@ class Worker:
         if pd != registered:
             raise WorkerError("WRONG_SUBJECT", "policy differs from the policy registered for this record on the ACSC")
         cd = symbolic.ciphertext_digest(record, policy)
-        row = self.db.execute("select payload_digest, policy_digest from records where data_id=?", (record["dataId"],)).fetchone()
-        if row is None:
-            self.db.execute("insert into records values(?,?,?,?,?,?)",
-                            (record["dataId"], record["owner"], record["payloadDigest"], repr(sorted(policy.items())), pd, cd))
-        elif row != (record["payloadDigest"], pd):
+        self.db.execute("begin immediate")                       # select-then-insert must be atomic across threads/processes
+        try:
+            row = self.db.execute("select payload_digest, policy_digest from records where data_id=?", (record["dataId"],)).fetchone()
+            if row is None:
+                self.db.execute("insert into records values(?,?,?,?,?,?)",
+                                (record["dataId"], record["owner"], record["payloadDigest"], repr(sorted(policy.items())), pd, cd))
+            self.db.execute("commit")
+        except BaseException:
+            self.db.execute("rollback")
+            raise
+        if row is not None and row != (record["payloadDigest"], pd):
             raise WorkerError("WRONG_SUBJECT", "dataId is already registered with different content")
         return {"schemaVersion": "v1", "adapterMode": "symbolic", "dataId": record["dataId"], "keyEpoch": "0",
                 "ciphertextDigest": cd, "policyDigest": pd}
@@ -131,9 +155,13 @@ class Worker:
             self.faults.discard("crash_after_send")
             raise SimulatedCrash("crash after send, before the acknowledgement was recorded")
         self.db.execute("begin immediate")
-        self.db.execute("update releases set delivery='sent', sent_count=sent_count+1 where grant_id=?", (grant_id,))
-        self._event("RELEASE_SENT", ident, self.clock())
-        self.db.execute("commit")
+        try:
+            self.db.execute("update releases set delivery='sent', sent_count=sent_count+1 where grant_id=?", (grant_id,))
+            self._event("RELEASE_SENT", ident, self.clock())
+            self.db.execute("commit")
+        except BaseException:
+            self.db.execute("rollback")
+            raise
         return response
 
     # -- completion ---------------------------------------------------------------------------------------------------------

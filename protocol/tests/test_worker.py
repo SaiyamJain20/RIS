@@ -28,7 +28,7 @@ def grant(led, ctx, nonce="1"):
 
 
 def worker(led, tmp_path, **kw):
-    return Worker(led, tmp_path / "state", clock=lambda: led.dbc.get_block()["timestamp"], **kw)
+    return Worker(led, tmp_path / "state", clock=led.dbc.now, **kw)
 
 
 def rows(tmp_path, sql):
