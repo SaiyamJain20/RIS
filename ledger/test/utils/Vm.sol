@@ -42,6 +42,14 @@ interface Vm {
 
     function envOr(string calldata name, uint256 defaultValue) external view returns (uint256 value);
     function envOr(string calldata name, string calldata defaultValue) external view returns (string memory value);
+    function envOr(string calldata name, string calldata delim, uint256[] calldata defaultValue)
+        external
+        view
+        returns (uint256[] memory value);
+    function envOr(string calldata name, string calldata delim, string[] calldata defaultValue)
+        external
+        view
+        returns (string[] memory value);
     function envUint(string calldata name) external view returns (uint256 value);
     function envString(string calldata name) external view returns (string memory value);
     function envAddress(string calldata name) external view returns (address value);

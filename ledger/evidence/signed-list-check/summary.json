@@ -1,0 +1,175 @@
+{
+ "schemaVersion": "hmbc-signed-list-check/v0",
+ "note": "owner evidence (A1-0034); not an E2 case result",
+ "results": [
+  {
+   "profile": "paper-strict",
+   "step": "1 duty ended",
+   "expected": "EXPIRED",
+   "observed": "EXPIRED",
+   "match": true
+  },
+  {
+   "profile": "paper-strict",
+   "step": "2 duty restored",
+   "expected": "NONE",
+   "observed": "NONE",
+   "match": true
+  },
+  {
+   "profile": "paper-strict",
+   "step": "3 Alice revoked",
+   "expected": "REVOKED",
+   "observed": "REVOKED",
+   "match": true
+  },
+  {
+   "profile": "paper-strict",
+   "step": "4 old CRL replayed",
+   "expected": "ACCEPT",
+   "observed": "ACCEPT",
+   "match": true
+  },
+  {
+   "profile": "paper-strict",
+   "step": "4 Alice after replay",
+   "expected": "NONE",
+   "observed": "NONE",
+   "match": true
+  },
+  {
+   "profile": "paper-strict",
+   "step": "5 equal version swap",
+   "expected": "ACCEPT",
+   "observed": "ACCEPT",
+   "match": true
+  },
+  {
+   "profile": "paper-strict",
+   "step": "6 unknown authority refused",
+   "expected": "REFUSED",
+   "observed": "REFUSED",
+   "match": true
+  },
+  {
+   "profile": "paper-strict",
+   "step": "6 wrong RPC refused",
+   "expected": "REFUSED",
+   "observed": "REFUSED",
+   "match": true
+  },
+  {
+   "profile": "paper-minimal",
+   "step": "1 duty ended",
+   "expected": "EXPIRED",
+   "observed": "EXPIRED",
+   "match": true
+  },
+  {
+   "profile": "paper-minimal",
+   "step": "2 duty restored",
+   "expected": "NONE",
+   "observed": "NONE",
+   "match": true
+  },
+  {
+   "profile": "paper-minimal",
+   "step": "3 Alice revoked",
+   "expected": "REVOKED",
+   "observed": "REVOKED",
+   "match": true
+  },
+  {
+   "profile": "paper-minimal",
+   "step": "4 old CRL replayed",
+   "expected": "ACCEPT",
+   "observed": "ACCEPT",
+   "match": true
+  },
+  {
+   "profile": "paper-minimal",
+   "step": "4 Alice after replay",
+   "expected": "NONE",
+   "observed": "NONE",
+   "match": true
+  },
+  {
+   "profile": "paper-minimal",
+   "step": "5 equal version swap",
+   "expected": "ACCEPT",
+   "observed": "ACCEPT",
+   "match": true
+  },
+  {
+   "profile": "paper-minimal",
+   "step": "6 unknown authority refused",
+   "expected": "REFUSED",
+   "observed": "REFUSED",
+   "match": true
+  },
+  {
+   "profile": "paper-minimal",
+   "step": "6 wrong RPC refused",
+   "expected": "REFUSED",
+   "observed": "REFUSED",
+   "match": true
+  },
+  {
+   "profile": "repaired-e",
+   "step": "1 duty ended",
+   "expected": "EXPIRED",
+   "observed": "EXPIRED",
+   "match": true
+  },
+  {
+   "profile": "repaired-e",
+   "step": "2 duty restored",
+   "expected": "NONE",
+   "observed": "NONE",
+   "match": true
+  },
+  {
+   "profile": "repaired-e",
+   "step": "3 Alice revoked",
+   "expected": "REVOKED",
+   "observed": "REVOKED",
+   "match": true
+  },
+  {
+   "profile": "repaired-e",
+   "step": "4 old CRL replayed",
+   "expected": "REJECT:STALE_ANCHOR",
+   "observed": "REJECT:STALE_ANCHOR",
+   "match": true
+  },
+  {
+   "profile": "repaired-e",
+   "step": "4 Alice after replay",
+   "expected": "REVOKED",
+   "observed": "REVOKED",
+   "match": true
+  },
+  {
+   "profile": "repaired-e",
+   "step": "5 equal version swap",
+   "expected": "REJECT:STALE_ANCHOR",
+   "observed": "REJECT:STALE_ANCHOR",
+   "match": true
+  },
+  {
+   "profile": "repaired-e",
+   "step": "6 unknown authority refused",
+   "expected": "REFUSED",
+   "observed": "REFUSED",
+   "match": true
+  },
+  {
+   "profile": "repaired-e",
+   "step": "6 wrong RPC refused",
+   "expected": "REFUSED",
+   "observed": "REFUSED",
+   "match": true
+  }
+ ],
+ "allMatch": true
+}

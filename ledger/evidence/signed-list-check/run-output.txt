@@ -1,0 +1,25 @@
+OK  paper-strict  1 duty ended                 expected=EXPIRED              observed=EXPIRED
+OK  paper-strict  2 duty restored              expected=NONE                 observed=NONE
+OK  paper-strict  3 Alice revoked              expected=REVOKED              observed=REVOKED
+OK  paper-strict  4 old CRL replayed           expected=ACCEPT               observed=ACCEPT
+OK  paper-strict  4 Alice after replay         expected=NONE                 observed=NONE
+OK  paper-strict  5 equal version swap         expected=ACCEPT               observed=ACCEPT
+OK  paper-strict  6 unknown authority refused  expected=REFUSED              observed=REFUSED
+OK  paper-strict  6 wrong RPC refused          expected=REFUSED              observed=REFUSED
+OK  paper-minimal 1 duty ended                 expected=EXPIRED              observed=EXPIRED
+OK  paper-minimal 2 duty restored              expected=NONE                 observed=NONE
+OK  paper-minimal 3 Alice revoked              expected=REVOKED              observed=REVOKED
+OK  paper-minimal 4 old CRL replayed           expected=ACCEPT               observed=ACCEPT
+OK  paper-minimal 4 Alice after replay         expected=NONE                 observed=NONE
+OK  paper-minimal 5 equal version swap         expected=ACCEPT               observed=ACCEPT
+OK  paper-minimal 6 unknown authority refused  expected=REFUSED              observed=REFUSED
+OK  paper-minimal 6 wrong RPC refused          expected=REFUSED              observed=REFUSED
+OK  repaired-e    1 duty ended                 expected=EXPIRED              observed=EXPIRED
+OK  repaired-e    2 duty restored              expected=NONE                 observed=NONE
+OK  repaired-e    3 Alice revoked              expected=REVOKED              observed=REVOKED
+OK  repaired-e    4 old CRL replayed           expected=REJECT:STALE_ANCHOR  observed=REJECT:STALE_ANCHOR
+OK  repaired-e    4 Alice after replay         expected=REVOKED              observed=REVOKED
+OK  repaired-e    5 equal version swap         expected=REJECT:STALE_ANCHOR  observed=REJECT:STALE_ANCHOR
+OK  repaired-e    6 unknown authority refused  expected=REFUSED              observed=REFUSED
+OK  repaired-e    6 wrong RPC refused          expected=REFUSED              observed=REFUSED
+ALL SIGNED-LIST CHECKS PASSED
