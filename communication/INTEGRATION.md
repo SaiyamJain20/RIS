@@ -20,4 +20,6 @@ Writer: agent 3. State: **INACTIVE**. No actual ledger/adapter services are star
 
 Before a run, record exact PIDs/ports and the freeze acknowledgements. If another process owns a port, choose a new port and publish the deployment manifest. If the coordinator restarts, inspect recorded PIDs and command lines before cleanup; never kill an unrelated process or infer a stale process solely from its port.
 
-Owner READY is now reviewed: ledger A1-0028 at91add8c/407c8633.. and service A2-0014 at34de384f/30f76dda..; neither is an integration FREEZE ACK. Bootstrap signed Alice/Bob fixture producer is pending A3-0024. No ports/PIDs allocated, no deployment/state directory created, no integration result.
+Earlier owner READY: A1-0028/A2-0014, now superseded by the source-reviewed E1 inputs below. Neither was an integration FREEZE ACK. No ports/PIDs allocated, no deployment/state directory created, no integration result.
+
+Current selected E1 successors: ledger9d6911d/106-entryec213160.. public bootstrap producer and protocol465aff5/105-entryeb236421.. fixed read-only worker_log. Source review only; actual runner/9-control run and both exact integration FREEZE ACKs pending. A1-0033/A2-0016 rehearsals and A1-0035 premature E2 results remain owner evidence; no services/PIDs/ports/freeze adopted. Selected collector checks pass; see evaluation/evidence/e1/collector-20261008/.

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "hmbc-live-mapping-acks/v1",
-  "updatedAt": "2026-10-08T15:54:08.679103+00:00",
+  "updatedAt": "2026-10-08T18:09:15.549945+00:00",
   "interfaceVersion": "v1",
   "freezeId": "E0-v1-r6-20261008",
   "frozenManifest": {
@@ -53,6 +53,48 @@
   "integrationFreezeActive": false,
   "ownerPins": {
     "ledger": {
+      "commit": "9d6911d9a35c7d20b3e0226400f8f0fcc99ef256",
+      "manifestSha256": "ec213160ffccf2affb3d6556f8d62b6f35aaec44249a21fd065e997e6c586f98",
+      "entries": 106,
+      "aE1Ready": true,
+      "bootstrapProducerReady": true,
+      "reviewEvidence": "evaluation/evidence/e1/collector-20261008/pin-review.json",
+      "reviewEvidenceSha256": "d293af440c725ec23b09cfab4fb21b668f92c728f14edce61812c868e0f8bdb0"
+    },
+    "protocol": {
+      "commit": "465aff52688179fd983fd8da9e2af3032189ff6e",
+      "manifestSha256": "eb236421b2208d33302d1445893a562c8cb6336ac2c77d21a5645b30ee1ff371",
+      "entries": 105,
+      "adapterSha256": "7146495b4dfbe351d73299223efdb853c41895ac880f9a6c13e2a525656a9220",
+      "supersedesFrozenOwnerPin": true,
+      "serviceReadyForIntegration": true,
+      "reviewEvidence": "evaluation/evidence/e1/collector-20261008/pin-review.json",
+      "reviewEvidenceSha256": "d293af440c725ec23b09cfab4fb21b668f92c728f14edce61812c868e0f8bdb0"
+    }
+  },
+  "note": "E0 closed/E1 unlocked; immutable frozen copies unchanged. Source-reviewed E1 bootstrap/worker-log successor selected. Collector unit checks pass; actual runner/integration and exact FREEZE ACKs pending. No owner rehearsal is Agent3 gate evidence.",
+  "ownerServiceReady": {
+    "agent-1": {
+      "commit": "a558b217f6501acc81a09f1e4bd4062004592a1a",
+      "changeCommit": "9d6911d9a35c7d20b3e0226400f8f0fcc99ef256",
+      "sha256": "4e430aa55fbb88bb17cb26de5e81ec3cf57fd968849ed4f1889c10462a1b0a03",
+      "path": "communication/agent-1/outbox/0030-ready-ledger-bootstrap-producer.md",
+      "messageId": "A1-0030",
+      "scope": "E1 bootstrap successor; owner live results not integrated evidence",
+      "integrationFreezeAck": false
+    },
+    "agent-2": {
+      "commit": "1f031c018bd0e8723f12faa90c2394a245198c94",
+      "changeCommit": "465aff52688179fd983fd8da9e2af3032189ff6e",
+      "sha256": "a0c81f8a8db2c6a2c5d1acbca4df6044aa86244fc2eab087bc9313a70a0bd948",
+      "path": "communication/agent-2/outbox/0016-ready-successor-worker-log-fix-and-paper-process-evidence.md",
+      "messageId": "A2-0016",
+      "scope": "read-only exporter directory fix; service start contract otherwise unchanged",
+      "integrationFreezeAck": false
+    }
+  },
+  "ownerPinHistory": {
+    "ledger": {
       "commit": "91add8cc6000d1413bad2ed0aa119a5f26e8c776",
       "manifestSha256": "407c86331072bdad63562541230fdd3078608287eccb373cb2f974e3bde20fc1",
       "entries": 101,
@@ -67,8 +109,7 @@
       "serviceReadyForIntegration": true
     }
   },
-  "note": "Live ACK/status/current successor record. FREEZE.json and15 copies retain immutable publication-time bytes. E0 closed/E1 unlocked; owner A1-0028/A2-0014 READY statements reviewed. Runner lifecycle/collector and Option A Alice/Bob bootstrap input pending. Exact integration FREEZE ACKs precede actual two-chain services. READY, unit tests and static checks are not integrated/RQ gate evidence.",
-  "ownerServiceReady": {
+  "ownerReadyHistory": {
     "agent-1": {
       "commit": "ff3cb743cd31fdd7745d2d4a8ecd81af9d04584e",
       "path": "communication/agent-1/outbox/0028-ready-a-e1-frozen-controls.md",
@@ -87,5 +128,18 @@
       "scope": "candidate symbolic service readiness; no reachable process crash hook, independent C-E1 result pending",
       "integrationFreezeAck": false
     }
+  },
+  "bootstrapReview": {
+    "producerPin": "9d6911d9a35c7d20b3e0226400f8f0fcc99ef256",
+    "producerCommand": "ledger/tools/bootstrap_fixture.sh <pbc-rpc> <deployment.json> <out.json>",
+    "peerScopeReview": {
+      "commit": "1f031c018bd0e8723f12faa90c2394a245198c94",
+      "changeCommit": "dbfefee2dd079b400191eba7bca4b3e117e2caef",
+      "sha256": "316b868764da4ca4a3202373f3b16d05d1933a9f8eefb93275eeccd55a5b1841",
+      "path": "communication/agent-2/outbox/0015-review-peer-bootstrap-producer-and-crosscheck.md"
+    },
+    "collectorCommand": "python -m hmbc_protocol.worker_log --state-dir <adapter state dir>",
+    "e2AdditionsAccepted": false,
+    "independentLiveRun": false
   }
 }
