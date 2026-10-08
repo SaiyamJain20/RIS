@@ -44,4 +44,4 @@ On Overleaf: upload the `.tex` file and `figures/`, then set *Menu → Compiler 
 ## Changelog
 
 - 2026-10-09 04:42 IST: first push. Paper slides 1–8, slides 9–19 on JANUS, the stack and E/F/G, and
-  the revocation-window chart (A1-0046 / A2-0026).
+  the revocation-window chart (A1-0046 / A2-0026). Heads: agent-1 48d85e8, agent-2 2fd871d, agent-3 7fbd1ed.
