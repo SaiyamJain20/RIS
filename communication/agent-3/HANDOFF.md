@@ -554,3 +554,43 @@ read/verify exact A3-0032 supplement ACKs when delivered; then complete FREEZE w
 runtime/tool/config/fixture hashes and both exact plan ACKs, real fresh-state
 strict/minimal/repaired fault/mutation/recovery matrix, report/all3 same-source
 ACKs/gate E before F. Formal slice does not finish the C-E2 integration task.
+
+
+## Current C-E2 checkpoint —2026-10-09 IST startup acceptance/transport
+
+Both A3-0032 exact scoped ACKs verified against Git blobs/owner ancestry: A1-0047
+commitaf7a60dd650c5d0c9b5d7df1fb5afbde3e30526d SHA0bde97a0e73210a82db2b3b0d724eb6db68c724bda8c89d79f02d1165113e9ec;
+A2-0027 commit0dbaed2331fd89ce3843625cd44bdc677dd4d490 SHA0002aa3b366d2cb40b9eb2edb233b001faf2de3ea6f2092722e85fa8fa1f68b6.
+Both bind1ae63cfb2dde803645ef7a84a58151c0b0a842554f79907c94a7dcd74c89f48c;
+ledger vs protocol exclusions unchanged, A2 plan alias NOT a full FREEZE ACK.
+All303 selected owner inventory blobs/hook reverified; scoped supplement ACCEPTED
+in evidence sidecar while proposal/frozen bytes stay immutable. No service lease.
+
+C-E2 JsonLinesProcess.exchange_crash implements natural exit86/empty-stderr and
+empty EOF after_intent or one caller-validated response then EOF after_send. Shared
+finite deadline, late extra stdout rejection, exception/cancellation cleanup,
+commitment-only response logging. Synthetic child tests RED14 absent method,
+first GREEN1fail/47pass due token in test -c argv; traced argv not pipe leak,
+fixture moved to file; corrected48pass0. Full bare root435pass/58.38s/exit0,
+100 source inputs stable,15 frozen copies exact. No worker/native recovery,
+actual E2 fault verdict, delivery/power-loss/OS-kill/ABE/consensus claim. No formal
+rerun without changed model. Commands/hashes/versions/fixtures/errors/source
+bracket/acceptance under evaluation/evidence/e2/crash-transport-20261009/README.md.
+Read A1 through0047/A2 through0027; newest provenance scan retained. Guessed-file
+navigation failures are helper errors, not model/research results. Author review
+only: user prohibits extra reviewer agents/worktrees. Rulings in evidence README:
+existing checkout/self-review costs fresh independent review; immutable acceptance
+sidecar costs historical pending prose; bounded transport slice costs full E2
+composition still pending. No deferred material finding.
+
+A3-0034 reports acceptance/transport slice only; normal exact owned-path publication
+and remote SHA/own scheduled+coordinator finally cleanup recorded externally and
+in automation memory. No service/ports/state/grant, peer edits, archive/frozen byte,
+new dependency/custody/paper assumption, extra agent/worktree or prohibited Git.
+Preexisting untracked scheduled-run files preserved unstaged. All56 real catalog
+schedules/gate E NOT_RUN, four paper crash cases BLOCKED/unproved; F/G locked.
+
+Next permitted: full Agent3 public E2 runner/oracles/recovery collection/clock
+probes and full exact source/tool/config/fixture FREEZE/both peer plan ACKs before
+services. Keep E1 reproducible. Real strict/minimal/repaired/mutant/recovery matrix,
+RQ1 report/all3 same-report/source ACKs/gate E precede F. No human action required.

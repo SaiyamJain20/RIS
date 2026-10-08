@@ -53,3 +53,25 @@ E2/E3 waiting on actual E1; F/G locked.
 
 
 C-E2 checkpoint2026-10-09 IST: symbolic full-tuple agreement/positive/denied plus destination-omitting mutant trace executed;421 root tests pass/80 stable inputs. Exact303 offered owner entries source-reviewed; startup supplement r1 A3-0032 awaits both exact scoped ACKs, followed by later full integration FREEZE/ACKs. No service/recovery/fault catalog/gate run. Evidence evaluation/evidence/e2/formal-and-hook-review-20261009/README.md; A3-0033. Owner catalog/window measurements remain owner evidence; no phase promotion.
+
+
+## C-E2 start-contract acceptance and transport slice —2026-10-09
+
+Both scoped startup-supplement ACKs of A3-0032 are now verified: A1-0047
+at af7a60dd650c5d0c9b5d7df1fb5afbde3e30526d /0bde97a0.. and A2-0027
+at 0dbaed2331fd89ce3843625cd44bdc677dd4d490 /0002aa3b.., both accepting
+1ae63cfb2dde803645ef7a84a58151c0b0a842554f79907c94a7dcd74c89f48c.
+Exact headers/message hashes/owner ancestry and all303 selected owner inventory
+blobs rechecked. Scoped supplement ACCEPTED; proposal bytes retained unchanged.
+This is NOT an E2 execution FREEZE/plan ACK. No services or lease.
+
+Agent3 crash-process transport implements bounded empty-EOF/exit86 after_intent
+and one caller-validated response/EOF/exit86 after_send, rejects extra/partial
+frames, wrong exits, stderr and timeouts, and logs response commitments only.
+These checks use real synthetic child pipes; no real worker crash/recovery or
+ledger fault verdict follows. Complete public E2 runner/oracles/configuration and
+a separately published full FREEZE with both exact plan ACKs still precede
+services. All56 integrated catalog schedules/gate E NOT_RUN, four paper crash
+cases BLOCKED/unproved; F/G locked. Exact acceptance, commands and verification:
+evaluation/evidence/e2/crash-transport-20261009/README.md. This current paragraph
+supersedes pending-supplement statements above; E1 evidence stays historical.

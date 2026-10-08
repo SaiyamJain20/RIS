@@ -1,0 +1,497 @@
+FFFFFFFFFFFFFF                                                           [100%]
+=================================== FAILURES ===================================
+_ test_expected_terminal_exit_is_observed_without_token_transcript[after_intent-os._exit(86)-None] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-60/test_expected_terminal_exit_is0')
+point = 'after_intent', program = 'os._exit(86)', want = None
+
+    @pytest.mark.parametrize('point,program,want',[
+        ('after_intent','os._exit(86)',None),
+        ('after_send',"print(json.dumps({'secret':'synthetic-token'}),flush=True)\nos._exit(86)",{'secret':'synthetic-token'}),
+    ])
+    def test_expected_terminal_exit_is_observed_without_token_transcript(tmp_path,point,program,want):
+        calls=[]
+        with child(tmp_path,program) as p:
+>           result=observe(p,point,lambda value:calls.append(value))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_crash_transport.py:33: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+process = <evaluation.processes.JsonLinesProcess object at 0x7f4983b4f4d0>
+point = 'after_intent'
+validator = <function test_expected_terminal_exit_is_observed_without_token_transcript.<locals>.<lambda> at 0x7f4983b93240>
+
+    def observe(process, point, validator=lambda value: None):
+>       assert hasattr(process, 'exchange_crash'), 'C-E2 crash observation transport is missing'
+E       AssertionError: C-E2 crash observation transport is missing
+E       assert False
+E        +  where False = hasattr(<evaluation.processes.JsonLinesProcess object at 0x7f4983b4f4d0>, 'exchange_crash')
+
+evaluation/tests/test_crash_transport.py:22: AssertionError
+_ test_expected_terminal_exit_is_observed_without_token_transcript[after_send-print(json.dumps({'secret':'synthetic-token'}),flush=True)\nos._exit(86)-want1] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-60/test_expected_terminal_exit_is1')
+point = 'after_send'
+program = "print(json.dumps({'secret':'synthetic-token'}),flush=True)\nos._exit(86)"
+want = {'secret': 'synthetic-token'}
+
+    @pytest.mark.parametrize('point,program,want',[
+        ('after_intent','os._exit(86)',None),
+        ('after_send',"print(json.dumps({'secret':'synthetic-token'}),flush=True)\nos._exit(86)",{'secret':'synthetic-token'}),
+    ])
+    def test_expected_terminal_exit_is_observed_without_token_transcript(tmp_path,point,program,want):
+        calls=[]
+        with child(tmp_path,program) as p:
+>           result=observe(p,point,lambda value:calls.append(value))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_crash_transport.py:33: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+process = <evaluation.processes.JsonLinesProcess object at 0x7f4983b7e990>
+point = 'after_send'
+validator = <function test_expected_terminal_exit_is_observed_without_token_transcript.<locals>.<lambda> at 0x7f4983b93b00>
+
+    def observe(process, point, validator=lambda value: None):
+>       assert hasattr(process, 'exchange_crash'), 'C-E2 crash observation transport is missing'
+E       AssertionError: C-E2 crash observation transport is missing
+E       assert False
+E        +  where False = hasattr(<evaluation.processes.JsonLinesProcess object at 0x7f4983b7e990>, 'exchange_crash')
+
+evaluation/tests/test_crash_transport.py:22: AssertionError
+_ test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass[after_intent-os._exit(0)] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-60/test_incomplete_or_wrong_termi0')
+point = 'after_intent', program = 'os._exit(0)'
+
+    @pytest.mark.parametrize('point,program',[
+        ('after_intent','os._exit(0)'),
+        ('after_intent',"sys.stdout.write('{');sys.stdout.flush();os._exit(86)"),
+        ('after_intent',"print('{}',flush=True);os._exit(86)"),
+        ('after_intent',"print('error',file=sys.stderr,flush=True);os._exit(86)"),
+        ('after_send','os._exit(86)'),
+        ('after_send',"print('{}',flush=True);time.sleep(.02);print('{}',flush=True);os._exit(86)"),
+        ('after_send',"print('{bad}',flush=True);os._exit(86)"),
+        ('after_send',"print('{}',flush=True);os._exit(7)"),
+        ('after_send',"print('{}',flush=True);time.sleep(30)"),
+        ('after_intent','time.sleep(30)'),
+    ])
+    def test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass(tmp_path,point,program):
+        p=child(tmp_path,program)
+        with p:
+            started=time.monotonic()
+            with pytest.raises((ValueError,ChildProcessError,TimeoutError)):
+>               observe(p,point)
+
+evaluation/tests/test_crash_transport.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+process = <evaluation.processes.JsonLinesProcess object at 0x7f4983b7ed50>
+point = 'after_intent', validator = <function <lambda> at 0x7f4983b907c0>
+
+    def observe(process, point, validator=lambda value: None):
+>       assert hasattr(process, 'exchange_crash'), 'C-E2 crash observation transport is missing'
+E       AssertionError: C-E2 crash observation transport is missing
+E       assert False
+E        +  where False = hasattr(<evaluation.processes.JsonLinesProcess object at 0x7f4983b7ed50>, 'exchange_crash')
+
+evaluation/tests/test_crash_transport.py:22: AssertionError
+_ test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass[after_intent-sys.stdout.write('{');sys.stdout.flush();os._exit(86)] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-60/test_incomplete_or_wrong_termi1')
+point = 'after_intent'
+program = "sys.stdout.write('{');sys.stdout.flush();os._exit(86)"
+
+    @pytest.mark.parametrize('point,program',[
+        ('after_intent','os._exit(0)'),
+        ('after_intent',"sys.stdout.write('{');sys.stdout.flush();os._exit(86)"),
+        ('after_intent',"print('{}',flush=True);os._exit(86)"),
+        ('after_intent',"print('error',file=sys.stderr,flush=True);os._exit(86)"),
+        ('after_send','os._exit(86)'),
+        ('after_send',"print('{}',flush=True);time.sleep(.02);print('{}',flush=True);os._exit(86)"),
+        ('after_send',"print('{bad}',flush=True);os._exit(86)"),
+        ('after_send',"print('{}',flush=True);os._exit(7)"),
+        ('after_send',"print('{}',flush=True);time.sleep(30)"),
+        ('after_intent','time.sleep(30)'),
+    ])
+    def test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass(tmp_path,point,program):
+        p=child(tmp_path,program)
+        with p:
+            started=time.monotonic()
+            with pytest.raises((ValueError,ChildProcessError,TimeoutError)):
+>               observe(p,point)
+
+evaluation/tests/test_crash_transport.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+process = <evaluation.processes.JsonLinesProcess object at 0x7f4983b42d70>
+point = 'after_intent', validator = <function <lambda> at 0x7f4983b907c0>
+
+    def observe(process, point, validator=lambda value: None):
+>       assert hasattr(process, 'exchange_crash'), 'C-E2 crash observation transport is missing'
+E       AssertionError: C-E2 crash observation transport is missing
+E       assert False
+E        +  where False = hasattr(<evaluation.processes.JsonLinesProcess object at 0x7f4983b42d70>, 'exchange_crash')
+
+evaluation/tests/test_crash_transport.py:22: AssertionError
+_ test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass[after_intent-print('{}',flush=True);os._exit(86)] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-60/test_incomplete_or_wrong_termi2')
+point = 'after_intent', program = "print('{}',flush=True);os._exit(86)"
+
+    @pytest.mark.parametrize('point,program',[
+        ('after_intent','os._exit(0)'),
+        ('after_intent',"sys.stdout.write('{');sys.stdout.flush();os._exit(86)"),
+        ('after_intent',"print('{}',flush=True);os._exit(86)"),
+        ('after_intent',"print('error',file=sys.stderr,flush=True);os._exit(86)"),
+        ('after_send','os._exit(86)'),
+        ('after_send',"print('{}',flush=True);time.sleep(.02);print('{}',flush=True);os._exit(86)"),
+        ('after_send',"print('{bad}',flush=True);os._exit(86)"),
+        ('after_send',"print('{}',flush=True);os._exit(7)"),
+        ('after_send',"print('{}',flush=True);time.sleep(30)"),
+        ('after_intent','time.sleep(30)'),
+    ])
+    def test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass(tmp_path,point,program):
+        p=child(tmp_path,program)
+        with p:
+            started=time.monotonic()
+            with pytest.raises((ValueError,ChildProcessError,TimeoutError)):
+>               observe(p,point)
+
+evaluation/tests/test_crash_transport.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+process = <evaluation.processes.JsonLinesProcess object at 0x7f4983b43100>
+point = 'after_intent', validator = <function <lambda> at 0x7f4983b907c0>
+
+    def observe(process, point, validator=lambda value: None):
+>       assert hasattr(process, 'exchange_crash'), 'C-E2 crash observation transport is missing'
+E       AssertionError: C-E2 crash observation transport is missing
+E       assert False
+E        +  where False = hasattr(<evaluation.processes.JsonLinesProcess object at 0x7f4983b43100>, 'exchange_crash')
+
+evaluation/tests/test_crash_transport.py:22: AssertionError
+_ test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass[after_intent-print('error',file=sys.stderr,flush=True);os._exit(86)] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-60/test_incomplete_or_wrong_termi3')
+point = 'after_intent'
+program = "print('error',file=sys.stderr,flush=True);os._exit(86)"
+
+    @pytest.mark.parametrize('point,program',[
+        ('after_intent','os._exit(0)'),
+        ('after_intent',"sys.stdout.write('{');sys.stdout.flush();os._exit(86)"),
+        ('after_intent',"print('{}',flush=True);os._exit(86)"),
+        ('after_intent',"print('error',file=sys.stderr,flush=True);os._exit(86)"),
+        ('after_send','os._exit(86)'),
+        ('after_send',"print('{}',flush=True);time.sleep(.02);print('{}',flush=True);os._exit(86)"),
+        ('after_send',"print('{bad}',flush=True);os._exit(86)"),
+        ('after_send',"print('{}',flush=True);os._exit(7)"),
+        ('after_send',"print('{}',flush=True);time.sleep(30)"),
+        ('after_intent','time.sleep(30)'),
+    ])
+    def test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass(tmp_path,point,program):
+        p=child(tmp_path,program)
+        with p:
+            started=time.monotonic()
+            with pytest.raises((ValueError,ChildProcessError,TimeoutError)):
+>               observe(p,point)
+
+evaluation/tests/test_crash_transport.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+process = <evaluation.processes.JsonLinesProcess object at 0x7f49839c2690>
+point = 'after_intent', validator = <function <lambda> at 0x7f4983b907c0>
+
+    def observe(process, point, validator=lambda value: None):
+>       assert hasattr(process, 'exchange_crash'), 'C-E2 crash observation transport is missing'
+E       AssertionError: C-E2 crash observation transport is missing
+E       assert False
+E        +  where False = hasattr(<evaluation.processes.JsonLinesProcess object at 0x7f49839c2690>, 'exchange_crash')
+
+evaluation/tests/test_crash_transport.py:22: AssertionError
+_ test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass[after_send-os._exit(86)] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-60/test_incomplete_or_wrong_termi4')
+point = 'after_send', program = 'os._exit(86)'
+
+    @pytest.mark.parametrize('point,program',[
+        ('after_intent','os._exit(0)'),
+        ('after_intent',"sys.stdout.write('{');sys.stdout.flush();os._exit(86)"),
+        ('after_intent',"print('{}',flush=True);os._exit(86)"),
+        ('after_intent',"print('error',file=sys.stderr,flush=True);os._exit(86)"),
+        ('after_send','os._exit(86)'),
+        ('after_send',"print('{}',flush=True);time.sleep(.02);print('{}',flush=True);os._exit(86)"),
+        ('after_send',"print('{bad}',flush=True);os._exit(86)"),
+        ('after_send',"print('{}',flush=True);os._exit(7)"),
+        ('after_send',"print('{}',flush=True);time.sleep(30)"),
+        ('after_intent','time.sleep(30)'),
+    ])
+    def test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass(tmp_path,point,program):
+        p=child(tmp_path,program)
+        with p:
+            started=time.monotonic()
+            with pytest.raises((ValueError,ChildProcessError,TimeoutError)):
+>               observe(p,point)
+
+evaluation/tests/test_crash_transport.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+process = <evaluation.processes.JsonLinesProcess object at 0x7f4983b8a470>
+point = 'after_send', validator = <function <lambda> at 0x7f4983b907c0>
+
+    def observe(process, point, validator=lambda value: None):
+>       assert hasattr(process, 'exchange_crash'), 'C-E2 crash observation transport is missing'
+E       AssertionError: C-E2 crash observation transport is missing
+E       assert False
+E        +  where False = hasattr(<evaluation.processes.JsonLinesProcess object at 0x7f4983b8a470>, 'exchange_crash')
+
+evaluation/tests/test_crash_transport.py:22: AssertionError
+_ test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass[after_send-print('{}',flush=True);time.sleep(.02);print('{}',flush=True);os._exit(86)] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-60/test_incomplete_or_wrong_termi5')
+point = 'after_send'
+program = "print('{}',flush=True);time.sleep(.02);print('{}',flush=True);os._exit(86)"
+
+    @pytest.mark.parametrize('point,program',[
+        ('after_intent','os._exit(0)'),
+        ('after_intent',"sys.stdout.write('{');sys.stdout.flush();os._exit(86)"),
+        ('after_intent',"print('{}',flush=True);os._exit(86)"),
+        ('after_intent',"print('error',file=sys.stderr,flush=True);os._exit(86)"),
+        ('after_send','os._exit(86)'),
+        ('after_send',"print('{}',flush=True);time.sleep(.02);print('{}',flush=True);os._exit(86)"),
+        ('after_send',"print('{bad}',flush=True);os._exit(86)"),
+        ('after_send',"print('{}',flush=True);os._exit(7)"),
+        ('after_send',"print('{}',flush=True);time.sleep(30)"),
+        ('after_intent','time.sleep(30)'),
+    ])
+    def test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass(tmp_path,point,program):
+        p=child(tmp_path,program)
+        with p:
+            started=time.monotonic()
+            with pytest.raises((ValueError,ChildProcessError,TimeoutError)):
+>               observe(p,point)
+
+evaluation/tests/test_crash_transport.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+process = <evaluation.processes.JsonLinesProcess object at 0x7f4983b8aad0>
+point = 'after_send', validator = <function <lambda> at 0x7f4983b907c0>
+
+    def observe(process, point, validator=lambda value: None):
+>       assert hasattr(process, 'exchange_crash'), 'C-E2 crash observation transport is missing'
+E       AssertionError: C-E2 crash observation transport is missing
+E       assert False
+E        +  where False = hasattr(<evaluation.processes.JsonLinesProcess object at 0x7f4983b8aad0>, 'exchange_crash')
+
+evaluation/tests/test_crash_transport.py:22: AssertionError
+_ test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass[after_send-print('{bad}',flush=True);os._exit(86)] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-60/test_incomplete_or_wrong_termi6')
+point = 'after_send', program = "print('{bad}',flush=True);os._exit(86)"
+
+    @pytest.mark.parametrize('point,program',[
+        ('after_intent','os._exit(0)'),
+        ('after_intent',"sys.stdout.write('{');sys.stdout.flush();os._exit(86)"),
+        ('after_intent',"print('{}',flush=True);os._exit(86)"),
+        ('after_intent',"print('error',file=sys.stderr,flush=True);os._exit(86)"),
+        ('after_send','os._exit(86)'),
+        ('after_send',"print('{}',flush=True);time.sleep(.02);print('{}',flush=True);os._exit(86)"),
+        ('after_send',"print('{bad}',flush=True);os._exit(86)"),
+        ('after_send',"print('{}',flush=True);os._exit(7)"),
+        ('after_send',"print('{}',flush=True);time.sleep(30)"),
+        ('after_intent','time.sleep(30)'),
+    ])
+    def test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass(tmp_path,point,program):
+        p=child(tmp_path,program)
+        with p:
+            started=time.monotonic()
+            with pytest.raises((ValueError,ChildProcessError,TimeoutError)):
+>               observe(p,point)
+
+evaluation/tests/test_crash_transport.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+process = <evaluation.processes.JsonLinesProcess object at 0x7f4983902d50>
+point = 'after_send', validator = <function <lambda> at 0x7f4983b907c0>
+
+    def observe(process, point, validator=lambda value: None):
+>       assert hasattr(process, 'exchange_crash'), 'C-E2 crash observation transport is missing'
+E       AssertionError: C-E2 crash observation transport is missing
+E       assert False
+E        +  where False = hasattr(<evaluation.processes.JsonLinesProcess object at 0x7f4983902d50>, 'exchange_crash')
+
+evaluation/tests/test_crash_transport.py:22: AssertionError
+_ test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass[after_send-print('{}',flush=True);os._exit(7)] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-60/test_incomplete_or_wrong_termi7')
+point = 'after_send', program = "print('{}',flush=True);os._exit(7)"
+
+    @pytest.mark.parametrize('point,program',[
+        ('after_intent','os._exit(0)'),
+        ('after_intent',"sys.stdout.write('{');sys.stdout.flush();os._exit(86)"),
+        ('after_intent',"print('{}',flush=True);os._exit(86)"),
+        ('after_intent',"print('error',file=sys.stderr,flush=True);os._exit(86)"),
+        ('after_send','os._exit(86)'),
+        ('after_send',"print('{}',flush=True);time.sleep(.02);print('{}',flush=True);os._exit(86)"),
+        ('after_send',"print('{bad}',flush=True);os._exit(86)"),
+        ('after_send',"print('{}',flush=True);os._exit(7)"),
+        ('after_send',"print('{}',flush=True);time.sleep(30)"),
+        ('after_intent','time.sleep(30)'),
+    ])
+    def test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass(tmp_path,point,program):
+        p=child(tmp_path,program)
+        with p:
+            started=time.monotonic()
+            with pytest.raises((ValueError,ChildProcessError,TimeoutError)):
+>               observe(p,point)
+
+evaluation/tests/test_crash_transport.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+process = <evaluation.processes.JsonLinesProcess object at 0x7f4983902750>
+point = 'after_send', validator = <function <lambda> at 0x7f4983b907c0>
+
+    def observe(process, point, validator=lambda value: None):
+>       assert hasattr(process, 'exchange_crash'), 'C-E2 crash observation transport is missing'
+E       AssertionError: C-E2 crash observation transport is missing
+E       assert False
+E        +  where False = hasattr(<evaluation.processes.JsonLinesProcess object at 0x7f4983902750>, 'exchange_crash')
+
+evaluation/tests/test_crash_transport.py:22: AssertionError
+_ test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass[after_send-print('{}',flush=True);time.sleep(30)] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-60/test_incomplete_or_wrong_termi8')
+point = 'after_send', program = "print('{}',flush=True);time.sleep(30)"
+
+    @pytest.mark.parametrize('point,program',[
+        ('after_intent','os._exit(0)'),
+        ('after_intent',"sys.stdout.write('{');sys.stdout.flush();os._exit(86)"),
+        ('after_intent',"print('{}',flush=True);os._exit(86)"),
+        ('after_intent',"print('error',file=sys.stderr,flush=True);os._exit(86)"),
+        ('after_send','os._exit(86)'),
+        ('after_send',"print('{}',flush=True);time.sleep(.02);print('{}',flush=True);os._exit(86)"),
+        ('after_send',"print('{bad}',flush=True);os._exit(86)"),
+        ('after_send',"print('{}',flush=True);os._exit(7)"),
+        ('after_send',"print('{}',flush=True);time.sleep(30)"),
+        ('after_intent','time.sleep(30)'),
+    ])
+    def test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass(tmp_path,point,program):
+        p=child(tmp_path,program)
+        with p:
+            started=time.monotonic()
+            with pytest.raises((ValueError,ChildProcessError,TimeoutError)):
+>               observe(p,point)
+
+evaluation/tests/test_crash_transport.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+process = <evaluation.processes.JsonLinesProcess object at 0x7f49839726c0>
+point = 'after_send', validator = <function <lambda> at 0x7f4983b907c0>
+
+    def observe(process, point, validator=lambda value: None):
+>       assert hasattr(process, 'exchange_crash'), 'C-E2 crash observation transport is missing'
+E       AssertionError: C-E2 crash observation transport is missing
+E       assert False
+E        +  where False = hasattr(<evaluation.processes.JsonLinesProcess object at 0x7f49839726c0>, 'exchange_crash')
+
+evaluation/tests/test_crash_transport.py:22: AssertionError
+_ test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass[after_intent-time.sleep(30)] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-60/test_incomplete_or_wrong_termi9')
+point = 'after_intent', program = 'time.sleep(30)'
+
+    @pytest.mark.parametrize('point,program',[
+        ('after_intent','os._exit(0)'),
+        ('after_intent',"sys.stdout.write('{');sys.stdout.flush();os._exit(86)"),
+        ('after_intent',"print('{}',flush=True);os._exit(86)"),
+        ('after_intent',"print('error',file=sys.stderr,flush=True);os._exit(86)"),
+        ('after_send','os._exit(86)'),
+        ('after_send',"print('{}',flush=True);time.sleep(.02);print('{}',flush=True);os._exit(86)"),
+        ('after_send',"print('{bad}',flush=True);os._exit(86)"),
+        ('after_send',"print('{}',flush=True);os._exit(7)"),
+        ('after_send',"print('{}',flush=True);time.sleep(30)"),
+        ('after_intent','time.sleep(30)'),
+    ])
+    def test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass(tmp_path,point,program):
+        p=child(tmp_path,program)
+        with p:
+            started=time.monotonic()
+            with pytest.raises((ValueError,ChildProcessError,TimeoutError)):
+>               observe(p,point)
+
+evaluation/tests/test_crash_transport.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+process = <evaluation.processes.JsonLinesProcess object at 0x7f49839719a0>
+point = 'after_intent', validator = <function <lambda> at 0x7f4983b907c0>
+
+    def observe(process, point, validator=lambda value: None):
+>       assert hasattr(process, 'exchange_crash'), 'C-E2 crash observation transport is missing'
+E       AssertionError: C-E2 crash observation transport is missing
+E       assert False
+E        +  where False = hasattr(<evaluation.processes.JsonLinesProcess object at 0x7f49839719a0>, 'exchange_crash')
+
+evaluation/tests/test_crash_transport.py:22: AssertionError
+_______ test_invalid_point_does_not_send_request_or_poison_usable_stream _______
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-60/test_invalid_point_does_not_se0')
+
+    def test_invalid_point_does_not_send_request_or_poison_usable_stream(tmp_path):
+        with child(tmp_path,'os._exit(86)') as p:
+>           with pytest.raises(ValueError):observe(p,'unknown')
+                                           ^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_crash_transport.py:69: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+process = <evaluation.processes.JsonLinesProcess object at 0x7f49839ce270>
+point = 'unknown', validator = <function <lambda> at 0x7f4983b907c0>
+
+    def observe(process, point, validator=lambda value: None):
+>       assert hasattr(process, 'exchange_crash'), 'C-E2 crash observation transport is missing'
+E       AssertionError: C-E2 crash observation transport is missing
+E       assert False
+E        +  where False = hasattr(<evaluation.processes.JsonLinesProcess object at 0x7f49839ce270>, 'exchange_crash')
+
+evaluation/tests/test_crash_transport.py:22: AssertionError
+_______ test_response_validator_rejection_is_preserved_and_closes_child ________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-60/test_response_validator_reject0')
+
+    def test_response_validator_rejection_is_preserved_and_closes_child(tmp_path):
+        def reject(value):raise ValueError('frozen response rejected')
+        with child(tmp_path,"print('{}',flush=True);os._exit(86)") as p:
+            with pytest.raises(ValueError,match='frozen response rejected'):
+>               observe(p,'after_send',reject)
+
+evaluation/tests/test_crash_transport.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+process = <evaluation.processes.JsonLinesProcess object at 0x7f49839ccbb0>
+point = 'after_send'
+validator = <function test_response_validator_rejection_is_preserved_and_closes_child.<locals>.reject at 0x7f49839c98a0>
+
+    def observe(process, point, validator=lambda value: None):
+>       assert hasattr(process, 'exchange_crash'), 'C-E2 crash observation transport is missing'
+E       AssertionError: C-E2 crash observation transport is missing
+E       assert False
+E        +  where False = hasattr(<evaluation.processes.JsonLinesProcess object at 0x7f49839ccbb0>, 'exchange_crash')
+
+evaluation/tests/test_crash_transport.py:22: AssertionError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_crash_transport.py::test_expected_terminal_exit_is_observed_without_token_transcript[after_intent-os._exit(86)-None]
+FAILED evaluation/tests/test_crash_transport.py::test_expected_terminal_exit_is_observed_without_token_transcript[after_send-print(json.dumps({'secret':'synthetic-token'}),flush=True)\nos._exit(86)-want1]
+FAILED evaluation/tests/test_crash_transport.py::test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass[after_intent-os._exit(0)]
+FAILED evaluation/tests/test_crash_transport.py::test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass[after_intent-sys.stdout.write('{');sys.stdout.flush();os._exit(86)]
+FAILED evaluation/tests/test_crash_transport.py::test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass[after_intent-print('{}',flush=True);os._exit(86)]
+FAILED evaluation/tests/test_crash_transport.py::test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass[after_intent-print('error',file=sys.stderr,flush=True);os._exit(86)]
+FAILED evaluation/tests/test_crash_transport.py::test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass[after_send-os._exit(86)]
+FAILED evaluation/tests/test_crash_transport.py::test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass[after_send-print('{}',flush=True);time.sleep(.02);print('{}',flush=True);os._exit(86)]
+FAILED evaluation/tests/test_crash_transport.py::test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass[after_send-print('{bad}',flush=True);os._exit(86)]
+FAILED evaluation/tests/test_crash_transport.py::test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass[after_send-print('{}',flush=True);os._exit(7)]
+FAILED evaluation/tests/test_crash_transport.py::test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass[after_send-print('{}',flush=True);time.sleep(30)]
+FAILED evaluation/tests/test_crash_transport.py::test_incomplete_or_wrong_terminal_observation_is_not_a_crash_pass[after_intent-time.sleep(30)]
+FAILED evaluation/tests/test_crash_transport.py::test_invalid_point_does_not_send_request_or_poison_usable_stream
+FAILED evaluation/tests/test_crash_transport.py::test_response_validator_rejection_is_preserved_and_closes_child
+14 failed in 0.63s

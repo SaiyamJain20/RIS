@@ -156,9 +156,80 @@ class JsonLinesProcess:
             self.stop()
             raise
 
-    def _roundtrip(self, wire):
-        process = self._process
+    def exchange_crash(self, request, *, point, validate_response):
+        """Observe the ACKed TEST-ONLY exit86 boundary, never infer worker state.
+
+        after_intent requires empty stdout; after_send requires one validated
+        frame followed by EOF. The caller must validate the frozen response and
+        independently collect durable worker/native facts. Only digests are saved.
+        No EOF alone, forced termination or ordinary error reply proves a crash.
+        """
+        if point not in ('after_intent', 'after_send') or not callable(validate_response):
+            raise ValueError('Named crash point and response validator required')
+        if self._process is None or self._record['endedAt'] is not None:
+            raise RuntimeError('Owned process is not running')
+        payload = json.dumps(request, allow_nan=False, separators=(',', ':')).encode()
+        if len(payload)+1 > MAX_LINE_BYTES:
+            raise ValueError('Request line exceeds 1 MiB')
+        row = {'startedAt': now(), 'requestSha256': hashlib.sha256(payload).hexdigest(),
+               'responseSha256': None, 'endedAt': None, 'failure': None,
+               'crashPoint': point, 'terminalObserved': False}
+        self._record['exchanges'].append(row)
         deadline = time.monotonic()+self.timeout
+        try:
+            response = self._roundtrip(payload+b'\n', allow_empty_eof=True, deadline=deadline)
+            if point == 'after_intent':
+                if response is not None:
+                    raise ValueError('after_intent emitted a response')
+                result = None
+            else:
+                if response is None:
+                    raise ChildProcessError('after_send omitted its response')
+                result = json.loads(response.decode('utf-8'), object_pairs_hook=_pairs,
+                                    parse_constant=_constant, parse_float=_float)
+                if not isinstance(result, dict):
+                    raise ValueError('Response must be an object')
+                validate_response(result)
+                row['responseSha256'] = hashlib.sha256(response).hexdigest()
+                # A second frame in a later read must also fail. Do not close
+                # stdin: an adapter awaiting another request did not crash.
+                with selectors.DefaultSelector() as selector:
+                    selector.register(self._process.stdout, selectors.EVENT_READ)
+                    while True:
+                        remaining = deadline-time.monotonic()
+                        if remaining <= 0 or not selector.select(remaining):
+                            raise TimeoutError('Crash stdout EOF timed out')
+                        try:
+                            tail = os.read(self._process.stdout.fileno(), 65536)
+                        except BlockingIOError:
+                            continue
+                        if tail:
+                            raise ValueError('Extra adapter stdout after crash response')
+                        break
+            remaining = deadline-time.monotonic()
+            if remaining <= 0:
+                raise TimeoutError('Crash exit timed out')
+            try:
+                code = self._process.wait(timeout=remaining)
+            except subprocess.TimeoutExpired as error:
+                raise TimeoutError('Crash exit timed out') from error
+            if code != 86 or (self.output/'stderr.log').stat().st_size != 0:
+                raise ValueError('Crash requires natural exit86 and empty stderr')
+            row['terminalObserved'] = True
+            row['endedAt'] = now()
+            self.stop()
+            return result
+        except BaseException as error:
+            row['endedAt'] = now()
+            row['failure'] = type(error).__name__
+            self._record['failure'] = type(error).__name__
+            self.stop()
+            raise
+
+    def _roundtrip(self, wire, *, allow_empty_eof=False, deadline=None):
+        process = self._process
+        if deadline is None:
+            deadline = time.monotonic()+self.timeout
         written = 0
         received = bytearray()
         with selectors.DefaultSelector() as selector:
@@ -189,6 +260,8 @@ class JsonLinesProcess:
                         except BlockingIOError:
                             continue
                         if not chunk:
+                            if allow_empty_eof and not received and written == len(wire):
+                                return None
                             raise ChildProcessError('Process exited without a complete response frame')
                         received.extend(chunk)
                         newline = received.find(b'\n')

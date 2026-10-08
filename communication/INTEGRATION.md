@@ -93,3 +93,25 @@ Earlier paragraphs above retain their original checkpoint claims.
 ## C-E2 symbolic/start-contract checkpoint —2026-10-09 IST
 
 C-E2 formal signature slice executed: full user/witness eight-field agreement true; positive path reachable, denied-data path unreachable; destination-omitting deliberate mutant has concrete counterexamples and remaining-field agreement.7 formal/sensitivity checks; final root421 tests0/80 stable inputs. Fixed synthetic names/non-injective/honest-key/witness abstraction; no mutable nonce/trust/recovery/encoding/implementation proof. Evidence evaluation/evidence/e2/formal-and-hook-review-20261009/README.md. All56 real Agent3 fault schedules and gate E remain NOT_RUN; four paper crash cases BLOCKED/unproved; F/G locked. No active service/freeze/lease. Exact offered owner303 blobs checked; A3-0032 both scoped ACKs pending and is not an integration FREEZE. Existing E1 evidence/pins/frozen copies immutable.
+
+
+## C-E2 start-contract acceptance and transport slice —2026-10-09
+
+Both scoped startup-supplement ACKs of A3-0032 are now verified: A1-0047
+at af7a60dd650c5d0c9b5d7df1fb5afbde3e30526d /0bde97a0.. and A2-0027
+at 0dbaed2331fd89ce3843625cd44bdc677dd4d490 /0002aa3b.., both accepting
+1ae63cfb2dde803645ef7a84a58151c0b0a842554f79907c94a7dcd74c89f48c.
+Exact headers/message hashes/owner ancestry and all303 selected owner inventory
+blobs rechecked. Scoped supplement ACCEPTED; proposal bytes retained unchanged.
+This is NOT an E2 execution FREEZE/plan ACK. No services or lease.
+
+Agent3 crash-process transport implements bounded empty-EOF/exit86 after_intent
+and one caller-validated response/EOF/exit86 after_send, rejects extra/partial
+frames, wrong exits, stderr and timeouts, and logs response commitments only.
+These checks use real synthetic child pipes; no real worker crash/recovery or
+ledger fault verdict follows. Complete public E2 runner/oracles/configuration and
+a separately published full FREEZE with both exact plan ACKs still precede
+services. All56 integrated catalog schedules/gate E NOT_RUN, four paper crash
+cases BLOCKED/unproved; F/G locked. Exact acceptance, commands and verification:
+evaluation/evidence/e2/crash-transport-20261009/README.md. This current paragraph
+supersedes pending-supplement statements above; E1 evidence stays historical.
