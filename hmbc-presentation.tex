@@ -1,0 +1,637 @@
+% HMBC paper presentation — Team 17, Research in Information Security
+% Compile with XeLaTeX or LuaLaTeX (Metropolis uses the Fira Sans fonts), e.g.:
+%   tectonic -X compile hmbc-presentation.tex      (or: latexmk -xelatex hmbc-presentation.tex)
+% Figures 1 and 11 are taken from the paper (CC BY 4.0); the other diagrams are redrawn from it.
+% Slides 9-18 cover JANUS (Appl. Sci. 2023), our stack and the E/F/G project status (status as of 2026-10-09).
+\documentclass[aspectratio=169,10pt]{beamer}
+\usetheme[progressbar=frametitle,numbering=fraction,block=fill]{metropolis}
+% Fira Sans Light is Metropolis' regular weight; use SemiBold so bold text stands out.
+\setsansfont[BoldFont={Fira Sans SemiBold},ItalicFont={Fira Sans Light Italic},BoldItalicFont={Fira Sans SemiBold Italic}]{Fira Sans Light}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,fit,shapes.symbols}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{booktabs}
+\usepackage{pifont}
+\usepackage{colortbl}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+% Colours: proxy chain purple and hospital chain green as in the paper's Fig. 1; Metropolis orange as accent.
+\definecolor{pbc}{HTML}{7030A0}
+\definecolor{dbc}{HTML}{548235}
+\definecolor{datagray}{HTML}{6B6B6B}
+\definecolor{accent}{HTML}{EB811B}
+\definecolor{okgreen}{HTML}{2E7D32}
+\definecolor{badred}{HTML}{C62828}
+\newcommand{\cmark}{\textcolor{okgreen}{\ding{51}}}
+\newcommand{\xmark}{\textcolor{badred!80}{\ding{55}}}
+\newcommand{\pmark}{\textcolor{okgreen!80}{(\ding{51})}}
+\newcommand{\src}[1]{{\scriptsize\color{datagray}#1}}
+% Project status shown on slides 11 and 16; updated with each hourly refresh from the agent branches.
+\newcommand{\statusstamp}{9 Oct 2026, 04:42 IST}
+\newcommand{\seqmsg}[5]{\draw[msg, #5] (#1,#3) -- node[lbl, above] {#4} (#2,#3);}
+
+\tikzset{
+  >={Stealth[length=2mm]},
+  box/.style={draw, rounded corners=2pt, align=center, inner sep=3pt, font=\scriptsize, execute at begin node={\hyphenpenalty=10000}},
+  lane/.style={box, minimum width=1.45cm, minimum height=0.5cm, font=\scriptsize\bfseries},
+  msg/.style={->, thick},
+  lbl/.style={font=\scriptsize, fill=white, inner sep=1pt},
+  tile/.style={draw=#1, fill=#1!10, rounded corners=3pt, text width=2.85cm, minimum height=1.5cm, align=center, inner sep=3pt},
+}
+
+\title{A Hierarchical Multi Blockchain for Fine Grained Access to Medical Data}
+\subtitle{Malamas, Kotzanikolaou, Dasaklis \& Burmester \,·\, IEEE Access, vol.~8, 2020}
+\author{Team 17 \,—\, Saiyam \,·\, Hemang \,·\, Eashaan}
+\institute{Research in Information Security \,·\, Paper presentation and project progress}
+\date{}
+\titlegraphic{%
+  \begin{tikzpicture}[remember picture, overlay]
+    \node[anchor=south east, inner sep=0pt] at ([xshift=-0.6cm, yshift=0.55cm]current page.south east)
+      {\includegraphics[height=2.9cm]{figures/fig1-architecture.png}};
+  \end{tikzpicture}}
+\hypersetup{pdftitle={HMBC: A Hierarchical Multi Blockchain for Fine Grained Access to Medical Data (Team 17)}}
+
+\begin{document}
+
+% ---------------------------------------------------------------- 1. Title
+\maketitle
+
+% ---------------------------------------------------------------- 2. Context
+\begin{frame}{Why was this needed?}
+\begin{columns}[c,onlytextwidth]
+\column{0.42\textwidth}
+\centering
+\begin{tikzpicture}
+  \draw[->, thick, datagray] (0,0) -- (4.7,0) node[below left, font=\scriptsize, text=black, align=right] {interoperable access\\across organisations};
+  \draw[->, thick, datagray] (0,0) -- (0,4.3) node[above right, font=\scriptsize, text=black, align=left, xshift=-0.2cm] {privacy, no single trusted party};
+  \draw[dashed, datagray!50] (2.35,0) -- (2.35,4.0);
+  \draw[dashed, datagray!50] (0,2.0) -- (4.5,2.0);
+  \node[box, fill=blue!7, text width=1.8cm] (cloud) at (3.45,0.95) {\textbf{Cloud}\\interoperable, but trust the operator};
+  \node[box, fill=dbc!12, text width=1.8cm] (bc) at (1.15,3.0) {\textbf{Blockchain}\\private \& auditable, but one domain};
+  \node[box, draw=accent, very thick, fill=accent!15, text width=1.5cm] (hmbc) at (3.5,3.0) {\textbf{HMBC goal}\\both};
+  \draw[->, accent, thick, dashed] (cloud) -- (hmbc);
+  \draw[->, accent, thick, dashed] (bc) -- (hmbc);
+\end{tikzpicture}
+
+\column{0.55\textwidth}
+\small
+Hospitals, device makers, insurers and researchers must share medical data, but \alert{they do not trust each other}, and each one manages its own users and credentials.
+
+\begin{itemize}\footnotesize
+  \item \textbf{Cloud:} interoperable, but privacy and the integrity of access records rely on \emph{trusting the cloud operator}.
+  \item \textbf{Blockchain:} tamper-evident and decentralised, but mostly single-domain, with fixed queries and static membership.
+\end{itemize}
+
+\begin{alertblock}{Running example}
+\footnotesize An emergency doctor from Hospital~X needs the history of a patient whose records sit at Hospital~Y, but \emph{only while on duty}. The access must be revocable and logged.
+\end{alertblock}
+\end{columns}
+\note{Paper §I and §I-B: cloud solutions are interoperable but make strong trust assumptions; blockchain solutions are private but not interoperable across untrusting stakeholders. HMBC aims for both.}
+\end{frame}
+
+% ---------------------------------------------------------------- 3. Requirements and positioning
+\begin{frame}{Requirements and how prior work compares}
+\begin{columns}[T,onlytextwidth]
+\column{0.44\textwidth}
+\footnotesize
+\textbf{Five requirements} \src{(§I-A)}
+\begin{enumerate}
+  \item \textbf{Decentralised trust:} no global root CA; each organisation manages its own credentials and can join or leave.
+  \item \textbf{Fine-grained, temporal access:} per role and domain, time-limited and revocable.
+  \item \textbf{Efficient, private encryption:} owners encrypt with ABE; light decryption; cheap revocation.
+  \item \textbf{Decentralised policies:} smart contracts enforce the agreed policy.
+  \item \textbf{Tailored forensics:} every request and every access is logged globally.
+\end{enumerate}
+
+\column{0.53\textwidth}
+\centering
+\footnotesize\textbf{Authors' comparison} \src{(subset of their Table 1)}\\[0.5em]
+\setlength{\tabcolsep}{3pt}
+\scriptsize
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+Scheme & Revoc. & Distr.\ & Fine- & Foren- & Adapt- \\
+       &        & trust   & grained & sics & able \\
+\midrule
+CP-ABE \src{[35]}           & \xmark & \xmark & \cmark & \xmark & \xmark \\
+CP-ABE + DMA-ABS \src{[38]} & \xmark & \xmark & \cmark & \pmark & \xmark \\
+MA KP-ABE \src{[39]}        & \xmark & \pmark & \cmark & \xmark & \cmark \\
+KP- + CP-ABE \src{[42]}     & \cmark & \pmark & \cmark & \xmark & \xmark \\
+PECS \src{[31]}             & \cmark & \xmark & \xmark & \xmark & \cmark \\
+\midrule
+\textbf{HMBC} (MA CP-ABE)   & \cmark & \cmark & \cmark & \cmark & \cmark \\
+\bottomrule
+\end{tabular}\\[0.6em]
+\raggedright\tiny\color{datagray}
+(\ding{51}) partial, per the authors' footnotes. In the authors' own assessment of 11 schemes, none before HMBC covers more than 3 of the 5 properties.
+\end{columns}
+\note{The requirements are the paper's own; the table is the authors' self-assessment, not an independent evaluation.}
+\end{frame}
+
+% ---------------------------------------------------------------- 4. Architecture
+\begin{frame}{Architecture: a hierarchy of blockchains}
+\begin{columns}[T,onlytextwidth]
+\column{0.56\textwidth}
+\includegraphics[width=\linewidth]{figures/fig1-architecture.png}\\[-0.1em]
+\src{Paper Fig.~1 (CC BY 4.0)}
+
+\column{0.41\textwidth}
+\footnotesize
+\begin{itemize}
+  \item \textbf{User layer:} one API for people and medical devices.
+  \item \textbf{\textcolor{pbc}{Proxy blockchain (PBC)}:} run by \emph{all} stakeholders. It is the single entry point and handles registration, trust lists and the global log.
+  \item \textbf{\textcolor{dbc}{Domain blockchains (DBC)}:} one per domain (hospitals, manufacturers, insurers). Each enforces its domain's policy and never talks to users directly.
+  \item \textbf{Data layer:} owners keep their data off-chain, ABE-encrypted.
+\end{itemize}
+\end{columns}
+
+\vspace{0.3em}
+\centering
+\begin{tikzpicture}[sc/.style={box, minimum height=0.6cm, text width=1.7cm}]
+  \node[font=\scriptsize\bfseries, text=pbc] at (-1.25,0) {PBC};
+  \node[sc, draw=pbc, fill=pbc!10] at (0,0)    {\textbf{RSC}\\registration};
+  \node[sc, draw=pbc, fill=pbc!10] at (2.0,0)  {\textbf{TMSC}\\trust lists};
+  \node[sc, draw=pbc, fill=pbc!10] at (4.0,0)  {\textbf{PSC}\\proxy / entry};
+  \node[sc, draw=pbc, fill=pbc!10] at (6.0,0)  {\textbf{LSC}\\global log};
+  \node[sc, draw=dbc, fill=dbc!12] at (8.5,0)  {\textbf{ACSC}\\access policy};
+  \node[sc, draw=dbc, fill=dbc!12] at (10.5,0) {\textbf{KSSC}\\key store};
+  \node[font=\scriptsize\bfseries, text=dbc] at (11.75,0) {DBC};
+\end{tikzpicture}\\[0.2em]
+{\scriptsize Each stakeholder runs one PBC node and one DBC node; all chains are permissioned and use Proof-of-Stake.}
+\note{Six smart contracts: four on the proxy chain (RSC, TMSC, PSC, LSC) and two on each domain chain (ACSC, KSSC).}
+\end{frame}
+
+% ---------------------------------------------------------------- 5. Trust and temporal roles
+\begin{frame}{Trust management and temporal roles}
+\begin{columns}[T,onlytextwidth]
+\column{0.57\textwidth}
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, org/.style={box, fill=gray!8, text width=2.2cm}]
+  \node[org] (hy) at (0.9,3.9) {\textbf{Hospital Y}\\own CA + ABE authority};
+  \node[org] (hx) at (4.9,3.9) {\textbf{Hospital X}\\own CA + ABE authority};
+  \node[box, fill=blue!6, text width=2.35cm] (ua) at (1.3,2.1) {\textbf{User A} (GID$_A$)\\certs: Doctor (X),\\Researcher (Y)\\holds both long-term keys};
+  \node[box, draw=dbc, fill=dbc!12, text width=2.1cm] (ks) at (5.15,2.1) {\textbf{KSSC} (DBC)\\holds the\\onDuty(X) key,\\\emph{never given to A}};
+  \node[box, draw=pbc, fill=pbc!8, text width=7.3cm] (pb) at (3.0,-0.1) {\textbf{\textcolor{pbc}{Proxy blockchain (TMSC)}}\\stores each hospital's root CERT, CRL and TempACL\\e.g.\ TempACL$_X$ entry: (GID$_A$, onDuty, 08:00–20:00)};
+  \coordinate (L) at (-0.75,0);
+  \coordinate (R) at (6.75,0);
+  \draw[->, thick] (hy.south) -- node[lbl, left] {cert + key} (hy.south |- ua.north);
+  \draw[->, thick] (hx.south west) -- node[lbl, above, sloped] {cert + key} (ua.north east);
+  \draw[->, thick, dbc] (hx.south) -- node[lbl, right] {temporal key} (hx.south |- ks.north);
+  \draw[->, thick, pbc] (hy.west) -| node[lbl, text=pbc, rotate=90, pos=0.75] {publish} (L |- pb.north);
+  \draw[->, thick, pbc] (hx.east) -| node[lbl, text=pbc, rotate=-90, pos=0.75] {publish} (R |- pb.north);
+  \draw[->, thick, dashed] (ua.south) -- node[lbl, right] {present credentials} (ua.south |- pb.north);
+\end{tikzpicture}
+
+\column{0.40\textwidth}
+\footnotesize
+\begin{itemize}
+  \item \textbf{No global root CA:} each stakeholder runs its own CA and its own ABE key authority.
+  \item \textbf{Trust lists on the PBC:} CA-Admins publish CERT, CRL and TempACL; the TMSC checks credentials against the latest lists.
+  \item \textbf{One global ID:} registration (RSC) links a user's certificates, so keys from different authorities combine (Lewko–Waters MA-CP-ABE).
+  \item \textbf{Long-term vs.\ temporal roles:} Doctor sits in the certificate, onDuty in the TempACL. A temporal role counts only together with a long-term one.
+\end{itemize}
+\end{columns}
+\note{Paper §III-C5/C6 and §III-D (Figs. 3 and 4). Adding or removing a stakeholder needs consensus of the CA-Admins. The 08:00–20:00 window is our illustrative example.}
+\end{frame}
+
+% ---------------------------------------------------------------- 6. Access flow
+\begin{frame}{How an access request flows}
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm]
+  \foreach \name/\x/\col in {User/0/black, PSC/2.35/pbc, TMSC/4.7/pbc, ACSC/7.05/dbc, KSSC/9.4/dbc, Database/11.75/datagray} {
+    \node[lane, draw=\col, text=\col, fill=\col!8] at (\x,0) {\name};
+    \draw[\col!55, thick] (\x,-0.27) -- (\x,-5.0);
+  }
+  \node[font=\tiny\bfseries]                at (0,0.45)     {USER};
+  \node[font=\tiny\bfseries, text=pbc]      at (3.525,0.45) {PROXY BLOCKCHAIN};
+  \node[font=\tiny\bfseries, text=dbc]      at (8.225,0.45) {HOSPITAL DOMAIN BLOCKCHAIN};
+  \node[font=\tiny\bfseries, text=datagray] at (11.75,0.45) {DATA};
+  \seqmsg{0}{2.35}{-0.7}{(1) request $\{\mathrm{cert}_A, \mathit{data\_id}\}$}{black}
+  \seqmsg{2.35}{4.7}{-1.15}{(2) verify credentials}{pbc}
+  \seqmsg{4.7}{2.35}{-1.6}{(3) valid + attributes}{pbc}
+  \seqmsg{2.35}{7.05}{-2.05}{(4) $\{\mathrm{GID}, \text{verified attributes}, \mathit{data\_id}\}$}{pbc}
+  \seqmsg{7.05}{9.4}{-2.5}{(5) policy OK}{dbc}
+  \seqmsg{9.4}{11.75}{-2.95}{(6) $\{\mathit{data\_id}\}$}{dbc}
+  \seqmsg{11.75}{9.4}{-3.4}{(7) ciphertext $C$}{datagray}
+  \seqmsg{9.4}{7.05}{-3.85}{(8) partly decrypted $C_1$}{dbc}
+  \seqmsg{7.05}{2.35}{-4.3}{(9) $C_1$ + transaction hash}{dbc}
+  \seqmsg{2.35}{0}{-4.75}{(10) $C_1$}{pbc}
+  \node[font=\scriptsize, text=accent] at (0,-5.25) {user finishes decryption};
+  \node[font=\scriptsize, text=dbc] at (9.4,-5.25) {step 1 of decryption};
+\end{tikzpicture}
+
+\vspace{0.1em}
+\raggedright\footnotesize\textbf{Logging at every hop:} the LSC opens a record at (1) and stores it on the PBC at (10); the ACSC logs on the DBC at (9). $C_1$ is still unreadable without the user's long-term key.
+\note{Redrawn from paper Fig. 6. The TMSC checks CERT, CRL and TempACL at (2). The PSC returns the response to the user encrypted with the user's public key.}
+\end{frame}
+
+% ---------------------------------------------------------------- 7. Two-step decryption
+\begin{frame}{Key idea: split the decryption between the KSSC and the user}
+\begin{columns}[T,onlytextwidth]
+\column{0.53\textwidth}
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm]
+  \node[box, fill=blue!6, text width=2.6cm] (u) at (0,0) {\textbf{User A}\\$K_{\mathrm{GID}_A,\mathrm{Doctor}(X)}$\\$K_{\mathrm{GID}_A,\mathrm{Researcher}(Y)}$};
+  \node[box, draw=dbc, fill=dbc!12, text width=2.4cm] (k) at (4.1,0) {\textbf{KSSC}\\$K_{\mathrm{GID}_A,\mathrm{onDuty}(X)}$};
+  \draw[thick, gray] (u.south) -- (0,-2.55);
+  \draw[thick, dbc!70] (k.south) -- (4.1,-1.45);
+  \draw[->, thick] (5.85,-0.9) -- node[lbl, above] {ciphertext $C$} (4.1,-0.9);
+  \node[box, draw=dbc, fill=white] (s1) at (4.1,-1.5) {\textbf{Step 1:} $C_1 \leftarrow \mathrm{Decr}(C, GP, K_{\mathrm{onDuty}(X)})$};
+  \draw[->, thick, dbc] (s1.south) |- node[lbl, above, pos=0.75] {$C_1$} (0,-2.15);
+  \node[box, fill=white, anchor=west] (s2) at (-1.3,-2.75) {\textbf{Step 2:} $D_\beta = \mathrm{Decr}(C_1, GP, K_{\mathrm{Doctor}(X)})$};
+  \node[box, draw=accent, fill=accent!8, text width=6.5cm, align=left, anchor=north west] at (-1.3,-3.3)
+    {Record $D_\beta$ of patient $\beta$: \;$C \leftarrow \mathrm{Encr}(D_\beta, (\mathcal{A},\rho), GP, \{\mathcal{P}\})$, with policy\\[2pt]
+     \quad(isDoctorAt$(X)$ \textbf{AND} isTreating$(\beta)$) \textbf{OR}\\
+     \quad(isDoctorAt$(*)$ \textbf{AND} onDuty$(*)$)};
+\end{tikzpicture}\\[0.2em]
+\src{Redrawn from paper Fig.~5}
+
+\column{0.44\textwidth}
+\footnotesize
+\textbf{Why split it?}
+\begin{itemize}
+  \item \textbf{Revocation is a list update:} temporal keys never reach users, so when the duty ends the hospital only updates its TempACL. No ABE key is revoked or re-issued.
+  \item \textbf{The KSSC is not fully trusted:} without the long-term keys it cannot decrypt anything alone.
+  \item \textbf{Lighter clients:} the user's device does only the last step.
+  \item \textbf{No bypass:} a ‘System’ role added with AND to every policy forces all access through the KSSC.
+\end{itemize}
+\smallskip
+\scriptsize Implemented by splitting Lewko–Waters MA-CP-ABE decryption (Charm library) into a KSSC step and a user step.
+\end{columns}
+\note{Paper §III-E2 and §V-A4. Only the temporal ABE keys are stored on-chain; their protection relies on the isolation mechanism, and even if leaked they are not enough alone because of the AND policy.}
+\end{frame}
+
+% ---------------------------------------------------------------- 8. Results
+\begin{frame}{Results: prototype performance}
+\scriptsize\textbf{Setup:} private Ethereum (Ganache/Truffle), 6 Solidity contracts, Charm MA-CP-ABE, Docker + Kubernetes; 12-core Ryzen; Proof-of-Stake at $\approx$1000\,tx/s with $\approx$12\,s blocks.
+
+\begin{columns}[T,onlytextwidth]
+\column{0.46\textwidth}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    xbar, bar width=5.5pt, width=6.4cm, height=3.75cm,
+    xmin=0, xmax=170, axis x line*=bottom, axis y line*=left,
+    symbolic y coords={User side,Cache,KSSC,ACSC,LSC,TMSC,PSC},
+    ytick={User side,Cache,KSSC,ACSC,LSC,TMSC,PSC},
+    tick label style={font=\scriptsize}, xlabel style={font=\scriptsize},
+    xlabel={ms per access (100 concurrent requests)},
+    nodes near coords, nodes near coords style={font=\scriptsize},
+    enlarge y limits=0.1, bar shift=0pt,
+    title={\small Mean access time: \textbf{603\,ms}}, title style={yshift=-5pt},
+  ]
+  \addplot[fill=pbc!70, draw=pbc] coordinates {(113,PSC) (98,TMSC) (88,LSC)};
+  \addplot[fill=dbc!70, draw=dbc] coordinates {(96,ACSC) (132,KSSC)};
+  \addplot[fill=datagray!45, draw=datagray] coordinates {(2,Cache) (74,User side)};
+\end{axis}
+\end{tikzpicture}\\
+\src{Paper Table~4: contracts 527\,ms + cache 2\,ms + user 74\,ms}
+
+\column{0.51\textwidth}
+\centering
+\includegraphics[width=0.86\linewidth]{figures/fig11-requests.png}\\
+\src{Paper Fig.~11 (CC BY 4.0)}
+\begin{itemize}\scriptsize
+  \item About 1\,s at 30 concurrent requests, rising to 3–4\,s at 100 (the text says $\approx$3\,s; its own plotted curve reaches $\approx$4\,s).
+  \item Decryption time grows with the number of attributes (Figs.~9–10). Overall it is slightly slower than one-step MA-ABE, but the user's share is smaller.
+\end{itemize}
+\end{columns}
+
+\begin{alertblock}{Security evaluation \src{(§V-A)}: an informal argument, under these assumptions}
+\scriptsize Isolation holds \,·\, honest majority in every chain \,·\, secure crypto \,·\, uncompromised keys \,·\, polynomially bounded adversary. Measured on one machine, without network delays.
+\end{alertblock}
+\note{Table 4 values are exact from the paper. The Fig. 11 discrepancy is between the paper's text and its own chart. The authors note that larger-scale studies are needed.}
+\end{frame}
+
+% ================================================================ PART II: JANUS, our project, stack, E/F/G
+
+% ---------------------------------------------------------------- 9. JANUS: what it adds
+\begin{frame}{JANUS (2023): what it adds on top of HMBC}
+\begin{columns}[T,onlytextwidth]
+\column{0.43\textwidth}
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, jl/.style={box, text width=5.1cm, minimum height=0.52cm}]
+  \node[jl, fill=blue!6]                    (fe) at (0,0)     {\textbf{Electron app} (React UI) + user's Vault};
+  \node[jl, fill=gray!8]                    (fa) at (0,-0.8)  {\textbf{Frontend API} (Node.js) · Fabric CA per stakeholder};
+  \node[jl, draw=pbc, fill=pbc!8]           (pc) at (0,-1.6)  {\textbf{Proxy chain} (Fabric, Raft): PSC · TMSC · LSC};
+  \node[jl, fill=gray!8]                    (ib) at (0,-2.4)  {\textbf{Inter-BC API}: RabbitMQ queues · voting};
+  \node[jl, draw=dbc, fill=dbc!10]          (dc) at (0,-3.2)  {\textbf{Domain chain} (Fabric, Raft): ACSC · KSSC};
+  \node[jl, draw=accent, fill=accent!10]    (va) at (0,-4.0)  {\textbf{Domain Vault + Go ABE plugin} (domain key)};
+  \node[jl, fill=gray!8]                    (db) at (0,-4.8)  {\textbf{Database API}: AES data, ABE-wrapped keys};
+  \foreach \a/\b in {fe/fa,fa/pc,pc/ib,ib/dc,dc/va,va/db} \draw[<->, thick, gray] (\a.south) -- (\b.north);
+  \node[draw, dashed, gray, rounded corners, fit=(fe)(db), inner sep=4pt] (k8s) {};
+  \node[font=\tiny, text=gray, anchor=north] at (k8s.south) {every component runs in its own Kubernetes pod};
+\end{tikzpicture}\\[0.1em]
+\src{Simplified from JANUS Fig.~5}
+
+\column{0.54\textwidth}
+\footnotesize
+Same authors with CENSUS S.A., \emph{Applied Sciences} 13(1):566, 2023.
+\begin{itemize}
+  \item \textbf{Formal model (HMBAC):} sets and relations, with three checks: attribute verification (PBC), authorisation and decryption (DBC).
+  \item \textbf{Open-source system:} Fabric 2.4 + Raft, JavaScript contracts, Kubernetes pods.
+  \item \textbf{Single access point enforced by crypto:} every policy gets an extra AND with a \emph{domain key} that only the KSSC can derive (in Vault). This realises HMBC's ‘System’ role. Records use AES, with MA-ABE only on the AES keys.
+  \item \textbf{Engineering:} RabbitMQ queues with throttling; voting for domains, stakeholders and policies.
+  \item \textbf{Evaluation:} attack trees; 2–300 concurrent requests on cloud servers, with linear growth and no failed requests.
+\end{itemize}
+\end{columns}
+\note{JANUS = Malamas, Palaiologos, Kotzanikolaou, Burmester, Glynos, Appl. Sci. 13(1):566, 2023, doi 10.3390/app13010566. Code: github.com/CENSUS/Janus.}
+\end{frame}
+
+% ---------------------------------------------------------------- 10. JANUS vs HMBC
+\begin{frame}{JANUS vs.\ HMBC: what changed, and why}
+\scriptsize
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}>{\bfseries}L{0.14\textwidth} L{0.26\textwidth} L{0.30\textwidth} L{0.27\textwidth}@{}}
+\toprule
+ & \textbf{HMBC (2020)} & \textbf{JANUS (2023)} & \textbf{Why} \\
+\midrule
+Platform & private Ethereum (Ganache, Truffle), Proof-of-Stake & Hyperledger Fabric 2.4 with Raft ordering & practical permissioned deployment, reproducible artifact \\
+Contracts & 6: RSC, TMSC, PSC, LSC | ACSC, KSSC & 5: no RSC; login via each stakeholder's Fabric CA & identity stays with each stakeholder's CA \\
+KSSC key & temporal-role keys (onDuty), never given to users & a \emph{domain} key derived per GID inside Vault & force every decryption through the system \\
+Temporal roles & enforced by withholding $K_{\mathrm{onDuty}}$ & user holds $K_{\mathrm{doctor}}$ and $K_{\mathrm{onDuty}}$; duty checked online & \emph{our note:} ending a duty then relies on the online check \\
+Key storage & inside the KSSC, behind container isolation & HashiCorp Vault (user side and domain side) & an off-the-shelf secret store \\
+Chain to chain & inter-blockchain API + cache & RabbitMQ queues, prioritisation, throttling & avoid congestion and failures \\
+Governance & “majority consent”, mechanism unspecified & voting manager with elections and thresholds & concrete joins, leaves and policy changes \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.5em}
+\begin{alertblock}{What JANUS itself leaves open}
+\scriptsize Raft tolerates crashes only; Byzantine tolerance is named as future work. Kubernetes/Vault isolation and an honest majority are assumed. No key rotation or epochs are described.
+\end{alertblock}
+\note{The "Why" column follows JANUS's own motivation, except the temporal-roles row, which is our reading of its Section 4.2.3.}
+\end{frame}
+
+% ---------------------------------------------------------------- 11. Our project: RQs
+\begin{frame}{Our project: three research questions, answered in order}
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm,
+    card/.style={draw, rounded corners=3pt, text width=4.0cm, align=left, inner sep=5pt, font=\scriptsize, minimum height=2.45cm, anchor=north},
+    head/.style={rounded corners=3pt, text width=4.0cm, inner sep=5pt, font=\footnotesize\bfseries, text=white, anchor=south}]
+  \foreach \x/\col/\h/\t/\body in {
+      0/accent/{RQ1 · Phase E}/{Authorisation, freshness \& audit}/{Which properties follow from HMBC's access flow, which depend on details the paper leaves out, and which explicit repairs enforce them?},
+      4.6/pbc/{RQ2 · Phase F}/{Byzantine operators}/{With faulty stakeholders, relay or witnesses, which RQ1 guarantees survive, and what quorum and state rules are enough?},
+      9.2/dbc/{RQ3 · Phase G}/{Key lifecycle}/{What confidentiality remains after revocation, joining and a later key compromise, with an explicit epoch lifecycle?}} {
+    \node[card, draw=\col] at (\x,0) {\textbf{\t}\\[2pt]\body};
+    \node[head, fill=\col] at (\x,0) {\h};
+  }
+  % timeline
+  \foreach \i/\lab/\col/\st in {
+      0/{E0 interface frozen}/okgreen/{done},
+      1/{E1 two-chain integration}/okgreen/{done: 9/9},
+      2/{E2 attack catalogue}/accent/{running},
+      3/{E3 report + gate}/datagray/{next},
+      4/{F (after gate E)}/datagray/{locked},
+      5/{G (after gate F)}/datagray/{locked}} {
+    \node[signal, signal to=east, signal from=west, draw=\col, fill=\col!15, text width=1.62cm, align=center, font=\tiny\bfseries, minimum height=0.75cm, inner sep=2pt]
+      at (-1.1+\i*2.22,-3.3) {\lab\\[1pt]{\mdseries\st}};
+  }
+\end{tikzpicture}
+
+\vspace{0.3em}
+\raggedright\scriptsize
+\textbf{Method:} a paper-derived reconstruction (the authors' code is not available). Every case runs in \textbf{paper-strict}, \textbf{paper-minimal} and \textbf{repaired-e} profiles, plus deliberate \textbf{mutants}; each result is labelled SUPPORTED, SPEC\_GAP, REPAIR\_SUPPORTED, REFUTED or BLOCKED.
+\textbf{Team setup:} three modules (ledger, protocol, evaluation) built in parallel on three machines, synchronised through Git and a frozen, hash-pinned interface.\hfill{\color{datagray}Status: \statusstamp}
+\note{Status as of 2026-10-09: E0 closed, E1 complete (9/9 integrated controls), E2 in progress, gate E not yet run, F and G locked until the previous gate passes.}
+\end{frame}
+
+% ---------------------------------------------------------------- 12. Why this direction
+\begin{frame}{Why this direction: HMBC's gaps and the surrounding literature}
+\scriptsize
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{}>{\bfseries}L{0.07\textwidth} L{0.29\textwidth} L{0.32\textwidth} L{0.28\textwidth}@{}}
+\toprule
+ & \textbf{What HMBC leaves open} & \textbf{What the literature covers} & \textbf{Our angle} \\
+\midrule
+\textcolor{accent}{E} & Fig.~6 forwards “verified attributes” to the DBC, and nothing binds the DBC grant to the PBC decision. Trust lists are “the latest” with no versions. Outcomes are logged without DBC evidence. & In general, cross-chain messages need a trusted third party (Zamyatin et al., FC 2021). Typed, domain-separated signatures and nonces are standard practice (EIP-712). & An executable, instance-level analysis of HMBC's own flow: paper vs.\ repaired profiles, mutants, ProVerif. \\
+\textcolor{pbc}{F} & Security assumes an honest majority and isolation; consensus is just “PoS”; one trusted relay/witness path. & BFT ordering for permissioned chains exists (Sousa, Bessani, Vukolić, DSN 2018). JANUS defers Byzantine tolerance to future work. & Not a consensus swap: which E guarantees survive one faulty witness under a 3-of-4 quorum, with a trust matrix and a TLC model. \\
+\textcolor{dbc}{G} & Revocation is gatekeeping only (withheld keys, list updates). There are no key epochs, and cached plaintext stays usable. & Decentralised MA-ABE (Lewko–Waters, EUROCRYPT 2011); outsourced decryption (Green–Hohenberger–Waters, USENIX Security 2011); revocable, forward-secure MA-ABE schemes (e.g.\ Bkakria et al., 2023). & Measure what a mediated, hierarchical design loses on revocation, joining and compromise; an epoch lifecycle with real ABE, not attribute renaming. \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.6em}
+\tiny\color{datagray} Our (non-exhaustive) literature search found no published instance-level security analysis of HMBC or JANUS. The class-level results above exist and are cited, not claimed as ours.
+\end{frame}
+
+% ---------------------------------------------------------------- 13. Tech stack comparison
+\begin{frame}{Tech stack: the paper, JANUS, and ours}
+\scriptsize
+\renewcommand{\arraystretch}{1.18}
+\begin{tabular}{@{}>{\bfseries}L{0.13\textwidth} L{0.24\textwidth} L{0.24\textwidth} >{\columncolor{accent!10}}L{0.33\textwidth}@{}}
+\toprule
+ & \textbf{HMBC paper (2020)} & \textbf{JANUS (2023)} & \textbf{Ours} \\
+\midrule
+Chains & 2 private Ethereum chains (ganache-cli, Truffle) & Hyperledger Fabric 2.4 & 2 local Anvil chains: PBC (id 18545), DBC (id 28545) \\
+Contracts & 6, in Solidity & 5, in JavaScript & 6 in Solidity 0.8.37 + a DecisionVerifier; Foundry 1.8.5 \\
+Consensus & Proof-of-Stake ($\approx$1000\,tx/s) & Raft (crash faults only) & none (local dev chains); F adds a 3-of-4 witness quorum \\
+Chain to chain & inter-blockchain API + cache & Node.js API + RabbitMQ & untrusted Python relay; EIP-712-signed decisions and receipts checked on-chain \\
+ABE & Charm MA-CP-ABE (Python); split decryption simulated & MA-ABE in Go (Vault plugin) + AES & symbolic adapter in E; real Charm / Lewko–Waters only after the G0 gate \\
+Secrets & temporal keys in the KSSC, behind container isolation & HashiCorp Vault & off-chain key worker (SQLite intent/send log); contracts hold no secrets \\
+Deployment & Docker + Kubernetes & Kubernetes pods, Electron/React, Fabric CA & plain processes on laptops; JSON-Schema interface; Git \\
+Evaluation & latency, attribute scaling & attack trees, cloud benchmarks & Forge tests + mutants, Python oracle (pytest), ProVerif 2.05; TLA+/TLC for F/G \\
+\bottomrule
+\end{tabular}
+\note{Python 3.13 with eth-account 0.14, jsonschema 4.26 and pytest 9.0 (uv lockfile) on the off-chain side. Anvil chains run with interval mining (one block per second).}
+\end{frame}
+
+% ---------------------------------------------------------------- 14. Why this stack
+\begin{frame}{Why this stack: what we keep, and what we change}
+\begin{columns}[T,onlytextwidth]
+\column{0.47\textwidth}
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, svc/.style={box, fill=blue!6, text width=1.95cm}]
+  \node[box, draw=pbc, fill=pbc!8, text width=2.45cm] (pbc) at (0,2.1) {\textbf{\textcolor{pbc}{Anvil PBC}} (18545)\\RSC · TMSC · PSC · LSC};
+  \node[box, draw=dbc, fill=dbc!10, text width=2.45cm] (dbc) at (4.5,2.1) {\textbf{\textcolor{dbc}{Anvil DBC}} (28545)\\ACSC · KSSC\\DecisionVerifier};
+  \node[svc, text width=1.6cm] (cl) at (0,3.75) {\textbf{Client}\\signs requests};
+  \node[svc, text width=1.9cm] (wi) at (2.25,3.75) {\textbf{Witness}\\checkpoint, decision, receipt};
+  \node[svc, text width=1.6cm] (re) at (2.25,1.0) {\textbf{Relay}\\(untrusted)};
+  \node[svc, text width=1.7cm] (wo) at (4.5,0.35) {\textbf{Key worker}\\intent log, release};
+  \draw[->, thick] (cl) -- node[lbl, left] {request} (pbc);
+  \draw[->, thick, pbc] (pbc.north) ++(0.6,0) -- node[lbl, left, pos=0.4] {reads} (wi.west);
+  \draw[->, thick, dbc] (wi.east) -- node[lbl, right, pos=0.6] {signs} ($(dbc.north)+(-0.6,0)$);
+  \draw[->, thick] (pbc.south) ++(0.6,0) |- (re.west);
+  \draw[->, thick] (re.east) -| node[lbl, right, pos=0.75] {forwards} ($(dbc.south)+(-0.6,0)$);
+  \draw[->, thick, dbc] ($(dbc.south)+(0.45,0)$) -- node[lbl, right] {grant} ($(wo.north)+(0.45,0)$);
+  \node[box, dashed, draw=gray, fill=gray!5, text width=6.4cm] (ev) at (2.25,-0.85) {\textbf{Evaluator:} runner · independent oracle · JSON-Schema v1 · ProVerif};
+\end{tikzpicture}\\[0.1em]
+\src{Python services (blue) and two Solidity ledgers}
+
+\column{0.50\textwidth}
+\footnotesize
+\textbf{\textcolor{okgreen}{Kept}}
+\begin{itemize}\setlength{\itemsep}{1pt}
+  \item EVM + Solidity, with the paper's six contracts and callers (HMBC's own platform).
+  \item Separate proxy and domain chains.
+  \item Charm's Lewko–Waters MA-CP-ABE for G (the paper's library).
+  \item Secrets off-chain in a key service (JANUS's Vault idea, kept minimal).
+\end{itemize}
+\textbf{\textcolor{badred}{Changed on purpose}}
+\begin{itemize}\setlength{\itemsep}{1pt}
+  \item Foundry/Anvil, not Ganache/Truffle (both sunset in 2023).
+  \item No Fabric, Kubernetes or Vault: we study HMBC2020's design, at laptop scale.
+  \item Untrusted relay: EIP-712-signed requests and decisions, checked on-chain.
+  \item No consensus claims; F studies witness quorums.
+  \item Security evidence, not throughput.
+\end{itemize}
+\end{columns}
+\end{frame}
+
+% ---------------------------------------------------------------- 15. Phase E: what we add
+\begin{frame}{Phase E: what we add (the repaired-e profile)}
+\scriptsize
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{}>{\bfseries}L{0.17\textwidth} L{0.37\textwidth} L{0.42\textwidth}@{}}
+\toprule
+\textbf{Case family} & \textbf{Gap in the paper profiles} & \textbf{What repaired-e adds} \\
+\midrule
+\textcolor{accent}{E01} Decision provenance & The relay's forwarded tuple is not bound to the PBC decision: subject, destination, freshness and replay are unchecked. & A user-signed request and a witness-signed decision (EIP-712, bound to the KSSC and DBC chain), a fixed 13-step verifier, and a single-use \texttt{(gid, nonce)}. \\
+\textcolor{accent}{E02} Trust-anchor freshness & “Latest list” allows a rollback to an older signed CRL/TempACL; nothing stops a decision made before a revocation. & Versioned, expiring trust lists (monotone per authority), plus signed checkpoints (sequence + authEpoch) as a revocation barrier. \\
+\textcolor{accent}{E03} Audit correspondence & An outcome can be logged with no DBC evidence; a crash between release and logging is unspecified. & A witness-signed GrantReceipt is required for an outcome. The worker durably logs intent before sending and re-sends the cached response; delivery is recorded as “unknown”. \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.6em}
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, st/.style={box, text width=1.5cm, minimum height=0.95cm, fill=white}]
+  \foreach \i/\t/\col in {0/{user-signed request}/black, 1/{PBC logs + checks credentials}/pbc, 2/{witness: checkpoint + decision}/blue!60!black, 3/{DBC: 13 checks, nonce used}/dbc, 4/{grant}/dbc, 5/{worker: intent, then send}/blue!60!black, 6/{signed receipt $\to$ outcome}/pbc} {
+    \node[st, draw=\col] (s\i) at (\i*1.95,0) {\t};
+  }
+  \foreach \i [evaluate=\i as \j using int(\i+1)] in {0,...,5} \draw[->, thick, gray] (s\i) -- (s\j);
+\end{tikzpicture}\\[0.3em]
+\scriptsize Compared against \textbf{paper-strict}, \textbf{paper-minimal}, and \textbf{6 mutants}, each removing one repaired check: destination binding, state barrier, record freshness, nonce, version monotonicity, receipt binding.
+\end{frame}
+
+% ---------------------------------------------------------------- 16. Phase E: results so far
+\begin{frame}{Phase E: results so far}
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm]
+  \node[tile=okgreen] at (0,0)     {{\Large\bfseries 9/9}\\[2pt]\parbox{2.8cm}{\centering\scriptsize integrated controls, 2 chains × 3 profiles \src{[I]}}};
+  \node[tile=okgreen] at (3.35,0)  {{\Large\bfseries 56/56}\\[2pt]\parbox{2.8cm}{\centering\scriptsize catalogue cases match the expectation \src{[R]}}};
+  \node[tile=accent]  at (6.7,0)   {{\Large\bfseries 5/6}\\[2pt]\parbox{2.8cm}{\centering\scriptsize live mutants killed (6th by unit test) \src{[R]}}};
+  \node[tile=pbc]     at (10.05,0) {{\Large\bfseries 166 · 7/7}\\[2pt]\parbox{2.8cm}{\centering\scriptsize ledger tests · mutant suites · 17/17 code mutants \src{[U]}}};
+\end{tikzpicture}
+
+\vspace{0.5em}
+\scriptsize
+\renewcommand{\arraystretch}{1.18}
+\begin{tabular}{@{}L{0.35\textwidth} L{0.24\textwidth} L{0.36\textwidth}@{}}
+\toprule
+\textbf{Case (observed)} & \textbf{Paper profiles} & \textbf{repaired-e} \\
+\midrule
+Relay swaps the subject, forges a tuple, replays, or delivers late & granted$^{*}$ (SPEC\_GAP) & rejected: WRONG\_SUBJECT, BAD\_SIGNATURE, REPLAY, EXPIRED \\
+Older signed CRL/TempACL re-installed & accepted: revocation undone & rejected: STALE\_ANCHOR \\
+Revoked on the PBC, decision delivered later & no bound: still grantable 65\,s later & STALE\_STATE once the next checkpoint lands; window $\le$30\,s (next slide) \\
+Outcome reported without DBC evidence & recorded & rejected: needs a witness-signed receipt \\
+Worker crash after intent / after send & recovery not specified (BLOCKED) & same cached response re-sent; one grant, one outcome; delivery “unknown” \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.4em}
+\raggedright\tiny\color{datagray}
+[I] integrated run by the independent evaluator · [R] cross-run by the module owners with unmodified modules · [U] ledger unit tests.
+$^{*}$Under a deviating relay, i.e.\ outside HMBC's isolation assumption: a specification gap, not a break of the paper's own model.
+\textbf{Still to do:} the evaluator's own run of all 56 cases, ProVerif correspondence queries, the RQ1 report and gate~E.\hfill Status: \statusstamp
+\end{frame}
+
+% ---------------------------------------------------------------- 16b. Phase E: revocation window
+\begin{frame}{Phase E: the measured revocation window}
+\begin{columns}[T,onlytextwidth]
+\column{0.50\textwidth}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar, bar width=8pt, width=7.0cm, height=5.0cm,
+    ymin=0, ymax=36, axis x line*=bottom, axis y line*=left,
+    symbolic x coords={0 s,5 s,10 s,20 s,never},
+    xtick=data, enlarge x limits=0.15,
+    xlabel={delay before the DBC accepts a new checkpoint},
+    ylabel={window $W$ (s)},
+    tick label style={font=\scriptsize}, label style={font=\scriptsize},
+    nodes near coords, nodes near coords style={font=\tiny},
+    legend style={font=\tiny, at={(0.02,0.78)}, anchor=north west, draw=none, fill=white},
+    legend cell align=left,
+  ]
+  \addplot[fill=dbc!70, draw=dbc] coordinates {(0 s,2) (5 s,6) (10 s,11) (20 s,21) (never,26)};
+  \addplot[fill=dbc!30, draw=dbc] coordinates {(0 s,2) (5 s,6) (10 s,11) (20 s,21) (never,27)};
+  \draw[dashed, badred, thick] (rel axis cs:0,0.833) -- (rel axis cs:1,0.833) node[pos=0.25, above, font=\tiny, text=badred] {30\,s request TTL cap};
+  \legend{machine A (ledger owner), machine B (protocol owner)}
+\end{axis}
+\end{tikzpicture}\\[0.1em]
+\src{repaired-e, one trial per delay; same runner, two machines \,[R]}
+
+\column{0.47\textwidth}
+\footnotesize
+\textbf{Experiment:} revoke Alice on the PBC at $T_0$, then probe her already-collected decision on the DBC in every block until it is refused.
+\begin{itemize}
+  \item \textbf{repaired-e:} refused in the very block where the DBC accepts the next checkpoint (STALE\_STATE). With no new checkpoint, it is refused at the request's own expiry (EXPIRED).\\[2pt]
+    $W = \min(\text{checkpoint delay}, \text{TTL left}) \le 30$\,s.
+  \item New requests after $T_0$ are refused at the PBC immediately (REVOKED).
+  \item \textbf{paper-strict:} no bound; a tuple forwarded before $T_0$ is still grantable 65\,s later.
+\end{itemize}
+\smallskip
+\scriptsize\color{datagray} $W$ is set by how often checkpoints are accepted, not by a ledger constant. Owner evidence from two machines; 1\,s granularity; not yet the evaluator's run.
+\end{columns}
+\note{A1-0046 (machine A) and A2-0026 (machine B): delays 0/5/10/20 s give W = 2/6/11/21 s on both; with no checkpoint W = 26 s vs 27 s, equal to the TTL left at T0 in each run.}
+\end{frame}
+
+% ---------------------------------------------------------------- 17. Next: F and G
+\begin{frame}{Next: Phase F and Phase G}
+\begin{columns}[T,onlytextwidth]
+\column{0.49\textwidth}
+\textbf{\textcolor{pbc}{F · RQ2: Byzantine operators}}\\[0.3em]
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, w/.style={circle, draw, thick, minimum size=0.62cm, font=\scriptsize\bfseries, inner sep=0pt}]
+  \node[w, draw=pbc, fill=pbc!10] (w1) at (0,0) {W1};
+  \node[w, draw=pbc, fill=pbc!10] (w2) at (1.2,0) {W2};
+  \node[w, draw=pbc, fill=pbc!10] (w3) at (2.4,0) {W3};
+  \node[w, draw=badred, fill=badred!15] (w4) at (3.6,0) {W4};
+  \draw[accent, thick, rounded corners] ($(w1.north west)+(-0.12,0.18)$) rectangle ($(w3.south east)+(0.12,-0.12)$);
+  \draw[dbc, thick, dashed, rounded corners] ($(w2.north west)+(-0.2,0.3)$) rectangle ($(w4.south east)+(0.2,-0.24)$);
+  \node[font=\tiny, text=accent, anchor=south] at ($(w1.north)!0.5!(w3.north)+(0,0.18)$) {quorum A};
+  \node[font=\tiny, text=dbc, anchor=north] at ($(w2.south)!0.5!(w4.south)+(0,-0.24)$) {quorum B};
+\end{tikzpicture}\\[-0.1em]
+{\tiny any two 3-of-4 quorums share $\ge$2 witnesses, so at least one honest when $f=1$}
+
+\raggedright\footnotesize
+\begin{itemize}
+  \item 4 decision witnesses (one per hospital), threshold $q=3$, $f=1$; certificates with distinct signers, a set version and request/state binding.
+  \item Governance certificates bound to action, payload, nonce and expiry.
+  \item Faults: 0/1/2 bad witnesses, equivocation, withholding, stale views.
+  \item TLA+/TLC model, with $f=2$ and weakened-threshold controls.
+\end{itemize}
+
+\column{0.49\textwidth}
+\textbf{\textcolor{dbc}{G · RQ3: key lifecycle}}\\[0.3em]
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, ep/.style={box, text width=1.35cm, minimum height=0.62cm}]
+  \node[ep, draw=dbc, fill=dbc!10] (p) at (0,0) {prepare\\epoch $e{+}1$};
+  \node[ep, draw=dbc, fill=dbc!20] (c) at (2.0,0) {commit\\on-chain};
+  \node[ep, draw=datagray, fill=gray!10] (r) at (4.0,0) {retire\\epoch $e$};
+  \draw[->, thick] (p) -- (c);
+  \draw[->, thick] (c) -- (r);
+\end{tikzpicture}\\[0.15em]
+{\tiny epoch and ciphertext commitments on-chain; no secrets in contracts}
+
+\raggedright\footnotesize
+\begin{itemize}
+  \item \textbf{G0 gate first:} a real MA-CP-ABE adapter (Charm, Lewko–Waters) with actual decryption vectors, and a correct KSSC/user split.
+  \item Secrecy experiments: data after revocation, joining without history, later key compromise, cached outputs.
+  \item Measure real encryption, partial/final decryption and rotation cost.
+  \item If G0 fails: deliver E/F and document the blocker; no symbolic result is passed off as crypto.
+\end{itemize}
+\end{columns}
+
+\vspace{0.3em}
+\centering\scriptsize Gates run in order: \textbf{E} $\to$ \textbf{F} $\to$ \textbf{G}. Each one needs integrated evidence and a review by all three modules before the next starts.
+\end{frame}
+
+% ---------------------------------------------------------------- 18. Close
+\begin{frame}[standout]
+Thank you\\[0.5em]
+{\normalsize Questions?}
+\end{frame}
+
+\end{document}
