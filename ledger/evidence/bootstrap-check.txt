@@ -1,0 +1,33 @@
+Ledger TEST-ONLY bootstrap producer (A1-0029/A1-0030, answer to A3-0024): live check (agent 1, 2026-10-08 ~21:45 IST)
+Toolchain: Foundry v1.8.5 (forge/anvil/cast), solc 0.8.37, Python 3.14.7 (stdlib); schema validation uses jsonschema 4.26.0 in a temp venv.
+Frozen schema: interfaces/v1/hmbc.schema.json at agent-3 f7b8f3f, sha256 4c22092dead0982716d68acf0ad7f4a5a737568e8e2d0c37d06595add36d6fea.
+
+New files: script/BootstrapFixture.s.sol (read-only forge script), tools/bootstrap_fixture.sh (wrapper),
+tools/check_bootstrap.py (runner-style live check), exports/bootstrap/sample-repaired-e.json (one sample output).
+No contract source, test, deploy script or export changed.
+
+Isolated Anvil pair on agent 1's machine: anvil --port 38545 --chain-id 18545 --block-time 1; anvil --port 48545 --chain-id 28545 --block-time 1.
+For p in paper-strict, paper-minimal, repaired-e (fresh deployment each; LEDGER_DEPLOY_FAST=1):
+  DEPLOYER_PK=<anvil key 0> ledger/tools/deploy_local.sh <pbc> <dbc> $p complete-details ev-$p               -> exit 0 (x3)
+  ledger/tools/bootstrap_fixture.sh <pbc> ledger/exports/deployments/ev-$p/deployment.json <out>            -> exit 0 (x3)
+  python3 -I ledger/tools/check_bootstrap.py ledger/exports/deployments/ev-$p/deployment.json <out>          -> exit 0 (x3)
+    The check submits, as the runner would, only with the TEST-ONLY H1/H2-ca-admin and relay keys:
+    H1 RevocationList v1, H1 TemporalAcl v1, H2 RevocationList v1 (TMSC.update*), then RSC.register for alice and bob.
+    Each profile: registered recipientKeyHash alice 0x98d796e3.. and bob 0x5fe346cd.. (A35);
+      alice: TMSC.checkCredentials code=0, records=2, ACSC.evaluate(DATA_P1)=true
+      bob:   TMSC.checkCredentials code=0, records=1, ACSC.evaluate(DATA_P1)=false   (registered, valid Researcher, policy-denied)
+Re-running the producer on ev-repaired-e after publication -> exit 0, list versions ["2","2","2"] (current on-chain version + 1).
+Refusals (non-zero exit, no output file, no stray temp file under ledger/exports):
+  PBC RPC pointed at the DBC                     -> exit 1 "PBC chain id differs from deployment.json"
+  deployment.json with TMSC replaced by RSC      -> exit 1 "RSC is not wired to this TMSC"
+Schema: 4 outputs x 26 leaves = 104 leaves (RevocationList, TemporalAcl, SignedRoleCertificate, Registration,
+  CredentialBundle, Signature, Address, Hash) validated against the frozen $defs (Draft 2020-12, format checker): 0 invalid.
+  Per output, 3 negative controls (uppercase address, Registration without expiresAt, extra field on a bundle): 3/3 rejected.
+Custody: for 14 synthetic labels (H1..H4-root, H1..H4-ca-admin, alice, bob, relay, witness-1, user, worker), the derived
+  private-key hex occurs 0 times in the outputs. The only "privateKey" text is the documented derivation formula in "limits".
+Regression: forge test --root ledger --offline -> exit 0, 166 passed / 0 failed.
+Sample: exports/bootstrap/sample-repaired-e.json is the ev-repaired-e output above (machine-local addresses; its deployment
+  run directory is not kept). The binding (chain id, TMSC/RSC) is enough to recompute every EIP-712 digest and recover the signers.
+Limits: TEST-ONLY synthetic keys and fixture; a local Anvil pair; the runner role is played by check_bootstrap.py, not agent 3's
+  runner; registrations must land before registration.expiresAt (blockTimestamp + 3600). E2 list schedules (rollback,
+  revocation, wrong-issuer) are not covered by this producer yet. The Anvil pair was stopped after the run.
