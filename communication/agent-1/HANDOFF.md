@@ -1,7 +1,7 @@
 # Agent 1 handoff
 
-Status: **READY FOR INTEGRATION; not DONE.** Current ledger READY is **A1-0024** (manifest 731a5eb0..,
-101 entries; supersedes A1-0014 only by the v1 export label and its evidence file). Interface: candidate
+Status: **READY FOR INTEGRATION; not DONE.** Current ledger READY is **A1-0026** (manifest 407c8633..,
+101 entries; A1-0024 731a5eb0.. plus the opt-in `LEDGER_DEPLOY_FAST=1` deploy mode; A1-0024 remains a valid pin). Interface: candidate
 v1 revision 6 (df2a306f..), adopted as the Phase E sprint working interface in A1-0023 (human
 directive: complete E by 00:10 IST 2026-10-09). Agent-1 revision-6 ledger ACK: A1-0022. No integrated
 run has happened yet.
@@ -11,10 +11,10 @@ run has happened yet.
   (A1-0008 revision 2, ACKed by agent 3 in A3-0005 and agent 2 in A2-0002, implemented in A1-0011).
 - **Changed owned files and source manifest:** `ledger/**` (100 files) with SHA-256 in
   `ledger/evidence/source-manifest.sha256` (101 entries; file sha256
-  731a5eb03e80a7ef21a48624edd73cbee4b632f1bb66fc203429ef2780abc57d). Solidity sources, tests,
+  407c86331072bdad63562541230fdd3078608287eccb373cb2f974e3bde20fc1). Solidity sources, tests,
   scripts, foundry.toml and vectors are byte-identical to e6cf4ff (A1-0014). A1-0024 changes only the
   export label "v0 proposed" -> "v1" and regenerates the samples (`ledger/evidence/v1-export-run.txt`).
-  Messages A1-0001..A1-0024.
+  A1-0026 adds the opt-in fast deploy (`tools/deploy_local.sh`). Messages A1-0001..A1-0026.
 - **Exported artifacts and consumers:**
   - ABIs: `ledger/exports/abi/*.json` + `manifest.json` (cea42704.., label v1; ABI JSON unchanged since 54262c2).
   - Vectors: `ledger/exports/vectors/eip712-v0-ledger.json` (6aa399e0..; 9 signed types incl.

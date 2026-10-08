@@ -31,3 +31,16 @@ Negative controls on a copy of sample-repaired-e: interfaceVersion "v2" REJECTED
 
 Limits: machine-local RPC URLs and addresses; a ledger-only smoke that signs inside Forge (TEST-ONLY keys); not the integration run.
 The isolated Anvil chains were stopped after the run.
+
+--- Addendum (A1-0026, 2026-10-08 ~19:35 IST): opt-in fast deploy ---
+Change: tools/deploy_local.sh. LEDGER_DEPLOY_FAST=1 omits forge's --slow on the three Deploy.s.sol stages. Each
+stage broadcasts from the single DEPLOYER_PK sender, so nonce order fixes inclusion order. The default (unset) keeps
+--slow and is unchanged. Empty-array expansion is written to be safe under `set -u` on bash 3.2+.
+Timing on fresh Anvil (--block-time 1): default repaired-e deploy 50.1 s; fast 10.8-16.0 s for each of the 9 profiles.
+Fresh chains, same order as the samples (paper-strict, paper-minimal, repaired-e, mutant-no-receipt-binding), fast mode:
+  deploy exit 0 (x4); e2e_smoke.sh exit 0 (x4); contract addresses EQUAL to the committed (slow-mode) samples (x4).
+Then fast mode on the same chains: mutant-no-destination-binding, -no-state-barrier, -no-record-freshness, -no-nonce,
+-no-version-monotone: deploy exit 0 (x5).
+All 9 fast deployment.json files are VALID against revision-6 $defs/LedgerDeployment (profile/mutations 0,0,0,1,2,4,8,16,32).
+The fast-* run directories were deleted (machine-local); the committed samples are the slow-mode files above, unchanged.
+The smoke (e2e_smoke.sh) keeps --slow because it broadcasts from several senders.

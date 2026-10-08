@@ -11,10 +11,12 @@
 #     log-mode: hash-only | complete-details
 # Output: ledger/exports/deployments/<run-id>/{pbc-stage,dbc-stage,deployment}.json
 # Chain ids default to 18545 (PBC) and 28545 (DBC); override with PBC_CHAIN_ID / DBC_CHAIN_ID.
+# LEDGER_DEPLOY_FAST=1 omits forge's --slow (each stage has one sender, so nonce order fixes
+# inclusion order); the default keeps --slow. Same addresses and state either way (v1-export-run.txt).
 set -euo pipefail
 
 if [ "$#" -ne 5 ]; then
-  sed -n '2,13p' "$0" >&2
+  sed -n '2,15p' "$0" >&2
   exit 2
 fi
 PBC_RPC="$1"; DBC_RPC="$2"; PROFILE_NAME="$3"; LOG_NAME="$4"; RUN_ID="$5"
@@ -39,6 +41,7 @@ case "$RUN_ID" in
 esac
 
 LEDGER="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SLOW=(--slow); [ "${LEDGER_DEPLOY_FAST:-0}" = 1 ] && SLOW=()
 export PBC_CHAIN_ID="${PBC_CHAIN_ID:-18545}" DBC_CHAIN_ID="${DBC_CHAIN_ID:-28545}"
 export PROFILE MUTATIONS LOG_MODE DEPLOYER_PK
 export OUT_DIR="exports/deployments/$RUN_ID"
@@ -49,18 +52,18 @@ field() { python3 -I -c 'import json,sys; print(json.load(open(sys.argv[1]))[sys
 forge build --root "$LEDGER" >/dev/null
 python3 -I "$LEDGER/tools/export_abi.py" >/dev/null
 
-STAGE=pbc forge script "$LEDGER/script/Deploy.s.sol:Deploy" --root "$LEDGER" --rpc-url "$PBC_RPC" --broadcast --slow
+STAGE=pbc forge script "$LEDGER/script/Deploy.s.sol:Deploy" --root "$LEDGER" --rpc-url "$PBC_RPC" --broadcast ${SLOW[@]+"${SLOW[@]}"}
 export PSC LSC TMSC RSC
 PSC="$(field "$LEDGER/$OUT_DIR/pbc-stage.json" psc)"
 LSC="$(field "$LEDGER/$OUT_DIR/pbc-stage.json" lsc)"
 TMSC="$(field "$LEDGER/$OUT_DIR/pbc-stage.json" tmsc)"
 RSC="$(field "$LEDGER/$OUT_DIR/pbc-stage.json" rsc)"
 
-STAGE=dbc forge script "$LEDGER/script/Deploy.s.sol:Deploy" --root "$LEDGER" --rpc-url "$DBC_RPC" --broadcast --slow
+STAGE=dbc forge script "$LEDGER/script/Deploy.s.sol:Deploy" --root "$LEDGER" --rpc-url "$DBC_RPC" --broadcast ${SLOW[@]+"${SLOW[@]}"}
 export KSSC
 KSSC="$(field "$LEDGER/$OUT_DIR/dbc-stage.json" kssc)"
 
-STAGE=finalize forge script "$LEDGER/script/Deploy.s.sol:Deploy" --root "$LEDGER" --rpc-url "$PBC_RPC" --broadcast --slow
+STAGE=finalize forge script "$LEDGER/script/Deploy.s.sol:Deploy" --root "$LEDGER" --rpc-url "$PBC_RPC" --broadcast ${SLOW[@]+"${SLOW[@]}"}
 
 python3 -I "$LEDGER/tools/make_manifest.py" "$LEDGER/$OUT_DIR" "$PROFILE_NAME" "$LOG_NAME" \
   "$PBC_CHAIN_ID" "$DBC_CHAIN_ID" "$PBC_RPC" "$DBC_RPC"
