@@ -104,13 +104,24 @@ class Worker:
 
     # -- release ------------------------------------------------------------------------------------------------------------
     def _recipient_for(self, g: dict) -> str:
-        """The recipient commitment a release is bound to. repaired-e: the grant's own recipientKeyHash, which must be non-zero and equal the GID's registered key
-        (the PSC enforced that at request time). A paper-profile grant carries none (zero, A24), so this REFUSES: whether and how a paper-mode release binds a
-        recipient is an OPEN decision (X-1, A2-0010/A1-0021). This is the only place that decision touches; tests exercise option (c) by overriding it."""
+        """The recipient commitment a release is bound to.
+
+        repaired-e: the grant's own recipientKeyHash, which must be non-zero and equal the GID's registered key (the PSC enforced that at request time).
+        paper profiles (decision D35 / assumption A38, option (c)): the DBC grant carries NO recipient (zero, A24), so the response is bound to the key the grant's
+        GID registered on the PBC, RSC.recipientKeyHash(grant.gid): a symbolic reconstruction of HMBC III-D3 (the PSC returns the response encrypted to the user's key),
+        NOT real encryption. The GID is relay-asserted in the paper tuple, so subject substitution binds the response to the substituted subject (a visible SPEC_GAP); a GID
+        with no registered key gets NO release (WRONG_SUBJECT, before any intent). The grant's native zero is never rewritten: only the response/worker record carry the key."""
         led = self.led
-        if int(g["recipientKeyHash"], 16) == 0 or g["recipientKeyHash"] != led.pbc.call(led.RSC, "recipientKeyHash", g["gid"]):
-            raise WorkerError("WRONG_SUBJECT", "the grant's recipient key is unbound or differs from the registered one")
-        return g["recipientKeyHash"]
+        registered = led.pbc.call(led.RSC, "recipientKeyHash", g["gid"])
+        if led.pbc.call(led.PSC, "profile") == "2":
+            if int(g["recipientKeyHash"], 16) == 0 or g["recipientKeyHash"] != registered:
+                raise WorkerError("WRONG_SUBJECT", "the grant's recipient key is unbound or differs from the registered one")
+            return g["recipientKeyHash"]
+        if int(registered, 16) == 0:
+            raise WorkerError("WRONG_SUBJECT", "the grant's GID has no registered recipient key, so a paper-mode response has no recipient to bind to")
+        if int(g["recipientKeyHash"], 16) != 0:
+            raise WorkerError("WRONG_SUBJECT", "a paper-profile grant is expected to carry no recipient commitment")
+        return registered
 
     def _event(self, kind: str, row: tuple, ts: int) -> None:
         self.db.execute("insert into events(type,request_digest,grant_id,gid,data_id,timestamp) values(?,?,?,?,?,?)",

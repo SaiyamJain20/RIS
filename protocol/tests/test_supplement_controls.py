@@ -179,3 +179,46 @@ def test_nonce_control_mutant_no_nonce_issues_a_second_distinct_grant(world_no_n
     consume_raw(led, b["request"], cb)                                              # accepted: the guard is gone
     second_id = "0x" + eip712.grant_id(bytes.fromhex(b["requestDigest"][2:]), led.KSSC.address, led.dbc.chain_id).hex()
     assert second_id != first and led.dbc.call(led.KSSC, "getGrant", second_id)[5] is True
+
+
+# ------------------------------------------------------------------ revision 6: build the deviating receipt at the HONEST receipt's DBC block --------------------
+
+def test_the_tool_can_build_its_receipt_at_the_honest_receipts_block_so_only_one_field_differs(world, tmp_path):
+    """A3-0018/DELTA: the collector compares the deviating receipt with the honest one field by field. Under interval mining the DBC head moves between the two calls, which
+    would change dbcBlockNumber/dbcBlockHash too; --at-block N pins the tool to the honest receipt's block so exactly the altered field differs."""
+    from support import rpc
+    led, ctx = world
+    signed, grant_id = granted(led, ctx)
+    honest = Witness(led).attest_grant(grant_id)["receipt"]
+    for _ in range(3):
+        rpc(led.dbc.url, "evm_mine")                                               # the head moves on
+    moved = json.loads(tool(tmp_path, led, "receipt", "--grant-id", grant_id, "--field", "gid").stdout)["receipt"]
+    assert moved["dbcBlockNumber"] != honest["dbcBlockNumber"]                     # without the flag the unchanged fields would differ too
+    out = json.loads(tool(tmp_path, led, "receipt", "--grant-id", grant_id, "--field", "gid", "--at-block", honest["dbcBlockNumber"]).stdout)
+    diff = {k for k in honest if honest[k] != out["receipt"][k]}
+    assert diff == {"gid"}                                                         # exactly the altered field
+    assert out["receipt"]["dbcBlockHash"] == honest["dbcBlockHash"]
+
+
+def test_the_tool_refuses_a_block_that_does_not_exist_or_predates_the_grant(world, tmp_path):
+    led, ctx = world
+    before = led.dbc.get_block()["number"]
+    signed, grant_id = granted(led, ctx)
+    for block in (str(before), "99999999", "-1", "x", "1.5", "", "0x5"):
+        p = tool(tmp_path, led, "receipt", "--grant-id", grant_id, "--field", "gid", "--at-block", block)
+        assert p.returncode != 0 and p.stdout == "" and "refusing" in p.stderr, (block, p.stderr)
+
+
+def test_at_block_accepts_only_a_plain_decimal_block_number(world, tmp_path):
+    """int() would accept '+N', ' N' and 'N_n' for a block that DOES hold the grant; only the tool's own format check refuses them (the plain form works)."""
+    led, ctx = world
+    signed, grant_id = granted(led, ctx)
+    n = str(Witness(led).attest_grant(grant_id)["receipt"]["dbcBlockNumber"])
+    assert len(n) >= 2
+    ok = tool(tmp_path, led, "receipt", "--grant-id", grant_id, "--field", "gid", "--at-block", n)
+    assert ok.returncode == 0, ok.stderr
+    for spelled in (f"+{n}", f" {n}", n[:-1] + "_" + n[-1], "0" + n):
+        p = tool(tmp_path, led, "receipt", "--grant-id", grant_id, "--field", "gid", "--at-block", spelled)
+        expect_refused = spelled != "0" + n                                       # leading zeros are plain decimal digits and stay valid
+        assert (p.returncode != 0) == expect_refused, (spelled, p.stderr)
+        assert p.returncode != 0 and "refusing" in p.stderr if expect_refused else p.returncode == 0

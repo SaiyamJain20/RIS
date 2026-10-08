@@ -57,7 +57,7 @@ OPS = {
         "inputFields": {"record": "SymbolicRecord {dataId, owner, payloadDigest}", "policy": "SymbolicPolicy {clauses: PolicyRequirement[][]}", "keyEpoch": "\"0\""},
         "draftResultFields": ["schemaVersion", "adapterMode=symbolic", "dataId", "keyEpoch", "ciphertextDigest", "policyDigest"],
         "errors": ["ADAPTER_UNAVAILABLE", "WRONG_EPOCH", "MALFORMED"],
-        "behaviour": "Symbolic token only. A result asserts modeled decryptability, never ABE confidentiality. Inputs follow candidate revision 4 SymbolicRecord/SymbolicPolicy (SAME_AS_FIRST cannot be a clause's first requirement).",
+        "behaviour": "Symbolic token only. A result asserts modeled decryptability, never ABE confidentiality. Inputs follow the candidate SymbolicRecord/SymbolicPolicy (unchanged since revision 4) (SAME_AS_FIRST cannot be a clause's first requirement).",
     },
     "finish_decryption": {
         "inputFields": {"response": "ReleaseResult", "userKeyRef": "keyref:user:<label>"},
@@ -147,7 +147,7 @@ def build_manifest() -> dict:
         ops.append(entry)
     return {
         "schemaVersion": "hmbc-protocol-adapter/v0",
-        "interfaceVersion": "candidate v1 revision 5 (NOT frozen)",
+        "interfaceVersion": "candidate v1 revision 6 (NOT frozen)",
         "producer": "agent-2 protocol/hmbc_protocol/export.py",
         "adapterMode": adapter.ADAPTER_MODE,
         "supportedAdapterModes": ["symbolic"],

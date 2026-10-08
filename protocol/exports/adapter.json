@@ -1,6 +1,6 @@
 {
   "schemaVersion": "hmbc-protocol-adapter/v0",
-  "interfaceVersion": "candidate v1 revision 5 (NOT frozen)",
+  "interfaceVersion": "candidate v1 revision 6 (NOT frozen)",
   "producer": "agent-2 protocol/hmbc_protocol/export.py",
   "adapterMode": "symbolic",
   "supportedAdapterModes": [
@@ -217,7 +217,7 @@
         "WRONG_EPOCH",
         "MALFORMED"
       ],
-      "behaviour": "Symbolic token only. A result asserts modeled decryptability, never ABE confidentiality. Inputs follow candidate revision 4 SymbolicRecord/SymbolicPolicy (SAME_AS_FIRST cannot be a clause's first requirement).",
+      "behaviour": "Symbolic token only. A result asserts modeled decryptability, never ABE confidentiality. Inputs follow the candidate SymbolicRecord/SymbolicPolicy (unchanged since revision 4) (SAME_AS_FIRST cannot be a clause's first requirement).",
       "draftNote": "CANDIDATE B-E1 code: implemented while E1 is not unlocked and NOT offered for integration or claimed as an E1 result. It needs a configured --state-dir and a reachable loopback ledger (rpcUrl in the deployment manifest); otherwise it answers ADAPTER_UNAVAILABLE. The examples below are generated with no ledger running, so they show the refusal paths only; successful runs are recorded as evidence from live-ledger tests, never invented here."
     },
     {

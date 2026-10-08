@@ -18,7 +18,7 @@ TESTS = {"wire": ["protocol/tests/test_candidate_schema_review.py", "protocol/te
          "witness": ["protocol/tests/test_witness.py", "protocol/tests/test_witness_policy.py", "protocol/tests/test_witness_hardening.py"],
          "worker": ["protocol/tests/test_worker.py", "protocol/tests/test_worker_hardening.py"],
          "chain": ["protocol/tests/test_chain.py", "protocol/tests/test_ledger.py", "protocol/tests/test_edges.py", "protocol/tests/test_chain_hardening.py", "protocol/tests/test_chain_stub.py"], "adapter_live": ["protocol/tests/test_adapter_live.py"],
-         "controls": ["protocol/tests/test_paper_profile.py", "protocol/tests/test_supplement_controls.py"], "eip712": ["protocol/tests/test_eip712_vs_agent1.py"]}
+         "controls": ["protocol/tests/test_paper_profile.py", "protocol/tests/test_paper_release.py", "protocol/tests/test_supplement_controls.py"], "eip712": ["protocol/tests/test_eip712_vs_agent1.py"]}
 
 M = [  # (suite, file, old, new, equivalent-reason or None)
     ("wire", "protocol/hmbc_protocol/wire.py", "    if any(a >= b for a, b in zip(keys, keys[1:])):", "    if False:", None),
@@ -51,7 +51,11 @@ M = [  # (suite, file, old, new, equivalent-reason or None)
     ("worker", "protocol/hmbc_protocol/worker.py", 'if keys.recipient_key_hash(user_key_ref) != issued[3]:', "if False:", None),
     ("worker", "protocol/hmbc_protocol/worker.py", 'if pd != registered:', "if False:", None),
     ("worker", "protocol/hmbc_protocol/worker.py", 'if not g["exists"] or not g["allowed"] or bound != grant_id:', 'if not g["exists"]:', 'unreachable with the real KSSC: every stored grant has allowed=true and grantId is derived from its own requestDigest, so only `exists` can fail'),
-    ("worker", "protocol/hmbc_protocol/worker.py", 'if int(g["recipientKeyHash"], 16) == 0 or g["recipientKeyHash"] != led.pbc.call(led.RSC, "recipientKeyHash", g["gid"]):', "if False:", 'repaired-e PSC already forces request.recipientKeyHash == RSC.recipientKeyHash(gid) and the grant copies it; the zero/mismatch case only arises for paper-profile grants, which the fixture does not deploy'),
+    ("worker", "protocol/hmbc_protocol/worker.py", 'if int(g["recipientKeyHash"], 16) == 0 or g["recipientKeyHash"] != registered:', "if False:", "repaired-e PSC already forces request.recipientKeyHash == RSC.recipientKeyHash(gid) and the grant copies it, so this defensive check cannot fail on a real repaired-e ledger"),
+    ("controls", "protocol/hmbc_protocol/worker.py", 'if int(registered, 16) == 0:', "if False:", None),
+    ("controls", "protocol/hmbc_protocol/worker.py", 'if int(g["recipientKeyHash"], 16) != 0:', "if False:", "unreachable with the real ledger: only the relay-only policyEnf path mints paper grants and it always writes a zero recipient"),
+    ("controls", "protocol/hmbc_protocol/worker.py", 'if led.pbc.call(led.PSC, "profile") == "2":', "if True:", None),
+    ("controls", "protocol/testtools/deviating_witness.py", 'if at_block is not None and not re.fullmatch(r"[0-9]+", at_block):', "if False:", None),
     ("chain", "protocol/hmbc_protocol/chain.py", 'if got != self.chain_id:', "if False:", None),
     ("chain", "protocol/hmbc_protocol/chain.py", 'if tag != "latest" and _hex(tag) > self.block_number():', "if False:", None),
     ("chain", "protocol/hmbc_protocol/chain.py", 'parts.hostname not in ("127.0.0.1", "localhost", "::1")', "False", None),
@@ -105,10 +109,13 @@ def run(files):
 def main(argv):
     out = pathlib.Path(argv[argv.index("--out") + 1]) if "--out" in argv else ROOT / "protocol/evidence/mutation-check.json"
     only = argv[argv.index("--only") + 1].split(",") if "--only" in argv else None      # restrict to suites, e.g. witness,worker
+    grep = argv[argv.index("--grep") + 1].split("|") if "--grep" in argv else None       # restrict to mutants whose anchor contains any of these substrings
     base_rc, base_line = run(["protocol/tests"])
     results, failed = [], base_rc != 0
     for suite, rel, old, new, equiv in M:
         if only and suite not in only:
+            continue
+        if grep and not any(g in old for g in grep):
             continue
         path = ROOT / rel
         orig = path.read_text()

@@ -63,17 +63,3 @@ def test_paper_grants_carry_a_zero_recipient_and_a_short_lifetime(world_paper):
     assert g["recipientKeyHash"] == "0x" + "00" * 32                                      # the Fig. 6 tuple carries no recipient (A24, S-e)
     now = led.dbc.now()
     assert 0 < int(g["expiresAt"]) - now <= 30
-
-
-def test_MEASURED_exception_the_symbolic_worker_refuses_release_of_a_paper_grant(world_paper, tmp_path):
-    """Characterisation of an OPEN decision (A2-0010 exception X-1), not a claimed property: the candidate worker binds every response to a registered recipient
-    commitment, which a paper grant does not have, so RELEASE steps of the paper catalog cases cannot run on it today."""
-    led, ctx = world_paper
-    signed, grant_id = paper_grant(led, ctx)
-    w = Worker(led, tmp_path / "state", clock=led.dbc.now)
-    from test_worker import P1_POLICY, P1_RECORD
-    w.encrypt_record(P1_RECORD, P1_POLICY, "0")
-    with pytest.raises(WorkerError) as e:
-        w.release(grant_id)
-    assert e.value.code == "WRONG_SUBJECT" and "recipient" in e.value.message
-    assert w.events() == []                                                               # refused before any intent: nothing durable, nothing sent

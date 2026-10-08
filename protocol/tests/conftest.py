@@ -90,6 +90,11 @@ def ledger_chains_paper(tmp_path_factory):
 
 
 @pytest.fixture(scope="session")
+def ledger_chains_paper_minimal(tmp_path_factory):
+    yield from _deploy_profile(tmp_path_factory, "paper-minimal")
+
+
+@pytest.fixture(scope="session")
 def ledger_chains_no_nonce(tmp_path_factory):
     yield from _deploy_profile(tmp_path_factory, "mutant-no-nonce")
 
@@ -159,3 +164,13 @@ def ledger_no_receipt_binding(ledger_chains_no_receipt_binding):
 @pytest.fixture
 def world_no_receipt_binding(ledger_no_receipt_binding):
     return _world(ledger_no_receipt_binding)
+
+
+@pytest.fixture
+def ledger_paper_minimal(ledger_chains_paper_minimal):
+    yield from _isolated(ledger_chains_paper_minimal)
+
+
+@pytest.fixture
+def world_paper_minimal(ledger_paper_minimal):
+    return _world(ledger_paper_minimal)

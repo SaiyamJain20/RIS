@@ -1,9 +1,9 @@
-"""SPIKE (test-only) for agent 1's option (c) on open decision X-1 (A1-0021): in a paper profile the worker binds a release to the requesting GID's REGISTERED
-recipient key, read from the PBC (RSC.recipientKeyHash(grant.gid)), mirroring HMBC III-D3 ("the PSC sends the response to the user, encrypted with the user's public key").
+"""Paper-mode release, option (c) (decision D35 / assumption A38, chosen by agent 3 in A3-0018 after A1-0021/A2-0011).
 
-PRODUCTION CODE DOES NOT DO THIS: hmbc_protocol.worker still refuses paper grants (zero recipient). The decision is agent 3's. This file only MEASURES whether option (c) fits the
-worker's evidence model (events, send-attempt counts, cached token, expiry, completion binding) so agent 1's question can be answered with evidence, via a subclass that
-overrides the single seam `Worker._recipient_for`.
+In a paper profile the DBC grant carries NO recipient (recipientKeyHash 0, A24). The symbolic worker binds the response to the requesting GID's REGISTERED key, read from the
+PBC (RSC.recipientKeyHash(grant.gid)), reconstructing HMBC III-D3 (the PSC sends the response to the user, encrypted with the user's public key) in symbolic mode only: this is not
+real encryption. The GID in the paper tuple is RELAY-ASSERTED, so subject substitution binds the response to the substituted subject (the SPEC_GAP stays visible) and an unregistered
+GID gets a grant but no release. repaired-e behaviour is unchanged (test_worker.py). The paper grant lives 30 s from the policyEnf DBC block: release and retry strictly before it.
 """
 import pytest
 
@@ -17,21 +17,8 @@ from test_worker import P1_POLICY, P1_RECORD
 from test_witness_policy import register_bob
 
 
-class PaperModeWorker(Worker):
-    """Option (c): in a paper deployment the response is bound to RSC.recipientKeyHash(grant.gid); the DBC grant itself carries none (A24)."""
-
-    def _recipient_for(self, g):
-        led = self.led
-        if led.pbc.call(led.PSC, "profile") == "2":
-            return super()._recipient_for(g)                                   # repaired-e is unchanged
-        registered = led.pbc.call(led.RSC, "recipientKeyHash", g["gid"])
-        if int(registered, 16) == 0:
-            raise WorkerError("WRONG_SUBJECT", "the grant's GID has no registered recipient key")
-        return registered
-
-
 def make(led, tmp_path, **kw):
-    return PaperModeWorker(led, tmp_path / "state", clock=led.dbc.now, **kw)
+    return Worker(led, tmp_path / "state", clock=led.dbc.now, **kw)
 
 
 def test_paper_release_bound_to_the_registered_key_fits_the_evidence_model(world_paper, tmp_path):
@@ -111,3 +98,18 @@ def test_an_unregistered_gid_gets_a_grant_but_no_release(world_paper, tmp_path):
     with pytest.raises(WorkerError) as e:
         w.release(grant_id)
     assert e.value.code == "WRONG_SUBJECT" and w.events() == []
+
+
+def test_paper_minimal_binds_and_refuses_the_same_way(world_paper_minimal, tmp_path):
+    """Revision 6 names paper-strict AND paper-minimal. The worker does not depend on which paper profile minted the grant."""
+    led, ctx = world_paper_minimal
+    assert led.pbc.call(led.PSC, "profile") == "1"
+    signed, grant_id = paper_grant(led, ctx)
+    w = make(led, tmp_path)
+    w.encrypt_record(P1_RECORD, P1_POLICY, "0")
+    resp = w.release(grant_id)
+    assert resp["recipientKeyHash"] == keys.recipient_key_hash("keyref:user:alice")
+    assert led.dbc.call(led.KSSC, "grantDetails", grant_id)["recipientKeyHash"] == "0x" + "00" * 32      # the native DBC grant still says zero: never rewritten
+    assert w.finish_decryption(resp, "keyref:user:alice")["decryptable"] is True
+    with pytest.raises(WorkerError):
+        w.finish_decryption(resp, "keyref:user:bob")

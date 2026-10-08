@@ -30,9 +30,9 @@ def test_manifest_lists_all_eight_operations_and_only_symbolic_mode():
 
 
 def test_manifest_names_the_interface_revision_it_was_reviewed_against():
-    """A3-0016: the label was stale (revision 3) after revision 5 was reviewed. Keep it tied to the reviewed candidate, and never to 'frozen'."""
+    """A3-0016/A3-0018: the label must track the reviewed candidate (it was stale at revision 3 once; revision 6 is the current working interface). Keep it tied to the reviewed candidate, and never to 'frozen'."""
     m = json.loads((ROOT / "exports" / "adapter.json").read_text())
-    assert m["interfaceVersion"] == "candidate v1 revision 5 (NOT frozen)"
+    assert m["interfaceVersion"] == "candidate v1 revision 6 (NOT frozen)"
     assert "frozen" not in m["interfaceVersion"].replace("NOT frozen", "")
 
 

@@ -6,10 +6,10 @@
 - Environment: CPython 3.13.15 (uv venv), eth-account 0.14.0, jsonschema 4.26.0, pytest 9.0.2; Foundry 1.8.5 (51a52c59, hashes = toolchain.json pins); solc 0.8.37 via forge.
   Root `uv.lock` NOT used by me (agent 3 reproduced the E0 suite under it, A3-0010). Ledger under test: agent-1 commit 33a7a5d (ledger sources = e6cf4ff / A1-0014).
 - Commands (repo root) and results on agent 2's machine:
-  - `python -m pytest protocol/tests -q -c protocol/pytest.ini --rootdir protocol -p no:cacheprovider` -> exit 0, 1311 passed, 201 skipped (agent-3 ScenarioResult/WorkerExpectation/FileHash
+  - `python -m pytest protocol/tests -q -c protocol/pytest.ini --rootdir protocol -p no:cacheprovider` -> exit 0, 1314 passed, 201 skipped (agent-3 ScenarioResult/WorkerExpectation/FileHash
     cases that are not agent-2 wire types), 0 xfail, ~3.5 min (live tests start/stop their own Anvil pair on free ports). Log: `protocol/evidence/pytest-e0.txt`.
   - `PYTHONPATH=protocol python -m hmbc_protocol.export --check` -> exit 0 (adapter.json + 8 operation examples equal regeneration).
-  - `python protocol/tools/mutation_check.py` (on a scratch copy; edits sources in place) -> 62/69 source-edit mutants detected, 7 documented equivalent survivors, 0 gaps (`protocol/evidence/mutation-check.json`, merged from two runs).
+  - `python protocol/tools/mutation_check.py` (on a scratch copy; edits sources in place) -> 65/73 source-edit mutants detected, 8 documented equivalent survivors, 0 gaps (`protocol/evidence/mutation-check.json`, merged from two runs).
   - `python protocol/tools/crosscheck_schema.py <a3 3e0300a snapshot> --cases protocol/tests/fixtures/boundary-cases-a3-3e0300a.json` -> 7187 mutated inputs, 0 disagreements with agent-3's validator.
   - `python protocol/tools/validate_examples_with_agent3.py <a3 3e0300a snapshot>` -> 16 example cases, 0 disagreements.
 - What is real (candidate, symbolic mode): strict EIP-712/wire layer; ABI codec; chain client (pending-block clock, loopback-only, no redirects/proxies); ledger loader (ABI-hash pinned);
@@ -19,9 +19,11 @@
   independent review disposition `protocol/evidence/independent-review-2026-10-08.md`.
 - What is NOT done / not claimed: no E1 integration run (runner role played by tests); paper-profile cases (no paper deployment made); F/G; real ABE; power-loss durability (crash tests are in-process);
   authentication of the registrant in encrypt_record (first writer wins the payloadDigest; interface-level limit); catalog coverage of the receipt-binding mutant (see A2-0009).
-- Messages sent: A2-0001..A2-0011. Read: A1-0001..A1-0021, A3-0001..A3-0017 (origin/agent-1 8aedd0c, origin/agent-3 bf10823 at last fetch).
+- Messages sent: A2-0001..A2-0012. Read: A1-0001..A1-0024, A3-0001..A3-0018 (origin/agent-1 a172fd3, origin/agent-3 9198a0c at last fetch).
 - A2-0010 additions: export label fixed to revision 5; WRONG_PROFILE for witness operations on paper deployments; paper-strict/mutant fixtures; TEST-ONLY deviating-witness tool (`protocol/testtools`, outside the adapter);
   supplement controls MEASURED (receipt binding on repaired-e vs mutant-no-receipt-binding; same-nonce distinct-digest schedule on repaired-e vs mutant-no-nonce); paper review exceptions X-1 (8 cases need a RELEASE of a zero-recipient paper grant, refused by the worker: OPEN decision) and X-2 (paper subject-substitution wording).
 - Reproduce: clone SaiyamJain20/RIS, checkout agent-2 (needs git objects of agent-1 33a7a5d for the live fixture: `git fetch origin`), Python 3.13 venv + `protocol/requirements.txt`, Foundry 1.8.5 on PATH or `HMBC_FOUNDRY_DIR`, run the commands above.
 
-- A2-0011: option (c) for X-1 (A1-0021) measured as a TEST-ONLY spike (`tests/test_paper_release_option_c_spike.py`, override of the new `Worker._recipient_for` seam). PRODUCTION STILL REFUSES paper grants; the decision is agent-3's.
+- A2-0011/A2-0012: option (c) for X-1 is now PRODUCTION behaviour (`Worker._recipient_for`; agent-3 chose it in D35/A38): paper-mode releases bind to RSC.recipientKeyHash(grant.gid); unregistered GID => no release; native grant recipient stays zero; repaired-e unchanged. Tests: `tests/test_paper_release.py` (paper-strict and paper-minimal).
+- Tool `testtools.deviating_witness` gained `--at-block N`. Export label: candidate v1 revision 6.
+- START CONTRACT: `cd protocol && PYTHONPATH=. python -m hmbc_protocol.adapter --state-dir <new 0700 dir> --deployment <exact deployment.json>`; evidence: `python -m hmbc_protocol.worker_log --state-dir <same dir>`.
