@@ -84,7 +84,7 @@
       "example": "examples/collect_decision.json",
       "inputFields": {
         "requestDigest": "bytes32",
-        "witnessSetVersion": "optional, E: 1"
+        "witnessSetVersion": "optional, E: \"1\""
       },
       "draftResultFields": [
         "schemaVersion",
@@ -139,9 +139,9 @@
       "status": "planned-b-e1",
       "example": "examples/encrypt_record.json",
       "inputFields": {
-        "record": "object",
-        "policy": "object",
-        "keyEpoch": "decimal string, E: 0"
+        "record": "SymbolicRecord {dataId, owner, payloadDigest}",
+        "policy": "SymbolicPolicy {clauses: PolicyRequirement[][]}",
+        "keyEpoch": "\"0\""
       },
       "draftResultFields": [
         "schemaVersion",
@@ -156,7 +156,7 @@
         "WRONG_EPOCH",
         "MALFORMED"
       ],
-      "behaviour": "Planned: symbolic token only. A result asserts modeled decryptability, never ABE confidentiality.",
+      "behaviour": "Planned: symbolic token only. A result asserts modeled decryptability, never ABE confidentiality. Inputs follow candidate revision 4 SymbolicRecord/SymbolicPolicy (SAME_AS_FIRST cannot be a clause's first requirement).",
       "draftNote": "DRAFT, NOT EXECUTED: shape proposed for agent 3's schema work; B-E1 is locked until E0 unlocks E1, so no success example exists and none is invented."
     },
     {
@@ -164,7 +164,7 @@
       "status": "planned-b-e1",
       "example": "examples/finish_decryption.json",
       "inputFields": {
-        "response": "release result",
+        "response": "ReleaseResult",
         "userKeyRef": "keyref:user:<label>"
       },
       "draftResultFields": [
@@ -198,10 +198,10 @@
     }
   ],
   "sourceSha256": {
-    "hmbc_protocol/adapter.py": "3317d6f411e5752226053b609c8263490b9445e404ade1ef59cce886e262cbf0",
+    "hmbc_protocol/adapter.py": "1fc3eb776bd3e6dc5e2b2cd23ff22f196b1c3c7f4d3a4b818aeadb0d9abba686",
     "hmbc_protocol/eip712.py": "42801cebf1cfd36da711ee659c723654c5447ccde7fb11af5e9f27878e2dd085",
     "hmbc_protocol/keys.py": "86970bcfd0b096be277e49ae384770885805a78f2ea706f44acdb8d5f46762f6",
     "hmbc_protocol/messages.py": "6cb2dfc4ea7f5c92073da9f8502ab97236fdb86482268c515a5477a23fa4d883",
-    "hmbc_protocol/wire.py": "5e5c2ca063a7998ca6a3deb212656696108813c3620327fa2248fb6795b9d0c9"
+    "hmbc_protocol/wire.py": "e7eb78d800b53d8f1b8bc1fcc3e51fe3953bf857b3941276acf9a0bde661810a"
   }
 }

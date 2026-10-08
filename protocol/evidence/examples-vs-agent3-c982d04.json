@@ -1,0 +1,83 @@
+{
+ "snapshot": "/tmp/claude-1000/-home-manav-Desktop-RIS/0a948378-3989-4248-927a-25118ca89914/scratchpad/a3",
+ "cases": [
+  {
+   "operation": "collect_decision",
+   "case": "well-formed request; B-E1 locked",
+   "a3RequestValid": true,
+   "a3ResponseValid": true,
+   "agent2ResponseCode": "ADAPTER_UNAVAILABLE"
+  },
+  {
+   "operation": "collect_decision",
+   "case": "refused: empty input is MALFORMED, not unavailable",
+   "a3RequestValid": false,
+   "a3ResponseValid": true,
+   "agent2ResponseCode": "MALFORMED"
+  },
+  {
+   "operation": "encrypt_record",
+   "case": "well-formed request; B-E1 locked",
+   "a3RequestValid": true,
+   "a3ResponseValid": true,
+   "agent2ResponseCode": "ADAPTER_UNAVAILABLE"
+  },
+  {
+   "operation": "encrypt_record",
+   "case": "refused: SAME_AS_FIRST as a clause's first requirement",
+   "a3RequestValid": false,
+   "a3ResponseValid": true,
+   "agent2ResponseCode": "MALFORMED"
+  },
+  {
+   "operation": "finish_decryption",
+   "case": "well-formed request; B-E1 locked",
+   "a3RequestValid": true,
+   "a3ResponseValid": true,
+   "agent2ResponseCode": "ADAPTER_UNAVAILABLE"
+  },
+  {
+   "operation": "prepare_request",
+   "case": "success",
+   "a3RequestValid": true,
+   "a3ResponseValid": true,
+   "agent2ResponseCode": null
+  },
+  {
+   "operation": "prepare_request",
+   "case": "refused: gid is not the referenced key's address",
+   "a3RequestValid": true,
+   "a3ResponseValid": true,
+   "agent2ResponseCode": "WRONG_SUBJECT"
+  },
+  {
+   "operation": "prepare_request",
+   "case": "refused: wrong destination KSSC",
+   "a3RequestValid": true,
+   "a3ResponseValid": true,
+   "agent2ResponseCode": "WRONG_DESTINATION"
+  },
+  {
+   "operation": "prepare_request",
+   "case": "refused: JSON number instead of decimal string",
+   "a3RequestValid": false,
+   "a3ResponseValid": true,
+   "agent2ResponseCode": "MALFORMED"
+  },
+  {
+   "operation": "release",
+   "case": "well-formed request; B-E1 locked",
+   "a3RequestValid": true,
+   "a3ResponseValid": true,
+   "agent2ResponseCode": "ADAPTER_UNAVAILABLE"
+  },
+  {
+   "operation": "rotate_epoch",
+   "case": "G-phase op, well-formed request",
+   "a3RequestValid": true,
+   "a3ResponseValid": true,
+   "agent2ResponseCode": "NOT_IMPLEMENTED_IN_PHASE"
+  }
+ ],
+ "disagreements": []
+}

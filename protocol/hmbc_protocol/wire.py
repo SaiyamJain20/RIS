@@ -196,3 +196,214 @@ def validate(name: str, value: Any) -> Any:
     except KeyError:
         raise WireError(f"unknown wire type {name!r}") from None
     return check(value)
+
+
+# --- revision-4 boundary types (A3-0011 / BOUNDARY.md), written from that prose, not from agent 3's schema ------------------
+
+import re as _re
+
+ERROR_CODES = frozenset({
+    "BAD_SIGNATURE", "WRONG_SUBJECT", "WRONG_DESTINATION", "UNKNOWN_AUTHORITY", "STALE_ANCHOR", "STALE_STATE", "EXPIRED",
+    "REPLAY", "POLICY_DENIED", "INSUFFICIENT_QUORUM", "DUPLICATE_SIGNER", "WRONG_EPOCH", "NOT_COMMITTED",
+    "ADAPTER_UNAVAILABLE", "NOT_IMPLEMENTED_IN_PHASE", "UNAUTHORIZED_CALLER", "NOT_REGISTERED", "ALREADY_REGISTERED",
+    "REVOKED", "MALFORMED", "WRONG_PROFILE"})
+_USER_KEY_REF = _re.compile(r"keyref:user:[a-z0-9][a-z0-9-]{0,63}")
+SYMBOLIC_ENVELOPE_KIND = "symbolic-partial/v1"
+
+
+def _const(value: Any, expected: Any, what: str) -> None:
+    if value != expected or type(value) is not type(expected):
+        _fail(f"{what} must be {expected!r}")
+
+
+def user_key_ref(v):
+    if not isinstance(v, str) or not _USER_KEY_REF.fullmatch(v):
+        _fail("key reference must be keyref:user:<label>")
+    return v
+
+
+def symbolic_record(v):
+    return _obj(v, dict(dataId=hash32, owner=address, payloadDigest=hash32), "SymbolicRecord")
+
+
+def policy_requirement(v):
+    _obj(v, dict(role=hash32, kind=lambda x: _enum(x, ("1", "2"), "kind"),
+                 issuerMode=lambda x: _enum(x, ("0", "1", "2"), "issuerMode")), "PolicyRequirement")
+    return v
+
+
+def _enum(x: Any, allowed: tuple, what: str):
+    if not isinstance(x, str) or x not in allowed:
+        _fail(f"{what} must be one of {allowed}")
+    return x
+
+
+def symbolic_policy(v):
+    _obj(v, dict(clauses=lambda c: None), "SymbolicPolicy")
+    clauses = _list(v["clauses"], "clauses")
+    if not clauses:
+        _fail("policy needs at least one clause")
+    for clause in clauses:
+        reqs = _list(clause, "clause")
+        if not reqs:
+            _fail("empty clause")
+        for r in reqs:
+            policy_requirement(r)
+        if reqs[0]["issuerMode"] == "2":      # SAME_AS_FIRST needs an anchor; first requirement of ANY clause (A32, ledger A1-0014)
+            _fail("SAME_AS_FIRST cannot be a clause's first requirement")
+    return v
+
+
+def symbolic_envelope(v):
+    _obj(v, dict(kind=lambda x: _const(x, SYMBOLIC_ENVELOPE_KIND, "kind"), token=hash32), "SymbolicEnvelope")
+    return v
+
+
+def _e_const(expected):
+    return lambda x: _const(x, expected, "value")
+
+
+def release_result(v):
+    return _obj(v, dict(schemaVersion=_e_const("v1"), adapterMode=_e_const("symbolic"), requestDigest=hash32, grantId=hash32,
+                        dataId=hash32, ciphertextDigest=hash32, recipientKeyHash=hash32, keyEpoch=_e_const("0"),
+                        responseEnvelope=symbolic_envelope), "ReleaseResult")
+
+
+def prepare_request_input(v):
+    return _obj(v, dict(request=access_request, signingKeyRef=user_key_ref), "PrepareRequestInput")
+
+
+def collect_decision_input(v):
+    if isinstance(v, dict) and "witnessSetVersion" in v:
+        return _obj(v, dict(requestDigest=hash32, witnessSetVersion=_e_const("1")), "CollectDecisionInput")
+    return _obj(v, dict(requestDigest=hash32), "CollectDecisionInput")
+
+
+def release_input(v):
+    return _obj(v, dict(grantId=hash32), "ReleaseInput")
+
+
+def encrypt_record_input(v):
+    return _obj(v, dict(record=symbolic_record, policy=symbolic_policy, keyEpoch=_e_const("0")), "EncryptRecordInput")
+
+
+def finish_decryption_input(v):
+    return _obj(v, dict(response=release_result, userKeyRef=user_key_ref), "FinishDecryptionInput")
+
+
+def rotate_epoch_input(v):
+    return _obj(v, dict(targetEpoch=U64), "RotateEpochInput")
+
+
+def prepare_request_result(v):
+    return _obj(v, dict(schemaVersion=_e_const("v1"), adapterMode=_e_const("symbolic"), request=access_request,
+                        requestDigest=hash32, signature=signature, signer=address), "PrepareRequestResult")
+
+
+def collect_decision_result(v):
+    def sigs(x):
+        if len(_list(x, "signatures")) != 1:     # E: q = 1 of 1
+            _fail("E carries exactly one witness signature")
+        for s in x:
+            signature(s)
+    _obj(v, dict(schemaVersion=_e_const("v1"), adapterMode=_e_const("symbolic"), decision=access_decision,
+                 signatures=sigs, credentialRecords=credential_records), "CollectDecisionResult")
+    return v
+
+
+def encrypt_record_result(v):
+    return _obj(v, dict(schemaVersion=_e_const("v1"), adapterMode=_e_const("symbolic"), dataId=hash32,
+                        keyEpoch=_e_const("0"), ciphertextDigest=hash32, policyDigest=hash32), "EncryptRecordResult")
+
+
+def finish_decryption_result(v):
+    def boolean(x):
+        if not isinstance(x, bool):
+            _fail("decryptable must be a JSON boolean")
+    return _obj(v, dict(schemaVersion=_e_const("v1"), adapterMode=_e_const("symbolic"), decryptable=boolean,
+                        dataId=hash32, ciphertextDigest=hash32), "FinishDecryptionResult")
+
+
+def error_obj(v):
+    _obj(v, dict(code=lambda c: _enum(c, tuple(ERROR_CODES), "code"), message=lambda m: None if isinstance(m, str) else _fail("message must be a string")), "Error")
+    return v
+
+
+INPUTS = {"prepare_request": prepare_request_input, "collect_decision": collect_decision_input, "release": release_input,
+          "encrypt_record": encrypt_record_input, "finish_decryption": finish_decryption_input, "rotate_epoch": rotate_epoch_input}
+RESULTS = {"prepare_request": prepare_request_result, "collect_decision": collect_decision_result,
+           "release": release_result, "encrypt_record": encrypt_record_result, "finish_decryption": finish_decryption_result}
+
+
+def adapter_request(v, deployment_check: Callable[[Any], Any] | None = None):
+    """Envelope + operation-selected closed input. The deployment is only checked by `deployment_check` (agent 3's/agent 1's schema)."""
+    _obj(v, dict(schemaVersion=_e_const("v1"), operation=lambda o: _enum(o, tuple(INPUTS), "operation"),
+                 input=lambda i: None, deploymentManifest=deployment_check or (lambda d: None if isinstance(d, dict) else _fail("deploymentManifest must be an object"))),
+         "AdapterRequest")
+    INPUTS[v["operation"]](v["input"])
+    return v
+
+
+def adapter_response(v, operation: str | None = None):
+    """Generic response when `operation` is None (any of the five results); bound to the pending operation otherwise."""
+    if not isinstance(v, dict) or set(v) != {"schemaVersion", "ok", "result", "error"}:
+        _fail("response must have exactly schemaVersion, ok, result, error")
+    _const(v["schemaVersion"], "v1", "schemaVersion")
+    if v["ok"] is True:
+        if v["error"] is not None:
+            _fail("success must have a null error")
+        if operation == "rotate_epoch":
+            _fail("rotate_epoch has no success result in E")
+        if operation is not None:
+            RESULTS[operation](v["result"])
+        else:
+            for check in RESULTS.values():
+                try:
+                    check(v["result"])
+                    break
+                except WireError:
+                    continue
+            else:
+                _fail("result matches none of the five closed E results")
+    elif v["ok"] is False:
+        if v["result"] is not None:
+            _fail("failure must have a null result")
+        error_obj(v["error"])
+    else:
+        _fail("ok must be a boolean")
+    return v
+
+
+OBSERVED_EVENT_FIELDS = {
+    "REQUEST_LOGGED": dict(requestDigest=hash32, timestamp=U64),
+    "PBC_DECIDED": dict(requestDigest=hash32, timestamp=U64),
+    "DBC_AUTHORIZED": dict(requestDigest=hash32, timestamp=U64, grantId=hash32, gid=address, dataId=hash32, kssc=address,
+                           destinationChainId=U256, recipientKeyHash=hash32, keyEpoch=_e_const("0")),
+    "RELEASE_INTENT": dict(requestDigest=hash32, timestamp=U64, grantId=hash32, gid=address, dataId=hash32),
+    "RELEASE_SENT": dict(requestDigest=hash32, timestamp=U64, grantId=hash32, gid=address, dataId=hash32),
+    "OUTCOME_RECORDED": dict(requestDigest=hash32, timestamp=U64, grantId=hash32, gid=address, dataId=hash32),
+}
+
+
+def observed_event(v):
+    if not isinstance(v, dict) or v.get("type") not in OBSERVED_EVENT_FIELDS:
+        _fail("unknown observed event type")
+    fields = {"type": lambda t: None, **OBSERVED_EVENT_FIELDS[v["type"]]}
+    return _obj(v, fields, "ObservedEvent")
+
+
+VALIDATORS.update({
+    "UserKeyRef": user_key_ref, "SymbolicRecord": symbolic_record, "PolicyRequirement": policy_requirement,
+    "SymbolicPolicy": symbolic_policy, "SymbolicEnvelope": symbolic_envelope, "ReleaseResult": release_result,
+    "PrepareRequestInput": prepare_request_input, "CollectDecisionInput": collect_decision_input, "ReleaseInput": release_input,
+    "EncryptRecordInput": encrypt_record_input, "FinishDecryptionInput": finish_decryption_input, "RotateEpochInput": rotate_epoch_input,
+    "PrepareRequestResult": prepare_request_result, "CollectDecisionResult": collect_decision_result,
+    "EncryptRecordResult": encrypt_record_result, "FinishDecryptionResult": finish_decryption_result,
+    "AdapterRequest": adapter_request, "AdapterResponse": adapter_response, "ObservedEvent": observed_event,
+    **{f"{n}Request": (lambda v, _op=op: (adapter_request(v), v["operation"] == _op or _fail("operation does not match request type")))
+       for n, op in (("PrepareRequest", "prepare_request"), ("CollectDecision", "collect_decision"), ("Release", "release"),
+                     ("EncryptRecord", "encrypt_record"), ("FinishDecryption", "finish_decryption"), ("RotateEpoch", "rotate_epoch"))},
+    **{f"{n}Response": (lambda v, _op=op: adapter_response(v, _op))
+       for n, op in (("PrepareRequest", "prepare_request"), ("CollectDecision", "collect_decision"), ("Release", "release"),
+                     ("EncryptRecord", "encrypt_record"), ("FinishDecryption", "finish_decryption"), ("RotateEpoch", "rotate_epoch"))},
+})

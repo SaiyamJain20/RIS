@@ -137,6 +137,12 @@ def handle_line(line: str) -> dict:
         if not isinstance(op, str) or op not in OPERATIONS:
             raise AdapterError("MALFORMED", "unknown operation")
         dep = _deployment(req["deploymentManifest"])
+        # Revision 4: every operation's input is a closed, canonical type, validated before dispatch; a bad request is
+        # MALFORMED, never "unavailable". Unbuilt operations only answer ADAPTER_UNAVAILABLE for a well-formed request.
+        try:
+            wire.INPUTS[op](req["input"])
+        except wire.WireError as e:
+            raise AdapterError("MALFORMED", str(e)) from None
         return _response(result=OPERATIONS[op]["handler"](req["input"], dep))
     except AdapterError as e:
         return _response(error=e)

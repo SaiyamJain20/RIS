@@ -106,16 +106,61 @@ def test_input_must_have_exactly_the_documented_fields():
         assert not r["ok"] and r["error"]["code"] == "MALFORMED"
 
 
+H = lambda n: "0x" + format(n, "064x")  # noqa: E731
+CANONICAL_INPUTS = {
+    "collect_decision": {"requestDigest": H(1)},
+    "release": {"grantId": H(2)},
+    "encrypt_record": {"record": {"dataId": H(3), "owner": "0x" + "44" * 20, "payloadDigest": H(5)},
+                       "policy": {"clauses": [[{"role": H(6), "kind": "1", "issuerMode": "0"}, {"role": H(7), "kind": "2", "issuerMode": "2"}]]},
+                       "keyEpoch": "0"},
+    "finish_decryption": {"response": {"schemaVersion": "v1", "adapterMode": "symbolic", "requestDigest": H(1), "grantId": H(2), "dataId": H(3),
+                                       "ciphertextDigest": H(8), "recipientKeyHash": H(9), "keyEpoch": "0",
+                                       "responseEnvelope": {"kind": "symbolic-partial/v1", "token": H(10)}},
+                          "userKeyRef": "keyref:user:alice"},
+    "rotate_epoch": {"targetEpoch": "1"},
+}
+
+
 @pytest.mark.parametrize("op", ["collect_decision", "release", "encrypt_record", "finish_decryption"])
 def test_unbuilt_e_operations_say_unavailable_never_succeed(op):
-    r = call(op=op, inp={})
+    r = call(op=op, inp=CANONICAL_INPUTS[op])
     check_envelope(r)
     assert not r["ok"] and r["error"]["code"] == "ADAPTER_UNAVAILABLE"
 
 
+@pytest.mark.parametrize("op", ["collect_decision", "release", "encrypt_record", "finish_decryption", "rotate_epoch"])
+def test_invalid_input_is_malformed_even_for_unbuilt_operations(op):
+    """Revision 4: a request with an empty/extra-field/noncanonical input is a bad request, not 'unavailable'."""
+    for bad in ({}, {**CANONICAL_INPUTS[op], "privateKey": "0x" + "11" * 32}, [], None):
+        r = call(op=op, inp=bad)
+        assert not r["ok"] and r["error"]["code"] == "MALFORMED", (op, bad)
+    first = next(iter(CANONICAL_INPUTS[op]))
+    if isinstance(CANONICAL_INPUTS[op][first], str):
+        r = call(op=op, inp={**CANONICAL_INPUTS[op], first: CANONICAL_INPUTS[op][first] + "\n"})
+        assert r["error"]["code"] == "MALFORMED"
+
+
+def test_encrypt_record_rejects_unanchored_policy_before_anything_else():
+    bad = copy.deepcopy(CANONICAL_INPUTS["encrypt_record"])
+    bad["policy"]["clauses"][0][0]["issuerMode"] = "2"       # SAME_AS_FIRST cannot be a clause's first requirement (A32)
+    assert call(op="encrypt_record", inp=bad)["error"]["code"] == "MALFORMED"
+
+
 def test_rotate_epoch_is_not_implemented_in_phase():
-    r = call(op="rotate_epoch", inp={"targetEpoch": "1"})
+    r = call(op="rotate_epoch", inp=CANONICAL_INPUTS["rotate_epoch"])
     assert not r["ok"] and r["error"]["code"] == "NOT_IMPLEMENTED_IN_PHASE"
+
+
+def test_every_adapter_response_validates_against_the_revision4_response_rules():
+    """Own revision-4 validators (hmbc_protocol.wire): requests canonical, responses bound to the pending operation."""
+    from hmbc_protocol import wire
+    cases = [("prepare_request", good_input())] + [(op, CANONICAL_INPUTS[op]) for op in CANONICAL_INPUTS]
+    for op, inp in cases:
+        env = {"schemaVersion": "v1", "operation": op, "input": inp, "deploymentManifest": DEP}
+        wire.adapter_request(env)
+        resp = adapter.handle_line(json.dumps(env))
+        wire.adapter_response(resp)
+        wire.adapter_response(resp, op)
 
 
 @pytest.mark.parametrize("line", [

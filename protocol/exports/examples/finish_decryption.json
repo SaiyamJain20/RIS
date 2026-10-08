@@ -4,12 +4,25 @@
   "deploymentFixture": "tests/fixtures/deployment-agent1-54262c2-repaired-e.json (byte copy of agent-1 54262c2 sample-repaired-e; machine-local RPC URLs)",
   "cases": [
     {
-      "case": "planned op, E1 locked",
+      "case": "well-formed request; B-E1 locked",
       "request": {
         "schemaVersion": "v1",
         "operation": "finish_decryption",
         "input": {
-          "response": {},
+          "response": {
+            "schemaVersion": "v1",
+            "adapterMode": "symbolic",
+            "requestDigest": "0x0000000000000000000000000000000000000000000000000000000000000001",
+            "grantId": "0x0000000000000000000000000000000000000000000000000000000000000002",
+            "dataId": "0x0000000000000000000000000000000000000000000000000000000000000003",
+            "ciphertextDigest": "0x0000000000000000000000000000000000000000000000000000000000000008",
+            "recipientKeyHash": "0x0000000000000000000000000000000000000000000000000000000000000009",
+            "keyEpoch": "0",
+            "responseEnvelope": {
+              "kind": "symbolic-partial/v1",
+              "token": "0x000000000000000000000000000000000000000000000000000000000000000a"
+            }
+          },
           "userKeyRef": "keyref:user:alice"
         },
         "deploymentManifest": {

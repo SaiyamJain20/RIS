@@ -1,7 +1,7 @@
 {
   "baseline": {
     "exitCode": 0,
-    "tail": "235 passed, 1 skipped in 2.07s"
+    "tail": "624 passed, 101 skipped in 2.22s"
   },
   "python": "3.13.15",
   "mutants": [
@@ -11,7 +11,7 @@
       "new": "if False:",
       "status": "DETECTED",
       "equivalentReason": null,
-      "pytestTail": "1 failed, 45 passed in 0.27s"
+      "pytestTail": "1 failed, 45 passed in 0.29s"
     },
     {
       "file": "protocol/hmbc_protocol/wire.py",
@@ -27,7 +27,7 @@
       "new": "s <= SECP256K1_N",
       "status": "DETECTED",
       "equivalentReason": null,
-      "pytestTail": "1 failed, 81 passed, 1 skipped in 0.29s"
+      "pytestTail": "1 failed, 81 passed, 1 skipped in 0.30s"
     },
     {
       "file": "protocol/hmbc_protocol/wire.py",
@@ -35,7 +35,7 @@
       "new": "if False:",
       "status": "DETECTED",
       "equivalentReason": null,
-      "pytestTail": "1 failed, 50 passed in 0.27s"
+      "pytestTail": "1 failed, 50 passed in 0.29s"
     },
     {
       "file": "protocol/hmbc_protocol/wire.py",
@@ -43,7 +43,7 @@
       "new": "if False:",
       "status": "DETECTED",
       "equivalentReason": null,
-      "pytestTail": "1 failed, 48 passed in 0.27s"
+      "pytestTail": "1 failed, 48 passed in 0.28s"
     },
     {
       "file": "protocol/hmbc_protocol/wire.py",
@@ -51,7 +51,79 @@
       "new": "if False:",
       "status": "DETECTED",
       "equivalentReason": null,
-      "pytestTail": "1 failed, 59 passed in 0.28s"
+      "pytestTail": "1 failed, 59 passed in 0.29s"
+    },
+    {
+      "file": "protocol/hmbc_protocol/wire.py",
+      "old": "if reqs[0][\"issuerMode\"] == \"2\":",
+      "new": "if False:",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 337 passed, 1 skipped in 1.43s"
+    },
+    {
+      "file": "protocol/hmbc_protocol/wire.py",
+      "old": "if len(_list(x, \"signatures\")) != 1:",
+      "new": "if False:",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 518 passed, 101 skipped in 1.55s"
+    },
+    {
+      "file": "protocol/hmbc_protocol/wire.py",
+      "old": "recipientKeyHash=hash32, keyEpoch=_e_const(\"0\"),",
+      "new": "recipientKeyHash=hash32, keyEpoch=lambda x: None,",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 518 passed, 101 skipped in 1.53s"
+    },
+    {
+      "file": "protocol/hmbc_protocol/wire.py",
+      "old": "if not isinstance(x, bool):",
+      "new": "if False:",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 518 passed, 101 skipped in 1.53s"
+    },
+    {
+      "file": "protocol/hmbc_protocol/wire.py",
+      "old": "code=lambda c: _enum(c, tuple(ERROR_CODES), \"code\")",
+      "new": "code=lambda c: None",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 519 passed, 101 skipped in 1.53s"
+    },
+    {
+      "file": "protocol/hmbc_protocol/wire.py",
+      "old": "if v[\"error\"] is not None:\n            _fail(\"success must have a null error\")",
+      "new": "if False:\n            _fail(\"success must have a null error\")",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 519 passed, 101 skipped in 1.53s"
+    },
+    {
+      "file": "protocol/hmbc_protocol/wire.py",
+      "old": "if operation == \"rotate_epoch\":",
+      "new": "if False:",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 323 passed, 1 skipped in 1.44s"
+    },
+    {
+      "file": "protocol/hmbc_protocol/wire.py",
+      "old": "if not clauses:\n        _fail(\"policy needs at least one clause\")",
+      "new": "if False:\n        _fail(\"policy needs at least one clause\")",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 517 passed, 101 skipped in 1.51s"
+    },
+    {
+      "file": "protocol/hmbc_protocol/adapter.py",
+      "old": "wire.INPUTS[op](req[\"input\"])",
+      "new": "pass",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 24 passed in 0.30s"
     },
     {
       "file": "protocol/hmbc_protocol/eip712.py",
@@ -59,7 +131,7 @@
       "new": "_ADDR.match(value)",
       "status": "DETECTED",
       "equivalentReason": null,
-      "pytestTail": "1 failed, 76 passed in 1.35s"
+      "pytestTail": "1 failed, 76 passed in 1.34s"
     },
     {
       "file": "protocol/hmbc_protocol/eip712.py",
@@ -99,7 +171,7 @@
       "new": "except ZeroDivisionError:",
       "status": "DETECTED",
       "equivalentReason": null,
-      "pytestTail": "1 failed, 43 passed in 0.32s"
+      "pytestTail": "1 failed, 50 passed in 0.34s"
     },
     {
       "file": "protocol/hmbc_protocol/adapter.py",
@@ -107,7 +179,7 @@
       "new": "",
       "status": "DETECTED",
       "equivalentReason": null,
-      "pytestTail": "1 failed, 39 passed in 0.32s"
+      "pytestTail": "1 failed, 46 passed in 0.33s"
     },
     {
       "file": "protocol/hmbc_protocol/adapter.py",
@@ -115,7 +187,7 @@
       "new": "if not isinstance(obj, dict):",
       "status": "DETECTED",
       "equivalentReason": null,
-      "pytestTail": "1 failed, 19 passed in 0.30s"
+      "pytestTail": "1 failed, 36 passed in 0.31s"
     },
     {
       "file": "protocol/hmbc_protocol/adapter.py",
@@ -123,7 +195,7 @@
       "new": "if False:",
       "status": "DETECTED",
       "equivalentReason": null,
-      "pytestTail": "1 failed, 40 passed in 0.33s"
+      "pytestTail": "1 failed, 47 passed in 0.33s"
     },
     {
       "file": "protocol/hmbc_protocol/adapter.py",
@@ -131,7 +203,7 @@
       "new": "if False:",
       "status": "DETECTED",
       "equivalentReason": null,
-      "pytestTail": "1 failed, 41 passed in 0.32s"
+      "pytestTail": "1 failed, 48 passed in 0.33s"
     },
     {
       "file": "protocol/hmbc_protocol/adapter.py",
@@ -139,7 +211,7 @@
       "new": "if op not in OPERATIONS:",
       "status": "DETECTED",
       "equivalentReason": null,
-      "pytestTail": "1 failed, 34 passed in 0.31s"
+      "pytestTail": "1 failed, 41 passed in 0.32s"
     },
     {
       "file": "protocol/hmbc_protocol/adapter.py",
@@ -147,7 +219,7 @@
       "new": "return {\"ok\": 1}; raise AdapterError(\"ADAPTER_UNAVAILABLE\", f\"{name} is B-E1",
       "status": "DETECTED",
       "equivalentReason": null,
-      "pytestTail": "1 failed, 20 passed in 0.30s"
+      "pytestTail": "1 failed, 20 passed in 0.29s"
     },
     {
       "file": "protocol/hmbc_protocol/keys.py",
@@ -155,7 +227,7 @@
       "new": "if False:",
       "status": "DETECTED",
       "equivalentReason": null,
-      "pytestTail": "1 failed, 15 passed in 0.31s"
+      "pytestTail": "1 failed, 14 passed in 0.27s"
     },
     {
       "file": "protocol/hmbc_protocol/adapter.py",
@@ -163,7 +235,7 @@
       "new": "",
       "status": "SURVIVED-EQUIVALENT",
       "equivalentReason": "defence-in-depth assertion: deterministic signing of the digest cannot recover a different key",
-      "pytestTail": "45 passed in 0.59s"
+      "pytestTail": "52 passed in 0.59s"
     },
     {
       "file": "protocol/hmbc_protocol/adapter.py",
@@ -171,11 +243,11 @@
       "new": "parse_constant=None",
       "status": "SURVIVED-EQUIVALENT",
       "equivalentReason": "NaN/Infinity become floats that the strict wire validators then reject as non-strings",
-      "pytestTail": "45 passed in 0.61s"
+      "pytestTail": "52 passed in 0.63s"
     }
   ],
-  "detected": 19,
-  "total": 21,
+  "detected": 28,
+  "total": 30,
   "survivedEquivalent": 2,
   "survivedGap": 0
 }

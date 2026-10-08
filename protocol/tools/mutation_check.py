@@ -13,8 +13,8 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 PY = sys.executable
-TESTS = {"wire": ["protocol/tests/test_candidate_schema_review.py", "protocol/tests/test_eip712_vs_agent1.py"],
-         "adapter": ["protocol/tests/test_adapter.py"], "eip712": ["protocol/tests/test_eip712_vs_agent1.py"]}
+TESTS = {"wire": ["protocol/tests/test_candidate_schema_review.py", "protocol/tests/test_eip712_vs_agent1.py", "protocol/tests/test_boundary_review.py"],
+         "adapter": ["protocol/tests/test_adapter.py"], "keys": ["protocol/tests/test_messages_keys.py"], "eip712": ["protocol/tests/test_eip712_vs_agent1.py"]}
 
 M = [  # (suite, file, old, new, equivalent-reason or None)
     ("wire", "protocol/hmbc_protocol/wire.py", "    if any(a >= b for a, b in zip(keys, keys[1:])):", "    if False:", None),
@@ -23,6 +23,15 @@ M = [  # (suite, file, old, new, equivalent-reason or None)
     ("wire", "protocol/hmbc_protocol/wire.py", 'if v["gid"] == ZERO_ADDRESS:', "if False:", None),
     ("wire", "protocol/hmbc_protocol/wire.py", 'if not v["certificates"] and not v["temporalClaims"]:', "if False:", None),
     ("wire", "protocol/hmbc_protocol/wire.py", 'if int(v["grantExpiresAt"]) == 0:', "if False:", None),
+    ("wire", "protocol/hmbc_protocol/wire.py", 'if reqs[0]["issuerMode"] == "2":', "if False:", None),
+    ("wire", "protocol/hmbc_protocol/wire.py", 'if len(_list(x, "signatures")) != 1:', "if False:", None),
+    ("wire", "protocol/hmbc_protocol/wire.py", 'recipientKeyHash=hash32, keyEpoch=_e_const("0"),', "recipientKeyHash=hash32, keyEpoch=lambda x: None,", None),
+    ("wire", "protocol/hmbc_protocol/wire.py", "if not isinstance(x, bool):", "if False:", None),
+    ("wire", "protocol/hmbc_protocol/wire.py", 'code=lambda c: _enum(c, tuple(ERROR_CODES), "code")', "code=lambda c: None", None),
+    ("wire", "protocol/hmbc_protocol/wire.py", '        if v["error"] is not None:\n            _fail("success must have a null error")', '        if False:\n            _fail("success must have a null error")', None),
+    ("wire", "protocol/hmbc_protocol/wire.py", 'if operation == "rotate_epoch":', "if False:", None),
+    ("wire", "protocol/hmbc_protocol/wire.py", 'if not clauses:\n        _fail("policy needs at least one clause")', 'if False:\n        _fail("policy needs at least one clause")', None),
+    ("adapter", "protocol/hmbc_protocol/adapter.py", '            wire.INPUTS[op](req["input"])', "            pass", None),
     ("eip712", "protocol/hmbc_protocol/eip712.py", "_ADDR.fullmatch(value)", "_ADDR.match(value)", None),
     ("eip712", "protocol/hmbc_protocol/eip712.py", "if not isinstance(value, str) or not _DEC.fullmatch(value):", "if not isinstance(value, (str, int)) or (isinstance(value, str) and not _DEC.fullmatch(value)):", None),
     ("adapter", "protocol/hmbc_protocol/adapter.py", 'if req["gid"] != signer:', "if False:", None),
@@ -35,7 +44,7 @@ M = [  # (suite, file, old, new, equivalent-reason or None)
     ("adapter", "protocol/hmbc_protocol/adapter.py", 'if req["schemaVersion"] != SCHEMA_VERSION:', "if False:", None),
     ("adapter", "protocol/hmbc_protocol/adapter.py", "if not isinstance(op, str) or op not in OPERATIONS:", "if op not in OPERATIONS:", None),
     ("adapter", "protocol/hmbc_protocol/adapter.py", 'raise AdapterError("ADAPTER_UNAVAILABLE", f"{name} is B-E1', 'return {"ok": 1}; raise AdapterError("ADAPTER_UNAVAILABLE", f"{name} is B-E1', None),
-    ("adapter", "protocol/hmbc_protocol/keys.py", 'if role not in allowed_roles:', "if False:", None),
+    ("keys", "protocol/hmbc_protocol/keys.py", 'if role not in allowed_roles:', "if False:", None),
     ("adapter", "protocol/hmbc_protocol/adapter.py", "    assert eip712.recover(digest, signature) == signer  # never emit a signature that does not verify\n", "",
      "defence-in-depth assertion: deterministic signing of the digest cannot recover a different key"),
     ("adapter", "protocol/hmbc_protocol/adapter.py", "parse_constant=_reject_constant", "parse_constant=None",

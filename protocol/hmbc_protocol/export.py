@@ -28,7 +28,7 @@ OPS = {
         "behaviour": "Signs the EIP-712 AccessRequest only if gid equals the referenced user key's address and the chains/contracts/keyEpoch/policyVersion equal the deployment manifest. Does not check expiry or authEpoch (the PSC and clock rules own those).",
     },
     "collect_decision": {
-        "inputFields": {"requestDigest": "bytes32", "witnessSetVersion": "optional, E: 1"},
+        "inputFields": {"requestDigest": "bytes32", "witnessSetVersion": "optional, E: \"1\""},
         "draftResultFields": ["schemaVersion", "adapterMode", "decision (AccessDecision)", "signatures (sorted by signer)", "credentialRecords (CredentialRecord[])"],
         "errors": ["ADAPTER_UNAVAILABLE (now)", "STALE_STATE", "EXPIRED", "POLICY_DENIED", "REVOKED", "WRONG_SUBJECT", "NOT_REGISTERED", "INSUFFICIENT_QUORUM"],
         "behaviour": "Planned: witness recomputes the decision from PBC state at the decision's block (checkCredentials at that block tag and its timestamp, A1-0011); relays never supply attributes. At most one re-collection per newly accepted checkpoint while the request is unexpired (D24).",
@@ -40,13 +40,13 @@ OPS = {
         "behaviour": "Planned: loads the committed grant from the DBC, persists release intent before sending, returns the same cached response on retry while the original grant is unexpired, and fails EXPIRED on the first call after expiry. Grant, send and reconciled outcome are separate recorded events.",
     },
     "encrypt_record": {
-        "inputFields": {"record": "object", "policy": "object", "keyEpoch": "decimal string, E: 0"},
+        "inputFields": {"record": "SymbolicRecord {dataId, owner, payloadDigest}", "policy": "SymbolicPolicy {clauses: PolicyRequirement[][]}", "keyEpoch": "\"0\""},
         "draftResultFields": ["schemaVersion", "adapterMode=symbolic", "dataId", "keyEpoch", "ciphertextDigest", "policyDigest"],
         "errors": ["ADAPTER_UNAVAILABLE (now)", "WRONG_EPOCH", "MALFORMED"],
-        "behaviour": "Planned: symbolic token only. A result asserts modeled decryptability, never ABE confidentiality.",
+        "behaviour": "Planned: symbolic token only. A result asserts modeled decryptability, never ABE confidentiality. Inputs follow candidate revision 4 SymbolicRecord/SymbolicPolicy (SAME_AS_FIRST cannot be a clause's first requirement).",
     },
     "finish_decryption": {
-        "inputFields": {"response": "release result", "userKeyRef": "keyref:user:<label>"},
+        "inputFields": {"response": "ReleaseResult", "userKeyRef": "keyref:user:<label>"},
         "draftResultFields": ["schemaVersion", "adapterMode=symbolic", "decryptable (boolean, modeled)", "dataId", "ciphertextDigest"],
         "errors": ["ADAPTER_UNAVAILABLE (now)", "WRONG_SUBJECT", "MALFORMED"],
         "behaviour": "Planned: symbolic two-step completion; checks recipientKeyHash against the user key handle.",
@@ -58,6 +58,9 @@ OPS = {
         "behaviour": "Always NOT_IMPLEMENTED_IN_PHASE before G; no fake rotation.",
     },
 }
+
+
+_h = lambda n: "0x" + format(n, "064x")  # noqa: E731  (constructed example values, not issued capabilities)
 
 
 def _dep() -> dict:
@@ -85,11 +88,22 @@ def _example_cases() -> dict[str, list[tuple[str, dict]]]:
             ("refused: wrong destination KSSC", {"request": _pbc_request(kssc="0x" + "11" * 20), "signingKeyRef": "keyref:user:alice"}),
             ("refused: JSON number instead of decimal string", {"request": _pbc_request(nonce=1), "signingKeyRef": "keyref:user:alice"}),
         ],
-        "collect_decision": [("planned op, E1 locked", {"requestDigest": "0x" + "00" * 32})],
-        "release": [("planned op, E1 locked", {"grantId": "0x" + "00" * 32})],
-        "encrypt_record": [("planned op, E1 locked", {"record": {}, "policy": {}, "keyEpoch": "0"})],
-        "finish_decryption": [("planned op, E1 locked", {"response": {}, "userKeyRef": "keyref:user:alice"})],
-        "rotate_epoch": [("G-phase op", {"targetEpoch": "1"})],
+        "collect_decision": [("well-formed request; B-E1 locked", {"requestDigest": _h(1)}),
+                             ("refused: empty input is MALFORMED, not unavailable", {})],
+        "release": [("well-formed request; B-E1 locked", {"grantId": _h(2)})],
+        "encrypt_record": [("well-formed request; B-E1 locked", {
+            "record": {"dataId": _h(3), "owner": "0x" + "44" * 20, "payloadDigest": _h(5)},
+            "policy": {"clauses": [[{"role": _h(6), "kind": "1", "issuerMode": "0"}, {"role": _h(7), "kind": "2", "issuerMode": "2"}]]},
+            "keyEpoch": "0"}),
+            ("refused: SAME_AS_FIRST as a clause's first requirement", {
+                "record": {"dataId": _h(3), "owner": "0x" + "44" * 20, "payloadDigest": _h(5)},
+                "policy": {"clauses": [[{"role": _h(6), "kind": "1", "issuerMode": "2"}]]}, "keyEpoch": "0"})],
+        "finish_decryption": [("well-formed request; B-E1 locked", {
+            "response": {"schemaVersion": "v1", "adapterMode": "symbolic", "requestDigest": _h(1), "grantId": _h(2), "dataId": _h(3),
+                         "ciphertextDigest": _h(8), "recipientKeyHash": _h(9), "keyEpoch": "0",
+                         "responseEnvelope": {"kind": "symbolic-partial/v1", "token": _h(10)}},
+            "userKeyRef": "keyref:user:alice"})],
+        "rotate_epoch": [("G-phase op, well-formed request", {"targetEpoch": "1"})],
     }, dep
 
 
