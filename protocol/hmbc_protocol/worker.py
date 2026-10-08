@@ -103,6 +103,15 @@ class Worker:
                 "ciphertextDigest": cd, "policyDigest": pd}
 
     # -- release ------------------------------------------------------------------------------------------------------------
+    def _recipient_for(self, g: dict) -> str:
+        """The recipient commitment a release is bound to. repaired-e: the grant's own recipientKeyHash, which must be non-zero and equal the GID's registered key
+        (the PSC enforced that at request time). A paper-profile grant carries none (zero, A24), so this REFUSES: whether and how a paper-mode release binds a
+        recipient is an OPEN decision (X-1, A2-0010/A1-0021). This is the only place that decision touches; tests exercise option (c) by overriding it."""
+        led = self.led
+        if int(g["recipientKeyHash"], 16) == 0 or g["recipientKeyHash"] != led.pbc.call(led.RSC, "recipientKeyHash", g["gid"]):
+            raise WorkerError("WRONG_SUBJECT", "the grant's recipient key is unbound or differs from the registered one")
+        return g["recipientKeyHash"]
+
     def _event(self, kind: str, row: tuple, ts: int) -> None:
         self.db.execute("insert into events(type,request_digest,grant_id,gid,data_id,timestamp) values(?,?,?,?,?,?)",
                         (kind, row[0], row[1], row[2], row[3], ts))
@@ -122,8 +131,7 @@ class Worker:
             raise WorkerError("EXPIRED", "the grant has expired; a retry never extends its lifetime")
         if g["keyEpoch"] != "0":
             raise WorkerError("WRONG_EPOCH", "E supports keyEpoch 0 only")
-        if int(g["recipientKeyHash"], 16) == 0 or g["recipientKeyHash"] != led.pbc.call(led.RSC, "recipientKeyHash", g["gid"]):
-            raise WorkerError("WRONG_SUBJECT", "the grant's recipient key is unbound or differs from the registered one")
+        recipient = self._recipient_for(g)
         rec = self.db.execute("select ciphertext_digest from records where data_id=?", (g["dataId"],)).fetchone()
         if rec is None:
             raise WorkerError("WRONG_SUBJECT", "no record is registered with this worker for the granted dataId")
@@ -135,7 +143,7 @@ class Worker:
             if created:
                 token = "0x" + os.urandom(32).hex()
                 self.db.execute("insert into releases values(?,?,?,?,?,?,?,?,?,?,?,0,0)",
-                                (grant_id, g["requestDigest"], g["dataId"], g["gid"], g["recipientKeyHash"], g["keyEpoch"], rec[0],
+                                (grant_id, g["requestDigest"], g["dataId"], g["gid"], recipient, g["keyEpoch"], rec[0],
                                  token, int(g["expiresAt"]), now, "unknown"))
                 self._event("RELEASE_INTENT", ident, now)
             else:
@@ -148,7 +156,7 @@ class Worker:
             self.faults.discard("crash_after_intent")
             raise SimulatedCrash("crash after durable intent, before send")
         response = {"schemaVersion": "v1", "adapterMode": "symbolic", "requestDigest": g["requestDigest"], "grantId": grant_id,
-                    "dataId": g["dataId"], "ciphertextDigest": rec[0], "recipientKeyHash": g["recipientKeyHash"], "keyEpoch": "0",
+                    "dataId": g["dataId"], "ciphertextDigest": rec[0], "recipientKeyHash": recipient, "keyEpoch": "0",
                     "responseEnvelope": {"kind": "symbolic-partial/v1", "token": token}}
         # Write-ahead: the ATTEMPT is durable before the response can leave, exactly like the intent, so the audit log can never lack a send that happened.
         # RELEASE_SENT therefore means "a send was attempted", never "delivered": the protocol has no recipient acknowledgement, so delivery stays "unknown".
