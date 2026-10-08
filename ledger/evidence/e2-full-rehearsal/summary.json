@@ -1,0 +1,907 @@
+{
+ "schemaVersion": "hmbc-e2-owner-rehearsal/v0",
+ "note": "OWNER rehearsal (A1-0035/A1-0039); not a C-E2 or gate result",
+ "rehearsed": 56,
+ "matched": 56,
+ "notRehearsed": 1,
+ "privateKeysInOutputs": [],
+ "rows": [
+  {
+   "id": "E01-subject-substitution-paper-strict",
+   "expectedOutcome": "CONDITIONAL",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "grantGid": "0xac5a40f1b6d99eca704aebc1fd7ffa5dbb5be59a",
+    "requester": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+   },
+   "match": true
+  },
+  {
+   "id": "E01-nonce-replay-paper-strict",
+   "expectedOutcome": "NO_NEW_GRANT",
+   "expectedError": "REPLAY",
+   "expectedClass": "SUPPORTED",
+   "observed": "NO_NEW_GRANT",
+   "observedError": "REPLAY",
+   "native": {
+    "firstGrantAllowed": true
+   },
+   "match": true
+  },
+  {
+   "id": "E01-forged-tuple-paper-strict",
+   "expectedOutcome": "ACCEPT",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "grantGid": "0x41e9357c5fed25e2866624d971679819e15312a7",
+    "pbcLogged": false
+   },
+   "match": true
+  },
+  {
+   "id": "E01-new-reference-replay-paper-strict",
+   "expectedOutcome": "ACCEPT",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "secondGrant": "0x8330cc19e68e72ef65bf66daa9215f5fd5a3c0e7b4065899cd46e1e7d7110975",
+    "firstGrant": "0x531a98fd70d9346ce0ab3dbcffac575d2db059bead10cc4d714b0418fab4cfcc"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-wrong-issuer-paper-strict",
+   "expectedOutcome": "REJECT",
+   "expectedError": "UNAUTHORIZED_CALLER",
+   "expectedClass": "SUPPORTED",
+   "observed": "REJECT",
+   "observedError": "UNAUTHORIZED_CALLER",
+   "native": {},
+   "match": true
+  },
+  {
+   "id": "E03-dropped-outcome-paper-strict",
+   "expectedOutcome": "PENDING",
+   "expectedError": null,
+   "expectedClass": "SUPPORTED",
+   "observed": "PENDING",
+   "observedError": null,
+   "native": {
+    "status": "1"
+   },
+   "match": true
+  },
+  {
+   "id": "E03-fabricated-outcome-paper-strict",
+   "expectedOutcome": "CONDITIONAL",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "status": "2",
+    "dbcGrantExists": false
+   },
+   "match": true
+  },
+  {
+   "id": "E03-duplicate-outcome-paper-strict",
+   "expectedOutcome": "NO_NEW_OUTCOME",
+   "expectedError": "REPLAY",
+   "expectedClass": "SUPPORTED",
+   "observed": "NO_NEW_OUTCOME",
+   "observedError": "REPLAY",
+   "native": {
+    "status": "2"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-signed-list-rollback-paper-strict",
+   "expectedOutcome": "ACCEPT",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "aliceAfter": "NONE"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-pre-barrier-revocation-paper-strict",
+   "expectedOutcome": "ACCEPT",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "grant": "0x7d0e0b3a24ecd53ee90830feaa3291b1e84a694b25f93905d27079de38ea7311"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-post-barrier-revocation-paper-strict",
+   "expectedOutcome": "CONDITIONAL",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "grant": "0x6a5f8ebbe71e946a4de40c15e5b91620f29c19fe813f271a74e68fd7c18a88bf"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-expired-duty-paper-strict",
+   "expectedOutcome": "CONDITIONAL",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "dutyEnd": "1791496313",
+    "grant": "0xc4fca46864f6d55c079f146669167ae615f6b58a06e2f64368f084888cbd7252"
+   },
+   "match": true
+  },
+  {
+   "id": "E01-wrong-destination-paper-strict",
+   "expectedOutcome": "CONDITIONAL",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "requestPsc": "0x3aa5ebb10dc797cac828524e59a333d0a371443c",
+    "grantKssc": "0x5fbdb2315678afecb367f032d93f642f64180aa3",
+    "grant": "0xc6edd0b6b9452690316a5e73d540d2bf6947c8e0fb40e36166bc7239a71e5c69"
+   },
+   "match": true
+  },
+  {
+   "id": "E03-crash-after-intent-paper-strict",
+   "expectedOutcome": "UNPROVED",
+   "expectedError": null,
+   "expectedClass": "BLOCKED",
+   "expectedWorker": {
+    "releaseIntentCount": "1",
+    "releaseSentCount": "1",
+    "sameCachedResponse": true,
+    "delivery": "unknown",
+    "expiredRetryError": "EXPIRED"
+   },
+   "observed": "CRASH_RECOVERY",
+   "observedError": null,
+   "native": {
+    "worker": {
+     "releaseIntentCount": "1",
+     "releaseSentCount": "1",
+     "sameCachedResponse": true,
+     "delivery": "unknown",
+     "expiredRetryError": "EXPIRED"
+    },
+    "exit": 86,
+    "stderrEmpty": true,
+    "firstResponse": "none (EOF)",
+    "eventsAfterCrash": [
+     "RELEASE_INTENT"
+    ],
+    "eventsAfterRestart": [
+     "RELEASE_INTENT",
+     "RELEASE_SENT"
+    ],
+    "newEventsOnExpiredRetry": 0,
+    "outcomeStatus": "2"
+   },
+   "match": true,
+   "note": "worker/native comparison only; the frozen class (paper BLOCKED/UNPROVED) is agent 3's decision"
+  },
+  {
+   "id": "E03-crash-after-send-paper-strict",
+   "expectedOutcome": "UNPROVED",
+   "expectedError": null,
+   "expectedClass": "BLOCKED",
+   "expectedWorker": {
+    "releaseIntentCount": "1",
+    "releaseSentCount": "2",
+    "sameCachedResponse": true,
+    "delivery": "unknown",
+    "expiredRetryError": "EXPIRED"
+   },
+   "observed": "CRASH_RECOVERY",
+   "observedError": null,
+   "native": {
+    "worker": {
+     "releaseIntentCount": "1",
+     "releaseSentCount": "2",
+     "sameCachedResponse": true,
+     "delivery": "unknown",
+     "expiredRetryError": "EXPIRED"
+    },
+    "exit": 86,
+    "stderrEmpty": true,
+    "firstResponse": "ok",
+    "eventsAfterCrash": [
+     "RELEASE_INTENT",
+     "RELEASE_SENT"
+    ],
+    "eventsAfterRestart": [
+     "RELEASE_INTENT",
+     "RELEASE_SENT",
+     "RELEASE_SENT"
+    ],
+    "newEventsOnExpiredRetry": 0,
+    "outcomeStatus": "2"
+   },
+   "match": true,
+   "note": "worker/native comparison only; the frozen class (paper BLOCKED/UNPROVED) is agent 3's decision"
+  },
+  {
+   "id": "E01-expiry-boundary-paper-strict",
+   "expectedOutcome": "CONDITIONAL",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "requestExpiresAt": "1791496417",
+    "grantBlockTimestamp": "1791496417",
+    "grant": "0x5563633e9b66f6a0eca99ac1ec057d00fb83fa791a3ebbbace285acc5a3d735e"
+   },
+   "match": true
+  },
+  {
+   "id": "E01-subject-substitution-paper-minimal",
+   "expectedOutcome": "CONDITIONAL",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "grantGid": "0xac5a40f1b6d99eca704aebc1fd7ffa5dbb5be59a",
+    "requester": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+   },
+   "match": true
+  },
+  {
+   "id": "E01-nonce-replay-paper-minimal",
+   "expectedOutcome": "NO_NEW_GRANT",
+   "expectedError": "REPLAY",
+   "expectedClass": "SUPPORTED",
+   "observed": "NO_NEW_GRANT",
+   "observedError": "REPLAY",
+   "native": {
+    "firstGrantAllowed": true
+   },
+   "match": true
+  },
+  {
+   "id": "E01-forged-tuple-paper-minimal",
+   "expectedOutcome": "ACCEPT",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "grantGid": "0x41e9357c5fed25e2866624d971679819e15312a7",
+    "pbcLogged": false
+   },
+   "match": true
+  },
+  {
+   "id": "E01-new-reference-replay-paper-minimal",
+   "expectedOutcome": "ACCEPT",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "secondGrant": "0xaa801b895e68d6bb2d15a5e4fdc930c92c6f9c25fc9ead31fc3226210104f880",
+    "firstGrant": "0x32231a818d63cb5aa5cc30234ee182e776c036443537c435407f2e2bfa196cd0"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-wrong-issuer-paper-minimal",
+   "expectedOutcome": "REJECT",
+   "expectedError": "UNAUTHORIZED_CALLER",
+   "expectedClass": "SUPPORTED",
+   "observed": "REJECT",
+   "observedError": "UNAUTHORIZED_CALLER",
+   "native": {},
+   "match": true
+  },
+  {
+   "id": "E03-dropped-outcome-paper-minimal",
+   "expectedOutcome": "PENDING",
+   "expectedError": null,
+   "expectedClass": "SUPPORTED",
+   "observed": "PENDING",
+   "observedError": null,
+   "native": {
+    "status": "1"
+   },
+   "match": true
+  },
+  {
+   "id": "E03-fabricated-outcome-paper-minimal",
+   "expectedOutcome": "CONDITIONAL",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "status": "2",
+    "dbcGrantExists": false
+   },
+   "match": true
+  },
+  {
+   "id": "E03-duplicate-outcome-paper-minimal",
+   "expectedOutcome": "NO_NEW_OUTCOME",
+   "expectedError": "REPLAY",
+   "expectedClass": "SUPPORTED",
+   "observed": "NO_NEW_OUTCOME",
+   "observedError": "REPLAY",
+   "native": {
+    "status": "2"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-signed-list-rollback-paper-minimal",
+   "expectedOutcome": "ACCEPT",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "aliceAfter": "NONE"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-pre-barrier-revocation-paper-minimal",
+   "expectedOutcome": "ACCEPT",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "grant": "0x765fe2db93158aea0f7e75073d0b02968df76508b95e809578b04a18433f719c"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-post-barrier-revocation-paper-minimal",
+   "expectedOutcome": "CONDITIONAL",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "grant": "0x955528189ed620228fb0cf85ca73ec0cf706f296bb2699e9cab0fea06df4decc"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-expired-duty-paper-minimal",
+   "expectedOutcome": "CONDITIONAL",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "dutyEnd": "1791496494",
+    "grant": "0xa7ab318cb5318f8d76665fad91ba61388d948ff145bbc394b2ee403c2f76b35a"
+   },
+   "match": true
+  },
+  {
+   "id": "E01-wrong-destination-paper-minimal",
+   "expectedOutcome": "CONDITIONAL",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "requestPsc": "0x5f3f1dbd7b74c6b46e8c44f98792a1daf8d69154",
+    "grantKssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+    "grant": "0x81d6b4f453149fe814a4448b1b995e593288f8b7cd6448ffa749d98aa231a85f"
+   },
+   "match": true
+  },
+  {
+   "id": "E03-crash-after-intent-paper-minimal",
+   "expectedOutcome": "UNPROVED",
+   "expectedError": null,
+   "expectedClass": "BLOCKED",
+   "expectedWorker": {
+    "releaseIntentCount": "1",
+    "releaseSentCount": "1",
+    "sameCachedResponse": true,
+    "delivery": "unknown",
+    "expiredRetryError": "EXPIRED"
+   },
+   "observed": "CRASH_RECOVERY",
+   "observedError": null,
+   "native": {
+    "worker": {
+     "releaseIntentCount": "1",
+     "releaseSentCount": "1",
+     "sameCachedResponse": true,
+     "delivery": "unknown",
+     "expiredRetryError": "EXPIRED"
+    },
+    "exit": 86,
+    "stderrEmpty": true,
+    "firstResponse": "none (EOF)",
+    "eventsAfterCrash": [
+     "RELEASE_INTENT"
+    ],
+    "eventsAfterRestart": [
+     "RELEASE_INTENT",
+     "RELEASE_SENT"
+    ],
+    "newEventsOnExpiredRetry": 0,
+    "outcomeStatus": "2"
+   },
+   "match": true,
+   "note": "worker/native comparison only; the frozen class (paper BLOCKED/UNPROVED) is agent 3's decision"
+  },
+  {
+   "id": "E03-crash-after-send-paper-minimal",
+   "expectedOutcome": "UNPROVED",
+   "expectedError": null,
+   "expectedClass": "BLOCKED",
+   "expectedWorker": {
+    "releaseIntentCount": "1",
+    "releaseSentCount": "2",
+    "sameCachedResponse": true,
+    "delivery": "unknown",
+    "expiredRetryError": "EXPIRED"
+   },
+   "observed": "CRASH_RECOVERY",
+   "observedError": null,
+   "native": {
+    "worker": {
+     "releaseIntentCount": "1",
+     "releaseSentCount": "2",
+     "sameCachedResponse": true,
+     "delivery": "unknown",
+     "expiredRetryError": "EXPIRED"
+    },
+    "exit": 86,
+    "stderrEmpty": true,
+    "firstResponse": "ok",
+    "eventsAfterCrash": [
+     "RELEASE_INTENT",
+     "RELEASE_SENT"
+    ],
+    "eventsAfterRestart": [
+     "RELEASE_INTENT",
+     "RELEASE_SENT",
+     "RELEASE_SENT"
+    ],
+    "newEventsOnExpiredRetry": 0,
+    "outcomeStatus": "2"
+   },
+   "match": true,
+   "note": "worker/native comparison only; the frozen class (paper BLOCKED/UNPROVED) is agent 3's decision"
+  },
+  {
+   "id": "E01-expiry-boundary-paper-minimal",
+   "expectedOutcome": "CONDITIONAL",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "requestExpiresAt": "1791496581",
+    "grantBlockTimestamp": "1791496581",
+    "grant": "0xca5012d2792a1ba637d286a822233611dda3866403f3115e665cb734bfe9ad35"
+   },
+   "match": true
+  },
+  {
+   "id": "E01-subject-substitution-repaired-e",
+   "expectedOutcome": "REJECT",
+   "expectedError": "WRONG_SUBJECT",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "REJECT",
+   "observedError": "WRONG_SUBJECT",
+   "native": {},
+   "match": true
+  },
+  {
+   "id": "E01-nonce-replay-repaired-e",
+   "expectedOutcome": "NO_NEW_GRANT",
+   "expectedError": "REPLAY",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "NO_NEW_GRANT",
+   "observedError": "REPLAY",
+   "native": {
+    "firstGrantAllowed": true
+   },
+   "match": true
+  },
+  {
+   "id": "E01-forged-tuple-repaired-e",
+   "expectedOutcome": "REJECT",
+   "expectedError": "BAD_SIGNATURE",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "REJECT",
+   "observedError": "BAD_SIGNATURE",
+   "native": {},
+   "match": true
+  },
+  {
+   "id": "E01-new-reference-replay-repaired-e",
+   "expectedOutcome": "NO_NEW_GRANT",
+   "expectedError": "REPLAY",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "NO_NEW_GRANT",
+   "observedError": "REPLAY",
+   "native": {},
+   "match": true
+  },
+  {
+   "id": "E02-wrong-issuer-repaired-e",
+   "expectedOutcome": "REJECT",
+   "expectedError": "UNAUTHORIZED_CALLER",
+   "expectedClass": "SUPPORTED",
+   "observed": "REJECT",
+   "observedError": "UNAUTHORIZED_CALLER",
+   "native": {},
+   "match": true
+  },
+  {
+   "id": "E03-dropped-outcome-repaired-e",
+   "expectedOutcome": "PENDING",
+   "expectedError": null,
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "PENDING",
+   "observedError": null,
+   "native": {
+    "status": "1"
+   },
+   "match": true
+  },
+  {
+   "id": "E03-fabricated-outcome-repaired-e",
+   "expectedOutcome": "REJECT",
+   "expectedError": "WRONG_PROFILE",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "REJECT",
+   "observedError": "WRONG_PROFILE",
+   "native": {
+    "status": "1"
+   },
+   "match": true
+  },
+  {
+   "id": "E03-duplicate-outcome-repaired-e",
+   "expectedOutcome": "NO_NEW_OUTCOME",
+   "expectedError": "REPLAY",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "NO_NEW_OUTCOME",
+   "observedError": "REPLAY",
+   "native": {
+    "status": "2"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-signed-list-rollback-repaired-e",
+   "expectedOutcome": "REJECT",
+   "expectedError": "STALE_ANCHOR",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "REJECT",
+   "observedError": "STALE_ANCHOR",
+   "native": {
+    "aliceAfter": "REVOKED"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-pre-barrier-revocation-repaired-e",
+   "expectedOutcome": "ACCEPT",
+   "expectedError": null,
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "grant": "0x6262aa25992fe1b28764b6a65be229ee81bcd104ab870de95c8d856fbea445bd",
+    "windowNote": "pre-barrier acceptance is the designed window"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-post-barrier-revocation-repaired-e",
+   "expectedOutcome": "REJECT",
+   "expectedError": "STALE_STATE",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "REJECT",
+   "observedError": "STALE_STATE",
+   "native": {
+    "nonceConsumed": false
+   },
+   "match": true
+  },
+  {
+   "id": "E02-expired-duty-repaired-e",
+   "expectedOutcome": "REJECT",
+   "expectedError": "EXPIRED",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "REJECT",
+   "observedError": "EXPIRED",
+   "native": {
+    "dutyEnd": "1791496667",
+    "requestExpiresAt": "1791496685"
+   },
+   "match": true
+  },
+  {
+   "id": "E01-wrong-destination-repaired-e",
+   "expectedOutcome": "REJECT",
+   "expectedError": "WRONG_DESTINATION",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "REJECT",
+   "observedError": "WRONG_DESTINATION",
+   "native": {
+    "requestPsc": "0xd84379ceae14aa33c123af12424a37803f885889",
+    "requestKssc": "0x9d4454b023096f34b160d6b654540c56a1f81688",
+    "hereKssc": "0x851356ae760d987e095750cceb3bc6014560891c",
+    "nonceConsumedHere": false
+   },
+   "match": true
+  },
+  {
+   "id": "E03-crash-after-intent-repaired-e",
+   "expectedOutcome": "CONDITIONAL",
+   "expectedError": null,
+   "expectedClass": "REPAIR_SUPPORTED",
+   "expectedWorker": {
+    "releaseIntentCount": "1",
+    "releaseSentCount": "1",
+    "sameCachedResponse": true,
+    "delivery": "unknown",
+    "expiredRetryError": "EXPIRED"
+   },
+   "observed": "CRASH_RECOVERY",
+   "observedError": null,
+   "native": {
+    "worker": {
+     "releaseIntentCount": "1",
+     "releaseSentCount": "1",
+     "sameCachedResponse": true,
+     "delivery": "unknown",
+     "expiredRetryError": "EXPIRED"
+    },
+    "exit": 86,
+    "stderrEmpty": true,
+    "firstResponse": "none (EOF)",
+    "eventsAfterCrash": [
+     "RELEASE_INTENT"
+    ],
+    "eventsAfterRestart": [
+     "RELEASE_INTENT",
+     "RELEASE_SENT"
+    ],
+    "newEventsOnExpiredRetry": 0,
+    "outcomeStatus": "2"
+   },
+   "match": true,
+   "note": "worker/native comparison only; the frozen class (paper BLOCKED/UNPROVED) is agent 3's decision"
+  },
+  {
+   "id": "E03-crash-after-send-repaired-e",
+   "expectedOutcome": "CONDITIONAL",
+   "expectedError": null,
+   "expectedClass": "REPAIR_SUPPORTED",
+   "expectedWorker": {
+    "releaseIntentCount": "1",
+    "releaseSentCount": "2",
+    "sameCachedResponse": true,
+    "delivery": "unknown",
+    "expiredRetryError": "EXPIRED"
+   },
+   "observed": "CRASH_RECOVERY",
+   "observedError": null,
+   "native": {
+    "worker": {
+     "releaseIntentCount": "1",
+     "releaseSentCount": "2",
+     "sameCachedResponse": true,
+     "delivery": "unknown",
+     "expiredRetryError": "EXPIRED"
+    },
+    "exit": 86,
+    "stderrEmpty": true,
+    "firstResponse": "ok",
+    "eventsAfterCrash": [
+     "RELEASE_INTENT",
+     "RELEASE_SENT"
+    ],
+    "eventsAfterRestart": [
+     "RELEASE_INTENT",
+     "RELEASE_SENT",
+     "RELEASE_SENT"
+    ],
+    "newEventsOnExpiredRetry": 0,
+    "outcomeStatus": "2"
+   },
+   "match": true,
+   "note": "worker/native comparison only; the frozen class (paper BLOCKED/UNPROVED) is agent 3's decision"
+  },
+  {
+   "id": "E01-expiry-boundary-repaired-e",
+   "expectedOutcome": "REJECT",
+   "expectedError": "EXPIRED",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "REJECT",
+   "observedError": "EXPIRED",
+   "native": {
+    "requestExpiresAt": "1791496766",
+    "consumeBlockTimestamp": "1791496766"
+   },
+   "match": true
+  },
+  {
+   "id": "kssc-rewrite-baseline-repaired-e (extra, not a catalog case)",
+   "observed": "WRONG_DESTINATION",
+   "match": null
+  },
+  {
+   "id": "E01-same-nonce-distinct-digests-repaired-e",
+   "expectedOutcome": "NO_NEW_GRANT",
+   "expectedError": "REPLAY",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "NO_NEW_GRANT",
+   "observedError": "REPLAY",
+   "native": {
+    "distinctDigests": true
+   },
+   "match": true
+  },
+  {
+   "id": "E03-receipt-binding-control-requestDigest-repaired-e",
+   "expectedOutcome": "NO_NEW_OUTCOME",
+   "expectedError": "WRONG_SUBJECT",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "NO_NEW_OUTCOME",
+   "observedError": "WRONG_SUBJECT",
+   "native": {
+    "status": "1"
+   },
+   "match": true
+  },
+  {
+   "id": "E03-receipt-binding-control-gid-repaired-e",
+   "expectedOutcome": "NO_NEW_OUTCOME",
+   "expectedError": "WRONG_SUBJECT",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "NO_NEW_OUTCOME",
+   "observedError": "WRONG_SUBJECT",
+   "native": {
+    "status": "1"
+   },
+   "match": true
+  },
+  {
+   "id": "E03-receipt-binding-control-dataId-repaired-e",
+   "expectedOutcome": "NO_NEW_OUTCOME",
+   "expectedError": "WRONG_SUBJECT",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "NO_NEW_OUTCOME",
+   "observedError": "WRONG_SUBJECT",
+   "native": {
+    "status": "1"
+   },
+   "match": true
+  },
+  {
+   "id": "E03-receipt-signature-control-requestDigest-repaired-e",
+   "expectedOutcome": "NO_NEW_OUTCOME",
+   "expectedError": "WRONG_SUBJECT",
+   "expectedClass": "SUPPORTED",
+   "observed": "NO_NEW_OUTCOME",
+   "observedError": "WRONG_SUBJECT",
+   "native": {
+    "status": "1"
+   },
+   "match": true
+  },
+  {
+   "id": "E03-receipt-signature-control-gid-repaired-e",
+   "expectedOutcome": "NO_NEW_OUTCOME",
+   "expectedError": "WRONG_SUBJECT",
+   "expectedClass": "SUPPORTED",
+   "observed": "NO_NEW_OUTCOME",
+   "observedError": "WRONG_SUBJECT",
+   "native": {
+    "status": "1"
+   },
+   "match": true
+  },
+  {
+   "id": "E03-receipt-signature-control-dataId-repaired-e",
+   "expectedOutcome": "NO_NEW_OUTCOME",
+   "expectedError": "WRONG_SUBJECT",
+   "expectedClass": "SUPPORTED",
+   "observed": "NO_NEW_OUTCOME",
+   "observedError": "WRONG_SUBJECT",
+   "native": {
+    "status": "1"
+   },
+   "match": true
+  },
+  {
+   "id": "E03-receipt-binding-positive-repaired-e",
+   "expectedOutcome": "ACCEPT",
+   "expectedError": null,
+   "expectedClass": "SUPPORTED",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "status": "2"
+   },
+   "match": true
+  }
+ ],
+ "mutants": [
+  {
+   "mutant": "mutant-no-nonce",
+   "case": "E01-same-nonce-distinct-digests",
+   "repairedExpect": "REPLAY",
+   "mutantObserved": "second grant",
+   "nonceRecorded": false,
+   "detected": true
+  },
+  {
+   "mutant": "mutant-no-receipt-binding",
+   "case": "E03-receipt-binding-control-requestDigest",
+   "repairedExpect": "WRONG_SUBJECT",
+   "mutantObserved": "outcome recorded (status 2)",
+   "detected": true
+  },
+  {
+   "mutant": "mutant-no-state-barrier",
+   "case": "E02-post-barrier-revocation",
+   "repairedExpect": "STALE_STATE",
+   "mutantObserved": "grant after the revoking checkpoint",
+   "detected": true
+  },
+  {
+   "mutant": "mutant-no-record-freshness",
+   "case": "E02-expired-duty",
+   "repairedExpect": "EXPIRED",
+   "mutantObserved": "grant after duty end",
+   "detected": true
+  },
+  {
+   "mutant": "mutant-no-version-monotone",
+   "case": "E02-signed-list-rollback",
+   "repairedExpect": "STALE_ANCHOR",
+   "mutantObserved": "old list accepted; Alice NONE",
+   "detected": true
+  },
+  {
+   "mutant": "mutant-no-destination-binding",
+   "case": "E01-wrong-destination (+ kssc-rewrite variant)",
+   "repairedExpect": "WRONG_DESTINATION (both)",
+   "mutantObserved": "second-deployment recipe: REJECT/WRONG_DESTINATION; kssc rewrite: WRONG_SUBJECT",
+   "detected": false,
+   "codeLevelDistinction": true
+  }
+ ]
+}

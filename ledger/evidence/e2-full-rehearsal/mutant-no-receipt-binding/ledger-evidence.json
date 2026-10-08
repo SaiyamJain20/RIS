@@ -1,0 +1,237 @@
+[
+ {
+  "step": "RevocationList v1 via H1-ca-admin",
+  "tx": "0xb6ccb533204440ea743b3d2607676436068d162dc289e73e6b03babe32911178",
+  "block": 612,
+  "status": 1,
+  "revert": null,
+  "events": [
+   {
+    "contract": "TMSC",
+    "event": "TrustAnchorUpdated",
+    "args": {
+     "authority": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+     "kind": "1",
+     "version": "1",
+     "validUntil": "1791583245",
+     "generation": "1",
+     "contentDigest": "0xd3abd9ecb93721acf3882250f14f1c2b7872249b8b1f8d4043ebebd40dcd6aad",
+     "prevBlockNumber": "0",
+     "authEpoch": "1",
+     "submitter": "0xa3abc957ca114c86ec9cdb519cffc62beb894066"
+    }
+   }
+  ]
+ },
+ {
+  "step": "TemporalAcl v1 via H1-ca-admin",
+  "tx": "0x1f01ac08cb44487bdcbee5835506008d645bbddbc0cea639c85d0171d4a9736a",
+  "block": 613,
+  "status": 1,
+  "revert": null,
+  "events": [
+   {
+    "contract": "TMSC",
+    "event": "TrustAnchorUpdated",
+    "args": {
+     "authority": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+     "kind": "2",
+     "version": "1",
+     "validUntil": "1791583245",
+     "generation": "1",
+     "contentDigest": "0xbca0292bf189c9913bb1f4de352da1e5bed3522998e5f2fcc8ce04724d92fa93",
+     "prevBlockNumber": "0",
+     "authEpoch": "2",
+     "submitter": "0xa3abc957ca114c86ec9cdb519cffc62beb894066"
+    }
+   }
+  ]
+ },
+ {
+  "step": "RevocationList v1 via H2-ca-admin",
+  "tx": "0xfa0ce836af6987480f9e89e392ccaa0a2a119ea775f149e62dbd8517b022e6b8",
+  "block": 614,
+  "status": 1,
+  "revert": null,
+  "events": [
+   {
+    "contract": "TMSC",
+    "event": "TrustAnchorUpdated",
+    "args": {
+     "authority": "0x6ea73ebda053f804cad188496ec48af56b06f698",
+     "kind": "1",
+     "version": "1",
+     "validUntil": "1791583245",
+     "generation": "1",
+     "contentDigest": "0xe1649e5809a920438bfaa2eaef17571c6653bda21fbcba06d5d26d12c5397d8f",
+     "prevBlockNumber": "0",
+     "authEpoch": "3",
+     "submitter": "0xffd802dc742f4939e8f8a185fd85632bf596433e"
+    }
+   }
+  ]
+ },
+ {
+  "step": "register alice",
+  "tx": "0x4d92456a65ce3274e056d8867c124fb3be362500a287a74d247e5aacb761dafc",
+  "block": 615,
+  "status": 1,
+  "revert": null,
+  "events": [
+   {
+    "contract": "RSC",
+    "event": "Registered",
+    "args": {
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+     "certDigest": "0xde627c614e7774afc492974b871f4f7640a8d77436926fa15f0feab03ff79b97",
+     "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d",
+     "logId": "4"
+    }
+   }
+  ]
+ },
+ {
+  "step": "register bob",
+  "tx": "0x209e0cb0e08c8bd922cf87fcbd3975a9b110417fa9edec953dbea3ab55cd6685",
+  "block": 616,
+  "status": 1,
+  "revert": null,
+  "events": [
+   {
+    "contract": "RSC",
+    "event": "Registered",
+    "args": {
+     "gid": "0xac5a40f1b6d99eca704aebc1fd7ffa5dbb5be59a",
+     "issuer": "0x6ea73ebda053f804cad188496ec48af56b06f698",
+     "certDigest": "0x90877e8bcb7da59a38fe0b7dc7984672feef8a8b6372fa46e4922d5e3c27b2e1",
+     "recipientKeyHash": "0x5fe346cd69926d7120dff3cc020f4d36ad8093b7c9bb95c6ecea9705a3f8c537",
+     "logId": "5"
+    }
+   }
+  ]
+ },
+ {
+  "step": "requestAccess",
+  "tx": "0xbf59091288bd10093f4afee77e41de1979a7e7ab8fa778290ede30b9c6029303",
+  "block": 617,
+  "status": 1,
+  "revert": null,
+  "events": [
+   {
+    "contract": "PSC",
+    "event": "AccessForwarded",
+    "args": {
+     "requestDigest": "0x0494cce04830f390b7607844be3a64f9da34ea1a11e6e9b54694979aed0361d7",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "destinationChainId": "28545",
+     "kssc": "0x162a433068f51e18b7d13932f27e66a3f99e6890",
+     "credentialDigest": "0xdeeb450baa101f911ccfd1b6bc62fbefe31ead5a3f126e968286559658874445",
+     "verifiedAttributes": [
+      {
+       "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+       "role": "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6",
+       "kind": "1",
+       "serial": "101",
+       "anchorVersion": "1",
+       "validUntil": "1791583245"
+      },
+      {
+       "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+       "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+       "kind": "2",
+       "serial": "0",
+       "anchorVersion": "1",
+       "validUntil": "1791525645"
+      }
+     ],
+     "expiresAt": "1791496882",
+     "requestLogId": "6"
+    }
+   }
+  ]
+ },
+ {
+  "step": "acceptState",
+  "tx": "0x5a8f14d4d81599fe05343c73de4a29ac2d85438d3b15f13290f8b59329003121",
+  "block": 618,
+  "status": 1,
+  "revert": null,
+  "events": [
+   {
+    "contract": "KSSC",
+    "event": "StateAccepted",
+    "args": {
+     "sequence": "1",
+     "authEpoch": "3",
+     "policyVersion": "1",
+     "keyEpoch": "0",
+     "witnessSetVersion": "1",
+     "sourceBlockNumber": "617",
+     "sourceBlockHash": "0x9a097ec7ccda41c802842d0d88d31b21cebf895b87d5a933d14bfb1c60f94d76",
+     "expiresAt": "1791496913"
+    }
+   }
+  ]
+ },
+ {
+  "step": "consumeDecision",
+  "tx": "0x6aa36b9ee4140a381e128fb574abf1262ecdf691abd3b4ee14c4625a68e97f12",
+  "block": 619,
+  "status": 1,
+  "revert": null,
+  "events": [
+   {
+    "contract": "KSSC",
+    "event": "GrantIssued",
+    "args": {
+     "grantId": "0x2a26156ad6b79cebe934bbc362c2a8842c49c23de273a03f017d85ed903ba30d",
+     "requestDigest": "0x0494cce04830f390b7607844be3a64f9da34ea1a11e6e9b54694979aed0361d7",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "keyEpoch": "0",
+     "expiresAt": "1791496882",
+     "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d",
+     "nonceConsumed": true,
+     "nonce": "101"
+    }
+   },
+   {
+    "contract": "ACSC",
+    "event": "AccessLog",
+    "args": {
+     "accessLogId": "1",
+     "requestRef": "0x0494cce04830f390b7607844be3a64f9da34ea1a11e6e9b54694979aed0361d7",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "allowed": true,
+     "code": "0",
+     "credentialDigest": "0xdeeb450baa101f911ccfd1b6bc62fbefe31ead5a3f126e968286559658874445",
+     "grantId": "0x2a26156ad6b79cebe934bbc362c2a8842c49c23de273a03f017d85ed903ba30d",
+     "submitter": "0x3df38017505bb45d1d4c77065e09aa9175a67c48"
+    }
+   }
+  ]
+ },
+ {
+  "step": "reportAttestedOutcome",
+  "tx": "0x9545362c1df5ee6b23d15da3b6c9bf4925c3e9344ba61e821f547600b0cedfa6",
+  "block": 620,
+  "status": 1,
+  "revert": null,
+  "events": [
+   {
+    "contract": "PSC",
+    "event": "AttestedOutcomeRecorded",
+    "args": {
+     "requestDigest": "0x0494cce04830f390b7607844be3a64f9da34ea1a11e6e9b54694979aed0361d7",
+     "grantId": "0x2a26156ad6b79cebe934bbc362c2a8842c49c23de273a03f017d85ed903ba30d",
+     "outcomeDigest": "0xd71457d5ddbdfa61a2be0fd66ce4632faf644d8f9953f560c863e22a24d4426b",
+     "dbcBlockNumber": "619",
+     "logId": "7"
+    }
+   }
+  ]
+ }
+]

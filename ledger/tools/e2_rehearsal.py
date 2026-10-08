@@ -9,7 +9,8 @@ interfaces/v1/scenarios/e0_cases.json / e0_supplement_cases.json expectation:
   REJECT, NO_NEW_GRANT, NO_NEW_OUTCOME  <-> rejected with the frozen error code (native Rejected(code), mined status-0 tx)
   PENDING                <-> no outcome, PSC status stays FORWARDED
 wrong-destination uses a second, independent deployment (own PSC/KSSC and adapter) on the same chain pair (A1-0039).
-NOT_REHEARSED (with the reason): the crash-after-* cases (no crash hook through the adapter process; A2-0014, A3-0024).
+crash-after-* cases use agent 2's CANDIDATE TEST-ONLY hook `testtools.faulty_adapter` (A2-0020) then the production adapter on the same
+state dir (A1-0041 W-1); compared with the frozen worker expectations; their classification stays agent 3's.
 
 Usage (repository root; the e1_rehearsal.py venv; Foundry on PATH):
     <venv>/bin/python -I ledger/tools/e2_rehearsal.py --protocol <agent-2 checkout>/protocol --cases <frozen e0_cases.json>
@@ -476,6 +477,71 @@ MUTANT_PROBES = {"mutant-no-nonce": probe_no_nonce, "mutant-no-receipt-binding":
                  "mutant-no-version-monotone": probe_no_version_monotone, "mutant-no-destination-binding": probe_no_destination_binding}
 
 
+# ------------------------------------------------------------------ crash schedules (A1-0041 W-1): agent 2's CANDIDATE TEST-ONLY hook
+# `python -m testtools.faulty_adapter --crash-at after_intent|after_send` (A2-0020), then the PRODUCTION adapter on the same state dir.
+
+def _worker_log(w, state):
+    out = subprocess.run([sys.executable, "-m", "hmbc_protocol.worker_log", "--state-dir", str(state)], cwd=w.protocol,
+                         env={"PYTHONPATH": str(w.protocol), "PATH": "/usr/bin:/bin"}, capture_output=True, text=True, check=True)
+    return json.loads(out.stdout)
+
+
+def _raw(proc, dep, op, inp):
+    proc.stdin.write(json.dumps({"schemaVersion": "v1", "operation": op, "input": inp, "deploymentManifest": dep}) + "\n")
+    proc.stdin.flush()
+    line = proc.stdout.readline()
+    return json.loads(line) if line else None
+
+
+def crash_case(point: str):
+    def run(w):
+        s, f, d, g = w.legit()
+        state = pathlib.Path(tempfile.mkdtemp(prefix="crash-", dir=w.out))
+        os.chmod(state, 0o700)
+        env = {"PYTHONPATH": str(w.protocol), "PATH": "/usr/bin:/bin"}
+        fp = subprocess.Popen([sys.executable, "-m", "testtools.faulty_adapter", "--crash-at", point, "--state-dir", str(state),
+                               "--deployment", str(w.dep_file)], cwd=w.protocol, env=env, stdin=subprocess.PIPE,
+                              stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        try:
+            rec = _raw(fp, w.dep, "encrypt_record", {"record": {"dataId": R.DATA_P1, "owner": R.addr("H2-root"),
+                                                                "payloadDigest": h("synthetic payload P1")}, "policy": R.P1_POLICY, "keyEpoch": "0"})
+            assert rec and rec.get("ok"), rec
+            first = _raw(fp, w.dep, "release", {"grantId": g})
+            fp.stdin.close()
+        except BrokenPipeError:
+            first = None
+        exit_code = fp.wait(timeout=20)
+        stderr = fp.stderr.read()
+        log1 = _worker_log(w, state)
+        prod = R.Adapter(w.protocol, w.dep_file, state)
+        try:
+            second = prod.call("release", {"grantId": g})
+            log2 = _worker_log(w, state)
+            tok2 = second["responseEnvelope"]["token"]
+            if point == "after_send":
+                same = first is not None and first.get("ok") and first["result"]["responseEnvelope"]["token"] == tok2
+            else:
+                same = first is None and log2["releases"][0]["tokenDigest"] == "0x" + keccak(bytes.fromhex(tok2[2:])).hex()
+            w.report(s["requestDigest"], g)
+            status = w.status(s["requestDigest"])
+            expires = int(w.dbc.call(w.KSSC, "getGrant", g)[4])
+            while w.dbc.now() < expires:
+                time.sleep(0.5)
+            retry = _raw(prod.p, w.dep, "release", {"grantId": g})
+            log3 = _worker_log(w, state)
+        finally:
+            prod.close()
+            shutil.rmtree(state)
+        worker = {"releaseIntentCount": log2["counts"]["releaseIntentCount"], "releaseSentCount": log2["counts"]["releaseSentCount"],
+                  "sameCachedResponse": bool(same), "delivery": log2["releases"][0]["delivery"],
+                  "expiredRetryError": (retry or {}).get("error", {}).get("code") if retry and not retry.get("ok") else None}
+        return Obs("CRASH_RECOVERY", None, worker=worker, exit=exit_code, stderrEmpty=stderr == "",
+                   firstResponse="none (EOF)" if first is None else ("ok" if first.get("ok") else "error"),
+                   eventsAfterCrash=[e["type"] for e in log1["events"]], eventsAfterRestart=[e["type"] for e in log2["events"]],
+                   newEventsOnExpiredRetry=len(log3["events"]) - len(log2["events"]), outcomeStatus=status)
+    return run
+
+
 def _alice_code(w):
     u = w.boot["users"]["alice"]
     return R.ERRORS[int(w.pbc.call(w.TMSC, "checkCredentials", u["gid"], u["bundle"], str(w.pbc.now()))[0])]
@@ -488,7 +554,9 @@ VARIANTS = {  # order matters: trust-mutating cases restore trust; expiry-bounda
     "new-reference-replay": new_reference_replay, "wrong-issuer": wrong_issuer, "dropped-outcome": dropped_outcome,
     "fabricated-outcome": fabricated_outcome, "duplicate-outcome": duplicate_outcome, "signed-list-rollback": signed_list_rollback,
     "pre-barrier-revocation": lambda w: _revocation(w, False), "post-barrier-revocation": lambda w: _revocation(w, True),
-    "expired-duty": expired_duty, "wrong-destination": wrong_destination, "expiry-boundary": expiry_boundary,
+    "expired-duty": expired_duty, "wrong-destination": wrong_destination,
+    "crash-after-intent": crash_case("after_intent"), "crash-after-send": crash_case("after_send"),
+    "expiry-boundary": expiry_boundary,
 }
 SUPPLEMENT = {
     "E01-same-nonce-distinct-digests-repaired-e": same_nonce_distinct_digests,
@@ -500,15 +568,19 @@ SUPPLEMENT = {
     "E03-receipt-signature-control-dataId-repaired-e": receipt_control("dataId", True),
     "E03-receipt-binding-positive-repaired-e": receipt_control(None, False),
 }
-NOT_REHEARSED = {
-    "crash-after-intent": "no crash hook through the adapter process (A2-0014, A3-0024)",
-    "crash-after-send": "no crash hook through the adapter process (A2-0014, A3-0024)",
-}
+NOT_REHEARSED = {}
 
 
 def compare(case: dict, obs: dict) -> dict:
     e = case["expected"]
     want, err = e["outcome"], e["error"]
+    if obs["result"] == "CRASH_RECOVERY":  # crash schedules: frozen worker expectations + native ledger (exit 86, one outcome)
+        n = obs["native"]
+        ok = (n["worker"] == e.get("worker") and n["exit"] == 86 and n["stderrEmpty"] and n["outcomeStatus"] == "2"
+              and n["newEventsOnExpiredRetry"] == 0)
+        return {"id": case["id"], "expectedOutcome": want, "expectedError": err, "expectedClass": e["classification"],
+                "expectedWorker": e.get("worker"), "observed": "CRASH_RECOVERY", "observedError": None, "native": n, "match": ok,
+                "note": "worker/native comparison only; the frozen class (paper BLOCKED/UNPROVED) is agent 3's decision"}
     if want in ("ACCEPT", "CONDITIONAL"):
         ok = obs["result"] == "ACCEPT" and obs["error"] is None
     else:
@@ -526,6 +598,7 @@ def main() -> int:
     ap.add_argument("--ports", nargs=2, type=int, default=[38545, 48545])
     ap.add_argument("--profiles", nargs="+", default=["paper-strict", "paper-minimal", "repaired-e"])
     ap.add_argument("--mutants", action="store_true", help="also run one live probe per mutant-* deployment (A1-0039)")
+    ap.add_argument("--variants", nargs="+", help="run only these catalog variants (default: all); supplement only with repaired-e")
     a = ap.parse_args()
     cases = {c["id"]: c for c in json.load(open(a.cases))["cases"]}
     supp = {c["id"]: c for c in (lambda s: s.get("cases") or s)(json.load(open(a.supplement)))}
@@ -545,6 +618,8 @@ def main() -> int:
             w = World(p, a.protocol.resolve(), urls, a.out / p)
             try:
                 for v, fn in VARIANTS.items():
+                    if a.variants and v not in a.variants:
+                        continue
                     cid = next(c for c in cases if cases[c]["profile"] == p and cases[c]["variant"] == v)
                     try:
                         rows.append(compare(cases[cid], fn(w)))
@@ -553,7 +628,7 @@ def main() -> int:
                 for cid, c in cases.items():
                     if c["profile"] == p and c["variant"] in NOT_REHEARSED:
                         rows.append({"id": cid, "observed": "NOT_REHEARSED", "reason": NOT_REHEARSED[c["variant"]], "match": None})
-                if p == "repaired-e":
+                if p == "repaired-e" and not a.variants:
                     try:
                         baseline = kssc_rewrite_baseline(w)
                     except BaseException as ex:
