@@ -27,11 +27,17 @@ TYPES = {
                        ("dbcBlockHash", "bytes32")),
     "Registration": _T(("gid", "address"), ("certDigest", "bytes32"), ("recipientKeyHash", "bytes32"),
                        ("expiresAt", "uint64")),
+    "RoleCertificate": _T(("issuer", "address"), ("gid", "address"), ("roles", "bytes32[]"), ("serial", "uint64"),
+                          ("validFrom", "uint64"), ("validUntil", "uint64")),
+    "RevocationList": _T(("authority", "address"), ("version", "uint64"), ("validUntil", "uint64"), ("revokedSerials", "uint64[]")),
+    "TemporalAcl": _T(("authority", "address"), ("version", "uint64"), ("validUntil", "uint64"), ("entries", "TempAclEntry[]")),
 }
+NESTED = {"TemporalAcl": {"TempAclEntry": _T(("gid", "address"), ("role", "bytes32"), ("validFrom", "uint64"), ("validUntil", "uint64"))}}
 
 VALIDATE = {"AccessRequest": wire.access_request, "AccessDecision": wire.access_decision,
             "StateCheckpoint": wire.state_checkpoint, "GrantReceipt": wire.grant_receipt,
-            "Registration": wire.registration}
+            "Registration": wire.registration, "RoleCertificate": wire.role_certificate,
+            "RevocationList": wire.revocation_list, "TemporalAcl": wire.temporal_acl}
 
 
 def domain_for(name: str, message: dict, deployment: dict) -> dict:
@@ -47,12 +53,16 @@ def domain_for(name: str, message: dict, deployment: dict) -> dict:
         return {"name": "HMBCReceipt", "version": "1", "chainId": pbc["chainId"], "verifyingContract": pbc["contracts"]["PSC"]}
     if name == "Registration":
         return {"name": "HMBCRegistration", "version": "1", "chainId": pbc["chainId"], "verifyingContract": pbc["contracts"]["RSC"]}
+    if name == "RoleCertificate":
+        return {"name": "HMBCCredential", "version": "1", "chainId": pbc["chainId"], "verifyingContract": pbc["contracts"]["TMSC"]}
+    if name in ("RevocationList", "TemporalAcl"):
+        return {"name": "HMBCTrust", "version": "1", "chainId": pbc["chainId"], "verifyingContract": pbc["contracts"]["TMSC"]}
     raise KeyError(name)
 
 
 def typed_data(name: str, message: dict, domain: dict) -> dict:
     VALIDATE[name](message)
-    return {"types": {"EIP712Domain": eip712.DOMAIN_TYPE, name: TYPES[name]}, "primaryType": name,
+    return {"types": {"EIP712Domain": eip712.DOMAIN_TYPE, name: TYPES[name], **NESTED.get(name, {})}, "primaryType": name,
             "domain": domain, "message": message}
 
 

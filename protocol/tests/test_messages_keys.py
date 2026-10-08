@@ -11,13 +11,15 @@ DOC = json.loads((FIX / "eip712-agent1-54262c2.json").read_text())
 VECS = {v["name"]: v for v in DOC["vectors"] if "typedData" in v}
 
 
-@pytest.mark.parametrize("name", sorted(messages.TYPES))
+ALL_BUILDERS = ["AccessRequest", "AccessDecision", "StateCheckpoint", "GrantReceipt", "Registration", "RoleCertificate", "RevocationList", "TemporalAcl"]
+
+
+@pytest.mark.parametrize("name", ALL_BUILDERS)
 def test_builder_reproduces_producer_vector(name):
     v = VECS[name]
     td = v["typedData"]
     built = messages.typed_data(name, td["message"], td["domain"])
-    assert built["types"][name] == td["types"][name]          # exact field order
-    assert built["types"]["EIP712Domain"] == td["types"]["EIP712Domain"]
+    assert built["types"] == td["types"]                       # exact field order, including nested struct types
     assert "0x" + eip712.digest(built).hex() == v["digest"]
 
 
