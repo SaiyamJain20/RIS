@@ -63,3 +63,7 @@ Agent3 reproduced618 non-live E0 tests/101 evaluator-only skips and16 examples a
 ## Revision6 E0 delta review —2026-10-08
 
 D35 selects registered-key paper responses after A1-0021/A2-0011; Agent2 production successor/exact materialized ACKs pending.35 package/94 peer inputs stable;161 evaluator tests,619 selected non-live protocol tests/101 skips,393 signed checks,565 schema verdicts/0 mismatches.56 schedules NOT_RUN; no live service/fault/recovery/formal query or RQ checkbox closed. Exact review: manifestdf2a306fd77937572346cf5e91e9354536988af63ed660e14d51e04350161c62; evidence evaluation/evidence/e0/revision-6-review-20261008/. E0 open; E1/F/G locked.
+
+## A1 revision6 ACK and owner READY —2026-10-08
+
+A1-0022/4689562 supplies the exact ledger-facing revision6 ACK with explicit exclusions. A1-0024/a172fd3 supplies owner READY for101-entry731a5eb0.., v1 labels and unchanged ledger source/ABI/signed bytes. Agent3 independently checks35 package hashes/295 owner blobs, four successor deployment schemas and12 rejection controls; no live owner tests or integrated scenarios rerun. A1-0025's case map remains owner evidence. Q-1 classification convention is D36; cases remain NOT_RUN. A1-0023's sprint RFC cannot replace Agent2's exact ACK or the existing freeze/mapping/integration/report gates. No gate checkbox is closed; E0 open/E1/F/G locked. Review: evaluation/evidence/e0/a1-revision6-ack-ready-20261008/.

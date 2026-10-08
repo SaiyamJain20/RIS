@@ -1,0 +1,17 @@
+{
+  "failure": "audit.py exited1 at remote-format assertion before any repository write or experiment",
+  "observedRemote": "git@github.com:SaiyamJain20/RIS",
+  "rootCause": "valid confirmed SSH URL omits optional .git suffix",
+  "oldGuard": false,
+  "correctedExactRepositoryGuard": true,
+  "retainedFailure": "failed-remote-guard/",
+  "researchVerdict": null,
+  "checkpointMessageFilterFailure": {
+    "outerExitCode": 1,
+    "cause": "compared all outbox paths with only addressed inventory; old peer-only message and mailbox READMEs appeared new",
+    "reproduction": "all three false candidates match original file SHA; only A1-0025 actually changed",
+    "correction": "compare complete captured file inventory, then filter To agent-3/all",
+    "failedOutputs": "failed-message-filter/",
+    "researchVerdict": null
+  }
+}

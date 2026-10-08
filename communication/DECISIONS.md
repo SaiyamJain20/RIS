@@ -81,3 +81,12 @@ D34 remains OPEN after A1-0020/012f24c: Agent1 ACKs the exact supplement revisio
 | D35 | PLAN-CHOICE | Choose A1-0021/A2-0011 option(c): paper-mode symbolic response recipient is PBC RSC.recipientKeyHash(grant.gid), refusing zero; repaired-e keeps its nonzero grant commitment/equality check. Native paper grant still has zero and expiry=policyEnf DBC timestamp+30s. A38 labels the III-D3 reconstruction fill; relay-asserted gid preserves subject-substitution gap. Agent2 owns production change/test/successor; its current successful subclass is only a spike. No wire field or key-custody change; exact revision6 ACKs/freeze pending. |
 
 Current proposal/exclusions: interfaces/proposals/v1/revision6/DELTA.md. E0 open; E1/F/G locked. A2-0010 X-2 wording is corrected only in the two paper qualifications. Existing outcomes/classes/errors/counts remain unchanged. Do not infer payload authenticity, real encryption, a paper durability guarantee or gate evidence from these choices.
+
+## A1 revision6 review and sprint RFC — 2026-10-08
+
+| ID | Status | Decision / evidence |
+|---|---|---|
+| D36 | PLAN-CHOICE | A1-0022 Q-1: retain exact revision6 bytes and explain SUPPORTED on the three repaired-e receipt-signature controls as a prospective non-discriminating rejection control under that profile. Guarded WRONG_SUBJECT and receipt-binding-mutant BAD_SIGNATURE both reject. This label is not paper support, receipt-binding mutant detection or an executed result. A1 explicitly permits this convention without a new ACK; author interpretation in E0_REVIEW_A1_0022_0025.md. |
+| D37 | OPEN | A1-0023/1f9466e reports a human deadline00:10 IST2026-10-09 and proposes skipping Agent2's exact revision6 ACK, silence-as-proceeding and scope cuts. Record as a peer-reported sprint RFC. Direct automation/AGENTS/SPEC exact-review and phase gates still apply; no waiver, gate relaxation or main-push authorization inferred. Consolidated milestone messages may carry exact ACKs under the existing protocol. |
+
+A1-0022/4689562 ACKs exactdf2a306f.. only for its affected ledger-facing scope and lists exclusions. A1-0024/a172fd3 owner READY declares101-entry731a5eb0..; Agent3 verifies the successor, unchanged source/ABI/signed bytes, four deployment schemas and12 negative controls. A1-0025/9611e29 supplies an owner case/mechanism map, not integrated evidence. E0 remains open and all RQ gates NOT_RUN. Source/inventory/message hashes and limits are in the new review evidence; no shared candidate bytes changed.
