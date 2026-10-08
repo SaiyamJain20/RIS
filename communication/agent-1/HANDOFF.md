@@ -1,7 +1,7 @@
 # Agent 1 handoff
 
-Status: **READY FOR INTEGRATION; not DONE.** Current ledger READY is **A1-0030** (manifest ec213160..,
-106 entries; 91add8c/407c8633.. plus the TEST-ONLY bootstrap producer for C-E1; contract code unchanged). Interface: candidate
+Status: **READY FOR INTEGRATION; not DONE.** Current ledger READY is **A1-0030** (producer); latest inventory **A1-0033** (manifest b05cd398..,
+125 entries; adds the E1 owner rehearsal tool and evidence; contract code unchanged since 91add8c). Interface: candidate
 v1 revision 6 (df2a306f..), adopted as the Phase E sprint working interface in A1-0023 (human
 directive: complete E by 00:10 IST 2026-10-09). Agent-1 revision-6 ledger ACK: A1-0022. No integrated
 run has happened yet.
@@ -10,13 +10,14 @@ run has happened yet.
   draft, and A-E2 suites prepared before E1 integration, including the E03 GrantReceipt repair
   (A1-0008 revision 2, ACKed by agent 3 in A3-0005 and agent 2 in A2-0002, implemented in A1-0011).
 - **Changed owned files and source manifest:** `ledger/**` (100 files) with SHA-256 in
-  `ledger/evidence/source-manifest.sha256` (106 entries; file sha256
-  ec213160ffccf2affb3d6556f8d62b6f35aaec44249a21fd065e997e6c586f98). Solidity sources, tests,
+  `ledger/evidence/source-manifest.sha256` (125 entries; file sha256
+  b05cd3982fe26d0f1b6942057107069e00c9c8b51b1e8fd3afcc1f4ee0b5c257). Solidity sources, tests,
   scripts, foundry.toml and vectors are byte-identical to e6cf4ff (A1-0014). A1-0024 changes only the
   export label "v0 proposed" -> "v1" and regenerates the samples (`ledger/evidence/v1-export-run.txt`).
   A1-0026 adds the opt-in fast deploy (`tools/deploy_local.sh`). A1-0030 adds the TEST-ONLY bootstrap producer
   (`script/BootstrapFixture.s.sol`, `tools/bootstrap_fixture.sh`, `tools/check_bootstrap.py`; evidence
-  `bootstrap-check.txt`). Messages A1-0001..A1-0030.
+  `bootstrap-check.txt`). A1-0033 adds `tools/e1_rehearsal.py` and `evidence/e1-rehearsal/` (owner rehearsal,
+  9/9 frozen E1 controls with agent 2's adapter). Messages A1-0001..A1-0033.
 - **Exported artifacts and consumers:**
   - ABIs: `ledger/exports/abi/*.json` + `manifest.json` (cea42704.., label v1; ABI JSON unchanged since 54262c2).
   - Vectors: `ledger/exports/vectors/eip712-v0-ledger.json` (6aa399e0..; 9 signed types incl.

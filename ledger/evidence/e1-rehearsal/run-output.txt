@@ -1,0 +1,10 @@
+MATCH E-control-WrongIssuerAdmin-paper-strict: events=[] error=UNAUTHORIZED_CALLER native=True
+MATCH E-control-Alice-paper-strict: events=['REQUEST_LOGGED', 'PBC_DECIDED', 'DBC_AUTHORIZED', 'RELEASE_INTENT', 'RELEASE_SENT', 'OUTCOME_RECORDED'] error=None native=True
+MATCH E-control-Bob-paper-strict: events=['REQUEST_LOGGED', 'PBC_DECIDED'] error=POLICY_DENIED native=True
+MATCH E-control-WrongIssuerAdmin-paper-minimal: events=[] error=UNAUTHORIZED_CALLER native=True
+MATCH E-control-Alice-paper-minimal: events=['REQUEST_LOGGED', 'PBC_DECIDED', 'DBC_AUTHORIZED', 'RELEASE_INTENT', 'RELEASE_SENT', 'OUTCOME_RECORDED'] error=None native=True
+MATCH E-control-Bob-paper-minimal: events=['REQUEST_LOGGED', 'PBC_DECIDED'] error=POLICY_DENIED native=True
+MATCH E-control-WrongIssuerAdmin-repaired-e: events=[] error=UNAUTHORIZED_CALLER native=True
+MATCH E-control-Alice-repaired-e: events=['REQUEST_LOGGED', 'PBC_DECIDED', 'DBC_AUTHORIZED', 'RELEASE_INTENT', 'RELEASE_SENT', 'OUTCOME_RECORDED'] error=None native=True
+MATCH E-control-Bob-repaired-e: events=['REQUEST_LOGGED', 'PBC_DECIDED'] error=POLICY_DENIED native=True
+ALL 9 CONTROLS MATCH | key leaks: []

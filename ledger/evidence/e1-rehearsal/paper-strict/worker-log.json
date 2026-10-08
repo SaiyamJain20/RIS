@@ -1,0 +1,45 @@
+{
+ "schemaVersion": "hmbc-worker-log/v0",
+ "adapterMode": "symbolic",
+ "deploymentFingerprint": "9886222d774b769ea9f694d43b8b2d1aebfa162c5b1fa58e5f8896968f82bef5",
+ "events": [
+  {
+   "type": "RELEASE_INTENT",
+   "requestDigest": "0xfb3ca08d8678970f91a34d7bf73d6a4b69959c28ee7223a29942e34b469e6d67",
+   "timestamp": "1791480281",
+   "grantId": "0x9adcf01f3e55010469b890dd9e4b6d45d38210759c7e16b54c31ca187b7164ee",
+   "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+   "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+  },
+  {
+   "type": "RELEASE_SENT",
+   "requestDigest": "0xfb3ca08d8678970f91a34d7bf73d6a4b69959c28ee7223a29942e34b469e6d67",
+   "timestamp": "1791480281",
+   "grantId": "0x9adcf01f3e55010469b890dd9e4b6d45d38210759c7e16b54c31ca187b7164ee",
+   "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+   "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+  }
+ ],
+ "releases": [
+  {
+   "grantId": "0x9adcf01f3e55010469b890dd9e4b6d45d38210759c7e16b54c31ca187b7164ee",
+   "requestDigest": "0xfb3ca08d8678970f91a34d7bf73d6a4b69959c28ee7223a29942e34b469e6d67",
+   "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+   "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+   "ciphertextDigest": "0xf6ca9be2e0ce865ab9d6237df041e6f5200ec077f064d0354781b000cc66d19d",
+   "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d",
+   "keyEpoch": "0",
+   "tokenDigest": "0xfe98e54066615417252e67121fef1a9875168eb0045a2b32d08825c0af45acfd",
+   "grantExpiresAt": "1791480311",
+   "createdAt": "1791480281",
+   "delivery": "unknown",
+   "sendAttempts": 1,
+   "completedAttempts": 1
+  }
+ ],
+ "counts": {
+  "releaseIntentCount": "1",
+  "releaseSentCount": "1"
+ },
+ "note": "RELEASE_SENT records an ATTEMPTED send (write-ahead); delivery is never acknowledged, so it stays 'unknown'. Tokens are redacted to digests."
+}

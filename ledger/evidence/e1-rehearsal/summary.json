@@ -1,0 +1,149 @@
+{
+ "schemaVersion": "hmbc-e1-owner-rehearsal/v0",
+ "note": "OWNER rehearsal (A1-0032); not a C-E1 result or gate evidence",
+ "results": [
+  {
+   "control": "E-control-WrongIssuerAdmin-paper-strict",
+   "expectedEvents": [],
+   "observedEvents": [],
+   "expectedError": "UNAUTHORIZED_CALLER",
+   "observedError": "UNAUTHORIZED_CALLER",
+   "nativeChecks": true,
+   "match": true
+  },
+  {
+   "control": "E-control-Alice-paper-strict",
+   "expectedEvents": [
+    "REQUEST_LOGGED",
+    "PBC_DECIDED",
+    "DBC_AUTHORIZED",
+    "RELEASE_INTENT",
+    "RELEASE_SENT",
+    "OUTCOME_RECORDED"
+   ],
+   "observedEvents": [
+    "REQUEST_LOGGED",
+    "PBC_DECIDED",
+    "DBC_AUTHORIZED",
+    "RELEASE_INTENT",
+    "RELEASE_SENT",
+    "OUTCOME_RECORDED"
+   ],
+   "expectedError": null,
+   "observedError": null,
+   "nativeChecks": true,
+   "match": true
+  },
+  {
+   "control": "E-control-Bob-paper-strict",
+   "expectedEvents": [
+    "REQUEST_LOGGED",
+    "PBC_DECIDED"
+   ],
+   "observedEvents": [
+    "REQUEST_LOGGED",
+    "PBC_DECIDED"
+   ],
+   "expectedError": "POLICY_DENIED",
+   "observedError": "POLICY_DENIED",
+   "nativeChecks": true,
+   "match": true
+  },
+  {
+   "control": "E-control-WrongIssuerAdmin-paper-minimal",
+   "expectedEvents": [],
+   "observedEvents": [],
+   "expectedError": "UNAUTHORIZED_CALLER",
+   "observedError": "UNAUTHORIZED_CALLER",
+   "nativeChecks": true,
+   "match": true
+  },
+  {
+   "control": "E-control-Alice-paper-minimal",
+   "expectedEvents": [
+    "REQUEST_LOGGED",
+    "PBC_DECIDED",
+    "DBC_AUTHORIZED",
+    "RELEASE_INTENT",
+    "RELEASE_SENT",
+    "OUTCOME_RECORDED"
+   ],
+   "observedEvents": [
+    "REQUEST_LOGGED",
+    "PBC_DECIDED",
+    "DBC_AUTHORIZED",
+    "RELEASE_INTENT",
+    "RELEASE_SENT",
+    "OUTCOME_RECORDED"
+   ],
+   "expectedError": null,
+   "observedError": null,
+   "nativeChecks": true,
+   "match": true
+  },
+  {
+   "control": "E-control-Bob-paper-minimal",
+   "expectedEvents": [
+    "REQUEST_LOGGED",
+    "PBC_DECIDED"
+   ],
+   "observedEvents": [
+    "REQUEST_LOGGED",
+    "PBC_DECIDED"
+   ],
+   "expectedError": "POLICY_DENIED",
+   "observedError": "POLICY_DENIED",
+   "nativeChecks": true,
+   "match": true
+  },
+  {
+   "control": "E-control-WrongIssuerAdmin-repaired-e",
+   "expectedEvents": [],
+   "observedEvents": [],
+   "expectedError": "UNAUTHORIZED_CALLER",
+   "observedError": "UNAUTHORIZED_CALLER",
+   "nativeChecks": true,
+   "match": true
+  },
+  {
+   "control": "E-control-Alice-repaired-e",
+   "expectedEvents": [
+    "REQUEST_LOGGED",
+    "PBC_DECIDED",
+    "DBC_AUTHORIZED",
+    "RELEASE_INTENT",
+    "RELEASE_SENT",
+    "OUTCOME_RECORDED"
+   ],
+   "observedEvents": [
+    "REQUEST_LOGGED",
+    "PBC_DECIDED",
+    "DBC_AUTHORIZED",
+    "RELEASE_INTENT",
+    "RELEASE_SENT",
+    "OUTCOME_RECORDED"
+   ],
+   "expectedError": null,
+   "observedError": null,
+   "nativeChecks": true,
+   "match": true
+  },
+  {
+   "control": "E-control-Bob-repaired-e",
+   "expectedEvents": [
+    "REQUEST_LOGGED",
+    "PBC_DECIDED"
+   ],
+   "observedEvents": [
+    "REQUEST_LOGGED",
+    "PBC_DECIDED"
+   ],
+   "expectedError": "POLICY_DENIED",
+   "observedError": "POLICY_DENIED",
+   "nativeChecks": true,
+   "match": true
+  }
+ ],
+ "privateKeysInOutputs": [],
+ "allMatch": true
+}
