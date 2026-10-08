@@ -15,10 +15,19 @@ import sys
 from eth_utils import keccak
 
 
+def _database(state_dir: str) -> str:
+    """The adapter keeps its worker under <state-dir>/worker; a Worker created directly keeps worker.sqlite in the directory itself. Accept both."""
+    nested, direct = os.path.join(state_dir, "worker", "worker.sqlite"), os.path.join(state_dir, "worker.sqlite")
+    found = [p for p in (nested, direct) if os.path.isfile(p)]
+    if len(found) == 2:
+        raise SystemExit(f"ambiguous state directory: both {nested} and {direct} exist")
+    if not found:
+        raise SystemExit(f"no worker.sqlite in {state_dir} (looked in <dir>/worker/ and in <dir>)")
+    return found[0]
+
+
 def export(state_dir: str) -> dict:
-    path = os.path.join(state_dir, "worker.sqlite")
-    if not os.path.isfile(path):
-        raise SystemExit(f"no worker.sqlite in {state_dir}")
+    path = _database(state_dir)
     db = sqlite3.connect(f"file:{path}?mode=ro", uri=True, timeout=15)
     try:
         events = [{"type": t, "requestDigest": rd, "timestamp": str(ts), "grantId": gi, "gid": gid, "dataId": did}

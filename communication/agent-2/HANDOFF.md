@@ -1,4 +1,4 @@
-# Agent 2 handoff (2026-10-08, updated for A2-0015): E0 closed and E1 unlocked by agent-3 (A3-0023); owner service READY published (A2-0014); agent-1's bootstrap producer reviewed and cross-checked (A2-0015); no integration FREEZE ACK yet. (Older bullets below describe earlier states; the A2-0013/A2-0014/A2-0015 bullets at the end are current.)
+# Agent 2 handoff (2026-10-08, updated for A2-0016): E0 closed and E1 unlocked by agent-3 (A3-0023); owner service READY published (A2-0014); agent-1's bootstrap producer reviewed and cross-checked (A2-0015); no integration FREEZE ACK yet. (Older bullets below describe earlier states; the A2-0013/A2-0014/A2-0015 bullets at the end are current.)
 
 - RQ/task: E / E0 (acceptance pending) with CANDIDATE B-E1/B-E2 code built ahead of the unlock at the user's instruction. Interface: candidate v1 revision 5
   (agent-3 A3-0012, manifest 124b95eb..., 32 files), NOT frozen. No INTERFACE_READY, E1 unlock or gate is claimed. F and G are untouched (locked).
@@ -44,3 +44,9 @@
 - Evidence: full suite 1352 passed/201 skipped (`evidence/pytest-e0.txt`), manifest 02676d6e.. (103 files), adapter.json 7146495b.. unchanged. Not verified by me: agent-1's own manifest ec213160.., `check_bootstrap.py`, its 166 forge tests, its schema-leaf validation.
 - Crash hook (A3-0024): E1 has no crash schedule; the TEST-ONLY startup hook is NOT authorised before E1 completes and E2/E3 is permitted; nothing built.
 - Messages sent: A2-0001..A2-0015. Read: A1-0001..A1-0030, A3-0001..A3-0024.
+
+- A2-0016 (successor pin; closes F-1 of A1-0033): the evidence command `python -m hmbc_protocol.worker_log --state-dir <adapter state dir>` of A2-0014 failed against a real adapter directory (the adapter keeps the worker under `<dir>/worker/`; the exporter looked only at `<dir>/worker.sqlite`; earlier tests used Worker-created directories). Fixed in `hmbc_protocol/worker_log.py` only: both layouts accepted, both-present refused as ambiguous, neither-present says where it looked. Workaround on the old pins 34de384/dbfefee: `--state-dir <dir>/worker`. Found by the new `tests/test_adapter_process_paper.py` (paper-strict and paper-minimal through the adapter PROCESS: witness ops WRONG_PROFILE, option (c) release bound to the registered key, cached retry, wrong-user refusal, reportOutcome, worker log through the adapter dir, EXPIRED after 40 s); agent-1's rehearsal reported the same defect independently.
+- Cross-run of agent-1's rehearsal (`git archive 25d1e6b`, `ledger/tools/e1_rehearsal.py --protocol <my checkout>/protocol`): exit 0, ALL 9 CONTROLS MATCH, no key leaks, on my machine against my working tree (this pin). Owner evidence, agent-1's runner/collector, not a C-E1 result.
+- Evidence: full suite 1356 passed/201 skipped (`evidence/pytest-e0.txt`), worker_log mutants 3/3 (`evidence/mutation-check-worker-log.json`), manifest eb236421.. (105 files), adapter.json 7146495b.. unchanged.
+- E2 crash-hook DRAFT (text only, not a message) pending; nothing implemented.
+- Messages sent: A2-0001..A2-0016. Read: A1-0001..A1-0033, A3-0001..A3-0024.
