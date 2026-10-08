@@ -1,0 +1,710 @@
+FFFFFFFFFFFF                                                             [100%]
+=================================== FAILURES ===================================
+_________ test_two_calls_return_their_own_frame_and_stop_records_exit __________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_two_calls_return_their_ow0')
+program = "import sys,json\nfor line in sys.stdin:\n print(json.dumps({'seen':json.loads(line)['id']}),flush=True)\n"
+
+    def transport(tmp_path, program):
+        # Keep RED as an assertion about the absent owned transport, not an import
+        # collection error. The temporary utility is an actual external process.
+        try:
+>           module = importlib.import_module('evaluation.processes')
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_processes.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.processes'
+import_ = <function _gcd_import at 0x7f6d28bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.processes'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_two_calls_return_their_ow0')
+
+    def test_two_calls_return_their_own_frame_and_stop_records_exit(tmp_path):
+>       child = transport(tmp_path, ECHO)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_processes.py:33: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_two_calls_return_their_ow0')
+program = "import sys,json\nfor line in sys.stdin:\n print(json.dumps({'seen':json.loads(line)['id']}),flush=True)\n"
+
+    def transport(tmp_path, program):
+        # Keep RED as an assertion about the absent owned transport, not an import
+        # collection error. The temporary utility is an actual external process.
+        try:
+            module = importlib.import_module('evaluation.processes')
+        except ModuleNotFoundError:
+>           pytest.fail('C-E1 owned process transport is not implemented')
+E           Failed: C-E1 owned process transport is not implemented
+
+evaluation/tests/test_processes.py:22: Failed
+__________ test_stderr_flood_does_not_block_response_and_is_retained ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_stderr_flood_does_not_blo0')
+program = "import sys\nsys.stderr.write('z'*200000);sys.stderr.flush()\nimport sys,json\nfor line in sys.stdin:\n print(json.dumps({'seen':json.loads(line)['id']}),flush=True)\n"
+
+    def transport(tmp_path, program):
+        # Keep RED as an assertion about the absent owned transport, not an import
+        # collection error. The temporary utility is an actual external process.
+        try:
+>           module = importlib.import_module('evaluation.processes')
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_processes.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.processes'
+import_ = <function _gcd_import at 0x7f6d28bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.processes'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_stderr_flood_does_not_blo0')
+
+    def test_stderr_flood_does_not_block_response_and_is_retained(tmp_path):
+>       child = transport(tmp_path, "import sys\nsys.stderr.write('z'*200000);sys.stderr.flush()\n" + ECHO)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_processes.py:49: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_stderr_flood_does_not_blo0')
+program = "import sys\nsys.stderr.write('z'*200000);sys.stderr.flush()\nimport sys,json\nfor line in sys.stdin:\n print(json.dumps({'seen':json.loads(line)['id']}),flush=True)\n"
+
+    def transport(tmp_path, program):
+        # Keep RED as an assertion about the absent owned transport, not an import
+        # collection error. The temporary utility is an actual external process.
+        try:
+            module = importlib.import_module('evaluation.processes')
+        except ModuleNotFoundError:
+>           pytest.fail('C-E1 owned process transport is not implemented')
+E           Failed: C-E1 owned process transport is not implemented
+
+evaluation/tests/test_processes.py:22: Failed
+___ test_response_timeout_stops_owned_child_and_preserves_unrelated_process ____
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_response_timeout_stops_ow0')
+program = 'import time;time.sleep(30)'
+
+    def transport(tmp_path, program):
+        # Keep RED as an assertion about the absent owned transport, not an import
+        # collection error. The temporary utility is an actual external process.
+        try:
+>           module = importlib.import_module('evaluation.processes')
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_processes.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.processes'
+import_ = <function _gcd_import at 0x7f6d28bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.processes'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_response_timeout_stops_ow0')
+
+    def test_response_timeout_stops_owned_child_and_preserves_unrelated_process(tmp_path):
+        unrelated = subprocess.Popen([sys.executable, '-c', 'import time;time.sleep(30)'])
+        try:
+>           child = transport(tmp_path, 'import time;time.sleep(30)')
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_processes.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_response_timeout_stops_ow0')
+program = 'import time;time.sleep(30)'
+
+    def transport(tmp_path, program):
+        # Keep RED as an assertion about the absent owned transport, not an import
+        # collection error. The temporary utility is an actual external process.
+        try:
+            module = importlib.import_module('evaluation.processes')
+        except ModuleNotFoundError:
+>           pytest.fail('C-E1 owned process transport is not implemented')
+E           Failed: C-E1 owned process transport is not implemented
+
+evaluation/tests/test_processes.py:22: Failed
+____________________ test_stdin_backpressure_obeys_timeout _____________________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_stdin_backpressure_obeys_0')
+program = 'import time;time.sleep(30)'
+
+    def transport(tmp_path, program):
+        # Keep RED as an assertion about the absent owned transport, not an import
+        # collection error. The temporary utility is an actual external process.
+        try:
+>           module = importlib.import_module('evaluation.processes')
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_processes.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.processes'
+import_ = <function _gcd_import at 0x7f6d28bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.processes'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_stdin_backpressure_obeys_0')
+
+    def test_stdin_backpressure_obeys_timeout(tmp_path):
+>       child = transport(tmp_path, 'import time;time.sleep(30)')
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_processes.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_stdin_backpressure_obeys_0')
+program = 'import time;time.sleep(30)'
+
+    def transport(tmp_path, program):
+        # Keep RED as an assertion about the absent owned transport, not an import
+        # collection error. The temporary utility is an actual external process.
+        try:
+            module = importlib.import_module('evaluation.processes')
+        except ModuleNotFoundError:
+>           pytest.fail('C-E1 owned process transport is not implemented')
+E           Failed: C-E1 owned process transport is not implemented
+
+evaluation/tests/test_processes.py:22: Failed
+_ test_corrupt_or_extra_response_poison_stream_and_stop_child[{"ok":true,"ok":false}\n] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_corrupt_or_extra_response0')
+program = 'import sys,time\nsys.stdin.readline()\nsys.stdout.write(\'{"ok":true,"ok":false}\\n\');sys.stdout.flush()\ntime.sleep(30)'
+
+    def transport(tmp_path, program):
+        # Keep RED as an assertion about the absent owned transport, not an import
+        # collection error. The temporary utility is an actual external process.
+        try:
+>           module = importlib.import_module('evaluation.processes')
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_processes.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.processes'
+import_ = <function _gcd_import at 0x7f6d28bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.processes'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_corrupt_or_extra_response0')
+reply = '{"ok":true,"ok":false}\n'
+
+    @pytest.mark.parametrize('reply', [
+        '{"ok":true,"ok":false}\n',
+        '{"value":NaN}\n',
+        'not-json\n',
+        '{}\n{}\n',
+    ])
+    def test_corrupt_or_extra_response_poison_stream_and_stop_child(tmp_path, reply):
+        program = f'import sys,time\nsys.stdin.readline()\nsys.stdout.write({reply!r});sys.stdout.flush()\ntime.sleep(30)'
+>       child = transport(tmp_path, program)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_processes.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_corrupt_or_extra_response0')
+program = 'import sys,time\nsys.stdin.readline()\nsys.stdout.write(\'{"ok":true,"ok":false}\\n\');sys.stdout.flush()\ntime.sleep(30)'
+
+    def transport(tmp_path, program):
+        # Keep RED as an assertion about the absent owned transport, not an import
+        # collection error. The temporary utility is an actual external process.
+        try:
+            module = importlib.import_module('evaluation.processes')
+        except ModuleNotFoundError:
+>           pytest.fail('C-E1 owned process transport is not implemented')
+E           Failed: C-E1 owned process transport is not implemented
+
+evaluation/tests/test_processes.py:22: Failed
+_ test_corrupt_or_extra_response_poison_stream_and_stop_child[{"value":NaN}\n] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_corrupt_or_extra_response1')
+program = 'import sys,time\nsys.stdin.readline()\nsys.stdout.write(\'{"value":NaN}\\n\');sys.stdout.flush()\ntime.sleep(30)'
+
+    def transport(tmp_path, program):
+        # Keep RED as an assertion about the absent owned transport, not an import
+        # collection error. The temporary utility is an actual external process.
+        try:
+>           module = importlib.import_module('evaluation.processes')
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_processes.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.processes'
+import_ = <function _gcd_import at 0x7f6d28bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.processes'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_corrupt_or_extra_response1')
+reply = '{"value":NaN}\n'
+
+    @pytest.mark.parametrize('reply', [
+        '{"ok":true,"ok":false}\n',
+        '{"value":NaN}\n',
+        'not-json\n',
+        '{}\n{}\n',
+    ])
+    def test_corrupt_or_extra_response_poison_stream_and_stop_child(tmp_path, reply):
+        program = f'import sys,time\nsys.stdin.readline()\nsys.stdout.write({reply!r});sys.stdout.flush()\ntime.sleep(30)'
+>       child = transport(tmp_path, program)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_processes.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_corrupt_or_extra_response1')
+program = 'import sys,time\nsys.stdin.readline()\nsys.stdout.write(\'{"value":NaN}\\n\');sys.stdout.flush()\ntime.sleep(30)'
+
+    def transport(tmp_path, program):
+        # Keep RED as an assertion about the absent owned transport, not an import
+        # collection error. The temporary utility is an actual external process.
+        try:
+            module = importlib.import_module('evaluation.processes')
+        except ModuleNotFoundError:
+>           pytest.fail('C-E1 owned process transport is not implemented')
+E           Failed: C-E1 owned process transport is not implemented
+
+evaluation/tests/test_processes.py:22: Failed
+___ test_corrupt_or_extra_response_poison_stream_and_stop_child[not-json\n] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_corrupt_or_extra_response2')
+program = "import sys,time\nsys.stdin.readline()\nsys.stdout.write('not-json\\n');sys.stdout.flush()\ntime.sleep(30)"
+
+    def transport(tmp_path, program):
+        # Keep RED as an assertion about the absent owned transport, not an import
+        # collection error. The temporary utility is an actual external process.
+        try:
+>           module = importlib.import_module('evaluation.processes')
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_processes.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.processes'
+import_ = <function _gcd_import at 0x7f6d28bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.processes'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_corrupt_or_extra_response2')
+reply = 'not-json\n'
+
+    @pytest.mark.parametrize('reply', [
+        '{"ok":true,"ok":false}\n',
+        '{"value":NaN}\n',
+        'not-json\n',
+        '{}\n{}\n',
+    ])
+    def test_corrupt_or_extra_response_poison_stream_and_stop_child(tmp_path, reply):
+        program = f'import sys,time\nsys.stdin.readline()\nsys.stdout.write({reply!r});sys.stdout.flush()\ntime.sleep(30)'
+>       child = transport(tmp_path, program)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_processes.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_corrupt_or_extra_response2')
+program = "import sys,time\nsys.stdin.readline()\nsys.stdout.write('not-json\\n');sys.stdout.flush()\ntime.sleep(30)"
+
+    def transport(tmp_path, program):
+        # Keep RED as an assertion about the absent owned transport, not an import
+        # collection error. The temporary utility is an actual external process.
+        try:
+            module = importlib.import_module('evaluation.processes')
+        except ModuleNotFoundError:
+>           pytest.fail('C-E1 owned process transport is not implemented')
+E           Failed: C-E1 owned process transport is not implemented
+
+evaluation/tests/test_processes.py:22: Failed
+____ test_corrupt_or_extra_response_poison_stream_and_stop_child[{}\n{}\n] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_corrupt_or_extra_response3')
+program = "import sys,time\nsys.stdin.readline()\nsys.stdout.write('{}\\n{}\\n');sys.stdout.flush()\ntime.sleep(30)"
+
+    def transport(tmp_path, program):
+        # Keep RED as an assertion about the absent owned transport, not an import
+        # collection error. The temporary utility is an actual external process.
+        try:
+>           module = importlib.import_module('evaluation.processes')
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_processes.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.processes'
+import_ = <function _gcd_import at 0x7f6d28bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.processes'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_corrupt_or_extra_response3')
+reply = '{}\n{}\n'
+
+    @pytest.mark.parametrize('reply', [
+        '{"ok":true,"ok":false}\n',
+        '{"value":NaN}\n',
+        'not-json\n',
+        '{}\n{}\n',
+    ])
+    def test_corrupt_or_extra_response_poison_stream_and_stop_child(tmp_path, reply):
+        program = f'import sys,time\nsys.stdin.readline()\nsys.stdout.write({reply!r});sys.stdout.flush()\ntime.sleep(30)'
+>       child = transport(tmp_path, program)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_processes.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_corrupt_or_extra_response3')
+program = "import sys,time\nsys.stdin.readline()\nsys.stdout.write('{}\\n{}\\n');sys.stdout.flush()\ntime.sleep(30)"
+
+    def transport(tmp_path, program):
+        # Keep RED as an assertion about the absent owned transport, not an import
+        # collection error. The temporary utility is an actual external process.
+        try:
+            module = importlib.import_module('evaluation.processes')
+        except ModuleNotFoundError:
+>           pytest.fail('C-E1 owned process transport is not implemented')
+E           Failed: C-E1 owned process transport is not implemented
+
+evaluation/tests/test_processes.py:22: Failed
+___________ test_eof_without_frame_is_failure_with_actual_exit_code ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_eof_without_frame_is_fail0')
+program = 'import sys\nsys.stdin.readline()\nsys.exit(7)'
+
+    def transport(tmp_path, program):
+        # Keep RED as an assertion about the absent owned transport, not an import
+        # collection error. The temporary utility is an actual external process.
+        try:
+>           module = importlib.import_module('evaluation.processes')
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_processes.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.processes'
+import_ = <function _gcd_import at 0x7f6d28bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.processes'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_eof_without_frame_is_fail0')
+
+    def test_eof_without_frame_is_failure_with_actual_exit_code(tmp_path):
+>       child = transport(tmp_path, 'import sys\nsys.stdin.readline()\nsys.exit(7)')
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_processes.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_eof_without_frame_is_fail0')
+program = 'import sys\nsys.stdin.readline()\nsys.exit(7)'
+
+    def transport(tmp_path, program):
+        # Keep RED as an assertion about the absent owned transport, not an import
+        # collection error. The temporary utility is an actual external process.
+        try:
+            module = importlib.import_module('evaluation.processes')
+        except ModuleNotFoundError:
+>           pytest.fail('C-E1 owned process transport is not implemented')
+E           Failed: C-E1 owned process transport is not implemented
+
+evaluation/tests/test_processes.py:22: Failed
+___________ test_oversize_response_is_rejected_before_unbounded_read ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_oversize_response_is_reje0')
+program = "import sys,time\nsys.stdin.readline()\nsys.stdout.write('a'*1100000);sys.stdout.flush()\ntime.sleep(30)"
+
+    def transport(tmp_path, program):
+        # Keep RED as an assertion about the absent owned transport, not an import
+        # collection error. The temporary utility is an actual external process.
+        try:
+>           module = importlib.import_module('evaluation.processes')
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_processes.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.processes'
+import_ = <function _gcd_import at 0x7f6d28bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.processes'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_oversize_response_is_reje0')
+
+    def test_oversize_response_is_rejected_before_unbounded_read(tmp_path):
+>       child = transport(tmp_path, "import sys,time\nsys.stdin.readline()\nsys.stdout.write('a'*1100000);sys.stdout.flush()\ntime.sleep(30)")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_processes.py:108: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_oversize_response_is_reje0')
+program = "import sys,time\nsys.stdin.readline()\nsys.stdout.write('a'*1100000);sys.stdout.flush()\ntime.sleep(30)"
+
+    def transport(tmp_path, program):
+        # Keep RED as an assertion about the absent owned transport, not an import
+        # collection error. The temporary utility is an actual external process.
+        try:
+            module = importlib.import_module('evaluation.processes')
+        except ModuleNotFoundError:
+>           pytest.fail('C-E1 owned process transport is not implemented')
+E           Failed: C-E1 owned process transport is not implemented
+
+evaluation/tests/test_processes.py:22: Failed
+_________ test_bad_request_is_rejected_without_poisoning_valid_stream __________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_bad_request_is_rejected_w0')
+program = "import sys,json\nfor line in sys.stdin:\n print(json.dumps({'seen':json.loads(line)['id']}),flush=True)\n"
+
+    def transport(tmp_path, program):
+        # Keep RED as an assertion about the absent owned transport, not an import
+        # collection error. The temporary utility is an actual external process.
+        try:
+>           module = importlib.import_module('evaluation.processes')
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_processes.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.processes'
+import_ = <function _gcd_import at 0x7f6d28bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.processes'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_bad_request_is_rejected_w0')
+
+    def test_bad_request_is_rejected_without_poisoning_valid_stream(tmp_path):
+>       child = transport(tmp_path, ECHO)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_processes.py:116: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_bad_request_is_rejected_w0')
+program = "import sys,json\nfor line in sys.stdin:\n print(json.dumps({'seen':json.loads(line)['id']}),flush=True)\n"
+
+    def transport(tmp_path, program):
+        # Keep RED as an assertion about the absent owned transport, not an import
+        # collection error. The temporary utility is an actual external process.
+        try:
+            module = importlib.import_module('evaluation.processes')
+        except ModuleNotFoundError:
+>           pytest.fail('C-E1 owned process transport is not implemented')
+E           Failed: C-E1 owned process transport is not implemented
+
+evaluation/tests/test_processes.py:22: Failed
+__________ test_existing_output_is_preserved_and_child_is_not_started __________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_existing_output_is_preser0')
+program = "import sys,json\nfor line in sys.stdin:\n print(json.dumps({'seen':json.loads(line)['id']}),flush=True)\n"
+
+    def transport(tmp_path, program):
+        # Keep RED as an assertion about the absent owned transport, not an import
+        # collection error. The temporary utility is an actual external process.
+        try:
+>           module = importlib.import_module('evaluation.processes')
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_processes.py:20: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.processes'
+import_ = <function _gcd_import at 0x7f6d28bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.processes'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_existing_output_is_preser0')
+
+    def test_existing_output_is_preserved_and_child_is_not_started(tmp_path):
+>       child = transport(tmp_path, ECHO)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_processes.py:126: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-8/test_existing_output_is_preser0')
+program = "import sys,json\nfor line in sys.stdin:\n print(json.dumps({'seen':json.loads(line)['id']}),flush=True)\n"
+
+    def transport(tmp_path, program):
+        # Keep RED as an assertion about the absent owned transport, not an import
+        # collection error. The temporary utility is an actual external process.
+        try:
+            module = importlib.import_module('evaluation.processes')
+        except ModuleNotFoundError:
+>           pytest.fail('C-E1 owned process transport is not implemented')
+E           Failed: C-E1 owned process transport is not implemented
+
+evaluation/tests/test_processes.py:22: Failed
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_processes.py::test_two_calls_return_their_own_frame_and_stop_records_exit
+FAILED evaluation/tests/test_processes.py::test_stderr_flood_does_not_block_response_and_is_retained
+FAILED evaluation/tests/test_processes.py::test_response_timeout_stops_owned_child_and_preserves_unrelated_process
+FAILED evaluation/tests/test_processes.py::test_stdin_backpressure_obeys_timeout
+FAILED evaluation/tests/test_processes.py::test_corrupt_or_extra_response_poison_stream_and_stop_child[{"ok":true,"ok":false}\n]
+FAILED evaluation/tests/test_processes.py::test_corrupt_or_extra_response_poison_stream_and_stop_child[{"value":NaN}\n]
+FAILED evaluation/tests/test_processes.py::test_corrupt_or_extra_response_poison_stream_and_stop_child[not-json\n]
+FAILED evaluation/tests/test_processes.py::test_corrupt_or_extra_response_poison_stream_and_stop_child[{}\n{}\n]
+FAILED evaluation/tests/test_processes.py::test_eof_without_frame_is_failure_with_actual_exit_code
+FAILED evaluation/tests/test_processes.py::test_oversize_response_is_rejected_before_unbounded_read
+FAILED evaluation/tests/test_processes.py::test_bad_request_is_rejected_without_poisoning_valid_stream
+FAILED evaluation/tests/test_processes.py::test_existing_output_is_preserved_and_child_is_not_started
+12 failed in 0.08s

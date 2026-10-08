@@ -1,0 +1,100 @@
+......F.............FF                                                   [100%]
+=================================== FAILURES ===================================
+_ test_corrupt_or_extra_response_poison_stream_and_stop_child[{"value":1e999}\n] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-14/test_corrupt_or_extra_response2')
+reply = '{"value":1e999}\n'
+
+    @pytest.mark.parametrize('reply', [
+        '{"ok":true,"ok":false}\n',
+        '{"value":NaN}\n',
+        '{"value":1e999}\n',
+        'not-json\n',
+        '{}\n{}\n',
+        pytest.param('{"nested":' + '['*10000 + '0' + ']'*10000 + '}\n', id='parser-recursion'),
+    ])
+    def test_corrupt_or_extra_response_poison_stream_and_stop_child(tmp_path, reply):
+        program = f'import sys,time\nsys.stdin.readline()\nsys.stdout.write({reply!r});sys.stdout.flush()\ntime.sleep(30)'
+        child = transport(tmp_path, program)
+        with child:
+>           with pytest.raises(ValueError):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE <class 'ValueError'>
+
+evaluation/tests/test_processes.py:93: Failed
+_______ test_request_limit_includes_line_terminator_and_preserves_stream _______
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-14/test_request_limit_includes_li0')
+
+    def test_request_limit_includes_line_terminator_and_preserves_stream(tmp_path):
+        child = transport(tmp_path, ECHO)
+        with child:
+            # The compact object is exactly 1 MiB before its required newline.
+            with pytest.raises(ValueError, match='line exceeds'):
+>               child.exchange({'blob': 'a'*(1048576-11)})
+
+evaluation/tests/test_processes.py:172: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/processes.py:131: in exchange
+    response = self._roundtrip(wire)
+               ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <evaluation.processes.JsonLinesProcess object at 0x7efd9969d630>
+wire = b'{"blob":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa...aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}\n'
+
+    def _roundtrip(self, wire):
+        process = self._process
+        deadline = time.monotonic()+self.timeout
+        written = 0
+        received = bytearray()
+        with selectors.DefaultSelector() as selector:
+            selector.register(process.stdout, selectors.EVENT_READ, 'out')
+            # An unsolicited queued frame must not become this request's answer.
+            if selector.select(0):
+                raise ValueError('Unsolicited adapter stdout')
+            selector.register(process.stdin, selectors.EVENT_WRITE, 'in')
+            while True:
+                remaining = deadline-time.monotonic()
+                if remaining <= 0:
+                    raise TimeoutError('JSON-lines process exchange timed out')
+                events = selector.select(remaining)
+                if not events:
+                    raise TimeoutError('JSON-lines process exchange timed out')
+                for key, _ in events:
+                    if key.data == 'in':
+                        try:
+                            count = os.write(key.fd, wire[written:written+65536])
+                        except BlockingIOError:
+                            continue
+                        written += count
+                        if written == len(wire):
+                            selector.unregister(process.stdin)
+                    else:
+                        try:
+                            chunk = os.read(key.fd, 65536)
+                        except BlockingIOError:
+                            continue
+                        if not chunk:
+>                           raise ChildProcessError('Process exited without a complete response frame')
+E                           ChildProcessError: Process exited without a complete response frame
+
+evaluation/processes.py:183: ChildProcessError
+_________________ test_response_limit_includes_line_terminator _________________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-14/test_response_limit_includes_l0')
+
+    def test_response_limit_includes_line_terminator(tmp_path):
+        program = "import sys,time\nsys.stdin.readline()\nsys.stdout.write('{\"blob\":\"'+'a'*(1048576-11)+'\"}\\n');sys.stdout.flush()\ntime.sleep(30)"
+        child = transport(tmp_path, program)
+        with child:
+>           with pytest.raises(ValueError, match='line exceeds'):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE <class 'ValueError'>
+
+evaluation/tests/test_processes.py:180: Failed
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_processes.py::test_corrupt_or_extra_response_poison_stream_and_stop_child[{"value":1e999}\n]
+FAILED evaluation/tests/test_processes.py::test_request_limit_includes_line_terminator_and_preserves_stream
+FAILED evaluation/tests/test_processes.py::test_response_limit_includes_line_terminator
+3 failed, 19 passed in 4.53s

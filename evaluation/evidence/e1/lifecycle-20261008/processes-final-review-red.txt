@@ -1,0 +1,83 @@
+........F......FF..                                                      [100%]
+=================================== FAILURES ===================================
+_ test_corrupt_or_extra_response_poison_stream_and_stop_child[parser-recursion] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-12/test_corrupt_or_extra_response4')
+reply = '{"nested":[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[...]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]}\n'
+
+    @pytest.mark.parametrize('reply', [
+        '{"ok":true,"ok":false}\n',
+        '{"value":NaN}\n',
+        'not-json\n',
+        '{}\n{}\n',
+        pytest.param('{"nested":' + '['*10000 + '0' + ']'*10000 + '}\n', id='parser-recursion'),
+    ])
+    def test_corrupt_or_extra_response_poison_stream_and_stop_child(tmp_path, reply):
+        program = f'import sys,time\nsys.stdin.readline()\nsys.stdout.write({reply!r});sys.stdout.flush()\ntime.sleep(30)'
+        child = transport(tmp_path, program)
+        with child:
+            with pytest.raises(ValueError):
+>               child.exchange({'id': 'bad'})
+
+evaluation/tests/test_processes.py:93: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/processes.py:131: in exchange
+    result = json.loads(response.decode('utf-8'), object_pairs_hook=_pairs,
+/usr/lib64/python3.13/json/__init__.py:365: in loads
+    return cls(**kw).decode(s)
+           ^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.13/json/decoder.py:345: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.decoder.JSONDecoder object at 0x7f299a529040>
+s = '{"nested":[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[...]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]}'
+idx = 0
+
+    def raw_decode(self, s, idx=0):
+        """Decode a JSON document from ``s`` (a ``str`` beginning with
+        a JSON document) and return a 2-tuple of the Python
+        representation and the index in ``s`` where the document ended.
+    
+        This can be used to decode a JSON document from a string that may
+        have extraneous data at the end.
+    
+        """
+        try:
+>           obj, end = self.scan_once(s, idx)
+                       ^^^^^^^^^^^^^^^^^^^^^^
+E           RecursionError: maximum recursion depth exceeded while decoding a JSON array from a unicode string
+
+/usr/lib64/python3.13/json/decoder.py:361: RecursionError
+__ test_nonfinite_or_nonpositive_budget_cannot_create_unbounded_process[nan] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-12/test_nonfinite_or_nonpositive_0')
+budget = nan
+
+    @pytest.mark.parametrize('budget', [float('nan'), float('inf'), 0, -1])
+    def test_nonfinite_or_nonpositive_budget_cannot_create_unbounded_process(tmp_path, budget):
+        child = transport(tmp_path, ECHO)
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+evaluation/tests/test_processes.py:161: Failed
+__ test_nonfinite_or_nonpositive_budget_cannot_create_unbounded_process[inf] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-12/test_nonfinite_or_nonpositive_1')
+budget = inf
+
+    @pytest.mark.parametrize('budget', [float('nan'), float('inf'), 0, -1])
+    def test_nonfinite_or_nonpositive_budget_cannot_create_unbounded_process(tmp_path, budget):
+        child = transport(tmp_path, ECHO)
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+evaluation/tests/test_processes.py:161: Failed
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_processes.py::test_corrupt_or_extra_response_poison_stream_and_stop_child[parser-recursion]
+FAILED evaluation/tests/test_processes.py::test_nonfinite_or_nonpositive_budget_cannot_create_unbounded_process[nan]
+FAILED evaluation/tests/test_processes.py::test_nonfinite_or_nonpositive_budget_cannot_create_unbounded_process[inf]
+3 failed, 16 passed in 3.86s

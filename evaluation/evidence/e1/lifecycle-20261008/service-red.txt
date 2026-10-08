@@ -1,0 +1,244 @@
+FFFFFFFFFF                                                               [100%]
+=================================== FAILURES ===================================
+_________ test_stdout_stderr_flood_does_not_wedge_readiness_or_cleanup _________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-16/test_stdout_stderr_flood_does_0')
+
+    def test_stdout_stderr_flood_does_not_wedge_readiness_or_cleanup(tmp_path):
+>       child = service(tmp_path, "import sys,time,pathlib\nsys.stdout.write('o'*200000);sys.stdout.flush()\nsys.stderr.write('e'*200000);sys.stderr.flush()\npathlib.Path('ready').write_text('yes')\ntime.sleep(30)")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_service_process.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-16/test_stdout_stderr_flood_does_0')
+program = "import sys,time,pathlib\nsys.stdout.write('o'*200000);sys.stdout.flush()\nsys.stderr.write('e'*200000);sys.stderr.flush()\npathlib.Path('ready').write_text('yes')\ntime.sleep(30)"
+
+    def service(tmp_path, program):
+        module = importlib.import_module('evaluation.processes')
+>       assert hasattr(module, 'ServiceProcess'), 'C-E1 service lifecycle is not implemented'
+E       AssertionError: C-E1 service lifecycle is not implemented
+E       assert False
+E        +  where False = hasattr(<module 'evaluation.processes' from '/home/karma/Documents/RIS/evaluation/processes.py'>, 'ServiceProcess')
+
+evaluation/tests/test_service_process.py:13: AssertionError
+_____________ test_readiness_timeout_stops_only_owned_direct_child _____________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-16/test_readiness_timeout_stops_o0')
+
+    def test_readiness_timeout_stops_only_owned_direct_child(tmp_path):
+        unrelated = subprocess.Popen([sys.executable, '-c', 'import time;time.sleep(30)'])
+        try:
+>           child = service(tmp_path, 'import time;time.sleep(30)')
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_service_process.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-16/test_readiness_timeout_stops_o0')
+program = 'import time;time.sleep(30)'
+
+    def service(tmp_path, program):
+        module = importlib.import_module('evaluation.processes')
+>       assert hasattr(module, 'ServiceProcess'), 'C-E1 service lifecycle is not implemented'
+E       AssertionError: C-E1 service lifecycle is not implemented
+E       assert False
+E        +  where False = hasattr(<module 'evaluation.processes' from '/home/karma/Documents/RIS/evaluation/processes.py'>, 'ServiceProcess')
+
+evaluation/tests/test_service_process.py:13: AssertionError
+___________ test_dead_service_cannot_be_ready_and_keeps_actual_exit ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-16/test_dead_service_cannot_be_re0')
+
+    def test_dead_service_cannot_be_ready_and_keeps_actual_exit(tmp_path):
+>       child = service(tmp_path, 'import sys;sys.exit(7)')
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_service_process.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-16/test_dead_service_cannot_be_re0')
+program = 'import sys;sys.exit(7)'
+
+    def service(tmp_path, program):
+        module = importlib.import_module('evaluation.processes')
+>       assert hasattr(module, 'ServiceProcess'), 'C-E1 service lifecycle is not implemented'
+E       AssertionError: C-E1 service lifecycle is not implemented
+E       assert False
+E        +  where False = hasattr(<module 'evaluation.processes' from '/home/karma/Documents/RIS/evaluation/processes.py'>, 'ServiceProcess')
+
+evaluation/tests/test_service_process.py:13: AssertionError
+_____________ test_probe_error_is_propagated_and_child_is_stopped ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-16/test_probe_error_is_propagated0')
+
+    def test_probe_error_is_propagated_and_child_is_stopped(tmp_path):
+>       child = service(tmp_path, 'import time;time.sleep(30)')
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_service_process.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-16/test_probe_error_is_propagated0')
+program = 'import time;time.sleep(30)'
+
+    def service(tmp_path, program):
+        module = importlib.import_module('evaluation.processes')
+>       assert hasattr(module, 'ServiceProcess'), 'C-E1 service lifecycle is not implemented'
+E       AssertionError: C-E1 service lifecycle is not implemented
+E       assert False
+E        +  where False = hasattr(<module 'evaluation.processes' from '/home/karma/Documents/RIS/evaluation/processes.py'>, 'ServiceProcess')
+
+evaluation/tests/test_service_process.py:13: AssertionError
+______________ test_service_existing_output_is_never_overwritten _______________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-16/test_service_existing_output_i0')
+
+    def test_service_existing_output_is_never_overwritten(tmp_path):
+>       child = service(tmp_path, 'import time;time.sleep(30)')
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_service_process.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-16/test_service_existing_output_i0')
+program = 'import time;time.sleep(30)'
+
+    def service(tmp_path, program):
+        module = importlib.import_module('evaluation.processes')
+>       assert hasattr(module, 'ServiceProcess'), 'C-E1 service lifecycle is not implemented'
+E       AssertionError: C-E1 service lifecycle is not implemented
+E       assert False
+E        +  where False = hasattr(<module 'evaluation.processes' from '/home/karma/Documents/RIS/evaluation/processes.py'>, 'ServiceProcess')
+
+evaluation/tests/test_service_process.py:13: AssertionError
+___________ test_service_missing_executable_preserves_start_failure ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-16/test_service_missing_executabl0')
+
+    def test_service_missing_executable_preserves_start_failure(tmp_path):
+>       child = service(tmp_path, '')
+                ^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_service_process.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-16/test_service_missing_executabl0')
+program = ''
+
+    def service(tmp_path, program):
+        module = importlib.import_module('evaluation.processes')
+>       assert hasattr(module, 'ServiceProcess'), 'C-E1 service lifecycle is not implemented'
+E       AssertionError: C-E1 service lifecycle is not implemented
+E       assert False
+E        +  where False = hasattr(<module 'evaluation.processes' from '/home/karma/Documents/RIS/evaluation/processes.py'>, 'ServiceProcess')
+
+evaluation/tests/test_service_process.py:13: AssertionError
+_________ test_readiness_budget_is_validated_before_running_probe[nan] _________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-16/test_readiness_budget_is_valid0')
+budget = nan
+
+    @pytest.mark.parametrize('budget', [float('nan'), float('inf'), 0, -1])
+    def test_readiness_budget_is_validated_before_running_probe(tmp_path, budget):
+>       child = service(tmp_path, 'import time;time.sleep(30)')
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_service_process.py:83: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-16/test_readiness_budget_is_valid0')
+program = 'import time;time.sleep(30)'
+
+    def service(tmp_path, program):
+        module = importlib.import_module('evaluation.processes')
+>       assert hasattr(module, 'ServiceProcess'), 'C-E1 service lifecycle is not implemented'
+E       AssertionError: C-E1 service lifecycle is not implemented
+E       assert False
+E        +  where False = hasattr(<module 'evaluation.processes' from '/home/karma/Documents/RIS/evaluation/processes.py'>, 'ServiceProcess')
+
+evaluation/tests/test_service_process.py:13: AssertionError
+_________ test_readiness_budget_is_validated_before_running_probe[inf] _________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-16/test_readiness_budget_is_valid1')
+budget = inf
+
+    @pytest.mark.parametrize('budget', [float('nan'), float('inf'), 0, -1])
+    def test_readiness_budget_is_validated_before_running_probe(tmp_path, budget):
+>       child = service(tmp_path, 'import time;time.sleep(30)')
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_service_process.py:83: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-16/test_readiness_budget_is_valid1')
+program = 'import time;time.sleep(30)'
+
+    def service(tmp_path, program):
+        module = importlib.import_module('evaluation.processes')
+>       assert hasattr(module, 'ServiceProcess'), 'C-E1 service lifecycle is not implemented'
+E       AssertionError: C-E1 service lifecycle is not implemented
+E       assert False
+E        +  where False = hasattr(<module 'evaluation.processes' from '/home/karma/Documents/RIS/evaluation/processes.py'>, 'ServiceProcess')
+
+evaluation/tests/test_service_process.py:13: AssertionError
+__________ test_readiness_budget_is_validated_before_running_probe[0] __________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-16/test_readiness_budget_is_valid2')
+budget = 0
+
+    @pytest.mark.parametrize('budget', [float('nan'), float('inf'), 0, -1])
+    def test_readiness_budget_is_validated_before_running_probe(tmp_path, budget):
+>       child = service(tmp_path, 'import time;time.sleep(30)')
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_service_process.py:83: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-16/test_readiness_budget_is_valid2')
+program = 'import time;time.sleep(30)'
+
+    def service(tmp_path, program):
+        module = importlib.import_module('evaluation.processes')
+>       assert hasattr(module, 'ServiceProcess'), 'C-E1 service lifecycle is not implemented'
+E       AssertionError: C-E1 service lifecycle is not implemented
+E       assert False
+E        +  where False = hasattr(<module 'evaluation.processes' from '/home/karma/Documents/RIS/evaluation/processes.py'>, 'ServiceProcess')
+
+evaluation/tests/test_service_process.py:13: AssertionError
+_________ test_readiness_budget_is_validated_before_running_probe[-1] __________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-16/test_readiness_budget_is_valid3')
+budget = -1
+
+    @pytest.mark.parametrize('budget', [float('nan'), float('inf'), 0, -1])
+    def test_readiness_budget_is_validated_before_running_probe(tmp_path, budget):
+>       child = service(tmp_path, 'import time;time.sleep(30)')
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_service_process.py:83: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-16/test_readiness_budget_is_valid3')
+program = 'import time;time.sleep(30)'
+
+    def service(tmp_path, program):
+        module = importlib.import_module('evaluation.processes')
+>       assert hasattr(module, 'ServiceProcess'), 'C-E1 service lifecycle is not implemented'
+E       AssertionError: C-E1 service lifecycle is not implemented
+E       assert False
+E        +  where False = hasattr(<module 'evaluation.processes' from '/home/karma/Documents/RIS/evaluation/processes.py'>, 'ServiceProcess')
+
+evaluation/tests/test_service_process.py:13: AssertionError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_service_process.py::test_stdout_stderr_flood_does_not_wedge_readiness_or_cleanup
+FAILED evaluation/tests/test_service_process.py::test_readiness_timeout_stops_only_owned_direct_child
+FAILED evaluation/tests/test_service_process.py::test_dead_service_cannot_be_ready_and_keeps_actual_exit
+FAILED evaluation/tests/test_service_process.py::test_probe_error_is_propagated_and_child_is_stopped
+FAILED evaluation/tests/test_service_process.py::test_service_existing_output_is_never_overwritten
+FAILED evaluation/tests/test_service_process.py::test_service_missing_executable_preserves_start_failure
+FAILED evaluation/tests/test_service_process.py::test_readiness_budget_is_validated_before_running_probe[nan]
+FAILED evaluation/tests/test_service_process.py::test_readiness_budget_is_validated_before_running_probe[inf]
+FAILED evaluation/tests/test_service_process.py::test_readiness_budget_is_validated_before_running_probe[0]
+FAILED evaluation/tests/test_service_process.py::test_readiness_budget_is_validated_before_running_probe[-1]
+10 failed in 0.05s

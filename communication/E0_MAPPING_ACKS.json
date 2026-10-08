@@ -1,6 +1,6 @@
 {
   "schemaVersion": "hmbc-live-mapping-acks/v1",
-  "updatedAt": "2026-10-08T15:30:10.698106+00:00",
+  "updatedAt": "2026-10-08T15:54:08.679103+00:00",
   "interfaceVersion": "v1",
   "freezeId": "E0-v1-r6-20261008",
   "frozenManifest": {
@@ -55,16 +55,37 @@
     "ledger": {
       "commit": "91add8cc6000d1413bad2ed0aa119a5f26e8c776",
       "manifestSha256": "407c86331072bdad63562541230fdd3078608287eccb373cb2f974e3bde20fc1",
-      "entries": 101
+      "entries": 101,
+      "aE1Ready": true
     },
     "protocol": {
-      "commit": "e30d00d840e76526d8f12845054bfbf92fc0621b",
-      "manifestSha256": "140bb7623bbba5f64c7e3e0a5f08d7c972a94ec50d20cc9e50a0e21aad404063",
+      "commit": "34de384f0af12b52f4de4559a5639388df824861",
+      "manifestSha256": "30f76ddac08bd1a720c4b4c9479103c2663eb61b806945c0d66fe44d48e9f41a",
       "entries": 98,
       "adapterSha256": "7146495b4dfbe351d73299223efdb853c41895ac880f9a6c13e2a525656a9220",
       "supersedesFrozenOwnerPin": true,
-      "serviceReadyForIntegration": false
+      "serviceReadyForIntegration": true
     }
   },
-  "note": "Live ACK receipt/status/successor record. FREEZE.json and its15 copies retain immutable publication-time bytes and nulls/status. Both exact mapping ACKs verified; all seven pre-publication E0 rows retain their evidence/exclusions. A-E1/B-E1/C-E1 unlock together. Owner service READY and exact integration FREEZE ACKs precede actual two-chain services; no RQ gate passed."
+  "note": "Live ACK/status/current successor record. FREEZE.json and15 copies retain immutable publication-time bytes. E0 closed/E1 unlocked; owner A1-0028/A2-0014 READY statements reviewed. Runner lifecycle/collector and Option A Alice/Bob bootstrap input pending. Exact integration FREEZE ACKs precede actual two-chain services. READY, unit tests and static checks are not integrated/RQ gate evidence.",
+  "ownerServiceReady": {
+    "agent-1": {
+      "commit": "ff3cb743cd31fdd7745d2d4a8ecd81af9d04584e",
+      "path": "communication/agent-1/outbox/0028-ready-a-e1-frozen-controls.md",
+      "sha256": "b37abe1ca81ee174256c18f3b3eba75ea5e80fa6cfa7922ea1bd69af3f23c572",
+      "changeCommit": "ff3cb743cd31fdd7745d2d4a8ecd81af9d04584e",
+      "messageId": "A1-0028",
+      "scope": "owner A-E1 ledger readiness; independent C-E1 result pending",
+      "integrationFreezeAck": false
+    },
+    "agent-2": {
+      "commit": "34de384f0af12b52f4de4559a5639388df824861",
+      "path": "communication/agent-2/outbox/0014-ready-owner-service-for-e1-integration.md",
+      "sha256": "52c5142c53894d6767ae08a683424b1d52997a4ae9a86dcdc9c9dfd2d94cb396",
+      "changeCommit": "34de384f0af12b52f4de4559a5639388df824861",
+      "messageId": "A2-0014",
+      "scope": "candidate symbolic service readiness; no reachable process crash hook, independent C-E1 result pending",
+      "integrationFreezeAck": false
+    }
+  }
 }
