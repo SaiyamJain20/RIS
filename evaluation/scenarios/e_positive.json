@@ -339,7 +339,11 @@
       "PBC_DECIDED"
     ],
     "expectedError": "POLICY_DENIED",
-    "adapterMode": "symbolic"
+    "adapterMode": "symbolic",
+    "expectedLedgerChecks": [
+      "DBC_POLICY_DENIAL_LOGGED",
+      "NONCE_UNCHANGED"
+    ]
   },
   {
     "id": "E-control-WrongIssuerAdmin-repaired-e",

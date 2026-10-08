@@ -50,3 +50,8 @@ See `evaluation/reports/E0-progress.md` and A3-0003 for locally verified source/
 ## Current E0 review — 2026-10-08
 
 Both peers supplied E0 owner handoffs and scoped revision3 reviews. Agent3 revision4 adds strict operation/envelope/result/ScenarioResult definitions and39 prospective case fixtures. Exact affected-party ACKs, shared compatibility acceptance and frozen-interface publication remain required; see interfaces/proposals/v1/ACCEPTANCE.md. No checkbox in the RQ1 gate is closed by schema/module tests. Runner/gate preflights remain BLOCKED; no E1 unlock or real service integration. Earlier partial checkpoint text is historical.
+
+
+## Current E0 review — revision5 (2026-10-08)
+
+Revision4 scoped peer acceptance requested concrete changes. Revision5 addresses them and proposes two missing witness operations (A2-0008/Agent1 confirmation).148 evaluator tests,565 schema verdicts,393 signed checks and fresh166-test ledger reproduction are E0/module compatibility evidence only;48 case schedules remain NOT_RUN. The initial schema command timed out124, then an unchanged longer-budget retry passed; retain both. Exact revised peer acceptance and frozen publication/mapping still block E0/E1. No RQ gate checkbox above is closed by this work. See A3-0012 and revision-5-review evidence.

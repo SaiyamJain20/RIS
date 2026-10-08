@@ -593,6 +593,12 @@
                   "$ref": "#/$defs/CollectDecisionResult"
                 },
                 {
+                  "$ref": "#/$defs/CollectCheckpointResult"
+                },
+                {
+                  "$ref": "#/$defs/AttestGrantResult"
+                },
+                {
                   "$ref": "#/$defs/ReleaseResult"
                 },
                 {
@@ -1695,6 +1701,17 @@
         },
         "adapterMode": {
           "const": "symbolic"
+        },
+        "expectedLedgerChecks": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "DBC_POLICY_DENIAL_LOGGED",
+              "NONCE_UNCHANGED"
+            ]
+          }
         }
       },
       "required": [
@@ -2010,6 +2027,28 @@
       ],
       "additionalProperties": false
     },
+    "CollectCheckpointInput": {
+      "type": "object",
+      "properties": {
+        "witnessSetVersion": {
+          "const": "1"
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "AttestGrantInput": {
+      "type": "object",
+      "properties": {
+        "grantId": {
+          "$ref": "#/$defs/Hash"
+        }
+      },
+      "required": [
+        "grantId"
+      ],
+      "additionalProperties": false
+    },
     "ReleaseInput": {
       "type": "object",
       "properties": {
@@ -2132,6 +2171,64 @@
         "decision",
         "signatures",
         "credentialRecords"
+      ],
+      "additionalProperties": false
+    },
+    "CollectCheckpointResult": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "v1"
+        },
+        "adapterMode": {
+          "const": "symbolic"
+        },
+        "checkpoint": {
+          "$ref": "#/$defs/StateCheckpoint"
+        },
+        "signatures": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Signature"
+          },
+          "minItems": 1,
+          "maxItems": 1
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "adapterMode",
+        "checkpoint",
+        "signatures"
+      ],
+      "additionalProperties": false
+    },
+    "AttestGrantResult": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "v1"
+        },
+        "adapterMode": {
+          "const": "symbolic"
+        },
+        "receipt": {
+          "$ref": "#/$defs/GrantReceipt"
+        },
+        "signatures": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Signature"
+          },
+          "minItems": 1,
+          "maxItems": 1
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "adapterMode",
+        "receipt",
+        "signatures"
       ],
       "additionalProperties": false
     },
@@ -2352,6 +2449,158 @@
             },
             "result": {
               "$ref": "#/$defs/CollectDecisionResult"
+            },
+            "error": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "ok",
+            "result",
+            "error"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": "v1"
+            },
+            "ok": {
+              "const": false
+            },
+            "result": {
+              "type": "null"
+            },
+            "error": {
+              "$ref": "#/$defs/Error"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "ok",
+            "result",
+            "error"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "CollectCheckpointRequest": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "v1"
+        },
+        "operation": {
+          "const": "collect_checkpoint"
+        },
+        "input": {
+          "$ref": "#/$defs/CollectCheckpointInput"
+        },
+        "deploymentManifest": {
+          "$ref": "#/$defs/LedgerDeployment"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "operation",
+        "input",
+        "deploymentManifest"
+      ],
+      "additionalProperties": false
+    },
+    "CollectCheckpointResponse": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": "v1"
+            },
+            "ok": {
+              "const": true
+            },
+            "result": {
+              "$ref": "#/$defs/CollectCheckpointResult"
+            },
+            "error": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "ok",
+            "result",
+            "error"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": "v1"
+            },
+            "ok": {
+              "const": false
+            },
+            "result": {
+              "type": "null"
+            },
+            "error": {
+              "$ref": "#/$defs/Error"
+            }
+          },
+          "required": [
+            "schemaVersion",
+            "ok",
+            "result",
+            "error"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "AttestGrantRequest": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": "v1"
+        },
+        "operation": {
+          "const": "attest_grant"
+        },
+        "input": {
+          "$ref": "#/$defs/AttestGrantInput"
+        },
+        "deploymentManifest": {
+          "$ref": "#/$defs/LedgerDeployment"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "operation",
+        "input",
+        "deploymentManifest"
+      ],
+      "additionalProperties": false
+    },
+    "AttestGrantResponse": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "schemaVersion": {
+              "const": "v1"
+            },
+            "ok": {
+              "const": true
+            },
+            "result": {
+              "$ref": "#/$defs/AttestGrantResult"
             },
             "error": {
               "type": "null"
@@ -2678,6 +2927,12 @@
         },
         {
           "$ref": "#/$defs/CollectDecisionRequest"
+        },
+        {
+          "$ref": "#/$defs/CollectCheckpointRequest"
+        },
+        {
+          "$ref": "#/$defs/AttestGrantRequest"
         },
         {
           "$ref": "#/$defs/ReleaseRequest"
@@ -3045,35 +3300,96 @@
       ]
     },
     "E0CaseStep": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "action": {
+              "enum": [
+                "REQUEST_ACCESS",
+                "SUBSTITUTE_SUBJECT",
+                "REPLAY_REQUEST",
+                "ADVANCE_CLOCK",
+                "FABRICATE_TUPLE",
+                "SUBSTITUTE_DESTINATION",
+                "REPLAY_NEW_REFERENCE",
+                "INSTALL_NEW_LIST",
+                "REPLAY_OLD_LIST",
+                "WRONG_ISSUER_UPDATE",
+                "REVOKE_ON_PBC",
+                "ACCEPT_CHECKPOINT",
+                "FORWARD_OR_CONSUME",
+                "RELEASE",
+                "DROP_OUTCOME",
+                "FABRICATE_OUTCOME",
+                "REPORT_OUTCOME",
+                "DUPLICATE_OUTCOME"
+              ]
+            },
+            "offsetSeconds": {
+              "$ref": "#/$defs/Uint64"
+            }
+          },
+          "required": [
+            "action",
+            "offsetSeconds"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "action": {
+              "const": "CRASH_RESTART"
+            },
+            "offsetSeconds": {
+              "$ref": "#/$defs/Uint64"
+            },
+            "workerHook": {
+              "const": "release"
+            },
+            "crashPoint": {
+              "enum": [
+                "after-intent",
+                "after-send"
+              ]
+            }
+          },
+          "required": [
+            "action",
+            "offsetSeconds",
+            "workerHook",
+            "crashPoint"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "WorkerExpectation": {
       "type": "object",
       "properties": {
-        "action": {
-          "enum": [
-            "REQUEST_ACCESS",
-            "SUBSTITUTE_SUBJECT",
-            "REPLAY_REQUEST",
-            "ADVANCE_CLOCK",
-            "INSTALL_NEW_LIST",
-            "REPLAY_OLD_LIST",
-            "WRONG_ISSUER_UPDATE",
-            "REVOKE_ON_PBC",
-            "ACCEPT_CHECKPOINT",
-            "FORWARD_OR_CONSUME",
-            "RELEASE",
-            "DROP_OUTCOME",
-            "FABRICATE_OUTCOME",
-            "REPORT_OUTCOME",
-            "DUPLICATE_OUTCOME",
-            "CRASH_RESTART"
-          ]
-        },
-        "offsetSeconds": {
+        "releaseIntentCount": {
           "$ref": "#/$defs/Uint64"
+        },
+        "releaseSentCount": {
+          "$ref": "#/$defs/Uint64"
+        },
+        "sameCachedResponse": {
+          "const": true
+        },
+        "delivery": {
+          "const": "unknown"
+        },
+        "expiredRetryError": {
+          "const": "EXPIRED"
         }
       },
       "required": [
-        "action",
-        "offsetSeconds"
+        "releaseIntentCount",
+        "releaseSentCount",
+        "sameCachedResponse",
+        "delivery",
+        "expiredRetryError"
       ],
       "additionalProperties": false
     },
@@ -3195,6 +3511,9 @@
             "qualification": {
               "type": "string",
               "minLength": 1
+            },
+            "worker": {
+              "$ref": "#/$defs/WorkerExpectation"
             }
           },
           "required": [
@@ -3242,7 +3561,10 @@
                 "enum": [
                   "subject-substitution",
                   "nonce-replay",
-                  "expiry-boundary"
+                  "expiry-boundary",
+                  "forged-tuple",
+                  "wrong-destination",
+                  "new-reference-replay"
                 ]
               }
             }

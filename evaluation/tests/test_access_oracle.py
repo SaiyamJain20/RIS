@@ -16,7 +16,8 @@ def trace(scenario):
             event.update({k:f[k] for k in ('grantId','gid','dataId')})
         if name=='DBC_AUTHORIZED': event.update({k:f[k] for k in ('kssc','destinationChainId','recipientKeyHash','keyEpoch')})
         events.append(event)
-    return {'adapterMode':'symbolic','events':events,'error':scenario['expectedError']}
+    return {'adapterMode':'symbolic','events':events,'error':scenario['expectedError'],
+            'ledgerChecks':{name:True for name in scenario.get('expectedLedgerChecks',[])}}
 
 
 def test_legitimate_and_denial_controls_accept_expected_traces():
@@ -67,3 +68,20 @@ def test_duplicate_outcome_transition_fails():
     s=SCENARIOS[0];t=trace(s)
     t['events'].append(copy.deepcopy(t['events'][-1]))
     assert not evaluate(s,t)['ok']
+
+
+@pytest.mark.parametrize('missing', ['DBC_POLICY_DENIAL_LOGGED', 'NONCE_UNCHANGED'])
+def test_repaired_bob_requires_native_dbc_denial_and_unchanged_nonce(missing):
+    s=next(s for s in SCENARIOS if s['fixture']['actor']=='Bob' and s['profile']=='repaired-e')
+    t=trace(s)
+    t['ledgerChecks']={'DBC_POLICY_DENIAL_LOGGED':True,'NONCE_UNCHANGED':True}
+    assert evaluate(s,t)['ok']
+    del t['ledgerChecks'][missing]
+    assert not evaluate(s,t)['ok']
+
+
+def test_repaired_bob_rejects_false_or_nonboolean_ledger_assertions():
+    s=next(s for s in SCENARIOS if s['fixture']['actor']=='Bob' and s['profile']=='repaired-e')
+    for value in (False, 1, 'true'):
+        t=trace(s); t['ledgerChecks']={'DBC_POLICY_DENIAL_LOGGED':value,'NONCE_UNCHANGED':True}
+        assert not evaluate(s,t)['ok']

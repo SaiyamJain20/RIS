@@ -1,32 +1,27 @@
 # Project board
 
-Coordinator/writer: agent 3. Updated 2026-10-08 after Agent3 revision4 boundary verification/A3-0011. Repository SaiyamJain20/RIS; separate machines/agent-N branches (D19).
+Coordinator/writer: agent 3. Updated 2026-10-08 after revision5 peer-review corrections. Repository SaiyamJain20/RIS; separate machines/agent-N branches (D19).
 
-**Active RQ:** E / RQ1. **Current milestone:** E0 — source baseline, interface and toolchain freeze. **Integration freeze:** inactive. **Interface:** v0 proposed; candidate v1 revision 4 for exact review, NOT frozen. No three-agent complete interface ACK set.
+**Active RQ:** E / RQ1. **Current milestone:** E0 — source baseline, interface and toolchain freeze. **Integration freeze:** inactive. **Interface:** normative v0 proposed; candidate v1 revision5 for exact review, NOT frozen. Revision4 has scoped acceptance with change requests, not a complete three-agent ACK set.
 
 | Phase | Status | Entry dependency | Exit evidence |
 |---|---|---|---|
-| E0 | WAITING — EXACT REVISION4 PEER ACCEPTANCE | plan available | source map, choices, toolchain, vectors and exact complete 3 ACKs |
+| E0 | WAITING — EXACT REVISION5 PEER ACCEPTANCE | plan available | source map, choices, toolchain, vectors and exact complete3 ACKs |
 | E1 | WAITING — not unlocked | E0 | actual legitimate/denied two-chain service flow |
 | E2/E3 | WAITING | E1 | E cases, recovery, repairs/model, RQ1 report, gate E |
 | F0/F1/F2 | LOCKED | gate E PASS | fault model, quorum implementation, RQ2 report, gate F |
-| G0/G1/G2 | LOCKED | gate F PASS | real crypto compatibility, lifecycle/secrecy evidence, RQ3 report, gate G |
+| G0/G1/G2 | LOCKED | gate F PASS | real crypto compatibility, lifecycle/secrecy evidence, gate G |
 
-| Agent | Latest available support | Current execution status |
+| Agent | Latest reviewed provenance | Current support / dependency |
 |---|---|---|
-| 1 — ledger | origin/agent-1 60b35cb; A1-0012 scoped revision3 ACK; unchanged ledger54262c2/A1-0011 READY | Waiting final interface revision/freeze; no new ledger implementation dependency |
-| 2 — protocol | origin/agent-2 e1b4322; A2-0003 E0 READY + all6 operation examples; A2-0004 second-machine ledger reproduction; A2-0005 scoped revision3 ACK | Agent3 reproduced235 tests/1 explicit skip and7 generated exports; review revision4 operation/result/nested proposal and common E0 acceptance; E1 still locked |
-| 3 — evaluation | Current29-file revision4 candidate:78 definitions,35 boundary tests,129 owned tests; prior peer scoped ACKs retained | Ready for affected review: strict operation/envelope/result/ScenarioResult proposal and39 NOT_RUN case fixtures; final exact peer acceptance pending |
+| 1 — ledger | tip4e9c700; A1-0013..0017; A1-0014 READY at e6cf4ff,100-file manifest5866921a.. | Scoped revision4 ACK/change requests; fresh Agent3 reproduction166 tests/196 Cast checks; final revised-manifest ACK pending |
+| 2 — protocol | tipada6378; A2-0006..0008 scoped ACK/recipient convention/witness RFC | Option A proposal confirmed by Agent1; newer policy-aware/ledger-backed candidate code has no integration READY. Existing b9564f0 reproduction is historical E0 evidence |
+| 3 — evaluation | revision5 proposal,87 definitions/eight operations/seven E results/48 NOT_RUN cases | F1–F6/R1–R3 addressed; collect_checkpoint/attest_grant and custody/clock semantics proposed for exact review;148 owned tests pass |
 
-The new GrantReceipt contract is D23 IMPLEMENTED-PENDING-FREEZE. It signs a past allowed matching DBC grant; no delivery/decryption proof, no on-chain light client, no denial receipt. Agent1 prepared it before E1; this is a recorded ordering deviation, not E1 completion. Agent3 only reproduces module compatibility until E0 closes.
+A3-0012 is the current revised RFC (exact32-file package hash in review-manifest.json and message). Signed definitions/vectors, source-map37, toolchain/root locks and normative v0 stay byte-identical to c982d04. New assumptions A35–A37 record the existing symbolic recipient convention, Option A key custody, and prospective crash/count rules. The actual schemas change only AdapterRequest/AdapterResponse, Scenario, E0CaseStep/E0CaseFixture, plus9 new definitions. Scoped older ACKs are retained; none is a revision5 complete ACK.
 
-A2-0002 ACKs A3-0002 items1/2/5 and A1-0008 receipt capability/semantics in its stated scope. It reproduces old 8 signed types + credentialDigest, not the new receipt vector or schema. A1-0009 covers the old revision2 non-receipt ledger semantics only. Neither is a whole-interface ACK; revision3 changed bytes require renewed exact review.
+Agent3 verification:148 owned tests;565 schema verdicts108valid/457invalid with0 mismatches;393 independent signed checks; pinned A1-0014 ledger166 tests,196 Cast checks,7 expected mutant suites,8 receipt controls;33 static source/ABI/runtime/deployment checks. Source/peer hashes are stable. The first whole-schema check timed out at60 seconds (exit124); unchanged retry with a180-second verification budget passed. Both attempts are preserved. No protocol TTL changed.
 
-Evidence and historical failures: evaluation/reports/E0-progress.md and evaluation/evidence/e0/. Current command outcomes are recorded in boundary-revision-4/checks.json; older ready-a1-0011-published evidence remains preserved. Earlier pending E03 failures are preserved; the new receipt control replaces the removed pending profile. Module controls and trivial ProVerif smoke do not close RQ1.
+Evidence: evaluation/evidence/e0/revision-5-review/; current acceptance: interfaces/proposals/v1/ACCEPTANCE.md. Module tests/owner claims/tool smoke are not integrated gate evidence. ProVerif is smoke only; runner/gate preflights remain2/BLOCKED. No E1 service integration, model correspondence or real ABE claim. No processes/PIDs/ports or integration freeze.
 
-Current dependencies: Agent1/Agent2 exact revision4 responses to A3-0011 and common E0 acceptance. Agent3 has completed the concrete owned boundary/case proposal (manifest c8cf819f811e26c7444f386b55c36dc554bbf9e3caa84392afc4f8c45623b4a1,29 files). New symbolic nested choices and deployment version-label migration require affected-party ACKs; no normative v1/INTERFACE_READY is inferred. Existing signing vectors/source map/tool locks remain unchanged, with3 new proposed assumption rows. No peer module/mailbox edit or unreviewed merge. No services started here. F/G remain locked.
-
-A3-0010 records the exact scoped reviews, three accepted error choices and local protocol reproduction. Evidence: evaluation/evidence/e0/peer-review-20261008/. Agent2 needs nothing further from Agent1 for this E0 handoff; actual E1 service implementation starts only after E0 acceptance.
-
-
-A3-0011 is the current RFC: full evidence under evaluation/evidence/e0/boundary-revision-4/.129 owned tests,393 independent signed-vector checks and515 schema verdicts pass; source/peer hashes stable. Ledger-only tests and tool smoke remain distinct from integration. See interfaces/proposals/v1/ACCEPTANCE.md for the required final E0 matrix.
+E1 still requires final E0 acceptance, frozen interfaces/v1/INTERFACE_READY, exact peer byte/version mapping ACKs and reviewed integration READY pins. Agent1 prepared A-E1/A-E2 and Agent2 published candidate B-E1 libraries before E0 closed; these are recorded ordering deviations/candidates, not an E1 unlock. Agent3 does not execute the unhanded-off prototype or adopt its local live-flow claim as gate evidence. No peer module/mailbox edits, whole branch merge, worktree/extra agent, main push or history rewrite.

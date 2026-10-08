@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 from eth_utils import keccak
+from eth_abi import encode
 
 ROOT = Path(__file__).resolve().parents[2]
 OUTPUT = ROOT / 'interfaces/vectors/boundary-candidate.json'
@@ -20,9 +21,12 @@ def build():
     records = next(v['records'] for v in vectors if 'records' in v)
     h = lambda label: '0x' + keccak(text=label).hex()
     data_id = prepared['request']['dataId']
-    policy = {'clauses': [[{'role': h('Doctor'), 'kind': '1', 'issuerMode': '0'},
-                           {'role': h('OnDuty'), 'kind': '2', 'issuerMode': '2'}]]}
-    record = {'dataId': data_id, 'owner': deployment['fixture']['authorities'][0]['root'],
+    policy = {'clauses': [[{'role': h('HMBC.role.Doctor'), 'kind': '1', 'issuerMode': '0'},
+                           {'role': h('HMBC.role.OnDuty'), 'kind': '2', 'issuerMode': '2'}]]}
+    clauses = [[(bytes.fromhex(r['role'][2:]), int(r['kind']), int(r['issuerMode'])) for r in clause] for clause in policy['clauses']]
+    policy_digest = '0x' + keccak(encode(['(bytes32,uint8,uint8)[][]'], [clauses])).hex()
+    record = {'dataId': h('HMBC.data.P1.MHR'),
+              'owner': next(a['root'] for a in deployment['fixture']['authorities'] if a['id'] == 'H2'),
               'payloadDigest': h('TEST-ONLY synthetic record')}
     release = {'schemaVersion': 'v1', 'adapterMode': 'symbolic', 'requestDigest': prepared['requestDigest'],
                'grantId': h('constructed grant'), 'dataId': data_id, 'keyEpoch': '0',
@@ -32,6 +36,8 @@ def build():
     inputs = {
         'PrepareRequest': example['request']['input'],
         'CollectDecision': {'requestDigest': prepared['requestDigest'], 'witnessSetVersion': '1'},
+        'CollectCheckpoint': {'witnessSetVersion': '1'},
+        'AttestGrant': {'grantId': release['grantId']},
         'Release': {'grantId': release['grantId']},
         'EncryptRecord': {'record': record, 'policy': policy, 'keyEpoch': '0'},
         'FinishDecryption': {'response': release, 'userKeyRef': 'keyref:user:alice'},
@@ -43,12 +49,16 @@ def build():
                             'decision': signed['typedData']['message'], 'signatures': [signed['signature']],
                             'credentialRecords': records},
         'Release': release,
-        'EncryptRecord': {'schemaVersion': 'v1', 'adapterMode': 'symbolic', 'dataId': data_id, 'keyEpoch': '0',
-                          'ciphertextDigest': release['ciphertextDigest'], 'policyDigest': h('constructed policy')},
+        'EncryptRecord': {'schemaVersion': 'v1', 'adapterMode': 'symbolic', 'dataId': record['dataId'], 'keyEpoch': '0',
+                          'ciphertextDigest': release['ciphertextDigest'], 'policyDigest': policy_digest},
         'FinishDecryption': {'schemaVersion': 'v1', 'adapterMode': 'symbolic', 'decryptable': True,
                              'dataId': data_id, 'ciphertextDigest': release['ciphertextDigest']},
     }
-    operations = ('prepare_request', 'collect_decision', 'release', 'encrypt_record', 'finish_decryption', 'rotate_epoch')
+    for name, typed, field in [('CollectCheckpoint', 'StateCheckpoint', 'checkpoint'), ('AttestGrant', 'GrantReceipt', 'receipt')]:
+        vector = next(v for v in vectors if v['name'] == typed)
+        results[name] = {'schemaVersion': 'v1', 'adapterMode': 'symbolic', field: vector['typedData']['message'],
+                         'signatures': [vector['signature']]}
+    operations = ('prepare_request', 'collect_decision', 'collect_checkpoint', 'attest_grant', 'release', 'encrypt_record', 'finish_decryption', 'rotate_epoch')
     cases = []
     def case(name, value, valid, label, provenance='constructed schema fixture; NOT EXECUTED'):
         cases.append({'schema': name, 'valid': valid, 'label': label, 'provenance': provenance, 'input': copy.deepcopy(value)})
@@ -57,7 +67,7 @@ def build():
         case(name, {**value, 'privateKey': 'forbidden'}, False, 'unknown secret field')
         for field in value:
             bad = copy.deepcopy(value); del bad[field]
-            if name == 'CollectDecisionInput' and field == 'witnessSetVersion':
+            if name in ('CollectDecisionInput', 'CollectCheckpointInput') and field == 'witnessSetVersion':
                 case(name, bad, True, 'optional E witness set omitted')
             else:
                 case(name, bad, False, 'missing ' + field)
@@ -66,7 +76,7 @@ def build():
         request = {'schemaVersion': 'v1', 'operation': operation, 'input': inp, 'deploymentManifest': deployment}
         closed(name + 'Request', request)
         case('AdapterRequest', request, True, operation)
-        case('AdapterRequest', {**request, 'input': {}}, False, operation + ': empty input')
+        case('AdapterRequest', {**request, 'input': {}}, name == 'CollectCheckpoint', operation + ': empty input')
         error = {'schemaVersion': 'v1', 'ok': False, 'result': None,
                  'error': {'code': 'NOT_IMPLEMENTED_IN_PHASE' if name == 'RotateEpoch' else 'ADAPTER_UNAVAILABLE',
                            'message': 'schema fixture, no service execution'}}
@@ -108,7 +118,7 @@ def build():
         closed('ScenarioResult', result)
     blocked = {**result, 'classification': 'BLOCKED', 'observedEvents': [], 'assertions': [], 'evidencePaths': []}
     case('ScenarioResult', blocked, True, 'unexecuted blocked trial')
-    return {'interfaceVersion': 'candidate v1 revision 4 NOT frozen',
+    return {'interfaceVersion': 'candidate v1 revision 5 NOT frozen',
             'scope': 'Schema positive/negative examples. Constructed results are not executable provider evidence or a gate.',
             'cases': cases}
 

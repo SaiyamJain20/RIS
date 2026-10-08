@@ -1,0 +1,17 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______ test_record_fixture_uses_registered_p1_owner_and_data_identifier _______
+
+    def test_record_fixture_uses_registered_p1_owner_and_data_identifier():
+        from interfaces.proposals.build_boundary_vectors import build
+        record = next(c['input']['record'] for c in build()['cases'] if c['schema'] == 'EncryptRecordInput' and c['valid'])
+>       assert record['owner'] == '0x6ea73ebda053f804cad188496ec48af56b06f698'
+E       AssertionError: assert '0x88a358e963...bc9f2fb329c1e' == '0x6ea73ebda0...48af56b06f698'
+E         
+E         - 0x6ea73ebda053f804cad188496ec48af56b06f698
+E         + 0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e
+
+evaluation/tests/test_revision5_review.py:35: AssertionError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_revision5_review.py::test_record_fixture_uses_registered_p1_owner_and_data_identifier
+1 failed, 15 deselected in 0.16s

@@ -1,51 +1,78 @@
 {
-  "status": "candidate v1 revision 4, NOT frozen",
+  "status": "candidate v1 revision 5, NOT frozen",
   "respondsTo": [
-    "A1-0012",
-    "A2-0003",
-    "A2-0004",
-    "A2-0005"
+    "A1-0013",
+    "A1-0014",
+    "A1-0015",
+    "A1-0016",
+    "A1-0017",
+    "A2-0006",
+    "A2-0007",
+    "A2-0008"
   ],
   "supersedes": {
-    "commit": "3e153a8698ceb651ed3081670912fa1581732947",
-    "reviewManifestSha256": "8665132949b8db88ef2cc0e9ddc233e1d628232c6ac869d460e44e3d96c8be32"
+    "commit": "c982d04d4c3a497c7a6f351af95c0657d728ea04",
+    "reviewManifestSha256": "c8cf819f811e26c7444f386b55c36dc554bbf9e3caa84392afc4f8c45623b4a1"
   },
   "files": {
     "communication/agent-3/outbox/0002-rfc-e0-semantics-toolchain-receipt.md": "fcc22f394cdbe1492be2d01bafda161b2f0ecf80a3be92740b7e6c031ae5c9db",
     "communication/agent-3/outbox/0005-ack-a1-0008-receipt-revision-2.md": "74e0b23c80c893f849c0f4176df67e388f7e7df09ef8a13e9fe9888c7ed2ff55",
     "evaluation/check_schema_vectors.py": "4cf3ee57a6bbba8c2bc99103fa4844b788149a87b2792dfbcc5c70bd06e78e05",
-    "evaluation/e0_verify.py": "b73beeb1fc46ea993e2108d6f1f47e2458bc533c8ea7a6bce47a74fccdaf9ee5",
-    "evaluation/evidence/assumptions.csv": "76be6d628a029ea892917c809413ea3d50f46dad44cf04aea02df1e942a63ffa",
+    "evaluation/e0_verify.py": "077bc6d50011b06769e4c5d26c06bd1f9327a317e4869692c86fea986116427c",
+    "evaluation/evidence/assumptions.csv": "0c36d5936d25b95c6fd7b85dc7a9d48c0ddfba7be89487598d70aefe6d78ecfb",
     "evaluation/evidence/source-map.csv": "25337ee2846b13791bf971281d885f6300a6ce1407f156ddeb4e5cb85f54a07c",
-    "evaluation/scenarios/e0_cases.json": "be77c5608095ac1d09d0ebf607b7e3f971f5f49a609fc0f821c2730c1efb4fd5",
-    "evaluation/scenarios/e_positive.json": "065feef25d8072da12e4a40149097367ca70912984fc170056a655a54562a177",
-    "evaluation/schema.py": "3543d49bdd19e7f804cb7c1507df077070b7dae72eb5815f035bf9e96bef8ec8",
-    "evaluation/tests/test_boundary_schemas.py": "4f35c4a307cf8469ff763b2aba132f4dd1ea9b70f739159d6509eed771741d45",
+    "evaluation/oracles/access.py": "98ff036fcbbf92d8f561c52769f1acf788e2e7117b614b8ab9fd7c35608b61e5",
+    "evaluation/scenarios/e0_cases.json": "66b5c4f0cb9bdd3ae8bb4795ac9e9771890572c6e238d29516be6668a4218a0f",
+    "evaluation/scenarios/e_positive.json": "95e75f10cfdaf0b0bf5bd75ea25b521df30817f85a280a8552cc62243f8ccdda",
+    "evaluation/schema.py": "3e29876907be197dcbe59142184d89cbe7cfb1ec8c446d3143950648d61598ad",
+    "evaluation/tests/test_access_oracle.py": "a5ae466018b0e34836114fe4564f0e3a008241e26b6319d4f4bb7a5965f6fbb3",
+    "evaluation/tests/test_boundary_schemas.py": "fccf5bf06b06ba23b5f961879a4ac289ba173696715ab6989b47b1ee285fbda3",
     "evaluation/tests/test_deployments.py": "2dd4a624d7ff967ab01e69a6d18fff6ccf5e5109c3c373b7a8d5abb357939c0b",
+    "evaluation/tests/test_revision5_review.py": "e16bf6e21ea0fb4d29bae4a0e970da1f7d6813a6888895c4a3b2e35ca3210366",
     "evaluation/tests/test_schemas.py": "e7bcb77edc222d59fb4f82f4e9e348bf0b8a1553f292feb249d48d04a33660c8",
     "evaluation/tests/test_vectors.py": "8833a4831fa198900c82200a6bd68a9534921b2c83611a234d96f7abc0234fce",
     "evaluation/toolchain.json": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746",
     "evaluation/vectors.py": "e7791eb24367032b3ed2932e1d84b5135fa4af145833bb1a68fa965d2cb53266",
-    "interfaces/proposals/boundaries.py": "ae3b924e1d1155d1c04651a48cbabda5779c66934c7be682614ae46fad4547c6",
-    "interfaces/proposals/build_boundary_vectors.py": "1e13e14c66b619b9216e4313abbd6368db228c69a9a6723aa8ea197ecf091ddb",
+    "interfaces/proposals/boundaries.py": "c628ee89c82e89e4a993cf7c507e2e041b0813c9e1e1fb613742c3f811e4489b",
+    "interfaces/proposals/build_boundary_vectors.py": "e2e0e042d0d72e0eacdc9994e4d195e979ef54de6dea3ab0377bd535dc4a0b93",
     "interfaces/proposals/build_schemas.py": "3cfa472da1d13e547015aa724c6dae588fc21de63f8c330711a8eba27ab57514",
-    "interfaces/proposals/v1/ACCEPTANCE.md": "c2e885baa9f33db0fd92efdd172004aa0cb0198c9d0e19a87485343a96c52c91",
-    "interfaces/proposals/v1/BOUNDARY.md": "45585dc6671b78d5c7630a6522bdf892b66db7ef6aecc88d12349ba55ab92982",
-    "interfaces/proposals/v1/README.md": "434d797b89bf1fff5e7645ab11adc8da8a9794b6984ceaa2b4009cad3a436590",
-    "interfaces/proposals/v1/hmbc.schema.json": "3922a5c42fc38768d88dde0996ac6e2c11f02270f774dbf191a893417645ffa4",
+    "interfaces/proposals/v1/ACCEPTANCE.md": "e816d0fc902a878578178bf7100ebc6400c03927437c70ce5379f57fe59afd8f",
+    "interfaces/proposals/v1/BOUNDARY.md": "cd541cc51f047649529f0c7f8c9059eefd182ac64326c98fe89b532bf335741d",
+    "interfaces/proposals/v1/README.md": "a0dba43353986e68230ee7f1697d12cfaa546dce2129482e4ce9776fc4199d13",
+    "interfaces/proposals/v1/hmbc.schema.json": "df44c418cdb9dba34f30678c2a777c1c52e074cb25de99dd44e3aeb7ac78f027",
     "interfaces/vectors/adapter-agent2-candidate.json": "e248fceb7455ebc3ae328da294ab7b328e2a69fc43eb4975d3b35e0016f5d0b7",
-    "interfaces/vectors/boundary-candidate.json": "36749f925a4dd7deb1a8ac1dcbeaa49800c8a80e9205b9cdd2816f6a5ae84994",
-    "interfaces/vectors/deployment-agent1-candidate.json": "16181e1b5825a1ad00b23f7bb5f0610f6db7ed95dafcb8e21451609b59561329",
+    "interfaces/vectors/boundary-candidate.json": "fce967f87cce9b453ae23d7450bcb6a199f3c0f6ad5d933b378b8f90e5a42210",
+    "interfaces/vectors/deployment-agent1-candidate.json": "787ae701241167a2474215168752ecac7fbec260cb0df3a2acdf680598f53ee1",
     "interfaces/vectors/eip712-agent1-candidate.json": "f211c65fe9c0ea0d7c7ed3fe6904ab04b36224f5bfcd41d3bd140e6165f0bf61",
     "interfaces/vectors/schema-candidate.json": "49a9dc29298495513340db2f4e4f78d7611e52c7b42409531bc5ed97f421e4d8",
     "pyproject.toml": "1d839e80b8acdef35d878740cb5d212b464cc30f4adfdd3f56b69b162badd0ca",
     "uv.lock": "1fb4777a5d4078434af8e7fe4a88f2f3afbe1d8f65d30e8a182999d7a7a29cbe"
   },
-  "scope": "Strict E0 boundary/result/observation/case proposal. New choices need exact affected-party ACKs. No E1 service success or gate.",
-  "oldDefinitionChanges": [
-    "AdapterResponse: opaque result replaced by closed E operations",
-    "LedgerDeployment: interfaceVersion legacy-v0/frozen-v1 label compatibility only"
+  "scope": "Owned E0 revision5 witness-operation/case/oracle proposal; exact affected-party acceptance required. No normative v1 or integrated evidence.",
+  "changedDefinitions": [
+    "AdapterResponse",
+    "Scenario",
+    "AdapterRequest",
+    "E0CaseStep",
+    "E0CaseFixture"
+  ],
+  "newDefinitions": [
+    "AttestGrantInput",
+    "AttestGrantRequest",
+    "AttestGrantResponse",
+    "AttestGrantResult",
+    "CollectCheckpointInput",
+    "CollectCheckpointRequest",
+    "CollectCheckpointResponse",
+    "CollectCheckpointResult",
+    "WorkerExpectation"
   ],
   "unchangedSignedDefinitionsAndVectors": true,
-  "fixtureExecutionLimit": "Only prepare_request example is owner-executed; all other success shapes/39 case expectations are constructed NOT_RUN fixtures."
+  "ledgerReady": {
+    "message": "A1-0014",
+    "commit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+    "manifestSha256": "5866921aa8ba4716a24afb4144123295f0e5f809296ed488a06bc84f07c277a9",
+    "entries": 100
+  },
+  "fixtureExecutionLimit": "Only retained prepare_request example is owner-executed; other success shapes and48 case schedules are constructed NOT_RUN; latest Agent2 candidate is not READY for integration."
 }

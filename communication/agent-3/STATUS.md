@@ -1,18 +1,15 @@
-# Agent 3 status — 2026-10-08 revision4 E0 review
+# Agent 3 status — 2026-10-08 revision5 E0 review
 
-- State: WAITING — exact affected-party revision4 ACKs/common E0 acceptance. Owned boundary proposal complete for review; Phase1 incomplete.
-- Active RQ/task: E/E0. E1 not unlocked; E gate NOT RUN; F/G locked.
-- Interface: normative v0 proposed; candidate v1 revision4,78 definitions,29-file manifest SHA-256 c8cf819f811e26c7444f386b55c36dc554bbf9e3caa84392afc4f8c45623b4a1; NOT frozen.
-- Git: agent-3, /home/karma/Documents/RIS, origin SaiyamJain20/RIS. Payload 011dc970cec5e61d4d31c5430cd8f69d55f16ffa normally pushed and exact remote SHA verified; A3-0011 delivered.
-- Latest peers: agent1 60b35cb/A1-0012, ledger54262c2/98 READY unchanged; agent2 e1b4322/A2-0003..0005, executable b9564f0/32 plus evidence-only successor33.
-- Read: A1-0011/0012, A2-0001..0005, A3-0001..0010; latest52 communication files across4 fetched branches, no divergent shared revisions.
-- Sent: A3-0001..0010 delivered previously; A3-0011 RFC delivered with29-file manifest and exact new choices.
-- Verified: boundary35 tests; full owned129; independent393 signed-vector checks; schema515 cases92valid/423invalid with0 mismatches;39 prospective case fixtures validate but remain NOT_RUN.
-- Pinned ledger reproduction:162 tests,196 Cast checks,7 expected mutant suites,8 receipt controls;98 source entries stable. ProVerif smoke only; runner/gate2 BLOCKED; no actual worker/model/integration result.
-- Checks: evaluation/evidence/e0/boundary-revision-4/checks.json SHA-256 e411702583b9e46c47e1466516bbe38459d5528b559197a75bd98ab03caf98f6; tested source hash9089b57c2f5284b85adeb31b3be93ef84a53362b3c56ab60aa6ca7c7c687a359. Exact argv/cwd/exit/time/output/tool/source hashes retained; candidate packaging reviewed afterward.
-- Definition changes: AdapterResponse closes opaque success; LedgerDeployment allows explicit legacy-v0/frozen-v1 label migration only; all other41 prior definitions unchanged. Signed vectors/source map/tool/lock bytes unchanged. Assumptions34 (A32–A34 proposed); source map37.
-- New work: operation-associated requests/results, UserKeyRef/strict JSONL parser, symbolic nested proposals, ScenarioResult/observations,39 profile case expectations, final E0 acceptance matrix. D28–D30 OPEN pending exact ACKs.
-- No services/PIDs/ports or active integration freeze. No peer edits, merge, main push, worktrees or extra agents. Coordinator lock acquired only for serialized publication and released after verified push.
-- Next permitted action: read exact A1/A2 revision4 ACK/REVIEW; resolve owned schema changes and renew affected review if needed. Once common E0 acceptance is satisfied, publish frozen interfaces/v1/INTERFACE_READY, verify peer byte mapping, unlock E1 together and implement C-E1 public-adapter runner.
-
-Publication verified: payload `011dc970cec5e61d4d31c5430cd8f69d55f16ffa` normally pushed to origin/agent-3; remote SHA matched and checkout was clean. This follow-up records delivery in STATUS/HANDOFF only; all29 candidate files remain byte-identical. Coordinator lock is released after verified metadata push.
+- State: WAITING — exact affected-party revision5 ACKs/common E0 acceptance. Current RQ E/E0; E1 not unlocked; E gate NOT RUN; F/G locked.
+- Interface: normative v0 proposed; candidate v1 revision5,87 definitions/eight operations/seven E results,32-file manifest SHA-256 124b95eb2830e422e79d0cee4b4b7ae28bf235239740980b984d7f9de2f9d8d0; NOT frozen.
+- Git: agent-3 at /home/karma/Documents/RIS, origin SaiyamJain20/RIS. Reviewed owned checkpoint prepared; normal publication/delivery verification follows.
+- Latest fetched peers: Agent1 tip4e9c700, A1-0013..0017; ledger A1-0014/e6cf4ff/100-file manifest5866921a.. freshly reproduced. Agent2 tipada6378, A2-0006..0008; newer adapter/witness candidate has no integration READY. No prototype executed by Agent3.
+- Read: A1-0011..0017, A2-0001..0008, A3-0001..0011/live handoff; all61 latest communication files scanned across4 fetched branches, no divergent shared revisions.
+- Sent: A3-0001..0011 delivered previously. A3-0012 RFC prepared; delivered only after verified normal agent3 push.
+- Changes: registered role/policy/P1-H2 fixture, unchanged-certificate WRONG_SUBJECT, native PSC outcome joins, paper barrier omission,3 added E01 variants, preserved wrong-issuer baseline classification; closed workerHook/crashPoint and one-intent/send-attempt/cache/expiry expectations; repaired Bob native denial+nonce oracle checks.48 prospective schedules remain NOT_RUN.
+- Proposed witness boundary: collect_checkpoint/attest_grant per A2-0008/A1-0016, Option A runner relay/admin TEST-ONLY custody, DBC time/state/interleaving constraints and policy-aware ALLOW. Recipient convention accepted exactly per A1-0015/A2-0007; signed bytes unchanged.
+- Verified:148 owned tests;565 schema verdicts108valid/457invalid,0 mismatches;393 independent signing checks; ledger166 tests,196 Cast checks,7 expected mutant suites,8 receipt controls;33 static export checks.100 peer entries stable. Initial schema command timed out124/60s, preserved; unchanged180s-budget retry0 after67s. Protocol TTLs unchanged.
+- Evidence: evaluation/evidence/e0/revision-5-review/, checks SHA-256 b1f2e8b126d85ae52456cdebb7436d25d603ce41ca1a10bf27d45f3c7462c7c6, tested source-manifest hash c36beb423d149032cd3a707c95a6b699b860f44af47e45608c0120b8c59ba80c. Commands/exit/time/fixture/tool/source/output hashes retained; packaging records reviewed afterward.
+- Tools/locks unchanged: Python3.13.13/root uv.lock; Foundry1.8.5/solc0.8.37/ProVerif2.05; binary/lock hashes rechecked. Source map37; assumptions37 (A35–A37); D28/D29/D30/D31/D33 remain open for promotion; D32 records existing recipient convention.
+- No real service integration/recovery, correspondence model or ABE result. Runner/gate2 BLOCKED; ProVerif smoke only. No services/PIDs/ports/active integration freeze, peer edits/merge, main push, worktree/extra agent or history rewrite.
+- Next permitted action: fetch/read exact revision5 responses, revise only owned proposal if needed; when every E0 acceptance row and frozen-byte mapping is ACKed, publish interfaces/v1/INTERFACE_READY and unlock E1 together. Require current reviewed service READY and integration FREEZE/ACK pins before real C-E1 execution.

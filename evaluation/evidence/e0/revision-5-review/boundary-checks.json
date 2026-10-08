@@ -1,0 +1,180 @@
+{
+  "commands": [
+    {
+      "argv": [
+        "/home/karma/Documents/RIS/.venv/bin/python",
+        "-m",
+        "evaluation.check_schema_vectors",
+        "interfaces/vectors/schema-candidate.json",
+        "interfaces/vectors/boundary-candidate.json",
+        "--output",
+        "evaluation/evidence/e0/revision-5-review/schema-results.json"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-10-08T08:29:35.843033+00:00",
+      "endedAt": "2026-10-08T08:30:35.844758+00:00",
+      "exitCode": 124,
+      "timedOut": true,
+      "elapsedSeconds": 60.00173013499989,
+      "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "name": "schema-fixtures"
+    },
+    {
+      "argv": [
+        "/home/karma/Documents/RIS/.venv/bin/python",
+        "interfaces/proposals/build_boundary_vectors.py",
+        "--check"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-10-08T08:30:35.844896+00:00",
+      "endedAt": "2026-10-08T08:30:36.008967+00:00",
+      "exitCode": 0,
+      "timedOut": false,
+      "elapsedSeconds": 0.16408305799996015,
+      "outputSha256": "cdfbe5b4de3ce65fe59a1884126a4577fb7fa5eea123f80e774011341f98ddcb",
+      "name": "fixture-generator"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-10-08T08:30:36.009127+00:00",
+      "endedAt": "2026-10-08T08:30:36.025074+00:00",
+      "exitCode": 0,
+      "timedOut": false,
+      "elapsedSeconds": 0.015955109999595152,
+      "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "name": "diff-check"
+    },
+    {
+      "argv": [
+        "/home/karma/Documents/RIS/.venv/bin/python",
+        "--version"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-10-08T08:30:36.238323+00:00",
+      "endedAt": "2026-10-08T08:30:36.239950+00:00",
+      "exitCode": 0,
+      "timedOut": false,
+      "elapsedSeconds": 0.001622351999685634,
+      "outputSha256": "6b64edf0fc8f22e798fb64873acba6b4106df290f0bf458b507e8cb409b63e49"
+    },
+    {
+      "argv": [
+        "git",
+        "--version"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-10-08T08:30:36.240033+00:00",
+      "endedAt": "2026-10-08T08:30:36.243555+00:00",
+      "exitCode": 0,
+      "timedOut": false,
+      "elapsedSeconds": 0.003525387000081537,
+      "outputSha256": "fff575d3fa43a92d932e4eb8bc03394140ce40699f9c8a97c3126016a244dfb8"
+    },
+    {
+      "argv": [
+        "/home/karma/.local/share/hmbc-tools/foundry-1.8.5/forge",
+        "--version"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-10-08T08:30:36.243622+00:00",
+      "endedAt": "2026-10-08T08:30:36.251295+00:00",
+      "exitCode": 0,
+      "timedOut": false,
+      "elapsedSeconds": 0.007676995999645442,
+      "outputSha256": "3ecb821e24278b54261fe72dd6d92425cd8d0cc9539de26c9acffdc63789e3f2"
+    },
+    {
+      "argv": [
+        "/home/karma/.local/share/svm/0.8.37/solc-0.8.37",
+        "--version"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-10-08T08:30:36.251369+00:00",
+      "endedAt": "2026-10-08T08:30:36.254892+00:00",
+      "exitCode": 0,
+      "timedOut": false,
+      "elapsedSeconds": 0.003525596999679692,
+      "outputSha256": "eceb819b86658915a2116dcfc40e48d484833d74a64a8f40811611c24e615c02"
+    }
+  ],
+  "sourceManifest": {
+    "AGENTS.md": "1b9384ce2866832bac0c37c5975a717237a7e85989305f77076ca237daac0425",
+    "PLAN.md": "7a784ba3b3478ba08de0772ca4b1c80d156c3d09d6bba52ae5ba51f960c67ac8",
+    "README.md": "e9641ef580d924ca84c7c744e2adef4e2a9efbc7b95b8eba3a4880faa6329011",
+    "SPEC.md": "8e20792278666df044e576f5ee67adb4b8fe773dc816e0d75bb4cdf600d46b11",
+    "communication/BOARD.md": "0579519fccb4b3021a64bdf7c1c9efc3bf29603f72e1201e4a0ad06a12c9c34d",
+    "communication/COMMON_AGENT_CONTEXT.md": "4a9d9845cf14ff6e315298226a72bb7fda8352e9b06dfbe24bdf2f9e890db734",
+    "communication/DECISIONS.md": "aacbde361e950848f209ae879492f7b022f10002f77864a869153c1e273d2a1d",
+    "communication/GATES.md": "8455d805ee3943009467e02507ae2e099e3852d2ec1df0defc6b8a5b47d5897e",
+    "communication/PROTOCOL.md": "1c1e32df994063b2af57d3c32b0e4a7a66e7927ecfc19541d1637f803181f1f2",
+    "communication/agent-1/ROLE.md": "5b95d0f631404cdaa0aaa67646ac2544f50d7d7d41d4ce804915d78765b25e88",
+    "communication/agent-2/ROLE.md": "56083377c6b087cd3614408467779d0c7cff4dd1eb260bdee7ee0d84b742ec91",
+    "communication/agent-3/ROLE.md": "d866e4df117a044af1ccde0ee473b86dfeb62b0297bc74b1fa27e0d36c7f10c4",
+    "communication/agent-3/outbox/0001-ack-distributed-startup.md": "811985266f1e79736b3d063c1e597e9d9eeee12aa038fee1a1ef11b0c0010ffa",
+    "communication/agent-3/outbox/0002-rfc-e0-semantics-toolchain-receipt.md": "fcc22f394cdbe1492be2d01bafda161b2f0ecf80a3be92740b7e6c031ae5c9db",
+    "evaluation/README.md": "33f8ff19e332f1cb3c4b44c12060560675abbd62902fc757d4657d257f25fbd4",
+    "evaluation/check_schema_vectors.py": "4cf3ee57a6bbba8c2bc99103fa4844b788149a87b2792dfbcc5c70bd06e78e05",
+    "evaluation/e0_verify.py": "077bc6d50011b06769e4c5d26c06bd1f9327a317e4869692c86fea986116427c",
+    "evaluation/evidence/assumptions.csv": "0c36d5936d25b95c6fd7b85dc7a9d48c0ddfba7be89487598d70aefe6d78ecfb",
+    "evaluation/evidence/source-map.csv": "25337ee2846b13791bf971281d885f6300a6ce1407f156ddeb4e5cb85f54a07c",
+    "evaluation/gate.py": "23fbfae54decc6eb2b4bf219a4658478b705498e45a775e8c30835631cfa1970",
+    "evaluation/manifests.py": "aac5a89d797ef45b68634703fd20cc870c4dc92d52ba497f7be29f699d533aeb",
+    "evaluation/models/e0/smoke.pv": "c6050442440545f3c39e5251eff87dd7835a974c7ce808913f19ffc5541883a6",
+    "evaluation/oracles/access.py": "98ff036fcbbf92d8f561c52769f1acf788e2e7117b614b8ab9fd7c35608b61e5",
+    "evaluation/peers.py": "fecac4e60476fc864a43021e369a79acf0606caabe5d331c3c51e2728a13f778",
+    "evaluation/reports/E0-progress.md": "ab0bd461f44b64c18fc69e559c9a6cbe50309811a93b2b6825fb0760194393da",
+    "evaluation/run.py": "c514402d5fa89685f655eeabf3f1acf20b9c9ac26ede78ee35fbd3964476248d",
+    "evaluation/scenarios/e0_cases.json": "66b5c4f0cb9bdd3ae8bb4795ac9e9771890572c6e238d29516be6668a4218a0f",
+    "evaluation/scenarios/e_positive.json": "95e75f10cfdaf0b0bf5bd75ea25b521df30817f85a280a8552cc62243f8ccdda",
+    "evaluation/schema.py": "3e29876907be197dcbe59142184d89cbe7cfb1ec8c446d3143950648d61598ad",
+    "evaluation/tests/test_access_oracle.py": "a5ae466018b0e34836114fe4564f0e3a008241e26b6319d4f4bb7a5965f6fbb3",
+    "evaluation/tests/test_boundary_schemas.py": "fccf5bf06b06ba23b5f961879a4ac289ba173696715ab6989b47b1ee285fbda3",
+    "evaluation/tests/test_deployments.py": "2dd4a624d7ff967ab01e69a6d18fff6ccf5e5109c3c373b7a8d5abb357939c0b",
+    "evaluation/tests/test_gate.py": "e74ed784f312cb59d986359b6943d111bd0b1548a075bb18d3ab44857cfc4d79",
+    "evaluation/tests/test_manifests.py": "687ca16ef9c9851a2f8e222b83c8e1c1947c56fa167992de38b7438b72c86c1e",
+    "evaluation/tests/test_peers.py": "7939a9cdf398ce40e795094853b436945165717f1ac0d7ebad7b078723169c98",
+    "evaluation/tests/test_revision5_review.py": "e16bf6e21ea0fb4d29bae4a0e970da1f7d6813a6888895c4a3b2e35ca3210366",
+    "evaluation/tests/test_run.py": "4a5db5b52345cf3ca27cef96873e0a4d63e3386535e75b1185439db305dd6eaa",
+    "evaluation/tests/test_schemas.py": "e7bcb77edc222d59fb4f82f4e9e348bf0b8a1553f292feb249d48d04a33660c8",
+    "evaluation/tests/test_vectors.py": "8833a4831fa198900c82200a6bd68a9534921b2c83611a234d96f7abc0234fce",
+    "evaluation/toolchain.json": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746",
+    "evaluation/vectors.py": "e7791eb24367032b3ed2932e1d84b5135fa4af145833bb1a68fa965d2cb53266",
+    "interfaces/README.md": "bed539b43af41616068384c0609973318c0da4d57f6d3ae080db99c3e3d99fbb",
+    "interfaces/proposals/boundaries.py": "c628ee89c82e89e4a993cf7c507e2e041b0813c9e1e1fb613742c3f811e4489b",
+    "interfaces/proposals/build_boundary_vectors.py": "e2e0e042d0d72e0eacdc9994e4d195e979ef54de6dea3ab0377bd535dc4a0b93",
+    "interfaces/proposals/build_schemas.py": "3cfa472da1d13e547015aa724c6dae588fc21de63f8c330711a8eba27ab57514",
+    "interfaces/proposals/v1/ACCEPTANCE.md": "e816d0fc902a878578178bf7100ebc6400c03927437c70ce5379f57fe59afd8f",
+    "interfaces/proposals/v1/BOUNDARY.md": "89222df631d3b44b93d8de6d304f7d01f61b8b93d4e74bba6b7977ed98e407b3",
+    "interfaces/proposals/v1/README.md": "a0dba43353986e68230ee7f1697d12cfaa546dce2129482e4ce9776fc4199d13",
+    "interfaces/proposals/v1/hmbc.schema.json": "df44c418cdb9dba34f30678c2a777c1c52e074cb25de99dd44e3aeb7ac78f027",
+    "interfaces/proposals/v1/review-manifest.json": "c8cf819f811e26c7444f386b55c36dc554bbf9e3caa84392afc4f8c45623b4a1",
+    "interfaces/vectors/adapter-agent2-candidate.json": "e248fceb7455ebc3ae328da294ab7b328e2a69fc43eb4975d3b35e0016f5d0b7",
+    "interfaces/vectors/boundary-candidate.json": "fce967f87cce9b453ae23d7450bcb6a199f3c0f6ad5d933b378b8f90e5a42210",
+    "interfaces/vectors/deployment-agent1-candidate.json": "787ae701241167a2474215168752ecac7fbec260cb0df3a2acdf680598f53ee1",
+    "interfaces/vectors/eip712-agent1-candidate.json": "f211c65fe9c0ea0d7c7ed3fe6904ab04b36224f5bfcd41d3bd140e6165f0bf61",
+    "interfaces/vectors/schema-candidate.json": "49a9dc29298495513340db2f4e4f78d7611e52c7b42409531bc5ed97f421e4d8",
+    "pyproject.toml": "1d839e80b8acdef35d878740cb5d212b464cc30f4adfdd3f56b69b162badd0ca",
+    "uv.lock": "1fb4777a5d4078434af8e7fe4a88f2f3afbe1d8f65d30e8a182999d7a7a29cbe"
+  },
+  "sourceManifestSha256": "c36beb423d149032cd3a707c95a6b699b860f44af47e45608c0120b8c59ba80c",
+  "sourceStable": true,
+  "toolHashChecks": {
+    "pythonLock": true,
+    "solc": true,
+    "foundry": true,
+    "proverif": true
+  },
+  "toolVersions": {
+    "python": "Python 3.13.13",
+    "git": "git version 2.54.0",
+    "forge": "forge Version: 1.8.5\nCommit SHA: 51a52c59cffd940f76eddd0b4bb1791aa4b5ac7f\nBuild Timestamp: 2026-10-05T17:18:54.332175693Z (1791220734)\nBuild Profile: dist",
+    "solc": "solc, the solidity compiler commandline interface\nVersion: 0.8.37+commit.f401782d.Linux.g++"
+  },
+  "toolchainSha256": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746",
+  "scope": "Candidate definition/vector/tool compatibility; not real service integration"
+}

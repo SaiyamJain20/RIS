@@ -13,6 +13,7 @@ SCHEMAS = Path(__file__).resolve().parents[1] / 'interfaces/proposals/v1'
 FORMATS = FormatChecker()
 SECP256K1_N = 0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141
 OPERATIONS = {'prepare_request':'PrepareRequest', 'collect_decision':'CollectDecision',
+              'collect_checkpoint':'CollectCheckpoint', 'attest_grant':'AttestGrant',
               'release':'Release', 'encrypt_record':'EncryptRecord',
               'finish_decryption':'FinishDecryption', 'rotate_epoch':'RotateEpoch'}
 

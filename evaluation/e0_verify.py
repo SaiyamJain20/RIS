@@ -12,7 +12,7 @@ from pathlib import Path
 from evaluation.manifests import canonical_hash,hash_files,record_command,sha256,source_manifest
 
 ROOT=Path(__file__).resolve().parents[1]
-EXPECTED='19273f507edb22fbbb9205ca2a587f764b5d79465fdfd327d751a31c3910f1a0' # A1-0011 READY, ledger 54262c2
+EXPECTED='5866921aa8ba4716a24afb4144123295f0e5f809296ed488a06bc84f07c277a9' # A1-0014 READY, ledger e6cf4ff
 
 
 def main():
@@ -22,7 +22,7 @@ def main():
     args=parser.parse_args();peer=args.peer_root.resolve();out=args.output.resolve();out.mkdir(parents=True,exist_ok=False)
     toolchain=json.loads((ROOT/'evaluation/toolchain.json').read_text())
     manifest=peer/'ledger/evidence/source-manifest.sha256'
-    if sha256(manifest)!=EXPECTED:parser.exit(2,'Peer manifest differs from reviewed A1-0011; review new READY before running\n')
+    if sha256(manifest)!=EXPECTED:parser.exit(2,'Peer manifest differs from reviewed A1-0014; review new READY before running\n')
     files={}
     for line in manifest.read_text().splitlines():
         expected,path=line.split('  ',1);files[Path(path)]=expected

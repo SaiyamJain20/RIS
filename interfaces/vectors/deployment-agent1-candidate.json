@@ -1,13 +1,13 @@
 {
-  "sourceCommit": "54262c2e4a1cfad26ba3a9445fcbda584f6eb491",
+  "sourceCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
   "producer": "agent-1 ledger exports; machine-local samples, not live integration",
-  "interfaceVersion": "v1 candidate revision 3 NOT frozen",
+  "interfaceVersion": "candidate v1 revision 5 NOT frozen",
   "deployments": [
     {
       "schemaVersion": "hmbc-ledger-deployment/v0",
       "interfaceVersion": "v0 proposed",
       "producer": "agent-1 ledger/tools/deploy_local.sh",
-      "createdAt": "2026-10-07T10:49:19Z",
+      "createdAt": "2026-10-07T22:03:25Z",
       "profile": "mutant-no-receipt-binding",
       "profileEnum": "2",
       "mutations": "32",
@@ -17,7 +17,7 @@
         "pbc": {
           "chainId": "18545",
           "rpcUrl": "http://127.0.0.1:38545",
-          "deployBlock": "196",
+          "deployBlock": "171",
           "contracts": {
             "LSC": "0x809d550fca64d94bd9f66e60752a544199cfac3d",
             "TMSC": "0x4c5859f0f772848b2d91f1d83e2fe57935348029",
@@ -28,7 +28,7 @@
         "dbc": {
           "chainId": "28545",
           "rpcUrl": "http://127.0.0.1:48545",
-          "deployBlock": "212",
+          "deployBlock": "188",
           "contracts": {
             "ACSC": "0xc5a5c42992decbae36851359345fe25997f5c42d",
             "KSSC": "0x09635f643e140090a9a8dcd712ed6285858cebef"
@@ -148,8 +148,8 @@
         "ACSC": {
           "abi": "exports/abi/ACSC.json",
           "abiSha256": "d5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08dbf8ad9a568",
-          "runtimeBytes": 12202,
-          "runtimeSha256": "1e63bfecc7da068eb50b639deb995e23f78e83c1d25aa0517e8255555db1d07e",
+          "runtimeBytes": 12345,
+          "runtimeSha256": "334d7c9d54d2cab89bba7a8ec7957c2d27c968a499327beb92e8b3793b4e580a",
           "source": "src/ACSC.sol"
         },
         "KSSC": {
@@ -171,7 +171,7 @@
       },
       "foundryTomlSha256": "432f310d0541f63a745a2f18acaa56ffa8c0a3c989188781e646bb9c4d79261f",
       "sources": {
-        "src/ACSC.sol": "87db4b68b49c495d950fd83b255b7e10473e012ab7aeaa303396948375ce5493",
+        "src/ACSC.sol": "b0ac86e7cf40d09ca2d4b984ee8e8314992cbdd98488b599289fdddc2ac7dc70",
         "src/DecisionVerifier.sol": "b5c92a6bf2fbe8a504adfbf05a07675af1569d45ecdd7cc869f9d825e19ff114",
         "src/KSSC.sol": "4b8f195f279f0dcd72c434c36b04c6caf65659e63c13ea95170a9a3b4af38321",
         "src/LSC.sol": "de1f9850c81786beb23f4ab85d2b33023bc294c7474ee8c300e18e92977f5224",
@@ -212,7 +212,7 @@
       "schemaVersion": "hmbc-ledger-deployment/v0",
       "interfaceVersion": "v0 proposed",
       "producer": "agent-1 ledger/tools/deploy_local.sh",
-      "createdAt": "2026-10-07T10:47:08Z",
+      "createdAt": "2026-10-07T22:01:30Z",
       "profile": "paper-minimal",
       "profileEnum": "1",
       "mutations": "0",
@@ -222,7 +222,7 @@
         "pbc": {
           "chainId": "18545",
           "rpcUrl": "http://127.0.0.1:38545",
-          "deployBlock": "64",
+          "deployBlock": "56",
           "contracts": {
             "LSC": "0x959922be3caee4b8cd9a407cc3ac1c251c2007b1",
             "TMSC": "0x9a9f2ccfde556a7e9ff0848998aa4a0cfd8863ae",
@@ -233,7 +233,7 @@
         "dbc": {
           "chainId": "28545",
           "rpcUrl": "http://127.0.0.1:48545",
-          "deployBlock": "81",
+          "deployBlock": "73",
           "contracts": {
             "ACSC": "0x610178da211fef7d417bc0e6fed39f05609ad788",
             "KSSC": "0x8a791620dd6260079bf849dc5567adc3f2fdc318"
@@ -353,8 +353,8 @@
         "ACSC": {
           "abi": "exports/abi/ACSC.json",
           "abiSha256": "d5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08dbf8ad9a568",
-          "runtimeBytes": 12202,
-          "runtimeSha256": "1e63bfecc7da068eb50b639deb995e23f78e83c1d25aa0517e8255555db1d07e",
+          "runtimeBytes": 12345,
+          "runtimeSha256": "334d7c9d54d2cab89bba7a8ec7957c2d27c968a499327beb92e8b3793b4e580a",
           "source": "src/ACSC.sol"
         },
         "KSSC": {
@@ -376,7 +376,7 @@
       },
       "foundryTomlSha256": "432f310d0541f63a745a2f18acaa56ffa8c0a3c989188781e646bb9c4d79261f",
       "sources": {
-        "src/ACSC.sol": "87db4b68b49c495d950fd83b255b7e10473e012ab7aeaa303396948375ce5493",
+        "src/ACSC.sol": "b0ac86e7cf40d09ca2d4b984ee8e8314992cbdd98488b599289fdddc2ac7dc70",
         "src/DecisionVerifier.sol": "b5c92a6bf2fbe8a504adfbf05a07675af1569d45ecdd7cc869f9d825e19ff114",
         "src/KSSC.sol": "4b8f195f279f0dcd72c434c36b04c6caf65659e63c13ea95170a9a3b4af38321",
         "src/LSC.sol": "de1f9850c81786beb23f4ab85d2b33023bc294c7474ee8c300e18e92977f5224",
@@ -417,7 +417,7 @@
       "schemaVersion": "hmbc-ledger-deployment/v0",
       "interfaceVersion": "v0 proposed",
       "producer": "agent-1 ledger/tools/deploy_local.sh",
-      "createdAt": "2026-10-07T10:46:08Z",
+      "createdAt": "2026-10-07T22:00:33Z",
       "profile": "paper-strict",
       "profileEnum": "0",
       "mutations": "0",
@@ -427,7 +427,7 @@
         "pbc": {
           "chainId": "18545",
           "rpcUrl": "http://127.0.0.1:38545",
-          "deployBlock": "7",
+          "deployBlock": "2",
           "contracts": {
             "LSC": "0x5fbdb2315678afecb367f032d93f642f64180aa3",
             "TMSC": "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512",
@@ -438,7 +438,7 @@
         "dbc": {
           "chainId": "28545",
           "rpcUrl": "http://127.0.0.1:48545",
-          "deployBlock": "22",
+          "deployBlock": "17",
           "contracts": {
             "ACSC": "0xe7f1725e7734ce288f8367e1bb143e90bb3f0512",
             "KSSC": "0x5fbdb2315678afecb367f032d93f642f64180aa3"
@@ -558,8 +558,8 @@
         "ACSC": {
           "abi": "exports/abi/ACSC.json",
           "abiSha256": "d5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08dbf8ad9a568",
-          "runtimeBytes": 12202,
-          "runtimeSha256": "1e63bfecc7da068eb50b639deb995e23f78e83c1d25aa0517e8255555db1d07e",
+          "runtimeBytes": 12345,
+          "runtimeSha256": "334d7c9d54d2cab89bba7a8ec7957c2d27c968a499327beb92e8b3793b4e580a",
           "source": "src/ACSC.sol"
         },
         "KSSC": {
@@ -581,7 +581,7 @@
       },
       "foundryTomlSha256": "432f310d0541f63a745a2f18acaa56ffa8c0a3c989188781e646bb9c4d79261f",
       "sources": {
-        "src/ACSC.sol": "87db4b68b49c495d950fd83b255b7e10473e012ab7aeaa303396948375ce5493",
+        "src/ACSC.sol": "b0ac86e7cf40d09ca2d4b984ee8e8314992cbdd98488b599289fdddc2ac7dc70",
         "src/DecisionVerifier.sol": "b5c92a6bf2fbe8a504adfbf05a07675af1569d45ecdd7cc869f9d825e19ff114",
         "src/KSSC.sol": "4b8f195f279f0dcd72c434c36b04c6caf65659e63c13ea95170a9a3b4af38321",
         "src/LSC.sol": "de1f9850c81786beb23f4ab85d2b33023bc294c7474ee8c300e18e92977f5224",
@@ -622,7 +622,7 @@
       "schemaVersion": "hmbc-ledger-deployment/v0",
       "interfaceVersion": "v0 proposed",
       "producer": "agent-1 ledger/tools/deploy_local.sh",
-      "createdAt": "2026-10-07T10:48:07Z",
+      "createdAt": "2026-10-07T22:02:27Z",
       "profile": "repaired-e",
       "profileEnum": "2",
       "mutations": "0",
@@ -632,7 +632,7 @@
         "pbc": {
           "chainId": "18545",
           "rpcUrl": "http://127.0.0.1:38545",
-          "deployBlock": "125",
+          "deployBlock": "114",
           "contracts": {
             "LSC": "0x84ea74d481ee0a5332c457a4d796187f6ba67feb",
             "TMSC": "0x9e545e3c0baab3e08cdfd552c960a1050f373042",
@@ -643,7 +643,7 @@
         "dbc": {
           "chainId": "28545",
           "rpcUrl": "http://127.0.0.1:48545",
-          "deployBlock": "140",
+          "deployBlock": "130",
           "contracts": {
             "ACSC": "0x3aa5ebb10dc797cac828524e59a333d0a371443c",
             "KSSC": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed"
@@ -763,8 +763,8 @@
         "ACSC": {
           "abi": "exports/abi/ACSC.json",
           "abiSha256": "d5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08dbf8ad9a568",
-          "runtimeBytes": 12202,
-          "runtimeSha256": "1e63bfecc7da068eb50b639deb995e23f78e83c1d25aa0517e8255555db1d07e",
+          "runtimeBytes": 12345,
+          "runtimeSha256": "334d7c9d54d2cab89bba7a8ec7957c2d27c968a499327beb92e8b3793b4e580a",
           "source": "src/ACSC.sol"
         },
         "KSSC": {
@@ -786,7 +786,7 @@
       },
       "foundryTomlSha256": "432f310d0541f63a745a2f18acaa56ffa8c0a3c989188781e646bb9c4d79261f",
       "sources": {
-        "src/ACSC.sol": "87db4b68b49c495d950fd83b255b7e10473e012ab7aeaa303396948375ce5493",
+        "src/ACSC.sol": "b0ac86e7cf40d09ca2d4b984ee8e8314992cbdd98488b599289fdddc2ac7dc70",
         "src/DecisionVerifier.sol": "b5c92a6bf2fbe8a504adfbf05a07675af1569d45ecdd7cc869f9d825e19ff114",
         "src/KSSC.sol": "4b8f195f279f0dcd72c434c36b04c6caf65659e63c13ea95170a9a3b4af38321",
         "src/LSC.sol": "de1f9850c81786beb23f4ab85d2b33023bc294c7474ee8c300e18e92977f5224",
@@ -823,5 +823,11 @@
       },
       "errorEncoding": "custom error Rejected(uint8 code); selector = bytes4(keccak256('Rejected(uint8)'))"
     }
-  ]
+  ],
+  "sourceFiles": {
+    "ledger/exports/deployments/sample-mutant-no-receipt-binding/deployment.json": "042373fd31fe6fb2dbd4fc10e047244ca41c16b137a9e364ad5cca07cc05fd4d",
+    "ledger/exports/deployments/sample-paper-minimal/deployment.json": "17ca05cc5c8417d85b4de2dc9e229756cdf48e2d9f674edff62c6ddc712595ba",
+    "ledger/exports/deployments/sample-paper-strict/deployment.json": "58ddba1012bc0e51409a798eaf02faf9503338b25bf5a1d27d20d84917a1a00d",
+    "ledger/exports/deployments/sample-repaired-e/deployment.json": "06a98761c0e5c746808f07bb284dc4dfa5f19fb1292d35f866e1fcd33b6abdaa"
+  }
 }

@@ -16,6 +16,8 @@ def evaluate(scenario,observed):
     events=observed.get('events',[]);fixture=scenario['fixture'];names=[e.get('type') for e in events]
     check('adapter mode is explicit and matches',observed.get('adapterMode')==scenario['adapterMode'])
     check('stable denial reason',observed.get('error')==scenario['expectedError'])
+    for name in scenario.get('expectedLedgerChecks',[]):
+        check(name,observed.get('ledgerChecks',{}).get(name) is True)
     check('expected events occur in causal order',_subsequence(scenario['expectedEvents'],names))
     # Controls do not include retry transitions: a second grant is never an idempotent read.
     check('at most one new grant',names.count('DBC_AUTHORIZED')<=1)

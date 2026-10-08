@@ -224,7 +224,7 @@ def test_all_prospective_cases_bind_existing_controls_and_source_assumptions():
     controls = {s['id']: s for s in json.loads(Path('evaluation/scenarios/e_positive.json').read_text())}
     source_ids = {r['id'] for r in csv.DictReader(Path('evaluation/evidence/source-map.csv').open())}
     assumption_ids = {r['id'] for r in csv.DictReader(Path('evaluation/evidence/assumptions.csv').open())}
-    assert len({c['id'] for c in catalog['cases']}) == len(catalog['cases']) == 39
+    assert len({c['id'] for c in catalog['cases']}) == len(catalog['cases']) == 48
     for case in catalog['cases']:
         validate('E0CaseFixture', case)
         assert controls[case['baseScenarioId']]['profile'] == case['profile']

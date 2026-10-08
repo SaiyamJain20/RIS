@@ -1,8 +1,8 @@
 {
-  "status": "E0 candidate revision4 expectations for review; NOT E2 executor input or observed results",
+  "status": "E0 candidate revision5 expectations for review; NOT E2 executor input or observed results",
   "positiveControls": "evaluation/scenarios/e_positive.json: Alice/Bob/wrong-issuer, both grant-all and deny-all rejected by existing oracle tests",
   "signedMutationInputs": "interfaces/vectors/eip712-agent1-candidate.json: exact typed messages and field/domain substitutions",
-  "scheduleSemantics": "Steps are ordered directives. offsetSeconds adds delay from prior step. ADVANCE_CLOCK sets the stated qualification boundary (expiry/duty); RELEASE crash points are explicitly identified by variant. E1 must materialize local chain addresses, signatures and worker fault hooks; no opaque executable parameters are accepted.",
+  "scheduleSemantics": "Steps are ordered directives; offsetSeconds delays from the prior step. The executor reads the complete schedule before execution: CRASH_RESTART names workerHook=release and crashPoint, arms that hook BEFORE the immediately preceding RELEASE, then restarts at CRASH_RESTART. The following RELEASE retries before original expiry. Hooks are closed test controls, not code. ADVANCE_CLOCK uses the qualification boundary. E1 materializes local bindings; no run is asserted.",
   "cases": [
     {
       "id": "E01-subject-substitution-paper-strict",
@@ -43,7 +43,7 @@
         "outcome": "CONDITIONAL",
         "classification": "SPEC_GAP",
         "error": null,
-        "qualification": "A compromised configured relay is outside the paper secure-isolation assumption. A repaired certificate must bind the original tuple."
+        "qualification": "A compromised configured relay is outside the paper secure-isolation assumption. A repaired certificate must bind the original tuple. Substitute request.gid only and present the original decision certificate unchanged. Rewriting decision.requestDigest as well is a separate signature-failure control."
       },
       "adapterMode": "symbolic",
       "executionStatus": "NOT_RUN"
@@ -87,7 +87,7 @@
         "outcome": "CONDITIONAL",
         "classification": "SPEC_GAP",
         "error": null,
-        "qualification": "A compromised configured relay is outside the paper secure-isolation assumption. A repaired certificate must bind the original tuple."
+        "qualification": "A compromised configured relay is outside the paper secure-isolation assumption. A repaired certificate must bind the original tuple. Substitute request.gid only and present the original decision certificate unchanged. Rewriting decision.requestDigest as well is a separate signature-failure control."
       },
       "adapterMode": "symbolic",
       "executionStatus": "NOT_RUN"
@@ -108,7 +108,8 @@
         "A02",
         "A14",
         "A19",
-        "A25"
+        "A25",
+        "A36"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "subject-substitution",
@@ -130,8 +131,8 @@
         "property": "decision-provenance",
         "outcome": "REJECT",
         "classification": "REPAIR_SUPPORTED",
-        "error": "BAD_SIGNATURE",
-        "qualification": "A compromised configured relay is outside the paper secure-isolation assumption. A repaired certificate must bind the original tuple."
+        "error": "WRONG_SUBJECT",
+        "qualification": "A compromised configured relay is outside the paper secure-isolation assumption. A repaired certificate must bind the original tuple. Substitute request.gid only and present the original decision certificate unchanged. Rewriting decision.requestDigest as well is a separate signature-failure control."
       },
       "adapterMode": "symbolic",
       "executionStatus": "NOT_RUN"
@@ -240,7 +241,8 @@
         "A02",
         "A14",
         "A19",
-        "A25"
+        "A25",
+        "A36"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "nonce-replay",
@@ -372,7 +374,8 @@
         "A02",
         "A14",
         "A19",
-        "A25"
+        "A25",
+        "A36"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "expiry-boundary",
@@ -507,7 +510,8 @@
         "A09",
         "A17",
         "A20",
-        "A22"
+        "A22",
+        "A36"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "signed-list-rollback",
@@ -626,7 +630,8 @@
         "A09",
         "A17",
         "A20",
-        "A22"
+        "A22",
+        "A36"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "wrong-issuer",
@@ -639,9 +644,9 @@
       "expected": {
         "property": "trust-freshness",
         "outcome": "REJECT",
-        "classification": "REPAIR_SUPPORTED",
+        "classification": "SUPPORTED",
         "error": "UNAUTHORIZED_CALLER",
-        "qualification": "H1 administrator attempts an H2 trust update. No profile drops the paper issuer/caller restriction."
+        "qualification": "H1 administrator attempts an H2 trust update. No profile drops the paper issuer/caller restriction. Issuer scoping is preserved baseline behavior, not a new repaired-e property."
       },
       "adapterMode": "symbolic",
       "executionStatus": "NOT_RUN"
@@ -753,7 +758,8 @@
         "A09",
         "A17",
         "A20",
-        "A22"
+        "A22",
+        "A36"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "pre-barrier-revocation",
@@ -812,10 +818,6 @@
           "offsetSeconds": "0"
         },
         {
-          "action": "ACCEPT_CHECKPOINT",
-          "offsetSeconds": "0"
-        },
-        {
           "action": "FORWARD_OR_CONSUME",
           "offsetSeconds": "0"
         }
@@ -825,7 +827,7 @@
         "outcome": "CONDITIONAL",
         "classification": "SPEC_GAP",
         "error": null,
-        "qualification": "New checkpoint changes sequence/authEpoch. Consume the older certificate without re-collection; reject without grant/nonce mutation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation."
+        "qualification": "New checkpoint changes sequence/authEpoch. Consume the older certificate without re-collection; reject without grant/nonce mutation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation. Paper profiles have no checkpoint barrier: ACCEPT_CHECKPOINT is not applicable and is omitted, rather than submitting a WRONG_PROFILE transaction."
       },
       "adapterMode": "symbolic",
       "executionStatus": "NOT_RUN"
@@ -861,10 +863,6 @@
           "offsetSeconds": "0"
         },
         {
-          "action": "ACCEPT_CHECKPOINT",
-          "offsetSeconds": "0"
-        },
-        {
           "action": "FORWARD_OR_CONSUME",
           "offsetSeconds": "0"
         }
@@ -874,7 +872,7 @@
         "outcome": "CONDITIONAL",
         "classification": "SPEC_GAP",
         "error": null,
-        "qualification": "New checkpoint changes sequence/authEpoch. Consume the older certificate without re-collection; reject without grant/nonce mutation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation."
+        "qualification": "New checkpoint changes sequence/authEpoch. Consume the older certificate without re-collection; reject without grant/nonce mutation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation. Paper profiles have no checkpoint barrier: ACCEPT_CHECKPOINT is not applicable and is omitted, rather than submitting a WRONG_PROFILE transaction."
       },
       "adapterMode": "symbolic",
       "executionStatus": "NOT_RUN"
@@ -896,7 +894,8 @@
         "A09",
         "A17",
         "A20",
-        "A22"
+        "A22",
+        "A36"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "post-barrier-revocation",
@@ -1035,7 +1034,8 @@
         "A09",
         "A17",
         "A20",
-        "A22"
+        "A22",
+        "A36"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "expired-duty",
@@ -1181,7 +1181,8 @@
         "A12",
         "A13",
         "A21",
-        "A26"
+        "A26",
+        "A36"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "dropped-outcome",
@@ -1315,7 +1316,8 @@
         "A12",
         "A13",
         "A21",
-        "A26"
+        "A26",
+        "A36"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "fabricated-outcome",
@@ -1465,7 +1467,8 @@
         "A12",
         "A13",
         "A21",
-        "A26"
+        "A26",
+        "A36"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "duplicate-outcome",
@@ -1519,7 +1522,9 @@
         "A12",
         "A13",
         "A21",
-        "A26"
+        "A26",
+        "A35",
+        "A37"
       ],
       "baseScenarioId": "E-control-Alice-paper-strict",
       "variant": "crash-after-intent",
@@ -1538,7 +1543,9 @@
         },
         {
           "action": "CRASH_RESTART",
-          "offsetSeconds": "0"
+          "offsetSeconds": "0",
+          "workerHook": "release",
+          "crashPoint": "after-intent"
         },
         {
           "action": "RELEASE",
@@ -1554,7 +1561,14 @@
         "outcome": "UNPROVED",
         "classification": "BLOCKED",
         "error": null,
-        "qualification": "Inject crash immediately after durable intent, before send. Restart uses the same persisted response; original expiry still bounds retry. E1/E2 worker implementation is required."
+        "qualification": "Inject crash immediately after durable intent, before send. Restart uses the same persisted response; original expiry still bounds retry. E1/E2 worker implementation is required. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED.",
+        "worker": {
+          "releaseIntentCount": "1",
+          "releaseSentCount": "1",
+          "sameCachedResponse": true,
+          "delivery": "unknown",
+          "expiredRetryError": "EXPIRED"
+        }
       },
       "adapterMode": "symbolic",
       "executionStatus": "NOT_RUN"
@@ -1577,7 +1591,9 @@
         "A12",
         "A13",
         "A21",
-        "A26"
+        "A26",
+        "A35",
+        "A37"
       ],
       "baseScenarioId": "E-control-Alice-paper-minimal",
       "variant": "crash-after-intent",
@@ -1596,7 +1612,9 @@
         },
         {
           "action": "CRASH_RESTART",
-          "offsetSeconds": "0"
+          "offsetSeconds": "0",
+          "workerHook": "release",
+          "crashPoint": "after-intent"
         },
         {
           "action": "RELEASE",
@@ -1612,7 +1630,14 @@
         "outcome": "UNPROVED",
         "classification": "BLOCKED",
         "error": null,
-        "qualification": "Inject crash immediately after durable intent, before send. Restart uses the same persisted response; original expiry still bounds retry. E1/E2 worker implementation is required."
+        "qualification": "Inject crash immediately after durable intent, before send. Restart uses the same persisted response; original expiry still bounds retry. E1/E2 worker implementation is required. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED.",
+        "worker": {
+          "releaseIntentCount": "1",
+          "releaseSentCount": "1",
+          "sameCachedResponse": true,
+          "delivery": "unknown",
+          "expiredRetryError": "EXPIRED"
+        }
       },
       "adapterMode": "symbolic",
       "executionStatus": "NOT_RUN"
@@ -1635,7 +1660,10 @@
         "A12",
         "A13",
         "A21",
-        "A26"
+        "A26",
+        "A35",
+        "A37",
+        "A36"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "crash-after-intent",
@@ -1654,7 +1682,9 @@
         },
         {
           "action": "CRASH_RESTART",
-          "offsetSeconds": "0"
+          "offsetSeconds": "0",
+          "workerHook": "release",
+          "crashPoint": "after-intent"
         },
         {
           "action": "RELEASE",
@@ -1670,7 +1700,14 @@
         "outcome": "CONDITIONAL",
         "classification": "REPAIR_SUPPORTED",
         "error": null,
-        "qualification": "Inject crash immediately after durable intent, before send. Restart uses the same persisted response; original expiry still bounds retry. E1/E2 worker implementation is required."
+        "qualification": "Inject crash immediately after durable intent, before send. Restart uses the same persisted response; original expiry still bounds retry. E1/E2 worker implementation is required. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED.",
+        "worker": {
+          "releaseIntentCount": "1",
+          "releaseSentCount": "1",
+          "sameCachedResponse": true,
+          "delivery": "unknown",
+          "expiredRetryError": "EXPIRED"
+        }
       },
       "adapterMode": "symbolic",
       "executionStatus": "NOT_RUN"
@@ -1693,7 +1730,9 @@
         "A12",
         "A13",
         "A21",
-        "A26"
+        "A26",
+        "A35",
+        "A37"
       ],
       "baseScenarioId": "E-control-Alice-paper-strict",
       "variant": "crash-after-send",
@@ -1712,7 +1751,9 @@
         },
         {
           "action": "CRASH_RESTART",
-          "offsetSeconds": "0"
+          "offsetSeconds": "0",
+          "workerHook": "release",
+          "crashPoint": "after-send"
         },
         {
           "action": "RELEASE",
@@ -1728,7 +1769,14 @@
         "outcome": "UNPROVED",
         "classification": "BLOCKED",
         "error": null,
-        "qualification": "Inject crash after send before PBC outcome acknowledgement. Delivery is unknown; retain that fact and reconcile idempotently without claiming exactly-once network delivery."
+        "qualification": "Inject crash after send before PBC outcome acknowledgement. Delivery is unknown; retain that fact and reconcile idempotently without claiming exactly-once network delivery. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED.",
+        "worker": {
+          "releaseIntentCount": "1",
+          "releaseSentCount": "2",
+          "sameCachedResponse": true,
+          "delivery": "unknown",
+          "expiredRetryError": "EXPIRED"
+        }
       },
       "adapterMode": "symbolic",
       "executionStatus": "NOT_RUN"
@@ -1751,7 +1799,9 @@
         "A12",
         "A13",
         "A21",
-        "A26"
+        "A26",
+        "A35",
+        "A37"
       ],
       "baseScenarioId": "E-control-Alice-paper-minimal",
       "variant": "crash-after-send",
@@ -1770,7 +1820,9 @@
         },
         {
           "action": "CRASH_RESTART",
-          "offsetSeconds": "0"
+          "offsetSeconds": "0",
+          "workerHook": "release",
+          "crashPoint": "after-send"
         },
         {
           "action": "RELEASE",
@@ -1786,7 +1838,14 @@
         "outcome": "UNPROVED",
         "classification": "BLOCKED",
         "error": null,
-        "qualification": "Inject crash after send before PBC outcome acknowledgement. Delivery is unknown; retain that fact and reconcile idempotently without claiming exactly-once network delivery."
+        "qualification": "Inject crash after send before PBC outcome acknowledgement. Delivery is unknown; retain that fact and reconcile idempotently without claiming exactly-once network delivery. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED.",
+        "worker": {
+          "releaseIntentCount": "1",
+          "releaseSentCount": "2",
+          "sameCachedResponse": true,
+          "delivery": "unknown",
+          "expiredRetryError": "EXPIRED"
+        }
       },
       "adapterMode": "symbolic",
       "executionStatus": "NOT_RUN"
@@ -1809,7 +1868,10 @@
         "A12",
         "A13",
         "A21",
-        "A26"
+        "A26",
+        "A35",
+        "A37",
+        "A36"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "crash-after-send",
@@ -1828,7 +1890,9 @@
         },
         {
           "action": "CRASH_RESTART",
-          "offsetSeconds": "0"
+          "offsetSeconds": "0",
+          "workerHook": "release",
+          "crashPoint": "after-send"
         },
         {
           "action": "RELEASE",
@@ -1844,7 +1908,401 @@
         "outcome": "CONDITIONAL",
         "classification": "REPAIR_SUPPORTED",
         "error": null,
-        "qualification": "Inject crash after send before PBC outcome acknowledgement. Delivery is unknown; retain that fact and reconcile idempotently without claiming exactly-once network delivery."
+        "qualification": "Inject crash after send before PBC outcome acknowledgement. Delivery is unknown; retain that fact and reconcile idempotently without claiming exactly-once network delivery. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED.",
+        "worker": {
+          "releaseIntentCount": "1",
+          "releaseSentCount": "2",
+          "sameCachedResponse": true,
+          "delivery": "unknown",
+          "expiredRetryError": "EXPIRED"
+        }
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-forged-tuple-paper-strict",
+      "caseFamily": "E01",
+      "profile": "paper-strict",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-strict",
+      "variant": "forged-tuple",
+      "steps": [
+        {
+          "action": "FABRICATE_TUPLE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "The configured relay fabricates a tuple without a PBC request/log. Repaired control uses a non-witness signature on an otherwise matching certificate; BAD_SIGNATURE must precede any grant. Paper caller restrictions remain enforced; the compromised relay stress is outside secure isolation."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-forged-tuple-paper-minimal",
+      "caseFamily": "E01",
+      "profile": "paper-minimal",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-minimal",
+      "variant": "forged-tuple",
+      "steps": [
+        {
+          "action": "FABRICATE_TUPLE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "The configured relay fabricates a tuple without a PBC request/log. Repaired control uses a non-witness signature on an otherwise matching certificate; BAD_SIGNATURE must precede any grant. Paper caller restrictions remain enforced; the compromised relay stress is outside secure isolation."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-forged-tuple-repaired-e",
+      "caseFamily": "E01",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A36"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "forged-tuple",
+      "steps": [
+        {
+          "action": "FABRICATE_TUPLE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "BAD_SIGNATURE",
+        "qualification": "The configured relay fabricates a tuple without a PBC request/log. Repaired control uses a non-witness signature on an otherwise matching certificate; BAD_SIGNATURE must precede any grant. Paper caller restrictions remain enforced; the compromised relay stress is outside secure isolation."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-wrong-destination-paper-strict",
+      "caseFamily": "E01",
+      "profile": "paper-strict",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-strict",
+      "variant": "wrong-destination",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "SUBSTITUTE_DESTINATION",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Use an otherwise valid request/certificate for a different destination chain/KSSC and submit it here without rewriting its signed fields. The receiver rejects WRONG_DESTINATION before grant state changes. Paper forwarded tuples omit this authenticated destination binding; this is a chosen completion under compromised-relay stress."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-wrong-destination-paper-minimal",
+      "caseFamily": "E01",
+      "profile": "paper-minimal",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-minimal",
+      "variant": "wrong-destination",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "SUBSTITUTE_DESTINATION",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Use an otherwise valid request/certificate for a different destination chain/KSSC and submit it here without rewriting its signed fields. The receiver rejects WRONG_DESTINATION before grant state changes. Paper forwarded tuples omit this authenticated destination binding; this is a chosen completion under compromised-relay stress."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-wrong-destination-repaired-e",
+      "caseFamily": "E01",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A36"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "wrong-destination",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "SUBSTITUTE_DESTINATION",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "WRONG_DESTINATION",
+        "qualification": "Use an otherwise valid request/certificate for a different destination chain/KSSC and submit it here without rewriting its signed fields. The receiver rejects WRONG_DESTINATION before grant state changes. Paper forwarded tuples omit this authenticated destination binding; this is a chosen completion under compromised-relay stress."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-new-reference-replay-paper-strict",
+      "caseFamily": "E01",
+      "profile": "paper-strict",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-strict",
+      "variant": "new-reference-replay",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPLAY_NEW_REFERENCE",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "After the first grant, the relay supplies a fresh pbcRequestId to paper policyEnf while repeating the same verified tuple. Paper grants again under A25. Repaired-e reuses the original signed gid/nonce/certificate (no freshly signed request); REPLAY prevents a second grant."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-new-reference-replay-paper-minimal",
+      "caseFamily": "E01",
+      "profile": "paper-minimal",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-minimal",
+      "variant": "new-reference-replay",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPLAY_NEW_REFERENCE",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "After the first grant, the relay supplies a fresh pbcRequestId to paper policyEnf while repeating the same verified tuple. Paper grants again under A25. Repaired-e reuses the original signed gid/nonce/certificate (no freshly signed request); REPLAY prevents a second grant."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-new-reference-replay-repaired-e",
+      "caseFamily": "E01",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A36"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "new-reference-replay",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPLAY_NEW_REFERENCE",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "NO_NEW_GRANT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "After the first grant, the relay supplies a fresh pbcRequestId to paper policyEnf while repeating the same verified tuple. Paper grants again under A25. Repaired-e reuses the original signed gid/nonce/certificate (no freshly signed request); REPLAY prevents a second grant."
       },
       "adapterMode": "symbolic",
       "executionStatus": "NOT_RUN"

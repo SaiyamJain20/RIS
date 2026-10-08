@@ -1,8 +1,10 @@
-"""Revision 4 E0 boundary proposal. No runtime services or real crypto here."""
+"""Revision 5 E0 boundary proposal. No runtime services or real crypto here."""
 
 OPERATIONS = {
     'prepare_request': 'PrepareRequest',
     'collect_decision': 'CollectDecision',
+    'collect_checkpoint': 'CollectCheckpoint',
+    'attest_grant': 'AttestGrant',
     'release': 'Release',
     'encrypt_record': 'EncryptRecord',
     'finish_decryption': 'FinishDecryption',
@@ -13,6 +15,8 @@ CLASSIFICATIONS = ('SUPPORTED', 'SPEC_GAP', 'RECONSTRUCTION_FAILURE',
 
 
 def extend(d, obj, ref, array, string, enum):
+    d['Scenario']['properties']['expectedLedgerChecks'] = {'type': 'array', 'minItems': 1, 'uniqueItems': True,
+                                                         'items': enum('DBC_POLICY_DENIAL_LOGGED', 'NONCE_UNCHANGED')}
     d['UserKeyRef'] = {'type': 'string', 'format': 'user-key-ref', 'maxLength': 76}
     d['SymbolicRecord'] = obj({'dataId': ref('Hash'), 'owner': ref('Address'), 'payloadDigest': ref('Hash')})
     # These are ACSC Requirement tuple encodings; clause order is meaningful.
@@ -23,6 +27,8 @@ def extend(d, obj, ref, array, string, enum):
     d['PrepareRequestInput'] = obj({'request': ref('AccessRequest'), 'signingKeyRef': ref('UserKeyRef')})
     d['CollectDecisionInput'] = obj({'requestDigest': ref('Hash'), 'witnessSetVersion': {'const': '1'}},
                                     optional=('witnessSetVersion',))
+    d['CollectCheckpointInput'] = obj({'witnessSetVersion': {'const': '1'}}, optional=('witnessSetVersion',))
+    d['AttestGrantInput'] = obj({'grantId': ref('Hash')})
     d['ReleaseInput'] = obj({'grantId': ref('Hash')})
     d['EncryptRecordInput'] = obj({'record': ref('SymbolicRecord'), 'policy': ref('SymbolicPolicy'), 'keyEpoch': {'const': '0'}})
     d['FinishDecryptionInput'] = obj({'response': ref('ReleaseResult'), 'userKeyRef': ref('UserKeyRef')})
@@ -33,6 +39,10 @@ def extend(d, obj, ref, array, string, enum):
     d['CollectDecisionResult'] = obj({**header, 'decision': ref('AccessDecision'),
                                       'signatures': {**array('Signature', 1), 'maxItems': 1},
                                       'credentialRecords': ref('CredentialRecords')})
+    d['CollectCheckpointResult'] = obj({**header, 'checkpoint': ref('StateCheckpoint'),
+                                       'signatures': {**array('Signature', 1), 'maxItems': 1}})
+    d['AttestGrantResult'] = obj({**header, 'receipt': ref('GrantReceipt'),
+                                'signatures': {**array('Signature', 1), 'maxItems': 1}})
     d['ReleaseResult'] = obj({**header, **{field: ref('Hash') for field in
                                          ('requestDigest', 'grantId', 'dataId', 'ciphertextDigest', 'recipientKeyHash')},
                               'keyEpoch': {'const': '0'}, 'responseEnvelope': ref('SymbolicEnvelope')})
@@ -82,17 +92,26 @@ def extend(d, obj, ref, array, string, enum):
          'then': {'properties': {'evidencePaths': {'minItems': 1}}}},
     ]
     actions = ('REQUEST_ACCESS', 'SUBSTITUTE_SUBJECT', 'REPLAY_REQUEST', 'ADVANCE_CLOCK',
+               'FABRICATE_TUPLE', 'SUBSTITUTE_DESTINATION', 'REPLAY_NEW_REFERENCE',
                'INSTALL_NEW_LIST', 'REPLAY_OLD_LIST', 'WRONG_ISSUER_UPDATE', 'REVOKE_ON_PBC',
                'ACCEPT_CHECKPOINT', 'FORWARD_OR_CONSUME', 'RELEASE', 'DROP_OUTCOME',
                'FABRICATE_OUTCOME', 'REPORT_OUTCOME', 'DUPLICATE_OUTCOME', 'CRASH_RESTART')
     variants = {
-        'E01': ('subject-substitution', 'nonce-replay', 'expiry-boundary'),
+        'E01': ('subject-substitution', 'nonce-replay', 'expiry-boundary',
+                'forged-tuple', 'wrong-destination', 'new-reference-replay'),
         'E02': ('signed-list-rollback', 'wrong-issuer', 'pre-barrier-revocation',
                 'post-barrier-revocation', 'expired-duty'),
         'E03': ('dropped-outcome', 'fabricated-outcome', 'duplicate-outcome',
                 'crash-after-intent', 'crash-after-send'),
     }
-    d['E0CaseStep'] = obj({'action': enum(*actions), 'offsetSeconds': ref('Uint64')})
+    d['E0CaseStep'] = {'oneOf': [
+        obj({'action': enum(*(a for a in actions if a != 'CRASH_RESTART')), 'offsetSeconds': ref('Uint64')}),
+        obj({'action': {'const': 'CRASH_RESTART'}, 'offsetSeconds': ref('Uint64'),
+             'workerHook': {'const': 'release'}, 'crashPoint': enum('after-intent', 'after-send')}),
+    ]}
+    d['WorkerExpectation'] = obj({'releaseIntentCount': ref('Uint64'), 'releaseSentCount': ref('Uint64'),
+                                 'sameCachedResponse': {'const': True}, 'delivery': {'const': 'unknown'},
+                                 'expiredRetryError': {'const': 'EXPIRED'}})
     d['E0CaseFixture'] = obj({'id': string(), 'caseFamily': enum(*variants),
                               'profile': enum('paper-strict', 'paper-minimal', 'repaired-e'),
                               'sourceRefs': {'type': 'array', 'items': string(), 'minItems': 1},
@@ -102,7 +121,7 @@ def extend(d, obj, ref, array, string, enum):
                                                'outcome': enum('ACCEPT', 'REJECT', 'PENDING', 'NO_NEW_GRANT', 'NO_NEW_OUTCOME', 'CONDITIONAL', 'UNPROVED'),
                                                'classification': enum(*CLASSIFICATIONS),
                                                'error': {'anyOf': [d['Error']['properties']['code'], {'type': 'null'}]},
-                                               'qualification': string()}),
+                                               'qualification': string(), 'worker': ref('WorkerExpectation')}, optional=('worker',)),
                               'adapterMode': {'const': 'symbolic'}, 'executionStatus': {'const': 'NOT_RUN'}})
     d['E0CaseFixture']['allOf'] = [
         {'if': {'properties': {'caseFamily': {'const': family}}},
