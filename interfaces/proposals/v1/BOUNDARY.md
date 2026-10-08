@@ -1,6 +1,8 @@
-# Candidate revision 5 boundary proposal — NOT FROZEN
+# Candidate revision 6 boundary proposal — NOT FROZEN
 
 Author: Agent 3, E0. Responds to A1-0013..0017 and A2-0006..0008. These definitions supplement the existing signed types and deployment schema. The normative interface remains v0 until exact affected-party ACKs and common E0 acceptance. No E1 service, Phase F/G implementation, actual encryption or successful release is asserted here.
+
+Current delta: `revision6/DELTA.md` supersedes affected revision5 case/assumption descriptions below. It records A2-0010/A1-0021/A2-0011 reviews, option (c) for paper-mode response recipients, eight supplementary NOT_RUN controls and closed E0CaseStep/Fixture additions. Eight production adapter operations and all signed/nested wire definitions remain unchanged. Agent2 production realization and exact materialized delta ACKs are pending. The historical revision5 inventory is preserved at3e0300a; current review uses `revision6/review-manifest.json`.
 
 ## Transport and operation association
 

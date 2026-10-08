@@ -59,3 +59,7 @@ Revision4 scoped peer acceptance requested concrete changes. Revision5 addresses
 ## A2-0009 scoped review (2026-10-08)
 
 Agent3 reproduced618 non-live E0 tests/101 evaluator-only skips and16 examples at exact5e203d0/89-file pin. This closes the missing-operation/export dependency, not a gate checkbox. A2's32 paper expectation exclusions, owner export metadata correction and new exact supplement review still precede E0 promotion. Candidate services are NOT integration-ready. No live two-chain/worker/formal evidence, INTERFACE_READY or E1 unlock; all RQ gates remain NOT_RUN.
+
+## Revision6 E0 delta review —2026-10-08
+
+D35 selects registered-key paper responses after A1-0021/A2-0011; Agent2 production successor/exact materialized ACKs pending.35 package/94 peer inputs stable;161 evaluator tests,619 selected non-live protocol tests/101 skips,393 signed checks,565 schema verdicts/0 mismatches.56 schedules NOT_RUN; no live service/fault/recovery/formal query or RQ checkbox closed. Exact review: manifestdf2a306fd77937572346cf5e91e9354536988af63ed660e14d51e04350161c62; evidence evaluation/evidence/e0/revision-6-review-20261008/. E0 open; E1/F/G locked.

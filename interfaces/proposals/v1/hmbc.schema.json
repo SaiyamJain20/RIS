@@ -3323,7 +3323,13 @@
                 "DROP_OUTCOME",
                 "FABRICATE_OUTCOME",
                 "REPORT_OUTCOME",
-                "DUPLICATE_OUTCOME"
+                "DUPLICATE_OUTCOME",
+                "REQUEST_SAME_NONCE_DISTINCT_DIGEST",
+                "FORWARD_BOTH_REQUESTS",
+                "CERTIFY_BOTH_BEFORE_CONSUMPTION",
+                "CONSUME_FIRST",
+                "CONSUME_PRECOLLECTED_SECOND",
+                "ATTEST_GRANT"
               ]
             },
             "offsetSeconds": {
@@ -3360,6 +3366,33 @@
             "offsetSeconds",
             "workerHook",
             "crashPoint"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "action": {
+              "enum": [
+                "RESIGN_RECEIPT_FIELD",
+                "ALTER_RECEIPT_KEEP_SIGNATURE"
+              ]
+            },
+            "offsetSeconds": {
+              "$ref": "#/$defs/Uint64"
+            },
+            "receiptField": {
+              "enum": [
+                "requestDigest",
+                "gid",
+                "dataId"
+              ]
+            }
+          },
+          "required": [
+            "action",
+            "offsetSeconds",
+            "receiptField"
           ],
           "additionalProperties": false
         }
@@ -3564,7 +3597,8 @@
                   "expiry-boundary",
                   "forged-tuple",
                   "wrong-destination",
-                  "new-reference-replay"
+                  "new-reference-replay",
+                  "same-nonce-distinct-digests"
                 ]
               }
             }
@@ -3608,7 +3642,10 @@
                   "fabricated-outcome",
                   "duplicate-outcome",
                   "crash-after-intent",
-                  "crash-after-send"
+                  "crash-after-send",
+                  "receipt-binding-control",
+                  "receipt-signature-control",
+                  "receipt-binding-positive"
                 ]
               }
             }

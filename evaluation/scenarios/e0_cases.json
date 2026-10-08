@@ -1,5 +1,5 @@
 {
-  "status": "E0 candidate revision5 expectations for review; NOT E2 executor input or observed results",
+  "status": "E0 candidate revision6 expectations for exact review; NOT E2 executor input or observed results",
   "positiveControls": "evaluation/scenarios/e_positive.json: Alice/Bob/wrong-issuer, both grant-all and deny-all rejected by existing oracle tests",
   "signedMutationInputs": "interfaces/vectors/eip712-agent1-candidate.json: exact typed messages and field/domain substitutions",
   "scheduleSemantics": "Steps are ordered directives; offsetSeconds delays from the prior step. The executor reads the complete schedule before execution: CRASH_RESTART names workerHook=release and crashPoint, arms that hook BEFORE the immediately preceding RELEASE, then restarts at CRASH_RESTART. The following RELEASE retries before original expiry. Hooks are closed test controls, not code. ADVANCE_CLOCK uses the qualification boundary. E1 materializes local bindings; no run is asserted.",
@@ -20,7 +20,9 @@
         "A02",
         "A14",
         "A19",
-        "A25"
+        "A25",
+        "A38",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-strict",
       "variant": "subject-substitution",
@@ -43,7 +45,7 @@
         "outcome": "CONDITIONAL",
         "classification": "SPEC_GAP",
         "error": null,
-        "qualification": "A compromised configured relay is outside the paper secure-isolation assumption. A repaired certificate must bind the original tuple. Substitute request.gid only and present the original decision certificate unchanged. Rewriting decision.requestDigest as well is a separate signature-failure control."
+        "qualification": "Compromised configured relay stress is outside paper secure isolation. Substitute only gid in the relay ForwardedRequest passed to policyEnf while keeping Alice's verified credential records. Paper profiles use no decision certificate. The DBC may authorize the substituted tuple; the grant gid is relay-asserted. With D35/A38 the symbolic response follows that gid's PBC-registered recipient key, not the original requester. An unregistered gid gets no release. This is a reconstruction/specification-gap comparison, not an HMBC exploit."
       },
       "adapterMode": "symbolic",
       "executionStatus": "NOT_RUN"
@@ -64,7 +66,9 @@
         "A02",
         "A14",
         "A19",
-        "A25"
+        "A25",
+        "A38",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-minimal",
       "variant": "subject-substitution",
@@ -87,7 +91,7 @@
         "outcome": "CONDITIONAL",
         "classification": "SPEC_GAP",
         "error": null,
-        "qualification": "A compromised configured relay is outside the paper secure-isolation assumption. A repaired certificate must bind the original tuple. Substitute request.gid only and present the original decision certificate unchanged. Rewriting decision.requestDigest as well is a separate signature-failure control."
+        "qualification": "Compromised configured relay stress is outside paper secure isolation. Substitute only gid in the relay ForwardedRequest passed to policyEnf while keeping Alice's verified credential records. Paper profiles use no decision certificate. The DBC may authorize the substituted tuple; the grant gid is relay-asserted. With D35/A38 the symbolic response follows that gid's PBC-registered recipient key, not the original requester. An unregistered gid gets no release. This is a reconstruction/specification-gap comparison, not an HMBC exploit."
       },
       "adapterMode": "symbolic",
       "executionStatus": "NOT_RUN"
@@ -109,7 +113,8 @@
         "A14",
         "A19",
         "A25",
-        "A36"
+        "A36",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "subject-substitution",
@@ -153,7 +158,8 @@
         "A02",
         "A14",
         "A19",
-        "A25"
+        "A25",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-strict",
       "variant": "nonce-replay",
@@ -197,7 +203,8 @@
         "A02",
         "A14",
         "A19",
-        "A25"
+        "A25",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-minimal",
       "variant": "nonce-replay",
@@ -242,7 +249,8 @@
         "A14",
         "A19",
         "A25",
-        "A36"
+        "A36",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "nonce-replay",
@@ -286,7 +294,8 @@
         "A02",
         "A14",
         "A19",
-        "A25"
+        "A25",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-strict",
       "variant": "expiry-boundary",
@@ -330,7 +339,8 @@
         "A02",
         "A14",
         "A19",
-        "A25"
+        "A25",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-minimal",
       "variant": "expiry-boundary",
@@ -375,7 +385,8 @@
         "A14",
         "A19",
         "A25",
-        "A36"
+        "A36",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "expiry-boundary",
@@ -420,7 +431,8 @@
         "A09",
         "A17",
         "A20",
-        "A22"
+        "A22",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-strict",
       "variant": "signed-list-rollback",
@@ -465,7 +477,8 @@
         "A09",
         "A17",
         "A20",
-        "A22"
+        "A22",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-minimal",
       "variant": "signed-list-rollback",
@@ -511,7 +524,8 @@
         "A17",
         "A20",
         "A22",
-        "A36"
+        "A36",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "signed-list-rollback",
@@ -556,7 +570,8 @@
         "A09",
         "A17",
         "A20",
-        "A22"
+        "A22",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-strict",
       "variant": "wrong-issuer",
@@ -593,7 +608,8 @@
         "A09",
         "A17",
         "A20",
-        "A22"
+        "A22",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-minimal",
       "variant": "wrong-issuer",
@@ -631,7 +647,8 @@
         "A17",
         "A20",
         "A22",
-        "A36"
+        "A36",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "wrong-issuer",
@@ -668,7 +685,8 @@
         "A09",
         "A17",
         "A20",
-        "A22"
+        "A22",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-strict",
       "variant": "pre-barrier-revocation",
@@ -713,7 +731,8 @@
         "A09",
         "A17",
         "A20",
-        "A22"
+        "A22",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-minimal",
       "variant": "pre-barrier-revocation",
@@ -759,7 +778,8 @@
         "A17",
         "A20",
         "A22",
-        "A36"
+        "A36",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "pre-barrier-revocation",
@@ -804,7 +824,8 @@
         "A09",
         "A17",
         "A20",
-        "A22"
+        "A22",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-strict",
       "variant": "post-barrier-revocation",
@@ -849,7 +870,8 @@
         "A09",
         "A17",
         "A20",
-        "A22"
+        "A22",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-minimal",
       "variant": "post-barrier-revocation",
@@ -895,7 +917,8 @@
         "A17",
         "A20",
         "A22",
-        "A36"
+        "A36",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "post-barrier-revocation",
@@ -944,7 +967,8 @@
         "A09",
         "A17",
         "A20",
-        "A22"
+        "A22",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-strict",
       "variant": "expired-duty",
@@ -989,7 +1013,8 @@
         "A09",
         "A17",
         "A20",
-        "A22"
+        "A22",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-minimal",
       "variant": "expired-duty",
@@ -1035,7 +1060,8 @@
         "A17",
         "A20",
         "A22",
-        "A36"
+        "A36",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "expired-duty",
@@ -1081,7 +1107,10 @@
         "A12",
         "A13",
         "A21",
-        "A26"
+        "A26",
+        "A24",
+        "A38",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-strict",
       "variant": "dropped-outcome",
@@ -1108,7 +1137,7 @@
         "outcome": "PENDING",
         "classification": "SUPPORTED",
         "error": null,
-        "qualification": "PBC remains pending with no successful outcome record. Local durable intent/send logs do not imply receipt delivery; reconciliation requires eventual delivery."
+        "qualification": "PBC remains pending with no successful outcome record. Local durable intent/send logs do not imply receipt delivery; reconciliation requires eventual delivery. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result."
       },
       "adapterMode": "symbolic",
       "executionStatus": "NOT_RUN"
@@ -1131,7 +1160,10 @@
         "A12",
         "A13",
         "A21",
-        "A26"
+        "A26",
+        "A24",
+        "A38",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-minimal",
       "variant": "dropped-outcome",
@@ -1158,7 +1190,7 @@
         "outcome": "PENDING",
         "classification": "SUPPORTED",
         "error": null,
-        "qualification": "PBC remains pending with no successful outcome record. Local durable intent/send logs do not imply receipt delivery; reconciliation requires eventual delivery."
+        "qualification": "PBC remains pending with no successful outcome record. Local durable intent/send logs do not imply receipt delivery; reconciliation requires eventual delivery. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result."
       },
       "adapterMode": "symbolic",
       "executionStatus": "NOT_RUN"
@@ -1182,7 +1214,8 @@
         "A13",
         "A21",
         "A26",
-        "A36"
+        "A36",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "dropped-outcome",
@@ -1232,7 +1265,8 @@
         "A12",
         "A13",
         "A21",
-        "A26"
+        "A26",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-strict",
       "variant": "fabricated-outcome",
@@ -1274,7 +1308,8 @@
         "A12",
         "A13",
         "A21",
-        "A26"
+        "A26",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-minimal",
       "variant": "fabricated-outcome",
@@ -1317,7 +1352,8 @@
         "A13",
         "A21",
         "A26",
-        "A36"
+        "A36",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "fabricated-outcome",
@@ -1359,7 +1395,10 @@
         "A12",
         "A13",
         "A21",
-        "A26"
+        "A26",
+        "A24",
+        "A38",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-strict",
       "variant": "duplicate-outcome",
@@ -1390,7 +1429,7 @@
         "outcome": "NO_NEW_OUTCOME",
         "classification": "SUPPORTED",
         "error": "REPLAY",
-        "qualification": "Repeated reconciliation cannot create a second successful outcome or grant. Exact owner reporter status/return values may differ; no duplicate transition is the assertion."
+        "qualification": "Repeated reconciliation cannot create a second successful outcome or grant. Exact owner reporter status/return values may differ; no duplicate transition is the assertion. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result."
       },
       "adapterMode": "symbolic",
       "executionStatus": "NOT_RUN"
@@ -1413,7 +1452,10 @@
         "A12",
         "A13",
         "A21",
-        "A26"
+        "A26",
+        "A24",
+        "A38",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-minimal",
       "variant": "duplicate-outcome",
@@ -1444,7 +1486,7 @@
         "outcome": "NO_NEW_OUTCOME",
         "classification": "SUPPORTED",
         "error": "REPLAY",
-        "qualification": "Repeated reconciliation cannot create a second successful outcome or grant. Exact owner reporter status/return values may differ; no duplicate transition is the assertion."
+        "qualification": "Repeated reconciliation cannot create a second successful outcome or grant. Exact owner reporter status/return values may differ; no duplicate transition is the assertion. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result."
       },
       "adapterMode": "symbolic",
       "executionStatus": "NOT_RUN"
@@ -1468,7 +1510,8 @@
         "A13",
         "A21",
         "A26",
-        "A36"
+        "A36",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "duplicate-outcome",
@@ -1524,7 +1567,10 @@
         "A21",
         "A26",
         "A35",
-        "A37"
+        "A37",
+        "A24",
+        "A38",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-strict",
       "variant": "crash-after-intent",
@@ -1561,7 +1607,7 @@
         "outcome": "UNPROVED",
         "classification": "BLOCKED",
         "error": null,
-        "qualification": "Inject crash immediately after durable intent, before send. Restart uses the same persisted response; original expiry still bounds retry. E1/E2 worker implementation is required. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED.",
+        "qualification": "Inject crash immediately after durable intent, before send. Restart uses the same persisted response; original expiry still bounds retry. E1/E2 worker implementation is required. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result.",
         "worker": {
           "releaseIntentCount": "1",
           "releaseSentCount": "1",
@@ -1593,7 +1639,10 @@
         "A21",
         "A26",
         "A35",
-        "A37"
+        "A37",
+        "A24",
+        "A38",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-minimal",
       "variant": "crash-after-intent",
@@ -1630,7 +1679,7 @@
         "outcome": "UNPROVED",
         "classification": "BLOCKED",
         "error": null,
-        "qualification": "Inject crash immediately after durable intent, before send. Restart uses the same persisted response; original expiry still bounds retry. E1/E2 worker implementation is required. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED.",
+        "qualification": "Inject crash immediately after durable intent, before send. Restart uses the same persisted response; original expiry still bounds retry. E1/E2 worker implementation is required. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result.",
         "worker": {
           "releaseIntentCount": "1",
           "releaseSentCount": "1",
@@ -1663,7 +1712,8 @@
         "A26",
         "A35",
         "A37",
-        "A36"
+        "A36",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "crash-after-intent",
@@ -1732,7 +1782,10 @@
         "A21",
         "A26",
         "A35",
-        "A37"
+        "A37",
+        "A24",
+        "A38",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-strict",
       "variant": "crash-after-send",
@@ -1769,7 +1822,7 @@
         "outcome": "UNPROVED",
         "classification": "BLOCKED",
         "error": null,
-        "qualification": "Inject crash after send before PBC outcome acknowledgement. Delivery is unknown; retain that fact and reconcile idempotently without claiming exactly-once network delivery. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED.",
+        "qualification": "Inject crash after send before PBC outcome acknowledgement. Delivery is unknown; retain that fact and reconcile idempotently without claiming exactly-once network delivery. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result.",
         "worker": {
           "releaseIntentCount": "1",
           "releaseSentCount": "2",
@@ -1801,7 +1854,10 @@
         "A21",
         "A26",
         "A35",
-        "A37"
+        "A37",
+        "A24",
+        "A38",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-minimal",
       "variant": "crash-after-send",
@@ -1838,7 +1894,7 @@
         "outcome": "UNPROVED",
         "classification": "BLOCKED",
         "error": null,
-        "qualification": "Inject crash after send before PBC outcome acknowledgement. Delivery is unknown; retain that fact and reconcile idempotently without claiming exactly-once network delivery. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED.",
+        "qualification": "Inject crash after send before PBC outcome acknowledgement. Delivery is unknown; retain that fact and reconcile idempotently without claiming exactly-once network delivery. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result.",
         "worker": {
           "releaseIntentCount": "1",
           "releaseSentCount": "2",
@@ -1871,7 +1927,8 @@
         "A26",
         "A35",
         "A37",
-        "A36"
+        "A36",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "crash-after-send",
@@ -1936,7 +1993,8 @@
         "A02",
         "A14",
         "A19",
-        "A25"
+        "A25",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-strict",
       "variant": "forged-tuple",
@@ -1976,7 +2034,8 @@
         "A02",
         "A14",
         "A19",
-        "A25"
+        "A25",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-minimal",
       "variant": "forged-tuple",
@@ -2017,7 +2076,8 @@
         "A14",
         "A19",
         "A25",
-        "A36"
+        "A36",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "forged-tuple",
@@ -2057,7 +2117,8 @@
         "A02",
         "A14",
         "A19",
-        "A25"
+        "A25",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-strict",
       "variant": "wrong-destination",
@@ -2101,7 +2162,8 @@
         "A02",
         "A14",
         "A19",
-        "A25"
+        "A25",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-minimal",
       "variant": "wrong-destination",
@@ -2146,7 +2208,8 @@
         "A14",
         "A19",
         "A25",
-        "A36"
+        "A36",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "wrong-destination",
@@ -2190,7 +2253,8 @@
         "A02",
         "A14",
         "A19",
-        "A25"
+        "A25",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-strict",
       "variant": "new-reference-replay",
@@ -2234,7 +2298,8 @@
         "A02",
         "A14",
         "A19",
-        "A25"
+        "A25",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-paper-minimal",
       "variant": "new-reference-replay",
@@ -2279,7 +2344,8 @@
         "A14",
         "A19",
         "A25",
-        "A36"
+        "A36",
+        "A41"
       ],
       "baseScenarioId": "E-control-Alice-repaired-e",
       "variant": "new-reference-replay",
@@ -2307,5 +2373,6 @@
       "adapterMode": "symbolic",
       "executionStatus": "NOT_RUN"
     }
-  ]
+  ],
+  "registrationCondition": "Before adversarial schedules, trusted coordinator pre-registers synthetic worker payload/policy commitments and verifies ledger owner/policy; no registrant or payload authenticity claim (A41)."
 }

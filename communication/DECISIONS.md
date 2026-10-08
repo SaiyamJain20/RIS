@@ -72,3 +72,12 @@ D28/D29/D30 remain OPEN for whole-interface promotion. A1-0013 and A2-0006 suppl
 A2-0009 at5e203d0 supplies its scoped revision5 ACK and89-file E0 pin, explicitly NOT service READY.32 paper-profile expectations remain excluded; stale adapter revision3 metadata needs owner correction. A1-0018 remains applicable; D28-D31/D33 stay OPEN until complete E0 acceptance/promotion. Details/scopes/evidence are in E0_ACCEPTANCE.md; no whole-manifest ACK inferred.
 
 D34 remains OPEN after A1-0020/012f24c: Agent1 ACKs the exact supplement revision2 b3fb3e77.. at09c589d for nonce/receipt/fresh-request isolation, Agent2 runtime test-signer ownership and ledger/worker registration distinction. Agent2 has not yet accepted its affected scope; no case/schema delta or promotion authorized by this single scoped response. A1 retracts A1-0019's unchanged-signature precedence sentence; pinned PSC/SigLib source independently confirms WRONG_SUBJECT before quorum in repaired-e and BAD_SIGNATURE with only receipt binding removed. This is static reconstruction review, not runtime/model evidence. Review and command/source hashes: evaluation/evidence/e0/supplement-r2-a1-ack-20261008/.
+
+## Revision6 decisions — 2026-10-08
+
+| ID | Status | Decision / evidence |
+|---|---|---|
+| D34 | PLAN-CHOICE | A2-0010 at27c51d2 ACKs exact supplement revision2 b3fb3e77..; A1-0020 is already exact. Both affected semantic responses are complete. Revision6 now materializes8 NOT_RUN nonce/receipt/positive/signature controls, A39–A41 and closed case directives. Exact new bytes still need affected ACKs. Owner live measurements remain owner evidence, not integrated results. |
+| D35 | PLAN-CHOICE | Choose A1-0021/A2-0011 option(c): paper-mode symbolic response recipient is PBC RSC.recipientKeyHash(grant.gid), refusing zero; repaired-e keeps its nonzero grant commitment/equality check. Native paper grant still has zero and expiry=policyEnf DBC timestamp+30s. A38 labels the III-D3 reconstruction fill; relay-asserted gid preserves subject-substitution gap. Agent2 owns production change/test/successor; its current successful subclass is only a spike. No wire field or key-custody change; exact revision6 ACKs/freeze pending. |
+
+Current proposal/exclusions: interfaces/proposals/v1/revision6/DELTA.md. E0 open; E1/F/G locked. A2-0010 X-2 wording is corrected only in the two paper qualifications. Existing outcomes/classes/errors/counts remain unchanged. Do not infer payload authenticity, real encryption, a paper durability guarantee or gate evidence from these choices.

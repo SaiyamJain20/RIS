@@ -95,19 +95,24 @@ def extend(d, obj, ref, array, string, enum):
                'FABRICATE_TUPLE', 'SUBSTITUTE_DESTINATION', 'REPLAY_NEW_REFERENCE',
                'INSTALL_NEW_LIST', 'REPLAY_OLD_LIST', 'WRONG_ISSUER_UPDATE', 'REVOKE_ON_PBC',
                'ACCEPT_CHECKPOINT', 'FORWARD_OR_CONSUME', 'RELEASE', 'DROP_OUTCOME',
-               'FABRICATE_OUTCOME', 'REPORT_OUTCOME', 'DUPLICATE_OUTCOME', 'CRASH_RESTART')
+               'FABRICATE_OUTCOME', 'REPORT_OUTCOME', 'DUPLICATE_OUTCOME', 'CRASH_RESTART',
+               'REQUEST_SAME_NONCE_DISTINCT_DIGEST', 'FORWARD_BOTH_REQUESTS',
+               'CERTIFY_BOTH_BEFORE_CONSUMPTION', 'CONSUME_FIRST', 'CONSUME_PRECOLLECTED_SECOND', 'ATTEST_GRANT')
     variants = {
         'E01': ('subject-substitution', 'nonce-replay', 'expiry-boundary',
-                'forged-tuple', 'wrong-destination', 'new-reference-replay'),
+                'forged-tuple', 'wrong-destination', 'new-reference-replay', 'same-nonce-distinct-digests'),
         'E02': ('signed-list-rollback', 'wrong-issuer', 'pre-barrier-revocation',
                 'post-barrier-revocation', 'expired-duty'),
         'E03': ('dropped-outcome', 'fabricated-outcome', 'duplicate-outcome',
-                'crash-after-intent', 'crash-after-send'),
+                'crash-after-intent', 'crash-after-send', 'receipt-binding-control',
+                'receipt-signature-control', 'receipt-binding-positive'),
     }
     d['E0CaseStep'] = {'oneOf': [
         obj({'action': enum(*(a for a in actions if a != 'CRASH_RESTART')), 'offsetSeconds': ref('Uint64')}),
         obj({'action': {'const': 'CRASH_RESTART'}, 'offsetSeconds': ref('Uint64'),
              'workerHook': {'const': 'release'}, 'crashPoint': enum('after-intent', 'after-send')}),
+        obj({'action': enum('RESIGN_RECEIPT_FIELD', 'ALTER_RECEIPT_KEEP_SIGNATURE'),
+             'offsetSeconds': ref('Uint64'), 'receiptField': enum('requestDigest', 'gid', 'dataId')}),
     ]}
     d['WorkerExpectation'] = obj({'releaseIntentCount': ref('Uint64'), 'releaseSentCount': ref('Uint64'),
                                  'sameCachedResponse': {'const': True}, 'delivery': {'const': 'unknown'},
