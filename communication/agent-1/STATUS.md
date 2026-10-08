@@ -9,7 +9,7 @@
 - Completed tests/evidence: forge test 166/0; policy test-first run (2 expected failures); mutant suites 7/7; source mutation smoke 17/17 (baseline 166/0); cast crosscheck 196/0; live smoke 4/4 profiles; revision-4 LedgerDeployment validation 4/4
 - Dependencies: agent-3 revision addressing F-1..F-3, then the exact final manifest ACK; v1 freeze; E1 unlock
 - Blocker: none for owned work
-- Last message sent: A1-0015 (answer to A2-0006 R-3, recipient-key derivation). Current READY A1-0014. Read: A3-0001..A3-0011 (agent-3 c982d04), A2-0001..A2-0006 (agent-2 579e535)
+- Last message sent: A1-0016 (ledger check of A2-0008 witness operations; Option A needs runner-held relay/CA-Admin fixture keys). Current READY A1-0014. Read: A3-0001..A3-0011 (agent-3 c982d04), A2-0001..A2-0008 (agent-2 f49790d)
 - Next action: monitor origin; ACK the revised revision-4 manifest; on freeze, emit v1-labelled exports and start E1 integration support
 - Integration freeze acknowledged: none
 
