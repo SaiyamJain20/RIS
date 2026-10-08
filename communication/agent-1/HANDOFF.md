@@ -2,24 +2,24 @@
 
 Status: **READY FOR INTEGRATION; not DONE.** Interface **v1 FROZEN** (E0-v1-r6-20261008, FREEZE.json
 f700292e.. at agent-3 f7b8f3f); E0 closed and E1 unlocked by A3-0023; agent-1 mapping ACK A1-0027, A-E1 READY
-A1-0028. Ledger READY items: A1-0030 (bootstrap producer), A1-0034 (E2 signed-list producer). Latest inventory
-**A1-0035** (manifest 8a3b8596.., 159 entries); contract code unchanged since 91add8c. Owner rehearsals (not C-E1/C-E2
+A1-0028. Ledger READY items: A1-0030 (bootstrap producer, E1), **A1-0039 (E2 handoff: `ledger/E2_HANDOFF.md`, sign_list.sh, mutant kill map)**.
+Latest inventory **A1-0039** (manifest c7b7dd51.., 195 entries); contract code unchanged since 91add8c. Owner rehearsals (not C-E1/C-E2
 results): E1 9/9 frozen controls with agent 2's adapter (A1-0033; agent 2 cross-ran 9/9), E2 47/47 rehearsable catalog
-cases (A1-0035). Agent 3's C-E1 runner/oracle and the integration FREEZE have not run yet.
+cases (A1-0035). **C-E1 COMPLETE: agent 3's actual integration 9/9 (A3-0030) under plan 78e195f5.. (A1-0038 ACK).** E2/E3 unlocked.
 
 - **RQ/task and interface version:** E / sprint E0 close -> E1 integration (A1-0023). The ledger has: E0 deliverables, an A-E1
   draft, and A-E2 suites prepared before E1 integration, including the E03 GrantReceipt repair
   (A1-0008 revision 2, ACKed by agent 3 in A3-0005 and agent 2 in A2-0002, implemented in A1-0011).
-- **Changed owned files and source manifest:** `ledger/**` (159 files) with SHA-256 in
-  `ledger/evidence/source-manifest.sha256` (159 entries; file sha256
-  8a3b85965a2b98ef3d8bd734bbb318364a5a363fff924fa62b47778ecd6a1a46). Solidity sources, tests,
+- **Changed owned files and source manifest:** `ledger/**` (195 files) with SHA-256 in
+  `ledger/evidence/source-manifest.sha256` (195 entries; file sha256
+  c7b7dd51f0e4c84535fbd093fbbd6bc6b49a9ed1a3f999b68f93d68f3dd04660). Solidity sources, tests,
   scripts, foundry.toml and vectors are byte-identical to e6cf4ff (A1-0014). A1-0024 changes only the
   export label "v0 proposed" -> "v1" and regenerates the samples (`ledger/evidence/v1-export-run.txt`).
   A1-0026 adds the opt-in fast deploy (`tools/deploy_local.sh`). A1-0030 adds the TEST-ONLY bootstrap producer
   (`script/BootstrapFixture.s.sol`, `tools/bootstrap_fixture.sh`, `tools/check_bootstrap.py`; evidence
   `bootstrap-check.txt`). A1-0033 adds `tools/e1_rehearsal.py` and `evidence/e1-rehearsal/` (owner rehearsal,
   9/9 frozen E1 controls with agent 2's adapter). A1-0034 adds `script/SignList.s.sol`, `tools/sign_list.sh`, `tools/check_sign_list.py` and
-  `evidence/signed-list-check/`. A1-0035 adds `tools/e2_rehearsal.py` and `evidence/e2-rehearsal/` (47/47 rehearsable catalog cases). Messages A1-0001..A1-0035.
+  `evidence/signed-list-check/`. A1-0035 adds `tools/e2_rehearsal.py` and `evidence/e2-rehearsal/` (47/47 rehearsable catalog cases). A1-0039 adds `E2_HANDOFF.md`, live mutant probes in `e2_rehearsal.py` and `evidence/e2-ready/`. Messages A1-0001..A1-0039.
 - **Exported artifacts and consumers:**
   - ABIs: `ledger/exports/abi/*.json` + `manifest.json` (cea42704.., label v1; ABI JSON unchanged since 54262c2).
   - Vectors: `ledger/exports/vectors/eip712-v0-ledger.json` (6aa399e0..; 9 signed types incl.

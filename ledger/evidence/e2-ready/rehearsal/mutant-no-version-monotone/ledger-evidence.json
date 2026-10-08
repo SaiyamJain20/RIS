@@ -1,0 +1,162 @@
+[
+ {
+  "step": "RevocationList v1 via H1-ca-admin",
+  "tx": "0xe4e2756ad65ffeebc2223fbc8bb9225648c5a6b7d3a2d712eb7954e63d76a1fb",
+  "block": 563,
+  "status": 1,
+  "revert": null,
+  "events": [
+   {
+    "contract": "TMSC",
+    "event": "TrustAnchorUpdated",
+    "args": {
+     "authority": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+     "kind": "1",
+     "version": "1",
+     "validUntil": "1791578335",
+     "generation": "1",
+     "contentDigest": "0xe66c7fbd79defcb4e8253145e24aa8b0e3ccdef9a7ef63af9c643655f8bdc3af",
+     "prevBlockNumber": "0",
+     "authEpoch": "1",
+     "submitter": "0xa3abc957ca114c86ec9cdb519cffc62beb894066"
+    }
+   }
+  ]
+ },
+ {
+  "step": "TemporalAcl v1 via H1-ca-admin",
+  "tx": "0x5472562d765b4b31bc9036d72679503f848c1170fff29206f656c3f0d7d2a178",
+  "block": 564,
+  "status": 1,
+  "revert": null,
+  "events": [
+   {
+    "contract": "TMSC",
+    "event": "TrustAnchorUpdated",
+    "args": {
+     "authority": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+     "kind": "2",
+     "version": "1",
+     "validUntil": "1791578335",
+     "generation": "1",
+     "contentDigest": "0xc5e04766bccfc729abe996b2902196cada7b9d7ac7be4f5d979c770f2b6bc1ac",
+     "prevBlockNumber": "0",
+     "authEpoch": "2",
+     "submitter": "0xa3abc957ca114c86ec9cdb519cffc62beb894066"
+    }
+   }
+  ]
+ },
+ {
+  "step": "RevocationList v1 via H2-ca-admin",
+  "tx": "0xd6e6d679bcfdfcbe542b59cdf3c871edc3b56db96ac357a9bfc498608c2a5786",
+  "block": 565,
+  "status": 1,
+  "revert": null,
+  "events": [
+   {
+    "contract": "TMSC",
+    "event": "TrustAnchorUpdated",
+    "args": {
+     "authority": "0x6ea73ebda053f804cad188496ec48af56b06f698",
+     "kind": "1",
+     "version": "1",
+     "validUntil": "1791578335",
+     "generation": "1",
+     "contentDigest": "0x0e9020ec43b8740b6a1a50ca23de820c33f3653171fbd8b297ed8e822c0b521a",
+     "prevBlockNumber": "0",
+     "authEpoch": "3",
+     "submitter": "0xffd802dc742f4939e8f8a185fd85632bf596433e"
+    }
+   }
+  ]
+ },
+ {
+  "step": "register alice",
+  "tx": "0xab0801df0ac1c599ca8ed27a371048bd57402d82e104e1a8a78b0e5465ce26be",
+  "block": 566,
+  "status": 1,
+  "revert": null,
+  "events": [
+   {
+    "contract": "RSC",
+    "event": "Registered",
+    "args": {
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+     "certDigest": "0x074c332318f0efd2538c9e04ecaf9e03c217fc931f61264ddd90723d792c806c",
+     "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d",
+     "logId": "4"
+    }
+   }
+  ]
+ },
+ {
+  "step": "register bob",
+  "tx": "0x8371412c5b39aaa7495b20813d3d8d6e3936c2f7e4e4c9284b84361b3dc1056d",
+  "block": 567,
+  "status": 1,
+  "revert": null,
+  "events": [
+   {
+    "contract": "RSC",
+    "event": "Registered",
+    "args": {
+     "gid": "0xac5a40f1b6d99eca704aebc1fd7ffa5dbb5be59a",
+     "issuer": "0x6ea73ebda053f804cad188496ec48af56b06f698",
+     "certDigest": "0xfb940787e9d1dbbb83ac7b20aff47fffb7d03f8a7f34a0b09e382f09292c565b",
+     "recipientKeyHash": "0x5fe346cd69926d7120dff3cc020f4d36ad8093b7c9bb95c6ecea9705a3f8c537",
+     "logId": "5"
+    }
+   }
+  ]
+ },
+ {
+  "step": "RevocationList v2 via H1-ca-admin",
+  "tx": "0xded6ba3382ee0aef564902c636ac4ec50280f0c602f3209469dde02360968246",
+  "block": 570,
+  "status": 1,
+  "revert": null,
+  "events": [
+   {
+    "contract": "TMSC",
+    "event": "TrustAnchorUpdated",
+    "args": {
+     "authority": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+     "kind": "1",
+     "version": "2",
+     "validUntil": "1791578342",
+     "generation": "2",
+     "contentDigest": "0x1d88257036c142f0f827df268f7dcaebc613f88427cf78befbdb87891fdeaebe",
+     "prevBlockNumber": "563",
+     "authEpoch": "4",
+     "submitter": "0xa3abc957ca114c86ec9cdb519cffc62beb894066"
+    }
+   }
+  ]
+ },
+ {
+  "step": "RevocationList v1 via H1-ca-admin",
+  "tx": "0xbf01c6baf71ef49d0e9bc313ca8b3eb7f922fbe902d71e383c08df0c3e154c19",
+  "block": 571,
+  "status": 1,
+  "revert": null,
+  "events": [
+   {
+    "contract": "TMSC",
+    "event": "TrustAnchorUpdated",
+    "args": {
+     "authority": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+     "kind": "1",
+     "version": "1",
+     "validUntil": "1791578335",
+     "generation": "3",
+     "contentDigest": "0xe66c7fbd79defcb4e8253145e24aa8b0e3ccdef9a7ef63af9c643655f8bdc3af",
+     "prevBlockNumber": "570",
+     "authEpoch": "5",
+     "submitter": "0xa3abc957ca114c86ec9cdb519cffc62beb894066"
+    }
+   }
+  ]
+ }
+]

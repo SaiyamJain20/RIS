@@ -1,0 +1,327 @@
+{
+  "tool": "ledger/tools/mutation_smoke.py",
+  "mutants": [
+    {
+      "id": "grant-all-policy",
+      "file": "src/ACSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "161",
+        "5"
+      ],
+      "expectedFailing": [
+        "test_BobWithoutDoctorRoleIsDeniedAndGetsNoGrant",
+        "test_TemporalRoleWithoutLongTermDoctorIsDenied"
+      ],
+      "failing": [
+        "test_BobWithoutDoctorRoleIsDeniedAndGetsNoGrant",
+        "test_TemporalRoleWithoutLongTermDoctorIsDenied",
+        "test_WitnessAllowForPolicyDeniedSubjectIsRejected"
+      ],
+      "detected": true
+    },
+    {
+      "id": "deny-all-policy",
+      "file": "src/ACSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "124",
+        "36"
+      ],
+      "expectedFailing": [
+        "test_AliceRegisteredDoctorOnDutyGetsGrant"
+      ],
+      "failing": [
+        "test_AliceRegisteredDoctorOnDutyGetsGrant",
+        "test_E01_DecisionExpiryBoundary",
+        "test_E01_NonceReuseAcrossDifferentRequests",
+        "test_E01_PositiveControl",
+        "test_E01_RelayDeliveryAfterRequestExpiry",
+        "test_E01_RelayFabricatedRequest",
+        "test_E01_RelayReplayUnderNewReference",
+        "test_E01_RelaySubjectSubstitution",
+        "test_E01_RequestFieldSubstitution",
+        "test_E02_DelayedDeliveryAcrossPbcRevocationBeforeBarrier",
+        "test_E02_DeliveryAfterOnDutyEntryEnds",
+        "test_E03_DroppedOutcomeStaysVisiblyPending",
+        "test_E03_EventsCorrelateWithPbcRequest",
+        "test_E03_TrustedWitnessBoundaryUnloggedRequest",
+        "test_OutcomeRequiresRelayForwardedRequestAndMatchingGrant",
+        "test_PaperRelayDuplicateForwardIsReplay",
+        "test_ReplayedCertificateIsRejected"
+      ],
+      "detected": true
+    },
+    {
+      "id": "unscoped-ca-admin",
+      "file": "src/TMSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "157",
+        "9"
+      ],
+      "expectedFailing": [
+        "test_H1AdminCannotReplaceH2TemporalAcl",
+        "test_H1AdminCannotReplaceH2RevocationList",
+        "test_NonAdminCannotUpdateEvenWithIssuerSignature"
+      ],
+      "failing": [
+        "test_H1AdminCannotReplaceH2RevocationList",
+        "test_H1AdminCannotReplaceH2TemporalAcl",
+        "test_NonAdminCannotUpdateEvenWithIssuerSignature"
+      ],
+      "detected": true
+    },
+    {
+      "id": "no-list-signature",
+      "file": "src/TMSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "164",
+        "2"
+      ],
+      "expectedFailing": [
+        "test_ListNotSignedByIssuerRootKey"
+      ],
+      "failing": [
+        "test_ListNotSignedByIssuerRootKey"
+      ],
+      "detected": true
+    },
+    {
+      "id": "no-crl-check",
+      "file": "src/TMSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "162",
+        "4"
+      ],
+      "expectedFailing": [
+        "test_CrlRevocationTakesEffectAtPbc"
+      ],
+      "failing": [
+        "test_CrlRevocationTakesEffectAtPbc",
+        "test_E02_StaleSignedCrlReplay"
+      ],
+      "detected": true
+    },
+    {
+      "id": "no-gid-possession",
+      "file": "src/RSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "163",
+        "3"
+      ],
+      "expectedFailing": [
+        "test_RegistrationWithoutGidPossessionFails"
+      ],
+      "failing": [
+        "test_RegistrationWithoutGidPossessionFails"
+      ],
+      "detected": true
+    },
+    {
+      "id": "no-user-signature",
+      "file": "src/PSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "163",
+        "3"
+      ],
+      "expectedFailing": [
+        "test_RequestSignedByAnotherKeyIsDenied"
+      ],
+      "failing": [
+        "test_RequestSignedByAnotherKeyIsDenied"
+      ],
+      "detected": true
+    },
+    {
+      "id": "request-expiry-off-by-one",
+      "file": "src/PSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "163",
+        "3"
+      ],
+      "expectedFailing": [
+        "test_RequestAtExactExpiryIsDenied"
+      ],
+      "failing": [
+        "test_RequestAtExactExpiryIsDenied"
+      ],
+      "detected": true
+    },
+    {
+      "id": "no-pbc-destination-check",
+      "file": "src/PSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "163",
+        "3"
+      ],
+      "expectedFailing": [
+        "test_WrongDestinationRequestIsDenied"
+      ],
+      "failing": [
+        "test_WrongDestinationRequestIsDenied"
+      ],
+      "detected": true
+    },
+    {
+      "id": "no-pbc-replay-check",
+      "file": "src/PSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "163",
+        "3"
+      ],
+      "expectedFailing": [
+        "test_DuplicateForwardedRequestIsReplayAndBothAreLogged"
+      ],
+      "failing": [
+        "test_DuplicateForwardedRequestIsReplayAndBothAreLogged"
+      ],
+      "detected": true
+    },
+    {
+      "id": "denial-reverts-log",
+      "file": "src/PSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "135",
+        "31"
+      ],
+      "expectedFailing": [
+        "test_UnregisteredUserIsDeniedAtPbcButRequestIsLogged"
+      ],
+      "failing": [
+        "test_CrlRevocationTakesEffectAtPbc",
+        "test_DuplicateForwardedRequestIsReplayAndBothAreLogged",
+        "test_E02_ListExpiryAtUse",
+        "test_E02_StaleSignedCrlReplay",
+        "test_E02_StaleSignedTempAclReplay",
+        "test_OnDutyOutsideEffectivePeriodIsExpired",
+        "test_RecipientKeyMustMatchRegistration",
+        "test_RepairedRequiresPublishedFreshCrl",
+        "test_RequestAtExactExpiryIsDenied",
+        "test_RequestSignedByAnotherKeyIsDenied",
+        "test_TempAclRemovalRevokesOnDuty",
+        "test_UnregisteredUserIsDeniedAtPbcButRequestIsLogged",
+        "test_WrongDestinationRequestIsDenied"
+      ],
+      "detected": true
+    },
+    {
+      "id": "unauthenticated-outcome",
+      "file": "src/PSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "164",
+        "2"
+      ],
+      "expectedFailing": [
+        "test_OutcomeRequiresRelayForwardedRequestAndMatchingGrant"
+      ],
+      "failing": [
+        "test_OutcomeRequiresRelayForwardedRequestAndMatchingGrant"
+      ],
+      "detected": true
+    },
+    {
+      "id": "unauthenticated-attested-outcome",
+      "file": "src/PSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "165",
+        "1"
+      ],
+      "expectedFailing": [
+        "test_E03_ReceiptCallerStateAndReplay"
+      ],
+      "failing": [
+        "test_E03_ReceiptCallerStateAndReplay"
+      ],
+      "detected": true
+    },
+    {
+      "id": "no-receipt-quorum",
+      "file": "src/PSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "164",
+        "2"
+      ],
+      "expectedFailing": [
+        "test_E03_ReceiptSignatureChecks",
+        "test_E03_NoOutcomeWithoutDbcGrantEvidence"
+      ],
+      "failing": [
+        "test_E03_NoOutcomeWithoutDbcGrantEvidence",
+        "test_E03_ReceiptSignatureChecks"
+      ],
+      "detected": true
+    },
+    {
+      "id": "unauthenticated-relay",
+      "file": "src/ACSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "164",
+        "2"
+      ],
+      "expectedFailing": [
+        "test_TableActuatorRestrictions"
+      ],
+      "failing": [
+        "test_TableActuatorRestrictions"
+      ],
+      "detected": true
+    },
+    {
+      "id": "no-witness-quorum",
+      "file": "src/DecisionVerifier.sol",
+      "exit": 1,
+      "passedFailed": [
+        "162",
+        "4"
+      ],
+      "expectedFailing": [
+        "test_RejectedCertificateChangesNoState"
+      ],
+      "failing": [
+        "test_E01_DecisionDomainBinding",
+        "test_E01_DecisionFieldSubstitution",
+        "test_E01_SignatureEncodings",
+        "test_RejectedCertificateChangesNoState"
+      ],
+      "detected": true
+    },
+    {
+      "id": "no-nonce-consumption",
+      "file": "src/KSSC.sol",
+      "exit": 1,
+      "passedFailed": [
+        "164",
+        "2"
+      ],
+      "expectedFailing": [
+        "test_AliceRegisteredDoctorOnDutyGetsGrant"
+      ],
+      "failing": [
+        "test_AliceRegisteredDoctorOnDutyGetsGrant",
+        "test_E01_NonceReuseAcrossDifferentRequests"
+      ],
+      "detected": true
+    }
+  ],
+  "baseline": {
+    "exit": 0,
+    "failing": [],
+    "passedFailed": [
+      "166",
+      "0"
+    ]
+  }
+}

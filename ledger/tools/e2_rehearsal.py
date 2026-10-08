@@ -8,8 +8,8 @@ interfaces/v1/scenarios/e0_cases.json / e0_supplement_cases.json expectation:
   ACCEPT or CONDITIONAL  <-> the adversarial/legitimate action was accepted (grant/outcome/list), no error
   REJECT, NO_NEW_GRANT, NO_NEW_OUTCOME  <-> rejected with the frozen error code (native Rejected(code), mined status-0 tx)
   PENDING                <-> no outcome, PSC status stays FORWARDED
-NOT_REHEARSED (with the reason): wrong-destination (needs a certificate genuinely issued for a second destination deployment) and
-the crash-after-* cases (no crash hook through the adapter process; A2-0014, A3-0024).
+wrong-destination uses a second, independent deployment (own PSC/KSSC and adapter) on the same chain pair (A1-0039).
+NOT_REHEARSED (with the reason): the crash-after-* cases (no crash hook through the adapter process; A2-0014, A3-0024).
 
 Usage (repository root; the e1_rehearsal.py venv; Foundry on PATH):
     <venv>/bin/python -I ledger/tools/e2_rehearsal.py --protocol <agent-2 checkout>/protocol --cases <frozen e0_cases.json>
@@ -50,7 +50,8 @@ class Obs(dict):
 class World:
     def __init__(self, profile: str, protocol: pathlib.Path, urls, out: pathlib.Path):
         self.profile, self.protocol, self.urls, self.out = profile, protocol, urls, out
-        self.repaired, self.paper = profile == "repaired-e", profile != "repaired-e"
+        self.repaired = profile == "repaired-e" or profile.startswith("mutant-")
+        self.paper = not self.repaired
         out.mkdir(parents=True, exist_ok=True)
         run_id = f"e2-{profile}-{os.getpid()}"
         env = {**os.environ, "DEPLOYER_PK": R.ANVIL_KEY0, "LEDGER_DEPLOY_FAST": "1"}
@@ -361,6 +362,120 @@ def receipt_control(field: str | None, keep_signature: bool):
     return run
 
 
+def wrong_destination(w):
+    """A request/certificate genuinely issued for a SECOND, independent deployment (its own PSC/KSSC on the same chain pair,
+    its own adapter), submitted unchanged here. Repaired-e: DecisionVerifier step 1 (request.psc/sourceChainId != this ACSC's
+    source PSC) -> WRONG_DESTINATION before any grant. Paper: the forwarded tuple carries no destination, so this DBC grants."""
+    w2 = World(w.profile, w.protocol, w.urls, w.out / "second-destination")
+    try:
+        s = w2.request()
+        f = w2.forward(s)
+        if w.paper:
+            got = w.policy_enf(s["requestDigest"], f["gid"], f["verifiedAttributes"])
+            return Obs("ACCEPT", requestPsc=s["request"]["psc"], grantKssc=w.KSSC.address, grant=got["GrantIssued"]["grantId"])
+        d = w2.certify(s["requestDigest"])
+        w.consume(s["request"], d, expect="WRONG_DESTINATION")
+        return Obs("REJECT", "WRONG_DESTINATION", requestPsc=s["request"]["psc"], requestKssc=s["request"]["kssc"],
+                   hereKssc=w.KSSC.address, nonceConsumedHere=w.dbc.call(w.KSSC, "nonceConsumed", s["request"]["gid"], s["request"]["nonce"]))
+    finally:
+        w2.close()
+
+
+# ------------------------------------------------------------------ live mutant probes (A1-0039): each runs on a fresh mutant-*
+# deployment and performs the case that should expose it WITHOUT expecting the guard; "DETECTED" = the mutant shows the
+# vulnerable behaviour the repaired profile rejects.
+
+def probe_no_nonce(w):
+    w.nonce += 1
+    n = str(w.nonce)
+    a, b = w.request(nonce=n, ttl=30), w.request(nonce=n, ttl=29)
+    w.forward(a), w.forward(b)
+    cp = w.adp.call("collect_checkpoint", {})
+    w.tx("acceptState", w.dbc, w.relay, w.KSSC, "acceptState", cp["checkpoint"], cp["signatures"])
+    da = w.adp.call("collect_decision", {"requestDigest": a["requestDigest"]})
+    db = w.adp.call("collect_decision", {"requestDigest": b["requestDigest"]})
+    w.consume(a["request"], da)
+    got = w.consume(b["request"], db)
+    return {"case": "E01-same-nonce-distinct-digests", "repairedExpect": "REPLAY", "mutantObserved": "second grant" if "GrantIssued" in got else "no grant",
+            "nonceRecorded": w.dbc.call(w.KSSC, "nonceConsumed", a["request"]["gid"], n), "detected": "GrantIssued" in got}
+
+
+def probe_no_receipt_binding(w):
+    s, f, d, g = w.legit()
+    att = w.adp.call("attest_grant", {"grantId": g})
+    art = w.deviating(g, "requestDigest", att["receipt"]["dbcBlockNumber"])
+    w.report(s["requestDigest"], g, receipt=art["receipt"], signatures=art["signatures"])
+    st = w.status(s["requestDigest"])
+    return {"case": "E03-receipt-binding-control-requestDigest", "repairedExpect": "WRONG_SUBJECT", "mutantObserved": f"outcome recorded (status {st})",
+            "detected": st == "2"}
+
+
+def probe_no_state_barrier(w):
+    s = w.request()
+    w.forward(s)
+    d = w.certify(s["requestDigest"])
+    w.submit_list(w.sign_list("crl", "H1", "--revoke", "101"))
+    cp = w.adp.call("collect_checkpoint", {})
+    w.tx("acceptState", w.dbc, w.relay, w.KSSC, "acceptState", cp["checkpoint"], cp["signatures"])
+    got = w.consume(s["request"], d)
+    return {"case": "E02-post-barrier-revocation", "repairedExpect": "STALE_STATE", "mutantObserved": "grant after the revoking checkpoint" if "GrantIssued" in got else "no grant",
+            "detected": "GrantIssued" in got}
+
+
+def probe_no_record_freshness(w):
+    w.submit_list(w.sign_list("tempacl", "H1", "--duty", "alice:60:14"))
+    s = w.request()
+    w.forward(s)
+    d = w.certify(s["requestDigest"])
+    duty_end = max(int(r["validUntil"]) for r in d["credentialRecords"] if r["kind"] == "2")
+    while w.dbc.now() < duty_end:
+        time.sleep(0.5)
+    got = w.consume(s["request"], d)
+    return {"case": "E02-expired-duty", "repairedExpect": "EXPIRED", "mutantObserved": "grant after duty end" if "GrantIssued" in got else "no grant",
+            "detected": "GrantIssued" in got}
+
+
+def probe_no_version_monotone(w):
+    w.submit_list(w.sign_list("crl", "H1", "--revoke", "101"))
+    w.submit_list(w.boot["trustLists"][0])
+    code = w.alice_code()
+    return {"case": "E02-signed-list-rollback", "repairedExpect": "STALE_ANCHOR", "mutantObserved": f"old list accepted; Alice {code}",
+            "detected": code == "NONE"}
+
+
+def probe_no_destination_binding(w):
+    """(a) the catalog recipe (second deployment) is rejected by step 1 (source PSC), which this mutant keeps: NOT a kill.
+    (b) relay rewrites only request.kssc of a certified request: guard -> WRONG_DESTINATION (step 2); mutant skips step 2 and
+    rejects later at step 4 with WRONG_SUBJECT: distinguishable by code only (both reject)."""
+    a = wrong_destination(w)
+    s = w.request()
+    w.forward(s)
+    d = w.certify(s["requestDigest"])
+    other = R.addr("not-this-kssc")
+    code = None
+    try:
+        w.consume({**s["request"], "kssc": other}, d, expect="WRONG_SUBJECT")
+        code = "WRONG_SUBJECT"
+    except R.Reverted as r:
+        code = r.code
+    return {"case": "E01-wrong-destination (+ kssc-rewrite variant)", "repairedExpect": "WRONG_DESTINATION (both)",
+            "mutantObserved": f"second-deployment recipe: {a['result']}/{a['error']}; kssc rewrite: {code}",
+            "detected": False, "codeLevelDistinction": code == "WRONG_SUBJECT"}
+
+
+def kssc_rewrite_baseline(w):
+    s = w.request()
+    w.forward(s)
+    d = w.certify(s["requestDigest"])
+    w.consume({**s["request"], "kssc": R.addr("not-this-kssc")}, d, expect="WRONG_DESTINATION")
+    return "WRONG_DESTINATION"
+
+
+MUTANT_PROBES = {"mutant-no-nonce": probe_no_nonce, "mutant-no-receipt-binding": probe_no_receipt_binding,
+                 "mutant-no-state-barrier": probe_no_state_barrier, "mutant-no-record-freshness": probe_no_record_freshness,
+                 "mutant-no-version-monotone": probe_no_version_monotone, "mutant-no-destination-binding": probe_no_destination_binding}
+
+
 def _alice_code(w):
     u = w.boot["users"]["alice"]
     return R.ERRORS[int(w.pbc.call(w.TMSC, "checkCredentials", u["gid"], u["bundle"], str(w.pbc.now()))[0])]
@@ -373,7 +488,7 @@ VARIANTS = {  # order matters: trust-mutating cases restore trust; expiry-bounda
     "new-reference-replay": new_reference_replay, "wrong-issuer": wrong_issuer, "dropped-outcome": dropped_outcome,
     "fabricated-outcome": fabricated_outcome, "duplicate-outcome": duplicate_outcome, "signed-list-rollback": signed_list_rollback,
     "pre-barrier-revocation": lambda w: _revocation(w, False), "post-barrier-revocation": lambda w: _revocation(w, True),
-    "expired-duty": expired_duty, "expiry-boundary": expiry_boundary,
+    "expired-duty": expired_duty, "wrong-destination": wrong_destination, "expiry-boundary": expiry_boundary,
 }
 SUPPLEMENT = {
     "E01-same-nonce-distinct-digests-repaired-e": same_nonce_distinct_digests,
@@ -386,7 +501,6 @@ SUPPLEMENT = {
     "E03-receipt-binding-positive-repaired-e": receipt_control(None, False),
 }
 NOT_REHEARSED = {
-    "wrong-destination": "needs an otherwise valid request/certificate genuinely issued for a second destination deployment",
     "crash-after-intent": "no crash hook through the adapter process (A2-0014, A3-0024)",
     "crash-after-send": "no crash hook through the adapter process (A2-0014, A3-0024)",
 }
@@ -411,6 +525,7 @@ def main() -> int:
     ap.add_argument("--out", required=True, type=pathlib.Path)
     ap.add_argument("--ports", nargs=2, type=int, default=[38545, 48545])
     ap.add_argument("--profiles", nargs="+", default=["paper-strict", "paper-minimal", "repaired-e"])
+    ap.add_argument("--mutants", action="store_true", help="also run one live probe per mutant-* deployment (A1-0039)")
     a = ap.parse_args()
     cases = {c["id"]: c for c in json.load(open(a.cases))["cases"]}
     supp = {c["id"]: c for c in (lambda s: s.get("cases") or s)(json.load(open(a.supplement)))}
@@ -418,7 +533,7 @@ def main() -> int:
     anvils = [subprocess.Popen(["anvil", "--port", str(p), "--chain-id", str(c), "--block-time", "1", "--silent"],
                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) for p, c in zip(a.ports, (18545, 28545))]
     urls = (f"http://127.0.0.1:{a.ports[0]}", f"http://127.0.0.1:{a.ports[1]}")
-    rows = []
+    rows, mutant_rows = [], []
     try:
         for _ in range(100):
             try:
@@ -439,6 +554,11 @@ def main() -> int:
                     if c["profile"] == p and c["variant"] in NOT_REHEARSED:
                         rows.append({"id": cid, "observed": "NOT_REHEARSED", "reason": NOT_REHEARSED[c["variant"]], "match": None})
                 if p == "repaired-e":
+                    try:
+                        baseline = kssc_rewrite_baseline(w)
+                    except BaseException as ex:
+                        baseline = "HARNESS_ERROR " + repr(ex)[:200]
+                    rows.append({"id": "kssc-rewrite-baseline-repaired-e (extra, not a catalog case)", "observed": baseline, "match": None})
                     for cid, fn in SUPPLEMENT.items():
                         try:
                             rows.append(compare(supp[cid], fn(w)))
@@ -446,6 +566,17 @@ def main() -> int:
                             rows.append({"id": cid, "observed": "HARNESS_ERROR", "error": repr(ex)[:300], "match": False})
             finally:
                 w.close()
+        if a.mutants:
+            for m, fn in MUTANT_PROBES.items():
+                w = World(m, a.protocol.resolve(), urls, a.out / m)
+                try:
+                    try:
+                        res = fn(w)
+                    except BaseException as ex:
+                        res = {"detected": False, "harnessError": repr(ex)[:300]}
+                    mutant_rows.append({"mutant": m, **res})
+                finally:
+                    w.close()
     finally:
         for p in anvils:
             p.terminate()
@@ -453,14 +584,16 @@ def main() -> int:
     blob = "".join(f.read_text() for f in a.out.rglob("*.json"))
     leaked = [lbl for lbl in ("alice", "bob", "relay", "witness-1", "H1-root", "H2-root") if R.key(lbl)[2:] in blob]
     run = [r for r in rows if r["match"] is not None]
-    summary = {"schemaVersion": "hmbc-e2-owner-rehearsal/v0", "note": "OWNER rehearsal (A1-0035), prepared ahead of E2; not a C-E2 or gate result",
+    summary = {"schemaVersion": "hmbc-e2-owner-rehearsal/v0", "note": "OWNER rehearsal (A1-0035/A1-0039); not a C-E2 or gate result",
                "rehearsed": len(run), "matched": sum(bool(r["match"]) for r in run), "notRehearsed": len(rows) - len(run),
-               "privateKeysInOutputs": leaked, "rows": rows}
+               "privateKeysInOutputs": leaked, "rows": rows, "mutants": mutant_rows}
     json.dump(summary, open(a.out / "summary.json", "w"), indent=1)
     for r in rows:
         tag = "SKIP " if r["match"] is None else ("MATCH" if r["match"] else "DIFF ")
         print(f"{tag} {r['id']:58} expected={r.get('expectedOutcome', '-')}/{r.get('expectedError')} "
               f"observed={r['observed']}/{r.get('observedError', r.get('error', r.get('reason', '')))}")
+    for m in mutant_rows:
+        print(f"{'DETECTED' if m.get('detected') else 'NOT-KILLED'} {m['mutant']:30} {m.get('case', '')}: {m.get('mutantObserved', m.get('harnessError'))}")
     print(f"REHEARSED {summary['rehearsed']} MATCHED {summary['matched']} NOT_REHEARSED {summary['notRehearsed']} | key leaks: {leaked}")
     return 0 if summary["matched"] == summary["rehearsed"] and not leaked else 1
 

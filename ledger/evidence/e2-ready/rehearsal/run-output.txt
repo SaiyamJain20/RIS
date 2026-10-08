@@ -1,0 +1,65 @@
+MATCH E01-subject-substitution-paper-strict                      expected=CONDITIONAL/None observed=ACCEPT/None
+MATCH E01-nonce-replay-paper-strict                              expected=NO_NEW_GRANT/REPLAY observed=NO_NEW_GRANT/REPLAY
+MATCH E01-forged-tuple-paper-strict                              expected=ACCEPT/None observed=ACCEPT/None
+MATCH E01-new-reference-replay-paper-strict                      expected=ACCEPT/None observed=ACCEPT/None
+MATCH E02-wrong-issuer-paper-strict                              expected=REJECT/UNAUTHORIZED_CALLER observed=REJECT/UNAUTHORIZED_CALLER
+MATCH E03-dropped-outcome-paper-strict                           expected=PENDING/None observed=PENDING/None
+MATCH E03-fabricated-outcome-paper-strict                        expected=CONDITIONAL/None observed=ACCEPT/None
+MATCH E03-duplicate-outcome-paper-strict                         expected=NO_NEW_OUTCOME/REPLAY observed=NO_NEW_OUTCOME/REPLAY
+MATCH E02-signed-list-rollback-paper-strict                      expected=ACCEPT/None observed=ACCEPT/None
+MATCH E02-pre-barrier-revocation-paper-strict                    expected=ACCEPT/None observed=ACCEPT/None
+MATCH E02-post-barrier-revocation-paper-strict                   expected=CONDITIONAL/None observed=ACCEPT/None
+MATCH E02-expired-duty-paper-strict                              expected=CONDITIONAL/None observed=ACCEPT/None
+MATCH E01-wrong-destination-paper-strict                         expected=CONDITIONAL/None observed=ACCEPT/None
+MATCH E01-expiry-boundary-paper-strict                           expected=CONDITIONAL/None observed=ACCEPT/None
+SKIP  E03-crash-after-intent-paper-strict                        expected=-/None observed=NOT_REHEARSED/no crash hook through the adapter process (A2-0014, A3-0024)
+SKIP  E03-crash-after-send-paper-strict                          expected=-/None observed=NOT_REHEARSED/no crash hook through the adapter process (A2-0014, A3-0024)
+MATCH E01-subject-substitution-paper-minimal                     expected=CONDITIONAL/None observed=ACCEPT/None
+MATCH E01-nonce-replay-paper-minimal                             expected=NO_NEW_GRANT/REPLAY observed=NO_NEW_GRANT/REPLAY
+MATCH E01-forged-tuple-paper-minimal                             expected=ACCEPT/None observed=ACCEPT/None
+MATCH E01-new-reference-replay-paper-minimal                     expected=ACCEPT/None observed=ACCEPT/None
+MATCH E02-wrong-issuer-paper-minimal                             expected=REJECT/UNAUTHORIZED_CALLER observed=REJECT/UNAUTHORIZED_CALLER
+MATCH E03-dropped-outcome-paper-minimal                          expected=PENDING/None observed=PENDING/None
+MATCH E03-fabricated-outcome-paper-minimal                       expected=CONDITIONAL/None observed=ACCEPT/None
+MATCH E03-duplicate-outcome-paper-minimal                        expected=NO_NEW_OUTCOME/REPLAY observed=NO_NEW_OUTCOME/REPLAY
+MATCH E02-signed-list-rollback-paper-minimal                     expected=ACCEPT/None observed=ACCEPT/None
+MATCH E02-pre-barrier-revocation-paper-minimal                   expected=ACCEPT/None observed=ACCEPT/None
+MATCH E02-post-barrier-revocation-paper-minimal                  expected=CONDITIONAL/None observed=ACCEPT/None
+MATCH E02-expired-duty-paper-minimal                             expected=CONDITIONAL/None observed=ACCEPT/None
+MATCH E01-wrong-destination-paper-minimal                        expected=CONDITIONAL/None observed=ACCEPT/None
+MATCH E01-expiry-boundary-paper-minimal                          expected=CONDITIONAL/None observed=ACCEPT/None
+SKIP  E03-crash-after-intent-paper-minimal                       expected=-/None observed=NOT_REHEARSED/no crash hook through the adapter process (A2-0014, A3-0024)
+SKIP  E03-crash-after-send-paper-minimal                         expected=-/None observed=NOT_REHEARSED/no crash hook through the adapter process (A2-0014, A3-0024)
+MATCH E01-subject-substitution-repaired-e                        expected=REJECT/WRONG_SUBJECT observed=REJECT/WRONG_SUBJECT
+MATCH E01-nonce-replay-repaired-e                                expected=NO_NEW_GRANT/REPLAY observed=NO_NEW_GRANT/REPLAY
+MATCH E01-forged-tuple-repaired-e                                expected=REJECT/BAD_SIGNATURE observed=REJECT/BAD_SIGNATURE
+MATCH E01-new-reference-replay-repaired-e                        expected=NO_NEW_GRANT/REPLAY observed=NO_NEW_GRANT/REPLAY
+MATCH E02-wrong-issuer-repaired-e                                expected=REJECT/UNAUTHORIZED_CALLER observed=REJECT/UNAUTHORIZED_CALLER
+MATCH E03-dropped-outcome-repaired-e                             expected=PENDING/None observed=PENDING/None
+MATCH E03-fabricated-outcome-repaired-e                          expected=REJECT/WRONG_PROFILE observed=REJECT/WRONG_PROFILE
+MATCH E03-duplicate-outcome-repaired-e                           expected=NO_NEW_OUTCOME/REPLAY observed=NO_NEW_OUTCOME/REPLAY
+MATCH E02-signed-list-rollback-repaired-e                        expected=REJECT/STALE_ANCHOR observed=REJECT/STALE_ANCHOR
+MATCH E02-pre-barrier-revocation-repaired-e                      expected=ACCEPT/None observed=ACCEPT/None
+MATCH E02-post-barrier-revocation-repaired-e                     expected=REJECT/STALE_STATE observed=REJECT/STALE_STATE
+MATCH E02-expired-duty-repaired-e                                expected=REJECT/EXPIRED observed=REJECT/EXPIRED
+MATCH E01-wrong-destination-repaired-e                           expected=REJECT/WRONG_DESTINATION observed=REJECT/WRONG_DESTINATION
+MATCH E01-expiry-boundary-repaired-e                             expected=REJECT/EXPIRED observed=REJECT/EXPIRED
+SKIP  E03-crash-after-intent-repaired-e                          expected=-/None observed=NOT_REHEARSED/no crash hook through the adapter process (A2-0014, A3-0024)
+SKIP  E03-crash-after-send-repaired-e                            expected=-/None observed=NOT_REHEARSED/no crash hook through the adapter process (A2-0014, A3-0024)
+SKIP  kssc-rewrite-baseline-repaired-e (extra, not a catalog case) expected=-/None observed=WRONG_DESTINATION/
+MATCH E01-same-nonce-distinct-digests-repaired-e                 expected=NO_NEW_GRANT/REPLAY observed=NO_NEW_GRANT/REPLAY
+MATCH E03-receipt-binding-control-requestDigest-repaired-e       expected=NO_NEW_OUTCOME/WRONG_SUBJECT observed=NO_NEW_OUTCOME/WRONG_SUBJECT
+MATCH E03-receipt-binding-control-gid-repaired-e                 expected=NO_NEW_OUTCOME/WRONG_SUBJECT observed=NO_NEW_OUTCOME/WRONG_SUBJECT
+MATCH E03-receipt-binding-control-dataId-repaired-e              expected=NO_NEW_OUTCOME/WRONG_SUBJECT observed=NO_NEW_OUTCOME/WRONG_SUBJECT
+MATCH E03-receipt-signature-control-requestDigest-repaired-e     expected=NO_NEW_OUTCOME/WRONG_SUBJECT observed=NO_NEW_OUTCOME/WRONG_SUBJECT
+MATCH E03-receipt-signature-control-gid-repaired-e               expected=NO_NEW_OUTCOME/WRONG_SUBJECT observed=NO_NEW_OUTCOME/WRONG_SUBJECT
+MATCH E03-receipt-signature-control-dataId-repaired-e            expected=NO_NEW_OUTCOME/WRONG_SUBJECT observed=NO_NEW_OUTCOME/WRONG_SUBJECT
+MATCH E03-receipt-binding-positive-repaired-e                    expected=ACCEPT/None observed=ACCEPT/None
+DETECTED mutant-no-nonce                E01-same-nonce-distinct-digests: second grant
+DETECTED mutant-no-receipt-binding      E03-receipt-binding-control-requestDigest: outcome recorded (status 2)
+DETECTED mutant-no-state-barrier        E02-post-barrier-revocation: grant after the revoking checkpoint
+DETECTED mutant-no-record-freshness     E02-expired-duty: grant after duty end
+DETECTED mutant-no-version-monotone     E02-signed-list-rollback: old list accepted; Alice NONE
+NOT-KILLED mutant-no-destination-binding  E01-wrong-destination (+ kssc-rewrite variant): second-deployment recipe: REJECT/WRONG_DESTINATION; kssc rewrite: WRONG_SUBJECT
+REHEARSED 50 MATCHED 50 NOT_REHEARSED 7 | key leaks: []
+exit=0
