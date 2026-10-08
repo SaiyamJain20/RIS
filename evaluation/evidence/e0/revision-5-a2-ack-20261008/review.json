@@ -1,0 +1,1921 @@
+{
+  "startedAt": "2026-10-08T10:21:43.986401+00:00",
+  "endedAt": "2026-10-08T10:21:51.125054+00:00",
+  "classification": "static source/provenance check; no new experiment",
+  "branches": {
+    "origin/agent-1": "73ae718b917a787bbdee0c3802fe32e265b0d70d",
+    "origin/agent-2": "5e203d0c0b26235c4618548a797d93201275a14d",
+    "origin/agent-3": "b9db5cdace1940fffae40b5babe9267b81b6380d",
+    "origin/main": "5f7118465c132f104eb2646d85fb635c9746e23b"
+  },
+  "branchChangesSincePriorRun": {
+    "origin/agent-2": {
+      "previous": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+      "current": "5e203d0c0b26235c4618548a797d93201275a14d"
+    }
+  },
+  "communicationFiles": 66,
+  "addressedMessages": [
+    {
+      "path": "communication/agent-1/outbox/0001-rfc-multi-machine-git-branches.md",
+      "ref": "origin/agent-1",
+      "commit": "73ae718b917a787bbdee0c3802fe32e265b0d70d",
+      "changeCommit": "364b1836e4405e6f78e21b273ed42017cb00e65d",
+      "sha256": "683572aed85501ff035c9ecb652785139b99dfd2f4fcced5e6cf243a905dd1d5",
+      "fields": {
+        "Message-ID": "A1-0001",
+        "From": "agent-1",
+        "To": "all",
+        "RQ": "E",
+        "Task": "E0",
+        "Type": "RFC",
+        "Responds-to": "none"
+      }
+    },
+    {
+      "path": "communication/agent-1/outbox/0002-review-e0-contract-source-permissions.md",
+      "ref": "origin/agent-1",
+      "commit": "73ae718b917a787bbdee0c3802fe32e265b0d70d",
+      "changeCommit": "364b1836e4405e6f78e21b273ed42017cb00e65d",
+      "sha256": "98bf8ee2296df0eb51f19b4ff65b3ce4ca83ac1a4b465b1573ea9710c9418452",
+      "fields": {
+        "Message-ID": "A1-0002",
+        "From": "agent-1",
+        "To": "agent-3",
+        "RQ": "E",
+        "Task": "E0 (contract-actuator rows of the source map)",
+        "Type": "REVIEW",
+        "Responds-to": "none"
+      }
+    },
+    {
+      "path": "communication/agent-1/outbox/0003-rfc-v1-ledger-types-and-abi.md",
+      "ref": "origin/agent-1",
+      "commit": "73ae718b917a787bbdee0c3802fe32e265b0d70d",
+      "changeCommit": "364b1836e4405e6f78e21b273ed42017cb00e65d",
+      "sha256": "a8c9547f0c262185762b45b7aabf1afc13189c9762c75eecc4d06da031e598b5",
+      "fields": {
+        "Message-ID": "A1-0003",
+        "From": "agent-1",
+        "To": "agent-3, agent-2",
+        "RQ": "E",
+        "Task": "E0 (interface v1 freeze: concrete ledger types, ABI, errors)",
+        "Type": "RFC",
+        "Responds-to": "none"
+      }
+    },
+    {
+      "path": "communication/agent-1/outbox/0004-ready-e0-ledger-toolchain-vectors-ae1-draft.md",
+      "ref": "origin/agent-1",
+      "commit": "73ae718b917a787bbdee0c3802fe32e265b0d70d",
+      "changeCommit": "364b1836e4405e6f78e21b273ed42017cb00e65d",
+      "sha256": "134d189067d8777c427b3d0d585638d4f097d69b63b6951d40133a28dced662c",
+      "fields": {
+        "Message-ID": "A1-0004",
+        "From": "agent-1",
+        "To": "all",
+        "RQ": "E",
+        "Task": "E0 (ledger toolchain, digest vectors, ABI) + A-E1 draft against v0-proposed",
+        "Type": "READY",
+        "Responds-to": "none"
+      }
+    },
+    {
+      "path": "communication/agent-1/outbox/0005-rfc-e03-grant-receipt-mutants-clock-domain.md",
+      "ref": "origin/agent-1",
+      "commit": "73ae718b917a787bbdee0c3802fe32e265b0d70d",
+      "changeCommit": "f643805e21c996bbf4bd73212c85c8a5a85b655d",
+      "sha256": "e8a049d57419d74ddd22ec7eb793caef260d4704fa53f0e1437cba52a8b51438",
+      "fields": {
+        "Message-ID": "A1-0005",
+        "From": "agent-1",
+        "To": "agent-3, agent-2",
+        "RQ": "E",
+        "Task": "A-E2 (prepared ahead of E1 integration) / interface v1",
+        "Type": "RFC",
+        "Responds-to": "A1-0003"
+      }
+    },
+    {
+      "path": "communication/agent-1/outbox/0006-ready-ae2-prep-property-matrix-mutants.md",
+      "ref": "origin/agent-1",
+      "commit": "73ae718b917a787bbdee0c3802fe32e265b0d70d",
+      "changeCommit": "f643805e21c996bbf4bd73212c85c8a5a85b655d",
+      "sha256": "9549d5dfc31914952e348c18fa7b663dc39a9dc0b3c9d52345f7f976223bb9ad",
+      "fields": {
+        "Message-ID": "A1-0006",
+        "From": "agent-1",
+        "To": "all",
+        "RQ": "E",
+        "Task": "A-E2 preparation (E01/E02/E03 ledger property suites, mutant-* profiles); A-E1 updated",
+        "Type": "READY",
+        "Responds-to": "A1-0004"
+      }
+    },
+    {
+      "path": "communication/agent-1/outbox/0007-review-ack-a3-0002-candidate-v1.md",
+      "ref": "origin/agent-1",
+      "commit": "73ae718b917a787bbdee0c3802fe32e265b0d70d",
+      "changeCommit": "589a05331a1a9a9cfe99eee2da70b980a44e5317",
+      "sha256": "7489f8ec3b5b196573bb1748ed43faa208802eb9048c384bd878e992d8f61e49",
+      "fields": {
+        "Message-ID": "A1-0007",
+        "From": "agent-1",
+        "To": "agent-3",
+        "RQ": "E",
+        "Task": "E0 (v1 candidate review)",
+        "Type": "REVIEW",
+        "Responds-to": "A3-0001, A3-0002, A3-0003, A3-0004"
+      }
+    },
+    {
+      "path": "communication/agent-1/outbox/0008-rfc-grant-receipt-revision-2.md",
+      "ref": "origin/agent-1",
+      "commit": "73ae718b917a787bbdee0c3802fe32e265b0d70d",
+      "changeCommit": "589a05331a1a9a9cfe99eee2da70b980a44e5317",
+      "sha256": "c42d064ce31a6c482f26640e67d1c541e3681db7239b89147b10e6b2e35aefea",
+      "fields": {
+        "Message-ID": "A1-0008",
+        "From": "agent-1",
+        "To": "agent-3, agent-2",
+        "RQ": "E",
+        "Task": "A-E2 / E03 repair (interface proposal; NOT implemented)",
+        "Type": "RFC",
+        "Responds-to": "A1-0005 item 1, A3-0002 item 3, A3-0003"
+      }
+    },
+    {
+      "path": "communication/agent-1/outbox/0009-ack-candidate-v1-revision-2.md",
+      "ref": "origin/agent-1",
+      "commit": "73ae718b917a787bbdee0c3802fe32e265b0d70d",
+      "changeCommit": "e351be5c98c35b0692afeb139623717121a5c14c",
+      "sha256": "6f6bf6282e3b23a95e26a2ffee76695a5c488eddd8089994872fe05cffb24521",
+      "fields": {
+        "Message-ID": "A1-0009",
+        "From": "agent-1",
+        "To": "agent-3",
+        "RQ": "E",
+        "Task": "E0 (v1 candidate review)",
+        "Type": "ACK",
+        "Responds-to": "A3-0005, A3-0006"
+      }
+    },
+    {
+      "path": "communication/agent-1/outbox/0010-ready-ledger-589a053-corrected-manifest.md",
+      "ref": "origin/agent-1",
+      "commit": "73ae718b917a787bbdee0c3802fe32e265b0d70d",
+      "changeCommit": "e351be5c98c35b0692afeb139623717121a5c14c",
+      "sha256": "7b1152c73be93463c398afa0d952540f03b0c216e86c0cb84bf33e79f5e9d63b",
+      "fields": {
+        "Message-ID": "A1-0010",
+        "From": "agent-1",
+        "To": "all",
+        "RQ": "E",
+        "Task": "E0 ledger deliverables + A-E1 draft + A-E2 preparation (corrected READY)",
+        "Type": "READY",
+        "Responds-to": "A3-0006 (peer READY issue), A1-0006"
+      }
+    },
+    {
+      "path": "communication/agent-1/outbox/0011-ready-receipt-implemented-fresh-exports.md",
+      "ref": "origin/agent-1",
+      "commit": "73ae718b917a787bbdee0c3802fe32e265b0d70d",
+      "changeCommit": "54262c2e4a1cfad26ba3a9445fcbda584f6eb491",
+      "sha256": "04fc74a6816a2e67ce57d134d667112d7b4e7ad80a9a775fa88653490c8848e8",
+      "fields": {
+        "Message-ID": "A1-0011",
+        "From": "agent-1",
+        "To": "all",
+        "RQ": "E",
+        "Task": "A-E2 E03 repair (A1-0008 implemented) + fresh ABI/deployment exports + answers to A2-0002",
+        "Type": "READY",
+        "Responds-to": "A2-0001, A2-0002, A3-0005, A3-0007"
+      }
+    },
+    {
+      "path": "communication/agent-1/outbox/0012-ack-candidate-revision-3.md",
+      "ref": "origin/agent-1",
+      "commit": "73ae718b917a787bbdee0c3802fe32e265b0d70d",
+      "changeCommit": "60b35cb65bac3b51e680e30a705df4afe0788d00",
+      "sha256": "a9c52b9899d72ebe1b08a3f2d4c8d721e5d4efc1c33b2e6948814927b82575d5",
+      "fields": {
+        "Message-ID": "A1-0012",
+        "From": "agent-1",
+        "To": "agent-3",
+        "RQ": "E",
+        "Task": "E0 (candidate v1 revision 3 review)",
+        "Type": "ACK",
+        "Responds-to": "A3-0008, A3-0009, A2-0003"
+      }
+    },
+    {
+      "path": "communication/agent-1/outbox/0013-review-candidate-revision-4.md",
+      "ref": "origin/agent-1",
+      "commit": "73ae718b917a787bbdee0c3802fe32e265b0d70d",
+      "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+      "sha256": "0282b898cd43d4fc2363d150471162cd559fec53d80fb2508c9be1e98bb4b0a5",
+      "fields": {
+        "Message-ID": "A1-0013",
+        "From": "agent-1",
+        "To": "agent-3",
+        "RQ": "E",
+        "Task": "E0 (candidate v1 revision 4 review: policy tuple, ledger observations, E01-E03 cases, deployment label, common acceptance)",
+        "Type": "REVIEW",
+        "Responds-to": "A3-0010, A3-0011"
+      }
+    },
+    {
+      "path": "communication/agent-1/outbox/0014-ready-ledger-policy-alignment.md",
+      "ref": "origin/agent-1",
+      "commit": "73ae718b917a787bbdee0c3802fe32e265b0d70d",
+      "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+      "sha256": "b6608033c0202cd758f26de7e7164ed4dbed68777914ccb7334dcb54250f9ae8",
+      "fields": {
+        "Message-ID": "A1-0014",
+        "From": "agent-1",
+        "To": "all",
+        "RQ": "E",
+        "Task": "E0 ledger pin update (revision-4 policy alignment)",
+        "Type": "READY",
+        "Responds-to": "A3-0011"
+      }
+    },
+    {
+      "path": "communication/agent-1/outbox/0015-review-a2-0006-recipient-key-derivation.md",
+      "ref": "origin/agent-1",
+      "commit": "73ae718b917a787bbdee0c3802fe32e265b0d70d",
+      "changeCommit": "33a7a5dbb040bce61caf357673722a68ae464cb3",
+      "sha256": "089ad940c167144b761f16b18c22314dc351bdf82178dc7ab8c7a75b44d43521",
+      "fields": {
+        "Message-ID": "A1-0015",
+        "From": "agent-1",
+        "To": "agent-2, agent-3",
+        "RQ": "E",
+        "Task": "E0 (answer to A2-0006 R-3: recipientKeyHash derivation)",
+        "Type": "REVIEW",
+        "Responds-to": "A2-0006"
+      }
+    },
+    {
+      "path": "communication/agent-1/outbox/0016-review-a2-0008-witness-operations.md",
+      "ref": "origin/agent-1",
+      "commit": "73ae718b917a787bbdee0c3802fe32e265b0d70d",
+      "changeCommit": "f1fe64b0f5344c394ef2402ae15cab4f7e717787",
+      "sha256": "039ba9ac0e260c6e4c93f1e12ded118cd345004373641f0a1a613422809143aa",
+      "fields": {
+        "Message-ID": "A1-0016",
+        "From": "agent-1",
+        "To": "agent-2, agent-3",
+        "RQ": "E",
+        "Task": "E0 (ledger check of A2-0008 witness operations)",
+        "Type": "REVIEW",
+        "Responds-to": "A2-0008"
+      }
+    },
+    {
+      "path": "communication/agent-1/outbox/0018-ack-candidate-revision-5.md",
+      "ref": "origin/agent-1",
+      "commit": "73ae718b917a787bbdee0c3802fe32e265b0d70d",
+      "changeCommit": "73ae718b917a787bbdee0c3802fe32e265b0d70d",
+      "sha256": "15c4d5687d1de9775f13129d15f2c0667460addbf2c35dfcbfb41cffbbb19d30",
+      "fields": {
+        "Message-ID": "A1-0018",
+        "From": "agent-1",
+        "To": "agent-3",
+        "RQ": "E",
+        "Task": "E0 (candidate v1 revision 5 review; agent-1 ACCEPTANCE.md rows)",
+        "Type": "ACK",
+        "Responds-to": "A3-0012"
+      }
+    },
+    {
+      "path": "communication/agent-2/outbox/0001-ack-distributed-startup.md",
+      "ref": "origin/agent-2",
+      "commit": "5e203d0c0b26235c4618548a797d93201275a14d",
+      "changeCommit": "b734a0abd47c5241b5ef94ee952fbf47cde0f13f",
+      "sha256": "d5e10fbd1d46260e55f576715b5daec85de6ba19fc2aa68b816e8713dca784d0",
+      "fields": {
+        "Message-ID": "A2-0001",
+        "From": "agent-2",
+        "To": "all",
+        "RQ": "E",
+        "Task": "E0 (startup)",
+        "Type": "ACK",
+        "Responds-to": "A1-0001, A3-0001, A3-0007"
+      }
+    },
+    {
+      "path": "communication/agent-2/outbox/0002-review-e0-source-flow-bundle-vectors.md",
+      "ref": "origin/agent-2",
+      "commit": "5e203d0c0b26235c4618548a797d93201275a14d",
+      "changeCommit": "b734a0abd47c5241b5ef94ee952fbf47cde0f13f",
+      "sha256": "08a7362de7d5d23891d4223c4e8ffd29b1090de6cf91037b1ddb37e2e648fe3a",
+      "fields": {
+        "Message-ID": "A2-0002",
+        "From": "agent-2",
+        "To": "agent-3, agent-1",
+        "RQ": "E",
+        "Task": "E0 (source-flow review, credential bundle, key custody, vectors, dependencies)",
+        "Type": "REVIEW",
+        "Responds-to": "A3-0002, A3-0003, A3-0006, A3-0007, A1-0003, A1-0008"
+      }
+    },
+    {
+      "path": "communication/agent-2/outbox/0003-ready-e0-vectors-schema-review-adapter.md",
+      "ref": "origin/agent-2",
+      "commit": "5e203d0c0b26235c4618548a797d93201275a14d",
+      "changeCommit": "b9564f045ef95639849a8806d441ecf8125a7d1b",
+      "sha256": "f23f0463b4b71e62be8b1a1953f723e7d16e21e155a8b19667267c1030189bc2",
+      "fields": {
+        "Message-ID": "A2-0003",
+        "From": "agent-2",
+        "To": "agent-3, agent-1",
+        "RQ": "E",
+        "Task": "E0 (receipt vector reproduction, candidate-schema review, boundary strictness, adapter manifest/examples)",
+        "Type": "READY",
+        "Responds-to": "A1-0011, A3-0008, A3-0009"
+      }
+    },
+    {
+      "path": "communication/agent-2/outbox/0004-ready-ledger-live-reproduction.md",
+      "ref": "origin/agent-2",
+      "commit": "5e203d0c0b26235c4618548a797d93201275a14d",
+      "changeCommit": "f3fc3a2effdb57d7a8766ef5ba9d852fee987fa1",
+      "sha256": "eac74c89a13a7eb31016392152aef71a7e6d42225452dbb7615e17beab7bf4c8",
+      "fields": {
+        "Message-ID": "A2-0004",
+        "From": "agent-2",
+        "To": "agent-1, agent-3",
+        "RQ": "E",
+        "Task": "E0 (independent reproduction of ledger 54262c2 on agent-2's machine)",
+        "Type": "REVIEW",
+        "Responds-to": "A1-0011, A2-0003"
+      }
+    },
+    {
+      "path": "communication/agent-2/outbox/0005-ack-candidate-revision-3-scoped.md",
+      "ref": "origin/agent-2",
+      "commit": "5e203d0c0b26235c4618548a797d93201275a14d",
+      "changeCommit": "e1b4322380b828157f0b18a812fc91abc7ea5642",
+      "sha256": "e4c942615b6bfbf748356323aa5bfc04aee6bfe207661e2031711ce73e8a525c",
+      "fields": {
+        "Message-ID": "A2-0005",
+        "From": "agent-2",
+        "To": "agent-3",
+        "RQ": "E",
+        "Task": "E0 (candidate v1 revision 3 review, agent-2 scope)",
+        "Type": "ACK",
+        "Responds-to": "A3-0009, A1-0012, A1-0011"
+      }
+    },
+    {
+      "path": "communication/agent-2/outbox/0006-ack-candidate-revision-4-scoped.md",
+      "ref": "origin/agent-2",
+      "commit": "5e203d0c0b26235c4618548a797d93201275a14d",
+      "changeCommit": "579e535132e81d299ccf2e874d2be3b47c779f1c",
+      "sha256": "362ff11fa7163bf7fcdbefe99a8d7be63cb9beef99d4e5e66a23c31ffa98d32d",
+      "fields": {
+        "Message-ID": "A2-0006",
+        "From": "agent-2",
+        "To": "agent-3",
+        "RQ": "E",
+        "Task": "E0 (candidate v1 revision 4 review, agent-2 scope)",
+        "Type": "ACK",
+        "Responds-to": "A3-0010, A3-0011, A1-0013, A1-0014"
+      }
+    },
+    {
+      "path": "communication/agent-2/outbox/0007-ack-recipient-key-derivation.md",
+      "ref": "origin/agent-2",
+      "commit": "5e203d0c0b26235c4618548a797d93201275a14d",
+      "changeCommit": "9e92800c2fd2f223737a42a3d42b2deec2a977ec",
+      "sha256": "57b7baa1a28f9d0b5b7d5c61e53587e0076ab54992961ed013598046ff6f5ca9",
+      "fields": {
+        "Message-ID": "A2-0007",
+        "From": "agent-2",
+        "To": "agent-1, agent-3",
+        "RQ": "E",
+        "Task": "E0 (R-3 closure: recipient key hash derivation)",
+        "Type": "ACK",
+        "Responds-to": "A1-0015, A2-0006"
+      }
+    },
+    {
+      "path": "communication/agent-2/outbox/0008-rfc-witness-checkpoint-and-receipt-operations.md",
+      "ref": "origin/agent-2",
+      "commit": "5e203d0c0b26235c4618548a797d93201275a14d",
+      "changeCommit": "f49790db43ce17dee650eb2a5f88c49fea5e27c0",
+      "sha256": "b51bb25b6214220cd0021b8f657d83bdc4e2ff3e30554e3ae7ec340d3ca6dbda",
+      "fields": {
+        "Message-ID": "A2-0008",
+        "From": "agent-2",
+        "To": "agent-3",
+        "RQ": "E",
+        "Task": "E0 (boundary completeness before freeze; affects B-E1 and C-E1)",
+        "Type": "RFC",
+        "Responds-to": "A3-0011, A1-0011, A2-0002 item 3"
+      }
+    },
+    {
+      "path": "communication/agent-2/outbox/0009-ready-e0-revision5-scoped-ack-and-candidate-b-e1.md",
+      "ref": "origin/agent-2",
+      "commit": "5e203d0c0b26235c4618548a797d93201275a14d",
+      "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+      "sha256": "139c3edcab713d2cdf7ae314f3af104d18a7d516532b188a3a2f0087e4d3ae23",
+      "fields": {
+        "Message-ID": "A2-0009",
+        "From": "agent-2",
+        "To": "agent-3, agent-1",
+        "RQ": "E",
+        "Task": "E0 (candidate revision 5 scoped ACK) and candidate B-E1/B-E2 status",
+        "Type": "READY",
+        "Responds-to": "A3-0012, A1-0016, A1-0017, A1-0018, A2-0008"
+      }
+    },
+    {
+      "path": "communication/agent-3/outbox/0001-ack-distributed-startup.md",
+      "ref": "origin/agent-3",
+      "commit": "b9db5cdace1940fffae40b5babe9267b81b6380d",
+      "changeCommit": "a657a8c458c830dd1a84957415c0fc5bdef4968c",
+      "sha256": "811985266f1e79736b3d063c1e597e9d9eeee12aa038fee1a1ef11b0c0010ffa",
+      "fields": {
+        "Message-ID": "A3-0001",
+        "From": "agent-3",
+        "To": "all",
+        "RQ": "E",
+        "Task": "E0",
+        "Type": "ACK",
+        "Responds-to": "A1-0001"
+      }
+    },
+    {
+      "path": "communication/agent-3/outbox/0004-ready-checkpoint-publication.md",
+      "ref": "origin/agent-3",
+      "commit": "b9db5cdace1940fffae40b5babe9267b81b6380d",
+      "changeCommit": "14d54aa505388bac85a1fb495e69f18da55c9143",
+      "sha256": "63dec733c1b3f41a1623790fb1d2c5825adc0c89cc2456f1792085a1c1d4ee29",
+      "fields": {
+        "Message-ID": "A3-0004",
+        "From": "agent-3",
+        "To": "all",
+        "RQ": "E",
+        "Task": "E0 checkpoint publication",
+        "Type": "READY",
+        "Responds-to": "A3-0003"
+      }
+    },
+    {
+      "path": "communication/agent-3/outbox/0012-rfc-revision-5-witness-operations-and-peer-fixes.md",
+      "ref": "origin/agent-3",
+      "commit": "b9db5cdace1940fffae40b5babe9267b81b6380d",
+      "changeCommit": "5620c863f354a180c820a790b03a8459d8dd748c",
+      "sha256": "4d15da6a2e9eee0c576d4513c9c711a40a6e798b1e8630c9e2cab1f137d70fb8",
+      "fields": {
+        "Message-ID": "A3-0012",
+        "From": "agent-3",
+        "To": "all",
+        "RQ": "E",
+        "Task": "E0 (revision5 peer-review corrections and missing witness boundary)",
+        "Type": "RFC",
+        "Responds-to": "A1-0013, A1-0014, A1-0015, A1-0016, A1-0017, A2-0006, A2-0007, A2-0008"
+      }
+    },
+    {
+      "path": "communication/agent-3/outbox/0013-ack-a1-revision5-acceptance.md",
+      "ref": "origin/agent-3",
+      "commit": "b9db5cdace1940fffae40b5babe9267b81b6380d",
+      "changeCommit": "9dfad20a6f2ae439555407cd732ab4e8e3e13e75",
+      "sha256": "66c65fc7287be47d64ee86048f9837b28deed653b0bf48b1e1bb8b6e8268a63c",
+      "fields": {
+        "Message-ID": "A3-0013",
+        "From": "agent-3",
+        "To": "all",
+        "RQ": "E",
+        "Task": "E0 (record A1-0018 exact revision5 acceptance)",
+        "Type": "ACK",
+        "Responds-to": "A1-0018"
+      }
+    }
+  ],
+  "newAddressedMessages": [
+    {
+      "path": "communication/agent-2/outbox/0009-ready-e0-revision5-scoped-ack-and-candidate-b-e1.md",
+      "ref": "origin/agent-2",
+      "commit": "5e203d0c0b26235c4618548a797d93201275a14d",
+      "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+      "sha256": "139c3edcab713d2cdf7ae314f3af104d18a7d516532b188a3a2f0087e4d3ae23",
+      "fields": {
+        "Message-ID": "A2-0009",
+        "From": "agent-2",
+        "To": "agent-3, agent-1",
+        "RQ": "E",
+        "Task": "E0 (candidate revision 5 scoped ACK) and candidate B-E1/B-E2 status",
+        "Type": "READY",
+        "Responds-to": "A3-0012, A1-0016, A1-0017, A1-0018, A2-0008"
+      }
+    }
+  ],
+  "package": [
+    {
+      "path": "communication/agent-3/outbox/0002-rfc-e0-semantics-toolchain-receipt.md",
+      "sha256": "fcc22f394cdbe1492be2d01bafda161b2f0ecf80a3be92740b7e6c031ae5c9db",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "communication/agent-3/outbox/0005-ack-a1-0008-receipt-revision-2.md",
+      "sha256": "74e0b23c80c893f849c0f4176df67e388f7e7df09ef8a13e9fe9888c7ed2ff55",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "evaluation/check_schema_vectors.py",
+      "sha256": "4cf3ee57a6bbba8c2bc99103fa4844b788149a87b2792dfbcc5c70bd06e78e05",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "evaluation/e0_verify.py",
+      "sha256": "077bc6d50011b06769e4c5d26c06bd1f9327a317e4869692c86fea986116427c",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "evaluation/evidence/assumptions.csv",
+      "sha256": "0c36d5936d25b95c6fd7b85dc7a9d48c0ddfba7be89487598d70aefe6d78ecfb",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "evaluation/evidence/source-map.csv",
+      "sha256": "25337ee2846b13791bf971281d885f6300a6ce1407f156ddeb4e5cb85f54a07c",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "evaluation/oracles/access.py",
+      "sha256": "98ff036fcbbf92d8f561c52769f1acf788e2e7117b614b8ab9fd7c35608b61e5",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "evaluation/scenarios/e0_cases.json",
+      "sha256": "66b5c4f0cb9bdd3ae8bb4795ac9e9771890572c6e238d29516be6668a4218a0f",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "evaluation/scenarios/e_positive.json",
+      "sha256": "95e75f10cfdaf0b0bf5bd75ea25b521df30817f85a280a8552cc62243f8ccdda",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "evaluation/schema.py",
+      "sha256": "3e29876907be197dcbe59142184d89cbe7cfb1ec8c446d3143950648d61598ad",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "evaluation/tests/test_access_oracle.py",
+      "sha256": "a5ae466018b0e34836114fe4564f0e3a008241e26b6319d4f4bb7a5965f6fbb3",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "evaluation/tests/test_boundary_schemas.py",
+      "sha256": "fccf5bf06b06ba23b5f961879a4ac289ba173696715ab6989b47b1ee285fbda3",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "evaluation/tests/test_deployments.py",
+      "sha256": "2dd4a624d7ff967ab01e69a6d18fff6ccf5e5109c3c373b7a8d5abb357939c0b",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "evaluation/tests/test_revision5_review.py",
+      "sha256": "e16bf6e21ea0fb4d29bae4a0e970da1f7d6813a6888895c4a3b2e35ca3210366",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "evaluation/tests/test_schemas.py",
+      "sha256": "e7bcb77edc222d59fb4f82f4e9e348bf0b8a1553f292feb249d48d04a33660c8",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "evaluation/tests/test_vectors.py",
+      "sha256": "8833a4831fa198900c82200a6bd68a9534921b2c83611a234d96f7abc0234fce",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "evaluation/toolchain.json",
+      "sha256": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "evaluation/vectors.py",
+      "sha256": "e7791eb24367032b3ed2932e1d84b5135fa4af145833bb1a68fa965d2cb53266",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "interfaces/proposals/boundaries.py",
+      "sha256": "c628ee89c82e89e4a993cf7c507e2e041b0813c9e1e1fb613742c3f811e4489b",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "interfaces/proposals/build_boundary_vectors.py",
+      "sha256": "e2e0e042d0d72e0eacdc9994e4d195e979ef54de6dea3ab0377bd535dc4a0b93",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "interfaces/proposals/build_schemas.py",
+      "sha256": "3cfa472da1d13e547015aa724c6dae588fc21de63f8c330711a8eba27ab57514",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "interfaces/proposals/v1/ACCEPTANCE.md",
+      "sha256": "e816d0fc902a878578178bf7100ebc6400c03927437c70ce5379f57fe59afd8f",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "interfaces/proposals/v1/BOUNDARY.md",
+      "sha256": "cd541cc51f047649529f0c7f8c9059eefd182ac64326c98fe89b532bf335741d",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "interfaces/proposals/v1/README.md",
+      "sha256": "a0dba43353986e68230ee7f1697d12cfaa546dce2129482e4ce9776fc4199d13",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "interfaces/proposals/v1/hmbc.schema.json",
+      "sha256": "df44c418cdb9dba34f30678c2a777c1c52e074cb25de99dd44e3aeb7ac78f027",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "interfaces/vectors/adapter-agent2-candidate.json",
+      "sha256": "e248fceb7455ebc3ae328da294ab7b328e2a69fc43eb4975d3b35e0016f5d0b7",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "interfaces/vectors/boundary-candidate.json",
+      "sha256": "fce967f87cce9b453ae23d7450bcb6a199f3c0f6ad5d933b378b8f90e5a42210",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "interfaces/vectors/deployment-agent1-candidate.json",
+      "sha256": "787ae701241167a2474215168752ecac7fbec260cb0df3a2acdf680598f53ee1",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "interfaces/vectors/eip712-agent1-candidate.json",
+      "sha256": "f211c65fe9c0ea0d7c7ed3fe6904ab04b36224f5bfcd41d3bd140e6165f0bf61",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "interfaces/vectors/schema-candidate.json",
+      "sha256": "49a9dc29298495513340db2f4e4f78d7611e52c7b42409531bc5ed97f421e4d8",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "1d839e80b8acdef35d878740cb5d212b464cc30f4adfdd3f56b69b162badd0ca",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    },
+    {
+      "path": "uv.lock",
+      "sha256": "1fb4777a5d4078434af8e7fe4a88f2f3afbe1d8f65d30e8a182999d7a7a29cbe",
+      "reviewedCommit": "3e0300a341aa577db8659d5e2e2d4792259dda4a"
+    }
+  ],
+  "ownerChecks": [
+    {
+      "ref": "origin/agent-1",
+      "commit": "73ae718b917a787bbdee0c3802fe32e265b0d70d",
+      "pin": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+      "manifestPath": "ledger/evidence/source-manifest.sha256",
+      "manifestSha256": "5866921aa8ba4716a24afb4144123295f0e5f809296ed488a06bc84f07c277a9",
+      "entries": [
+        {
+          "path": "ledger/evidence/ae1-mutation-smoke.json",
+          "sha256": "a7cfb87677427ea5924c3833bd54fa3d68b575270702bb0e7477e93ad9669f69"
+        },
+        {
+          "path": "ledger/evidence/ae2-first-run.txt",
+          "sha256": "2591384c0ce4505cc65743c89651169f766cc56e116eaee6f11cfcfba4fc8a65"
+        },
+        {
+          "path": "ledger/evidence/ae2-mutants.json",
+          "sha256": "60a30adc988e22278a05810b166c23a9e30a6cdbc4f641279116f7858558f022"
+        },
+        {
+          "path": "ledger/evidence/ae2-mutants.txt",
+          "sha256": "7bcfca8e193a2b8d1e4b3e3b5027bdb4e784c895d337739b8b0c6f1bd7186444"
+        },
+        {
+          "path": "ledger/evidence/ae2-property-matrix.md",
+          "sha256": "663e308b8fcae8393c67f5d3098bca59f1ca8bdc8dece5045b5f474a95bcbf07"
+        },
+        {
+          "path": "ledger/evidence/crosscheck-cast.txt",
+          "sha256": "b88c8ab563f2b9781fef65d0715d11929051eda38c2309e169878ce37a12605e"
+        },
+        {
+          "path": "ledger/evidence/export-abi.txt",
+          "sha256": "95a87f1e4ccfef3e88ef45b22a79eb5491109f0acbf584da6391b524b8d64bb4"
+        },
+        {
+          "path": "ledger/evidence/export-vectors.txt",
+          "sha256": "7390a7c1b2b92f5626c25767040caf93bdd0eff933582b7ed96deeb258ec6943"
+        },
+        {
+          "path": "ledger/evidence/forge-test.txt",
+          "sha256": "a58fba02b7a1b4f073ed86e1513fc0d143b4f9310f937d4ba6b97d29dd674257"
+        },
+        {
+          "path": "ledger/evidence/gas-report-unit.txt",
+          "sha256": "b1d19f67e9b610ff659ef427a9ea419422df231a3cb14c26fa773b952e442969"
+        },
+        {
+          "path": "ledger/evidence/historical-read-check.txt",
+          "sha256": "56a59a093c48c3f4ef153f07d059598897f357076aa25b76f175383db379e42e"
+        },
+        {
+          "path": "ledger/evidence/mutation-smoke.txt",
+          "sha256": "7e709962d63f8301165c537689a4199f603220913b2172a33288b42d1fc0824f"
+        },
+        {
+          "path": "ledger/evidence/pending-first-run.txt",
+          "sha256": "cbc1ab4e8048303316da3a279ab3f95f982877a3db0628c5d38505866da1007f"
+        },
+        {
+          "path": "ledger/evidence/pending-run.txt",
+          "sha256": "2dafd73b4a3e99498270728fed62c8bc3f158886453af782a9dd892be6416485"
+        },
+        {
+          "path": "ledger/evidence/policy-first-run.txt",
+          "sha256": "dc7aa4d0a58832ddd58ccfffe69c4a1e53bb138da503eaa01719019a5de0d29a"
+        },
+        {
+          "path": "ledger/evidence/receipt-first-run.txt",
+          "sha256": "8d2351796c68f95100bc85f52653e5b7498ce84b45e82c917490ddaa89808df8"
+        },
+        {
+          "path": "ledger/exports/abi/ACSC.json",
+          "sha256": "d5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08dbf8ad9a568"
+        },
+        {
+          "path": "ledger/exports/abi/KSSC.json",
+          "sha256": "391841544b43c967bd8004c95376f139baaa2dd8c553f13310accecd83e1c6e7"
+        },
+        {
+          "path": "ledger/exports/abi/LSC.json",
+          "sha256": "3c9acabbb8978e6330f5878b9a979326ca22f1519300a5277cffeea3911d42de"
+        },
+        {
+          "path": "ledger/exports/abi/manifest.json",
+          "sha256": "e75f1d71b59096857814f43f856153c81c2d9cf23d487f74f1936104f41c02f1"
+        },
+        {
+          "path": "ledger/exports/abi/PSC.json",
+          "sha256": "559d3f011fe7687b0a422e8f6f61c2e8f72a9a7a61c8795973da0d543a1c3fe1"
+        },
+        {
+          "path": "ledger/exports/abi/RSC.json",
+          "sha256": "f0bc3732ee5646db945a68e06434cd46ba2637df04e4fe2260cf0d16bde1eebc"
+        },
+        {
+          "path": "ledger/exports/abi/TMSC.json",
+          "sha256": "a6f6273c8dcff51bb8834c8fa0f354d5e9b6bb7b5d7d39ca89c5d7f9975a225d"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-mutant-no-receipt-binding/dbc-stage.json",
+          "sha256": "067b748108837b9993d47e1c0d5ea8d71ecc1ee11e40c5a9870b928aa7b0cd1d"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-mutant-no-receipt-binding/deployment.json",
+          "sha256": "042373fd31fe6fb2dbd4fc10e047244ca41c16b137a9e364ad5cca07cc05fd4d"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-mutant-no-receipt-binding/pbc-stage.json",
+          "sha256": "d104f6a4fe7e6976824bf4af55316a71d557a3db1a8c1ca0d48fc9ea81e3c7d4"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-mutant-no-receipt-binding/smoke-nonce-1/checkcreds.calldata",
+          "sha256": "a4a12b1489a6c7d1928c9039202581495eb0f2f0c70553555fe007802c4c43fc"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-mutant-no-receipt-binding/smoke-nonce-1/grant.hex",
+          "sha256": "e6da874d33ab1f2c8d8ef517d72aadec36b9f0fdbe28f761cd8300c4ea0835d2"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-mutant-no-receipt-binding/smoke-nonce-1/receipt.hex",
+          "sha256": "214b5bb65fc0b090ef87c00269058fd7e8f5ae5d7fbb2584f246275a3d00b7df"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-mutant-no-receipt-binding/smoke-nonce-1/request.hex",
+          "sha256": "2929adfb670e7935cbf1e06bf0fcd1d8a4fa2d02d5f10efc7a462f294d233b71"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-mutant-no-receipt-binding/smoke-nonce-1/summary.txt",
+          "sha256": "9073d1eda2baf3c21da2cbce70560bdbe28677b9125f4e5f007c5f4dcdfc9a7b"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-minimal/dbc-stage.json",
+          "sha256": "f200749a3d94ee7d841b3bd921ba1471487ab747858b1167df6d0bc31baf4a90"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-minimal/deployment.json",
+          "sha256": "17ca05cc5c8417d85b4de2dc9e229756cdf48e2d9f674edff62c6ddc712595ba"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-minimal/pbc-stage.json",
+          "sha256": "aa367993f5b490f592fe073aebe950d1249d1a5dcbfd947b9e23b276acca0bb8"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-minimal/smoke-nonce-1/checkcreds.calldata",
+          "sha256": "35c27369ec999f67c3b27e85951b8a4f94f4a3d1ac0a7db997c9b13889f1b1fe"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-minimal/smoke-nonce-1/grant.hex",
+          "sha256": "860a118324e25353595943cdb18bb2bceeb9cfef05dde8218bbf67d82ddcfa70"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-minimal/smoke-nonce-1/receipt.hex",
+          "sha256": "c0c210d2649e52feac6e85428b22b5cd17d704eadf559ad1d95e15b372d1de34"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-minimal/smoke-nonce-1/request.hex",
+          "sha256": "9d5d3928f4cf24b58c2c2372de756f9010a79b41426e189690166f85fa6cddcc"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-minimal/smoke-nonce-1/summary.txt",
+          "sha256": "0deb72b759aea101374c80626c9a0b239710ed5c3e05890380b3d2d2461b7945"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-strict/dbc-stage.json",
+          "sha256": "008db8740ccb5457234d617e011ffe7616eb054ffd114a7abc7a4fa1bd8a7b0b"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-strict/deployment.json",
+          "sha256": "58ddba1012bc0e51409a798eaf02faf9503338b25bf5a1d27d20d84917a1a00d"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-strict/pbc-stage.json",
+          "sha256": "d581d585790224d724f7e398981f987766fa92fb30897ed1388a78c5c4e40e05"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-strict/smoke-nonce-1/checkcreds.calldata",
+          "sha256": "31d55140b16a5c609fc00c8e32b78ca7b0980193540f3a53d84384808f1dad2d"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-strict/smoke-nonce-1/grant.hex",
+          "sha256": "19d5a99a5c84d325829f3f6fddc6155842fd8eda35a793a60041c25187d566af"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-strict/smoke-nonce-1/receipt.hex",
+          "sha256": "2b96a99bb9e83df5db4dd2bc0437e61104fcab4e5dc4c77ddd9bbef05fea53de"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-strict/smoke-nonce-1/request.hex",
+          "sha256": "830e39b32df109db7577b29abb20c9f451451ffa1da5ad215b9a0a3646b2c8c3"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-strict/smoke-nonce-1/summary.txt",
+          "sha256": "ff79d29264c484b62f975e6377349e1903f878c110f64da99b9d813d88e5ed26"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-repaired-e/dbc-stage.json",
+          "sha256": "8a64ecb03c884ec6adae17e99ca079c95dd180b2d3cb2b69d9ea119f81dc0706"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-repaired-e/deployment.json",
+          "sha256": "06a98761c0e5c746808f07bb284dc4dfa5f19fb1292d35f866e1fcd33b6abdaa"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-repaired-e/pbc-stage.json",
+          "sha256": "0f2686466e0e440be1675ac6dfa87ae2c11806daf72f6a1d85da4f718ce9eab7"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-repaired-e/smoke-nonce-1/checkcreds.calldata",
+          "sha256": "3c20e519f9fc1ac784484d3647ab80d41c19a6e0ec98356c0f79c3ea720929eb"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-repaired-e/smoke-nonce-1/grant.hex",
+          "sha256": "088e5f840d99976a92dfa90127c3364f80d4582fabb83b05014fd3a18857cdb5"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-repaired-e/smoke-nonce-1/receipt.hex",
+          "sha256": "47337790e7c0d8c926590b998039db87b031af367a73bd44fc87e8ac4a00673a"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-repaired-e/smoke-nonce-1/request.hex",
+          "sha256": "09eb4bb0fa78a09601cad1ccbbc1795ea53e27a853e7a1c19fefe60d0cd42834"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-repaired-e/smoke-nonce-1/summary.txt",
+          "sha256": "7c9fd4b3543ae342fb38035aa4cbd746934b2da39b64a49aa05a027390f2cc9a"
+        },
+        {
+          "path": "ledger/exports/vectors/eip712-v0-ledger.json",
+          "sha256": "6aa399e038be204a0420e7503f11300196fcaaf4bc7acbaef2724163f8cf0574"
+        },
+        {
+          "path": "ledger/exports/vectors/typed/AccessDecision.json",
+          "sha256": "5b9260aea18123909524e0e3031252b94dfe0a7558b3c783da91cc1aa6da0086"
+        },
+        {
+          "path": "ledger/exports/vectors/typed/AccessRequest.json",
+          "sha256": "e2a8cbc02711d0f4882ad05bb8767e4f756f30b8b8100aefecb97f22ed2e89cb"
+        },
+        {
+          "path": "ledger/exports/vectors/typed/CredentialSet.json",
+          "sha256": "8bd5493b95fb191450552c24caae2ec1c28163e1cc6f1e8ea551542eb51968e1"
+        },
+        {
+          "path": "ledger/exports/vectors/typed/GrantReceipt.json",
+          "sha256": "d1a16fff3b976da99e49443ad25d3558e468dfdbc9cb174afa2f2f5dbf554312"
+        },
+        {
+          "path": "ledger/exports/vectors/typed/Registration.json",
+          "sha256": "b220b4b659a9a5b31e2bfda9c41873984268fa29a1b452ff1c63e18addb99fac"
+        },
+        {
+          "path": "ledger/exports/vectors/typed/RevocationList.json",
+          "sha256": "33fad55ba12ad164b4f3b7a22690c771ce6e7906158a3fe5353ffd028befdd2e"
+        },
+        {
+          "path": "ledger/exports/vectors/typed/RoleCertificate.json",
+          "sha256": "3061b6cfd0705ec4d66f1d3b233d37f2cdc18ff71380189de3362f4a92abf41e"
+        },
+        {
+          "path": "ledger/exports/vectors/typed/StateCheckpoint.json",
+          "sha256": "595b89b32558d8a30b51465091b91137c45a338dae1c06baed64d80b182adf9d"
+        },
+        {
+          "path": "ledger/exports/vectors/typed/TemporalAcl.json",
+          "sha256": "f7193a30bd7de5b2b6dac6b37323170b00302b922621381c2681a8f1f7b48154"
+        },
+        {
+          "path": "ledger/foundry.toml",
+          "sha256": "432f310d0541f63a745a2f18acaa56ffa8c0a3c989188781e646bb9c4d79261f"
+        },
+        {
+          "path": "ledger/README.md",
+          "sha256": "03e90c13904fbf9a7c7db62b6ab071ceabfae34885daebe5a9175d6895e08e9e"
+        },
+        {
+          "path": "ledger/script/Deploy.s.sol",
+          "sha256": "15745171c00c3696780742983134a2181b46ede5e06bb1933785eb557bd4ee03"
+        },
+        {
+          "path": "ledger/script/E2ESmoke.s.sol",
+          "sha256": "255b5c3f6a549fa7e62a53e1f05d225b5abef7b8fcf45ffcbc1942b15713d2a7"
+        },
+        {
+          "path": "ledger/script/ExportVectors.s.sol",
+          "sha256": "7e23e20ef0804cd806040bb3193bd1018243be93a35eb3f60d41ddce8ff2c87d"
+        },
+        {
+          "path": "ledger/script/FixtureConfig.sol",
+          "sha256": "d150516dae476cf991c9ad8e2187dc0b370ba3a00083829ab145998f43f0e3db"
+        },
+        {
+          "path": "ledger/src/ACSC.sol",
+          "sha256": "b0ac86e7cf40d09ca2d4b984ee8e8314992cbdd98488b599289fdddc2ac7dc70"
+        },
+        {
+          "path": "ledger/src/DecisionVerifier.sol",
+          "sha256": "b5c92a6bf2fbe8a504adfbf05a07675af1569d45ecdd7cc869f9d825e19ff114"
+        },
+        {
+          "path": "ledger/src/KSSC.sol",
+          "sha256": "4b8f195f279f0dcd72c434c36b04c6caf65659e63c13ea95170a9a3b4af38321"
+        },
+        {
+          "path": "ledger/src/lib/Bootstrapped.sol",
+          "sha256": "6184f2d07075d19dee617ae3a239ec259533b9c006f366be57b7639bd719ee4f"
+        },
+        {
+          "path": "ledger/src/lib/SigLib.sol",
+          "sha256": "c08a87ea13045f03ec4f456f9ebbeb38eed801448ad70348e7dd3cbb39535830"
+        },
+        {
+          "path": "ledger/src/LSC.sol",
+          "sha256": "de1f9850c81786beb23f4ab85d2b33023bc294c7474ee8c300e18e92977f5224"
+        },
+        {
+          "path": "ledger/src/PSC.sol",
+          "sha256": "3a74000f738c7d55a7b0617ceec5149592932052f17570c273b45a86b037b6d7"
+        },
+        {
+          "path": "ledger/src/RSC.sol",
+          "sha256": "083e6e5f24f190be95a3fcfd8cc79d3763512c07badf2762c96522e3b3fb4c96"
+        },
+        {
+          "path": "ledger/src/TMSC.sol",
+          "sha256": "d0262f09a93f2197ed52a64226bd8d18d43117d4617d0de88d75f2aa5460e1aa"
+        },
+        {
+          "path": "ledger/src/types/ProtocolTypes.sol",
+          "sha256": "5f389a15230290a597a78d84cd2accc354f91e50c3b8e88dbe5c36e4fd75272f"
+        },
+        {
+          "path": "ledger/test/AccessFlow.t.sol",
+          "sha256": "47835b62512b3567b02e3f89a2a88f9806e439c5067ca1c64a2f48e95eb37ef9"
+        },
+        {
+          "path": "ledger/test/Audit.t.sol",
+          "sha256": "e10f7d5431b67c2d23b7df63ccc4b3c4f0afc34656a04c609d08d194ee8795ea"
+        },
+        {
+          "path": "ledger/test/DecisionBinding.t.sol",
+          "sha256": "e51aa497dd406361d4eb11874765301b05d0f221f22eb5ce5ebc9a14875ee788"
+        },
+        {
+          "path": "ledger/test/Freshness.t.sol",
+          "sha256": "bc98d379f987806450db5223dc8513ad358074279a8a3cf57425b6b13f585794"
+        },
+        {
+          "path": "ledger/test-mutants/Mutants.t.sol",
+          "sha256": "1c769667c591de8967f645c224677a3df08146ca0dc545486f81bb265856dca5"
+        },
+        {
+          "path": "ledger/test/OutcomeEvidence.t.sol",
+          "sha256": "d9781d3b79e9dcabec1b1f533c008df96d5cfbbd7f0dca4a58334b13fd4c105c"
+        },
+        {
+          "path": "ledger/test/Policy.t.sol",
+          "sha256": "80adfe8414b8b8051d1cda346d764ada7778c1cecb24995972f21197cf8383b5"
+        },
+        {
+          "path": "ledger/test/TrustAnchors.t.sol",
+          "sha256": "2146a361129c647f98cebc80398558b208aa1c3781f6ab4c01f4a9b5814c4fb0"
+        },
+        {
+          "path": "ledger/test/utils/Fixture.sol",
+          "sha256": "cfba347ba15e9501a7c1f8b55855a237135f5162280adb55777fb3c207088598"
+        },
+        {
+          "path": "ledger/test/utils/TestBase.sol",
+          "sha256": "83b61f905c46ae5faf138f52e5e949b6f7631f2a2024e7459db8bca42b6d4532"
+        },
+        {
+          "path": "ledger/test/utils/Vm.sol",
+          "sha256": "681a213f4e3611ebc75e2b562b1ac20e3a398a293518dbbbd224ac864da85d72"
+        },
+        {
+          "path": "ledger/toolchain.json",
+          "sha256": "8a530510d48cdac48c9c5ca028b43552de570be5e4ef2f898e1f3ab65a9371a2"
+        },
+        {
+          "path": "ledger/tools/check_mutants.py",
+          "sha256": "df87751b77e9bc8e9bde028d7019c99c381434ed79a3584d82df93b7e9f5d0a2"
+        },
+        {
+          "path": "ledger/tools/crosscheck_cast.py",
+          "sha256": "6af105b4d33f16969d0fe47498131377a1b85aa9200772c8f3c68ea418cb869a"
+        },
+        {
+          "path": "ledger/tools/deploy_local.sh",
+          "sha256": "916ee9fb6f627a5a770fc80c9cfe162a9d1a1fff32be37e78848c8dadb648689"
+        },
+        {
+          "path": "ledger/tools/e2e_smoke.sh",
+          "sha256": "1466c23e0c86fb17883d18842c704c6323c7e6753f2845a6e2b6a305f38c349b"
+        },
+        {
+          "path": "ledger/tools/export_abi.py",
+          "sha256": "8bc9b8d067ef6b3d130b40d6883ec1c96561c2ef6139d0c62b8c48d69a83d9d2"
+        },
+        {
+          "path": "ledger/tools/make_manifest.py",
+          "sha256": "458872ae7a9495a94f148866b733761f15a446f6502a1d159365972c21f3e2a0"
+        },
+        {
+          "path": "ledger/tools/mutation_smoke.py",
+          "sha256": "8a82181a5c64c5770dd1dd768cfa0e0742e5e4ba210459387acd87db024df33a"
+        }
+      ]
+    },
+    {
+      "ref": "origin/agent-2",
+      "commit": "5e203d0c0b26235c4618548a797d93201275a14d",
+      "pin": "5e203d0c0b26235c4618548a797d93201275a14d",
+      "manifestPath": "protocol/evidence/source-manifest.sha256",
+      "manifestSha256": "a352f339f3c874cbb5634efffd1478abbc0b098292ec1d7ba97d348d76b4cdac",
+      "entries": [
+        {
+          "path": "protocol/abi/ACSC.json",
+          "sha256": "d5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08dbf8ad9a568"
+        },
+        {
+          "path": "protocol/abi/KSSC.json",
+          "sha256": "391841544b43c967bd8004c95376f139baaa2dd8c553f13310accecd83e1c6e7"
+        },
+        {
+          "path": "protocol/abi/LSC.json",
+          "sha256": "3c9acabbb8978e6330f5878b9a979326ca22f1519300a5277cffeea3911d42de"
+        },
+        {
+          "path": "protocol/abi/manifest.json",
+          "sha256": "e75f1d71b59096857814f43f856153c81c2d9cf23d487f74f1936104f41c02f1"
+        },
+        {
+          "path": "protocol/abi/PROVENANCE.md",
+          "sha256": "18a8c9cb3a8ee2eef447b01f2ebc84e84697b995d683b8213a59f1c559ffb075"
+        },
+        {
+          "path": "protocol/abi/PSC.json",
+          "sha256": "559d3f011fe7687b0a422e8f6f61c2e8f72a9a7a61c8795973da0d543a1c3fe1"
+        },
+        {
+          "path": "protocol/abi/RSC.json",
+          "sha256": "f0bc3732ee5646db945a68e06434cd46ba2637df04e4fe2260cf0d16bde1eebc"
+        },
+        {
+          "path": "protocol/abi/TMSC.json",
+          "sha256": "a6f6273c8dcff51bb8834c8fa0f354d5e9b6bb7b5d7d39ca89c5d7f9975a225d"
+        },
+        {
+          "path": "protocol/evidence/crosscheck-agent3-boundary-3e0300a.json",
+          "sha256": "6f4268a9bfc8a4e9cbd617ae838cc68d74205bd73f98e2de502482f17f838535"
+        },
+        {
+          "path": "protocol/evidence/crosscheck-agent3-schema-988e452.json",
+          "sha256": "613ea24b7cd373291af97cea707c2de4407041cc929ec5d09cc97bcc9b2fd9d7"
+        },
+        {
+          "path": "protocol/evidence/e2-repaired-e-observed.txt",
+          "sha256": "35acc0ed9696a727ac027b98c2e30e2e46d71694ed7552190e57fae1dd870f99"
+        },
+        {
+          "path": "protocol/evidence/examples-vs-agent3-3e0300a.json",
+          "sha256": "c8d8515d1968895b37223507fc0e2e76ed8d9080f1ef8449e7908a4016fa01ea"
+        },
+        {
+          "path": "protocol/evidence/independent-review-2026-10-08.md",
+          "sha256": "29ed2cc7d548336a730a3c102780479031bb1851ecd7cdc55daace7cc898dfc9"
+        },
+        {
+          "path": "protocol/evidence/ledger-reproduction-54262c2.md",
+          "sha256": "51490d52a0f95e5f2a30d323f932609340a68ae8718df3c06bcaae2cb15b46f0"
+        },
+        {
+          "path": "protocol/evidence/live-adapter-flow.json",
+          "sha256": "bb4d03c914f947f236e85ba525e194dd26734fe428a08e28bf7ff5ddb8b869fe"
+        },
+        {
+          "path": "protocol/evidence/mutation-check.json",
+          "sha256": "1cf4b05b3ffaf8bc8822c9b9f31a489454468c5c769078ba049b263cbe7b4dbe"
+        },
+        {
+          "path": "protocol/evidence/pytest-e0.txt",
+          "sha256": "7087ea427667f8afd2e3a8b12498a9287942dff08ceced041df9631dec400812"
+        },
+        {
+          "path": "protocol/exports/adapter.json",
+          "sha256": "83fc9b5dad66b9a9d448e1fe592b2e2164e67c327168280b290484c6be84814e"
+        },
+        {
+          "path": "protocol/exports/examples/attest_grant.json",
+          "sha256": "a6df59407d21b3b7b9f071a9b23e5aa5b1fb01a11cf3454ea2e4ddd85be228f8"
+        },
+        {
+          "path": "protocol/exports/examples/collect_checkpoint.json",
+          "sha256": "38571f0d383583a099284d3ef7a75d317c373bc6cb7d95b6bdf5eb4f6b8b61e6"
+        },
+        {
+          "path": "protocol/exports/examples/collect_decision.json",
+          "sha256": "524b2212dedda8880107b99a338d7e6e05d7264e1edd1f8ca44ed1342f8be581"
+        },
+        {
+          "path": "protocol/exports/examples/encrypt_record.json",
+          "sha256": "669cbdae41ffdcfee1ec159dd19951778706bcc061dec822853c8fd91c7ce71b"
+        },
+        {
+          "path": "protocol/exports/examples/finish_decryption.json",
+          "sha256": "30a786bbf3df49e8fde27cae4054ba6ee9e280e5947fce11a8fa601457bfc023"
+        },
+        {
+          "path": "protocol/exports/examples/prepare_request.json",
+          "sha256": "04f03b64281dabda82e8a9d06376abd70d483757d69489734a5d00343efc6cf4"
+        },
+        {
+          "path": "protocol/exports/examples/release.json",
+          "sha256": "2922ae41f9543a4340e452ae1e335c9ad654f50d16f73446651868a7802ee13c"
+        },
+        {
+          "path": "protocol/exports/examples/rotate_epoch.json",
+          "sha256": "868dc26acfed5ff8fa161785512d0dcf2875a339b67c19a71ab663b07a7d82cc"
+        },
+        {
+          "path": "protocol/hmbc_protocol/abi.py",
+          "sha256": "6a2a65dc6f2a15d63c8f0cb668bedd49e53ae9f72717d9800fede8ad4e1fb8d6"
+        },
+        {
+          "path": "protocol/hmbc_protocol/adapter.py",
+          "sha256": "7fa01a39909ee9b94555d5f3c616bc89488d649b4731993ef80e7f4235267ce0"
+        },
+        {
+          "path": "protocol/hmbc_protocol/chain.py",
+          "sha256": "fabe4bb109603a2621378e089b9b6d573a319415d32a191b6b7f923c3468fbd8"
+        },
+        {
+          "path": "protocol/hmbc_protocol/client.py",
+          "sha256": "fd9531a799d21436f081a340bd3a78478728538adde8cf688a53e4ad8ab2478d"
+        },
+        {
+          "path": "protocol/hmbc_protocol/eip712.py",
+          "sha256": "eb70dd51e82c1374f9629bb18b063b05835ca983101d5ebc47a327220b43d03c"
+        },
+        {
+          "path": "protocol/hmbc_protocol/export.py",
+          "sha256": "b647cf4592e4aec2dc9eb6e4e15d9dccdca0a7aad05df8a8fb2de5af822efacf"
+        },
+        {
+          "path": "protocol/hmbc_protocol/__init__.py",
+          "sha256": "f2f51918113e8deb6af23b47d31cfa8f6299b52d69face127523a99a37138f20"
+        },
+        {
+          "path": "protocol/hmbc_protocol/keys.py",
+          "sha256": "cf953bea08d9658ba0917d2f1c99dc039b9b269f765f52a775b043cddcae48ab"
+        },
+        {
+          "path": "protocol/hmbc_protocol/ledger.py",
+          "sha256": "127ed4c9a27d8044aecfa3c67952e1fb4893802bb3aed4962265a5721c403605"
+        },
+        {
+          "path": "protocol/hmbc_protocol/messages.py",
+          "sha256": "54bfeda86ea4b52ce279cee52e69721c794b68f1644f856fc7641db75abe8da8"
+        },
+        {
+          "path": "protocol/hmbc_protocol/relay.py",
+          "sha256": "e42044e92d8b76b2209377b44f9077dd927445f8824ce6ed265b6a3db4b6239d"
+        },
+        {
+          "path": "protocol/hmbc_protocol/symbolic.py",
+          "sha256": "7de9293f48cc66844e7346af574323067805352ca67a72e978111b7ebf481afa"
+        },
+        {
+          "path": "protocol/hmbc_protocol/wire.py",
+          "sha256": "ee3e8d78326bba54db56f0ecd54025e1f88748ff60cf5a1b9ec31f504e504dbb"
+        },
+        {
+          "path": "protocol/hmbc_protocol/witness.py",
+          "sha256": "8d552a4e31358b8df4aee46ecad1c4fe15a57689af7a6a41c16b036dd6e61298"
+        },
+        {
+          "path": "protocol/hmbc_protocol/worker_log.py",
+          "sha256": "60dbcfc1282b22e22d2524db88b2e9160de69434abf87dc7450ad856fad0a99c"
+        },
+        {
+          "path": "protocol/hmbc_protocol/worker.py",
+          "sha256": "b4062a3bccbd24ffd79b7d4f499b3c220bd8a93947a7ff8308ba1cff0bf605f8"
+        },
+        {
+          "path": "protocol/pytest.ini",
+          "sha256": "6c6ccf864e8f2d2e0223ee8e39bfde660c12435aa37d81e2b14000a6bee15003"
+        },
+        {
+          "path": "protocol/README.md",
+          "sha256": "b2581db6d228e84228e36b025f04537562202e108c8727f62fc2cb99c20f42a9"
+        },
+        {
+          "path": "protocol/requirements.txt",
+          "sha256": "7f93b8aa1767c08a401bd278e3d4f95d1973b7377fb3cb92acf41f12c9a698d3"
+        },
+        {
+          "path": "protocol/tests/conftest.py",
+          "sha256": "28ae7c0d12e9aca3ccf2527b0f1aec61502abea8f87ccbee909be64189d13702"
+        },
+        {
+          "path": "protocol/tests/e2_support.py",
+          "sha256": "214540e231cb0641891c820ca011bed8fba1ca00dcece3952eb3d210c23014a0"
+        },
+        {
+          "path": "protocol/tests/fixtures/boundary-cases-a3-3e0300a.json",
+          "sha256": "fce967f87cce9b453ae23d7450bcb6a199f3c0f6ad5d933b378b8f90e5a42210"
+        },
+        {
+          "path": "protocol/tests/fixtures/boundary-cases-a3-c982d04.json",
+          "sha256": "36749f925a4dd7deb1a8ac1dcbeaa49800c8a80e9205b9cdd2816f6a5ae84994"
+        },
+        {
+          "path": "protocol/tests/fixtures/deployment-agent1-54262c2-repaired-e.json",
+          "sha256": "38b7631f5b977dac06f64fabf2615f846da8f8d0619e1b01797c7821fed2f3eb"
+        },
+        {
+          "path": "protocol/tests/fixtures/e0-cases-a3-3e0300a.json",
+          "sha256": "66b5c4f0cb9bdd3ae8bb4795ac9e9771890572c6e238d29516be6668a4218a0f"
+        },
+        {
+          "path": "protocol/tests/fixtures/e0-cases-a3-c982d04.json",
+          "sha256": "be77c5608095ac1d09d0ebf607b7e3f971f5f49a609fc0f821c2730c1efb4fd5"
+        },
+        {
+          "path": "protocol/tests/fixtures/eip712-agent1-54262c2.json",
+          "sha256": "6aa399e038be204a0420e7503f11300196fcaaf4bc7acbaef2724163f8cf0574"
+        },
+        {
+          "path": "protocol/tests/fixtures/eip712-agent1-e351be5.json",
+          "sha256": "6e931f83c53303350d847f61b192d57fe0f9c30f9d815effa57e36c279278cdf"
+        },
+        {
+          "path": "protocol/tests/fixtures/hmbc-schema-candidate-a3-3e0300a.json",
+          "sha256": "df44c418cdb9dba34f30678c2a777c1c52e074cb25de99dd44e3aeb7ac78f027"
+        },
+        {
+          "path": "protocol/tests/fixtures/hmbc-schema-candidate-a3-988e452.json",
+          "sha256": "6be244335aef3ceffb6977849db8b9013d144a0babf47981cc8a9ec2edf2a14c"
+        },
+        {
+          "path": "protocol/tests/fixtures/hmbc-schema-candidate-a3-c982d04.json",
+          "sha256": "3922a5c42fc38768d88dde0996ac6e2c11f02270f774dbf191a893417645ffa4"
+        },
+        {
+          "path": "protocol/tests/fixtures/schema-cases-a3-988e452.json",
+          "sha256": "49a9dc29298495513340db2f4e4f78d7611e52c7b42409531bc5ed97f421e4d8"
+        },
+        {
+          "path": "protocol/tests/ledger_setup.py",
+          "sha256": "e6f2d0b7467ad85d916288a405f0f6f6d656980ab744a3c4b1c66a5bdfd025b8"
+        },
+        {
+          "path": "protocol/tests/support.py",
+          "sha256": "65a57446d816ddd00e80cbd196e0c88420b5ffc35e8b25135288dbdfd842833b"
+        },
+        {
+          "path": "protocol/tests/test_abi.py",
+          "sha256": "6e4f4abfe92dfe309596865cb94a789f005491970a78a400c322a5da3f56d35d"
+        },
+        {
+          "path": "protocol/tests/test_adapter_hardening.py",
+          "sha256": "6a5ee7fc15e9e7d503ee3bed066e163533240e06b17ad6a383bf8f3934b6aa82"
+        },
+        {
+          "path": "protocol/tests/test_adapter_live.py",
+          "sha256": "2154fa2127e368dd460a1bea25f51a979be8f2620daaaa6cbbeafcdbdffd0bf4"
+        },
+        {
+          "path": "protocol/tests/test_adapter_process_live.py",
+          "sha256": "27118dfde94909fe3b20a97f2a2f950ccf0ab948c84f8f81843d86bc35b12487"
+        },
+        {
+          "path": "protocol/tests/test_adapter.py",
+          "sha256": "4f5bc6c43104fe4831a3a8d8af05a84504a1976c636580b331aecc6188b22d34"
+        },
+        {
+          "path": "protocol/tests/test_boundary_review.py",
+          "sha256": "f8ff972b6c10e272ecddd3227a5c5483cd324f17a3f1f0737f8a2d4c79c3a009"
+        },
+        {
+          "path": "protocol/tests/test_boundary_review_r5.py",
+          "sha256": "1d3d3611208602914fc87fcdc145b3068e333debd739f20965b46489f5bf7721"
+        },
+        {
+          "path": "protocol/tests/test_candidate_schema_review.py",
+          "sha256": "21cf645d196b04518bb0966fa6ef2cb12397e847132c4d5664502cb3dabe2ece"
+        },
+        {
+          "path": "protocol/tests/test_chain_hardening.py",
+          "sha256": "112322ad612e8f41e6a0e7dcc9f7d0448368a537933c78c7201aa7356a08bcd1"
+        },
+        {
+          "path": "protocol/tests/test_chain.py",
+          "sha256": "60c57620bc6b75bbce9ed41989f2b0deed1b26917b4e24a3dec52075e3fbebd7"
+        },
+        {
+          "path": "protocol/tests/test_chain_stub.py",
+          "sha256": "4f9f5d4a0ef62af2959bf28ebeb63c923c02d3eb8d7e312739e8271f5c4b9ea6"
+        },
+        {
+          "path": "protocol/tests/test_e2_repaired_e.py",
+          "sha256": "1d826da22b0857f3447a39068ca5a7dfe0fa338c9f1d20117d503d74d2e28c0a"
+        },
+        {
+          "path": "protocol/tests/test_edges.py",
+          "sha256": "9989ad4b2ea39cc9deaeae928bfc63173d0e149f1eb7519a52926589ea46930e"
+        },
+        {
+          "path": "protocol/tests/test_eip712_vs_agent1.py",
+          "sha256": "eb3679b7930bb29e80197f5f1dda01124d26e2b8823b1ec3ecfef12954e61437"
+        },
+        {
+          "path": "protocol/tests/test_exports.py",
+          "sha256": "ccc3e1bc883b56022a3d9d2acda42bbd450f2e8d3712dba056ae2c226dc1de97"
+        },
+        {
+          "path": "protocol/tests/test_fixture_isolation.py",
+          "sha256": "cafee79c8bf516d206d097b1968f1d3dc10beb9aee4c0fefe3f3c5867140fc98"
+        },
+        {
+          "path": "protocol/tests/test_flow_forward.py",
+          "sha256": "149c38227dc17caa5ef076a7ebab0c9e22d6cd5ccbc2fdf3de4dccf5bfd63f31"
+        },
+        {
+          "path": "protocol/tests/test_ledger.py",
+          "sha256": "ec81380c540b4778c893a26aa5a7fc6c1e9279237946410263c2283103d3eecf"
+        },
+        {
+          "path": "protocol/tests/test_messages_keys.py",
+          "sha256": "efc576188cc6273c4d36f2ce5f4c82ba8bbb8c2196315207239a2ddb08d897ca"
+        },
+        {
+          "path": "protocol/tests/test_symbolic.py",
+          "sha256": "e56b10a583081297b0cd3398a94b5fdaba7e5e2e1319c22065ddc6389943bfef"
+        },
+        {
+          "path": "protocol/tests/test_witness_hardening.py",
+          "sha256": "09a29799cb47634959002cd4e464f5667e5a0ef9b6efc8aa727b004ebd485517"
+        },
+        {
+          "path": "protocol/tests/test_witness_policy.py",
+          "sha256": "b98b21fef3c0ef4f2dd97a1e9aa21ce9600a9f73b9d8c0bff665a819c3509fee"
+        },
+        {
+          "path": "protocol/tests/test_witness.py",
+          "sha256": "358b77b6db3f3a44231323126e09065784c62eb8d9ac060c568a9fcc2a568226"
+        },
+        {
+          "path": "protocol/tests/test_worker_hardening.py",
+          "sha256": "773e1d4ab520f6e5183f98c1ad864684cbc06e04a20388aa5a58ea084cb77671"
+        },
+        {
+          "path": "protocol/tests/test_worker_log.py",
+          "sha256": "6a08aaac97b0e31d5dfd0a08f47d17395e7aae0f639eccb84171568c8615ce71"
+        },
+        {
+          "path": "protocol/tests/test_worker.py",
+          "sha256": "d9cf7e87ce4f6bcaf5d2c72602f8f816bbea6b0fb9d00f6553a58333a93059ea"
+        },
+        {
+          "path": "protocol/tools/crosscheck_schema.py",
+          "sha256": "39658670c517005d6a044decea7dcd25c757abcd03167460f3076b8f9c16221c"
+        },
+        {
+          "path": "protocol/tools/mutation_check.py",
+          "sha256": "76c589999855bafa24305f5b85675d96299efa0f26cb6d92d1dc5eb36a16be8d"
+        },
+        {
+          "path": "protocol/tools/validate_examples_with_agent3.py",
+          "sha256": "7e373c9da766be1aeac806da78ac6cd407dd71d9cb9837094fc4a45f2f7e4e1c"
+        }
+      ]
+    }
+  ],
+  "latestFileChangingRevisions": [
+    {
+      "ref": "origin/agent-1",
+      "deletedPaths": [],
+      "latestModuleChangeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+      "files": [
+        {
+          "path": "ledger/README.md",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "03e90c13904fbf9a7c7db62b6ab071ceabfae34885daebe5a9175d6895e08e9e"
+        },
+        {
+          "path": "ledger/evidence/ae1-mutation-smoke.json",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "a7cfb87677427ea5924c3833bd54fa3d68b575270702bb0e7477e93ad9669f69"
+        },
+        {
+          "path": "ledger/evidence/forge-test.txt",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "a58fba02b7a1b4f073ed86e1513fc0d143b4f9310f937d4ba6b97d29dd674257"
+        },
+        {
+          "path": "ledger/evidence/mutation-smoke.txt",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "7e709962d63f8301165c537689a4199f603220913b2172a33288b42d1fc0824f"
+        },
+        {
+          "path": "ledger/evidence/policy-first-run.txt",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "dc7aa4d0a58832ddd58ccfffe69c4a1e53bb138da503eaa01719019a5de0d29a"
+        },
+        {
+          "path": "ledger/evidence/source-manifest.sha256",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "5866921aa8ba4716a24afb4144123295f0e5f809296ed488a06bc84f07c277a9"
+        },
+        {
+          "path": "ledger/exports/abi/manifest.json",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "e75f1d71b59096857814f43f856153c81c2d9cf23d487f74f1936104f41c02f1"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-mutant-no-receipt-binding/dbc-stage.json",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "067b748108837b9993d47e1c0d5ea8d71ecc1ee11e40c5a9870b928aa7b0cd1d"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-mutant-no-receipt-binding/deployment.json",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "042373fd31fe6fb2dbd4fc10e047244ca41c16b137a9e364ad5cca07cc05fd4d"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-mutant-no-receipt-binding/pbc-stage.json",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "d104f6a4fe7e6976824bf4af55316a71d557a3db1a8c1ca0d48fc9ea81e3c7d4"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-mutant-no-receipt-binding/smoke-nonce-1/checkcreds.calldata",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "a4a12b1489a6c7d1928c9039202581495eb0f2f0c70553555fe007802c4c43fc"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-mutant-no-receipt-binding/smoke-nonce-1/grant.hex",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "e6da874d33ab1f2c8d8ef517d72aadec36b9f0fdbe28f761cd8300c4ea0835d2"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-mutant-no-receipt-binding/smoke-nonce-1/receipt.hex",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "214b5bb65fc0b090ef87c00269058fd7e8f5ae5d7fbb2584f246275a3d00b7df"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-mutant-no-receipt-binding/smoke-nonce-1/request.hex",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "2929adfb670e7935cbf1e06bf0fcd1d8a4fa2d02d5f10efc7a462f294d233b71"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-mutant-no-receipt-binding/smoke-nonce-1/summary.txt",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "9073d1eda2baf3c21da2cbce70560bdbe28677b9125f4e5f007c5f4dcdfc9a7b"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-minimal/dbc-stage.json",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "f200749a3d94ee7d841b3bd921ba1471487ab747858b1167df6d0bc31baf4a90"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-minimal/deployment.json",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "17ca05cc5c8417d85b4de2dc9e229756cdf48e2d9f674edff62c6ddc712595ba"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-minimal/pbc-stage.json",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "aa367993f5b490f592fe073aebe950d1249d1a5dcbfd947b9e23b276acca0bb8"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-minimal/smoke-nonce-1/checkcreds.calldata",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "35c27369ec999f67c3b27e85951b8a4f94f4a3d1ac0a7db997c9b13889f1b1fe"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-minimal/smoke-nonce-1/grant.hex",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "860a118324e25353595943cdb18bb2bceeb9cfef05dde8218bbf67d82ddcfa70"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-minimal/smoke-nonce-1/receipt.hex",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "c0c210d2649e52feac6e85428b22b5cd17d704eadf559ad1d95e15b372d1de34"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-minimal/smoke-nonce-1/request.hex",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "9d5d3928f4cf24b58c2c2372de756f9010a79b41426e189690166f85fa6cddcc"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-minimal/smoke-nonce-1/summary.txt",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "0deb72b759aea101374c80626c9a0b239710ed5c3e05890380b3d2d2461b7945"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-strict/dbc-stage.json",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "008db8740ccb5457234d617e011ffe7616eb054ffd114a7abc7a4fa1bd8a7b0b"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-strict/deployment.json",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "58ddba1012bc0e51409a798eaf02faf9503338b25bf5a1d27d20d84917a1a00d"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-strict/pbc-stage.json",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "d581d585790224d724f7e398981f987766fa92fb30897ed1388a78c5c4e40e05"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-strict/smoke-nonce-1/checkcreds.calldata",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "31d55140b16a5c609fc00c8e32b78ca7b0980193540f3a53d84384808f1dad2d"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-strict/smoke-nonce-1/grant.hex",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "19d5a99a5c84d325829f3f6fddc6155842fd8eda35a793a60041c25187d566af"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-strict/smoke-nonce-1/receipt.hex",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "2b96a99bb9e83df5db4dd2bc0437e61104fcab4e5dc4c77ddd9bbef05fea53de"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-strict/smoke-nonce-1/request.hex",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "830e39b32df109db7577b29abb20c9f451451ffa1da5ad215b9a0a3646b2c8c3"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-paper-strict/smoke-nonce-1/summary.txt",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "ff79d29264c484b62f975e6377349e1903f878c110f64da99b9d813d88e5ed26"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-repaired-e/dbc-stage.json",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "8a64ecb03c884ec6adae17e99ca079c95dd180b2d3cb2b69d9ea119f81dc0706"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-repaired-e/deployment.json",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "06a98761c0e5c746808f07bb284dc4dfa5f19fb1292d35f866e1fcd33b6abdaa"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-repaired-e/pbc-stage.json",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "0f2686466e0e440be1675ac6dfa87ae2c11806daf72f6a1d85da4f718ce9eab7"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-repaired-e/smoke-nonce-1/checkcreds.calldata",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "3c20e519f9fc1ac784484d3647ab80d41c19a6e0ec98356c0f79c3ea720929eb"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-repaired-e/smoke-nonce-1/grant.hex",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "088e5f840d99976a92dfa90127c3364f80d4582fabb83b05014fd3a18857cdb5"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-repaired-e/smoke-nonce-1/receipt.hex",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "47337790e7c0d8c926590b998039db87b031af367a73bd44fc87e8ac4a00673a"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-repaired-e/smoke-nonce-1/request.hex",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "09eb4bb0fa78a09601cad1ccbbc1795ea53e27a853e7a1c19fefe60d0cd42834"
+        },
+        {
+          "path": "ledger/exports/deployments/sample-repaired-e/smoke-nonce-1/summary.txt",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "7c9fd4b3543ae342fb38035aa4cbd746934b2da39b64a49aa05a027390f2cc9a"
+        },
+        {
+          "path": "ledger/src/ACSC.sol",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "b0ac86e7cf40d09ca2d4b984ee8e8314992cbdd98488b599289fdddc2ac7dc70"
+        },
+        {
+          "path": "ledger/test/Policy.t.sol",
+          "changeCommit": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+          "sha256": "80adfe8414b8b8051d1cda346d764ada7778c1cecb24995972f21197cf8383b5"
+        }
+      ]
+    },
+    {
+      "ref": "origin/agent-2",
+      "deletedPaths": [
+        {
+          "path": "protocol/evidence/crosscheck-agent3-boundary-c982d04.json",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "previousSha256": "5eeed30269c07ab490eba033f2d1d583028f85d2b6c6e7be7bd7c7498a61666c"
+        },
+        {
+          "path": "protocol/evidence/examples-vs-agent3-c982d04.json",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "previousSha256": "6d4423046d3eb600a9134f3ecf77181d90f89542bf37e70bd092cdad3264f3ab"
+        }
+      ],
+      "latestModuleChangeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+      "files": [
+        {
+          "path": "protocol/README.md",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "b2581db6d228e84228e36b025f04537562202e108c8727f62fc2cb99c20f42a9"
+        },
+        {
+          "path": "protocol/evidence/crosscheck-agent3-boundary-3e0300a.json",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "6f4268a9bfc8a4e9cbd617ae838cc68d74205bd73f98e2de502482f17f838535"
+        },
+        {
+          "path": "protocol/evidence/e2-repaired-e-observed.txt",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "35acc0ed9696a727ac027b98c2e30e2e46d71694ed7552190e57fae1dd870f99"
+        },
+        {
+          "path": "protocol/evidence/examples-vs-agent3-3e0300a.json",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "c8d8515d1968895b37223507fc0e2e76ed8d9080f1ef8449e7908a4016fa01ea"
+        },
+        {
+          "path": "protocol/evidence/independent-review-2026-10-08.md",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "29ed2cc7d548336a730a3c102780479031bb1851ecd7cdc55daace7cc898dfc9"
+        },
+        {
+          "path": "protocol/evidence/live-adapter-flow.json",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "bb4d03c914f947f236e85ba525e194dd26734fe428a08e28bf7ff5ddb8b869fe"
+        },
+        {
+          "path": "protocol/evidence/mutation-check.json",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "1cf4b05b3ffaf8bc8822c9b9f31a489454468c5c769078ba049b263cbe7b4dbe"
+        },
+        {
+          "path": "protocol/evidence/pytest-e0.txt",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "7087ea427667f8afd2e3a8b12498a9287942dff08ceced041df9631dec400812"
+        },
+        {
+          "path": "protocol/evidence/source-manifest.sha256",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "a352f339f3c874cbb5634efffd1478abbc0b098292ec1d7ba97d348d76b4cdac"
+        },
+        {
+          "path": "protocol/exports/adapter.json",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "83fc9b5dad66b9a9d448e1fe592b2e2164e67c327168280b290484c6be84814e"
+        },
+        {
+          "path": "protocol/exports/examples/attest_grant.json",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "a6df59407d21b3b7b9f071a9b23e5aa5b1fb01a11cf3454ea2e4ddd85be228f8"
+        },
+        {
+          "path": "protocol/exports/examples/collect_checkpoint.json",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "38571f0d383583a099284d3ef7a75d317c373bc6cb7d95b6bdf5eb4f6b8b61e6"
+        },
+        {
+          "path": "protocol/hmbc_protocol/adapter.py",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "7fa01a39909ee9b94555d5f3c616bc89488d649b4731993ef80e7f4235267ce0"
+        },
+        {
+          "path": "protocol/hmbc_protocol/export.py",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "b647cf4592e4aec2dc9eb6e4e15d9dccdca0a7aad05df8a8fb2de5af822efacf"
+        },
+        {
+          "path": "protocol/hmbc_protocol/wire.py",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "ee3e8d78326bba54db56f0ecd54025e1f88748ff60cf5a1b9ec31f504e504dbb"
+        },
+        {
+          "path": "protocol/hmbc_protocol/worker.py",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "b4062a3bccbd24ffd79b7d4f499b3c220bd8a93947a7ff8308ba1cff0bf605f8"
+        },
+        {
+          "path": "protocol/hmbc_protocol/worker_log.py",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "60dbcfc1282b22e22d2524db88b2e9160de69434abf87dc7450ad856fad0a99c"
+        },
+        {
+          "path": "protocol/tests/e2_support.py",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "214540e231cb0641891c820ca011bed8fba1ca00dcece3952eb3d210c23014a0"
+        },
+        {
+          "path": "protocol/tests/fixtures/boundary-cases-a3-3e0300a.json",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "fce967f87cce9b453ae23d7450bcb6a199f3c0f6ad5d933b378b8f90e5a42210"
+        },
+        {
+          "path": "protocol/tests/fixtures/e0-cases-a3-3e0300a.json",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "66b5c4f0cb9bdd3ae8bb4795ac9e9771890572c6e238d29516be6668a4218a0f"
+        },
+        {
+          "path": "protocol/tests/fixtures/hmbc-schema-candidate-a3-3e0300a.json",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "df44c418cdb9dba34f30678c2a777c1c52e074cb25de99dd44e3aeb7ac78f027"
+        },
+        {
+          "path": "protocol/tests/test_adapter_live.py",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "2154fa2127e368dd460a1bea25f51a979be8f2620daaaa6cbbeafcdbdffd0bf4"
+        },
+        {
+          "path": "protocol/tests/test_adapter_process_live.py",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "27118dfde94909fe3b20a97f2a2f950ccf0ab948c84f8f81843d86bc35b12487"
+        },
+        {
+          "path": "protocol/tests/test_boundary_review_r5.py",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "1d3d3611208602914fc87fcdc145b3068e333debd739f20965b46489f5bf7721"
+        },
+        {
+          "path": "protocol/tests/test_chain_hardening.py",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "112322ad612e8f41e6a0e7dcc9f7d0448368a537933c78c7201aa7356a08bcd1"
+        },
+        {
+          "path": "protocol/tests/test_e2_repaired_e.py",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "1d826da22b0857f3447a39068ca5a7dfe0fa338c9f1d20117d503d74d2e28c0a"
+        },
+        {
+          "path": "protocol/tests/test_exports.py",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "ccc3e1bc883b56022a3d9d2acda42bbd450f2e8d3712dba056ae2c226dc1de97"
+        },
+        {
+          "path": "protocol/tests/test_worker.py",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "d9cf7e87ce4f6bcaf5d2c72602f8f816bbea6b0fb9d00f6553a58333a93059ea"
+        },
+        {
+          "path": "protocol/tests/test_worker_hardening.py",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "773e1d4ab520f6e5183f98c1ad864684cbc06e04a20388aa5a58ea084cb77671"
+        },
+        {
+          "path": "protocol/tests/test_worker_log.py",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "6a08aaac97b0e31d5dfd0a08f47d17395e7aae0f639eccb84171568c8615ce71"
+        },
+        {
+          "path": "protocol/tools/mutation_check.py",
+          "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+          "sha256": "76c589999855bafa24305f5b85675d96299efa0f26cb6d92d1dc5eb36a16be8d"
+        }
+      ]
+    },
+    {
+      "ref": "origin/agent-3",
+      "latestChangeCommit": "b9db5cdace1940fffae40b5babe9267b81b6380d",
+      "files": [
+        {
+          "path": "communication/BOARD.md",
+          "changeCommit": "b9db5cdace1940fffae40b5babe9267b81b6380d",
+          "sha256": "f4976a2241ec2f6de5d847f77dd389a46f06caaa1b0a5736be1baeba232681c1"
+        },
+        {
+          "path": "communication/E0_ACCEPTANCE.md",
+          "changeCommit": "b9db5cdace1940fffae40b5babe9267b81b6380d",
+          "sha256": "ae4703c8c1127f61b66a38120bd8ada224a60dafb24edb0f38e05848414b0c74"
+        },
+        {
+          "path": "communication/agent-3/HANDOFF.md",
+          "changeCommit": "b9db5cdace1940fffae40b5babe9267b81b6380d",
+          "sha256": "caa38b7182740c3949c6b64f0d5e73593cdd852164f8f3e93831177a2a07be74"
+        },
+        {
+          "path": "communication/agent-3/STATUS.md",
+          "changeCommit": "b9db5cdace1940fffae40b5babe9267b81b6380d",
+          "sha256": "ee7534da5ce9eae942ceb534bfcc7fb99b556e16e888699208172e87b504c11c"
+        },
+        {
+          "path": "evaluation/evidence/e0/revision-5-a1-ack-20261008/protocol-advance.json",
+          "changeCommit": "b9db5cdace1940fffae40b5babe9267b81b6380d",
+          "sha256": "278e827504b997aebe99c56ab9c7842a044947838f3adec7a10d43658c5a33bb"
+        },
+        {
+          "path": "evaluation/evidence/e0/revision-5-a1-ack-20261008/protocol-advance.txt",
+          "changeCommit": "b9db5cdace1940fffae40b5babe9267b81b6380d",
+          "sha256": "55931f87f91ebbc38ecd96e19dfc3b2eb7db53f9ab18082ccaeaf7833b791644"
+        }
+      ]
+    }
+  ],
+  "tools": [
+    {
+      "name": "uv.lock",
+      "path": "/home/karma/Documents/RIS/uv.lock",
+      "sha256": "1fb4777a5d4078434af8e7fe4a88f2f3afbe1d8f65d30e8a182999d7a7a29cbe"
+    },
+    {
+      "name": "forge",
+      "path": "/home/karma/.local/share/hmbc-tools/foundry-1.8.5/forge",
+      "sha256": "06c477aee83d0996e57aa92b0841fdf06382cb172fd69bbb88920bb0054dfd7f"
+    },
+    {
+      "name": "anvil",
+      "path": "/home/karma/.local/share/hmbc-tools/foundry-1.8.5/anvil",
+      "sha256": "00f97668e1ae0fcca118fd7d2d1b6d25c0496447a523ca6bc2dfd10958c99604"
+    },
+    {
+      "name": "cast",
+      "path": "/home/karma/.local/share/hmbc-tools/foundry-1.8.5/cast",
+      "sha256": "1eb1eecfdadaad8da2173ccf0c7c0be86fe237b0a267042a40d7ca12d0fa2af7"
+    },
+    {
+      "name": "solc",
+      "path": "/home/karma/.local/share/svm/0.8.37/solc-0.8.37",
+      "sha256": "5de843c2c93563cc66425c99a4fb13fdbf32b4c4ae07469480faaf126e14404a"
+    }
+  ],
+  "adapterInterface": "candidate v1 revision 3 (NOT frozen)",
+  "adapterOperations": [
+    "prepare_request",
+    "collect_decision",
+    "collect_checkpoint",
+    "attest_grant",
+    "release",
+    "encrypt_record",
+    "finish_decryption",
+    "rotate_epoch"
+  ],
+  "missingRevision5Operations": [],
+  "phase": "E/E0; v1 revision5 NOT frozen; E1/F/G locked",
+  "assumptions": "Exact source hashes establish byte stability only; no peer owner claim substitutes for gate evidence. Synthetic fixture bytes unchanged.",
+  "limitations": "Static scan only. A2-0009 has new scoped ACK; no service READY or integrated result inferred. 48 schedules remain NOT_RUN."
+}

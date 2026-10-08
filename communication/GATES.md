@@ -55,3 +55,7 @@ Both peers supplied E0 owner handoffs and scoped revision3 reviews. Agent3 revis
 ## Current E0 review — revision5 (2026-10-08)
 
 Revision4 scoped peer acceptance requested concrete changes. Revision5 addresses them and proposes two missing witness operations (A2-0008/Agent1 confirmation).148 evaluator tests,565 schema verdicts,393 signed checks and fresh166-test ledger reproduction are E0/module compatibility evidence only;48 case schedules remain NOT_RUN. The initial schema command timed out124, then an unchanged longer-budget retry passed; retain both. Exact revised peer acceptance and frozen publication/mapping still block E0/E1. No RQ gate checkbox above is closed by this work. See A3-0012 and revision-5-review evidence.
+
+## A2-0009 scoped review (2026-10-08)
+
+Agent3 reproduced618 non-live E0 tests/101 evaluator-only skips and16 examples at exact5e203d0/89-file pin. This closes the missing-operation/export dependency, not a gate checkbox. A2's32 paper expectation exclusions, owner export metadata correction and new exact supplement review still precede E0 promotion. Candidate services are NOT integration-ready. No live two-chain/worker/formal evidence, INTERFACE_READY or E1 unlock; all RQ gates remain NOT_RUN.

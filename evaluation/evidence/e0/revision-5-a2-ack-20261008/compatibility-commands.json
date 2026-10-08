@@ -1,0 +1,75 @@
+[
+  {
+    "name": "protocol-archive",
+    "argv": [
+      "git",
+      "archive",
+      "5e203d0c0b26235c4618548a797d93201275a14d",
+      "protocol"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "environmentOverrides": {},
+    "startedAt": "2026-10-08T10:22:47.505248+00:00",
+    "endedAt": "2026-10-08T10:22:47.515075+00:00",
+    "exitCode": 0,
+    "stdoutSha256": "32cc886068948fea5717359f7d4d049b87287634451edf29ee2a850bb3356def",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "timeoutSeconds": 180,
+    "stdoutPath": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/a2-ack-20261008/protocol-archive.stdout",
+    "stderrPath": "/home/karma/Documents/RIS/evaluation/evidence/e0/revision-5-a2-ack-20261008/protocol-archive.stderr"
+  },
+  {
+    "name": "e0-wire-vector-export-tests",
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-m",
+      "pytest",
+      "tests/test_boundary_review_r5.py",
+      "tests/test_candidate_schema_review.py",
+      "tests/test_exports.py",
+      "tests/test_eip712_vs_agent1.py",
+      "-q",
+      "-c",
+      "pytest.ini",
+      "--rootdir",
+      ".",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "cwd": "/tmp/hmbc-agent3-a2-e0-5e203d0-qlvchwhn/protocol",
+    "environmentOverrides": {
+      "PYTHONPATH": "/tmp/hmbc-agent3-a2-e0-5e203d0-qlvchwhn/protocol",
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "startedAt": "2026-10-08T10:22:47.534126+00:00",
+    "endedAt": "2026-10-08T10:22:49.930457+00:00",
+    "exitCode": 0,
+    "stdoutSha256": "a55b53646332b7016a93ddc99052f7984172de97c6c96572606756c30e471065",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "timeoutSeconds": 180,
+    "stdoutPath": "/home/karma/Documents/RIS/evaluation/evidence/e0/revision-5-a2-ack-20261008/e0-wire-vector-export-tests.stdout",
+    "stderrPath": "/home/karma/Documents/RIS/evaluation/evidence/e0/revision-5-a2-ack-20261008/e0-wire-vector-export-tests.stderr"
+  },
+  {
+    "name": "export-regeneration",
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-m",
+      "hmbc_protocol.export",
+      "--check"
+    ],
+    "cwd": "/tmp/hmbc-agent3-a2-e0-5e203d0-qlvchwhn/protocol",
+    "environmentOverrides": {
+      "PYTHONPATH": "/tmp/hmbc-agent3-a2-e0-5e203d0-qlvchwhn/protocol",
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "startedAt": "2026-10-08T10:22:49.930580+00:00",
+    "endedAt": "2026-10-08T10:22:50.263046+00:00",
+    "exitCode": 0,
+    "stdoutSha256": "80106acd4e5ca0eb1630628f09b8348d358c9235aeea53e02b8d5d0c04065e10",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "timeoutSeconds": 180,
+    "stdoutPath": "/home/karma/Documents/RIS/evaluation/evidence/e0/revision-5-a2-ack-20261008/export-regeneration.stdout",
+    "stderrPath": "/home/karma/Documents/RIS/evaluation/evidence/e0/revision-5-a2-ack-20261008/export-regeneration.stderr"
+  }
+]

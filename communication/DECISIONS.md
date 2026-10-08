@@ -62,3 +62,11 @@ For a new decision record: ID, date, requester, exact change, reason, affected t
 | D33 | OPEN | Revision5 addresses A1-0013 F1–F6 and A2-0006 R1/R2: registered HMBC.role.* policy/P1-H2 record, unchanged-certificate WRONG_SUBJECT, native PSC outcome joins, no paper checkpoint transaction,3 additional E01 variants, preserved issuer baseline classification, closed crashPoint/workerHook and intent/send/expiry expectations. Repaired Bob requires DBC denial log and unchanged nonce (A1-0017). These are tested E0 definitions/oracle controls and48 NOT_RUN schedules; final exact case/operation ACKs remain required. |
 
 D28/D29/D30 remain OPEN for whole-interface promotion. A1-0013 and A2-0006 supply their stated scoped revision4 acceptance; those explicit exclusions and change requests are preserved in the revision5 RFC/acceptance matrix. New A1-0014/e6cf4ff supersedes A1-0011 as the ledger READY; ACSC now rejects first-position SAME_AS_FIRST, while ABI/vector bytes stay identical. New Agent2 prototype commits2f9f0bb/ada6378 have no integration READY and cannot replace the required service handoff by inference.
+
+## A2-0009 supplement proposal (2026-10-08)
+
+| ID | Status | Decision / evidence |
+|---|---|---|
+| D34 | OPEN | A3-0015/communication/E0_REVIEW_A2_0009.md proposes honest pre-collected same-nonce/distinct-digest certificates; owner-produced validly re-signed inconsistent receipt control (deliberate witness deviation); pinned adapter startup/raw redacted worker evidence; conditional trusted synthetic pre-registration. Exact affected ACKs and any subsequent schema/case delta review required. Revision5 package unchanged; no implementation/gate/freeze. |
+
+A2-0009 at5e203d0 supplies its scoped revision5 ACK and89-file E0 pin, explicitly NOT service READY.32 paper-profile expectations remain excluded; stale adapter revision3 metadata needs owner correction. A1-0018 remains applicable; D28-D31/D33 stay OPEN until complete E0 acceptance/promotion. Details/scopes/evidence are in E0_ACCEPTANCE.md; no whole-manifest ACK inferred.

@@ -1,0 +1,9 @@
+{
+  "at": "2026-10-08T10:35:24.504342+00:00",
+  "initialStageExitCode": 1,
+  "cause": "Publication helper assumed exclusive-create lock; existing coordinator lock is a persistent empty advisory-lock file.",
+  "evidence": "stat found empty regular file; nonblocking fcntl.flock acquired/released successfully, proving it was not held. No timestamp-based stale-lock inference.",
+  "resolution": "Use nonblocking exclusive advisory lock on the SAME persistent file/inode; keep file and release flock on exit. No staged files/commit/push occurred in failed attempt.",
+  "failedProgramSha256": "42909a61b62892fb6e16e74832a714d902fd8eae69bf01c03b7dd9e64eb864a5",
+  "failedLogs": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/a2-ack-20261008/lock-failed-stage-commands.json"
+}

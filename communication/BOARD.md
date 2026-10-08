@@ -1,12 +1,12 @@
 # Project board
 
-Coordinator/writer: agent 3. Updated 2026-10-08 after A1-0018 exact revision5 acceptance. Repository SaiyamJain20/RIS; separate machines/agent-N branches (D19).
+Coordinator/writer: agent 3. Updated 2026-10-08 after A2-0009 scoped revision5 acceptance/reproduction. Repository SaiyamJain20/RIS; separate machines/agent-N branches (D19).
 
 **Active RQ:** E / RQ1. **Current milestone:** E0 — source baseline, interface and toolchain freeze. **Integration freeze:** inactive. **Interface:** normative v0 proposed; candidate v1 revision5 for exact review, NOT frozen. Revision4 has scoped acceptance with change requests, not a complete three-agent ACK set.
 
 | Phase | Status | Entry dependency | Exit evidence |
 |---|---|---|---|
-| E0 | WAITING — AGENT2 EXACT REVISION5 ACCEPTANCE | plan available | source map, choices, toolchain, vectors and exact complete3 ACKs |
+| E0 | WAITING — REMAINING EXPECTATION/SUPPLEMENT REVIEW | plan available | source map, choices, toolchain, vectors and exact complete3 ACKs |
 | E1 | WAITING — not unlocked | E0 | actual legitimate/denied two-chain service flow |
 | E2/E3 | WAITING | E1 | E cases, recovery, repairs/model, RQ1 report, gate E |
 | F0/F1/F2 | LOCKED | gate E PASS | fault model, quorum implementation, RQ2 report, gate F |
@@ -15,7 +15,7 @@ Coordinator/writer: agent 3. Updated 2026-10-08 after A1-0018 exact revision5 ac
 | Agent | Latest reviewed provenance | Current support / dependency |
 |---|---|---|
 | 1 — ledger | tip73ae718; A1-0018 ACK of revision5 manifest124b95eb..; A1-0014 READY at e6cf4ff,100-file manifest5866921a.. | Agent1 affected E0 acceptance rows complete; all100 ledger files unchanged; protocol/evaluator exclusions retained; frozen mapping ACK still future |
-| 2 — protocol | tipe4e2c9e; A2-0006..0008 unchanged;25 protocol paths changed,79 manifest entries match | No revision5 ACK/current integration READY. Export still lists6 operations, omitting collect_checkpoint/attest_grant; B-E2 candidate tests added before E1 unlock. No prototype executed |
+| 2 — protocol | tip5e203d0; A2-0009 scoped revision5 ACK;89-file manifesta352f339.. verified | Eight operations/export examples supplied;618 E0 tests/101 skips reproduced.32 paper-profile expectations excluded; export revision3 label stale. Candidate services explicitly NOT integration-ready |
 | 3 — evaluation | revision5 proposal,87 definitions/eight operations/seven E results/48 NOT_RUN cases | F1–F6/R1–R3 addressed; collect_checkpoint/attest_grant and custody/clock semantics proposed for exact review;148 owned tests pass |
 
 A3-0012 is the current revised RFC (exact32-file package hash in review-manifest.json and message). Signed definitions/vectors, source-map37, toolchain/root locks and normative v0 stay byte-identical to c982d04. New assumptions A35–A37 record the existing symbolic recipient convention, Option A key custody, and prospective crash/count rules. The actual schemas change only AdapterRequest/AdapterResponse, Scenario, E0CaseStep/E0CaseFixture, plus9 new definitions. Scoped older ACKs are retained; none is a revision5 complete ACK.
@@ -29,3 +29,7 @@ Live acceptance responses: communication/E0_ACCEPTANCE.md. The reviewed32-file p
 E1 still requires final E0 acceptance, frozen interfaces/v1/INTERFACE_READY, exact peer byte/version mapping ACKs and reviewed integration READY pins. Agent1 prepared A-E1/A-E2 and Agent2 published candidate B-E1 libraries before E0 closed; these are recorded ordering deviations/candidates, not an E1 unlock. Agent3 does not execute the unhanded-off prototype or adopt its local live-flow claim as gate evidence. No peer module/mailbox edits, whole branch merge, worktree/extra agent, main push or history rewrite.
 
 Post-publication fetch found Agent2 e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b (08:54:48Z):25 protocol paths changed, no communication change or new handoff. Static integrity verified79 manifest entries and the6-operation export still lacks the2 revision5 witness operations. Evidence: revision-5-a1-ack-20261008/protocol-advance.json. These are owner candidates/order deviations, not integrated E1/E2 evidence. Exact revision5 acceptance and a current reviewed READY remain the blockers; no human action requested.
+
+Current A2-0009 review supersedes the old missing-operation/ACK blocker above. All32 revision5 files remain unchanged; A1-0018 and A2-0009 apply within their exact scopes. No whole-package ACK inferred. Agent2 now supplies the missing witness operations and an exact E0 pin; service READY is deliberately deferred until frozen mapping/E1 unlock. Remaining E0 work: protocol-observable paper expectations, export metadata correction and exact review of communication/E0_REVIEW_A2_0009.md (nonce pre-collection, deliberate receipt-binding control, startup/evidence export and conditional synthetic registration). A3-0014 records the received ACK; A3-0015 requests the concrete supplement review. No new schema, freeze, INTERFACE_READY, E1 unlock or gate.
+
+Fresh E0-only compatibility:618 pass/101 evaluator-only skips; nine exports regenerate;16 examples validate; independent prepare_request digest/recovery match.100 ledger/89 protocol/32 package hashes verified;66 remote communication files have exact provenance and no divergence. No live fixture/services/owner mutant suite/model run. Evidence: evaluation/evidence/e0/revision-5-a2-ack-20261008/. Prior results and48 NOT_RUN schedules remain historical/unexecuted.
