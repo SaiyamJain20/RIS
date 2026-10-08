@@ -1,0 +1,169 @@
+{
+  "reviewedAt": "2026-10-08T08:59:36.540473+00:00",
+  "command": {
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-c",
+      "import hashlib,json,subprocess\nh=lambda b:hashlib.sha256(b).hexdigest()\ndef g(*a):return subprocess.check_output(['git',*a])\npin='e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b';previous='ada637879632355ea66848f55f2801bd3397b061'\nassert g('rev-parse','origin/agent-2').decode().strip()==pin\nchanged=g('diff','--name-only',previous,pin).decode().splitlines()\ncommunication=g('diff','--name-only',previous,pin,'--','communication/').decode().splitlines();assert not communication\nmanifest=g('show',pin+':protocol/evidence/source-manifest.sha256')\nentries={}\nfor line in manifest.decode().splitlines():\n    digest,p=line.split('  ',1);entries[p]=digest\nmismatches=[p for p,d in entries.items() if h(g('show',pin+':'+p))!=d]\nassert not mismatches,mismatches\nexport=g('show',pin+':protocol/exports/adapter.json');adapter=json.loads(export)\nops=[o['name'] for o in adapter['operations']]\nassert 'collect_checkpoint' not in ops and 'attest_grant' not in ops\nrevisions={}\nfor p in changed:\n    revisions[p]={'changeCommit':g('log','-1','--format=%H',pin,'--',p).decode().strip(),'sha256':h(g('show',pin+':'+p))}\nprint(json.dumps({'capturedCommit':pin,'previousCommit':previous,'commit':g('show','-s','--format=%H %aI %s',pin).decode().strip(),'changedFiles':revisions,'changedCommunication':communication,'sourceManifestSha256':h(manifest),'manifestEntries':len(entries),'manifestMismatches':mismatches,'adapterExportSha256':h(export),'adapterInterfaceVersion':adapter['interfaceVersion'],'advertisedOperations':ops,'missingRevision5Operations':['collect_checkpoint','attest_grant'],'currentMailboxChange':g('log','-1','--format=%H %aI %s',pin,'--','communication/agent-2/STATUS.md','communication/agent-2/HANDOFF.md','communication/agent-2/outbox').decode().strip(),'execution':'NONE; read-only git inspection of unhanded-off candidate; no peer code executed','gateImpact':'No new ACK/READY; E0/E1 remain blocked; owner-added B-E2 tests prepared before E1 are ordering deviation/candidates, not integrated evidence'},indent=2))\n"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T08:59:36.175205+00:00",
+    "endedAt": "2026-10-08T08:59:36.540054+00:00",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 0.3648654529997657,
+    "outputSha256": "55931f87f91ebbc38ecd96e19dfc3b2eb7db53f9ab18082ccaeaf7833b791644"
+  },
+  "review": {
+    "capturedCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+    "previousCommit": "ada637879632355ea66848f55f2801bd3397b061",
+    "commit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b 2026-10-08T14:24:48+05:30 feat(protocol): act on independent review; add B-E2 repaired-e scenario tests",
+    "changedFiles": {
+      "protocol/evidence/source-manifest.sha256": {
+        "changeCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+        "sha256": "50c514fa1af5c002b1909373899b4101667011b132efccb84d2d8cfe5a5cf135"
+      },
+      "protocol/exports/adapter.json": {
+        "changeCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+        "sha256": "94bb774da69457aae1c8b4f33a6ee9caa05ad95cc957f2c4c99bed0e6c2a9eab"
+      },
+      "protocol/exports/examples/collect_decision.json": {
+        "changeCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+        "sha256": "524b2212dedda8880107b99a338d7e6e05d7264e1edd1f8ca44ed1342f8be581"
+      },
+      "protocol/exports/examples/encrypt_record.json": {
+        "changeCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+        "sha256": "669cbdae41ffdcfee1ec159dd19951778706bcc061dec822853c8fd91c7ce71b"
+      },
+      "protocol/exports/examples/finish_decryption.json": {
+        "changeCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+        "sha256": "30a786bbf3df49e8fde27cae4054ba6ee9e280e5947fce11a8fa601457bfc023"
+      },
+      "protocol/exports/examples/release.json": {
+        "changeCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+        "sha256": "2922ae41f9543a4340e452ae1e335c9ad654f50d16f73446651868a7802ee13c"
+      },
+      "protocol/hmbc_protocol/adapter.py": {
+        "changeCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+        "sha256": "750a95352238065a032bff18869b2eb4e7381da5e4d24fbf9930db21a165faa7"
+      },
+      "protocol/hmbc_protocol/chain.py": {
+        "changeCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+        "sha256": "fabe4bb109603a2621378e089b9b6d573a319415d32a191b6b7f923c3468fbd8"
+      },
+      "protocol/hmbc_protocol/client.py": {
+        "changeCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+        "sha256": "fd9531a799d21436f081a340bd3a78478728538adde8cf688a53e4ad8ab2478d"
+      },
+      "protocol/hmbc_protocol/eip712.py": {
+        "changeCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+        "sha256": "eb70dd51e82c1374f9629bb18b063b05835ca983101d5ebc47a327220b43d03c"
+      },
+      "protocol/hmbc_protocol/export.py": {
+        "changeCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+        "sha256": "ad2b078c3635582941125b8a78960a6021aac192303045b7303decc13e896c1d"
+      },
+      "protocol/hmbc_protocol/ledger.py": {
+        "changeCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+        "sha256": "127ed4c9a27d8044aecfa3c67952e1fb4893802bb3aed4962265a5721c403605"
+      },
+      "protocol/hmbc_protocol/witness.py": {
+        "changeCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+        "sha256": "8d552a4e31358b8df4aee46ecad1c4fe15a57689af7a6a41c16b036dd6e61298"
+      },
+      "protocol/hmbc_protocol/worker.py": {
+        "changeCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+        "sha256": "4000e256bca88d1cdc19631e113a363019a47d4fcd84db2c68b00fb3a876d354"
+      },
+      "protocol/tests/e2_support.py": {
+        "changeCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+        "sha256": "3a68305fbebbff5162d47e78cfe1b55f0507fdc8be93288307e24290cb38d447"
+      },
+      "protocol/tests/ledger_setup.py": {
+        "changeCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+        "sha256": "e6f2d0b7467ad85d916288a405f0f6f6d656980ab744a3c4b1c66a5bdfd025b8"
+      },
+      "protocol/tests/test_adapter_hardening.py": {
+        "changeCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+        "sha256": "6a5ee7fc15e9e7d503ee3bed066e163533240e06b17ad6a383bf8f3934b6aa82"
+      },
+      "protocol/tests/test_adapter_live.py": {
+        "changeCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+        "sha256": "2fb05c0b3de0146c912fc8bdf2e3b8f3e46e7a07e33631ede3092b8d844772aa"
+      },
+      "protocol/tests/test_adapter_process_live.py": {
+        "changeCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+        "sha256": "e1a9e3838e632e77d90902b0e9c4aca02d288ab099e54fee8b26b3ea9788914a"
+      },
+      "protocol/tests/test_chain_hardening.py": {
+        "changeCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+        "sha256": "e1edcb6aac8e7e21aba9891b1d21aa673e020c0e5e774fd938c2cd3df6c0cf53"
+      },
+      "protocol/tests/test_e2_repaired_e.py": {
+        "changeCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+        "sha256": "de58c6bae1daa75cf4cb8a4fdc62128e37699b57632a1d7959f263ae3587ff1d"
+      },
+      "protocol/tests/test_exports.py": {
+        "changeCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+        "sha256": "bc022e2b88c0acb6f148ce7493c7b048e4cd3619f0553f5a6fbb4e09d56dc54d"
+      },
+      "protocol/tests/test_witness_hardening.py": {
+        "changeCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+        "sha256": "09a29799cb47634959002cd4e464f5667e5a0ef9b6efc8aa727b004ebd485517"
+      },
+      "protocol/tests/test_worker.py": {
+        "changeCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+        "sha256": "6faf564bb9f2e9b27947f4342d8811f1f07af89b7d2612d60f7ce24f4800b896"
+      },
+      "protocol/tests/test_worker_hardening.py": {
+        "changeCommit": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+        "sha256": "6bbd2a75eac84f3a9ee513008df74de2ec7725ffda71f7cef70c696fe2e46c6a"
+      }
+    },
+    "changedCommunication": [],
+    "sourceManifestSha256": "50c514fa1af5c002b1909373899b4101667011b132efccb84d2d8cfe5a5cf135",
+    "manifestEntries": 79,
+    "manifestMismatches": [],
+    "adapterExportSha256": "94bb774da69457aae1c8b4f33a6ee9caa05ad95cc957f2c4c99bed0e6c2a9eab",
+    "adapterInterfaceVersion": "candidate v1 revision 3 (NOT frozen)",
+    "advertisedOperations": [
+      "prepare_request",
+      "collect_decision",
+      "release",
+      "encrypt_record",
+      "finish_decryption",
+      "rotate_epoch"
+    ],
+    "missingRevision5Operations": [
+      "collect_checkpoint",
+      "attest_grant"
+    ],
+    "currentMailboxChange": "f49790db43ce17dee650eb2a5f88c49fea5e27c0 2026-10-08T13:13:09+05:30 docs(agent-2): RFC A2-0008 witness checkpoint and receipt operations",
+    "execution": "NONE; read-only git inspection of unhanded-off candidate; no peer code executed",
+    "gateImpact": "No new ACK/READY; E0/E1 remain blocked; owner-added B-E2 tests prepared before E1 are ordering deviation/candidates, not integrated evidence"
+  },
+  "postPublicationFetch": {
+    "capturedAt": "2026-10-08T08:58:21.305135+00:00",
+    "fetch": {
+      "argv": [
+        "git",
+        "fetch",
+        "origin"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-10-08T08:58:17.272871+00:00",
+      "endedAt": "2026-10-08T08:58:21.296867+00:00",
+      "exitCode": 0,
+      "timedOut": false,
+      "elapsedSeconds": 4.0240113100007875,
+      "outputSha256": "ebde068d71dff58a60f0f8b9a38f859f14bdd1cee5445b19b071cef242d0b02f"
+    },
+    "refs": {
+      "origin/agent-1": "73ae718b917a787bbdee0c3802fe32e265b0d70d",
+      "origin/agent-2": "e4e2c9ead8571a2bf1fc932a917f2a6d7f0d461b",
+      "origin/agent-3": "42a3adfc6d8ba694bc2baf5d1f3a966626a54f13"
+    },
+    "unchanged": false,
+    "status": "## agent-3...origin/agent-3"
+  }
+}
