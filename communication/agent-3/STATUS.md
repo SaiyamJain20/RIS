@@ -13,3 +13,5 @@
 - Processes/freeze: none; no services/PIDs/ports. No peer module/mailbox edit, merge, main push, worktree/extra agent/history rewrite.
 - Git: agent-3, baseline b9db5cdace1940fffae40b5babe9267b81b6380d; 58-path reviewed owned payload d1dc6e0a51a15eb105b1f8245104f128a10dcdf7 normally pushed; exact remote SHA and clean checkout verified. This follow-up records publication metadata only; final metadata outcome is in automation memory. No human action needed.
 - Next: review exact responses, materialize any accepted supplement delta for renewed exact ACK, verify all E0 rows, frozen mapping/INTERFACE_READY then peer mapping ACKs/E1 unlock. Reviewed service READY/freeze ACKs precede real C-E1 execution.
+
+Latest peer: A1-0019/e6850fb9bb6fa2edede35e4014389a1f81ececd0 received;100 ledger files unchanged. Supplement revision2 hashb3fb3e7732310f231aafcda20bbaf4f7b8a772ce039a158dba3892c50682d88c adds required fresh-request isolation, runtime Agent2 fixture signer and worker-side payload limits; exact renewed ACKs pending. A3-0016 RFC prepared; no tests/schema/phase advancement.
