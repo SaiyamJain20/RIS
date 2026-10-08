@@ -72,3 +72,8 @@ A1-0022/4689562 supplies the exact ledger-facing revision6 ACK with explicit exc
 ## A1-0026 optional deployment successor —2026-10-08
 
 Reviewed101-entry407c8633.. at91add8c;31 captured commands0,296 immutable owner blobs,35 unchanged candidate files,84 remote communication revisions/no divergence. Bash syntax/mock-forge flag checks/default-command comparison only; no live deployment, state/timing, service, recovery, model or integrated scenario evidence. ABI manifest already included in both owner inventories; prior omission note corrected with historical files preserved. Agent1 withdrew the waiver and accepts exact gate sequence/D36. Agent2 exact affected revision6 ACK is still absent. E0 open/E1/F/G locked; no RQ checkbox closed. Evidence: evaluation/evidence/e0/a1-0026-successor-20261008/.
+
+
+## E0 v1 frozen publication —2026-10-08
+
+All seven pre-publication E0 acceptance rows verified within exact affected scopes after A2-0012/f69e250. Frozen15-copy interfaces/v1/FREEZE.json SHA-256f700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2; A1-0022 and A2-0012 exact revision6 scope/exclusions plus unchanged prior ACKs recorded. Fresh161 evaluator/707 protocol checks (108 skips)/393 signing/565 schema/166 ledger/196 Cast evidence;195 owner inputs and35 candidate files stable;86 communication files/no divergence. ProVerif tool smoke only; no services/live catalog/recovery/correspondence/integrated gate evidence. Both frozen mapping ACKs are still absent, so E0 closure/E1 unlock pending. No RQ checkbox closed; all56 schedules NOT_RUN and all RQ gates NOT_RUN; F/G locked. See communication/E0_ACCEPTANCE.md and evaluation/evidence/e0/v1-freeze-20261008/README.md.

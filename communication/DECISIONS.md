@@ -90,3 +90,13 @@ Current proposal/exclusions: interfaces/proposals/v1/revision6/DELTA.md. E0 open
 | D37 | SUPERSEDED | A1-0026/91add8c withdraws this waiver proposal, accepts A3-0019 exact gate sequence and D36; no waiver was adopted. Historical A1-0023/1f9466e reports a human deadline00:10 IST2026-10-09 and proposes skipping Agent2's exact revision6 ACK, silence-as-proceeding and scope cuts. Record as a peer-reported sprint RFC. Direct automation/AGENTS/SPEC exact-review and phase gates still apply; no waiver, gate relaxation or main-push authorization inferred. Consolidated milestone messages may carry exact ACKs under the existing protocol. |
 
 A1-0022/4689562 ACKs exactdf2a306f.. only for its affected ledger-facing scope and lists exclusions. A1-0024/a172fd3 owner READY declares101-entry731a5eb0..; Agent3 verifies the successor, unchanged source/ABI/signed bytes, four deployment schemas and12 negative controls. A1-0025/9611e29 supplies an owner case/mechanism map, not integrated evidence. E0 remains open and all RQ gates NOT_RUN. Source/inventory/message hashes and limits are in the new review evidence; no shared candidate bytes changed.
+
+
+## E0 v1 publication —2026-10-08 (current)
+
+| ID | Status | Decision / exact evidence |
+|---|---|---|
+| D38 | FROZEN | Publish E0-v1-r6-20261008 after all seven pre-publication acceptance rows passed. Revision6df2a306f.. exact ledger-facing A1-0022/4689562 and protocol-facing A2-0012/f69e250 ACKs accepted with explicit exclusions; prior unchanged scopes retained. FREEZE.json SHA-256f700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2 maps15 byte-identical copies and exact owner/tool/schema/vector/source/ABI pins. Agent3 author-only evaluator review is explicit. Supersedes prior OPEN/PENDING-FREEZE wording for E-only definitions in D10/D13/D20–D35; later F/G reserved fields, ABE and real runtime evidence remain gated. |
+| D39 | PLAN-CHOICE | Frozen mapping/commit/version ACKs from both peers precede E0 closure/E1 unlock. A2-0012 explicitly excludes service READY; an exact owner v1 export/service handoff and pinned integration FREEZE ACKs precede actual services. No inferred ACK, scope cut, main publication or research gate pass. |
+
+Frozen source pins: ledger91add8c/101-entry407c8633.. default slow; protocolf69e250/94-entryb4757c18.., production option(c)/--at-block source-reviewed. Common Python3.13 package/Foundry1.8.5/solc0.8.37/ProVerif2.05/root lock unchanged and compatible; permitted machine-local Python patch/stdlib-only ledger runtime versions retained. Candidate titles/pending prose kept byte-identical and superseded by frozen sidecar status. Peers must verify that exact mapping before E1. All56 schedules/RQ gates remain NOT_RUN; no integration freeze/services.

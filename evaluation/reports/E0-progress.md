@@ -1,5 +1,7 @@
 # Phase 1 / E0 progress — 2026-10-07
 
+**Current checkpoint2026-10-08: interfaces/v1 frozen bytes SHA-256f700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2; E0 publication complete, exact peer frozen mapping ACKs pending. E1/F/G locked; all56 schedules NOT_RUN; every RQ gate NOT_RUN. A2-0012 exact revision6 scope accepted; production successor source-reviewed. No services/integration freeze. Historical sections below retain their original evidence/status; this checkpoint supersedes their pending revision6 statements.**
+
 **Status: E0 PARTIAL, E1 NOT UNLOCKED, gate E NOT RUN.** **Current checkpoint: receipt/deployment candidate revision3; both peer branches present. Read the latest section below; earlier dated sections are historical.** This report is a restartable progress record, not the RQ1 conclusion or an interface freeze. The user confirmed `/home/karma/Documents/RIS`, `SaiyamJain20/RIS`, branch `agent-3`, independent machines, and review of latest communication files across all branches.
 
 ## Source and choices
@@ -102,3 +104,12 @@ A2 excludes32 paper expectations/internal evaluator structures and explicitly su
 ## Revision6 current review —2026-10-08
 
 A2-0010 supplies exact supplement response/export correction/paper expectation review; A1-0021/A2-0011 support option(c). D35/A38 binds paper symbolic responses to grant.gid's PBC-registered key while retaining native grant0 and30s grant-block expiry. Production still refuses paper grants; the owner subclass is a spike. Eight supplementary nonce/receipt/signature/positive controls and48 amended expectations are materialized as NOT_RUN in35-file manifestdf2a306fd77937572346cf5e91e9354536988af63ed660e14d51e04350161c62. Only two case definitions change; existing signed/wire bytes and old48 outcomes/counts/steps remain. Fresh161 evaluator tests,619 selected non-live protocol tests/101 skips,9 exports,393 signing checks and565 schema verdicts/0 mismatches under stable inputs. These are E0 preparation, not a completed RQ. Exact affected delta ACKs and future frozen mapping/owner readiness remain; E1/F/G locked. Evidence: evaluation/evidence/e0/revision-6-review-20261008/.
+
+
+## E0 v1 frozen publication —2026-10-08
+
+Current checkpoint2026-10-08: interfaces/v1 frozen bytes SHA-256f700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2; E0 publication complete, exact peer frozen mapping ACKs pending. E1/F/G locked; all56 schedules NOT_RUN; every RQ gate NOT_RUN. A2-0012 exact revision6 scope accepted; production successor source-reviewed. No services/integration freeze. Historical sections below retain their original evidence/status; this checkpoint supersedes their pending revision6 statements.
+
+A2-0012/f69e250 exact protocol-observable ACK/exclusions completes the missing materialized revision6 response; production option(c)/--at-block successor94-entryb4757c18.. reviewed. Agent1 ledger ACK and101-entry407c8633.. source pin retained. All seven pre-publication acceptance rows checked in communication/E0_ACCEPTANCE.md;15 frozen copies byte-identical to reviewed sources. A3-0021/A3-0022 publish FREEZE/INTERFACE_READY and request both exact peer mapping/commit/version ACKs before E1. Owner service READY and pinned integration FREEZE ACKs remain required before actual two-chain services.
+
+Fresh84 commands0;161 evaluator tests;707 protocol checks/108 skips;9 exports;393 signed checks;565 schema verdicts/0 mismatch;166 ledger tests;196 Cast checks; generator/prompts; ProVerif public/private-token smoke only.35 candidate/195 owner inputs stable,86 communication files/no divergence. evaluation/evidence/e0/v1-freeze-20261008/ records exact commands/hashes/versions/fixtures/limitations. No live catalog/service/recovery/mutation/correspondence/crypto/integrated RQ gate. Paper-derived reconstruction/synthetic fixtures/E symbolic mode. Author-only evaluator internals remain excluded from peer reviews. Historical candidate documents/pack/outboxes preserved. No peer edit/main push/history rewrite.

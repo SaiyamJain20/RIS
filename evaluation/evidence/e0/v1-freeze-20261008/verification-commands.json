@@ -1,0 +1,1293 @@
+[
+  {
+    "name": "branch-check",
+    "argv": [
+      "git",
+      "branch",
+      "--show-current"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.590932+00:00",
+    "endedAt": "2026-10-08T14:51:43.592565+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "8eb3f22e68936190e06c0ba0bd1a8ca4a12241569c0b315bec7fa35e76afc7d7",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "clean-check",
+    "argv": [
+      "git",
+      "status",
+      "--porcelain=v1"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.592718+00:00",
+    "endedAt": "2026-10-08T14:51:43.596277+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "ledger-manifest",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:ledger/evidence/source-manifest.sha256"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.598640+00:00",
+    "endedAt": "2026-10-08T14:51:43.600059+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "407c86331072bdad63562541230fdd3078608287eccb373cb2f974e3bde20fc1",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "ledger-archive",
+    "argv": [
+      "git",
+      "archive",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776",
+      "ledger"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.600413+00:00",
+    "endedAt": "2026-10-08T14:51:43.605571+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "2bab76167451ecb0d4acde7b5004003631d1ef5437f9e00be5102f689e29b653",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "protocol-manifest",
+    "argv": [
+      "git",
+      "show",
+      "f69e25027ff98a611774ad45924615eb2af37d89:protocol/evidence/source-manifest.sha256"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.623623+00:00",
+    "endedAt": "2026-10-08T14:51:43.625354+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "b4757c18887956e1da67b7b140c4674a2970d793e6684bcc8e17ec90db442f46",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "protocol-archive",
+    "argv": [
+      "git",
+      "archive",
+      "f69e25027ff98a611774ad45924615eb2af37d89",
+      "protocol"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.626190+00:00",
+    "endedAt": "2026-10-08T14:51:43.635796+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "604dff18847569aa2928054be3c6232ab713f7832ef3231e14f085b2c4acd909",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "protocol-diff",
+    "argv": [
+      "git",
+      "diff",
+      "a4dcade3dc3bf01e172a4a5ba30a40fc7ad97292",
+      "f69e25027ff98a611774ad45924615eb2af37d89",
+      "--",
+      "protocol"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.652400+00:00",
+    "endedAt": "2026-10-08T14:51:43.655304+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "5261ff8364b7595426e90b4dc36a94aa6b71f183f523245ba23aa8ad6738f82e",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0001-rfc-multi-machine-git-branches",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0001-rfc-multi-machine-git-branches.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.655688+00:00",
+    "endedAt": "2026-10-08T14:51:43.657394+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "683572aed85501ff035c9ecb652785139b99dfd2f4fcced5e6cf243a905dd1d5",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0002-review-e0-contract-source-permissions",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0002-review-e0-contract-source-permissions.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.657742+00:00",
+    "endedAt": "2026-10-08T14:51:43.659391+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "98bf8ee2296df0eb51f19b4ff65b3ce4ca83ac1a4b465b1573ea9710c9418452",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0003-rfc-v1-ledger-types-and-abi",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0003-rfc-v1-ledger-types-and-abi.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.659779+00:00",
+    "endedAt": "2026-10-08T14:51:43.661322+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "a8c9547f0c262185762b45b7aabf1afc13189c9762c75eecc4d06da031e598b5",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0004-ready-e0-ledger-toolchain-vectors-ae1-draft",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0004-ready-e0-ledger-toolchain-vectors-ae1-draft.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.661554+00:00",
+    "endedAt": "2026-10-08T14:51:43.663179+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "134d189067d8777c427b3d0d585638d4f097d69b63b6951d40133a28dced662c",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0005-rfc-e03-grant-receipt-mutants-clock-domain",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0005-rfc-e03-grant-receipt-mutants-clock-domain.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.663403+00:00",
+    "endedAt": "2026-10-08T14:51:43.665261+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "e8a049d57419d74ddd22ec7eb793caef260d4704fa53f0e1437cba52a8b51438",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0006-ready-ae2-prep-property-matrix-mutants",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0006-ready-ae2-prep-property-matrix-mutants.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.665570+00:00",
+    "endedAt": "2026-10-08T14:51:43.667732+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "9549d5dfc31914952e348c18fa7b663dc39a9dc0b3c9d52345f7f976223bb9ad",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0007-review-ack-a3-0002-candidate-v1",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0007-review-ack-a3-0002-candidate-v1.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.668046+00:00",
+    "endedAt": "2026-10-08T14:51:43.671352+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "7489f8ec3b5b196573bb1748ed43faa208802eb9048c384bd878e992d8f61e49",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0008-rfc-grant-receipt-revision-2",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0008-rfc-grant-receipt-revision-2.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.671664+00:00",
+    "endedAt": "2026-10-08T14:51:43.673921+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "c42d064ce31a6c482f26640e67d1c541e3681db7239b89147b10e6b2e35aefea",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0009-ack-candidate-v1-revision-2",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0009-ack-candidate-v1-revision-2.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.674364+00:00",
+    "endedAt": "2026-10-08T14:51:43.676833+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "6f6bf6282e3b23a95e26a2ffee76695a5c488eddd8089994872fe05cffb24521",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0010-ready-ledger-589a053-corrected-manifest",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0010-ready-ledger-589a053-corrected-manifest.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.677224+00:00",
+    "endedAt": "2026-10-08T14:51:43.679711+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "7b1152c73be93463c398afa0d952540f03b0c216e86c0cb84bf33e79f5e9d63b",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0011-ready-receipt-implemented-fresh-exports",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0011-ready-receipt-implemented-fresh-exports.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.680098+00:00",
+    "endedAt": "2026-10-08T14:51:43.682645+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "04fc74a6816a2e67ce57d134d667112d7b4e7ad80a9a775fa88653490c8848e8",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0012-ack-candidate-revision-3",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0012-ack-candidate-revision-3.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.683030+00:00",
+    "endedAt": "2026-10-08T14:51:43.685407+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "a9c52b9899d72ebe1b08a3f2d4c8d721e5d4efc1c33b2e6948814927b82575d5",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0013-review-candidate-revision-4",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0013-review-candidate-revision-4.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.685809+00:00",
+    "endedAt": "2026-10-08T14:51:43.687807+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "0282b898cd43d4fc2363d150471162cd559fec53d80fb2508c9be1e98bb4b0a5",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0014-ready-ledger-policy-alignment",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0014-ready-ledger-policy-alignment.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.688186+00:00",
+    "endedAt": "2026-10-08T14:51:43.690572+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "b6608033c0202cd758f26de7e7164ed4dbed68777914ccb7334dcb54250f9ae8",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0015-review-a2-0006-recipient-key-derivation",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0015-review-a2-0006-recipient-key-derivation.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.690996+00:00",
+    "endedAt": "2026-10-08T14:51:43.693449+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "089ad940c167144b761f16b18c22314dc351bdf82178dc7ab8c7a75b44d43521",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0016-review-a2-0008-witness-operations",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0016-review-a2-0008-witness-operations.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.693862+00:00",
+    "endedAt": "2026-10-08T14:51:43.696400+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "039ba9ac0e260c6e4c93f1e12ded118cd345004373641f0a1a613422809143aa",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0017-review-a2-witness-policy-result",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0017-review-a2-witness-policy-result.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.696838+00:00",
+    "endedAt": "2026-10-08T14:51:43.699175+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "83c5832ec96f7c4d0d8afe29f5a0e00fc2c9e5e4df20dac87f4638e2f7f2940f",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0018-ack-candidate-revision-5",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0018-ack-candidate-revision-5.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.699572+00:00",
+    "endedAt": "2026-10-08T14:51:43.701499+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "15c4d5687d1de9775f13129d15f2c0667460addbf2c35dfcbfb41cffbbb19d30",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0019-review-a3-0015-supplement-controls",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0019-review-a3-0015-supplement-controls.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.701813+00:00",
+    "endedAt": "2026-10-08T14:51:43.703017+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "499b4dcd6a3b631a6509ea23dd08271d6f41c62642fd2d3dff2f66b78ea9db12",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0020-ack-supplement-revision2",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0020-ack-supplement-revision2.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.703301+00:00",
+    "endedAt": "2026-10-08T14:51:43.704768+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "63ad3fbcac051d4f79a316535360e241e58cf808bcc33cabd05ec1c07687f9ba",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0021-review-a2-0010-paper-grant-recipient",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0021-review-a2-0010-paper-grant-recipient.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.705044+00:00",
+    "endedAt": "2026-10-08T14:51:43.706628+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "b11b47bbc0663aa62ab585950f8927424ce663a2c668db4dde599ba23755ef46",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0022-ack-candidate-revision-6",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0022-ack-candidate-revision-6.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.706922+00:00",
+    "endedAt": "2026-10-08T14:51:43.708631+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "fb2b55a020b66b2af7e462f546d9389182242c59744690b3d0475689483e8d3f",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0023-rfc-phase-e-sprint-plan",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0023-rfc-phase-e-sprint-plan.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.709034+00:00",
+    "endedAt": "2026-10-08T14:51:43.711254+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "e7fb5e202c2a5b1e963713e367b7978689f18b5866dc887b85817d26ef3cdfd5",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0024-ready-ledger-v1-exports",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0024-ready-ledger-v1-exports.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.711772+00:00",
+    "endedAt": "2026-10-08T14:51:43.713844+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "a491537847c2536f9022f256c2ebc820ff87eb78de3ec9b8c2bcf0696f2ca444",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0025-review-e-case-ledger-map",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0025-review-e-case-ledger-map.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.714341+00:00",
+    "endedAt": "2026-10-08T14:51:43.716829+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "22f0943b7f1f7c02ccd54bca75a5be07cec9285902a5bf13838680da0d068380",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-0026-ready-ledger-fast-deploy-successor",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/0026-ready-ledger-fast-deploy-successor.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.717347+00:00",
+    "endedAt": "2026-10-08T14:51:43.719551+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "7aa219f0d3f7daaf03ebed19270caf9a476db81d5479a713f98409abb9874c53",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-1-README",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-1/outbox/README.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.719964+00:00",
+    "endedAt": "2026-10-08T14:51:43.722388+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "11713531d666e6be3a27f0d7a8f3f2440875d2dc70dd1d9e79d9b97d6e5c2fc9",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-2-0001-ack-distributed-startup",
+    "argv": [
+      "git",
+      "show",
+      "f69e25027ff98a611774ad45924615eb2af37d89:communication/agent-2/outbox/0001-ack-distributed-startup.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.722804+00:00",
+    "endedAt": "2026-10-08T14:51:43.725158+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "d5e10fbd1d46260e55f576715b5daec85de6ba19fc2aa68b816e8713dca784d0",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-2-0002-review-e0-source-flow-bundle-vectors",
+    "argv": [
+      "git",
+      "show",
+      "f69e25027ff98a611774ad45924615eb2af37d89:communication/agent-2/outbox/0002-review-e0-source-flow-bundle-vectors.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.725579+00:00",
+    "endedAt": "2026-10-08T14:51:43.727876+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "08a7362de7d5d23891d4223c4e8ffd29b1090de6cf91037b1ddb37e2e648fe3a",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-2-0003-ready-e0-vectors-schema-review-adapter",
+    "argv": [
+      "git",
+      "show",
+      "f69e25027ff98a611774ad45924615eb2af37d89:communication/agent-2/outbox/0003-ready-e0-vectors-schema-review-adapter.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.728393+00:00",
+    "endedAt": "2026-10-08T14:51:43.730537+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "f23f0463b4b71e62be8b1a1953f723e7d16e21e155a8b19667267c1030189bc2",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-2-0004-ready-ledger-live-reproduction",
+    "argv": [
+      "git",
+      "show",
+      "f69e25027ff98a611774ad45924615eb2af37d89:communication/agent-2/outbox/0004-ready-ledger-live-reproduction.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.730963+00:00",
+    "endedAt": "2026-10-08T14:51:43.733152+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "eac74c89a13a7eb31016392152aef71a7e6d42225452dbb7615e17beab7bf4c8",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-2-0005-ack-candidate-revision-3-scoped",
+    "argv": [
+      "git",
+      "show",
+      "f69e25027ff98a611774ad45924615eb2af37d89:communication/agent-2/outbox/0005-ack-candidate-revision-3-scoped.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.733621+00:00",
+    "endedAt": "2026-10-08T14:51:43.735915+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "e4c942615b6bfbf748356323aa5bfc04aee6bfe207661e2031711ce73e8a525c",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-2-0006-ack-candidate-revision-4-scoped",
+    "argv": [
+      "git",
+      "show",
+      "f69e25027ff98a611774ad45924615eb2af37d89:communication/agent-2/outbox/0006-ack-candidate-revision-4-scoped.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.736375+00:00",
+    "endedAt": "2026-10-08T14:51:43.738453+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "362ff11fa7163bf7fcdbefe99a8d7be63cb9beef99d4e5e66a23c31ffa98d32d",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-2-0007-ack-recipient-key-derivation",
+    "argv": [
+      "git",
+      "show",
+      "f69e25027ff98a611774ad45924615eb2af37d89:communication/agent-2/outbox/0007-ack-recipient-key-derivation.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.738885+00:00",
+    "endedAt": "2026-10-08T14:51:43.741060+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "57b7baa1a28f9d0b5b7d5c61e53587e0076ab54992961ed013598046ff6f5ca9",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-2-0008-rfc-witness-checkpoint-and-receipt-operations",
+    "argv": [
+      "git",
+      "show",
+      "f69e25027ff98a611774ad45924615eb2af37d89:communication/agent-2/outbox/0008-rfc-witness-checkpoint-and-receipt-operations.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.741553+00:00",
+    "endedAt": "2026-10-08T14:51:43.743758+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "b51bb25b6214220cd0021b8f657d83bdc4e2ff3e30554e3ae7ec340d3ca6dbda",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-2-0009-ready-e0-revision5-scoped-ack-and-candidate-b-e1",
+    "argv": [
+      "git",
+      "show",
+      "f69e25027ff98a611774ad45924615eb2af37d89:communication/agent-2/outbox/0009-ready-e0-revision5-scoped-ack-and-candidate-b-e1.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.744179+00:00",
+    "endedAt": "2026-10-08T14:51:43.747344+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "139c3edcab713d2cdf7ae314f3af104d18a7d516532b188a3a2f0087e4d3ae23",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-2-0010-ack-supplement-revision2-paper-review-and-tool",
+    "argv": [
+      "git",
+      "show",
+      "f69e25027ff98a611774ad45924615eb2af37d89:communication/agent-2/outbox/0010-ack-supplement-revision2-paper-review-and-tool.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.747783+00:00",
+    "endedAt": "2026-10-08T14:51:43.751219+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "f4294691ba8fec1313b226b5685c4b437089cdb6ee45754309e05c677b67cf75",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-2-0011-review-x1-option-c-spike",
+    "argv": [
+      "git",
+      "show",
+      "f69e25027ff98a611774ad45924615eb2af37d89:communication/agent-2/outbox/0011-review-x1-option-c-spike.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.751687+00:00",
+    "endedAt": "2026-10-08T14:51:43.754056+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "5abfc710f09ac1061393f8a95fe2acfc1f9c7bfe044a8632d6b16a0a292cf417",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-2-0012-ready-revision6-ack-option-c-and-start-contract",
+    "argv": [
+      "git",
+      "show",
+      "f69e25027ff98a611774ad45924615eb2af37d89:communication/agent-2/outbox/0012-ready-revision6-ack-option-c-and-start-contract.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.754527+00:00",
+    "endedAt": "2026-10-08T14:51:43.756938+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "4a530a8e0018daf30a705338c36e8260a3aa94bb20581581e85fe7b30c039474",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-2-README",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-2/outbox/README.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.757459+00:00",
+    "endedAt": "2026-10-08T14:51:43.760781+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "09da0a106a321157d8e45b5e9b0739cee566a3cb20e0917dbb2d1de0c93fd1f2",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-3-0001-ack-distributed-startup",
+    "argv": [
+      "git",
+      "show",
+      "e504e6dcd65100a393de765895dc207995077720:communication/agent-3/outbox/0001-ack-distributed-startup.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.761279+00:00",
+    "endedAt": "2026-10-08T14:51:43.763993+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "811985266f1e79736b3d063c1e597e9d9eeee12aa038fee1a1ef11b0c0010ffa",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-3-0002-rfc-e0-semantics-toolchain-receipt",
+    "argv": [
+      "git",
+      "show",
+      "e504e6dcd65100a393de765895dc207995077720:communication/agent-3/outbox/0002-rfc-e0-semantics-toolchain-receipt.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.764712+00:00",
+    "endedAt": "2026-10-08T14:51:43.767882+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "fcc22f394cdbe1492be2d01bafda161b2f0ecf80a3be92740b7e6c031ae5c9db",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-3-0003-ready-e0-candidates-pinned-ledger-review",
+    "argv": [
+      "git",
+      "show",
+      "e504e6dcd65100a393de765895dc207995077720:communication/agent-3/outbox/0003-ready-e0-candidates-pinned-ledger-review.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.768561+00:00",
+    "endedAt": "2026-10-08T14:51:43.771068+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "7a59b7b20ef2c741c31d3b5ca2edf76336f496dcdf34d802ba84530a58288cfd",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-3-0004-ready-checkpoint-publication",
+    "argv": [
+      "git",
+      "show",
+      "e504e6dcd65100a393de765895dc207995077720:communication/agent-3/outbox/0004-ready-checkpoint-publication.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.771645+00:00",
+    "endedAt": "2026-10-08T14:51:43.774261+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "63dec733c1b3f41a1623790fb1d2c5825adc0c89cc2456f1792085a1c1d4ee29",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-3-0005-ack-a1-0008-receipt-revision-2",
+    "argv": [
+      "git",
+      "show",
+      "e504e6dcd65100a393de765895dc207995077720:communication/agent-3/outbox/0005-ack-a1-0008-receipt-revision-2.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.774852+00:00",
+    "endedAt": "2026-10-08T14:51:43.777229+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "74e0b23c80c893f849c0f4176df67e388f7e7df09ef8a13e9fe9888c7ed2ff55",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-3-0006-ready-candidate-revision-2-review-fixes",
+    "argv": [
+      "git",
+      "show",
+      "e504e6dcd65100a393de765895dc207995077720:communication/agent-3/outbox/0006-ready-candidate-revision-2-review-fixes.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.777795+00:00",
+    "endedAt": "2026-10-08T14:51:43.781237+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "f8065f1f76c2cc56e57a1d0e26ad9426b88ace23f588fd1923cdcc617084efe7",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-3-0007-review-a1-0010-pinned-verification",
+    "argv": [
+      "git",
+      "show",
+      "e504e6dcd65100a393de765895dc207995077720:communication/agent-3/outbox/0007-review-a1-0010-pinned-verification.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.781820+00:00",
+    "endedAt": "2026-10-08T14:51:43.784097+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "934623f1cf465ea011a02348ea3c46840159ce9bcb4dc261b3513083190e21e0",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-3-0008-ack-a2-review-a1-receipt-ready",
+    "argv": [
+      "git",
+      "show",
+      "e504e6dcd65100a393de765895dc207995077720:communication/agent-3/outbox/0008-ack-a2-review-a1-receipt-ready.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.784602+00:00",
+    "endedAt": "2026-10-08T14:51:43.786990+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "2e9cdf750112c24a7377187a8a78920b0a8b53320662bcad4594c621b5ecc6b8",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-3-0009-rfc-candidate-revision-3-receipt-deployment",
+    "argv": [
+      "git",
+      "show",
+      "e504e6dcd65100a393de765895dc207995077720:communication/agent-3/outbox/0009-rfc-candidate-revision-3-receipt-deployment.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.787614+00:00",
+    "endedAt": "2026-10-08T14:51:43.789953+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "67c890385784988502c7382a0b9d1bcb2645cd6a68ff3b72089fdaf8298099e6",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-3-0010-ack-peer-revision-3-and-protocol-ready",
+    "argv": [
+      "git",
+      "show",
+      "e504e6dcd65100a393de765895dc207995077720:communication/agent-3/outbox/0010-ack-peer-revision-3-and-protocol-ready.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.790397+00:00",
+    "endedAt": "2026-10-08T14:51:43.792373+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "6ab932187e1b459c1f24a18e74a6e2cd0790cdfc1da35c235a07a79be8baf22d",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-3-0011-rfc-e0-boundary-revision-4",
+    "argv": [
+      "git",
+      "show",
+      "e504e6dcd65100a393de765895dc207995077720:communication/agent-3/outbox/0011-rfc-e0-boundary-revision-4.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.792832+00:00",
+    "endedAt": "2026-10-08T14:51:43.794772+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "6537852f3c375de51764b8c9303b776bf4e96cd38fc0c297fc50cfc92559433e",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-3-0012-rfc-revision-5-witness-operations-and-peer-fixes",
+    "argv": [
+      "git",
+      "show",
+      "e504e6dcd65100a393de765895dc207995077720:communication/agent-3/outbox/0012-rfc-revision-5-witness-operations-and-peer-fixes.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.795248+00:00",
+    "endedAt": "2026-10-08T14:51:43.797526+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "4d15da6a2e9eee0c576d4513c9c711a40a6e798b1e8630c9e2cab1f137d70fb8",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-3-0013-ack-a1-revision5-acceptance",
+    "argv": [
+      "git",
+      "show",
+      "e504e6dcd65100a393de765895dc207995077720:communication/agent-3/outbox/0013-ack-a1-revision5-acceptance.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.798132+00:00",
+    "endedAt": "2026-10-08T14:51:43.800280+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "66c65fc7287be47d64ee86048f9837b28deed653b0bf48b1e1bb8b6e8268a63c",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-3-0014-ack-a2-revision5-scoped-acceptance",
+    "argv": [
+      "git",
+      "show",
+      "e504e6dcd65100a393de765895dc207995077720:communication/agent-3/outbox/0014-ack-a2-revision5-scoped-acceptance.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.800775+00:00",
+    "endedAt": "2026-10-08T14:51:43.803128+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "36f8ecdd3d3973ab84fc9e0ade7753c0c39178e1a77e5098bda5405decbaf33c",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-3-0015-rfc-e0-a2-review-supplement",
+    "argv": [
+      "git",
+      "show",
+      "e504e6dcd65100a393de765895dc207995077720:communication/agent-3/outbox/0015-rfc-e0-a2-review-supplement.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.803712+00:00",
+    "endedAt": "2026-10-08T14:51:43.806021+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "b1c7c1057fd415f6123b2019fc4cbeac68f357514f6120fee06efbaae9c4e593",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-3-0016-rfc-e0-supplement-revision2",
+    "argv": [
+      "git",
+      "show",
+      "e504e6dcd65100a393de765895dc207995077720:communication/agent-3/outbox/0016-rfc-e0-supplement-revision2.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.806585+00:00",
+    "endedAt": "2026-10-08T14:51:43.808688+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "3f87cd8fba08d228978b7350250640c89e5c1c4b73b3f81591dd198f9d581337",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-3-0017-ack-a1-supplement-revision2",
+    "argv": [
+      "git",
+      "show",
+      "e504e6dcd65100a393de765895dc207995077720:communication/agent-3/outbox/0017-ack-a1-supplement-revision2.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.809178+00:00",
+    "endedAt": "2026-10-08T14:51:43.812445+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "478dd0ba292c6c9f9c6db9c9f650183378f07a31badf02fc123df19d3dfcf190",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-3-0018-rfc-e0-revision6-paper-recipient-supplement",
+    "argv": [
+      "git",
+      "show",
+      "e504e6dcd65100a393de765895dc207995077720:communication/agent-3/outbox/0018-rfc-e0-revision6-paper-recipient-supplement.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.812996+00:00",
+    "endedAt": "2026-10-08T14:51:43.815460+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "8c462874e4e06835d79384ee4a1305b633a5c450167451b232dc2161e7f57a2c",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-3-0019-blocked-revision6-agent2-ack-sprint",
+    "argv": [
+      "git",
+      "show",
+      "e504e6dcd65100a393de765895dc207995077720:communication/agent-3/outbox/0019-blocked-revision6-agent2-ack-sprint.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.816046+00:00",
+    "endedAt": "2026-10-08T14:51:43.818355+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "6d9752b9ef0aea5cee70dbb013c79c43d48f2d83be524fdfba07e2cde0d51fd7",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-3-0020-ack-a1-0026-successor-inventory-correction",
+    "argv": [
+      "git",
+      "show",
+      "e504e6dcd65100a393de765895dc207995077720:communication/agent-3/outbox/0020-ack-a1-0026-successor-inventory-correction.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.818975+00:00",
+    "endedAt": "2026-10-08T14:51:43.821227+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "d9b19410a01f7267a93e6cbfd733d68775e1ea826bfe40faf446038ef0ad41f0",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "message-agent-3-README",
+    "argv": [
+      "git",
+      "show",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776:communication/agent-3/outbox/README.md"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:43.821818+00:00",
+    "endedAt": "2026-10-08T14:51:43.823976+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "2999edc87291ecc0164dd98d992c62ab336910aa40141b741bfaefcbcf8932f6",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "git-version",
+    "argv": [
+      "git",
+      "--version"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:44.049035+00:00",
+    "endedAt": "2026-10-08T14:51:44.050633+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "fff575d3fa43a92d932e4eb8bc03394140ce40699f9c8a97c3126016a244dfb8",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "python-version",
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "--version"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:44.051139+00:00",
+    "endedAt": "2026-10-08T14:51:44.052630+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "6b64edf0fc8f22e798fb64873acba6b4106df290f0bf458b507e8cb409b63e49",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "forge-version",
+    "argv": [
+      "/home/karma/.local/share/hmbc-tools/foundry-1.8.5/forge",
+      "--version"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:44.064580+00:00",
+    "endedAt": "2026-10-08T14:51:44.069956+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "3ecb821e24278b54261fe72dd6d92425cd8d0cc9539de26c9acffdc63789e3f2",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "solc-version",
+    "argv": [
+      "/home/karma/.local/share/svm/0.8.37/solc-0.8.37",
+      "--version"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:44.070510+00:00",
+    "endedAt": "2026-10-08T14:51:44.072486+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "eceb819b86658915a2116dcfc40e48d484833d74a64a8f40811611c24e615c02",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "owned-tests",
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-m",
+      "pytest",
+      "evaluation/tests",
+      "-q",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:51:44.072945+00:00",
+    "endedAt": "2026-10-08T14:52:26.652927+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "5bff46f6671139a18c1ba145213a8e49bf45ee7d7123c7e55e34db3b175579de",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "peer-nonlive-tests",
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-m",
+      "pytest",
+      "-c",
+      "pytest.ini",
+      "--rootdir",
+      ".",
+      "tests/test_boundary_review_r5.py",
+      "tests/test_candidate_schema_review.py",
+      "tests/test_exports.py",
+      "tests/test_eip712_vs_agent1.py",
+      "tests/test_symbolic.py",
+      "tests/test_adapter.py",
+      "tests/test_adapter_hardening.py",
+      "tests/test_messages_keys.py",
+      "-q",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T144827Z/protocol-snapshot/protocol",
+    "startedAt": "2026-10-08T14:52:26.653469+00:00",
+    "endedAt": "2026-10-08T14:52:30.122898+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "5f1847ec07403fa7851a948df176fbe34b9b24889a83824089cb18736f2d644b",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "peer-exports",
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-m",
+      "hmbc_protocol.export",
+      "--check"
+    ],
+    "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T144827Z/protocol-snapshot/protocol",
+    "startedAt": "2026-10-08T14:52:30.123493+00:00",
+    "endedAt": "2026-10-08T14:52:30.456801+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "80106acd4e5ca0eb1630628f09b8348d358c9235aeea53e02b8d5d0c04065e10",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "vectors",
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-m",
+      "evaluation.vectors",
+      "interfaces/vectors/eip712-agent1-candidate.json",
+      "--output",
+      "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T144827Z/vectors.json"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:52:30.457271+00:00",
+    "endedAt": "2026-10-08T14:52:31.119794+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "9ae9972b0a8640743fdef9636548d31cb2cb43b5246dad59acc812d45fe13178",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "schema-cases",
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-m",
+      "evaluation.check_schema_vectors",
+      "interfaces/vectors/schema-candidate.json",
+      "interfaces/vectors/boundary-candidate.json",
+      "--output",
+      "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T144827Z/schema-results.json"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:52:31.120326+00:00",
+    "endedAt": "2026-10-08T14:53:36.203147+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "d0327961d5e977bec3933ecf0c5f5af594805048d8b026569778760cbbe9776e",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "generator",
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "interfaces/proposals/build_boundary_vectors.py",
+      "--check"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:53:36.203657+00:00",
+    "endedAt": "2026-10-08T14:53:36.349313+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "cdfbe5b4de3ce65fe59a1884126a4577fb7fa5eea123f80e774011341f98ddcb",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "prompts",
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "communication/build_prompts.py",
+      "--check"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:53:36.349746+00:00",
+    "endedAt": "2026-10-08T14:53:36.375095+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "8f29a69f6b3463b624687ea89c034e86c0217602a093168e78b810d5ef4ac781",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "ledger-tests",
+    "argv": [
+      "/home/karma/.local/share/hmbc-tools/foundry-1.8.5/forge",
+      "test",
+      "--offline",
+      "--root",
+      "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T144827Z/ledger-snapshot/ledger"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:53:36.375719+00:00",
+    "endedAt": "2026-10-08T14:53:47.952292+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "ffcd522846d4b9ecbdf15dbaff830a0c761e7ab46c20c4e295595906685b9754",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "cast-vectors",
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-I",
+      "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T144827Z/ledger-snapshot/ledger/tools/crosscheck_cast.py"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:53:47.952799+00:00",
+    "endedAt": "2026-10-08T14:53:48.272510+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "b88c8ab563f2b9781fef65d0715d11929051eda38c2309e169878ce37a12605e",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "proverif-smoke",
+    "argv": [
+      "/home/karma/.local/share/hmbc-tools/proverif-2.05/proverif",
+      "/home/karma/Documents/RIS/evaluation/models/e0/smoke.pv"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:53:48.273301+00:00",
+    "endedAt": "2026-10-08T14:53:48.278230+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "14d76c0503eb1c8fc62b62ee666c5f4b2cd55ddbbafe14de8d02cf2ed070aad3",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "post-fetch",
+    "argv": [
+      "git",
+      "fetch",
+      "origin"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:53:48.288629+00:00",
+    "endedAt": "2026-10-08T14:53:52.060349+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "post-scan",
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-m",
+      "evaluation.peers",
+      "--output",
+      "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T144827Z/post-test-peer-communication.json"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T14:53:52.061239+00:00",
+    "endedAt": "2026-10-08T14:53:53.006193+00:00",
+    "exitCode": 0,
+    "expectedExit": 0,
+    "stdoutSha256": "d27874fda6f708a558492f2c2a2fc5100aef733cafac0a5b42882118360821f2",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

@@ -1,6 +1,6 @@
 # Agent 3 evaluation — E0 candidate foundation
 
-This is a **paper-derived HMBC2020 reconstruction**. E0 remains open; no E/F/G gate has passed. Agent 1's exact READY handoff has been reproduced locally; Agent 2's E0 public adapter and scoped review are available and independently reproduced; final E0 boundary acceptance remains pending.
+This is a **paper-derived HMBC2020 reconstruction**. E0 v1 bytes are frozen after exact affected reviews and compatibility checks; both peer frozen mapping ACKs still precede E0 closure/E1 unlock. No E/F/G gate has passed. See interfaces/v1/FREEZE.json and communication/E0_ACCEPTANCE.md.
 
 Implemented owned preparation:
 
@@ -24,6 +24,6 @@ uv sync --frozen
 
 The last two commands exit **2/BLOCKED** while E0/agent-2 dependencies are unresolved. Output directories must be new; existing evidence is never overwritten. Fetch `origin` separately before scanning peers. The scan reads every remote communication tree without switching branches; it preserves file-changing commit hashes and flags incomparable content. An immutable outbox message is delivered only after its sender pushes it.
 
-`toolchain.json` records exact local versions, primary download/docs URLs and artifact hashes. The shared toolchain/schema freeze is still pending. Public vector keys are synthetic TEST-ONLY fixtures. Candidate schemas live under `interfaces/proposals/v1`; they do not change the normative v0 interface. Positive trace fixtures use abstract synthetic bindings to test the oracle; they are not executable live-chain transactions. Agent-2's frozen result/deployment/input schemas are required before the real collector can normalize ledger/worker events.
+`toolchain.json` records exact local versions, primary download/docs URLs and artifact hashes. The exact shared E0 toolchain/schema mapping is frozen; peer packaging/version ACKs are pending. Public vector keys are synthetic TEST-ONLY fixtures. Frozen schema/vector copies live under `interfaces/v1`; candidate copies remain untouched for byte provenance. The current validator still reads the identical proposal schema; wiring the real C-E1 runner waits for mapping ACKs. Positive trace fixtures use abstract synthetic bindings to test the oracle; they are not executable live-chain transactions. The real C-E1 collector still must normalize native ledger/worker evidence after E1 unlock; root preflight retains legacy v0 metadata and BLOCKED status.
 
 Read `reports/E0-progress.md` for completed evidence, missing requirements and next steps. Never use these unit/toolchain results as a two-chain service integration, measured ABE implementation or Byzantine-consensus claim.

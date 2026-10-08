@@ -102,7 +102,7 @@ No retroactive re-encryption of all history is required for the first future-dat
 
 ## 8. Interfaces, ownership and completion
 
-The normative v0 contract is [interfaces/README.md](interfaces/README.md). It becomes v1 only after all three agents acknowledge identical vectors and field definitions in E0. Cross-module imports must use that contract, not another module's internals.
+The normative v1 byte mapping is [interfaces/README.md](interfaces/README.md) and [interfaces/v1/FREEZE.json](interfaces/v1/FREEZE.json), published after exact affected E0 reviews. E0 closure/E1 unlock still requires both peers to ACK the published byte/version mapping; no integrated result follows from the freeze. Cross-module imports must use that contract, not another module's internals.
 
 Each module can be tested with contract-conforming stubs. Each RQ then receives a real integration run controlled by agent 3. Stub-only success cannot close a gate. `communication/GATES.md` records exact evidence and all three agents' acknowledgements. A task marked BLOCKED cannot silently become passed when another agent finishes.
 

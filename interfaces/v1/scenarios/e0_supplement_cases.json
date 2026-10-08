@@ -1,0 +1,455 @@
+{
+  "status": "E0 revision6 supplement definitions for exact review; NOT_RUN, not an executor or result",
+  "scheduleSemantics": "Ordered zero-delay directives with fresh scenario state per case/profile. FORWARD_OR_CONSUME includes legitimate public witness/consume path. ATTEST_GRANT calls public adapter. RESIGN_RECEIPT_FIELD invokes Agent2 testtools.deviating_witness outside adapter; ALTER_RECEIPT_KEEP_SIGNATURE uses the retained honest receipt. No witness keys in runner. Mutant counterparts are specified in qualification; execute only after E1 and exact service/freeze ACKs.",
+  "cases": [
+    {
+      "id": "E01-same-nonce-distinct-digests-repaired-e",
+      "caseFamily": "E01",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A36",
+        "A39",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "same-nonce-distinct-digests",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REQUEST_SAME_NONCE_DISTINCT_DIGEST",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_BOTH_REQUESTS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ACCEPT_CHECKPOINT",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "CERTIFY_BOTH_BEFORE_CONSUMPTION",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "CONSUME_FIRST",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "CONSUME_PRECOLLECTED_SECOND",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "NO_NEW_GRANT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Fresh scenario: two valid user-signed Alice requests, same gid/nonce, distinct expiresAt within live 30-second bounds. Independently verify both signatures, distinct digests and derived grantIds. Forward both BEFORE ONE checkpoint covering both. Collect BOTH honest policy-aware ALLOW certificates BEFORE either consume; each sees nonceConsumed=false. Preserve that checkpoint, credentials and TTLs; consume first then the second PRE-COLLECTED certificate without re-collection. Native repaired-e: REPLAY, no second grant, first grant unchanged. MUT_NO_NONCE (8) counterpart: second distinct allowed grant; nonce never recorded. These are NOT_RUN expectations; A2 owner measurements are separate. No evaluator witness key."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E03-receipt-binding-control-requestDigest-repaired-e",
+      "caseFamily": "E03",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A36",
+        "A40",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "receipt-binding-control",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ATTEST_GRANT",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "RESIGN_RECEIPT_FIELD",
+          "offsetSeconds": "0",
+          "receiptField": "requestDigest"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "qualification": "Each trial/profile begins with its OWN fresh forwarded request, actual allowed grant and honest receipt; separate fresh requests for all three fields, the positive trial and every signature trial. Change ONLY receipt.requestDigest; keep outer requestDigest, grantId, destination, epochs/expiry/membership and all other fields. Native repaired-e rejects WRONG_SUBJECT, PBC remains FORWARDED, no outcome/log/status transition. Agent2 TEST-ONLY tool signs the inconsistent receipt at runtime using actual PSC/chain domain and real grant/expiry; returns artifact only. MUT_NO_RECEIPT_BINDING (32) counterpart ACCEPTS and becomes OUTCOME_RECORDED; retain inconsistent native fields. Deliberate witness-deviation/defense-in-depth control outside honest-witness assumption, not an HMBC attack. Receipts may reconcile after expiry without reauthorizing release. NOT_RUN; owner measurements are separate."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E03-receipt-binding-control-gid-repaired-e",
+      "caseFamily": "E03",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A36",
+        "A40",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "receipt-binding-control",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ATTEST_GRANT",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "RESIGN_RECEIPT_FIELD",
+          "offsetSeconds": "0",
+          "receiptField": "gid"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "qualification": "Each trial/profile begins with its OWN fresh forwarded request, actual allowed grant and honest receipt; separate fresh requests for all three fields, the positive trial and every signature trial. Change ONLY receipt.gid; keep outer requestDigest, grantId, destination, epochs/expiry/membership and all other fields. Native repaired-e rejects WRONG_SUBJECT, PBC remains FORWARDED, no outcome/log/status transition. Agent2 TEST-ONLY tool signs the inconsistent receipt at runtime using actual PSC/chain domain and real grant/expiry; returns artifact only. MUT_NO_RECEIPT_BINDING (32) counterpart ACCEPTS and becomes OUTCOME_RECORDED; retain inconsistent native fields. Deliberate witness-deviation/defense-in-depth control outside honest-witness assumption, not an HMBC attack. Receipts may reconcile after expiry without reauthorizing release. NOT_RUN; owner measurements are separate."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E03-receipt-binding-control-dataId-repaired-e",
+      "caseFamily": "E03",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A36",
+        "A40",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "receipt-binding-control",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ATTEST_GRANT",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "RESIGN_RECEIPT_FIELD",
+          "offsetSeconds": "0",
+          "receiptField": "dataId"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "qualification": "Each trial/profile begins with its OWN fresh forwarded request, actual allowed grant and honest receipt; separate fresh requests for all three fields, the positive trial and every signature trial. Change ONLY receipt.dataId; keep outer requestDigest, grantId, destination, epochs/expiry/membership and all other fields. Native repaired-e rejects WRONG_SUBJECT, PBC remains FORWARDED, no outcome/log/status transition. Agent2 TEST-ONLY tool signs the inconsistent receipt at runtime using actual PSC/chain domain and real grant/expiry; returns artifact only. MUT_NO_RECEIPT_BINDING (32) counterpart ACCEPTS and becomes OUTCOME_RECORDED; retain inconsistent native fields. Deliberate witness-deviation/defense-in-depth control outside honest-witness assumption, not an HMBC attack. Receipts may reconcile after expiry without reauthorizing release. NOT_RUN; owner measurements are separate."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E03-receipt-signature-control-requestDigest-repaired-e",
+      "caseFamily": "E03",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A36",
+        "A40",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "receipt-signature-control",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ATTEST_GRANT",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ALTER_RECEIPT_KEEP_SIGNATURE",
+          "offsetSeconds": "0",
+          "receiptField": "requestDigest"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "qualification": "Each trial/profile begins with its OWN fresh forwarded request, actual allowed grant and honest receipt; separate fresh requests for all three fields, the positive trial and every signature trial. Change ONLY receipt.requestDigest; keep outer requestDigest, grantId, destination, epochs/expiry/membership and all other fields. Native repaired-e rejects WRONG_SUBJECT, PBC remains FORWARDED, no outcome/log/status transition. Retain original honest signature over the altered receipt; binding check precedes quorum in repaired-e. MUT_NO_RECEIPT_BINDING (32) reaches BAD_SIGNATURE and also rejects; this signature control cannot kill the binding mutant. Receipts may reconcile after expiry without reauthorizing release. NOT_RUN; owner measurements are separate."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E03-receipt-signature-control-gid-repaired-e",
+      "caseFamily": "E03",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A36",
+        "A40",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "receipt-signature-control",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ATTEST_GRANT",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ALTER_RECEIPT_KEEP_SIGNATURE",
+          "offsetSeconds": "0",
+          "receiptField": "gid"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "qualification": "Each trial/profile begins with its OWN fresh forwarded request, actual allowed grant and honest receipt; separate fresh requests for all three fields, the positive trial and every signature trial. Change ONLY receipt.gid; keep outer requestDigest, grantId, destination, epochs/expiry/membership and all other fields. Native repaired-e rejects WRONG_SUBJECT, PBC remains FORWARDED, no outcome/log/status transition. Retain original honest signature over the altered receipt; binding check precedes quorum in repaired-e. MUT_NO_RECEIPT_BINDING (32) reaches BAD_SIGNATURE and also rejects; this signature control cannot kill the binding mutant. Receipts may reconcile after expiry without reauthorizing release. NOT_RUN; owner measurements are separate."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E03-receipt-signature-control-dataId-repaired-e",
+      "caseFamily": "E03",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A36",
+        "A40",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "receipt-signature-control",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ATTEST_GRANT",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ALTER_RECEIPT_KEEP_SIGNATURE",
+          "offsetSeconds": "0",
+          "receiptField": "dataId"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "qualification": "Each trial/profile begins with its OWN fresh forwarded request, actual allowed grant and honest receipt; separate fresh requests for all three fields, the positive trial and every signature trial. Change ONLY receipt.dataId; keep outer requestDigest, grantId, destination, epochs/expiry/membership and all other fields. Native repaired-e rejects WRONG_SUBJECT, PBC remains FORWARDED, no outcome/log/status transition. Retain original honest signature over the altered receipt; binding check precedes quorum in repaired-e. MUT_NO_RECEIPT_BINDING (32) reaches BAD_SIGNATURE and also rejects; this signature control cannot kill the binding mutant. Receipts may reconcile after expiry without reauthorizing release. NOT_RUN; owner measurements are separate."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E03-receipt-binding-positive-repaired-e",
+      "caseFamily": "E03",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A36",
+        "A40",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "receipt-binding-positive",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ATTEST_GRANT",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "ACCEPT",
+        "classification": "SUPPORTED",
+        "error": null,
+        "qualification": "Separate fresh forwarded-and-granted request in repaired-e AND receipt-binding mutant. Honest attest_grant receipt records one matching successful outcome; preserve native fields/status/log. This positive control prevents deny-all from passing. It attests authorization only, not release/delivery. Receipts may reconcile after expiry. NOT_RUN."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    }
+  ]
+}
