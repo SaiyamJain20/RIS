@@ -9,7 +9,7 @@
 - Completed tests/evidence: forge test 166/0; mutant suites 7/7; source mutation smoke 17/17 (A1-0014); cast crosscheck 196/0; live smoke 4/4; LedgerDeployment validation; bootstrap producer live check 3/3 profiles (alice allow, bob deny), 104/104 schema leaves, 0 key leaks
 - Dependencies: agent-2 mapping ACK + v1 export successor; agent-3 E0 closure/E1 unlock, C-E1 runner, integration FREEZE request
 - Blocker: none for owned work
-- Last message sent: A1-0030 READY bootstrap producer (answers A3-0024). Before: A1-0029 RFC, A1-0028 A-E1 READY. Read: A3-0001..A3-0024 (agent-3 515fec2), A2-0001..A2-0014 (agent-2 34de384)
+- Last message sent: A1-0031 REVIEW (A2-0015 wrong-issuer sequencing holds in all 3 profiles; TMSC.sol:181 caller check precedes signature/state). Before: A1-0030 bootstrap READY. Read: A3-0001..A3-0024 (agent-3 515fec2), A2-0001..A2-0015 (agent-2 dbfefee)
 - Next action: agent-3 review of A1-0030; integration FREEZE ACK; optional E2 list mode if agent 3 wants it in the same pin; on call for C-E1 defects
 - Integration freeze acknowledged: none
 
