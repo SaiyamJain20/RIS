@@ -1,6 +1,6 @@
 # Project board
 
-Coordinator/writer: agent 3. Updated 2026-10-08 after A2-0009 scoped revision5 acceptance/reproduction. Repository SaiyamJain20/RIS; separate machines/agent-N branches (D19).
+Coordinator/writer: agent 3. Updated 2026-10-08 after A1-0020 exact supplement revision2 ACK. Repository SaiyamJain20/RIS; separate machines/agent-N branches (D19).
 
 **Active RQ:** E / RQ1. **Current milestone:** E0 — source baseline, interface and toolchain freeze. **Integration freeze:** inactive. **Interface:** normative v0 proposed; candidate v1 revision5 for exact review, NOT frozen. Revision4 has scoped acceptance with change requests, not a complete three-agent ACK set.
 
@@ -14,7 +14,7 @@ Coordinator/writer: agent 3. Updated 2026-10-08 after A2-0009 scoped revision5 a
 
 | Agent | Latest reviewed provenance | Current support / dependency |
 |---|---|---|
-| 1 — ledger | tipe6850fb; A1-0019 supplement review; A1-0018 ACK of revision5 manifest124b95eb..; A1-0014 READY at e6cf4ff,100-file manifest5866921a.. | Agent1 affected E0 acceptance rows complete; all100 ledger files unchanged; protocol/evaluator exclusions retained; frozen mapping ACK still future |
+| 1 — ledger | tip012f24c; A1-0020 exact supplement revision2 ACK; A1-0018 ACK of revision5 manifest124b95eb..; A1-0014 READY at e6cf4ff,100-file manifest5866921a.. | Agent1 affected E0/supplement ledger review complete; all100 ledger files unchanged; protocol/evaluator exclusions retained; frozen mapping ACK still future |
 | 2 — protocol | tip5e203d0; A2-0009 scoped revision5 ACK;89-file manifesta352f339.. verified | Eight operations/export examples supplied;618 E0 tests/101 skips reproduced.32 paper-profile expectations excluded; export revision3 label stale. Candidate services explicitly NOT integration-ready |
 | 3 — evaluation | revision5 proposal,87 definitions/eight operations/seven E results/48 NOT_RUN cases | F1–F6/R1–R3 addressed; collect_checkpoint/attest_grant and custody/clock semantics proposed for exact review;148 owned tests pass |
 
@@ -34,4 +34,8 @@ Current A2-0009 review supersedes the old missing-operation/ACK blocker above. A
 
 Fresh E0-only compatibility:618 pass/101 evaluator-only skips; nine exports regenerate;16 examples validate; independent prepare_request digest/recovery match.100 ledger/89 protocol/32 package hashes verified;66 remote communication files have exact provenance and no divergence. No live fixture/services/owner mutant suite/model run. Evidence: evaluation/evidence/e0/revision-5-a2-ack-20261008/. Prior results and48 NOT_RUN schedules remain historical/unexecuted.
 
-Latest A1-0019/e6850fb reviews the supplement: nonce/registration accepted; receipt control condition is fresh request per variant and separate positive counterpart. Revision2 incorporates it and exact error precedence, proposes Agent2 runtime test signer; both affected revised-byte responses pending. Supplement hashb3fb3e7732310f231aafcda20bbaf4f7b8a772ce039a158dba3892c50682d88c. Ledger tree unchanged; E0/E1 gates unchanged.
+Latest A1-0020/012f24c ACKs the exact supplement revision2 hashb3fb3e7732310f231aafcda20bbaf4f7b8a772ce039a158dba3892c50682d88c at09c589d for all ledger conditions. Fresh-request-per-variant isolation, separate positive/signature trials, Agent2 runtime test-signer ownership and ledger/worker registration distinction are accepted. A1 explicitly retracts A1-0019's unchanged-signature precedence sentence: repaired-e returns WRONG_SUBJECT before quorum verification; the binding mutant returns BAD_SIGNATURE. Fresh pinned static review confirms the order; no runtime result inferred. Agent2 exact supplement response,32 paper-profile expectations and export-label correction remain pending. No new case/schema materialization until affected review completes.
+
+Fresh ACK evidence: evaluation/evidence/e0/supplement-r2-a1-ack-20261008/. Eight monitor commands exit0;72 communication files across four branches have exact newest file-changing commits/content hashes and no divergence.32 package/100 ledger/89 protocol entries and binary/root-lock hashes match; source trees unchanged. The monitor first failed on an incorrect library-filename assumption, then located QuorumLib in SigLib.sol and passed without weakening checks; failure/recovery retained. No module/schema/service/formal test repeated;48 schedules NOT_RUN. Agent2 remains5e203d0 with no new message. E0/E1 gates unchanged; A3-0017 records receipt of the scoped ACK, not INTERFACE_READY.
+
+A1-0020 received at `012f24c7427f2106fc3166db3d540c8254d56a27`, message SHA-25663ad3fbcac051d4f79a316535360e241e58cf808bcc33cabd05ec1c07687f9ba, ACKing exact supplement revision2 hashb3fb3e7732310f231aafcda20bbaf4f7b8a772ce039a158dba3892c50682d88c for its ledger scope and retracting the earlier A1-0019 signature-precedence sentence. Its supplement response is complete; Agent2 exact response/fixture boundary, paper expectations and export metadata successor still pending. Original32-file package and ledger tree unchanged. No new test/runtime/gate result; evidence a1-0020-ack.json.
