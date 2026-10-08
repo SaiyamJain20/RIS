@@ -1,0 +1,957 @@
+{
+  "status": "E1_CONTROL_PASS",
+  "failure": null,
+  "started_at": "2026-10-08T20:15:09.489040+00:00",
+  "ended_at": "2026-10-08T20:21:05.186778+00:00",
+  "source_stable": true,
+  "command_exit": 0,
+  "seconds": 356.0612476440001,
+  "source_count": 75,
+  "source_bracket_stable": true,
+  "acks": {
+    "agent-1": {
+      "commit": "2f5e37624eec57054811bbbff112ecee86e6164d",
+      "path": "communication/agent-1/outbox/0038-ack-e1-port-recovery-freeze.md",
+      "sha256": "cecf397fd818364d8c3c872b18aa7ff5902fec37a0795856726e6637d232190a",
+      "messageId": "A1-0038"
+    },
+    "agent-2": {
+      "commit": "6d2c8671c0bc4c988f0fe57a29cc4e5bf684d918",
+      "path": "communication/agent-2/outbox/0019-ack-e1-port-recovery-plan.md",
+      "sha256": "04fbe2fde44a0a10d1074b88bbd20f5467bc83b3ff68801600dd81928953f520",
+      "messageId": "A2-0019"
+    }
+  },
+  "profiles": {
+    "paper-strict": {
+      "status": "CONTROL_PASS",
+      "sources_stable": true,
+      "services_stopped": true,
+      "started_service_count": 2,
+      "wrong_admin_code": "16",
+      "alice": {
+        "ok": true,
+        "oracle": {
+          "ok": true,
+          "classification": "SUPPORTED",
+          "assertions": [
+            {
+              "name": "adapter mode is explicit and matches",
+              "passed": true
+            },
+            {
+              "name": "stable denial reason",
+              "passed": true
+            },
+            {
+              "name": "expected events occur in causal order",
+              "passed": true
+            },
+            {
+              "name": "at most one new grant",
+              "passed": true
+            },
+            {
+              "name": "at most one recorded outcome",
+              "passed": true
+            },
+            {
+              "name": "event 0 request binding",
+              "passed": true
+            },
+            {
+              "name": "event 1 request binding",
+              "passed": true
+            },
+            {
+              "name": "event 2 request binding",
+              "passed": true
+            },
+            {
+              "name": "grant 2 requestDigest",
+              "passed": true
+            },
+            {
+              "name": "grant 2 grantId",
+              "passed": true
+            },
+            {
+              "name": "grant 2 gid",
+              "passed": true
+            },
+            {
+              "name": "grant 2 dataId",
+              "passed": true
+            },
+            {
+              "name": "grant 2 kssc",
+              "passed": true
+            },
+            {
+              "name": "grant 2 destinationChainId",
+              "passed": true
+            },
+            {
+              "name": "grant 2 recipientKeyHash",
+              "passed": true
+            },
+            {
+              "name": "grant 2 keyEpoch",
+              "passed": true
+            },
+            {
+              "name": "event 3 request binding",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 3 requestDigest",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 3 grantId",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 3 gid",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 3 dataId",
+              "passed": true
+            },
+            {
+              "name": "authorization precedes 3",
+              "passed": true
+            },
+            {
+              "name": "event 4 request binding",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 4 requestDigest",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 4 grantId",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 4 gid",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 4 dataId",
+              "passed": true
+            },
+            {
+              "name": "authorization precedes 4",
+              "passed": true
+            },
+            {
+              "name": "durable intent precedes send 4",
+              "passed": true
+            },
+            {
+              "name": "event 5 request binding",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 5 requestDigest",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 5 grantId",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 5 gid",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 5 dataId",
+              "passed": true
+            },
+            {
+              "name": "authorization precedes 5",
+              "passed": true
+            }
+          ],
+          "observedEvents": [
+            {
+              "type": "REQUEST_LOGGED",
+              "requestDigest": "0xc44087be9a1bf5f7cd1c8a18756297abf108f35219c27d19ae45cedfe0c97c7f",
+              "timestamp": "1791490588"
+            },
+            {
+              "type": "PBC_DECIDED",
+              "requestDigest": "0xc44087be9a1bf5f7cd1c8a18756297abf108f35219c27d19ae45cedfe0c97c7f",
+              "timestamp": "1791490588"
+            },
+            {
+              "type": "DBC_AUTHORIZED",
+              "requestDigest": "0xc44087be9a1bf5f7cd1c8a18756297abf108f35219c27d19ae45cedfe0c97c7f",
+              "timestamp": "1791490592",
+              "grantId": "0x401813a776adc18ca58f73f791a02e3e31dd0ca241f4f4356e260d30d2869598",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+              "kssc": "0xe08fc08118c249128865a95e60617618970876b9",
+              "destinationChainId": "28545",
+              "recipientKeyHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "keyEpoch": "0"
+            },
+            {
+              "type": "RELEASE_INTENT",
+              "requestDigest": "0xc44087be9a1bf5f7cd1c8a18756297abf108f35219c27d19ae45cedfe0c97c7f",
+              "timestamp": "1791490595",
+              "grantId": "0x401813a776adc18ca58f73f791a02e3e31dd0ca241f4f4356e260d30d2869598",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            },
+            {
+              "type": "RELEASE_SENT",
+              "requestDigest": "0xc44087be9a1bf5f7cd1c8a18756297abf108f35219c27d19ae45cedfe0c97c7f",
+              "timestamp": "1791490595",
+              "grantId": "0x401813a776adc18ca58f73f791a02e3e31dd0ca241f4f4356e260d30d2869598",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            },
+            {
+              "type": "OUTCOME_RECORDED",
+              "requestDigest": "0xc44087be9a1bf5f7cd1c8a18756297abf108f35219c27d19ae45cedfe0c97c7f",
+              "timestamp": "1791490596",
+              "grantId": "0x401813a776adc18ca58f73f791a02e3e31dd0ca241f4f4356e260d30d2869598",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            }
+          ],
+          "limitations": [
+            "E/F adapter is symbolic; no measured ABE security.",
+            "Outcome recording is not proof of recipient delivery."
+          ]
+        },
+        "observed_event_types": [
+          "REQUEST_LOGGED",
+          "PBC_DECIDED",
+          "DBC_AUTHORIZED",
+          "RELEASE_INTENT",
+          "RELEASE_SENT",
+          "OUTCOME_RECORDED"
+        ],
+        "delivery": "unknown"
+      },
+      "bob": {
+        "ok": true,
+        "oracle": {
+          "ok": true,
+          "classification": "SUPPORTED",
+          "assertions": [
+            {
+              "name": "adapter mode is explicit and matches",
+              "passed": true
+            },
+            {
+              "name": "stable denial reason",
+              "passed": true
+            },
+            {
+              "name": "DBC_POLICY_DENIAL_LOGGED",
+              "passed": true
+            },
+            {
+              "name": "NONCE_UNCHANGED",
+              "passed": true
+            },
+            {
+              "name": "expected events occur in causal order",
+              "passed": true
+            },
+            {
+              "name": "at most one new grant",
+              "passed": true
+            },
+            {
+              "name": "at most one recorded outcome",
+              "passed": true
+            },
+            {
+              "name": "denial cannot release or record a successful grant outcome",
+              "passed": true
+            },
+            {
+              "name": "event 0 request binding",
+              "passed": true
+            },
+            {
+              "name": "event 1 request binding",
+              "passed": true
+            }
+          ],
+          "observedEvents": [
+            {
+              "type": "REQUEST_LOGGED",
+              "requestDigest": "0x434f0d1fa4bf947217bd445de38fcd45c9807ba044faf272f6ecc9dd222ce577",
+              "timestamp": "1791490613"
+            },
+            {
+              "type": "PBC_DECIDED",
+              "requestDigest": "0x434f0d1fa4bf947217bd445de38fcd45c9807ba044faf272f6ecc9dd222ce577",
+              "timestamp": "1791490613"
+            }
+          ],
+          "limitations": [
+            "E/F adapter is symbolic; no measured ABE security.",
+            "Outcome recording is not proof of recipient delivery."
+          ]
+        },
+        "observed_event_types": [
+          "REQUEST_LOGGED",
+          "PBC_DECIDED"
+        ],
+        "delivery": "unknown"
+      }
+    },
+    "paper-minimal": {
+      "status": "CONTROL_PASS",
+      "sources_stable": true,
+      "services_stopped": true,
+      "started_service_count": 2,
+      "wrong_admin_code": "16",
+      "alice": {
+        "ok": true,
+        "oracle": {
+          "ok": true,
+          "classification": "SUPPORTED",
+          "assertions": [
+            {
+              "name": "adapter mode is explicit and matches",
+              "passed": true
+            },
+            {
+              "name": "stable denial reason",
+              "passed": true
+            },
+            {
+              "name": "expected events occur in causal order",
+              "passed": true
+            },
+            {
+              "name": "at most one new grant",
+              "passed": true
+            },
+            {
+              "name": "at most one recorded outcome",
+              "passed": true
+            },
+            {
+              "name": "event 0 request binding",
+              "passed": true
+            },
+            {
+              "name": "event 1 request binding",
+              "passed": true
+            },
+            {
+              "name": "event 2 request binding",
+              "passed": true
+            },
+            {
+              "name": "grant 2 requestDigest",
+              "passed": true
+            },
+            {
+              "name": "grant 2 grantId",
+              "passed": true
+            },
+            {
+              "name": "grant 2 gid",
+              "passed": true
+            },
+            {
+              "name": "grant 2 dataId",
+              "passed": true
+            },
+            {
+              "name": "grant 2 kssc",
+              "passed": true
+            },
+            {
+              "name": "grant 2 destinationChainId",
+              "passed": true
+            },
+            {
+              "name": "grant 2 recipientKeyHash",
+              "passed": true
+            },
+            {
+              "name": "grant 2 keyEpoch",
+              "passed": true
+            },
+            {
+              "name": "event 3 request binding",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 3 requestDigest",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 3 grantId",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 3 gid",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 3 dataId",
+              "passed": true
+            },
+            {
+              "name": "authorization precedes 3",
+              "passed": true
+            },
+            {
+              "name": "event 4 request binding",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 4 requestDigest",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 4 grantId",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 4 gid",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 4 dataId",
+              "passed": true
+            },
+            {
+              "name": "authorization precedes 4",
+              "passed": true
+            },
+            {
+              "name": "durable intent precedes send 4",
+              "passed": true
+            },
+            {
+              "name": "event 5 request binding",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 5 requestDigest",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 5 grantId",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 5 gid",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 5 dataId",
+              "passed": true
+            },
+            {
+              "name": "authorization precedes 5",
+              "passed": true
+            }
+          ],
+          "observedEvents": [
+            {
+              "type": "REQUEST_LOGGED",
+              "requestDigest": "0xfb6dba93656e7a4fa161c217b55d4a02cf5a5a40ee12145934a7d7279ad980dc",
+              "timestamp": "1791490700"
+            },
+            {
+              "type": "PBC_DECIDED",
+              "requestDigest": "0xfb6dba93656e7a4fa161c217b55d4a02cf5a5a40ee12145934a7d7279ad980dc",
+              "timestamp": "1791490700"
+            },
+            {
+              "type": "DBC_AUTHORIZED",
+              "requestDigest": "0xfb6dba93656e7a4fa161c217b55d4a02cf5a5a40ee12145934a7d7279ad980dc",
+              "timestamp": "1791490704",
+              "grantId": "0x13d11281bfa06f7fa94cc1baf445905e08586d0a3bc69a1674ecbb6aac8085c1",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+              "kssc": "0xe08fc08118c249128865a95e60617618970876b9",
+              "destinationChainId": "28545",
+              "recipientKeyHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "keyEpoch": "0"
+            },
+            {
+              "type": "RELEASE_INTENT",
+              "requestDigest": "0xfb6dba93656e7a4fa161c217b55d4a02cf5a5a40ee12145934a7d7279ad980dc",
+              "timestamp": "1791490707",
+              "grantId": "0x13d11281bfa06f7fa94cc1baf445905e08586d0a3bc69a1674ecbb6aac8085c1",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            },
+            {
+              "type": "RELEASE_SENT",
+              "requestDigest": "0xfb6dba93656e7a4fa161c217b55d4a02cf5a5a40ee12145934a7d7279ad980dc",
+              "timestamp": "1791490707",
+              "grantId": "0x13d11281bfa06f7fa94cc1baf445905e08586d0a3bc69a1674ecbb6aac8085c1",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            },
+            {
+              "type": "OUTCOME_RECORDED",
+              "requestDigest": "0xfb6dba93656e7a4fa161c217b55d4a02cf5a5a40ee12145934a7d7279ad980dc",
+              "timestamp": "1791490708",
+              "grantId": "0x13d11281bfa06f7fa94cc1baf445905e08586d0a3bc69a1674ecbb6aac8085c1",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            }
+          ],
+          "limitations": [
+            "E/F adapter is symbolic; no measured ABE security.",
+            "Outcome recording is not proof of recipient delivery."
+          ]
+        },
+        "observed_event_types": [
+          "REQUEST_LOGGED",
+          "PBC_DECIDED",
+          "DBC_AUTHORIZED",
+          "RELEASE_INTENT",
+          "RELEASE_SENT",
+          "OUTCOME_RECORDED"
+        ],
+        "delivery": "unknown"
+      },
+      "bob": {
+        "ok": true,
+        "oracle": {
+          "ok": true,
+          "classification": "SUPPORTED",
+          "assertions": [
+            {
+              "name": "adapter mode is explicit and matches",
+              "passed": true
+            },
+            {
+              "name": "stable denial reason",
+              "passed": true
+            },
+            {
+              "name": "DBC_POLICY_DENIAL_LOGGED",
+              "passed": true
+            },
+            {
+              "name": "NONCE_UNCHANGED",
+              "passed": true
+            },
+            {
+              "name": "expected events occur in causal order",
+              "passed": true
+            },
+            {
+              "name": "at most one new grant",
+              "passed": true
+            },
+            {
+              "name": "at most one recorded outcome",
+              "passed": true
+            },
+            {
+              "name": "denial cannot release or record a successful grant outcome",
+              "passed": true
+            },
+            {
+              "name": "event 0 request binding",
+              "passed": true
+            },
+            {
+              "name": "event 1 request binding",
+              "passed": true
+            }
+          ],
+          "observedEvents": [
+            {
+              "type": "REQUEST_LOGGED",
+              "requestDigest": "0xb61706f6330bf19bfbdda15e94c0b3fa48206474ec01b1a6ad38b1e65b3361ac",
+              "timestamp": "1791490725"
+            },
+            {
+              "type": "PBC_DECIDED",
+              "requestDigest": "0xb61706f6330bf19bfbdda15e94c0b3fa48206474ec01b1a6ad38b1e65b3361ac",
+              "timestamp": "1791490725"
+            }
+          ],
+          "limitations": [
+            "E/F adapter is symbolic; no measured ABE security.",
+            "Outcome recording is not proof of recipient delivery."
+          ]
+        },
+        "observed_event_types": [
+          "REQUEST_LOGGED",
+          "PBC_DECIDED"
+        ],
+        "delivery": "unknown"
+      }
+    },
+    "repaired-e": {
+      "status": "CONTROL_PASS",
+      "sources_stable": true,
+      "services_stopped": true,
+      "started_service_count": 2,
+      "wrong_admin_code": "16",
+      "alice": {
+        "ok": true,
+        "oracle": {
+          "ok": true,
+          "classification": "REPAIR_SUPPORTED",
+          "assertions": [
+            {
+              "name": "adapter mode is explicit and matches",
+              "passed": true
+            },
+            {
+              "name": "stable denial reason",
+              "passed": true
+            },
+            {
+              "name": "expected events occur in causal order",
+              "passed": true
+            },
+            {
+              "name": "at most one new grant",
+              "passed": true
+            },
+            {
+              "name": "at most one recorded outcome",
+              "passed": true
+            },
+            {
+              "name": "event 0 request binding",
+              "passed": true
+            },
+            {
+              "name": "event 1 request binding",
+              "passed": true
+            },
+            {
+              "name": "event 2 request binding",
+              "passed": true
+            },
+            {
+              "name": "grant 2 requestDigest",
+              "passed": true
+            },
+            {
+              "name": "grant 2 grantId",
+              "passed": true
+            },
+            {
+              "name": "grant 2 gid",
+              "passed": true
+            },
+            {
+              "name": "grant 2 dataId",
+              "passed": true
+            },
+            {
+              "name": "grant 2 kssc",
+              "passed": true
+            },
+            {
+              "name": "grant 2 destinationChainId",
+              "passed": true
+            },
+            {
+              "name": "grant 2 recipientKeyHash",
+              "passed": true
+            },
+            {
+              "name": "grant 2 keyEpoch",
+              "passed": true
+            },
+            {
+              "name": "event 3 request binding",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 3 requestDigest",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 3 grantId",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 3 gid",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 3 dataId",
+              "passed": true
+            },
+            {
+              "name": "authorization precedes 3",
+              "passed": true
+            },
+            {
+              "name": "event 4 request binding",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 4 requestDigest",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 4 grantId",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 4 gid",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 4 dataId",
+              "passed": true
+            },
+            {
+              "name": "authorization precedes 4",
+              "passed": true
+            },
+            {
+              "name": "durable intent precedes send 4",
+              "passed": true
+            },
+            {
+              "name": "event 5 request binding",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 5 requestDigest",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 5 grantId",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 5 gid",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 5 dataId",
+              "passed": true
+            },
+            {
+              "name": "authorization precedes 5",
+              "passed": true
+            }
+          ],
+          "observedEvents": [
+            {
+              "type": "REQUEST_LOGGED",
+              "requestDigest": "0x29908f2c60ba5710324a516a157501a03b29dc3669673d4460e8e87b2c8c29d4",
+              "timestamp": "1791490812"
+            },
+            {
+              "type": "PBC_DECIDED",
+              "requestDigest": "0x29908f2c60ba5710324a516a157501a03b29dc3669673d4460e8e87b2c8c29d4",
+              "timestamp": "1791490812"
+            },
+            {
+              "type": "DBC_AUTHORIZED",
+              "requestDigest": "0x29908f2c60ba5710324a516a157501a03b29dc3669673d4460e8e87b2c8c29d4",
+              "timestamp": "1791490824",
+              "grantId": "0x48b4c587254a3d3a7ed89ff5f6cdb2786e1b5b8c2da4005ccb079db7344705b6",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+              "kssc": "0xe08fc08118c249128865a95e60617618970876b9",
+              "destinationChainId": "28545",
+              "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d",
+              "keyEpoch": "0"
+            },
+            {
+              "type": "RELEASE_INTENT",
+              "requestDigest": "0x29908f2c60ba5710324a516a157501a03b29dc3669673d4460e8e87b2c8c29d4",
+              "timestamp": "1791490827",
+              "grantId": "0x48b4c587254a3d3a7ed89ff5f6cdb2786e1b5b8c2da4005ccb079db7344705b6",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            },
+            {
+              "type": "RELEASE_SENT",
+              "requestDigest": "0x29908f2c60ba5710324a516a157501a03b29dc3669673d4460e8e87b2c8c29d4",
+              "timestamp": "1791490827",
+              "grantId": "0x48b4c587254a3d3a7ed89ff5f6cdb2786e1b5b8c2da4005ccb079db7344705b6",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            },
+            {
+              "type": "OUTCOME_RECORDED",
+              "requestDigest": "0x29908f2c60ba5710324a516a157501a03b29dc3669673d4460e8e87b2c8c29d4",
+              "timestamp": "1791490829",
+              "grantId": "0x48b4c587254a3d3a7ed89ff5f6cdb2786e1b5b8c2da4005ccb079db7344705b6",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            }
+          ],
+          "limitations": [
+            "E/F adapter is symbolic; no measured ABE security.",
+            "Outcome recording is not proof of recipient delivery."
+          ]
+        },
+        "observed_event_types": [
+          "REQUEST_LOGGED",
+          "PBC_DECIDED",
+          "DBC_AUTHORIZED",
+          "RELEASE_INTENT",
+          "RELEASE_SENT",
+          "OUTCOME_RECORDED"
+        ],
+        "delivery": "unknown"
+      },
+      "bob": {
+        "ok": true,
+        "oracle": {
+          "ok": true,
+          "classification": "REPAIR_SUPPORTED",
+          "assertions": [
+            {
+              "name": "adapter mode is explicit and matches",
+              "passed": true
+            },
+            {
+              "name": "stable denial reason",
+              "passed": true
+            },
+            {
+              "name": "DBC_POLICY_DENIAL_LOGGED",
+              "passed": true
+            },
+            {
+              "name": "NONCE_UNCHANGED",
+              "passed": true
+            },
+            {
+              "name": "expected events occur in causal order",
+              "passed": true
+            },
+            {
+              "name": "at most one new grant",
+              "passed": true
+            },
+            {
+              "name": "at most one recorded outcome",
+              "passed": true
+            },
+            {
+              "name": "denial cannot release or record a successful grant outcome",
+              "passed": true
+            },
+            {
+              "name": "event 0 request binding",
+              "passed": true
+            },
+            {
+              "name": "event 1 request binding",
+              "passed": true
+            }
+          ],
+          "observedEvents": [
+            {
+              "type": "REQUEST_LOGGED",
+              "requestDigest": "0x0becec9228200c73c91882dbb6dc2191ed52727f7034e52d98ac1d346da49b1f",
+              "timestamp": "1791490849"
+            },
+            {
+              "type": "PBC_DECIDED",
+              "requestDigest": "0x0becec9228200c73c91882dbb6dc2191ed52727f7034e52d98ac1d346da49b1f",
+              "timestamp": "1791490849"
+            }
+          ],
+          "limitations": [
+            "E/F adapter is symbolic; no measured ABE security.",
+            "Outcome recording is not proof of recipient delivery."
+          ]
+        },
+        "observed_event_types": [
+          "REQUEST_LOGGED",
+          "PBC_DECIDED"
+        ],
+        "delivery": "unknown"
+      }
+    }
+  },
+  "cleanup": [
+    {
+      "path": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T201323Z/real-e1-output/paper-strict/pbc-service/process.json",
+      "pid": 362505,
+      "exit_code": 0,
+      "ended_at": "2026-10-08T20:17:01.152561+00:00",
+      "pid_currently_exists": false
+    },
+    {
+      "path": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T201323Z/real-e1-output/paper-strict/dbc-service/process.json",
+      "pid": 362629,
+      "exit_code": 0,
+      "ended_at": "2026-10-08T20:17:01.148915+00:00",
+      "pid_currently_exists": false
+    },
+    {
+      "path": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T201323Z/real-e1-output/paper-strict/adapter/process.json",
+      "pid": 366785,
+      "exit_code": 0,
+      "ended_at": "2026-10-08T20:17:01.144880+00:00",
+      "pid_currently_exists": false
+    },
+    {
+      "path": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T201323Z/real-e1-output/paper-minimal/pbc-service/process.json",
+      "pid": 372541,
+      "exit_code": 0,
+      "ended_at": "2026-10-08T20:18:52.502331+00:00",
+      "pid_currently_exists": false
+    },
+    {
+      "path": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T201323Z/real-e1-output/paper-minimal/dbc-service/process.json",
+      "pid": 372675,
+      "exit_code": 0,
+      "ended_at": "2026-10-08T20:18:52.498727+00:00",
+      "pid_currently_exists": false
+    },
+    {
+      "path": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T201323Z/real-e1-output/paper-minimal/adapter/process.json",
+      "pid": 376851,
+      "exit_code": 0,
+      "ended_at": "2026-10-08T20:18:52.494686+00:00",
+      "pid_currently_exists": false
+    },
+    {
+      "path": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T201323Z/real-e1-output/repaired-e/pbc-service/process.json",
+      "pid": 382618,
+      "exit_code": 0,
+      "ended_at": "2026-10-08T20:21:04.555520+00:00",
+      "pid_currently_exists": false
+    },
+    {
+      "path": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T201323Z/real-e1-output/repaired-e/dbc-service/process.json",
+      "pid": 382746,
+      "exit_code": 0,
+      "ended_at": "2026-10-08T20:21:04.552071+00:00",
+      "pid_currently_exists": false
+    },
+    {
+      "path": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T201323Z/real-e1-output/repaired-e/adapter/process.json",
+      "pid": 386869,
+      "exit_code": 0,
+      "ended_at": "2026-10-08T20:21:04.547940+00:00",
+      "pid_currently_exists": false
+    }
+  ],
+  "frozen_copies_verified": 15,
+  "owner_snapshot_blobs_verified": 633,
+  "classification": "tested reconstruction result; actual synthetic local two-chain C-E1 controls only",
+  "limits": "All E2 catalog schedules and RQ gates NOT_RUN; symbolic completion and attempted RELEASE_SENT do not prove ABE, delivery, consensus, provider integrity or power-loss recovery."
+}

@@ -1,5 +1,26 @@
 # Integration service and freeze record
 
+Writer: agent3. **RELEASED — A3-0029; actual C-E1 controls9/9 PASS.** No active services or lease. Earlier records below are historical.
+
+| Field | Verified value |
+|---|---|
+| RQ/run | E / E1-20261008-port-recovery |
+| Plan/hash | evaluation/evidence/e1/port-recovery-20261008/integration-plan.json /78e195f57872e0732394e3c546f665e1062b4a360083d2ee0a407d5def33b008 |
+| Exact ACKs | A1-0038/2f5e376/cecf397f..; A2-0019/6d2c867/04fbe2fd..; headers/Git ancestry/hash/scope verified before services |
+| Owner pins | ledger9d6911d/ec213160../106; protocol465aff5/eb236421../105 |
+| Sources |47 exact plan inputs/75 bracket inputs stable;633 owner snapshot blobs stable;15 frozen copies verified |
+| Ports/IDs | PBC18545, DBC28545; fresh chains per profile |
+| Actual result | CLI0/E1_CONTROL_PASS/356.061s; each profile wrong-admin16/Alice allow/Bob policy9 deny |
+| Current PIDs/state | none;9 owned process records exit0 and identities absent |
+| Freeze release | after actual complete run; A3-0030 is delivered only by verified normal push |
+| Limits | E1 only; symbolic, attempted send/delivery unknown; E2/RQ gates NOT_RUN; F/G locked |
+
+Exact process PIDs/end times/exit codes, argv/tool/source/output hashes and native result records: evaluation/evidence/e1/integrated-controls-20261008/live-result-audit.json, real-e1.json, run/manifest.json. ACK exclusions remain intact. No runtime/tool/dependency/owner/key-custody/interface bytes changed. Logical freeze is released; E2 hooks/pins still need exact review.
+
+## Historical records (superseded state)
+
+# Integration service and freeze record
+
 Writer: agent3. **REQUESTED — A3-0029 revised plan; both new ACKs absent.**
 A3-0027 RELEASED after failed actual run. No current services or lease.
 

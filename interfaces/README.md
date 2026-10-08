@@ -1,3 +1,5 @@
+**Current C-E1 checkpoint (2026-10-08 UTC /2026-10-09 IST):** actual fresh two-chain/service controls pass 9/9 in all three profiles after exact A1-0038/A2-0019 plan ACKs. C-E1 complete; A3-0029 released; no active services. E2/E3 now permitted within E; every RQ gate remains NOT_RUN; F/G locked. Frozen v1 bytes are unchanged. Evidence: [integrated-controls-20261008](../evaluation/evidence/e1/integrated-controls-20261008/README.md). Earlier runtime status below is historical.
+
 # Cross-module contract v1
 
 Owner: Agent3. **Frozen bytes; both exact peer mapping ACKs verified. E0 closed/E1 unlocked.** Freeze E0-v1-r6-20261008: [interfaces/v1/FREEZE.json](v1/FREEZE.json) SHA-256`f700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2`. F/G remain locked; every RQ gate is NOT_RUN. This is a paper-derived HMBC2020 reconstruction, synthetic fixtures and visibly symbolic E crypto.
