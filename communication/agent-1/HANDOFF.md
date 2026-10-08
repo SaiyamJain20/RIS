@@ -1,15 +1,16 @@
 # Agent 1 handoff
 
-Status: **READY FOR INTEGRATION; not DONE.** Current ledger READY is **A1-0030** (producer); latest inventory **A1-0034** (manifest b99b83e5..,
-143 entries; adds the E1 owner rehearsal (A1-0033) and the E2 signed-list producer; contract code unchanged since 91add8c). Interface: candidate
-v1 revision 6 (df2a306f..), adopted as the Phase E sprint working interface in A1-0023 (human
-directive: complete E by 00:10 IST 2026-10-09). Agent-1 revision-6 ledger ACK: A1-0022. No integrated
-run has happened yet.
+Status: **READY FOR INTEGRATION; not DONE.** Interface **v1 FROZEN** (E0-v1-r6-20261008, FREEZE.json
+f700292e.. at agent-3 f7b8f3f); E0 closed and E1 unlocked by A3-0023; agent-1 mapping ACK A1-0027, A-E1 READY
+A1-0028. Ledger READY items: A1-0030 (bootstrap producer), A1-0034 (E2 signed-list producer). Latest inventory
+**A1-0035** (manifest 8a3b8596.., 159 entries); contract code unchanged since 91add8c. Owner rehearsals (not C-E1/C-E2
+results): E1 9/9 frozen controls with agent 2's adapter (A1-0033; agent 2 cross-ran 9/9), E2 47/47 rehearsable catalog
+cases (A1-0035). Agent 3's C-E1 runner/oracle and the integration FREEZE have not run yet.
 
 - **RQ/task and interface version:** E / sprint E0 close -> E1 integration (A1-0023). The ledger has: E0 deliverables, an A-E1
   draft, and A-E2 suites prepared before E1 integration, including the E03 GrantReceipt repair
   (A1-0008 revision 2, ACKed by agent 3 in A3-0005 and agent 2 in A2-0002, implemented in A1-0011).
-- **Changed owned files and source manifest:** `ledger/**` (100 files) with SHA-256 in
+- **Changed owned files and source manifest:** `ledger/**` (159 files) with SHA-256 in
   `ledger/evidence/source-manifest.sha256` (159 entries; file sha256
   8a3b85965a2b98ef3d8bd734bbb318364a5a363fff924fa62b47778ecd6a1a46). Solidity sources, tests,
   scripts, foundry.toml and vectors are byte-identical to e6cf4ff (A1-0014). A1-0024 changes only the
