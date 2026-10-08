@@ -1,0 +1,185 @@
+{
+  "rq": "E",
+  "executionMode": "two-chain-e1",
+  "adapterMode": "symbolic",
+  "status": "FAILED",
+  "startedAt": "2026-10-08T19:55:49.643422+00:00",
+  "endedAt": "2026-10-08T19:57:43.210212+00:00",
+  "servicesStarted": [
+    {
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 340838
+    },
+    {
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 28545,
+      "pid": 340960
+    }
+  ],
+  "profiles": {
+    "paper-strict": {
+      "status": "CONTROL_PASS",
+      "sourcesStable": true,
+      "commands": [
+        {
+          "argv": [
+            "/usr/bin/bash",
+            "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T195325Z/real-e1-output/paper-strict/snapshots/ledger/ledger/tools/deploy_local.sh",
+            "http://127.0.0.1:18545",
+            "http://127.0.0.1:28545",
+            "paper-strict",
+            "complete-details",
+            "E1-20261008-public-access-paper-strict"
+          ],
+          "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T195325Z/real-e1-output/paper-strict/snapshots/ledger",
+          "startedAt": "2026-10-08T19:55:53.374934+00:00",
+          "endedAt": "2026-10-08T19:56:18.930592+00:00",
+          "exitCode": 0,
+          "timedOut": false,
+          "elapsedSeconds": 25.555655531999946,
+          "outputSha256": "d7190b62b1c43c27359c2444f3948990fedc44d5c06b1161efecc39acc114274",
+          "pid": 341082,
+          "processGroup": 341082,
+          "groupCleanup": null,
+          "environmentSha256": "1a13e75d5fcef6245ac8dbec0857f505dd864ad029fbad5e8b37577639eb4f89"
+        },
+        {
+          "argv": [
+            "/usr/bin/bash",
+            "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T195325Z/real-e1-output/paper-strict/snapshots/ledger/ledger/tools/bootstrap_fixture.sh",
+            "http://127.0.0.1:18545",
+            "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T195325Z/real-e1-output/paper-strict/snapshots/ledger/ledger/exports/deployments/E1-20261008-public-access-paper-strict/deployment.json",
+            "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T195325Z/real-e1-output/paper-strict/snapshots/ledger/ledger/exports/bootstrap-E1-20261008-public-access-paper-strict.json"
+          ],
+          "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T195325Z/real-e1-output/paper-strict/snapshots/ledger",
+          "startedAt": "2026-10-08T19:56:19.881695+00:00",
+          "endedAt": "2026-10-08T19:56:21.752641+00:00",
+          "exitCode": 0,
+          "timedOut": false,
+          "elapsedSeconds": 1.870960398002353,
+          "outputSha256": "c7fa566ff79ffbdc7e45434c58263259e3e228d4a0451e6c510d0d00e53a7efb",
+          "pid": 341568,
+          "processGroup": 341568,
+          "groupCleanup": null,
+          "environmentSha256": "1a13e75d5fcef6245ac8dbec0857f505dd864ad029fbad5e8b37577639eb4f89"
+        },
+        {
+          "argv": [
+            "/home/karma/Documents/RIS/.venv/bin/python",
+            "-m",
+            "hmbc_protocol.worker_log",
+            "--state-dir",
+            "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T195325Z/real-e1-output/paper-strict/private-adapter-state"
+          ],
+          "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T195325Z/real-e1-output/paper-strict/snapshots/protocol/protocol",
+          "startedAt": "2026-10-08T19:57:04.236014+00:00",
+          "endedAt": "2026-10-08T19:57:04.401057+00:00",
+          "exitCode": 0,
+          "timedOut": false,
+          "elapsedSeconds": 0.16505239899561275,
+          "outputSha256": "1677436e8d345eb580c68381c893cc652c2ed9eeb0a27a15c04be458873f1a1b",
+          "pid": 346342,
+          "processGroup": 346342,
+          "groupCleanup": null,
+          "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+        },
+        {
+          "argv": [
+            "/home/karma/Documents/RIS/.venv/bin/python",
+            "-m",
+            "hmbc_protocol.worker_log",
+            "--state-dir",
+            "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T195325Z/real-e1-output/paper-strict/private-adapter-state"
+          ],
+          "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T195325Z/real-e1-output/paper-strict/snapshots/protocol/protocol",
+          "startedAt": "2026-10-08T19:57:16.170874+00:00",
+          "endedAt": "2026-10-08T19:57:16.336266+00:00",
+          "exitCode": 0,
+          "timedOut": false,
+          "elapsedSeconds": 0.16540964899468236,
+          "outputSha256": "5945f9ea2c2cbfed4d9ed8d8bdb436065e5dd8c4dfbdba7225a9a231b9e386e2",
+          "pid": 347652,
+          "processGroup": 347652,
+          "groupCleanup": null,
+          "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+        },
+        {
+          "argv": [
+            "/home/karma/Documents/RIS/.venv/bin/python",
+            "-m",
+            "hmbc_protocol.worker_log",
+            "--state-dir",
+            "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T195325Z/real-e1-output/paper-strict/private-adapter-state"
+          ],
+          "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T195325Z/real-e1-output/paper-strict/snapshots/protocol/protocol",
+          "startedAt": "2026-10-08T19:57:29.998392+00:00",
+          "endedAt": "2026-10-08T19:57:30.163388+00:00",
+          "exitCode": 0,
+          "timedOut": false,
+          "elapsedSeconds": 0.16500742900097976,
+          "outputSha256": "5945f9ea2c2cbfed4d9ed8d8bdb436065e5dd8c4dfbdba7225a9a231b9e386e2",
+          "pid": 349144,
+          "processGroup": 349144,
+          "groupCleanup": null,
+          "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+        },
+        {
+          "argv": [
+            "/home/karma/Documents/RIS/.venv/bin/python",
+            "-m",
+            "hmbc_protocol.worker_log",
+            "--state-dir",
+            "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T195325Z/real-e1-output/paper-strict/private-adapter-state"
+          ],
+          "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T195325Z/real-e1-output/paper-strict/snapshots/protocol/protocol",
+          "startedAt": "2026-10-08T19:57:41.770509+00:00",
+          "endedAt": "2026-10-08T19:57:41.935372+00:00",
+          "exitCode": 0,
+          "timedOut": false,
+          "elapsedSeconds": 0.1648807770034182,
+          "outputSha256": "5945f9ea2c2cbfed4d9ed8d8bdb436065e5dd8c4dfbdba7225a9a231b9e386e2",
+          "pid": 350447,
+          "processGroup": 350447,
+          "groupCleanup": null,
+          "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+        }
+      ],
+      "results": {
+        "alice": "paper-strict/alice/result.json",
+        "bob": "paper-strict/bob/result.json"
+      },
+      "wrongAdmin": "UNAUTHORIZED_CALLER; baseline issuer restriction, not a repair",
+      "servicesStopped": true
+    },
+    "paper-minimal": {
+      "status": "RUNNING",
+      "sourcesStable": true,
+      "commands": [],
+      "servicesStopped": true
+    }
+  },
+  "acks": {
+    "agent-1": {
+      "commit": "79dacb061a037c8254b11cff732aca88751a129f",
+      "path": "communication/agent-1/outbox/0037-ack-e1-integration-freeze.md",
+      "sha256": "422bc4ffa677e818cb54d075001c6aa530a223aa3fe768001059d258438d961c",
+      "messageId": "A1-0037"
+    },
+    "agent-2": {
+      "commit": "c8d89d85f654823a511be21e13fe52fabc8722c9",
+      "path": "communication/agent-2/outbox/0018-ack-e1-public-access-integration-plan.md",
+      "sha256": "ab30d00a0c9f3021aedddc8756ff4161ee7bd8c7dcc3b0c7a5eecb2743f94363",
+      "messageId": "A2-0018"
+    }
+  },
+  "failure": {
+    "type": "OSError",
+    "message": "[Errno 98] Address already in use"
+  },
+  "sourceStable": true,
+  "limitation": "E1 controls only; E2/E3 and every RQ gate remain unproved.",
+  "planSha256": "1899126e37c683fd9b4334787f71131250d7950506d845286220249b526a4b31"
+}

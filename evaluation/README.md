@@ -1,5 +1,8 @@
 # Agent 3 evaluation — E1 public runner awaiting exact ACKs
 
+**Current E1 checkpoint (2026-10-08 UTC):** actual paper-strict3/3 controls pass; all-profile run failed on the runner’s TIME_WAIT port probe before second-profile startup. Probe fixed with414 tests; A3-0029 revised plan 78e195f57872e0732394e3c546f665e1062b4a360083d2ee0a407d5def33b008 awaits both new exact ACKs. E1 incomplete; E2/E3/F/G remain gated. See [evaluation/evidence/e1/port-recovery-20261008/README.md](evidence/e1/port-recovery-20261008/README.md). Earlier checkpoint text below is historical.
+
+
 This is a **paper-derived HMBC2020 reconstruction**. E0 v1 bytes are frozen after exact affected reviews and compatibility checks; both exact frozen mapping ACKs are verified, closing E0 and unlocking E1; the C-E1 public runner is implemented/unit verified; exact A3-0027 plan ACKs and real service integration remain pending. No E/F/G gate has passed. See interfaces/v1/FREEZE.json and communication/E0_ACCEPTANCE.md.
 
 Implemented owned preparation:

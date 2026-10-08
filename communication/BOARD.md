@@ -1,22 +1,24 @@
 # Project board
 
-Coordinator/writer: Agent3. Updated2026-10-08 UTC /2026-10-09 IST after C-E1 public access runner verification and A3-0027 concrete FREEZE request; selected A1-0030/A2-0016 inputs unchanged.
+Coordinator/writer: Agent3. Updated2026-10-08 UTC /2026-10-09 IST after actual paper-strict integration and TIME_WAIT port-probe correction; selected A1-0030/A2-0016 inputs unchanged. Current paragraphs supersede historical checkpoints below.
 
-**Active RQ:** E/RQ1. **Milestone:** E0 closed; E1 unlocked, C-E1 runner implemented/unit verified; actual integration unproved. **Interface:** v1 frozen bytes;15 byte-identical copies in interfaces/v1/FREEZE.json SHA-256`f700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2`. **Integration freeze:** A3-0027 REQUESTED, both exact plan ACKs absent; no active service lease. E1 is unlocked; F/G remain locked. Live ACKs/current successor pins: communication/E0_MAPPING_ACKS.json; frozen manifest retains immutable publication-time status.
+**Active RQ:** E/RQ1. **Milestone:** E0 closed; E1 unlocked, actual paper-strict3/3 controls pass; all-profile run failed before second-profile startup. Port probe fixed/unit verified; full E1 incomplete. **Interface:** v1 frozen bytes;15 byte-identical copies in interfaces/v1/FREEZE.json SHA-256`f700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2`. **Integration freeze:** A3-0027 RELEASED after failed run; A3-0029 REQUESTED, revised plan 78e195f57872e0732394e3c546f665e1062b4a360083d2ee0a407d5def33b008, both new ACKs absent; no active service lease. E1 is unlocked; F/G remain locked. Live ACKs/current successor pins: communication/E0_MAPPING_ACKS.json; frozen manifest retains immutable publication-time status.
 
 | Phase | Status | Remaining evidence |
 |---|---|---|
 | E0 | CLOSED | A1-0027/70f704d and A2-0013/e30d00d exact frozen mapping ACKs verified; all seven definition rows retain evidence/exclusions |
-| E1 | UNLOCKED — C-E1 WORKING | Public bootstrap/access runner unit verified (411 tests); selected owner pins unchanged. Both exact A3-0027 plan ACKs and fresh nine two-chain controls required |
+| E1 | UNLOCKED — C-E1 WORKING | Actual paper-strict3/3; inter-profile port refusal fixed,414 unit tests. A3-0029 exact new ACKs and all9 fresh controls required |
 | E2/E3 | WAITING — E1 |56 NOT_RUN schedules, fault/recovery/model/repair/report evidence and gate E |
 | F | LOCKED | gate E PASS |
 | G | LOCKED | gate F PASS |
 
 | Agent | Reviewed provenance | Accepted scope / pending obligation |
 |---|---|---|
-|1|A1-0030/9d6911d9a35c7d20b3e0226400f8f0fcc99ef256; prior exact E0 ACKs retained|106-entryec213160.. E1 bootstrap successor reviewed; default slow deployment. A1-0031 wrong-admin sequencing source-reviewed. Exact integration ACK still required; later E2 pin excluded.|
-|2|A2-0016/465aff52688179fd983fd8da9e2af3032189ff6e; prior exact E0 ACKs retained|105-entryeb236421.. successor reviewed; exporter now accepts adapter state-dir. Adapter7146495b.. unchanged; service READY reviewed, exact integration FREEZE ACK absent.|
+|1|A1-0030/9d6911d9a35c7d20b3e0226400f8f0fcc99ef256; prior exact E0 ACKs retained|106-entryec213160.. E1 bootstrap successor reviewed; default slow deployment. A1-0031 wrong-admin sequencing source-reviewed. A1-0037 exact old-plan ACK verified; new A3-0029 ACK required; later E2 pin excluded.|
+|2|A2-0016/465aff52688179fd983fd8da9e2af3032189ff6e; prior exact E0 ACKs retained|105-entryeb236421.. successor reviewed; exporter now accepts adapter state-dir. Adapter7146495b.. unchanged; service READY reviewed; A2-0018 exact old-plan ACK verified, new A3-0029 ACK absent.|
 |3|Reviewdf2a306f..; frozen manifestf700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2|All seven pre-publication E0 rows satisfied; author-only evaluator internals preserved. A3-0021/A3-0022 exact mapping accepted by both peers; A3-0023 records E0 closure/E1 unlock.|
+
+## Historical checkpoint notes
 
 Freeze-publication checks (historical at this checkpoint):161 evaluator tests;707 protocol checks/108 skips (101 evaluator-only +7 live-fixture tests unavailable in standalone snapshot);9 exports;393 independent signed checks;565 schema verdicts/0 mismatches;166 ledger tests;196 Cast checks; ProVerif public/private-token smoke only.84 captured commands0;35 reviewed files and195 owner inputs stable; six ABI payloads identical;86 remote communication files/no divergence. [Acceptance](E0_ACCEPTANCE.md) and [evidence](../evaluation/evidence/e0/v1-freeze-20261008/README.md) record exact scopes/commands/hashes/limitations.
 
@@ -41,3 +43,5 @@ exact FREEZE ACKs still precede9 live controls. All catalog/RQ gates NOT_RUN;
 E2/E3 waiting on actual E1; F/G locked.
 
 2026-10-08 UTC /2026-10-09 IST continuation:411 evaluator checks pass on74 stable explicit inputs;76 new access/freeze/environment/lifecycle controls. Concrete A3-0027 FREEZE plan SHA-256 `1899126e37c683fd9b4334787f71131250d7950506d845286220249b526a4b31` pins47 runtime/config/fixture inputs,211 owner files, tools/dependencies and exact three-profile service/control recipe. Actual CLI without ACKs exits2/BLOCKED before snapshots/services. Both exact peer plan ACKs required; READY/rehearsal/silence insufficient. A1-0036 native revert-trace evidence at13f21fca reviewed as owner evidence only; runner flags/auto-mining unproved. No services/PIDs/ports/lease,9-control result, catalog/RQ gate or phase promotion. Author review only; evidence evaluation/evidence/e1/access-runner-20261008/. Prior continuation paragraphs above are historical.
+
+2026-10-08 UTC /2026-10-09 IST current: A1-0037/79dacb0 and A2-0018/c8d89d8 exact old-plan ACKs verified. Actual strict3/3 controls pass, CLI2/FAILED on TCP TIME_WAIT before second profile. Owned services stopped; sources stable. Probe fix RED→GREEN/414 tests, no listener takeover. New A3-0029 plan 78e195f57872e0732394e3c546f665e1062b4a360083d2ee0a407d5def33b008 requires both exact new ACKs; original freeze released. E1 remains incomplete; E2/E3/F/G locked. Evidence evaluation/evidence/e1/port-recovery-20261008/.

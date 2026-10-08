@@ -150,3 +150,10 @@ supervision or assert power-loss recovery. Author review fixed reply logging
 and cancellation recording with RED/GREEN evidence;411 unit tests do not close
 a gate. A1-0036's exact trace result is owner evidence, not Agent3 compatibility.
 Evidence evaluation/evidence/e1/access-runner-20261008/; E2/E3/F/G restrictions unchanged.
+
+
+## 2026-10-08 UTC /2026-10-09 IST — partial live E1 / renewed FREEZE
+
+A1-0037/79dacb0 and A2-0018/c8d89d8 exact A3-0027 ACKs verified. Actual paper-strict3/3 passes; CLI2/FAILED before paper-minimal startup due Agent3 TIME_WAIT port probe. Source stable, owned services stopped. Minimal fix RED→GREEN/full414 tests; no full E1 success, catalog/recovery/formal/RQ gate result. A3-0028 releases original freeze; A3-0029 requests revised 78e195f57872e0732394e3c546f665e1062b4a360083d2ee0a407d5def33b008 plan with same owner pins/configuration. Both new exact ACKs required; old ACKs rejected. E2/E3/F/G remain gated; no checkbox changes. Evidence evaluation/evidence/e1/port-recovery-20261008/.
+
+D42 PLAN-CHOICE-PENDING-ACK: use SO_REUSEADDR for the port probe to match next-listener TIME_WAIT binding. Live listeners still refuse; no takeover/port/budget/service-flag change. Only runtime e1.py hash changed. D41 original exact owner-scope ACKs were satisfied for the failed attempt; new D42 plan bytes require renewed exact ACKs. This runner defect is a tested reconstruction result, not a paper ambiguity/vulnerability.

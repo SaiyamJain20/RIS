@@ -100,3 +100,8 @@ public runner is implemented, but both exact A3-0027 plan ACKs are absent and CL
 refuses startup. No real nine-control E1 run, catalog/recovery/formal correspondence
 or research gate result. E2/E3 wait on actual E1; F/G locked; no checkbox changed.
 Evidence evaluation/evidence/e1/access-runner-20261008/.
+
+
+## 2026-10-08 UTC /2026-10-09 IST — partial live E1 / renewed FREEZE
+
+A1-0037/79dacb0 and A2-0018/c8d89d8 exact A3-0027 ACKs verified. Actual paper-strict3/3 passes; CLI2/FAILED before paper-minimal startup due Agent3 TIME_WAIT port probe. Source stable, owned services stopped. Minimal fix RED→GREEN/full414 tests; no full E1 success, catalog/recovery/formal/RQ gate result. A3-0028 releases original freeze; A3-0029 requests revised 78e195f57872e0732394e3c546f665e1062b4a360083d2ee0a407d5def33b008 plan with same owner pins/configuration. Both new exact ACKs required; old ACKs rejected. E2/E3/F/G remain gated; no checkbox changes. Evidence evaluation/evidence/e1/port-recovery-20261008/.

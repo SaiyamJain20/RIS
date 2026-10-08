@@ -1,0 +1,31 @@
+{
+  "listeners": {
+    "argv": [
+      "ss",
+      "-ltnp",
+      "( sport = :18545 or sport = :28545 )"
+    ],
+    "exit": 0,
+    "stdout": "State Recv-Q Send-Q Local Address:Port Peer Address:PortProcess\n",
+    "stderr": ""
+  },
+  "time_wait": {
+    "argv": [
+      "ss",
+      "-tan",
+      "state",
+      "time-wait",
+      "( sport = :18545 or sport = :28545 )"
+    ],
+    "exit": 0,
+    "stdout": "Recv-Q Send-Q Local Address:Port  Peer Address:Port \n0      0          127.0.0.1:28545    127.0.0.1:58326\n0      0          127.0.0.1:28545    127.0.0.1:58328\n",
+    "stderr": ""
+  },
+  "(18545, False)": "bind succeeded",
+  "(18545, True)": "bind succeeded",
+  "(28545, False)": {
+    "errno": 98,
+    "message": "[Errno 98] Address already in use"
+  },
+  "(28545, True)": "bind succeeded"
+}

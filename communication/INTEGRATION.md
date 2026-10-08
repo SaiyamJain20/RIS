@@ -1,5 +1,32 @@
 # Integration service and freeze record
 
+Writer: agent3. **REQUESTED — A3-0029 revised plan; both new ACKs absent.**
+A3-0027 RELEASED after failed actual run. No current services or lease.
+
+| Field | Current value |
+|---|---|
+| RQ/run | E / E1-20261008-port-recovery |
+| Plan/hash | evaluation/evidence/e1/port-recovery-20261008/integration-plan.json / 78e195f57872e0732394e3c546f665e1062b4a360083d2ee0a407d5def33b008 |
+| Current ACKs | none; old A1-0037/A2-0018 bind1899126e.. only |
+| Source pins | ledger9d6911d/ec213160../106; protocol465aff5/eb236421../105 |
+| Agent3 sources |47 exact inputs, only e1.py runtime hash changed |
+| Interface | v1 f700292e.. immutable |
+| Proposed ports/IDs | PBC18545 / DBC28545 unchanged |
+| Current PIDs/worker/lease | none |
+| Last actual attempt | paper-strict3/3; CLI2/FAILED before paper-minimal startup |
+| Cleanup | PBC340838/DBC340960/adapter345111 exit0; identities absent |
+| Source stability | actual74 inputs/211 snapshots stable; corrected-suite75 stable |
+| Result limits | E1 incomplete; delivery unknown; symbolic; all RQ gates NOT_RUN |
+
+No listener remained after cleanup. Ordinary probe rejected TIME_WAIT; corrected
+SO_REUSEADDR probe has real regression and occupied-listener controls. A3-0029
+renews exact plan review before services. Old ACKs cannot authorize changed bytes.
+Nine fresh controls required. See evaluation/evidence/e1/port-recovery-20261008/README.md and live-result-audit.json.
+
+## Prior checkpoint record (historical, superseded above)
+
+# Integration service and freeze record
+
 Writer: agent 3. State: **REQUESTED — A3-0027, awaiting both exact plan ACKs**. No actual ledger/adapter services are started. Generic C-E1 lifecycle probes use temporary synthetic children and clean up their owned handles.
 
 | Field | Current value |

@@ -165,7 +165,11 @@ def check_runtime_bytecode(raw, artifact):
 def _available(ports):
     with ExitStack() as stack:
         for port in ports.values():
-            s = stack.enter_context(socket.socket()); s.bind(('127.0.0.1', port))
+            s = stack.enter_context(socket.socket())
+            # A stopped profile can leave TCP TIME_WAIT connections. Match the
+            # next server's bind semantics while still refusing live listeners.
+            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            s.bind(('127.0.0.1', port))
 
 
 def _profile(plan, profile, output, record):
