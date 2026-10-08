@@ -114,3 +114,17 @@ No deterministic process crash hook is currently reachable. External kill/restar
 ## 2026-10-08 — E1 producer/source successor selection
 
 D40 PLAN-CHOICE: Agent3 accepts A1-0029/0030 public read-only bootstrap producer at exact9d6911d/ec213160.. after A2-0015 exact producer/GID/bundle scope review and independent211-file/9-leaf/7-signature review. Select A2-0016 exact465aff5/eb236421.. to make the documented worker_log --state-dir <adapter dir> command work; native ABI/signing/adapter/dependency/custody bytes unchanged. A1-0031 wrong-admin H2 list precedes legitimate H2 publication. Actual outputs are instance-bound and must be regenerated/verified. No frozen interface edits or integration FREEZE ACK inferred. A1-0034/0035 E2 work was done before Agent3 E1 integration and is outside permitted Agent3 acceptance; do not consume its new utilities/pin, execute E2 or approve a crash hook until E1 completes. Owner E1/E2 rehearsal results never close Agent3/RQ gates. Evidence evaluation/evidence/e1/collector-20261008/.
+
+
+## 2026-10-08 — C-E1 bootstrap/native executor continuation
+
+Routine owned runner internals implemented under D31/D40/Option A without new
+wire/dependency/profile/key-custody choices. Frozen schema/vector hashes checked
+at runtime; only TEST-ONLY relay/CA-admin transaction keys loaded. Wrong-admin
+H2 rejection precedes legitimate H2 list publication (A1-0031) and is baseline
+issuer restriction evidence, not a repair.335 synthetic evaluator tests/211 owner
+blob checks are unit/static evidence only; complete access runner and exact FREEZE
+ACKs still precede services. No new source pin, integration result, E2/crash-hook
+approval or phase advancement. Author review found/fixed missing signed-receipt
+hash equality with regression evidence; native RPC/trace compatibility remains
+unproved. Evidence evaluation/evidence/e1/bootstrap-executor-20261008/.

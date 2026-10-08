@@ -1,0 +1,17 @@
+Selected bounded excerpt; exact full output/hash/command in commands.json
+..........F..............                                                [100%]
+=================================== FAILURES ===================================
+____ test_mutually_consistent_receipt_cannot_replace_the_signed_transaction ____
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-33/test_mutually_consistent_recei0')
+
+    def test_mutually_consistent_receipt_cannot_replace_the_signed_transaction(tmp_path):
+        replies = Replies(); replies.foreign_hash = True; chain = executor(tmp_path, replies)
+>       with pytest.raises(ValueError): chain.submit('relay', 'TMSC', 'authEpoch')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+evaluation/tests/test_chain.py:92: Failed
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_chain.py::test_mutually_consistent_receipt_cannot_replace_the_signed_transaction
+1 failed, 24 passed in 0.45s

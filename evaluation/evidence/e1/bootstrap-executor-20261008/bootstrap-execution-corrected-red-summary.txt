@@ -1,0 +1,71 @@
+Selected bounded excerpt; exact full output/hash/command in commands.json
+E       AssertionError: Native bootstrap execution is missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fbd4099e480>('evaluation.bootstrap_execution')
+E        +    where <function find_spec at 0x7fbd4099e480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_bootstrap_execution.py:16: AssertionError
+___ test_invalid_bootstrap_provider_cannot_satisfy_controls[wrong-recipient] ___
+
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal'
+control = 'wrong-recipient'
+
+    @pytest.mark.parametrize('control', ['grant-all', 'deny-all', 'wrong-reason', 'wrong-state', 'wrong-event', 'wrong-recipient'])
+    def test_invalid_bootstrap_provider_cannot_satisfy_controls(inputs, control):
+        sample, kwargs = inputs; chain = Boundary(sample, kwargs); chain.control = control
+>       with pytest.raises(ValueError): execute(chain, sample, kwargs['deployment_bytes'])
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_bootstrap_execution.py:107: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+chain = <test_bootstrap_execution.Boundary object at 0x7fbd3fd28270>
+sample = {'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d38804... (keyref:user:<label>)'], 'producer': 'agent-1 ledger/tools/bootstrap_fixture.sh (script/BootstrapFixture.s.so
+deployment = b'{"schemaVersion": "hmbc-ledger-deployment/v0", "interfaceVersion": "v1", "producer": "agent-1 ledger/tools/deploy_lo...NG_PROFILE"}, "errorEncoding": "custom error Rejected(uint8 code); selector = bytes4(keccak256(\'Rejected(
+
+    def execute(chain, sample, deployment):
+>       assert importlib.util.find_spec('evaluation.bootstrap_execution') is not None, 'Native bootstrap execution is missing'
+E       AssertionError: Native bootstrap execution is missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fbd4099e480>('evaluation.bootstrap_execution')
+E        +    where <function find_spec at 0x7fbd4099e480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_bootstrap_execution.py:16: AssertionError
+_______________ test_metadata_mismatch_prevents_any_transaction ________________
+
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': 'fffffffffffffffffffffffffffff...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal'
+
+    def test_metadata_mismatch_prevents_any_transaction(inputs):
+        sample, kwargs = inputs; chain = Boundary(sample, kwargs)
+        sample['binding']['deploymentSha256'] = 'f'*64
+>       with pytest.raises(ValueError): execute(chain, sample, kwargs['deployment_bytes'])
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_bootstrap_execution.py:113: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+chain = <test_bootstrap_execution.Boundary object at 0x7fbd3fd2a360>
+sample = {'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': 'ffffffffffffffffffffffffffffff... (keyref:user:<label>)'], 'producer': 'agent-1 ledger/tools/bootstrap_fixture.sh (script/BootstrapFixture.s.so
+deployment = b'{"schemaVersion": "hmbc-ledger-deployment/v0", "interfaceVersion": "v1", "producer": "agent-1 ledger/tools/deploy_lo...NG_PROFILE"}, "errorEncoding": "custom error Rejected(uint8 code); selector = bytes4(keccak256(\'Rejected(
+
+    def execute(chain, sample, deployment):
+>       assert importlib.util.find_spec('evaluation.bootstrap_execution') is not None, 'Native bootstrap execution is missing'
+E       AssertionError: Native bootstrap execution is missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fbd4099e480>('evaluation.bootstrap_execution')
+E        +    where <function find_spec at 0x7fbd4099e480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_bootstrap_execution.py:16: AssertionError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_bootstrap_execution.py::test_wrong_admin_precedes_legitimate_h2_and_both_users_register
+FAILED evaluation/tests/test_bootstrap_execution.py::test_invalid_bootstrap_provider_cannot_satisfy_controls[grant-all]
+FAILED evaluation/tests/test_bootstrap_execution.py::test_invalid_bootstrap_provider_cannot_satisfy_controls[deny-all]
+FAILED evaluation/tests/test_bootstrap_execution.py::test_invalid_bootstrap_provider_cannot_satisfy_controls[wrong-reason]
+FAILED evaluation/tests/test_bootstrap_execution.py::test_invalid_bootstrap_provider_cannot_satisfy_controls[wrong-state]
+FAILED evaluation/tests/test_bootstrap_execution.py::test_invalid_bootstrap_provider_cannot_satisfy_controls[wrong-event]
+FAILED evaluation/tests/test_bootstrap_execution.py::test_invalid_bootstrap_provider_cannot_satisfy_controls[wrong-recipient]
+FAILED evaluation/tests/test_bootstrap_execution.py::test_metadata_mismatch_prevents_any_transaction
+8 failed in 0.04s

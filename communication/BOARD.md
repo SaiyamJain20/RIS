@@ -1,13 +1,13 @@
 # Project board
 
-Coordinator/writer: Agent3. Updated2026-10-08 after C-E1 collector verification and A1-0030/A2-0016 successor source review.
+Coordinator/writer: Agent3. Updated2026-10-08 after C-E1 bootstrap/native executor verification; selected A1-0030/A2-0016 inputs unchanged.
 
 **Active RQ:** E/RQ1. **Milestone:** E0 closed; E1 unlocked, C-E1 lifecycle implemented; native/worker collector verified; actual runner/integration pending. **Interface:** v1 frozen bytes;15 byte-identical copies in interfaces/v1/FREEZE.json SHA-256`f700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2`. **Integration freeze:** inactive. E1 is unlocked; F/G remain locked. Live ACKs/current successor pins: communication/E0_MAPPING_ACKS.json; frozen manifest retains immutable publication-time status.
 
 | Phase | Status | Remaining evidence |
 |---|---|---|
 | E0 | CLOSED | A1-0027/70f704d and A2-0013/e30d00d exact frozen mapping ACKs verified; all seven definition rows retain evidence/exclusions |
-| E1 | UNLOCKED — C-E1 WORKING | Collector verified; A1-0030 bootstrap/A2-0016 exporter successor source-reviewed. Actual runner, both exact integration FREEZE ACKs and fresh two-chain controls required |
+| E1 | UNLOCKED — C-E1 WORKING | Collector + bootstrap/native executor unit verified; selected owner pins unchanged. Complete access runner, both exact integration FREEZE ACKs and fresh two-chain controls required |
 | E2/E3 | WAITING — E1 |56 NOT_RUN schedules, fault/recovery/model/repair/report evidence and gate E |
 | F | LOCKED | gate E PASS |
 | G | LOCKED | gate F PASS |
@@ -29,3 +29,13 @@ E0 closure verification atf644054 (historical; owner READY status superseded bel
 2026-10-08 C-E1: 32 synthetic process lifecycle checks pass; full evaluator verification recorded in the C-E1 checkpoint evidence. A1-0028 ledger READY at91add8c and A2-0014 candidate service READY at34de384f/98-entry30f76dda.. reviewed; production source unchanged frome30d00d. No actual service started. N-1 WrongIssuerAdmin repaired-control classification is a frozen-label ambiguity; its caller restriction is baseline behavior and must not be attributed to a repair in the later report. No frozen bytes changed.
 
 2026-10-08 scheduled continuation: collector265 evaluator tests pass (source stable); ledger9d6911d/106-entryec213160.. bootstrap and protocol465aff5/105-entryeb236421.. worker-log successor source-reviewed. No actual C-E1 result or integration FREEZE. Owner9/9 E1 rehearsals are owner evidence; premature E2 utilities/rehearsals not accepted/consumed. All56 Agent3 schedules/RQ gates NOT_RUN; F/G locked. Evidence evaluation/evidence/e1/collector-20261008/. Next actual runner, exact FREEZE ACKs, then9 controls on fresh two-chain services.
+
+2026-10-08 continuation:335 evaluator tests pass, source stable;70 new synthetic
+bootstrap/transaction/view/execution checks. Actual bootstrap component implemented
+through public ABIs; no services or live transactions executed. Signed receipt hash
+join omission found in author review, regression RED→GREEN retained.211 selected
+owner blobs/15 frozen copies/35 original review inputs verified. Agent2 STATUS
+atc99e2073 confirms E1 support only; no ACK/source promotion. Evidence
+evaluation/evidence/e1/bootstrap-executor-20261008/. Complete access runner and
+exact FREEZE ACKs still precede9 live controls. All catalog/RQ gates NOT_RUN;
+E2/E3 waiting on actual E1; F/G locked.

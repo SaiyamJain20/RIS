@@ -32,3 +32,22 @@ Read `reports/E0-progress.md` for completed evidence, missing requirements and n
 Current E1 owner inputs: ledger9d6911d/A1-0030 public Alice/Bob bootstrap and protocol465aff5/A2-0016 exporter successor source-reviewed; Option A key custody preserved. Actual runner/integration remain pending. Named crash hooks are absent from the process adapter; E2/E3 is later work and external kill alone cannot prove named crash schedules. Exact integration FREEZE ACKs precede actual services.
 
 C-E1 collector modules: `evm.py` (hash-bound public ABI), `native.py` (receipt/view joins), `rpc.py` (bounded loopback Cast commands), `worker_evidence.py` (redacted exporter consistency and response-cache commitments). They check supplied facts; the actual public runner/native/provider/nonce/expiry/denial joins remain unfinished. Fresh265-test verification/evidence: `evaluation/evidence/e1/collector-20261008/`. No integration or gate result.
+
+C-E1 bootstrap executor: `bootstrap.py` checks the immutable frozen schemas and
+EIP-712 types against the exact deployment bytes, observed producer block and
+authority versions. It independently checks all seven signatures, issuer/admin
+roles, public fixture GIDs, recipient/certificate/bundle joins and expirations.
+`chain.py` submits public ABI calldata with TEST-ONLY relay/CA-admin keys only,
+binds native receipts to the locally signed hash/sender/call, and reads historical
+views with block identity checks. `bootstrap_execution.py` runs wrong-admin H2
+rejection before legitimate H2 publication, verifies rollback and all trust-list
+event/state joins, then registers Alice and policy-denied Bob. No peer-owned
+authority/GID/user/witness key is derived or loaded by these modules.
+
+Verification:335 evaluator tests pass, including70 new synthetic checks; source
+stable during the command. Evidence: `evaluation/evidence/e1/bootstrap-executor-20261008/`.
+The bootstrap component has not run against services. Its controlled RPC replies
+do not prove Anvil trace compatibility, fresh deployment correctness or integration.
+The full access/JSON-lines runner, real9 E1 controls and exact integration FREEZE
+ACKs are still required. Root preflight remains legacy/BLOCKED; every RQ gate is
+NOT_RUN. WrongIssuerAdmin is baseline issuer restriction evidence, not a repair.

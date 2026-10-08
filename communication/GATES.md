@@ -81,3 +81,14 @@ All seven pre-publication E0 acceptance rows verified within exact affected scop
 ## E0 mapping closure —2026-10-08
 
 Exact A1-0027/70f704d and A2-0013/e30d00d frozen mapping ACKs verified; E0 closes/E1 unlocks, with scope exclusions intact. Frozenf700292e.. remains immutable; live status and reviewed98-entry protocol successor recorded in communication/E0_MAPPING_ACKS.json. Static/source/export evidence only (12 non-live tests/9 regenerated exports/16 example verdicts); no real two-chain/services, recovery, correspondence, report or RQ gate run. Every mandatory RQ checkbox and gate decision above remains unchanged/NOT_RUN.
+
+
+## C-E1 bootstrap/native executor checkpoint —2026-10-08
+
+335 evaluator unit checks pass on stable inputs;211 selected owner blobs,
+15 frozen copies and35 original reviewed inputs verify.70 new synthetic
+bootstrap/transaction/view/execution checks do not close any RQ gate criterion.
+No actual service, bootstrap transaction,9-control E1 run, catalog, recovery,
+correspondence or RQ report/ACK executed. Full access runner and exact integration
+FREEZE ACKs remain pending; E1 WORKING, E2/E3 waiting on actual E1, F/G locked.
+Evidence evaluation/evidence/e1/bootstrap-executor-20261008/.

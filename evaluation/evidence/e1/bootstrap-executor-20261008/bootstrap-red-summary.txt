@@ -1,0 +1,71 @@
+Selected bounded excerpt; exact full output/hash/command in commands.json
+>       assert importlib.util.find_spec('evaluation.bootstrap') is not None, 'Instance-bound bootstrap verifier is missing'
+E       AssertionError: Instance-bound bootstrap verifier is missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f7452e9a480>('evaluation.bootstrap')
+E        +    where <function find_spec at 0x7f7452e9a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_bootstrap.py:18: AssertionError
+_ test_raw_bootstrap_uses_bounded_strict_json[xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal'
+bad = b'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+    @pytest.mark.parametrize('bad', [b'{"x":1,"x":2}', b'{"x":NaN}', b'[]', b'x'*1048577])
+    def test_raw_bootstrap_uses_bounded_strict_json(inputs, bad):
+        _, kwargs = inputs
+>       with pytest.raises(ValueError): checker()(bad, **kwargs)
+                                        ^^^^^^^^^
+
+evaluation/tests/test_bootstrap.py:107: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def checker():
+>       assert importlib.util.find_spec('evaluation.bootstrap') is not None, 'Instance-bound bootstrap verifier is missing'
+E       AssertionError: Instance-bound bootstrap verifier is missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f7452e9a480>('evaluation.bootstrap')
+E        +    where <function find_spec at 0x7f7452e9a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_bootstrap.py:18: AssertionError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_bootstrap.py::test_positive_bootstrap_retains_registered_policy_denied_bob
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_instance_or_source_block_refuses_before_submission[deploymentSha256-ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_instance_or_source_block_refuses_before_submission[pbcChainId-28545]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_instance_or_source_block_refuses_before_submission[tmsc-0x1111111111111111111111111111111111111111]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_instance_or_source_block_refuses_before_submission[rsc-0x2222222222222222222222222222222222222222]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_instance_or_source_block_refuses_before_submission[profile-0]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_instance_or_source_block_refuses_before_submission[blockNumber-339]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_instance_or_source_block_refuses_before_submission[blockTimestamp-1791475989]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_actor_bundle_or_unsigned_metadata_is_rejected[unknown-root]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_actor_bundle_or_unsigned_metadata_is_rejected[wrong-admin]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_actor_bundle_or_unsigned_metadata_is_rejected[wrong-kind]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_actor_bundle_or_unsigned_metadata_is_rejected[wrong-call]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_actor_bundle_or_unsigned_metadata_is_rejected[version]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_actor_bundle_or_unsigned_metadata_is_rejected[list-expired]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_actor_bundle_or_unsigned_metadata_is_rejected[unexpected-revocation]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_actor_bundle_or_unsigned_metadata_is_rejected[root-signature]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_actor_bundle_or_unsigned_metadata_is_rejected[missing-list]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_actor_bundle_or_unsigned_metadata_is_rejected[reordered-list]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_actor_bundle_or_unsigned_metadata_is_rejected[extra-secret]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_actor_bundle_or_unsigned_metadata_is_rejected[not-test-only]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_actor_bundle_or_unsigned_metadata_is_rejected[unknown-user]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_actor_bundle_or_unsigned_metadata_is_rejected[gid-substitution]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_actor_bundle_or_unsigned_metadata_is_rejected[bundle-substitution]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_actor_bundle_or_unsigned_metadata_is_rejected[recipient-label]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_actor_bundle_or_unsigned_metadata_is_rejected[recipient-hash]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_actor_bundle_or_unsigned_metadata_is_rejected[certificate-digest]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_actor_bundle_or_unsigned_metadata_is_rejected[possession-signature]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_actor_bundle_or_unsigned_metadata_is_rejected[duty-claim]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_actor_bundle_or_unsigned_metadata_is_rejected[certificate-role]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_actor_bundle_or_unsigned_metadata_is_rejected[registration-expiry]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_actor_bundle_or_unsigned_metadata_is_rejected[stale-current-version]
+FAILED evaluation/tests/test_bootstrap.py::test_wrong_actor_bundle_or_unsigned_metadata_is_rejected[extra-field]
+FAILED evaluation/tests/test_bootstrap.py::test_registration_at_expiry_is_not_reusable_authorization
+FAILED evaluation/tests/test_bootstrap.py::test_raw_bootstrap_uses_bounded_strict_json[{"x":1,"x":2}]
+FAILED evaluation/tests/test_bootstrap.py::test_raw_bootstrap_uses_bounded_strict_json[{"x":NaN}]
+FAILED evaluation/tests/test_bootstrap.py::test_raw_bootstrap_uses_bounded_strict_json[[]]
+FAILED evaluation/tests/test_bootstrap.py::test_raw_bootstrap_uses_bounded_strict_json[xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+37 failed in 0.19s

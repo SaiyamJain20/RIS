@@ -301,3 +301,82 @@ All15 frozen copies and35 original review files unchanged. No interfaces, depend
 Prior writer stopped on a usage limit; its14 unfinished codec/RPC/test/ABI fixture files were preserved before review and adopted only after fresh verification. Historical RED/GREEN logs remain in /home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T152012Z; no fresh RED claim for inherited code. New worker tests are RED→GREEN in this run. Failed helper lookup/metadata/append-race details are preserved in verification.json; final pin capture was repeated sequentially. Raw blob reads/programs/full logs and publication records: /home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T175325Z. Selected evidence is committed here. Author self-review is weaker than an independent review; extra agents/worktrees are prohibited.
 
 Executing-plans ledger: resume SPEC/PLAN C-E1 from515fec2. Pre-flight: frozen schemas/public ABIs retained; process transport already published. Ruling: adopt only the older E1 ledger producer pin, with fixed successor worker-log command — exact peer scope/source review, no E2 promotion — cost is preserving excluded owner rehearsal utilities outside the selected pin. Ruling: phase evidence is Agent3 actual integration, not peer rehearsal claims — required by live gates — cost is independent run still pending. Ruling: existing live HANDOFF is this project's ledger, no worktree/extra agent/new planning template — explicit user execution constraints. C-E1 collector slice verified; C-E1 task NOT complete. Separate author review checks byte pins, typed signing/sample limits, canonical ABI/native joins, strict result association, process ownership, redaction/cache consistency and denial/grant-all/deny-all controls. No unresolved finding in this slice. Final native/RPC authenticity/TTL/nonce/recipient joins remain concrete runner work, never inferred from normalized booleans.
+
+
+## Current checkpoint — C-E1 bootstrap/native executor,2026-10-08
+
+Resume SPEC/PLAN C-E1 fromb12151b2bbe0e4c881e6f86d8b9abdc1d92f7fd8. E0 closed,
+E1 unlocked; complete access runner and actual integration still INCOMPLETE.
+New modules: evaluation/bootstrap.py (frozen-schema/EIP-712 instance binding,
+seven public signature recoveries, observed source-block/version/current-time
+checks, issuer/admin/GID/recipient/certificate/bundle/TTL joins), chain.py
+(public ABI transactions using only relay/CA-admin TEST-ONLY keys, locally signed
+hash/sender/call native receipt joins, historical view block stability checks),
+bootstrap_execution.py (wrong-admin H2 rejection/code16/rollback before legitimate
+H2 list, all three trust updates/events/state digests, then Alice/Bob registration).
+No peer internal imports or root/GID/user/witness keys loaded/derived. Fresh
+transaction status/trace must establish exact UNAUTHORIZED_CALLER; OOG/generic
+failure cannot pass. Block/RPC consistency is not a light-client proof. Live
+Anvil trace compatibility remains unproved, as do all actual bootstrap transactions.
+
+Fresh command `.venv/bin/python -m pytest evaluation/tests -q -p no:cacheprovider`
+exit0:335 passed/49.86s pytest,50.05s subprocess.103-source before/after equal;
+later active documentation writes are publication metadata, runtime code unchanged.
+70 new synthetic tests: bootstrap RED37fail→GREEN37pass; chain RED24fail→GREEN24pass;
+author review regression demonstrated missing locally signed receipt-hash equality
+(1fail/24pass)→fixed25pass; bootstrap execution RED8fail→corrected test digest
+literals from previous pin evidence/RED8fail→GREEN8pass. All RED/control outputs
+retained; bounded excerpts committed, raw output hashes/exact paths in commands.json.
+Two exploratory `git show` guessed-path errors128 recorded in verification.json;
+not experiments. Synthetic old-instance sample/adapted deployment metadata and
+controlled RPC/native evidence; seednone, E symbolic mode. No services, actual
+transactions, live catalog/mutations/recovery/correspondence or RQ gate occurred.
+
+Fresh source audit verifies211 selected ledger/protocol inventory blobs,15 frozen
+copies and35 original review files. Exact public sample copied from
+ledger9d6911d:ledger/exports/bootstrap/sample-repaired-e.json, with provenance
+sidecar. It is never reusable authorization on a new deployment. Pins unchanged:
+ledger9d6911d/106-entryec213160.. A1-0030; protocol465aff5/105-entryeb236421..
+A2-0016, adapter7146495b.. unchanged; live E0_MAPPING_ACKS.json unchanged.
+Frozenf700292e../original review package unchanged. New peer STATUS only at
+c99e2073 (SHA2828635bf882800a5ea30a0828360e3bbdbe5fd1f6241897155467586b61f70f):
+Agent2 explicitly E1 support only/waiting for concrete FREEZE; no new source pin
+or integration ACK. Post-test branches unchanged,107 communication files/no
+divergence. Source/sample/static checks are not owner or Agent3 live evidence.
+
+Evidence evaluation/evidence/e1/bootstrap-executor-20261008/verification.json
+SHA233d7bc33d03cfef84a3582ff21799d6d47b7cee5205d4bcbb62096e91b6c65b;
+commands.json/audit.json/source-brackets.json record actual argv/cwd/times/exits,
+source/tool/package/fixture/output hashes, source stability and limitations.
+Python3.13.13, eth-account0.14.0/eth-abi6.0.0/jsonschema4.26.0/pytest9.0.2;
+Foundry1.8.5 binary/root lock hashes verified. Raw logs/programs/lock/publication/
+cleanup evidence external at /home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T183327Z.
+
+Executing-plans ledger: C-E1 bootstrap/native executor slice verified; C-E1 NOT
+complete. Ruling: keep the existing live HANDOFF as ledger and implement routine
+runner internals under frozen/public boundaries, without a new interface/dependency
+or planning template. Explicit no-worktree/no-extra-agent constraints override
+skill delegation. Author self-review checks signer custody, domain/instance/source
+joins, canonical schema/ABI, local signed hash versus mutually consistent RPC
+replies, raw custom-error evidence, expiry/rollback and grant-all/deny-all controls;
+weaker than independent review. Fixed missing signed-hash check after RED evidence.
+Live RPC/trace/service behaviors are explicit unproved limits, not silent fallbacks.
+
+A3-0026 REVIEW delivered only after exact-path normal Agent3 push/remote SHA/status
+verification. Separate scheduled mkdir guard and coordinator flock held; scheduled
+metadata contains active guard PID/start time and conservative6h+owner-absent stale
+policy. Cleanup uses finally, verifies exact guard process identity, releases both
+locks including publication failure. No stale recovery. No peer source/mailbox,
+archive/frozen bytes/dependency edits, extra agent/worktree, unreviewed merge,
+main/force push, reset/rebase/stash/clean or history rewrite.
+
+Next: complete runner must materialize reviewed hash-bound owner snapshots, start
+fresh chains only after a concrete source/tool/dependency/config FREEZE and both
+exact owner ACKs, run producer and validated bootstrap, start the public adapter,
+collect actual request/decision/checkpoint/grant/worker/outcome evidence for9 E1
+legitimate/Bob/wrong-admin controls. Maintain causal order, native grant/recipient/
+nonce/expiry/denial joins and raw evidence custody. Do not publish FREEZE around
+an unfinished access runner or count this bootstrap unit slice as integrated E1.
+All56 catalog schedules/RQ gates remain NOT_RUN; four paper crash cases remain
+BLOCKED/unproved; E2/E3 after actual E1; F/G locked. WrongIssuerAdmin credits
+baseline issuer checks, not a repair. No human action required.

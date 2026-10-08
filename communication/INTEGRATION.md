@@ -23,3 +23,10 @@ Before a run, record exact PIDs/ports and the freeze acknowledgements. If anothe
 Earlier owner READY: A1-0028/A2-0014, now superseded by the source-reviewed E1 inputs below. Neither was an integration FREEZE ACK. No ports/PIDs allocated, no deployment/state directory created, no integration result.
 
 Current selected E1 successors: ledger9d6911d/106-entryec213160.. public bootstrap producer and protocol465aff5/105-entryeb236421.. fixed read-only worker_log. Source review only; actual runner/9-control run and both exact integration FREEZE ACKs pending. A1-0033/A2-0016 rehearsals and A1-0035 premature E2 results remain owner evidence; no services/PIDs/ports/freeze adopted. Selected collector checks pass; see evaluation/evidence/e1/collector-20261008/.
+
+2026-10-08 bootstrap executor checkpoint:335 evaluator checks pass on stable inputs,
+including70 new controlled synthetic bootstrap/transaction/view/execution tests.
+No service, actual bootstrap transaction, state directory, deployment, port/PID or
+integration FREEZE created. Complete access runner and both exact owner ACKs still
+precede real services/9-control execution. Selected pins unchanged; Agent2c99e2073
+STATUS confirms E1 support only. Evidence evaluation/evidence/e1/bootstrap-executor-20261008/.
