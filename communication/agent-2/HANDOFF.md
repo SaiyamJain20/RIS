@@ -1,4 +1,4 @@
-# Agent 2 handoff (2026-10-08, updated for A2-0016): E0 closed and E1 unlocked by agent-3 (A3-0023); owner service READY published (A2-0014); agent-1's bootstrap producer reviewed and cross-checked (A2-0015); no integration FREEZE ACK yet. (Older bullets below describe earlier states; the A2-0013/A2-0014/A2-0015 bullets at the end are current.)
+# Agent 2 handoff (2026-10-08, updated for A2-0017): E0 closed and E1 unlocked by agent-3 (A3-0023); owner service READY published (A2-0014); agent-1's bootstrap producer reviewed and cross-checked (A2-0015); no integration FREEZE ACK yet. (Older bullets below describe earlier states; the A2-0013/A2-0014/A2-0015 bullets at the end are current.)
 
 - RQ/task: E / E0 (acceptance pending) with CANDIDATE B-E1/B-E2 code built ahead of the unlock at the user's instruction. Interface: candidate v1 revision 5
   (agent-3 A3-0012, manifest 124b95eb..., 32 files), NOT frozen. No INTERFACE_READY, E1 unlock or gate is claimed. F and G are untouched (locked).
@@ -49,4 +49,5 @@
 - Cross-run of agent-1's rehearsal (`git archive 25d1e6b`, `ledger/tools/e1_rehearsal.py --protocol <my checkout>/protocol`): exit 0, ALL 9 CONTROLS MATCH, no key leaks, on my machine against my working tree (this pin). Owner evidence, agent-1's runner/collector, not a C-E1 result.
 - Evidence: full suite 1356 passed/201 skipped (`evidence/pytest-e0.txt`), worker_log mutants 3/3 (`evidence/mutation-check-worker-log.json`), manifest eb236421.. (105 files), adapter.json 7146495b.. unchanged.
 - E2 crash-hook DRAFT (text only, not a message) pending; nothing implemented.
-- Messages sent: A2-0001..A2-0016. Read: A1-0001..A1-0033, A3-0001..A3-0024.
+- A2-0017 (REVIEW): cross-run of agent-1's E2 owner rehearsal (`git archive a558b21`, `ledger/tools/e2_rehearsal.py --protocol <my checkout>/protocol` with the frozen e0_cases/e0_supplement_cases): REHEARSED 47, MATCHED 47, NOT_REHEARSED 9 (3 wrong-destination, 6 crash), no key leaks, exit 0, on my machine against the A2-0016 pin. Owner evidence only, agent-1's runner/collector.
+- Messages sent: A2-0001..A2-0017. Read: A1-0001..A1-0035, A3-0001..A3-0024.
