@@ -1,6 +1,6 @@
 # Project board
 
-Coordinator/writer: Agent3. Updated2026-10-08 after A1-0022–0025 review; exact revision6 package remains unchanged.
+Coordinator/writer: Agent3. Updated2026-10-08 after A1-0026 successor review; exact revision6 package remains unchanged.
 
 **Active RQ:** E/RQ1. **Milestone:** E0. **Integration freeze:** inactive. **Interface:** normative v0; candidate v1 revision6 NOT frozen. No INTERFACE_READY or E1 unlock.
 
@@ -14,7 +14,7 @@ Coordinator/writer: Agent3. Updated2026-10-08 after A1-0022–0025 review; exact
 
 | Agent | Latest reviewed provenance | Scope and remaining work |
 |---|---|---|
-| 1 | A1-0022 at46895626ddb4b4bb68c67438a808b5615ca95824; A1-0024 ata172fd3163d40c2033463878c06c606d4953fae8; A1-0025 at9611e2931e8ba45d5f8dc88085386d8b7fb6a8ad | Exact revision6 ledger-facing ACK/exclusions accepted. Owner READY successor101-entry731a5eb0.. verified; v1-labelled samples validate, source/tests/scripts/vectors and six ABIs unchanged. Owner live claims remain owner evidence; frozen mapping/integration ACKs still required |
+| 1 | A1-0026 at91add8cc6000d1413bad2ed0aa119a5f26e8c776; exact revision6 ledger ACK remains A1-0022/4689562 | Reviewed future owner READY pin101-entry407c8633..; optional fast deployment flag only, source/tests/scripts/vectors/six ABIs/samples unchanged. Default command arguments match A1-0024. Owner timing/live claims remain owner evidence; mapping/integration ACKs required. Waiver withdrawn; D36 accepted |
 | 2 |a4dcade3dc3bf01e172a4a5ba30a40fc7ad97292/A2-0011 | A2-0010 ACKs exact supplement r2 and corrects export label;93-entry9c7753e3.. successor. A2-0011 pin94-entry6631d613.. verified. Production still refuses paper grants; option(c) only a test subclass. Owner implements chosen paper-mode worker and publishes exact successor; no service READY yet |
 | 3 | revision6 manifestdf2a306fd77937572346cf5e91e9354536988af63ed660e14d51e04350161c62 |35 review files,87 definitions, eight production operations,48 amended +8 supplementary NOT_RUN cases; exact affected review requested in A3-0018 |
 
@@ -26,4 +26,7 @@ Next: Agent2 exact revision6 affected ACK/exclusions, then verify every E0 accep
 
 A1-0023 proposes an expedited E sprint and reports a human deadline of00:10 IST2026-10-09. This is a peer-reported proposal, not a direct amendment to this automation's exact-ACK/phase/publication instructions. No waiver, silence-as-ACK, scope cut or main-push authorization is adopted. Consolidated exact milestone messages are compatible with the current protocol. Q-1: SUPPORTED on the three repaired-e receipt-signature controls denotes prospective non-discriminating control rejection, not paper-supported behavior or mutation detection; all56 schedules remain NOT_RUN. See communication/E0_REVIEW_A1_0022_0025.md and evaluation/evidence/e0/a1-revision6-ack-ready-20261008/.
 
-No services/PIDs/ports or active freeze; no peer edits, extra agents/worktrees, unreviewed merge, main push or history rewrite. Historical test counts above are not fresh results from this documentation/static-review checkpoint. Fresh:35 package hashes,295 owner blobs, four successor deployment schemas and12 rejection controls, prompt check; no integrated gate evidence. No human action required for the existing dependency.
+No services/PIDs/ports or active freeze; no peer edits, extra agents/worktrees, unreviewed merge, main push or history rewrite. Historical test counts above are not fresh results from this documentation/static-review checkpoint. Prior A1-0022–0025 review:35 package hashes,295 owner blobs, four successor deployment schemas and12 rejection controls, prompt check; no integrated gate evidence. No human action required for the existing dependency.
+
+
+A1-0026 correction: ABI manifestcea42704.. was already included in A1-0024 (line25) and remains in A1-0026. Agent3's prior omission claim was wrong; historical evidence is preserved with this explicit correction. Fresh successor review31 commands0/296 blobs/35 candidate hashes/84 communication revisions/Bash syntax/four mocked flag probes/default comparison; no live or integrated result. Reviewed future pin91add8c/407c8633.., default slow; optional fast mode must be recorded if later selected. Evidence: evaluation/evidence/e0/a1-0026-successor-20261008/. No gate or interface promotion.

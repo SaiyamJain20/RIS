@@ -1,0 +1,17 @@
+# A1-0026 E0 successor review — 2026-10-08
+
+Paper-derived HMBC2020 reconstruction. This is static owner-source review and shell argument checking. E0 remains open; E1/F/G locked; all56 schedules NOT_RUN.
+
+Agent1 message A1-0026 at91add8cc6000d1413bad2ed0aa119a5f26e8c776, SHA-2567aa219f0d3f7daaf03ebed19270caf9a476db81d5479a713f98409abb9874c53. Reviewed101-entry manifest407c86331072bdad63562541230fdd3078608287eccb373cb2f974e3bde20fc1. A1-0024/a172fd3/101-entry731a5eb0.. remains a valid historical pin. Agent2 a4dcade/94-entry6631d613.. unchanged.
+
+Command: `.venv/bin/python /home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T142000Z/review.py`, exit0.31 captured subprocesses0;296 immutable blobs verified (101 previous ledger+101 successor ledger+94 protocol);84 newest remote communication files with exact file-changing commits/hashes, no divergent revisions.35 candidate files remain byte-identical to revision6 df2a306f.. before/after. Ledger src/test/script/config/vector/ABI/sample bytes unchanged. Only deploy_local.sh and its owner evidence hashes change inside the101 entries; the inventory itself changes accordingly.
+
+Fresh Bash syntax check0 and four TEST-ONLY mock-forge argument probes (flag unset/0/1/other), each with three stage calls; only1 omits --slow. A separate old-script probe verifies default argument bytes equal the previous pin. This establishes shell expansion on this host, not deployment state equality, portability to other Bash versions or throughput. Owner four live smokes/nine deploys/11–16-second timings are owner assertions; their fast run directories were deleted by the owner and were not independently replayed here.
+
+Inventory correction: the ABI manifest was already listed on line25 of A1-0024 and remains listed in A1-0026 with hashcea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7. The previous review's omission note was an author error hard-coded in its narrative field. Its audit had correctly verified the entry. Historical audit/review files and immutable A3-0019 remain preserved; this successor supersedes the false coverage note without changing a research verdict.
+
+First helper exited1 because its published prior scan predated already-reviewed A1-0025. Exact comparison with the prior run's final84-minus-one scan confirms only A1-0026 is new. Failed helper/outputs preserved externally under stopped-old-peer-baseline; corrected prior-baseline guard retained. This is a monitor bookkeeping failure, not an experiment result.
+
+Python3.13.13/Git2.54.0/eth-account0.14.0/jsonschema4.26.0/pytest9.0.2; Bash version output and all command argv/cwd/start/end/exits/stdin/output hashes in review.json. Foundry1.8.5/solc0.8.37/ProVerif2.05 and root lock binaries/hashes unchanged. Synthetic fixtures only; seed none; no service/PID/port, freeze, ledger/schema/unit/model/crypto/recovery/integration run. Source manifests/program hash/raw outputs retained at /home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T142000Z. Author self-review only; extra agents forbidden.
+
+Operational choice: reviewed future ledger pin=A1-0026; deployment remains default slow unless a future authorized E1 run explicitly chooses and records LEDGER_DEPLOY_FAST=1. Not INTERFACE_READY, mapping ACK or integration FREEZE ACK. Agent1 withdrew its waiver proposal and accepted D36; Agent2 exact revision6 affected ACK and production successor remain pending. Service READY is an integration prerequisite, not a new E0 condition.

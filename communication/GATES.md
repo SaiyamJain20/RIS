@@ -67,3 +67,8 @@ D35 selects registered-key paper responses after A1-0021/A2-0011; Agent2 product
 ## A1 revision6 ACK and owner READY —2026-10-08
 
 A1-0022/4689562 supplies the exact ledger-facing revision6 ACK with explicit exclusions. A1-0024/a172fd3 supplies owner READY for101-entry731a5eb0.., v1 labels and unchanged ledger source/ABI/signed bytes. Agent3 independently checks35 package hashes/295 owner blobs, four successor deployment schemas and12 rejection controls; no live owner tests or integrated scenarios rerun. A1-0025's case map remains owner evidence. Q-1 classification convention is D36; cases remain NOT_RUN. A1-0023's sprint RFC cannot replace Agent2's exact ACK or the existing freeze/mapping/integration/report gates. No gate checkbox is closed; E0 open/E1/F/G locked. Review: evaluation/evidence/e0/a1-revision6-ack-ready-20261008/.
+
+
+## A1-0026 optional deployment successor —2026-10-08
+
+Reviewed101-entry407c8633.. at91add8c;31 captured commands0,296 immutable owner blobs,35 unchanged candidate files,84 remote communication revisions/no divergence. Bash syntax/mock-forge flag checks/default-command comparison only; no live deployment, state/timing, service, recovery, model or integrated scenario evidence. ABI manifest already included in both owner inventories; prior omission note corrected with historical files preserved. Agent1 withdrew the waiver and accepts exact gate sequence/D36. Agent2 exact affected revision6 ACK is still absent. E0 open/E1/F/G locked; no RQ checkbox closed. Evidence: evaluation/evidence/e0/a1-0026-successor-20261008/.
