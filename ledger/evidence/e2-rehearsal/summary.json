@@ -1,0 +1,633 @@
+{
+ "schemaVersion": "hmbc-e2-owner-rehearsal/v0",
+ "note": "OWNER rehearsal (A1-0035), prepared ahead of E2; not a C-E2 or gate result",
+ "rehearsed": 47,
+ "matched": 47,
+ "notRehearsed": 9,
+ "privateKeysInOutputs": [],
+ "rows": [
+  {
+   "id": "E01-subject-substitution-paper-strict",
+   "expectedOutcome": "CONDITIONAL",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "grantGid": "0xac5a40f1b6d99eca704aebc1fd7ffa5dbb5be59a",
+    "requester": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+   },
+   "match": true
+  },
+  {
+   "id": "E01-nonce-replay-paper-strict",
+   "expectedOutcome": "NO_NEW_GRANT",
+   "expectedError": "REPLAY",
+   "expectedClass": "SUPPORTED",
+   "observed": "NO_NEW_GRANT",
+   "observedError": "REPLAY",
+   "native": {
+    "firstGrantAllowed": true
+   },
+   "match": true
+  },
+  {
+   "id": "E01-forged-tuple-paper-strict",
+   "expectedOutcome": "ACCEPT",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "grantGid": "0x41e9357c5fed25e2866624d971679819e15312a7",
+    "pbcLogged": false
+   },
+   "match": true
+  },
+  {
+   "id": "E01-new-reference-replay-paper-strict",
+   "expectedOutcome": "ACCEPT",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "secondGrant": "0xe7b901243dc6410416ab60913c1298727507a80baa2344728379369da9b02b04",
+    "firstGrant": "0x35084bdfbdf311f6d52c4e9da3a51bdb5e747d493d16e3df46e9107f189feefd"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-wrong-issuer-paper-strict",
+   "expectedOutcome": "REJECT",
+   "expectedError": "UNAUTHORIZED_CALLER",
+   "expectedClass": "SUPPORTED",
+   "observed": "REJECT",
+   "observedError": "UNAUTHORIZED_CALLER",
+   "native": {},
+   "match": true
+  },
+  {
+   "id": "E03-dropped-outcome-paper-strict",
+   "expectedOutcome": "PENDING",
+   "expectedError": null,
+   "expectedClass": "SUPPORTED",
+   "observed": "PENDING",
+   "observedError": null,
+   "native": {
+    "status": "1"
+   },
+   "match": true
+  },
+  {
+   "id": "E03-fabricated-outcome-paper-strict",
+   "expectedOutcome": "CONDITIONAL",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "status": "2",
+    "dbcGrantExists": false
+   },
+   "match": true
+  },
+  {
+   "id": "E03-duplicate-outcome-paper-strict",
+   "expectedOutcome": "NO_NEW_OUTCOME",
+   "expectedError": "REPLAY",
+   "expectedClass": "SUPPORTED",
+   "observed": "NO_NEW_OUTCOME",
+   "observedError": "REPLAY",
+   "native": {
+    "status": "2"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-signed-list-rollback-paper-strict",
+   "expectedOutcome": "ACCEPT",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "aliceAfter": "NONE"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-pre-barrier-revocation-paper-strict",
+   "expectedOutcome": "ACCEPT",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "grant": "0x5825fa46855eca3c508bce6de10aa4fa1b3f5174f1a5cd66094d0b9b4ea43c54"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-post-barrier-revocation-paper-strict",
+   "expectedOutcome": "CONDITIONAL",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "grant": "0xf234c7d51aca942adf64d414d9fcad09b7f0602acc83fdc15dbbfad69032318b"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-expired-duty-paper-strict",
+   "expectedOutcome": "CONDITIONAL",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "dutyEnd": "1791481560",
+    "grant": "0x314cabdbb11082351fc4c3508ccba2985324ccc9f52fc842c9df50672977f96e"
+   },
+   "match": true
+  },
+  {
+   "id": "E01-expiry-boundary-paper-strict",
+   "expectedOutcome": "CONDITIONAL",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "requestExpiresAt": "1791481575",
+    "grantBlockTimestamp": "1791481575",
+    "grant": "0x754e9cc068728d3e0ea7416e3466a4355df705f22159e9204e5f754c375d6f95"
+   },
+   "match": true
+  },
+  {
+   "id": "E03-crash-after-intent-paper-strict",
+   "observed": "NOT_REHEARSED",
+   "reason": "no crash hook through the adapter process (A2-0014, A3-0024)",
+   "match": null
+  },
+  {
+   "id": "E03-crash-after-send-paper-strict",
+   "observed": "NOT_REHEARSED",
+   "reason": "no crash hook through the adapter process (A2-0014, A3-0024)",
+   "match": null
+  },
+  {
+   "id": "E01-wrong-destination-paper-strict",
+   "observed": "NOT_REHEARSED",
+   "reason": "needs an otherwise valid request/certificate genuinely issued for a second destination deployment",
+   "match": null
+  },
+  {
+   "id": "E01-subject-substitution-paper-minimal",
+   "expectedOutcome": "CONDITIONAL",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "grantGid": "0xac5a40f1b6d99eca704aebc1fd7ffa5dbb5be59a",
+    "requester": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+   },
+   "match": true
+  },
+  {
+   "id": "E01-nonce-replay-paper-minimal",
+   "expectedOutcome": "NO_NEW_GRANT",
+   "expectedError": "REPLAY",
+   "expectedClass": "SUPPORTED",
+   "observed": "NO_NEW_GRANT",
+   "observedError": "REPLAY",
+   "native": {
+    "firstGrantAllowed": true
+   },
+   "match": true
+  },
+  {
+   "id": "E01-forged-tuple-paper-minimal",
+   "expectedOutcome": "ACCEPT",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "grantGid": "0x41e9357c5fed25e2866624d971679819e15312a7",
+    "pbcLogged": false
+   },
+   "match": true
+  },
+  {
+   "id": "E01-new-reference-replay-paper-minimal",
+   "expectedOutcome": "ACCEPT",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "secondGrant": "0x89bce50eb66fc48e57fa6ac3d010cb621c6ffbcc2e981e42efa4339f1f3b8d3c",
+    "firstGrant": "0xf579716beb1286e44e0a05fe749cff02f180571ab0e5129b9472c2bd93b2fcf6"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-wrong-issuer-paper-minimal",
+   "expectedOutcome": "REJECT",
+   "expectedError": "UNAUTHORIZED_CALLER",
+   "expectedClass": "SUPPORTED",
+   "observed": "REJECT",
+   "observedError": "UNAUTHORIZED_CALLER",
+   "native": {},
+   "match": true
+  },
+  {
+   "id": "E03-dropped-outcome-paper-minimal",
+   "expectedOutcome": "PENDING",
+   "expectedError": null,
+   "expectedClass": "SUPPORTED",
+   "observed": "PENDING",
+   "observedError": null,
+   "native": {
+    "status": "1"
+   },
+   "match": true
+  },
+  {
+   "id": "E03-fabricated-outcome-paper-minimal",
+   "expectedOutcome": "CONDITIONAL",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "status": "2",
+    "dbcGrantExists": false
+   },
+   "match": true
+  },
+  {
+   "id": "E03-duplicate-outcome-paper-minimal",
+   "expectedOutcome": "NO_NEW_OUTCOME",
+   "expectedError": "REPLAY",
+   "expectedClass": "SUPPORTED",
+   "observed": "NO_NEW_OUTCOME",
+   "observedError": "REPLAY",
+   "native": {
+    "status": "2"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-signed-list-rollback-paper-minimal",
+   "expectedOutcome": "ACCEPT",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "aliceAfter": "NONE"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-pre-barrier-revocation-paper-minimal",
+   "expectedOutcome": "ACCEPT",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "grant": "0x18ad7723e76583d166b2d60ed7d64e84addc92172a283a0a56fe33afed987b72"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-post-barrier-revocation-paper-minimal",
+   "expectedOutcome": "CONDITIONAL",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "grant": "0x737670f232328eaf9bd430c63339fee35a1c2369ba5e4f594840f80f1aa1d66e"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-expired-duty-paper-minimal",
+   "expectedOutcome": "CONDITIONAL",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "dutyEnd": "1791481652",
+    "grant": "0x79d9ea584e0fee86d6c08352f5751fc946df0bddc92d6305a59c8952b96ce8eb"
+   },
+   "match": true
+  },
+  {
+   "id": "E01-expiry-boundary-paper-minimal",
+   "expectedOutcome": "CONDITIONAL",
+   "expectedError": null,
+   "expectedClass": "SPEC_GAP",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "requestExpiresAt": "1791481667",
+    "grantBlockTimestamp": "1791481667",
+    "grant": "0xca256a7fb6958958877b24e06ca6687dcfd4c9ddf3db81039304c72f56fd83b7"
+   },
+   "match": true
+  },
+  {
+   "id": "E03-crash-after-intent-paper-minimal",
+   "observed": "NOT_REHEARSED",
+   "reason": "no crash hook through the adapter process (A2-0014, A3-0024)",
+   "match": null
+  },
+  {
+   "id": "E03-crash-after-send-paper-minimal",
+   "observed": "NOT_REHEARSED",
+   "reason": "no crash hook through the adapter process (A2-0014, A3-0024)",
+   "match": null
+  },
+  {
+   "id": "E01-wrong-destination-paper-minimal",
+   "observed": "NOT_REHEARSED",
+   "reason": "needs an otherwise valid request/certificate genuinely issued for a second destination deployment",
+   "match": null
+  },
+  {
+   "id": "E01-subject-substitution-repaired-e",
+   "expectedOutcome": "REJECT",
+   "expectedError": "WRONG_SUBJECT",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "REJECT",
+   "observedError": "WRONG_SUBJECT",
+   "native": {},
+   "match": true
+  },
+  {
+   "id": "E01-nonce-replay-repaired-e",
+   "expectedOutcome": "NO_NEW_GRANT",
+   "expectedError": "REPLAY",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "NO_NEW_GRANT",
+   "observedError": "REPLAY",
+   "native": {
+    "firstGrantAllowed": true
+   },
+   "match": true
+  },
+  {
+   "id": "E01-forged-tuple-repaired-e",
+   "expectedOutcome": "REJECT",
+   "expectedError": "BAD_SIGNATURE",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "REJECT",
+   "observedError": "BAD_SIGNATURE",
+   "native": {},
+   "match": true
+  },
+  {
+   "id": "E01-new-reference-replay-repaired-e",
+   "expectedOutcome": "NO_NEW_GRANT",
+   "expectedError": "REPLAY",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "NO_NEW_GRANT",
+   "observedError": "REPLAY",
+   "native": {},
+   "match": true
+  },
+  {
+   "id": "E02-wrong-issuer-repaired-e",
+   "expectedOutcome": "REJECT",
+   "expectedError": "UNAUTHORIZED_CALLER",
+   "expectedClass": "SUPPORTED",
+   "observed": "REJECT",
+   "observedError": "UNAUTHORIZED_CALLER",
+   "native": {},
+   "match": true
+  },
+  {
+   "id": "E03-dropped-outcome-repaired-e",
+   "expectedOutcome": "PENDING",
+   "expectedError": null,
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "PENDING",
+   "observedError": null,
+   "native": {
+    "status": "1"
+   },
+   "match": true
+  },
+  {
+   "id": "E03-fabricated-outcome-repaired-e",
+   "expectedOutcome": "REJECT",
+   "expectedError": "WRONG_PROFILE",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "REJECT",
+   "observedError": "WRONG_PROFILE",
+   "native": {
+    "status": "1"
+   },
+   "match": true
+  },
+  {
+   "id": "E03-duplicate-outcome-repaired-e",
+   "expectedOutcome": "NO_NEW_OUTCOME",
+   "expectedError": "REPLAY",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "NO_NEW_OUTCOME",
+   "observedError": "REPLAY",
+   "native": {
+    "status": "2"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-signed-list-rollback-repaired-e",
+   "expectedOutcome": "REJECT",
+   "expectedError": "STALE_ANCHOR",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "REJECT",
+   "observedError": "STALE_ANCHOR",
+   "native": {
+    "aliceAfter": "REVOKED"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-pre-barrier-revocation-repaired-e",
+   "expectedOutcome": "ACCEPT",
+   "expectedError": null,
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "grant": "0x79941aab209204a23bdb42d3e7877c6a7e960b47016b2ed42d5a3ccb93606a0d",
+    "windowNote": "pre-barrier acceptance is the designed window"
+   },
+   "match": true
+  },
+  {
+   "id": "E02-post-barrier-revocation-repaired-e",
+   "expectedOutcome": "REJECT",
+   "expectedError": "STALE_STATE",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "REJECT",
+   "observedError": "STALE_STATE",
+   "native": {
+    "nonceConsumed": false
+   },
+   "match": true
+  },
+  {
+   "id": "E02-expired-duty-repaired-e",
+   "expectedOutcome": "REJECT",
+   "expectedError": "EXPIRED",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "REJECT",
+   "observedError": "EXPIRED",
+   "native": {
+    "dutyEnd": "1791481758",
+    "requestExpiresAt": "1791481776"
+   },
+   "match": true
+  },
+  {
+   "id": "E01-expiry-boundary-repaired-e",
+   "expectedOutcome": "REJECT",
+   "expectedError": "EXPIRED",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "REJECT",
+   "observedError": "EXPIRED",
+   "native": {
+    "requestExpiresAt": "1791481773",
+    "consumeBlockTimestamp": "1791481773"
+   },
+   "match": true
+  },
+  {
+   "id": "E03-crash-after-intent-repaired-e",
+   "observed": "NOT_REHEARSED",
+   "reason": "no crash hook through the adapter process (A2-0014, A3-0024)",
+   "match": null
+  },
+  {
+   "id": "E03-crash-after-send-repaired-e",
+   "observed": "NOT_REHEARSED",
+   "reason": "no crash hook through the adapter process (A2-0014, A3-0024)",
+   "match": null
+  },
+  {
+   "id": "E01-wrong-destination-repaired-e",
+   "observed": "NOT_REHEARSED",
+   "reason": "needs an otherwise valid request/certificate genuinely issued for a second destination deployment",
+   "match": null
+  },
+  {
+   "id": "E01-same-nonce-distinct-digests-repaired-e",
+   "expectedOutcome": "NO_NEW_GRANT",
+   "expectedError": "REPLAY",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "NO_NEW_GRANT",
+   "observedError": "REPLAY",
+   "native": {
+    "distinctDigests": true
+   },
+   "match": true
+  },
+  {
+   "id": "E03-receipt-binding-control-requestDigest-repaired-e",
+   "expectedOutcome": "NO_NEW_OUTCOME",
+   "expectedError": "WRONG_SUBJECT",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "NO_NEW_OUTCOME",
+   "observedError": "WRONG_SUBJECT",
+   "native": {
+    "status": "1"
+   },
+   "match": true
+  },
+  {
+   "id": "E03-receipt-binding-control-gid-repaired-e",
+   "expectedOutcome": "NO_NEW_OUTCOME",
+   "expectedError": "WRONG_SUBJECT",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "NO_NEW_OUTCOME",
+   "observedError": "WRONG_SUBJECT",
+   "native": {
+    "status": "1"
+   },
+   "match": true
+  },
+  {
+   "id": "E03-receipt-binding-control-dataId-repaired-e",
+   "expectedOutcome": "NO_NEW_OUTCOME",
+   "expectedError": "WRONG_SUBJECT",
+   "expectedClass": "REPAIR_SUPPORTED",
+   "observed": "NO_NEW_OUTCOME",
+   "observedError": "WRONG_SUBJECT",
+   "native": {
+    "status": "1"
+   },
+   "match": true
+  },
+  {
+   "id": "E03-receipt-signature-control-requestDigest-repaired-e",
+   "expectedOutcome": "NO_NEW_OUTCOME",
+   "expectedError": "WRONG_SUBJECT",
+   "expectedClass": "SUPPORTED",
+   "observed": "NO_NEW_OUTCOME",
+   "observedError": "WRONG_SUBJECT",
+   "native": {
+    "status": "1"
+   },
+   "match": true
+  },
+  {
+   "id": "E03-receipt-signature-control-gid-repaired-e",
+   "expectedOutcome": "NO_NEW_OUTCOME",
+   "expectedError": "WRONG_SUBJECT",
+   "expectedClass": "SUPPORTED",
+   "observed": "NO_NEW_OUTCOME",
+   "observedError": "WRONG_SUBJECT",
+   "native": {
+    "status": "1"
+   },
+   "match": true
+  },
+  {
+   "id": "E03-receipt-signature-control-dataId-repaired-e",
+   "expectedOutcome": "NO_NEW_OUTCOME",
+   "expectedError": "WRONG_SUBJECT",
+   "expectedClass": "SUPPORTED",
+   "observed": "NO_NEW_OUTCOME",
+   "observedError": "WRONG_SUBJECT",
+   "native": {
+    "status": "1"
+   },
+   "match": true
+  },
+  {
+   "id": "E03-receipt-binding-positive-repaired-e",
+   "expectedOutcome": "ACCEPT",
+   "expectedError": null,
+   "expectedClass": "SUPPORTED",
+   "observed": "ACCEPT",
+   "observedError": null,
+   "native": {
+    "status": "2"
+   },
+   "match": true
+  }
+ ]
+}

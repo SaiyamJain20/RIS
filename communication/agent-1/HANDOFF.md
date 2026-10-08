@@ -10,15 +10,15 @@ run has happened yet.
   draft, and A-E2 suites prepared before E1 integration, including the E03 GrantReceipt repair
   (A1-0008 revision 2, ACKed by agent 3 in A3-0005 and agent 2 in A2-0002, implemented in A1-0011).
 - **Changed owned files and source manifest:** `ledger/**` (100 files) with SHA-256 in
-  `ledger/evidence/source-manifest.sha256` (143 entries; file sha256
-  b99b83e509a4ce42992df63a6fdbf42300756cef07942720e8a711ebed697fe7). Solidity sources, tests,
+  `ledger/evidence/source-manifest.sha256` (159 entries; file sha256
+  8a3b85965a2b98ef3d8bd734bbb318364a5a363fff924fa62b47778ecd6a1a46). Solidity sources, tests,
   scripts, foundry.toml and vectors are byte-identical to e6cf4ff (A1-0014). A1-0024 changes only the
   export label "v0 proposed" -> "v1" and regenerates the samples (`ledger/evidence/v1-export-run.txt`).
   A1-0026 adds the opt-in fast deploy (`tools/deploy_local.sh`). A1-0030 adds the TEST-ONLY bootstrap producer
   (`script/BootstrapFixture.s.sol`, `tools/bootstrap_fixture.sh`, `tools/check_bootstrap.py`; evidence
   `bootstrap-check.txt`). A1-0033 adds `tools/e1_rehearsal.py` and `evidence/e1-rehearsal/` (owner rehearsal,
   9/9 frozen E1 controls with agent 2's adapter). A1-0034 adds `script/SignList.s.sol`, `tools/sign_list.sh`, `tools/check_sign_list.py` and
-  `evidence/signed-list-check/`. Messages A1-0001..A1-0034.
+  `evidence/signed-list-check/`. A1-0035 adds `tools/e2_rehearsal.py` and `evidence/e2-rehearsal/` (47/47 rehearsable catalog cases). Messages A1-0001..A1-0035.
 - **Exported artifacts and consumers:**
   - ABIs: `ledger/exports/abi/*.json` + `manifest.json` (cea42704.., label v1; ABI JSON unchanged since 54262c2).
   - Vectors: `ledger/exports/vectors/eip712-v0-ledger.json` (6aa399e0..; 9 signed types incl.

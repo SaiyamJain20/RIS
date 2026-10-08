@@ -1,0 +1,2656 @@
+[
+ {
+  "operation": "encrypt_record",
+  "input": {
+   "record": {
+    "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+    "owner": "0x6ea73ebda053f804cad188496ec48af56b06f698",
+    "payloadDigest": "0x35fcb0ddd944fc86ca98a8e2299a2034862145b07c18cb7573741f81306ca630"
+   },
+   "policy": {
+    "clauses": [
+     [
+      {
+       "role": "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6",
+       "kind": "1",
+       "issuerMode": "0"
+      },
+      {
+       "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+       "kind": "2",
+       "issuerMode": "2"
+      }
+     ]
+    ]
+   },
+   "keyEpoch": "0"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+    "keyEpoch": "0",
+    "ciphertextDigest": "0xf6ca9be2e0ce865ab9d6237df041e6f5200ec077f064d0354781b000cc66d19d",
+    "policyDigest": "0x4bd063e1a4c348bf656f983104839fec2594aaee710b4627e9e46368ba1abc3a"
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "prepare_request",
+  "input": {
+   "request": {
+    "sourceChainId": "18545",
+    "destinationChainId": "28545",
+    "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+    "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+    "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+    "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+    "action": "1",
+    "policyVersion": "1",
+    "authEpoch": "3",
+    "keyEpoch": "0",
+    "nonce": "101",
+    "expiresAt": "1791481719",
+    "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+   },
+   "signingKeyRef": "keyref:user:alice"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "request": {
+     "sourceChainId": "18545",
+     "destinationChainId": "28545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "action": "1",
+     "policyVersion": "1",
+     "authEpoch": "3",
+     "keyEpoch": "0",
+     "nonce": "101",
+     "expiresAt": "1791481719",
+     "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+    },
+    "requestDigest": "0x77b0c46402e0462fd5c2e9f52ffecb30c33f8918531bf857d9e4153224c21e46",
+    "signature": "0x56cad1d524a6511968e7ccad16a9b25106de9d7d537b812cc27e2d4ee9455266479e330a0235eb99c5c01dbf02c6689bb3b47cae088318903630274d279796c91b",
+    "signer": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_checkpoint",
+  "input": {},
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "checkpoint": {
+     "sequence": "1",
+     "authEpoch": "3",
+     "policyVersion": "1",
+     "keyEpoch": "0",
+     "witnessSetVersion": "1",
+     "sourceChainId": "18545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "sourceBlockNumber": "207",
+     "sourceBlockHash": "0xb573141cd80f4f1d2526a25d1d4046c901f70de292498ec74c57375b96608071",
+     "expiresAt": "1791481750"
+    },
+    "signatures": [
+     "0xcf83ad483db570b6da02845df616173343c3af350dac9f47411d37a37e4a14cf7a25ad5585292060f47146cbbd32d87818a1bb5c5a5fd2a597c40a7685322b881b"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_decision",
+  "input": {
+   "requestDigest": "0x77b0c46402e0462fd5c2e9f52ffecb30c33f8918531bf857d9e4153224c21e46"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "decision": {
+     "requestDigest": "0x77b0c46402e0462fd5c2e9f52ffecb30c33f8918531bf857d9e4153224c21e46",
+     "result": "1",
+     "credentialDigest": "0xab0b70e2e40f6196dc48bcb18cda194a28f86d102f458d92107d4d817351d82f",
+     "stateSequence": "1",
+     "witnessSetVersion": "1",
+     "sourceBlockNumber": "207",
+     "sourceBlockHash": "0xb573141cd80f4f1d2526a25d1d4046c901f70de292498ec74c57375b96608071",
+     "expiresAt": "1791481719"
+    },
+    "signatures": [
+     "0xb74eb246180aa980413486d060e95066a1264fdfa7ad08f31740bcc0d6ebc05967554a2ab495773f1d7931e7aa69f6111f5f1a2426d451679ebdd4950d06002e1c"
+    ],
+    "credentialRecords": [
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6",
+      "kind": "1",
+      "serial": "101",
+      "anchorVersion": "1",
+      "validUntil": "1791568082"
+     },
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+      "kind": "2",
+      "serial": "0",
+      "anchorVersion": "1",
+      "validUntil": "1791510482"
+     }
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "prepare_request",
+  "input": {
+   "request": {
+    "sourceChainId": "18545",
+    "destinationChainId": "28545",
+    "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+    "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+    "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+    "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+    "action": "1",
+    "policyVersion": "1",
+    "authEpoch": "3",
+    "keyEpoch": "0",
+    "nonce": "102",
+    "expiresAt": "1791481722",
+    "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+   },
+   "signingKeyRef": "keyref:user:alice"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "request": {
+     "sourceChainId": "18545",
+     "destinationChainId": "28545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "action": "1",
+     "policyVersion": "1",
+     "authEpoch": "3",
+     "keyEpoch": "0",
+     "nonce": "102",
+     "expiresAt": "1791481722",
+     "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+    },
+    "requestDigest": "0xa3e3f8e5e63e7832515f3b7f3de42f6db6ecd295305403abc97e467858378c23",
+    "signature": "0x6887f75a3825d838b0f3a24f0a29141199c551bba5c8427032a73922198e0a506564cb69b36379a28b14ab81d5e5b7cfacfa8d3fe301ffba4cdc9631e4719ac31b",
+    "signer": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_checkpoint",
+  "input": {},
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "checkpoint": {
+     "sequence": "2",
+     "authEpoch": "3",
+     "policyVersion": "1",
+     "keyEpoch": "0",
+     "witnessSetVersion": "1",
+     "sourceChainId": "18545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "sourceBlockNumber": "210",
+     "sourceBlockHash": "0x5d1ebc0a38f594ec200115c6eb2837bb9dcd963059b74fc8fbb309c1f4e38e34",
+     "expiresAt": "1791481753"
+    },
+    "signatures": [
+     "0x918cac302389a862986f553fe79bf847391c72cffc040726292513f6a5c7fb2670e3456e986407ae3095736fc04426ce01104d7d49bd0f8ffe0f1923c09507861c"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_decision",
+  "input": {
+   "requestDigest": "0xa3e3f8e5e63e7832515f3b7f3de42f6db6ecd295305403abc97e467858378c23"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "decision": {
+     "requestDigest": "0xa3e3f8e5e63e7832515f3b7f3de42f6db6ecd295305403abc97e467858378c23",
+     "result": "1",
+     "credentialDigest": "0xab0b70e2e40f6196dc48bcb18cda194a28f86d102f458d92107d4d817351d82f",
+     "stateSequence": "2",
+     "witnessSetVersion": "1",
+     "sourceBlockNumber": "210",
+     "sourceBlockHash": "0x5d1ebc0a38f594ec200115c6eb2837bb9dcd963059b74fc8fbb309c1f4e38e34",
+     "expiresAt": "1791481722"
+    },
+    "signatures": [
+     "0xf694085dc7c0409ffbf91f8166d1a3b26edc971f11defef5eb828a34cef833b70a78c2ed9a3af0d7e6ed5d4dc59e2e1c610f3ca0fc013479259c9777d6fff1fa1b"
+    ],
+    "credentialRecords": [
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6",
+      "kind": "1",
+      "serial": "101",
+      "anchorVersion": "1",
+      "validUntil": "1791568082"
+     },
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+      "kind": "2",
+      "serial": "0",
+      "anchorVersion": "1",
+      "validUntil": "1791510482"
+     }
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "prepare_request",
+  "input": {
+   "request": {
+    "sourceChainId": "18545",
+    "destinationChainId": "28545",
+    "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+    "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+    "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+    "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+    "action": "1",
+    "policyVersion": "1",
+    "authEpoch": "3",
+    "keyEpoch": "0",
+    "nonce": "103",
+    "expiresAt": "1791481726",
+    "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+   },
+   "signingKeyRef": "keyref:user:alice"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "request": {
+     "sourceChainId": "18545",
+     "destinationChainId": "28545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "action": "1",
+     "policyVersion": "1",
+     "authEpoch": "3",
+     "keyEpoch": "0",
+     "nonce": "103",
+     "expiresAt": "1791481726",
+     "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+    },
+    "requestDigest": "0xa9be4845ff345215fb92fd34317b2e9c406ca68535f0981cc202ea673ae5d027",
+    "signature": "0x5c50e7b140a4eadc4501fa43f1e4d39e1b156a56a0ba64c20c9a33fa32ce3c2443aeee62f543cf15f4d68245c389193c2eb3fd0ac3cbc3f8a08854c5489166ea1c",
+    "signer": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_checkpoint",
+  "input": {},
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "checkpoint": {
+     "sequence": "3",
+     "authEpoch": "3",
+     "policyVersion": "1",
+     "keyEpoch": "0",
+     "witnessSetVersion": "1",
+     "sourceChainId": "18545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "sourceBlockNumber": "214",
+     "sourceBlockHash": "0xfce330642de6022cdc5ab007c8a26693af0e60b7465e695e829fad025b838a32",
+     "expiresAt": "1791481757"
+    },
+    "signatures": [
+     "0xc433c041abf8ce2268858ca3f7970e74d64f07ab13b24a2001d6158fb9148b944f1d17317ab24a5da36493f1c2e5a7a4c54e27e297f16a4446b4f47f2767547e1c"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_decision",
+  "input": {
+   "requestDigest": "0xa9be4845ff345215fb92fd34317b2e9c406ca68535f0981cc202ea673ae5d027"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "decision": {
+     "requestDigest": "0xa9be4845ff345215fb92fd34317b2e9c406ca68535f0981cc202ea673ae5d027",
+     "result": "1",
+     "credentialDigest": "0xab0b70e2e40f6196dc48bcb18cda194a28f86d102f458d92107d4d817351d82f",
+     "stateSequence": "3",
+     "witnessSetVersion": "1",
+     "sourceBlockNumber": "214",
+     "sourceBlockHash": "0xfce330642de6022cdc5ab007c8a26693af0e60b7465e695e829fad025b838a32",
+     "expiresAt": "1791481726"
+    },
+    "signatures": [
+     "0x7600d61d18842cf99f6831294d3864394c311bb87468951696be22a4ce886d1e6d35816c255e29ab737a0ef3285c28dde8d355e8622f69d5bcc4314fdb6fd9411b"
+    ],
+    "credentialRecords": [
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6",
+      "kind": "1",
+      "serial": "101",
+      "anchorVersion": "1",
+      "validUntil": "1791568082"
+     },
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+      "kind": "2",
+      "serial": "0",
+      "anchorVersion": "1",
+      "validUntil": "1791510482"
+     }
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "prepare_request",
+  "input": {
+   "request": {
+    "sourceChainId": "18545",
+    "destinationChainId": "28545",
+    "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+    "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+    "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+    "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+    "action": "1",
+    "policyVersion": "1",
+    "authEpoch": "3",
+    "keyEpoch": "0",
+    "nonce": "104",
+    "expiresAt": "1791481729",
+    "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+   },
+   "signingKeyRef": "keyref:user:alice"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "request": {
+     "sourceChainId": "18545",
+     "destinationChainId": "28545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "action": "1",
+     "policyVersion": "1",
+     "authEpoch": "3",
+     "keyEpoch": "0",
+     "nonce": "104",
+     "expiresAt": "1791481729",
+     "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+    },
+    "requestDigest": "0xc88eae4adbd7994b249ca1fdadb62c79abcbf4b022af4d322cf50c5c7a50adb6",
+    "signature": "0xc7e486b393a344341f7cc053a5366159e704463e5751fe807a18b02cab7a12d34071a871ecc369c9b1808be94e6cccbcd95f5d808d51ce144effc7998a773feb1b",
+    "signer": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_checkpoint",
+  "input": {},
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "checkpoint": {
+     "sequence": "4",
+     "authEpoch": "3",
+     "policyVersion": "1",
+     "keyEpoch": "0",
+     "witnessSetVersion": "1",
+     "sourceChainId": "18545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "sourceBlockNumber": "217",
+     "sourceBlockHash": "0x6c1dfb59afd377a0224c9e9fd18f297697bff439348b8a0d1a91bc6d570fb269",
+     "expiresAt": "1791481760"
+    },
+    "signatures": [
+     "0x131f41733289c928fe1baca721b3c2330bddf8a58b9a2b442cc8f4bf7302bec91593476be28f91d0ce7e745d8a0f03c7ab362cb62d1eb80b08b0a619570e96f11b"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_decision",
+  "input": {
+   "requestDigest": "0xc88eae4adbd7994b249ca1fdadb62c79abcbf4b022af4d322cf50c5c7a50adb6"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "decision": {
+     "requestDigest": "0xc88eae4adbd7994b249ca1fdadb62c79abcbf4b022af4d322cf50c5c7a50adb6",
+     "result": "1",
+     "credentialDigest": "0xab0b70e2e40f6196dc48bcb18cda194a28f86d102f458d92107d4d817351d82f",
+     "stateSequence": "4",
+     "witnessSetVersion": "1",
+     "sourceBlockNumber": "217",
+     "sourceBlockHash": "0x6c1dfb59afd377a0224c9e9fd18f297697bff439348b8a0d1a91bc6d570fb269",
+     "expiresAt": "1791481729"
+    },
+    "signatures": [
+     "0xd878d84008c74de2df8aa1bd29af9545e45fd7ecf2bc6422350a64ce52bc79716ed275b6f6404f7f25b4c5c8d166c2c1b2fd6e41a7bbe0e1142ca1d159fedacb1c"
+    ],
+    "credentialRecords": [
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6",
+      "kind": "1",
+      "serial": "101",
+      "anchorVersion": "1",
+      "validUntil": "1791568082"
+     },
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+      "kind": "2",
+      "serial": "0",
+      "anchorVersion": "1",
+      "validUntil": "1791510482"
+     }
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "prepare_request",
+  "input": {
+   "request": {
+    "sourceChainId": "18545",
+    "destinationChainId": "28545",
+    "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+    "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+    "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+    "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+    "action": "1",
+    "policyVersion": "1",
+    "authEpoch": "3",
+    "keyEpoch": "0",
+    "nonce": "105",
+    "expiresAt": "1791481734",
+    "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+   },
+   "signingKeyRef": "keyref:user:alice"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "request": {
+     "sourceChainId": "18545",
+     "destinationChainId": "28545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "action": "1",
+     "policyVersion": "1",
+     "authEpoch": "3",
+     "keyEpoch": "0",
+     "nonce": "105",
+     "expiresAt": "1791481734",
+     "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+    },
+    "requestDigest": "0x9dda0857bda3a6e531a73aa3af6b719cebbc8dc648f66b3231e0b0e542bf027e",
+    "signature": "0x5975870039497b415df7c3153f0779bbebba7b091a8a911e6b5ec1a5e63a05383f22cdbff9c3b6e25333426e0390a523a5aaf17b543788336d3f390d0644907d1c",
+    "signer": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_checkpoint",
+  "input": {},
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "checkpoint": {
+     "sequence": "5",
+     "authEpoch": "3",
+     "policyVersion": "1",
+     "keyEpoch": "0",
+     "witnessSetVersion": "1",
+     "sourceChainId": "18545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "sourceBlockNumber": "222",
+     "sourceBlockHash": "0x968ec952567a521494ecf7c35e42eb9b68fd1d713927472a6cb4bbfdf6a31d08",
+     "expiresAt": "1791481765"
+    },
+    "signatures": [
+     "0x9303261c4dbd09e31ad321527d62f1c2dd41896760fe794c03b93dfb98ecab7c0f2dd95f951feb888dbc2c5745d24ad5385598f9c9255e655e3c0262cd779bcc1c"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_decision",
+  "input": {
+   "requestDigest": "0x9dda0857bda3a6e531a73aa3af6b719cebbc8dc648f66b3231e0b0e542bf027e"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "decision": {
+     "requestDigest": "0x9dda0857bda3a6e531a73aa3af6b719cebbc8dc648f66b3231e0b0e542bf027e",
+     "result": "1",
+     "credentialDigest": "0xab0b70e2e40f6196dc48bcb18cda194a28f86d102f458d92107d4d817351d82f",
+     "stateSequence": "5",
+     "witnessSetVersion": "1",
+     "sourceBlockNumber": "222",
+     "sourceBlockHash": "0x968ec952567a521494ecf7c35e42eb9b68fd1d713927472a6cb4bbfdf6a31d08",
+     "expiresAt": "1791481734"
+    },
+    "signatures": [
+     "0xd0a22636d444ede01772ce8a9aa3887558f3832ccc6cc8f9d65fcc3bf8d033a00ec5962ebbb677305888d806001cc1c4f86259bb6fa76727798e479cf2f23c471b"
+    ],
+    "credentialRecords": [
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6",
+      "kind": "1",
+      "serial": "101",
+      "anchorVersion": "1",
+      "validUntil": "1791568082"
+     },
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+      "kind": "2",
+      "serial": "0",
+      "anchorVersion": "1",
+      "validUntil": "1791510482"
+     }
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "prepare_request",
+  "input": {
+   "request": {
+    "sourceChainId": "18545",
+    "destinationChainId": "28545",
+    "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+    "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+    "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+    "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+    "action": "1",
+    "policyVersion": "1",
+    "authEpoch": "3",
+    "keyEpoch": "0",
+    "nonce": "106",
+    "expiresAt": "1791481737",
+    "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+   },
+   "signingKeyRef": "keyref:user:alice"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "request": {
+     "sourceChainId": "18545",
+     "destinationChainId": "28545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "action": "1",
+     "policyVersion": "1",
+     "authEpoch": "3",
+     "keyEpoch": "0",
+     "nonce": "106",
+     "expiresAt": "1791481737",
+     "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+    },
+    "requestDigest": "0x5f325483f0766e8182c966f8994f860e69fbfcb250b32e3355232a878b6338d5",
+    "signature": "0x9a6730db97890a0b94dabdf991fc3b0e640bbaad901925c6863b98c829db9c6e35142c046fd929e5ff1a43254b73ec129777250a3b7bf3ecc7ae7459177cdcf61b",
+    "signer": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "prepare_request",
+  "input": {
+   "request": {
+    "sourceChainId": "18545",
+    "destinationChainId": "28545",
+    "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+    "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+    "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+    "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+    "action": "1",
+    "policyVersion": "1",
+    "authEpoch": "3",
+    "keyEpoch": "0",
+    "nonce": "107",
+    "expiresAt": "1791481739",
+    "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+   },
+   "signingKeyRef": "keyref:user:alice"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "request": {
+     "sourceChainId": "18545",
+     "destinationChainId": "28545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "action": "1",
+     "policyVersion": "1",
+     "authEpoch": "3",
+     "keyEpoch": "0",
+     "nonce": "107",
+     "expiresAt": "1791481739",
+     "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+    },
+    "requestDigest": "0x8641af3e47ca25ddff8d14dfcc8bf5027591eb2df2a226671d1c070274f98f62",
+    "signature": "0xe837071b8fa31b373ef9309ef66469ccf84391b789968a454d14d0ad87576ab64dfd06b5ab61d33f2a74d04ae2b81ac934c136ea0766bd9017b11c8304b1d8f81b",
+    "signer": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_checkpoint",
+  "input": {},
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "checkpoint": {
+     "sequence": "6",
+     "authEpoch": "3",
+     "policyVersion": "1",
+     "keyEpoch": "0",
+     "witnessSetVersion": "1",
+     "sourceChainId": "18545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "sourceBlockNumber": "227",
+     "sourceBlockHash": "0x4a91f453dcb07f440ad7bad464598268ab0bd453e3fb90157dc204fcdb8baaa9",
+     "expiresAt": "1791481770"
+    },
+    "signatures": [
+     "0x6ec71128bfe5465a780b497d4506f7320708c0480dc450090efcff6c73f1116e10ec00eda051a3f416722f2bf1f1b9cf9ee290766b7065f31af3b89d3b8eeafa1c"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_decision",
+  "input": {
+   "requestDigest": "0x8641af3e47ca25ddff8d14dfcc8bf5027591eb2df2a226671d1c070274f98f62"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "decision": {
+     "requestDigest": "0x8641af3e47ca25ddff8d14dfcc8bf5027591eb2df2a226671d1c070274f98f62",
+     "result": "1",
+     "credentialDigest": "0xab0b70e2e40f6196dc48bcb18cda194a28f86d102f458d92107d4d817351d82f",
+     "stateSequence": "6",
+     "witnessSetVersion": "1",
+     "sourceBlockNumber": "227",
+     "sourceBlockHash": "0x4a91f453dcb07f440ad7bad464598268ab0bd453e3fb90157dc204fcdb8baaa9",
+     "expiresAt": "1791481739"
+    },
+    "signatures": [
+     "0x96f4baf8b679d2d3f0f531ba17b726bdccd9a3ddbac00d8fedd3af9080dbebbd5670b63296fc153ad979469db6e7960ac7ec491b4f0c9c860f90f964a3b2f05f1b"
+    ],
+    "credentialRecords": [
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6",
+      "kind": "1",
+      "serial": "101",
+      "anchorVersion": "1",
+      "validUntil": "1791568082"
+     },
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+      "kind": "2",
+      "serial": "0",
+      "anchorVersion": "1",
+      "validUntil": "1791510482"
+     }
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "attest_grant",
+  "input": {
+   "grantId": "0x95f9b938f5c394a20bdb667ba26164cd36f1ab7135662e76fd0fb1b188fccfa1"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "receipt": {
+     "requestDigest": "0x8641af3e47ca25ddff8d14dfcc8bf5027591eb2df2a226671d1c070274f98f62",
+     "grantId": "0x95f9b938f5c394a20bdb667ba26164cd36f1ab7135662e76fd0fb1b188fccfa1",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "keyEpoch": "0",
+     "grantExpiresAt": "1791481739",
+     "witnessSetVersion": "1",
+     "dbcChainId": "28545",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "dbcBlockNumber": "229",
+     "dbcBlockHash": "0xab1c42844cad0f024b984c558e109a776d4d911430d4a04be01a39d7ad5c4787"
+    },
+    "signatures": [
+     "0x4599db7e13bec4eb79c9b898e137c20855e7a9c809c905e10e5abed12a77559015b177bb91cc56d70d387be039b1948d8a5262e0d55276c45a90da4806ba23fe1c"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "prepare_request",
+  "input": {
+   "request": {
+    "sourceChainId": "18545",
+    "destinationChainId": "28545",
+    "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+    "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+    "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+    "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+    "action": "1",
+    "policyVersion": "1",
+    "authEpoch": "6",
+    "keyEpoch": "0",
+    "nonce": "108",
+    "expiresAt": "1791481751",
+    "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+   },
+   "signingKeyRef": "keyref:user:alice"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "request": {
+     "sourceChainId": "18545",
+     "destinationChainId": "28545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "action": "1",
+     "policyVersion": "1",
+     "authEpoch": "6",
+     "keyEpoch": "0",
+     "nonce": "108",
+     "expiresAt": "1791481751",
+     "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+    },
+    "requestDigest": "0x7f14e1d1f6c82417eca7cf322ff949ecd7f300f15f46c5ba6b8ed9ea0d057705",
+    "signature": "0xf05826dcb301781bf0c650098bca51712cb4ef780ad837e5f66ad9ced0a3df254f6bca881cf5a7e0f12acac68e6205ee9185a4ad2adfcdade875c4f394c6e0a31c",
+    "signer": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_checkpoint",
+  "input": {},
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "checkpoint": {
+     "sequence": "7",
+     "authEpoch": "6",
+     "policyVersion": "1",
+     "keyEpoch": "0",
+     "witnessSetVersion": "1",
+     "sourceChainId": "18545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "sourceBlockNumber": "239",
+     "sourceBlockHash": "0x7490fdfcc689b57d2fe7fee72ea3867f4671d57e31aec232b242c63d87e63f7e",
+     "expiresAt": "1791481782"
+    },
+    "signatures": [
+     "0x1da9d31285f895da5b814e2ab7d005a8296291b866e4a13329f793ed758c8fd64469217e8bc9691fbebf32315543511e62df91584b1f8195e91e9074a45f9ea41b"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_decision",
+  "input": {
+   "requestDigest": "0x7f14e1d1f6c82417eca7cf322ff949ecd7f300f15f46c5ba6b8ed9ea0d057705"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "decision": {
+     "requestDigest": "0x7f14e1d1f6c82417eca7cf322ff949ecd7f300f15f46c5ba6b8ed9ea0d057705",
+     "result": "1",
+     "credentialDigest": "0xf47f1140ff020a98bf761727bb51d5089039041e4c3aa1580f202bf4641ab693",
+     "stateSequence": "7",
+     "witnessSetVersion": "1",
+     "sourceBlockNumber": "239",
+     "sourceBlockHash": "0x7490fdfcc689b57d2fe7fee72ea3867f4671d57e31aec232b242c63d87e63f7e",
+     "expiresAt": "1791481751"
+    },
+    "signatures": [
+     "0x65ae371fb2a26fe81703419a6ad6aed46dc3cff3332866fffac8eda3df9570c70bd7ef0ad1f6e73971a361a9d838687446af0463fdde3cf4d64c1b079dea0b3d1c"
+    ],
+    "credentialRecords": [
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6",
+      "kind": "1",
+      "serial": "101",
+      "anchorVersion": "3",
+      "validUntil": "1791568117"
+     },
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+      "kind": "2",
+      "serial": "0",
+      "anchorVersion": "2",
+      "validUntil": "1791485319"
+     }
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "prepare_request",
+  "input": {
+   "request": {
+    "sourceChainId": "18545",
+    "destinationChainId": "28545",
+    "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+    "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+    "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+    "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+    "action": "1",
+    "policyVersion": "1",
+    "authEpoch": "9",
+    "keyEpoch": "0",
+    "nonce": "109",
+    "expiresAt": "1791481760",
+    "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+   },
+   "signingKeyRef": "keyref:user:alice"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "request": {
+     "sourceChainId": "18545",
+     "destinationChainId": "28545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "action": "1",
+     "policyVersion": "1",
+     "authEpoch": "9",
+     "keyEpoch": "0",
+     "nonce": "109",
+     "expiresAt": "1791481760",
+     "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+    },
+    "requestDigest": "0x0a016de955deeed05abffad582eb0fd8d757147d64d0283a21d7aeccd8340f72",
+    "signature": "0xc5843ca9602fa94d590f8c5d69a0c77eb72144dbd11dc7e07cb752aa024773342ce5442c4dcb0b1e7a021f36043a6babe6456703e2bc9f5428d5ee84febdd7571c",
+    "signer": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_checkpoint",
+  "input": {},
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "checkpoint": {
+     "sequence": "8",
+     "authEpoch": "9",
+     "policyVersion": "1",
+     "keyEpoch": "0",
+     "witnessSetVersion": "1",
+     "sourceChainId": "18545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "sourceBlockNumber": "248",
+     "sourceBlockHash": "0x4b546e303123a338fccc929ca08a1479be1a4b979b105f913eb981146bb15438",
+     "expiresAt": "1791481791"
+    },
+    "signatures": [
+     "0x9b7672d8484806266aa6ee50a98937a2a767e048176cb90e6915a2aef70cf548077a7f0ef55580b6d5a54a4d5d45d79d8139b40cd56b3e5aca97c892dea9ea041b"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_decision",
+  "input": {
+   "requestDigest": "0x0a016de955deeed05abffad582eb0fd8d757147d64d0283a21d7aeccd8340f72"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "decision": {
+     "requestDigest": "0x0a016de955deeed05abffad582eb0fd8d757147d64d0283a21d7aeccd8340f72",
+     "result": "1",
+     "credentialDigest": "0xe9067af9cdf74b4de99c1756daec0957164fde3b214c85f03c98f26e2d4263c9",
+     "stateSequence": "8",
+     "witnessSetVersion": "1",
+     "sourceBlockNumber": "248",
+     "sourceBlockHash": "0x4b546e303123a338fccc929ca08a1479be1a4b979b105f913eb981146bb15438",
+     "expiresAt": "1791481760"
+    },
+    "signatures": [
+     "0x51c84bab81f4d171e20b3c9fe6fa5333ca4ecd2db736fde7b9359192ac353b476ef71d9372d5b516b89f1a31b1d361204d2e0ef47694d85181678dc052c775b41b"
+    ],
+    "credentialRecords": [
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6",
+      "kind": "1",
+      "serial": "101",
+      "anchorVersion": "5",
+      "validUntil": "1791568126"
+     },
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+      "kind": "2",
+      "serial": "0",
+      "anchorVersion": "3",
+      "validUntil": "1791485328"
+     }
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_checkpoint",
+  "input": {},
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "checkpoint": {
+     "sequence": "9",
+     "authEpoch": "10",
+     "policyVersion": "1",
+     "keyEpoch": "0",
+     "witnessSetVersion": "1",
+     "sourceChainId": "18545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "sourceBlockNumber": "251",
+     "sourceBlockHash": "0x8c110ec41526ec7f6f6186b72527a88f240143e081f84f0dcd243df1cfc60b90",
+     "expiresAt": "1791481794"
+    },
+    "signatures": [
+     "0x747f3ecdce32a4cfd2eb218bc805062e63355801f3db0fc9e103847fa677817163033b5e86b98832b66b5f04bb7af478c858f0549130982025fc2e85e12c9bf21c"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "prepare_request",
+  "input": {
+   "request": {
+    "sourceChainId": "18545",
+    "destinationChainId": "28545",
+    "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+    "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+    "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+    "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+    "action": "1",
+    "policyVersion": "1",
+    "authEpoch": "13",
+    "keyEpoch": "0",
+    "nonce": "110",
+    "expiresAt": "1791481776",
+    "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+   },
+   "signingKeyRef": "keyref:user:alice"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "request": {
+     "sourceChainId": "18545",
+     "destinationChainId": "28545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "action": "1",
+     "policyVersion": "1",
+     "authEpoch": "13",
+     "keyEpoch": "0",
+     "nonce": "110",
+     "expiresAt": "1791481776",
+     "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+    },
+    "requestDigest": "0xb4ef5395534a5c25a86712dd61ee4a3f7efacab27930827a51f965d8df88847f",
+    "signature": "0x3e61e381749433026a79ba03bcef393af30d264e550fd5c2df31cf1430134b775f169efe11f6dbbff236a7283087858a45d06ee50bbb775cbdaf473e3b8dbee71b",
+    "signer": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_checkpoint",
+  "input": {},
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "checkpoint": {
+     "sequence": "10",
+     "authEpoch": "13",
+     "policyVersion": "1",
+     "keyEpoch": "0",
+     "witnessSetVersion": "1",
+     "sourceChainId": "18545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "sourceBlockNumber": "264",
+     "sourceBlockHash": "0xc0fd6d2a12048b326732664af22f44f401096a8af268024470e31a95d0201c61",
+     "expiresAt": "1791481807"
+    },
+    "signatures": [
+     "0x57fbd9260088d4441f18fb27c3a24d714f1d9bdf3e1b4685835e0cb354ed6a5b7d78ff769a807cb9c5b82878927b0c2135d4633c6ad43d18ecdc999b68c120241c"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_decision",
+  "input": {
+   "requestDigest": "0xb4ef5395534a5c25a86712dd61ee4a3f7efacab27930827a51f965d8df88847f"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "decision": {
+     "requestDigest": "0xb4ef5395534a5c25a86712dd61ee4a3f7efacab27930827a51f965d8df88847f",
+     "result": "1",
+     "credentialDigest": "0xbcd5ed803948844a2edec48b5b3e7610db9dbc18a5a1f9631055c20c03e98cd4",
+     "stateSequence": "10",
+     "witnessSetVersion": "1",
+     "sourceBlockNumber": "264",
+     "sourceBlockHash": "0xc0fd6d2a12048b326732664af22f44f401096a8af268024470e31a95d0201c61",
+     "expiresAt": "1791481776"
+    },
+    "signatures": [
+     "0x00a56a8485c63ff31ee4a11a4fe247192e1cb91f8a6627c2c4571c1aeeededaa7e432d058a78cafdcc9a59122a16bdba2f940b73d2b384b62cff5057329c323a1c"
+    ],
+    "credentialRecords": [
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6",
+      "kind": "1",
+      "serial": "101",
+      "anchorVersion": "7",
+      "validUntil": "1791568136"
+     },
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+      "kind": "2",
+      "serial": "0",
+      "anchorVersion": "5",
+      "validUntil": "1791481758"
+     }
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "prepare_request",
+  "input": {
+   "request": {
+    "sourceChainId": "18545",
+    "destinationChainId": "28545",
+    "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+    "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+    "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+    "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+    "action": "1",
+    "policyVersion": "1",
+    "authEpoch": "15",
+    "keyEpoch": "0",
+    "nonce": "111",
+    "expiresAt": "1791481773",
+    "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+   },
+   "signingKeyRef": "keyref:user:alice"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "request": {
+     "sourceChainId": "18545",
+     "destinationChainId": "28545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "action": "1",
+     "policyVersion": "1",
+     "authEpoch": "15",
+     "keyEpoch": "0",
+     "nonce": "111",
+     "expiresAt": "1791481773",
+     "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+    },
+    "requestDigest": "0x059778c63aeada385c6180ed2b5d151a79558ef88f84b10604bd21964b082552",
+    "signature": "0x0fe315165cd03156909a0391115163622aa13b754e148cc3a3c58196d74c2562725c1cbc1d6166985d065f4948cd859fddcf4338e3a07eaf6bb061eebf4235ec1b",
+    "signer": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_checkpoint",
+  "input": {},
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "checkpoint": {
+     "sequence": "11",
+     "authEpoch": "15",
+     "policyVersion": "1",
+     "keyEpoch": "0",
+     "witnessSetVersion": "1",
+     "sourceChainId": "18545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "sourceBlockNumber": "281",
+     "sourceBlockHash": "0xfebdd68c8ffcda66e73f1edad5fdd850d11e4fef13b64fea8bb9b5a3fc4c7830",
+     "expiresAt": "1791481824"
+    },
+    "signatures": [
+     "0xf8f865227ebd5a3cf1aee664afb8b99a33fc564e75e61ff60116214d24abc7ff57ae7f7a1f67367e90c44b7124810acb12e3208f376396d8946f6d5ace1d74d71c"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_decision",
+  "input": {
+   "requestDigest": "0x059778c63aeada385c6180ed2b5d151a79558ef88f84b10604bd21964b082552"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "decision": {
+     "requestDigest": "0x059778c63aeada385c6180ed2b5d151a79558ef88f84b10604bd21964b082552",
+     "result": "1",
+     "credentialDigest": "0xc6844b81333fc8518d6f58ef3371b89886ce31b6a1259ae1aec0822ac4cd8fcb",
+     "stateSequence": "11",
+     "witnessSetVersion": "1",
+     "sourceBlockNumber": "281",
+     "sourceBlockHash": "0xfebdd68c8ffcda66e73f1edad5fdd850d11e4fef13b64fea8bb9b5a3fc4c7830",
+     "expiresAt": "1791481773"
+    },
+    "signatures": [
+     "0x425fe7163bc4130da90b22b60d5bef90035deb016108108a9a8022a4ad87a30876b5ae24d924fa6712f0e3dad965d1f1a8fa26cb405c075ec19cf3ed3dc4e9dc1c"
+    ],
+    "credentialRecords": [
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6",
+      "kind": "1",
+      "serial": "101",
+      "anchorVersion": "8",
+      "validUntil": "1791568159"
+     },
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+      "kind": "2",
+      "serial": "0",
+      "anchorVersion": "6",
+      "validUntil": "1791485361"
+     }
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "prepare_request",
+  "input": {
+   "request": {
+    "sourceChainId": "18545",
+    "destinationChainId": "28545",
+    "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+    "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+    "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+    "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+    "action": "1",
+    "policyVersion": "1",
+    "authEpoch": "15",
+    "keyEpoch": "0",
+    "nonce": "112",
+    "expiresAt": "1791481803",
+    "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+   },
+   "signingKeyRef": "keyref:user:alice"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "request": {
+     "sourceChainId": "18545",
+     "destinationChainId": "28545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "action": "1",
+     "policyVersion": "1",
+     "authEpoch": "15",
+     "keyEpoch": "0",
+     "nonce": "112",
+     "expiresAt": "1791481803",
+     "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+    },
+    "requestDigest": "0xad09e321f5f5025a259ecb0725b33a0bfc91f8e254f5f63e3b2ad8ea0538c708",
+    "signature": "0x73436677d56d60a507bb227c7ba517a372519b91b4993d91675f5fc35fb3076735d57935d911427eb55a64c048beb523796634c177d7f1b1b2533570d9b524891b",
+    "signer": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "prepare_request",
+  "input": {
+   "request": {
+    "sourceChainId": "18545",
+    "destinationChainId": "28545",
+    "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+    "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+    "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+    "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+    "action": "1",
+    "policyVersion": "1",
+    "authEpoch": "15",
+    "keyEpoch": "0",
+    "nonce": "112",
+    "expiresAt": "1791481802",
+    "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+   },
+   "signingKeyRef": "keyref:user:alice"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "request": {
+     "sourceChainId": "18545",
+     "destinationChainId": "28545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "action": "1",
+     "policyVersion": "1",
+     "authEpoch": "15",
+     "keyEpoch": "0",
+     "nonce": "112",
+     "expiresAt": "1791481802",
+     "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+    },
+    "requestDigest": "0x7467960272ad1facf546590bd610f0695e0345294959828e839ea734408c2bed",
+    "signature": "0xd553ee6dd55c967142266070080e4c1ad990fbbbb265c228c8340e5f93eb59e45f740eb856fef459c093dc87618fafb97aaefc0dd6d551bfaf01a7b856babe521b",
+    "signer": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_checkpoint",
+  "input": {},
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "checkpoint": {
+     "sequence": "12",
+     "authEpoch": "15",
+     "policyVersion": "1",
+     "keyEpoch": "0",
+     "witnessSetVersion": "1",
+     "sourceChainId": "18545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "sourceBlockNumber": "292",
+     "sourceBlockHash": "0x2a8cf5e7f0776656c911925c05762a83bd394c89b2fbe1c9d61bef939de31a4b",
+     "expiresAt": "1791481835"
+    },
+    "signatures": [
+     "0x6bf1ad374c50359b4a0d848a7a99cc7c2602d089ed5e28544ae32903de5d29ab49d69f8b8a2f35b183c785494872e340f10d04821ab10b02723e802e753a60e51c"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_decision",
+  "input": {
+   "requestDigest": "0xad09e321f5f5025a259ecb0725b33a0bfc91f8e254f5f63e3b2ad8ea0538c708"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "decision": {
+     "requestDigest": "0xad09e321f5f5025a259ecb0725b33a0bfc91f8e254f5f63e3b2ad8ea0538c708",
+     "result": "1",
+     "credentialDigest": "0xc6844b81333fc8518d6f58ef3371b89886ce31b6a1259ae1aec0822ac4cd8fcb",
+     "stateSequence": "12",
+     "witnessSetVersion": "1",
+     "sourceBlockNumber": "292",
+     "sourceBlockHash": "0x2a8cf5e7f0776656c911925c05762a83bd394c89b2fbe1c9d61bef939de31a4b",
+     "expiresAt": "1791481803"
+    },
+    "signatures": [
+     "0x973cb7d25d2d8f8a129447732bbd27fbe9ee8fd35d7a94b72773369ad34c501312d5edd4ddda4a1ba734076b7cd52f4cfca5b7caea5369f1582f78193adf8eff1c"
+    ],
+    "credentialRecords": [
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6",
+      "kind": "1",
+      "serial": "101",
+      "anchorVersion": "8",
+      "validUntil": "1791568159"
+     },
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+      "kind": "2",
+      "serial": "0",
+      "anchorVersion": "6",
+      "validUntil": "1791485361"
+     }
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_decision",
+  "input": {
+   "requestDigest": "0x7467960272ad1facf546590bd610f0695e0345294959828e839ea734408c2bed"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "decision": {
+     "requestDigest": "0x7467960272ad1facf546590bd610f0695e0345294959828e839ea734408c2bed",
+     "result": "1",
+     "credentialDigest": "0xc6844b81333fc8518d6f58ef3371b89886ce31b6a1259ae1aec0822ac4cd8fcb",
+     "stateSequence": "12",
+     "witnessSetVersion": "1",
+     "sourceBlockNumber": "292",
+     "sourceBlockHash": "0x2a8cf5e7f0776656c911925c05762a83bd394c89b2fbe1c9d61bef939de31a4b",
+     "expiresAt": "1791481802"
+    },
+    "signatures": [
+     "0xd6a9d69429c93a229902b8dd32e5f849f43da28dbe97454426f6aeaa6dd8323e6866458fc545fd6fd976ee4db173ae80498368175248ca75732d954413c3d7e51c"
+    ],
+    "credentialRecords": [
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6",
+      "kind": "1",
+      "serial": "101",
+      "anchorVersion": "8",
+      "validUntil": "1791568159"
+     },
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+      "kind": "2",
+      "serial": "0",
+      "anchorVersion": "6",
+      "validUntil": "1791485361"
+     }
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "prepare_request",
+  "input": {
+   "request": {
+    "sourceChainId": "18545",
+    "destinationChainId": "28545",
+    "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+    "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+    "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+    "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+    "action": "1",
+    "policyVersion": "1",
+    "authEpoch": "15",
+    "keyEpoch": "0",
+    "nonce": "113",
+    "expiresAt": "1791481808",
+    "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+   },
+   "signingKeyRef": "keyref:user:alice"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "request": {
+     "sourceChainId": "18545",
+     "destinationChainId": "28545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "action": "1",
+     "policyVersion": "1",
+     "authEpoch": "15",
+     "keyEpoch": "0",
+     "nonce": "113",
+     "expiresAt": "1791481808",
+     "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+    },
+    "requestDigest": "0x9cc318246f64c6c0681bdcdca1f68bb9978e8c98d6f97348522547133717bc2e",
+    "signature": "0xe03a9e5dda6e38f2cae85b079652b260383535adae08023958d9ac2d8990f5fc520bb72165067a8af3fd2214c2bda95399e55c0f0c6b304c332096b6fb609b4a1c",
+    "signer": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_checkpoint",
+  "input": {},
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "checkpoint": {
+     "sequence": "13",
+     "authEpoch": "15",
+     "policyVersion": "1",
+     "keyEpoch": "0",
+     "witnessSetVersion": "1",
+     "sourceChainId": "18545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "sourceBlockNumber": "296",
+     "sourceBlockHash": "0x827ac3876b45946c7c9863e911b7eed94dd6386d3a9e9ffe997ffa9ba0da9083",
+     "expiresAt": "1791481839"
+    },
+    "signatures": [
+     "0x28cc72c445fcc2bba15ffe7c2907b28a9d03fed76787b2db0a24874220f78a4c72157b1b2a88174d3d2f46cc0836cd2f1198cc8f6a17dc9ea53ce719c62894281c"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_decision",
+  "input": {
+   "requestDigest": "0x9cc318246f64c6c0681bdcdca1f68bb9978e8c98d6f97348522547133717bc2e"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "decision": {
+     "requestDigest": "0x9cc318246f64c6c0681bdcdca1f68bb9978e8c98d6f97348522547133717bc2e",
+     "result": "1",
+     "credentialDigest": "0xc6844b81333fc8518d6f58ef3371b89886ce31b6a1259ae1aec0822ac4cd8fcb",
+     "stateSequence": "13",
+     "witnessSetVersion": "1",
+     "sourceBlockNumber": "296",
+     "sourceBlockHash": "0x827ac3876b45946c7c9863e911b7eed94dd6386d3a9e9ffe997ffa9ba0da9083",
+     "expiresAt": "1791481808"
+    },
+    "signatures": [
+     "0x9dfb726fed8454dda2e47e32b69f6431e3d15799bbddab2e3386e3223d8ced2d4f18668362a0ba273a46b7bf31c9789b16051de0a66d14c528d0cb7599c6603c1b"
+    ],
+    "credentialRecords": [
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6",
+      "kind": "1",
+      "serial": "101",
+      "anchorVersion": "8",
+      "validUntil": "1791568159"
+     },
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+      "kind": "2",
+      "serial": "0",
+      "anchorVersion": "6",
+      "validUntil": "1791485361"
+     }
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "attest_grant",
+  "input": {
+   "grantId": "0x75cc11d3692b8b781c55e6f9d8c48be8ce082c09f452ee339d37a148b5bf63b7"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "receipt": {
+     "requestDigest": "0x9cc318246f64c6c0681bdcdca1f68bb9978e8c98d6f97348522547133717bc2e",
+     "grantId": "0x75cc11d3692b8b781c55e6f9d8c48be8ce082c09f452ee339d37a148b5bf63b7",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "keyEpoch": "0",
+     "grantExpiresAt": "1791481808",
+     "witnessSetVersion": "1",
+     "dbcChainId": "28545",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "dbcBlockNumber": "298",
+     "dbcBlockHash": "0xf5d5f83da1c4ade0bf1381735f2a5e46fc972450d4cf63b0a26c5f063c801c40"
+    },
+    "signatures": [
+     "0xf81b882725c6e8f128da8bd9b93b139d26812ef955a3b94363ae11a879cb932409c302e0f46d8da28623876be9b9370a79c7549aaa3410ca11906c224fef55c01b"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "prepare_request",
+  "input": {
+   "request": {
+    "sourceChainId": "18545",
+    "destinationChainId": "28545",
+    "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+    "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+    "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+    "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+    "action": "1",
+    "policyVersion": "1",
+    "authEpoch": "15",
+    "keyEpoch": "0",
+    "nonce": "114",
+    "expiresAt": "1791481812",
+    "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+   },
+   "signingKeyRef": "keyref:user:alice"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "request": {
+     "sourceChainId": "18545",
+     "destinationChainId": "28545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "action": "1",
+     "policyVersion": "1",
+     "authEpoch": "15",
+     "keyEpoch": "0",
+     "nonce": "114",
+     "expiresAt": "1791481812",
+     "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+    },
+    "requestDigest": "0xc8a96367e15d8c937dfd70c37e64dd885627e6e4362c6ec6e3fe2884ffd3c746",
+    "signature": "0x57a3e9d1e89231c538448c73acdd96b3f293c7eb0a0dd264508be78b3f093d0e28c88f9ccdb1c7b5890110bb36c9b976edc0dac8b1ed946c3b1400efb41d22e71b",
+    "signer": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_checkpoint",
+  "input": {},
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "checkpoint": {
+     "sequence": "14",
+     "authEpoch": "15",
+     "policyVersion": "1",
+     "keyEpoch": "0",
+     "witnessSetVersion": "1",
+     "sourceChainId": "18545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "sourceBlockNumber": "300",
+     "sourceBlockHash": "0x07ed1e782f48e9f999bf200ad4001b670e66fbd0fa16c6a639abb03faecdb141",
+     "expiresAt": "1791481843"
+    },
+    "signatures": [
+     "0xc6d6edb3333eb895eaa7e94456dfe9ff997cac374bc3417ca491f6f92fffcae5573b378bcb50c0c7379bfb322e551b3c5fe7a2cd7ab125be4db5956f9054b4d11b"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_decision",
+  "input": {
+   "requestDigest": "0xc8a96367e15d8c937dfd70c37e64dd885627e6e4362c6ec6e3fe2884ffd3c746"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "decision": {
+     "requestDigest": "0xc8a96367e15d8c937dfd70c37e64dd885627e6e4362c6ec6e3fe2884ffd3c746",
+     "result": "1",
+     "credentialDigest": "0xc6844b81333fc8518d6f58ef3371b89886ce31b6a1259ae1aec0822ac4cd8fcb",
+     "stateSequence": "14",
+     "witnessSetVersion": "1",
+     "sourceBlockNumber": "300",
+     "sourceBlockHash": "0x07ed1e782f48e9f999bf200ad4001b670e66fbd0fa16c6a639abb03faecdb141",
+     "expiresAt": "1791481812"
+    },
+    "signatures": [
+     "0x26aa98832637235dcb59f37d7f52c65b7bb88f3c4925c5b7389d8b592f90f52a3041a6fce76b5c40f7cffd2989b66d39dd0f6ec86264d9f02edabfac6b5d6bf31c"
+    ],
+    "credentialRecords": [
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6",
+      "kind": "1",
+      "serial": "101",
+      "anchorVersion": "8",
+      "validUntil": "1791568159"
+     },
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+      "kind": "2",
+      "serial": "0",
+      "anchorVersion": "6",
+      "validUntil": "1791485361"
+     }
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "attest_grant",
+  "input": {
+   "grantId": "0x9ba8c3082e28846e3016e6d6cfc60d931474e971ce0b377ddead157399df6180"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "receipt": {
+     "requestDigest": "0xc8a96367e15d8c937dfd70c37e64dd885627e6e4362c6ec6e3fe2884ffd3c746",
+     "grantId": "0x9ba8c3082e28846e3016e6d6cfc60d931474e971ce0b377ddead157399df6180",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "keyEpoch": "0",
+     "grantExpiresAt": "1791481812",
+     "witnessSetVersion": "1",
+     "dbcChainId": "28545",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "dbcBlockNumber": "302",
+     "dbcBlockHash": "0x48aa6bd0867297b66c00a3f464ec442a7708adedcd8645d01b70453104b69141"
+    },
+    "signatures": [
+     "0x791e95c33836e20d18b6516411c2dc08ba6261af657176e14614ece0d407a2d3540d8e5f5b52285debd9ed41df9c220f3bac0a0981c74461dbf9ab5a8bd2403f1b"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "prepare_request",
+  "input": {
+   "request": {
+    "sourceChainId": "18545",
+    "destinationChainId": "28545",
+    "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+    "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+    "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+    "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+    "action": "1",
+    "policyVersion": "1",
+    "authEpoch": "15",
+    "keyEpoch": "0",
+    "nonce": "115",
+    "expiresAt": "1791481816",
+    "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+   },
+   "signingKeyRef": "keyref:user:alice"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "request": {
+     "sourceChainId": "18545",
+     "destinationChainId": "28545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "action": "1",
+     "policyVersion": "1",
+     "authEpoch": "15",
+     "keyEpoch": "0",
+     "nonce": "115",
+     "expiresAt": "1791481816",
+     "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+    },
+    "requestDigest": "0xb0b369caccfd26c461edef66ca54557e928446ba9b0f0874c71e5cbe73bf8c18",
+    "signature": "0x68e52b51704fec39b1a31003a9c33c1c997f4a1d6013007446a7548077d3d3870116c8eb2779b37f273a398ad8725f3f09a1194c4cefd66f0de52a2c5747d8af1b",
+    "signer": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_checkpoint",
+  "input": {},
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "checkpoint": {
+     "sequence": "15",
+     "authEpoch": "15",
+     "policyVersion": "1",
+     "keyEpoch": "0",
+     "witnessSetVersion": "1",
+     "sourceChainId": "18545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "sourceBlockNumber": "304",
+     "sourceBlockHash": "0x12c6b74ca1f12980de6ffdcbdd40287b350d4c9843bc9175cd160a120ae83af7",
+     "expiresAt": "1791481847"
+    },
+    "signatures": [
+     "0x6bc06758c2810ed8c4fcee8579726b3986584a6e2e436a8003c373487c378daa5adc944caae852442b3dffd07cc80ee80acdc8b59eb8e7f259005c2360ef93dc1b"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_decision",
+  "input": {
+   "requestDigest": "0xb0b369caccfd26c461edef66ca54557e928446ba9b0f0874c71e5cbe73bf8c18"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "decision": {
+     "requestDigest": "0xb0b369caccfd26c461edef66ca54557e928446ba9b0f0874c71e5cbe73bf8c18",
+     "result": "1",
+     "credentialDigest": "0xc6844b81333fc8518d6f58ef3371b89886ce31b6a1259ae1aec0822ac4cd8fcb",
+     "stateSequence": "15",
+     "witnessSetVersion": "1",
+     "sourceBlockNumber": "304",
+     "sourceBlockHash": "0x12c6b74ca1f12980de6ffdcbdd40287b350d4c9843bc9175cd160a120ae83af7",
+     "expiresAt": "1791481816"
+    },
+    "signatures": [
+     "0x2e9d6607d89c53d488258c9ceaf5082a80e4a24be65ba78adcd41b0b58019459694c33f5fd419b2cd70c52a18d171e676cfc4d1404fd832b7484d3e2427a52b41b"
+    ],
+    "credentialRecords": [
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6",
+      "kind": "1",
+      "serial": "101",
+      "anchorVersion": "8",
+      "validUntil": "1791568159"
+     },
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+      "kind": "2",
+      "serial": "0",
+      "anchorVersion": "6",
+      "validUntil": "1791485361"
+     }
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "attest_grant",
+  "input": {
+   "grantId": "0xf986f831a465c959e7608b8427e5da5ba6b9950d0b35a03785c4998dce25b1c2"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "receipt": {
+     "requestDigest": "0xb0b369caccfd26c461edef66ca54557e928446ba9b0f0874c71e5cbe73bf8c18",
+     "grantId": "0xf986f831a465c959e7608b8427e5da5ba6b9950d0b35a03785c4998dce25b1c2",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "keyEpoch": "0",
+     "grantExpiresAt": "1791481816",
+     "witnessSetVersion": "1",
+     "dbcChainId": "28545",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "dbcBlockNumber": "306",
+     "dbcBlockHash": "0xd818e248b56cafe4fe0fb5370a0b1d5c0905ab00096bd6e302328023409b6621"
+    },
+    "signatures": [
+     "0x3088d89ee5a07a835101d5c26b8f1f5a1540a4297ef5f83dbfc101520563913a5ddc592a332b1207de8c12a05de3092e26be2970f7cda0fb3864b73cbd318c931b"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "prepare_request",
+  "input": {
+   "request": {
+    "sourceChainId": "18545",
+    "destinationChainId": "28545",
+    "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+    "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+    "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+    "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+    "action": "1",
+    "policyVersion": "1",
+    "authEpoch": "15",
+    "keyEpoch": "0",
+    "nonce": "116",
+    "expiresAt": "1791481820",
+    "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+   },
+   "signingKeyRef": "keyref:user:alice"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "request": {
+     "sourceChainId": "18545",
+     "destinationChainId": "28545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "action": "1",
+     "policyVersion": "1",
+     "authEpoch": "15",
+     "keyEpoch": "0",
+     "nonce": "116",
+     "expiresAt": "1791481820",
+     "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+    },
+    "requestDigest": "0xb70bdc028f1fde4d7c76d89c35e8589d544128cb3b1ba73fecdc9790fe1e35ff",
+    "signature": "0xdc2e8600e764458c94381ebd3a3dba845a097b8f8a1b1b7732c3fd0b4c4e2c315bd465be3719cd156d95f0848ed1eb7a7cc427e886a2601048205fc68b95a7f51c",
+    "signer": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_checkpoint",
+  "input": {},
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "checkpoint": {
+     "sequence": "16",
+     "authEpoch": "15",
+     "policyVersion": "1",
+     "keyEpoch": "0",
+     "witnessSetVersion": "1",
+     "sourceChainId": "18545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "sourceBlockNumber": "308",
+     "sourceBlockHash": "0xe481393eea1e7871c0de5711acb8a0f1c40de960ebbe57bbc44c40be6222352d",
+     "expiresAt": "1791481851"
+    },
+    "signatures": [
+     "0xd28643f450df236946b9c72c805b969b9c9d71b159ef128140c5eac2d1a74bda228ddc6493837776497e58c867389fdd10554bdfb6fb42cb83eb92620503d3d01b"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_decision",
+  "input": {
+   "requestDigest": "0xb70bdc028f1fde4d7c76d89c35e8589d544128cb3b1ba73fecdc9790fe1e35ff"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "decision": {
+     "requestDigest": "0xb70bdc028f1fde4d7c76d89c35e8589d544128cb3b1ba73fecdc9790fe1e35ff",
+     "result": "1",
+     "credentialDigest": "0xc6844b81333fc8518d6f58ef3371b89886ce31b6a1259ae1aec0822ac4cd8fcb",
+     "stateSequence": "16",
+     "witnessSetVersion": "1",
+     "sourceBlockNumber": "308",
+     "sourceBlockHash": "0xe481393eea1e7871c0de5711acb8a0f1c40de960ebbe57bbc44c40be6222352d",
+     "expiresAt": "1791481820"
+    },
+    "signatures": [
+     "0x348485fc1c24d5e127753568983b7c1c2ef7de6071bcd943c34e803ee20c32b37d8e9e81535dc6234b2f8186f6218f1c5add9962bae59e511cf2bf8a7c0d22771c"
+    ],
+    "credentialRecords": [
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6",
+      "kind": "1",
+      "serial": "101",
+      "anchorVersion": "8",
+      "validUntil": "1791568159"
+     },
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+      "kind": "2",
+      "serial": "0",
+      "anchorVersion": "6",
+      "validUntil": "1791485361"
+     }
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "attest_grant",
+  "input": {
+   "grantId": "0x123b1bcfcbba1a50b5871b357754ee73d253310842a30b22518e3573e088f15f"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "receipt": {
+     "requestDigest": "0xb70bdc028f1fde4d7c76d89c35e8589d544128cb3b1ba73fecdc9790fe1e35ff",
+     "grantId": "0x123b1bcfcbba1a50b5871b357754ee73d253310842a30b22518e3573e088f15f",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "keyEpoch": "0",
+     "grantExpiresAt": "1791481820",
+     "witnessSetVersion": "1",
+     "dbcChainId": "28545",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "dbcBlockNumber": "310",
+     "dbcBlockHash": "0x00beeb1d316f918b3c65618331ba2bd378c3f89afc6fc69fbc4ad8d9a65e634e"
+    },
+    "signatures": [
+     "0x2c42e71c2f71ae134eadb2edf8d13fd6da92dadec86dc2a0962a85815dd6f80a447f26e0dba118b5d0c0203c6e284b5795a697b63d84a162992e02ff176ef1881b"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "prepare_request",
+  "input": {
+   "request": {
+    "sourceChainId": "18545",
+    "destinationChainId": "28545",
+    "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+    "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+    "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+    "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+    "action": "1",
+    "policyVersion": "1",
+    "authEpoch": "15",
+    "keyEpoch": "0",
+    "nonce": "117",
+    "expiresAt": "1791481824",
+    "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+   },
+   "signingKeyRef": "keyref:user:alice"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "request": {
+     "sourceChainId": "18545",
+     "destinationChainId": "28545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "action": "1",
+     "policyVersion": "1",
+     "authEpoch": "15",
+     "keyEpoch": "0",
+     "nonce": "117",
+     "expiresAt": "1791481824",
+     "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+    },
+    "requestDigest": "0x7e7913a4c7ba81c2503ec548b3e9d9d0a14c2b4b907afda36f00ea851bd544f3",
+    "signature": "0x2a6ee73b732effe4281f6f40c500219150649a3a77d400edd0da8b16591e1864704eb094e8f14cfbb01cc79850a72cdaff422893e94885e4b495f9a847f58aca1b",
+    "signer": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_checkpoint",
+  "input": {},
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "checkpoint": {
+     "sequence": "17",
+     "authEpoch": "15",
+     "policyVersion": "1",
+     "keyEpoch": "0",
+     "witnessSetVersion": "1",
+     "sourceChainId": "18545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "sourceBlockNumber": "312",
+     "sourceBlockHash": "0x35570b16a30094359df9fdef1a28a4510910f2455d84f49c5c1257ef41e7e289",
+     "expiresAt": "1791481855"
+    },
+    "signatures": [
+     "0xe5b0f179fc6aaf4a0923558458be8b1ec4beb42fa4e2369aa9e24475a383a4fa252d0cf000dcd2a9ae673fd19eacf758aed53a61fabe401ec578d354f81a89071c"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_decision",
+  "input": {
+   "requestDigest": "0x7e7913a4c7ba81c2503ec548b3e9d9d0a14c2b4b907afda36f00ea851bd544f3"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "decision": {
+     "requestDigest": "0x7e7913a4c7ba81c2503ec548b3e9d9d0a14c2b4b907afda36f00ea851bd544f3",
+     "result": "1",
+     "credentialDigest": "0xc6844b81333fc8518d6f58ef3371b89886ce31b6a1259ae1aec0822ac4cd8fcb",
+     "stateSequence": "17",
+     "witnessSetVersion": "1",
+     "sourceBlockNumber": "312",
+     "sourceBlockHash": "0x35570b16a30094359df9fdef1a28a4510910f2455d84f49c5c1257ef41e7e289",
+     "expiresAt": "1791481824"
+    },
+    "signatures": [
+     "0x5c2a71824135289e5edbd269d4d18d6a675a762a093fd1276956657bebdb5a22317014acab36837f31df5a42bfa8cc3ec8c11cb398132c1e0d8802a04bf596711c"
+    ],
+    "credentialRecords": [
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6",
+      "kind": "1",
+      "serial": "101",
+      "anchorVersion": "8",
+      "validUntil": "1791568159"
+     },
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+      "kind": "2",
+      "serial": "0",
+      "anchorVersion": "6",
+      "validUntil": "1791485361"
+     }
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "attest_grant",
+  "input": {
+   "grantId": "0x32ecfac766480a85170fd3ca3636b82b744df00094d38f344b85c4be781c2b7a"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "receipt": {
+     "requestDigest": "0x7e7913a4c7ba81c2503ec548b3e9d9d0a14c2b4b907afda36f00ea851bd544f3",
+     "grantId": "0x32ecfac766480a85170fd3ca3636b82b744df00094d38f344b85c4be781c2b7a",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "keyEpoch": "0",
+     "grantExpiresAt": "1791481824",
+     "witnessSetVersion": "1",
+     "dbcChainId": "28545",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "dbcBlockNumber": "314",
+     "dbcBlockHash": "0x0d479d92e6625b862f8fa3e4544085fd35fe8644b74c6f38d53f1be264f64a02"
+    },
+    "signatures": [
+     "0x10ac3ea0de41011e552e79a4671edda6fa692373d8609a1434fbd1709f9d05f04fff0772cc0ee626e7c8007d8ec956df22d2bd42d80a1d964b0377faa3b018ec1b"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "prepare_request",
+  "input": {
+   "request": {
+    "sourceChainId": "18545",
+    "destinationChainId": "28545",
+    "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+    "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+    "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+    "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+    "action": "1",
+    "policyVersion": "1",
+    "authEpoch": "15",
+    "keyEpoch": "0",
+    "nonce": "118",
+    "expiresAt": "1791481828",
+    "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+   },
+   "signingKeyRef": "keyref:user:alice"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "request": {
+     "sourceChainId": "18545",
+     "destinationChainId": "28545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "action": "1",
+     "policyVersion": "1",
+     "authEpoch": "15",
+     "keyEpoch": "0",
+     "nonce": "118",
+     "expiresAt": "1791481828",
+     "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+    },
+    "requestDigest": "0x03e6b6aefaaffbfaa729f18a59c09e8f2321ad01ece248d9a5fb68698888c1be",
+    "signature": "0x9b62a97aed3626d74c2f6125dccdda0d099c87cfc67b59f52c97a6cd5fe9d4dd66481945c96080fd6b34c524420d5b4b64851286571eb623f271cd717d6e388c1c",
+    "signer": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_checkpoint",
+  "input": {},
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "checkpoint": {
+     "sequence": "18",
+     "authEpoch": "15",
+     "policyVersion": "1",
+     "keyEpoch": "0",
+     "witnessSetVersion": "1",
+     "sourceChainId": "18545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "sourceBlockNumber": "316",
+     "sourceBlockHash": "0x3c5ee87450cdce3cddf2fb6bf27efa35dc31283bda97317fdaad2ed04a0fcb6b",
+     "expiresAt": "1791481859"
+    },
+    "signatures": [
+     "0x6e36d966810d37375a5e5ea88b9f417aa45299f505d49d824306006c2f4e4f6a301897c8df3a3912028e60285345f981e44b4b23d1c66c2da5b8b25c425284751b"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_decision",
+  "input": {
+   "requestDigest": "0x03e6b6aefaaffbfaa729f18a59c09e8f2321ad01ece248d9a5fb68698888c1be"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "decision": {
+     "requestDigest": "0x03e6b6aefaaffbfaa729f18a59c09e8f2321ad01ece248d9a5fb68698888c1be",
+     "result": "1",
+     "credentialDigest": "0xc6844b81333fc8518d6f58ef3371b89886ce31b6a1259ae1aec0822ac4cd8fcb",
+     "stateSequence": "18",
+     "witnessSetVersion": "1",
+     "sourceBlockNumber": "316",
+     "sourceBlockHash": "0x3c5ee87450cdce3cddf2fb6bf27efa35dc31283bda97317fdaad2ed04a0fcb6b",
+     "expiresAt": "1791481828"
+    },
+    "signatures": [
+     "0xbc2267295869317f4466aa09bd2d42d6bc337bfa7026864ed65ec84b2142e33d2c89aaf08c9fcfc42f331f53db888e1cf26a4411a83ee86674179fc252aae2b51c"
+    ],
+    "credentialRecords": [
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6",
+      "kind": "1",
+      "serial": "101",
+      "anchorVersion": "8",
+      "validUntil": "1791568159"
+     },
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+      "kind": "2",
+      "serial": "0",
+      "anchorVersion": "6",
+      "validUntil": "1791485361"
+     }
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "attest_grant",
+  "input": {
+   "grantId": "0x2be1fb4de6c1dfbad730df08ead52581d2343681ba89729911de9704f9fd7f8a"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "receipt": {
+     "requestDigest": "0x03e6b6aefaaffbfaa729f18a59c09e8f2321ad01ece248d9a5fb68698888c1be",
+     "grantId": "0x2be1fb4de6c1dfbad730df08ead52581d2343681ba89729911de9704f9fd7f8a",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "keyEpoch": "0",
+     "grantExpiresAt": "1791481828",
+     "witnessSetVersion": "1",
+     "dbcChainId": "28545",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "dbcBlockNumber": "318",
+     "dbcBlockHash": "0xea417a6fa8451b256f29364184665cee1d585792166859e8d4b99de667343329"
+    },
+    "signatures": [
+     "0x4cebaaf178b2bc092b74ae1ed89751741bb7a1f5eb7d20c444fb90147aff90733ac7921026fa369a5b2e44a14020e3d7905d0192608ecb27f3f3d035c12048201c"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "prepare_request",
+  "input": {
+   "request": {
+    "sourceChainId": "18545",
+    "destinationChainId": "28545",
+    "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+    "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+    "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+    "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+    "action": "1",
+    "policyVersion": "1",
+    "authEpoch": "15",
+    "keyEpoch": "0",
+    "nonce": "119",
+    "expiresAt": "1791481832",
+    "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+   },
+   "signingKeyRef": "keyref:user:alice"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "request": {
+     "sourceChainId": "18545",
+     "destinationChainId": "28545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "action": "1",
+     "policyVersion": "1",
+     "authEpoch": "15",
+     "keyEpoch": "0",
+     "nonce": "119",
+     "expiresAt": "1791481832",
+     "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+    },
+    "requestDigest": "0x3201f6009b950362e625314bb97869e99a941120557d8b0f046d01066dab5ea9",
+    "signature": "0xaa67933876a365b9b795a06812c6f5e9e257c6ecaf4ce8adc52d25bc3626f68216616453dc48ea465c3072ebcfbeebdc41d2c36b9ae015879a9f4739ccba0d991b",
+    "signer": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_checkpoint",
+  "input": {},
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "checkpoint": {
+     "sequence": "19",
+     "authEpoch": "15",
+     "policyVersion": "1",
+     "keyEpoch": "0",
+     "witnessSetVersion": "1",
+     "sourceChainId": "18545",
+     "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+     "sourceBlockNumber": "320",
+     "sourceBlockHash": "0x924af0735c8c7c30cd1db317bf2fdc70c34223ba508102530f96c22d537f7ac4",
+     "expiresAt": "1791481863"
+    },
+    "signatures": [
+     "0x859a7f6fbd23caa3e918b4d36fbdf9c9cae149624e4f7a530229dfd4939adde6479cc1d13d5b6df773b872610d492b4d8f5af0b00006b749710e7d32bb79da511c"
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "collect_decision",
+  "input": {
+   "requestDigest": "0x3201f6009b950362e625314bb97869e99a941120557d8b0f046d01066dab5ea9"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "decision": {
+     "requestDigest": "0x3201f6009b950362e625314bb97869e99a941120557d8b0f046d01066dab5ea9",
+     "result": "1",
+     "credentialDigest": "0xc6844b81333fc8518d6f58ef3371b89886ce31b6a1259ae1aec0822ac4cd8fcb",
+     "stateSequence": "19",
+     "witnessSetVersion": "1",
+     "sourceBlockNumber": "320",
+     "sourceBlockHash": "0x924af0735c8c7c30cd1db317bf2fdc70c34223ba508102530f96c22d537f7ac4",
+     "expiresAt": "1791481832"
+    },
+    "signatures": [
+     "0x562a9adad2b3acfb83765f1c608f999f7b1901b34ce2f601c254e856d6e4d6d1492001aeefddf02893bdbdbac5fc8fc4b0b575c2a284ef55b2634b0bf183440e1c"
+    ],
+    "credentialRecords": [
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6",
+      "kind": "1",
+      "serial": "101",
+      "anchorVersion": "8",
+      "validUntil": "1791568159"
+     },
+     {
+      "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+      "kind": "2",
+      "serial": "0",
+      "anchorVersion": "6",
+      "validUntil": "1791485361"
+     }
+    ]
+   },
+   "error": null
+  }
+ },
+ {
+  "operation": "attest_grant",
+  "input": {
+   "grantId": "0xcebef24289710dbdfc9ede66ec15a8f361c0f86cf53b62e7787d6127b9224096"
+  },
+  "response": {
+   "schemaVersion": "v1",
+   "ok": true,
+   "result": {
+    "schemaVersion": "v1",
+    "adapterMode": "symbolic",
+    "receipt": {
+     "requestDigest": "0x3201f6009b950362e625314bb97869e99a941120557d8b0f046d01066dab5ea9",
+     "grantId": "0xcebef24289710dbdfc9ede66ec15a8f361c0f86cf53b62e7787d6127b9224096",
+     "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+     "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+     "keyEpoch": "0",
+     "grantExpiresAt": "1791481832",
+     "witnessSetVersion": "1",
+     "dbcChainId": "28545",
+     "kssc": "0x68b1d87f95878fe05b998f19b66f4baba5de1aed",
+     "dbcBlockNumber": "322",
+     "dbcBlockHash": "0x5e17ea3995d689d6713acd18cd3ef7006c9b5dbfa88a0294afab7afec826dc88"
+    },
+    "signatures": [
+     "0x8af8d546f0ba51d312c744cd80bf2fc2d649b9d18afc432663fb44d344bef1af73c5356c56ee0d1b9d355c8cdcd99e8399755307818931cefe89c4472a0fbf831b"
+    ]
+   },
+   "error": null
+  }
+ }
+]
