@@ -9,11 +9,17 @@ import pytest
 from evaluation.manifests import sha256
 
 
-def client(tmp_path, program='import json,sys;print(json.dumps(sys.argv[1:]))', url='http://127.0.0.1:18545', timeout=0.2):
+def client(tmp_path, program='import json,sys;print(json.dumps(sys.argv[1:]))', url='http://127.0.0.1:18545', timeout=0.2, **kwargs):
     executable=tmp_path/'cast-probe';executable.write_text('#!'+sys.executable+'\n'+program+'\n');executable.chmod(0o700)
     try:module=importlib.import_module('evaluation.rpc')
     except ModuleNotFoundError:pytest.fail('C-E1 bounded public RPC CLI is not implemented')
-    return module.RpcClient(url,cast=executable,cast_sha256=sha256(executable),cwd=tmp_path,output=tmp_path/'rpc',timeout=timeout)
+    return module.RpcClient(url,cast=executable,cast_sha256=sha256(executable),cwd=tmp_path,output=tmp_path/'rpc',timeout=timeout,**kwargs)
+
+
+def test_rpc_cli_uses_frozen_environment(tmp_path,monkeypatch):
+    monkeypatch.setenv('HMBC_TEST_RPC_ENV','ambient')
+    c=client(tmp_path,'import os,json;print(json.dumps(os.environ["HMBC_TEST_RPC_ENV"]))',env={'HMBC_TEST_RPC_ENV':'pinned'})
+    assert c.call('eth_chainId')=='pinned'
 
 
 def test_raw_params_are_single_json_argument_without_shell_interpretation(tmp_path):

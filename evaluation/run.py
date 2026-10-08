@@ -1,7 +1,7 @@
-"""E integration preflight: record explicit blockers rather than synthesize success.
+"""E preflight or public two-chain E1 execution with an exact frozen plan/ACKs.
 
-C-E1 provider execution will be implemented against the frozen public adapter
-and manifests after E0. This entry point does not start unfrozen service code.
+The default preflight records blockers. Explicit plans use evaluation.e1;
+neither unit controls nor this entry point imply an RQ gate passed.
 """
 import argparse
 import json
@@ -14,9 +14,12 @@ ROOT=Path(__file__).resolve().parents[1]
 PROFILES=('paper-strict','paper-minimal','repaired-e')
 
 
-def run(rq,profile,output):
+def run(rq,profile,output,*,integration_plan=None,integration_acks=None):
     if rq!='E':raise ValueError('NOT_IMPLEMENTED_IN_PHASE: F/G remain locked')
     if profile not in PROFILES:raise ValueError('Unsupported preflight profile')
+    if integration_plan is not None:
+        from evaluation.e1 import execute
+        return execute(integration_plan,integration_acks,output,profiles=[profile])
     output=Path(output)
     output.mkdir(parents=True,exist_ok=False)
     started=now();source=source_manifest(ROOT)
@@ -36,11 +39,13 @@ def main():
     parser.add_argument('--rq',choices=['E','F','G'],required=True)
     parser.add_argument('--profile',choices=PROFILES,required=True)
     parser.add_argument('--output',type=Path,required=True)
+    parser.add_argument('--integration-plan',type=Path)
+    parser.add_argument('--integration-acks',type=Path)
     args=parser.parse_args()
-    try:result=run(args.rq,args.profile,args.output)
+    try:result=run(args.rq,args.profile,args.output,integration_plan=args.integration_plan,integration_acks=args.integration_acks)
     except (ValueError,FileExistsError) as error:parser.exit(2,str(error)+'\n')
-    print(json.dumps({'status':result['status'],'manifest':str(args.output/'manifest.json'),'blockers':result['blockers']},indent=2))
-    return 2
+    print(json.dumps({'status':result['status'],'manifest':str(args.output/'manifest.json'),'blockers':result.get('blockers',result.get('failure'))},indent=2))
+    return 0 if result['status']=='E1_CONTROL_PASS' else 2
 
 
 if __name__=='__main__':raise SystemExit(main())

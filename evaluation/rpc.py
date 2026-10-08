@@ -11,12 +11,12 @@ from pathlib import Path
 import re
 from urllib.parse import urlsplit
 
-from evaluation.manifests import record_command, sha256
+from evaluation.manifests import record_command, sha256, canonical_hash
 from evaluation.processes import _pairs, _constant, _float
 
 
 class RpcClient:
-    def __init__(self, url, *, cast, cast_sha256, cwd, output, timeout=5.0):
+    def __init__(self, url, *, cast, cast_sha256, cwd, output, timeout=5.0, env=None):
         if not math.isfinite(timeout) or timeout <= 0:
             raise ValueError('RPC budget must be finite and positive')
         parsed = urlsplit(url)
@@ -36,6 +36,7 @@ class RpcClient:
         self.cwd = Path(cwd).resolve()
         self.output = Path(output)
         self.timeout = timeout
+        self.env = None if env is None else dict(env)
         self.commands = []
         self.output.mkdir(parents=True, exist_ok=False)
         self._save()
@@ -56,7 +57,8 @@ class RpcClient:
         log = self.output/f'{len(self.commands):04}.txt'
         argv = [str(self.cast), 'rpc', method, encoded, '--raw', '--rpc-url', self.url,
                 '--rpc-timeout', str(math.ceil(self.timeout)), '--no-proxy', '--color', 'never']
-        row = record_command(argv, self.cwd, log, timeout=self.timeout)
+        row = record_command(argv, self.cwd, log, timeout=self.timeout, env=self.env)
+        row['environmentSha256'] = None if self.env is None else canonical_hash(self.env)
         row.update(castSha256Before=before, castSha256After=sha256(self.cast), parseFailure=None)
         self.commands.append(row)
         self._save()

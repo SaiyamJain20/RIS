@@ -29,6 +29,16 @@ def transport(tmp_path, program):
 ECHO = "import sys,json\nfor line in sys.stdin:\n print(json.dumps({'seen':json.loads(line)['id']}),flush=True)\n"
 
 
+def test_frozen_environment_overrides_parent_without_exposing_values(tmp_path, monkeypatch):
+    monkeypatch.setenv('HMBC_TEST_FROZEN_ENV', 'ambient')
+    module = importlib.import_module('evaluation.processes')
+    program = "import os,sys,json\nfor _ in sys.stdin:\n print(json.dumps({'value':os.environ['HMBC_TEST_FROZEN_ENV']}),flush=True)"
+    with module.JsonLinesProcess([sys.executable, '-u', '-c', program], cwd=tmp_path, output=tmp_path/'env-process',
+                                 env={'HMBC_TEST_FROZEN_ENV':'pinned'}) as child:
+        assert child.exchange({}) == {'value':'pinned'}
+    assert 'pinned' not in (tmp_path/'env-process'/'process.json').read_text()
+
+
 def test_two_calls_return_their_own_frame_and_stop_records_exit(tmp_path):
     child = transport(tmp_path, ECHO)
     with child:

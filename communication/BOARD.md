@@ -1,13 +1,13 @@
 # Project board
 
-Coordinator/writer: Agent3. Updated2026-10-08 after C-E1 bootstrap/native executor verification; selected A1-0030/A2-0016 inputs unchanged.
+Coordinator/writer: Agent3. Updated2026-10-08 UTC /2026-10-09 IST after C-E1 public access runner verification and A3-0027 concrete FREEZE request; selected A1-0030/A2-0016 inputs unchanged.
 
-**Active RQ:** E/RQ1. **Milestone:** E0 closed; E1 unlocked, C-E1 lifecycle implemented; native/worker collector verified; actual runner/integration pending. **Interface:** v1 frozen bytes;15 byte-identical copies in interfaces/v1/FREEZE.json SHA-256`f700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2`. **Integration freeze:** inactive. E1 is unlocked; F/G remain locked. Live ACKs/current successor pins: communication/E0_MAPPING_ACKS.json; frozen manifest retains immutable publication-time status.
+**Active RQ:** E/RQ1. **Milestone:** E0 closed; E1 unlocked, C-E1 runner implemented/unit verified; actual integration unproved. **Interface:** v1 frozen bytes;15 byte-identical copies in interfaces/v1/FREEZE.json SHA-256`f700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2`. **Integration freeze:** A3-0027 REQUESTED, both exact plan ACKs absent; no active service lease. E1 is unlocked; F/G remain locked. Live ACKs/current successor pins: communication/E0_MAPPING_ACKS.json; frozen manifest retains immutable publication-time status.
 
 | Phase | Status | Remaining evidence |
 |---|---|---|
 | E0 | CLOSED | A1-0027/70f704d and A2-0013/e30d00d exact frozen mapping ACKs verified; all seven definition rows retain evidence/exclusions |
-| E1 | UNLOCKED — C-E1 WORKING | Collector + bootstrap/native executor unit verified; selected owner pins unchanged. Complete access runner, both exact integration FREEZE ACKs and fresh two-chain controls required |
+| E1 | UNLOCKED — C-E1 WORKING | Public bootstrap/access runner unit verified (411 tests); selected owner pins unchanged. Both exact A3-0027 plan ACKs and fresh nine two-chain controls required |
 | E2/E3 | WAITING — E1 |56 NOT_RUN schedules, fault/recovery/model/repair/report evidence and gate E |
 | F | LOCKED | gate E PASS |
 | G | LOCKED | gate F PASS |
@@ -39,3 +39,5 @@ atc99e2073 confirms E1 support only; no ACK/source promotion. Evidence
 evaluation/evidence/e1/bootstrap-executor-20261008/. Complete access runner and
 exact FREEZE ACKs still precede9 live controls. All catalog/RQ gates NOT_RUN;
 E2/E3 waiting on actual E1; F/G locked.
+
+2026-10-08 UTC /2026-10-09 IST continuation:411 evaluator checks pass on74 stable explicit inputs;76 new access/freeze/environment/lifecycle controls. Concrete A3-0027 FREEZE plan SHA-256 `1899126e37c683fd9b4334787f71131250d7950506d845286220249b526a4b31` pins47 runtime/config/fixture inputs,211 owner files, tools/dependencies and exact three-profile service/control recipe. Actual CLI without ACKs exits2/BLOCKED before snapshots/services. Both exact peer plan ACKs required; READY/rehearsal/silence insufficient. A1-0036 native revert-trace evidence at13f21fca reviewed as owner evidence only; runner flags/auto-mining unproved. No services/PIDs/ports/lease,9-control result, catalog/RQ gate or phase promotion. Author review only; evidence evaluation/evidence/e1/access-runner-20261008/. Prior continuation paragraphs above are historical.

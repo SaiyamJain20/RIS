@@ -1,22 +1,22 @@
 # Integration service and freeze record
 
-Writer: agent 3. State: **INACTIVE**. No actual ledger/adapter services are started. Generic C-E1 lifecycle probes use temporary synthetic children and clean up their owned handles.
+Writer: agent 3. State: **REQUESTED — A3-0027, awaiting both exact plan ACKs**. No actual ledger/adapter services are started. Generic C-E1 lifecycle probes use temporary synthetic children and clean up their owned handles.
 
 | Field | Current value |
 |---|---|
-| RQ/run ID | none |
-| Freeze message | none |
-| Agent 1 ACK/source manifest | none |
-| Agent 2 ACK/source manifest | none |
-| Agent 3 source manifest | none |
+| RQ/run ID | E / E1-20261008-public-access |
+| Freeze message | A3-0027 / exact plan `1899126e37c683fd9b4334787f71131250d7950506d845286220249b526a4b31` |
+| Agent 1 ACK/source manifest | ACK absent; ledger9d6911d /106-entryec213160.. selected |
+| Agent 2 ACK/source manifest | ACK absent; protocol465aff5 /105-entryeb236421.. selected |
+| Agent 3 source manifest | evaluation/evidence/e1/access-runner-20261008/integration-plan.json,47 exact runtime/config/fixture inputs |
 | Interface version | v1 frozen f700292e..; live READY/pins in E0_MAPPING_ACKS.json |
 | PBC port/PID/owner | proposed 18545 / no process / agent 3 |
 | DBC port/PID/owner | proposed 28545 / no process / agent 3 |
 | Worker processes | none |
 | Started at / expiry of lease | no lease |
-| Input manifest / output directory | none |
-| Result / source hashes stable | not run |
-| Freeze released | no active freeze |
+| Input manifest / output directory | evaluation/evidence/e1/access-runner-20261008/integration-plan.json / no service output directory yet |
+| Result / source hashes stable | Real controls NOT_RUN;411 unit tests stable; CLI ACK refusal2/BLOCKED |
+| Freeze released | Logical pinned-byte freeze requested; no active service lease |
 
 Before a run, record exact PIDs/ports and the freeze acknowledgements. If another process owns a port, choose a new port and publish the deployment manifest. If the coordinator restarts, inspect recorded PIDs and command lines before cleanup; never kill an unrelated process or infer a stale process solely from its port.
 
@@ -30,3 +30,13 @@ No service, actual bootstrap transaction, state directory, deployment, port/PID 
 integration FREEZE created. Complete access runner and both exact owner ACKs still
 precede real services/9-control execution. Selected pins unchanged; Agent2c99e2073
 STATUS confirms E1 support only. Evidence evaluation/evidence/e1/bootstrap-executor-20261008/.
+
+Current A3-0027 checkpoint: complete public two-chain runner implemented;411 unit
+checks pass, no live services/transactions. Plan `1899126e37c683fd9b4334787f71131250d7950506d845286220249b526a4b31` binds exact source/tool/dependency/configuration/control bytes. Required
+ACK header `Accepted-plan-sha256` plus `Responds-to: A3-0027`, Type ACK and exact
+owner Git ancestry/content are checked before snapshot creation/startup.
+`evaluation.e1` records service PIDs immediately and command group PIDs before
+owner execution. Occupied ports refuse the frozen plan; revise/re-ACK ports rather
+than adopt a process. Only recorded owned children/new groups are stopped.
+Nine real controls remain unproved; no new E2 inputs or RQ gate evidence accepted.
+Earlier paragraphs above retain their original checkpoint claims.

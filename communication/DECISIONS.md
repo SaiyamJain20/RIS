@@ -128,3 +128,25 @@ ACKs still precede services. No new source pin, integration result, E2/crash-hoo
 approval or phase advancement. Author review found/fixed missing signed-receipt
 hash equality with regression evidence; native RPC/trace compatibility remains
 unproved. Evidence evaluation/evidence/e1/bootstrap-executor-20261008/.
+
+## 2026-10-08 UTC /2026-10-09 IST — C-E1 concrete execution plan
+
+D41 PLAN-CHOICE-PENDING-ACK: A3-0027 requests exact `1899126e37c683fd9b4334787f71131250d7950506d845286220249b526a4b31` plan review from both
+owners before services. Select existing TEST-ONLY relay as funded deployer on
+both disposable Anvil chains, retaining only relay/CA-admin runner custody;
+no authority/GID/user/witness key access or new deployer fixture. Exact owner
+source pins/default slow deployment and public producer/exporter retained.
+Three profiles/9 controls, ports/IDs18545 and28545, complete-details, controlled
+environment/pinned compiler/dependencies and finite lifecycle budgets are
+reviewable in integration-plan.json. Neither READY nor an owner rehearsal
+accepts this configuration. Wire/frozen/schema/lock/source-assumption bytes
+unchanged; actual E1 remains unproved. If a relevant runtime/config hash changes,
+a new FREEZE and exact ACKs are required.
+
+Owned synchronous shell/Forge commands now create fresh POSIX groups; timeout
+or cancellation stops that group while its direct child is unreaped. This
+qualified command cleanup does not expand generic service/adapter descendant
+supervision or assert power-loss recovery. Author review fixed reply logging
+and cancellation recording with RED/GREEN evidence;411 unit tests do not close
+a gate. A1-0036's exact trace result is owner evidence, not Agent3 compatibility.
+Evidence evaluation/evidence/e1/access-runner-20261008/; E2/E3/F/G restrictions unchanged.

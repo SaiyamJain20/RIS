@@ -1,6 +1,9 @@
 """Hash explicit inputs and retain command failures; never infer a run from a commit."""
 import hashlib
 import json
+import math
+import os
+import signal
 import subprocess
 import time
 from datetime import datetime,timezone
@@ -39,15 +42,47 @@ def source_manifest(root):
     return hash_files(root,files)
 
 
-def record_command(argv,cwd,log,timeout=60,env=None):
+def record_command(argv,cwd,log,timeout=60,env=None,*,owned_process_group=False,stop_grace=2):
+    """Bounded command, optionally own a fresh POSIX group for shell/Forge children.
+
+    Group cleanup is confined to a session we created while the direct child is
+    unreaped. Normal synchronous commands must not daemonize descendants.
+    """
     start=now();began=time.monotonic();log=Path(log);log.parent.mkdir(parents=True,exist_ok=True)
-    timed_out=False
+    timed_out=False;pid=None;cleanup=None;process=None
+    state_path=Path(str(log)+'.process.json')
+    def save(status):
+        if owned_process_group:
+            state_path.write_text(json.dumps(dict(pid=pid,processGroup=pid,status=status,groupCleanup=cleanup),indent=2)+'\n')
+    def stop_group():
+        nonlocal cleanup
+        cleanup='TERM_THEN_KILL'
+        for sig in (signal.SIGTERM,signal.SIGKILL):
+            try: os.killpg(pid,sig)
+            except ProcessLookupError: pass
+            if sig == signal.SIGTERM: time.sleep(stop_grace)
+        process.wait(timeout=5)
     with log.open('wb') as output:
         try:
-            result=subprocess.run(argv,cwd=cwd,env=env,stdout=output,stderr=subprocess.STDOUT,timeout=timeout,check=False)
-            code=result.returncode
+            if owned_process_group:
+                if os.name != 'posix' or stop_grace < 0 or not math.isfinite(stop_grace):
+                    raise ValueError('Owned command requires POSIX and a finite nonnegative stop budget')
+                process=subprocess.Popen(argv,cwd=cwd,env=env,stdout=output,stderr=subprocess.STDOUT,start_new_session=True)
+                pid=process.pid
+                try:
+                    save('RUNNING')
+                    code=process.wait(timeout=timeout)
+                except subprocess.TimeoutExpired:
+                    timed_out=True;code=124;stop_group()
+                except BaseException:
+                    stop_group();raise
+                finally: save('STOPPED' if process.returncode is not None else 'CLEANUP_FAILED')
+            else:
+                result=subprocess.run(argv,cwd=cwd,env=env,stdout=output,stderr=subprocess.STDOUT,timeout=timeout,check=False)
+                code=result.returncode
         except subprocess.TimeoutExpired:
             code=124;timed_out=True
         except OSError as error:
             code=127;output.write(str(error).encode())
-    return {'argv':list(argv),'cwd':str(Path(cwd).resolve()),'startedAt':start,'endedAt':now(),'exitCode':code,'timedOut':timed_out,'elapsedSeconds':time.monotonic()-began,'outputSha256':sha256(log)}
+    return {'argv':list(argv),'cwd':str(Path(cwd).resolve()),'startedAt':start,'endedAt':now(),'exitCode':code,'timedOut':timed_out,'elapsedSeconds':time.monotonic()-began,'outputSha256':sha256(log),
+            'pid':pid,'processGroup':pid if owned_process_group else None,'groupCleanup':cleanup,'environmentSha256':None if env is None else canonical_hash(env)}

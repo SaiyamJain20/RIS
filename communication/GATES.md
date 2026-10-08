@@ -92,3 +92,11 @@ No actual service, bootstrap transaction,9-control E1 run, catalog, recovery,
 correspondence or RQ report/ACK executed. Full access runner and exact integration
 FREEZE ACKs remain pending; E1 WORKING, E2/E3 waiting on actual E1, F/G locked.
 Evidence evaluation/evidence/e1/bootstrap-executor-20261008/.
+
+## C-E1 public access runner FREEZE request —2026-10-08 UTC
+
+411 evaluator unit/process checks pass on74 stable explicit inputs. Complete
+public runner is implemented, but both exact A3-0027 plan ACKs are absent and CLI
+refuses startup. No real nine-control E1 run, catalog/recovery/formal correspondence
+or research gate result. E2/E3 wait on actual E1; F/G locked; no checkbox changed.
+Evidence evaluation/evidence/e1/access-runner-20261008/.

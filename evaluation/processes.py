@@ -42,7 +42,7 @@ def _float(value):
 class JsonLinesProcess:
     """Single-request-at-a-time transport; failures close a desynchronized pipe."""
 
-    def __init__(self, argv, *, cwd, output, timeout=10.0, stop_grace=2.0):
+    def __init__(self, argv, *, cwd, output, timeout=10.0, stop_grace=2.0, env=None):
         if not all(math.isfinite(value) and value > 0 for value in (timeout, stop_grace)):
             raise ValueError('Process time budgets must be finite and positive')
         self.argv = list(argv)
@@ -50,6 +50,7 @@ class JsonLinesProcess:
         self.output = Path(output)
         self.timeout = timeout
         self.stop_grace = stop_grace
+        self.env = None if env is None else dict(env)
         self._process = None
         self._stderr = None
         self._started = False
@@ -75,12 +76,13 @@ class JsonLinesProcess:
         self._record = {'argv': self.argv, 'cwd': str(self.cwd), 'pid': None,
                         'startedAt': now(), 'endedAt': None, 'exitCode': None,
                         'timeoutSeconds': self.timeout, 'stopGraceSeconds': self.stop_grace,
-                        'failure': None, 'exchanges': []}
+                        'failure': None, 'exchanges': [], 'environmentSha256': None if self.env is None else
+                        hashlib.sha256(json.dumps(self.env, sort_keys=True).encode()).hexdigest()}
         try:
             self._stderr = (self.output/'stderr.log').open('xb')
             self._process = subprocess.Popen(self.argv, cwd=self.cwd, stdin=subprocess.PIPE,
                                             stdout=subprocess.PIPE, stderr=self._stderr,
-                                            bufsize=0, start_new_session=True)
+                                            bufsize=0, start_new_session=True, env=self.env)
             self._record['pid'] = self.pid
             os.set_blocking(self._process.stdin.fileno(), False)
             os.set_blocking(self._process.stdout.fileno(), False)
@@ -208,13 +210,14 @@ class ServiceProcess:
     service directly; descendant supervision is not provided.
     """
 
-    def __init__(self, argv, *, cwd, output, stop_grace=2.0):
+    def __init__(self, argv, *, cwd, output, stop_grace=2.0, env=None):
         if not math.isfinite(stop_grace) or stop_grace <= 0:
             raise ValueError('Process grace must be finite and positive')
         self.argv = list(argv)
         self.cwd = Path(cwd).resolve()
         self.output = Path(output)
         self.stop_grace = stop_grace
+        self.env = None if env is None else dict(env)
         self._process = None
         self._record = None
         self._logs = []
@@ -238,13 +241,14 @@ class ServiceProcess:
         self._started = True
         self._record = {'argv': self.argv, 'cwd': str(self.cwd), 'pid': None,
                         'startedAt': now(), 'readyAt': None, 'endedAt': None,
-                        'exitCode': None, 'stopGraceSeconds': self.stop_grace, 'failure': None}
+                        'exitCode': None, 'stopGraceSeconds': self.stop_grace, 'failure': None,
+                        'environmentSha256': None if self.env is None else hashlib.sha256(json.dumps(self.env, sort_keys=True).encode()).hexdigest()}
         try:
             for name in ('stdout.log', 'stderr.log'):
                 self._logs.append((self.output/name).open('xb'))
             self._process = subprocess.Popen(self.argv, cwd=self.cwd, stdin=subprocess.DEVNULL,
                                             stdout=self._logs[0], stderr=self._logs[1],
-                                            start_new_session=True)
+                                            start_new_session=True, env=self.env)
             self._record['pid'] = self.pid
             self._save()
         except OSError as error:

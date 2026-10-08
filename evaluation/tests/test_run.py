@@ -23,3 +23,11 @@ def test_existing_output_is_never_overwritten(tmp_path):
 
 def test_unimplemented_phase_rejects_explicitly(tmp_path):
     with pytest.raises(ValueError,match='NOT_IMPLEMENTED_IN_PHASE'):run('F','repaired-e',tmp_path/'f')
+
+
+def test_explicit_integration_plan_requires_both_exact_acks(tmp_path):
+    from evaluation.e1 import create_plan
+    plan=tmp_path/'plan.json';plan.write_text(json.dumps(create_plan(run_id='E1-test',freeze_message='A3-0027')))
+    result=run('E','paper-strict',tmp_path/'run',integration_plan=plan)
+    assert result['status']=='BLOCKED' and result['executionMode']=='two-chain-e1'
+    assert not result['servicesStarted']

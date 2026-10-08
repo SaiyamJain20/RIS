@@ -1,4 +1,4 @@
-**Current checkpoint2026-10-08: C-E1 ABI/native/RPC/redacted-worker collector verified;265 evaluator tests pass with stable source bracket. E1 bootstrap9d6911d/ec213160.. and protocol465aff5/eb236421.. successor source-reviewed. Actual runner/integration and both exact integration FREEZE ACKs pending. E0 closed/E1 unlocked; frozen bytes immutable; all56 Agent3 schedules/RQ gates NOT_RUN, F/G locked. Resume final section; no extra agents/worktrees.**
+**Current checkpoint2026-10-08 UTC /2026-10-09 IST: C-E1 public runner unit verified,411 checks/74 stable inputs. Concrete A3-0027 plan `1899126e37c683fd9b4334787f71131250d7950506d845286220249b526a4b31` requests both exact owner ACKs before startup. Actual9 two-chain controls unproved; all56 schedules/RQ gates NOT_RUN; E2/E3 waiting, F/G locked. Resume the final section; earlier checkpoints below are historical. No extra agents/worktrees.**
 
 **Current checkpoint2026-10-08: E0 closed/E1 unlocked after exact A1-0027/70f704d and A2-0013/e30d00d frozen mapping ACKs. Frozenf700292e.. and15 copies immutable; live ACK/status/current protocol successor in communication/E0_MAPPING_ACKS.json. C-E1 runner/lifecycle next; owner service READY/exact integration FREEZE ACKs still required for actual services. F/G locked; all RQ gates/schedules NOT_RUN. Prior sections below are historical. Resume the final section.**
 
@@ -380,3 +380,80 @@ an unfinished access runner or count this bootstrap unit slice as integrated E1.
 All56 catalog schedules/RQ gates remain NOT_RUN; four paper crash cases remain
 BLOCKED/unproved; E2/E3 after actual E1; F/G locked. WrongIssuerAdmin credits
 baseline issuer checks, not a repair. No human action required.
+
+## Current checkpoint —2026-10-08 UTC /2026-10-09 IST public access runner
+
+PLAN.md C-E1 execution ledger continues from01a8114481c4e60119570905da0aaf4e11b22789.
+The complete public access runner and orchestration entry point are implemented;
+C-E1 is not DONE because real services/9 controls and exact owner FREEZE ACKs
+remain absent. A3-0027 becomes delivered only after verified normal agent3 push.
+
+Exports: `evaluation/access_artifacts.py`, `access_execution.py`, `e1.py`; bounded
+owned command group/environment/dispatch changes in manifests/processes/rpc/run;
+new76 evaluator/process checks. Exact47 runtime/config/fixture inputs and211
+selected owner files plus tool/environment/dependency/control pins live in
+evaluation/evidence/e1/access-runner-20261008/integration-plan.json SHA-256 `1899126e37c683fd9b4334787f71131250d7950506d845286220249b526a4b31`. Ledger9d6911d/106-entryec213160.. and
+protocol465aff5/105-entryeb236421.. remain owner-authored snapshots. Frozen
+f700292e../15 copies,35 reviewed inputs, root uv.lock/tool/package pins unchanged.
+Full evidence/commands/source brackets/audit/peer revisions/fixture qualifications
+are in evaluation/evidence/e1/access-runner-20261008/. Raw capture logs: /home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T185322Z.
+
+Fresh final test argv `.venv/bin/python -m pytest evaluation/tests -q -p no:cacheprovider`
+exit0:411pass/56.31s;74 exact inputs stable. Prior410pass run preceded the cancellation
+regression and does not cover final bytes; final411 run does.76 new checks:34 artifact,
+21 access,15 freeze/cancellation,2 owned-command and4 environment/dispatch.
+Schemas/codecs/signature recovery/native collectors/oracle are real; ledger/RPC/
+adapter/worker replies in access tests are control doubles. Real local synthetic
+children verify environment and timeout-group cleanup. Neither suite nor owner
+rehearsal is nine actual two-chain controls. Captured CLI plan verification0;
+missing exact ACK CLI2/BLOCKED, no snapshots/services; prompts0; versions Foundry
+1.8.5/solc0.8.37/Python3.13.13 and package versions/hash provenance in audit.
+
+Author review fixed malformed response logged before validation, schema-valid
+error diagnostic leakage, shell/Forge timeout descendants and interrupted
+manifest RUNNING status. RED then GREEN command metadata/raw logs retained.
+Owned synchronous commands use a fresh POSIX session/group, record PID before
+execution, TERM/KILL only that group on timeout/cancellation while parent remains
+unreaped. Generic service/adapter descendant supervision is not expanded.
+Helper/read guesses and one test assertion mistake are explicitly separated in
+helper-recovery.json, not research results/refuted hypotheses. No deferred author
+review finding; review is weaker than independent review and no gate approval.
+
+Peer review: final fetch0/scanner0,109 newest communication revisions, no
+divergence. New A1-0036 at13f21fca32e7202a5dfd31aa9b6a06a7f35c0c9f SHA
+c57314930ebdf9b87c31b56a814d9a251effe4bd72662150d8606d11d73de02e records
+owner repaired-e Anvil1.8.5 private-chain Rejected(uint8) returnValue from mined
+debug_traceTransaction. Agent3 already decodes mined trace; own flags/auto-mining
+compatibility unproved. No source pin/ACK/gate promoted. Agent2c99e2073 unchanged.
+Premature owner E2 utilities/results remain outside acceptance.
+
+Rulings: preserve confirmed agent3 checkout/existing plan execution ledger;
+no worktree or extra reviewer agent per explicit user instructions. Use existing
+relay as proposed funded deployer, avoiding new key custody; exact plan ACKs
+required before that configuration executes (D41). Publish concrete owned FREEZE
+for review without another human permission request; agent3 normal push already
+authorized. Source/tool/config changes invalidate ACKs and require new FREEZE.
+Self-review costs no fresh independent reviewer; peers still must review exact
+affected execution inputs. No shared wire/dependency/interface/source-assumption
+change, peer edit, main/force push, history rewrite or gate waiver.
+
+Restart: read memory/live board/role/docs, acquire both locks, fetch/read exact
+new messages. Verify both Type ACK records Responds-to A3-0027 and Accepted-plan-
+sha256 `1899126e37c683fd9b4334787f71131250d7950506d845286220249b526a4b31`, From/To/RQ/v1, exact Git commit/path/SHA and fetched-owner ancestry.
+Build real ACK index with agent-1/agent-2 records; no fabricated ACK file is
+provided. Re-verify47 source/tool/config inputs and211 owner blobs; run
+`.venv/bin/python -m evaluation.e1 --plan evaluation/evidence/e1/access-runner-20261008/integration-plan.json --acks <exact-ack-index> --output <fresh-private-output>`
+with scheduled guard and coordinator service ownership. Record actual PIDs/
+ports/lease, native receipts/views/bootstrap/seven signatures/JSON-lines digests/
+redacted worker commitments/source brackets, cleanup and result. If ports occupied
+refuse and revise/re-ACK configuration; never adopt/kill another process.
+Wrong-admin H2 code16 precedes legitimate H2 list and is baseline issuer restriction;
+then Alice allow and Bob deny in each profile. Report failures for owner repair;
+release logical freeze after actual result. E1 must complete before E2/E3;
+all56 catalog schedules/RQ gates NOT_RUN, four paper crashes BLOCKED/unproved;
+F/G locked. No cryptographic/provider-integrity/consensus/delivery/power-loss proof.
+
+Scheduled run acquired2026-10-08T18:53:22.962470Z, guard310318/ticks4241423,
+separate coordinator flock, no stale recovery. Exact publication/remote hash,
+clean tree and finally lock release are recorded in automation memory/external
+publication/cleanup evidence after this payload; no future result invented here.

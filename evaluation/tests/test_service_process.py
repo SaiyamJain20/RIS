@@ -28,6 +28,17 @@ def test_stdout_stderr_flood_does_not_wedge_readiness_or_cleanup(tmp_path):
     child.stop()
 
 
+def test_direct_service_uses_explicit_environment(tmp_path, monkeypatch):
+    monkeypatch.setenv('HMBC_TEST_SERVICE_ENV','ambient')
+    module=importlib.import_module('evaluation.processes')
+    program="import os,pathlib,time\npathlib.Path('ready').write_text(os.environ['HMBC_TEST_SERVICE_ENV'])\ntime.sleep(30)"
+    with module.ServiceProcess([sys.executable,'-u','-c',program],cwd=tmp_path,output=tmp_path/'service',
+                               env={'HMBC_TEST_SERVICE_ENV':'pinned'},stop_grace=0.2) as child:
+        child.wait_ready(lambda:(tmp_path/'ready').is_file(),timeout=1)
+        assert (tmp_path/'ready').read_text()=='pinned'
+    assert 'pinned' not in (tmp_path/'service/process.json').read_text()
+
+
 def test_readiness_timeout_stops_only_owned_direct_child(tmp_path):
     unrelated = subprocess.Popen([sys.executable, '-c', 'import time;time.sleep(30)'])
     try:
