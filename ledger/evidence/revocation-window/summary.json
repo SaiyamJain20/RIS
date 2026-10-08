@@ -1,0 +1,105 @@
+{
+ "schemaVersion": "hmbc-revocation-window/v0",
+ "note": "OWNER measurement (A1-0045); not C-E2 or gate evidence",
+ "repaired": [
+  {
+   "profile": "repaired-e",
+   "barrierDelaySeconds": 0,
+   "revocationBlockTimestamp": 1791499633,
+   "barrierAcceptedTimestamp": 1791499635,
+   "requestExpiresAt": 1791499659,
+   "requestTtlLeftAtRevocation": 26,
+   "firstRefusal": {
+    "block": 27,
+    "timestamp": 1791499635,
+    "code": "STALE_STATE"
+   },
+   "windowSeconds": 2,
+   "probes": 1,
+   "newRequestAfterRevocation": "REVOKED"
+  },
+  {
+   "profile": "repaired-e",
+   "barrierDelaySeconds": 5,
+   "revocationBlockTimestamp": 1791499642,
+   "barrierAcceptedTimestamp": 1791499648,
+   "requestExpiresAt": 1791499668,
+   "requestTtlLeftAtRevocation": 26,
+   "firstRefusal": {
+    "block": 40,
+    "timestamp": 1791499648,
+    "code": "STALE_STATE"
+   },
+   "windowSeconds": 6,
+   "probes": 9,
+   "newRequestAfterRevocation": "REVOKED"
+  },
+  {
+   "profile": "repaired-e",
+   "barrierDelaySeconds": 10,
+   "revocationBlockTimestamp": 1791499656,
+   "barrierAcceptedTimestamp": 1791499667,
+   "requestExpiresAt": 1791499682,
+   "requestTtlLeftAtRevocation": 26,
+   "firstRefusal": {
+    "block": 59,
+    "timestamp": 1791499667,
+    "code": "STALE_STATE"
+   },
+   "windowSeconds": 11,
+   "probes": 19,
+   "newRequestAfterRevocation": "REVOKED"
+  },
+  {
+   "profile": "repaired-e",
+   "barrierDelaySeconds": 20,
+   "revocationBlockTimestamp": 1791499675,
+   "barrierAcceptedTimestamp": 1791499696,
+   "requestExpiresAt": 1791499701,
+   "requestTtlLeftAtRevocation": 26,
+   "firstRefusal": {
+    "block": 88,
+    "timestamp": 1791499696,
+    "code": "STALE_STATE"
+   },
+   "windowSeconds": 21,
+   "probes": 39,
+   "newRequestAfterRevocation": "REVOKED"
+  },
+  {
+   "profile": "repaired-e",
+   "barrierDelaySeconds": "never",
+   "revocationBlockTimestamp": 1791499703,
+   "barrierAcceptedTimestamp": null,
+   "requestExpiresAt": 1791499729,
+   "requestTtlLeftAtRevocation": 26,
+   "firstRefusal": {
+    "block": 121,
+    "timestamp": 1791499729,
+    "code": "EXPIRED"
+   },
+   "windowSeconds": 26,
+   "probes": 51,
+   "newRequestAfterRevocation": "REVOKED"
+  }
+ ],
+ "paperContrast": {
+  "profile": "paper-strict",
+  "revocationBlockTimestamp": 1791499757,
+  "probes": [
+   {
+    "secondsAfterRevocation": 5,
+    "wouldGrant": true
+   },
+   {
+    "secondsAfterRevocation": 35,
+    "wouldGrant": true
+   },
+   {
+    "secondsAfterRevocation": 65,
+    "wouldGrant": true
+   }
+  ],
+  "requestExpiresAt": 1791499784
+ }
+}
