@@ -15,7 +15,8 @@ from . import adapter
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 EXPORTS = ROOT / "exports"
-DEPLOYMENT = ROOT / "tests" / "fixtures" / "deployment-agent1-54262c2-repaired-e.json"
+DEPLOYMENT = ROOT / "tests" / "fixtures" / "deployment-agent1-91add8c-v1-repaired-e.json"
+FREEZE = ROOT / "tests" / "fixtures" / "freeze-a3-f7b8f3f-v1.json"
 SOURCES = ["hmbc_protocol/adapter.py", "hmbc_protocol/eip712.py", "hmbc_protocol/keys.py", "hmbc_protocol/messages.py", "hmbc_protocol/wire.py"]
 
 CANDIDATE_NOTE = ("CANDIDATE B-E1 code: implemented while E1 is not unlocked and NOT offered for integration or claimed as an E1 result. It needs a "
@@ -133,9 +134,22 @@ def build_examples() -> dict[str, dict]:
             req = {"schemaVersion": adapter.SCHEMA_VERSION, "operation": op, "input": inp, "deploymentManifest": dep}
             entries.append({"case": label, "request": req, "response": adapter.handle_line(json.dumps(req))})
         out[op] = {"operation": op, "generatedBy": "python -m hmbc_protocol.export (runs the adapter; not hand-written)",
-                   "deploymentFixture": "tests/fixtures/deployment-agent1-54262c2-repaired-e.json (byte copy of agent-1 54262c2 sample-repaired-e; machine-local RPC URLs)",
+                   "deploymentFixture": "tests/fixtures/deployment-agent1-91add8c-v1-repaired-e.json (byte copy of agent-1 91add8c sample-repaired-e, labelled v1; machine-local RPC URLs)",
                    "cases": entries}
     return out
+
+
+SERVICE_STATUS = ("Owner mapping of the frozen E0 v1 interface only. The service code is CANDIDATE B-E1/B-E2 code (symbolic mode): no owner service READY, "
+                  "no E1 unlock, no integration freeze and no E1/E2 result are claimed here. The 'v1' label identifies the interface mapping, never a research gate.")
+
+
+def _freeze_reference() -> dict:
+    """Identify the exact agent-3 publication this export maps to, read from a byte copy of its FREEZE.json (never typed in by hand)."""
+    raw = FREEZE.read_bytes()
+    frozen = json.loads(raw)
+    return {"freezeId": frozen["freezeId"], "freezeJsonSha256": hashlib.sha256(raw).hexdigest(),
+            "publicationCommit": "f7b8f3fd74ae3dd52e385cd013a6429415b519a2", "candidateRevision": frozen["candidateRevision"],
+            "reviewManifestSha256": frozen["reviewManifest"]["sha256"], "fixture": "tests/fixtures/freeze-a3-f7b8f3f-v1.json (byte copy of interfaces/v1/FREEZE.json at the publication commit)"}
 
 
 def build_manifest() -> dict:
@@ -147,7 +161,9 @@ def build_manifest() -> dict:
         ops.append(entry)
     return {
         "schemaVersion": "hmbc-protocol-adapter/v0",
-        "interfaceVersion": "candidate v1 revision 6 (NOT frozen)",
+        "interfaceVersion": "v1",
+        "freeze": _freeze_reference(),
+        "serviceStatus": SERVICE_STATUS,
         "producer": "agent-2 protocol/hmbc_protocol/export.py",
         "adapterMode": adapter.ADAPTER_MODE,
         "supportedAdapterModes": ["symbolic"],

@@ -1,4 +1,4 @@
-# Agent 2 handoff (2026-10-08, updated for A2-0010): E0 revision-5 review done; supplement controls measured; candidate B-E1/B-E2 built; NOT E1-unlocked, NOT integration-ready
+# Agent 2 handoff (2026-10-08, updated for A2-0013): frozen v1 mapping ACKed (protocol scope); v1-labelled export successor published; candidate B-E1/B-E2 built; NOT E1-unlocked, NOT integration-ready
 
 - RQ/task: E / E0 (acceptance pending) with CANDIDATE B-E1/B-E2 code built ahead of the unlock at the user's instruction. Interface: candidate v1 revision 5
   (agent-3 A3-0012, manifest 124b95eb..., 32 files), NOT frozen. No INTERFACE_READY, E1 unlock or gate is claimed. F and G are untouched (locked).
@@ -27,3 +27,9 @@
 - A2-0011/A2-0012: option (c) for X-1 is now PRODUCTION behaviour (`Worker._recipient_for`; agent-3 chose it in D35/A38): paper-mode releases bind to RSC.recipientKeyHash(grant.gid); unregistered GID => no release; native grant recipient stays zero; repaired-e unchanged. Tests: `tests/test_paper_release.py` (paper-strict and paper-minimal).
 - Tool `testtools.deviating_witness` gained `--at-block N`. Export label: candidate v1 revision 6.
 - START CONTRACT: `cd protocol && PYTHONPATH=. python -m hmbc_protocol.adapter --state-dir <new 0700 dir> --deployment <exact deployment.json>`; evidence: `python -m hmbc_protocol.worker_log --state-dir <same dir>`.
+
+- A2-0013 (frozen v1 mapping + successor): ACKs agent-3's publication f7b8f3f / FREEZE.json f700292e.. for protocol scope (15/15 frozenCopies verified; frozen boundary.json fce967f8.. agrees with `hmbc_protocol.wire` on all 397 agent-2-scope cases; all 10 entries of the frozen eip712-agent1.json reproduced by my encoder; 6/6 `abiAgreement` hashes equal `protocol/abi/*.json`; frozen `adapter-agent2.json` = my early b9564f0 export, retained provenance only). Exclusions: evaluator internals, Scenario/ScenarioResult/WorkerExpectation/RunManifest, whole package, E0 closure, E1 unlock, service READY, integration freeze, gates.
+- v1-labelled successor: `exports/adapter.json` interfaceVersion "v1" + `freeze` reference (read from a byte copy of FREEZE.json, `tests/fixtures/freeze-a3-f7b8f3f-v1.json`) + `serviceStatus` (candidate code, no service READY); examples embed agent-1's v1-labelled sample deployment (`tests/fixtures/deployment-agent1-91add8c-v1-repaired-e.json`). Only `hmbc_protocol/export.py` changed in production source; adapter/witness/worker/eip712/wire are byte-identical to f69e250. adapter.json SHA-256 7146495b..; manifest 140bb762.. (98 files). Full suite 1318 passed, 201 skipped, exit 0; crosscheck vs the frozen snapshot 7187 inputs / 0 disagreements; examples vs frozen validators 16 / 0.
+- Messages sent: A2-0001..A2-0013. Read: A1-0001..A1-0027 (A1-0027 = ledger frozen-mapping ACK), A3-0001..A3-0022.
+- Mutation check not re-run for this commit (mutated sources unchanged since f69e250; 65/73, 8 documented equivalents, 0 gaps).
+- Service READY is NOT published; it follows the E1 unlock as a separate owner statement naming the exact commit and manifest. START CONTRACT unchanged (A2-0012 section 4).

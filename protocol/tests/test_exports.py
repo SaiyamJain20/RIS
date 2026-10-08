@@ -1,3 +1,4 @@
+import hashlib
 import json
 import pathlib
 import subprocess
@@ -29,11 +30,55 @@ def test_manifest_lists_all_eight_operations_and_only_symbolic_mode():
     assert all(s == "candidate-b-e1-not-unlocked" for k, s in statuses.items() if k in {"collect_decision", "collect_checkpoint", "attest_grant", "release", "encrypt_record", "finish_decryption"})
 
 
-def test_manifest_names_the_interface_revision_it_was_reviewed_against():
-    """A3-0016/A3-0018: the label must track the reviewed candidate (it was stale at revision 3 once; revision 6 is the current working interface). Keep it tied to the reviewed candidate, and never to 'frozen'."""
+FREEZE = ROOT / "tests" / "fixtures" / "freeze-a3-f7b8f3f-v1.json"
+V1_DEPLOYMENT = ROOT / "tests" / "fixtures" / "deployment-agent1-91add8c-v1-repaired-e.json"
+
+
+def test_manifest_carries_the_frozen_v1_label():
+    """A3-0021 asks for a reviewed v1-labelled successor; the gate and BOUNDARY compare the label with exactly 'v1'."""
     m = json.loads((ROOT / "exports" / "adapter.json").read_text())
-    assert m["interfaceVersion"] == "candidate v1 revision 6 (NOT frozen)"
-    assert "frozen" not in m["interfaceVersion"].replace("NOT frozen", "")
+    assert m["interfaceVersion"] == "v1"
+
+
+def test_manifest_names_the_exact_frozen_publication_it_maps_to():
+    """The mapping reference is checked against a byte copy of FREEZE.json, so a wrong id/hash/commit cannot be typed in by hand."""
+    m = json.loads((ROOT / "exports" / "adapter.json").read_text())
+    raw = FREEZE.read_bytes()
+    frozen = json.loads(raw)
+    ref = m["freeze"]
+    assert hashlib.sha256(raw).hexdigest() == ref["freezeJsonSha256"] == "f700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2"
+    assert ref["freezeId"] == frozen["freezeId"] == "E0-v1-r6-20261008"
+    assert ref["publicationCommit"] == "f7b8f3fd74ae3dd52e385cd013a6429415b519a2"
+    assert ref["candidateRevision"] == frozen["candidateRevision"] == 6
+    assert ref["reviewManifestSha256"] == frozen["reviewManifest"]["sha256"]
+    assert frozen["interfaceVersion"] == m["interfaceVersion"]
+
+
+def test_manifest_says_the_label_is_a_mapping_and_not_a_service_ready_or_unlock():
+    """Labelling the export v1 must not read as integration approval: agent 3 excluded service READY until E1 is unlocked."""
+    m = json.loads((ROOT / "exports" / "adapter.json").read_text())
+    s = m["serviceStatus"]
+    assert "CANDIDATE" in s and "no owner service READY" in s and "E1" in s and "never a research gate" in s
+    frozen = json.loads(FREEZE.read_text())
+    assert frozen["e1Unlocked"] is False and frozen["owners"]["protocol"]["serviceReadyForIntegration"] is False
+
+
+def test_examples_embed_agent1s_v1_labelled_deployment_sample():
+    """A v1 export must not carry legacy 'v0 proposed' deployments in its examples (BOUNDARY: an E1 run uses owner exports labelled v1)."""
+    dep = json.loads(V1_DEPLOYMENT.read_text())
+    assert dep["interfaceVersion"] == "v1"
+    for op in adapter.OPERATIONS:
+        doc = json.loads((ROOT / "exports" / "examples" / f"{op}.json").read_text())
+        assert "deployment-agent1-91add8c-v1-repaired-e.json" in doc["deploymentFixture"]
+        for case in doc["cases"]:
+            assert case["request"]["deploymentManifest"] == dep, (op, case["case"])
+
+
+def test_agent1s_v1_sample_loads_and_its_abi_hashes_equal_the_bundled_abis():
+    """The v1 sample must be usable by the ledger loader unchanged (all six ABI hashes pinned to the bundled ABIs)."""
+    from hmbc_protocol import ledger as ledger_mod
+    led = ledger_mod.Ledger.from_deployment(json.loads(V1_DEPLOYMENT.read_text()))
+    assert led.pbc.chain_id == 18545 and led.dbc.chain_id == 28545
 
 
 def test_manifest_documents_the_worker_log_evidence_export_without_tokens():

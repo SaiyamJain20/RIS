@@ -1,0 +1,252 @@
+{
+  "schemaVersion": "hmbc-interface-freeze/v1",
+  "interfaceVersion": "v1",
+  "freezeId": "E0-v1-r6-20261008",
+  "status": "FROZEN_BYTES_AWAITING_PEER_MAPPING_ACKS",
+  "createdAt": "2026-10-08T14:56:38.263368+00:00",
+  "author": "agent-3",
+  "reviewedAgent3Commit": "9198a0c1218af68d9d846ff8426dc84b66414526",
+  "publicationBase": "e504e6dcd65100a393de765895dc207995077720",
+  "candidateRevision": 6,
+  "reviewManifest": {
+    "path": "interfaces/proposals/v1/revision6/review-manifest.json",
+    "sha256": "df2a306fd77937572346cf5e91e9354536988af63ed660e14d51e04350161c62",
+    "files": {
+      "communication/agent-3/outbox/0002-rfc-e0-semantics-toolchain-receipt.md": "fcc22f394cdbe1492be2d01bafda161b2f0ecf80a3be92740b7e6c031ae5c9db",
+      "communication/agent-3/outbox/0005-ack-a1-0008-receipt-revision-2.md": "74e0b23c80c893f849c0f4176df67e388f7e7df09ef8a13e9fe9888c7ed2ff55",
+      "evaluation/check_schema_vectors.py": "4cf3ee57a6bbba8c2bc99103fa4844b788149a87b2792dfbcc5c70bd06e78e05",
+      "evaluation/e0_verify.py": "077bc6d50011b06769e4c5d26c06bd1f9327a317e4869692c86fea986116427c",
+      "evaluation/evidence/assumptions.csv": "98047dda31877f286175cfcbe66fa0ada10bef452cfd6c15f42f0dac430ad39b",
+      "evaluation/evidence/source-map.csv": "25337ee2846b13791bf971281d885f6300a6ce1407f156ddeb4e5cb85f54a07c",
+      "evaluation/oracles/access.py": "98ff036fcbbf92d8f561c52769f1acf788e2e7117b614b8ab9fd7c35608b61e5",
+      "evaluation/scenarios/e0_cases.json": "438fa38ddcbd7edd0e49fb93cc580e5219ed05349fd677b2e386bc4669f5d50e",
+      "evaluation/scenarios/e0_supplement_cases.json": "9ccade362c5a8853d63f06a08be3134ae32cd99527ceb36fcd78c311a9246858",
+      "evaluation/scenarios/e_positive.json": "95e75f10cfdaf0b0bf5bd75ea25b521df30817f85a280a8552cc62243f8ccdda",
+      "evaluation/schema.py": "3e29876907be197dcbe59142184d89cbe7cfb1ec8c446d3143950648d61598ad",
+      "evaluation/tests/test_access_oracle.py": "a5ae466018b0e34836114fe4564f0e3a008241e26b6319d4f4bb7a5965f6fbb3",
+      "evaluation/tests/test_boundary_schemas.py": "fccf5bf06b06ba23b5f961879a4ac289ba173696715ab6989b47b1ee285fbda3",
+      "evaluation/tests/test_deployments.py": "2dd4a624d7ff967ab01e69a6d18fff6ccf5e5109c3c373b7a8d5abb357939c0b",
+      "evaluation/tests/test_revision5_review.py": "e16bf6e21ea0fb4d29bae4a0e970da1f7d6813a6888895c4a3b2e35ca3210366",
+      "evaluation/tests/test_revision6_review.py": "041b48733c2840b38ad9700f19d96f4a7f519a01dac52e688b28d334dc6b81d1",
+      "evaluation/tests/test_schemas.py": "e7bcb77edc222d59fb4f82f4e9e348bf0b8a1553f292feb249d48d04a33660c8",
+      "evaluation/tests/test_vectors.py": "8833a4831fa198900c82200a6bd68a9534921b2c83611a234d96f7abc0234fce",
+      "evaluation/toolchain.json": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746",
+      "evaluation/vectors.py": "e7791eb24367032b3ed2932e1d84b5135fa4af145833bb1a68fa965d2cb53266",
+      "interfaces/proposals/boundaries.py": "c3d2ce28c4969abf6e36b4821481dfb34723a9c1d6cf6f158f9febf1ba87e394",
+      "interfaces/proposals/build_boundary_vectors.py": "e2e0e042d0d72e0eacdc9994e4d195e979ef54de6dea3ab0377bd535dc4a0b93",
+      "interfaces/proposals/build_schemas.py": "3cfa472da1d13e547015aa724c6dae588fc21de63f8c330711a8eba27ab57514",
+      "interfaces/proposals/v1/ACCEPTANCE.md": "68e0a88afda178173037a9e2910d16958e2b1c45d2afeebdf6e0e1b3dfe560e1",
+      "interfaces/proposals/v1/BOUNDARY.md": "cb100d436aba200f7a1aae9f848218827cf1afb39e5ecf4b4e923b8de14f1235",
+      "interfaces/proposals/v1/README.md": "0de821dea5d5fa56d73cca449e225635f4c875311fbe608c91ba4a9d818e6212",
+      "interfaces/proposals/v1/hmbc.schema.json": "4c22092dead0982716d68acf0ad7f4a5a737568e8e2d0c37d06595add36d6fea",
+      "interfaces/proposals/v1/revision6/DELTA.md": "d2275e8a23c545e60fd408110ecd1dfa0e309c70226799fdfe05f492998e6172",
+      "interfaces/vectors/adapter-agent2-candidate.json": "e248fceb7455ebc3ae328da294ab7b328e2a69fc43eb4975d3b35e0016f5d0b7",
+      "interfaces/vectors/boundary-candidate.json": "fce967f87cce9b453ae23d7450bcb6a199f3c0f6ad5d933b378b8f90e5a42210",
+      "interfaces/vectors/deployment-agent1-candidate.json": "787ae701241167a2474215168752ecac7fbec260cb0df3a2acdf680598f53ee1",
+      "interfaces/vectors/eip712-agent1-candidate.json": "f211c65fe9c0ea0d7c7ed3fe6904ab04b36224f5bfcd41d3bd140e6165f0bf61",
+      "interfaces/vectors/schema-candidate.json": "49a9dc29298495513340db2f4e4f78d7611e52c7b42409531bc5ed97f421e4d8",
+      "pyproject.toml": "1d839e80b8acdef35d878740cb5d212b464cc30f4adfdd3f56b69b162badd0ca",
+      "uv.lock": "1fb4777a5d4078434af8e7fe4a88f2f3afbe1d8f65d30e8a182999d7a7a29cbe"
+    }
+  },
+  "frozenCopies": {
+    "interfaces/v1/hmbc.schema.json": {
+      "sourcePath": "interfaces/proposals/v1/hmbc.schema.json",
+      "sha256": "4c22092dead0982716d68acf0ad7f4a5a737568e8e2d0c37d06595add36d6fea",
+      "mapping": "byte-identical"
+    },
+    "interfaces/v1/BOUNDARY.md": {
+      "sourcePath": "interfaces/proposals/v1/BOUNDARY.md",
+      "sha256": "cb100d436aba200f7a1aae9f848218827cf1afb39e5ecf4b4e923b8de14f1235",
+      "mapping": "byte-identical"
+    },
+    "interfaces/v1/source-map.csv": {
+      "sourcePath": "evaluation/evidence/source-map.csv",
+      "sha256": "25337ee2846b13791bf971281d885f6300a6ce1407f156ddeb4e5cb85f54a07c",
+      "mapping": "byte-identical"
+    },
+    "interfaces/v1/assumptions.csv": {
+      "sourcePath": "evaluation/evidence/assumptions.csv",
+      "sha256": "98047dda31877f286175cfcbe66fa0ada10bef452cfd6c15f42f0dac430ad39b",
+      "mapping": "byte-identical"
+    },
+    "interfaces/v1/scenarios/e0_cases.json": {
+      "sourcePath": "evaluation/scenarios/e0_cases.json",
+      "sha256": "438fa38ddcbd7edd0e49fb93cc580e5219ed05349fd677b2e386bc4669f5d50e",
+      "mapping": "byte-identical"
+    },
+    "interfaces/v1/scenarios/e0_supplement_cases.json": {
+      "sourcePath": "evaluation/scenarios/e0_supplement_cases.json",
+      "sha256": "9ccade362c5a8853d63f06a08be3134ae32cd99527ceb36fcd78c311a9246858",
+      "mapping": "byte-identical"
+    },
+    "interfaces/v1/scenarios/e_positive.json": {
+      "sourcePath": "evaluation/scenarios/e_positive.json",
+      "sha256": "95e75f10cfdaf0b0bf5bd75ea25b521df30817f85a280a8552cc62243f8ccdda",
+      "mapping": "byte-identical"
+    },
+    "interfaces/v1/toolchain.json": {
+      "sourcePath": "evaluation/toolchain.json",
+      "sha256": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746",
+      "mapping": "byte-identical"
+    },
+    "interfaces/v1/vectors/adapter-agent2.json": {
+      "sourcePath": "interfaces/vectors/adapter-agent2-candidate.json",
+      "sha256": "e248fceb7455ebc3ae328da294ab7b328e2a69fc43eb4975d3b35e0016f5d0b7",
+      "mapping": "byte-identical"
+    },
+    "interfaces/v1/vectors/boundary.json": {
+      "sourcePath": "interfaces/vectors/boundary-candidate.json",
+      "sha256": "fce967f87cce9b453ae23d7450bcb6a199f3c0f6ad5d933b378b8f90e5a42210",
+      "mapping": "byte-identical"
+    },
+    "interfaces/v1/vectors/deployment-agent1.json": {
+      "sourcePath": "interfaces/vectors/deployment-agent1-candidate.json",
+      "sha256": "787ae701241167a2474215168752ecac7fbec260cb0df3a2acdf680598f53ee1",
+      "mapping": "byte-identical"
+    },
+    "interfaces/v1/vectors/eip712-agent1.json": {
+      "sourcePath": "interfaces/vectors/eip712-agent1-candidate.json",
+      "sha256": "f211c65fe9c0ea0d7c7ed3fe6904ab04b36224f5bfcd41d3bd140e6165f0bf61",
+      "mapping": "byte-identical"
+    },
+    "interfaces/v1/vectors/schema.json": {
+      "sourcePath": "interfaces/vectors/schema-candidate.json",
+      "sha256": "49a9dc29298495513340db2f4e4f78d7611e52c7b42409531bc5ed97f421e4d8",
+      "mapping": "byte-identical"
+    },
+    "interfaces/v1/owners/ledger-source-manifest.sha256": {
+      "sourcePath": "ledger/evidence/source-manifest.sha256",
+      "commit": "91add8cc6000d1413bad2ed0aa119a5f26e8c776",
+      "sha256": "407c86331072bdad63562541230fdd3078608287eccb373cb2f974e3bde20fc1",
+      "mapping": "byte-identical owner-authored inventory"
+    },
+    "interfaces/v1/owners/protocol-source-manifest.sha256": {
+      "sourcePath": "protocol/evidence/source-manifest.sha256",
+      "commit": "f69e25027ff98a611774ad45924615eb2af37d89",
+      "sha256": "b4757c18887956e1da67b7b140c4674a2970d793e6684bcc8e17ec90db442f46",
+      "mapping": "byte-identical owner-authored inventory"
+    }
+  },
+  "ackProvenance": {
+    "A1-0018": {
+      "path": "communication/agent-1/outbox/0018-ack-candidate-revision-5.md",
+      "commit": "91add8cc6000d1413bad2ed0aa119a5f26e8c776",
+      "changeCommit": "73ae718b917a787bbdee0c3802fe32e265b0d70d",
+      "sha256": "15c4d5687d1de9775f13129d15f2c0667460addbf2c35dfcbfb41cffbbb19d30"
+    },
+    "A1-0020": {
+      "path": "communication/agent-1/outbox/0020-ack-supplement-revision2.md",
+      "commit": "91add8cc6000d1413bad2ed0aa119a5f26e8c776",
+      "changeCommit": "012f24c7427f2106fc3166db3d540c8254d56a27",
+      "sha256": "63ad3fbcac051d4f79a316535360e241e58cf808bcc33cabd05ec1c07687f9ba"
+    },
+    "A1-0021": {
+      "path": "communication/agent-1/outbox/0021-review-a2-0010-paper-grant-recipient.md",
+      "commit": "91add8cc6000d1413bad2ed0aa119a5f26e8c776",
+      "changeCommit": "8aedd0cfcad2cdd659500778e23ce357740cf487",
+      "sha256": "b11b47bbc0663aa62ab585950f8927424ce663a2c668db4dde599ba23755ef46"
+    },
+    "A1-0022": {
+      "path": "communication/agent-1/outbox/0022-ack-candidate-revision-6.md",
+      "commit": "91add8cc6000d1413bad2ed0aa119a5f26e8c776",
+      "changeCommit": "46895626ddb4b4bb68c67438a808b5615ca95824",
+      "sha256": "fb2b55a020b66b2af7e462f546d9389182242c59744690b3d0475689483e8d3f"
+    },
+    "A1-0024": {
+      "path": "communication/agent-1/outbox/0024-ready-ledger-v1-exports.md",
+      "commit": "91add8cc6000d1413bad2ed0aa119a5f26e8c776",
+      "changeCommit": "a172fd3163d40c2033463878c06c606d4953fae8",
+      "sha256": "a491537847c2536f9022f256c2ebc820ff87eb78de3ec9b8c2bcf0696f2ca444"
+    },
+    "A1-0026": {
+      "path": "communication/agent-1/outbox/0026-ready-ledger-fast-deploy-successor.md",
+      "commit": "91add8cc6000d1413bad2ed0aa119a5f26e8c776",
+      "changeCommit": "91add8cc6000d1413bad2ed0aa119a5f26e8c776",
+      "sha256": "7aa219f0d3f7daaf03ebed19270caf9a476db81d5479a713f98409abb9874c53"
+    },
+    "A2-0006": {
+      "path": "communication/agent-2/outbox/0006-ack-candidate-revision-4-scoped.md",
+      "commit": "f69e25027ff98a611774ad45924615eb2af37d89",
+      "changeCommit": "579e535132e81d299ccf2e874d2be3b47c779f1c",
+      "sha256": "362ff11fa7163bf7fcdbefe99a8d7be63cb9beef99d4e5e66a23c31ffa98d32d"
+    },
+    "A2-0007": {
+      "path": "communication/agent-2/outbox/0007-ack-recipient-key-derivation.md",
+      "commit": "f69e25027ff98a611774ad45924615eb2af37d89",
+      "changeCommit": "9e92800c2fd2f223737a42a3d42b2deec2a977ec",
+      "sha256": "57b7baa1a28f9d0b5b7d5c61e53587e0076ab54992961ed013598046ff6f5ca9"
+    },
+    "A2-0009": {
+      "path": "communication/agent-2/outbox/0009-ready-e0-revision5-scoped-ack-and-candidate-b-e1.md",
+      "commit": "f69e25027ff98a611774ad45924615eb2af37d89",
+      "changeCommit": "5e203d0c0b26235c4618548a797d93201275a14d",
+      "sha256": "139c3edcab713d2cdf7ae314f3af104d18a7d516532b188a3a2f0087e4d3ae23"
+    },
+    "A2-0010": {
+      "path": "communication/agent-2/outbox/0010-ack-supplement-revision2-paper-review-and-tool.md",
+      "commit": "f69e25027ff98a611774ad45924615eb2af37d89",
+      "changeCommit": "27c51d2334f275041230b16c505522615621f553",
+      "sha256": "f4294691ba8fec1313b226b5685c4b437089cdb6ee45754309e05c677b67cf75"
+    },
+    "A2-0011": {
+      "path": "communication/agent-2/outbox/0011-review-x1-option-c-spike.md",
+      "commit": "f69e25027ff98a611774ad45924615eb2af37d89",
+      "changeCommit": "a4dcade3dc3bf01e172a4a5ba30a40fc7ad97292",
+      "sha256": "5abfc710f09ac1061393f8a95fe2acfc1f9c7bfe044a8632d6b16a0a292cf417"
+    },
+    "A2-0012": {
+      "path": "communication/agent-2/outbox/0012-ready-revision6-ack-option-c-and-start-contract.md",
+      "commit": "f69e25027ff98a611774ad45924615eb2af37d89",
+      "changeCommit": "f69e25027ff98a611774ad45924615eb2af37d89",
+      "sha256": "4a530a8e0018daf30a705338c36e8260a3aa94bb20581581e85fe7b30c039474"
+    }
+  },
+  "owners": {
+    "ledger": {
+      "commit": "91add8cc6000d1413bad2ed0aa119a5f26e8c776",
+      "manifestPath": "ledger/evidence/source-manifest.sha256",
+      "manifestSha256": "407c86331072bdad63562541230fdd3078608287eccb373cb2f974e3bde20fc1",
+      "entries": 101,
+      "serviceReadyForIntegration": false
+    },
+    "protocol": {
+      "commit": "f69e25027ff98a611774ad45924615eb2af37d89",
+      "manifestPath": "protocol/evidence/source-manifest.sha256",
+      "manifestSha256": "b4757c18887956e1da67b7b140c4674a2970d793e6684bcc8e17ec90db442f46",
+      "entries": 94,
+      "serviceReadyForIntegration": false
+    }
+  },
+  "abiAgreement": {
+    "ACSC": "d5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08dbf8ad9a568",
+    "KSSC": "391841544b43c967bd8004c95376f139baaa2dd8c553f13310accecd83e1c6e7",
+    "LSC": "3c9acabbb8978e6330f5878b9a979326ca22f1519300a5277cffeea3911d42de",
+    "PSC": "559d3f011fe7687b0a422e8f6f61c2e8f72a9a7a61c8795973da0d543a1c3fe1",
+    "RSC": "f0bc3732ee5646db945a68e06434cd46ba2637df04e4fe2260cf0d16bde1eebc",
+    "TMSC": "a6f6273c8dcff51bb8834c8fa0f354d5e9b6bb7b5d7d39ca89c5d7f9975a225d"
+  },
+  "e0Acceptance": "All seven pre-publication acceptance rows satisfied within exact affected scope; evaluator internals explicitly author-only. See communication/E0_ACCEPTANCE.md.",
+  "peerMappingAcks": {
+    "agent-1": null,
+    "agent-2": null
+  },
+  "e0Closed": false,
+  "e1Unlocked": false,
+  "integrationFreezeActive": false,
+  "caseExecutionStatus": "All 48 amended and 8 supplementary schedules NOT_RUN",
+  "evidence": {
+    "path": "evaluation/evidence/e0/v1-freeze-20261008/verification.json",
+    "sha256": "1f2e98bebdc31f98ce16e8efed388ed41e45cdca75fc5162f5883243858f8734",
+    "sourceStable": true
+  },
+  "metadataPolicy": "Copied candidate titles/pending prose/owner draft labels are retained to preserve exact reviewed bytes. This FREEZE.json and interfaces/v1/README.md supersede their publication status, not their field definitions. Peer mapping ACKs must name this manifest hash and commit. No semantic/wire change.",
+  "scopeLimits": [
+    "Paper-derived reconstruction; synthetic fixtures; E symbolic mode, not actual ABE/encryption.",
+    "A1/A2 ACKs are affected-scope reviews, never whole-package or evaluator-internals approvals.",
+    "Agent2 production option(c) and --at-block were source-reviewed; new live behavior remains owner evidence pending authorized integration.",
+    "166 ledger module tests and ProVerif tool smoke are not two-chain integration or E correspondence proofs.",
+    "E1 stays locked until both peers ACK exact frozen byte/version mapping; actual services also require owner service READY and pinned integration FREEZE ACKs.",
+    "F/G stay locked; all RQ gates NOT_RUN."
+  ]
+}
