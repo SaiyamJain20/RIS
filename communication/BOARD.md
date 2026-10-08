@@ -1,6 +1,6 @@
 # Project board
 
-Coordinator/writer: Agent3. Updated2026-10-08 UTC /2026-10-09 IST after independently executed fresh all-profile C-E1 controls.
+Coordinator/writer: Agent3. Updated2026-10-08 UTC /2026-10-09 IST after C-E2 symbolic correspondence and exact owner-tool review (2026-10-09 IST).
 
 **Active RQ:** E/RQ1. **Milestone:** E0 closed; C-E1 COMPLETE9/9, E2/E3 UNLOCKED within E; gate E NOT_RUN. **Interface:** v1 frozenf700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2/15 copies immutable. **Integration freeze:** A3-0029 RELEASED after completed run; no active service lease. F/G locked.
 
@@ -8,7 +8,7 @@ Coordinator/writer: Agent3. Updated2026-10-08 UTC /2026-10-09 IST after independ
 |---|---|---|
 | E0 | CLOSED | Exact frozen mapping ACKs retained; no byte change |
 | E1 | COMPLETE — C-E1 actual9/9 | Source-stable fresh chain pair and adapter state per profile; exact A1-0038/A2-0019 ACKs; native/public/redacted evidence retained |
-| E2/E3 | UNLOCKED within E |56 NOT_RUN fault/mutation/recovery schedules, scoped ProVerif positive/mutant queries, report, exact report/source ACKs and gate E |
+| E2/E3 | UNLOCKED within E |56 real fault/mutation/recovery schedules NOT_RUN; ProVerif slice executed; report, exact report/source ACKs and gate E |
 | F | LOCKED | gate E PASS |
 | G | LOCKED | gate F PASS |
 
@@ -50,3 +50,6 @@ E2/E3 waiting on actual E1; F/G locked.
 
 
 **Current checkpoint2026-10-08 UTC /2026-10-09 IST:** C-E1 COMPLETE: actual fresh two-chain/service controls9/9 across paper-strict, paper-minimal and repaired-e; CLI0/E1_CONTROL_PASS in356.061s. Exact A1-0038/2f5e376 and A2-0019/6d2c867 ACKs verified for A3-0029/78e195f5.. before services. Sources stable; all9 owned PBC/DBC/adapter processes exit0/absent. A3-0029 RELEASED after completed run. E2/E3 now permitted within E/RQ1; all56 catalog schedules and every RQ gate remain NOT_RUN, four paper crash cases BLOCKED/unproved; F/G locked. Evidence evaluation/evidence/e1/integrated-controls-20261008/README.md. This paragraph supersedes prior milestone status below; prior evidence remains historical.
+
+
+C-E2 checkpoint2026-10-09 IST: symbolic full-tuple agreement/positive/denied plus destination-omitting mutant trace executed;421 root tests pass/80 stable inputs. Exact303 offered owner entries source-reviewed; startup supplement r1 A3-0032 awaits both exact scoped ACKs, followed by later full integration FREEZE/ACKs. No service/recovery/fault catalog/gate run. Evidence evaluation/evidence/e2/formal-and-hook-review-20261009/README.md; A3-0033. Owner catalog/window measurements remain owner evidence; no phase promotion.

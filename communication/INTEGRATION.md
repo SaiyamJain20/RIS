@@ -88,3 +88,8 @@ owner execution. Occupied ports refuse the frozen plan; revise/re-ACK ports rath
 than adopt a process. Only recorded owned children/new groups are stopped.
 Nine real controls remain unproved; no new E2 inputs or RQ gate evidence accepted.
 Earlier paragraphs above retain their original checkpoint claims.
+
+
+## C-E2 symbolic/start-contract checkpoint —2026-10-09 IST
+
+C-E2 formal signature slice executed: full user/witness eight-field agreement true; positive path reachable, denied-data path unreachable; destination-omitting deliberate mutant has concrete counterexamples and remaining-field agreement.7 formal/sensitivity checks; final root421 tests0/80 stable inputs. Fixed synthetic names/non-injective/honest-key/witness abstraction; no mutable nonce/trust/recovery/encoding/implementation proof. Evidence evaluation/evidence/e2/formal-and-hook-review-20261009/README.md. All56 real Agent3 fault schedules and gate E remain NOT_RUN; four paper crash cases BLOCKED/unproved; F/G locked. No active service/freeze/lease. Exact offered owner303 blobs checked; A3-0032 both scoped ACKs pending and is not an integration FREEZE. Existing E1 evidence/pins/frozen copies immutable.

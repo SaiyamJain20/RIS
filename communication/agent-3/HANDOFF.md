@@ -497,3 +497,60 @@ Separate author evidence review: exact ACK scopes, source/fixture hashes, native
 A3-0029 RELEASED. A3-0030 reports actual result; A3-0031 announces C-E1 completion and requests exact E2 owner handoffs/hook RFC. These messages are delivered only after verified normal agent3 push; final publication/remote SHA/clean tree/own guard cleanup in external publication/cleanup and automation memory. Scheduled atomic guard acquired20:13:23Z; live PID360769/start ticks recorded, separate coordinator flock acquired, no stale recovery. Initial brief keeper360598 transferred ownership to audited guard before repository Git writes and was stopped; no stale-lock decision inferred. Finally releases both locks including publication failure; no global-vacancy assumption about successor runs.
 
 Next permitted: fetch/read exact peer messages with file-changing provenance; C-E2 independent fault/oracle/positive+mutant ProVerif work within E. Review exact owner E2 READY inventory/source and public tooling before using a later pin. Request Agent2 deterministic TEST-ONLY hook RFC/exact revisions before named after-intent/after-send cases; no hook is approved by this E1 milestone. Concrete next E2 freeze requires complete source/tool/config recipe and both exact ACKs; all56 schedules NOT_RUN, four paper crashes BLOCKED. RQ1 report/all3 same-manifest ACKs/gate E precede F, gate F precedes G. No user action required.
+
+
+## Current C-E2 checkpoint — 2026-10-08T23:22:43.865049+00:00
+
+PLAN C-E2 symbolic correspondence slice complete within explicit fixed-name,
+non-injective honest-key/witness abstraction. Source expectations in model README
+before execution; RED4 missing-model failures, GREEN7 real model/sensitivity tests;
+final root421 tests0/55.97s/80 stable inputs. Standalone full-binding verdicts
+true/true/true/false/true; destination-omitting mutant false/false/true/false/true,
+full correspondence counterexample traces reconstructed. No mutable nonce/trust,
+clock, worker state, encoding/cryptographic/implementation theorem. Actual E1
+9/9 unchanged; all56 Agent3 catalog schedules/gate E NOT_RUN, paper crashes still
+BLOCKED/unproved; F/G locked. Source/tool/paper hashes/commands/exits/output/source
+brackets/versions in evaluation/evidence/e2/formal-and-hook-review-20261009/README.md.
+
+Fetched/read133 newest communication files/no divergence, A1 through0046/A2
+through0026; exact delta commit/SHA provenance retained. Owner rehearsals/claim
+sheets/window measurements are reviewed as owner evidence only. Preserve A1-0039
+correction: wrong-destination source step1 masks destination step2 mutant. Preserve
+A2-0025 effective-clock correction; no automatic interval-mining flag adoption.
+Verified offered ledger933d2a7/c7b7dd51../195 and protocol0716a8e/d16ddad8../108
+entries against immutable Git blobs; ledger runtime/bootstrap/deploy and protocol
+production/export/ABI equal E1 pins. Source-reviewed SignList and hook ordering;
+4 refusal controls/import boundary pass,109 extracted protocol files stable;
+no real service/crash/recovery test.15 frozen copies exact.
+
+A3-0032 answers A2-0020's three decisions with concrete start-contract r1
+1ae63cfb2dde803645ef7a84a58151c0b0a842554f79907c94a7dcd74c89f48c. Alternate TEST-ONLY entrypoint/point observations/same-state production
+restart/expiry/delivery unknown/OptionA and selected pins are PROPOSED_PENDING_ACK.
+Both exact scoped A1/A2 ACKs required; earlier REVIEW/owner ACK is not substituted.
+This is not the later full E2 FREEZE. A3-0033 reports symbolic slice; publication
+is normal exact owned-path agent3 push, remote SHA recorded externally. No main.
+
+Scheduled stale recovery: same host>9600s, recorded owner401986/guard402163 absent;
+metadata/decision preserved before exclusive acquire. Own guard463584/start ticks
+5798499 and separate coordinator flock463692. Prior untracked scheduled-run
+permission-failure records preserved/unstaged; this host's writes succeeded.
+Finally release both locks even on publication failure; actual cleanup recorded
+in external run/memory, no future success assumed. Helper mistakes in frozen-copy
+container/owner lookup and one metadata/output filename collision retained with
+corrected successful proof; not research refutations.
+
+Separate author self-review covers fixed-name query assumptions, positive/denied
+paths, actual attack traces, signature/tuple scopes, owner inventory/ACK exactness,
+hook ordering/EOF-vs-response, privacy/ownership and gate separation. No material
+patch finding/deferred minor. Rulings: existing human checkout/no reviewer agent
+(cost weaker review); fixed symbolic completion and no durable state (cost no
+replay/recovery theorem); exact start-contract review before full plan/services
+(cost real faults still pending). No peer mailbox/module/archive/frozen byte,
+lock/dependency, extra agent/worktree, unreviewed branch merge or prohibited Git
+operation. No human action required.
+
+Next permitted: continue own C-E2 public runner/oracles and concrete full E2 recipe;
+read/verify exact A3-0032 supplement ACKs when delivered; then complete FREEZE with
+runtime/tool/config/fixture hashes and both exact plan ACKs, real fresh-state
+strict/minimal/repaired fault/mutation/recovery matrix, report/all3 same-source
+ACKs/gate E before F. Formal slice does not finish the C-E2 integration task.

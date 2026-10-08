@@ -1,0 +1,191 @@
+Process 0 (that is, the initial process):
+{1}out(net, (pk(userKey),pk(witnessKey)));
+(
+    {2}!
+    {3}let d: bitstring = allowedData in
+    {4}new r: bitstring;
+    {5}new n: bitstring;
+    {6}event UserRequest(r,gid,d,sourcePSC,destinationKSSC,readAction,policyVersion,n);
+    {7}out(net, sign(request(r,gid,d,sourcePSC,destinationKSSC,readAction,policyVersion,n),userKey))
+) | (
+    {8}!
+    {9}let d_1: bitstring = deniedData in
+    {10}new r_1: bitstring;
+    {11}new n_1: bitstring;
+    {12}event UserRequest(r_1,gid,d_1,sourcePSC,destinationKSSC,readAction,policyVersion,n_1);
+    {13}out(net, sign(request(r_1,gid,d_1,sourcePSC,destinationKSSC,readAction,policyVersion,n_1),userKey))
+) | (
+    {14}!
+    {15}in(net, sig: bitstring);
+    {16}let request(r_2: bitstring,g: bitstring,d_2: bitstring,s: bitstring,t: bitstring,a: bitstring,p: bitstring,n_2: bitstring) = verify(sig,pk(userKey)) in
+    {17}if (d_2 = allowedData) then
+    {18}event WitnessDecision(r_2,g,d_2,s,t,a,p,n_2);
+    {19}out(net, (t,sign(certificate(r_2,g,d_2,s,t,a,p,n_2),witnessKey)))
+) | (
+    {20}!
+    {21}in(net, (claimedDestination: bitstring,sig_1: bitstring));
+    {22}let certificate(r_3: bitstring,g_1: bitstring,d_3: bitstring,s_1: bitstring,t_1: bitstring,a_1: bitstring,p_1: bitstring,n_3: bitstring) = verify(sig_1,pk(witnessKey)) in
+    {23}if (claimedDestination = t_1) then
+    {24}event Grant(r_3,g_1,d_3,s_1,claimedDestination,a_1,p_1,n_3);
+    (
+        {25}if (d_3 = allowedData) then
+        {26}event AllowedGrant
+    ) | (
+        {27}if (d_3 = deniedData) then
+        {28}event DeniedGrant
+    )
+)
+
+--  Process 1 (that is, process 0, with let moved downwards):
+{1}out(net, (pk(userKey),pk(witnessKey)));
+(
+    {2}!
+    {4}new r: bitstring;
+    {5}new n: bitstring;
+    {3}let d: bitstring = allowedData in
+    {6}event UserRequest(r,gid,d,sourcePSC,destinationKSSC,readAction,policyVersion,n);
+    {7}out(net, sign(request(r,gid,d,sourcePSC,destinationKSSC,readAction,policyVersion,n),userKey))
+) | (
+    {8}!
+    {10}new r_1: bitstring;
+    {11}new n_1: bitstring;
+    {9}let d_1: bitstring = deniedData in
+    {12}event UserRequest(r_1,gid,d_1,sourcePSC,destinationKSSC,readAction,policyVersion,n_1);
+    {13}out(net, sign(request(r_1,gid,d_1,sourcePSC,destinationKSSC,readAction,policyVersion,n_1),userKey))
+) | (
+    {14}!
+    {15}in(net, sig: bitstring);
+    {16}let request(r_2: bitstring,g: bitstring,d_2: bitstring,s: bitstring,t: bitstring,a: bitstring,p: bitstring,n_2: bitstring) = verify(sig,pk(userKey)) in
+    {17}if (d_2 = allowedData) then
+    {18}event WitnessDecision(r_2,g,d_2,s,t,a,p,n_2);
+    {19}out(net, (t,sign(certificate(r_2,g,d_2,s,t,a,p,n_2),witnessKey)))
+) | (
+    {20}!
+    {21}in(net, (claimedDestination: bitstring,sig_1: bitstring));
+    {22}let certificate(r_3: bitstring,g_1: bitstring,d_3: bitstring,s_1: bitstring,t_1: bitstring,a_1: bitstring,p_1: bitstring,n_3: bitstring) = verify(sig_1,pk(witnessKey)) in
+    {23}if (claimedDestination = t_1) then
+    {24}event Grant(r_3,g_1,d_3,s_1,claimedDestination,a_1,p_1,n_3);
+    (
+        {25}if (d_3 = allowedData) then
+        {26}event AllowedGrant
+    ) | (
+        {27}if (d_3 = deniedData) then
+        {28}event DeniedGrant
+    )
+)
+
+-- Query event(Grant(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) ==> event(UserRequest(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Starting query event(Grant(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) ==> event(UserRequest(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4))
+goal reachable: b-event(UserRequest(r_4,gid[],allowedData[],sourcePSC[],destinationKSSC[],readAction[],policyVersion[],n_4)) -> event(Grant(r_4,gid[],allowedData[],sourcePSC[],destinationKSSC[],readAction[],policyVersion[],n_4))
+Abbreviations:
+r_4 = r[!1 = @sid]
+n_4 = n[!1 = @sid]
+RESULT event(Grant(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) ==> event(UserRequest(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) is true.
+-- Query event(Grant(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) ==> event(WitnessDecision(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Starting query event(Grant(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) ==> event(WitnessDecision(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4))
+goal reachable: b-event(WitnessDecision(r_4,gid[],allowedData[],sourcePSC[],destinationKSSC[],readAction[],policyVersion[],n_4)) -> event(Grant(r_4,gid[],allowedData[],sourcePSC[],destinationKSSC[],readAction[],policyVersion[],n_4))
+Abbreviations:
+r_4 = r[!1 = @sid]
+n_4 = n[!1 = @sid]
+RESULT event(Grant(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) ==> event(WitnessDecision(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) is true.
+-- Query event(Grant(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) ==> event(WitnessDecision(r_4,g_2,d_4,s_2,approvedDestination,a_2,p_2,n_4)) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Starting query event(Grant(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) ==> event(WitnessDecision(r_4,g_2,d_4,s_2,approvedDestination,a_2,p_2,n_4))
+goal reachable: b-event(WitnessDecision(r_4,gid[],allowedData[],sourcePSC[],destinationKSSC[],readAction[],policyVersion[],n_4)) -> event(Grant(r_4,gid[],allowedData[],sourcePSC[],destinationKSSC[],readAction[],policyVersion[],n_4))
+Abbreviations:
+r_4 = r[!1 = @sid]
+n_4 = n[!1 = @sid]
+RESULT event(Grant(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) ==> event(WitnessDecision(r_4,g_2,d_4,s_2,approvedDestination,a_2,p_2,n_4)) is true.
+-- Query not event(AllowedGrant) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Starting query not event(AllowedGrant)
+goal reachable: event(AllowedGrant)
+
+Derivation:
+Abbreviations:
+r_4 = r[!1 = @sid]
+n_4 = n[!1 = @sid]
+
+1. The message sign(request(r_4,gid[],allowedData[],sourcePSC[],destinationKSSC[],readAction[],policyVersion[],n_4),userKey[]) may be sent to the attacker at output {7}.
+attacker(sign(request(r_4,gid[],allowedData[],sourcePSC[],destinationKSSC[],readAction[],policyVersion[],n_4),userKey[])).
+
+2. The message sign(request(r_4,gid[],allowedData[],sourcePSC[],destinationKSSC[],readAction[],policyVersion[],n_4),userKey[]) that the attacker may have by 1 may be received at input {15}.
+So the message (destinationKSSC[],sign(certificate(r_4,gid[],allowedData[],sourcePSC[],destinationKSSC[],readAction[],policyVersion[],n_4),witnessKey[])) may be sent to the attacker at output {19}.
+attacker((destinationKSSC[],sign(certificate(r_4,gid[],allowedData[],sourcePSC[],destinationKSSC[],readAction[],policyVersion[],n_4),witnessKey[]))).
+
+3. By 2, the attacker may know (destinationKSSC[],sign(certificate(r_4,gid[],allowedData[],sourcePSC[],destinationKSSC[],readAction[],policyVersion[],n_4),witnessKey[])).
+Using the function 2-proj-2-tuple the attacker may obtain sign(certificate(r_4,gid[],allowedData[],sourcePSC[],destinationKSSC[],readAction[],policyVersion[],n_4),witnessKey[]).
+attacker(sign(certificate(r_4,gid[],allowedData[],sourcePSC[],destinationKSSC[],readAction[],policyVersion[],n_4),witnessKey[])).
+
+4. The attacker initially knows destinationKSSC[].
+attacker(destinationKSSC[]).
+
+5. By 4, the attacker may know destinationKSSC[].
+By 3, the attacker may know sign(certificate(r_4,gid[],allowedData[],sourcePSC[],destinationKSSC[],readAction[],policyVersion[],n_4),witnessKey[]).
+Using the function 2-tuple the attacker may obtain (destinationKSSC[],sign(certificate(r_4,gid[],allowedData[],sourcePSC[],destinationKSSC[],readAction[],policyVersion[],n_4),witnessKey[])).
+attacker((destinationKSSC[],sign(certificate(r_4,gid[],allowedData[],sourcePSC[],destinationKSSC[],readAction[],policyVersion[],n_4),witnessKey[]))).
+
+6. The message (destinationKSSC[],sign(certificate(r_4,gid[],allowedData[],sourcePSC[],destinationKSSC[],readAction[],policyVersion[],n_4),witnessKey[])) that the attacker may have by 5 may be received at input {21}.
+So event AllowedGrant may be executed at {26}.
+event(AllowedGrant).
+
+7. By 6, event(AllowedGrant).
+The goal is reached, represented in the following fact:
+event(AllowedGrant).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+out(net, (~M,~M_1)) with ~M = pk(userKey), ~M_1 = pk(witnessKey) at {1}
+
+new r: bitstring creating r_5 at {4} in copy a_2
+
+new n: bitstring creating n_5 at {5} in copy a_2
+
+event UserRequest(r_5,gid,allowedData,sourcePSC,destinationKSSC,readAction,policyVersion,n_5) at {6} in copy a_2
+
+out(net, ~M_2) with ~M_2 = sign(request(r_5,gid,allowedData,sourcePSC,destinationKSSC,readAction,policyVersion,n_5),userKey) at {7} in copy a_2
+
+in(net, ~M_2) with ~M_2 = sign(request(r_5,gid,allowedData,sourcePSC,destinationKSSC,readAction,policyVersion,n_5),userKey) at {15} in copy a_3
+
+event WitnessDecision(r_5,gid,allowedData,sourcePSC,destinationKSSC,readAction,policyVersion,n_5) at {18} in copy a_3
+
+out(net, (~M_3,~M_4)) with ~M_3 = destinationKSSC, ~M_4 = sign(certificate(r_5,gid,allowedData,sourcePSC,destinationKSSC,readAction,policyVersion,n_5),witnessKey) at {19} in copy a_3
+
+in(net, (destinationKSSC,~M_4)) with ~M_4 = sign(certificate(r_5,gid,allowedData,sourcePSC,destinationKSSC,readAction,policyVersion,n_5),witnessKey) at {21} in copy a_4
+
+event Grant(r_5,gid,allowedData,sourcePSC,destinationKSSC,readAction,policyVersion,n_5) at {24} in copy a_4
+
+event AllowedGrant at {26} in copy a_4 (goal)
+
+The event AllowedGrant is executed at {26} in copy a_4.
+A trace has been found.
+RESULT not event(AllowedGrant) is false.
+-- Query not event(DeniedGrant) in process 1.
+Translating the process into Horn clauses...
+Completing...
+Starting query not event(DeniedGrant)
+RESULT not event(DeniedGrant) is true.
+
+--------------------------------------------------------------
+Verification summary:
+
+Query event(Grant(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) ==> event(UserRequest(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) is true.
+
+Query event(Grant(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) ==> event(WitnessDecision(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) is true.
+
+Query event(Grant(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) ==> event(WitnessDecision(r_4,g_2,d_4,s_2,approvedDestination,a_2,p_2,n_4)) is true.
+
+Query not event(AllowedGrant) is false.
+
+Query not event(DeniedGrant) is true.
+
+--------------------------------------------------------------
+

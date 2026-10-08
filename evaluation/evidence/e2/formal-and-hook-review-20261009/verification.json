@@ -1,0 +1,57 @@
+{
+  "time": "2026-10-08T23:20:48.971265+00:00",
+  "base_commit": "7fbd1edf5abcd2b6b1a74df81907e0a2ff10d01b",
+  "source_hashes": {
+    "evaluation/models/e/access.pv": "1ca655061e9eb6d5717a919f554a6071eefdcf71b155a7a08f863464d64f01f8",
+    "evaluation/models/e/access_mutant.pv": "1c6e1acc6346d9f3859180f76f2a7a5e679477d3a61c4a132eefa46da1775537",
+    "evaluation/models/e/README.md": "97040ff004613daccd0448dea34a8bf5706121a2c260cc26ccc7cf6fd4a859d6",
+    "evaluation/tests/test_e_correspondence.py": "a544f52771e19278a1f48276115a9174a6888fcf702056b4566261c2e4d1f3f2",
+    "references/HMBC2020.pdf": "d7a3bbdf8c738abf094d9836446f032a7eeb98a81bb6404f23d39fa87b4ced0a",
+    "references/HMBC2020.txt": "e8b339a8f99d3815022f0334e428aad4a0aeac94db3cd31211393ac3df066311",
+    "AGENTS.md": "1b9384ce2866832bac0c37c5975a717237a7e85989305f77076ca237daac0425",
+    "SPEC.md": "99b088b7f4757302f63c25ae7c63f3871b36ae19e15d6ff9d0c8ebe8b107ff36",
+    "PLAN.md": "7a784ba3b3478ba08de0772ca4b1c80d156c3d09d6bba52ae5ba51f960c67ac8",
+    "interfaces/v1/FREEZE.json": "f700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2",
+    "evaluation/toolchain.json": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746",
+    "uv.lock": "1fb4777a5d4078434af8e7fe4a88f2f3afbe1d8f65d30e8a182999d7a7a29cbe"
+  },
+  "expected_positive": [
+    "true",
+    "true",
+    "true",
+    "false",
+    "true"
+  ],
+  "expected_mutant": [
+    "false",
+    "false",
+    "true",
+    "false",
+    "true"
+  ],
+  "actual_verdicts": {
+    "positive-final": [
+      "true",
+      "true",
+      "true",
+      "false",
+      "true"
+    ],
+    "mutant-final": [
+      "false",
+      "false",
+      "true",
+      "false",
+      "true"
+    ]
+  },
+  "formal_regressions": 7,
+  "full_evaluator_tests": 421,
+  "full_suite_source_inputs": 80,
+  "full_suite_stable": true,
+  "owner_entries_verified": 303,
+  "protocol_snapshot_files_stable": 109,
+  "real_E2_catalog": "NOT_RUN",
+  "gate_E": "NOT_RUN",
+  "review": "author separate self-review; no extra agents permitted"
+}
