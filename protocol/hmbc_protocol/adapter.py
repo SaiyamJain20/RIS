@@ -18,7 +18,10 @@ import stat
 import sys
 from typing import Any, TextIO
 
-from . import eip712, keys, messages, wire
+from . import chain, eip712, keys, messages, wire
+from .ledger import Ledger, LedgerError
+from .witness import Witness, WitnessError
+from .worker import Worker, WorkerError
 
 SCHEMA_VERSION = "v1"
 ADAPTER_MODE = "symbolic"
@@ -100,10 +103,65 @@ def prepare_request(inp: Any, dep: dict) -> dict:
             "requestDigest": "0x" + digest.hex(), "signature": signature, "signer": signer}
 
 
-def _unavailable(name: str):
+_STATE_DIR: str | None = None
+
+
+def configure(state_dir: str | None) -> None:
+    """Set (or clear) the private directory that holds durable worker state. Called once at startup by main()."""
+    global _STATE_DIR
+    _STATE_DIR = state_dir
+
+
+def _ledger(dep: dict) -> Ledger:
+    try:
+        return Ledger.from_deployment(dep)
+    except LedgerError as e:
+        raise AdapterError("MALFORMED", str(e)) from None
+
+
+def _worker(led: Ledger) -> Worker:
+    if _STATE_DIR is None:
+        raise AdapterError("ADAPTER_UNAVAILABLE", "no worker state directory is configured (start with --state-dir)")
+    return Worker(led, os.path.join(_STATE_DIR, "worker"), clock=lambda: led.dbc.get_block()["timestamp"])
+
+
+def _ledger_op(fn):
+    """Run a ledger-backed operation and map every failure onto the interface's closed error classes (never leak internals)."""
     def handler(inp: Any, dep: dict) -> dict:
-        raise AdapterError("ADAPTER_UNAVAILABLE", f"{name} is B-E1 work and is not implemented before E0 unlocks E1")
+        try:
+            return fn(inp, _ledger(dep))
+        except (WorkerError, WitnessError) as e:
+            raise AdapterError(e.code, e.message) from None
+        except chain.Rejected as e:
+            raise AdapterError(e.code if e.code in wire.ERROR_CODES else "ADAPTER_UNAVAILABLE", f"the ledger rejected the call: {e.code}") from None
+        except chain.ChainError:
+            raise AdapterError("ADAPTER_UNAVAILABLE", "the ledger is unreachable or returned an error") from None
     return handler
+
+
+@_ledger_op
+def collect_decision(inp: Any, led: Ledger) -> dict:
+    w = Witness(led)
+    if "witnessSetVersion" in inp and inp["witnessSetVersion"] != w.witness_set_version:
+        raise AdapterError("STALE_STATE", "witnessSetVersion differs from the configured witness set")
+    d = w.decide(inp["requestDigest"])
+    return {"schemaVersion": SCHEMA_VERSION, "adapterMode": ADAPTER_MODE, "decision": d["decision"],
+            "signatures": d["signatures"], "credentialRecords": d["credentialRecords"]}
+
+
+@_ledger_op
+def release(inp: Any, led: Ledger) -> dict:
+    return _worker(led).release(inp["grantId"])
+
+
+@_ledger_op
+def encrypt_record(inp: Any, led: Ledger) -> dict:
+    return _worker(led).encrypt_record(inp["record"], inp["policy"], inp["keyEpoch"])
+
+
+@_ledger_op
+def finish_decryption(inp: Any, led: Ledger) -> dict:
+    return _worker(led).finish_decryption(inp["response"], inp["userKeyRef"])
 
 
 def rotate_epoch(inp: Any, dep: dict) -> dict:
@@ -112,10 +170,10 @@ def rotate_epoch(inp: Any, dep: dict) -> dict:
 
 OPERATIONS = {
     "prepare_request": {"handler": prepare_request, "status": "implemented-e0"},
-    "collect_decision": {"handler": _unavailable("collect_decision"), "status": "planned-b-e1"},
-    "release": {"handler": _unavailable("release"), "status": "planned-b-e1"},
-    "encrypt_record": {"handler": _unavailable("encrypt_record"), "status": "planned-b-e1"},
-    "finish_decryption": {"handler": _unavailable("finish_decryption"), "status": "planned-b-e1"},
+    "collect_decision": {"handler": collect_decision, "status": "candidate-b-e1-not-unlocked"},
+    "release": {"handler": release, "status": "candidate-b-e1-not-unlocked"},
+    "encrypt_record": {"handler": encrypt_record, "status": "candidate-b-e1-not-unlocked"},
+    "finish_decryption": {"handler": finish_decryption, "status": "candidate-b-e1-not-unlocked"},
     "rotate_epoch": {"handler": rotate_epoch, "status": "not-implemented-in-phase"},
 }
 
@@ -171,7 +229,7 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="HMBC agent-2 JSON-lines adapter (symbolic mode)")
     ap.add_argument("--state-dir", required=True, help="private directory for durable worker state (unused at E0)")
     args = ap.parse_args(argv)
-    _private_state_dir(args.state_dir)
+    configure(_private_state_dir(args.state_dir))
     return serve(sys.stdin, sys.stdout)
 
 

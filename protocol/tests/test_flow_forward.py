@@ -30,7 +30,7 @@ def test_legitimate_request_is_forwarded_by_the_pbc(world):
 
 @pytest.mark.parametrize("label,over,code", [
     ("expired-at-submission", {"ttl": 0}, "EXPIRED"),
-    ("ttl-too-long", {"ttl": 31}, "MALFORMED"),
+    ("ttl-too-long", {"ttl": 45}, "MALFORMED"),                      # clearly beyond the 30 s limit: 31 would flip with the seconds between building and mining
 ])
 def test_pbc_denials_are_returned_as_codes_not_exceptions(world, label, over, code):
     led, ctx = world

@@ -152,3 +152,14 @@ def test_a_key_outside_the_configured_witness_set_is_refused(world):
     with pytest.raises(WitnessError) as e:
         Witness(led, key_label="witness-2")
     assert e.value.code == "UNKNOWN_AUTHORITY"
+
+
+def test_an_expired_dbc_checkpoint_is_stale_state(world):
+    led, ctx = world
+    w, relay = Witness(led), Relay(led, "relay")
+    signed, _ = forwarded(led, ctx)
+    relay.accept_state(w.checkpoint())
+    setup.advance(led, 61)                                                                    # past the 60 s checkpoint TTL (and the 30 s request TTL)
+    with pytest.raises(WitnessError) as e:
+        w.decide(signed["requestDigest"])
+    assert e.value.code == "STALE_STATE"                                                      # the checkpoint check fires first, not the later request-expiry check

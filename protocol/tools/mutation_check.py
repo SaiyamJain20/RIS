@@ -14,7 +14,9 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 PY = sys.executable
 TESTS = {"wire": ["protocol/tests/test_candidate_schema_review.py", "protocol/tests/test_eip712_vs_agent1.py", "protocol/tests/test_boundary_review.py"],
-         "adapter": ["protocol/tests/test_adapter.py"], "keys": ["protocol/tests/test_messages_keys.py"], "eip712": ["protocol/tests/test_eip712_vs_agent1.py"]}
+         "adapter": ["protocol/tests/test_adapter.py"], "keys": ["protocol/tests/test_messages_keys.py"],
+         "witness": ["protocol/tests/test_witness.py", "protocol/tests/test_witness_policy.py"], "worker": ["protocol/tests/test_worker.py"],
+         "chain": ["protocol/tests/test_chain.py", "protocol/tests/test_ledger.py", "protocol/tests/test_edges.py"], "adapter_live": ["protocol/tests/test_adapter_live.py"], "eip712": ["protocol/tests/test_eip712_vs_agent1.py"]}
 
 M = [  # (suite, file, old, new, equivalent-reason or None)
     ("wire", "protocol/hmbc_protocol/wire.py", "    if any(a >= b for a, b in zip(keys, keys[1:])):", "    if False:", None),
@@ -32,6 +34,26 @@ M = [  # (suite, file, old, new, equivalent-reason or None)
     ("wire", "protocol/hmbc_protocol/wire.py", 'if operation == "rotate_epoch":', "if False:", None),
     ("wire", "protocol/hmbc_protocol/wire.py", 'if not clauses:\n        _fail("policy needs at least one clause")', 'if False:\n        _fail("policy needs at least one clause")', None),
     ("adapter", "protocol/hmbc_protocol/adapter.py", '            wire.INPUTS[op](req["input"])', "            pass", None),
+    ("witness", "protocol/hmbc_protocol/witness.py", '        if forwarded_at > src:', "        if False:", None),
+    ("witness", "protocol/hmbc_protocol/witness.py", 'if request["authEpoch"] != cp["authEpoch"] or request["policyVersion"] != cp["policyVersion"]:', "if False:", None),
+    ("witness", "protocol/hmbc_protocol/witness.py", 'satisfied = code == "0" and led.dbc.call(led.ACSC, "evaluate", request["dataId"], records) is True', 'satisfied = code == "0"', None),
+    ("witness", "protocol/hmbc_protocol/witness.py", 'satisfied = code == "0" and led.dbc.call(led.ACSC, "evaluate", request["dataId"], records) is True', 'satisfied = True', None),
+    ("witness", "protocol/hmbc_protocol/witness.py", "if not exists or dbc_now >= int(cp[\"expiresAt\"]):", "if not exists:", None),
+    ("witness", "protocol/hmbc_protocol/witness.py", 'if not allowed or "0x" + eip712.grant_id(', 'if False and "0x" + eip712.grant_id(', None),
+    ("witness", "protocol/hmbc_protocol/witness.py", 'if rec["status"] != "1":\n            raise WitnessError("WRONG_SUBJECT", "the PBC has not forwarded this request digest")', 'if False:\n            raise WitnessError("WRONG_SUBJECT", "the PBC has not forwarded this request digest")', 'redundant with the AccessForwarded log lookup, which raises the same WRONG_SUBJECT for any digest the PSC did not forward'),
+    ("witness", "protocol/hmbc_protocol/witness.py", 'if recomputed != digest:', "if False:", 'defence against a PSC that emits AccessForwarded for a digest its own calldata does not hash to; unreachable with the real PSC (address-filtered log, indexed digest)'),
+    ("witness", "protocol/hmbc_protocol/witness.py", 'if self.address not in pbc_set or self.address not in dbc_set:', "if False:", None),
+    ("worker", "protocol/hmbc_protocol/worker.py", 'if now >= int(g["expiresAt"]):', "if False:", None),
+    ("worker", "protocol/hmbc_protocol/worker.py", 'token = "0x" + os.urandom(32).hex()', 'token = "0x" + "11" * 32', None),
+    ("worker", "protocol/hmbc_protocol/worker.py", 'if issued is None or not all(hmac.compare_digest(a.encode(), b.encode()) for a, b in zip(issued, offered)):', "if issued is None:", None),
+    ("worker", "protocol/hmbc_protocol/worker.py", 'if keys.recipient_key_hash(user_key_ref) != issued[3]:', "if False:", None),
+    ("worker", "protocol/hmbc_protocol/worker.py", 'if pd != registered:', "if False:", None),
+    ("worker", "protocol/hmbc_protocol/worker.py", 'if not g["exists"] or not g["allowed"] or bound != grant_id:', 'if not g["exists"]:', 'unreachable with the real KSSC: every stored grant has allowed=true and grantId is derived from its own requestDigest, so only `exists` can fail'),
+    ("worker", "protocol/hmbc_protocol/worker.py", 'if int(g["recipientKeyHash"], 16) == 0 or g["recipientKeyHash"] != led.pbc.call(led.RSC, "recipientKeyHash", g["gid"]):', "if False:", 'repaired-e PSC already forces request.recipientKeyHash == RSC.recipientKeyHash(gid) and the grant copies it; the zero/mismatch case only arises for paper-profile grants, which the fixture does not deploy'),
+    ("chain", "protocol/hmbc_protocol/chain.py", 'if got != self.chain_id:', "if False:", None),
+    ("chain", "protocol/hmbc_protocol/chain.py", 'if tag != "latest" and int(tag, 16) > self.block_number():', "if False:", None),
+    ("chain", "protocol/hmbc_protocol/ledger.py", 'parts.hostname not in ("127.0.0.1", "localhost", "::1")', "False", None),
+    ("chain", "protocol/hmbc_protocol/ledger.py", 'if hashlib.sha256(raw).hexdigest() != dep["abi"][name]["abiSha256"]:', "if False:", None),
     ("eip712", "protocol/hmbc_protocol/eip712.py", "_ADDR.fullmatch(value)", "_ADDR.match(value)", None),
     ("eip712", "protocol/hmbc_protocol/eip712.py", "if not isinstance(value, str) or not _DEC.fullmatch(value):", "if not isinstance(value, (str, int)) or (isinstance(value, str) and not _DEC.fullmatch(value)):", None),
     ("adapter", "protocol/hmbc_protocol/adapter.py", 'if req["gid"] != signer:', "if False:", None),
@@ -60,9 +82,12 @@ def run(files):
 
 def main(argv):
     out = pathlib.Path(argv[argv.index("--out") + 1]) if "--out" in argv else ROOT / "protocol/evidence/mutation-check.json"
+    only = argv[argv.index("--only") + 1].split(",") if "--only" in argv else None      # restrict to suites, e.g. witness,worker
     base_rc, base_line = run(["protocol/tests"])
     results, failed = [], base_rc != 0
     for suite, rel, old, new, equiv in M:
+        if only and suite not in only:
+            continue
         path = ROOT / rel
         orig = path.read_text()
         assert orig.count(old) == 1, f"mutation anchor not unique/present: {rel}: {old!r}"

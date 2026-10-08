@@ -22,7 +22,15 @@ def test_manifest_lists_all_six_operations_and_only_symbolic_mode():
     assert m["startup"]["requiredEnvironmentVariables"] == []
     statuses = {o["name"]: o["status"] for o in m["operations"]}
     assert statuses["prepare_request"] == "implemented-e0" and statuses["rotate_epoch"] == "not-implemented-in-phase"
-    assert all(s == "planned-b-e1" for k, s in statuses.items() if k in {"collect_decision", "release", "encrypt_record", "finish_decryption"})
+    assert all(s == "candidate-b-e1-not-unlocked" for k, s in statuses.items() if k in {"collect_decision", "release", "encrypt_record", "finish_decryption"})
+
+
+def test_candidate_operations_are_declared_with_their_state_requirements():
+    m = json.loads((ROOT / "exports" / "adapter.json").read_text())
+    ops = {o["name"]: o for o in m["operations"]}
+    for name in ("collect_decision", "release", "encrypt_record", "finish_decryption"):
+        note = ops[name]["draftNote"] if "draftNote" in ops[name] else ops[name].get("candidateNote", "")
+        assert "CANDIDATE" in note and "E1 is not unlocked" in note and "--state-dir" in note, name
 
 
 def test_every_example_has_exactly_one_of_result_or_error_and_unbuilt_ops_never_succeed():

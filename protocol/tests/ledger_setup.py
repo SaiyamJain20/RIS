@@ -27,8 +27,15 @@ def sign(name: str, msg: dict, dep: dict, label: str) -> str:
     return eip712.sign_digest(key(label), digest)
 
 
+def fresh_now(led) -> int:
+    """Mine one PBC block and return its timestamp. `get_block('latest')` alone is the LAST mined block, which is stale after idle time."""
+    from support import rpc
+    rpc(led.pbc.url, "evm_mine")
+    return led.pbc.get_block()["timestamp"]
+
+
 def setup_pbc(led, duty_seconds: int = 8 * 3600) -> SimpleNamespace:
-    dep, t = led.deployment, led.pbc.get_block()["timestamp"]
+    dep, t = led.deployment, fresh_now(led)
     h1, h2, alice = addr("H1-root"), addr("H2-root"), addr("alice")
     crl1 = {"authority": h1, "version": "1", "validUntil": str(t + 86400), "revokedSerials": []}
     crl2 = {"authority": h2, "version": "1", "validUntil": str(t + 86400), "revokedSerials": []}

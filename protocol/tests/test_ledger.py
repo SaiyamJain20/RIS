@@ -30,3 +30,12 @@ def test_missing_or_malformed_contract_entries_are_refused(ledger_chains):
         mutate(bad)
         with pytest.raises(ledger.LedgerError):
             ledger.Ledger.from_deployment(bad)
+
+
+@pytest.mark.parametrize("url", ["http://169.254.169.254:80", "http://example.com:8545", "https://10.0.0.5:8545", "http://127.0.0.1", "http://[::2]:8545",
+                                 "ftp://127.0.0.1:21", "http://127.0.0.1.evil.example:8545", None, 8545])
+def test_rpc_urls_must_be_loopback_http_with_an_explicit_port(ledger_chains, url):
+    bad = copy.deepcopy(ledger_chains.deployment)
+    bad["chains"]["pbc"]["rpcUrl"] = url
+    with pytest.raises(ledger.LedgerError):
+        ledger.Ledger.from_deployment(bad)

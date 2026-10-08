@@ -18,8 +18,10 @@ EXPORTS = ROOT / "exports"
 DEPLOYMENT = ROOT / "tests" / "fixtures" / "deployment-agent1-54262c2-repaired-e.json"
 SOURCES = ["hmbc_protocol/adapter.py", "hmbc_protocol/eip712.py", "hmbc_protocol/keys.py", "hmbc_protocol/messages.py", "hmbc_protocol/wire.py"]
 
-DRAFT_NOTE = ("DRAFT, NOT EXECUTED: shape proposed for agent 3's schema work; B-E1 is locked until E0 unlocks E1, so no "
-              "success example exists and none is invented.")
+CANDIDATE_NOTE = ("CANDIDATE B-E1 code: implemented while E1 is not unlocked and NOT offered for integration or claimed as an E1 result. It needs a "
+                  "configured --state-dir and a reachable loopback ledger (rpcUrl in the deployment manifest); otherwise it answers ADAPTER_UNAVAILABLE. "
+                  "The examples below are generated with no ledger running, so they show the refusal paths only; successful runs are recorded as "
+                  "evidence from live-ledger tests, never invented here.")
 OPS = {
     "prepare_request": {
         "inputFields": {"request": "AccessRequest (wire form, decimal-string uints)", "signingKeyRef": "keyref:user:<label>"},
@@ -30,26 +32,26 @@ OPS = {
     "collect_decision": {
         "inputFields": {"requestDigest": "bytes32", "witnessSetVersion": "optional, E: \"1\""},
         "draftResultFields": ["schemaVersion", "adapterMode", "decision (AccessDecision)", "signatures (sorted by signer)", "credentialRecords (CredentialRecord[])"],
-        "errors": ["ADAPTER_UNAVAILABLE (now)", "STALE_STATE", "EXPIRED", "POLICY_DENIED", "REVOKED", "WRONG_SUBJECT", "NOT_REGISTERED", "INSUFFICIENT_QUORUM"],
-        "behaviour": "Planned: witness recomputes the decision from PBC state at the decision's block (checkCredentials at that block tag and its timestamp, A1-0011); relays never supply attributes. At most one re-collection per newly accepted checkpoint while the request is unexpired (D24).",
+        "errors": ["ADAPTER_UNAVAILABLE", "STALE_STATE", "EXPIRED", "POLICY_DENIED", "REVOKED", "WRONG_SUBJECT", "NOT_REGISTERED", "INSUFFICIENT_QUORUM"],
+        "behaviour": "Witness recomputes the decision from PBC state at the decision's block (checkCredentials at that block tag and its timestamp, A1-0011); relays never supply attributes. At most one re-collection per newly accepted checkpoint while the request is unexpired (D24).",
     },
     "release": {
         "inputFields": {"grantId": "bytes32"},
         "draftResultFields": ["schemaVersion", "adapterMode", "requestDigest", "grantId", "dataId", "keyEpoch", "ciphertextDigest", "recipientKeyHash", "responseEnvelope"],
-        "errors": ["ADAPTER_UNAVAILABLE (now)", "NOT_COMMITTED", "EXPIRED", "WRONG_SUBJECT", "REPLAY (never: a retry returns the cached response)"],
-        "behaviour": "Planned: loads the committed grant from the DBC, persists release intent before sending, returns the same cached response on retry while the original grant is unexpired, and fails EXPIRED on the first call after expiry. Grant, send and reconciled outcome are separate recorded events.",
+        "errors": ["ADAPTER_UNAVAILABLE", "NOT_COMMITTED", "EXPIRED", "WRONG_SUBJECT", "REPLAY (never: a retry returns the cached response)"],
+        "behaviour": "Loads the committed grant from the DBC, persists release intent before sending, returns the same cached response on retry while the original grant is unexpired, and fails EXPIRED on the first call after expiry. Grant, send and reconciled outcome are separate recorded events.",
     },
     "encrypt_record": {
         "inputFields": {"record": "SymbolicRecord {dataId, owner, payloadDigest}", "policy": "SymbolicPolicy {clauses: PolicyRequirement[][]}", "keyEpoch": "\"0\""},
         "draftResultFields": ["schemaVersion", "adapterMode=symbolic", "dataId", "keyEpoch", "ciphertextDigest", "policyDigest"],
-        "errors": ["ADAPTER_UNAVAILABLE (now)", "WRONG_EPOCH", "MALFORMED"],
-        "behaviour": "Planned: symbolic token only. A result asserts modeled decryptability, never ABE confidentiality. Inputs follow candidate revision 4 SymbolicRecord/SymbolicPolicy (SAME_AS_FIRST cannot be a clause's first requirement).",
+        "errors": ["ADAPTER_UNAVAILABLE", "WRONG_EPOCH", "MALFORMED"],
+        "behaviour": "Symbolic token only. A result asserts modeled decryptability, never ABE confidentiality. Inputs follow candidate revision 4 SymbolicRecord/SymbolicPolicy (SAME_AS_FIRST cannot be a clause's first requirement).",
     },
     "finish_decryption": {
         "inputFields": {"response": "ReleaseResult", "userKeyRef": "keyref:user:<label>"},
         "draftResultFields": ["schemaVersion", "adapterMode=symbolic", "decryptable (boolean, modeled)", "dataId", "ciphertextDigest"],
-        "errors": ["ADAPTER_UNAVAILABLE (now)", "WRONG_SUBJECT", "MALFORMED"],
-        "behaviour": "Planned: symbolic two-step completion; checks recipientKeyHash against the user key handle.",
+        "errors": ["ADAPTER_UNAVAILABLE", "WRONG_SUBJECT", "MALFORMED"],
+        "behaviour": "Symbolic two-step completion: the response must equal what this worker issued (token compared in constant time) and the user key handle must hash to the grant's recipientKeyHash; never returns decryptable=false in E (a refusal is an error).",
     },
     "rotate_epoch": {
         "inputFields": {"targetEpoch": "decimal string"},
@@ -88,17 +90,17 @@ def _example_cases() -> dict[str, list[tuple[str, dict]]]:
             ("refused: wrong destination KSSC", {"request": _pbc_request(kssc="0x" + "11" * 20), "signingKeyRef": "keyref:user:alice"}),
             ("refused: JSON number instead of decimal string", {"request": _pbc_request(nonce=1), "signingKeyRef": "keyref:user:alice"}),
         ],
-        "collect_decision": [("well-formed request; B-E1 locked", {"requestDigest": _h(1)}),
+        "collect_decision": [("well-formed request, no ledger running", {"requestDigest": _h(1)}),
                              ("refused: empty input is MALFORMED, not unavailable", {})],
-        "release": [("well-formed request; B-E1 locked", {"grantId": _h(2)})],
-        "encrypt_record": [("well-formed request; B-E1 locked", {
+        "release": [("well-formed request, no ledger running", {"grantId": _h(2)})],
+        "encrypt_record": [("well-formed request, no ledger running", {
             "record": {"dataId": _h(3), "owner": "0x" + "44" * 20, "payloadDigest": _h(5)},
             "policy": {"clauses": [[{"role": _h(6), "kind": "1", "issuerMode": "0"}, {"role": _h(7), "kind": "2", "issuerMode": "2"}]]},
             "keyEpoch": "0"}),
             ("refused: SAME_AS_FIRST as a clause's first requirement", {
                 "record": {"dataId": _h(3), "owner": "0x" + "44" * 20, "payloadDigest": _h(5)},
                 "policy": {"clauses": [[{"role": _h(6), "kind": "1", "issuerMode": "2"}]]}, "keyEpoch": "0"})],
-        "finish_decryption": [("well-formed request; B-E1 locked", {
+        "finish_decryption": [("well-formed request, no ledger running", {
             "response": {"schemaVersion": "v1", "adapterMode": "symbolic", "requestDigest": _h(1), "grantId": _h(2), "dataId": _h(3),
                          "ciphertextDigest": _h(8), "recipientKeyHash": _h(9), "keyEpoch": "0",
                          "responseEnvelope": {"kind": "symbolic-partial/v1", "token": _h(10)}},
@@ -125,8 +127,8 @@ def build_manifest() -> dict:
     ops = []
     for name, spec in OPS.items():
         entry = {"name": name, "status": adapter.OPERATIONS[name]["status"], "example": f"examples/{name}.json", **spec}
-        if name != "prepare_request":
-            entry["draftNote"] = DRAFT_NOTE
+        if name in ("collect_decision", "release", "encrypt_record", "finish_decryption"):
+            entry["draftNote"] = CANDIDATE_NOTE
         ops.append(entry)
     return {
         "schemaVersion": "hmbc-protocol-adapter/v0",

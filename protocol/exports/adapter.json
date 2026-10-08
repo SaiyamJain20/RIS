@@ -80,7 +80,7 @@
     },
     {
       "name": "collect_decision",
-      "status": "planned-b-e1",
+      "status": "candidate-b-e1-not-unlocked",
       "example": "examples/collect_decision.json",
       "inputFields": {
         "requestDigest": "bytes32",
@@ -94,7 +94,7 @@
         "credentialRecords (CredentialRecord[])"
       ],
       "errors": [
-        "ADAPTER_UNAVAILABLE (now)",
+        "ADAPTER_UNAVAILABLE",
         "STALE_STATE",
         "EXPIRED",
         "POLICY_DENIED",
@@ -103,12 +103,12 @@
         "NOT_REGISTERED",
         "INSUFFICIENT_QUORUM"
       ],
-      "behaviour": "Planned: witness recomputes the decision from PBC state at the decision's block (checkCredentials at that block tag and its timestamp, A1-0011); relays never supply attributes. At most one re-collection per newly accepted checkpoint while the request is unexpired (D24).",
-      "draftNote": "DRAFT, NOT EXECUTED: shape proposed for agent 3's schema work; B-E1 is locked until E0 unlocks E1, so no success example exists and none is invented."
+      "behaviour": "Witness recomputes the decision from PBC state at the decision's block (checkCredentials at that block tag and its timestamp, A1-0011); relays never supply attributes. At most one re-collection per newly accepted checkpoint while the request is unexpired (D24).",
+      "draftNote": "CANDIDATE B-E1 code: implemented while E1 is not unlocked and NOT offered for integration or claimed as an E1 result. It needs a configured --state-dir and a reachable loopback ledger (rpcUrl in the deployment manifest); otherwise it answers ADAPTER_UNAVAILABLE. The examples below are generated with no ledger running, so they show the refusal paths only; successful runs are recorded as evidence from live-ledger tests, never invented here."
     },
     {
       "name": "release",
-      "status": "planned-b-e1",
+      "status": "candidate-b-e1-not-unlocked",
       "example": "examples/release.json",
       "inputFields": {
         "grantId": "bytes32"
@@ -125,18 +125,18 @@
         "responseEnvelope"
       ],
       "errors": [
-        "ADAPTER_UNAVAILABLE (now)",
+        "ADAPTER_UNAVAILABLE",
         "NOT_COMMITTED",
         "EXPIRED",
         "WRONG_SUBJECT",
         "REPLAY (never: a retry returns the cached response)"
       ],
-      "behaviour": "Planned: loads the committed grant from the DBC, persists release intent before sending, returns the same cached response on retry while the original grant is unexpired, and fails EXPIRED on the first call after expiry. Grant, send and reconciled outcome are separate recorded events.",
-      "draftNote": "DRAFT, NOT EXECUTED: shape proposed for agent 3's schema work; B-E1 is locked until E0 unlocks E1, so no success example exists and none is invented."
+      "behaviour": "Loads the committed grant from the DBC, persists release intent before sending, returns the same cached response on retry while the original grant is unexpired, and fails EXPIRED on the first call after expiry. Grant, send and reconciled outcome are separate recorded events.",
+      "draftNote": "CANDIDATE B-E1 code: implemented while E1 is not unlocked and NOT offered for integration or claimed as an E1 result. It needs a configured --state-dir and a reachable loopback ledger (rpcUrl in the deployment manifest); otherwise it answers ADAPTER_UNAVAILABLE. The examples below are generated with no ledger running, so they show the refusal paths only; successful runs are recorded as evidence from live-ledger tests, never invented here."
     },
     {
       "name": "encrypt_record",
-      "status": "planned-b-e1",
+      "status": "candidate-b-e1-not-unlocked",
       "example": "examples/encrypt_record.json",
       "inputFields": {
         "record": "SymbolicRecord {dataId, owner, payloadDigest}",
@@ -152,16 +152,16 @@
         "policyDigest"
       ],
       "errors": [
-        "ADAPTER_UNAVAILABLE (now)",
+        "ADAPTER_UNAVAILABLE",
         "WRONG_EPOCH",
         "MALFORMED"
       ],
-      "behaviour": "Planned: symbolic token only. A result asserts modeled decryptability, never ABE confidentiality. Inputs follow candidate revision 4 SymbolicRecord/SymbolicPolicy (SAME_AS_FIRST cannot be a clause's first requirement).",
-      "draftNote": "DRAFT, NOT EXECUTED: shape proposed for agent 3's schema work; B-E1 is locked until E0 unlocks E1, so no success example exists and none is invented."
+      "behaviour": "Symbolic token only. A result asserts modeled decryptability, never ABE confidentiality. Inputs follow candidate revision 4 SymbolicRecord/SymbolicPolicy (SAME_AS_FIRST cannot be a clause's first requirement).",
+      "draftNote": "CANDIDATE B-E1 code: implemented while E1 is not unlocked and NOT offered for integration or claimed as an E1 result. It needs a configured --state-dir and a reachable loopback ledger (rpcUrl in the deployment manifest); otherwise it answers ADAPTER_UNAVAILABLE. The examples below are generated with no ledger running, so they show the refusal paths only; successful runs are recorded as evidence from live-ledger tests, never invented here."
     },
     {
       "name": "finish_decryption",
-      "status": "planned-b-e1",
+      "status": "candidate-b-e1-not-unlocked",
       "example": "examples/finish_decryption.json",
       "inputFields": {
         "response": "ReleaseResult",
@@ -175,12 +175,12 @@
         "ciphertextDigest"
       ],
       "errors": [
-        "ADAPTER_UNAVAILABLE (now)",
+        "ADAPTER_UNAVAILABLE",
         "WRONG_SUBJECT",
         "MALFORMED"
       ],
-      "behaviour": "Planned: symbolic two-step completion; checks recipientKeyHash against the user key handle.",
-      "draftNote": "DRAFT, NOT EXECUTED: shape proposed for agent 3's schema work; B-E1 is locked until E0 unlocks E1, so no success example exists and none is invented."
+      "behaviour": "Symbolic two-step completion: the response must equal what this worker issued (token compared in constant time) and the user key handle must hash to the grant's recipientKeyHash; never returns decryptable=false in E (a refusal is an error).",
+      "draftNote": "CANDIDATE B-E1 code: implemented while E1 is not unlocked and NOT offered for integration or claimed as an E1 result. It needs a configured --state-dir and a reachable loopback ledger (rpcUrl in the deployment manifest); otherwise it answers ADAPTER_UNAVAILABLE. The examples below are generated with no ledger running, so they show the refusal paths only; successful runs are recorded as evidence from live-ledger tests, never invented here."
     },
     {
       "name": "rotate_epoch",
@@ -193,12 +193,11 @@
       "errors": [
         "NOT_IMPLEMENTED_IN_PHASE"
       ],
-      "behaviour": "Always NOT_IMPLEMENTED_IN_PHASE before G; no fake rotation.",
-      "draftNote": "DRAFT, NOT EXECUTED: shape proposed for agent 3's schema work; B-E1 is locked until E0 unlocks E1, so no success example exists and none is invented."
+      "behaviour": "Always NOT_IMPLEMENTED_IN_PHASE before G; no fake rotation."
     }
   ],
   "sourceSha256": {
-    "hmbc_protocol/adapter.py": "1fc3eb776bd3e6dc5e2b2cd23ff22f196b1c3c7f4d3a4b818aeadb0d9abba686",
+    "hmbc_protocol/adapter.py": "64b9bd374f5e2693344d1ab032e5236c28f4274ccbfcb04012906341908c95ee",
     "hmbc_protocol/eip712.py": "42801cebf1cfd36da711ee659c723654c5447ccde7fb11af5e9f27878e2dd085",
     "hmbc_protocol/keys.py": "cf953bea08d9658ba0917d2f1c99dc039b9b269f765f52a775b043cddcae48ab",
     "hmbc_protocol/messages.py": "54bfeda86ea4b52ce279cee52e69721c794b68f1644f856fc7641db75abe8da8",

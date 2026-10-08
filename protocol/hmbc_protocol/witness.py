@@ -110,12 +110,15 @@ class Witness:
             raise WitnessError("STALE_STATE", "request authEpoch/policyVersion differ from the DBC checkpoint")
         if request["keyEpoch"] != cp["keyEpoch"]:
             raise WitnessError("WRONG_EPOCH", "request keyEpoch differs from the DBC checkpoint")
-        if min(dbc_now, pbc_now) >= int(request["expiresAt"]) or max(dbc_now, pbc_now) >= int(request["expiresAt"]):
+        if max(dbc_now, pbc_now) >= int(request["expiresAt"]):
             raise WitnessError("EXPIRED", "the request has expired on at least one chain's clock")
         # Independent credential evaluation at the checkpoint's PBC block, with that block's own timestamp (A1-0011 answer 1; A29).
         at = led.pbc.get_block(src)["timestamp"]
         code, records = led.pbc.call(led.TMSC, "checkCredentials", request["gid"], bundle, str(at), block=src)
-        decision = {"requestDigest": request_digest, "result": "1" if code == "0" else "0",
+        # ALLOW needs valid credentials AND a policy the DBC will accept (A1-0017): an ALLOW the ACSC rejects reverts POLICY_DENIED and
+        # loses the DBC's own audit record, whereas a signed DENY is logged there. The ACSC still reverts a forged ALLOW (defence in depth).
+        satisfied = code == "0" and led.dbc.call(led.ACSC, "evaluate", request["dataId"], records) is True
+        decision = {"requestDigest": request_digest, "result": "1" if satisfied else "0",
                     "credentialDigest": "0x" + eip712.credential_digest(records).hex(), "stateSequence": cp["sequence"],
                     "witnessSetVersion": cp["witnessSetVersion"], "sourceBlockNumber": cp["sourceBlockNumber"],
                     "sourceBlockHash": cp["sourceBlockHash"],

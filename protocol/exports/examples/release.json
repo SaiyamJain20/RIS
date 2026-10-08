@@ -4,7 +4,7 @@
   "deploymentFixture": "tests/fixtures/deployment-agent1-54262c2-repaired-e.json (byte copy of agent-1 54262c2 sample-repaired-e; machine-local RPC URLs)",
   "cases": [
     {
-      "case": "well-formed request; B-E1 locked",
+      "case": "well-formed request, no ledger running",
       "request": {
         "schemaVersion": "v1",
         "operation": "release",
@@ -223,7 +223,7 @@
         "result": null,
         "error": {
           "code": "ADAPTER_UNAVAILABLE",
-          "message": "release is B-E1 work and is not implemented before E0 unlocks E1"
+          "message": "no worker state directory is configured (start with --state-dir)"
         }
       }
     }
