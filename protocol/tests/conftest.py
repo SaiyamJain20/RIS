@@ -24,10 +24,38 @@ ANVIL_KEY0 = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
 PBC_ID, DBC_ID = 18545, 28545
 
 
+PORT_RANGE_ENV = "HMBC_TEST_PORT_RANGE"   # optional "LOW-HIGH": confine the live Anvil pairs to an assigned range (solo/PROTOCOL.md item 6); unset = OS-chosen
+
+
 def _free_port() -> int:
     with socket.socket() as s:
         s.bind(("127.0.0.1", 0))
         return s.getsockname()[1]
+
+
+def _bindable(port: int) -> bool:
+    """Conservative probe WITHOUT SO_REUSEADDR: a port with a listener OR a lingering TIME_WAIT connection counts as taken."""
+    with socket.socket() as s:
+        try:
+            s.bind(("127.0.0.1", port))
+        except OSError:
+            return False
+        return True
+
+
+def _anvil_ports() -> tuple[int, int]:
+    """Two distinct ports for one Anvil pair. Default (env unset): OS-chosen, exactly as before. With HMBC_TEST_PORT_RANGE=LOW-HIGH: the two lowest
+    bindable ports in that range, or an error; never a port outside it."""
+    spec = os.environ.get(PORT_RANGE_ENV)
+    if not spec:
+        return _free_port(), _free_port()
+    lo, sep, hi = spec.partition("-")
+    if not (sep and lo.isdigit() and hi.isdigit() and 1024 <= int(lo) < int(hi) <= 65535):
+        raise ValueError(f"{PORT_RANGE_ENV} must be LOW-HIGH with 1024 <= LOW < HIGH <= 65535, got {spec!r}")
+    free = [p for p in range(int(lo), int(hi) + 1) if _bindable(p)][:2]
+    if len(free) < 2:
+        raise RuntimeError(f"fewer than two free ports in {PORT_RANGE_ENV}={spec}")
+    return free[0], free[1]
 
 
 def _wait(url: str):
@@ -56,7 +84,7 @@ def _deploy_profile(tmp_path_factory, profile: str):
         t.extractall(root / "src", filter="data")
     src = root / "src"
     assert hashlib.sha256((src / "ledger/exports/abi/manifest.json").read_bytes()).hexdigest() == ABI_MANIFEST_SHA256, "ABI fixtures differ from the pinned commit"
-    ports = (_free_port(), _free_port())
+    ports = _anvil_ports()
     procs = [subprocess.Popen([anvil, "--port", str(p), "--chain-id", str(cid), "--silent"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
              for p, cid in zip(ports, (PBC_ID, DBC_ID))]
     try:

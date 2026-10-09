@@ -153,3 +153,38 @@ def test_the_hook_is_not_part_of_the_production_adapter_boundary():
     manifest = (PROTOCOL / "exports" / "adapter.json").read_text()
     assert "faulty" not in manifest and "crash-at" not in manifest and "testtools" not in manifest
     assert not any("testtools" in f.read_text() or "faulty_adapter" in f.read_text() for f in (PROTOCOL / "hmbc_protocol").glob("*.py"))
+
+
+@pytest.mark.parametrize("point", ["after_intent", "after_send"])
+@pytest.mark.parametrize("fixture_name", PROFILES)
+def test_first_production_restart_after_the_original_expiry_answers_expired_with_no_new_event(request, fixture_name, point, tmp_path):
+    """S2-0001 T3, closing the open qualification "first restart at expiry" of A3-0038 in owner evidence. The hook crashes the FIRST release; both chains then
+    pass the ORIGINAL grant expiry BEFORE any restart; the first production release after the restart must answer EXPIRED, emit no worker event and mint no
+    token, so the whole exported worker log equals the post-crash log. after_intent: the token was never transmitted (0 send attempts) and it never will be;
+    after_send: one attempted send, delivery unknown. Same rules in paper-strict, paper-minimal and repaired-e. A retry never extends a grant (A21/A37)."""
+    led, grant_id, dep_file, state = setup_case(request, fixture_name, tmp_path)
+    dep = led.deployment
+    faulty = Proc("testtools.faulty_adapter", state, dep_file, "--crash-at", point)
+    assert faulty.call(dep, "encrypt_record", P1)["ok"]
+    if point == "after_intent":
+        assert faulty.send(dep, "release", {"grantId": grant_id}) == ""                      # died before any response
+    else:
+        assert faulty.call(dep, "release", {"grantId": grant_id})["ok"]                       # the one response that left before the crash
+    code, err = faulty.finish()
+    assert code == CRASH_EXIT and err == ""
+    at_crash = worker_log(state)
+    sent_before = 0 if point == "after_intent" else 1
+    assert [e["type"] for e in at_crash["events"]] == ["RELEASE_INTENT", "RELEASE_SENT"][:1 + sent_before]
+    row = at_crash["releases"][0]
+    assert (row["sendAttempts"], row["completedAttempts"], row["delivery"]) == (sent_before, 0, "unknown")
+
+    expires = int(led.dbc.call(led.KSSC, "grantDetails", grant_id)["expiresAt"])
+    assert led.dbc.now() < expires                                                            # the crash happened inside the grant's lifetime
+    setup.advance(led, 40)                                                                    # every grant here lives <= 30 s: both chains pass it, no restart yet
+    assert led.dbc.now() >= expires
+
+    prod = Proc("hmbc_protocol.adapter", state, dep_file)                                     # the FIRST restart happens after the original expiry
+    late = prod.call(dep, "release", {"grantId": grant_id})
+    assert late["ok"] is False and late["error"]["code"] == "EXPIRED"
+    assert prod.finish() == (0, "")
+    assert worker_log(state) == at_crash                                                      # no event, no attempt, no new token, delivery still unknown

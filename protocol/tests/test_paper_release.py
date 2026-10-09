@@ -59,10 +59,13 @@ def test_crash_counts_and_expiry_are_the_same_as_in_repaired_e(world_paper, tmp_
     assert e.value.code == "EXPIRED" and len(restarted.events()) == n                                        # no new event, no new token
 
 
-def test_the_binding_follows_the_RELAY_ASSERTED_gid_so_the_spec_gap_stays_visible(world_paper, tmp_path):
-    """E01 subject substitution (paper): the relay puts Bob's gid in the policyEnf tuple for Alice's request. The release is then bound to BOB's registered key."""
-    led, ctx = world_paper
-    bundle_bob = register_bob(led)
+@pytest.mark.parametrize("fixture_name", ["world_paper", "world_paper_minimal"])
+def test_the_binding_follows_the_RELAY_ASSERTED_gid_so_the_spec_gap_stays_visible(request, fixture_name, tmp_path):
+    """E01 subject substitution, paper-strict AND paper-minimal: the relay puts Bob's gid in the policyEnf tuple for Alice's request, keeping Alice's verified
+    records. The paper DBC grants that tuple (ledger/E2_HANDOFF.md, SUBSTITUTE_SUBJECT) and the release is then bound to BOB's registered key.
+    S2-0001 T1: the grant is ASSERTED, never skipped. A ledger that stopped granting the substituted tuple is a change to report, not a silent skip."""
+    led, ctx = request.getfixturevalue(fixture_name)
+    register_bob(led)                                                                                       # Bob must be registered: unregistered gids get no release
     client = UserClient("alice", led.deployment)
     signed = client.sign_request(setup.make_request(led, ctx, client))
     relay = Relay(led, "relay")
@@ -72,15 +75,16 @@ def test_the_binding_follows_the_RELAY_ASSERTED_gid_so_the_spec_gap_stays_visibl
     led.dbc.send(setup.key("relay"), led.ACSC, "policyEnf", {"pbcRequestId": signed["requestDigest"], "gid": bob, "dataId": setup.DATA_P1, "action": "1"}, res.records)
     grant_id = "0x" + eip712.grant_id(bytes.fromhex(signed["requestDigest"][2:]), led.KSSC.address, led.dbc.chain_id).hex()
     g = led.dbc.call(led.KSSC, "getGrant", grant_id)
-    if not g[5]:
-        pytest.skip("the paper DBC policy rejected the substituted tuple (Bob lacks Doctor/OnDuty); nothing to release")
+    assert g[5] is True and g[2] == bob, f"the paper DBC no longer grants the relay-asserted gid (getGrant={g})"
     w = make(led, tmp_path)
     w.encrypt_record(P1_RECORD, P1_POLICY, "0")
     resp = w.release(grant_id)
-    assert resp["recipientKeyHash"] == keys.recipient_key_hash("keyref:user:bob")
+    assert resp["recipientKeyHash"] == keys.recipient_key_hash("keyref:user:bob") != keys.recipient_key_hash("keyref:user:alice")
+    assert [(e["type"], e["gid"]) for e in w.events()] == [("RELEASE_INTENT", bob), ("RELEASE_SENT", bob)]
     assert w.finish_decryption(resp, "keyref:user:bob")["decryptable"] is True                                # the substituted subject completes
-    with pytest.raises(WorkerError):
+    with pytest.raises(WorkerError) as e:
         w.finish_decryption(resp, "keyref:user:alice")                                                      # the real requester cannot
+    assert e.value.code == "WRONG_SUBJECT"
 
 
 def test_an_unregistered_gid_gets_a_grant_but_no_release(world_paper, tmp_path):

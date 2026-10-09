@@ -20,7 +20,8 @@ durable key worker (`worker.py`: record registry, intent-before-send release wit
 Candidate B-E2: `tests/test_e2_repaired_e.py` runs the 13 repaired-e E01/E02/E03 cases of agent 3's pinned catalog (12 agree; E01-subject-substitution is a strict xfail).
 
 - Tests (repo root, Python 3.13, `pip install -r protocol/requirements.txt`; live tests need Foundry 1.8.5 at `~/.local/share/hmbc-tools/foundry-1.8.5` or `HMBC_FOUNDRY_DIR`, and the pinned ledger commit in the local git object store):
-  `python -m pytest protocol/tests -q -c protocol/pytest.ini --rootdir protocol` (~2 min; live fixtures start their own Anvil pair on free ports and stop only those)
+  `python -m pytest protocol/tests -q -c protocol/pytest.ini --rootdir protocol` (~2 min; live fixtures start their own Anvil pair on free ports and stop only those).
+  Optional `HMBC_TEST_PORT_RANGE=LOW-HIGH` (e.g. `19545-19599`, the solo-phase agent-2 range) confines those Anvil pairs to the two lowest free ports in that range; unset keeps OS-chosen ports (S2-0006).
 - Regenerate/check exports: `PYTHONPATH=protocol python -m hmbc_protocol.export [--check]`
 - Mutation check: `python protocol/tools/mutation_check.py [--only witness,worker,chain,...]` (edits sources in place: run it on a scratch copy with `GIT_DIR` set)
 - Run the adapter: `cd protocol && python -m hmbc_protocol.adapter --state-dir <private 0700 dir> --deployment <deployment.json>` (JSON lines on stdin/stdout;

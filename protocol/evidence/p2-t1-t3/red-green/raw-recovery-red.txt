@@ -1,0 +1,16 @@
+F
+=================================== FAILURES ===================================
+_ test_crash_before_intent_leaves_no_trace_and_a_restart_releases_once[world] __
+protocol/tests/test_recovery.py:42: in test_crash_before_intent_leaves_no_trace_and_a_restart_releases_once
+    assert restarted.status(grant_id) is None and restarted.events() == []   # no release row, no event: no trace of the crashed attempt
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: assert (None is None and [{'dataId': '...966835', ...}] == []
+E    +  where None = status('0xf796055a8726ae0092e7cede2268cd3d94ee716d3d3d71c95ccdd5b4e4f20031')
+E    +    where status = <hmbc_protocol.worker.Worker object at 0x753250f84830>.status
+E     
+E     Left contains one more item: {'dataId': '0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e', 'gid': '0xc4ff0022e776c3471e39abf6c69...d3d3d71c95ccdd5b4e4f20031', 'requestDigest': '0x82b52b92a863bcd8d53c013684c67db679a426f955dad6bd17f938f552966835', ...}
+E     Use -v to get more diff)
+=========================== short test summary info ============================
+FAILED protocol/tests/test_recovery.py::test_crash_before_intent_leaves_no_trace_and_a_restart_releases_once[world]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 30.34s

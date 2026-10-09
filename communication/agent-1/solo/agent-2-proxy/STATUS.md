@@ -1,27 +1,19 @@
 # agent-2 (proxy-2) status
 
-- **State:** WORKING. S2-0004 (protocol-scope ACK of the SL1 FREEZE S3-0005) has been written. P2 T1-T3 are in progress, with READY to follow as S2-0005.
+- **State:** READY_FOR_INTEGRATION. S2-0006 (P2 T1-T3) is published, and S2-0005 (SL1 review) too. Waiting for agent 1's commit and the next assignment, or the next FREEZE to ACK (protocol scope).
 - **Role:** acting for absent agent 2 and owner of `protocol/**` (human directive via A1-0060).
   - Mailbox: this directory. Message IDs: S2-NNNN.
   - Ports: 19545-19599. Scratch: /home/saiyamjain/.claude/jobs/aed51961/tmp/p2/. Python: repo-root `.venv`.
 - **Interface:** v1 (FREEZE.json f700292e..; catalog 438fa38d..).
+- **Protocol manifest:** `protocol/evidence/source-manifest.sha256` 551e9f77.. (127 entries). The previous manifest was d16ddad8.. (108, pin 0716a8e). Production, testtools and exports are byte-identical to the pin.
 - **Sent:**
   - S2-0001..S2-0003: P0 reviews, accepted in A1-0060.
-  - S2-0004: ACK of S3-0005, Accepted-plan-sha256 6fd5809b... File sha256 4b836b0b... Accepted by `evaluation.e1._verify_solo_ack_message`.
-- **Read:** A1-0060, A1-0062, S3-0005, the SL1 plan, e1.py, access_execution.py, subject_substitution.py.
-- **P2 T1-T3: uncommitted working-tree edits; not READY yet.**
-  - Edited: `protocol/tests/{conftest.py, test_paper_release.py, test_faulty_adapter.py}` and `protocol/tools/mutation_check.py`.
-  - New: `protocol/tests/test_recovery.py` and `protocol/evidence/p2-t1-t3/`.
-  - Done:
-    - targeted GREEN: 24 passed, exit 0;
-    - full suite: 1375 passed, 201 skipped, exit 0;
-    - Anvil ports confined to 19545-19554 (sampled);
-    - mutation check on a scratch copy: 3/3 DETECTED, baseline exit 0;
-    - export check exit 0.
-  - Remaining:
-    - re-run the RED detail with `--color=no` (restart mutant assertion line);
-    - regenerate `protocol/evidence/source-manifest.sha256`;
-    - write S2-0005 READY and HANDOFF.
-  - None of this touches the SL1 run: the runner uses git blobs at pin 0716a8e.
+  - S2-0004: ACK of S3-0005, plan 6fd5809b...
+  - S2-0005: REVIEW of S3-0006 (SL1, 3/3). No discrepancy in protocol scope; two precision notes.
+  - S2-0006: READY for T1-T3.
+- **Read:** A1-0060, A1-0062, S3-0005, S3-0006 and the SL1 evidence.
+- **Open items:**
+  - none in my queue;
+  - SL2 (forged tuple, new-reference replay, same nonce) will need a protocol-scope ACK when proxy-3 FREEZEs it. Per D-S1 the forged tuple uses a relay signature, so no H1.
 - **Correlated review:** every proxy-2 review and ACK is the same model as agent 1. Agent 2 can overturn it on return.
 - **F/G:** locked.

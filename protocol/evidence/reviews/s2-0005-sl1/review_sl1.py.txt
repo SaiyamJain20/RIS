@@ -1,0 +1,129 @@
+"""Protocol-scope review checks of the SL1 public evidence (S3-0006). Read-only; prints one JSON report.
+Usage: python -I review_sl1.py <evidence dir> <protocol pin worker-log fingerprint helper not needed>
+"""
+import json
+import pathlib
+import re
+import sys
+
+from eth_utils import keccak
+
+EVD = pathlib.Path(sys.argv[1])
+RUN = EVD / "run"
+BOB = "0x" + keccak(text="HMBC.recipient-key.bob").hex()
+ALICE = "0x" + keccak(text="HMBC.recipient-key.alice").hex()
+
+
+def load(p):
+    return json.loads(pathlib.Path(p).read_text())
+
+
+def ops(ex):
+    return [(e["operation"], e["response"]["ok"] if isinstance(e.get("response"), dict) else None) for e in ex]
+
+
+report, problems = {}, []
+
+
+def check(cond, msg):
+    if not cond:
+        problems.append(msg)
+    return bool(cond)
+
+
+token_digests = set()
+for profile in ("paper-strict", "paper-minimal", "repaired-e"):
+    row = RUN / f"{profile}-subject-substitution" / profile
+    r = {}
+    d1p, d2p = load(row / "adapter/process.json"), load(row / "subject-instance/adapter/process.json")
+    for name, p in (("d1Adapter", d1p), ("d2Adapter", d2p)):
+        r[name] = dict(module=p["argv"][2], exit=p["exitCode"], failure=p["failure"],
+                       stderr={k: v for k, v in p.items() if "stderr" in k.lower()}, exchanges=len(p["exchanges"]),
+                       exchangeFailures=[e["failure"] for e in p["exchanges"] if e["failure"]])
+        check(p["argv"][1:3] == ["-m", "hmbc_protocol.adapter"], f"{profile} {name}: not the production adapter")
+        check(p["exitCode"] == 0 and p["failure"] is None, f"{profile} {name}: exit/failure")
+    sd = lambda p: p["argv"][p["argv"].index("--state-dir") + 1]       # noqa: E731
+    dp = lambda p: p["argv"][p["argv"].index("--deployment") + 1]      # noqa: E731
+    r["stateDirsDistinct"] = check(sd(d1p) != sd(d2p) and not sd(d2p).startswith(sd(d1p) + "/"), f"{profile}: state dirs not distinct")
+    r["deploymentsDistinct"] = check(dp(d1p) != dp(d2p), f"{profile}: same deployment file")
+    dep1, dep2 = load(row / "deployment.json"), load(row / "subject-instance/deployment.json")
+    r["contractsDisjoint"] = check(all(not set(dep1["chains"][n]["contracts"].values()) & set(dep2["chains"][n]["contracts"].values()) for n in ("pbc", "dbc")),
+                                   f"{profile}: D1/D2 contracts overlap")
+    ex = load(row / "subject-stress/exchanges.json")
+    r["d2Operations"] = ops(ex)
+    want = [("encrypt_record", True), ("prepare_request", True)] + (
+        [("collect_checkpoint", True), ("collect_decision", True)] if profile == "repaired-e"
+        else [("release", True), ("finish_decryption", True), ("finish_decryption", False)])
+    check(r["d2Operations"] == want, f"{profile}: D2 operation sequence {r['d2Operations']}")
+    check(not any(e["operation"] in ("attest_grant",) for e in ex), f"{profile}: attest_grant called")
+    # workers on D2
+    wb = load(row / "subject-stress/worker-before.json")
+    sb, sa = load(row / "subject-stress/subject-substitution/before.json"), load(row / "subject-stress/subject-substitution/after.json")
+    fp2 = wb["deploymentFingerprint"]
+    check(wb["events"] == [] and wb["releases"] == [], f"{profile}: D2 worker not idle at start")
+    check(sb["worker"] == wb and sa["worker"] == wb, f"{profile}: worker changed across the substituted call")
+    r["d2Fingerprint"] = fp2
+    d1_fps = {load(f)["deploymentFingerprint"] for f in row.glob("alice/worker-*.json")} | {load(f)["deploymentFingerprint"] for f in row.glob("bob/worker-*.json")}
+    r["d1Fingerprints"] = sorted(d1_fps)
+    check(fp2 not in d1_fps and len(d1_fps) == 1, f"{profile}: D2 fingerprint not distinct from D1")
+    for f in list(row.glob("alice/worker-*.json")) + list(row.glob("bob/worker-*.json")):
+        token_digests |= {x["tokenDigest"] for x in load(f)["releases"]}
+    if profile == "repaired-e":
+        check(not (row / "subject-stress/subject-completion").exists(), "repaired-e: completion stage exists")
+        check(sa["request"]["status"] == "1", "repaired-e: request not FORWARDED")
+        r["verdict"] = "rejected before release; D2 worker idle before/after"
+        report[profile] = r
+        continue
+    comp = row / "subject-stress/subject-completion"
+    rel_ex = next(e for e in ex if e["operation"] == "release")
+    resp = rel_ex["response"]["result"]
+    r["releaseResponseKeys"] = sorted(resp)
+    r["releaseEnvelope"] = resp.get("responseEnvelope")
+    check(resp["recipientKeyHash"] == BOB != ALICE, f"{profile}: release not bound to Bob's key")
+    grant = sa["grant"]
+    check(grant["gid"] != load(row / "subject-stress/subject-substitution/public-call.json")["originalRequest"]["gid"], f"{profile}: grant gid not substituted")
+    check(resp["grantId"] == load(row / "subject-stress/subject-substitution/result.json").get("grantId", resp["grantId"]), "grant id")
+    check(grant["recipientKeyHash"] == "0x" + "00" * 32, f"{profile}: native grant recipient not zero")
+    rec = load(comp / "recipients.json")
+    check(rec["target"] == BOB and rec["original"] == ALICE, f"{profile}: registered recipients")
+    ar, ac = load(comp / "after-release.json"), load(comp / "after-completion.json")
+    w = ar["worker"]
+    r["afterReleaseEvents"] = [(e["type"], e["gid"]) for e in w["events"]]
+    check([e["type"] for e in w["events"]] == ["RELEASE_INTENT", "RELEASE_SENT"] and all(e["gid"] == grant["gid"] for e in w["events"]),
+          f"{profile}: release events")
+    check(len(w["releases"]) == 1, f"{profile}: release rows")
+    rr = w["releases"][0]
+    r["afterReleaseRow"] = {k: rr[k] for k in ("recipientKeyHash", "sendAttempts", "completedAttempts", "delivery", "ciphertextDigest")}
+    check((rr["recipientKeyHash"], rr["sendAttempts"], rr["completedAttempts"], rr["delivery"]) == (BOB, 1, 1, "unknown"), f"{profile}: release row")
+    check(w["counts"] == {"releaseIntentCount": "1", "releaseSentCount": "1"}, f"{profile}: counts")
+    check(rr["ciphertextDigest"] == resp["ciphertextDigest"] == ex[0]["response"]["result"]["ciphertextDigest"], f"{profile}: ciphertext digest join")
+    if isinstance(resp.get("responseEnvelope"), dict) and re.fullmatch(r"0x[0-9a-f]{64}", str(resp["responseEnvelope"].get("token", ""))):
+        problems.append(f"{profile}: RAW TOKEN present in exchanges.json")
+    token_digests.add(rr["tokenDigest"])
+    check(ac["worker"] == ar["worker"], f"{profile}: completion changed the worker log")
+    check(ac["request"]["status"] == "1" and ac["request"]["outcomeLogId"] == "0", f"{profile}: outcome recorded / not FORWARDED")
+    fin = [e for e in ex if e["operation"] == "finish_decryption"]
+    r["bobCompletion"] = fin[0]["response"]["result"]
+    r["aliceCompletion"] = fin[1]["response"]["error"]
+    check(fin[0]["response"]["ok"] and fin[0]["response"]["result"]["decryptable"] is True, f"{profile}: Bob completion")
+    check(fin[1]["response"]["error"]["code"] == "WRONG_SUBJECT", f"{profile}: Alice completion code")
+    cres = load(comp / "result.json")
+    r["completionResult"] = {k: cres.get(k) for k in ("ok", "failure", "dbcClockAfterRelease", "targetCompletion", "originalCompletion")}
+    r["grantExpiresAt"] = grant["expiresAt"]
+    report[profile] = r
+
+# whole-evidence raw-token scan: any 32-byte hex string whose keccak equals a worker tokenDigest
+hexes, files, token_keys = set(), 0, []
+for f in EVD.rglob("*"):
+    if f.is_file():
+        files += 1
+        text = f.read_text(errors="replace")
+        hexes |= set(re.findall(r"0x[0-9a-f]{64}", text))
+        for m in re.finditer(r'"token"\s*:\s*"([^"]*)"', text):
+            token_keys.append((str(f.relative_to(EVD)), m.group(1)[:20]))
+hits = [h for h in hexes if "0x" + keccak(bytes.fromhex(h[2:])).hex() in token_digests]
+check(not hits, f"raw token(s) whose keccak equals a worker tokenDigest: {len(hits)}")
+report["tokenScan"] = dict(filesScanned=files, distinctHex32=len(hexes), tokenDigestsChecked=len(token_digests), preimageHits=len(hits),
+                           tokenFieldValues=sorted(set(v for _, v in token_keys)), tokenFieldFiles=len(token_keys))
+report["problems"] = problems
+print(json.dumps(report, indent=1))
