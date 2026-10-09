@@ -1,0 +1,144 @@
+{
+  "rq": "E",
+  "executionMode": "two-chain-e2-recovery-slice",
+  "adapterMode": "symbolic",
+  "status": "E2_RECOVERY_EXPIRY_SLICE_PASS",
+  "startedAt": "2026-10-09T01:14:30.407295+00:00",
+  "endedAt": "2026-10-09T01:27:29.831508+00:00",
+  "cases": {
+    "paper-strict-after_intent": {
+      "status": "RECOVERY_CONTROL_PASS",
+      "manifest": "paper-strict-after_intent/manifest.json",
+      "expiredRetry": "EXPIRED_NO_CHANGE_PASS"
+    },
+    "paper-strict-after_send": {
+      "status": "RECOVERY_CONTROL_PASS",
+      "manifest": "paper-strict-after_send/manifest.json",
+      "expiredRetry": "EXPIRED_NO_CHANGE_PASS"
+    },
+    "paper-minimal-after_intent": {
+      "status": "RECOVERY_CONTROL_PASS",
+      "manifest": "paper-minimal-after_intent/manifest.json",
+      "expiredRetry": "EXPIRED_NO_CHANGE_PASS"
+    },
+    "paper-minimal-after_send": {
+      "status": "RECOVERY_CONTROL_PASS",
+      "manifest": "paper-minimal-after_send/manifest.json",
+      "expiredRetry": "EXPIRED_NO_CHANGE_PASS"
+    },
+    "repaired-e-after_intent": {
+      "status": "RECOVERY_CONTROL_PASS",
+      "manifest": "repaired-e-after_intent/manifest.json",
+      "expiredRetry": "EXPIRED_NO_CHANGE_PASS"
+    },
+    "repaired-e-after_send": {
+      "status": "RECOVERY_CONTROL_PASS",
+      "manifest": "repaired-e-after_send/manifest.json",
+      "expiredRetry": "EXPIRED_NO_CHANGE_PASS"
+    }
+  },
+  "servicesStarted": [
+    {
+      "case": "paper-strict-after_intent",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 618037
+    },
+    {
+      "case": "paper-strict-after_intent",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 28545,
+      "pid": 618159
+    },
+    {
+      "case": "paper-strict-after_send",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 630411
+    },
+    {
+      "case": "paper-strict-after_send",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 28545,
+      "pid": 630533
+    },
+    {
+      "case": "paper-minimal-after_intent",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 642091
+    },
+    {
+      "case": "paper-minimal-after_intent",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 28545,
+      "pid": 642213
+    },
+    {
+      "case": "paper-minimal-after_send",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 653795
+    },
+    {
+      "case": "paper-minimal-after_send",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 28545,
+      "pid": 653917
+    },
+    {
+      "case": "repaired-e-after_intent",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 665475
+    },
+    {
+      "case": "repaired-e-after_intent",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 28545,
+      "pid": 665601
+    },
+    {
+      "case": "repaired-e-after_send",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 679684
+    },
+    {
+      "case": "repaired-e-after_send",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 28545,
+      "pid": 679806
+    }
+  ],
+  "acks": {
+    "agent-1": {
+      "commit": "38e0a95450d62c8fb2bf2c48033fdc081d9348b7",
+      "path": "communication/agent-1/outbox/0050-ack-e2-expiry-slice-freeze.md",
+      "sha256": "335623fc41ea81dd20c7d63515048174e7242f5e3dc9cf7082df1dd350f24451",
+      "messageId": "A1-0050"
+    },
+    "agent-2": {
+      "commit": "3d60b4091227e7194ae9b897643cedc42ee0b419",
+      "path": "communication/agent-2/outbox/0030-ack-e2-recovery-expiry-slice-plan.md",
+      "sha256": "7d37b9ac91de56e2759f6936c804878c908b2eefdeb1c5f147f4409d87776c13",
+      "messageId": "A2-0030"
+    }
+  },
+  "failure": null,
+  "sourceStable": true,
+  "limitation": "Six logical process recovery comparisons only; no complete catalog or RQ gate.",
+  "planSha256": "a76a291d3790370018707496fcda2048833ba1e826031bf2a2c0c427b5afe03e"
+}
