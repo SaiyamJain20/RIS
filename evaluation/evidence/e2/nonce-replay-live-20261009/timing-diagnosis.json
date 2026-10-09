@@ -1,0 +1,23 @@
+{
+  "grantExpiresAt": "1791521422",
+  "requestExpiresAt": "1791521422",
+  "probeStartedAt": "2026-10-09T04:50:10.728843+00:00",
+  "probeEndedAt": "2026-10-09T04:50:20.939249+00:00",
+  "releaseExchange": {
+    "operation": "release",
+    "startedAt": "2026-10-09T04:50:22.053340+00:00",
+    "endedAt": "2026-10-09T04:50:22.056373+00:00",
+    "requestSha256": "57b7b260f323cba6b27ef1c144093a049b08fc37ebe98d0f8b2aef5b49bb43c6",
+    "responseCanonicalSha256": "b2fd085584885eb7d10550ce433969594a8724aa10aed36cae68b789d119f0b4",
+    "response": {
+      "schemaVersion": "v1",
+      "ok": false,
+      "result": null,
+      "error": {
+        "code": "EXPIRED"
+      }
+    },
+    "validationFailure": null
+  },
+  "diagnosis": "Worker returned canonical EXPIRED; release started at wall-clock second corresponding to original expiry1791521422 (2026-10-09T04:50:22Z). Wall clock is context, not direct worker effective-clock measurement. Earlier runner clock passed (<expiry), then adapter clock check rejected. No delivery or worker defect claimed. Probe lasts10.210406s; original permission untouched."
+}

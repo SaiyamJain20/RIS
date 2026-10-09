@@ -1,3 +1,15 @@
+## Current checkpoint — replay attempt FAILED at repaired release, 2026-10-09 UTC
+
+Actual CLI2/FAILED in 341.181s. Paper-strict/minimal complete PASS; repaired-e replay subcheck PASS then first release EXPIRED; completion/outcome/Bob NOT_RUN. No three-profile success. Original expiry1791521422; probe10.210406s, release04:50:22.053340UTC at corresponding wall-clock second; worker effective-clock equality not directly measured. Failure preserved, no TTL extension. Exact A1-0054/194379c+A2-0034/ca1b8ce ACKs of A3-0041 plana7732650.. verified before services. A3-0041 RELEASED/no services/lease. Evidence evaluation/evidence/e2/nonce-replay-live-20261009/README.md.
+
+All3 identical ACSC replays mined status0/Rejected8/no logs/whole request-grant-nonce-access-worker-both-history unchanged; grant uniqueness precedes nonce check. Paper2 catalog SUPPORTED as tested reconstruction; repaired composite BLOCKED/incomplete, different-digest same-(gid,nonce) controls unrun; idle-worker equality not retry/idempotence. Wrong-admin16 all3/Alice+Bob paper2 pass. Sources stable:85plan/303owner/121bracket/15frozen/six snapshots;9processes ended0/PIDs absent;1667commands0, CLI2 retained. Post-stop worker exporter same empty log; no full native post-refusal claim.
+
+Historical6recovery-expiry+3duplicate preserved; paper2replay complete/repaired1incomplete/other44untouched:45 comparisons remain. Fourpaper crash classes BLOCKED/unproved; live mutants/windows/report/all3same-source ACKs/every gateE criterion remain. E/RQ1 active/E0closed/C-E1complete/E2-E3permitted/F-Glocked. Deliveryunknown/symbolic/safe-ledger/trusted-worker/no authors-implementation/ABE/consensus/power-loss theorem. ReadA1through0054/A2through0034,159communication/no divergence/postrun fetched branches unchanged. No runtime/tool/custody/interface change; historical584 unit tests not rerun. Author self-review weaker than independent.
+
+Scheduled+separate coordinator held before fetch/services/publication; finally cleanup/publication external20261009T044325Z/memory. No human input/peer module repair needed. Next owned runner timing revision preserving snapshots/original expiry; RED/GREEN/source-complete new FREEZE/both exact ACKs before services, then remainingE/report/gateE.
+
+## Prior checkpoint records (historical)
+
 ## Current checkpoint — E01 replay runner awaits exact ACKs, 2026-10-09 UTC
 
 A3-0041 requests NEW three-profile identical-request replay plan `a7732650007e9b06a3de49bbe5cc36c1baed674f67eb4e947da9cbbef851d652`.
