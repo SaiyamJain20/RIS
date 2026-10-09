@@ -107,7 +107,7 @@ class _Adapter:
 
 
 def execute_access(pbc, dbc, adapter, *, deployment_bytes, user_label, user, record, policy,
-                   expected_allow, worker_snapshot, output, recovery_point=None, duplicate_outcome=False, nonce_replay=False):
+                   expected_allow, worker_snapshot, output, recovery_point=None, duplicate_outcome=False, nonce_replay=False, subject_substitution=None):
     """Run Alice ALLOW or registered Bob POLICY_DENIED against checked evidence.
 
     `worker_snapshot` executes the pinned owner's read-only exporter and returns
@@ -123,6 +123,11 @@ def execute_access(pbc, dbc, adapter, *, deployment_bytes, user_label, user, rec
         require(type(duplicate_outcome) is bool and (not duplicate_outcome or expected_allow is True), 'duplicate probe after allow only')
         require(type(nonce_replay) is bool and (not nonce_replay or
                 (expected_allow is True and recovery_point is None and not duplicate_outcome)), 'isolated nonce replay after allow')
+        if subject_substitution is not None:
+            frozen_validate('Address', subject_substitution)
+            require(expected_allow is True and subject_substitution != user['gid']
+                    and recovery_point is None and not duplicate_outcome and not nonce_replay,
+                    'isolated pre-release subject stress')
         if recovery_point is not None:
             result['scope'] = 'C-E2 logical crash/retry control; not an RQ gate'
         dep = strict_json(deployment_bytes); frozen_validate('LedgerDeployment', dep)
@@ -235,6 +240,16 @@ def execute_access(pbc, dbc, adapter, *, deployment_bytes, user_label, user, rec
             require(dbc.read('ACSC', 'evaluate', request['dataId'], records) == [expected_allow], 'expected native policy')
             grant_method = 'policyEnf'
             grant_arguments = (dict(pbcRequestId=digest, gid=request['gid'], dataId=request['dataId'], action='1'), records)
+        if subject_substitution is not None:
+            from evaluation.subject_substitution import execute_subject_substitution
+            forwarded = dict(pbcRequestId=digest, gid=request['gid'], dataId=request['dataId'], action=request['action'])
+            proof = execute_subject_substitution(pbc, dbc, deployment=dep, request=request, prepared=prepared,
+                original_native=native_request, original_bundle=user['bundle'], forwarded=forwarded, records=records, decision=decision,
+                target_gid=subject_substitution, grant_id=gid, worker_snapshot=worker_snapshot,
+                output=output/'subject-substitution')
+            result.update(ok=proof['ok'], scope='C-E2 subject pre-release stage; full case and gate incomplete',
+                          subjectSubstitution=proof, delivery='unknown')
+            return result
         native_dbc = dbc.submit('relay', 'ACSC', grant_method, *grant_arguments)
         require(native_dbc.success is True, 'native policy status')
         access = _event(native_dbc, dbc.contracts['ACSC'], 'AccessLog')['fields']

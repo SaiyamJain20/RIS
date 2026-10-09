@@ -1,0 +1,38 @@
+.......F....F.                                                           [100%]
+=================================== FAILURES ===================================
+_ test_subject_collector_refuses_unbound_native_transactions[paper-strict-original-bundle] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-101/test_subject_collector_refuses4')
+profile = 'paper-strict', mutation = 'original-bundle'
+
+    @pytest.mark.parametrize('mutation', ['wrong-relay', 'wrong-calldata', 'wrong-block', 'original-call', 'original-bundle'])
+    @pytest.mark.parametrize('profile', ['paper-strict', 'repaired-e'])
+    def test_subject_collector_refuses_unbound_native_transactions(artifacts, inputs, tmp_path, profile, mutation):
+        m = fixture(artifacts, inputs, tmp_path, profile, mutation)
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+evaluation/tests/test_subject_collector.py:102: Failed
+_ test_subject_collector_refuses_unbound_native_transactions[repaired-e-original-bundle] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-101/test_subject_collector_refuses9')
+profile = 'repaired-e', mutation = 'original-bundle'
+
+    @pytest.mark.parametrize('mutation', ['wrong-relay', 'wrong-calldata', 'wrong-block', 'original-call', 'original-bundle'])
+    @pytest.mark.parametrize('profile', ['paper-strict', 'repaired-e'])
+    def test_subject_collector_refuses_unbound_native_transactions(artifacts, inputs, tmp_path, profile, mutation):
+        m = fixture(artifacts, inputs, tmp_path, profile, mutation)
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+evaluation/tests/test_subject_collector.py:102: Failed
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_subject_collector.py::test_subject_collector_refuses_unbound_native_transactions[paper-strict-original-bundle]
+FAILED evaluation/tests/test_subject_collector.py::test_subject_collector_refuses_unbound_native_transactions[repaired-e-original-bundle]
+2 failed, 12 passed in 1.34s

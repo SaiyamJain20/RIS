@@ -274,3 +274,13 @@ no-extra-agent rule; scheduled+separate coordinator guards through publication,
 finally cleanup/verified remote commit in automation memory. A3-0047 responds to
 A1-0058 with the correction; no execution ACK requested. Preexisting untracked
 scheduled-runs preserved unstaged; only reviewed owned agent-3 publication.
+
+## Subject pre-release collector checkpoint —2026-10-09 UTC
+
+Fresh root690 tests pass;124 complete runtime/fixture/config/Python inputs stable,
+303 selected owner blobs/15 frozen copies verified. This is a public collector
+with synthetic native inputs only; no subject release/completion, fresh integrated
+controls or live full case. All gate checkboxes unchanged.44 catalog comparisons
+remain; gateE NOT_RUN/F-Glocked. Next routing/completion/separate controls and full
+new execution FREEZE/BOTH exact ACKs before services. Evidence:
+evaluation/evidence/e2/subject-collector-20261009/README.md.

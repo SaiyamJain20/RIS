@@ -1,0 +1,223 @@
+FFFFFFFFFFFF                                                             [100%]
+=================================== FAILURES ===================================
+_ test_pre_release_subject_collector_preserves_original_request_and_stops_before_release[paper-strict] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-98/test_pre_release_subject_colle0')
+profile = 'paper-strict'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    def test_pre_release_subject_collector_preserves_original_request_and_stops_before_release(artifacts, inputs, tmp_path, profile):
+        m = fixture(artifacts, inputs, tmp_path, profile, None)
+>       result = execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+            user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy, expected_allow=True,
+            worker_snapshot=m.snapshot, output=tmp_path/'access', subject_substitution=m.users['bob']['gid'])
+E       TypeError: execute_access() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_subject_collector.py:83: TypeError
+_ test_pre_release_subject_collector_preserves_original_request_and_stops_before_release[paper-minimal] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-98/test_pre_release_subject_colle1')
+profile = 'paper-minimal'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    def test_pre_release_subject_collector_preserves_original_request_and_stops_before_release(artifacts, inputs, tmp_path, profile):
+        m = fixture(artifacts, inputs, tmp_path, profile, None)
+>       result = execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+            user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy, expected_allow=True,
+            worker_snapshot=m.snapshot, output=tmp_path/'access', subject_substitution=m.users['bob']['gid'])
+E       TypeError: execute_access() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_subject_collector.py:83: TypeError
+_ test_pre_release_subject_collector_preserves_original_request_and_stops_before_release[repaired-e] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-98/test_pre_release_subject_colle2')
+profile = 'repaired-e'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    def test_pre_release_subject_collector_preserves_original_request_and_stops_before_release(artifacts, inputs, tmp_path, profile):
+        m = fixture(artifacts, inputs, tmp_path, profile, None)
+>       result = execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+            user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy, expected_allow=True,
+            worker_snapshot=m.snapshot, output=tmp_path/'access', subject_substitution=m.users['bob']['gid'])
+E       TypeError: execute_access() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_subject_collector.py:83: TypeError
+_ test_subject_collector_refuses_unbound_native_transactions[paper-strict-wrong-relay] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-98/test_subject_collector_refuses0')
+profile = 'paper-strict', mutation = 'wrong-relay'
+
+    @pytest.mark.parametrize('mutation', ['wrong-relay', 'wrong-calldata', 'wrong-block', 'original-call'])
+    @pytest.mark.parametrize('profile', ['paper-strict', 'repaired-e'])
+    def test_subject_collector_refuses_unbound_native_transactions(artifacts, inputs, tmp_path, profile, mutation):
+        m = fixture(artifacts, inputs, tmp_path, profile, mutation)
+        with pytest.raises(ValueError):
+>           execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+                user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy, expected_allow=True,
+                worker_snapshot=m.snapshot, output=tmp_path/'access', subject_substitution=m.users['bob']['gid'])
+E           TypeError: execute_access() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_subject_collector.py:102: TypeError
+_ test_subject_collector_refuses_unbound_native_transactions[paper-strict-wrong-calldata] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-98/test_subject_collector_refuses1')
+profile = 'paper-strict', mutation = 'wrong-calldata'
+
+    @pytest.mark.parametrize('mutation', ['wrong-relay', 'wrong-calldata', 'wrong-block', 'original-call'])
+    @pytest.mark.parametrize('profile', ['paper-strict', 'repaired-e'])
+    def test_subject_collector_refuses_unbound_native_transactions(artifacts, inputs, tmp_path, profile, mutation):
+        m = fixture(artifacts, inputs, tmp_path, profile, mutation)
+        with pytest.raises(ValueError):
+>           execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+                user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy, expected_allow=True,
+                worker_snapshot=m.snapshot, output=tmp_path/'access', subject_substitution=m.users['bob']['gid'])
+E           TypeError: execute_access() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_subject_collector.py:102: TypeError
+_ test_subject_collector_refuses_unbound_native_transactions[paper-strict-wrong-block] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-98/test_subject_collector_refuses2')
+profile = 'paper-strict', mutation = 'wrong-block'
+
+    @pytest.mark.parametrize('mutation', ['wrong-relay', 'wrong-calldata', 'wrong-block', 'original-call'])
+    @pytest.mark.parametrize('profile', ['paper-strict', 'repaired-e'])
+    def test_subject_collector_refuses_unbound_native_transactions(artifacts, inputs, tmp_path, profile, mutation):
+        m = fixture(artifacts, inputs, tmp_path, profile, mutation)
+        with pytest.raises(ValueError):
+>           execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+                user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy, expected_allow=True,
+                worker_snapshot=m.snapshot, output=tmp_path/'access', subject_substitution=m.users['bob']['gid'])
+E           TypeError: execute_access() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_subject_collector.py:102: TypeError
+_ test_subject_collector_refuses_unbound_native_transactions[paper-strict-original-call] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-98/test_subject_collector_refuses3')
+profile = 'paper-strict', mutation = 'original-call'
+
+    @pytest.mark.parametrize('mutation', ['wrong-relay', 'wrong-calldata', 'wrong-block', 'original-call'])
+    @pytest.mark.parametrize('profile', ['paper-strict', 'repaired-e'])
+    def test_subject_collector_refuses_unbound_native_transactions(artifacts, inputs, tmp_path, profile, mutation):
+        m = fixture(artifacts, inputs, tmp_path, profile, mutation)
+        with pytest.raises(ValueError):
+>           execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+                user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy, expected_allow=True,
+                worker_snapshot=m.snapshot, output=tmp_path/'access', subject_substitution=m.users['bob']['gid'])
+E           TypeError: execute_access() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_subject_collector.py:102: TypeError
+_ test_subject_collector_refuses_unbound_native_transactions[repaired-e-wrong-relay] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-98/test_subject_collector_refuses4')
+profile = 'repaired-e', mutation = 'wrong-relay'
+
+    @pytest.mark.parametrize('mutation', ['wrong-relay', 'wrong-calldata', 'wrong-block', 'original-call'])
+    @pytest.mark.parametrize('profile', ['paper-strict', 'repaired-e'])
+    def test_subject_collector_refuses_unbound_native_transactions(artifacts, inputs, tmp_path, profile, mutation):
+        m = fixture(artifacts, inputs, tmp_path, profile, mutation)
+        with pytest.raises(ValueError):
+>           execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+                user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy, expected_allow=True,
+                worker_snapshot=m.snapshot, output=tmp_path/'access', subject_substitution=m.users['bob']['gid'])
+E           TypeError: execute_access() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_subject_collector.py:102: TypeError
+_ test_subject_collector_refuses_unbound_native_transactions[repaired-e-wrong-calldata] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-98/test_subject_collector_refuses5')
+profile = 'repaired-e', mutation = 'wrong-calldata'
+
+    @pytest.mark.parametrize('mutation', ['wrong-relay', 'wrong-calldata', 'wrong-block', 'original-call'])
+    @pytest.mark.parametrize('profile', ['paper-strict', 'repaired-e'])
+    def test_subject_collector_refuses_unbound_native_transactions(artifacts, inputs, tmp_path, profile, mutation):
+        m = fixture(artifacts, inputs, tmp_path, profile, mutation)
+        with pytest.raises(ValueError):
+>           execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+                user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy, expected_allow=True,
+                worker_snapshot=m.snapshot, output=tmp_path/'access', subject_substitution=m.users['bob']['gid'])
+E           TypeError: execute_access() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_subject_collector.py:102: TypeError
+_ test_subject_collector_refuses_unbound_native_transactions[repaired-e-wrong-block] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-98/test_subject_collector_refuses6')
+profile = 'repaired-e', mutation = 'wrong-block'
+
+    @pytest.mark.parametrize('mutation', ['wrong-relay', 'wrong-calldata', 'wrong-block', 'original-call'])
+    @pytest.mark.parametrize('profile', ['paper-strict', 'repaired-e'])
+    def test_subject_collector_refuses_unbound_native_transactions(artifacts, inputs, tmp_path, profile, mutation):
+        m = fixture(artifacts, inputs, tmp_path, profile, mutation)
+        with pytest.raises(ValueError):
+>           execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+                user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy, expected_allow=True,
+                worker_snapshot=m.snapshot, output=tmp_path/'access', subject_substitution=m.users['bob']['gid'])
+E           TypeError: execute_access() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_subject_collector.py:102: TypeError
+_ test_subject_collector_refuses_unbound_native_transactions[repaired-e-original-call] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-98/test_subject_collector_refuses7')
+profile = 'repaired-e', mutation = 'original-call'
+
+    @pytest.mark.parametrize('mutation', ['wrong-relay', 'wrong-calldata', 'wrong-block', 'original-call'])
+    @pytest.mark.parametrize('profile', ['paper-strict', 'repaired-e'])
+    def test_subject_collector_refuses_unbound_native_transactions(artifacts, inputs, tmp_path, profile, mutation):
+        m = fixture(artifacts, inputs, tmp_path, profile, mutation)
+        with pytest.raises(ValueError):
+>           execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+                user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy, expected_allow=True,
+                worker_snapshot=m.snapshot, output=tmp_path/'access', subject_substitution=m.users['bob']['gid'])
+E           TypeError: execute_access() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_subject_collector.py:102: TypeError
+_________ test_subject_collector_refuses_wrong_repaired_rejection_code _________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-98/test_subject_collector_refuses8')
+
+    def test_subject_collector_refuses_wrong_repaired_rejection_code(artifacts, inputs, tmp_path):
+        m = fixture(artifacts, inputs, tmp_path, 'repaired-e', 'wrong-code')
+        with pytest.raises(ValueError):
+>           execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+                user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy, expected_allow=True,
+                worker_snapshot=m.snapshot, output=tmp_path/'access', subject_substitution=m.users['bob']['gid'])
+E           TypeError: execute_access() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_subject_collector.py:110: TypeError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_subject_collector.py::test_pre_release_subject_collector_preserves_original_request_and_stops_before_release[paper-strict]
+FAILED evaluation/tests/test_subject_collector.py::test_pre_release_subject_collector_preserves_original_request_and_stops_before_release[paper-minimal]
+FAILED evaluation/tests/test_subject_collector.py::test_pre_release_subject_collector_preserves_original_request_and_stops_before_release[repaired-e]
+FAILED evaluation/tests/test_subject_collector.py::test_subject_collector_refuses_unbound_native_transactions[paper-strict-wrong-relay]
+FAILED evaluation/tests/test_subject_collector.py::test_subject_collector_refuses_unbound_native_transactions[paper-strict-wrong-calldata]
+FAILED evaluation/tests/test_subject_collector.py::test_subject_collector_refuses_unbound_native_transactions[paper-strict-wrong-block]
+FAILED evaluation/tests/test_subject_collector.py::test_subject_collector_refuses_unbound_native_transactions[paper-strict-original-call]
+FAILED evaluation/tests/test_subject_collector.py::test_subject_collector_refuses_unbound_native_transactions[repaired-e-wrong-relay]
+FAILED evaluation/tests/test_subject_collector.py::test_subject_collector_refuses_unbound_native_transactions[repaired-e-wrong-calldata]
+FAILED evaluation/tests/test_subject_collector.py::test_subject_collector_refuses_unbound_native_transactions[repaired-e-wrong-block]
+FAILED evaluation/tests/test_subject_collector.py::test_subject_collector_refuses_unbound_native_transactions[repaired-e-original-call]
+FAILED evaluation/tests/test_subject_collector.py::test_subject_collector_refuses_wrong_repaired_rejection_code
+12 failed in 0.47s

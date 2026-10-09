@@ -1,3 +1,37 @@
+## Current checkpoint — subject pre-release collector prepared, 2026-10-09 UTC
+
+C-E2 WORKING. Public pre-release subject collector implemented: authenticate
+original signed request/bundle and mined PBC call, retain original historical
+credentials/ALLOW certificate, alter gid only, check mined ACSC caller/calldata/
+block, collect block-anchored whole request/grant/two-nonce/access-count/idle-worker
+and decoded all-contract histories. Paper grants Bob under the original derived
+grantId with zero native recipient; repaired-e requires Rejected2 and whole
+rollback. This path stops before release; invalid selections refuse before any
+adapter/request side effect.
+
+Fresh final root690 PASS/exit0 in109.90s;124 inputs unchanged. Post-suite303
+selected owner blobs/15 frozen copies verify. Tests-first missing-featureRED12,
+original-bundleRED2->GREEN14 and early-selectionRED6->GREEN20. Initial fixture
+chain/hash collision, manifest setup failure and aborted verification retained.
+Corrected full bracket/suite supersedes the initial65-file audit.
+
+No live subject trial, release, completion, fresh integrated controls, new FREEZE
+or lease.44 catalog comparisons remain/four paper crash classes BLOCKED/unproved;
+gateE NOT_RUN/F-Glocked. New runtime bytes invalidate prior execution recipes;
+complete recipient routing/symbolic completion and separate fresh Alice/Bob controls,
+then full revised plan/FREEZE/BOTH NEW exact owner ACKs before services.
+
+Evidence: evaluation/evidence/e2/subject-collector-20261009/README.md.173 latest
+communication paths/no divergence; peers A1e66eeb91/A296ebe160 unchanged; read
+A1through0058/A2through0038, no new ACK inferred or requested. No owner source/ABI/
+frozen/tool/dependency/custody change or human action needed. Author review only
+under explicit no-extra-agent rule; weaker than independent. Scheduled+separate
+coordinator guards before fetch through publication; finally cleanup/publication
+recorded externally and in automation memory. Preexisting untracked scheduled-runs
+preserved unstaged; only exact reviewed Agent3-owned checkpoint on agent-3.
+
+## Prior checkpoint records (historical)
+
 ## Current checkpoint — subject oracle code corrected, 2026-10-09 UTC
 
 C-E2 WORKING. Exact A1-0058/e66eeb91/1e3644dd.. identified a real evaluator

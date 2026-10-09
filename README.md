@@ -1,3 +1,10 @@
+**Current checkpoint (2026-10-09 UTC):** Subject pre-release collector implemented;
+fresh690 root tests pass with124 inputs stable. No live subject release/completion
+or complete case result.44 comparisons remain; gateE NOT_RUN/F-Glocked. Next:
+recipient routing, separate fresh controls, complete revised plan and both exact
+peer ACKs. See [collector evidence](evaluation/evidence/e2/subject-collector-20261009/README.md).
+Earlier checkpoint prose below is historical.
+
 **Current checkpoint (2026-10-09 UTC):** Agent 1 found an evaluator error: WRONG_SUBJECT is code2, not3. Oracle and synthetic fixture corrected; regression RED2→GREEN71 and fresh670 root tests pass on106 stable inputs. No new live subject result or gate;44 comparisons remain, gateE NOT_RUN/F-Glocked. Next: public subject collector, complete revised plan and both exact peer ACKs before services. See [correction evidence](evaluation/evidence/e2/subject-code-fix-20261009/README.md). Earlier prose below is historical.
 
 # HMBC: access security, Byzantine operators, and key lifecycle
