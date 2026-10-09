@@ -1,0 +1,73 @@
+[
+  {
+    "command": [
+      "pwd"
+    ],
+    "exit_code": 0,
+    "stdout": "/home/karma/Documents/RIS\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "rev-parse",
+      "--show-toplevel"
+    ],
+    "exit_code": 0,
+    "stdout": "/home/karma/Documents/RIS\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "branch",
+      "--show-current"
+    ],
+    "exit_code": 0,
+    "stdout": "agent-3\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "remote",
+      "-v"
+    ],
+    "exit_code": 0,
+    "stdout": "origin\tgit@github.com:SaiyamJain20/RIS (fetch)\norigin\tgit@github.com:SaiyamJain20/RIS (push)\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0,
+    "stdout": "996587e735c3e0daf9d36c193e5d9f9673dd660a\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "git",
+      "fetch",
+      "origin"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "From github.com:SaiyamJain20/RIS\n   83c084c..b057c2b  agent-1    -> origin/agent-1\n   902a95b..e950766  agent-2    -> origin/agent-2\n"
+  },
+  {
+    "command": [
+      "git",
+      "for-each-ref",
+      "--format=%(refname) %(objectname)",
+      "refs/remotes/origin/agent-1",
+      "refs/remotes/origin/agent-2",
+      "refs/remotes/origin/agent-3"
+    ],
+    "exit_code": 0,
+    "stdout": "refs/remotes/origin/agent-1 b057c2b22c3c4b4d627b0b8702af7ed6b641c060\nrefs/remotes/origin/agent-2 e950766f2272f310ad8db1f1f976e815e6f947ce\nrefs/remotes/origin/agent-3 996587e735c3e0daf9d36c193e5d9f9673dd660a\n",
+    "stderr": ""
+  }
+]

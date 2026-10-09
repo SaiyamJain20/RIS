@@ -237,3 +237,18 @@ mutants/revocation windows under a new complete source/tool/config plan/both ACK
 report/all3 same-source ACKs/gate E before F. No human action needed. Author
 self-review only under human ban on extra agents/worktrees; rulings/costs in evidence
 README. No peer source/mailbox/archive/frozen/main/destructive Git change.
+
+
+## C-E2 original-expiry supplemental plan —2026-10-09 UTC
+
+D44 PLAN-CHOICE-PENDING-EXACT-ACK: A3-0037 requests plan a76a291d3790370018707496fcda2048833ba1e826031bf2a2c0c427b5afe03e.
+Six fresh profile/point recovery rows plus explicit same-grant cached retry AFTER
+Alice recovery/completion/outcome, BEFORE Bob denial; synthetic DBC empty block
+at max(latest+1, ORIGINAL expiry), require latest/pending >=expiry, canonical EXPIRED,
+unchanged entire worker cache/events/attempts/counts/native grant/PBC request/outcome/
+both-chain contract logs. No permission/TTL/pre-expiry recipe change. Both exact
+new full-plan ACKs precede services; existing ACKs/reviews insufficient. Timing4s
+caution retained; unexpected expiry fails visibly. No first-restart-at-expiry,
+wall-clock equality, delivery, power-loss, paper durability or gate claim.
+Synthetic495 root tests/actual ACK refusal only. Evidence
+ evaluation/evidence/e2/expiry-runner-20261009/README.md. E remains open/F-G locked.

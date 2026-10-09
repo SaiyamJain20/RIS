@@ -172,7 +172,8 @@ def _available(ports):
             s.bind(('127.0.0.1', port))
 
 
-def _profile(plan, profile, output, record, *, recovery_point=None):
+def _profile(plan, profile, output, record, *, recovery_point=None, expired_retry=False):
+    require(type(expired_retry) is bool and (not expired_retry or recovery_point is not None), 'expiry probe follows explicit recovery')
     output.mkdir(parents=True, exist_ok=False)
     snapshots = output/'snapshots'
     ledger_root = materialize_owner(plan['owners']['ledger'], snapshots/'ledger')
@@ -271,6 +272,12 @@ def _profile(plan, profile, output, record, *, recovery_point=None):
                                                user_label=label, user=bootstrap['users'][label], record=record_fixture, policy=policy,
                                                expected_allow=label=='alice', worker_snapshot=worker_snapshot, output=output/label,
                                                recovery_point=recovery_point)
+                if label == 'alice' and expired_retry:
+                    from evaluation.expired_retry import execute_expired_retry
+                    grants = [e['grantId'] for e in results[label]['observed']['events'] if e['type'] == 'DBC_AUTHORIZED']
+                    require(len(grants) == 1, 'one recovered grant for expiry probe')
+                    execute_expired_retry(chains['pbc'], chains['dbc'], process, deployment=deployment,
+                                          grant_id=grants[0], worker_snapshot=worker_snapshot, output=output/'expired-retry')
             require(bootstrap['wrongAdminCode'] == '16' and all(r['ok'] for r in results.values()), 'three E1 controls')
             record['profiles'][profile].update(status='CONTROL_PASS', results={k: str(Path(profile)/k/'result.json') for k in results},
                                               wrongAdmin='UNAUTHORIZED_CALLER; baseline issuer restriction, not a repair')

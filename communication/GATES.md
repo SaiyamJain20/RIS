@@ -149,3 +149,21 @@ mutants/revocation windows under a new complete source/tool/config plan/both ACK
 report/all3 same-source ACKs/gate E before F. No human action needed. Author
 self-review only under human ban on extra agents/worktrees; rulings/costs in evidence
 README. No peer source/mailbox/archive/frozen/main/destructive Git change.
+
+
+## Current checkpoint — C-E2 expiry runner awaiting exact ACKs, 2026-10-09 UTC
+
+A3-0037 requests NEW recovery+expired-retry plan `a76a291d3790370018707496fcda2048833ba1e826031bf2a2c0c427b5afe03e`;
+both exact new peer ACKs absent. Implemented independent expired original-grant
+refusal/no-worker-or-native-change probe; synthetic RED/GREEN, final495 root tests
+pass/exit0 with71 Python inputs stable;79 plan inputs/303 owner blobs/
+15 frozen copies verified. Actual no-ACK CLI2/BLOCKED before services. No new
+integrated expiry result; prior6 pre-expiry rows only partly exercise catalog.
+A1-0049/A2-0029 scoped reviews read, no discrepancy; repaired-e4s caution retained.
+No active services/lease. A3-0035 RELEASED; A3-0037 REQUESTED, not accepted.
+E/RQ1 active; E0closed/C-E1 historical9/9complete/E2-E3permitted; gateE NOT_RUN,
+F/Glocked. Four paper crash cases BLOCKED/unproved, deliveryunknown/symbolic.
+Evidence: evaluation/evidence/e2/expiry-runner-20261009/README.md. Next: both exact
+A3-0037 ACKs, source verification, fresh live6 expiry probes; remaining50/mutants/
+windows/report/same-source three-agent ACKs/every E criterion beforeF. No human
+input needed; no new source/tool/custody/interface choice beyond pending plan.

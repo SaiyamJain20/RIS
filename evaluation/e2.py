@@ -46,9 +46,10 @@ def _owners(contract):
     return result
 
 
-def create_plan(*, run_id, freeze_message):
+def create_plan(*, run_id, freeze_message, expired_retry=False):
     # Retain the previously reviewed environment, mining/ports, tool and custody
     # recipe; any new exact runtime bytes require new full execution-plan ACKs.
+    require(type(expired_retry) is bool, 'explicit expiry-probe selection')
     plan = e1.create_plan(run_id=run_id, freeze_message=freeze_message)
     contract = json.loads(CONTRACT.read_text())
     plan.update(schemaVersion='hmbc-e2-recovery-plan/v1', executionScope='six fresh logical crash/recovery cases; not full RQ matrix',
@@ -66,11 +67,22 @@ def create_plan(*, run_id, freeze_message):
                              'Six logical recovery comparisons only; complete56 catalog/mutants/revocation windows/report/gate remain required.',
                              'Paper crash classification remains BLOCKED/unproved until explicit report qualification.',
                              'Symbolic crypto, safe-ledger/trusted-worker assumptions; no recipient delivery, ABE, consensus, power-loss or OS-kill proof.'])
+    if expired_retry:
+        plan.update(schemaVersion='hmbc-e2-recovery-expiry-plan/v1', expiredRetry=True,
+                    executionScope='six fresh logical recovery comparisons plus six expired cached retries; not full RQ matrix',
+                    expiryProbe=dict(order='after Alice recovery/completion/outcome, before Bob control',
+                                     clock='DBC evm_setNextBlockTimestamp(max(latest+1, original grant expiry)); evm_mine; verify latest and pending >= expiry',
+                                     input='identical release envelope with the recovered grantId and deployment',
+                                     expected='EXPIRED; entire redacted worker cache/events/attempts and native grant/request/all contract logs unchanged',
+                                     scope='refusal after successful recovery; not first restart at expiry, exact wall-clock equality or power-loss durability'))
+        plan['controls'].append('expired-original-grant-cached-retry-no-new-event')
+        plan['limitations'].append('Six expired retry probes supplement historical recovery evidence; remaining50 catalog/mutants/windows/report/gate still required.')
     return plan
 
 
 def verify_plan(plan):
-    require(plan == create_plan(run_id=plan['runId'], freeze_message=plan['freezeMessage']), 'exact current E2 plan/source/config')
+    require(plan == create_plan(run_id=plan['runId'], freeze_message=plan['freezeMessage'],
+                                expired_retry=plan.get('expiredRetry', False)), 'exact current E2 plan/source/config')
     require(sha256(ROOT/'interfaces/v1/FREEZE.json') == FREEZE_SHA256, 'immutable v1 freeze')
     require(platform.python_version() == plan['pythonVersion'], 'pinned Python version')
     for tool in plan['tools'].values():
@@ -106,11 +118,17 @@ def execute(plan_path, ack_path, output):
             record['cases'][case] = dict(status='RUNNING', manifest=case+'/manifest.json')
             (output/'manifest.json').write_text(json.dumps(record, indent=2)+'\n')
             selected = copy.deepcopy(plan); selected['runId'] = plan['runId']+'-'+item['point']
-            e1._profile(selected, item['profile'], destination/item['profile'], child, recovery_point=item['point'])
+            e1._profile(selected, item['profile'], destination/item['profile'], child, recovery_point=item['point'],
+                        expired_retry=plan.get('expiredRetry', False))
             proof = json.loads((destination/item['profile']/'recovery/result.json').read_text())
             require(proof['ok'] is True and proof['delivery'] == 'unknown', 'complete checked recovery result')
+            if plan.get('expiredRetry', False):
+                expiry = json.loads((destination/item['profile']/'expired-retry/result.json').read_text())
+                require(expiry['ok'] is True and expiry['error'] == 'EXPIRED' and expiry['delivery'] == 'unknown'
+                        and expiry['workerUnchanged'] is True and expiry['nativeUnchanged'] is True, 'complete expired retry refusal')
+                record['cases'][case]['expiredRetry'] = 'EXPIRED_NO_CHANGE_PASS'
             record['cases'][case]['status'] = 'RECOVERY_CONTROL_PASS'
-        verify_plan(plan); record.update(status='E2_RECOVERY_SLICE_PASS', sourceStable=True)
+        verify_plan(plan); record.update(status='E2_RECOVERY_EXPIRY_SLICE_PASS' if plan.get('expiredRetry', False) else 'E2_RECOVERY_SLICE_PASS', sourceStable=True)
     except BaseException as error:
         record['failure'] = dict(type=type(error).__name__, message=str(error))
         record['status'] = 'FAILED' if authorized else 'BLOCKED'
@@ -128,7 +146,7 @@ def main():
     p.add_argument('--plan', type=Path, required=True); p.add_argument('--acks', type=Path); p.add_argument('--output', type=Path, required=True)
     args = p.parse_args(); result = execute(args.plan, args.acks, args.output)
     print(json.dumps({k: result[k] for k in ('status', 'failure', 'sourceStable', 'servicesStarted')}, indent=2))
-    return 0 if result['status'] == 'E2_RECOVERY_SLICE_PASS' else 2
+    return 0 if result['status'] in ('E2_RECOVERY_SLICE_PASS', 'E2_RECOVERY_EXPIRY_SLICE_PASS') else 2
 
 
 if __name__ == '__main__': raise SystemExit(main())
