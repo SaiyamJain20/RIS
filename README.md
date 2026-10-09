@@ -1,6 +1,25 @@
+**Current checkpoint (2026-10-09 UTC):** Subject routing/completion checker prepared;
+fresh777 root tests pass with190 inputs stable. Pure synthetic checks only: no
+live subject release/completion or complete case.44 comparisons remain; gateE
+NOT_RUN/F-Glocked. Next public completion collector, separate fresh controls,
+full revised plan and both exact peer ACKs before services. See
+[checker evidence](evaluation/evidence/e2/subject-completion-oracle-20261009/README.md).
+Earlier checkpoint prose below is historical.
+
+**Current checkpoint (2026-10-09 UTC):** Subject pre-release collector implemented;
+fresh690 root tests pass with124 inputs stable. No live subject release/completion
+or complete case result.44 comparisons remain; gateE NOT_RUN/F-Glocked. Next:
+recipient routing, separate fresh controls, complete revised plan and both exact
+peer ACKs. See [collector evidence](evaluation/evidence/e2/subject-collector-20261009/README.md).
+Earlier checkpoint prose below is historical.
+
+**Current checkpoint (2026-10-09 UTC):** Agent 1 found an evaluator error: WRONG_SUBJECT is code2, not3. Oracle and synthetic fixture corrected; regression RED2→GREEN71 and fresh670 root tests pass on106 stable inputs. No new live subject result or gate;44 comparisons remain, gateE NOT_RUN/F-Glocked. Next: public subject collector, complete revised plan and both exact peer ACKs before services. See [correction evidence](evaluation/evidence/e2/subject-code-fix-20261009/README.md). Earlier prose below is historical.
+
 # HMBC: access security, Byzantine operators, and key lifecycle
 
-**Selected scope:** directions **E, F and G**, using **HMBC2020 only**. Work directly in this repository. The implementation has not started.
+**Current checkpoint (2026-10-09 UTC):** E0 closed/C-E1 complete; E2/E3 active. Grouped historical replay collector implemented;599 tests pass. A3-0044 complete plan awaits both exact peer ACKs before services. No new live timing/repaired release result; prior expiry failure retained.45 catalog comparisons remain; gateE NOT_RUN/F/G locked. See [the live board](communication/BOARD.md) and [runner evidence](evaluation/evidence/e2/grouped-replay-runner-20261009/README.md).
+
+**Selected scope:** directions **E, F and G**, using **HMBC2020 only**, in this confirmed checkout. This is a paper-derived reconstruction with synthetic fixtures and symbolic E cryptography. Frozen v1 bytes and exact E0 mapping ACKs are retained; all RQ gates remain NOT_RUN.
 
 **Order: E → F → G.** All three agents complete one research question together, integrate their modules, and close its evidence gate before starting the next. The first deliverable is a complete answer to **RQ1/E**, not three unfinished prototypes.
 
@@ -23,6 +42,6 @@ references/                       HMBC and two cryptography references
 archive/                          all previous documents, papers and audit evidence
 ```
 
-The board starts at **E0: freeze the HMBC baseline and interfaces**. Coding agents have not been launched by this planning task. Proposed commands and source files in the plan are deliverables to create, not claims that software already exists.
+Read the latest `communication/**` revisions across fetched branches, preserving exact commit provenance. Each agent publishes its owned work on `agent-N` from its own machine. [E0 progress](evaluation/reports/E0-progress.md) is historical; current phase and dependencies belong to [BOARD.md](communication/BOARD.md). Unit tests and owner rehearsals do not substitute for integrated gate evidence.
 
 All previous content, including the uncommitted citation audit, is preserved under [archive/2026-10-06-pre-hmbc-efg/](archive/2026-10-06-pre-hmbc-efg/ARCHIVE.md). Its 51 archived files were checked against a SHA-256 manifest. JANUS, DP and abandoned directions are historical material; they are not active requirements.

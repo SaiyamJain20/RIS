@@ -1,0 +1,40 @@
+{
+  "runStarted": "2026-10-09T08:13:29.105279+00:00",
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "fetch",
+        "origin"
+      ],
+      "exitCode": 0,
+      "scope": "initial fetch before owned edits"
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "origin/agent-1:communication/agent-1/outbox/0058-review-subject-oracle-wrong-subject-code.md"
+      ],
+      "exitCode": 128,
+      "note": "incorrect filename, no mutation; corrected to0058-review-subject-oracle-wrong-code.md"
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "origin/agent-1:communication/agent-1/outbox/0058-review-subject-oracle-wrong-code.md"
+      ],
+      "exitCode": 0
+    },
+    {
+      "argv": [
+        "git",
+        "show",
+        "origin/agent-2:communication/agent-2/outbox/0038-review-e2-grouped-replay-evidence-agent-2-scope.md"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "note": "Initial tool commands recorded from returned exit/results; exact per-command timestamps not captured; run start bounds the read phase"
+}

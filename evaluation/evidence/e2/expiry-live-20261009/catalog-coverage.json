@@ -1,0 +1,191 @@
+{
+  "catalogSha256": "438fa38ddcbd7edd0e49fb93cc580e5219ed05349fd677b2e386bc4669f5d50e",
+  "rows": [
+    {
+      "caseId": "E03-crash-after-intent-paper-strict",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A35",
+        "A37",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "mechanicalStatus": {
+        "status": "RECOVERY_CONTROL_PASS",
+        "manifest": "paper-strict-after_intent/manifest.json",
+        "expiredRetry": "EXPIRED_NO_CHANGE_PASS"
+      },
+      "classification": "BLOCKED",
+      "qualification": "No original-paper durability, exact wall-clock equality or first restart at expiry; full catalog not executed."
+    },
+    {
+      "caseId": "E03-crash-after-intent-paper-minimal",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A35",
+        "A37",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "mechanicalStatus": {
+        "status": "RECOVERY_CONTROL_PASS",
+        "manifest": "paper-minimal-after_intent/manifest.json",
+        "expiredRetry": "EXPIRED_NO_CHANGE_PASS"
+      },
+      "classification": "BLOCKED",
+      "qualification": "No original-paper durability, exact wall-clock equality or first restart at expiry; full catalog not executed."
+    },
+    {
+      "caseId": "E03-crash-after-intent-repaired-e",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A35",
+        "A37",
+        "A36",
+        "A41"
+      ],
+      "mechanicalStatus": {
+        "status": "RECOVERY_CONTROL_PASS",
+        "manifest": "repaired-e-after_intent/manifest.json",
+        "expiredRetry": "EXPIRED_NO_CHANGE_PASS"
+      },
+      "classification": "REPAIR_SUPPORTED_BOUNDED_MECHANICS",
+      "qualification": "No original-paper durability, exact wall-clock equality or first restart at expiry; full catalog not executed."
+    },
+    {
+      "caseId": "E03-crash-after-send-paper-strict",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A35",
+        "A37",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "mechanicalStatus": {
+        "status": "RECOVERY_CONTROL_PASS",
+        "manifest": "paper-strict-after_send/manifest.json",
+        "expiredRetry": "EXPIRED_NO_CHANGE_PASS"
+      },
+      "classification": "BLOCKED",
+      "qualification": "No original-paper durability, exact wall-clock equality or first restart at expiry; full catalog not executed."
+    },
+    {
+      "caseId": "E03-crash-after-send-paper-minimal",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A35",
+        "A37",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "mechanicalStatus": {
+        "status": "RECOVERY_CONTROL_PASS",
+        "manifest": "paper-minimal-after_send/manifest.json",
+        "expiredRetry": "EXPIRED_NO_CHANGE_PASS"
+      },
+      "classification": "BLOCKED",
+      "qualification": "No original-paper durability, exact wall-clock equality or first restart at expiry; full catalog not executed."
+    },
+    {
+      "caseId": "E03-crash-after-send-repaired-e",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A35",
+        "A37",
+        "A36",
+        "A41"
+      ],
+      "mechanicalStatus": {
+        "status": "RECOVERY_CONTROL_PASS",
+        "manifest": "repaired-e-after_send/manifest.json",
+        "expiredRetry": "EXPIRED_NO_CHANGE_PASS"
+      },
+      "classification": "REPAIR_SUPPORTED_BOUNDED_MECHANICS",
+      "qualification": "No original-paper durability, exact wall-clock equality or first restart at expiry; full catalog not executed."
+    }
+  ],
+  "remainingSchedules": 50,
+  "fullCatalogComplete": false
+}

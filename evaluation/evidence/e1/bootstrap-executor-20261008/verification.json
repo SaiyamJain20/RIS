@@ -1,0 +1,72 @@
+{
+  "capturedAt": "2026-10-08T18:48:06.123549+00:00",
+  "baseCommit": "b12151b2bbe0e4c881e6f86d8b9abdc1d92f7fd8",
+  "task": "E/RQ1 C-E1 bootstrap/native executor slice; full runner INCOMPLETE",
+  "fullEvaluator": {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "evaluation/tests",
+      "-q",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "exitCode": 0,
+    "passed": 335,
+    "elapsedSeconds": 50.04621690500062,
+    "sourceStable": true,
+    "sourceCount": 103,
+    "outputSha256": "c48a04753d3497d0e38b75816bd88821d4ea94c5f7aa5291cf21601d481f3538"
+  },
+  "tdd": {
+    "bootstrap": "37 fail -> 37 pass",
+    "chain": "24 fail -> 24 pass; author-review missing signed-tx-hash comparison: 1 fail/24 pass -> 25 pass",
+    "bootstrapExecution": "8 fail -> corrected test fixture evidence digests/8 fail -> 8 pass"
+  },
+  "peerChange": {
+    "path": "communication/agent-2/STATUS.md",
+    "commit": "c99e2073b545b4e8e857dbfc8fd55e73131af796",
+    "sha256": "2828635bf882800a5ea30a0828360e3bbdbe5fd1f6241897155467586b61f70f",
+    "meaning": "E1-support-only readiness; selected service bytes unchanged"
+  },
+  "fixtures": "Exact old-instance public bootstrap sample plus adapted frozen deployment metadata and controlled RPC/native evidence; no chain/provider service",
+  "seed": null,
+  "adapterMode": "symbolic",
+  "findings": [
+    {
+      "class": "tested reconstruction result",
+      "scope": "Evaluator missing locally-signed receipt-hash equality",
+      "evidence": "chain-review-red-summary.txt",
+      "resolution": "chain-review-green.txt"
+    }
+  ],
+  "lookupFailures": [
+    {
+      "command": [
+        "git",
+        "show",
+        "9d6911d9a35c7d20b3e0226400f8f0fcc99ef256:ledger/tools/bootstrap_fixture.py"
+      ],
+      "exitCode": 128,
+      "cause": "Guessed nonexistent helper; owner producer is Solidity script"
+    },
+    {
+      "command": [
+        "git",
+        "show",
+        "465aff52688179fd983fd8da9e2af3032189ff6e:communication/agent-2/outbox/0016-ready-e1-worker-log-state-dir.md"
+      ],
+      "exitCode": 128,
+      "cause": "Guessed filename; scanner exact source pin retained"
+    }
+  ],
+  "review": "Author review only; extra agents prohibited by human instructions. Missing signed-hash join fixed and regression verified. Unproved live RPC/trace compatibility is a runtime limitation, not a passed test.",
+  "notRun": [
+    "actual two-chain/services/bootstrap transactions",
+    "complete nine E1 controls",
+    "56 catalog schedules",
+    "durable recovery/formal correspondence/RQ gates"
+  ],
+  "next": "Finish full JSON-lines access runner and source/dependency freeze plan; get both exact owner ACKs before services. E2/E3 after E1; F/G locked."
+}

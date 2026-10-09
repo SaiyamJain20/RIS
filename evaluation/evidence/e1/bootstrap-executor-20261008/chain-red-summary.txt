@@ -1,0 +1,71 @@
+Selected bounded excerpt; exact full output/hash/command in commands.json
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-31/test_changed_block_invalidates0')
+
+    def test_changed_block_invalidates_historical_view(tmp_path):
+>       replies = Replies(); chain = executor(tmp_path, replies)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_chain.py:142: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-31/test_changed_block_invalidates0')
+replies = <test_chain.Replies object at 0x7f85059b4320>
+
+    def executor(tmp_path, replies):
+>       assert importlib.util.find_spec('evaluation.chain') is not None, 'Public ABI executor is missing'
+E       AssertionError: Public ABI executor is missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f8507e9a480>('evaluation.chain')
+E        +    where <function find_spec at 0x7f8507e9a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_chain.py:62: AssertionError
+_______ test_unregistered_contract_and_abi_drift_refuse_before_broadcast _______
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-31/test_unregistered_contract_and0')
+
+    def test_unregistered_contract_and_abi_drift_refuse_before_broadcast(tmp_path):
+>       replies = Replies(); chain = executor(tmp_path, replies)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_chain.py:148: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-31/test_unregistered_contract_and0')
+replies = <test_chain.Replies object at 0x7f85059b45f0>
+
+    def executor(tmp_path, replies):
+>       assert importlib.util.find_spec('evaluation.chain') is not None, 'Public ABI executor is missing'
+E       AssertionError: Public ABI executor is missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f8507e9a480>('evaluation.chain')
+E        +    where <function find_spec at 0x7f8507e9a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_chain.py:62: AssertionError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_chain.py::test_transaction_signing_binds_only_runner_owned_relay_and_retains_native_result
+FAILED evaluation/tests/test_chain.py::test_receipt_cannot_certify_a_different_submitted_call[from-0x2222222222222222222222222222222222222222]
+FAILED evaluation/tests/test_chain.py::test_receipt_cannot_certify_a_different_submitted_call[to-0x2222222222222222222222222222222222222222]
+FAILED evaluation/tests/test_chain.py::test_receipt_cannot_certify_a_different_submitted_call[input-0x1234]
+FAILED evaluation/tests/test_chain.py::test_receipt_cannot_certify_a_different_submitted_call[nonce-0x1]
+FAILED evaluation/tests/test_chain.py::test_receipt_cannot_certify_a_different_submitted_call[chainId-0x6f]
+FAILED evaluation/tests/test_chain.py::test_receipt_cannot_certify_a_different_submitted_call[value-0x1]
+FAILED evaluation/tests/test_chain.py::test_receipt_cannot_certify_a_different_submitted_call[gas-0x1]
+FAILED evaluation/tests/test_chain.py::test_receipt_cannot_certify_a_different_submitted_call[blockHash-0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff]
+FAILED evaluation/tests/test_chain.py::test_receipt_cannot_certify_a_different_submitted_call[transactionIndex-0x1]
+FAILED evaluation/tests/test_chain.py::test_runner_never_derives_peer_owned_keys[H1-root]
+FAILED evaluation/tests/test_chain.py::test_runner_never_derives_peer_owned_keys[alice]
+FAILED evaluation/tests/test_chain.py::test_runner_never_derives_peer_owned_keys[bob]
+FAILED evaluation/tests/test_chain.py::test_runner_never_derives_peer_owned_keys[witness-1]
+FAILED evaluation/tests/test_chain.py::test_runner_never_derives_peer_owned_keys[deployer]
+FAILED evaluation/tests/test_chain.py::test_runner_never_derives_peer_owned_keys[arbitrary-ca-admin]
+FAILED evaluation/tests/test_chain.py::test_wrong_chain_is_refused_before_broadcast
+FAILED evaluation/tests/test_chain.py::test_mined_rejection_retains_exact_public_custom_error
+FAILED evaluation/tests/test_chain.py::test_rejection_trace_is_not_a_generic_failed_transaction
+FAILED evaluation/tests/test_chain.py::test_reverted_transaction_never_counts_as_expected_success
+FAILED evaluation/tests/test_chain.py::test_pending_transaction_has_bounded_wait_and_retained_failure
+FAILED evaluation/tests/test_chain.py::test_view_returns_block_address_and_calldata_bound_evidence
+FAILED evaluation/tests/test_chain.py::test_changed_block_invalidates_historical_view
+FAILED evaluation/tests/test_chain.py::test_unregistered_contract_and_abi_drift_refuse_before_broadcast
+24 failed in 0.37s

@@ -1,0 +1,145 @@
+{
+  "schemaVersion": "hmbc-live-mapping-acks/v1",
+  "updatedAt": "2026-10-08T18:09:15.549945+00:00",
+  "interfaceVersion": "v1",
+  "freezeId": "E0-v1-r6-20261008",
+  "frozenManifest": {
+    "path": "interfaces/v1/FREEZE.json",
+    "sha256": "f700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2",
+    "publicationCommit": "f7b8f3fd74ae3dd52e385cd013a6429415b519a2",
+    "immutable": true
+  },
+  "peerMappingAcks": {
+    "agent-1": {
+      "messageId": "A1-0027",
+      "path": "communication/agent-1/outbox/0027-ack-frozen-v1-mapping.md",
+      "commit": "70f704da9bf1a7ed4aa2fc3fa8e7292e6eb7b37a",
+      "changeCommit": "70f704da9bf1a7ed4aa2fc3fa8e7292e6eb7b37a",
+      "sha256": "93f8e6681225b7392af0e9e76eb45dd6ce26f09285a19b4048b8143e67692f26",
+      "scope": "all15 frozenCopies, metadataPolicy and version mapping; ledger-facing acceptance only",
+      "exclusions": [
+        "protocol operations/tool/worker semantics beyond ledger facts",
+        "A33/A37 symbolic meanings and worker counts",
+        "ScenarioResult/RunManifest/evaluator internals",
+        "ProVerif material",
+        "root dependency locks",
+        "non-ledger E0 acceptance rows"
+      ],
+      "reviewEvidence": "evaluation/evidence/e0/a1-frozen-mapping-ack-20261008/review.json",
+      "reviewEvidenceSha256": "ccfe633eb9bab8dad5545d447e9f44c81fee2abcf16d43ee004d2580f7565244"
+    },
+    "agent-2": {
+      "messageId": "A2-0013",
+      "path": "communication/agent-2/outbox/0013-ack-frozen-v1-mapping-and-v1-export-successor.md",
+      "commit": "e30d00d840e76526d8f12845054bfbf92fc0621b",
+      "changeCommit": "e30d00d840e76526d8f12845054bfbf92fc0621b",
+      "sha256": "dea71c476c105965f53e849a5343c0de5278f09defefa52b9fcdb154b3d0fcf0",
+      "scope": "all15 frozenCopies, protocol inventory and bundled six-ABI agreement, metadataPolicy/version mapping, D35/A38/--at-block/expiry restatement; earlier source/tool/case reviews retained for identical bytes",
+      "exclusions": [
+        "evaluator internals",
+        "Scenario/ScenarioResult/WorkerExpectation/RunManifest beyond wire checks",
+        "whole package approval",
+        "Agent3 verification reruns and ProVerif",
+        "ledger-only classifications",
+        "scenario/runtime results and four unproved paper crash cases",
+        "owner service READY/integration FREEZE/RQ gate decisions"
+      ],
+      "reviewEvidence": "evaluation/evidence/e0/a1-frozen-mapping-ack-20261008/successor-review.json",
+      "reviewEvidenceSha256": "5ea7a9bca96aa33c26df555593283597f7bcfafff6b3b2c0c5d56217432e6c45"
+    }
+  },
+  "e0Closed": true,
+  "e1Unlocked": true,
+  "integrationFreezeActive": false,
+  "ownerPins": {
+    "ledger": {
+      "commit": "9d6911d9a35c7d20b3e0226400f8f0fcc99ef256",
+      "manifestSha256": "ec213160ffccf2affb3d6556f8d62b6f35aaec44249a21fd065e997e6c586f98",
+      "entries": 106,
+      "aE1Ready": true,
+      "bootstrapProducerReady": true,
+      "reviewEvidence": "evaluation/evidence/e1/collector-20261008/pin-review.json",
+      "reviewEvidenceSha256": "d293af440c725ec23b09cfab4fb21b668f92c728f14edce61812c868e0f8bdb0"
+    },
+    "protocol": {
+      "commit": "465aff52688179fd983fd8da9e2af3032189ff6e",
+      "manifestSha256": "eb236421b2208d33302d1445893a562c8cb6336ac2c77d21a5645b30ee1ff371",
+      "entries": 105,
+      "adapterSha256": "7146495b4dfbe351d73299223efdb853c41895ac880f9a6c13e2a525656a9220",
+      "supersedesFrozenOwnerPin": true,
+      "serviceReadyForIntegration": true,
+      "reviewEvidence": "evaluation/evidence/e1/collector-20261008/pin-review.json",
+      "reviewEvidenceSha256": "d293af440c725ec23b09cfab4fb21b668f92c728f14edce61812c868e0f8bdb0"
+    }
+  },
+  "note": "E0 closed/E1 unlocked; immutable frozen copies unchanged. Source-reviewed E1 bootstrap/worker-log successor selected. Collector unit checks pass; actual runner/integration and exact FREEZE ACKs pending. No owner rehearsal is Agent3 gate evidence.",
+  "ownerServiceReady": {
+    "agent-1": {
+      "commit": "a558b217f6501acc81a09f1e4bd4062004592a1a",
+      "changeCommit": "9d6911d9a35c7d20b3e0226400f8f0fcc99ef256",
+      "sha256": "4e430aa55fbb88bb17cb26de5e81ec3cf57fd968849ed4f1889c10462a1b0a03",
+      "path": "communication/agent-1/outbox/0030-ready-ledger-bootstrap-producer.md",
+      "messageId": "A1-0030",
+      "scope": "E1 bootstrap successor; owner live results not integrated evidence",
+      "integrationFreezeAck": false
+    },
+    "agent-2": {
+      "commit": "1f031c018bd0e8723f12faa90c2394a245198c94",
+      "changeCommit": "465aff52688179fd983fd8da9e2af3032189ff6e",
+      "sha256": "a0c81f8a8db2c6a2c5d1acbca4df6044aa86244fc2eab087bc9313a70a0bd948",
+      "path": "communication/agent-2/outbox/0016-ready-successor-worker-log-fix-and-paper-process-evidence.md",
+      "messageId": "A2-0016",
+      "scope": "read-only exporter directory fix; service start contract otherwise unchanged",
+      "integrationFreezeAck": false
+    }
+  },
+  "ownerPinHistory": {
+    "ledger": {
+      "commit": "91add8cc6000d1413bad2ed0aa119a5f26e8c776",
+      "manifestSha256": "407c86331072bdad63562541230fdd3078608287eccb373cb2f974e3bde20fc1",
+      "entries": 101,
+      "aE1Ready": true
+    },
+    "protocol": {
+      "commit": "34de384f0af12b52f4de4559a5639388df824861",
+      "manifestSha256": "30f76ddac08bd1a720c4b4c9479103c2663eb61b806945c0d66fe44d48e9f41a",
+      "entries": 98,
+      "adapterSha256": "7146495b4dfbe351d73299223efdb853c41895ac880f9a6c13e2a525656a9220",
+      "supersedesFrozenOwnerPin": true,
+      "serviceReadyForIntegration": true
+    }
+  },
+  "ownerReadyHistory": {
+    "agent-1": {
+      "commit": "ff3cb743cd31fdd7745d2d4a8ecd81af9d04584e",
+      "path": "communication/agent-1/outbox/0028-ready-a-e1-frozen-controls.md",
+      "sha256": "b37abe1ca81ee174256c18f3b3eba75ea5e80fa6cfa7922ea1bd69af3f23c572",
+      "changeCommit": "ff3cb743cd31fdd7745d2d4a8ecd81af9d04584e",
+      "messageId": "A1-0028",
+      "scope": "owner A-E1 ledger readiness; independent C-E1 result pending",
+      "integrationFreezeAck": false
+    },
+    "agent-2": {
+      "commit": "34de384f0af12b52f4de4559a5639388df824861",
+      "path": "communication/agent-2/outbox/0014-ready-owner-service-for-e1-integration.md",
+      "sha256": "52c5142c53894d6767ae08a683424b1d52997a4ae9a86dcdc9c9dfd2d94cb396",
+      "changeCommit": "34de384f0af12b52f4de4559a5639388df824861",
+      "messageId": "A2-0014",
+      "scope": "candidate symbolic service readiness; no reachable process crash hook, independent C-E1 result pending",
+      "integrationFreezeAck": false
+    }
+  },
+  "bootstrapReview": {
+    "producerPin": "9d6911d9a35c7d20b3e0226400f8f0fcc99ef256",
+    "producerCommand": "ledger/tools/bootstrap_fixture.sh <pbc-rpc> <deployment.json> <out.json>",
+    "peerScopeReview": {
+      "commit": "1f031c018bd0e8723f12faa90c2394a245198c94",
+      "changeCommit": "dbfefee2dd079b400191eba7bca4b3e117e2caef",
+      "sha256": "316b868764da4ca4a3202373f3b16d05d1933a9f8eefb93275eeccd55a5b1841",
+      "path": "communication/agent-2/outbox/0015-review-peer-bootstrap-producer-and-crosscheck.md"
+    },
+    "collectorCommand": "python -m hmbc_protocol.worker_log --state-dir <adapter state dir>",
+    "e2AdditionsAccepted": false,
+    "independentLiveRun": false
+  }
+}

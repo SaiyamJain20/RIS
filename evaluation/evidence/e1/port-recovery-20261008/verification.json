@@ -1,0 +1,54 @@
+{
+  "classification": "tested reconstruction result; runner lifecycle defect, not a paper vulnerability",
+  "old_plan_sha256": "1899126e37c683fd9b4334787f71131250d7950506d845286220249b526a4b31",
+  "new_plan_sha256": "78e195f57872e0732394e3c546f665e1062b4a360083d2ee0a407d5def33b008",
+  "new_freeze": "A3-0029",
+  "new_run_id": "E1-20261008-port-recovery",
+  "old_acks_refused_new_plan": true,
+  "pending_acks": [
+    "agent-1",
+    "agent-2"
+  ],
+  "same_owner_files": 211,
+  "same_runtime_config_count": 47,
+  "runtime_delta": [
+    "evaluation/e1.py"
+  ],
+  "test_delta": [
+    "evaluation/tests/test_e1_ports.py"
+  ],
+  "three_real_controls": "paper-strict only; wrong-admin16 baseline, Alice allow, Bob policy9 deny",
+  "remaining_profiles": "paper-minimal blocked before services; repaired-e not run",
+  "source_stability": {
+    "real_run": true,
+    "evaluator_suite": true
+  },
+  "full_suite": "414 passed, exit0,55.94s pytest/56.12543405799806s subprocess",
+  "red_green": "1 failed/2 passed before fix;18 passed afterward including freeze guards",
+  "cleanup": "PBC340838/DBC340960/adapter345111 exit0; /proc identities absent; only owned processes stopped",
+  "rq_gates": "NOT_RUN; E2/E3/F/G remain gated",
+  "author_review": "Self-review only under no-extra-agents instruction; weaker than independent review. Minimal bind change, real TIME_WAIT and loopback/wildcard listener controls; no oracle/module/wire/dependency/key-custody change; existing port-check/startup race remains; no source/phase promotion.",
+  "rulings": [
+    "Keep failed A3-0027 run as partial evidence, release its logical freeze; no nine-control success.",
+    "Require exact new A3-0029 ACKs after the single runtime hash change; no re-use of old ACKs.",
+    "Run in confirmed checkout; no worktree or extra reviewer agent."
+  ],
+  "helper_failures": [
+    {
+      "exit": 1,
+      "reason": "Package helper requested result-audit.py instead of saved result_audit.py; resumed the own unpublished partial package with corrected filename; runtime unchanged."
+    },
+    {
+      "exit": 1,
+      "reason": "Exploratory nonexistent evaluation/freeze.py and test_e1_environment.py reads; corrected paths e1.py/test_e1_freeze.py."
+    },
+    {
+      "exit": 1,
+      "reason": "Initial frozen-copy audit assumed peer source manifest exists in Agent3 checkout; corrected to exact recorded owner Git blob. No gate/evidence verdict from failed helper."
+    },
+    {
+      "exit": 2,
+      "reason": "Staged diff whitespace check rejected raw pytest RED log before commit/push; explicit normalized display artifact with both hashes replaced only unpublished own copy; raw preserved externally."
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+....................F................................................... [100%]
+=================================== FAILURES ===================================
+_______ test_response_must_match_redacted_cache_commitments[keyEpoch-1] ________
+
+key = 'keyEpoch', value = '1'
+
+    @pytest.mark.parametrize('key,value',[('requestDigest','0x'+'77'*32),('dataId','0x'+'77'*32),
+                                         ('recipientKeyHash','0x'+'77'*32),('ciphertextDigest','0x'+'77'*32),
+                                         ('keyEpoch','1'),('token','0x'+'77'*32)])
+    def test_response_must_match_redacted_cache_commitments(key,value):
+        r=response()
+        if key=='token':r['responseEnvelope']['token']=value
+        else:r[key]=value
+>       with pytest.raises(ValueError):log().check_response(r)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_worker_evidence.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/worker_evidence.py:107: in check_response
+    validate('ReleaseResult', response)
+evaluation/schema.py:103: in validate
+    Draft202012Validator(schema,format_checker=FORMATS).validate(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Draft202012Validator(schema={'$defs': {'AccessDecision': {'additionalProperties': False, 'properties': {'credentialDig... 'evidence-path', 'idn-email', 'ipv4', 'ipv6', 'regex', 'time', 'uint256', 'uint64', 'uint8', 'user-key-ref', 'uuid']>)
+args = ({'adapterMode': 'symbolic', 'ciphertextDigest': '0x5555555555555555555555555555555555555555555555555555555555555555',...44444444444444444444444444444', 'grantId': '0x2222222222222222222222222222222222222222222222222222222222222222', ...},)
+kwargs = {}, error = <ValidationError: "'0' was expected">
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: '0' was expected
+E           
+E           Failed validating 'const' in schema['properties']['keyEpoch']:
+E               {'const': '0'}
+E           
+E           On instance['keyEpoch']:
+E               '1'
+
+.venv/lib64/python3.13/site-packages/jsonschema/validators.py:450: ValidationError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_worker_evidence.py::test_response_must_match_redacted_cache_commitments[keyEpoch-1]
+1 failed, 71 passed in 1.46s

@@ -1,0 +1,123 @@
+{
+  "capturedAt": "2026-10-08T08:50:03.376303+00:00",
+  "scope": "E0 Agent1 exact ACK receipt/static integrity; no implementation change or integrated evidence",
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "fetch",
+        "origin"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-10-08T08:49:58.098554+00:00",
+      "endedAt": "2026-10-08T08:50:01.722005+00:00",
+      "exitCode": 0,
+      "timedOut": false,
+      "elapsedSeconds": 3.623463412000092,
+      "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "name": "fetch",
+      "output": "fetch.txt"
+    },
+    {
+      "argv": [
+        "/home/karma/Documents/RIS/.venv/bin/python",
+        "-m",
+        "evaluation.peers",
+        "--output",
+        "/home/karma/Documents/RIS/evaluation/evidence/e0/revision-5-a1-ack-20261008/peer-communication.json"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-10-08T08:50:01.722222+00:00",
+      "endedAt": "2026-10-08T08:50:02.638223+00:00",
+      "exitCode": 0,
+      "timedOut": false,
+      "elapsedSeconds": 0.9160213639997892,
+      "outputSha256": "e1f20c446d4dd37396426b4fdb1795e982198b6c682c41b427eafdd176063ec4",
+      "name": "peer-scan",
+      "output": "peer-scan.txt"
+    },
+    {
+      "argv": [
+        "/home/karma/Documents/RIS/.venv/bin/python",
+        "-c",
+        "import hashlib,json,subprocess\nfrom pathlib import Path\nh=lambda b:hashlib.sha256(b).hexdigest()\ndef git(*a): return subprocess.check_output(['git',*a])\npackage=Path('interfaces/proposals/v1/review-manifest.json'); expected='124b95eb2830e422e79d0cee4b4b7ae28bf235239740980b984d7f9de2f9d8d0'\nassert h(package.read_bytes())==expected\nfiles=json.loads(package.read_text())['files']\nassert len(files)==32\nactual={p:h(Path(p).read_bytes()) for p in files}\nassert actual==files\nreviewed='3e0300a341aa577db8659d5e2e2d4792259dda4a'\nassert all(h(git('show',reviewed+':'+p))==v for p,v in files.items())\npin='e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e'\ntip=git('rev-parse','origin/agent-1').decode().strip()\nmanifest=git('show',pin+':ledger/evidence/source-manifest.sha256')\nassert h(manifest)=='5866921aa8ba4716a24afb4144123295f0e5f809296ed488a06bc84f07c277a9'\nentries={}\nfor line in manifest.decode().splitlines():\n    digest,p=line.split('  ',1);entries[p]=digest\nassert len(entries)==100\nassert all(h(git('show',pin+':'+p))==v and h(git('show',tip+':'+p))==v for p,v in entries.items())\nassert not git('diff','--name-only',pin,tip,'--','ledger/').strip()\nackpath='communication/agent-1/outbox/0018-ack-candidate-revision-5.md'\nack=git('show',tip+':'+ackpath)\nassert expected.encode() in ack and reviewed.encode() in ack and b'This is not a whole-manifest ACK.' in ack\nchange=git('log','-1','--format=%H %aI',tip,'--',ackpath).decode().strip()\nsource=git('show',pin+':ledger/src/ACSC.sol').decode(); lines=source.splitlines()\nnative='_accessLog(requestDigest, r.gid, r.dataId, false, ErrorCode.POLICY_DENIED, c.decision.credentialDigest, 0);'\nline=next(i for i,l in enumerate(lines,1) if native in l)\nassert lines[line].strip()=='return 0;'\nscan=json.loads(Path('/home/karma/Documents/RIS/evaluation/evidence/e0/revision-5-a1-ack-20261008/peer-communication.json').read_text())\nassert not scan['missingBranches']\nassert not [p for p,r in scan['files'].items() if r['ambiguous'] or r['divergentRevisions']]\ntools=json.loads(Path('evaluation/toolchain.json').read_text())\nassert h(Path(tools['pythonLock']['path']).read_bytes())==tools['pythonLock']['sha256']\nbinaries=list(tools['foundry']['binaryPaths'].values())+[tools['solc'], {'path':tools['proverif']['path'],'sha256':tools['proverif']['binarySha256']}]\nassert all(h(Path(t['path']).read_bytes())==t['sha256'] for t in binaries)\nprint(json.dumps({'reviewManifestSha256':expected,'packageFiles':len(files),'packageHashesMatch':True,'packageEqualsAcceptedCommit':reviewed,'ack':{'message':'A1-0018','tip':tip,'path':ackpath,'changeCommitAndAuthorTime':change,'sha256':h(ack),'scope':'Agent1 affected acceptance rows only; explicit exclusions retained'},'ledgerReady':{'message':'A1-0014','commit':pin,'manifestSha256':h(manifest),'entries':len(entries),'allMatchAtPinAndTip':True,'ledgerChangedSincePin':False},'bobDenialSource':{'path':'ledger/src/ACSC.sol','commit':pin,'sha256':h(source.encode()),'firstLine':line-1,'lastLine':line+2,'excerpt':lines[line-2:line+2],'method':'static source review only; no runtime execution'},'remoteBranches':scan['branches'],'communicationFiles':len(scan['files']),'divergentRevisions':[],'pinnedToolAndLockHashesMatch':True,'packageFileHashes':actual,'gateState':'E0 incomplete; Agent2 exact revision5 response pending; E1/F/G locked'},indent=2))\n"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-10-08T08:50:02.638438+00:00",
+      "endedAt": "2026-10-08T08:50:03.303692+00:00",
+      "exitCode": 0,
+      "timedOut": false,
+      "elapsedSeconds": 0.6652606379993813,
+      "outputSha256": "d3c2afcf1a14887620f3b8ee37ecdd07f6f6f2f36c94b77d7ceadc3507b11268",
+      "name": "ack-integrity",
+      "output": "ack-integrity.txt"
+    },
+    {
+      "argv": [
+        "/home/karma/Documents/RIS/.venv/bin/python",
+        "--version"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-10-08T08:50:03.304090+00:00",
+      "endedAt": "2026-10-08T08:50:03.307767+00:00",
+      "exitCode": 0,
+      "timedOut": false,
+      "elapsedSeconds": 0.0036805060008191504,
+      "outputSha256": "6b64edf0fc8f22e798fb64873acba6b4106df290f0bf458b507e8cb409b63e49",
+      "name": "python-version",
+      "output": "python-version.txt"
+    },
+    {
+      "argv": [
+        "git",
+        "--version"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-10-08T08:50:03.307840+00:00",
+      "endedAt": "2026-10-08T08:50:03.311655+00:00",
+      "exitCode": 0,
+      "timedOut": false,
+      "elapsedSeconds": 0.003824728999461513,
+      "outputSha256": "fff575d3fa43a92d932e4eb8bc03394140ce40699f9c8a97c3126016a244dfb8",
+      "name": "git-version",
+      "output": "git-version.txt"
+    },
+    {
+      "argv": [
+        "/home/karma/Documents/RIS/.venv/bin/python",
+        "communication/build_prompts.py",
+        "--check"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-10-08T08:50:03.311755+00:00",
+      "endedAt": "2026-10-08T08:50:03.376148+00:00",
+      "exitCode": 0,
+      "timedOut": false,
+      "elapsedSeconds": 0.06441168399942399,
+      "outputSha256": "8f29a69f6b3463b624687ea89c034e86c0217602a093168e78b810d5ef4ac781",
+      "name": "launch-prompts",
+      "output": "launch-prompts.txt"
+    }
+  ],
+  "tools": {
+    "python": "Python 3.13.13",
+    "git": "git version 2.54.0",
+    "toolchainSha256": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746"
+  },
+  "fixtures": "unchanged revision5 synthetic fixtures, 48 cases remain NOT_RUN",
+  "limitations": [
+    "Agent1 test counts are owner claims, not rerun this run. Prior Agent3 tests remain historical evidence.",
+    "No protocol prototype execution, service processes, real integration, model correspondence or ABE result.",
+    "Agent2 revision5 acceptance/current executable READY still pending."
+  ],
+  "resultHashes": {
+    "fetch.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "peer-scan.txt": "e1f20c446d4dd37396426b4fdb1795e982198b6c682c41b427eafdd176063ec4",
+    "peer-communication.json": "f926df38b7a1cc9145fb10c1401bf860534587a00613ae9bc67ecfe4d77543fd",
+    "ack-integrity.txt": "d3c2afcf1a14887620f3b8ee37ecdd07f6f6f2f36c94b77d7ceadc3507b11268",
+    "ack-review.json": "d3c2afcf1a14887620f3b8ee37ecdd07f6f6f2f36c94b77d7ceadc3507b11268",
+    "python-version.txt": "6b64edf0fc8f22e798fb64873acba6b4106df290f0bf458b507e8cb409b63e49",
+    "git-version.txt": "fff575d3fa43a92d932e4eb8bc03394140ce40699f9c8a97c3126016a244dfb8",
+    "launch-prompts.txt": "8f29a69f6b3463b624687ea89c034e86c0217602a093168e78b810d5ef4ac781"
+  }
+}

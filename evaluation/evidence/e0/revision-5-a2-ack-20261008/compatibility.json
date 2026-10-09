@@ -1,0 +1,134 @@
+{
+  "endedAt": "2026-10-08T10:22:54.324840+00:00",
+  "peerPin": "5e203d0c0b26235c4618548a797d93201275a14d",
+  "peerManifestSha256": "a352f339f3c874cbb5634efffd1478abbc0b098292ec1d7ba97d348d76b4cdac",
+  "snapshot": "/tmp/hmbc-agent3-a2-e0-5e203d0-qlvchwhn",
+  "snapshotEntries": 89,
+  "sourceStable": true,
+  "packageStable": true,
+  "rootLockSha256": "1fb4777a5d4078434af8e7fe4a88f2f3afbe1d8f65d30e8a182999d7a7a29cbe",
+  "pythonVersion": "Python 3.13.13",
+  "selectedTests": [
+    "test_boundary_review_r5.py",
+    "test_candidate_schema_review.py",
+    "test_exports.py",
+    "test_eip712_vs_agent1.py"
+  ],
+  "examples": [
+    {
+      "operation": "attest_grant",
+      "case": "well-formed request, no ledger running",
+      "requestValid": true,
+      "responseValid": true,
+      "ownerResponseCode": "ADAPTER_UNAVAILABLE"
+    },
+    {
+      "operation": "attest_grant",
+      "case": "refused: empty input is MALFORMED",
+      "requestValid": false,
+      "responseValid": true,
+      "ownerResponseCode": "MALFORMED"
+    },
+    {
+      "operation": "collect_checkpoint",
+      "case": "well-formed request, no ledger running",
+      "requestValid": true,
+      "responseValid": true,
+      "ownerResponseCode": "ADAPTER_UNAVAILABLE"
+    },
+    {
+      "operation": "collect_checkpoint",
+      "case": "well-formed with the optional version",
+      "requestValid": true,
+      "responseValid": true,
+      "ownerResponseCode": "ADAPTER_UNAVAILABLE"
+    },
+    {
+      "operation": "collect_checkpoint",
+      "case": "refused: a relay-supplied sequence is never accepted",
+      "requestValid": false,
+      "responseValid": true,
+      "ownerResponseCode": "MALFORMED"
+    },
+    {
+      "operation": "collect_decision",
+      "case": "well-formed request, no ledger running",
+      "requestValid": true,
+      "responseValid": true,
+      "ownerResponseCode": "ADAPTER_UNAVAILABLE"
+    },
+    {
+      "operation": "collect_decision",
+      "case": "refused: empty input is MALFORMED, not unavailable",
+      "requestValid": false,
+      "responseValid": true,
+      "ownerResponseCode": "MALFORMED"
+    },
+    {
+      "operation": "encrypt_record",
+      "case": "well-formed request, no ledger running",
+      "requestValid": true,
+      "responseValid": true,
+      "ownerResponseCode": "ADAPTER_UNAVAILABLE"
+    },
+    {
+      "operation": "encrypt_record",
+      "case": "refused: SAME_AS_FIRST as a clause's first requirement",
+      "requestValid": false,
+      "responseValid": true,
+      "ownerResponseCode": "MALFORMED"
+    },
+    {
+      "operation": "finish_decryption",
+      "case": "well-formed request, no ledger running",
+      "requestValid": true,
+      "responseValid": true,
+      "ownerResponseCode": "ADAPTER_UNAVAILABLE"
+    },
+    {
+      "operation": "prepare_request",
+      "case": "success",
+      "requestValid": true,
+      "responseValid": true,
+      "ownerResponseCode": null
+    },
+    {
+      "operation": "prepare_request",
+      "case": "refused: gid is not the referenced key's address",
+      "requestValid": true,
+      "responseValid": true,
+      "ownerResponseCode": "WRONG_SUBJECT"
+    },
+    {
+      "operation": "prepare_request",
+      "case": "refused: wrong destination KSSC",
+      "requestValid": true,
+      "responseValid": true,
+      "ownerResponseCode": "WRONG_DESTINATION"
+    },
+    {
+      "operation": "prepare_request",
+      "case": "refused: JSON number instead of decimal string",
+      "requestValid": false,
+      "responseValid": true,
+      "ownerResponseCode": "MALFORMED"
+    },
+    {
+      "operation": "release",
+      "case": "well-formed request, no ledger running",
+      "requestValid": true,
+      "responseValid": true,
+      "ownerResponseCode": "ADAPTER_UNAVAILABLE"
+    },
+    {
+      "operation": "rotate_epoch",
+      "case": "G-phase op, well-formed request",
+      "requestValid": true,
+      "responseValid": true,
+      "ownerResponseCode": "NOT_IMPLEMENTED_IN_PHASE"
+    }
+  ],
+  "independentPrepareRequestDigestAndRecovery": true,
+  "scope": "E0 non-live wire/vector/export compatibility only; owner candidate services NOT executed. No peer-internal imports by production evaluator; snapshot test imports are isolated verification only.",
+  "limits": "No live chains, worker recovery, paper-profile or repaired service scenarios, mutation runner, formal proof or gate result. Owner A2-0009 execution claims remain owner evidence."
+}

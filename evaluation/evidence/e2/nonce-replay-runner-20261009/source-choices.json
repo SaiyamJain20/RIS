@@ -1,0 +1,37 @@
+{
+  "sourceRefs": {
+    "ledger/src/ACSC.sol": {
+      "commit": "933d2a75483a08e7374cd417a6cf8a9e5c13a33c",
+      "sha256": "b0ac86e7cf40d09ca2d4b984ee8e8314992cbdd98488b599289fdddc2ac7dc70"
+    },
+    "ledger/src/KSSC.sol": {
+      "commit": "933d2a75483a08e7374cd417a6cf8a9e5c13a33c",
+      "sha256": "4b8f195f279f0dcd72c434c36b04c6caf65659e63c13ea95170a9a3b4af38321"
+    },
+    "ledger/src/DecisionVerifier.sol": {
+      "commit": "933d2a75483a08e7374cd417a6cf8a9e5c13a33c",
+      "sha256": "b5c92a6bf2fbe8a504adfbf05a07675af1569d45ecdd7cc869f9d825e19ff114"
+    },
+    "interfaces/v1/scenarios/e0_cases.json": {
+      "sha256": "438fa38ddcbd7edd0e49fb93cc580e5219ed05349fd677b2e386bc4669f5d50e"
+    },
+    "interfaces/v1/source-map.csv": {
+      "sha256": "25337ee2846b13791bf971281d885f6300a6ce1407f156ddeb4e5cb85f54a07c"
+    },
+    "interfaces/v1/assumptions.csv": {
+      "sha256": "98047dda31877f286175cfcbe66fa0ada10bef452cfd6c15f42f0dac430ad39b"
+    }
+  },
+  "scope": "E01-nonce-replay strict/minimal/repaired; accepted reference unchanged",
+  "assumptions": "existing frozen choices only; safe-ledger/trusted-worker/synthetic/symbolic",
+  "expectations": "one original allowed grant; mined Rejected8/status0/no logs; no changes to nonce/grant/request/access count/worker or contract histories",
+  "sourceFiles": {
+    "evaluation/access_execution.py": "04a58fd27a49761dce369955f1e83ef5b4d150d816b04563ec1b8cdb46aef424",
+    "evaluation/e1.py": "95d820a25f55b7772d269bed8d3b657b8c9b2dcd25f42ec951411a18e387769e",
+    "evaluation/e2.py": "9e248e92a1122620849634f454cb695a51babc678fa2ee9c5f63bc6af5152734",
+    "evaluation/oracles/replay.py": "14a5da8b1c0f7eb23833cccafa11f0eb09f0cbb564b3959eaf25864fb9ce780c",
+    "evaluation/request_replay.py": "fe051b198f0fd827509397837a75baade36b1cad9f4ddaf9f6a6704b4358c235",
+    "evaluation/tests/test_request_replay.py": "523837def6d0486b9aa6e018336bcfc19f6484cbf639a9248be667dce1e40cf2",
+    "evaluation/tests/test_e2_freeze.py": "7a77705cad5cc75b7f7a2b4e2e9cd4825eb3e13c69d797ea65e786895bdd0e56"
+  }
+}

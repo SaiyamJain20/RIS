@@ -1,0 +1,29 @@
+{
+  "failures": [
+    {
+      "command": "frozenCopies[:2] exploratory print",
+      "exit_code": 1,
+      "reason": "dict mistakenly treated as list; KeyError slice"
+    },
+    {
+      "command": "iterate frozenCopies and item.keys() exploratory print",
+      "exit_code": 1,
+      "reason": "dict keys mistakenly treated as record objects; AttributeError"
+    },
+    {
+      "command": [
+        "python3",
+        "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T231330Z/frozen_verify.py"
+      ],
+      "exit_code": 1,
+      "reason": "attempted owner source-manifest lookup in agent3 commit instead of frozen owner commit; git show128; failed stdout/stderr preserved",
+      "timestamp": "not retained; initial command metadata filename was reused by corrected result"
+    },
+    {
+      "operation": "frozen-copy helper result/command JSON filename collision",
+      "reason": "corrected helper result overwrote initial failed command metadata; stdout/stderr preserved; corrected successful command record has distinct filename",
+      "correction": "frozen-copy-result.json contains corrected data; frozen-verification-corrected.json contains successful argv/exits/timing"
+    }
+  ],
+  "classification": "Helper inspection mistakes only, not research verdicts. No source/evidence modified by failures. Corrected dict.items() inspection."
+}

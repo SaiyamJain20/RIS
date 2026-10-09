@@ -1,0 +1,58 @@
+(* C-E2 repaired-e signature abstraction; see README for exact omissions.
+   Non-injective agreement: this model intentionally does not prevent replay. *)
+type skey.
+type pkey.
+free net: channel.
+free gid, allowedData, deniedData, sourcePSC, destinationKSSC, otherDestination,
+     readAction, policyVersion: bitstring.
+free userKey, witnessKey: skey [private].
+fun pk(skey): pkey.
+fun sign(bitstring, skey): bitstring.
+reduc forall m:bitstring, k:skey; verify(sign(m,k),pk(k)) = m.
+reduc forall m:bitstring, k:skey; message(sign(m,k)) = m.
+fun request(bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring): bitstring [data].
+fun certificate(bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring): bitstring [data].
+
+event UserRequest(bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring).
+event WitnessDecision(bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring).
+event Grant(bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring,bitstring).
+event AllowedGrant.
+event DeniedGrant.
+
+query r:bitstring, g:bitstring, d:bitstring, s:bitstring, t:bitstring,
+      a:bitstring, p:bitstring, n:bitstring;
+      event(Grant(r,g,d,s,t,a,p,n)) ==> event(UserRequest(r,g,d,s,t,a,p,n)).
+query r:bitstring, g:bitstring, d:bitstring, s:bitstring, t:bitstring,
+      a:bitstring, p:bitstring, n:bitstring;
+      event(Grant(r,g,d,s,t,a,p,n)) ==> event(WitnessDecision(r,g,d,s,t,a,p,n)).
+query r:bitstring, g:bitstring, d:bitstring, s:bitstring, t:bitstring,
+      a:bitstring, p:bitstring, n:bitstring, approvedDestination:bitstring;
+      event(Grant(r,g,d,s,t,a,p,n)) ==> event(WitnessDecision(r,g,d,s,approvedDestination,a,p,n)).
+query event(AllowedGrant).
+query event(DeniedGrant).
+
+let user(d:bitstring) =
+  new r:bitstring;
+  new n:bitstring;
+  event UserRequest(r,gid,d,sourcePSC,destinationKSSC,readAction,policyVersion,n);
+  out(net,sign(request(r,gid,d,sourcePSC,destinationKSSC,readAction,policyVersion,n),userKey)).
+
+let witness =
+  in(net,sig:bitstring);
+  let request(r:bitstring,g:bitstring,d:bitstring,s:bitstring,t:bitstring,a:bitstring,p:bitstring,n:bitstring) = verify(sig,pk(userKey)) in
+  if d = allowedData then
+  event WitnessDecision(r,g,d,s,t,a,p,n);
+  out(net,(t,sign(certificate(r,g,d,s,a,p,n),witnessKey))).
+
+let destination =
+  in(net,(claimedDestination:bitstring,sig:bitstring));
+  let certificate(r:bitstring,g:bitstring,d:bitstring,s:bitstring,a:bitstring,p:bitstring,n:bitstring) = verify(sig,pk(witnessKey)) in
+  (* DELIBERATE MUTATION: destination is absent from the signed certificate. *)
+
+  event Grant(r,g,d,s,claimedDestination,a,p,n);
+  (if d = allowedData then event AllowedGrant) |
+  (if d = deniedData then event DeniedGrant).
+
+process
+  out(net,(pk(userKey),pk(witnessKey)));
+  ((!user(allowedData)) | (!user(deniedData)) | (!witness) | (!destination))

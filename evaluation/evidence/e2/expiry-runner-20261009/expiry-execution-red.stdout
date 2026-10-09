@@ -1,0 +1,346 @@
+..............FFFFFF                                                     [100%]
+=================================== FAILURES ===================================
+_ test_public_expiry_probe_after_real_collector_recovery[after_intent-paper-strict] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-72/test_public_expiry_probe_after0')
+profile = 'paper-strict', point = 'after_intent'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('point', ['after_intent', 'after_send'])
+    def test_public_expiry_probe_after_real_collector_recovery(artifacts, inputs, tmp_path, profile, point):
+        m = RecoveryModel(artifacts, inputs, profile)
+        from evaluation.recovery_execution import RecoveryAdapter
+        from evaluation.access_execution import execute_access
+        session = RecoveryAdapter(m, restart=m.restart, point=point, pbc=m.pbc, dbc=m.dbc,
+                                  deployment=m.dep, worker_snapshot=m.snapshot, output=tmp_path/'recovery')
+        result = execute_access(m.pbc, m.dbc, session, deployment_bytes=json.dumps(m.dep).encode(),
+                                user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy,
+                                expected_allow=True, worker_snapshot=m.snapshot, output=tmp_path/'access', recovery_point=point)
+        gid = next(e['grantId'] for e in result['observed']['events'] if e['type'] == 'DBC_AUTHORIZED')
+        old_exchange = m.exchange
+        clock = int(m.grant['expiresAt'])-1
+        expired = False
+    
+        class ClockRpc:
+            def call(self, method, args=None):
+                nonlocal clock, expired
+                if method == 'evm_setNextBlockTimestamp':
+                    assert args == [int(m.grant['expiresAt'])]
+                    clock = args[0]; return None
+                if method == 'evm_mine':
+                    expired = True; return '0x0'
+                if method == 'eth_getBlockByNumber': return dict(timestamp=hex(clock))
+                if method == 'eth_getLogs':
+                    assert args[0]['fromBlock'] == '0x0' and args[0]['toBlock'] == 'latest'
+                    assert len(args[0]['address']) > 0
+                    return []
+                raise AssertionError(method)
+    
+        def exchange(request):
+            if expired and request['operation'] == 'release':
+                assert request == dict(schemaVersion='v1', operation='release', input=dict(grantId=gid), deploymentManifest=m.dep)
+                return dict(schemaVersion='v1', ok=False, result=None, error=dict(code='EXPIRED', message='Expired grant'))
+            return old_exchange(request)
+    
+        m.exchange = exchange
+        m.dbc.rpc = ClockRpc(); m.pbc.rpc = ClockRpc()
+        old_latest = m.dbc.latest_block
+        m.dbc.latest_block = lambda: dict(old_latest(), timestamp=hex(clock))
+        before = m.snapshot()
+        mod = importlib.import_module('evaluation.expired_retry')
+>       assert hasattr(mod, 'execute_expired_retry'), 'Public expiry-probe execution missing'
+E       AssertionError: Public expiry-probe execution missing
+E       assert False
+E        +  where False = hasattr(<module 'evaluation.expired_retry' from '/home/karma/Documents/RIS/evaluation/expired_retry.py'>, 'execute_expired_retry')
+
+evaluation/tests/test_expired_retry.py:108: AssertionError
+_ test_public_expiry_probe_after_real_collector_recovery[after_intent-paper-minimal] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-72/test_public_expiry_probe_after1')
+profile = 'paper-minimal', point = 'after_intent'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('point', ['after_intent', 'after_send'])
+    def test_public_expiry_probe_after_real_collector_recovery(artifacts, inputs, tmp_path, profile, point):
+        m = RecoveryModel(artifacts, inputs, profile)
+        from evaluation.recovery_execution import RecoveryAdapter
+        from evaluation.access_execution import execute_access
+        session = RecoveryAdapter(m, restart=m.restart, point=point, pbc=m.pbc, dbc=m.dbc,
+                                  deployment=m.dep, worker_snapshot=m.snapshot, output=tmp_path/'recovery')
+        result = execute_access(m.pbc, m.dbc, session, deployment_bytes=json.dumps(m.dep).encode(),
+                                user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy,
+                                expected_allow=True, worker_snapshot=m.snapshot, output=tmp_path/'access', recovery_point=point)
+        gid = next(e['grantId'] for e in result['observed']['events'] if e['type'] == 'DBC_AUTHORIZED')
+        old_exchange = m.exchange
+        clock = int(m.grant['expiresAt'])-1
+        expired = False
+    
+        class ClockRpc:
+            def call(self, method, args=None):
+                nonlocal clock, expired
+                if method == 'evm_setNextBlockTimestamp':
+                    assert args == [int(m.grant['expiresAt'])]
+                    clock = args[0]; return None
+                if method == 'evm_mine':
+                    expired = True; return '0x0'
+                if method == 'eth_getBlockByNumber': return dict(timestamp=hex(clock))
+                if method == 'eth_getLogs':
+                    assert args[0]['fromBlock'] == '0x0' and args[0]['toBlock'] == 'latest'
+                    assert len(args[0]['address']) > 0
+                    return []
+                raise AssertionError(method)
+    
+        def exchange(request):
+            if expired and request['operation'] == 'release':
+                assert request == dict(schemaVersion='v1', operation='release', input=dict(grantId=gid), deploymentManifest=m.dep)
+                return dict(schemaVersion='v1', ok=False, result=None, error=dict(code='EXPIRED', message='Expired grant'))
+            return old_exchange(request)
+    
+        m.exchange = exchange
+        m.dbc.rpc = ClockRpc(); m.pbc.rpc = ClockRpc()
+        old_latest = m.dbc.latest_block
+        m.dbc.latest_block = lambda: dict(old_latest(), timestamp=hex(clock))
+        before = m.snapshot()
+        mod = importlib.import_module('evaluation.expired_retry')
+>       assert hasattr(mod, 'execute_expired_retry'), 'Public expiry-probe execution missing'
+E       AssertionError: Public expiry-probe execution missing
+E       assert False
+E        +  where False = hasattr(<module 'evaluation.expired_retry' from '/home/karma/Documents/RIS/evaluation/expired_retry.py'>, 'execute_expired_retry')
+
+evaluation/tests/test_expired_retry.py:108: AssertionError
+_ test_public_expiry_probe_after_real_collector_recovery[after_intent-repaired-e] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-72/test_public_expiry_probe_after2')
+profile = 'repaired-e', point = 'after_intent'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('point', ['after_intent', 'after_send'])
+    def test_public_expiry_probe_after_real_collector_recovery(artifacts, inputs, tmp_path, profile, point):
+        m = RecoveryModel(artifacts, inputs, profile)
+        from evaluation.recovery_execution import RecoveryAdapter
+        from evaluation.access_execution import execute_access
+        session = RecoveryAdapter(m, restart=m.restart, point=point, pbc=m.pbc, dbc=m.dbc,
+                                  deployment=m.dep, worker_snapshot=m.snapshot, output=tmp_path/'recovery')
+        result = execute_access(m.pbc, m.dbc, session, deployment_bytes=json.dumps(m.dep).encode(),
+                                user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy,
+                                expected_allow=True, worker_snapshot=m.snapshot, output=tmp_path/'access', recovery_point=point)
+        gid = next(e['grantId'] for e in result['observed']['events'] if e['type'] == 'DBC_AUTHORIZED')
+        old_exchange = m.exchange
+        clock = int(m.grant['expiresAt'])-1
+        expired = False
+    
+        class ClockRpc:
+            def call(self, method, args=None):
+                nonlocal clock, expired
+                if method == 'evm_setNextBlockTimestamp':
+                    assert args == [int(m.grant['expiresAt'])]
+                    clock = args[0]; return None
+                if method == 'evm_mine':
+                    expired = True; return '0x0'
+                if method == 'eth_getBlockByNumber': return dict(timestamp=hex(clock))
+                if method == 'eth_getLogs':
+                    assert args[0]['fromBlock'] == '0x0' and args[0]['toBlock'] == 'latest'
+                    assert len(args[0]['address']) > 0
+                    return []
+                raise AssertionError(method)
+    
+        def exchange(request):
+            if expired and request['operation'] == 'release':
+                assert request == dict(schemaVersion='v1', operation='release', input=dict(grantId=gid), deploymentManifest=m.dep)
+                return dict(schemaVersion='v1', ok=False, result=None, error=dict(code='EXPIRED', message='Expired grant'))
+            return old_exchange(request)
+    
+        m.exchange = exchange
+        m.dbc.rpc = ClockRpc(); m.pbc.rpc = ClockRpc()
+        old_latest = m.dbc.latest_block
+        m.dbc.latest_block = lambda: dict(old_latest(), timestamp=hex(clock))
+        before = m.snapshot()
+        mod = importlib.import_module('evaluation.expired_retry')
+>       assert hasattr(mod, 'execute_expired_retry'), 'Public expiry-probe execution missing'
+E       AssertionError: Public expiry-probe execution missing
+E       assert False
+E        +  where False = hasattr(<module 'evaluation.expired_retry' from '/home/karma/Documents/RIS/evaluation/expired_retry.py'>, 'execute_expired_retry')
+
+evaluation/tests/test_expired_retry.py:108: AssertionError
+_ test_public_expiry_probe_after_real_collector_recovery[after_send-paper-strict] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-72/test_public_expiry_probe_after3')
+profile = 'paper-strict', point = 'after_send'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('point', ['after_intent', 'after_send'])
+    def test_public_expiry_probe_after_real_collector_recovery(artifacts, inputs, tmp_path, profile, point):
+        m = RecoveryModel(artifacts, inputs, profile)
+        from evaluation.recovery_execution import RecoveryAdapter
+        from evaluation.access_execution import execute_access
+        session = RecoveryAdapter(m, restart=m.restart, point=point, pbc=m.pbc, dbc=m.dbc,
+                                  deployment=m.dep, worker_snapshot=m.snapshot, output=tmp_path/'recovery')
+        result = execute_access(m.pbc, m.dbc, session, deployment_bytes=json.dumps(m.dep).encode(),
+                                user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy,
+                                expected_allow=True, worker_snapshot=m.snapshot, output=tmp_path/'access', recovery_point=point)
+        gid = next(e['grantId'] for e in result['observed']['events'] if e['type'] == 'DBC_AUTHORIZED')
+        old_exchange = m.exchange
+        clock = int(m.grant['expiresAt'])-1
+        expired = False
+    
+        class ClockRpc:
+            def call(self, method, args=None):
+                nonlocal clock, expired
+                if method == 'evm_setNextBlockTimestamp':
+                    assert args == [int(m.grant['expiresAt'])]
+                    clock = args[0]; return None
+                if method == 'evm_mine':
+                    expired = True; return '0x0'
+                if method == 'eth_getBlockByNumber': return dict(timestamp=hex(clock))
+                if method == 'eth_getLogs':
+                    assert args[0]['fromBlock'] == '0x0' and args[0]['toBlock'] == 'latest'
+                    assert len(args[0]['address']) > 0
+                    return []
+                raise AssertionError(method)
+    
+        def exchange(request):
+            if expired and request['operation'] == 'release':
+                assert request == dict(schemaVersion='v1', operation='release', input=dict(grantId=gid), deploymentManifest=m.dep)
+                return dict(schemaVersion='v1', ok=False, result=None, error=dict(code='EXPIRED', message='Expired grant'))
+            return old_exchange(request)
+    
+        m.exchange = exchange
+        m.dbc.rpc = ClockRpc(); m.pbc.rpc = ClockRpc()
+        old_latest = m.dbc.latest_block
+        m.dbc.latest_block = lambda: dict(old_latest(), timestamp=hex(clock))
+        before = m.snapshot()
+        mod = importlib.import_module('evaluation.expired_retry')
+>       assert hasattr(mod, 'execute_expired_retry'), 'Public expiry-probe execution missing'
+E       AssertionError: Public expiry-probe execution missing
+E       assert False
+E        +  where False = hasattr(<module 'evaluation.expired_retry' from '/home/karma/Documents/RIS/evaluation/expired_retry.py'>, 'execute_expired_retry')
+
+evaluation/tests/test_expired_retry.py:108: AssertionError
+_ test_public_expiry_probe_after_real_collector_recovery[after_send-paper-minimal] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-72/test_public_expiry_probe_after4')
+profile = 'paper-minimal', point = 'after_send'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('point', ['after_intent', 'after_send'])
+    def test_public_expiry_probe_after_real_collector_recovery(artifacts, inputs, tmp_path, profile, point):
+        m = RecoveryModel(artifacts, inputs, profile)
+        from evaluation.recovery_execution import RecoveryAdapter
+        from evaluation.access_execution import execute_access
+        session = RecoveryAdapter(m, restart=m.restart, point=point, pbc=m.pbc, dbc=m.dbc,
+                                  deployment=m.dep, worker_snapshot=m.snapshot, output=tmp_path/'recovery')
+        result = execute_access(m.pbc, m.dbc, session, deployment_bytes=json.dumps(m.dep).encode(),
+                                user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy,
+                                expected_allow=True, worker_snapshot=m.snapshot, output=tmp_path/'access', recovery_point=point)
+        gid = next(e['grantId'] for e in result['observed']['events'] if e['type'] == 'DBC_AUTHORIZED')
+        old_exchange = m.exchange
+        clock = int(m.grant['expiresAt'])-1
+        expired = False
+    
+        class ClockRpc:
+            def call(self, method, args=None):
+                nonlocal clock, expired
+                if method == 'evm_setNextBlockTimestamp':
+                    assert args == [int(m.grant['expiresAt'])]
+                    clock = args[0]; return None
+                if method == 'evm_mine':
+                    expired = True; return '0x0'
+                if method == 'eth_getBlockByNumber': return dict(timestamp=hex(clock))
+                if method == 'eth_getLogs':
+                    assert args[0]['fromBlock'] == '0x0' and args[0]['toBlock'] == 'latest'
+                    assert len(args[0]['address']) > 0
+                    return []
+                raise AssertionError(method)
+    
+        def exchange(request):
+            if expired and request['operation'] == 'release':
+                assert request == dict(schemaVersion='v1', operation='release', input=dict(grantId=gid), deploymentManifest=m.dep)
+                return dict(schemaVersion='v1', ok=False, result=None, error=dict(code='EXPIRED', message='Expired grant'))
+            return old_exchange(request)
+    
+        m.exchange = exchange
+        m.dbc.rpc = ClockRpc(); m.pbc.rpc = ClockRpc()
+        old_latest = m.dbc.latest_block
+        m.dbc.latest_block = lambda: dict(old_latest(), timestamp=hex(clock))
+        before = m.snapshot()
+        mod = importlib.import_module('evaluation.expired_retry')
+>       assert hasattr(mod, 'execute_expired_retry'), 'Public expiry-probe execution missing'
+E       AssertionError: Public expiry-probe execution missing
+E       assert False
+E        +  where False = hasattr(<module 'evaluation.expired_retry' from '/home/karma/Documents/RIS/evaluation/expired_retry.py'>, 'execute_expired_retry')
+
+evaluation/tests/test_expired_retry.py:108: AssertionError
+_ test_public_expiry_probe_after_real_collector_recovery[after_send-repaired-e] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-72/test_public_expiry_probe_after5')
+profile = 'repaired-e', point = 'after_send'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('point', ['after_intent', 'after_send'])
+    def test_public_expiry_probe_after_real_collector_recovery(artifacts, inputs, tmp_path, profile, point):
+        m = RecoveryModel(artifacts, inputs, profile)
+        from evaluation.recovery_execution import RecoveryAdapter
+        from evaluation.access_execution import execute_access
+        session = RecoveryAdapter(m, restart=m.restart, point=point, pbc=m.pbc, dbc=m.dbc,
+                                  deployment=m.dep, worker_snapshot=m.snapshot, output=tmp_path/'recovery')
+        result = execute_access(m.pbc, m.dbc, session, deployment_bytes=json.dumps(m.dep).encode(),
+                                user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy,
+                                expected_allow=True, worker_snapshot=m.snapshot, output=tmp_path/'access', recovery_point=point)
+        gid = next(e['grantId'] for e in result['observed']['events'] if e['type'] == 'DBC_AUTHORIZED')
+        old_exchange = m.exchange
+        clock = int(m.grant['expiresAt'])-1
+        expired = False
+    
+        class ClockRpc:
+            def call(self, method, args=None):
+                nonlocal clock, expired
+                if method == 'evm_setNextBlockTimestamp':
+                    assert args == [int(m.grant['expiresAt'])]
+                    clock = args[0]; return None
+                if method == 'evm_mine':
+                    expired = True; return '0x0'
+                if method == 'eth_getBlockByNumber': return dict(timestamp=hex(clock))
+                if method == 'eth_getLogs':
+                    assert args[0]['fromBlock'] == '0x0' and args[0]['toBlock'] == 'latest'
+                    assert len(args[0]['address']) > 0
+                    return []
+                raise AssertionError(method)
+    
+        def exchange(request):
+            if expired and request['operation'] == 'release':
+                assert request == dict(schemaVersion='v1', operation='release', input=dict(grantId=gid), deploymentManifest=m.dep)
+                return dict(schemaVersion='v1', ok=False, result=None, error=dict(code='EXPIRED', message='Expired grant'))
+            return old_exchange(request)
+    
+        m.exchange = exchange
+        m.dbc.rpc = ClockRpc(); m.pbc.rpc = ClockRpc()
+        old_latest = m.dbc.latest_block
+        m.dbc.latest_block = lambda: dict(old_latest(), timestamp=hex(clock))
+        before = m.snapshot()
+        mod = importlib.import_module('evaluation.expired_retry')
+>       assert hasattr(mod, 'execute_expired_retry'), 'Public expiry-probe execution missing'
+E       AssertionError: Public expiry-probe execution missing
+E       assert False
+E        +  where False = hasattr(<module 'evaluation.expired_retry' from '/home/karma/Documents/RIS/evaluation/expired_retry.py'>, 'execute_expired_retry')
+
+evaluation/tests/test_expired_retry.py:108: AssertionError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_expired_retry.py::test_public_expiry_probe_after_real_collector_recovery[after_intent-paper-strict]
+FAILED evaluation/tests/test_expired_retry.py::test_public_expiry_probe_after_real_collector_recovery[after_intent-paper-minimal]
+FAILED evaluation/tests/test_expired_retry.py::test_public_expiry_probe_after_real_collector_recovery[after_intent-repaired-e]
+FAILED evaluation/tests/test_expired_retry.py::test_public_expiry_probe_after_real_collector_recovery[after_send-paper-strict]
+FAILED evaluation/tests/test_expired_retry.py::test_public_expiry_probe_after_real_collector_recovery[after_send-paper-minimal]
+FAILED evaluation/tests/test_expired_retry.py::test_public_expiry_probe_after_real_collector_recovery[after_send-repaired-e]
+6 failed, 14 passed in 2.63s

@@ -1,0 +1,34 @@
+import subprocess,json,hashlib,datetime
+from pathlib import Path
+root=Path('/home/karma/Documents/RIS');out=Path(__file__).parent
+def git(*a):return subprocess.check_output(['git',*a],cwd=root)
+refs=['origin/agent-'+str(i) for i in (1,2,3)]
+paths=set()
+for r in refs: paths.update(git('ls-tree','-r','--name-only',r,'communication').decode().splitlines())
+rows=[];conflicts=[]
+for path in sorted(paths):
+ candidates=[]
+ for r in refs:
+  if path not in git('ls-tree','--name-only',r,'--',path).decode().splitlines():continue
+  line=git('log','-1','--format=%H %ct',r,'--',path).decode().split();c,at=line
+  b=git('show',r+':'+path);candidates.append(dict(ref=r,commit=c,changedAt=int(at),sha256=hashlib.sha256(b).hexdigest()))
+ owner=next((i for i in (1,2,3) if path.startswith(f'communication/agent-{i}/') and path.rsplit('/',1)[-1] not in ('ROLE.md','START_PROMPT.md')),None)
+ if owner:chosen=next(x for x in candidates if x['ref']==f'origin/agent-{owner}')
+ else:
+  chosen=max(candidates,key=lambda x:x['changedAt'])
+  for x in candidates:
+   if x['sha256']!=chosen['sha256']:
+    v=subprocess.run(['git','merge-base','--is-ancestor',x['commit'],chosen['commit']],cwd=root)
+    if v.returncode!=0:conflicts.append(dict(path=path,a=x,b=chosen))
+ rows.append(dict(path=path,selected=chosen,candidates=candidates))
+report=dict(at=datetime.datetime.now(datetime.timezone.utc).isoformat(),refs={r:git('rev-parse',r).decode().strip() for r in refs},files=rows,conflicts=conflicts)
+(out/'communication-provenance.json').write_text(json.dumps(report,indent=2)+'\n')
+assert not conflicts,conflicts
+msgs=[]
+for i,number in [(1,'0056'),(2,'0037')]:
+ r=f'origin/agent-{i}';p=next(p for p in paths if p.startswith(f'communication/agent-{i}/outbox/{number}-'))
+ b=git('show',r+':'+p);(out/f'agent-{i}-review.md').write_bytes(b)
+ c=git('log','-1','--format=%H',r,'--',p).decode().strip();assert subprocess.run(['git','merge-base','--is-ancestor',c,r],cwd=root).returncode==0
+ msgs.append(dict(path=p,commit=c,ref=r,sha256=hashlib.sha256(b).hexdigest(),type='ACK; exact A3-0044 execution plan; scope exclusions retained'))
+(out/'peer-reviews.json').write_text(json.dumps(msgs,indent=2)+'\n')
+print(json.dumps(dict(paths=len(rows),conflicts=len(conflicts),reviews=msgs)))

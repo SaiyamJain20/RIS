@@ -1,0 +1,838 @@
+FFFFFFFFFFFFFFFFFFFF.............F                                       [100%]
+=================================== FAILURES ===================================
+_____ test_duplicate_reconciliation_preserves_one_prior_successful_outcome _____
+
+    def test_duplicate_reconciliation_preserves_one_prior_successful_outcome():
+>       proof = module().check_duplicate_outcome(**facts())
+                ^^^^^^^^
+
+evaluation/tests/test_duplicate_outcome.py:26:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.duplicate_outcome') is not None, 'Duplicate outcome collector missing'
+E       AssertionError: Duplicate outcome collector missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f880a99e480>('evaluation.duplicate_outcome')
+E        +    where <function find_spec at 0x7f880a99e480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_duplicate_outcome.py:13: AssertionError
+____ test_duplicate_collector_rejects_false_no_change_evidence[no-positive] ____
+
+mutation = 'no-positive'
+
+    @pytest.mark.parametrize('mutation', ['no-positive', 'two-positive', 'no-grant', 'success', 'wrong-code',
+                                          'receipt-event', 'request', 'grant', 'worker', 'pbc-log', 'dbc-log',
+                                          'pending', 'wrong-subject', 'wrong-data', 'wrong-digest', 'no-log'])
+    def test_duplicate_collector_rejects_false_no_change_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_outcomes'] = 0
+        if mutation == 'two-positive': data['original_outcomes'] = 2
+        if mutation == 'no-grant': data['original_grants'] = 0
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '16'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'outcome'}]
+        if mutation == 'request': data['after']['request']['outcomeLogId'] = '10'
+        if mutation == 'grant': data['after']['grant']['exists'] = False
+        if mutation == 'worker': data['after']['worker']['cache'] = 'changed'
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'outcome': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'pending': data['before']['request']['status'] = '1'
+        if mutation == 'wrong-subject': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['grant']['dataId'] = 'other'
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'no-log': data['before']['request']['outcomeLogId'] = '0'
+>       with pytest.raises(ValueError): module().check_duplicate_outcome(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_duplicate_outcome.py:51:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.duplicate_outcome') is not None, 'Duplicate outcome collector missing'
+E       AssertionError: Duplicate outcome collector missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f880a99e480>('evaluation.duplicate_outcome')
+E        +    where <function find_spec at 0x7f880a99e480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_duplicate_outcome.py:13: AssertionError
+___ test_duplicate_collector_rejects_false_no_change_evidence[two-positive] ____
+
+mutation = 'two-positive'
+
+    @pytest.mark.parametrize('mutation', ['no-positive', 'two-positive', 'no-grant', 'success', 'wrong-code',
+                                          'receipt-event', 'request', 'grant', 'worker', 'pbc-log', 'dbc-log',
+                                          'pending', 'wrong-subject', 'wrong-data', 'wrong-digest', 'no-log'])
+    def test_duplicate_collector_rejects_false_no_change_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_outcomes'] = 0
+        if mutation == 'two-positive': data['original_outcomes'] = 2
+        if mutation == 'no-grant': data['original_grants'] = 0
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '16'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'outcome'}]
+        if mutation == 'request': data['after']['request']['outcomeLogId'] = '10'
+        if mutation == 'grant': data['after']['grant']['exists'] = False
+        if mutation == 'worker': data['after']['worker']['cache'] = 'changed'
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'outcome': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'pending': data['before']['request']['status'] = '1'
+        if mutation == 'wrong-subject': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['grant']['dataId'] = 'other'
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'no-log': data['before']['request']['outcomeLogId'] = '0'
+>       with pytest.raises(ValueError): module().check_duplicate_outcome(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_duplicate_outcome.py:51:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.duplicate_outcome') is not None, 'Duplicate outcome collector missing'
+E       AssertionError: Duplicate outcome collector missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f880a99e480>('evaluation.duplicate_outcome')
+E        +    where <function find_spec at 0x7f880a99e480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_duplicate_outcome.py:13: AssertionError
+_____ test_duplicate_collector_rejects_false_no_change_evidence[no-grant] ______
+
+mutation = 'no-grant'
+
+    @pytest.mark.parametrize('mutation', ['no-positive', 'two-positive', 'no-grant', 'success', 'wrong-code',
+                                          'receipt-event', 'request', 'grant', 'worker', 'pbc-log', 'dbc-log',
+                                          'pending', 'wrong-subject', 'wrong-data', 'wrong-digest', 'no-log'])
+    def test_duplicate_collector_rejects_false_no_change_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_outcomes'] = 0
+        if mutation == 'two-positive': data['original_outcomes'] = 2
+        if mutation == 'no-grant': data['original_grants'] = 0
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '16'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'outcome'}]
+        if mutation == 'request': data['after']['request']['outcomeLogId'] = '10'
+        if mutation == 'grant': data['after']['grant']['exists'] = False
+        if mutation == 'worker': data['after']['worker']['cache'] = 'changed'
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'outcome': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'pending': data['before']['request']['status'] = '1'
+        if mutation == 'wrong-subject': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['grant']['dataId'] = 'other'
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'no-log': data['before']['request']['outcomeLogId'] = '0'
+>       with pytest.raises(ValueError): module().check_duplicate_outcome(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_duplicate_outcome.py:51:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.duplicate_outcome') is not None, 'Duplicate outcome collector missing'
+E       AssertionError: Duplicate outcome collector missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f880a99e480>('evaluation.duplicate_outcome')
+E        +    where <function find_spec at 0x7f880a99e480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_duplicate_outcome.py:13: AssertionError
+______ test_duplicate_collector_rejects_false_no_change_evidence[success] ______
+
+mutation = 'success'
+
+    @pytest.mark.parametrize('mutation', ['no-positive', 'two-positive', 'no-grant', 'success', 'wrong-code',
+                                          'receipt-event', 'request', 'grant', 'worker', 'pbc-log', 'dbc-log',
+                                          'pending', 'wrong-subject', 'wrong-data', 'wrong-digest', 'no-log'])
+    def test_duplicate_collector_rejects_false_no_change_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_outcomes'] = 0
+        if mutation == 'two-positive': data['original_outcomes'] = 2
+        if mutation == 'no-grant': data['original_grants'] = 0
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '16'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'outcome'}]
+        if mutation == 'request': data['after']['request']['outcomeLogId'] = '10'
+        if mutation == 'grant': data['after']['grant']['exists'] = False
+        if mutation == 'worker': data['after']['worker']['cache'] = 'changed'
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'outcome': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'pending': data['before']['request']['status'] = '1'
+        if mutation == 'wrong-subject': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['grant']['dataId'] = 'other'
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'no-log': data['before']['request']['outcomeLogId'] = '0'
+>       with pytest.raises(ValueError): module().check_duplicate_outcome(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_duplicate_outcome.py:51:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.duplicate_outcome') is not None, 'Duplicate outcome collector missing'
+E       AssertionError: Duplicate outcome collector missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f880a99e480>('evaluation.duplicate_outcome')
+E        +    where <function find_spec at 0x7f880a99e480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_duplicate_outcome.py:13: AssertionError
+____ test_duplicate_collector_rejects_false_no_change_evidence[wrong-code] _____
+
+mutation = 'wrong-code'
+
+    @pytest.mark.parametrize('mutation', ['no-positive', 'two-positive', 'no-grant', 'success', 'wrong-code',
+                                          'receipt-event', 'request', 'grant', 'worker', 'pbc-log', 'dbc-log',
+                                          'pending', 'wrong-subject', 'wrong-data', 'wrong-digest', 'no-log'])
+    def test_duplicate_collector_rejects_false_no_change_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_outcomes'] = 0
+        if mutation == 'two-positive': data['original_outcomes'] = 2
+        if mutation == 'no-grant': data['original_grants'] = 0
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '16'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'outcome'}]
+        if mutation == 'request': data['after']['request']['outcomeLogId'] = '10'
+        if mutation == 'grant': data['after']['grant']['exists'] = False
+        if mutation == 'worker': data['after']['worker']['cache'] = 'changed'
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'outcome': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'pending': data['before']['request']['status'] = '1'
+        if mutation == 'wrong-subject': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['grant']['dataId'] = 'other'
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'no-log': data['before']['request']['outcomeLogId'] = '0'
+>       with pytest.raises(ValueError): module().check_duplicate_outcome(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_duplicate_outcome.py:51:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.duplicate_outcome') is not None, 'Duplicate outcome collector missing'
+E       AssertionError: Duplicate outcome collector missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f880a99e480>('evaluation.duplicate_outcome')
+E        +    where <function find_spec at 0x7f880a99e480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_duplicate_outcome.py:13: AssertionError
+___ test_duplicate_collector_rejects_false_no_change_evidence[receipt-event] ___
+
+mutation = 'receipt-event'
+
+    @pytest.mark.parametrize('mutation', ['no-positive', 'two-positive', 'no-grant', 'success', 'wrong-code',
+                                          'receipt-event', 'request', 'grant', 'worker', 'pbc-log', 'dbc-log',
+                                          'pending', 'wrong-subject', 'wrong-data', 'wrong-digest', 'no-log'])
+    def test_duplicate_collector_rejects_false_no_change_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_outcomes'] = 0
+        if mutation == 'two-positive': data['original_outcomes'] = 2
+        if mutation == 'no-grant': data['original_grants'] = 0
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '16'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'outcome'}]
+        if mutation == 'request': data['after']['request']['outcomeLogId'] = '10'
+        if mutation == 'grant': data['after']['grant']['exists'] = False
+        if mutation == 'worker': data['after']['worker']['cache'] = 'changed'
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'outcome': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'pending': data['before']['request']['status'] = '1'
+        if mutation == 'wrong-subject': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['grant']['dataId'] = 'other'
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'no-log': data['before']['request']['outcomeLogId'] = '0'
+>       with pytest.raises(ValueError): module().check_duplicate_outcome(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_duplicate_outcome.py:51:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.duplicate_outcome') is not None, 'Duplicate outcome collector missing'
+E       AssertionError: Duplicate outcome collector missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f880a99e480>('evaluation.duplicate_outcome')
+E        +    where <function find_spec at 0x7f880a99e480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_duplicate_outcome.py:13: AssertionError
+______ test_duplicate_collector_rejects_false_no_change_evidence[request] ______
+
+mutation = 'request'
+
+    @pytest.mark.parametrize('mutation', ['no-positive', 'two-positive', 'no-grant', 'success', 'wrong-code',
+                                          'receipt-event', 'request', 'grant', 'worker', 'pbc-log', 'dbc-log',
+                                          'pending', 'wrong-subject', 'wrong-data', 'wrong-digest', 'no-log'])
+    def test_duplicate_collector_rejects_false_no_change_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_outcomes'] = 0
+        if mutation == 'two-positive': data['original_outcomes'] = 2
+        if mutation == 'no-grant': data['original_grants'] = 0
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '16'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'outcome'}]
+        if mutation == 'request': data['after']['request']['outcomeLogId'] = '10'
+        if mutation == 'grant': data['after']['grant']['exists'] = False
+        if mutation == 'worker': data['after']['worker']['cache'] = 'changed'
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'outcome': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'pending': data['before']['request']['status'] = '1'
+        if mutation == 'wrong-subject': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['grant']['dataId'] = 'other'
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'no-log': data['before']['request']['outcomeLogId'] = '0'
+>       with pytest.raises(ValueError): module().check_duplicate_outcome(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_duplicate_outcome.py:51:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.duplicate_outcome') is not None, 'Duplicate outcome collector missing'
+E       AssertionError: Duplicate outcome collector missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f880a99e480>('evaluation.duplicate_outcome')
+E        +    where <function find_spec at 0x7f880a99e480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_duplicate_outcome.py:13: AssertionError
+_______ test_duplicate_collector_rejects_false_no_change_evidence[grant] _______
+
+mutation = 'grant'
+
+    @pytest.mark.parametrize('mutation', ['no-positive', 'two-positive', 'no-grant', 'success', 'wrong-code',
+                                          'receipt-event', 'request', 'grant', 'worker', 'pbc-log', 'dbc-log',
+                                          'pending', 'wrong-subject', 'wrong-data', 'wrong-digest', 'no-log'])
+    def test_duplicate_collector_rejects_false_no_change_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_outcomes'] = 0
+        if mutation == 'two-positive': data['original_outcomes'] = 2
+        if mutation == 'no-grant': data['original_grants'] = 0
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '16'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'outcome'}]
+        if mutation == 'request': data['after']['request']['outcomeLogId'] = '10'
+        if mutation == 'grant': data['after']['grant']['exists'] = False
+        if mutation == 'worker': data['after']['worker']['cache'] = 'changed'
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'outcome': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'pending': data['before']['request']['status'] = '1'
+        if mutation == 'wrong-subject': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['grant']['dataId'] = 'other'
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'no-log': data['before']['request']['outcomeLogId'] = '0'
+>       with pytest.raises(ValueError): module().check_duplicate_outcome(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_duplicate_outcome.py:51:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.duplicate_outcome') is not None, 'Duplicate outcome collector missing'
+E       AssertionError: Duplicate outcome collector missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f880a99e480>('evaluation.duplicate_outcome')
+E        +    where <function find_spec at 0x7f880a99e480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_duplicate_outcome.py:13: AssertionError
+______ test_duplicate_collector_rejects_false_no_change_evidence[worker] _______
+
+mutation = 'worker'
+
+    @pytest.mark.parametrize('mutation', ['no-positive', 'two-positive', 'no-grant', 'success', 'wrong-code',
+                                          'receipt-event', 'request', 'grant', 'worker', 'pbc-log', 'dbc-log',
+                                          'pending', 'wrong-subject', 'wrong-data', 'wrong-digest', 'no-log'])
+    def test_duplicate_collector_rejects_false_no_change_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_outcomes'] = 0
+        if mutation == 'two-positive': data['original_outcomes'] = 2
+        if mutation == 'no-grant': data['original_grants'] = 0
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '16'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'outcome'}]
+        if mutation == 'request': data['after']['request']['outcomeLogId'] = '10'
+        if mutation == 'grant': data['after']['grant']['exists'] = False
+        if mutation == 'worker': data['after']['worker']['cache'] = 'changed'
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'outcome': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'pending': data['before']['request']['status'] = '1'
+        if mutation == 'wrong-subject': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['grant']['dataId'] = 'other'
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'no-log': data['before']['request']['outcomeLogId'] = '0'
+>       with pytest.raises(ValueError): module().check_duplicate_outcome(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_duplicate_outcome.py:51:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.duplicate_outcome') is not None, 'Duplicate outcome collector missing'
+E       AssertionError: Duplicate outcome collector missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f880a99e480>('evaluation.duplicate_outcome')
+E        +    where <function find_spec at 0x7f880a99e480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_duplicate_outcome.py:13: AssertionError
+______ test_duplicate_collector_rejects_false_no_change_evidence[pbc-log] ______
+
+mutation = 'pbc-log'
+
+    @pytest.mark.parametrize('mutation', ['no-positive', 'two-positive', 'no-grant', 'success', 'wrong-code',
+                                          'receipt-event', 'request', 'grant', 'worker', 'pbc-log', 'dbc-log',
+                                          'pending', 'wrong-subject', 'wrong-data', 'wrong-digest', 'no-log'])
+    def test_duplicate_collector_rejects_false_no_change_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_outcomes'] = 0
+        if mutation == 'two-positive': data['original_outcomes'] = 2
+        if mutation == 'no-grant': data['original_grants'] = 0
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '16'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'outcome'}]
+        if mutation == 'request': data['after']['request']['outcomeLogId'] = '10'
+        if mutation == 'grant': data['after']['grant']['exists'] = False
+        if mutation == 'worker': data['after']['worker']['cache'] = 'changed'
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'outcome': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'pending': data['before']['request']['status'] = '1'
+        if mutation == 'wrong-subject': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['grant']['dataId'] = 'other'
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'no-log': data['before']['request']['outcomeLogId'] = '0'
+>       with pytest.raises(ValueError): module().check_duplicate_outcome(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_duplicate_outcome.py:51:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.duplicate_outcome') is not None, 'Duplicate outcome collector missing'
+E       AssertionError: Duplicate outcome collector missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f880a99e480>('evaluation.duplicate_outcome')
+E        +    where <function find_spec at 0x7f880a99e480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_duplicate_outcome.py:13: AssertionError
+______ test_duplicate_collector_rejects_false_no_change_evidence[dbc-log] ______
+
+mutation = 'dbc-log'
+
+    @pytest.mark.parametrize('mutation', ['no-positive', 'two-positive', 'no-grant', 'success', 'wrong-code',
+                                          'receipt-event', 'request', 'grant', 'worker', 'pbc-log', 'dbc-log',
+                                          'pending', 'wrong-subject', 'wrong-data', 'wrong-digest', 'no-log'])
+    def test_duplicate_collector_rejects_false_no_change_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_outcomes'] = 0
+        if mutation == 'two-positive': data['original_outcomes'] = 2
+        if mutation == 'no-grant': data['original_grants'] = 0
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '16'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'outcome'}]
+        if mutation == 'request': data['after']['request']['outcomeLogId'] = '10'
+        if mutation == 'grant': data['after']['grant']['exists'] = False
+        if mutation == 'worker': data['after']['worker']['cache'] = 'changed'
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'outcome': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'pending': data['before']['request']['status'] = '1'
+        if mutation == 'wrong-subject': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['grant']['dataId'] = 'other'
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'no-log': data['before']['request']['outcomeLogId'] = '0'
+>       with pytest.raises(ValueError): module().check_duplicate_outcome(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_duplicate_outcome.py:51:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.duplicate_outcome') is not None, 'Duplicate outcome collector missing'
+E       AssertionError: Duplicate outcome collector missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f880a99e480>('evaluation.duplicate_outcome')
+E        +    where <function find_spec at 0x7f880a99e480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_duplicate_outcome.py:13: AssertionError
+______ test_duplicate_collector_rejects_false_no_change_evidence[pending] ______
+
+mutation = 'pending'
+
+    @pytest.mark.parametrize('mutation', ['no-positive', 'two-positive', 'no-grant', 'success', 'wrong-code',
+                                          'receipt-event', 'request', 'grant', 'worker', 'pbc-log', 'dbc-log',
+                                          'pending', 'wrong-subject', 'wrong-data', 'wrong-digest', 'no-log'])
+    def test_duplicate_collector_rejects_false_no_change_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_outcomes'] = 0
+        if mutation == 'two-positive': data['original_outcomes'] = 2
+        if mutation == 'no-grant': data['original_grants'] = 0
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '16'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'outcome'}]
+        if mutation == 'request': data['after']['request']['outcomeLogId'] = '10'
+        if mutation == 'grant': data['after']['grant']['exists'] = False
+        if mutation == 'worker': data['after']['worker']['cache'] = 'changed'
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'outcome': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'pending': data['before']['request']['status'] = '1'
+        if mutation == 'wrong-subject': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['grant']['dataId'] = 'other'
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'no-log': data['before']['request']['outcomeLogId'] = '0'
+>       with pytest.raises(ValueError): module().check_duplicate_outcome(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_duplicate_outcome.py:51:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.duplicate_outcome') is not None, 'Duplicate outcome collector missing'
+E       AssertionError: Duplicate outcome collector missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f880a99e480>('evaluation.duplicate_outcome')
+E        +    where <function find_spec at 0x7f880a99e480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_duplicate_outcome.py:13: AssertionError
+___ test_duplicate_collector_rejects_false_no_change_evidence[wrong-subject] ___
+
+mutation = 'wrong-subject'
+
+    @pytest.mark.parametrize('mutation', ['no-positive', 'two-positive', 'no-grant', 'success', 'wrong-code',
+                                          'receipt-event', 'request', 'grant', 'worker', 'pbc-log', 'dbc-log',
+                                          'pending', 'wrong-subject', 'wrong-data', 'wrong-digest', 'no-log'])
+    def test_duplicate_collector_rejects_false_no_change_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_outcomes'] = 0
+        if mutation == 'two-positive': data['original_outcomes'] = 2
+        if mutation == 'no-grant': data['original_grants'] = 0
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '16'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'outcome'}]
+        if mutation == 'request': data['after']['request']['outcomeLogId'] = '10'
+        if mutation == 'grant': data['after']['grant']['exists'] = False
+        if mutation == 'worker': data['after']['worker']['cache'] = 'changed'
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'outcome': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'pending': data['before']['request']['status'] = '1'
+        if mutation == 'wrong-subject': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['grant']['dataId'] = 'other'
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'no-log': data['before']['request']['outcomeLogId'] = '0'
+>       with pytest.raises(ValueError): module().check_duplicate_outcome(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_duplicate_outcome.py:51:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.duplicate_outcome') is not None, 'Duplicate outcome collector missing'
+E       AssertionError: Duplicate outcome collector missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f880a99e480>('evaluation.duplicate_outcome')
+E        +    where <function find_spec at 0x7f880a99e480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_duplicate_outcome.py:13: AssertionError
+____ test_duplicate_collector_rejects_false_no_change_evidence[wrong-data] _____
+
+mutation = 'wrong-data'
+
+    @pytest.mark.parametrize('mutation', ['no-positive', 'two-positive', 'no-grant', 'success', 'wrong-code',
+                                          'receipt-event', 'request', 'grant', 'worker', 'pbc-log', 'dbc-log',
+                                          'pending', 'wrong-subject', 'wrong-data', 'wrong-digest', 'no-log'])
+    def test_duplicate_collector_rejects_false_no_change_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_outcomes'] = 0
+        if mutation == 'two-positive': data['original_outcomes'] = 2
+        if mutation == 'no-grant': data['original_grants'] = 0
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '16'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'outcome'}]
+        if mutation == 'request': data['after']['request']['outcomeLogId'] = '10'
+        if mutation == 'grant': data['after']['grant']['exists'] = False
+        if mutation == 'worker': data['after']['worker']['cache'] = 'changed'
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'outcome': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'pending': data['before']['request']['status'] = '1'
+        if mutation == 'wrong-subject': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['grant']['dataId'] = 'other'
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'no-log': data['before']['request']['outcomeLogId'] = '0'
+>       with pytest.raises(ValueError): module().check_duplicate_outcome(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_duplicate_outcome.py:51:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.duplicate_outcome') is not None, 'Duplicate outcome collector missing'
+E       AssertionError: Duplicate outcome collector missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f880a99e480>('evaluation.duplicate_outcome')
+E        +    where <function find_spec at 0x7f880a99e480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_duplicate_outcome.py:13: AssertionError
+___ test_duplicate_collector_rejects_false_no_change_evidence[wrong-digest] ____
+
+mutation = 'wrong-digest'
+
+    @pytest.mark.parametrize('mutation', ['no-positive', 'two-positive', 'no-grant', 'success', 'wrong-code',
+                                          'receipt-event', 'request', 'grant', 'worker', 'pbc-log', 'dbc-log',
+                                          'pending', 'wrong-subject', 'wrong-data', 'wrong-digest', 'no-log'])
+    def test_duplicate_collector_rejects_false_no_change_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_outcomes'] = 0
+        if mutation == 'two-positive': data['original_outcomes'] = 2
+        if mutation == 'no-grant': data['original_grants'] = 0
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '16'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'outcome'}]
+        if mutation == 'request': data['after']['request']['outcomeLogId'] = '10'
+        if mutation == 'grant': data['after']['grant']['exists'] = False
+        if mutation == 'worker': data['after']['worker']['cache'] = 'changed'
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'outcome': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'pending': data['before']['request']['status'] = '1'
+        if mutation == 'wrong-subject': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['grant']['dataId'] = 'other'
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'no-log': data['before']['request']['outcomeLogId'] = '0'
+>       with pytest.raises(ValueError): module().check_duplicate_outcome(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_duplicate_outcome.py:51:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.duplicate_outcome') is not None, 'Duplicate outcome collector missing'
+E       AssertionError: Duplicate outcome collector missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f880a99e480>('evaluation.duplicate_outcome')
+E        +    where <function find_spec at 0x7f880a99e480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_duplicate_outcome.py:13: AssertionError
+______ test_duplicate_collector_rejects_false_no_change_evidence[no-log] _______
+
+mutation = 'no-log'
+
+    @pytest.mark.parametrize('mutation', ['no-positive', 'two-positive', 'no-grant', 'success', 'wrong-code',
+                                          'receipt-event', 'request', 'grant', 'worker', 'pbc-log', 'dbc-log',
+                                          'pending', 'wrong-subject', 'wrong-data', 'wrong-digest', 'no-log'])
+    def test_duplicate_collector_rejects_false_no_change_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_outcomes'] = 0
+        if mutation == 'two-positive': data['original_outcomes'] = 2
+        if mutation == 'no-grant': data['original_grants'] = 0
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '16'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'outcome'}]
+        if mutation == 'request': data['after']['request']['outcomeLogId'] = '10'
+        if mutation == 'grant': data['after']['grant']['exists'] = False
+        if mutation == 'worker': data['after']['worker']['cache'] = 'changed'
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'outcome': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'pending': data['before']['request']['status'] = '1'
+        if mutation == 'wrong-subject': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['grant']['dataId'] = 'other'
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'no-log': data['before']['request']['outcomeLogId'] = '0'
+>       with pytest.raises(ValueError): module().check_duplicate_outcome(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_duplicate_outcome.py:51:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.duplicate_outcome') is not None, 'Duplicate outcome collector missing'
+E       AssertionError: Duplicate outcome collector missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f880a99e480>('evaluation.duplicate_outcome')
+E        +    where <function find_spec at 0x7f880a99e480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_duplicate_outcome.py:13: AssertionError
+_ test_duplicate_probe_replays_identical_public_call_after_positive_control[paper-strict] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-79/test_duplicate_probe_replays_i0')
+profile = 'paper-strict'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    def test_duplicate_probe_replays_identical_public_call_after_positive_control(artifacts, inputs, tmp_path, profile):
+        from evaluation.native import NativeReceipt
+        m = Model(artifacts, inputs, profile)
+        original_submit = m.pbc.submit
+        original_call = m.pbc.call
+        original_calls = []
+        public_logs = {'pbc': [], 'dbc': []}
+        def submit(signer, role, method, *args, expect_success=True):
+            if expect_success:
+                native = original_submit(signer, role, method, *args)
+                public_logs['pbc'].extend(native.receipt['logs'])
+                if method in ('reportOutcome', 'reportAttestedOutcome'):
+                    original_calls.append((method, copy.deepcopy(args), native))
+                return native
+            assert (method, args) == original_calls[0][:2]
+            assert m.request_state['status'] == '2'
+            n = original_calls[0][2]
+            receipt = dict(n.receipt, status='0x0', logs=[])
+            return NativeReceipt(receipt=receipt, transaction=dict(hash=receipt['transactionHash'], chainId=hex(int(m.pbc.chain_id)),
+                                  blockHash=n.block_hash, blockNumber=hex(int(n.block_number)), transactionIndex='0x0'),
+                                 block=dict(hash=n.block_hash, number=hex(int(n.block_number)), timestamp=hex(int(n.timestamp)),
+                                            transactions=[receipt['transactionHash']]), chain_id=m.pbc.chain_id)
+        def call(method, args=None):
+            if method == 'eth_getLogs': return public_logs['pbc']
+            return original_call(method, args)
+        m.pbc.submit = submit; m.pbc.call = call
+        dbc_call = m.dbc.call
+        dbc_submit = m.dbc.submit
+        def submit_dbc(*args, **kwargs):
+            native = dbc_submit(*args, **kwargs); public_logs['dbc'].extend(native.receipt['logs']); return native
+        m.dbc.submit = submit_dbc
+        m.dbc.call = lambda method, args=None: public_logs['dbc'] if method == 'eth_getLogs' else dbc_call(method, args)
+        m.pbc.rejection_code = lambda native: '8'
+        from evaluation.access_execution import execute_access
+>       result = execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+                                user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy,
+                                expected_allow=True, worker_snapshot=m.snapshot, output=tmp_path/'access', duplicate_outcome=True)
+E       TypeError: execute_access() got an unexpected keyword argument 'duplicate_outcome'
+
+evaluation/tests/test_duplicate_outcome.py:89: TypeError
+_ test_duplicate_probe_replays_identical_public_call_after_positive_control[paper-minimal] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-79/test_duplicate_probe_replays_i1')
+profile = 'paper-minimal'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    def test_duplicate_probe_replays_identical_public_call_after_positive_control(artifacts, inputs, tmp_path, profile):
+        from evaluation.native import NativeReceipt
+        m = Model(artifacts, inputs, profile)
+        original_submit = m.pbc.submit
+        original_call = m.pbc.call
+        original_calls = []
+        public_logs = {'pbc': [], 'dbc': []}
+        def submit(signer, role, method, *args, expect_success=True):
+            if expect_success:
+                native = original_submit(signer, role, method, *args)
+                public_logs['pbc'].extend(native.receipt['logs'])
+                if method in ('reportOutcome', 'reportAttestedOutcome'):
+                    original_calls.append((method, copy.deepcopy(args), native))
+                return native
+            assert (method, args) == original_calls[0][:2]
+            assert m.request_state['status'] == '2'
+            n = original_calls[0][2]
+            receipt = dict(n.receipt, status='0x0', logs=[])
+            return NativeReceipt(receipt=receipt, transaction=dict(hash=receipt['transactionHash'], chainId=hex(int(m.pbc.chain_id)),
+                                  blockHash=n.block_hash, blockNumber=hex(int(n.block_number)), transactionIndex='0x0'),
+                                 block=dict(hash=n.block_hash, number=hex(int(n.block_number)), timestamp=hex(int(n.timestamp)),
+                                            transactions=[receipt['transactionHash']]), chain_id=m.pbc.chain_id)
+        def call(method, args=None):
+            if method == 'eth_getLogs': return public_logs['pbc']
+            return original_call(method, args)
+        m.pbc.submit = submit; m.pbc.call = call
+        dbc_call = m.dbc.call
+        dbc_submit = m.dbc.submit
+        def submit_dbc(*args, **kwargs):
+            native = dbc_submit(*args, **kwargs); public_logs['dbc'].extend(native.receipt['logs']); return native
+        m.dbc.submit = submit_dbc
+        m.dbc.call = lambda method, args=None: public_logs['dbc'] if method == 'eth_getLogs' else dbc_call(method, args)
+        m.pbc.rejection_code = lambda native: '8'
+        from evaluation.access_execution import execute_access
+>       result = execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+                                user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy,
+                                expected_allow=True, worker_snapshot=m.snapshot, output=tmp_path/'access', duplicate_outcome=True)
+E       TypeError: execute_access() got an unexpected keyword argument 'duplicate_outcome'
+
+evaluation/tests/test_duplicate_outcome.py:89: TypeError
+_ test_duplicate_probe_replays_identical_public_call_after_positive_control[repaired-e] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-79/test_duplicate_probe_replays_i2')
+profile = 'repaired-e'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    def test_duplicate_probe_replays_identical_public_call_after_positive_control(artifacts, inputs, tmp_path, profile):
+        from evaluation.native import NativeReceipt
+        m = Model(artifacts, inputs, profile)
+        original_submit = m.pbc.submit
+        original_call = m.pbc.call
+        original_calls = []
+        public_logs = {'pbc': [], 'dbc': []}
+        def submit(signer, role, method, *args, expect_success=True):
+            if expect_success:
+                native = original_submit(signer, role, method, *args)
+                public_logs['pbc'].extend(native.receipt['logs'])
+                if method in ('reportOutcome', 'reportAttestedOutcome'):
+                    original_calls.append((method, copy.deepcopy(args), native))
+                return native
+            assert (method, args) == original_calls[0][:2]
+            assert m.request_state['status'] == '2'
+            n = original_calls[0][2]
+            receipt = dict(n.receipt, status='0x0', logs=[])
+            return NativeReceipt(receipt=receipt, transaction=dict(hash=receipt['transactionHash'], chainId=hex(int(m.pbc.chain_id)),
+                                  blockHash=n.block_hash, blockNumber=hex(int(n.block_number)), transactionIndex='0x0'),
+                                 block=dict(hash=n.block_hash, number=hex(int(n.block_number)), timestamp=hex(int(n.timestamp)),
+                                            transactions=[receipt['transactionHash']]), chain_id=m.pbc.chain_id)
+        def call(method, args=None):
+            if method == 'eth_getLogs': return public_logs['pbc']
+            return original_call(method, args)
+        m.pbc.submit = submit; m.pbc.call = call
+        dbc_call = m.dbc.call
+        dbc_submit = m.dbc.submit
+        def submit_dbc(*args, **kwargs):
+            native = dbc_submit(*args, **kwargs); public_logs['dbc'].extend(native.receipt['logs']); return native
+        m.dbc.submit = submit_dbc
+        m.dbc.call = lambda method, args=None: public_logs['dbc'] if method == 'eth_getLogs' else dbc_call(method, args)
+        m.pbc.rejection_code = lambda native: '8'
+        from evaluation.access_execution import execute_access
+>       result = execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+                                user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy,
+                                expected_allow=True, worker_snapshot=m.snapshot, output=tmp_path/'access', duplicate_outcome=True)
+E       TypeError: execute_access() got an unexpected keyword argument 'duplicate_outcome'
+
+evaluation/tests/test_duplicate_outcome.py:89: TypeError
+_____ test_duplicate_outcome_plan_requires_new_exact_acks_before_services ______
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-79/test_duplicate_outcome_plan_re0')
+
+    def test_duplicate_outcome_plan_requires_new_exact_acks_before_services(tmp_path):
+        m = module()
+>       p = m.create_plan(run_id='E2-duplicate-test', freeze_message='A3-0039', duplicate_outcome=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'duplicate_outcome'
+
+evaluation/tests/test_e2_freeze.py:89: TypeError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_duplicate_outcome.py::test_duplicate_reconciliation_preserves_one_prior_successful_outcome
+FAILED evaluation/tests/test_duplicate_outcome.py::test_duplicate_collector_rejects_false_no_change_evidence[no-positive]
+FAILED evaluation/tests/test_duplicate_outcome.py::test_duplicate_collector_rejects_false_no_change_evidence[two-positive]
+FAILED evaluation/tests/test_duplicate_outcome.py::test_duplicate_collector_rejects_false_no_change_evidence[no-grant]
+FAILED evaluation/tests/test_duplicate_outcome.py::test_duplicate_collector_rejects_false_no_change_evidence[success]
+FAILED evaluation/tests/test_duplicate_outcome.py::test_duplicate_collector_rejects_false_no_change_evidence[wrong-code]
+FAILED evaluation/tests/test_duplicate_outcome.py::test_duplicate_collector_rejects_false_no_change_evidence[receipt-event]
+FAILED evaluation/tests/test_duplicate_outcome.py::test_duplicate_collector_rejects_false_no_change_evidence[request]
+FAILED evaluation/tests/test_duplicate_outcome.py::test_duplicate_collector_rejects_false_no_change_evidence[grant]
+FAILED evaluation/tests/test_duplicate_outcome.py::test_duplicate_collector_rejects_false_no_change_evidence[worker]
+FAILED evaluation/tests/test_duplicate_outcome.py::test_duplicate_collector_rejects_false_no_change_evidence[pbc-log]
+FAILED evaluation/tests/test_duplicate_outcome.py::test_duplicate_collector_rejects_false_no_change_evidence[dbc-log]
+FAILED evaluation/tests/test_duplicate_outcome.py::test_duplicate_collector_rejects_false_no_change_evidence[pending]
+FAILED evaluation/tests/test_duplicate_outcome.py::test_duplicate_collector_rejects_false_no_change_evidence[wrong-subject]
+FAILED evaluation/tests/test_duplicate_outcome.py::test_duplicate_collector_rejects_false_no_change_evidence[wrong-data]
+FAILED evaluation/tests/test_duplicate_outcome.py::test_duplicate_collector_rejects_false_no_change_evidence[wrong-digest]
+FAILED evaluation/tests/test_duplicate_outcome.py::test_duplicate_collector_rejects_false_no_change_evidence[no-log]
+FAILED evaluation/tests/test_duplicate_outcome.py::test_duplicate_probe_replays_identical_public_call_after_positive_control[paper-strict]
+FAILED evaluation/tests/test_duplicate_outcome.py::test_duplicate_probe_replays_identical_public_call_after_positive_control[paper-minimal]
+FAILED evaluation/tests/test_duplicate_outcome.py::test_duplicate_probe_replays_identical_public_call_after_positive_control[repaired-e]
+FAILED evaluation/tests/test_e2_freeze.py::test_duplicate_outcome_plan_requires_new_exact_acks_before_services
+21 failed, 13 passed in 12.77s

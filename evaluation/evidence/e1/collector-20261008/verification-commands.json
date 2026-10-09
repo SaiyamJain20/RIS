@@ -1,0 +1,363 @@
+[
+  {
+    "argv": [
+      "git",
+      "fetch",
+      "origin"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T17:55:17.818512+00:00",
+    "endedAt": "2026-10-08T17:55:23.000251+00:00",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 5.181749554998532,
+    "outputSha256": "f42197acd8307a88d99a6d97effbb712635d0fc34f6bc874e5a89b9295bc4a62",
+    "log": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T175325Z/fetch.log",
+    "sourceStable": true
+  },
+  {
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-m",
+      "evaluation.peers",
+      "--output",
+      "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T175325Z/peer-communication.json"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T17:55:23.047847+00:00",
+    "endedAt": "2026-10-08T17:55:24.013625+00:00",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 0.965789768997638,
+    "outputSha256": "76c89a98c194f3f76eface909e6bfe7b723b579b39150e322291063ac2c19cce",
+    "log": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T175325Z/scan.log",
+    "sourceStable": true
+  },
+  {
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-m",
+      "pytest",
+      "evaluation/tests/test_evm_codec.py",
+      "evaluation/tests/test_native_receipts.py",
+      "evaluation/tests/test_rpc_cli.py",
+      "-q",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T17:55:47.311892+00:00",
+    "endedAt": "2026-10-08T17:55:47.877239+00:00",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 0.5653506520029623,
+    "outputSha256": "9ea516600cb8ba6dea0ec0c7954ec6e7596360cd64ab41f40503d7d5184214e7",
+    "log": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T175325Z/collector-baseline.log",
+    "sourceStable": true
+  },
+  {
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-m",
+      "pytest",
+      "evaluation/tests/test_worker_evidence.py",
+      "-q",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T17:58:17.189135+00:00",
+    "endedAt": "2026-10-08T17:58:17.453988+00:00",
+    "exitCode": 1,
+    "timedOut": false,
+    "elapsedSeconds": 0.2648693020018982,
+    "outputSha256": "7f417e5bc5251393e6c793ca352f907ea229394f15990872744403ad04f5d501",
+    "log": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T175325Z/worker-red.log",
+    "sourceStable": true
+  },
+  {
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-m",
+      "pytest",
+      "evaluation/tests/test_worker_evidence.py",
+      "evaluation/tests/test_evm_codec.py",
+      "evaluation/tests/test_native_receipts.py",
+      "evaluation/tests/test_rpc_cli.py",
+      "-q",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T17:59:07.282057+00:00",
+    "endedAt": "2026-10-08T17:59:08.901032+00:00",
+    "exitCode": 1,
+    "timedOut": false,
+    "elapsedSeconds": 1.6189765009985422,
+    "outputSha256": "cb5ebf0458c06f527d2531da0ed1bade724e19c471a9426d9bd31d62463091b6",
+    "log": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T175325Z/worker-green.log",
+    "sourceStable": true
+  },
+  {
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-m",
+      "pytest",
+      "evaluation/tests/test_worker_evidence.py",
+      "evaluation/tests/test_evm_codec.py",
+      "evaluation/tests/test_native_receipts.py",
+      "evaluation/tests/test_rpc_cli.py",
+      "-q",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T17:59:25.580374+00:00",
+    "endedAt": "2026-10-08T17:59:27.198672+00:00",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 1.6183104619994992,
+    "outputSha256": "302f1f09c29ee13db50eed3c86c4ebbf8700ba7ad2024682f852b0d3418cbf68",
+    "log": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T175325Z/worker-green-corrected.log",
+    "sourceStable": true
+  },
+  {
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T175325Z/review_pins.py"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T18:01:52.557584+00:00",
+    "endedAt": "2026-10-08T18:01:55.678795+00:00",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 3.12122093099606,
+    "outputSha256": "8284a56fe8d3aaeb996f7359feaeeb9137aa9d320503fc37e58c1678de78e530",
+    "log": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T175325Z/review-pins-corrected.log",
+    "sourceStable": true
+  },
+  {
+    "argv": [
+      "git",
+      "diff",
+      "--name-only",
+      "91add8cc6000d1413bad2ed0aa119a5f26e8c776",
+      "9d6911d9a35c7d20b3e0226400f8f0fcc99ef256",
+      "--",
+      "ledger/src",
+      "ledger/test",
+      "ledger/test-mutants",
+      "ledger/exports/abi",
+      "ledger/exports/vectors",
+      "ledger/exports/deployments",
+      "ledger/script/Deploy.s.sol",
+      "ledger/script/FixtureConfig.sol",
+      "ledger/tools/deploy_local.sh"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T18:03:04.404749+00:00",
+    "endedAt": "2026-10-08T18:03:04.406171+00:00",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 0.0014183399980538525,
+    "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "log": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T175325Z/production-delta-ledger.log",
+    "sourceStable": true
+  },
+  {
+    "argv": [
+      "git",
+      "diff",
+      "--name-only",
+      "34de384f0af12b52f4de4559a5639388df824861",
+      "465aff52688179fd983fd8da9e2af3032189ff6e",
+      "--",
+      "protocol/hmbc_protocol",
+      "protocol/exports",
+      "protocol/requirements.txt"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T18:03:04.438459+00:00",
+    "endedAt": "2026-10-08T18:03:04.442077+00:00",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 0.003617306996602565,
+    "outputSha256": "054e9214d2d9fa4ed63c7b80731b7e0fa2ee51aea5d7b92e5bd5329320616d8f",
+    "log": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T175325Z/production-delta-protocol.log",
+    "sourceStable": true
+  },
+  {
+    "argv": [
+      "/home/karma/.local/share/hmbc-tools/foundry-1.8.5/cast",
+      "calldata",
+      "requestAccess((uint256,uint256,address,address,address,bytes32,uint8,uint64,uint64,uint64,uint256,uint64,bytes32),bytes,(((address,address,bytes32[],uint64,uint64,uint64),bytes)[],(address,bytes32)[]))",
+      "(31337,31338,0x2222222222222222222222222222222222222222,0x3333333333333333333333333333333333333333,0x1111111111111111111111111111111111111111,0x4444444444444444444444444444444444444444444444444444444444444444,1,1,3,0,7,2000000000,0x5555555555555555555555555555555555555555555555555555555555555555)",
+      "0xababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababab",
+      "([],[])"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T18:03:05.624605+00:00",
+    "endedAt": "2026-10-08T18:03:05.632418+00:00",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 0.007810093004081864,
+    "outputSha256": "1e300963bea8827519625145c8bfe50b32dd48fac86e3edcfd67a082513fc84a",
+    "log": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T175325Z/cast-calldata-reproduction.log",
+    "sourceStable": true
+  },
+  {
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-m",
+      "pytest",
+      "protocol/tests/test_worker_log.py",
+      "-k",
+      "missing_or_foreign or ambiguous_directory",
+      "-q",
+      "-c",
+      "protocol/pytest.ini",
+      "--rootdir",
+      "protocol",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T175325Z/snapshots/protocol",
+    "startedAt": "2026-10-08T18:03:05.664873+00:00",
+    "endedAt": "2026-10-08T18:03:06.380172+00:00",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 0.7153054259979399,
+    "outputSha256": "d91fbb663d544efb4f5e7107fca4193e484316c22bbce4bb2efb4dc0a7858b4c",
+    "log": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T175325Z/owner-worker-log-refusals.log",
+    "sourceStable": true
+  },
+  {
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T175325Z/review_pins.py"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T18:03:02.989674+00:00",
+    "endedAt": "2026-10-08T18:03:06.463578+00:00",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 3.4739238059992203,
+    "outputSha256": "784606ac5b2c78afa826d5e2d1cac58a090c98a287d2070f798a2cbc8ffd5da9",
+    "log": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T175325Z/review-pins-final.log",
+    "sourceStable": true
+  },
+  {
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "--version"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T18:04:00.959879+00:00",
+    "endedAt": "2026-10-08T18:04:00.961565+00:00",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 0.0016829439991852269,
+    "outputSha256": "6b64edf0fc8f22e798fb64873acba6b4106df290f0bf458b507e8cb409b63e49",
+    "log": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T175325Z/python-version.log",
+    "sourceStable": true
+  },
+  {
+    "argv": [
+      "git",
+      "--version"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T18:04:00.993992+00:00",
+    "endedAt": "2026-10-08T18:04:00.995535+00:00",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 0.0015397539973491803,
+    "outputSha256": "fff575d3fa43a92d932e4eb8bc03394140ce40699f9c8a97c3126016a244dfb8",
+    "log": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T175325Z/git-version.log",
+    "sourceStable": true
+  },
+  {
+    "argv": [
+      "/home/karma/.local/share/hmbc-tools/foundry-1.8.5/cast",
+      "--version"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T18:04:01.027062+00:00",
+    "endedAt": "2026-10-08T18:04:01.034767+00:00",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 0.007705129995883908,
+    "outputSha256": "51a75a4180ba3499402a8954a847a711adbdfed3afc38c066a6e54198192c038",
+    "log": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T175325Z/cast-version.log",
+    "sourceStable": true
+  },
+  {
+    "argv": [
+      "bash",
+      "--version"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T18:04:01.067405+00:00",
+    "endedAt": "2026-10-08T18:04:01.069200+00:00",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 0.0017931729962583631,
+    "outputSha256": "5545b1a5c4f72ea730e39d60b6f3015f33070f752dbc8ec2491429db5c4d9f8d",
+    "log": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T175325Z/bash-version.log",
+    "sourceStable": true
+  },
+  {
+    "argv": [
+      "git",
+      "fetch",
+      "origin"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T18:04:22.687679+00:00",
+    "endedAt": "2026-10-08T18:04:25.862053+00:00",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 3.1743911180019495,
+    "outputSha256": "0b7280523eac3bf7f1b10a2a898ea1f3e81f3d57626deeb3eb3277ebbe36561f",
+    "log": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T175325Z/post-test-fetch.log",
+    "sourceStable": true
+  },
+  {
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-m",
+      "evaluation.peers",
+      "--output",
+      "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T175325Z/post-test-peer-communication.json"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T18:04:25.905312+00:00",
+    "endedAt": "2026-10-08T18:04:26.920734+00:00",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 1.0154263240037835,
+    "outputSha256": "0876821e0afbfed217ed64600bada036ddaf70ce68d241d2cfe112144ca2cd7c",
+    "log": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T175325Z/post-test-scan.log",
+    "sourceStable": true
+  },
+  {
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-m",
+      "pytest",
+      "evaluation/tests",
+      "-q",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T18:07:40.801879+00:00",
+    "endedAt": "2026-10-08T18:08:31.233679+00:00",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 50.431800489001034,
+    "outputSha256": "857ce68a9f19ecc3ca3eb9c721b7d84e9c9a27b432939396c00a2ea2bfbf0637",
+    "log": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T175325Z/full-evaluator.log",
+    "sourceStable": true
+  }
+]

@@ -1,0 +1,76 @@
+import json,sys,hashlib,os
+from pathlib import Path
+root=Path('/home/karma/Documents/RIS');sys.path.insert(0,str(root))
+from evaluation import e1,e2
+from evaluation.manifests import sha256,now
+run=Path(__file__).parent;r=run/'real-e2-output';plan=json.loads((root/'evaluation/evidence/e2/grouped-replay-runner-20261009/integration-plan.json').read_text())
+m=json.loads((r/'manifest.json').read_text());rows=[];processes=[];commands=[];snapshots=[]
+for item in plan['matrix']:
+ case=item['profile']+'-nonce-replay';p=r/case/item['profile']
+ if not p.exists():continue
+ cm=json.loads((r/case/'manifest.json').read_text())
+ row={'case':case,'status':m['cases'][case]['status'],'sourceStatus':cm['profiles'][item['profile']]}
+ for label in ['alice','bob','alice/nonce-replay']:
+  f=p/label/'result.json'
+  if f.exists():row[label]=json.loads(f.read_text())
+ for f in [p/'commands.json',p/'pbc-rpc/commands.json',p/'dbc-rpc/commands.json']:
+  if f.exists():
+   a=json.loads(f.read_text());assert isinstance(a,list);commands.extend({'path':str(f.relative_to(r)),'record':x} for x in a)
+ for label in ['pbc-service','dbc-service','adapter','adapter-restarted']:
+  f=p/label/'process.json'
+  if not f.exists():continue
+  x=json.loads(f.read_text());x['evidencePath']=str(f.relative_to(r));x['pidPresent']=Path('/proc/'+str(x['pid'])).exists();processes.append(x)
+ for module,owner in plan['owners'].items():
+  dest=p/'snapshots'/module
+  # Derive actual materialized root from command cwd; inspect if needed.
+  options=[dest,p/'snapshots'/(module+'-owner')]
+  candidates=list((p/'snapshots').glob('**/'+module+'/evidence/source-manifest.sha256'))
+  if candidates:dest=candidates[0].parents[2]
+  stable=dest.exists() and e1._snapshot_stable(owner,dest)
+  snapshots.append({'case':case,'module':module,'root':str(dest),'entries':len(owner['entries']),'stable':stable})
+ rows.append(row)
+# Independent inspection of saved native transactions and whole snapshots.
+checks=[]
+for row in rows:
+ p=r/row['case']/row['case'].removesuffix('-nonce-replay')
+ pbctx=json.loads((p/'pbc-native/transactions.json').read_text())
+ wrong=pbctx[0];assert wrong['method']=='updateRevocationList' and int(wrong['receipt']['status'],16)==0 and wrong['receipt']['logs']==[] and wrong['rejectionTrace']['returnValue']=='0xf73a052c'+'0'*62+'10'
+ before=json.loads((p/'alice/nonce-replay/before.json').read_text())
+ after=json.loads((p/'alice/nonce-replay/after.json').read_text())
+ txs=[x for x in json.loads((p/'dbc-native/transactions.json').read_text()) if x['method'] in ('policyEnf','consumeDecision')]
+ assert len(txs)==(3 if 'bob' in row else 2)
+ original,duplicate=txs[:2]
+ assert int(original['receipt']['status'],16)==1 and int(duplicate['receipt']['status'],16)==0
+ assert duplicate['receipt']['logs']==[] and duplicate['rejectionTrace']['returnValue']=='0xf73a052c'+'0'*63+'8'
+ assert original['transactionHash']!=duplicate['transactionHash'] and int(duplicate['nonce'])>int(original['nonce'])
+ assert all(original['transaction'][k]==duplicate['transaction'][k] for k in ('input','from','to'))
+ assert before==after and before['request']['status']=='1'
+ assert before['nonceConsumed']==row['case'].startswith('repaired-e')
+ for name in ('before','after'):
+  blocks=json.loads((p/('alice/nonce-replay/'+name+'-blocks.json')).read_text())
+  for chain, methods in [('dbc',('grantDetails','nonceConsumed','accessLogCount')),('pbc',('getRequest',))]:
+   block=blocks[chain];views=json.loads((p/(chain+'-native/views.json')).read_text())
+   assert all(any(v['method']==method and v['blockHash']==block['hash'] and int(v['blockNumber'])==int(block['number'],16) for v in views) for method in methods)
+
+ assert row['alice/nonce-replay']['ok']
+ complete='bob' in row and row['alice']['ok'] and row['bob']['ok']
+ if complete:
+  events=row['alice']['observed']['events'];assert [v['type'] for v in events]==['REQUEST_LOGGED','PBC_DECIDED','DBC_AUTHORIZED','RELEASE_INTENT','RELEASE_SENT','OUTCOME_RECORDED']
+  assert row['bob']['observed']['error']=='POLICY_DENIED'
+  assert row['bob']['observed']['ledgerChecks']['DBC_POLICY_DENIAL_LOGGED'] and row['bob']['observed']['ledgerChecks']['NONCE_UNCHANGED']
+
+ if not complete:
+  exchange=json.loads((p/'alice/exchanges.json').read_text())[-1]
+  assert row['case'].startswith('repaired-e') and exchange['operation']=='release' and not exchange['response']['ok'] and exchange['response']['error']['code']=='EXPIRED'
+  row['releaseFailure']=exchange
+ checks.append({'case':row['case'],'identicalMinedCallFreshNonce':True,'status0Rejected8':True,'wholeSnapshotUnchanged':True,'aliceBobControls':complete, 'repairedReleaseExpired':not complete})
+assert len(rows)==3
+assert m['status']==('E2_NONCE_REPLAY_SLICE_PASS' if all(x['aliceBobControls'] for x in checks) else 'FAILED')
+if m['status']=='FAILED':assert m['failure']['message']=='Public access adapter release success failed'
+assert all(x['stable'] for x in snapshots)
+assert len(processes)==9 and all(not x['pidPresent'] and x['endedAt'] and x['exitCode']==0 for x in processes)
+assert all(x['record']['exitCode']==0 for x in commands)
+e2.verify_plan(plan)
+report={'at':now(),'status':m['status'],'failure':m['failure'],'sourceBracket':json.loads((run/'source-bracket.json').read_text()) if (run/'source-bracket.json').exists() else None,'cases':rows,'processes':processes,'commands':commands,'snapshots':snapshots,'frozenCopies':json.loads((run/'frozen-copy-check.json').read_text()),'independentChecks':checks,'scope':'approved three identical accepted request replay comparisons only; actual control completion recorded per case; no full matrix or RQ gate'}
+(run/'live-result-audit.json').write_text(json.dumps(report,indent=2)+'\n')
+print(json.dumps({'status':m['status'],'rows':len(rows),'snapshotChecks':len(snapshots),'snapshotsStable':all(x['stable'] for x in snapshots),'processes':len(processes),'pidsPresent':[x['pid'] for x in processes if x['pidPresent']],'commandRecords':len(commands),'commandNonzero':[(x['record'].get('exitCode'),x['path']) for x in commands if x['record'].get('exitCode')!=0]},indent=2))

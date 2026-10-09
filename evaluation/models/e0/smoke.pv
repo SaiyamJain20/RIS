@@ -1,0 +1,7 @@
+(* Toolchain smoke only, not the E correspondence model. *)
+free c:channel.
+free publicToken:bitstring.
+free secretToken:bitstring [private].
+query attacker(publicToken).
+query attacker(secretToken).
+process out(c,publicToken)

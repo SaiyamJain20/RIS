@@ -1,0 +1,59 @@
+{
+  "at": "2026-10-09T04:25:30.609259+00:00",
+  "reviewer": "Agent3 author review only; no extra agents per explicit human instructions",
+  "fullSuite": "584 passed/exit0/109.48s",
+  "sourceStable": true,
+  "scopes": "synthetic/native-codec sensitivity + actual no-ACK startup refusal; no live replay result",
+  "deferredMaterialFindings": [],
+  "limitations": [
+    "no fresh independent review",
+    "pre-expiry timing margin unmeasured",
+    "identical reference replay does not prove different-digest nonce consumption rejection"
+  ],
+  "branches": {
+    "origin/agent-1": "8c991dec60d2039be21c67e713a5775e6a59da55",
+    "origin/agent-2": "e6a8927aff6d8ca4a8e70114e0c0f56273142814",
+    "origin/agent-3": "46af1e258e6e8dfd4207bb2f1d1baa9a0a82a3a6"
+  },
+  "scheduledGuard": {
+    "started_at": "2026-10-09T04:13:55.804621+00:00",
+    "automation_id": "ris-agent-branch-monitor-and-continuation",
+    "context": "fresh standalone scheduled chat",
+    "pid": 829952,
+    "start_ticks": "7599281",
+    "run_evidence": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T041355Z"
+  },
+  "coordinatorGuardPid": 830084,
+  "ownedSources": {
+    "README.md": "4f902bba9718edc8942b99090d382f970c080747aee15864d3c2f982781a6d3d",
+    "communication/BOARD.md": "83ea0e02e7c039dc5b7bafde421feaf62500e06273d8e1d0482d6553ad68ecc1",
+    "communication/DECISIONS.md": "5c192706a49897d885aa6873df524174d9057cc2e5441718a0e923f339975789",
+    "communication/GATES.md": "18f3598aa70d89097c163286b6af7c40d40685d53ac778bd2db7af3f3fa5d7b9",
+    "communication/INTEGRATION.md": "9c93b55662f155e920674fb40cba136c5a3cb272bb5a18a52546f5d407e66100",
+    "communication/agent-3/HANDOFF.md": "7d635d51bb91378ae761d7662324fba0721bd32f56721ab96ec5c8a0d28eaf82",
+    "communication/agent-3/STATUS.md": "6cfc516e1948ae421de6e4947ae762d1fcf6dd234fa932009960c14147f9faf4",
+    "communication/agent-3/outbox/0041-freeze-e2-nonce-replay.md": "7aca1a3063ea8f3d0e2c1406529fa61d6e63a90b3a914d442afd625efdc5a23f",
+    "evaluation/access_execution.py": "04a58fd27a49761dce369955f1e83ef5b4d150d816b04563ec1b8cdb46aef424",
+    "evaluation/e1.py": "95d820a25f55b7772d269bed8d3b657b8c9b2dcd25f42ec951411a18e387769e",
+    "evaluation/e2.py": "9e248e92a1122620849634f454cb695a51babc678fa2ee9c5f63bc6af5152734",
+    "evaluation/oracles/replay.py": "14a5da8b1c0f7eb23833cccafa11f0eb09f0cbb564b3959eaf25864fb9ce780c",
+    "evaluation/request_replay.py": "fe051b198f0fd827509397837a75baade36b1cad9f4ddaf9f6a6704b4358c235",
+    "evaluation/tests/test_request_replay.py": "523837def6d0486b9aa6e018336bcfc19f6484cbf639a9248be667dce1e40cf2",
+    "evaluation/tests/test_e2_freeze.py": "7a77705cad5cc75b7f7a2b4e2e9cd4825eb3e13c69d797ea65e786895bdd0e56"
+  },
+  "stagedWhitespaceReview": {
+    "fullExitCode": 2,
+    "onlyPath": "evaluation/evidence/e2/nonce-replay-runner-20261009/replay-red.txt",
+    "reason": "unaltered raw pytest failure output has trailing spaces; preserve exact evidence bytes",
+    "sourceAndOtherArtifactsExitCode": 0,
+    "sourceCheckArgv": [
+      "git",
+      "diff",
+      "--cached",
+      "--check",
+      "--",
+      ".",
+      ":(exclude)evaluation/evidence/e2/nonce-replay-runner-20261009/replay-red.txt"
+    ]
+  }
+}

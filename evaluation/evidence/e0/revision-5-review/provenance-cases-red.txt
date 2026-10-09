@@ -1,0 +1,64 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+_ test_missing_provenance_controls_have_repaired_oracle_counterparts[forged-tuple-BAD_SIGNATURE] _
+
+variant = 'forged-tuple', error = 'BAD_SIGNATURE'
+
+    @pytest.mark.parametrize('variant,error', [('forged-tuple', 'BAD_SIGNATURE'),
+                                             ('wrong-destination', 'WRONG_DESTINATION'),
+                                             ('new-reference-replay', 'REPLAY')])
+    def test_missing_provenance_controls_have_repaired_oracle_counterparts(variant, error):
+        cases = [c for c in catalog() if c['caseFamily'] == 'E01' and c['variant'] == variant]
+>       assert {c['profile'] for c in cases} == {'paper-strict', 'paper-minimal', 'repaired-e'}
+E       AssertionError: assert set() == {'paper-minim... 'repaired-e'}
+E         
+E         Extra items in the right set:
+E         'paper-strict'
+E         'paper-minimal'
+E         'repaired-e'
+E         Use -v to get more diff
+
+evaluation/tests/test_revision5_review.py:113: AssertionError
+_ test_missing_provenance_controls_have_repaired_oracle_counterparts[wrong-destination-WRONG_DESTINATION] _
+
+variant = 'wrong-destination', error = 'WRONG_DESTINATION'
+
+    @pytest.mark.parametrize('variant,error', [('forged-tuple', 'BAD_SIGNATURE'),
+                                             ('wrong-destination', 'WRONG_DESTINATION'),
+                                             ('new-reference-replay', 'REPLAY')])
+    def test_missing_provenance_controls_have_repaired_oracle_counterparts(variant, error):
+        cases = [c for c in catalog() if c['caseFamily'] == 'E01' and c['variant'] == variant]
+>       assert {c['profile'] for c in cases} == {'paper-strict', 'paper-minimal', 'repaired-e'}
+E       AssertionError: assert set() == {'paper-minim... 'repaired-e'}
+E         
+E         Extra items in the right set:
+E         'paper-strict'
+E         'paper-minimal'
+E         'repaired-e'
+E         Use -v to get more diff
+
+evaluation/tests/test_revision5_review.py:113: AssertionError
+_ test_missing_provenance_controls_have_repaired_oracle_counterparts[new-reference-replay-REPLAY] _
+
+variant = 'new-reference-replay', error = 'REPLAY'
+
+    @pytest.mark.parametrize('variant,error', [('forged-tuple', 'BAD_SIGNATURE'),
+                                             ('wrong-destination', 'WRONG_DESTINATION'),
+                                             ('new-reference-replay', 'REPLAY')])
+    def test_missing_provenance_controls_have_repaired_oracle_counterparts(variant, error):
+        cases = [c for c in catalog() if c['caseFamily'] == 'E01' and c['variant'] == variant]
+>       assert {c['profile'] for c in cases} == {'paper-strict', 'paper-minimal', 'repaired-e'}
+E       AssertionError: assert set() == {'paper-minim... 'repaired-e'}
+E         
+E         Extra items in the right set:
+E         'paper-strict'
+E         'paper-minimal'
+E         'repaired-e'
+E         Use -v to get more diff
+
+evaluation/tests/test_revision5_review.py:113: AssertionError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_revision5_review.py::test_missing_provenance_controls_have_repaired_oracle_counterparts[forged-tuple-BAD_SIGNATURE]
+FAILED evaluation/tests/test_revision5_review.py::test_missing_provenance_controls_have_repaired_oracle_counterparts[wrong-destination-WRONG_DESTINATION]
+FAILED evaluation/tests/test_revision5_review.py::test_missing_provenance_controls_have_repaired_oracle_counterparts[new-reference-replay-REPLAY]
+3 failed, 12 deselected in 0.18s

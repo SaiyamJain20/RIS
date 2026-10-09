@@ -1,0 +1,46 @@
+..........FFF                                                            [100%]
+=================================== FAILURES ===================================
+___________ test_expiry_plan_cannot_start_without_new_exact_full_ack ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-74/test_expiry_plan_cannot_start_0')
+
+    def test_expiry_plan_cannot_start_without_new_exact_full_ack(tmp_path):
+        m = module()
+>       p = m.create_plan(run_id='E2-expiry-test', freeze_message='A3-0037', expired_retry=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'expired_retry'
+
+evaluation/tests/test_e2_freeze.py:55: TypeError
+___________ test_expiry_execution_cannot_accept_recovery_only[False] ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-74/test_expiry_execution_cannot_a0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f7b8ee9e2c0>
+omit_expiry = False
+
+    @pytest.mark.parametrize('omit_expiry', [False, True])
+    def test_expiry_execution_cannot_accept_recovery_only(tmp_path, monkeypatch, omit_expiry):
+        m = module()
+>       p = m.create_plan(run_id='E2-expiry-test', freeze_message='A3-0037', expired_retry=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'expired_retry'
+
+evaluation/tests/test_e2_freeze.py:69: TypeError
+___________ test_expiry_execution_cannot_accept_recovery_only[True] ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-74/test_expiry_execution_cannot_a1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f7b8d490640>
+omit_expiry = True
+
+    @pytest.mark.parametrize('omit_expiry', [False, True])
+    def test_expiry_execution_cannot_accept_recovery_only(tmp_path, monkeypatch, omit_expiry):
+        m = module()
+>       p = m.create_plan(run_id='E2-expiry-test', freeze_message='A3-0037', expired_retry=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'expired_retry'
+
+evaluation/tests/test_e2_freeze.py:69: TypeError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_e2_freeze.py::test_expiry_plan_cannot_start_without_new_exact_full_ack
+FAILED evaluation/tests/test_e2_freeze.py::test_expiry_execution_cannot_accept_recovery_only[False]
+FAILED evaluation/tests/test_e2_freeze.py::test_expiry_execution_cannot_accept_recovery_only[True]
+3 failed, 10 passed in 2.69s

@@ -1,0 +1,99 @@
+....................FFFFFFF                                              [100%]
+=================================== FAILURES ===================================
+_________ test_nonce_replay_plan_requires_new_full_ack_before_services _________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-87/test_nonce_replay_plan_require0')
+
+    def test_nonce_replay_plan_requires_new_full_ack_before_services(tmp_path):
+>       m = module(); p = m.create_plan(run_id='E2-replay-test', freeze_message='A3-0041', nonce_replay=True)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'nonce_replay'
+
+evaluation/tests/test_e2_freeze.py:122: TypeError
+_____ test_nonce_replay_execution_requires_complete_native_proof[missing] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-87/test_nonce_replay_execution_re0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5b9b809310>
+proof_mode = 'missing'
+
+    @pytest.mark.parametrize('proof_mode', ['missing', 'wrong-error', 'changed-native', 'changed-worker', 'different-call', 'complete'])
+    def test_nonce_replay_execution_requires_complete_native_proof(tmp_path, monkeypatch, proof_mode):
+>       m = module(); p = m.create_plan(run_id='E2-replay-test', freeze_message='A3-0041', nonce_replay=True)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'nonce_replay'
+
+evaluation/tests/test_e2_freeze.py:136: TypeError
+___ test_nonce_replay_execution_requires_complete_native_proof[wrong-error] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-87/test_nonce_replay_execution_re1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5b9b6799b0>
+proof_mode = 'wrong-error'
+
+    @pytest.mark.parametrize('proof_mode', ['missing', 'wrong-error', 'changed-native', 'changed-worker', 'different-call', 'complete'])
+    def test_nonce_replay_execution_requires_complete_native_proof(tmp_path, monkeypatch, proof_mode):
+>       m = module(); p = m.create_plan(run_id='E2-replay-test', freeze_message='A3-0041', nonce_replay=True)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'nonce_replay'
+
+evaluation/tests/test_e2_freeze.py:136: TypeError
+__ test_nonce_replay_execution_requires_complete_native_proof[changed-native] __
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-87/test_nonce_replay_execution_re2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5b9b67a5f0>
+proof_mode = 'changed-native'
+
+    @pytest.mark.parametrize('proof_mode', ['missing', 'wrong-error', 'changed-native', 'changed-worker', 'different-call', 'complete'])
+    def test_nonce_replay_execution_requires_complete_native_proof(tmp_path, monkeypatch, proof_mode):
+>       m = module(); p = m.create_plan(run_id='E2-replay-test', freeze_message='A3-0041', nonce_replay=True)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'nonce_replay'
+
+evaluation/tests/test_e2_freeze.py:136: TypeError
+__ test_nonce_replay_execution_requires_complete_native_proof[changed-worker] __
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-87/test_nonce_replay_execution_re3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5b9b92e5b0>
+proof_mode = 'changed-worker'
+
+    @pytest.mark.parametrize('proof_mode', ['missing', 'wrong-error', 'changed-native', 'changed-worker', 'different-call', 'complete'])
+    def test_nonce_replay_execution_requires_complete_native_proof(tmp_path, monkeypatch, proof_mode):
+>       m = module(); p = m.create_plan(run_id='E2-replay-test', freeze_message='A3-0041', nonce_replay=True)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'nonce_replay'
+
+evaluation/tests/test_e2_freeze.py:136: TypeError
+__ test_nonce_replay_execution_requires_complete_native_proof[different-call] __
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-87/test_nonce_replay_execution_re4')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5b9b69c350>
+proof_mode = 'different-call'
+
+    @pytest.mark.parametrize('proof_mode', ['missing', 'wrong-error', 'changed-native', 'changed-worker', 'different-call', 'complete'])
+    def test_nonce_replay_execution_requires_complete_native_proof(tmp_path, monkeypatch, proof_mode):
+>       m = module(); p = m.create_plan(run_id='E2-replay-test', freeze_message='A3-0041', nonce_replay=True)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'nonce_replay'
+
+evaluation/tests/test_e2_freeze.py:136: TypeError
+_____ test_nonce_replay_execution_requires_complete_native_proof[complete] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-87/test_nonce_replay_execution_re5')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f5b9b69c290>
+proof_mode = 'complete'
+
+    @pytest.mark.parametrize('proof_mode', ['missing', 'wrong-error', 'changed-native', 'changed-worker', 'different-call', 'complete'])
+    def test_nonce_replay_execution_requires_complete_native_proof(tmp_path, monkeypatch, proof_mode):
+>       m = module(); p = m.create_plan(run_id='E2-replay-test', freeze_message='A3-0041', nonce_replay=True)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'nonce_replay'
+
+evaluation/tests/test_e2_freeze.py:136: TypeError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_e2_freeze.py::test_nonce_replay_plan_requires_new_full_ack_before_services
+FAILED evaluation/tests/test_e2_freeze.py::test_nonce_replay_execution_requires_complete_native_proof[missing]
+FAILED evaluation/tests/test_e2_freeze.py::test_nonce_replay_execution_requires_complete_native_proof[wrong-error]
+FAILED evaluation/tests/test_e2_freeze.py::test_nonce_replay_execution_requires_complete_native_proof[changed-native]
+FAILED evaluation/tests/test_e2_freeze.py::test_nonce_replay_execution_requires_complete_native_proof[changed-worker]
+FAILED evaluation/tests/test_e2_freeze.py::test_nonce_replay_execution_requires_complete_native_proof[different-call]
+FAILED evaluation/tests/test_e2_freeze.py::test_nonce_replay_execution_requires_complete_native_proof[complete]
+7 failed, 20 passed in 27.70s

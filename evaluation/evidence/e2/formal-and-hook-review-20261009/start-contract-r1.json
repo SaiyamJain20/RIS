@@ -1,0 +1,104 @@
+{
+  "schemaVersion": "hmbc-e2-start-contract/r1",
+  "rq": "E",
+  "status": "PROPOSED_PENDING_EXACT_A1_A2_ACKS",
+  "respondsTo": "A2-0020",
+  "frozenInterfaceSha256": "f700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2",
+  "ledger": {
+    "commit": "933d2a75483a08e7374cd417a6cf8a9e5c13a33c",
+    "manifestSha256": "c7b7dd51f0e4c84535fbd093fbbd6bc6b49a9ed1a3f999b68f93d68f3dd04660",
+    "entries": 195
+  },
+  "protocol": {
+    "commit": "0716a8e2d46f985f35a612d42acaae02ab8701a4",
+    "manifestSha256": "d16ddad897dac7df3d406bab200f85e5dba1c27595a3bbaf5fe658640ba184a5",
+    "entries": 108,
+    "hookSha256": "f0ab2400db5b3667f92ad2e9061b931c8acc94696f42bcd7080e7cdd4e39bde4",
+    "productionBytes": "equal to E1 pin 465aff52688179fd983fd8da9e2af3032189ff6e"
+  },
+  "cwd": "exact protocol snapshot",
+  "command": [
+    "<pinned-python>",
+    "-m",
+    "testtools.faulty_adapter",
+    "--crash-at",
+    "<after_intent|after_send>",
+    "--state-dir",
+    "<fresh-private-0700-dir>",
+    "--deployment",
+    "<instance-bound-test-only-deployment>"
+  ],
+  "restart": [
+    "<pinned-python>",
+    "-m",
+    "hmbc_protocol.adapter",
+    "--state-dir",
+    "<same-dir>",
+    "--deployment",
+    "<same-file>"
+  ],
+  "observations": {
+    "after_intent": {
+      "stdout": "EOF without response frame",
+      "exitCode": 86,
+      "stderr": "empty",
+      "events": [
+        "RELEASE_INTENT"
+      ],
+      "attempts": [
+        0,
+        0
+      ],
+      "retryEvents": [
+        "RELEASE_INTENT",
+        "RELEASE_SENT"
+      ],
+      "retryAttempts": [
+        1,
+        1
+      ]
+    },
+    "after_send": {
+      "stdout": "one frozen-schema-valid response flushed before EOF",
+      "exitCode": 86,
+      "stderr": "empty",
+      "events": [
+        "RELEASE_INTENT",
+        "RELEASE_SENT"
+      ],
+      "attempts": [
+        1,
+        0
+      ],
+      "retryEvents": [
+        "RELEASE_INTENT",
+        "RELEASE_SENT",
+        "RELEASE_SENT"
+      ],
+      "retryAttempts": [
+        2,
+        1
+      ],
+      "retryResponse": "same full response; publish commitments only"
+    }
+  },
+  "common": {
+    "delivery": "unknown",
+    "grantCount": 1,
+    "outcomeAfterRecovery": 1,
+    "retry": "strictly before original grant expiry; equality EXPIRED without new event/token",
+    "afterGrantExpiry": "late outcome reconciliation allowed; does not reauthorize release",
+    "notCommittedOrExpiredRelease": "ordinary error response; does not crash",
+    "encryptRecord": "trusted synthetic preregistration before release",
+    "keyCustody": "Option A unchanged; only relay/CA-admin keys in evaluator"
+  },
+  "scope": "TEST-ONLY alternate entrypoint supplement only; no frozen wire/ABI/signed-byte/dependency change",
+  "integrationPrerequisite": "complete Agent3-owned E2 runner/configuration plus separately published FREEZE and both exact plan ACKs; this contract is not a service FREEZE",
+  "paperCrashClassification": "frozen expected BLOCKED/unproved retained until Agent3 actual evidence and explicit report qualification; no paper durability inferred",
+  "limits": [
+    "logical process-death points only",
+    "no power-loss/OS-kill guarantee",
+    "no recipient delivery acknowledgement",
+    "no ABE or consensus proof"
+  ]
+}

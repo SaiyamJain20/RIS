@@ -1,0 +1,140 @@
+{
+  "classification": "tested reconstruction result; actual synthetic two-chain C-E1 evidence",
+  "status": "C-E1 complete; E1 controls 9/9; E2/E3 now permitted in RQ E; gate E NOT_RUN",
+  "plan_sha256": "78e195f57872e0732394e3c546f665e1062b4a360083d2ee0a407d5def33b008",
+  "freeze": "A3-0029 RELEASED after completed run",
+  "acks": {
+    "agent-1": {
+      "commit": "2f5e37624eec57054811bbbff112ecee86e6164d",
+      "path": "communication/agent-1/outbox/0038-ack-e1-port-recovery-freeze.md",
+      "sha256": "cecf397fd818364d8c3c872b18aa7ff5902fec37a0795856726e6637d232190a",
+      "messageId": "A1-0038"
+    },
+    "agent-2": {
+      "commit": "6d2c8671c0bc4c988f0fe57a29cc4e5bf684d918",
+      "path": "communication/agent-2/outbox/0019-ack-e1-port-recovery-plan.md",
+      "sha256": "04fbe2fde44a0a10d1074b88bbd20f5467bc83b3ff68801600dd81928953f520",
+      "messageId": "A2-0019"
+    }
+  },
+  "profiles": {
+    "paper-strict": "3/3 controls pass",
+    "paper-minimal": "3/3 controls pass",
+    "repaired-e": "3/3 controls pass"
+  },
+  "commands": {
+    "real_run_exit_code": 0,
+    "real_run_seconds": 356.0612476440001,
+    "source_count": 75,
+    "source_stable": true
+  },
+  "owner_snapshot_blobs_verified": 633,
+  "frozen_copies_verified": 15,
+  "fixtures": "fresh chain pair, deployment and private adapter state per profile; synthetic Alice Doctor+OnDuty from H2, registered Bob Doctor without OnDuty; seed none; real cryptographic randomness fresh",
+  "tools": {
+    "name": "versions",
+    "argv": [
+      ".venv/bin/python",
+      "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T201323Z/versions.py"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "started_at": "2026-10-08T20:15:03.135401+00:00",
+    "ended_at": "2026-10-08T20:15:03.204422+00:00",
+    "seconds": 0.0690306869946653,
+    "exit_code": 0,
+    "stdout_sha256": "edf28cbba4af8a18dfe8f64951f34c1d100a4b35d9c0fce323d545b25ca438e2",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "source_before": null,
+    "source_after": null,
+    "sources_stable": null
+  },
+  "wrong_admin": "H1 admin H2 trust-list code16 and rollback before legitimate H2; baseline issuer restriction, not repair",
+  "allow": "Alice native committed grant, registered recipient, original expiry, symbolic worker intent/cache/send-attempt/completion and PBC outcome",
+  "deny": "Bob policy9 and no grant/nonce/release; repaired-e signed denial and DBC log; pending PBC is recorded, not concealed",
+  "cleanup": [
+    {
+      "path": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T201323Z/real-e1-output/paper-strict/pbc-service/process.json",
+      "pid": 362505,
+      "exit_code": 0,
+      "ended_at": "2026-10-08T20:17:01.152561+00:00",
+      "pid_currently_exists": false
+    },
+    {
+      "path": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T201323Z/real-e1-output/paper-strict/dbc-service/process.json",
+      "pid": 362629,
+      "exit_code": 0,
+      "ended_at": "2026-10-08T20:17:01.148915+00:00",
+      "pid_currently_exists": false
+    },
+    {
+      "path": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T201323Z/real-e1-output/paper-strict/adapter/process.json",
+      "pid": 366785,
+      "exit_code": 0,
+      "ended_at": "2026-10-08T20:17:01.144880+00:00",
+      "pid_currently_exists": false
+    },
+    {
+      "path": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T201323Z/real-e1-output/paper-minimal/pbc-service/process.json",
+      "pid": 372541,
+      "exit_code": 0,
+      "ended_at": "2026-10-08T20:18:52.502331+00:00",
+      "pid_currently_exists": false
+    },
+    {
+      "path": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T201323Z/real-e1-output/paper-minimal/dbc-service/process.json",
+      "pid": 372675,
+      "exit_code": 0,
+      "ended_at": "2026-10-08T20:18:52.498727+00:00",
+      "pid_currently_exists": false
+    },
+    {
+      "path": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T201323Z/real-e1-output/paper-minimal/adapter/process.json",
+      "pid": 376851,
+      "exit_code": 0,
+      "ended_at": "2026-10-08T20:18:52.494686+00:00",
+      "pid_currently_exists": false
+    },
+    {
+      "path": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T201323Z/real-e1-output/repaired-e/pbc-service/process.json",
+      "pid": 382618,
+      "exit_code": 0,
+      "ended_at": "2026-10-08T20:21:04.555520+00:00",
+      "pid_currently_exists": false
+    },
+    {
+      "path": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T201323Z/real-e1-output/repaired-e/dbc-service/process.json",
+      "pid": 382746,
+      "exit_code": 0,
+      "ended_at": "2026-10-08T20:21:04.552071+00:00",
+      "pid_currently_exists": false
+    },
+    {
+      "path": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T201323Z/real-e1-output/repaired-e/adapter/process.json",
+      "pid": 386869,
+      "exit_code": 0,
+      "ended_at": "2026-10-08T20:21:04.547940+00:00",
+      "pid_currently_exists": false
+    }
+  ],
+  "limitations": "All E2 catalog schedules and RQ gates NOT_RUN; symbolic completion and attempted RELEASE_SENT do not prove ABE, delivery, consensus, provider integrity or power-loss recovery.",
+  "review": "Author-only separate evidence review; no extra agents authorized; weaker than independent review. No new runtime implementation or deferred patch finding. Existing port availability/startup race retained.",
+  "rulings": [
+    "Use existing HANDOFF as execution ledger and confirmed checkout, per explicit no-worktree/no-extra-agent constraints; cost: no fresh reviewer.",
+    "Treat nine actual E1 controls as completion of C-E1 only; no RQ gate, cryptographic or recovery claim; E2/E3 still require their own evidence.",
+    "No repeat unchanged unit suite: no runtime/code/dependency input changed; actual integrated controls and source rechecks are the applicable fresh verification."
+  ],
+  "private_material": "Private adapter state, capabilities, Forge caches/broadcast and whole owner snapshots remain external and unpublished.",
+  "helper_recovery": {
+    "time": "2026-10-08T20:22:55.627684+00:00",
+    "command": "Post-run peer scan full-document equality assertion",
+    "exit_code": 1,
+    "reason": "Full-document comparison included scan timestamps; exact files and branches are unchanged. Corrected file/branch-only equality succeeds. Subsequent packaging/docs ran sequentially despite helper assertion failure; evidence reviewed independently. No research/gate verdict arose from this helper failure.",
+    "corrected_check": {
+      "files": 116,
+      "branches_stable": true,
+      "files_stable": true,
+      "no_divergence": true
+    },
+    "message_write_note": "Documentation helper direct-wrote new unpublished own outbox files; no existing sent message overwritten. Future helper uses required temporary-file rename."
+  }
+}

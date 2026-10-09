@@ -1,0 +1,130 @@
+[
+  {
+    "operation": "encrypt_record",
+    "startedAt": "2026-10-09T00:25:03.951364+00:00",
+    "endedAt": "2026-10-09T00:25:03.954639+00:00",
+    "requestSha256": "676034c40bea204fcbebb60bd19d2e46136b33d2cb731765139ed3d5b959a988",
+    "responseCanonicalSha256": "59150f31959c0ba9eefbc563dad83b2919507e4124ebebcf0f0a9967fa11cff6",
+    "response": {
+      "schemaVersion": "v1",
+      "ok": true,
+      "result": {
+        "schemaVersion": "v1",
+        "adapterMode": "symbolic",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+        "keyEpoch": "0",
+        "ciphertextDigest": "0xf6906a0ebe73c6698feb9f54f7849d072229ad124dabde7d177bfd799d644a6c",
+        "policyDigest": "0x4bd063e1a4c348bf656f983104839fec2594aaee710b4627e9e46368ba1abc3a"
+      },
+      "error": null
+    },
+    "validationFailure": null
+  },
+  {
+    "operation": "prepare_request",
+    "startedAt": "2026-10-09T00:25:05.279723+00:00",
+    "endedAt": "2026-10-09T00:25:05.287969+00:00",
+    "requestSha256": "43811c69329b86988e78ee8fa167142d43bf1c376cd156f9c96d9c80134c30f9",
+    "responseCanonicalSha256": "fbbdd83c7bc02c3a686898345b0671f6e199b4d2164d17da986c19b42e241a79",
+    "response": {
+      "schemaVersion": "v1",
+      "ok": true,
+      "result": {
+        "schemaVersion": "v1",
+        "adapterMode": "symbolic",
+        "request": {
+          "sourceChainId": "18545",
+          "destinationChainId": "28545",
+          "psc": "0xd3fb8e96fe85c01731383fab9f234dcd4d6135b7",
+          "kssc": "0xe08fc08118c249128865a95e60617618970876b9",
+          "gid": "0xac5a40f1b6d99eca704aebc1fd7ffa5dbb5be59a",
+          "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+          "action": "1",
+          "policyVersion": "1",
+          "authEpoch": "3",
+          "keyEpoch": "0",
+          "nonce": "1",
+          "expiresAt": "1791505534",
+          "recipientKeyHash": "0x5fe346cd69926d7120dff3cc020f4d36ad8093b7c9bb95c6ecea9705a3f8c537"
+        },
+        "requestDigest": "0xfec9f7e556e645eb3e98020184fef64bf0085e68bcdc5f211a2cb5d0364d70f2",
+        "signature": "0xe79087ed576032ba91829faad0f6d3b4c68871e91da2f4c8ee5759ade664648f19aeafc1204606fcc839e1bccde86e8e5df81ab82c3c305be163ed1fab2195631b",
+        "signer": "0xac5a40f1b6d99eca704aebc1fd7ffa5dbb5be59a"
+      },
+      "error": null
+    },
+    "validationFailure": null
+  },
+  {
+    "operation": "collect_checkpoint",
+    "startedAt": "2026-10-09T00:25:11.551246+00:00",
+    "endedAt": "2026-10-09T00:25:11.568258+00:00",
+    "requestSha256": "97496957ca707bd17b2d9ba17d261a933cb314a24ae1740a2c0608df94455176",
+    "responseCanonicalSha256": "777ca69bf6759ee80ab63b3858c575be9962d40ab2b7502d508107a52da4798a",
+    "response": {
+      "schemaVersion": "v1",
+      "ok": true,
+      "result": {
+        "schemaVersion": "v1",
+        "adapterMode": "symbolic",
+        "checkpoint": {
+          "sequence": "2",
+          "authEpoch": "3",
+          "policyVersion": "1",
+          "keyEpoch": "0",
+          "witnessSetVersion": "1",
+          "sourceChainId": "18545",
+          "psc": "0xd3fb8e96fe85c01731383fab9f234dcd4d6135b7",
+          "sourceBlockNumber": "25",
+          "sourceBlockHash": "0x45be076ca07bf78ce1fefc1107897dc4fe978ab63a093958aa0cefbc62c2594b",
+          "expiresAt": "1791505571"
+        },
+        "signatures": [
+          "0xcc5538322022017057bc12702676fc6cd6bc443711a8a99d6b81597cac2e1e31442aed065c16eba6fd2427149a76f1b6021ec467aba84bf596fc19d04bf931cb1c"
+        ]
+      },
+      "error": null
+    },
+    "validationFailure": null
+  },
+  {
+    "operation": "collect_decision",
+    "startedAt": "2026-10-09T00:25:16.145723+00:00",
+    "endedAt": "2026-10-09T00:25:16.173657+00:00",
+    "requestSha256": "8aa10b6ab6e0a1b0175ab357cb075fa8764044e659a2de0778d24b6c615476da",
+    "responseCanonicalSha256": "0edd8c7eefb21edcf7648f12bb4a0c3c8b17e034e3639c2eb8db9c4fc5076e9d",
+    "response": {
+      "schemaVersion": "v1",
+      "ok": true,
+      "result": {
+        "schemaVersion": "v1",
+        "adapterMode": "symbolic",
+        "decision": {
+          "requestDigest": "0xfec9f7e556e645eb3e98020184fef64bf0085e68bcdc5f211a2cb5d0364d70f2",
+          "result": "0",
+          "credentialDigest": "0xcfc557e1b04309f822a1c53a8c04db5b01558a40623a844ddacbb70dec28ef10",
+          "stateSequence": "2",
+          "witnessSetVersion": "1",
+          "sourceBlockNumber": "25",
+          "sourceBlockHash": "0x45be076ca07bf78ce1fefc1107897dc4fe978ab63a093958aa0cefbc62c2594b",
+          "expiresAt": "1791505534"
+        },
+        "signatures": [
+          "0xc02e2c4283bbda9c6caab643da3c180e4c5759d73bfb2064ac4941d977fdd0593936cf9e02dacb28b5cf7c2642b425ae21c0d16847375592016a6b3ca95883951c"
+        ],
+        "credentialRecords": [
+          {
+            "issuer": "0x6ea73ebda053f804cad188496ec48af56b06f698",
+            "role": "0x2b14ce5fd3a3fd8a4ecc39fd8d67dc8af4b88e6e8f70ba61d441e2e6b93e5160",
+            "kind": "1",
+            "serial": "201",
+            "anchorVersion": "1",
+            "validUntil": "1791591807"
+          }
+        ]
+      },
+      "error": null
+    },
+    "validationFailure": null
+  }
+]

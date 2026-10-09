@@ -1,0 +1,170 @@
+.....................FFFFFFFFFF                                          [100%]
+=================================== FAILURES ===================================
+_____ test_schema_signing_metadata_matches_producer_vectors[Registration] ______
+
+name = 'Registration'
+
+    @pytest.mark.parametrize('name', ['Registration','RoleCertificate','RevocationList','TemporalAcl','AccessRequest','AccessDecision','StateCheckpoint'])
+    def test_schema_signing_metadata_matches_producer_vectors(name):
+        from evaluation.vectors import type_string
+        schema=json.loads(Path('interfaces/proposals/v1/hmbc.schema.json').read_text())['$defs'][name]
+        typed=next(v['typedData'] for v in V['vectors'] if v['name']==name)
+>       assert schema.get('x-eip712Type')==type_string(name,typed['types'])
+E       AssertionError: assert None == 'Registration(address gid,bytes32 certDigest,bytes32 recipientKeyHash,uint64 expiresAt)'
+E        +  where None = <built-in method get of dict object at 0x7fd251e0ce40>('x-eip712Type')
+E        +    where <built-in method get of dict object at 0x7fd251e0ce40> = {'additionalProperties': False, 'properties': {'certDigest': {'$ref': '#/$defs/Hash'}, 'expiresAt': {'$ref': '#/$defs/...Hash': {'$ref': '#/$defs/Hash'}}, 'required': ['gid', 'certDigest', 'recipientKeyHash', 'expiresAt'], 'type': 'object'}.get
+E        +  and   'Registration(address gid,bytes32 certDigest,bytes32 recipientKeyHash,uint64 expiresAt)' = <function type_string at 0x7fd2532bb060>('Registration', {'EIP712Domain': [{'name': 'name', 'type': 'string'}, {'name': 'version', 'type': 'string'}, {'name': 'chainId', 'type...Digest', 'type': 'bytes32'}, {'name': 'recipientKeyHash', 'type': 'bytes32'}, {'name': 'expiresAt', 'type': 'uint64'}]})
+
+evaluation/tests/test_schemas.py:92: AssertionError
+____ test_schema_signing_metadata_matches_producer_vectors[RoleCertificate] ____
+
+name = 'RoleCertificate'
+
+    @pytest.mark.parametrize('name', ['Registration','RoleCertificate','RevocationList','TemporalAcl','AccessRequest','AccessDecision','StateCheckpoint'])
+    def test_schema_signing_metadata_matches_producer_vectors(name):
+        from evaluation.vectors import type_string
+        schema=json.loads(Path('interfaces/proposals/v1/hmbc.schema.json').read_text())['$defs'][name]
+        typed=next(v['typedData'] for v in V['vectors'] if v['name']==name)
+>       assert schema.get('x-eip712Type')==type_string(name,typed['types'])
+E       AssertionError: assert None == 'RoleCertificate(address issuer,address gid,bytes32[] roles,uint64 serial,uint64 validFrom,uint64 validUntil)'
+E        +  where None = <built-in method get of dict object at 0x7fd251ba9c80>('x-eip712Type')
+E        +    where <built-in method get of dict object at 0x7fd251ba9c80> = {'additionalProperties': False, 'properties': {'gid': {'$ref': '#/$defs/Address'}, 'issuer': {'$ref': '#/$defs/Address...'#/$defs/Uint64'}, ...}, 'required': ['issuer', 'gid', 'serial', 'validFrom', 'validUntil', 'roles'], 'type': 'object'}.get
+E        +  and   'RoleCertificate(address issuer,address gid,bytes32[] roles,uint64 serial,uint64 validFrom,uint64 validUntil)' = <function type_string at 0x7fd2532bb060>('RoleCertificate', {'EIP712Domain': [{'name': 'name', 'type': 'string'}, {'name': 'version', 'type': 'string'}, {'name': 'chainId', 'type...name': 'serial', 'type': 'uint64'}, {'name': 'validFrom', 'type': 'uint64'}, {'name': 'validUntil', 'type': 'uint64'}]})
+
+evaluation/tests/test_schemas.py:92: AssertionError
+____ test_schema_signing_metadata_matches_producer_vectors[RevocationList] _____
+
+name = 'RevocationList'
+
+    @pytest.mark.parametrize('name', ['Registration','RoleCertificate','RevocationList','TemporalAcl','AccessRequest','AccessDecision','StateCheckpoint'])
+    def test_schema_signing_metadata_matches_producer_vectors(name):
+        from evaluation.vectors import type_string
+        schema=json.loads(Path('interfaces/proposals/v1/hmbc.schema.json').read_text())['$defs'][name]
+        typed=next(v['typedData'] for v in V['vectors'] if v['name']==name)
+>       assert schema.get('x-eip712Type')==type_string(name,typed['types'])
+E       AssertionError: assert None == 'RevocationList(address authority,uint64 version,uint64 validUntil,uint64[] revokedSerials)'
+E        +  where None = <built-in method get of dict object at 0x7fd252152240>('x-eip712Type')
+E        +    where <built-in method get of dict object at 0x7fd252152240> = {'additionalProperties': False, 'properties': {'authority': {'$ref': '#/$defs/Address'}, 'revokedSerials': {'items': {...': {'$ref': '#/$defs/Uint64'}}, 'required': ['authority', 'version', 'validUntil', 'revokedSerials'], 'type': 'object'}.get
+E        +  and   'RevocationList(address authority,uint64 version,uint64 validUntil,uint64[] revokedSerials)' = <function type_string at 0x7fd2532bb060>('RevocationList', {'EIP712Domain': [{'name': 'name', 'type': 'string'}, {'name': 'version', 'type': 'string'}, {'name': 'chainId', 'type...version', 'type': 'uint64'}, {'name': 'validUntil', 'type': 'uint64'}, {'name': 'revokedSerials', 'type': 'uint64[]'}]})
+
+evaluation/tests/test_schemas.py:92: AssertionError
+______ test_schema_signing_metadata_matches_producer_vectors[TemporalAcl] ______
+
+name = 'TemporalAcl'
+
+    @pytest.mark.parametrize('name', ['Registration','RoleCertificate','RevocationList','TemporalAcl','AccessRequest','AccessDecision','StateCheckpoint'])
+    def test_schema_signing_metadata_matches_producer_vectors(name):
+        from evaluation.vectors import type_string
+        schema=json.loads(Path('interfaces/proposals/v1/hmbc.schema.json').read_text())['$defs'][name]
+        typed=next(v['typedData'] for v in V['vectors'] if v['name']==name)
+>       assert schema.get('x-eip712Type')==type_string(name,typed['types'])
+E       AssertionError: assert None == 'TemporalAcl(address authority,uint64 version,uint64 validUntil,TempAclEntry[] entries)TempAclEntry(address gid,bytes32 role,uint64 validFrom,uint64 validUntil)'
+E        +  where None = <built-in method get of dict object at 0x7fd251bb44c0>('x-eip712Type')
+E        +    where <built-in method get of dict object at 0x7fd251bb44c0> = {'additionalProperties': False, 'properties': {'authority': {'$ref': '#/$defs/Address'}, 'entries': {'items': {'$ref':...version': {'$ref': '#/$defs/Uint64'}}, 'required': ['authority', 'version', 'validUntil', 'entries'], 'type': 'object'}.get
+E        +  and   'TemporalAcl(address authority,uint64 version,uint64 validUntil,TempAclEntry[] entries)TempAclEntry(address gid,bytes32 role,uint64 validFrom,uint64 validUntil)' = <function type_string at 0x7fd2532bb060>('TemporalAcl', {'EIP712Domain': [{'name': 'name', 'type': 'string'}, {'name': 'version', 'type': 'string'}, {'name': 'chainId', 'type...'version', 'type': 'uint64'}, {'name': 'validUntil', 'type': 'uint64'}, {'name': 'entries', 'type': 'TempAclEntry[]'}]})
+
+evaluation/tests/test_schemas.py:92: AssertionError
+_____ test_schema_signing_metadata_matches_producer_vectors[AccessRequest] _____
+
+name = 'AccessRequest'
+
+    @pytest.mark.parametrize('name', ['Registration','RoleCertificate','RevocationList','TemporalAcl','AccessRequest','AccessDecision','StateCheckpoint'])
+    def test_schema_signing_metadata_matches_producer_vectors(name):
+        from evaluation.vectors import type_string
+        schema=json.loads(Path('interfaces/proposals/v1/hmbc.schema.json').read_text())['$defs'][name]
+        typed=next(v['typedData'] for v in V['vectors'] if v['name']==name)
+>       assert schema.get('x-eip712Type')==type_string(name,typed['types'])
+E       AssertionError: assert None == 'AccessRequest(uint256 sourceChainId,uint256 destinationChainId,address psc,address kssc,address gid,bytes32 dataId,uint8 action,uint64 policyVersion,uint64 authEpoch,uint64 keyEpoch,uint256 nonce,uint64 expiresAt,bytes32 recipientKeyHash)'
+E        +  where None = <built-in method get of dict object at 0x7fd251b6f340>('x-eip712Type')
+E        +    where <built-in method get of dict object at 0x7fd251b6f340> = {'additionalProperties': False, 'properties': {'action': {'$ref': '#/$defs/Uint8'}, 'authEpoch': {'$ref': '#/$defs/Uin...56'}, ...}, 'required': ['sourceChainId', 'destinationChainId', 'psc', 'kssc', 'gid', 'dataId', ...], 'type': 'object'}.get
+E        +  and   'AccessRequest(uint256 sourceChainId,uint256 destinationChainId,address psc,address kssc,address gid,bytes32 dataId,uint8 action,uint64 policyVersion,uint64 authEpoch,uint64 keyEpoch,uint256 nonce,uint64 expiresAt,bytes32 recipientKeyHash)' = <function type_string at 0x7fd2532bb060>('AccessRequest', {'AccessRequest': [{'name': 'sourceChainId', 'type': 'uint256'}, {'name': 'destinationChainId', 'type': 'uint256'}, {'...version', 'type': 'string'}, {'name': 'chainId', 'type': 'uint256'}, {'name': 'verifyingContract', 'type': 'address'}]})
+
+evaluation/tests/test_schemas.py:92: AssertionError
+____ test_schema_signing_metadata_matches_producer_vectors[AccessDecision] _____
+
+name = 'AccessDecision'
+
+    @pytest.mark.parametrize('name', ['Registration','RoleCertificate','RevocationList','TemporalAcl','AccessRequest','AccessDecision','StateCheckpoint'])
+    def test_schema_signing_metadata_matches_producer_vectors(name):
+        from evaluation.vectors import type_string
+        schema=json.loads(Path('interfaces/proposals/v1/hmbc.schema.json').read_text())['$defs'][name]
+        typed=next(v['typedData'] for v in V['vectors'] if v['name']==name)
+>       assert schema.get('x-eip712Type')==type_string(name,typed['types'])
+E       AssertionError: assert None == 'AccessDecision(bytes32 requestDigest,uint8 result,bytes32 credentialDigest,uint64 stateSequence,uint64 witnessSetVersion,uint256 sourceBlockNumber,bytes32 sourceBlockHash,uint64 expiresAt)'
+E        +  where None = <built-in method get of dict object at 0x7fd251b82780>('x-eip712Type')
+E        +    where <built-in method get of dict object at 0x7fd251b82780> = {'additionalProperties': False, 'properties': {'credentialDigest': {'$ref': '#/$defs/Hash'}, 'expiresAt': {'$ref': '#/...gest', 'result', 'credentialDigest', 'stateSequence', 'witnessSetVersion', 'sourceBlockNumber', ...], 'type': 'object'}.get
+E        +  and   'AccessDecision(bytes32 requestDigest,uint8 result,bytes32 credentialDigest,uint64 stateSequence,uint64 witnessSetVersion,uint256 sourceBlockNumber,bytes32 sourceBlockHash,uint64 expiresAt)' = <function type_string at 0x7fd2532bb060>('AccessDecision', {'AccessDecision': [{'name': 'requestDigest', 'type': 'bytes32'}, {'name': 'result', 'type': 'uint8'}, {'name': 'crede...version', 'type': 'string'}, {'name': 'chainId', 'type': 'uint256'}, {'name': 'verifyingContract', 'type': 'address'}]})
+
+evaluation/tests/test_schemas.py:92: AssertionError
+____ test_schema_signing_metadata_matches_producer_vectors[StateCheckpoint] ____
+
+name = 'StateCheckpoint'
+
+    @pytest.mark.parametrize('name', ['Registration','RoleCertificate','RevocationList','TemporalAcl','AccessRequest','AccessDecision','StateCheckpoint'])
+    def test_schema_signing_metadata_matches_producer_vectors(name):
+        from evaluation.vectors import type_string
+        schema=json.loads(Path('interfaces/proposals/v1/hmbc.schema.json').read_text())['$defs'][name]
+        typed=next(v['typedData'] for v in V['vectors'] if v['name']==name)
+>       assert schema.get('x-eip712Type')==type_string(name,typed['types'])
+E       AssertionError: assert None == 'StateCheckpoint(uint64 sequence,uint64 authEpoch,uint64 policyVersion,uint64 keyEpoch,uint64 witnessSetVersion,uint256 sourceChainId,address psc,uint256 sourceBlockNumber,bytes32 sourceBlockHash,uint64 expiresAt)'
+E        +  where None = <built-in method get of dict object at 0x7fd251ba6700>('x-eip712Type')
+E        +    where <built-in method get of dict object at 0x7fd251ba6700> = {'additionalProperties': False, 'properties': {'authEpoch': {'$ref': '#/$defs/Uint64'}, 'expiresAt': {'$ref': '#/$defs...': ['sequence', 'authEpoch', 'policyVersion', 'keyEpoch', 'witnessSetVersion', 'sourceChainId', ...], 'type': 'object'}.get
+E        +  and   'StateCheckpoint(uint64 sequence,uint64 authEpoch,uint64 policyVersion,uint64 keyEpoch,uint64 witnessSetVersion,uint256 sourceChainId,address psc,uint256 sourceBlockNumber,bytes32 sourceBlockHash,uint64 expiresAt)' = <function type_string at 0x7fd2532bb060>('StateCheckpoint', {'EIP712Domain': [{'name': 'name', 'type': 'string'}, {'name': 'version', 'type': 'string'}, {'name': 'chainId', 'type...'type': 'uint64'}, {'name': 'witnessSetVersion', 'type': 'uint64'}, {'name': 'sourceChainId', 'type': 'uint256'}, ...]})
+
+evaluation/tests/test_schemas.py:92: AssertionError
+__________________ test_empty_credential_bundle_is_malformed ___________________
+
+    def test_empty_credential_bundle_is_malformed():
+        # A bundle with one temporal claim is structurally valid; membership is a state check.
+        validate('CredentialBundle',{'certificates':[],'temporalClaims':[{'authority':REQUEST['gid'],'role':REQUEST['dataId']}]})
+>       with pytest.raises(ValueError,match='MALFORMED'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+evaluation/tests/test_schemas.py:99: Failed
+____________ test_zero_subject_in_temporal_acl_is_malformed[False] _____________
+
+nested = False
+
+    @pytest.mark.parametrize('nested',[False,True])
+    def test_zero_subject_in_temporal_acl_is_malformed(nested):
+        acl=copy.deepcopy(next(v['typedData']['message'] for v in V['vectors'] if v['name']=='TemporalAcl'))
+        entry=acl['entries'][0]
+        validate('TempAclEntry',entry)
+        entry['gid']='0x'+'00'*20
+        # One entry avoids confounding this check with the separate canonical-order constraint.
+        acl['entries']=[entry]
+>       with pytest.raises(ValueError,match='MALFORMED'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+evaluation/tests/test_schemas.py:111: Failed
+_____________ test_zero_subject_in_temporal_acl_is_malformed[True] _____________
+
+nested = True
+
+    @pytest.mark.parametrize('nested',[False,True])
+    def test_zero_subject_in_temporal_acl_is_malformed(nested):
+        acl=copy.deepcopy(next(v['typedData']['message'] for v in V['vectors'] if v['name']=='TemporalAcl'))
+        entry=acl['entries'][0]
+        validate('TempAclEntry',entry)
+        entry['gid']='0x'+'00'*20
+        # One entry avoids confounding this check with the separate canonical-order constraint.
+        acl['entries']=[entry]
+>       with pytest.raises(ValueError,match='MALFORMED'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+evaluation/tests/test_schemas.py:111: Failed
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_schemas.py::test_schema_signing_metadata_matches_producer_vectors[Registration]
+FAILED evaluation/tests/test_schemas.py::test_schema_signing_metadata_matches_producer_vectors[RoleCertificate]
+FAILED evaluation/tests/test_schemas.py::test_schema_signing_metadata_matches_producer_vectors[RevocationList]
+FAILED evaluation/tests/test_schemas.py::test_schema_signing_metadata_matches_producer_vectors[TemporalAcl]
+FAILED evaluation/tests/test_schemas.py::test_schema_signing_metadata_matches_producer_vectors[AccessRequest]
+FAILED evaluation/tests/test_schemas.py::test_schema_signing_metadata_matches_producer_vectors[AccessDecision]
+FAILED evaluation/tests/test_schemas.py::test_schema_signing_metadata_matches_producer_vectors[StateCheckpoint]
+FAILED evaluation/tests/test_schemas.py::test_empty_credential_bundle_is_malformed
+FAILED evaluation/tests/test_schemas.py::test_zero_subject_in_temporal_acl_is_malformed[False]
+FAILED evaluation/tests/test_schemas.py::test_zero_subject_in_temporal_acl_is_malformed[True]
+10 failed, 21 passed in 1.74s

@@ -1,0 +1,59 @@
+[
+  {
+    "name": "prepublication-fetch",
+    "argv": [
+      "git",
+      "fetch",
+      "origin"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T10:56:19.107363+00:00",
+    "endedAt": "2026-10-08T10:56:22.754380+00:00",
+    "exitCode": 0,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "prepublication-refs",
+    "argv": [
+      "git",
+      "for-each-ref",
+      "--format=%(refname) %(objectname) %(symref)",
+      "refs/remotes/origin"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T10:56:22.754607+00:00",
+    "endedAt": "2026-10-08T10:56:22.757088+00:00",
+    "exitCode": 0,
+    "stdoutSha256": "6bb85da183aeb86eb9359d46e0d92df95d8e8136cd2c364198e19a29926e5b1e",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "prepublication-diff-check",
+    "argv": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T10:56:22.757326+00:00",
+    "endedAt": "2026-10-08T10:56:22.762326+00:00",
+    "exitCode": 0,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "prepublication-prompts",
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "communication/build_prompts.py",
+      "--check"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-10-08T10:56:22.762532+00:00",
+    "endedAt": "2026-10-08T10:56:22.794541+00:00",
+    "exitCode": 0,
+    "stdoutSha256": "8f29a69f6b3463b624687ea89c034e86c0217602a093168e78b810d5ef4ac781",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

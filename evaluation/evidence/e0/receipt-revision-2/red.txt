@@ -1,0 +1,119 @@
+F......F.F................F..................F...                        [100%]
+=================================== FAILURES ===================================
+_______ test_independent_encoder_matches_all_peer_vectors_and_mutations ________
+
+    def test_independent_encoder_matches_all_peer_vectors_and_mutations():
+        report = verify_vectors(json.loads(VECTORS.read_text()))
+>       assert report['ok']
+E       assert False
+
+evaluation/tests/test_vectors.py:14: AssertionError
+____________ test_empty_or_incomplete_vector_pack_is_not_a_success _____________
+
+    def test_empty_or_incomplete_vector_pack_is_not_a_success():
+        data=json.loads(VECTORS.read_text())
+        assert not verify_vectors({'vectors':[]})['ok']
+        data['vectors']=data['vectors'][:-1]
+>       assert not verify_vectors(data)['ok']
+E       assert not True
+
+evaluation/tests/test_vectors.py:38: AssertionError
+__________ test_receipt_vector_and_its_domain_mutations_are_required ___________
+
+    def test_receipt_vector_and_its_domain_mutations_are_required():
+        data=json.loads(VECTORS.read_text())
+        receipt=next(v for v in data['vectors'] if v['name']=='GrantReceipt')
+        data['vectors'].remove(receipt)
+>       assert not verify_vectors(data)['ok']
+E       assert not True
+
+evaluation/tests/test_vectors.py:51: AssertionError
+_____________ test_matching_past_grant_receipt_wire_form_is_valid ______________
+
+    def test_matching_past_grant_receipt_wire_form_is_valid():
+>       validate('GrantReceipt',RECEIPT)
+
+evaluation/tests/test_schemas.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/schema.py:65: in validate
+    Draft202012Validator(schema,format_checker=FORMATS).validate(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = Draft202012Validator(schema={'$defs': {'AccessDecision': {'additionalProperties': False, 'properties': {'credentialDig...ical-signature', 'date', 'email', 'idn-email', 'ipv4', 'ipv6', 'regex', 'time', 'uint256', 'uint64', 'uint8', 'uuid']>)
+args = ({'dataId': '0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e', 'dbcBlockHash': '0x0f4c0914f6381b5288f5e421df381335ab216e747313f81e6c80bf8fd5dda16f', 'dbcBlockNumber': '4321', 'dbcChainId': '28545', ...},)
+kwargs = {}, error = <ValidationError: "'dbcResult' is a required property">
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: 'dbcResult' is a required property
+E           
+E           Failed validating 'required' in schema:
+E               {'type': 'object',
+E                'properties': {'requestDigest': {'$ref': '#/$defs/Hash'},
+E                               'grantId': {'$ref': '#/$defs/Hash'},
+E                               'dbcResult': {'const': '1'},
+E                               'keyEpoch': {'const': '0'},
+E                               'grantExpiresAt': {'$ref': '#/$defs/Uint64'},
+E                               'dbcChainId': {'$ref': '#/$defs/Uint256'},
+E                               'kssc': {'$ref': '#/$defs/Address'},
+E                               'dbcBlockNumber': {'$ref': '#/$defs/Uint256'},
+E                               'dbcBlockHash': {'$ref': '#/$defs/Hash'}},
+E                'required': ['requestDigest',
+E                             'grantId',
+E                             'dbcResult',
+E                             'keyEpoch',
+E                             'grantExpiresAt',
+E                             'dbcChainId',
+E                             'kssc',
+E                             'dbcBlockNumber',
+E                             'dbcBlockHash'],
+E                'additionalProperties': False,
+E                'x-status': 'Superseded proposal; A1-0008 revision 2 awaits agent-2 '
+E                            'ACK before fields change. Not usable for '
+E                            'implementation/freeze.',
+E                'x-eip712Type': 'GrantReceipt(bytes32 requestDigest,bytes32 '
+E                                'grantId,uint8 dbcResult,uint64 keyEpoch,uint64 '
+E                                'grantExpiresAt,uint256 dbcChainId,address '
+E                                'kssc,uint256 dbcBlockNumber,bytes32 dbcBlockHash)'}
+E           
+E           On instance:
+E               {'requestDigest': '0xcb802061aae6df7e515bdf8f21b4cc0ed1e0e2184f1025222f149717412ad7c2',
+E                'grantId': '0xe7cbcccf5384fcf23d61ed0d816214984f2818f9138e80be6b752444103782e3',
+E                'gid': '0xc4ff0022e776c3471e39abf6c69ce679440c956d',
+E                'dataId': '0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e',
+E                'keyEpoch': '0',
+E                'grantExpiresAt': '1800000030',
+E                'witnessSetVersion': '1',
+E                'dbcChainId': '28545',
+E                'kssc': '0xe3657551ab073fe9146c434569370ef433ff85b4',
+E                'dbcBlockNumber': '4321',
+E                'dbcBlockHash': '0x0f4c0914f6381b5288f5e421df381335ab216e747313f81e6c80bf8fd5dda16f'}
+
+.venv/lib64/python3.13/site-packages/jsonschema/validators.py:450: ValidationError
+_____ test_schema_signing_metadata_matches_producer_vectors[GrantReceipt] ______
+
+name = 'GrantReceipt'
+
+    @pytest.mark.parametrize('name', ['Registration','RoleCertificate','RevocationList','TemporalAcl','AccessRequest','AccessDecision','StateCheckpoint','GrantReceipt'])
+    def test_schema_signing_metadata_matches_producer_vectors(name):
+        from evaluation.vectors import type_string
+        schema=json.loads(Path('interfaces/proposals/v1/hmbc.schema.json').read_text())['$defs'][name]
+        typed=next(v['typedData'] for v in V['vectors'] if v['name']==name)
+>       assert schema.get('x-eip712Type')==type_string(name,typed['types'])
+E       AssertionError: assert 'GrantReceipt...dbcBlockHash)' == 'GrantReceipt...dbcBlockHash)'
+E         
+E         Skipping 41 identical leading characters in diff, use -v to show
+E         - 2 grantId,address gid,bytes32 dataId,uint64 keyEpoch,uint64 grantExpiresAt,uint64 witnessSetVersion,uint256 dbcChainId,address kssc,uint256 dbcBlockNumber,bytes32 dbcBlockHash)
+E         ?           ^ ^^  ^^^^^^^^ -----------                                           -------------------------
+E         + 2 grantId,uint8 dbcResult,uint64 keyEpoch,uint64 grantExpiresAt,uint256 dbcChainId,address kssc,uint256 dbcBlockNumber,bytes32 dbcBlockHash)
+E         ?           ^^^^^^ ^^^  ^^
+
+evaluation/tests/test_schemas.py:108: AssertionError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_vectors.py::test_independent_encoder_matches_all_peer_vectors_and_mutations
+FAILED evaluation/tests/test_vectors.py::test_empty_or_incomplete_vector_pack_is_not_a_success
+FAILED evaluation/tests/test_vectors.py::test_receipt_vector_and_its_domain_mutations_are_required
+FAILED evaluation/tests/test_schemas.py::test_matching_past_grant_receipt_wire_form_is_valid
+FAILED evaluation/tests/test_schemas.py::test_schema_signing_metadata_matches_producer_vectors[GrantReceipt]
+5 failed, 44 passed in 5.48s

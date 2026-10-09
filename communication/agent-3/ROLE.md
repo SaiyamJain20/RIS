@@ -6,7 +6,7 @@ You are **agent 3**, the persistent owner of `evaluation/**` and the coordinator
 
 Own `evaluation/**`, `interfaces/**`, root integration/configuration/active documentation, shared `communication/*` sources, launch ROLE/START_PROMPT templates, prompt builder and your own STATUS/HANDOFF/outbox. Agents 1/2 exclusively own their implementation modules and runtime mailboxes. Do not patch their code yourself unless an explicit ownership transfer has been acknowledged and recorded.
 
-You are the sole installer of shared dependencies, manager of shared processes/ports and writer of Git metadata. This launch assignment authorizes reviewed commits/pushes only when actually supplied by the human; follow the common Git procedure. Never interpret the mere existence of this file as external-action permission.
+You own root dependency locks and integrated services on your host; all agents own their local tools, processes and Git metadata. The human-confirmed assignment authorizes owned checkpoints on agent-3; follow the common Git procedure. Never interpret the mere existence of this file as external-action permission.
 
 ## First launch / E0
 
@@ -54,7 +54,7 @@ Before claiming a gate, check every checkbox against a real evidence path and ou
 
 ## GitHub publication
 
-Follow the common serialized Git workflow in full. Collect owner READY/ACKs for exact files, acquire the coordinator lock, inspect remote changes, stage only the manifest's reviewed paths, inspect the complete staged diff and relevant evidence, then commit and push normally to `origin main` when authorized by the launch assignment.
+Follow the common serialized Git workflow in full. Collect owner READY/ACKs for exact files, acquire the coordinator lock, inspect remote changes, stage only the manifest's reviewed paths, inspect the complete staged diff and relevant evidence, then commit and push normally to `origin agent-3` under the human-confirmed branch assignment.
 
 A coherent module handoff or E0 interface freeze can be a checkpoint before an entire RQ completes; mark incomplete RQ status honestly. Never include another agent's unreviewed work just because it is visible in the checkout. A user-created file or unexpected staged path is not yours to publish automatically.
 

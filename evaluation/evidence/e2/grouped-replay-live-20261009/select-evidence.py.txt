@@ -1,0 +1,37 @@
+from pathlib import Path
+import json,hashlib,shutil,sys
+run=Path(__file__).parent;root=Path('/home/karma/Documents/RIS');raw=run/'real-e2-output';dest=root/'evaluation/evidence/e2/grouped-replay-live-20261009'
+dest.mkdir(exist_ok=False)
+allowed_dirs={'pbc-native','dbc-native','nonce-replay','alice','bob','adapter','adapter-restarted','pbc-service','dbc-service'}
+allowed_root={'deployment.json','bootstrap.json','bootstrap-checked.json','commands.json'}
+selected=[]
+for p in raw.rglob('*.json'):
+ rel=p.relative_to(raw)
+ if any(x in rel.parts for x in ('snapshots','private-adapter-state')):continue
+ if len(rel.parts)==1 or (len(rel.parts)==2 and rel.name=='manifest.json') or (len(rel.parts)==3 and rel.name in allowed_root) or (len(rel.parts)==4 and rel.parts[-2] in allowed_dirs) or (len(rel.parts)==5 and rel.parts[-2]=='nonce-replay'):
+  target=dest/'run'/rel;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(p,target);selected.append(target)
+for name in ['acks.json','preflight.json','communication-provenance.json','peer-reviews.json','scheduled-lock.json','real-e2.json','source-bracket.json','frozen-copy-check.json','agent-1-ack.md','agent-2-ack.md']:
+ target=dest/name;shutil.copyfile(run/name,target);selected.append(target)
+# Full public RPC command records stay externally inventoried; selected direct
+# service/owner command argv, native receipts/views and exchange hashes are saved.
+audit=json.loads((run/'live-result-audit.json').read_text())
+audit['commands']=[x for x in audit['commands'] if x['path'].endswith('/'+ 'commands.json') and '-rpc/' not in x['path']]
+audit['externalRawRoot']=str(run)
+(dest/'live-result-audit.json').write_text(json.dumps(audit,indent=2)+'\n');selected.append(dest/'live-result-audit.json')
+files={str(p.relative_to(raw)):hashlib.sha256(p.read_bytes()).hexdigest() for p in raw.rglob('*') if p.is_file() and not any(x in p.relative_to(raw).parts for x in ('snapshots','private-adapter-state'))}
+(dest/'external-public-inventory.json').write_text(json.dumps({'root':str(raw),'files':files,'privateStateAndSnapshotsExcluded':True},indent=2)+'\n');selected.append(dest/'external-public-inventory.json')
+# Refuse keys/capabilities by structured field names; commitments/key refs and
+# TEST-ONLY derivation descriptions are allowed. Public signatures aren't secrets.
+banned={'token','privateKey','private_key','secretKey','secret_key','mnemonic','secret','seedPhrase'}
+def check(x,path):
+ if isinstance(x,dict):
+  for k,v in x.items():
+   if k in banned:raise ValueError('unredacted field '+k+' in '+str(path))
+   check(v,path)
+ elif isinstance(x,list):
+  for v in x:check(v,path)
+for p in selected:
+ if p.suffix=='.json':check(json.loads(p.read_text()),p)
+manifest={str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in selected}
+(dest/'selected-manifest.json').write_text(json.dumps({'files':manifest,'classification':'selected public and redacted evidence; exact hashes','externalRoot':str(run)},indent=2)+'\n')
+print('SELECTED',len(selected),sum(p.stat().st_size for p in selected))

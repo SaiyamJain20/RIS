@@ -1,0 +1,76 @@
+FFF.                                                                     [100%]
+=================================== FAILURES ===================================
+_ test_subject_oracle_enforces_caller_action_and_observation_clock[wrong-caller] _
+
+mutation = 'wrong-caller'
+
+    @pytest.mark.parametrize('mutation', ['wrong-caller', 'before-decision', 'wrong-action', 'unknown-profile'])
+    def test_subject_oracle_enforces_caller_action_and_observation_clock(mutation):
+        d = facts()
+        if mutation == 'wrong-caller':
+            d['receipt_events'][1]['fields']['submitter'] = 'outsider'
+            d['after']['logs']['dbc'][1]['fields']['submitter'] = 'outsider'
+        if mutation == 'before-decision':
+            d['timestamp'] = d['after']['grant']['issuedAt'] = '99'
+            d['after']['grant']['expiresAt'] = '129'
+            d['receipt_events'][0]['fields']['expiresAt'] = '129'
+            d['after']['logs']['dbc'][0]['fields']['expiresAt'] = '129'
+        if mutation == 'wrong-action':
+            for obj in (d['original_request'], d['forwarded'], d['submitted_arguments'][0]): obj['action'] = '2'
+        if mutation == 'unknown-profile': d['profile'] = 'mutant-no-binding'
+>       with pytest.raises(ValueError): oracle()(**d)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+evaluation/tests/test_subject_substitution.py:132: Failed
+_ test_subject_oracle_enforces_caller_action_and_observation_clock[before-decision] _
+
+mutation = 'before-decision'
+
+    @pytest.mark.parametrize('mutation', ['wrong-caller', 'before-decision', 'wrong-action', 'unknown-profile'])
+    def test_subject_oracle_enforces_caller_action_and_observation_clock(mutation):
+        d = facts()
+        if mutation == 'wrong-caller':
+            d['receipt_events'][1]['fields']['submitter'] = 'outsider'
+            d['after']['logs']['dbc'][1]['fields']['submitter'] = 'outsider'
+        if mutation == 'before-decision':
+            d['timestamp'] = d['after']['grant']['issuedAt'] = '99'
+            d['after']['grant']['expiresAt'] = '129'
+            d['receipt_events'][0]['fields']['expiresAt'] = '129'
+            d['after']['logs']['dbc'][0]['fields']['expiresAt'] = '129'
+        if mutation == 'wrong-action':
+            for obj in (d['original_request'], d['forwarded'], d['submitted_arguments'][0]): obj['action'] = '2'
+        if mutation == 'unknown-profile': d['profile'] = 'mutant-no-binding'
+>       with pytest.raises(ValueError): oracle()(**d)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+evaluation/tests/test_subject_substitution.py:132: Failed
+_ test_subject_oracle_enforces_caller_action_and_observation_clock[wrong-action] _
+
+mutation = 'wrong-action'
+
+    @pytest.mark.parametrize('mutation', ['wrong-caller', 'before-decision', 'wrong-action', 'unknown-profile'])
+    def test_subject_oracle_enforces_caller_action_and_observation_clock(mutation):
+        d = facts()
+        if mutation == 'wrong-caller':
+            d['receipt_events'][1]['fields']['submitter'] = 'outsider'
+            d['after']['logs']['dbc'][1]['fields']['submitter'] = 'outsider'
+        if mutation == 'before-decision':
+            d['timestamp'] = d['after']['grant']['issuedAt'] = '99'
+            d['after']['grant']['expiresAt'] = '129'
+            d['receipt_events'][0]['fields']['expiresAt'] = '129'
+            d['after']['logs']['dbc'][0]['fields']['expiresAt'] = '129'
+        if mutation == 'wrong-action':
+            for obj in (d['original_request'], d['forwarded'], d['submitted_arguments'][0]): obj['action'] = '2'
+        if mutation == 'unknown-profile': d['profile'] = 'mutant-no-binding'
+>       with pytest.raises(ValueError): oracle()(**d)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+evaluation/tests/test_subject_substitution.py:132: Failed
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_enforces_caller_action_and_observation_clock[wrong-caller]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_enforces_caller_action_and_observation_clock[before-decision]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_enforces_caller_action_and_observation_clock[wrong-action]
+3 failed, 1 passed, 67 deselected in 0.32s

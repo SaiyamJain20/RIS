@@ -1,0 +1,61 @@
+{
+  "status": "local smoke verified; shared version freeze awaits peer ACKs",
+  "hostPython": "3.13.13",
+  "uv": "uv 0.11.11 (x86_64-unknown-linux-gnu)",
+  "git": "git version 2.54.0",
+  "pythonLock": {
+    "path": "uv.lock",
+    "sha256": "1fb4777a5d4078434af8e7fe4a88f2f3afbe1d8f65d30e8a182999d7a7a29cbe"
+  },
+  "packagePins": {
+    "eth-account": "0.14.0",
+    "jsonschema": "4.26.0",
+    "pytest": "9.0.2"
+  },
+  "primaryDocs": [
+    "https://eth-account.readthedocs.io/en/stable/eth_account.html",
+    "https://python-jsonschema.readthedocs.io/en/stable/validate/",
+    "https://github.com/foundry-rs/foundry/releases/tag/v1.8.5",
+    "https://bblanche.gitlabpages.inria.fr/proverif/install.html"
+  ],
+  "foundry": {
+    "version": "1.8.5",
+    "commit": "51a52c59cffd940f76eddd0b4bb1791aa4b5ac7f",
+    "assetUrl": "https://github.com/foundry-rs/foundry/releases/download/v1.8.5/foundry_v1.8.5_linux_amd64.tar.gz",
+    "assetSha256": "6c66ffcc55fa4249197721baa3098bc208014ea1d8aa04b2ed50ac6bccffb226",
+    "binaryPaths": {
+      "forge": {
+        "path": "/home/karma/.local/share/hmbc-tools/foundry-1.8.5/forge",
+        "sha256": "06c477aee83d0996e57aa92b0841fdf06382cb172fd69bbb88920bb0054dfd7f"
+      },
+      "anvil": {
+        "path": "/home/karma/.local/share/hmbc-tools/foundry-1.8.5/anvil",
+        "sha256": "00f97668e1ae0fcca118fd7d2d1b6d25c0496447a523ca6bc2dfd10958c99604"
+      },
+      "cast": {
+        "path": "/home/karma/.local/share/hmbc-tools/foundry-1.8.5/cast",
+        "sha256": "1eb1eecfdadaad8da2173ccf0c7c0be86fe237b0a267042a40d7ca12d0fa2af7"
+      }
+    }
+  },
+  "solc": {
+    "version": "0.8.37+commit.f401782d",
+    "path": "/home/karma/.local/share/svm/0.8.37/solc-0.8.37",
+    "sha256": "5de843c2c93563cc66425c99a4fb13fdbf32b4c4ae07469480faaf126e14404a"
+  },
+  "proverif": {
+    "version": "2.05",
+    "sourceUrl": "https://bblanche.gitlabpages.inria.fr/proverif/proverif2.05.tar.gz",
+    "sourceSha256": "4871f53c32ab4a04669a060c4886ba5d9080496963fb980a9a62d2c429ceabc4",
+    "path": "/home/karma/.local/share/hmbc-tools/proverif-2.05/proverif",
+    "binarySha256": "c1087205c639702fa4a3f5e8518abfe97bbd867eb0a0c1aab3f7293448b2726f",
+    "compiler": "OCaml 4.14.2 locally built",
+    "compilerSourceUrl": "https://github.com/ocaml/ocaml/archive/refs/tags/4.14.2.tar.gz",
+    "compilerSourceSha256": "c2d706432f93ba85bd3383fa451d74543c32a4e84a1afaf3e8ace18f7f097b43",
+    "build": "PATH=<ocaml-prefix>/bin:$PATH ./build -nointeract native (exit 0)",
+    "failedAttempt": "./build exited 127 at optional GUI ocamlfind dependency; retained failure; core rebuilt successfully without GUI",
+    "smoke": "public token reachable; private token unreachable; does not prove E correspondence"
+  },
+  "tlc": "NOT INSTALLED: F/G locked",
+  "abe": "NOT INSTALLED: G0 locked"
+}

@@ -1,0 +1,694 @@
+..................................FFFFFFFFFFFF                           [100%]
+=================================== FAILURES ===================================
+_ test_public_replay_probe_checks_mined_call_before_worker_release[none-paper-strict] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-85/test_public_replay_probe_check0')
+profile = 'paper-strict', transaction_mutation = 'none'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('transaction_mutation', ['none', 'changed-call', 'same-nonce', 'wrong-relay'])
+    def test_public_replay_probe_checks_mined_call_before_worker_release(artifacts, inputs, tmp_path, profile, transaction_mutation):
+        import json
+        from evaluation.native import NativeReceipt
+        from evaluation.tests.test_access_execution import Model
+        from evaluation.access_execution import execute_access
+        m = Model(artifacts, inputs, profile)
+        logs = {'pbc': [], 'dbc': []}; grants = []
+        for label, chain in [('pbc', m.pbc), ('dbc', m.dbc)]:
+            submit = chain.submit; call = chain.call
+            def wrapped_submit(signer, role, method, *args, expect_success=True, chain=chain, label=label, submit=submit):
+                if expect_success:
+                    native = submit(signer, role, method, *args)
+                    logs[label].extend(native.receipt['logs'])
+                    if method in ('policyEnf', 'consumeDecision'): grants.append((method, copy.deepcopy(args), native))
+                    return native
+                assert label == 'dbc' and (method, args) == grants[0][:2]
+                assert m.request_state['status'] == '1' and m.snapshot()  # exporter remains usable before release
+                n = grants[0][2]
+                receipt = dict(n.receipt, status='0x0', logs=[], transactionHash='0x'+'aa'*32)
+                return NativeReceipt(receipt=receipt, transaction=dict(hash=receipt['transactionHash'], chainId=hex(int(chain.chain_id)),
+                                      blockHash=n.block_hash, blockNumber=hex(int(n.block_number)), transactionIndex='0x0'),
+                                     block=dict(hash=n.block_hash, number=hex(int(n.block_number)), timestamp=hex(int(n.timestamp)),
+                                                transactions=[receipt['transactionHash']]), chain_id=chain.chain_id)
+            def wrapped_call(method, args=None, chain=chain, label=label, call=call):
+                if method == 'eth_getLogs': return logs[label]
+                if method == 'eth_getTransactionByHash':
+                    name, arguments, native = grants[0]
+                    duplicate = args[0] != native.receipt['transactionHash']
+                    data = dict(hash=args[0], input=chain.contracts['ACSC'].calldata(name, *arguments),
+                                to=chain.contracts['ACSC'].address, **{'from': m.dep['fixture']['relay']['address']},
+                                nonce='0x2' if duplicate else '0x1')
+                    if duplicate and transaction_mutation == 'changed-call': data['input'] += '00'
+                    if duplicate and transaction_mutation == 'same-nonce': data['nonce'] = '0x1'
+                    if duplicate and transaction_mutation == 'wrong-relay': data['from'] = '0x'+'bb'*20
+                    return data
+                return call(method, args)
+            chain.submit = wrapped_submit; chain.call = wrapped_call
+        m.dbc.rejection_code = lambda native: '8'
+        kwargs = dict(deployment_bytes=json.dumps(m.dep).encode(), user_label='alice', user=m.users['alice'],
+                      record=m.record, policy=m.policy, expected_allow=True, worker_snapshot=m.snapshot,
+                      output=tmp_path/'access', nonce_replay=True)
+        if transaction_mutation != 'none':
+            with pytest.raises(ValueError): execute_access(m.pbc, m.dbc, m, **kwargs)
+            return
+>       result = execute_access(m.pbc, m.dbc, m, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: execute_access() got an unexpected keyword argument 'nonce_replay'
+
+evaluation/tests/test_request_replay.py:136: TypeError
+_ test_public_replay_probe_checks_mined_call_before_worker_release[none-paper-minimal] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-85/test_public_replay_probe_check1')
+profile = 'paper-minimal', transaction_mutation = 'none'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('transaction_mutation', ['none', 'changed-call', 'same-nonce', 'wrong-relay'])
+    def test_public_replay_probe_checks_mined_call_before_worker_release(artifacts, inputs, tmp_path, profile, transaction_mutation):
+        import json
+        from evaluation.native import NativeReceipt
+        from evaluation.tests.test_access_execution import Model
+        from evaluation.access_execution import execute_access
+        m = Model(artifacts, inputs, profile)
+        logs = {'pbc': [], 'dbc': []}; grants = []
+        for label, chain in [('pbc', m.pbc), ('dbc', m.dbc)]:
+            submit = chain.submit; call = chain.call
+            def wrapped_submit(signer, role, method, *args, expect_success=True, chain=chain, label=label, submit=submit):
+                if expect_success:
+                    native = submit(signer, role, method, *args)
+                    logs[label].extend(native.receipt['logs'])
+                    if method in ('policyEnf', 'consumeDecision'): grants.append((method, copy.deepcopy(args), native))
+                    return native
+                assert label == 'dbc' and (method, args) == grants[0][:2]
+                assert m.request_state['status'] == '1' and m.snapshot()  # exporter remains usable before release
+                n = grants[0][2]
+                receipt = dict(n.receipt, status='0x0', logs=[], transactionHash='0x'+'aa'*32)
+                return NativeReceipt(receipt=receipt, transaction=dict(hash=receipt['transactionHash'], chainId=hex(int(chain.chain_id)),
+                                      blockHash=n.block_hash, blockNumber=hex(int(n.block_number)), transactionIndex='0x0'),
+                                     block=dict(hash=n.block_hash, number=hex(int(n.block_number)), timestamp=hex(int(n.timestamp)),
+                                                transactions=[receipt['transactionHash']]), chain_id=chain.chain_id)
+            def wrapped_call(method, args=None, chain=chain, label=label, call=call):
+                if method == 'eth_getLogs': return logs[label]
+                if method == 'eth_getTransactionByHash':
+                    name, arguments, native = grants[0]
+                    duplicate = args[0] != native.receipt['transactionHash']
+                    data = dict(hash=args[0], input=chain.contracts['ACSC'].calldata(name, *arguments),
+                                to=chain.contracts['ACSC'].address, **{'from': m.dep['fixture']['relay']['address']},
+                                nonce='0x2' if duplicate else '0x1')
+                    if duplicate and transaction_mutation == 'changed-call': data['input'] += '00'
+                    if duplicate and transaction_mutation == 'same-nonce': data['nonce'] = '0x1'
+                    if duplicate and transaction_mutation == 'wrong-relay': data['from'] = '0x'+'bb'*20
+                    return data
+                return call(method, args)
+            chain.submit = wrapped_submit; chain.call = wrapped_call
+        m.dbc.rejection_code = lambda native: '8'
+        kwargs = dict(deployment_bytes=json.dumps(m.dep).encode(), user_label='alice', user=m.users['alice'],
+                      record=m.record, policy=m.policy, expected_allow=True, worker_snapshot=m.snapshot,
+                      output=tmp_path/'access', nonce_replay=True)
+        if transaction_mutation != 'none':
+            with pytest.raises(ValueError): execute_access(m.pbc, m.dbc, m, **kwargs)
+            return
+>       result = execute_access(m.pbc, m.dbc, m, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: execute_access() got an unexpected keyword argument 'nonce_replay'
+
+evaluation/tests/test_request_replay.py:136: TypeError
+_ test_public_replay_probe_checks_mined_call_before_worker_release[none-repaired-e] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-85/test_public_replay_probe_check2')
+profile = 'repaired-e', transaction_mutation = 'none'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('transaction_mutation', ['none', 'changed-call', 'same-nonce', 'wrong-relay'])
+    def test_public_replay_probe_checks_mined_call_before_worker_release(artifacts, inputs, tmp_path, profile, transaction_mutation):
+        import json
+        from evaluation.native import NativeReceipt
+        from evaluation.tests.test_access_execution import Model
+        from evaluation.access_execution import execute_access
+        m = Model(artifacts, inputs, profile)
+        logs = {'pbc': [], 'dbc': []}; grants = []
+        for label, chain in [('pbc', m.pbc), ('dbc', m.dbc)]:
+            submit = chain.submit; call = chain.call
+            def wrapped_submit(signer, role, method, *args, expect_success=True, chain=chain, label=label, submit=submit):
+                if expect_success:
+                    native = submit(signer, role, method, *args)
+                    logs[label].extend(native.receipt['logs'])
+                    if method in ('policyEnf', 'consumeDecision'): grants.append((method, copy.deepcopy(args), native))
+                    return native
+                assert label == 'dbc' and (method, args) == grants[0][:2]
+                assert m.request_state['status'] == '1' and m.snapshot()  # exporter remains usable before release
+                n = grants[0][2]
+                receipt = dict(n.receipt, status='0x0', logs=[], transactionHash='0x'+'aa'*32)
+                return NativeReceipt(receipt=receipt, transaction=dict(hash=receipt['transactionHash'], chainId=hex(int(chain.chain_id)),
+                                      blockHash=n.block_hash, blockNumber=hex(int(n.block_number)), transactionIndex='0x0'),
+                                     block=dict(hash=n.block_hash, number=hex(int(n.block_number)), timestamp=hex(int(n.timestamp)),
+                                                transactions=[receipt['transactionHash']]), chain_id=chain.chain_id)
+            def wrapped_call(method, args=None, chain=chain, label=label, call=call):
+                if method == 'eth_getLogs': return logs[label]
+                if method == 'eth_getTransactionByHash':
+                    name, arguments, native = grants[0]
+                    duplicate = args[0] != native.receipt['transactionHash']
+                    data = dict(hash=args[0], input=chain.contracts['ACSC'].calldata(name, *arguments),
+                                to=chain.contracts['ACSC'].address, **{'from': m.dep['fixture']['relay']['address']},
+                                nonce='0x2' if duplicate else '0x1')
+                    if duplicate and transaction_mutation == 'changed-call': data['input'] += '00'
+                    if duplicate and transaction_mutation == 'same-nonce': data['nonce'] = '0x1'
+                    if duplicate and transaction_mutation == 'wrong-relay': data['from'] = '0x'+'bb'*20
+                    return data
+                return call(method, args)
+            chain.submit = wrapped_submit; chain.call = wrapped_call
+        m.dbc.rejection_code = lambda native: '8'
+        kwargs = dict(deployment_bytes=json.dumps(m.dep).encode(), user_label='alice', user=m.users['alice'],
+                      record=m.record, policy=m.policy, expected_allow=True, worker_snapshot=m.snapshot,
+                      output=tmp_path/'access', nonce_replay=True)
+        if transaction_mutation != 'none':
+            with pytest.raises(ValueError): execute_access(m.pbc, m.dbc, m, **kwargs)
+            return
+>       result = execute_access(m.pbc, m.dbc, m, **kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: execute_access() got an unexpected keyword argument 'nonce_replay'
+
+evaluation/tests/test_request_replay.py:136: TypeError
+_ test_public_replay_probe_checks_mined_call_before_worker_release[changed-call-paper-strict] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-85/test_public_replay_probe_check3')
+profile = 'paper-strict', transaction_mutation = 'changed-call'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('transaction_mutation', ['none', 'changed-call', 'same-nonce', 'wrong-relay'])
+    def test_public_replay_probe_checks_mined_call_before_worker_release(artifacts, inputs, tmp_path, profile, transaction_mutation):
+        import json
+        from evaluation.native import NativeReceipt
+        from evaluation.tests.test_access_execution import Model
+        from evaluation.access_execution import execute_access
+        m = Model(artifacts, inputs, profile)
+        logs = {'pbc': [], 'dbc': []}; grants = []
+        for label, chain in [('pbc', m.pbc), ('dbc', m.dbc)]:
+            submit = chain.submit; call = chain.call
+            def wrapped_submit(signer, role, method, *args, expect_success=True, chain=chain, label=label, submit=submit):
+                if expect_success:
+                    native = submit(signer, role, method, *args)
+                    logs[label].extend(native.receipt['logs'])
+                    if method in ('policyEnf', 'consumeDecision'): grants.append((method, copy.deepcopy(args), native))
+                    return native
+                assert label == 'dbc' and (method, args) == grants[0][:2]
+                assert m.request_state['status'] == '1' and m.snapshot()  # exporter remains usable before release
+                n = grants[0][2]
+                receipt = dict(n.receipt, status='0x0', logs=[], transactionHash='0x'+'aa'*32)
+                return NativeReceipt(receipt=receipt, transaction=dict(hash=receipt['transactionHash'], chainId=hex(int(chain.chain_id)),
+                                      blockHash=n.block_hash, blockNumber=hex(int(n.block_number)), transactionIndex='0x0'),
+                                     block=dict(hash=n.block_hash, number=hex(int(n.block_number)), timestamp=hex(int(n.timestamp)),
+                                                transactions=[receipt['transactionHash']]), chain_id=chain.chain_id)
+            def wrapped_call(method, args=None, chain=chain, label=label, call=call):
+                if method == 'eth_getLogs': return logs[label]
+                if method == 'eth_getTransactionByHash':
+                    name, arguments, native = grants[0]
+                    duplicate = args[0] != native.receipt['transactionHash']
+                    data = dict(hash=args[0], input=chain.contracts['ACSC'].calldata(name, *arguments),
+                                to=chain.contracts['ACSC'].address, **{'from': m.dep['fixture']['relay']['address']},
+                                nonce='0x2' if duplicate else '0x1')
+                    if duplicate and transaction_mutation == 'changed-call': data['input'] += '00'
+                    if duplicate and transaction_mutation == 'same-nonce': data['nonce'] = '0x1'
+                    if duplicate and transaction_mutation == 'wrong-relay': data['from'] = '0x'+'bb'*20
+                    return data
+                return call(method, args)
+            chain.submit = wrapped_submit; chain.call = wrapped_call
+        m.dbc.rejection_code = lambda native: '8'
+        kwargs = dict(deployment_bytes=json.dumps(m.dep).encode(), user_label='alice', user=m.users['alice'],
+                      record=m.record, policy=m.policy, expected_allow=True, worker_snapshot=m.snapshot,
+                      output=tmp_path/'access', nonce_replay=True)
+        if transaction_mutation != 'none':
+>           with pytest.raises(ValueError): execute_access(m.pbc, m.dbc, m, **kwargs)
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: execute_access() got an unexpected keyword argument 'nonce_replay'
+
+evaluation/tests/test_request_replay.py:134: TypeError
+_ test_public_replay_probe_checks_mined_call_before_worker_release[changed-call-paper-minimal] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-85/test_public_replay_probe_check4')
+profile = 'paper-minimal', transaction_mutation = 'changed-call'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('transaction_mutation', ['none', 'changed-call', 'same-nonce', 'wrong-relay'])
+    def test_public_replay_probe_checks_mined_call_before_worker_release(artifacts, inputs, tmp_path, profile, transaction_mutation):
+        import json
+        from evaluation.native import NativeReceipt
+        from evaluation.tests.test_access_execution import Model
+        from evaluation.access_execution import execute_access
+        m = Model(artifacts, inputs, profile)
+        logs = {'pbc': [], 'dbc': []}; grants = []
+        for label, chain in [('pbc', m.pbc), ('dbc', m.dbc)]:
+            submit = chain.submit; call = chain.call
+            def wrapped_submit(signer, role, method, *args, expect_success=True, chain=chain, label=label, submit=submit):
+                if expect_success:
+                    native = submit(signer, role, method, *args)
+                    logs[label].extend(native.receipt['logs'])
+                    if method in ('policyEnf', 'consumeDecision'): grants.append((method, copy.deepcopy(args), native))
+                    return native
+                assert label == 'dbc' and (method, args) == grants[0][:2]
+                assert m.request_state['status'] == '1' and m.snapshot()  # exporter remains usable before release
+                n = grants[0][2]
+                receipt = dict(n.receipt, status='0x0', logs=[], transactionHash='0x'+'aa'*32)
+                return NativeReceipt(receipt=receipt, transaction=dict(hash=receipt['transactionHash'], chainId=hex(int(chain.chain_id)),
+                                      blockHash=n.block_hash, blockNumber=hex(int(n.block_number)), transactionIndex='0x0'),
+                                     block=dict(hash=n.block_hash, number=hex(int(n.block_number)), timestamp=hex(int(n.timestamp)),
+                                                transactions=[receipt['transactionHash']]), chain_id=chain.chain_id)
+            def wrapped_call(method, args=None, chain=chain, label=label, call=call):
+                if method == 'eth_getLogs': return logs[label]
+                if method == 'eth_getTransactionByHash':
+                    name, arguments, native = grants[0]
+                    duplicate = args[0] != native.receipt['transactionHash']
+                    data = dict(hash=args[0], input=chain.contracts['ACSC'].calldata(name, *arguments),
+                                to=chain.contracts['ACSC'].address, **{'from': m.dep['fixture']['relay']['address']},
+                                nonce='0x2' if duplicate else '0x1')
+                    if duplicate and transaction_mutation == 'changed-call': data['input'] += '00'
+                    if duplicate and transaction_mutation == 'same-nonce': data['nonce'] = '0x1'
+                    if duplicate and transaction_mutation == 'wrong-relay': data['from'] = '0x'+'bb'*20
+                    return data
+                return call(method, args)
+            chain.submit = wrapped_submit; chain.call = wrapped_call
+        m.dbc.rejection_code = lambda native: '8'
+        kwargs = dict(deployment_bytes=json.dumps(m.dep).encode(), user_label='alice', user=m.users['alice'],
+                      record=m.record, policy=m.policy, expected_allow=True, worker_snapshot=m.snapshot,
+                      output=tmp_path/'access', nonce_replay=True)
+        if transaction_mutation != 'none':
+>           with pytest.raises(ValueError): execute_access(m.pbc, m.dbc, m, **kwargs)
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: execute_access() got an unexpected keyword argument 'nonce_replay'
+
+evaluation/tests/test_request_replay.py:134: TypeError
+_ test_public_replay_probe_checks_mined_call_before_worker_release[changed-call-repaired-e] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-85/test_public_replay_probe_check5')
+profile = 'repaired-e', transaction_mutation = 'changed-call'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('transaction_mutation', ['none', 'changed-call', 'same-nonce', 'wrong-relay'])
+    def test_public_replay_probe_checks_mined_call_before_worker_release(artifacts, inputs, tmp_path, profile, transaction_mutation):
+        import json
+        from evaluation.native import NativeReceipt
+        from evaluation.tests.test_access_execution import Model
+        from evaluation.access_execution import execute_access
+        m = Model(artifacts, inputs, profile)
+        logs = {'pbc': [], 'dbc': []}; grants = []
+        for label, chain in [('pbc', m.pbc), ('dbc', m.dbc)]:
+            submit = chain.submit; call = chain.call
+            def wrapped_submit(signer, role, method, *args, expect_success=True, chain=chain, label=label, submit=submit):
+                if expect_success:
+                    native = submit(signer, role, method, *args)
+                    logs[label].extend(native.receipt['logs'])
+                    if method in ('policyEnf', 'consumeDecision'): grants.append((method, copy.deepcopy(args), native))
+                    return native
+                assert label == 'dbc' and (method, args) == grants[0][:2]
+                assert m.request_state['status'] == '1' and m.snapshot()  # exporter remains usable before release
+                n = grants[0][2]
+                receipt = dict(n.receipt, status='0x0', logs=[], transactionHash='0x'+'aa'*32)
+                return NativeReceipt(receipt=receipt, transaction=dict(hash=receipt['transactionHash'], chainId=hex(int(chain.chain_id)),
+                                      blockHash=n.block_hash, blockNumber=hex(int(n.block_number)), transactionIndex='0x0'),
+                                     block=dict(hash=n.block_hash, number=hex(int(n.block_number)), timestamp=hex(int(n.timestamp)),
+                                                transactions=[receipt['transactionHash']]), chain_id=chain.chain_id)
+            def wrapped_call(method, args=None, chain=chain, label=label, call=call):
+                if method == 'eth_getLogs': return logs[label]
+                if method == 'eth_getTransactionByHash':
+                    name, arguments, native = grants[0]
+                    duplicate = args[0] != native.receipt['transactionHash']
+                    data = dict(hash=args[0], input=chain.contracts['ACSC'].calldata(name, *arguments),
+                                to=chain.contracts['ACSC'].address, **{'from': m.dep['fixture']['relay']['address']},
+                                nonce='0x2' if duplicate else '0x1')
+                    if duplicate and transaction_mutation == 'changed-call': data['input'] += '00'
+                    if duplicate and transaction_mutation == 'same-nonce': data['nonce'] = '0x1'
+                    if duplicate and transaction_mutation == 'wrong-relay': data['from'] = '0x'+'bb'*20
+                    return data
+                return call(method, args)
+            chain.submit = wrapped_submit; chain.call = wrapped_call
+        m.dbc.rejection_code = lambda native: '8'
+        kwargs = dict(deployment_bytes=json.dumps(m.dep).encode(), user_label='alice', user=m.users['alice'],
+                      record=m.record, policy=m.policy, expected_allow=True, worker_snapshot=m.snapshot,
+                      output=tmp_path/'access', nonce_replay=True)
+        if transaction_mutation != 'none':
+>           with pytest.raises(ValueError): execute_access(m.pbc, m.dbc, m, **kwargs)
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: execute_access() got an unexpected keyword argument 'nonce_replay'
+
+evaluation/tests/test_request_replay.py:134: TypeError
+_ test_public_replay_probe_checks_mined_call_before_worker_release[same-nonce-paper-strict] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-85/test_public_replay_probe_check6')
+profile = 'paper-strict', transaction_mutation = 'same-nonce'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('transaction_mutation', ['none', 'changed-call', 'same-nonce', 'wrong-relay'])
+    def test_public_replay_probe_checks_mined_call_before_worker_release(artifacts, inputs, tmp_path, profile, transaction_mutation):
+        import json
+        from evaluation.native import NativeReceipt
+        from evaluation.tests.test_access_execution import Model
+        from evaluation.access_execution import execute_access
+        m = Model(artifacts, inputs, profile)
+        logs = {'pbc': [], 'dbc': []}; grants = []
+        for label, chain in [('pbc', m.pbc), ('dbc', m.dbc)]:
+            submit = chain.submit; call = chain.call
+            def wrapped_submit(signer, role, method, *args, expect_success=True, chain=chain, label=label, submit=submit):
+                if expect_success:
+                    native = submit(signer, role, method, *args)
+                    logs[label].extend(native.receipt['logs'])
+                    if method in ('policyEnf', 'consumeDecision'): grants.append((method, copy.deepcopy(args), native))
+                    return native
+                assert label == 'dbc' and (method, args) == grants[0][:2]
+                assert m.request_state['status'] == '1' and m.snapshot()  # exporter remains usable before release
+                n = grants[0][2]
+                receipt = dict(n.receipt, status='0x0', logs=[], transactionHash='0x'+'aa'*32)
+                return NativeReceipt(receipt=receipt, transaction=dict(hash=receipt['transactionHash'], chainId=hex(int(chain.chain_id)),
+                                      blockHash=n.block_hash, blockNumber=hex(int(n.block_number)), transactionIndex='0x0'),
+                                     block=dict(hash=n.block_hash, number=hex(int(n.block_number)), timestamp=hex(int(n.timestamp)),
+                                                transactions=[receipt['transactionHash']]), chain_id=chain.chain_id)
+            def wrapped_call(method, args=None, chain=chain, label=label, call=call):
+                if method == 'eth_getLogs': return logs[label]
+                if method == 'eth_getTransactionByHash':
+                    name, arguments, native = grants[0]
+                    duplicate = args[0] != native.receipt['transactionHash']
+                    data = dict(hash=args[0], input=chain.contracts['ACSC'].calldata(name, *arguments),
+                                to=chain.contracts['ACSC'].address, **{'from': m.dep['fixture']['relay']['address']},
+                                nonce='0x2' if duplicate else '0x1')
+                    if duplicate and transaction_mutation == 'changed-call': data['input'] += '00'
+                    if duplicate and transaction_mutation == 'same-nonce': data['nonce'] = '0x1'
+                    if duplicate and transaction_mutation == 'wrong-relay': data['from'] = '0x'+'bb'*20
+                    return data
+                return call(method, args)
+            chain.submit = wrapped_submit; chain.call = wrapped_call
+        m.dbc.rejection_code = lambda native: '8'
+        kwargs = dict(deployment_bytes=json.dumps(m.dep).encode(), user_label='alice', user=m.users['alice'],
+                      record=m.record, policy=m.policy, expected_allow=True, worker_snapshot=m.snapshot,
+                      output=tmp_path/'access', nonce_replay=True)
+        if transaction_mutation != 'none':
+>           with pytest.raises(ValueError): execute_access(m.pbc, m.dbc, m, **kwargs)
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: execute_access() got an unexpected keyword argument 'nonce_replay'
+
+evaluation/tests/test_request_replay.py:134: TypeError
+_ test_public_replay_probe_checks_mined_call_before_worker_release[same-nonce-paper-minimal] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-85/test_public_replay_probe_check7')
+profile = 'paper-minimal', transaction_mutation = 'same-nonce'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('transaction_mutation', ['none', 'changed-call', 'same-nonce', 'wrong-relay'])
+    def test_public_replay_probe_checks_mined_call_before_worker_release(artifacts, inputs, tmp_path, profile, transaction_mutation):
+        import json
+        from evaluation.native import NativeReceipt
+        from evaluation.tests.test_access_execution import Model
+        from evaluation.access_execution import execute_access
+        m = Model(artifacts, inputs, profile)
+        logs = {'pbc': [], 'dbc': []}; grants = []
+        for label, chain in [('pbc', m.pbc), ('dbc', m.dbc)]:
+            submit = chain.submit; call = chain.call
+            def wrapped_submit(signer, role, method, *args, expect_success=True, chain=chain, label=label, submit=submit):
+                if expect_success:
+                    native = submit(signer, role, method, *args)
+                    logs[label].extend(native.receipt['logs'])
+                    if method in ('policyEnf', 'consumeDecision'): grants.append((method, copy.deepcopy(args), native))
+                    return native
+                assert label == 'dbc' and (method, args) == grants[0][:2]
+                assert m.request_state['status'] == '1' and m.snapshot()  # exporter remains usable before release
+                n = grants[0][2]
+                receipt = dict(n.receipt, status='0x0', logs=[], transactionHash='0x'+'aa'*32)
+                return NativeReceipt(receipt=receipt, transaction=dict(hash=receipt['transactionHash'], chainId=hex(int(chain.chain_id)),
+                                      blockHash=n.block_hash, blockNumber=hex(int(n.block_number)), transactionIndex='0x0'),
+                                     block=dict(hash=n.block_hash, number=hex(int(n.block_number)), timestamp=hex(int(n.timestamp)),
+                                                transactions=[receipt['transactionHash']]), chain_id=chain.chain_id)
+            def wrapped_call(method, args=None, chain=chain, label=label, call=call):
+                if method == 'eth_getLogs': return logs[label]
+                if method == 'eth_getTransactionByHash':
+                    name, arguments, native = grants[0]
+                    duplicate = args[0] != native.receipt['transactionHash']
+                    data = dict(hash=args[0], input=chain.contracts['ACSC'].calldata(name, *arguments),
+                                to=chain.contracts['ACSC'].address, **{'from': m.dep['fixture']['relay']['address']},
+                                nonce='0x2' if duplicate else '0x1')
+                    if duplicate and transaction_mutation == 'changed-call': data['input'] += '00'
+                    if duplicate and transaction_mutation == 'same-nonce': data['nonce'] = '0x1'
+                    if duplicate and transaction_mutation == 'wrong-relay': data['from'] = '0x'+'bb'*20
+                    return data
+                return call(method, args)
+            chain.submit = wrapped_submit; chain.call = wrapped_call
+        m.dbc.rejection_code = lambda native: '8'
+        kwargs = dict(deployment_bytes=json.dumps(m.dep).encode(), user_label='alice', user=m.users['alice'],
+                      record=m.record, policy=m.policy, expected_allow=True, worker_snapshot=m.snapshot,
+                      output=tmp_path/'access', nonce_replay=True)
+        if transaction_mutation != 'none':
+>           with pytest.raises(ValueError): execute_access(m.pbc, m.dbc, m, **kwargs)
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: execute_access() got an unexpected keyword argument 'nonce_replay'
+
+evaluation/tests/test_request_replay.py:134: TypeError
+_ test_public_replay_probe_checks_mined_call_before_worker_release[same-nonce-repaired-e] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-85/test_public_replay_probe_check8')
+profile = 'repaired-e', transaction_mutation = 'same-nonce'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('transaction_mutation', ['none', 'changed-call', 'same-nonce', 'wrong-relay'])
+    def test_public_replay_probe_checks_mined_call_before_worker_release(artifacts, inputs, tmp_path, profile, transaction_mutation):
+        import json
+        from evaluation.native import NativeReceipt
+        from evaluation.tests.test_access_execution import Model
+        from evaluation.access_execution import execute_access
+        m = Model(artifacts, inputs, profile)
+        logs = {'pbc': [], 'dbc': []}; grants = []
+        for label, chain in [('pbc', m.pbc), ('dbc', m.dbc)]:
+            submit = chain.submit; call = chain.call
+            def wrapped_submit(signer, role, method, *args, expect_success=True, chain=chain, label=label, submit=submit):
+                if expect_success:
+                    native = submit(signer, role, method, *args)
+                    logs[label].extend(native.receipt['logs'])
+                    if method in ('policyEnf', 'consumeDecision'): grants.append((method, copy.deepcopy(args), native))
+                    return native
+                assert label == 'dbc' and (method, args) == grants[0][:2]
+                assert m.request_state['status'] == '1' and m.snapshot()  # exporter remains usable before release
+                n = grants[0][2]
+                receipt = dict(n.receipt, status='0x0', logs=[], transactionHash='0x'+'aa'*32)
+                return NativeReceipt(receipt=receipt, transaction=dict(hash=receipt['transactionHash'], chainId=hex(int(chain.chain_id)),
+                                      blockHash=n.block_hash, blockNumber=hex(int(n.block_number)), transactionIndex='0x0'),
+                                     block=dict(hash=n.block_hash, number=hex(int(n.block_number)), timestamp=hex(int(n.timestamp)),
+                                                transactions=[receipt['transactionHash']]), chain_id=chain.chain_id)
+            def wrapped_call(method, args=None, chain=chain, label=label, call=call):
+                if method == 'eth_getLogs': return logs[label]
+                if method == 'eth_getTransactionByHash':
+                    name, arguments, native = grants[0]
+                    duplicate = args[0] != native.receipt['transactionHash']
+                    data = dict(hash=args[0], input=chain.contracts['ACSC'].calldata(name, *arguments),
+                                to=chain.contracts['ACSC'].address, **{'from': m.dep['fixture']['relay']['address']},
+                                nonce='0x2' if duplicate else '0x1')
+                    if duplicate and transaction_mutation == 'changed-call': data['input'] += '00'
+                    if duplicate and transaction_mutation == 'same-nonce': data['nonce'] = '0x1'
+                    if duplicate and transaction_mutation == 'wrong-relay': data['from'] = '0x'+'bb'*20
+                    return data
+                return call(method, args)
+            chain.submit = wrapped_submit; chain.call = wrapped_call
+        m.dbc.rejection_code = lambda native: '8'
+        kwargs = dict(deployment_bytes=json.dumps(m.dep).encode(), user_label='alice', user=m.users['alice'],
+                      record=m.record, policy=m.policy, expected_allow=True, worker_snapshot=m.snapshot,
+                      output=tmp_path/'access', nonce_replay=True)
+        if transaction_mutation != 'none':
+>           with pytest.raises(ValueError): execute_access(m.pbc, m.dbc, m, **kwargs)
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: execute_access() got an unexpected keyword argument 'nonce_replay'
+
+evaluation/tests/test_request_replay.py:134: TypeError
+_ test_public_replay_probe_checks_mined_call_before_worker_release[wrong-relay-paper-strict] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-85/test_public_replay_probe_check9')
+profile = 'paper-strict', transaction_mutation = 'wrong-relay'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('transaction_mutation', ['none', 'changed-call', 'same-nonce', 'wrong-relay'])
+    def test_public_replay_probe_checks_mined_call_before_worker_release(artifacts, inputs, tmp_path, profile, transaction_mutation):
+        import json
+        from evaluation.native import NativeReceipt
+        from evaluation.tests.test_access_execution import Model
+        from evaluation.access_execution import execute_access
+        m = Model(artifacts, inputs, profile)
+        logs = {'pbc': [], 'dbc': []}; grants = []
+        for label, chain in [('pbc', m.pbc), ('dbc', m.dbc)]:
+            submit = chain.submit; call = chain.call
+            def wrapped_submit(signer, role, method, *args, expect_success=True, chain=chain, label=label, submit=submit):
+                if expect_success:
+                    native = submit(signer, role, method, *args)
+                    logs[label].extend(native.receipt['logs'])
+                    if method in ('policyEnf', 'consumeDecision'): grants.append((method, copy.deepcopy(args), native))
+                    return native
+                assert label == 'dbc' and (method, args) == grants[0][:2]
+                assert m.request_state['status'] == '1' and m.snapshot()  # exporter remains usable before release
+                n = grants[0][2]
+                receipt = dict(n.receipt, status='0x0', logs=[], transactionHash='0x'+'aa'*32)
+                return NativeReceipt(receipt=receipt, transaction=dict(hash=receipt['transactionHash'], chainId=hex(int(chain.chain_id)),
+                                      blockHash=n.block_hash, blockNumber=hex(int(n.block_number)), transactionIndex='0x0'),
+                                     block=dict(hash=n.block_hash, number=hex(int(n.block_number)), timestamp=hex(int(n.timestamp)),
+                                                transactions=[receipt['transactionHash']]), chain_id=chain.chain_id)
+            def wrapped_call(method, args=None, chain=chain, label=label, call=call):
+                if method == 'eth_getLogs': return logs[label]
+                if method == 'eth_getTransactionByHash':
+                    name, arguments, native = grants[0]
+                    duplicate = args[0] != native.receipt['transactionHash']
+                    data = dict(hash=args[0], input=chain.contracts['ACSC'].calldata(name, *arguments),
+                                to=chain.contracts['ACSC'].address, **{'from': m.dep['fixture']['relay']['address']},
+                                nonce='0x2' if duplicate else '0x1')
+                    if duplicate and transaction_mutation == 'changed-call': data['input'] += '00'
+                    if duplicate and transaction_mutation == 'same-nonce': data['nonce'] = '0x1'
+                    if duplicate and transaction_mutation == 'wrong-relay': data['from'] = '0x'+'bb'*20
+                    return data
+                return call(method, args)
+            chain.submit = wrapped_submit; chain.call = wrapped_call
+        m.dbc.rejection_code = lambda native: '8'
+        kwargs = dict(deployment_bytes=json.dumps(m.dep).encode(), user_label='alice', user=m.users['alice'],
+                      record=m.record, policy=m.policy, expected_allow=True, worker_snapshot=m.snapshot,
+                      output=tmp_path/'access', nonce_replay=True)
+        if transaction_mutation != 'none':
+>           with pytest.raises(ValueError): execute_access(m.pbc, m.dbc, m, **kwargs)
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: execute_access() got an unexpected keyword argument 'nonce_replay'
+
+evaluation/tests/test_request_replay.py:134: TypeError
+_ test_public_replay_probe_checks_mined_call_before_worker_release[wrong-relay-paper-minimal] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-85/test_public_replay_probe_check10')
+profile = 'paper-minimal', transaction_mutation = 'wrong-relay'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('transaction_mutation', ['none', 'changed-call', 'same-nonce', 'wrong-relay'])
+    def test_public_replay_probe_checks_mined_call_before_worker_release(artifacts, inputs, tmp_path, profile, transaction_mutation):
+        import json
+        from evaluation.native import NativeReceipt
+        from evaluation.tests.test_access_execution import Model
+        from evaluation.access_execution import execute_access
+        m = Model(artifacts, inputs, profile)
+        logs = {'pbc': [], 'dbc': []}; grants = []
+        for label, chain in [('pbc', m.pbc), ('dbc', m.dbc)]:
+            submit = chain.submit; call = chain.call
+            def wrapped_submit(signer, role, method, *args, expect_success=True, chain=chain, label=label, submit=submit):
+                if expect_success:
+                    native = submit(signer, role, method, *args)
+                    logs[label].extend(native.receipt['logs'])
+                    if method in ('policyEnf', 'consumeDecision'): grants.append((method, copy.deepcopy(args), native))
+                    return native
+                assert label == 'dbc' and (method, args) == grants[0][:2]
+                assert m.request_state['status'] == '1' and m.snapshot()  # exporter remains usable before release
+                n = grants[0][2]
+                receipt = dict(n.receipt, status='0x0', logs=[], transactionHash='0x'+'aa'*32)
+                return NativeReceipt(receipt=receipt, transaction=dict(hash=receipt['transactionHash'], chainId=hex(int(chain.chain_id)),
+                                      blockHash=n.block_hash, blockNumber=hex(int(n.block_number)), transactionIndex='0x0'),
+                                     block=dict(hash=n.block_hash, number=hex(int(n.block_number)), timestamp=hex(int(n.timestamp)),
+                                                transactions=[receipt['transactionHash']]), chain_id=chain.chain_id)
+            def wrapped_call(method, args=None, chain=chain, label=label, call=call):
+                if method == 'eth_getLogs': return logs[label]
+                if method == 'eth_getTransactionByHash':
+                    name, arguments, native = grants[0]
+                    duplicate = args[0] != native.receipt['transactionHash']
+                    data = dict(hash=args[0], input=chain.contracts['ACSC'].calldata(name, *arguments),
+                                to=chain.contracts['ACSC'].address, **{'from': m.dep['fixture']['relay']['address']},
+                                nonce='0x2' if duplicate else '0x1')
+                    if duplicate and transaction_mutation == 'changed-call': data['input'] += '00'
+                    if duplicate and transaction_mutation == 'same-nonce': data['nonce'] = '0x1'
+                    if duplicate and transaction_mutation == 'wrong-relay': data['from'] = '0x'+'bb'*20
+                    return data
+                return call(method, args)
+            chain.submit = wrapped_submit; chain.call = wrapped_call
+        m.dbc.rejection_code = lambda native: '8'
+        kwargs = dict(deployment_bytes=json.dumps(m.dep).encode(), user_label='alice', user=m.users['alice'],
+                      record=m.record, policy=m.policy, expected_allow=True, worker_snapshot=m.snapshot,
+                      output=tmp_path/'access', nonce_replay=True)
+        if transaction_mutation != 'none':
+>           with pytest.raises(ValueError): execute_access(m.pbc, m.dbc, m, **kwargs)
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: execute_access() got an unexpected keyword argument 'nonce_replay'
+
+evaluation/tests/test_request_replay.py:134: TypeError
+_ test_public_replay_probe_checks_mined_call_before_worker_release[wrong-relay-repaired-e] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-85/test_public_replay_probe_check11')
+profile = 'repaired-e', transaction_mutation = 'wrong-relay'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('transaction_mutation', ['none', 'changed-call', 'same-nonce', 'wrong-relay'])
+    def test_public_replay_probe_checks_mined_call_before_worker_release(artifacts, inputs, tmp_path, profile, transaction_mutation):
+        import json
+        from evaluation.native import NativeReceipt
+        from evaluation.tests.test_access_execution import Model
+        from evaluation.access_execution import execute_access
+        m = Model(artifacts, inputs, profile)
+        logs = {'pbc': [], 'dbc': []}; grants = []
+        for label, chain in [('pbc', m.pbc), ('dbc', m.dbc)]:
+            submit = chain.submit; call = chain.call
+            def wrapped_submit(signer, role, method, *args, expect_success=True, chain=chain, label=label, submit=submit):
+                if expect_success:
+                    native = submit(signer, role, method, *args)
+                    logs[label].extend(native.receipt['logs'])
+                    if method in ('policyEnf', 'consumeDecision'): grants.append((method, copy.deepcopy(args), native))
+                    return native
+                assert label == 'dbc' and (method, args) == grants[0][:2]
+                assert m.request_state['status'] == '1' and m.snapshot()  # exporter remains usable before release
+                n = grants[0][2]
+                receipt = dict(n.receipt, status='0x0', logs=[], transactionHash='0x'+'aa'*32)
+                return NativeReceipt(receipt=receipt, transaction=dict(hash=receipt['transactionHash'], chainId=hex(int(chain.chain_id)),
+                                      blockHash=n.block_hash, blockNumber=hex(int(n.block_number)), transactionIndex='0x0'),
+                                     block=dict(hash=n.block_hash, number=hex(int(n.block_number)), timestamp=hex(int(n.timestamp)),
+                                                transactions=[receipt['transactionHash']]), chain_id=chain.chain_id)
+            def wrapped_call(method, args=None, chain=chain, label=label, call=call):
+                if method == 'eth_getLogs': return logs[label]
+                if method == 'eth_getTransactionByHash':
+                    name, arguments, native = grants[0]
+                    duplicate = args[0] != native.receipt['transactionHash']
+                    data = dict(hash=args[0], input=chain.contracts['ACSC'].calldata(name, *arguments),
+                                to=chain.contracts['ACSC'].address, **{'from': m.dep['fixture']['relay']['address']},
+                                nonce='0x2' if duplicate else '0x1')
+                    if duplicate and transaction_mutation == 'changed-call': data['input'] += '00'
+                    if duplicate and transaction_mutation == 'same-nonce': data['nonce'] = '0x1'
+                    if duplicate and transaction_mutation == 'wrong-relay': data['from'] = '0x'+'bb'*20
+                    return data
+                return call(method, args)
+            chain.submit = wrapped_submit; chain.call = wrapped_call
+        m.dbc.rejection_code = lambda native: '8'
+        kwargs = dict(deployment_bytes=json.dumps(m.dep).encode(), user_label='alice', user=m.users['alice'],
+                      record=m.record, policy=m.policy, expected_allow=True, worker_snapshot=m.snapshot,
+                      output=tmp_path/'access', nonce_replay=True)
+        if transaction_mutation != 'none':
+>           with pytest.raises(ValueError): execute_access(m.pbc, m.dbc, m, **kwargs)
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: execute_access() got an unexpected keyword argument 'nonce_replay'
+
+evaluation/tests/test_request_replay.py:134: TypeError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_request_replay.py::test_public_replay_probe_checks_mined_call_before_worker_release[none-paper-strict]
+FAILED evaluation/tests/test_request_replay.py::test_public_replay_probe_checks_mined_call_before_worker_release[none-paper-minimal]
+FAILED evaluation/tests/test_request_replay.py::test_public_replay_probe_checks_mined_call_before_worker_release[none-repaired-e]
+FAILED evaluation/tests/test_request_replay.py::test_public_replay_probe_checks_mined_call_before_worker_release[changed-call-paper-strict]
+FAILED evaluation/tests/test_request_replay.py::test_public_replay_probe_checks_mined_call_before_worker_release[changed-call-paper-minimal]
+FAILED evaluation/tests/test_request_replay.py::test_public_replay_probe_checks_mined_call_before_worker_release[changed-call-repaired-e]
+FAILED evaluation/tests/test_request_replay.py::test_public_replay_probe_checks_mined_call_before_worker_release[same-nonce-paper-strict]
+FAILED evaluation/tests/test_request_replay.py::test_public_replay_probe_checks_mined_call_before_worker_release[same-nonce-paper-minimal]
+FAILED evaluation/tests/test_request_replay.py::test_public_replay_probe_checks_mined_call_before_worker_release[same-nonce-repaired-e]
+FAILED evaluation/tests/test_request_replay.py::test_public_replay_probe_checks_mined_call_before_worker_release[wrong-relay-paper-strict]
+FAILED evaluation/tests/test_request_replay.py::test_public_replay_probe_checks_mined_call_before_worker_release[wrong-relay-paper-minimal]
+FAILED evaluation/tests/test_request_replay.py::test_public_replay_probe_checks_mined_call_before_worker_release[wrong-relay-repaired-e]
+12 failed, 34 passed in 0.49s

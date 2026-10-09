@@ -1,0 +1,224 @@
+"""Exact-plan gated, fresh two-chain C-E2 recovery or audit comparisons.
+
+Recovery or duplicate outcome cases across three profiles, with wrong-issuer, Alice and Bob
+policy-denial controls. This slice does not execute the complete 56-case catalog,
+revocation-window/mutant matrix, power-loss tests or an RQ gate.
+"""
+import argparse
+import copy
+import hashlib
+import json
+from pathlib import Path
+import platform
+
+from evaluation import e1
+from evaluation.access_artifacts import require
+from evaluation.bootstrap import FREEZE_SHA256
+from evaluation.manifests import now, sha256
+
+ROOT = e1.ROOT
+CONTRACT = ROOT/'evaluation/evidence/e2/formal-and-hook-review-20261009/start-contract-r1.json'
+ACCEPTANCE = ROOT/'evaluation/evidence/e2/crash-transport-20261009/start-contract-acceptance.json'
+
+
+def _sources():
+    paths = [p for p in (ROOT/'evaluation').rglob('*.py') if 'tests' not in p.relative_to(ROOT/'evaluation').parts]
+    paths += list((ROOT/'evaluation/fixtures').rglob('*.json'))+list((ROOT/'evaluation/scenarios').rglob('*.json'))
+    paths += list((ROOT/'interfaces/v1').rglob('*'))+list((ROOT/'interfaces/proposals/v1').rglob('*.json'))
+    paths += [ROOT/p for p in ('AGENTS.md', 'SPEC.md', 'PLAN.md', 'uv.lock', 'pyproject.toml', 'evaluation/toolchain.json')]
+    paths += [CONTRACT, ACCEPTANCE, e1.PIN_REVIEW]
+    return {str(p.relative_to(ROOT)): sha256(p) for p in sorted(set(paths)) if p.is_file()}
+
+
+def _owners(contract):
+    result = {}
+    for name in ('ledger', 'protocol'):
+        pin = contract[name]
+        raw = e1._git_blob(pin['commit'], name+'/evidence/source-manifest.sha256')
+        require(hashlib.sha256(raw).hexdigest() == pin['manifestSha256'], 'accepted owner inventory')
+        entries = {}
+        for line in raw.decode().splitlines():
+            digest, path = line.split(maxsplit=1); path = path.lstrip('*')
+            require(path not in entries, 'unique owner inventory path')
+            entries[path] = digest
+        require(len(entries) == pin['entries'], 'accepted inventory length')
+        result[name] = dict(commit=pin['commit'], inventorySha256=pin['manifestSha256'], entries=entries)
+    return result
+
+
+def create_plan(*, run_id, freeze_message, expired_retry=False, duplicate_outcome=False, nonce_replay=False):
+    # Retain the previously reviewed environment, mining/ports, tool and custody
+    # recipe; any new exact runtime bytes require new full execution-plan ACKs.
+    require(all(type(flag) is bool for flag in (expired_retry, duplicate_outcome, nonce_replay))
+            and sum((expired_retry, duplicate_outcome, nonce_replay)) <= 1, 'explicit nonoverlapping probe selection')
+    plan = e1.create_plan(run_id=run_id, freeze_message=freeze_message)
+    contract = json.loads(CONTRACT.read_text())
+    plan.update(schemaVersion='hmbc-e2-recovery-plan/v1', executionScope='six fresh logical crash/recovery cases; not full RQ matrix',
+                owners=_owners(contract), agent3Sources=_sources(), startContractSha256=sha256(CONTRACT),
+                startupAcceptanceSha256=sha256(ACCEPTANCE), fullCatalogComplete=False, mining='Anvil automatic mining; explicit pending clock probes',
+                matrix=[dict(profile=profile, point=point) for profile in e1.PROFILES for point in ('after_intent', 'after_send')],
+                controls=['wrong-admin-before-H2', 'registered-Alice-crash-cached-retry-outcome', 'registered-Bob-policy-deny'],
+                freshness='fresh chain pair, deployment, protocol state and snapshots per matrix row',
+                restart='production adapter on identical private state/deployment; one restart; no expiry extension',
+                observation='empty EOF after_intent or one validated frame then EOF after_send; natural86, empty stderr; same cached response',
+                workerExpected={'after_intent': dict(crashEvents=['RELEASE_INTENT'], crashAttempts=[0, 0], retryEvents=['RELEASE_INTENT', 'RELEASE_SENT'], retryAttempts=[1, 1]),
+                                'after_send': dict(crashEvents=['RELEASE_INTENT', 'RELEASE_SENT'], crashAttempts=[1, 0], retryEvents=['RELEASE_INTENT', 'RELEASE_SENT', 'RELEASE_SENT'], retryAttempts=[2, 1])},
+                timing='retry strictly before original native grant expiry; unexpected expiry fails run, never extends permission',
+                limitations=['Both exact full plan ACKs required; supplement ACKs are insufficient.',
+                             'Six logical recovery comparisons only; complete56 catalog/mutants/revocation windows/report/gate remain required.',
+                             'Paper crash classification remains BLOCKED/unproved until explicit report qualification.',
+                             'Symbolic crypto, safe-ledger/trusted-worker assumptions; no recipient delivery, ABE, consensus, power-loss or OS-kill proof.'])
+    if expired_retry:
+        plan.update(schemaVersion='hmbc-e2-recovery-expiry-plan/v1', expiredRetry=True,
+                    executionScope='six fresh logical recovery comparisons plus six expired cached retries; not full RQ matrix',
+                    expiryProbe=dict(order='after Alice recovery/completion/outcome, before Bob control',
+                                     clock='DBC evm_setNextBlockTimestamp(max(latest+1, original grant expiry)); evm_mine; verify latest and pending >= expiry',
+                                     input='identical release envelope with the recovered grantId and deployment',
+                                     expected='EXPIRED; entire redacted worker cache/events/attempts and native grant/request/all contract logs unchanged',
+                                     scope='refusal after successful recovery; not first restart at expiry, exact wall-clock equality or power-loss durability'))
+        plan['controls'].append('expired-original-grant-cached-retry-no-new-event')
+        plan['limitations'].append('Six expired retry probes supplement historical recovery evidence; remaining50 catalog/mutants/windows/report/gate still required.')
+    if duplicate_outcome:
+        plan.update(schemaVersion='hmbc-e2-duplicate-outcome-plan/v1', duplicateOutcome=True,
+                    executionScope='three fresh duplicate outcome comparisons; not full RQ matrix',
+                    matrix=[dict(profile=profile, point=None) for profile in e1.PROFILES],
+                    caseIds=['E03-duplicate-outcome-'+profile for profile in e1.PROFILES],
+                    classification='SUPPORTED for both paper reconstruction profiles; REPAIR_SUPPORTED for repaired-e; no paper implementation claim',
+                    controls=['wrong-admin-before-H2', 'registered-Alice-allow-release-one-outcome',
+                              'identical-outcome-call-mined-REPLAY-no-change', 'registered-Bob-policy-deny'],
+                    restart='none; production adapter only, no crash hook selected',
+                    observation='successful Alice outcome then identical application calldata in a fresh transaction; mined Rejected(8)',
+                    timing='normal live grant release before original expiry; late duplicate reconciliation allowed; no expiry extension',
+                    duplicateProbe=dict(order='after successful Alice outcome, before Bob denial',
+                                        call='relay resubmits identical reportOutcome/reportAttestedOutcome arguments with fresh transaction nonce',
+                                        expected='status0, decoded Rejected(8)/REPLAY, no receipt logs; all request/grant/worker/cache and PBC/DBC contract logs unchanged',
+                                        positive='exactly one prior successful outcome and GrantIssued plus Alice release and Bob denial'),
+                    limitations=['Both new exact full plan ACKs required before services.',
+                                 'Three duplicate outcome cases only; all50 remaining schedules (including these3 until measured), live mutants/windows/report/gate remain required.',
+                                 'Paper-derived reconstruction behavior, not authors implementation or discovered vulnerability.',
+                                 'Production adapter only; symbolic crypto/safe-ledger/trusted-worker; no delivery/ABE/consensus/power-loss proof.'])
+        plan.pop('workerExpected')
+    if nonce_replay:
+        plan.update(schemaVersion='hmbc-e2-nonce-replay-plan/v1', nonceReplay=True,
+                    executionScope='three fresh identical accepted request replays; not full RQ matrix',
+                    matrix=[dict(profile=profile, point=None) for profile in e1.PROFILES],
+                    caseIds=['E01-nonce-replay-'+profile for profile in e1.PROFILES],
+                    controls=['wrong-admin-before-H2', 'registered-Alice-allow-grant',
+                              'identical-ACSC-call-mined-REPLAY-no-change-before-release',
+                              'original-Alice-release-completion-one-outcome', 'registered-Bob-policy-deny'],
+                    restart='none; production adapter only, no crash hook',
+                    observation='identical accepted policyEnf/consumeDecision application calldata; fresh relay transaction nonce; status0/Rejected8/no logs',
+                    timing='replay before original request/grant expiry; Alice release remains strictly before original expiry; unexpected expiry fails',
+                    replayProbe=dict(order='after checked native Alice grant, before first release/completion/outcome',
+                                     positive='one logged FORWARDED request and one allowed matching native grant/access log',
+                                     expected='REPLAY8; complete grant/request/nonce/access count/worker/PBC and DBC histories unchanged',
+                                     nonce='paper profiles false; repaired-e true from original acceptance',
+                                     references='identical accepted request/forward reference; never fabricate a new reference',
+                                     operations='no adapter operation/clock advance/crash/restart during replay; worker exporter read-only'),
+                    classification='paper SUPPORTED as tested reconstruction; repaired-e REPAIR_SUPPORTED; no original implementation claim',
+                    limitations=['Both NEW exact full execution-plan ACKs precede services.',
+                                 'Three of remaining47 prospective schedules only; no complete matrix, live mutants/windows/report/gate result.',
+                                 'Equal idle-worker snapshots are not worker retry/idempotence evidence.',
+                                 'Symbolic crypto/safe-ledger/trusted-worker; no delivery/ABE/consensus/power-loss proof.'])
+        plan['replayProbe']['nativeSnapshots'] = dict(
+            block='one explicit latest-selected historical block per chain per snapshot',
+            identity='chain and block before/after each group; all selected ABI hashes before/after',
+            history='all deployment contract addresses; from0 to the selected block number',
+            budget='at most16 view/log queries per group; shared PublicChain timeout10s',
+            evidence='individual ABI/calldata/return rows; separate before/after block anchors',
+            worker='both full idle-worker exports before first release; no worker operation')
+        plan['limitations'][1] = ('Three fresh replay comparisons; historical paper2 complete/repaired1 incomplete, '
+                                  '44 untouched schedules;45 catalog comparisons still need completion, plus mutants/windows/report/gate.')
+        plan['limitations'].append('Grouped RPC consistency cannot detect a transient reorg restored between boundary checks; safe-ledger assumption unchanged.')
+        plan.pop('workerExpected')
+    return plan
+
+
+def verify_plan(plan):
+    require(plan == create_plan(run_id=plan['runId'], freeze_message=plan['freezeMessage'],
+                                expired_retry=plan.get('expiredRetry', False), duplicate_outcome=plan.get('duplicateOutcome', False),
+                                nonce_replay=plan.get('nonceReplay', False)), 'exact current E2 plan/source/config')
+    require(sha256(ROOT/'interfaces/v1/FREEZE.json') == FREEZE_SHA256, 'immutable v1 freeze')
+    require(platform.python_version() == plan['pythonVersion'], 'pinned Python version')
+    for tool in plan['tools'].values():
+        require(Path(tool['path']).is_file() and sha256(tool['path']) == tool['sha256'], 'tool binary hash')
+    acceptance = json.loads(ACCEPTANCE.read_text())
+    require(acceptance['status'] == 'ACCEPTED_SCOPED_STARTUP_SUPPLEMENT_ONLY'
+            and acceptance['contract']['sha256'] == plan['startContractSha256'], 'accepted scoped startup contract')
+    contract = json.loads(CONTRACT.read_text())
+    require(hashlib.sha256(e1._git_blob(contract['protocol']['commit'], 'protocol/testtools/faulty_adapter.py')).hexdigest()
+            == contract['protocol']['hookSha256'], 'accepted exact hook')
+    for owner in plan['owners'].values():
+        e1._owner_paths(owner)
+        for path, digest in owner['entries'].items():
+            require(hashlib.sha256(e1._git_blob(owner['commit'], path)).hexdigest() == digest, 'exact owner input blob')
+
+
+def execute(plan_path, ack_path, output):
+    output = Path(output); output.mkdir(parents=True, exist_ok=False, mode=0o700)
+    record = dict(rq='E', executionMode='two-chain-e2-recovery-slice', adapterMode='symbolic', status='BLOCKED',
+                  startedAt=now(), endedAt=None, cases={}, servicesStarted=[], acks=None, failure=None, sourceStable=None,
+                  limitation='Six logical process recovery comparisons only; no complete catalog or RQ gate.')
+    authorized = False; case_records = {}
+    try:
+        raw = Path(plan_path).read_bytes(); plan = json.loads(raw)
+        record['planSha256'] = hashlib.sha256(raw).hexdigest(); verify_plan(plan)
+        record['acks'] = e1._acks(ack_path, plan, record['planSha256'])
+        if plan.get('duplicateOutcome', False):
+            record.update(executionMode='two-chain-e2-duplicate-outcome-slice',
+                          limitation='Three duplicate outcome comparisons only; no complete catalog or RQ gate.')
+        if plan.get('nonceReplay', False):
+            record.update(executionMode='two-chain-e2-nonce-replay-slice',
+                          limitation='Three identical accepted request replays only; no complete catalog or RQ gate.')
+        authorized = True; record['status'] = 'RUNNING'
+        for item in plan['matrix']:
+            verify_plan(plan)
+            probe_name = 'nonce-replay' if plan.get('nonceReplay', False) else 'duplicate-outcome'
+            case = item['profile']+'-'+(item['point'] or probe_name); destination = output/case; destination.mkdir()
+            child = dict(profiles={}, servicesStarted=[], adapterProcesses=[])
+            case_records[case] = child
+            record['cases'][case] = dict(status='RUNNING', manifest=case+'/manifest.json')
+            (output/'manifest.json').write_text(json.dumps(record, indent=2)+'\n')
+            selected = copy.deepcopy(plan); selected['runId'] = plan['runId']+'-'+(item['point'] or probe_name)
+            probe_options = {'duplicate_outcome': True} if plan.get('duplicateOutcome', False) else {}
+            if plan.get('nonceReplay', False): probe_options = {'nonce_replay': True}
+            e1._profile(selected, item['profile'], destination/item['profile'], child, recovery_point=item['point'],
+                        expired_retry=plan.get('expiredRetry', False), **probe_options)
+            if plan.get('duplicateOutcome', False) or plan.get('nonceReplay', False):
+                proof = json.loads((destination/item['profile']/('alice/'+probe_name+'/result.json')).read_text())
+                require(proof['ok'] is True and proof['error'] == 'REPLAY' and proof['delivery'] == 'unknown'
+                        and proof['workerUnchanged'] is True and proof['nativeUnchanged'] is True
+                        and proof['identicalCalldata'] is True, 'complete checked native replay result')
+            else:
+                proof = json.loads((destination/item['profile']/'recovery/result.json').read_text())
+                require(proof['ok'] is True and proof['delivery'] == 'unknown', 'complete checked recovery result')
+            if plan.get('expiredRetry', False):
+                expiry = json.loads((destination/item['profile']/'expired-retry/result.json').read_text())
+                require(expiry['ok'] is True and expiry['error'] == 'EXPIRED' and expiry['delivery'] == 'unknown'
+                        and expiry['workerUnchanged'] is True and expiry['nativeUnchanged'] is True, 'complete expired retry refusal')
+                record['cases'][case]['expiredRetry'] = 'EXPIRED_NO_CHANGE_PASS'
+            record['cases'][case]['status'] = ('NONCE_REPLAY_CONTROL_PASS' if plan.get('nonceReplay', False)
+                                             else ('DUPLICATE_OUTCOME_CONTROL_PASS' if plan.get('duplicateOutcome', False) else 'RECOVERY_CONTROL_PASS'))
+        verify_plan(plan); record.update(status='E2_DUPLICATE_OUTCOME_SLICE_PASS' if plan.get('duplicateOutcome', False) else ('E2_RECOVERY_EXPIRY_SLICE_PASS' if plan.get('expiredRetry', False) else 'E2_RECOVERY_SLICE_PASS'), sourceStable=True)
+        if plan.get('nonceReplay', False): record['status'] = 'E2_NONCE_REPLAY_SLICE_PASS'
+    except BaseException as error:
+        record['failure'] = dict(type=type(error).__name__, message=str(error))
+        record['status'] = 'FAILED' if authorized else 'BLOCKED'
+        if authorized: record['sourceStable'] = _sources() == plan['agent3Sources']
+        if not isinstance(error, Exception): raise
+    finally:
+        record['servicesStarted'] = [dict(case=case, **entry) for case, child in case_records.items() for entry in child['servicesStarted']]
+        record['endedAt'] = now()
+        (output/'manifest.json').write_text(json.dumps(record, indent=2)+'\n')
+    return record
+
+
+def main():
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--plan', type=Path, required=True); p.add_argument('--acks', type=Path); p.add_argument('--output', type=Path, required=True)
+    args = p.parse_args(); result = execute(args.plan, args.acks, args.output)
+    print(json.dumps({k: result[k] for k in ('status', 'failure', 'sourceStable', 'servicesStarted')}, indent=2))
+    return 0 if result['status'] in ('E2_RECOVERY_SLICE_PASS', 'E2_RECOVERY_EXPIRY_SLICE_PASS', 'E2_DUPLICATE_OUTCOME_SLICE_PASS', 'E2_NONCE_REPLAY_SLICE_PASS') else 2
+
+
+if __name__ == '__main__': raise SystemExit(main())

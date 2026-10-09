@@ -1,0 +1,22 @@
+{
+  "events": [
+    {
+      "action": "pre-edit branch stability guard",
+      "exitCode": 1,
+      "reason": "A2 advanced f69e250 to e30d00d with exact mapping ACK and export successor; no bypass, successor now reviewed."
+    },
+    {
+      "action": "early evidence copy",
+      "exitCode": 1,
+      "reason": "pre-edit-commands.json was not created after that guard; copied initial A1 evidence only, no live status/mailbox/frozen bytes changed."
+    },
+    {
+      "action": "successor helper",
+      "exitCode": 1,
+      "reason": "Unconditionally required AdapterRequest validity for an intentionally MALFORMED attest_grant input{}; export tests12pass/regeneration9pass, owner fixtures contain negative controls.",
+      "fix": "For each example verify request validity iff response is not MALFORMED; independently require every response valid. Preserve failed helper/logs; rerun under unchanged pinned inputs."
+    }
+  ],
+  "earlyLookupErrors": "Guessed A1 ACK filename128 and guessed Agent3 outbox pair1 corrected with exact tree/rg paths. Initial heredoc lock exited0; corrected PTY39238 flock still held.",
+  "classification": "helper/monitor recovery; no failed experiment relabelled as PASS"
+}

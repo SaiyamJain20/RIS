@@ -1,0 +1,1059 @@
+{
+  "interfaceVersion": "v1 candidate revision 3 NOT frozen",
+  "cases": [
+    {
+      "schema": "Registration",
+      "valid": true,
+      "input": {
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "certDigest": "0x19ed9acb9fa1276b44fc6d54b9e2e167cc98c09d9ba69a925d0cb328f13f3aec",
+        "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d",
+        "expiresAt": "1800000600"
+      }
+    },
+    {
+      "schema": "Registration",
+      "valid": false,
+      "input": {
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "certDigest": "0x19ed9acb9fa1276b44fc6d54b9e2e167cc98c09d9ba69a925d0cb328f13f3aec",
+        "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d",
+        "expiresAt": "1800000600",
+        "unknownField": "forbidden"
+      }
+    },
+    {
+      "schema": "Registration",
+      "valid": false,
+      "input": {
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "certDigest": "0x19ed9acb9fa1276b44fc6d54b9e2e167cc98c09d9ba69a925d0cb328f13f3aec",
+        "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d",
+        "expiresAt": "18446744073709551616"
+      }
+    },
+    {
+      "schema": "RoleCertificate",
+      "valid": true,
+      "input": {
+        "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "roles": [
+          "0x2b14ce5fd3a3fd8a4ecc39fd8d67dc8af4b88e6e8f70ba61d441e2e6b93e5160",
+          "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6"
+        ],
+        "serial": "101",
+        "validFrom": "1799996400",
+        "validUntil": "1831536000"
+      }
+    },
+    {
+      "schema": "RoleCertificate",
+      "valid": false,
+      "input": {
+        "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "roles": [
+          "0x2b14ce5fd3a3fd8a4ecc39fd8d67dc8af4b88e6e8f70ba61d441e2e6b93e5160",
+          "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6"
+        ],
+        "serial": "101",
+        "validFrom": "1799996400",
+        "validUntil": "1831536000",
+        "unknownField": "forbidden"
+      }
+    },
+    {
+      "schema": "RoleCertificate",
+      "valid": false,
+      "input": {
+        "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "roles": [
+          "0x2b14ce5fd3a3fd8a4ecc39fd8d67dc8af4b88e6e8f70ba61d441e2e6b93e5160",
+          "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6"
+        ],
+        "serial": "18446744073709551616",
+        "validFrom": "1799996400",
+        "validUntil": "1831536000"
+      }
+    },
+    {
+      "schema": "RoleCertificate",
+      "valid": false,
+      "input": {
+        "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "roles": [
+          "0x2b14ce5fd3a3fd8a4ecc39fd8d67dc8af4b88e6e8f70ba61d441e2e6b93e5160",
+          "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6"
+        ],
+        "serial": "101",
+        "validFrom": "18446744073709551616",
+        "validUntil": "1831536000"
+      }
+    },
+    {
+      "schema": "RoleCertificate",
+      "valid": false,
+      "input": {
+        "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "roles": [
+          "0x2b14ce5fd3a3fd8a4ecc39fd8d67dc8af4b88e6e8f70ba61d441e2e6b93e5160",
+          "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6"
+        ],
+        "serial": "101",
+        "validFrom": "1799996400",
+        "validUntil": "18446744073709551616"
+      }
+    },
+    {
+      "schema": "RevocationList",
+      "valid": true,
+      "input": {
+        "authority": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+        "version": "3",
+        "validUntil": "1800086400",
+        "revokedSerials": [
+          "7",
+          "101"
+        ]
+      }
+    },
+    {
+      "schema": "RevocationList",
+      "valid": false,
+      "input": {
+        "authority": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+        "version": "3",
+        "validUntil": "1800086400",
+        "revokedSerials": [
+          "7",
+          "101"
+        ],
+        "unknownField": "forbidden"
+      }
+    },
+    {
+      "schema": "RevocationList",
+      "valid": false,
+      "input": {
+        "authority": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+        "version": "18446744073709551616",
+        "validUntil": "1800086400",
+        "revokedSerials": [
+          "7",
+          "101"
+        ]
+      }
+    },
+    {
+      "schema": "RevocationList",
+      "valid": false,
+      "input": {
+        "authority": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+        "version": "3",
+        "validUntil": "18446744073709551616",
+        "revokedSerials": [
+          "7",
+          "101"
+        ]
+      }
+    },
+    {
+      "schema": "TemporalAcl",
+      "valid": true,
+      "input": {
+        "authority": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+        "version": "2",
+        "validUntil": "1800086400",
+        "entries": [
+          {
+            "gid": "0xac5a40f1b6d99eca704aebc1fd7ffa5dbb5be59a",
+            "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+            "validFrom": "1799999940",
+            "validUntil": "1800028800"
+          },
+          {
+            "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+            "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+            "validFrom": "1800000000",
+            "validUntil": "1800014400"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TemporalAcl",
+      "valid": false,
+      "input": {
+        "authority": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+        "version": "2",
+        "validUntil": "1800086400",
+        "entries": [
+          {
+            "gid": "0xac5a40f1b6d99eca704aebc1fd7ffa5dbb5be59a",
+            "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+            "validFrom": "1799999940",
+            "validUntil": "1800028800"
+          },
+          {
+            "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+            "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+            "validFrom": "1800000000",
+            "validUntil": "1800014400"
+          }
+        ],
+        "unknownField": "forbidden"
+      }
+    },
+    {
+      "schema": "TemporalAcl",
+      "valid": false,
+      "input": {
+        "authority": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+        "version": "18446744073709551616",
+        "validUntil": "1800086400",
+        "entries": [
+          {
+            "gid": "0xac5a40f1b6d99eca704aebc1fd7ffa5dbb5be59a",
+            "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+            "validFrom": "1799999940",
+            "validUntil": "1800028800"
+          },
+          {
+            "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+            "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+            "validFrom": "1800000000",
+            "validUntil": "1800014400"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TemporalAcl",
+      "valid": false,
+      "input": {
+        "authority": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+        "version": "2",
+        "validUntil": "18446744073709551616",
+        "entries": [
+          {
+            "gid": "0xac5a40f1b6d99eca704aebc1fd7ffa5dbb5be59a",
+            "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+            "validFrom": "1799999940",
+            "validUntil": "1800028800"
+          },
+          {
+            "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+            "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+            "validFrom": "1800000000",
+            "validUntil": "1800014400"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "AccessRequest",
+      "valid": true,
+      "input": {
+        "sourceChainId": "18545",
+        "destinationChainId": "28545",
+        "psc": "0xbaf0d260f32ee1cdc0d6bcca688fd02f7aca3a13",
+        "kssc": "0xe3657551ab073fe9146c434569370ef433ff85b4",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+        "action": "1",
+        "policyVersion": "1",
+        "authEpoch": "4",
+        "keyEpoch": "0",
+        "nonce": "1",
+        "expiresAt": "1800000030",
+        "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+      }
+    },
+    {
+      "schema": "AccessRequest",
+      "valid": false,
+      "input": {
+        "sourceChainId": "18545",
+        "destinationChainId": "28545",
+        "psc": "0xbaf0d260f32ee1cdc0d6bcca688fd02f7aca3a13",
+        "kssc": "0xe3657551ab073fe9146c434569370ef433ff85b4",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+        "action": "1",
+        "policyVersion": "1",
+        "authEpoch": "4",
+        "keyEpoch": "0",
+        "nonce": "1",
+        "expiresAt": "1800000030",
+        "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d",
+        "unknownField": "forbidden"
+      }
+    },
+    {
+      "schema": "AccessRequest",
+      "valid": false,
+      "input": {
+        "sourceChainId": "115792089237316195423570985008687907853269984665640564039457584007913129639936",
+        "destinationChainId": "28545",
+        "psc": "0xbaf0d260f32ee1cdc0d6bcca688fd02f7aca3a13",
+        "kssc": "0xe3657551ab073fe9146c434569370ef433ff85b4",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+        "action": "1",
+        "policyVersion": "1",
+        "authEpoch": "4",
+        "keyEpoch": "0",
+        "nonce": "1",
+        "expiresAt": "1800000030",
+        "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+      }
+    },
+    {
+      "schema": "AccessRequest",
+      "valid": false,
+      "input": {
+        "sourceChainId": "18545",
+        "destinationChainId": "115792089237316195423570985008687907853269984665640564039457584007913129639936",
+        "psc": "0xbaf0d260f32ee1cdc0d6bcca688fd02f7aca3a13",
+        "kssc": "0xe3657551ab073fe9146c434569370ef433ff85b4",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+        "action": "1",
+        "policyVersion": "1",
+        "authEpoch": "4",
+        "keyEpoch": "0",
+        "nonce": "1",
+        "expiresAt": "1800000030",
+        "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+      }
+    },
+    {
+      "schema": "AccessRequest",
+      "valid": false,
+      "input": {
+        "sourceChainId": "18545",
+        "destinationChainId": "28545",
+        "psc": "0xbaf0d260f32ee1cdc0d6bcca688fd02f7aca3a13",
+        "kssc": "0xe3657551ab073fe9146c434569370ef433ff85b4",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+        "action": "256",
+        "policyVersion": "1",
+        "authEpoch": "4",
+        "keyEpoch": "0",
+        "nonce": "1",
+        "expiresAt": "1800000030",
+        "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+      }
+    },
+    {
+      "schema": "AccessRequest",
+      "valid": false,
+      "input": {
+        "sourceChainId": "18545",
+        "destinationChainId": "28545",
+        "psc": "0xbaf0d260f32ee1cdc0d6bcca688fd02f7aca3a13",
+        "kssc": "0xe3657551ab073fe9146c434569370ef433ff85b4",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+        "action": "1",
+        "policyVersion": "18446744073709551616",
+        "authEpoch": "4",
+        "keyEpoch": "0",
+        "nonce": "1",
+        "expiresAt": "1800000030",
+        "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+      }
+    },
+    {
+      "schema": "AccessRequest",
+      "valid": false,
+      "input": {
+        "sourceChainId": "18545",
+        "destinationChainId": "28545",
+        "psc": "0xbaf0d260f32ee1cdc0d6bcca688fd02f7aca3a13",
+        "kssc": "0xe3657551ab073fe9146c434569370ef433ff85b4",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+        "action": "1",
+        "policyVersion": "1",
+        "authEpoch": "18446744073709551616",
+        "keyEpoch": "0",
+        "nonce": "1",
+        "expiresAt": "1800000030",
+        "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+      }
+    },
+    {
+      "schema": "AccessRequest",
+      "valid": false,
+      "input": {
+        "sourceChainId": "18545",
+        "destinationChainId": "28545",
+        "psc": "0xbaf0d260f32ee1cdc0d6bcca688fd02f7aca3a13",
+        "kssc": "0xe3657551ab073fe9146c434569370ef433ff85b4",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+        "action": "1",
+        "policyVersion": "1",
+        "authEpoch": "4",
+        "keyEpoch": "18446744073709551616",
+        "nonce": "1",
+        "expiresAt": "1800000030",
+        "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+      }
+    },
+    {
+      "schema": "AccessRequest",
+      "valid": false,
+      "input": {
+        "sourceChainId": "18545",
+        "destinationChainId": "28545",
+        "psc": "0xbaf0d260f32ee1cdc0d6bcca688fd02f7aca3a13",
+        "kssc": "0xe3657551ab073fe9146c434569370ef433ff85b4",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+        "action": "1",
+        "policyVersion": "1",
+        "authEpoch": "4",
+        "keyEpoch": "0",
+        "nonce": "115792089237316195423570985008687907853269984665640564039457584007913129639936",
+        "expiresAt": "1800000030",
+        "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+      }
+    },
+    {
+      "schema": "AccessRequest",
+      "valid": false,
+      "input": {
+        "sourceChainId": "18545",
+        "destinationChainId": "28545",
+        "psc": "0xbaf0d260f32ee1cdc0d6bcca688fd02f7aca3a13",
+        "kssc": "0xe3657551ab073fe9146c434569370ef433ff85b4",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+        "action": "1",
+        "policyVersion": "1",
+        "authEpoch": "4",
+        "keyEpoch": "0",
+        "nonce": "1",
+        "expiresAt": "18446744073709551616",
+        "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+      }
+    },
+    {
+      "schema": "AccessDecision",
+      "valid": true,
+      "input": {
+        "requestDigest": "0xcb802061aae6df7e515bdf8f21b4cc0ed1e0e2184f1025222f149717412ad7c2",
+        "result": "1",
+        "credentialDigest": "0x4ac43f5a41f745b7ade201d76ae9c7b9055e0d290a321be8f2bfd3eea6b61bc1",
+        "stateSequence": "5",
+        "witnessSetVersion": "1",
+        "sourceBlockNumber": "1234",
+        "sourceBlockHash": "0x819d6524fa6fc164dc9fb5f471892ef7403a2b9110b8cf9e2ded9c5225275713",
+        "expiresAt": "1800000030"
+      }
+    },
+    {
+      "schema": "AccessDecision",
+      "valid": false,
+      "input": {
+        "requestDigest": "0xcb802061aae6df7e515bdf8f21b4cc0ed1e0e2184f1025222f149717412ad7c2",
+        "result": "1",
+        "credentialDigest": "0x4ac43f5a41f745b7ade201d76ae9c7b9055e0d290a321be8f2bfd3eea6b61bc1",
+        "stateSequence": "5",
+        "witnessSetVersion": "1",
+        "sourceBlockNumber": "1234",
+        "sourceBlockHash": "0x819d6524fa6fc164dc9fb5f471892ef7403a2b9110b8cf9e2ded9c5225275713",
+        "expiresAt": "1800000030",
+        "unknownField": "forbidden"
+      }
+    },
+    {
+      "schema": "AccessDecision",
+      "valid": false,
+      "input": {
+        "requestDigest": "0xcb802061aae6df7e515bdf8f21b4cc0ed1e0e2184f1025222f149717412ad7c2",
+        "result": "256",
+        "credentialDigest": "0x4ac43f5a41f745b7ade201d76ae9c7b9055e0d290a321be8f2bfd3eea6b61bc1",
+        "stateSequence": "5",
+        "witnessSetVersion": "1",
+        "sourceBlockNumber": "1234",
+        "sourceBlockHash": "0x819d6524fa6fc164dc9fb5f471892ef7403a2b9110b8cf9e2ded9c5225275713",
+        "expiresAt": "1800000030"
+      }
+    },
+    {
+      "schema": "AccessDecision",
+      "valid": false,
+      "input": {
+        "requestDigest": "0xcb802061aae6df7e515bdf8f21b4cc0ed1e0e2184f1025222f149717412ad7c2",
+        "result": "1",
+        "credentialDigest": "0x4ac43f5a41f745b7ade201d76ae9c7b9055e0d290a321be8f2bfd3eea6b61bc1",
+        "stateSequence": "18446744073709551616",
+        "witnessSetVersion": "1",
+        "sourceBlockNumber": "1234",
+        "sourceBlockHash": "0x819d6524fa6fc164dc9fb5f471892ef7403a2b9110b8cf9e2ded9c5225275713",
+        "expiresAt": "1800000030"
+      }
+    },
+    {
+      "schema": "AccessDecision",
+      "valid": false,
+      "input": {
+        "requestDigest": "0xcb802061aae6df7e515bdf8f21b4cc0ed1e0e2184f1025222f149717412ad7c2",
+        "result": "1",
+        "credentialDigest": "0x4ac43f5a41f745b7ade201d76ae9c7b9055e0d290a321be8f2bfd3eea6b61bc1",
+        "stateSequence": "5",
+        "witnessSetVersion": "18446744073709551616",
+        "sourceBlockNumber": "1234",
+        "sourceBlockHash": "0x819d6524fa6fc164dc9fb5f471892ef7403a2b9110b8cf9e2ded9c5225275713",
+        "expiresAt": "1800000030"
+      }
+    },
+    {
+      "schema": "AccessDecision",
+      "valid": false,
+      "input": {
+        "requestDigest": "0xcb802061aae6df7e515bdf8f21b4cc0ed1e0e2184f1025222f149717412ad7c2",
+        "result": "1",
+        "credentialDigest": "0x4ac43f5a41f745b7ade201d76ae9c7b9055e0d290a321be8f2bfd3eea6b61bc1",
+        "stateSequence": "5",
+        "witnessSetVersion": "1",
+        "sourceBlockNumber": "115792089237316195423570985008687907853269984665640564039457584007913129639936",
+        "sourceBlockHash": "0x819d6524fa6fc164dc9fb5f471892ef7403a2b9110b8cf9e2ded9c5225275713",
+        "expiresAt": "1800000030"
+      }
+    },
+    {
+      "schema": "AccessDecision",
+      "valid": false,
+      "input": {
+        "requestDigest": "0xcb802061aae6df7e515bdf8f21b4cc0ed1e0e2184f1025222f149717412ad7c2",
+        "result": "1",
+        "credentialDigest": "0x4ac43f5a41f745b7ade201d76ae9c7b9055e0d290a321be8f2bfd3eea6b61bc1",
+        "stateSequence": "5",
+        "witnessSetVersion": "1",
+        "sourceBlockNumber": "1234",
+        "sourceBlockHash": "0x819d6524fa6fc164dc9fb5f471892ef7403a2b9110b8cf9e2ded9c5225275713",
+        "expiresAt": "18446744073709551616"
+      }
+    },
+    {
+      "schema": "StateCheckpoint",
+      "valid": true,
+      "input": {
+        "sequence": "5",
+        "authEpoch": "4",
+        "policyVersion": "1",
+        "keyEpoch": "0",
+        "witnessSetVersion": "1",
+        "sourceChainId": "18545",
+        "psc": "0xbaf0d260f32ee1cdc0d6bcca688fd02f7aca3a13",
+        "sourceBlockNumber": "1234",
+        "sourceBlockHash": "0x819d6524fa6fc164dc9fb5f471892ef7403a2b9110b8cf9e2ded9c5225275713",
+        "expiresAt": "1800000060"
+      }
+    },
+    {
+      "schema": "StateCheckpoint",
+      "valid": false,
+      "input": {
+        "sequence": "5",
+        "authEpoch": "4",
+        "policyVersion": "1",
+        "keyEpoch": "0",
+        "witnessSetVersion": "1",
+        "sourceChainId": "18545",
+        "psc": "0xbaf0d260f32ee1cdc0d6bcca688fd02f7aca3a13",
+        "sourceBlockNumber": "1234",
+        "sourceBlockHash": "0x819d6524fa6fc164dc9fb5f471892ef7403a2b9110b8cf9e2ded9c5225275713",
+        "expiresAt": "1800000060",
+        "unknownField": "forbidden"
+      }
+    },
+    {
+      "schema": "StateCheckpoint",
+      "valid": false,
+      "input": {
+        "sequence": "18446744073709551616",
+        "authEpoch": "4",
+        "policyVersion": "1",
+        "keyEpoch": "0",
+        "witnessSetVersion": "1",
+        "sourceChainId": "18545",
+        "psc": "0xbaf0d260f32ee1cdc0d6bcca688fd02f7aca3a13",
+        "sourceBlockNumber": "1234",
+        "sourceBlockHash": "0x819d6524fa6fc164dc9fb5f471892ef7403a2b9110b8cf9e2ded9c5225275713",
+        "expiresAt": "1800000060"
+      }
+    },
+    {
+      "schema": "StateCheckpoint",
+      "valid": false,
+      "input": {
+        "sequence": "5",
+        "authEpoch": "18446744073709551616",
+        "policyVersion": "1",
+        "keyEpoch": "0",
+        "witnessSetVersion": "1",
+        "sourceChainId": "18545",
+        "psc": "0xbaf0d260f32ee1cdc0d6bcca688fd02f7aca3a13",
+        "sourceBlockNumber": "1234",
+        "sourceBlockHash": "0x819d6524fa6fc164dc9fb5f471892ef7403a2b9110b8cf9e2ded9c5225275713",
+        "expiresAt": "1800000060"
+      }
+    },
+    {
+      "schema": "StateCheckpoint",
+      "valid": false,
+      "input": {
+        "sequence": "5",
+        "authEpoch": "4",
+        "policyVersion": "18446744073709551616",
+        "keyEpoch": "0",
+        "witnessSetVersion": "1",
+        "sourceChainId": "18545",
+        "psc": "0xbaf0d260f32ee1cdc0d6bcca688fd02f7aca3a13",
+        "sourceBlockNumber": "1234",
+        "sourceBlockHash": "0x819d6524fa6fc164dc9fb5f471892ef7403a2b9110b8cf9e2ded9c5225275713",
+        "expiresAt": "1800000060"
+      }
+    },
+    {
+      "schema": "StateCheckpoint",
+      "valid": false,
+      "input": {
+        "sequence": "5",
+        "authEpoch": "4",
+        "policyVersion": "1",
+        "keyEpoch": "18446744073709551616",
+        "witnessSetVersion": "1",
+        "sourceChainId": "18545",
+        "psc": "0xbaf0d260f32ee1cdc0d6bcca688fd02f7aca3a13",
+        "sourceBlockNumber": "1234",
+        "sourceBlockHash": "0x819d6524fa6fc164dc9fb5f471892ef7403a2b9110b8cf9e2ded9c5225275713",
+        "expiresAt": "1800000060"
+      }
+    },
+    {
+      "schema": "StateCheckpoint",
+      "valid": false,
+      "input": {
+        "sequence": "5",
+        "authEpoch": "4",
+        "policyVersion": "1",
+        "keyEpoch": "0",
+        "witnessSetVersion": "18446744073709551616",
+        "sourceChainId": "18545",
+        "psc": "0xbaf0d260f32ee1cdc0d6bcca688fd02f7aca3a13",
+        "sourceBlockNumber": "1234",
+        "sourceBlockHash": "0x819d6524fa6fc164dc9fb5f471892ef7403a2b9110b8cf9e2ded9c5225275713",
+        "expiresAt": "1800000060"
+      }
+    },
+    {
+      "schema": "StateCheckpoint",
+      "valid": false,
+      "input": {
+        "sequence": "5",
+        "authEpoch": "4",
+        "policyVersion": "1",
+        "keyEpoch": "0",
+        "witnessSetVersion": "1",
+        "sourceChainId": "115792089237316195423570985008687907853269984665640564039457584007913129639936",
+        "psc": "0xbaf0d260f32ee1cdc0d6bcca688fd02f7aca3a13",
+        "sourceBlockNumber": "1234",
+        "sourceBlockHash": "0x819d6524fa6fc164dc9fb5f471892ef7403a2b9110b8cf9e2ded9c5225275713",
+        "expiresAt": "1800000060"
+      }
+    },
+    {
+      "schema": "StateCheckpoint",
+      "valid": false,
+      "input": {
+        "sequence": "5",
+        "authEpoch": "4",
+        "policyVersion": "1",
+        "keyEpoch": "0",
+        "witnessSetVersion": "1",
+        "sourceChainId": "18545",
+        "psc": "0xbaf0d260f32ee1cdc0d6bcca688fd02f7aca3a13",
+        "sourceBlockNumber": "115792089237316195423570985008687907853269984665640564039457584007913129639936",
+        "sourceBlockHash": "0x819d6524fa6fc164dc9fb5f471892ef7403a2b9110b8cf9e2ded9c5225275713",
+        "expiresAt": "1800000060"
+      }
+    },
+    {
+      "schema": "StateCheckpoint",
+      "valid": false,
+      "input": {
+        "sequence": "5",
+        "authEpoch": "4",
+        "policyVersion": "1",
+        "keyEpoch": "0",
+        "witnessSetVersion": "1",
+        "sourceChainId": "18545",
+        "psc": "0xbaf0d260f32ee1cdc0d6bcca688fd02f7aca3a13",
+        "sourceBlockNumber": "1234",
+        "sourceBlockHash": "0x819d6524fa6fc164dc9fb5f471892ef7403a2b9110b8cf9e2ded9c5225275713",
+        "expiresAt": "18446744073709551616"
+      }
+    },
+    {
+      "schema": "CredentialRecords",
+      "valid": true,
+      "input": [
+        {
+          "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+          "role": "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6",
+          "kind": "1",
+          "serial": "101",
+          "anchorVersion": "1",
+          "validUntil": "1800086400"
+        },
+        {
+          "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+          "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+          "kind": "2",
+          "serial": "0",
+          "anchorVersion": "2",
+          "validUntil": "1800028800"
+        }
+      ]
+    },
+    {
+      "schema": "CredentialRecords",
+      "valid": false,
+      "input": [
+        {
+          "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+          "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+          "kind": "2",
+          "serial": "0",
+          "anchorVersion": "2",
+          "validUntil": "1800028800"
+        },
+        {
+          "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+          "role": "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6",
+          "kind": "1",
+          "serial": "101",
+          "anchorVersion": "1",
+          "validUntil": "1800086400"
+        }
+      ]
+    },
+    {
+      "schema": "Signature",
+      "valid": true,
+      "input": "0x74429e0a03ea1221e9eeb5054478ee4f404a257be41ecfcb299da9c88446bc885a51f9f5285499703c312944727df5dc647fc82b1af7f182c0b8e0cf8294eb111b"
+    },
+    {
+      "schema": "Signature",
+      "valid": false,
+      "input": "0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "schema": "CredentialBundle",
+      "valid": false,
+      "input": {
+        "certificates": [],
+        "temporalClaims": []
+      }
+    },
+    {
+      "schema": "CredentialBundle",
+      "valid": true,
+      "input": {
+        "certificates": [],
+        "temporalClaims": [
+          {
+            "authority": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+            "role": "0x2b14ce5fd3a3fd8a4ecc39fd8d67dc8af4b88e6e8f70ba61d441e2e6b93e5160"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "TempAclEntry",
+      "valid": false,
+      "input": {
+        "gid": "0x0000000000000000000000000000000000000000",
+        "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+        "validFrom": "1799999940",
+        "validUntil": "1800028800"
+      }
+    },
+    {
+      "schema": "TemporalAcl",
+      "valid": false,
+      "input": {
+        "authority": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+        "version": "2",
+        "validUntil": "1800086400",
+        "entries": [
+          {
+            "gid": "0x0000000000000000000000000000000000000000",
+            "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+            "validFrom": "1799999940",
+            "validUntil": "1800028800"
+          }
+        ]
+      }
+    },
+    {
+      "schema": "RoleCertificate",
+      "valid": false,
+      "input": {
+        "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "roles": [
+          "0x2b14ce5fd3a3fd8a4ecc39fd8d67dc8af4b88e6e8f70ba61d441e2e6b93e5160",
+          "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6"
+        ],
+        "serial": "101",
+        "validFrom": "1831536000",
+        "validUntil": "1831536000"
+      }
+    },
+    {
+      "schema": "RoleCertificate",
+      "valid": false,
+      "input": {
+        "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "roles": [
+          "0x2b14ce5fd3a3fd8a4ecc39fd8d67dc8af4b88e6e8f70ba61d441e2e6b93e5160",
+          "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6"
+        ],
+        "serial": "101",
+        "validFrom": "1831536001",
+        "validUntil": "1831536000"
+      }
+    },
+    {
+      "schema": "GrantReceipt",
+      "valid": true,
+      "input": {
+        "requestDigest": "0xcb802061aae6df7e515bdf8f21b4cc0ed1e0e2184f1025222f149717412ad7c2",
+        "grantId": "0xe7cbcccf5384fcf23d61ed0d816214984f2818f9138e80be6b752444103782e3",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+        "keyEpoch": "0",
+        "grantExpiresAt": "1800000030",
+        "witnessSetVersion": "1",
+        "dbcChainId": "28545",
+        "kssc": "0xe3657551ab073fe9146c434569370ef433ff85b4",
+        "dbcBlockNumber": "4321",
+        "dbcBlockHash": "0x0f4c0914f6381b5288f5e421df381335ab216e747313f81e6c80bf8fd5dda16f"
+      }
+    },
+    {
+      "schema": "GrantReceipt",
+      "valid": true,
+      "input": {
+        "requestDigest": "0xcb802061aae6df7e515bdf8f21b4cc0ed1e0e2184f1025222f149717412ad7c2",
+        "grantId": "0xe7cbcccf5384fcf23d61ed0d816214984f2818f9138e80be6b752444103782e3",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+        "keyEpoch": "0",
+        "grantExpiresAt": "1",
+        "witnessSetVersion": "1",
+        "dbcChainId": "28545",
+        "kssc": "0xe3657551ab073fe9146c434569370ef433ff85b4",
+        "dbcBlockNumber": "4321",
+        "dbcBlockHash": "0x0f4c0914f6381b5288f5e421df381335ab216e747313f81e6c80bf8fd5dda16f"
+      }
+    },
+    {
+      "schema": "GrantReceipt",
+      "valid": false,
+      "input": {
+        "requestDigest": "0xcb802061aae6df7e515bdf8f21b4cc0ed1e0e2184f1025222f149717412ad7c2",
+        "grantId": "0xe7cbcccf5384fcf23d61ed0d816214984f2818f9138e80be6b752444103782e3",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+        "keyEpoch": "0",
+        "grantExpiresAt": "1800000030",
+        "witnessSetVersion": "1",
+        "dbcChainId": "28545",
+        "kssc": "0xe3657551ab073fe9146c434569370ef433ff85b4",
+        "dbcBlockNumber": "4321",
+        "dbcBlockHash": "0x0f4c0914f6381b5288f5e421df381335ab216e747313f81e6c80bf8fd5dda16f",
+        "dbcResult": "1"
+      }
+    },
+    {
+      "schema": "GrantReceipt",
+      "valid": false,
+      "input": {
+        "requestDigest": "0xcb802061aae6df7e515bdf8f21b4cc0ed1e0e2184f1025222f149717412ad7c2",
+        "grantId": "0xe7cbcccf5384fcf23d61ed0d816214984f2818f9138e80be6b752444103782e3",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+        "keyEpoch": "1",
+        "grantExpiresAt": "1800000030",
+        "witnessSetVersion": "1",
+        "dbcChainId": "28545",
+        "kssc": "0xe3657551ab073fe9146c434569370ef433ff85b4",
+        "dbcBlockNumber": "4321",
+        "dbcBlockHash": "0x0f4c0914f6381b5288f5e421df381335ab216e747313f81e6c80bf8fd5dda16f"
+      }
+    },
+    {
+      "schema": "GrantReceipt",
+      "valid": false,
+      "input": {
+        "requestDigest": "0xcb802061aae6df7e515bdf8f21b4cc0ed1e0e2184f1025222f149717412ad7c2",
+        "grantId": "0xe7cbcccf5384fcf23d61ed0d816214984f2818f9138e80be6b752444103782e3",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+        "keyEpoch": "0",
+        "grantExpiresAt": "1800000030",
+        "witnessSetVersion": "2",
+        "dbcChainId": "28545",
+        "kssc": "0xe3657551ab073fe9146c434569370ef433ff85b4",
+        "dbcBlockNumber": "4321",
+        "dbcBlockHash": "0x0f4c0914f6381b5288f5e421df381335ab216e747313f81e6c80bf8fd5dda16f"
+      }
+    },
+    {
+      "schema": "GrantReceipt",
+      "valid": false,
+      "input": {
+        "requestDigest": "0xcb802061aae6df7e515bdf8f21b4cc0ed1e0e2184f1025222f149717412ad7c2",
+        "grantId": "0xe7cbcccf5384fcf23d61ed0d816214984f2818f9138e80be6b752444103782e3",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+        "keyEpoch": "0",
+        "grantExpiresAt": "0",
+        "witnessSetVersion": "1",
+        "dbcChainId": "28545",
+        "kssc": "0xe3657551ab073fe9146c434569370ef433ff85b4",
+        "dbcBlockNumber": "4321",
+        "dbcBlockHash": "0x0f4c0914f6381b5288f5e421df381335ab216e747313f81e6c80bf8fd5dda16f"
+      }
+    },
+    {
+      "schema": "GrantReceipt",
+      "valid": false,
+      "input": {
+        "requestDigest": "0xcb802061aae6df7e515bdf8f21b4cc0ed1e0e2184f1025222f149717412ad7c2",
+        "grantId": "0xe7cbcccf5384fcf23d61ed0d816214984f2818f9138e80be6b752444103782e3",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+        "keyEpoch": "0",
+        "grantExpiresAt": "18446744073709551616",
+        "witnessSetVersion": "1",
+        "dbcChainId": "28545",
+        "kssc": "0xe3657551ab073fe9146c434569370ef433ff85b4",
+        "dbcBlockNumber": "4321",
+        "dbcBlockHash": "0x0f4c0914f6381b5288f5e421df381335ab216e747313f81e6c80bf8fd5dda16f"
+      }
+    },
+    {
+      "schema": "GrantReceipt",
+      "valid": false,
+      "input": {
+        "requestDigest": "0xcb802061aae6df7e515bdf8f21b4cc0ed1e0e2184f1025222f149717412ad7c2",
+        "grantId": "0xe7cbcccf5384fcf23d61ed0d816214984f2818f9138e80be6b752444103782e3",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+        "keyEpoch": "0",
+        "grantExpiresAt": "1800000030",
+        "witnessSetVersion": "1",
+        "dbcChainId": "28545",
+        "kssc": "0xe3657551ab073fe9146c434569370ef433ff85b4",
+        "dbcBlockNumber": "115792089237316195423570985008687907853269984665640564039457584007913129639936",
+        "dbcBlockHash": "0x0f4c0914f6381b5288f5e421df381335ab216e747313f81e6c80bf8fd5dda16f"
+      }
+    },
+    {
+      "schema": "GrantReceipt",
+      "valid": false,
+      "input": {
+        "requestDigest": "0xcb802061aae6df7e515bdf8f21b4cc0ed1e0e2184f1025222f149717412ad7c2",
+        "grantId": "0xe7cbcccf5384fcf23d61ed0d816214984f2818f9138e80be6b752444103782e3",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+        "keyEpoch": "0",
+        "grantExpiresAt": "1800000030",
+        "witnessSetVersion": "1",
+        "dbcChainId": "28545",
+        "kssc": "0xe3657551ab073fe9146c434569370ef433ff85b4",
+        "dbcBlockNumber": "4321",
+        "dbcBlockHash": "0x0f4c0914f6381b5288f5e421df381335ab216e747313f81e6c80bf8fd5dda16f",
+        "unexpected": "x"
+      }
+    },
+    {
+      "schema": "GrantReceipt",
+      "valid": false,
+      "input": {
+        "requestDigest": "0xcb802061aae6df7e515bdf8f21b4cc0ed1e0e2184f1025222f149717412ad7c2",
+        "grantId": "0xe7cbcccf5384fcf23d61ed0d816214984f2818f9138e80be6b752444103782e3",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+        "keyEpoch": "0",
+        "grantExpiresAt": "1800000030",
+        "witnessSetVersion": "1",
+        "dbcChainId": "28545",
+        "kssc": "0xe3657551ab073fe9146c434569370ef433ff85b4",
+        "dbcBlockNumber": "4321",
+        "dbcBlockHash": "0x0f4c0914f6381b5288f5e421df381335ab216e747313f81e6c80bf8fd5dda16f"
+      }
+    },
+    {
+      "schema": "GrantReceipt",
+      "valid": false,
+      "input": {
+        "requestDigest": "0xcb802061aae6df7e515bdf8f21b4cc0ed1e0e2184f1025222f149717412ad7c2",
+        "grantId": "0xe7cbcccf5384fcf23d61ed0d816214984f2818f9138e80be6b752444103782e3",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "keyEpoch": "0",
+        "grantExpiresAt": "1800000030",
+        "witnessSetVersion": "1",
+        "dbcChainId": "28545",
+        "kssc": "0xe3657551ab073fe9146c434569370ef433ff85b4",
+        "dbcBlockNumber": "4321",
+        "dbcBlockHash": "0x0f4c0914f6381b5288f5e421df381335ab216e747313f81e6c80bf8fd5dda16f"
+      }
+    },
+    {
+      "schema": "GrantReceipt",
+      "valid": false,
+      "input": {
+        "requestDigest": "0xcb802061aae6df7e515bdf8f21b4cc0ed1e0e2184f1025222f149717412ad7c2",
+        "grantId": "0xe7cbcccf5384fcf23d61ed0d816214984f2818f9138e80be6b752444103782e3",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+        "keyEpoch": "0",
+        "grantExpiresAt": "1800000030",
+        "dbcChainId": "28545",
+        "kssc": "0xe3657551ab073fe9146c434569370ef433ff85b4",
+        "dbcBlockNumber": "4321",
+        "dbcBlockHash": "0x0f4c0914f6381b5288f5e421df381335ab216e747313f81e6c80bf8fd5dda16f"
+      }
+    },
+    {
+      "schema": "Address",
+      "valid": false,
+      "input": "0x1111111111111111111111111111111111111111\n"
+    },
+    {
+      "schema": "Hash",
+      "valid": false,
+      "input": "0x2222222222222222222222222222222222222222222222222222222222222222\n"
+    },
+    {
+      "schema": "FileHash",
+      "valid": false,
+      "input": "3333333333333333333333333333333333333333333333333333333333333333\n"
+    }
+  ]
+}

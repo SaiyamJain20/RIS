@@ -1,0 +1,84 @@
+{
+  "rq": "E",
+  "executionMode": "two-chain-e2-nonce-replay-slice",
+  "adapterMode": "symbolic",
+  "status": "E2_NONCE_REPLAY_SLICE_PASS",
+  "startedAt": "2026-10-09T06:14:55.748913+00:00",
+  "endedAt": "2026-10-09T06:21:10.575091+00:00",
+  "cases": {
+    "paper-strict-nonce-replay": {
+      "status": "NONCE_REPLAY_CONTROL_PASS",
+      "manifest": "paper-strict-nonce-replay/manifest.json"
+    },
+    "paper-minimal-nonce-replay": {
+      "status": "NONCE_REPLAY_CONTROL_PASS",
+      "manifest": "paper-minimal-nonce-replay/manifest.json"
+    },
+    "repaired-e-nonce-replay": {
+      "status": "NONCE_REPLAY_CONTROL_PASS",
+      "manifest": "repaired-e-nonce-replay/manifest.json"
+    }
+  },
+  "servicesStarted": [
+    {
+      "case": "paper-strict-nonce-replay",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 989669
+    },
+    {
+      "case": "paper-strict-nonce-replay",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 28545,
+      "pid": 989796
+    },
+    {
+      "case": "paper-minimal-nonce-replay",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1000757
+    },
+    {
+      "case": "paper-minimal-nonce-replay",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 28545,
+      "pid": 1000879
+    },
+    {
+      "case": "repaired-e-nonce-replay",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1011801
+    },
+    {
+      "case": "repaired-e-nonce-replay",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 28545,
+      "pid": 1011925
+    }
+  ],
+  "acks": {
+    "agent-1": {
+      "commit": "d89fc8438feb3510d436c02bff89b692aa5e15c4",
+      "path": "communication/agent-1/outbox/0056-ack-e2-grouped-replay-freeze.md",
+      "sha256": "9bac585bc6088d578f39818915ba2d6308a3106819a61fe3db90dac5ca7cb570",
+      "messageId": "A1-0056"
+    },
+    "agent-2": {
+      "commit": "6ce46bd6f48a4ae780d0a13912f802e4c870e1a5",
+      "path": "communication/agent-2/outbox/0037-ack-e2-grouped-replay-plan.md",
+      "sha256": "0c309f166c305b51c6743a293b555d401c9c0d01e2507407aebbcf32cd5471c2",
+      "messageId": "A2-0037"
+    }
+  },
+  "failure": null,
+  "sourceStable": true,
+  "limitation": "Three identical accepted request replays only; no complete catalog or RQ gate.",
+  "planSha256": "1b3cf7cd13ea8b1436396f8cc6268bbbdcae753661730290043ee144c1804a32"
+}

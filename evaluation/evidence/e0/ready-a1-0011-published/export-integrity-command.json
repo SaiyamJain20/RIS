@@ -1,0 +1,14 @@
+{
+  "argv": [
+    ".venv/bin/python",
+    "-c",
+    "import json,hashlib\nfrom pathlib import Path\nroot=Path('/tmp/hmbc-agent3-peer-a1-0011-54262c2/ledger')\nm=json.loads((root/'exports/abi/manifest.json').read_text())\nchecks=0\nfor name,h in m['sources'].items():\n    assert hashlib.sha256((root/name).read_bytes()).hexdigest()==h;checks+=1\nfor name,item in m['contracts'].items():\n    assert hashlib.sha256((root/item['abi']).read_bytes()).hexdigest()==item['abiSha256'];checks+=1\n    artifact=json.loads((root/'out'/f'{name}.sol'/f'{name}.json').read_text())\n    assert artifact['abi']==json.loads((root/item['abi']).read_text());checks+=1\n    bytecode=bytes.fromhex(artifact['deployedBytecode']['object'].removeprefix('0x'))\n    assert len(bytecode)==item['runtimeBytes'] and hashlib.sha256(bytecode).hexdigest()==item['runtimeSha256'];checks+=1\nsamples=[]\nfor path in sorted((root/'exports/deployments').glob('*/deployment.json')):\n    d=json.loads(path.read_text())\n    assert d['sources']==m['sources'] and d['abi']==m['contracts'] and d['foundryTomlSha256']==m['foundryTomlSha256'];checks+=1;samples.append(d['profile'])\nassert hashlib.sha256((root/'foundry.toml').read_bytes()).hexdigest()==m['foundryTomlSha256'];checks+=1\nprint(json.dumps({'checks':checks,'contracts':6,'samples':samples,'mismatches':[],'scope':'Static source/ABI/runtime/deployment export consistency; not current chain RPC verification'}))\n"
+  ],
+  "cwd": "/home/karma/Documents/RIS",
+  "startedAt": "2026-10-07T12:30:00.942846+00:00",
+  "endedAt": "2026-10-07T12:30:00.974762+00:00",
+  "exitCode": 0,
+  "timedOut": false,
+  "elapsedSeconds": 0.03192062000744045,
+  "outputSha256": "f86da19382ccb90d0a319cee574193309e5da1bc3e8f52f4a54b9c5f48d4e330"
+}

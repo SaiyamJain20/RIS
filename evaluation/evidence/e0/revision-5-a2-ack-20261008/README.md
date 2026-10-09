@@ -1,0 +1,9 @@
+# A2-0009 E0 review evidence
+
+Exact pin: Agent2 5e203d0c0b26235c4618548a797d93201275a14d,89-file source manifest a352f339f3c874cbb5634efffd1478abbc0b098292ec1d7ba97d348d76b4cdac; Agent1 e6cf4ff/100 entries; Agent3 revision5 3e0300a/32-file package. Synthetic E0 compatibility only.
+
+monitor.py and review.json preserve exact branch/communication/file-changing/source/tool hashes and command exits. Tombstones preserve the two removed evidence filenames and previous content hashes. preflight-failed-* and rename-failed-* retain two failed wrapper attempts; preflight-recovery.json records causes and exact guard corrections. They are not failed runtime experiments.
+
+compatibility.py and compatibility-commands.json record the exact pinned archive, selected non-live test files, root Python/lock, cwd/environment/times/exits/output hashes. Results:618 passed/101 evaluator-only skips; nine exports match;16 examples validate; independent prepared digest/recovery pass. compatibility.json records example verdicts and pre/post stability. No live fixtures/services, owner mutants, recovery, paper/repaired runtime scenarios or formal models executed. Snapshot at /tmp/hmbc-agent3-a2-e0-5e203d0-qlvchwhn is disposable; reproduce git archive at the exact commit. Raw archive retained outside Git under the automation run; its path/hash are in compatibility-commands.json.
+
+Saved programs are records of this run, not general CLI tools: reproduce them in a NEW empty output directory with the recorded repository path/environment, rather than overwriting this evidence. Wrapper creation/execution tool exit failures and exploratory missing-path reads are summarized in HANDOFF/static-review.json. static-review.json separates source reasoning from unexecuted nonce/receipt control proposals. Existing48 case schedules remain NOT_RUN; accepted32 package files are unchanged. final verification/publication evidence is separate from this tested snapshot.

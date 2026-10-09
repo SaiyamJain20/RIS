@@ -1,0 +1,101 @@
+..F.........                                                             [100%]
+=================================== FAILURES ===================================
+_ test_pre_release_subject_collector_preserves_original_request_and_stops_before_release[repaired-e] _
+
+specs = [{'components': [{'internalType': 'uint256', 'name': 'sourceChainId', 'type': 'uint256'}, {'internalType': 'uint256', ...: 'temporalClaims', 'type': 'tuple[]'}], 'internalType': 'struct CredentialBundle', 'name': 'bundle', 'type': 'tuple'}]
+raw = b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00...00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+
+    def _decode(specs, raw):
+        types = [_type(x) for x in specs]
+        try:
+>           values = decode(types, raw, strict=True)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/evm.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib64/python3.13/site-packages/eth_abi/codec.py:153: in decode
+    return cast(tuple[Any, ...], decoder(stream))
+                                 ^^^^^^^^^^^^^^^
+.venv/lib64/python3.13/site-packages/eth_abi/decoding.py:134: in __call__
+    return self.decode(stream)
+           ^^^^^^^^^^^^^^^^^^^
+.venv/lib64/python3.13/site-packages/eth_utils/functional.py:49: in inner
+    return callback(fn(*args, **kwargs))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib64/python3.13/site-packages/eth_abi/decoding.py:226: in decode
+    self.validate_pointers(stream)
+.venv/lib64/python3.13/site-packages/eth_abi/decoding.py:220: in validate_pointers
+    decoder(stream)
+.venv/lib64/python3.13/site-packages/eth_abi/decoding.py:134: in __call__
+    return self.decode(stream)
+           ^^^^^^^^^^^^^^^^^^^
+.venv/lib64/python3.13/site-packages/eth_utils/functional.py:49: in inner
+    return callback(fn(*args, **kwargs))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib64/python3.13/site-packages/eth_abi/decoding.py:226: in decode
+    self.validate_pointers(stream)
+.venv/lib64/python3.13/site-packages/eth_abi/decoding.py:220: in validate_pointers
+    decoder(stream)
+.venv/lib64/python3.13/site-packages/eth_abi/decoding.py:134: in __call__
+    return self.decode(stream)
+           ^^^^^^^^^^^^^^^^^^^
+.venv/lib64/python3.13/site-packages/eth_abi/decoding.py:257: in decode
+    self.validate_padding_bytes(value, padding_bytes)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <eth_abi.decoding.UnsignedIntegerDecoder object at 0x7f8bac6ff390>
+value = 232
+padding_bytes = b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x16\x13\xbe\xb3\xb2\xc4\xf2.\xe0\x86\xb2\xb3\x8c\x14v\xa3\xce\x7fx'
+
+    def validate_padding_bytes(self, value, padding_bytes):
+        value_byte_size = self._get_value_byte_size()
+        padding_size = self.data_byte_size - value_byte_size
+    
+        if padding_bytes != b"\x00" * padding_size:
+>           raise NonEmptyPaddingBytes(
+                f"Padding bytes were not empty: {repr(padding_bytes)}"
+            )
+E           eth_abi.exceptions.NonEmptyPaddingBytes: Padding bytes were not empty: b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x16\x13\xbe\xb3\xb2\xc4\xf2.\xe0\x86\xb2\xb3\x8c\x14v\xa3\xce\x7fx'
+
+.venv/lib64/python3.13/site-packages/eth_abi/decoding.py:416: NonEmptyPaddingBytes
+
+The above exception was the direct cause of the following exception:
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-99/test_pre_release_subject_colle2')
+profile = 'repaired-e'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    def test_pre_release_subject_collector_preserves_original_request_and_stops_before_release(artifacts, inputs, tmp_path, profile):
+        m = fixture(artifacts, inputs, tmp_path, profile, None)
+>       result = execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+            user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy, expected_allow=True,
+            worker_snapshot=m.snapshot, output=tmp_path/'access', subject_substitution=m.users['bob']['gid'])
+
+evaluation/tests/test_subject_collector.py:83: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/access_execution.py:243: in execute_access
+    proof = execute_subject_substitution(pbc, dbc, deployment=dep, request=request, prepared=prepared,
+evaluation/subject_substitution.py:88: in execute_subject_substitution
+    raw_args = _decode(spec['inputs'], bytes.fromhex(original_tx['input'][10:]))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+specs = [{'components': [{'internalType': 'uint256', 'name': 'sourceChainId', 'type': 'uint256'}, {'internalType': 'uint256', ...: 'temporalClaims', 'type': 'tuple[]'}], 'internalType': 'struct CredentialBundle', 'name': 'bundle', 'type': 'tuple'}]
+raw = b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00...00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'
+
+    def _decode(specs, raw):
+        types = [_type(x) for x in specs]
+        try:
+            values = decode(types, raw, strict=True)
+            if encode(types, values) != raw:
+                raise ValueError('Noncanonical or trailing ABI data')
+        except (DecodingError, EncodingError) as error:
+>           raise ValueError('Invalid ABI data') from error
+E           ValueError: Invalid ABI data
+
+evaluation/evm.py:91: ValueError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_subject_collector.py::test_pre_release_subject_collector_preserves_original_request_and_stops_before_release[repaired-e]
+1 failed, 11 passed in 1.17s

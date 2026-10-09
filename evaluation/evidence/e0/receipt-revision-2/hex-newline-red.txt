@@ -1,0 +1,45 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+_ test_canonical_hex_rejects_trailing_newline[Address-0x1111111111111111111111111111111111111111] _
+
+name = 'Address', value = '0x1111111111111111111111111111111111111111'
+
+    @pytest.mark.parametrize('name,value',[('Address','0x'+'11'*20),('Hash','0x'+'22'*32),('FileHash','33'*32)])
+    def test_canonical_hex_rejects_trailing_newline(name,value):
+        validate(name,value)
+>       with pytest.raises(ValidationError):validate(name,value+'\n')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'jsonschema.exceptions.ValidationError'>
+
+evaluation/tests/test_schemas.py:134: Failed
+_ test_canonical_hex_rejects_trailing_newline[Hash-0x2222222222222222222222222222222222222222222222222222222222222222] _
+
+name = 'Hash'
+value = '0x2222222222222222222222222222222222222222222222222222222222222222'
+
+    @pytest.mark.parametrize('name,value',[('Address','0x'+'11'*20),('Hash','0x'+'22'*32),('FileHash','33'*32)])
+    def test_canonical_hex_rejects_trailing_newline(name,value):
+        validate(name,value)
+>       with pytest.raises(ValidationError):validate(name,value+'\n')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'jsonschema.exceptions.ValidationError'>
+
+evaluation/tests/test_schemas.py:134: Failed
+_ test_canonical_hex_rejects_trailing_newline[FileHash-3333333333333333333333333333333333333333333333333333333333333333] _
+
+name = 'FileHash'
+value = '3333333333333333333333333333333333333333333333333333333333333333'
+
+    @pytest.mark.parametrize('name,value',[('Address','0x'+'11'*20),('Hash','0x'+'22'*32),('FileHash','33'*32)])
+    def test_canonical_hex_rejects_trailing_newline(name,value):
+        validate(name,value)
+>       with pytest.raises(ValidationError):validate(name,value+'\n')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'jsonschema.exceptions.ValidationError'>
+
+evaluation/tests/test_schemas.py:134: Failed
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_schemas.py::test_canonical_hex_rejects_trailing_newline[Address-0x1111111111111111111111111111111111111111]
+FAILED evaluation/tests/test_schemas.py::test_canonical_hex_rejects_trailing_newline[Hash-0x2222222222222222222222222222222222222222222222222222222222222222]
+FAILED evaluation/tests/test_schemas.py::test_canonical_hex_rejects_trailing_newline[FileHash-3333333333333333333333333333333333333333333333333333333333333333]
+3 failed, 39 deselected in 0.42s

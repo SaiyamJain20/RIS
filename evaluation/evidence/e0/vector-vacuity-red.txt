@@ -1,0 +1,23 @@
+.......FF                                                                [100%]
+=================================== FAILURES ===================================
+____________ test_empty_or_incomplete_vector_pack_is_not_a_success _____________
+
+    def test_empty_or_incomplete_vector_pack_is_not_a_success():
+        data=json.loads(VECTORS.read_text())
+>       assert not verify_vectors({'vectors':[]})['ok']
+E       assert not True
+
+evaluation/tests/test_vectors.py:36: AssertionError
+__________________ test_removed_mutation_coverage_is_detected __________________
+
+    def test_removed_mutation_coverage_is_detected():
+        data=json.loads(VECTORS.read_text())
+        data['vectors'][0]['mutations']=[]
+>       assert not verify_vectors(data)['ok']
+E       assert not True
+
+evaluation/tests/test_vectors.py:44: AssertionError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_vectors.py::test_empty_or_incomplete_vector_pack_is_not_a_success
+FAILED evaluation/tests/test_vectors.py::test_removed_mutation_coverage_is_detected
+2 failed, 7 passed in 2.56s

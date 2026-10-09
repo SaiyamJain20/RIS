@@ -1,0 +1,41 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+____________________ test_source_mutation_changes_manifest _____________________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-0/test_source_mutation_changes_m0')
+
+    def test_source_mutation_changes_manifest(tmp_path):
+        source=tmp_path/'input.py';source.write_text('a=1')
+        before=hash_files(tmp_path,[Path('input.py')]);source.write_text('a=2')
+>       assert before!=hash_files(tmp_path,[Path('input.py')])
+E       AssertionError: assert {} != {}
+E        +  where {} = hash_files(PosixPath('/tmp/pytest-of-karma/pytest-0/test_source_mutation_changes_m0'), [PosixPath('input.py')])
+
+evaluation/tests/test_manifests.py:9: AssertionError
+______________ test_command_failure_recorded_and_timeout_bounded _______________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-0/test_command_failure_recorded_0')
+
+    def test_command_failure_recorded_and_timeout_bounded(tmp_path):
+        import sys
+        result=record_command([sys.executable,'-c','import sys; print("failure"); sys.exit(7)'],tmp_path,tmp_path/'failed.txt',2)
+>       assert result['exitCode']==7 and 'failure' in (tmp_path/'failed.txt').read_text()
+E       assert (0 == 7)
+
+evaluation/tests/test_manifests.py:15: AssertionError
+____________________ test_evidence_paths_cannot_escape_run _____________________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-0/test_evidence_paths_cannot_esc0')
+
+    def test_evidence_paths_cannot_escape_run(tmp_path):
+        for path in ('../outside','/etc/passwd'):
+>           with pytest.raises(ValueError):safe_artifact(tmp_path,path)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE <class 'ValueError'>
+
+evaluation/tests/test_manifests.py:22: Failed
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_manifests.py::test_source_mutation_changes_manifest
+FAILED evaluation/tests/test_manifests.py::test_command_failure_recorded_and_timeout_bounded
+FAILED evaluation/tests/test_manifests.py::test_evidence_paths_cannot_escape_run
+3 failed in 0.02s

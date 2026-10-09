@@ -1,0 +1,844 @@
+FFFFFFFFFFFFFFFFFFFFF                                                    [100%]
+=================================== FAILURES ===================================
+______ test_exact_cached_retry_counts_keep_delivery_unknown[after_intent] ______
+
+point = 'after_intent'
+
+    @pytest.mark.parametrize('point',['after_intent','after_send'])
+    def test_exact_cached_retry_counts_keep_delivery_unknown(point):
+>       got=check(examples(point))
+            ^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_recovery.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+data = {'after': {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFinge...222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}, ...}
+
+    def check(data):
+>       assert importlib.util.find_spec('evaluation.recovery') is not None,'Independent C-E2 recovery checks missing'
+E       AssertionError: Independent C-E2 recovery checks missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7ff9c309a480>('evaluation.recovery')
+E        +    where <function find_spec at 0x7ff9c309a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery.py:33: AssertionError
+_______ test_exact_cached_retry_counts_keep_delivery_unknown[after_send] _______
+
+point = 'after_send'
+
+    @pytest.mark.parametrize('point',['after_intent','after_send'])
+    def test_exact_cached_retry_counts_keep_delivery_unknown(point):
+>       got=check(examples(point))
+            ^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_recovery.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+data = {'after': {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '2'}, 'deploymentFinge...222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}, ...}
+
+    def check(data):
+>       assert importlib.util.find_spec('evaluation.recovery') is not None,'Independent C-E2 recovery checks missing'
+E       AssertionError: Independent C-E2 recovery checks missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7ff9c309a480>('evaluation.recovery')
+E        +    where <function find_spec at 0x7ff9c309a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery.py:33: AssertionError
+___ test_reconstruction_faults_cannot_match_recovery_oracle[crash-completed] ___
+
+change = 'crash-completed'
+
+    @pytest.mark.parametrize('change',['crash-completed','retry-completed','cache-token','cache-cipher','expiry','created-at',
+                                      'extra-intent','extra-send','different-crash-response','future-event','pre-grant-intent',
+                                      'response-data','recipient','native-expiry','missing-crash-response','delivery','drop-before'])
+    def test_reconstruction_faults_cannot_match_recovery_oracle(change):
+        data=examples('after_send');r=data['after']['releases'][0]
+        if change=='crash-completed':data['crashed']['releases'][0]['completedAttempts']=1
+        if change=='retry-completed':r['completedAttempts']=2
+        if change=='cache-token':data['crashed']['releases'][0]['tokenDigest']='0x'+'77'*32
+        if change=='cache-cipher':data['crashed']['releases'][0]['ciphertextDigest']='0x'+'77'*32
+        if change=='expiry':r['grantExpiresAt']='131'
+        if change=='created-at':r['createdAt']='101';data['after']['events'][0]['timestamp']='101'
+        if change=='extra-intent':data['after']['events'].append(copy.deepcopy(data['after']['events'][0]))
+        if change=='extra-send':data['after']['events'].append(dict(data['after']['events'][-1]));r['sendAttempts']=3;data['after']['counts']['releaseSentCount']='3'
+        if change=='different-crash-response':data['crash_response']['responseEnvelope']['token']='0x'+'77'*32
+        if change=='future-event':data['after']['events'][-1]['timestamp']='104'
+        if change=='pre-grant-intent':data['grant']['issuedAt']='101'
+        if change=='response-data':data['response']['dataId']='0x'+'77'*32
+        if change=='recipient':data['recipient']='0x'+'77'*32
+        if change=='native-expiry':data['grant']['expiresAt']='129'
+        if change=='missing-crash-response':data['crash_response']=None
+        if change=='delivery':r['delivery']='delivered'
+        if change=='drop-before':data['before']=copy.deepcopy(data['crashed'])
+>       with pytest.raises(ValueError):check(data)
+                                       ^^^^^^^^^^^
+
+evaluation/tests/test_recovery.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+data = {'after': {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '2'}, 'deploymentFinge...222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}, ...}
+
+    def check(data):
+>       assert importlib.util.find_spec('evaluation.recovery') is not None,'Independent C-E2 recovery checks missing'
+E       AssertionError: Independent C-E2 recovery checks missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7ff9c309a480>('evaluation.recovery')
+E        +    where <function find_spec at 0x7ff9c309a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery.py:33: AssertionError
+___ test_reconstruction_faults_cannot_match_recovery_oracle[retry-completed] ___
+
+change = 'retry-completed'
+
+    @pytest.mark.parametrize('change',['crash-completed','retry-completed','cache-token','cache-cipher','expiry','created-at',
+                                      'extra-intent','extra-send','different-crash-response','future-event','pre-grant-intent',
+                                      'response-data','recipient','native-expiry','missing-crash-response','delivery','drop-before'])
+    def test_reconstruction_faults_cannot_match_recovery_oracle(change):
+        data=examples('after_send');r=data['after']['releases'][0]
+        if change=='crash-completed':data['crashed']['releases'][0]['completedAttempts']=1
+        if change=='retry-completed':r['completedAttempts']=2
+        if change=='cache-token':data['crashed']['releases'][0]['tokenDigest']='0x'+'77'*32
+        if change=='cache-cipher':data['crashed']['releases'][0]['ciphertextDigest']='0x'+'77'*32
+        if change=='expiry':r['grantExpiresAt']='131'
+        if change=='created-at':r['createdAt']='101';data['after']['events'][0]['timestamp']='101'
+        if change=='extra-intent':data['after']['events'].append(copy.deepcopy(data['after']['events'][0]))
+        if change=='extra-send':data['after']['events'].append(dict(data['after']['events'][-1]));r['sendAttempts']=3;data['after']['counts']['releaseSentCount']='3'
+        if change=='different-crash-response':data['crash_response']['responseEnvelope']['token']='0x'+'77'*32
+        if change=='future-event':data['after']['events'][-1]['timestamp']='104'
+        if change=='pre-grant-intent':data['grant']['issuedAt']='101'
+        if change=='response-data':data['response']['dataId']='0x'+'77'*32
+        if change=='recipient':data['recipient']='0x'+'77'*32
+        if change=='native-expiry':data['grant']['expiresAt']='129'
+        if change=='missing-crash-response':data['crash_response']=None
+        if change=='delivery':r['delivery']='delivered'
+        if change=='drop-before':data['before']=copy.deepcopy(data['crashed'])
+>       with pytest.raises(ValueError):check(data)
+                                       ^^^^^^^^^^^
+
+evaluation/tests/test_recovery.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+data = {'after': {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '2'}, 'deploymentFinge...222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}, ...}
+
+    def check(data):
+>       assert importlib.util.find_spec('evaluation.recovery') is not None,'Independent C-E2 recovery checks missing'
+E       AssertionError: Independent C-E2 recovery checks missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7ff9c309a480>('evaluation.recovery')
+E        +    where <function find_spec at 0x7ff9c309a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery.py:33: AssertionError
+_____ test_reconstruction_faults_cannot_match_recovery_oracle[cache-token] _____
+
+change = 'cache-token'
+
+    @pytest.mark.parametrize('change',['crash-completed','retry-completed','cache-token','cache-cipher','expiry','created-at',
+                                      'extra-intent','extra-send','different-crash-response','future-event','pre-grant-intent',
+                                      'response-data','recipient','native-expiry','missing-crash-response','delivery','drop-before'])
+    def test_reconstruction_faults_cannot_match_recovery_oracle(change):
+        data=examples('after_send');r=data['after']['releases'][0]
+        if change=='crash-completed':data['crashed']['releases'][0]['completedAttempts']=1
+        if change=='retry-completed':r['completedAttempts']=2
+        if change=='cache-token':data['crashed']['releases'][0]['tokenDigest']='0x'+'77'*32
+        if change=='cache-cipher':data['crashed']['releases'][0]['ciphertextDigest']='0x'+'77'*32
+        if change=='expiry':r['grantExpiresAt']='131'
+        if change=='created-at':r['createdAt']='101';data['after']['events'][0]['timestamp']='101'
+        if change=='extra-intent':data['after']['events'].append(copy.deepcopy(data['after']['events'][0]))
+        if change=='extra-send':data['after']['events'].append(dict(data['after']['events'][-1]));r['sendAttempts']=3;data['after']['counts']['releaseSentCount']='3'
+        if change=='different-crash-response':data['crash_response']['responseEnvelope']['token']='0x'+'77'*32
+        if change=='future-event':data['after']['events'][-1]['timestamp']='104'
+        if change=='pre-grant-intent':data['grant']['issuedAt']='101'
+        if change=='response-data':data['response']['dataId']='0x'+'77'*32
+        if change=='recipient':data['recipient']='0x'+'77'*32
+        if change=='native-expiry':data['grant']['expiresAt']='129'
+        if change=='missing-crash-response':data['crash_response']=None
+        if change=='delivery':r['delivery']='delivered'
+        if change=='drop-before':data['before']=copy.deepcopy(data['crashed'])
+>       with pytest.raises(ValueError):check(data)
+                                       ^^^^^^^^^^^
+
+evaluation/tests/test_recovery.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+data = {'after': {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '2'}, 'deploymentFinge...222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}, ...}
+
+    def check(data):
+>       assert importlib.util.find_spec('evaluation.recovery') is not None,'Independent C-E2 recovery checks missing'
+E       AssertionError: Independent C-E2 recovery checks missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7ff9c309a480>('evaluation.recovery')
+E        +    where <function find_spec at 0x7ff9c309a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery.py:33: AssertionError
+____ test_reconstruction_faults_cannot_match_recovery_oracle[cache-cipher] _____
+
+change = 'cache-cipher'
+
+    @pytest.mark.parametrize('change',['crash-completed','retry-completed','cache-token','cache-cipher','expiry','created-at',
+                                      'extra-intent','extra-send','different-crash-response','future-event','pre-grant-intent',
+                                      'response-data','recipient','native-expiry','missing-crash-response','delivery','drop-before'])
+    def test_reconstruction_faults_cannot_match_recovery_oracle(change):
+        data=examples('after_send');r=data['after']['releases'][0]
+        if change=='crash-completed':data['crashed']['releases'][0]['completedAttempts']=1
+        if change=='retry-completed':r['completedAttempts']=2
+        if change=='cache-token':data['crashed']['releases'][0]['tokenDigest']='0x'+'77'*32
+        if change=='cache-cipher':data['crashed']['releases'][0]['ciphertextDigest']='0x'+'77'*32
+        if change=='expiry':r['grantExpiresAt']='131'
+        if change=='created-at':r['createdAt']='101';data['after']['events'][0]['timestamp']='101'
+        if change=='extra-intent':data['after']['events'].append(copy.deepcopy(data['after']['events'][0]))
+        if change=='extra-send':data['after']['events'].append(dict(data['after']['events'][-1]));r['sendAttempts']=3;data['after']['counts']['releaseSentCount']='3'
+        if change=='different-crash-response':data['crash_response']['responseEnvelope']['token']='0x'+'77'*32
+        if change=='future-event':data['after']['events'][-1]['timestamp']='104'
+        if change=='pre-grant-intent':data['grant']['issuedAt']='101'
+        if change=='response-data':data['response']['dataId']='0x'+'77'*32
+        if change=='recipient':data['recipient']='0x'+'77'*32
+        if change=='native-expiry':data['grant']['expiresAt']='129'
+        if change=='missing-crash-response':data['crash_response']=None
+        if change=='delivery':r['delivery']='delivered'
+        if change=='drop-before':data['before']=copy.deepcopy(data['crashed'])
+>       with pytest.raises(ValueError):check(data)
+                                       ^^^^^^^^^^^
+
+evaluation/tests/test_recovery.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+data = {'after': {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '2'}, 'deploymentFinge...222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}, ...}
+
+    def check(data):
+>       assert importlib.util.find_spec('evaluation.recovery') is not None,'Independent C-E2 recovery checks missing'
+E       AssertionError: Independent C-E2 recovery checks missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7ff9c309a480>('evaluation.recovery')
+E        +    where <function find_spec at 0x7ff9c309a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery.py:33: AssertionError
+_______ test_reconstruction_faults_cannot_match_recovery_oracle[expiry] ________
+
+change = 'expiry'
+
+    @pytest.mark.parametrize('change',['crash-completed','retry-completed','cache-token','cache-cipher','expiry','created-at',
+                                      'extra-intent','extra-send','different-crash-response','future-event','pre-grant-intent',
+                                      'response-data','recipient','native-expiry','missing-crash-response','delivery','drop-before'])
+    def test_reconstruction_faults_cannot_match_recovery_oracle(change):
+        data=examples('after_send');r=data['after']['releases'][0]
+        if change=='crash-completed':data['crashed']['releases'][0]['completedAttempts']=1
+        if change=='retry-completed':r['completedAttempts']=2
+        if change=='cache-token':data['crashed']['releases'][0]['tokenDigest']='0x'+'77'*32
+        if change=='cache-cipher':data['crashed']['releases'][0]['ciphertextDigest']='0x'+'77'*32
+        if change=='expiry':r['grantExpiresAt']='131'
+        if change=='created-at':r['createdAt']='101';data['after']['events'][0]['timestamp']='101'
+        if change=='extra-intent':data['after']['events'].append(copy.deepcopy(data['after']['events'][0]))
+        if change=='extra-send':data['after']['events'].append(dict(data['after']['events'][-1]));r['sendAttempts']=3;data['after']['counts']['releaseSentCount']='3'
+        if change=='different-crash-response':data['crash_response']['responseEnvelope']['token']='0x'+'77'*32
+        if change=='future-event':data['after']['events'][-1]['timestamp']='104'
+        if change=='pre-grant-intent':data['grant']['issuedAt']='101'
+        if change=='response-data':data['response']['dataId']='0x'+'77'*32
+        if change=='recipient':data['recipient']='0x'+'77'*32
+        if change=='native-expiry':data['grant']['expiresAt']='129'
+        if change=='missing-crash-response':data['crash_response']=None
+        if change=='delivery':r['delivery']='delivered'
+        if change=='drop-before':data['before']=copy.deepcopy(data['crashed'])
+>       with pytest.raises(ValueError):check(data)
+                                       ^^^^^^^^^^^
+
+evaluation/tests/test_recovery.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+data = {'after': {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '2'}, 'deploymentFinge...222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}, ...}
+
+    def check(data):
+>       assert importlib.util.find_spec('evaluation.recovery') is not None,'Independent C-E2 recovery checks missing'
+E       AssertionError: Independent C-E2 recovery checks missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7ff9c309a480>('evaluation.recovery')
+E        +    where <function find_spec at 0x7ff9c309a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery.py:33: AssertionError
+_____ test_reconstruction_faults_cannot_match_recovery_oracle[created-at] ______
+
+change = 'created-at'
+
+    @pytest.mark.parametrize('change',['crash-completed','retry-completed','cache-token','cache-cipher','expiry','created-at',
+                                      'extra-intent','extra-send','different-crash-response','future-event','pre-grant-intent',
+                                      'response-data','recipient','native-expiry','missing-crash-response','delivery','drop-before'])
+    def test_reconstruction_faults_cannot_match_recovery_oracle(change):
+        data=examples('after_send');r=data['after']['releases'][0]
+        if change=='crash-completed':data['crashed']['releases'][0]['completedAttempts']=1
+        if change=='retry-completed':r['completedAttempts']=2
+        if change=='cache-token':data['crashed']['releases'][0]['tokenDigest']='0x'+'77'*32
+        if change=='cache-cipher':data['crashed']['releases'][0]['ciphertextDigest']='0x'+'77'*32
+        if change=='expiry':r['grantExpiresAt']='131'
+        if change=='created-at':r['createdAt']='101';data['after']['events'][0]['timestamp']='101'
+        if change=='extra-intent':data['after']['events'].append(copy.deepcopy(data['after']['events'][0]))
+        if change=='extra-send':data['after']['events'].append(dict(data['after']['events'][-1]));r['sendAttempts']=3;data['after']['counts']['releaseSentCount']='3'
+        if change=='different-crash-response':data['crash_response']['responseEnvelope']['token']='0x'+'77'*32
+        if change=='future-event':data['after']['events'][-1]['timestamp']='104'
+        if change=='pre-grant-intent':data['grant']['issuedAt']='101'
+        if change=='response-data':data['response']['dataId']='0x'+'77'*32
+        if change=='recipient':data['recipient']='0x'+'77'*32
+        if change=='native-expiry':data['grant']['expiresAt']='129'
+        if change=='missing-crash-response':data['crash_response']=None
+        if change=='delivery':r['delivery']='delivered'
+        if change=='drop-before':data['before']=copy.deepcopy(data['crashed'])
+>       with pytest.raises(ValueError):check(data)
+                                       ^^^^^^^^^^^
+
+evaluation/tests/test_recovery.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+data = {'after': {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '2'}, 'deploymentFinge...222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}, ...}
+
+    def check(data):
+>       assert importlib.util.find_spec('evaluation.recovery') is not None,'Independent C-E2 recovery checks missing'
+E       AssertionError: Independent C-E2 recovery checks missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7ff9c309a480>('evaluation.recovery')
+E        +    where <function find_spec at 0x7ff9c309a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery.py:33: AssertionError
+____ test_reconstruction_faults_cannot_match_recovery_oracle[extra-intent] _____
+
+change = 'extra-intent'
+
+    @pytest.mark.parametrize('change',['crash-completed','retry-completed','cache-token','cache-cipher','expiry','created-at',
+                                      'extra-intent','extra-send','different-crash-response','future-event','pre-grant-intent',
+                                      'response-data','recipient','native-expiry','missing-crash-response','delivery','drop-before'])
+    def test_reconstruction_faults_cannot_match_recovery_oracle(change):
+        data=examples('after_send');r=data['after']['releases'][0]
+        if change=='crash-completed':data['crashed']['releases'][0]['completedAttempts']=1
+        if change=='retry-completed':r['completedAttempts']=2
+        if change=='cache-token':data['crashed']['releases'][0]['tokenDigest']='0x'+'77'*32
+        if change=='cache-cipher':data['crashed']['releases'][0]['ciphertextDigest']='0x'+'77'*32
+        if change=='expiry':r['grantExpiresAt']='131'
+        if change=='created-at':r['createdAt']='101';data['after']['events'][0]['timestamp']='101'
+        if change=='extra-intent':data['after']['events'].append(copy.deepcopy(data['after']['events'][0]))
+        if change=='extra-send':data['after']['events'].append(dict(data['after']['events'][-1]));r['sendAttempts']=3;data['after']['counts']['releaseSentCount']='3'
+        if change=='different-crash-response':data['crash_response']['responseEnvelope']['token']='0x'+'77'*32
+        if change=='future-event':data['after']['events'][-1]['timestamp']='104'
+        if change=='pre-grant-intent':data['grant']['issuedAt']='101'
+        if change=='response-data':data['response']['dataId']='0x'+'77'*32
+        if change=='recipient':data['recipient']='0x'+'77'*32
+        if change=='native-expiry':data['grant']['expiresAt']='129'
+        if change=='missing-crash-response':data['crash_response']=None
+        if change=='delivery':r['delivery']='delivered'
+        if change=='drop-before':data['before']=copy.deepcopy(data['crashed'])
+>       with pytest.raises(ValueError):check(data)
+                                       ^^^^^^^^^^^
+
+evaluation/tests/test_recovery.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+data = {'after': {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '2'}, 'deploymentFinge...222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}, ...}
+
+    def check(data):
+>       assert importlib.util.find_spec('evaluation.recovery') is not None,'Independent C-E2 recovery checks missing'
+E       AssertionError: Independent C-E2 recovery checks missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7ff9c309a480>('evaluation.recovery')
+E        +    where <function find_spec at 0x7ff9c309a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery.py:33: AssertionError
+_____ test_reconstruction_faults_cannot_match_recovery_oracle[extra-send] ______
+
+change = 'extra-send'
+
+    @pytest.mark.parametrize('change',['crash-completed','retry-completed','cache-token','cache-cipher','expiry','created-at',
+                                      'extra-intent','extra-send','different-crash-response','future-event','pre-grant-intent',
+                                      'response-data','recipient','native-expiry','missing-crash-response','delivery','drop-before'])
+    def test_reconstruction_faults_cannot_match_recovery_oracle(change):
+        data=examples('after_send');r=data['after']['releases'][0]
+        if change=='crash-completed':data['crashed']['releases'][0]['completedAttempts']=1
+        if change=='retry-completed':r['completedAttempts']=2
+        if change=='cache-token':data['crashed']['releases'][0]['tokenDigest']='0x'+'77'*32
+        if change=='cache-cipher':data['crashed']['releases'][0]['ciphertextDigest']='0x'+'77'*32
+        if change=='expiry':r['grantExpiresAt']='131'
+        if change=='created-at':r['createdAt']='101';data['after']['events'][0]['timestamp']='101'
+        if change=='extra-intent':data['after']['events'].append(copy.deepcopy(data['after']['events'][0]))
+        if change=='extra-send':data['after']['events'].append(dict(data['after']['events'][-1]));r['sendAttempts']=3;data['after']['counts']['releaseSentCount']='3'
+        if change=='different-crash-response':data['crash_response']['responseEnvelope']['token']='0x'+'77'*32
+        if change=='future-event':data['after']['events'][-1]['timestamp']='104'
+        if change=='pre-grant-intent':data['grant']['issuedAt']='101'
+        if change=='response-data':data['response']['dataId']='0x'+'77'*32
+        if change=='recipient':data['recipient']='0x'+'77'*32
+        if change=='native-expiry':data['grant']['expiresAt']='129'
+        if change=='missing-crash-response':data['crash_response']=None
+        if change=='delivery':r['delivery']='delivered'
+        if change=='drop-before':data['before']=copy.deepcopy(data['crashed'])
+>       with pytest.raises(ValueError):check(data)
+                                       ^^^^^^^^^^^
+
+evaluation/tests/test_recovery.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+data = {'after': {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '3'}, 'deploymentFinge...222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}, ...}
+
+    def check(data):
+>       assert importlib.util.find_spec('evaluation.recovery') is not None,'Independent C-E2 recovery checks missing'
+E       AssertionError: Independent C-E2 recovery checks missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7ff9c309a480>('evaluation.recovery')
+E        +    where <function find_spec at 0x7ff9c309a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery.py:33: AssertionError
+_ test_reconstruction_faults_cannot_match_recovery_oracle[different-crash-response] _
+
+change = 'different-crash-response'
+
+    @pytest.mark.parametrize('change',['crash-completed','retry-completed','cache-token','cache-cipher','expiry','created-at',
+                                      'extra-intent','extra-send','different-crash-response','future-event','pre-grant-intent',
+                                      'response-data','recipient','native-expiry','missing-crash-response','delivery','drop-before'])
+    def test_reconstruction_faults_cannot_match_recovery_oracle(change):
+        data=examples('after_send');r=data['after']['releases'][0]
+        if change=='crash-completed':data['crashed']['releases'][0]['completedAttempts']=1
+        if change=='retry-completed':r['completedAttempts']=2
+        if change=='cache-token':data['crashed']['releases'][0]['tokenDigest']='0x'+'77'*32
+        if change=='cache-cipher':data['crashed']['releases'][0]['ciphertextDigest']='0x'+'77'*32
+        if change=='expiry':r['grantExpiresAt']='131'
+        if change=='created-at':r['createdAt']='101';data['after']['events'][0]['timestamp']='101'
+        if change=='extra-intent':data['after']['events'].append(copy.deepcopy(data['after']['events'][0]))
+        if change=='extra-send':data['after']['events'].append(dict(data['after']['events'][-1]));r['sendAttempts']=3;data['after']['counts']['releaseSentCount']='3'
+        if change=='different-crash-response':data['crash_response']['responseEnvelope']['token']='0x'+'77'*32
+        if change=='future-event':data['after']['events'][-1]['timestamp']='104'
+        if change=='pre-grant-intent':data['grant']['issuedAt']='101'
+        if change=='response-data':data['response']['dataId']='0x'+'77'*32
+        if change=='recipient':data['recipient']='0x'+'77'*32
+        if change=='native-expiry':data['grant']['expiresAt']='129'
+        if change=='missing-crash-response':data['crash_response']=None
+        if change=='delivery':r['delivery']='delivered'
+        if change=='drop-before':data['before']=copy.deepcopy(data['crashed'])
+>       with pytest.raises(ValueError):check(data)
+                                       ^^^^^^^^^^^
+
+evaluation/tests/test_recovery.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+data = {'after': {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '2'}, 'deploymentFinge...222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}, ...}
+
+    def check(data):
+>       assert importlib.util.find_spec('evaluation.recovery') is not None,'Independent C-E2 recovery checks missing'
+E       AssertionError: Independent C-E2 recovery checks missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7ff9c309a480>('evaluation.recovery')
+E        +    where <function find_spec at 0x7ff9c309a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery.py:33: AssertionError
+____ test_reconstruction_faults_cannot_match_recovery_oracle[future-event] _____
+
+change = 'future-event'
+
+    @pytest.mark.parametrize('change',['crash-completed','retry-completed','cache-token','cache-cipher','expiry','created-at',
+                                      'extra-intent','extra-send','different-crash-response','future-event','pre-grant-intent',
+                                      'response-data','recipient','native-expiry','missing-crash-response','delivery','drop-before'])
+    def test_reconstruction_faults_cannot_match_recovery_oracle(change):
+        data=examples('after_send');r=data['after']['releases'][0]
+        if change=='crash-completed':data['crashed']['releases'][0]['completedAttempts']=1
+        if change=='retry-completed':r['completedAttempts']=2
+        if change=='cache-token':data['crashed']['releases'][0]['tokenDigest']='0x'+'77'*32
+        if change=='cache-cipher':data['crashed']['releases'][0]['ciphertextDigest']='0x'+'77'*32
+        if change=='expiry':r['grantExpiresAt']='131'
+        if change=='created-at':r['createdAt']='101';data['after']['events'][0]['timestamp']='101'
+        if change=='extra-intent':data['after']['events'].append(copy.deepcopy(data['after']['events'][0]))
+        if change=='extra-send':data['after']['events'].append(dict(data['after']['events'][-1]));r['sendAttempts']=3;data['after']['counts']['releaseSentCount']='3'
+        if change=='different-crash-response':data['crash_response']['responseEnvelope']['token']='0x'+'77'*32
+        if change=='future-event':data['after']['events'][-1]['timestamp']='104'
+        if change=='pre-grant-intent':data['grant']['issuedAt']='101'
+        if change=='response-data':data['response']['dataId']='0x'+'77'*32
+        if change=='recipient':data['recipient']='0x'+'77'*32
+        if change=='native-expiry':data['grant']['expiresAt']='129'
+        if change=='missing-crash-response':data['crash_response']=None
+        if change=='delivery':r['delivery']='delivered'
+        if change=='drop-before':data['before']=copy.deepcopy(data['crashed'])
+>       with pytest.raises(ValueError):check(data)
+                                       ^^^^^^^^^^^
+
+evaluation/tests/test_recovery.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+data = {'after': {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '2'}, 'deploymentFinge...222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}, ...}
+
+    def check(data):
+>       assert importlib.util.find_spec('evaluation.recovery') is not None,'Independent C-E2 recovery checks missing'
+E       AssertionError: Independent C-E2 recovery checks missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7ff9c309a480>('evaluation.recovery')
+E        +    where <function find_spec at 0x7ff9c309a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery.py:33: AssertionError
+__ test_reconstruction_faults_cannot_match_recovery_oracle[pre-grant-intent] ___
+
+change = 'pre-grant-intent'
+
+    @pytest.mark.parametrize('change',['crash-completed','retry-completed','cache-token','cache-cipher','expiry','created-at',
+                                      'extra-intent','extra-send','different-crash-response','future-event','pre-grant-intent',
+                                      'response-data','recipient','native-expiry','missing-crash-response','delivery','drop-before'])
+    def test_reconstruction_faults_cannot_match_recovery_oracle(change):
+        data=examples('after_send');r=data['after']['releases'][0]
+        if change=='crash-completed':data['crashed']['releases'][0]['completedAttempts']=1
+        if change=='retry-completed':r['completedAttempts']=2
+        if change=='cache-token':data['crashed']['releases'][0]['tokenDigest']='0x'+'77'*32
+        if change=='cache-cipher':data['crashed']['releases'][0]['ciphertextDigest']='0x'+'77'*32
+        if change=='expiry':r['grantExpiresAt']='131'
+        if change=='created-at':r['createdAt']='101';data['after']['events'][0]['timestamp']='101'
+        if change=='extra-intent':data['after']['events'].append(copy.deepcopy(data['after']['events'][0]))
+        if change=='extra-send':data['after']['events'].append(dict(data['after']['events'][-1]));r['sendAttempts']=3;data['after']['counts']['releaseSentCount']='3'
+        if change=='different-crash-response':data['crash_response']['responseEnvelope']['token']='0x'+'77'*32
+        if change=='future-event':data['after']['events'][-1]['timestamp']='104'
+        if change=='pre-grant-intent':data['grant']['issuedAt']='101'
+        if change=='response-data':data['response']['dataId']='0x'+'77'*32
+        if change=='recipient':data['recipient']='0x'+'77'*32
+        if change=='native-expiry':data['grant']['expiresAt']='129'
+        if change=='missing-crash-response':data['crash_response']=None
+        if change=='delivery':r['delivery']='delivered'
+        if change=='drop-before':data['before']=copy.deepcopy(data['crashed'])
+>       with pytest.raises(ValueError):check(data)
+                                       ^^^^^^^^^^^
+
+evaluation/tests/test_recovery.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+data = {'after': {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '2'}, 'deploymentFinge...222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}, ...}
+
+    def check(data):
+>       assert importlib.util.find_spec('evaluation.recovery') is not None,'Independent C-E2 recovery checks missing'
+E       AssertionError: Independent C-E2 recovery checks missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7ff9c309a480>('evaluation.recovery')
+E        +    where <function find_spec at 0x7ff9c309a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery.py:33: AssertionError
+____ test_reconstruction_faults_cannot_match_recovery_oracle[response-data] ____
+
+change = 'response-data'
+
+    @pytest.mark.parametrize('change',['crash-completed','retry-completed','cache-token','cache-cipher','expiry','created-at',
+                                      'extra-intent','extra-send','different-crash-response','future-event','pre-grant-intent',
+                                      'response-data','recipient','native-expiry','missing-crash-response','delivery','drop-before'])
+    def test_reconstruction_faults_cannot_match_recovery_oracle(change):
+        data=examples('after_send');r=data['after']['releases'][0]
+        if change=='crash-completed':data['crashed']['releases'][0]['completedAttempts']=1
+        if change=='retry-completed':r['completedAttempts']=2
+        if change=='cache-token':data['crashed']['releases'][0]['tokenDigest']='0x'+'77'*32
+        if change=='cache-cipher':data['crashed']['releases'][0]['ciphertextDigest']='0x'+'77'*32
+        if change=='expiry':r['grantExpiresAt']='131'
+        if change=='created-at':r['createdAt']='101';data['after']['events'][0]['timestamp']='101'
+        if change=='extra-intent':data['after']['events'].append(copy.deepcopy(data['after']['events'][0]))
+        if change=='extra-send':data['after']['events'].append(dict(data['after']['events'][-1]));r['sendAttempts']=3;data['after']['counts']['releaseSentCount']='3'
+        if change=='different-crash-response':data['crash_response']['responseEnvelope']['token']='0x'+'77'*32
+        if change=='future-event':data['after']['events'][-1]['timestamp']='104'
+        if change=='pre-grant-intent':data['grant']['issuedAt']='101'
+        if change=='response-data':data['response']['dataId']='0x'+'77'*32
+        if change=='recipient':data['recipient']='0x'+'77'*32
+        if change=='native-expiry':data['grant']['expiresAt']='129'
+        if change=='missing-crash-response':data['crash_response']=None
+        if change=='delivery':r['delivery']='delivered'
+        if change=='drop-before':data['before']=copy.deepcopy(data['crashed'])
+>       with pytest.raises(ValueError):check(data)
+                                       ^^^^^^^^^^^
+
+evaluation/tests/test_recovery.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+data = {'after': {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '2'}, 'deploymentFinge...222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}, ...}
+
+    def check(data):
+>       assert importlib.util.find_spec('evaluation.recovery') is not None,'Independent C-E2 recovery checks missing'
+E       AssertionError: Independent C-E2 recovery checks missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7ff9c309a480>('evaluation.recovery')
+E        +    where <function find_spec at 0x7ff9c309a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery.py:33: AssertionError
+______ test_reconstruction_faults_cannot_match_recovery_oracle[recipient] ______
+
+change = 'recipient'
+
+    @pytest.mark.parametrize('change',['crash-completed','retry-completed','cache-token','cache-cipher','expiry','created-at',
+                                      'extra-intent','extra-send','different-crash-response','future-event','pre-grant-intent',
+                                      'response-data','recipient','native-expiry','missing-crash-response','delivery','drop-before'])
+    def test_reconstruction_faults_cannot_match_recovery_oracle(change):
+        data=examples('after_send');r=data['after']['releases'][0]
+        if change=='crash-completed':data['crashed']['releases'][0]['completedAttempts']=1
+        if change=='retry-completed':r['completedAttempts']=2
+        if change=='cache-token':data['crashed']['releases'][0]['tokenDigest']='0x'+'77'*32
+        if change=='cache-cipher':data['crashed']['releases'][0]['ciphertextDigest']='0x'+'77'*32
+        if change=='expiry':r['grantExpiresAt']='131'
+        if change=='created-at':r['createdAt']='101';data['after']['events'][0]['timestamp']='101'
+        if change=='extra-intent':data['after']['events'].append(copy.deepcopy(data['after']['events'][0]))
+        if change=='extra-send':data['after']['events'].append(dict(data['after']['events'][-1]));r['sendAttempts']=3;data['after']['counts']['releaseSentCount']='3'
+        if change=='different-crash-response':data['crash_response']['responseEnvelope']['token']='0x'+'77'*32
+        if change=='future-event':data['after']['events'][-1]['timestamp']='104'
+        if change=='pre-grant-intent':data['grant']['issuedAt']='101'
+        if change=='response-data':data['response']['dataId']='0x'+'77'*32
+        if change=='recipient':data['recipient']='0x'+'77'*32
+        if change=='native-expiry':data['grant']['expiresAt']='129'
+        if change=='missing-crash-response':data['crash_response']=None
+        if change=='delivery':r['delivery']='delivered'
+        if change=='drop-before':data['before']=copy.deepcopy(data['crashed'])
+>       with pytest.raises(ValueError):check(data)
+                                       ^^^^^^^^^^^
+
+evaluation/tests/test_recovery.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+data = {'after': {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '2'}, 'deploymentFinge...222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}, ...}
+
+    def check(data):
+>       assert importlib.util.find_spec('evaluation.recovery') is not None,'Independent C-E2 recovery checks missing'
+E       AssertionError: Independent C-E2 recovery checks missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7ff9c309a480>('evaluation.recovery')
+E        +    where <function find_spec at 0x7ff9c309a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery.py:33: AssertionError
+____ test_reconstruction_faults_cannot_match_recovery_oracle[native-expiry] ____
+
+change = 'native-expiry'
+
+    @pytest.mark.parametrize('change',['crash-completed','retry-completed','cache-token','cache-cipher','expiry','created-at',
+                                      'extra-intent','extra-send','different-crash-response','future-event','pre-grant-intent',
+                                      'response-data','recipient','native-expiry','missing-crash-response','delivery','drop-before'])
+    def test_reconstruction_faults_cannot_match_recovery_oracle(change):
+        data=examples('after_send');r=data['after']['releases'][0]
+        if change=='crash-completed':data['crashed']['releases'][0]['completedAttempts']=1
+        if change=='retry-completed':r['completedAttempts']=2
+        if change=='cache-token':data['crashed']['releases'][0]['tokenDigest']='0x'+'77'*32
+        if change=='cache-cipher':data['crashed']['releases'][0]['ciphertextDigest']='0x'+'77'*32
+        if change=='expiry':r['grantExpiresAt']='131'
+        if change=='created-at':r['createdAt']='101';data['after']['events'][0]['timestamp']='101'
+        if change=='extra-intent':data['after']['events'].append(copy.deepcopy(data['after']['events'][0]))
+        if change=='extra-send':data['after']['events'].append(dict(data['after']['events'][-1]));r['sendAttempts']=3;data['after']['counts']['releaseSentCount']='3'
+        if change=='different-crash-response':data['crash_response']['responseEnvelope']['token']='0x'+'77'*32
+        if change=='future-event':data['after']['events'][-1]['timestamp']='104'
+        if change=='pre-grant-intent':data['grant']['issuedAt']='101'
+        if change=='response-data':data['response']['dataId']='0x'+'77'*32
+        if change=='recipient':data['recipient']='0x'+'77'*32
+        if change=='native-expiry':data['grant']['expiresAt']='129'
+        if change=='missing-crash-response':data['crash_response']=None
+        if change=='delivery':r['delivery']='delivered'
+        if change=='drop-before':data['before']=copy.deepcopy(data['crashed'])
+>       with pytest.raises(ValueError):check(data)
+                                       ^^^^^^^^^^^
+
+evaluation/tests/test_recovery.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+data = {'after': {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '2'}, 'deploymentFinge...222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}, ...}
+
+    def check(data):
+>       assert importlib.util.find_spec('evaluation.recovery') is not None,'Independent C-E2 recovery checks missing'
+E       AssertionError: Independent C-E2 recovery checks missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7ff9c309a480>('evaluation.recovery')
+E        +    where <function find_spec at 0x7ff9c309a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery.py:33: AssertionError
+_ test_reconstruction_faults_cannot_match_recovery_oracle[missing-crash-response] _
+
+change = 'missing-crash-response'
+
+    @pytest.mark.parametrize('change',['crash-completed','retry-completed','cache-token','cache-cipher','expiry','created-at',
+                                      'extra-intent','extra-send','different-crash-response','future-event','pre-grant-intent',
+                                      'response-data','recipient','native-expiry','missing-crash-response','delivery','drop-before'])
+    def test_reconstruction_faults_cannot_match_recovery_oracle(change):
+        data=examples('after_send');r=data['after']['releases'][0]
+        if change=='crash-completed':data['crashed']['releases'][0]['completedAttempts']=1
+        if change=='retry-completed':r['completedAttempts']=2
+        if change=='cache-token':data['crashed']['releases'][0]['tokenDigest']='0x'+'77'*32
+        if change=='cache-cipher':data['crashed']['releases'][0]['ciphertextDigest']='0x'+'77'*32
+        if change=='expiry':r['grantExpiresAt']='131'
+        if change=='created-at':r['createdAt']='101';data['after']['events'][0]['timestamp']='101'
+        if change=='extra-intent':data['after']['events'].append(copy.deepcopy(data['after']['events'][0]))
+        if change=='extra-send':data['after']['events'].append(dict(data['after']['events'][-1]));r['sendAttempts']=3;data['after']['counts']['releaseSentCount']='3'
+        if change=='different-crash-response':data['crash_response']['responseEnvelope']['token']='0x'+'77'*32
+        if change=='future-event':data['after']['events'][-1]['timestamp']='104'
+        if change=='pre-grant-intent':data['grant']['issuedAt']='101'
+        if change=='response-data':data['response']['dataId']='0x'+'77'*32
+        if change=='recipient':data['recipient']='0x'+'77'*32
+        if change=='native-expiry':data['grant']['expiresAt']='129'
+        if change=='missing-crash-response':data['crash_response']=None
+        if change=='delivery':r['delivery']='delivered'
+        if change=='drop-before':data['before']=copy.deepcopy(data['crashed'])
+>       with pytest.raises(ValueError):check(data)
+                                       ^^^^^^^^^^^
+
+evaluation/tests/test_recovery.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+data = {'after': {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '2'}, 'deploymentFinge...222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}, ...}
+
+    def check(data):
+>       assert importlib.util.find_spec('evaluation.recovery') is not None,'Independent C-E2 recovery checks missing'
+E       AssertionError: Independent C-E2 recovery checks missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7ff9c309a480>('evaluation.recovery')
+E        +    where <function find_spec at 0x7ff9c309a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery.py:33: AssertionError
+______ test_reconstruction_faults_cannot_match_recovery_oracle[delivery] _______
+
+change = 'delivery'
+
+    @pytest.mark.parametrize('change',['crash-completed','retry-completed','cache-token','cache-cipher','expiry','created-at',
+                                      'extra-intent','extra-send','different-crash-response','future-event','pre-grant-intent',
+                                      'response-data','recipient','native-expiry','missing-crash-response','delivery','drop-before'])
+    def test_reconstruction_faults_cannot_match_recovery_oracle(change):
+        data=examples('after_send');r=data['after']['releases'][0]
+        if change=='crash-completed':data['crashed']['releases'][0]['completedAttempts']=1
+        if change=='retry-completed':r['completedAttempts']=2
+        if change=='cache-token':data['crashed']['releases'][0]['tokenDigest']='0x'+'77'*32
+        if change=='cache-cipher':data['crashed']['releases'][0]['ciphertextDigest']='0x'+'77'*32
+        if change=='expiry':r['grantExpiresAt']='131'
+        if change=='created-at':r['createdAt']='101';data['after']['events'][0]['timestamp']='101'
+        if change=='extra-intent':data['after']['events'].append(copy.deepcopy(data['after']['events'][0]))
+        if change=='extra-send':data['after']['events'].append(dict(data['after']['events'][-1]));r['sendAttempts']=3;data['after']['counts']['releaseSentCount']='3'
+        if change=='different-crash-response':data['crash_response']['responseEnvelope']['token']='0x'+'77'*32
+        if change=='future-event':data['after']['events'][-1]['timestamp']='104'
+        if change=='pre-grant-intent':data['grant']['issuedAt']='101'
+        if change=='response-data':data['response']['dataId']='0x'+'77'*32
+        if change=='recipient':data['recipient']='0x'+'77'*32
+        if change=='native-expiry':data['grant']['expiresAt']='129'
+        if change=='missing-crash-response':data['crash_response']=None
+        if change=='delivery':r['delivery']='delivered'
+        if change=='drop-before':data['before']=copy.deepcopy(data['crashed'])
+>       with pytest.raises(ValueError):check(data)
+                                       ^^^^^^^^^^^
+
+evaluation/tests/test_recovery.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+data = {'after': {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '2'}, 'deploymentFinge...222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}, ...}
+
+    def check(data):
+>       assert importlib.util.find_spec('evaluation.recovery') is not None,'Independent C-E2 recovery checks missing'
+E       AssertionError: Independent C-E2 recovery checks missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7ff9c309a480>('evaluation.recovery')
+E        +    where <function find_spec at 0x7ff9c309a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery.py:33: AssertionError
+_____ test_reconstruction_faults_cannot_match_recovery_oracle[drop-before] _____
+
+change = 'drop-before'
+
+    @pytest.mark.parametrize('change',['crash-completed','retry-completed','cache-token','cache-cipher','expiry','created-at',
+                                      'extra-intent','extra-send','different-crash-response','future-event','pre-grant-intent',
+                                      'response-data','recipient','native-expiry','missing-crash-response','delivery','drop-before'])
+    def test_reconstruction_faults_cannot_match_recovery_oracle(change):
+        data=examples('after_send');r=data['after']['releases'][0]
+        if change=='crash-completed':data['crashed']['releases'][0]['completedAttempts']=1
+        if change=='retry-completed':r['completedAttempts']=2
+        if change=='cache-token':data['crashed']['releases'][0]['tokenDigest']='0x'+'77'*32
+        if change=='cache-cipher':data['crashed']['releases'][0]['ciphertextDigest']='0x'+'77'*32
+        if change=='expiry':r['grantExpiresAt']='131'
+        if change=='created-at':r['createdAt']='101';data['after']['events'][0]['timestamp']='101'
+        if change=='extra-intent':data['after']['events'].append(copy.deepcopy(data['after']['events'][0]))
+        if change=='extra-send':data['after']['events'].append(dict(data['after']['events'][-1]));r['sendAttempts']=3;data['after']['counts']['releaseSentCount']='3'
+        if change=='different-crash-response':data['crash_response']['responseEnvelope']['token']='0x'+'77'*32
+        if change=='future-event':data['after']['events'][-1]['timestamp']='104'
+        if change=='pre-grant-intent':data['grant']['issuedAt']='101'
+        if change=='response-data':data['response']['dataId']='0x'+'77'*32
+        if change=='recipient':data['recipient']='0x'+'77'*32
+        if change=='native-expiry':data['grant']['expiresAt']='129'
+        if change=='missing-crash-response':data['crash_response']=None
+        if change=='delivery':r['delivery']='delivered'
+        if change=='drop-before':data['before']=copy.deepcopy(data['crashed'])
+>       with pytest.raises(ValueError):check(data)
+                                       ^^^^^^^^^^^
+
+evaluation/tests/test_recovery.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+data = {'after': {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '2'}, 'deploymentFinge...222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}, ...}
+
+    def check(data):
+>       assert importlib.util.find_spec('evaluation.recovery') is not None,'Independent C-E2 recovery checks missing'
+E       AssertionError: Independent C-E2 recovery checks missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7ff9c309a480>('evaluation.recovery')
+E        +    where <function find_spec at 0x7ff9c309a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery.py:33: AssertionError
+_____ test_paper_zero_native_recipient_still_requires_registered_recipient _____
+
+    def test_paper_zero_native_recipient_still_requires_registered_recipient():
+        data=examples('after_intent');data['grant']['recipientKeyHash']='0x'+'00'*32
+>       assert check(data)['ok']
+               ^^^^^^^^^^^
+
+evaluation/tests/test_recovery.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+data = {'after': {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFinge...222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}, ...}
+
+    def check(data):
+>       assert importlib.util.find_spec('evaluation.recovery') is not None,'Independent C-E2 recovery checks missing'
+E       AssertionError: Independent C-E2 recovery checks missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7ff9c309a480>('evaluation.recovery')
+E        +    where <function find_spec at 0x7ff9c309a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery.py:33: AssertionError
+_ test_late_observation_is_allowed_but_each_actual_send_remains_before_expiry __
+
+    def test_late_observation_is_allowed_but_each_actual_send_remains_before_expiry():
+        data=examples('after_send');data['dbc_now']='140'
+>       assert check(data)['ok']
+               ^^^^^^^^^^^
+
+evaluation/tests/test_recovery.py:80: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+data = {'after': {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '2'}, 'deploymentFinge...222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}, ...}
+
+    def check(data):
+>       assert importlib.util.find_spec('evaluation.recovery') is not None,'Independent C-E2 recovery checks missing'
+E       AssertionError: Independent C-E2 recovery checks missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7ff9c309a480>('evaluation.recovery')
+E        +    where <function find_spec at 0x7ff9c309a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery.py:33: AssertionError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_recovery.py::test_exact_cached_retry_counts_keep_delivery_unknown[after_intent]
+FAILED evaluation/tests/test_recovery.py::test_exact_cached_retry_counts_keep_delivery_unknown[after_send]
+FAILED evaluation/tests/test_recovery.py::test_reconstruction_faults_cannot_match_recovery_oracle[crash-completed]
+FAILED evaluation/tests/test_recovery.py::test_reconstruction_faults_cannot_match_recovery_oracle[retry-completed]
+FAILED evaluation/tests/test_recovery.py::test_reconstruction_faults_cannot_match_recovery_oracle[cache-token]
+FAILED evaluation/tests/test_recovery.py::test_reconstruction_faults_cannot_match_recovery_oracle[cache-cipher]
+FAILED evaluation/tests/test_recovery.py::test_reconstruction_faults_cannot_match_recovery_oracle[expiry]
+FAILED evaluation/tests/test_recovery.py::test_reconstruction_faults_cannot_match_recovery_oracle[created-at]
+FAILED evaluation/tests/test_recovery.py::test_reconstruction_faults_cannot_match_recovery_oracle[extra-intent]
+FAILED evaluation/tests/test_recovery.py::test_reconstruction_faults_cannot_match_recovery_oracle[extra-send]
+FAILED evaluation/tests/test_recovery.py::test_reconstruction_faults_cannot_match_recovery_oracle[different-crash-response]
+FAILED evaluation/tests/test_recovery.py::test_reconstruction_faults_cannot_match_recovery_oracle[future-event]
+FAILED evaluation/tests/test_recovery.py::test_reconstruction_faults_cannot_match_recovery_oracle[pre-grant-intent]
+FAILED evaluation/tests/test_recovery.py::test_reconstruction_faults_cannot_match_recovery_oracle[response-data]
+FAILED evaluation/tests/test_recovery.py::test_reconstruction_faults_cannot_match_recovery_oracle[recipient]
+FAILED evaluation/tests/test_recovery.py::test_reconstruction_faults_cannot_match_recovery_oracle[native-expiry]
+FAILED evaluation/tests/test_recovery.py::test_reconstruction_faults_cannot_match_recovery_oracle[missing-crash-response]
+FAILED evaluation/tests/test_recovery.py::test_reconstruction_faults_cannot_match_recovery_oracle[delivery]
+FAILED evaluation/tests/test_recovery.py::test_reconstruction_faults_cannot_match_recovery_oracle[drop-before]
+FAILED evaluation/tests/test_recovery.py::test_paper_zero_native_recipient_still_requires_registered_recipient
+FAILED evaluation/tests/test_recovery.py::test_late_observation_is_allowed_but_each_actual_send_remains_before_expiry
+21 failed in 0.08s

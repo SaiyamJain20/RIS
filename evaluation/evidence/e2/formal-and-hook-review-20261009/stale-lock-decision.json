@@ -1,0 +1,17 @@
+{
+  "time": "2026-10-08T23:13:47.922959+00:00",
+  "reason": "same host, age > 9600 seconds, both recorded owner_pid 401986 and live guard pid 402163 absent in /proc; prior tool-driven run cannot retain recorded live guard",
+  "observed_owner": {
+    "start_time": "2026-10-08T20:33:26.079339+00:00",
+    "host": "fedora",
+    "owner_pid": 401986,
+    "automation_id": "ris-agent-branch-monitor-and-continuation",
+    "context": "standalone scheduled Agent 3 run",
+    "token": "950e88c581577728bb0092630ea5361e",
+    "pid": 402163,
+    "process_start_ticks": "4839777",
+    "owner_kind": "live-scheduled-guard",
+    "guard_script": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T203326Z/guard.py"
+  },
+  "recovery": "rename preserved stale lock then exclusively mkdir new scheduled lock; no peer lock touched"
+}

@@ -1,0 +1,208 @@
+..............FFFFFF                                                     [100%]
+=================================== FAILURES ===================================
+_ test_subject_selection_refuses_before_any_request_or_worker_side_effect[same-gid] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-103/test_subject_selection_refuses0')
+selection = 'same-gid'
+
+    @pytest.mark.parametrize('selection', ['same-gid', 'bob-control', 'crash', 'nonce-replay', 'duplicate', 'bad-address'])
+    def test_subject_selection_refuses_before_any_request_or_worker_side_effect(artifacts, inputs, tmp_path, selection):
+        m = fixture(artifacts, inputs, tmp_path, 'paper-strict', None)
+        label = 'bob' if selection == 'bob-control' else 'alice'
+        options = dict(subject_substitution=m.users['alice' if selection == 'same-gid' else 'bob']['gid'])
+        if selection == 'crash': options['recovery_point'] = 'after_intent'
+        if selection == 'nonce-replay': options['nonce_replay'] = True
+        if selection == 'duplicate': options['duplicate_outcome'] = True
+        if selection == 'bad-address': options['subject_substitution'] = 'not-an-address'
+        with pytest.raises(ValueError):
+            execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+                user_label=label, user=m.users[label], record=m.record, policy=m.policy, expected_allow=label == 'alice',
+                worker_snapshot=m.snapshot, output=tmp_path/'access', **options)
+>       assert m.request_state == {'status': '0'} and m.calls == []
+E       AssertionError: assert ({'credentialD... '28545', ...} == {'status': '0'}
+E         
+E         Differing items:
+E         {'status': '1'} != {'status': '0'}
+E         Left contains 9 more items:
+E         {'credentialDigest': '0x6d122ed38a6dfc72a39efe59fee93d615ef96f9ffedece28e5cc9cf7a0ca2eb7',
+E          'dataId': '0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e',
+E          'decidedAt': '1791476010',...
+E         
+E         ...Full output truncated (7 lines hidden), use '-vv' to show)
+
+evaluation/tests/test_subject_collector.py:129: AssertionError
+_ test_subject_selection_refuses_before_any_request_or_worker_side_effect[bob-control] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-103/test_subject_selection_refuses1')
+selection = 'bob-control'
+
+    @pytest.mark.parametrize('selection', ['same-gid', 'bob-control', 'crash', 'nonce-replay', 'duplicate', 'bad-address'])
+    def test_subject_selection_refuses_before_any_request_or_worker_side_effect(artifacts, inputs, tmp_path, selection):
+        m = fixture(artifacts, inputs, tmp_path, 'paper-strict', None)
+        label = 'bob' if selection == 'bob-control' else 'alice'
+        options = dict(subject_substitution=m.users['alice' if selection == 'same-gid' else 'bob']['gid'])
+        if selection == 'crash': options['recovery_point'] = 'after_intent'
+        if selection == 'nonce-replay': options['nonce_replay'] = True
+        if selection == 'duplicate': options['duplicate_outcome'] = True
+        if selection == 'bad-address': options['subject_substitution'] = 'not-an-address'
+        with pytest.raises(ValueError):
+            execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+                user_label=label, user=m.users[label], record=m.record, policy=m.policy, expected_allow=label == 'alice',
+                worker_snapshot=m.snapshot, output=tmp_path/'access', **options)
+>       assert m.request_state == {'status': '0'} and m.calls == []
+E       AssertionError: assert ({'credentialD... '28545', ...} == {'status': '0'}
+E         
+E         Differing items:
+E         {'status': '1'} != {'status': '0'}
+E         Left contains 9 more items:
+E         {'credentialDigest': '0x91d1024e42996d3a1001bcde2ce507eed2da2191f3901d1a36c3f110b228c89a',
+E          'dataId': '0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e',
+E          'decidedAt': '1791476010',...
+E         
+E         ...Full output truncated (7 lines hidden), use '-vv' to show)
+
+evaluation/tests/test_subject_collector.py:129: AssertionError
+_ test_subject_selection_refuses_before_any_request_or_worker_side_effect[crash] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-103/test_subject_selection_refuses2')
+selection = 'crash'
+
+    @pytest.mark.parametrize('selection', ['same-gid', 'bob-control', 'crash', 'nonce-replay', 'duplicate', 'bad-address'])
+    def test_subject_selection_refuses_before_any_request_or_worker_side_effect(artifacts, inputs, tmp_path, selection):
+        m = fixture(artifacts, inputs, tmp_path, 'paper-strict', None)
+        label = 'bob' if selection == 'bob-control' else 'alice'
+        options = dict(subject_substitution=m.users['alice' if selection == 'same-gid' else 'bob']['gid'])
+        if selection == 'crash': options['recovery_point'] = 'after_intent'
+        if selection == 'nonce-replay': options['nonce_replay'] = True
+        if selection == 'duplicate': options['duplicate_outcome'] = True
+        if selection == 'bad-address': options['subject_substitution'] = 'not-an-address'
+        with pytest.raises(ValueError):
+            execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+                user_label=label, user=m.users[label], record=m.record, policy=m.policy, expected_allow=label == 'alice',
+                worker_snapshot=m.snapshot, output=tmp_path/'access', **options)
+>       assert m.request_state == {'status': '0'} and m.calls == []
+E       AssertionError: assert ({'credentialD... '28545', ...} == {'status': '0'}
+E         
+E         Differing items:
+E         {'status': '1'} != {'status': '0'}
+E         Left contains 9 more items:
+E         {'credentialDigest': '0x6d122ed38a6dfc72a39efe59fee93d615ef96f9ffedece28e5cc9cf7a0ca2eb7',
+E          'dataId': '0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e',
+E          'decidedAt': '1791476010',...
+E         
+E         ...Full output truncated (7 lines hidden), use '-vv' to show)
+
+evaluation/tests/test_subject_collector.py:129: AssertionError
+_ test_subject_selection_refuses_before_any_request_or_worker_side_effect[nonce-replay] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-103/test_subject_selection_refuses3')
+selection = 'nonce-replay'
+
+    @pytest.mark.parametrize('selection', ['same-gid', 'bob-control', 'crash', 'nonce-replay', 'duplicate', 'bad-address'])
+    def test_subject_selection_refuses_before_any_request_or_worker_side_effect(artifacts, inputs, tmp_path, selection):
+        m = fixture(artifacts, inputs, tmp_path, 'paper-strict', None)
+        label = 'bob' if selection == 'bob-control' else 'alice'
+        options = dict(subject_substitution=m.users['alice' if selection == 'same-gid' else 'bob']['gid'])
+        if selection == 'crash': options['recovery_point'] = 'after_intent'
+        if selection == 'nonce-replay': options['nonce_replay'] = True
+        if selection == 'duplicate': options['duplicate_outcome'] = True
+        if selection == 'bad-address': options['subject_substitution'] = 'not-an-address'
+        with pytest.raises(ValueError):
+            execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+                user_label=label, user=m.users[label], record=m.record, policy=m.policy, expected_allow=label == 'alice',
+                worker_snapshot=m.snapshot, output=tmp_path/'access', **options)
+>       assert m.request_state == {'status': '0'} and m.calls == []
+E       AssertionError: assert ({'credentialD... '28545', ...} == {'status': '0'}
+E         
+E         Differing items:
+E         {'status': '1'} != {'status': '0'}
+E         Left contains 9 more items:
+E         {'credentialDigest': '0x6d122ed38a6dfc72a39efe59fee93d615ef96f9ffedece28e5cc9cf7a0ca2eb7',
+E          'dataId': '0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e',
+E          'decidedAt': '1791476010',...
+E         
+E         ...Full output truncated (7 lines hidden), use '-vv' to show)
+
+evaluation/tests/test_subject_collector.py:129: AssertionError
+_ test_subject_selection_refuses_before_any_request_or_worker_side_effect[duplicate] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-103/test_subject_selection_refuses4')
+selection = 'duplicate'
+
+    @pytest.mark.parametrize('selection', ['same-gid', 'bob-control', 'crash', 'nonce-replay', 'duplicate', 'bad-address'])
+    def test_subject_selection_refuses_before_any_request_or_worker_side_effect(artifacts, inputs, tmp_path, selection):
+        m = fixture(artifacts, inputs, tmp_path, 'paper-strict', None)
+        label = 'bob' if selection == 'bob-control' else 'alice'
+        options = dict(subject_substitution=m.users['alice' if selection == 'same-gid' else 'bob']['gid'])
+        if selection == 'crash': options['recovery_point'] = 'after_intent'
+        if selection == 'nonce-replay': options['nonce_replay'] = True
+        if selection == 'duplicate': options['duplicate_outcome'] = True
+        if selection == 'bad-address': options['subject_substitution'] = 'not-an-address'
+        with pytest.raises(ValueError):
+            execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+                user_label=label, user=m.users[label], record=m.record, policy=m.policy, expected_allow=label == 'alice',
+                worker_snapshot=m.snapshot, output=tmp_path/'access', **options)
+>       assert m.request_state == {'status': '0'} and m.calls == []
+E       AssertionError: assert ({'credentialD... '28545', ...} == {'status': '0'}
+E         
+E         Differing items:
+E         {'status': '1'} != {'status': '0'}
+E         Left contains 9 more items:
+E         {'credentialDigest': '0x6d122ed38a6dfc72a39efe59fee93d615ef96f9ffedece28e5cc9cf7a0ca2eb7',
+E          'dataId': '0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e',
+E          'decidedAt': '1791476010',...
+E         
+E         ...Full output truncated (7 lines hidden), use '-vv' to show)
+
+evaluation/tests/test_subject_collector.py:129: AssertionError
+_ test_subject_selection_refuses_before_any_request_or_worker_side_effect[bad-address] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-103/test_subject_selection_refuses5')
+selection = 'bad-address'
+
+    @pytest.mark.parametrize('selection', ['same-gid', 'bob-control', 'crash', 'nonce-replay', 'duplicate', 'bad-address'])
+    def test_subject_selection_refuses_before_any_request_or_worker_side_effect(artifacts, inputs, tmp_path, selection):
+        m = fixture(artifacts, inputs, tmp_path, 'paper-strict', None)
+        label = 'bob' if selection == 'bob-control' else 'alice'
+        options = dict(subject_substitution=m.users['alice' if selection == 'same-gid' else 'bob']['gid'])
+        if selection == 'crash': options['recovery_point'] = 'after_intent'
+        if selection == 'nonce-replay': options['nonce_replay'] = True
+        if selection == 'duplicate': options['duplicate_outcome'] = True
+        if selection == 'bad-address': options['subject_substitution'] = 'not-an-address'
+        with pytest.raises(ValueError):
+            execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+                user_label=label, user=m.users[label], record=m.record, policy=m.policy, expected_allow=label == 'alice',
+                worker_snapshot=m.snapshot, output=tmp_path/'access', **options)
+>       assert m.request_state == {'status': '0'} and m.calls == []
+E       AssertionError: assert ({'credentialD... '28545', ...} == {'status': '0'}
+E         
+E         Differing items:
+E         {'status': '1'} != {'status': '0'}
+E         Left contains 9 more items:
+E         {'credentialDigest': '0x6d122ed38a6dfc72a39efe59fee93d615ef96f9ffedece28e5cc9cf7a0ca2eb7',
+E          'dataId': '0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e',
+E          'decidedAt': '1791476010',...
+E         
+E         ...Full output truncated (7 lines hidden), use '-vv' to show)
+
+evaluation/tests/test_subject_collector.py:129: AssertionError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_subject_collector.py::test_subject_selection_refuses_before_any_request_or_worker_side_effect[same-gid]
+FAILED evaluation/tests/test_subject_collector.py::test_subject_selection_refuses_before_any_request_or_worker_side_effect[bob-control]
+FAILED evaluation/tests/test_subject_collector.py::test_subject_selection_refuses_before_any_request_or_worker_side_effect[crash]
+FAILED evaluation/tests/test_subject_collector.py::test_subject_selection_refuses_before_any_request_or_worker_side_effect[nonce-replay]
+FAILED evaluation/tests/test_subject_collector.py::test_subject_selection_refuses_before_any_request_or_worker_side_effect[duplicate]
+FAILED evaluation/tests/test_subject_collector.py::test_subject_selection_refuses_before_any_request_or_worker_side_effect[bad-address]
+6 failed, 14 passed in 1.60s

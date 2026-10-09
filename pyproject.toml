@@ -1,0 +1,10 @@
+[project]
+name = "hmbc-reconstruction-evaluation"
+version = "0.1.0"
+description = "Independent evaluation for the paper-derived HMBC2020 reconstruction"
+requires-python = ">=3.13,<3.14"
+dependencies = ["eth-account==0.14.0", "jsonschema==4.26.0", "pytest==9.0.2"]
+
+[tool.pytest.ini_options]
+testpaths = ["evaluation/tests"]
+pythonpath = ["."]

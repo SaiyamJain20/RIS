@@ -1,0 +1,89 @@
+{
+  "command": "FOUNDRY_PROFILE=mutants forge test --root ledger",
+  "forgeExit": 1,
+  "suites": {
+    "MutantNoDestinationBindingTest": {
+      "expectedFailing": [
+        "test_E01_RequestFieldSubstitution",
+        "test_E01_RequestForOtherDestinationCertifiedHere"
+      ],
+      "failing": [
+        "test_E01_RequestFieldSubstitution",
+        "test_E01_RequestForOtherDestinationCertifiedHere"
+      ],
+      "missed": [],
+      "unexpected": [],
+      "detected": true
+    },
+    "MutantNoStateBarrierTest": {
+      "expectedFailing": [
+        "test_E02_RevocationBarrierBlocksOlderDecision"
+      ],
+      "failing": [
+        "test_E02_RevocationBarrierBlocksOlderDecision"
+      ],
+      "missed": [],
+      "unexpected": [],
+      "detected": true
+    },
+    "MutantNoRecordFreshnessTest": {
+      "expectedFailing": [
+        "test_E02_DeliveryAfterOnDutyEntryEnds"
+      ],
+      "failing": [
+        "test_E02_DeliveryAfterOnDutyEntryEnds"
+      ],
+      "missed": [],
+      "unexpected": [],
+      "detected": true
+    },
+    "MutantNoNonceDecisionBindingTest": {
+      "expectedFailing": [
+        "test_E01_NonceReuseAcrossDifferentRequests"
+      ],
+      "failing": [
+        "test_E01_NonceReuseAcrossDifferentRequests"
+      ],
+      "missed": [],
+      "unexpected": [],
+      "detected": true
+    },
+    "MutantNoNonceAccessFlowTest": {
+      "expectedFailing": [
+        "test_AliceRegisteredDoctorOnDutyGetsGrant"
+      ],
+      "failing": [
+        "test_AliceRegisteredDoctorOnDutyGetsGrant"
+      ],
+      "missed": [],
+      "unexpected": [],
+      "detected": true
+    },
+    "MutantNoVersionMonotoneTest": {
+      "expectedFailing": [
+        "test_E02_EqualVersionDifferentContent",
+        "test_E02_StaleSignedCrlReplay",
+        "test_E02_StaleSignedTempAclReplay"
+      ],
+      "failing": [
+        "test_E02_EqualVersionDifferentContent",
+        "test_E02_StaleSignedCrlReplay",
+        "test_E02_StaleSignedTempAclReplay"
+      ],
+      "missed": [],
+      "unexpected": [],
+      "detected": true
+    },
+    "MutantNoReceiptBindingTest": {
+      "expectedFailing": [
+        "test_E03_ReceiptFieldSubstitution"
+      ],
+      "failing": [
+        "test_E03_ReceiptFieldSubstitution"
+      ],
+      "missed": [],
+      "unexpected": [],
+      "detected": true
+    }
+  }
+}

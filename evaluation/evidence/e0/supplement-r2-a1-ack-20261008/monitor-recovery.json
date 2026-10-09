@@ -1,0 +1,28 @@
+{
+  "at": "2026-10-08T10:51:44.054649+00:00",
+  "failedCommand": [
+    ".venv/bin/python",
+    "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T104925Z/monitor.py"
+  ],
+  "exitCode": 1,
+  "exception": "StopIteration at next(p for p in source_paths if p.endswith(/QuorumLib.sol))",
+  "failedProgramSha256": "a3cfac3b3c847fd4e04ea63ad31ae515c1bca5490b94fd7c4f0aff3b823f9ddf",
+  "hypothesis": "Library name is not its containing filename; lookup by filename is wrong.",
+  "reproduced": true,
+  "diagnostic": {
+    "argv": [
+      "git",
+      "grep",
+      "-n",
+      "library QuorumLib",
+      "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e",
+      "--",
+      "ledger/src/"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "exitCode": 0,
+    "stdout": "e6cf4ff3a25bfe9f12da6e7f5c6b1563a194c07e:ledger/src/lib/SigLib.sol:36:library QuorumLib {\n",
+    "stderr": ""
+  },
+  "resolution": "Locate the one pinned source declaring library QuorumLib; preserve all hash and first-check assertions. No peer or runtime code changed."
+}

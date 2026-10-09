@@ -1,0 +1,13 @@
+fatal: path 'ledger/evidence/source-manifest.sha256' does not exist in '7fbd1edf5abcd2b6b1a74df81907e0a2ff10d01b'
+Traceback (most recent call last):
+  File "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T231330Z/frozen_verify.py", line 9, in <module>
+    original=subprocess.check_output(['git','show','7fbd1edf5abcd2b6b1a74df81907e0a2ff10d01b:'+item['sourcePath']]);provenance='agent3 immutable E1 commit source'
+  File "/usr/lib64/python3.13/subprocess.py", line 472, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+               **kwargs).stdout
+               ^^^^^^^^^
+  File "/usr/lib64/python3.13/subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['git', 'show', '7fbd1edf5abcd2b6b1a74df81907e0a2ff10d01b:ledger/evidence/source-manifest.sha256']' returned non-zero exit status 128.

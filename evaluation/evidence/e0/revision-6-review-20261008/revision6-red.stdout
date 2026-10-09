@@ -1,0 +1,817 @@
+FFFFFFFFFFFFF                                                            [100%]
+=================================== FAILURES ===================================
+_ test_supplement_steps_accept_only_closed_test_directives[REQUEST_SAME_NONCE_DISTINCT_DIGEST] _
+
+action = 'REQUEST_SAME_NONCE_DISTINCT_DIGEST'
+
+    @pytest.mark.parametrize('action', ['REQUEST_SAME_NONCE_DISTINCT_DIGEST', 'FORWARD_BOTH_REQUESTS',
+        'CERTIFY_BOTH_BEFORE_CONSUMPTION', 'CONSUME_FIRST', 'CONSUME_PRECOLLECTED_SECOND', 'ATTEST_GRANT'])
+    def test_supplement_steps_accept_only_closed_test_directives(action):
+        step = {'action': action, 'offsetSeconds': '0'}
+>       validate('E0CaseStep', step)
+
+evaluation/tests/test_revision6_review.py:15:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+evaluation/schema.py:103: in validate
+    Draft202012Validator(schema,format_checker=FORMATS).validate(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = Draft202012Validator(schema={'$defs': {'AccessDecision': {'additionalProperties': False, 'properties': {'credentialDig... 'evidence-path', 'idn-email', 'ipv4', 'ipv6', 'regex', 'time', 'uint256', 'uint64', 'uint8', 'user-key-ref', 'uuid']>)
+args = ({'action': 'REQUEST_SAME_NONCE_DISTINCT_DIGEST', 'offsetSeconds': '0'},)
+kwargs = {}
+error = <ValidationError: "{'action': 'REQUEST_SAME_NONCE_DISTINCT_DIGEST', 'offsetSeconds': '0'} is not valid under any of the given schemas">
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: {'action': 'REQUEST_SAME_NONCE_DISTINCT_DIGEST', 'offsetSeconds': '0'} is not valid under any of the given schemas
+E
+E           Failed validating 'oneOf' in schema:
+E               {'oneOf': [{'type': 'object',
+E                           'properties': {'action': {'enum': ['REQUEST_ACCESS',
+E                                                              'SUBSTITUTE_SUBJECT',
+E                                                              'REPLAY_REQUEST',
+E                                                              'ADVANCE_CLOCK',
+E                                                              'FABRICATE_TUPLE',
+E                                                              'SUBSTITUTE_DESTINATION',
+E                                                              'REPLAY_NEW_REFERENCE',
+E                                                              'INSTALL_NEW_LIST',
+E                                                              'REPLAY_OLD_LIST',
+E                                                              'WRONG_ISSUER_UPDATE',
+E                                                              'REVOKE_ON_PBC',
+E                                                              'ACCEPT_CHECKPOINT',
+E                                                              'FORWARD_OR_CONSUME',
+E                                                              'RELEASE',
+E                                                              'DROP_OUTCOME',
+E                                                              'FABRICATE_OUTCOME',
+E                                                              'REPORT_OUTCOME',
+E                                                              'DUPLICATE_OUTCOME']},
+E                                          'offsetSeconds': {'$ref': '#/$defs/Uint64'}},
+E                           'required': ['action', 'offsetSeconds'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'action': {'const': 'CRASH_RESTART'},
+E                                          'offsetSeconds': {'$ref': '#/$defs/Uint64'},
+E                                          'workerHook': {'const': 'release'},
+E                                          'crashPoint': {'enum': ['after-intent',
+E                                                                  'after-send']}},
+E                           'required': ['action',
+E                                        'offsetSeconds',
+E                                        'workerHook',
+E                                        'crashPoint'],
+E                           'additionalProperties': False}]}
+E
+E           On instance:
+E               {'action': 'REQUEST_SAME_NONCE_DISTINCT_DIGEST', 'offsetSeconds': '0'}
+
+.venv/lib64/python3.13/site-packages/jsonschema/validators.py:450: ValidationError
+_ test_supplement_steps_accept_only_closed_test_directives[FORWARD_BOTH_REQUESTS] _
+
+action = 'FORWARD_BOTH_REQUESTS'
+
+    @pytest.mark.parametrize('action', ['REQUEST_SAME_NONCE_DISTINCT_DIGEST', 'FORWARD_BOTH_REQUESTS',
+        'CERTIFY_BOTH_BEFORE_CONSUMPTION', 'CONSUME_FIRST', 'CONSUME_PRECOLLECTED_SECOND', 'ATTEST_GRANT'])
+    def test_supplement_steps_accept_only_closed_test_directives(action):
+        step = {'action': action, 'offsetSeconds': '0'}
+>       validate('E0CaseStep', step)
+
+evaluation/tests/test_revision6_review.py:15:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+evaluation/schema.py:103: in validate
+    Draft202012Validator(schema,format_checker=FORMATS).validate(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = Draft202012Validator(schema={'$defs': {'AccessDecision': {'additionalProperties': False, 'properties': {'credentialDig... 'evidence-path', 'idn-email', 'ipv4', 'ipv6', 'regex', 'time', 'uint256', 'uint64', 'uint8', 'user-key-ref', 'uuid']>)
+args = ({'action': 'FORWARD_BOTH_REQUESTS', 'offsetSeconds': '0'},), kwargs = {}
+error = <ValidationError: "{'action': 'FORWARD_BOTH_REQUESTS', 'offsetSeconds': '0'} is not valid under any of the given schemas">
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: {'action': 'FORWARD_BOTH_REQUESTS', 'offsetSeconds': '0'} is not valid under any of the given schemas
+E
+E           Failed validating 'oneOf' in schema:
+E               {'oneOf': [{'type': 'object',
+E                           'properties': {'action': {'enum': ['REQUEST_ACCESS',
+E                                                              'SUBSTITUTE_SUBJECT',
+E                                                              'REPLAY_REQUEST',
+E                                                              'ADVANCE_CLOCK',
+E                                                              'FABRICATE_TUPLE',
+E                                                              'SUBSTITUTE_DESTINATION',
+E                                                              'REPLAY_NEW_REFERENCE',
+E                                                              'INSTALL_NEW_LIST',
+E                                                              'REPLAY_OLD_LIST',
+E                                                              'WRONG_ISSUER_UPDATE',
+E                                                              'REVOKE_ON_PBC',
+E                                                              'ACCEPT_CHECKPOINT',
+E                                                              'FORWARD_OR_CONSUME',
+E                                                              'RELEASE',
+E                                                              'DROP_OUTCOME',
+E                                                              'FABRICATE_OUTCOME',
+E                                                              'REPORT_OUTCOME',
+E                                                              'DUPLICATE_OUTCOME']},
+E                                          'offsetSeconds': {'$ref': '#/$defs/Uint64'}},
+E                           'required': ['action', 'offsetSeconds'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'action': {'const': 'CRASH_RESTART'},
+E                                          'offsetSeconds': {'$ref': '#/$defs/Uint64'},
+E                                          'workerHook': {'const': 'release'},
+E                                          'crashPoint': {'enum': ['after-intent',
+E                                                                  'after-send']}},
+E                           'required': ['action',
+E                                        'offsetSeconds',
+E                                        'workerHook',
+E                                        'crashPoint'],
+E                           'additionalProperties': False}]}
+E
+E           On instance:
+E               {'action': 'FORWARD_BOTH_REQUESTS', 'offsetSeconds': '0'}
+
+.venv/lib64/python3.13/site-packages/jsonschema/validators.py:450: ValidationError
+_ test_supplement_steps_accept_only_closed_test_directives[CERTIFY_BOTH_BEFORE_CONSUMPTION] _
+
+action = 'CERTIFY_BOTH_BEFORE_CONSUMPTION'
+
+    @pytest.mark.parametrize('action', ['REQUEST_SAME_NONCE_DISTINCT_DIGEST', 'FORWARD_BOTH_REQUESTS',
+        'CERTIFY_BOTH_BEFORE_CONSUMPTION', 'CONSUME_FIRST', 'CONSUME_PRECOLLECTED_SECOND', 'ATTEST_GRANT'])
+    def test_supplement_steps_accept_only_closed_test_directives(action):
+        step = {'action': action, 'offsetSeconds': '0'}
+>       validate('E0CaseStep', step)
+
+evaluation/tests/test_revision6_review.py:15:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+evaluation/schema.py:103: in validate
+    Draft202012Validator(schema,format_checker=FORMATS).validate(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = Draft202012Validator(schema={'$defs': {'AccessDecision': {'additionalProperties': False, 'properties': {'credentialDig... 'evidence-path', 'idn-email', 'ipv4', 'ipv6', 'regex', 'time', 'uint256', 'uint64', 'uint8', 'user-key-ref', 'uuid']>)
+args = ({'action': 'CERTIFY_BOTH_BEFORE_CONSUMPTION', 'offsetSeconds': '0'},)
+kwargs = {}
+error = <ValidationError: "{'action': 'CERTIFY_BOTH_BEFORE_CONSUMPTION', 'offsetSeconds': '0'} is not valid under any of the given schemas">
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: {'action': 'CERTIFY_BOTH_BEFORE_CONSUMPTION', 'offsetSeconds': '0'} is not valid under any of the given schemas
+E
+E           Failed validating 'oneOf' in schema:
+E               {'oneOf': [{'type': 'object',
+E                           'properties': {'action': {'enum': ['REQUEST_ACCESS',
+E                                                              'SUBSTITUTE_SUBJECT',
+E                                                              'REPLAY_REQUEST',
+E                                                              'ADVANCE_CLOCK',
+E                                                              'FABRICATE_TUPLE',
+E                                                              'SUBSTITUTE_DESTINATION',
+E                                                              'REPLAY_NEW_REFERENCE',
+E                                                              'INSTALL_NEW_LIST',
+E                                                              'REPLAY_OLD_LIST',
+E                                                              'WRONG_ISSUER_UPDATE',
+E                                                              'REVOKE_ON_PBC',
+E                                                              'ACCEPT_CHECKPOINT',
+E                                                              'FORWARD_OR_CONSUME',
+E                                                              'RELEASE',
+E                                                              'DROP_OUTCOME',
+E                                                              'FABRICATE_OUTCOME',
+E                                                              'REPORT_OUTCOME',
+E                                                              'DUPLICATE_OUTCOME']},
+E                                          'offsetSeconds': {'$ref': '#/$defs/Uint64'}},
+E                           'required': ['action', 'offsetSeconds'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'action': {'const': 'CRASH_RESTART'},
+E                                          'offsetSeconds': {'$ref': '#/$defs/Uint64'},
+E                                          'workerHook': {'const': 'release'},
+E                                          'crashPoint': {'enum': ['after-intent',
+E                                                                  'after-send']}},
+E                           'required': ['action',
+E                                        'offsetSeconds',
+E                                        'workerHook',
+E                                        'crashPoint'],
+E                           'additionalProperties': False}]}
+E
+E           On instance:
+E               {'action': 'CERTIFY_BOTH_BEFORE_CONSUMPTION', 'offsetSeconds': '0'}
+
+.venv/lib64/python3.13/site-packages/jsonschema/validators.py:450: ValidationError
+___ test_supplement_steps_accept_only_closed_test_directives[CONSUME_FIRST] ____
+
+action = 'CONSUME_FIRST'
+
+    @pytest.mark.parametrize('action', ['REQUEST_SAME_NONCE_DISTINCT_DIGEST', 'FORWARD_BOTH_REQUESTS',
+        'CERTIFY_BOTH_BEFORE_CONSUMPTION', 'CONSUME_FIRST', 'CONSUME_PRECOLLECTED_SECOND', 'ATTEST_GRANT'])
+    def test_supplement_steps_accept_only_closed_test_directives(action):
+        step = {'action': action, 'offsetSeconds': '0'}
+>       validate('E0CaseStep', step)
+
+evaluation/tests/test_revision6_review.py:15:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+evaluation/schema.py:103: in validate
+    Draft202012Validator(schema,format_checker=FORMATS).validate(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = Draft202012Validator(schema={'$defs': {'AccessDecision': {'additionalProperties': False, 'properties': {'credentialDig... 'evidence-path', 'idn-email', 'ipv4', 'ipv6', 'regex', 'time', 'uint256', 'uint64', 'uint8', 'user-key-ref', 'uuid']>)
+args = ({'action': 'CONSUME_FIRST', 'offsetSeconds': '0'},), kwargs = {}
+error = <ValidationError: "{'action': 'CONSUME_FIRST', 'offsetSeconds': '0'} is not valid under any of the given schemas">
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: {'action': 'CONSUME_FIRST', 'offsetSeconds': '0'} is not valid under any of the given schemas
+E
+E           Failed validating 'oneOf' in schema:
+E               {'oneOf': [{'type': 'object',
+E                           'properties': {'action': {'enum': ['REQUEST_ACCESS',
+E                                                              'SUBSTITUTE_SUBJECT',
+E                                                              'REPLAY_REQUEST',
+E                                                              'ADVANCE_CLOCK',
+E                                                              'FABRICATE_TUPLE',
+E                                                              'SUBSTITUTE_DESTINATION',
+E                                                              'REPLAY_NEW_REFERENCE',
+E                                                              'INSTALL_NEW_LIST',
+E                                                              'REPLAY_OLD_LIST',
+E                                                              'WRONG_ISSUER_UPDATE',
+E                                                              'REVOKE_ON_PBC',
+E                                                              'ACCEPT_CHECKPOINT',
+E                                                              'FORWARD_OR_CONSUME',
+E                                                              'RELEASE',
+E                                                              'DROP_OUTCOME',
+E                                                              'FABRICATE_OUTCOME',
+E                                                              'REPORT_OUTCOME',
+E                                                              'DUPLICATE_OUTCOME']},
+E                                          'offsetSeconds': {'$ref': '#/$defs/Uint64'}},
+E                           'required': ['action', 'offsetSeconds'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'action': {'const': 'CRASH_RESTART'},
+E                                          'offsetSeconds': {'$ref': '#/$defs/Uint64'},
+E                                          'workerHook': {'const': 'release'},
+E                                          'crashPoint': {'enum': ['after-intent',
+E                                                                  'after-send']}},
+E                           'required': ['action',
+E                                        'offsetSeconds',
+E                                        'workerHook',
+E                                        'crashPoint'],
+E                           'additionalProperties': False}]}
+E
+E           On instance:
+E               {'action': 'CONSUME_FIRST', 'offsetSeconds': '0'}
+
+.venv/lib64/python3.13/site-packages/jsonschema/validators.py:450: ValidationError
+_ test_supplement_steps_accept_only_closed_test_directives[CONSUME_PRECOLLECTED_SECOND] _
+
+action = 'CONSUME_PRECOLLECTED_SECOND'
+
+    @pytest.mark.parametrize('action', ['REQUEST_SAME_NONCE_DISTINCT_DIGEST', 'FORWARD_BOTH_REQUESTS',
+        'CERTIFY_BOTH_BEFORE_CONSUMPTION', 'CONSUME_FIRST', 'CONSUME_PRECOLLECTED_SECOND', 'ATTEST_GRANT'])
+    def test_supplement_steps_accept_only_closed_test_directives(action):
+        step = {'action': action, 'offsetSeconds': '0'}
+>       validate('E0CaseStep', step)
+
+evaluation/tests/test_revision6_review.py:15:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+evaluation/schema.py:103: in validate
+    Draft202012Validator(schema,format_checker=FORMATS).validate(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = Draft202012Validator(schema={'$defs': {'AccessDecision': {'additionalProperties': False, 'properties': {'credentialDig... 'evidence-path', 'idn-email', 'ipv4', 'ipv6', 'regex', 'time', 'uint256', 'uint64', 'uint8', 'user-key-ref', 'uuid']>)
+args = ({'action': 'CONSUME_PRECOLLECTED_SECOND', 'offsetSeconds': '0'},)
+kwargs = {}
+error = <ValidationError: "{'action': 'CONSUME_PRECOLLECTED_SECOND', 'offsetSeconds': '0'} is not valid under any of the given schemas">
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: {'action': 'CONSUME_PRECOLLECTED_SECOND', 'offsetSeconds': '0'} is not valid under any of the given schemas
+E
+E           Failed validating 'oneOf' in schema:
+E               {'oneOf': [{'type': 'object',
+E                           'properties': {'action': {'enum': ['REQUEST_ACCESS',
+E                                                              'SUBSTITUTE_SUBJECT',
+E                                                              'REPLAY_REQUEST',
+E                                                              'ADVANCE_CLOCK',
+E                                                              'FABRICATE_TUPLE',
+E                                                              'SUBSTITUTE_DESTINATION',
+E                                                              'REPLAY_NEW_REFERENCE',
+E                                                              'INSTALL_NEW_LIST',
+E                                                              'REPLAY_OLD_LIST',
+E                                                              'WRONG_ISSUER_UPDATE',
+E                                                              'REVOKE_ON_PBC',
+E                                                              'ACCEPT_CHECKPOINT',
+E                                                              'FORWARD_OR_CONSUME',
+E                                                              'RELEASE',
+E                                                              'DROP_OUTCOME',
+E                                                              'FABRICATE_OUTCOME',
+E                                                              'REPORT_OUTCOME',
+E                                                              'DUPLICATE_OUTCOME']},
+E                                          'offsetSeconds': {'$ref': '#/$defs/Uint64'}},
+E                           'required': ['action', 'offsetSeconds'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'action': {'const': 'CRASH_RESTART'},
+E                                          'offsetSeconds': {'$ref': '#/$defs/Uint64'},
+E                                          'workerHook': {'const': 'release'},
+E                                          'crashPoint': {'enum': ['after-intent',
+E                                                                  'after-send']}},
+E                           'required': ['action',
+E                                        'offsetSeconds',
+E                                        'workerHook',
+E                                        'crashPoint'],
+E                           'additionalProperties': False}]}
+E
+E           On instance:
+E               {'action': 'CONSUME_PRECOLLECTED_SECOND', 'offsetSeconds': '0'}
+
+.venv/lib64/python3.13/site-packages/jsonschema/validators.py:450: ValidationError
+____ test_supplement_steps_accept_only_closed_test_directives[ATTEST_GRANT] ____
+
+action = 'ATTEST_GRANT'
+
+    @pytest.mark.parametrize('action', ['REQUEST_SAME_NONCE_DISTINCT_DIGEST', 'FORWARD_BOTH_REQUESTS',
+        'CERTIFY_BOTH_BEFORE_CONSUMPTION', 'CONSUME_FIRST', 'CONSUME_PRECOLLECTED_SECOND', 'ATTEST_GRANT'])
+    def test_supplement_steps_accept_only_closed_test_directives(action):
+        step = {'action': action, 'offsetSeconds': '0'}
+>       validate('E0CaseStep', step)
+
+evaluation/tests/test_revision6_review.py:15:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+evaluation/schema.py:103: in validate
+    Draft202012Validator(schema,format_checker=FORMATS).validate(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = Draft202012Validator(schema={'$defs': {'AccessDecision': {'additionalProperties': False, 'properties': {'credentialDig... 'evidence-path', 'idn-email', 'ipv4', 'ipv6', 'regex', 'time', 'uint256', 'uint64', 'uint8', 'user-key-ref', 'uuid']>)
+args = ({'action': 'ATTEST_GRANT', 'offsetSeconds': '0'},), kwargs = {}
+error = <ValidationError: "{'action': 'ATTEST_GRANT', 'offsetSeconds': '0'} is not valid under any of the given schemas">
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: {'action': 'ATTEST_GRANT', 'offsetSeconds': '0'} is not valid under any of the given schemas
+E
+E           Failed validating 'oneOf' in schema:
+E               {'oneOf': [{'type': 'object',
+E                           'properties': {'action': {'enum': ['REQUEST_ACCESS',
+E                                                              'SUBSTITUTE_SUBJECT',
+E                                                              'REPLAY_REQUEST',
+E                                                              'ADVANCE_CLOCK',
+E                                                              'FABRICATE_TUPLE',
+E                                                              'SUBSTITUTE_DESTINATION',
+E                                                              'REPLAY_NEW_REFERENCE',
+E                                                              'INSTALL_NEW_LIST',
+E                                                              'REPLAY_OLD_LIST',
+E                                                              'WRONG_ISSUER_UPDATE',
+E                                                              'REVOKE_ON_PBC',
+E                                                              'ACCEPT_CHECKPOINT',
+E                                                              'FORWARD_OR_CONSUME',
+E                                                              'RELEASE',
+E                                                              'DROP_OUTCOME',
+E                                                              'FABRICATE_OUTCOME',
+E                                                              'REPORT_OUTCOME',
+E                                                              'DUPLICATE_OUTCOME']},
+E                                          'offsetSeconds': {'$ref': '#/$defs/Uint64'}},
+E                           'required': ['action', 'offsetSeconds'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'action': {'const': 'CRASH_RESTART'},
+E                                          'offsetSeconds': {'$ref': '#/$defs/Uint64'},
+E                                          'workerHook': {'const': 'release'},
+E                                          'crashPoint': {'enum': ['after-intent',
+E                                                                  'after-send']}},
+E                           'required': ['action',
+E                                        'offsetSeconds',
+E                                        'workerHook',
+E                                        'crashPoint'],
+E                           'additionalProperties': False}]}
+E
+E           On instance:
+E               {'action': 'ATTEST_GRANT', 'offsetSeconds': '0'}
+
+.venv/lib64/python3.13/site-packages/jsonschema/validators.py:450: ValidationError
+_ test_receipt_control_requires_one_of_the_three_bound_fields[requestDigest-RESIGN_RECEIPT_FIELD] _
+
+action = 'RESIGN_RECEIPT_FIELD', field = 'requestDigest'
+
+    @pytest.mark.parametrize('action', ['RESIGN_RECEIPT_FIELD', 'ALTER_RECEIPT_KEEP_SIGNATURE'])
+    @pytest.mark.parametrize('field', ['requestDigest', 'gid', 'dataId'])
+    def test_receipt_control_requires_one_of_the_three_bound_fields(action, field):
+        step = {'action': action, 'offsetSeconds': '0', 'receiptField': field}
+>       validate('E0CaseStep', step)
+
+evaluation/tests/test_revision6_review.py:24:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+evaluation/schema.py:103: in validate
+    Draft202012Validator(schema,format_checker=FORMATS).validate(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = Draft202012Validator(schema={'$defs': {'AccessDecision': {'additionalProperties': False, 'properties': {'credentialDig... 'evidence-path', 'idn-email', 'ipv4', 'ipv6', 'regex', 'time', 'uint256', 'uint64', 'uint8', 'user-key-ref', 'uuid']>)
+args = ({'action': 'RESIGN_RECEIPT_FIELD', 'offsetSeconds': '0', 'receiptField': 'requestDigest'},)
+kwargs = {}
+error = <ValidationError: "{'action': 'RESIGN_RECEIPT_FIELD', 'offsetSeconds': '0', 'receiptField': 'requestDigest'} is not valid under any of the given schemas">
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: {'action': 'RESIGN_RECEIPT_FIELD', 'offsetSeconds': '0', 'receiptField': 'requestDigest'} is not valid under any of the given schemas
+E
+E           Failed validating 'oneOf' in schema:
+E               {'oneOf': [{'type': 'object',
+E                           'properties': {'action': {'enum': ['REQUEST_ACCESS',
+E                                                              'SUBSTITUTE_SUBJECT',
+E                                                              'REPLAY_REQUEST',
+E                                                              'ADVANCE_CLOCK',
+E                                                              'FABRICATE_TUPLE',
+E                                                              'SUBSTITUTE_DESTINATION',
+E                                                              'REPLAY_NEW_REFERENCE',
+E                                                              'INSTALL_NEW_LIST',
+E                                                              'REPLAY_OLD_LIST',
+E                                                              'WRONG_ISSUER_UPDATE',
+E                                                              'REVOKE_ON_PBC',
+E                                                              'ACCEPT_CHECKPOINT',
+E                                                              'FORWARD_OR_CONSUME',
+E                                                              'RELEASE',
+E                                                              'DROP_OUTCOME',
+E                                                              'FABRICATE_OUTCOME',
+E                                                              'REPORT_OUTCOME',
+E                                                              'DUPLICATE_OUTCOME']},
+E                                          'offsetSeconds': {'$ref': '#/$defs/Uint64'}},
+E                           'required': ['action', 'offsetSeconds'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'action': {'const': 'CRASH_RESTART'},
+E                                          'offsetSeconds': {'$ref': '#/$defs/Uint64'},
+E                                          'workerHook': {'const': 'release'},
+E                                          'crashPoint': {'enum': ['after-intent',
+E                                                                  'after-send']}},
+E                           'required': ['action',
+E                                        'offsetSeconds',
+E                                        'workerHook',
+E                                        'crashPoint'],
+E                           'additionalProperties': False}]}
+E
+E           On instance:
+E               {'action': 'RESIGN_RECEIPT_FIELD',
+E                'offsetSeconds': '0',
+E                'receiptField': 'requestDigest'}
+
+.venv/lib64/python3.13/site-packages/jsonschema/validators.py:450: ValidationError
+_ test_receipt_control_requires_one_of_the_three_bound_fields[requestDigest-ALTER_RECEIPT_KEEP_SIGNATURE] _
+
+action = 'ALTER_RECEIPT_KEEP_SIGNATURE', field = 'requestDigest'
+
+    @pytest.mark.parametrize('action', ['RESIGN_RECEIPT_FIELD', 'ALTER_RECEIPT_KEEP_SIGNATURE'])
+    @pytest.mark.parametrize('field', ['requestDigest', 'gid', 'dataId'])
+    def test_receipt_control_requires_one_of_the_three_bound_fields(action, field):
+        step = {'action': action, 'offsetSeconds': '0', 'receiptField': field}
+>       validate('E0CaseStep', step)
+
+evaluation/tests/test_revision6_review.py:24:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+evaluation/schema.py:103: in validate
+    Draft202012Validator(schema,format_checker=FORMATS).validate(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = Draft202012Validator(schema={'$defs': {'AccessDecision': {'additionalProperties': False, 'properties': {'credentialDig... 'evidence-path', 'idn-email', 'ipv4', 'ipv6', 'regex', 'time', 'uint256', 'uint64', 'uint8', 'user-key-ref', 'uuid']>)
+args = ({'action': 'ALTER_RECEIPT_KEEP_SIGNATURE', 'offsetSeconds': '0', 'receiptField': 'requestDigest'},)
+kwargs = {}
+error = <ValidationError: "{'action': 'ALTER_RECEIPT_KEEP_SIGNATURE', 'offsetSeconds': '0', 'receiptField': 'requestDigest'} is not valid under any of the given schemas">
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: {'action': 'ALTER_RECEIPT_KEEP_SIGNATURE', 'offsetSeconds': '0', 'receiptField': 'requestDigest'} is not valid under any of the given schemas
+E
+E           Failed validating 'oneOf' in schema:
+E               {'oneOf': [{'type': 'object',
+E                           'properties': {'action': {'enum': ['REQUEST_ACCESS',
+E                                                              'SUBSTITUTE_SUBJECT',
+E                                                              'REPLAY_REQUEST',
+E                                                              'ADVANCE_CLOCK',
+E                                                              'FABRICATE_TUPLE',
+E                                                              'SUBSTITUTE_DESTINATION',
+E                                                              'REPLAY_NEW_REFERENCE',
+E                                                              'INSTALL_NEW_LIST',
+E                                                              'REPLAY_OLD_LIST',
+E                                                              'WRONG_ISSUER_UPDATE',
+E                                                              'REVOKE_ON_PBC',
+E                                                              'ACCEPT_CHECKPOINT',
+E                                                              'FORWARD_OR_CONSUME',
+E                                                              'RELEASE',
+E                                                              'DROP_OUTCOME',
+E                                                              'FABRICATE_OUTCOME',
+E                                                              'REPORT_OUTCOME',
+E                                                              'DUPLICATE_OUTCOME']},
+E                                          'offsetSeconds': {'$ref': '#/$defs/Uint64'}},
+E                           'required': ['action', 'offsetSeconds'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'action': {'const': 'CRASH_RESTART'},
+E                                          'offsetSeconds': {'$ref': '#/$defs/Uint64'},
+E                                          'workerHook': {'const': 'release'},
+E                                          'crashPoint': {'enum': ['after-intent',
+E                                                                  'after-send']}},
+E                           'required': ['action',
+E                                        'offsetSeconds',
+E                                        'workerHook',
+E                                        'crashPoint'],
+E                           'additionalProperties': False}]}
+E
+E           On instance:
+E               {'action': 'ALTER_RECEIPT_KEEP_SIGNATURE',
+E                'offsetSeconds': '0',
+E                'receiptField': 'requestDigest'}
+
+.venv/lib64/python3.13/site-packages/jsonschema/validators.py:450: ValidationError
+_ test_receipt_control_requires_one_of_the_three_bound_fields[gid-RESIGN_RECEIPT_FIELD] _
+
+action = 'RESIGN_RECEIPT_FIELD', field = 'gid'
+
+    @pytest.mark.parametrize('action', ['RESIGN_RECEIPT_FIELD', 'ALTER_RECEIPT_KEEP_SIGNATURE'])
+    @pytest.mark.parametrize('field', ['requestDigest', 'gid', 'dataId'])
+    def test_receipt_control_requires_one_of_the_three_bound_fields(action, field):
+        step = {'action': action, 'offsetSeconds': '0', 'receiptField': field}
+>       validate('E0CaseStep', step)
+
+evaluation/tests/test_revision6_review.py:24:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+evaluation/schema.py:103: in validate
+    Draft202012Validator(schema,format_checker=FORMATS).validate(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = Draft202012Validator(schema={'$defs': {'AccessDecision': {'additionalProperties': False, 'properties': {'credentialDig... 'evidence-path', 'idn-email', 'ipv4', 'ipv6', 'regex', 'time', 'uint256', 'uint64', 'uint8', 'user-key-ref', 'uuid']>)
+args = ({'action': 'RESIGN_RECEIPT_FIELD', 'offsetSeconds': '0', 'receiptField': 'gid'},)
+kwargs = {}
+error = <ValidationError: "{'action': 'RESIGN_RECEIPT_FIELD', 'offsetSeconds': '0', 'receiptField': 'gid'} is not valid under any of the given schemas">
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: {'action': 'RESIGN_RECEIPT_FIELD', 'offsetSeconds': '0', 'receiptField': 'gid'} is not valid under any of the given schemas
+E
+E           Failed validating 'oneOf' in schema:
+E               {'oneOf': [{'type': 'object',
+E                           'properties': {'action': {'enum': ['REQUEST_ACCESS',
+E                                                              'SUBSTITUTE_SUBJECT',
+E                                                              'REPLAY_REQUEST',
+E                                                              'ADVANCE_CLOCK',
+E                                                              'FABRICATE_TUPLE',
+E                                                              'SUBSTITUTE_DESTINATION',
+E                                                              'REPLAY_NEW_REFERENCE',
+E                                                              'INSTALL_NEW_LIST',
+E                                                              'REPLAY_OLD_LIST',
+E                                                              'WRONG_ISSUER_UPDATE',
+E                                                              'REVOKE_ON_PBC',
+E                                                              'ACCEPT_CHECKPOINT',
+E                                                              'FORWARD_OR_CONSUME',
+E                                                              'RELEASE',
+E                                                              'DROP_OUTCOME',
+E                                                              'FABRICATE_OUTCOME',
+E                                                              'REPORT_OUTCOME',
+E                                                              'DUPLICATE_OUTCOME']},
+E                                          'offsetSeconds': {'$ref': '#/$defs/Uint64'}},
+E                           'required': ['action', 'offsetSeconds'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'action': {'const': 'CRASH_RESTART'},
+E                                          'offsetSeconds': {'$ref': '#/$defs/Uint64'},
+E                                          'workerHook': {'const': 'release'},
+E                                          'crashPoint': {'enum': ['after-intent',
+E                                                                  'after-send']}},
+E                           'required': ['action',
+E                                        'offsetSeconds',
+E                                        'workerHook',
+E                                        'crashPoint'],
+E                           'additionalProperties': False}]}
+E
+E           On instance:
+E               {'action': 'RESIGN_RECEIPT_FIELD',
+E                'offsetSeconds': '0',
+E                'receiptField': 'gid'}
+
+.venv/lib64/python3.13/site-packages/jsonschema/validators.py:450: ValidationError
+_ test_receipt_control_requires_one_of_the_three_bound_fields[gid-ALTER_RECEIPT_KEEP_SIGNATURE] _
+
+action = 'ALTER_RECEIPT_KEEP_SIGNATURE', field = 'gid'
+
+    @pytest.mark.parametrize('action', ['RESIGN_RECEIPT_FIELD', 'ALTER_RECEIPT_KEEP_SIGNATURE'])
+    @pytest.mark.parametrize('field', ['requestDigest', 'gid', 'dataId'])
+    def test_receipt_control_requires_one_of_the_three_bound_fields(action, field):
+        step = {'action': action, 'offsetSeconds': '0', 'receiptField': field}
+>       validate('E0CaseStep', step)
+
+evaluation/tests/test_revision6_review.py:24:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+evaluation/schema.py:103: in validate
+    Draft202012Validator(schema,format_checker=FORMATS).validate(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = Draft202012Validator(schema={'$defs': {'AccessDecision': {'additionalProperties': False, 'properties': {'credentialDig... 'evidence-path', 'idn-email', 'ipv4', 'ipv6', 'regex', 'time', 'uint256', 'uint64', 'uint8', 'user-key-ref', 'uuid']>)
+args = ({'action': 'ALTER_RECEIPT_KEEP_SIGNATURE', 'offsetSeconds': '0', 'receiptField': 'gid'},)
+kwargs = {}
+error = <ValidationError: "{'action': 'ALTER_RECEIPT_KEEP_SIGNATURE', 'offsetSeconds': '0', 'receiptField': 'gid'} is not valid under any of the given schemas">
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: {'action': 'ALTER_RECEIPT_KEEP_SIGNATURE', 'offsetSeconds': '0', 'receiptField': 'gid'} is not valid under any of the given schemas
+E
+E           Failed validating 'oneOf' in schema:
+E               {'oneOf': [{'type': 'object',
+E                           'properties': {'action': {'enum': ['REQUEST_ACCESS',
+E                                                              'SUBSTITUTE_SUBJECT',
+E                                                              'REPLAY_REQUEST',
+E                                                              'ADVANCE_CLOCK',
+E                                                              'FABRICATE_TUPLE',
+E                                                              'SUBSTITUTE_DESTINATION',
+E                                                              'REPLAY_NEW_REFERENCE',
+E                                                              'INSTALL_NEW_LIST',
+E                                                              'REPLAY_OLD_LIST',
+E                                                              'WRONG_ISSUER_UPDATE',
+E                                                              'REVOKE_ON_PBC',
+E                                                              'ACCEPT_CHECKPOINT',
+E                                                              'FORWARD_OR_CONSUME',
+E                                                              'RELEASE',
+E                                                              'DROP_OUTCOME',
+E                                                              'FABRICATE_OUTCOME',
+E                                                              'REPORT_OUTCOME',
+E                                                              'DUPLICATE_OUTCOME']},
+E                                          'offsetSeconds': {'$ref': '#/$defs/Uint64'}},
+E                           'required': ['action', 'offsetSeconds'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'action': {'const': 'CRASH_RESTART'},
+E                                          'offsetSeconds': {'$ref': '#/$defs/Uint64'},
+E                                          'workerHook': {'const': 'release'},
+E                                          'crashPoint': {'enum': ['after-intent',
+E                                                                  'after-send']}},
+E                           'required': ['action',
+E                                        'offsetSeconds',
+E                                        'workerHook',
+E                                        'crashPoint'],
+E                           'additionalProperties': False}]}
+E
+E           On instance:
+E               {'action': 'ALTER_RECEIPT_KEEP_SIGNATURE',
+E                'offsetSeconds': '0',
+E                'receiptField': 'gid'}
+
+.venv/lib64/python3.13/site-packages/jsonschema/validators.py:450: ValidationError
+_ test_receipt_control_requires_one_of_the_three_bound_fields[dataId-RESIGN_RECEIPT_FIELD] _
+
+action = 'RESIGN_RECEIPT_FIELD', field = 'dataId'
+
+    @pytest.mark.parametrize('action', ['RESIGN_RECEIPT_FIELD', 'ALTER_RECEIPT_KEEP_SIGNATURE'])
+    @pytest.mark.parametrize('field', ['requestDigest', 'gid', 'dataId'])
+    def test_receipt_control_requires_one_of_the_three_bound_fields(action, field):
+        step = {'action': action, 'offsetSeconds': '0', 'receiptField': field}
+>       validate('E0CaseStep', step)
+
+evaluation/tests/test_revision6_review.py:24:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+evaluation/schema.py:103: in validate
+    Draft202012Validator(schema,format_checker=FORMATS).validate(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = Draft202012Validator(schema={'$defs': {'AccessDecision': {'additionalProperties': False, 'properties': {'credentialDig... 'evidence-path', 'idn-email', 'ipv4', 'ipv6', 'regex', 'time', 'uint256', 'uint64', 'uint8', 'user-key-ref', 'uuid']>)
+args = ({'action': 'RESIGN_RECEIPT_FIELD', 'offsetSeconds': '0', 'receiptField': 'dataId'},)
+kwargs = {}
+error = <ValidationError: "{'action': 'RESIGN_RECEIPT_FIELD', 'offsetSeconds': '0', 'receiptField': 'dataId'} is not valid under any of the given schemas">
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: {'action': 'RESIGN_RECEIPT_FIELD', 'offsetSeconds': '0', 'receiptField': 'dataId'} is not valid under any of the given schemas
+E
+E           Failed validating 'oneOf' in schema:
+E               {'oneOf': [{'type': 'object',
+E                           'properties': {'action': {'enum': ['REQUEST_ACCESS',
+E                                                              'SUBSTITUTE_SUBJECT',
+E                                                              'REPLAY_REQUEST',
+E                                                              'ADVANCE_CLOCK',
+E                                                              'FABRICATE_TUPLE',
+E                                                              'SUBSTITUTE_DESTINATION',
+E                                                              'REPLAY_NEW_REFERENCE',
+E                                                              'INSTALL_NEW_LIST',
+E                                                              'REPLAY_OLD_LIST',
+E                                                              'WRONG_ISSUER_UPDATE',
+E                                                              'REVOKE_ON_PBC',
+E                                                              'ACCEPT_CHECKPOINT',
+E                                                              'FORWARD_OR_CONSUME',
+E                                                              'RELEASE',
+E                                                              'DROP_OUTCOME',
+E                                                              'FABRICATE_OUTCOME',
+E                                                              'REPORT_OUTCOME',
+E                                                              'DUPLICATE_OUTCOME']},
+E                                          'offsetSeconds': {'$ref': '#/$defs/Uint64'}},
+E                           'required': ['action', 'offsetSeconds'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'action': {'const': 'CRASH_RESTART'},
+E                                          'offsetSeconds': {'$ref': '#/$defs/Uint64'},
+E                                          'workerHook': {'const': 'release'},
+E                                          'crashPoint': {'enum': ['after-intent',
+E                                                                  'after-send']}},
+E                           'required': ['action',
+E                                        'offsetSeconds',
+E                                        'workerHook',
+E                                        'crashPoint'],
+E                           'additionalProperties': False}]}
+E
+E           On instance:
+E               {'action': 'RESIGN_RECEIPT_FIELD',
+E                'offsetSeconds': '0',
+E                'receiptField': 'dataId'}
+
+.venv/lib64/python3.13/site-packages/jsonschema/validators.py:450: ValidationError
+_ test_receipt_control_requires_one_of_the_three_bound_fields[dataId-ALTER_RECEIPT_KEEP_SIGNATURE] _
+
+action = 'ALTER_RECEIPT_KEEP_SIGNATURE', field = 'dataId'
+
+    @pytest.mark.parametrize('action', ['RESIGN_RECEIPT_FIELD', 'ALTER_RECEIPT_KEEP_SIGNATURE'])
+    @pytest.mark.parametrize('field', ['requestDigest', 'gid', 'dataId'])
+    def test_receipt_control_requires_one_of_the_three_bound_fields(action, field):
+        step = {'action': action, 'offsetSeconds': '0', 'receiptField': field}
+>       validate('E0CaseStep', step)
+
+evaluation/tests/test_revision6_review.py:24:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+evaluation/schema.py:103: in validate
+    Draft202012Validator(schema,format_checker=FORMATS).validate(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = Draft202012Validator(schema={'$defs': {'AccessDecision': {'additionalProperties': False, 'properties': {'credentialDig... 'evidence-path', 'idn-email', 'ipv4', 'ipv6', 'regex', 'time', 'uint256', 'uint64', 'uint8', 'user-key-ref', 'uuid']>)
+args = ({'action': 'ALTER_RECEIPT_KEEP_SIGNATURE', 'offsetSeconds': '0', 'receiptField': 'dataId'},)
+kwargs = {}
+error = <ValidationError: "{'action': 'ALTER_RECEIPT_KEEP_SIGNATURE', 'offsetSeconds': '0', 'receiptField': 'dataId'} is not valid under any of the given schemas">
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+>           raise error
+E           jsonschema.exceptions.ValidationError: {'action': 'ALTER_RECEIPT_KEEP_SIGNATURE', 'offsetSeconds': '0', 'receiptField': 'dataId'} is not valid under any of the given schemas
+E
+E           Failed validating 'oneOf' in schema:
+E               {'oneOf': [{'type': 'object',
+E                           'properties': {'action': {'enum': ['REQUEST_ACCESS',
+E                                                              'SUBSTITUTE_SUBJECT',
+E                                                              'REPLAY_REQUEST',
+E                                                              'ADVANCE_CLOCK',
+E                                                              'FABRICATE_TUPLE',
+E                                                              'SUBSTITUTE_DESTINATION',
+E                                                              'REPLAY_NEW_REFERENCE',
+E                                                              'INSTALL_NEW_LIST',
+E                                                              'REPLAY_OLD_LIST',
+E                                                              'WRONG_ISSUER_UPDATE',
+E                                                              'REVOKE_ON_PBC',
+E                                                              'ACCEPT_CHECKPOINT',
+E                                                              'FORWARD_OR_CONSUME',
+E                                                              'RELEASE',
+E                                                              'DROP_OUTCOME',
+E                                                              'FABRICATE_OUTCOME',
+E                                                              'REPORT_OUTCOME',
+E                                                              'DUPLICATE_OUTCOME']},
+E                                          'offsetSeconds': {'$ref': '#/$defs/Uint64'}},
+E                           'required': ['action', 'offsetSeconds'],
+E                           'additionalProperties': False},
+E                          {'type': 'object',
+E                           'properties': {'action': {'const': 'CRASH_RESTART'},
+E                                          'offsetSeconds': {'$ref': '#/$defs/Uint64'},
+E                                          'workerHook': {'const': 'release'},
+E                                          'crashPoint': {'enum': ['after-intent',
+E                                                                  'after-send']}},
+E                           'required': ['action',
+E                                        'offsetSeconds',
+E                                        'workerHook',
+E                                        'crashPoint'],
+E                           'additionalProperties': False}]}
+E
+E           On instance:
+E               {'action': 'ALTER_RECEIPT_KEEP_SIGNATURE',
+E                'offsetSeconds': '0',
+E                'receiptField': 'dataId'}
+
+.venv/lib64/python3.13/site-packages/jsonschema/validators.py:450: ValidationError
+_ test_supplement_catalog_is_unexecuted_and_isolates_nonce_and_receipt_controls _
+
+    def test_supplement_catalog_is_unexecuted_and_isolates_nonce_and_receipt_controls():
+        path = Path('evaluation/scenarios/e0_supplement_cases.json')
+>       assert path.is_file(), 'the accepted supplement needs concrete review fixtures'
+E       AssertionError: the accepted supplement needs concrete review fixtures
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('evaluation/scenarios/e0_supplement_cases.json').is_file
+
+evaluation/tests/test_revision6_review.py:33: AssertionError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_revision6_review.py::test_supplement_steps_accept_only_closed_test_directives[REQUEST_SAME_NONCE_DISTINCT_DIGEST]
+FAILED evaluation/tests/test_revision6_review.py::test_supplement_steps_accept_only_closed_test_directives[FORWARD_BOTH_REQUESTS]
+FAILED evaluation/tests/test_revision6_review.py::test_supplement_steps_accept_only_closed_test_directives[CERTIFY_BOTH_BEFORE_CONSUMPTION]
+FAILED evaluation/tests/test_revision6_review.py::test_supplement_steps_accept_only_closed_test_directives[CONSUME_FIRST]
+FAILED evaluation/tests/test_revision6_review.py::test_supplement_steps_accept_only_closed_test_directives[CONSUME_PRECOLLECTED_SECOND]
+FAILED evaluation/tests/test_revision6_review.py::test_supplement_steps_accept_only_closed_test_directives[ATTEST_GRANT]
+FAILED evaluation/tests/test_revision6_review.py::test_receipt_control_requires_one_of_the_three_bound_fields[requestDigest-RESIGN_RECEIPT_FIELD]
+FAILED evaluation/tests/test_revision6_review.py::test_receipt_control_requires_one_of_the_three_bound_fields[requestDigest-ALTER_RECEIPT_KEEP_SIGNATURE]
+FAILED evaluation/tests/test_revision6_review.py::test_receipt_control_requires_one_of_the_three_bound_fields[gid-RESIGN_RECEIPT_FIELD]
+FAILED evaluation/tests/test_revision6_review.py::test_receipt_control_requires_one_of_the_three_bound_fields[gid-ALTER_RECEIPT_KEEP_SIGNATURE]
+FAILED evaluation/tests/test_revision6_review.py::test_receipt_control_requires_one_of_the_three_bound_fields[dataId-RESIGN_RECEIPT_FIELD]
+FAILED evaluation/tests/test_revision6_review.py::test_receipt_control_requires_one_of_the_three_bound_fields[dataId-ALTER_RECEIPT_KEEP_SIGNATURE]
+FAILED evaluation/tests/test_revision6_review.py::test_supplement_catalog_is_unexecuted_and_isolates_nonce_and_receipt_controls
+13 failed in 1.51s

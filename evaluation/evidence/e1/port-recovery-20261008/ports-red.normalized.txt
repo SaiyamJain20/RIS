@@ -1,0 +1,38 @@
+F..                                                                      [100%]
+=================================== FAILURES ===================================
+______ test_next_profile_accepts_time_wait_after_previous_listener_closed ______
+
+    def test_next_profile_accepts_time_wait_after_previous_listener_closed():
+        # The server actively closes a real connection, leaving its local port in
+        # TIME_WAIT. This is the lifecycle boundary that broke the live E1 run.
+        with socket.socket() as listener:
+            listener.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            listener.bind(('127.0.0.1', 0))
+            port = listener.getsockname()[1]
+            listener.listen(1)
+            with socket.create_connection(('127.0.0.1', port), timeout=2) as client:
+                accepted, _ = listener.accept()
+                accepted.close()
+                assert client.recv(1) == b''
+        with socket.socket() as ordinary_probe:
+            with pytest.raises(OSError) as error:
+                ordinary_probe.bind(('127.0.0.1', port))
+            assert error.value.errno == errno.EADDRINUSE
+>       _available({'pbc': port})
+
+evaluation/tests/test_e1_ports.py:26:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+ports = {'pbc': 38975}
+
+    def _available(ports):
+        with ExitStack() as stack:
+            for port in ports.values():
+>               s = stack.enter_context(socket.socket()); s.bind(('127.0.0.1', port))
+                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               OSError: [Errno 98] Address already in use
+
+evaluation/e1.py:168: OSError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_e1_ports.py::test_next_profile_accepts_time_wait_after_previous_listener_closed
+1 failed, 2 passed in 0.31s

@@ -1,0 +1,3019 @@
+{
+  "at": "2026-10-09T06:22:18.423425+00:00",
+  "status": "E2_NONCE_REPLAY_SLICE_PASS",
+  "failure": null,
+  "sourceBracket": {
+    "before": {
+      "AGENTS.md": "1b9384ce2866832bac0c37c5975a717237a7e85989305f77076ca237daac0425",
+      "PLAN.md": "7a784ba3b3478ba08de0772ca4b1c80d156c3d09d6bba52ae5ba51f960c67ac8",
+      "SPEC.md": "99b088b7f4757302f63c25ae7c63f3871b36ae19e15d6ff9d0c8ebe8b107ff36",
+      "evaluation/access_artifacts.py": "d9994a6b96c18162df6fee8765a669509554505939db2c90704b5440ad7119ed",
+      "evaluation/access_execution.py": "04a58fd27a49761dce369955f1e83ef5b4d150d816b04563ec1b8cdb46aef424",
+      "evaluation/bootstrap.py": "7b60f94a867f71038fdb9936282b23121fce9728789662a60b3dad4683e9c5a0",
+      "evaluation/bootstrap_execution.py": "47dd62bab9e0a8de1b949bc6eafa3b85d2e662c25394a8e22a905aee5de15947",
+      "evaluation/chain.py": "8063b1d4341f68c28acdb2e858ca6de1f8c65617d3a6a19a35f6441c49568d43",
+      "evaluation/check_schema_vectors.py": "4cf3ee57a6bbba8c2bc99103fa4844b788149a87b2792dfbcc5c70bd06e78e05",
+      "evaluation/duplicate_outcome.py": "c6171aa928bf283d309ddad02a7d269c46b818133381e074b67449a4a349e496",
+      "evaluation/e0_verify.py": "077bc6d50011b06769e4c5d26c06bd1f9327a317e4869692c86fea986116427c",
+      "evaluation/e1.py": "95d820a25f55b7772d269bed8d3b657b8c9b2dcd25f42ec951411a18e387769e",
+      "evaluation/e2.py": "a664aed62efc226870975d94f9d64c0d4a31cdba062ef58f75c52b37df99713f",
+      "evaluation/evidence/e0/a1-frozen-mapping-ack-20261008/review.py": "75ca5ad9314681bb7e85c14a8826e392e2e554daa1528f9485565c4fcbe6009f",
+      "evaluation/evidence/e0/a1-frozen-mapping-ack-20261008/successor.py": "4c98f54f4afeeb202949ccf041a1f5a4d0341a894ff86fbb5d090884cb6e8ea6",
+      "evaluation/evidence/e0/revision-5-a2-ack-20261008/compatibility.py": "069d9cbfd3468e02bcf6b2b908cd01476152ef140ad7b445ee5ed45be0bcab79",
+      "evaluation/evidence/e0/revision-5-a2-ack-20261008/monitor.py": "84aa4391327a3df9f654cd1cb2d57f4bb3fd939ba45d5b1fa796e8a7fc8af1f9",
+      "evaluation/evidence/e0/revision-5-a2-ack-20261008/preflight-failed-program.py": "48636af5198c6aca7f26dcae6e959bf9e7c94a6681165baef1466df61ebe7201",
+      "evaluation/evidence/e0/revision-5-a2-ack-20261008/rename-failed-program.py": "daa9771ae6483c49e71c008acd54350ecfa3b2115f0d41e88b1e9a86671b9479",
+      "evaluation/evidence/e0/revision-6-review-20261008/audit.py": "8f9696a31088776b71f71718a43541643e32d88012dcf6629ad3d9066c1164e5",
+      "evaluation/evidence/e0/revision-6-review-20261008/materialize.py": "5b8cdc43833d4842231293801251e9c25d78136a22408afd86dc9998b94525bf",
+      "evaluation/evidence/e0/revision-6-review-20261008/package.py": "d06e40e093d515398b079be26b97bf31dc0894c5bbcc5cac9c09a8bc4197a859",
+      "evaluation/evidence/e0/revision-6-review-20261008/verify.py": "57ef3823de2831cbe3a69fb710ef87a2e838babde30a76aec9398b9a27ec0183",
+      "evaluation/evidence/e0/supplement-r2-a1-ack-20261008/monitor.py": "6976acf0d472cdca35d948689c7b0d19b9c2ceb936a8f75c172af2c883d841d5",
+      "evaluation/evidence/e0/v1-freeze-20261008/verify_e0.py": "c4e9536308ad93f1dabbf4c016b18efce9deefdd1b7bdd4b8462479b65c9bb49",
+      "evaluation/evidence/e1/collector-20261008/pin-review.json": "d293af440c725ec23b09cfab4fb21b668f92c728f14edce61812c868e0f8bdb0",
+      "evaluation/evidence/e1/integrated-controls-20261008/result_audit.py": "ff3eb3a0dcdda776278c396f6ae75b3c13ae0ae9093aa5553cd6de8b721e3509",
+      "evaluation/evidence/e1/lifecycle-20261008/review_e1_ready.py": "131683c38c8a5c22089891b6b007bfa6c8404d77e7b80fe2ded9561c9cbf5944",
+      "evaluation/evidence/e1/port-recovery-20261008/port_diagnosis.py": "8a6c342f51c9bb01c1fe589f31673de23bf3f1022fcadd8e335228d2757edf9f",
+      "evaluation/evidence/e1/port-recovery-20261008/result_audit.py": "61ef77a66c22837e6da6f336e15990875c474d354df509954069bee574754a2f",
+      "evaluation/evidence/e2/crash-transport-20261009/start-contract-acceptance.json": "507c5d925f37b7264743a7e7605b5bb288766139883c3f1827db57ff5d5df6c5",
+      "evaluation/evidence/e2/formal-and-hook-review-20261009/start-contract-r1.json": "1ae63cfb2dde803645ef7a84a58151c0b0a842554f79907c94a7dcd74c89f48c",
+      "evaluation/evidence/e2/replay-timing-review-20261009/analyze.py": "9696c17a4d5732b9ca9d17bde6ead49c29bfcaf1a5a0aa520f4f878097629499",
+      "evaluation/evm.py": "78189e24aae585e7bc4bfb573e9ab23bf7ec55b86df96890f2af17b7a8e157e8",
+      "evaluation/expired_retry.py": "b9c4dc44a326b136aa2f02dd9bba28037bc5f40ed2c48dbf485c1dad4dbb1246",
+      "evaluation/fixtures/e1/abi/ACSC.json": "d5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08dbf8ad9a568",
+      "evaluation/fixtures/e1/abi/KSSC.json": "391841544b43c967bd8004c95376f139baaa2dd8c553f13310accecd83e1c6e7",
+      "evaluation/fixtures/e1/abi/LSC.json": "3c9acabbb8978e6330f5878b9a979326ca22f1519300a5277cffeea3911d42de",
+      "evaluation/fixtures/e1/abi/PROVENANCE.json": "44101a25d34812db6e24e8117d5894699ba79fa9828828f011f44688a19a955f",
+      "evaluation/fixtures/e1/abi/PSC.json": "559d3f011fe7687b0a422e8f6f61c2e8f72a9a7a61c8795973da0d543a1c3fe1",
+      "evaluation/fixtures/e1/abi/RSC.json": "f0bc3732ee5646db945a68e06434cd46ba2637df04e4fe2260cf0d16bde1eebc",
+      "evaluation/fixtures/e1/abi/TMSC.json": "a6f6273c8dcff51bb8834c8fa0f354d5e9b6bb7b5d7d39ca89c5d7f9975a225d",
+      "evaluation/fixtures/e1/bootstrap-owner-sample.json": "e2b32811fa4e6ea39b3dcb1b56986b6247839f5895d06ce1ae8e01be4f552557",
+      "evaluation/fixtures/e1/bootstrap-owner-sample.provenance.json": "3794c0c43f03f47fab0ad04b573dfcc36c2f9cc6331e6d2c3b06acc8f21ef725",
+      "evaluation/fixtures/e1/cast-request-calldata.json": "7f44c767803b59a0badfe8a559ec93de05086fd2ef580361859c968026ad312e",
+      "evaluation/gate.py": "23fbfae54decc6eb2b4bf219a4658478b705498e45a775e8c30835631cfa1970",
+      "evaluation/manifests.py": "e6fbe5569d1a301cfff17f923f051b44503e84befb36bc11e2e6ef0b04ad1c8a",
+      "evaluation/models/e/README.md": "97040ff004613daccd0448dea34a8bf5706121a2c260cc26ccc7cf6fd4a859d6",
+      "evaluation/models/e/access.pv": "1ca655061e9eb6d5717a919f554a6071eefdcf71b155a7a08f863464d64f01f8",
+      "evaluation/models/e/access_mutant.pv": "1c6e1acc6346d9f3859180f76f2a7a5e679477d3a61c4a132eefa46da1775537",
+      "evaluation/native.py": "8ed02c0cca130cac2041ddbfd1110a66a397a2e34e866150a5b0a3e1bdd3c540",
+      "evaluation/oracles/access.py": "98ff036fcbbf92d8f561c52769f1acf788e2e7117b614b8ab9fd7c35608b61e5",
+      "evaluation/oracles/replay.py": "14a5da8b1c0f7eb23833cccafa11f0eb09f0cbb564b3959eaf25864fb9ce780c",
+      "evaluation/peers.py": "fecac4e60476fc864a43021e369a79acf0606caabe5d331c3c51e2728a13f778",
+      "evaluation/processes.py": "4a63d2a5b2443666fd9528c10ac22313ca77b9ca51ee67d121dc306eee7c6532",
+      "evaluation/recovery.py": "b50aadf193dc00417aeafee9e16d3775abd68097ced7ddb865689c736d84d411",
+      "evaluation/recovery_execution.py": "bb71c6ac57a990e0366fdad369df2900269b543653a909947d269dca65af1587",
+      "evaluation/request_replay.py": "235e5f62aa3a83ca4170b7332db82d78beca1f0657ba2102563ce737263872ae",
+      "evaluation/rpc.py": "b77551dc0a942474273c14fd2aa0e152579515163576a42b8cdfeb8a9418d7f7",
+      "evaluation/run.py": "c3a71ae563c62851a418de69a3e625bfcf8fbc4a957e2f0fa59c67c4f6e51c78",
+      "evaluation/scenarios/e0_cases.json": "438fa38ddcbd7edd0e49fb93cc580e5219ed05349fd677b2e386bc4669f5d50e",
+      "evaluation/scenarios/e0_supplement_cases.json": "9ccade362c5a8853d63f06a08be3134ae32cd99527ceb36fcd78c311a9246858",
+      "evaluation/scenarios/e_positive.json": "95e75f10cfdaf0b0bf5bd75ea25b521df30817f85a280a8552cc62243f8ccdda",
+      "evaluation/schema.py": "3e29876907be197dcbe59142184d89cbe7cfb1ec8c446d3143950648d61598ad",
+      "evaluation/tests/test_access_artifacts.py": "98f8ea5d7b3a189e2e8b2ba1d3fd6a0a65274a151e735ff8dfe8853bd16c1c3d",
+      "evaluation/tests/test_access_execution.py": "a3394c24a3baa197c842fcff805fb6b25faabe40f2b73f2833f9aa3dbd571e2f",
+      "evaluation/tests/test_access_oracle.py": "a5ae466018b0e34836114fe4564f0e3a008241e26b6319d4f4bb7a5965f6fbb3",
+      "evaluation/tests/test_bootstrap.py": "119c09cc108c842c90649266afcf9af41143ea0a0cf51e61a3d4f2d4dc95113a",
+      "evaluation/tests/test_bootstrap_execution.py": "23f47757b67bea1c428607051cdef00adb47c6243fedcb82e01e81b860de2d67",
+      "evaluation/tests/test_boundary_schemas.py": "fccf5bf06b06ba23b5f961879a4ac289ba173696715ab6989b47b1ee285fbda3",
+      "evaluation/tests/test_chain.py": "c68fd69a481cdde4d134fda17619f5e6166e3143a6f65e97eae111cd2c72dc57",
+      "evaluation/tests/test_crash_transport.py": "aacdc1b1c17eb615e5c46c0ddc7d44edf5cfca8093e53f7a8f4421d2bd764c49",
+      "evaluation/tests/test_deployments.py": "2dd4a624d7ff967ab01e69a6d18fff6ccf5e5109c3c373b7a8d5abb357939c0b",
+      "evaluation/tests/test_duplicate_outcome.py": "9571165dea7095b5e9a40a64f58cb3736723b01579b181df6fae5a43eef6e999",
+      "evaluation/tests/test_e1_freeze.py": "42a9eda42d366484418abd21d27b02252b178efedfe12f39140bfa1bd1b25a9f",
+      "evaluation/tests/test_e1_ports.py": "4849c9e2054c4e300cd8ddfa6e042c674411243185a0c3c58d3593df32289f19",
+      "evaluation/tests/test_e2_freeze.py": "7d51f40aa630f234ace0a8d6cc5abdfa911e4cff204746a26ab4bc0701a963d6",
+      "evaluation/tests/test_e_correspondence.py": "a544f52771e19278a1f48276115a9174a6888fcf702056b4566261c2e4d1f3f2",
+      "evaluation/tests/test_evm_codec.py": "ee6db9854a686ce4f728977c0d08c37c1d04e28215fb61e1968ba68c55c5919f",
+      "evaluation/tests/test_expired_retry.py": "b6d5f55e1824d3a3b1ae63a9720c16d3064f63f5d69a57bf2dde227a43548570",
+      "evaluation/tests/test_gate.py": "e74ed784f312cb59d986359b6943d111bd0b1548a075bb18d3ab44857cfc4d79",
+      "evaluation/tests/test_manifests.py": "687ca16ef9c9851a2f8e222b83c8e1c1947c56fa167992de38b7438b72c86c1e",
+      "evaluation/tests/test_native_receipts.py": "806526e5fab56a4d14c3fd32a155a0b2c01632834f0df57be83ac48fbe19839e",
+      "evaluation/tests/test_owned_command.py": "dd180ffdfc27d8a3f0de117b5d290c5c3aebf0635f9906d1a84ab2275fd342d7",
+      "evaluation/tests/test_peers.py": "7939a9cdf398ce40e795094853b436945165717f1ac0d7ebad7b078723169c98",
+      "evaluation/tests/test_processes.py": "81d198f5607d81a328426767764eafea71bc5c26f3b7f51bbb5f05bee6f3be59",
+      "evaluation/tests/test_read_group.py": "246dc431ed99e9133b26afe17f2a81254a62ac955dc2bd39eccd6bad3ac7eaee",
+      "evaluation/tests/test_recovery.py": "437ec0d9eca981503d5bdbd5eba4791ad61f055fe5a7260ae0efc1d0371cb504",
+      "evaluation/tests/test_recovery_execution.py": "93109957067f65a9517a7a86ac03945b40632943166d4da4bb6ef3a3b67a8b66",
+      "evaluation/tests/test_request_replay.py": "cd93d3a1a257e8350f983742fabf2a28d50577f2500d36238fa347c218d01dbb",
+      "evaluation/tests/test_revision5_review.py": "e16bf6e21ea0fb4d29bae4a0e970da1f7d6813a6888895c4a3b2e35ca3210366",
+      "evaluation/tests/test_revision6_review.py": "041b48733c2840b38ad9700f19d96f4a7f519a01dac52e688b28d334dc6b81d1",
+      "evaluation/tests/test_rpc_cli.py": "095781412092d711c49383e4a71b0fc343f72d4932b142ec20d10b1423f4521c",
+      "evaluation/tests/test_run.py": "78eec342fe879e2a15e49291918e31a183e7cc186988450c054276b92bbcad92",
+      "evaluation/tests/test_schemas.py": "e7bcb77edc222d59fb4f82f4e9e348bf0b8a1553f292feb249d48d04a33660c8",
+      "evaluation/tests/test_service_process.py": "fa84f26af4606745ba45466bfee19245bc5ead514016d6fc759ec30d3daf48ef",
+      "evaluation/tests/test_vectors.py": "8833a4831fa198900c82200a6bd68a9534921b2c83611a234d96f7abc0234fce",
+      "evaluation/tests/test_worker_evidence.py": "aede6a3855ccb56bfd2820bc146e2ba814a8dc3142115e0c1a8da34e5589f5bc",
+      "evaluation/toolchain.json": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746",
+      "evaluation/vectors.py": "e7791eb24367032b3ed2932e1d84b5135fa4af145833bb1a68fa965d2cb53266",
+      "evaluation/worker_evidence.py": "13ebf84ee0073745f79241ef32c542eb588e56d28dfc2222aa9f07878147ba53",
+      "interfaces/proposals/v1/hmbc.schema.json": "4c22092dead0982716d68acf0ad7f4a5a737568e8e2d0c37d06595add36d6fea",
+      "interfaces/proposals/v1/review-manifest.json": "124b95eb2830e422e79d0cee4b4b7ae28bf235239740980b984d7f9de2f9d8d0",
+      "interfaces/proposals/v1/revision6/review-manifest.json": "df2a306fd77937572346cf5e91e9354536988af63ed660e14d51e04350161c62",
+      "interfaces/v1/BOUNDARY.md": "cb100d436aba200f7a1aae9f848218827cf1afb39e5ecf4b4e923b8de14f1235",
+      "interfaces/v1/FREEZE.json": "f700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2",
+      "interfaces/v1/README.md": "be699a2653abf411a90f5d1ea0d091cda14c2ba7b3f43812a9c9750b095b2ee3",
+      "interfaces/v1/assumptions.csv": "98047dda31877f286175cfcbe66fa0ada10bef452cfd6c15f42f0dac430ad39b",
+      "interfaces/v1/hmbc.schema.json": "4c22092dead0982716d68acf0ad7f4a5a737568e8e2d0c37d06595add36d6fea",
+      "interfaces/v1/owners/ledger-source-manifest.sha256": "407c86331072bdad63562541230fdd3078608287eccb373cb2f974e3bde20fc1",
+      "interfaces/v1/owners/protocol-source-manifest.sha256": "b4757c18887956e1da67b7b140c4674a2970d793e6684bcc8e17ec90db442f46",
+      "interfaces/v1/scenarios/e0_cases.json": "438fa38ddcbd7edd0e49fb93cc580e5219ed05349fd677b2e386bc4669f5d50e",
+      "interfaces/v1/scenarios/e0_supplement_cases.json": "9ccade362c5a8853d63f06a08be3134ae32cd99527ceb36fcd78c311a9246858",
+      "interfaces/v1/scenarios/e_positive.json": "95e75f10cfdaf0b0bf5bd75ea25b521df30817f85a280a8552cc62243f8ccdda",
+      "interfaces/v1/source-map.csv": "25337ee2846b13791bf971281d885f6300a6ce1407f156ddeb4e5cb85f54a07c",
+      "interfaces/v1/toolchain.json": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746",
+      "interfaces/v1/vectors/adapter-agent2.json": "e248fceb7455ebc3ae328da294ab7b328e2a69fc43eb4975d3b35e0016f5d0b7",
+      "interfaces/v1/vectors/boundary.json": "fce967f87cce9b453ae23d7450bcb6a199f3c0f6ad5d933b378b8f90e5a42210",
+      "interfaces/v1/vectors/deployment-agent1.json": "787ae701241167a2474215168752ecac7fbec260cb0df3a2acdf680598f53ee1",
+      "interfaces/v1/vectors/eip712-agent1.json": "f211c65fe9c0ea0d7c7ed3fe6904ab04b36224f5bfcd41d3bd140e6165f0bf61",
+      "interfaces/v1/vectors/schema.json": "49a9dc29298495513340db2f4e4f78d7611e52c7b42409531bc5ed97f421e4d8",
+      "pyproject.toml": "1d839e80b8acdef35d878740cb5d212b464cc30f4adfdd3f56b69b162badd0ca",
+      "uv.lock": "1fb4777a5d4078434af8e7fe4a88f2f3afbe1d8f65d30e8a182999d7a7a29cbe"
+    },
+    "after": {
+      "AGENTS.md": "1b9384ce2866832bac0c37c5975a717237a7e85989305f77076ca237daac0425",
+      "PLAN.md": "7a784ba3b3478ba08de0772ca4b1c80d156c3d09d6bba52ae5ba51f960c67ac8",
+      "SPEC.md": "99b088b7f4757302f63c25ae7c63f3871b36ae19e15d6ff9d0c8ebe8b107ff36",
+      "evaluation/access_artifacts.py": "d9994a6b96c18162df6fee8765a669509554505939db2c90704b5440ad7119ed",
+      "evaluation/access_execution.py": "04a58fd27a49761dce369955f1e83ef5b4d150d816b04563ec1b8cdb46aef424",
+      "evaluation/bootstrap.py": "7b60f94a867f71038fdb9936282b23121fce9728789662a60b3dad4683e9c5a0",
+      "evaluation/bootstrap_execution.py": "47dd62bab9e0a8de1b949bc6eafa3b85d2e662c25394a8e22a905aee5de15947",
+      "evaluation/chain.py": "8063b1d4341f68c28acdb2e858ca6de1f8c65617d3a6a19a35f6441c49568d43",
+      "evaluation/check_schema_vectors.py": "4cf3ee57a6bbba8c2bc99103fa4844b788149a87b2792dfbcc5c70bd06e78e05",
+      "evaluation/duplicate_outcome.py": "c6171aa928bf283d309ddad02a7d269c46b818133381e074b67449a4a349e496",
+      "evaluation/e0_verify.py": "077bc6d50011b06769e4c5d26c06bd1f9327a317e4869692c86fea986116427c",
+      "evaluation/e1.py": "95d820a25f55b7772d269bed8d3b657b8c9b2dcd25f42ec951411a18e387769e",
+      "evaluation/e2.py": "a664aed62efc226870975d94f9d64c0d4a31cdba062ef58f75c52b37df99713f",
+      "evaluation/evidence/e0/a1-frozen-mapping-ack-20261008/review.py": "75ca5ad9314681bb7e85c14a8826e392e2e554daa1528f9485565c4fcbe6009f",
+      "evaluation/evidence/e0/a1-frozen-mapping-ack-20261008/successor.py": "4c98f54f4afeeb202949ccf041a1f5a4d0341a894ff86fbb5d090884cb6e8ea6",
+      "evaluation/evidence/e0/revision-5-a2-ack-20261008/compatibility.py": "069d9cbfd3468e02bcf6b2b908cd01476152ef140ad7b445ee5ed45be0bcab79",
+      "evaluation/evidence/e0/revision-5-a2-ack-20261008/monitor.py": "84aa4391327a3df9f654cd1cb2d57f4bb3fd939ba45d5b1fa796e8a7fc8af1f9",
+      "evaluation/evidence/e0/revision-5-a2-ack-20261008/preflight-failed-program.py": "48636af5198c6aca7f26dcae6e959bf9e7c94a6681165baef1466df61ebe7201",
+      "evaluation/evidence/e0/revision-5-a2-ack-20261008/rename-failed-program.py": "daa9771ae6483c49e71c008acd54350ecfa3b2115f0d41e88b1e9a86671b9479",
+      "evaluation/evidence/e0/revision-6-review-20261008/audit.py": "8f9696a31088776b71f71718a43541643e32d88012dcf6629ad3d9066c1164e5",
+      "evaluation/evidence/e0/revision-6-review-20261008/materialize.py": "5b8cdc43833d4842231293801251e9c25d78136a22408afd86dc9998b94525bf",
+      "evaluation/evidence/e0/revision-6-review-20261008/package.py": "d06e40e093d515398b079be26b97bf31dc0894c5bbcc5cac9c09a8bc4197a859",
+      "evaluation/evidence/e0/revision-6-review-20261008/verify.py": "57ef3823de2831cbe3a69fb710ef87a2e838babde30a76aec9398b9a27ec0183",
+      "evaluation/evidence/e0/supplement-r2-a1-ack-20261008/monitor.py": "6976acf0d472cdca35d948689c7b0d19b9c2ceb936a8f75c172af2c883d841d5",
+      "evaluation/evidence/e0/v1-freeze-20261008/verify_e0.py": "c4e9536308ad93f1dabbf4c016b18efce9deefdd1b7bdd4b8462479b65c9bb49",
+      "evaluation/evidence/e1/collector-20261008/pin-review.json": "d293af440c725ec23b09cfab4fb21b668f92c728f14edce61812c868e0f8bdb0",
+      "evaluation/evidence/e1/integrated-controls-20261008/result_audit.py": "ff3eb3a0dcdda776278c396f6ae75b3c13ae0ae9093aa5553cd6de8b721e3509",
+      "evaluation/evidence/e1/lifecycle-20261008/review_e1_ready.py": "131683c38c8a5c22089891b6b007bfa6c8404d77e7b80fe2ded9561c9cbf5944",
+      "evaluation/evidence/e1/port-recovery-20261008/port_diagnosis.py": "8a6c342f51c9bb01c1fe589f31673de23bf3f1022fcadd8e335228d2757edf9f",
+      "evaluation/evidence/e1/port-recovery-20261008/result_audit.py": "61ef77a66c22837e6da6f336e15990875c474d354df509954069bee574754a2f",
+      "evaluation/evidence/e2/crash-transport-20261009/start-contract-acceptance.json": "507c5d925f37b7264743a7e7605b5bb288766139883c3f1827db57ff5d5df6c5",
+      "evaluation/evidence/e2/formal-and-hook-review-20261009/start-contract-r1.json": "1ae63cfb2dde803645ef7a84a58151c0b0a842554f79907c94a7dcd74c89f48c",
+      "evaluation/evidence/e2/replay-timing-review-20261009/analyze.py": "9696c17a4d5732b9ca9d17bde6ead49c29bfcaf1a5a0aa520f4f878097629499",
+      "evaluation/evm.py": "78189e24aae585e7bc4bfb573e9ab23bf7ec55b86df96890f2af17b7a8e157e8",
+      "evaluation/expired_retry.py": "b9c4dc44a326b136aa2f02dd9bba28037bc5f40ed2c48dbf485c1dad4dbb1246",
+      "evaluation/fixtures/e1/abi/ACSC.json": "d5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08dbf8ad9a568",
+      "evaluation/fixtures/e1/abi/KSSC.json": "391841544b43c967bd8004c95376f139baaa2dd8c553f13310accecd83e1c6e7",
+      "evaluation/fixtures/e1/abi/LSC.json": "3c9acabbb8978e6330f5878b9a979326ca22f1519300a5277cffeea3911d42de",
+      "evaluation/fixtures/e1/abi/PROVENANCE.json": "44101a25d34812db6e24e8117d5894699ba79fa9828828f011f44688a19a955f",
+      "evaluation/fixtures/e1/abi/PSC.json": "559d3f011fe7687b0a422e8f6f61c2e8f72a9a7a61c8795973da0d543a1c3fe1",
+      "evaluation/fixtures/e1/abi/RSC.json": "f0bc3732ee5646db945a68e06434cd46ba2637df04e4fe2260cf0d16bde1eebc",
+      "evaluation/fixtures/e1/abi/TMSC.json": "a6f6273c8dcff51bb8834c8fa0f354d5e9b6bb7b5d7d39ca89c5d7f9975a225d",
+      "evaluation/fixtures/e1/bootstrap-owner-sample.json": "e2b32811fa4e6ea39b3dcb1b56986b6247839f5895d06ce1ae8e01be4f552557",
+      "evaluation/fixtures/e1/bootstrap-owner-sample.provenance.json": "3794c0c43f03f47fab0ad04b573dfcc36c2f9cc6331e6d2c3b06acc8f21ef725",
+      "evaluation/fixtures/e1/cast-request-calldata.json": "7f44c767803b59a0badfe8a559ec93de05086fd2ef580361859c968026ad312e",
+      "evaluation/gate.py": "23fbfae54decc6eb2b4bf219a4658478b705498e45a775e8c30835631cfa1970",
+      "evaluation/manifests.py": "e6fbe5569d1a301cfff17f923f051b44503e84befb36bc11e2e6ef0b04ad1c8a",
+      "evaluation/models/e/README.md": "97040ff004613daccd0448dea34a8bf5706121a2c260cc26ccc7cf6fd4a859d6",
+      "evaluation/models/e/access.pv": "1ca655061e9eb6d5717a919f554a6071eefdcf71b155a7a08f863464d64f01f8",
+      "evaluation/models/e/access_mutant.pv": "1c6e1acc6346d9f3859180f76f2a7a5e679477d3a61c4a132eefa46da1775537",
+      "evaluation/native.py": "8ed02c0cca130cac2041ddbfd1110a66a397a2e34e866150a5b0a3e1bdd3c540",
+      "evaluation/oracles/access.py": "98ff036fcbbf92d8f561c52769f1acf788e2e7117b614b8ab9fd7c35608b61e5",
+      "evaluation/oracles/replay.py": "14a5da8b1c0f7eb23833cccafa11f0eb09f0cbb564b3959eaf25864fb9ce780c",
+      "evaluation/peers.py": "fecac4e60476fc864a43021e369a79acf0606caabe5d331c3c51e2728a13f778",
+      "evaluation/processes.py": "4a63d2a5b2443666fd9528c10ac22313ca77b9ca51ee67d121dc306eee7c6532",
+      "evaluation/recovery.py": "b50aadf193dc00417aeafee9e16d3775abd68097ced7ddb865689c736d84d411",
+      "evaluation/recovery_execution.py": "bb71c6ac57a990e0366fdad369df2900269b543653a909947d269dca65af1587",
+      "evaluation/request_replay.py": "235e5f62aa3a83ca4170b7332db82d78beca1f0657ba2102563ce737263872ae",
+      "evaluation/rpc.py": "b77551dc0a942474273c14fd2aa0e152579515163576a42b8cdfeb8a9418d7f7",
+      "evaluation/run.py": "c3a71ae563c62851a418de69a3e625bfcf8fbc4a957e2f0fa59c67c4f6e51c78",
+      "evaluation/scenarios/e0_cases.json": "438fa38ddcbd7edd0e49fb93cc580e5219ed05349fd677b2e386bc4669f5d50e",
+      "evaluation/scenarios/e0_supplement_cases.json": "9ccade362c5a8853d63f06a08be3134ae32cd99527ceb36fcd78c311a9246858",
+      "evaluation/scenarios/e_positive.json": "95e75f10cfdaf0b0bf5bd75ea25b521df30817f85a280a8552cc62243f8ccdda",
+      "evaluation/schema.py": "3e29876907be197dcbe59142184d89cbe7cfb1ec8c446d3143950648d61598ad",
+      "evaluation/tests/test_access_artifacts.py": "98f8ea5d7b3a189e2e8b2ba1d3fd6a0a65274a151e735ff8dfe8853bd16c1c3d",
+      "evaluation/tests/test_access_execution.py": "a3394c24a3baa197c842fcff805fb6b25faabe40f2b73f2833f9aa3dbd571e2f",
+      "evaluation/tests/test_access_oracle.py": "a5ae466018b0e34836114fe4564f0e3a008241e26b6319d4f4bb7a5965f6fbb3",
+      "evaluation/tests/test_bootstrap.py": "119c09cc108c842c90649266afcf9af41143ea0a0cf51e61a3d4f2d4dc95113a",
+      "evaluation/tests/test_bootstrap_execution.py": "23f47757b67bea1c428607051cdef00adb47c6243fedcb82e01e81b860de2d67",
+      "evaluation/tests/test_boundary_schemas.py": "fccf5bf06b06ba23b5f961879a4ac289ba173696715ab6989b47b1ee285fbda3",
+      "evaluation/tests/test_chain.py": "c68fd69a481cdde4d134fda17619f5e6166e3143a6f65e97eae111cd2c72dc57",
+      "evaluation/tests/test_crash_transport.py": "aacdc1b1c17eb615e5c46c0ddc7d44edf5cfca8093e53f7a8f4421d2bd764c49",
+      "evaluation/tests/test_deployments.py": "2dd4a624d7ff967ab01e69a6d18fff6ccf5e5109c3c373b7a8d5abb357939c0b",
+      "evaluation/tests/test_duplicate_outcome.py": "9571165dea7095b5e9a40a64f58cb3736723b01579b181df6fae5a43eef6e999",
+      "evaluation/tests/test_e1_freeze.py": "42a9eda42d366484418abd21d27b02252b178efedfe12f39140bfa1bd1b25a9f",
+      "evaluation/tests/test_e1_ports.py": "4849c9e2054c4e300cd8ddfa6e042c674411243185a0c3c58d3593df32289f19",
+      "evaluation/tests/test_e2_freeze.py": "7d51f40aa630f234ace0a8d6cc5abdfa911e4cff204746a26ab4bc0701a963d6",
+      "evaluation/tests/test_e_correspondence.py": "a544f52771e19278a1f48276115a9174a6888fcf702056b4566261c2e4d1f3f2",
+      "evaluation/tests/test_evm_codec.py": "ee6db9854a686ce4f728977c0d08c37c1d04e28215fb61e1968ba68c55c5919f",
+      "evaluation/tests/test_expired_retry.py": "b6d5f55e1824d3a3b1ae63a9720c16d3064f63f5d69a57bf2dde227a43548570",
+      "evaluation/tests/test_gate.py": "e74ed784f312cb59d986359b6943d111bd0b1548a075bb18d3ab44857cfc4d79",
+      "evaluation/tests/test_manifests.py": "687ca16ef9c9851a2f8e222b83c8e1c1947c56fa167992de38b7438b72c86c1e",
+      "evaluation/tests/test_native_receipts.py": "806526e5fab56a4d14c3fd32a155a0b2c01632834f0df57be83ac48fbe19839e",
+      "evaluation/tests/test_owned_command.py": "dd180ffdfc27d8a3f0de117b5d290c5c3aebf0635f9906d1a84ab2275fd342d7",
+      "evaluation/tests/test_peers.py": "7939a9cdf398ce40e795094853b436945165717f1ac0d7ebad7b078723169c98",
+      "evaluation/tests/test_processes.py": "81d198f5607d81a328426767764eafea71bc5c26f3b7f51bbb5f05bee6f3be59",
+      "evaluation/tests/test_read_group.py": "246dc431ed99e9133b26afe17f2a81254a62ac955dc2bd39eccd6bad3ac7eaee",
+      "evaluation/tests/test_recovery.py": "437ec0d9eca981503d5bdbd5eba4791ad61f055fe5a7260ae0efc1d0371cb504",
+      "evaluation/tests/test_recovery_execution.py": "93109957067f65a9517a7a86ac03945b40632943166d4da4bb6ef3a3b67a8b66",
+      "evaluation/tests/test_request_replay.py": "cd93d3a1a257e8350f983742fabf2a28d50577f2500d36238fa347c218d01dbb",
+      "evaluation/tests/test_revision5_review.py": "e16bf6e21ea0fb4d29bae4a0e970da1f7d6813a6888895c4a3b2e35ca3210366",
+      "evaluation/tests/test_revision6_review.py": "041b48733c2840b38ad9700f19d96f4a7f519a01dac52e688b28d334dc6b81d1",
+      "evaluation/tests/test_rpc_cli.py": "095781412092d711c49383e4a71b0fc343f72d4932b142ec20d10b1423f4521c",
+      "evaluation/tests/test_run.py": "78eec342fe879e2a15e49291918e31a183e7cc186988450c054276b92bbcad92",
+      "evaluation/tests/test_schemas.py": "e7bcb77edc222d59fb4f82f4e9e348bf0b8a1553f292feb249d48d04a33660c8",
+      "evaluation/tests/test_service_process.py": "fa84f26af4606745ba45466bfee19245bc5ead514016d6fc759ec30d3daf48ef",
+      "evaluation/tests/test_vectors.py": "8833a4831fa198900c82200a6bd68a9534921b2c83611a234d96f7abc0234fce",
+      "evaluation/tests/test_worker_evidence.py": "aede6a3855ccb56bfd2820bc146e2ba814a8dc3142115e0c1a8da34e5589f5bc",
+      "evaluation/toolchain.json": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746",
+      "evaluation/vectors.py": "e7791eb24367032b3ed2932e1d84b5135fa4af145833bb1a68fa965d2cb53266",
+      "evaluation/worker_evidence.py": "13ebf84ee0073745f79241ef32c542eb588e56d28dfc2222aa9f07878147ba53",
+      "interfaces/proposals/v1/hmbc.schema.json": "4c22092dead0982716d68acf0ad7f4a5a737568e8e2d0c37d06595add36d6fea",
+      "interfaces/proposals/v1/review-manifest.json": "124b95eb2830e422e79d0cee4b4b7ae28bf235239740980b984d7f9de2f9d8d0",
+      "interfaces/proposals/v1/revision6/review-manifest.json": "df2a306fd77937572346cf5e91e9354536988af63ed660e14d51e04350161c62",
+      "interfaces/v1/BOUNDARY.md": "cb100d436aba200f7a1aae9f848218827cf1afb39e5ecf4b4e923b8de14f1235",
+      "interfaces/v1/FREEZE.json": "f700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2",
+      "interfaces/v1/README.md": "be699a2653abf411a90f5d1ea0d091cda14c2ba7b3f43812a9c9750b095b2ee3",
+      "interfaces/v1/assumptions.csv": "98047dda31877f286175cfcbe66fa0ada10bef452cfd6c15f42f0dac430ad39b",
+      "interfaces/v1/hmbc.schema.json": "4c22092dead0982716d68acf0ad7f4a5a737568e8e2d0c37d06595add36d6fea",
+      "interfaces/v1/owners/ledger-source-manifest.sha256": "407c86331072bdad63562541230fdd3078608287eccb373cb2f974e3bde20fc1",
+      "interfaces/v1/owners/protocol-source-manifest.sha256": "b4757c18887956e1da67b7b140c4674a2970d793e6684bcc8e17ec90db442f46",
+      "interfaces/v1/scenarios/e0_cases.json": "438fa38ddcbd7edd0e49fb93cc580e5219ed05349fd677b2e386bc4669f5d50e",
+      "interfaces/v1/scenarios/e0_supplement_cases.json": "9ccade362c5a8853d63f06a08be3134ae32cd99527ceb36fcd78c311a9246858",
+      "interfaces/v1/scenarios/e_positive.json": "95e75f10cfdaf0b0bf5bd75ea25b521df30817f85a280a8552cc62243f8ccdda",
+      "interfaces/v1/source-map.csv": "25337ee2846b13791bf971281d885f6300a6ce1407f156ddeb4e5cb85f54a07c",
+      "interfaces/v1/toolchain.json": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746",
+      "interfaces/v1/vectors/adapter-agent2.json": "e248fceb7455ebc3ae328da294ab7b328e2a69fc43eb4975d3b35e0016f5d0b7",
+      "interfaces/v1/vectors/boundary.json": "fce967f87cce9b453ae23d7450bcb6a199f3c0f6ad5d933b378b8f90e5a42210",
+      "interfaces/v1/vectors/deployment-agent1.json": "787ae701241167a2474215168752ecac7fbec260cb0df3a2acdf680598f53ee1",
+      "interfaces/v1/vectors/eip712-agent1.json": "f211c65fe9c0ea0d7c7ed3fe6904ab04b36224f5bfcd41d3bd140e6165f0bf61",
+      "interfaces/v1/vectors/schema.json": "49a9dc29298495513340db2f4e4f78d7611e52c7b42409531bc5ed97f421e4d8",
+      "pyproject.toml": "1d839e80b8acdef35d878740cb5d212b464cc30f4adfdd3f56b69b162badd0ca",
+      "uv.lock": "1fb4777a5d4078434af8e7fe4a88f2f3afbe1d8f65d30e8a182999d7a7a29cbe"
+    },
+    "stable": true
+  },
+  "cases": [
+    {
+      "case": "paper-strict-nonce-replay",
+      "status": "NONCE_REPLAY_CONTROL_PASS",
+      "sourceStatus": {
+        "status": "CONTROL_PASS",
+        "sourcesStable": true,
+        "commands": [
+          {
+            "argv": [
+              "/usr/bin/bash",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/ledger/ledger/tools/deploy_local.sh",
+              "http://127.0.0.1:18545",
+              "http://127.0.0.1:28545",
+              "paper-strict",
+              "complete-details",
+              "E2-grouped-replay-20261009-nonce-replay-paper-strict"
+            ],
+            "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/ledger",
+            "startedAt": "2026-10-09T06:15:00.125849+00:00",
+            "endedAt": "2026-10-09T06:15:25.515130+00:00",
+            "exitCode": 0,
+            "timedOut": false,
+            "elapsedSeconds": 25.38929532500333,
+            "outputSha256": "edf996932cc48b2f7849f0aea4578bc224e76396a9f1cf3934b1468d50a382a4",
+            "pid": 989927,
+            "processGroup": 989927,
+            "groupCleanup": null,
+            "environmentSha256": "1a13e75d5fcef6245ac8dbec0857f505dd864ad029fbad5e8b37577639eb4f89"
+          },
+          {
+            "argv": [
+              "/usr/bin/bash",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/ledger/ledger/tools/bootstrap_fixture.sh",
+              "http://127.0.0.1:18545",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/ledger/ledger/exports/deployments/E2-grouped-replay-20261009-nonce-replay-paper-strict/deployment.json",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/ledger/ledger/exports/bootstrap-E2-grouped-replay-20261009-nonce-replay-paper-strict.json"
+            ],
+            "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/ledger",
+            "startedAt": "2026-10-09T06:15:26.490634+00:00",
+            "endedAt": "2026-10-09T06:15:28.260015+00:00",
+            "exitCode": 0,
+            "timedOut": false,
+            "elapsedSeconds": 1.7693962170014856,
+            "outputSha256": "5a01d31615937c8f92723b84279f4d18ce06c5ba90ee9edb4566ef97609db772",
+            "pid": 990444,
+            "processGroup": 990444,
+            "groupCleanup": null,
+            "environmentSha256": "1a13e75d5fcef6245ac8dbec0857f505dd864ad029fbad5e8b37577639eb4f89"
+          },
+          {
+            "argv": [
+              "/home/karma/Documents/RIS/.venv/bin/python",
+              "-m",
+              "hmbc_protocol.worker_log",
+              "--state-dir",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/private-adapter-state"
+            ],
+            "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/protocol/protocol",
+            "startedAt": "2026-10-09T06:16:10.291933+00:00",
+            "endedAt": "2026-10-09T06:16:10.456784+00:00",
+            "exitCode": 0,
+            "timedOut": false,
+            "elapsedSeconds": 0.1648669010028243,
+            "outputSha256": "1677436e8d345eb580c68381c893cc652c2ed9eeb0a27a15c04be458873f1a1b",
+            "pid": 995233,
+            "processGroup": 995233,
+            "groupCleanup": null,
+            "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+          },
+          {
+            "argv": [
+              "/home/karma/Documents/RIS/.venv/bin/python",
+              "-m",
+              "hmbc_protocol.worker_log",
+              "--state-dir",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/private-adapter-state"
+            ],
+            "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/protocol/protocol",
+            "startedAt": "2026-10-09T06:16:23.828424+00:00",
+            "endedAt": "2026-10-09T06:16:23.943144+00:00",
+            "exitCode": 0,
+            "timedOut": false,
+            "elapsedSeconds": 0.11472238600254059,
+            "outputSha256": "1677436e8d345eb580c68381c893cc652c2ed9eeb0a27a15c04be458873f1a1b",
+            "pid": 996753,
+            "processGroup": 996753,
+            "groupCleanup": null,
+            "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+          },
+          {
+            "argv": [
+              "/home/karma/Documents/RIS/.venv/bin/python",
+              "-m",
+              "hmbc_protocol.worker_log",
+              "--state-dir",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/private-adapter-state"
+            ],
+            "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/protocol/protocol",
+            "startedAt": "2026-10-09T06:16:28.045114+00:00",
+            "endedAt": "2026-10-09T06:16:28.159358+00:00",
+            "exitCode": 0,
+            "timedOut": false,
+            "elapsedSeconds": 0.11424607598746661,
+            "outputSha256": "1677436e8d345eb580c68381c893cc652c2ed9eeb0a27a15c04be458873f1a1b",
+            "pid": 997208,
+            "processGroup": 997208,
+            "groupCleanup": null,
+            "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+          },
+          {
+            "argv": [
+              "/home/karma/Documents/RIS/.venv/bin/python",
+              "-m",
+              "hmbc_protocol.worker_log",
+              "--state-dir",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/private-adapter-state"
+            ],
+            "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/protocol/protocol",
+            "startedAt": "2026-10-09T06:16:29.290919+00:00",
+            "endedAt": "2026-10-09T06:16:29.456028+00:00",
+            "exitCode": 0,
+            "timedOut": false,
+            "elapsedSeconds": 0.165127462008968,
+            "outputSha256": "022e417b088f9cf1014831823a686083bb48b13a5b592d93dac7521f9d476272",
+            "pid": 997336,
+            "processGroup": 997336,
+            "groupCleanup": null,
+            "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+          },
+          {
+            "argv": [
+              "/home/karma/Documents/RIS/.venv/bin/python",
+              "-m",
+              "hmbc_protocol.worker_log",
+              "--state-dir",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/private-adapter-state"
+            ],
+            "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/protocol/protocol",
+            "startedAt": "2026-10-09T06:16:42.808055+00:00",
+            "endedAt": "2026-10-09T06:16:42.972829+00:00",
+            "exitCode": 0,
+            "timedOut": false,
+            "elapsedSeconds": 0.16478460599319078,
+            "outputSha256": "022e417b088f9cf1014831823a686083bb48b13a5b592d93dac7521f9d476272",
+            "pid": 998846,
+            "processGroup": 998846,
+            "groupCleanup": null,
+            "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+          },
+          {
+            "argv": [
+              "/home/karma/Documents/RIS/.venv/bin/python",
+              "-m",
+              "hmbc_protocol.worker_log",
+              "--state-dir",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/private-adapter-state"
+            ],
+            "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/protocol/protocol",
+            "startedAt": "2026-10-09T06:16:54.613277+00:00",
+            "endedAt": "2026-10-09T06:16:54.777943+00:00",
+            "exitCode": 0,
+            "timedOut": false,
+            "elapsedSeconds": 0.1646858180029085,
+            "outputSha256": "022e417b088f9cf1014831823a686083bb48b13a5b592d93dac7521f9d476272",
+            "pid": 1000142,
+            "processGroup": 1000142,
+            "groupCleanup": null,
+            "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+          }
+        ],
+        "results": {
+          "alice": "paper-strict/alice/result.json",
+          "bob": "paper-strict/bob/result.json"
+        },
+        "wrongAdmin": "UNAUTHORIZED_CALLER; baseline issuer restriction, not a repair",
+        "servicesStopped": true
+      },
+      "alice": {
+        "startedAt": "2026-10-09T06:15:59.204171+00:00",
+        "endedAt": "2026-10-09T06:16:31.823414+00:00",
+        "ok": true,
+        "failure": null,
+        "scope": "C-E1 single control; not an RQ gate",
+        "adapterMode": "symbolic",
+        "observed": {
+          "adapterMode": "symbolic",
+          "events": [
+            {
+              "type": "REQUEST_LOGGED",
+              "requestDigest": "0xb64cb06108022fa558608243d34de4b8cf2e8c30e3cd2c16c7ee8f0b37ad1ab2",
+              "timestamp": "1791526575"
+            },
+            {
+              "type": "PBC_DECIDED",
+              "requestDigest": "0xb64cb06108022fa558608243d34de4b8cf2e8c30e3cd2c16c7ee8f0b37ad1ab2",
+              "timestamp": "1791526575"
+            },
+            {
+              "type": "DBC_AUTHORIZED",
+              "requestDigest": "0xb64cb06108022fa558608243d34de4b8cf2e8c30e3cd2c16c7ee8f0b37ad1ab2",
+              "timestamp": "1791526579",
+              "grantId": "0x8048e82a8b6dacc897f1699027eb942cb3867559b415ebc6b0d265395e260868",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+              "kssc": "0xe08fc08118c249128865a95e60617618970876b9",
+              "destinationChainId": "28545",
+              "recipientKeyHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "keyEpoch": "0"
+            },
+            {
+              "type": "RELEASE_INTENT",
+              "requestDigest": "0xb64cb06108022fa558608243d34de4b8cf2e8c30e3cd2c16c7ee8f0b37ad1ab2",
+              "timestamp": "1791526589",
+              "grantId": "0x8048e82a8b6dacc897f1699027eb942cb3867559b415ebc6b0d265395e260868",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            },
+            {
+              "type": "RELEASE_SENT",
+              "requestDigest": "0xb64cb06108022fa558608243d34de4b8cf2e8c30e3cd2c16c7ee8f0b37ad1ab2",
+              "timestamp": "1791526589",
+              "grantId": "0x8048e82a8b6dacc897f1699027eb942cb3867559b415ebc6b0d265395e260868",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            },
+            {
+              "type": "OUTCOME_RECORDED",
+              "requestDigest": "0xb64cb06108022fa558608243d34de4b8cf2e8c30e3cd2c16c7ee8f0b37ad1ab2",
+              "timestamp": "1791526590",
+              "grantId": "0x8048e82a8b6dacc897f1699027eb942cb3867559b415ebc6b0d265395e260868",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            }
+          ],
+          "error": null,
+          "ledgerChecks": {}
+        },
+        "oracle": {
+          "ok": true,
+          "classification": "SUPPORTED",
+          "assertions": [
+            {
+              "name": "adapter mode is explicit and matches",
+              "passed": true
+            },
+            {
+              "name": "stable denial reason",
+              "passed": true
+            },
+            {
+              "name": "expected events occur in causal order",
+              "passed": true
+            },
+            {
+              "name": "at most one new grant",
+              "passed": true
+            },
+            {
+              "name": "at most one recorded outcome",
+              "passed": true
+            },
+            {
+              "name": "event 0 request binding",
+              "passed": true
+            },
+            {
+              "name": "event 1 request binding",
+              "passed": true
+            },
+            {
+              "name": "event 2 request binding",
+              "passed": true
+            },
+            {
+              "name": "grant 2 requestDigest",
+              "passed": true
+            },
+            {
+              "name": "grant 2 grantId",
+              "passed": true
+            },
+            {
+              "name": "grant 2 gid",
+              "passed": true
+            },
+            {
+              "name": "grant 2 dataId",
+              "passed": true
+            },
+            {
+              "name": "grant 2 kssc",
+              "passed": true
+            },
+            {
+              "name": "grant 2 destinationChainId",
+              "passed": true
+            },
+            {
+              "name": "grant 2 recipientKeyHash",
+              "passed": true
+            },
+            {
+              "name": "grant 2 keyEpoch",
+              "passed": true
+            },
+            {
+              "name": "event 3 request binding",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 3 requestDigest",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 3 grantId",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 3 gid",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 3 dataId",
+              "passed": true
+            },
+            {
+              "name": "authorization precedes 3",
+              "passed": true
+            },
+            {
+              "name": "event 4 request binding",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 4 requestDigest",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 4 grantId",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 4 gid",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 4 dataId",
+              "passed": true
+            },
+            {
+              "name": "authorization precedes 4",
+              "passed": true
+            },
+            {
+              "name": "durable intent precedes send 4",
+              "passed": true
+            },
+            {
+              "name": "event 5 request binding",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 5 requestDigest",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 5 grantId",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 5 gid",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 5 dataId",
+              "passed": true
+            },
+            {
+              "name": "authorization precedes 5",
+              "passed": true
+            }
+          ],
+          "observedEvents": [
+            {
+              "type": "REQUEST_LOGGED",
+              "requestDigest": "0xb64cb06108022fa558608243d34de4b8cf2e8c30e3cd2c16c7ee8f0b37ad1ab2",
+              "timestamp": "1791526575"
+            },
+            {
+              "type": "PBC_DECIDED",
+              "requestDigest": "0xb64cb06108022fa558608243d34de4b8cf2e8c30e3cd2c16c7ee8f0b37ad1ab2",
+              "timestamp": "1791526575"
+            },
+            {
+              "type": "DBC_AUTHORIZED",
+              "requestDigest": "0xb64cb06108022fa558608243d34de4b8cf2e8c30e3cd2c16c7ee8f0b37ad1ab2",
+              "timestamp": "1791526579",
+              "grantId": "0x8048e82a8b6dacc897f1699027eb942cb3867559b415ebc6b0d265395e260868",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+              "kssc": "0xe08fc08118c249128865a95e60617618970876b9",
+              "destinationChainId": "28545",
+              "recipientKeyHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "keyEpoch": "0"
+            },
+            {
+              "type": "RELEASE_INTENT",
+              "requestDigest": "0xb64cb06108022fa558608243d34de4b8cf2e8c30e3cd2c16c7ee8f0b37ad1ab2",
+              "timestamp": "1791526589",
+              "grantId": "0x8048e82a8b6dacc897f1699027eb942cb3867559b415ebc6b0d265395e260868",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            },
+            {
+              "type": "RELEASE_SENT",
+              "requestDigest": "0xb64cb06108022fa558608243d34de4b8cf2e8c30e3cd2c16c7ee8f0b37ad1ab2",
+              "timestamp": "1791526589",
+              "grantId": "0x8048e82a8b6dacc897f1699027eb942cb3867559b415ebc6b0d265395e260868",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            },
+            {
+              "type": "OUTCOME_RECORDED",
+              "requestDigest": "0xb64cb06108022fa558608243d34de4b8cf2e8c30e3cd2c16c7ee8f0b37ad1ab2",
+              "timestamp": "1791526590",
+              "grantId": "0x8048e82a8b6dacc897f1699027eb942cb3867559b415ebc6b0d265395e260868",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            }
+          ],
+          "limitations": [
+            "E/F adapter is symbolic; no measured ABE security.",
+            "Outcome recording is not proof of recipient delivery."
+          ]
+        },
+        "delivery": "unknown"
+      },
+      "bob": {
+        "startedAt": "2026-10-09T06:16:31.823603+00:00",
+        "endedAt": "2026-10-09T06:16:54.779436+00:00",
+        "ok": true,
+        "failure": null,
+        "scope": "C-E1 single control; not an RQ gate",
+        "adapterMode": "symbolic",
+        "observed": {
+          "adapterMode": "symbolic",
+          "events": [
+            {
+              "type": "REQUEST_LOGGED",
+              "requestDigest": "0xcda03e3936636cf7ccf4827be25180bc84503a280f3bc8b74e06f0c531713cd8",
+              "timestamp": "1791526607"
+            },
+            {
+              "type": "PBC_DECIDED",
+              "requestDigest": "0xcda03e3936636cf7ccf4827be25180bc84503a280f3bc8b74e06f0c531713cd8",
+              "timestamp": "1791526607"
+            }
+          ],
+          "error": "POLICY_DENIED",
+          "ledgerChecks": {
+            "DBC_POLICY_DENIAL_LOGGED": true,
+            "NONCE_UNCHANGED": true
+          }
+        },
+        "oracle": {
+          "ok": true,
+          "classification": "SUPPORTED",
+          "assertions": [
+            {
+              "name": "adapter mode is explicit and matches",
+              "passed": true
+            },
+            {
+              "name": "stable denial reason",
+              "passed": true
+            },
+            {
+              "name": "DBC_POLICY_DENIAL_LOGGED",
+              "passed": true
+            },
+            {
+              "name": "NONCE_UNCHANGED",
+              "passed": true
+            },
+            {
+              "name": "expected events occur in causal order",
+              "passed": true
+            },
+            {
+              "name": "at most one new grant",
+              "passed": true
+            },
+            {
+              "name": "at most one recorded outcome",
+              "passed": true
+            },
+            {
+              "name": "denial cannot release or record a successful grant outcome",
+              "passed": true
+            },
+            {
+              "name": "event 0 request binding",
+              "passed": true
+            },
+            {
+              "name": "event 1 request binding",
+              "passed": true
+            }
+          ],
+          "observedEvents": [
+            {
+              "type": "REQUEST_LOGGED",
+              "requestDigest": "0xcda03e3936636cf7ccf4827be25180bc84503a280f3bc8b74e06f0c531713cd8",
+              "timestamp": "1791526607"
+            },
+            {
+              "type": "PBC_DECIDED",
+              "requestDigest": "0xcda03e3936636cf7ccf4827be25180bc84503a280f3bc8b74e06f0c531713cd8",
+              "timestamp": "1791526607"
+            }
+          ],
+          "limitations": [
+            "E/F adapter is symbolic; no measured ABE security.",
+            "Outcome recording is not proof of recipient delivery."
+          ]
+        },
+        "delivery": "unknown"
+      },
+      "alice/nonce-replay": {
+        "startedAt": "2026-10-09T06:16:21.085051+00:00",
+        "endedAt": "2026-10-09T06:16:28.159945+00:00",
+        "ok": true,
+        "failure": null,
+        "scope": "C-E2 identical accepted request; not an RQ gate",
+        "delivery": "unknown",
+        "error": "REPLAY",
+        "nativeUnchanged": true,
+        "workerUnchanged": true,
+        "identicalCalldata": true,
+        "classification": "SUPPORTED",
+        "limitation": "checked reconstruction observations only; no worker retry, delivery, ABE, consensus or gate proof",
+        "rejectionCode": "8",
+        "replayTransactionHash": "0x800f32e32cc7aa35415498f96df3c944a0801085dfc80a4c1e280139ce6fd29d"
+      }
+    },
+    {
+      "case": "paper-minimal-nonce-replay",
+      "status": "NONCE_REPLAY_CONTROL_PASS",
+      "sourceStatus": {
+        "status": "CONTROL_PASS",
+        "sourcesStable": true,
+        "commands": [
+          {
+            "argv": [
+              "/usr/bin/bash",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/ledger/ledger/tools/deploy_local.sh",
+              "http://127.0.0.1:18545",
+              "http://127.0.0.1:28545",
+              "paper-minimal",
+              "complete-details",
+              "E2-grouped-replay-20261009-nonce-replay-paper-minimal"
+            ],
+            "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/ledger",
+            "startedAt": "2026-10-09T06:16:58.375998+00:00",
+            "endedAt": "2026-10-09T06:17:24.327900+00:00",
+            "exitCode": 0,
+            "timedOut": false,
+            "elapsedSeconds": 25.951908046001336,
+            "outputSha256": "4c9f4b05f5202a637146b3adaabd225ce7dc003c3c571d59b81aaaf47a1689f4",
+            "pid": 1001002,
+            "processGroup": 1001002,
+            "groupCleanup": null,
+            "environmentSha256": "1a13e75d5fcef6245ac8dbec0857f505dd864ad029fbad5e8b37577639eb4f89"
+          },
+          {
+            "argv": [
+              "/usr/bin/bash",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/ledger/ledger/tools/bootstrap_fixture.sh",
+              "http://127.0.0.1:18545",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/ledger/ledger/exports/deployments/E2-grouped-replay-20261009-nonce-replay-paper-minimal/deployment.json",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/ledger/ledger/exports/bootstrap-E2-grouped-replay-20261009-nonce-replay-paper-minimal.json"
+            ],
+            "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/ledger",
+            "startedAt": "2026-10-09T06:17:25.265765+00:00",
+            "endedAt": "2026-10-09T06:17:27.085454+00:00",
+            "exitCode": 0,
+            "timedOut": false,
+            "elapsedSeconds": 1.8197053959884215,
+            "outputSha256": "8a4c2c3e006c7f2a2f6e65454818988d7f1b3ac1c8f567e2d88dadd8cdb87874",
+            "pid": 1001485,
+            "processGroup": 1001485,
+            "groupCleanup": null,
+            "environmentSha256": "1a13e75d5fcef6245ac8dbec0857f505dd864ad029fbad5e8b37577639eb4f89"
+          },
+          {
+            "argv": [
+              "/home/karma/Documents/RIS/.venv/bin/python",
+              "-m",
+              "hmbc_protocol.worker_log",
+              "--state-dir",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/private-adapter-state"
+            ],
+            "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/protocol/protocol",
+            "startedAt": "2026-10-09T06:18:08.991146+00:00",
+            "endedAt": "2026-10-09T06:18:09.156039+00:00",
+            "exitCode": 0,
+            "timedOut": false,
+            "elapsedSeconds": 0.16490862300270237,
+            "outputSha256": "1677436e8d345eb580c68381c893cc652c2ed9eeb0a27a15c04be458873f1a1b",
+            "pid": 1006315,
+            "processGroup": 1006315,
+            "groupCleanup": null,
+            "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+          },
+          {
+            "argv": [
+              "/home/karma/Documents/RIS/.venv/bin/python",
+              "-m",
+              "hmbc_protocol.worker_log",
+              "--state-dir",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/private-adapter-state"
+            ],
+            "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/protocol/protocol",
+            "startedAt": "2026-10-09T06:18:22.403845+00:00",
+            "endedAt": "2026-10-09T06:18:22.518617+00:00",
+            "exitCode": 0,
+            "timedOut": false,
+            "elapsedSeconds": 0.1147687190095894,
+            "outputSha256": "1677436e8d345eb580c68381c893cc652c2ed9eeb0a27a15c04be458873f1a1b",
+            "pid": 1007802,
+            "processGroup": 1007802,
+            "groupCleanup": null,
+            "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+          },
+          {
+            "argv": [
+              "/home/karma/Documents/RIS/.venv/bin/python",
+              "-m",
+              "hmbc_protocol.worker_log",
+              "--state-dir",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/private-adapter-state"
+            ],
+            "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/protocol/protocol",
+            "startedAt": "2026-10-09T06:18:26.612582+00:00",
+            "endedAt": "2026-10-09T06:18:26.727047+00:00",
+            "exitCode": 0,
+            "timedOut": false,
+            "elapsedSeconds": 0.11446422399603762,
+            "outputSha256": "1677436e8d345eb580c68381c893cc652c2ed9eeb0a27a15c04be458873f1a1b",
+            "pid": 1008274,
+            "processGroup": 1008274,
+            "groupCleanup": null,
+            "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+          },
+          {
+            "argv": [
+              "/home/karma/Documents/RIS/.venv/bin/python",
+              "-m",
+              "hmbc_protocol.worker_log",
+              "--state-dir",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/private-adapter-state"
+            ],
+            "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/protocol/protocol",
+            "startedAt": "2026-10-09T06:18:27.867940+00:00",
+            "endedAt": "2026-10-09T06:18:28.032635+00:00",
+            "exitCode": 0,
+            "timedOut": false,
+            "elapsedSeconds": 0.16470138299337123,
+            "outputSha256": "5a3693190964dacf0d49a835b5ce7d93a3d363c23bf70924d7d1fae31114d9df",
+            "pid": 1008396,
+            "processGroup": 1008396,
+            "groupCleanup": null,
+            "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+          },
+          {
+            "argv": [
+              "/home/karma/Documents/RIS/.venv/bin/python",
+              "-m",
+              "hmbc_protocol.worker_log",
+              "--state-dir",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/private-adapter-state"
+            ],
+            "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/protocol/protocol",
+            "startedAt": "2026-10-09T06:18:41.448637+00:00",
+            "endedAt": "2026-10-09T06:18:41.613868+00:00",
+            "exitCode": 0,
+            "timedOut": false,
+            "elapsedSeconds": 0.16524878500786144,
+            "outputSha256": "5a3693190964dacf0d49a835b5ce7d93a3d363c23bf70924d7d1fae31114d9df",
+            "pid": 1009886,
+            "processGroup": 1009886,
+            "groupCleanup": null,
+            "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+          },
+          {
+            "argv": [
+              "/home/karma/Documents/RIS/.venv/bin/python",
+              "-m",
+              "hmbc_protocol.worker_log",
+              "--state-dir",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/private-adapter-state"
+            ],
+            "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/protocol/protocol",
+            "startedAt": "2026-10-09T06:18:53.146575+00:00",
+            "endedAt": "2026-10-09T06:18:53.311085+00:00",
+            "exitCode": 0,
+            "timedOut": false,
+            "elapsedSeconds": 0.16451968699402642,
+            "outputSha256": "5a3693190964dacf0d49a835b5ce7d93a3d363c23bf70924d7d1fae31114d9df",
+            "pid": 1011180,
+            "processGroup": 1011180,
+            "groupCleanup": null,
+            "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+          }
+        ],
+        "results": {
+          "alice": "paper-minimal/alice/result.json",
+          "bob": "paper-minimal/bob/result.json"
+        },
+        "wrongAdmin": "UNAUTHORIZED_CALLER; baseline issuer restriction, not a repair",
+        "servicesStopped": true
+      },
+      "alice": {
+        "startedAt": "2026-10-09T06:17:57.988246+00:00",
+        "endedAt": "2026-10-09T06:18:30.436574+00:00",
+        "ok": true,
+        "failure": null,
+        "scope": "C-E1 single control; not an RQ gate",
+        "adapterMode": "symbolic",
+        "observed": {
+          "adapterMode": "symbolic",
+          "events": [
+            {
+              "type": "REQUEST_LOGGED",
+              "requestDigest": "0xbff5f6aea55d6d6249471cb4b6f763d6d75519e2673f09194c27e6f7020316fb",
+              "timestamp": "1791526693"
+            },
+            {
+              "type": "PBC_DECIDED",
+              "requestDigest": "0xbff5f6aea55d6d6249471cb4b6f763d6d75519e2673f09194c27e6f7020316fb",
+              "timestamp": "1791526693"
+            },
+            {
+              "type": "DBC_AUTHORIZED",
+              "requestDigest": "0xbff5f6aea55d6d6249471cb4b6f763d6d75519e2673f09194c27e6f7020316fb",
+              "timestamp": "1791526697",
+              "grantId": "0x01e930133cdc24606e79f0053ae1200e277fbf51e75b727de3ff35cce2abf8f8",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+              "kssc": "0xe08fc08118c249128865a95e60617618970876b9",
+              "destinationChainId": "28545",
+              "recipientKeyHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "keyEpoch": "0"
+            },
+            {
+              "type": "RELEASE_INTENT",
+              "requestDigest": "0xbff5f6aea55d6d6249471cb4b6f763d6d75519e2673f09194c27e6f7020316fb",
+              "timestamp": "1791526707",
+              "grantId": "0x01e930133cdc24606e79f0053ae1200e277fbf51e75b727de3ff35cce2abf8f8",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            },
+            {
+              "type": "RELEASE_SENT",
+              "requestDigest": "0xbff5f6aea55d6d6249471cb4b6f763d6d75519e2673f09194c27e6f7020316fb",
+              "timestamp": "1791526707",
+              "grantId": "0x01e930133cdc24606e79f0053ae1200e277fbf51e75b727de3ff35cce2abf8f8",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            },
+            {
+              "type": "OUTCOME_RECORDED",
+              "requestDigest": "0xbff5f6aea55d6d6249471cb4b6f763d6d75519e2673f09194c27e6f7020316fb",
+              "timestamp": "1791526709",
+              "grantId": "0x01e930133cdc24606e79f0053ae1200e277fbf51e75b727de3ff35cce2abf8f8",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            }
+          ],
+          "error": null,
+          "ledgerChecks": {}
+        },
+        "oracle": {
+          "ok": true,
+          "classification": "SUPPORTED",
+          "assertions": [
+            {
+              "name": "adapter mode is explicit and matches",
+              "passed": true
+            },
+            {
+              "name": "stable denial reason",
+              "passed": true
+            },
+            {
+              "name": "expected events occur in causal order",
+              "passed": true
+            },
+            {
+              "name": "at most one new grant",
+              "passed": true
+            },
+            {
+              "name": "at most one recorded outcome",
+              "passed": true
+            },
+            {
+              "name": "event 0 request binding",
+              "passed": true
+            },
+            {
+              "name": "event 1 request binding",
+              "passed": true
+            },
+            {
+              "name": "event 2 request binding",
+              "passed": true
+            },
+            {
+              "name": "grant 2 requestDigest",
+              "passed": true
+            },
+            {
+              "name": "grant 2 grantId",
+              "passed": true
+            },
+            {
+              "name": "grant 2 gid",
+              "passed": true
+            },
+            {
+              "name": "grant 2 dataId",
+              "passed": true
+            },
+            {
+              "name": "grant 2 kssc",
+              "passed": true
+            },
+            {
+              "name": "grant 2 destinationChainId",
+              "passed": true
+            },
+            {
+              "name": "grant 2 recipientKeyHash",
+              "passed": true
+            },
+            {
+              "name": "grant 2 keyEpoch",
+              "passed": true
+            },
+            {
+              "name": "event 3 request binding",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 3 requestDigest",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 3 grantId",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 3 gid",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 3 dataId",
+              "passed": true
+            },
+            {
+              "name": "authorization precedes 3",
+              "passed": true
+            },
+            {
+              "name": "event 4 request binding",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 4 requestDigest",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 4 grantId",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 4 gid",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 4 dataId",
+              "passed": true
+            },
+            {
+              "name": "authorization precedes 4",
+              "passed": true
+            },
+            {
+              "name": "durable intent precedes send 4",
+              "passed": true
+            },
+            {
+              "name": "event 5 request binding",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 5 requestDigest",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 5 grantId",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 5 gid",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 5 dataId",
+              "passed": true
+            },
+            {
+              "name": "authorization precedes 5",
+              "passed": true
+            }
+          ],
+          "observedEvents": [
+            {
+              "type": "REQUEST_LOGGED",
+              "requestDigest": "0xbff5f6aea55d6d6249471cb4b6f763d6d75519e2673f09194c27e6f7020316fb",
+              "timestamp": "1791526693"
+            },
+            {
+              "type": "PBC_DECIDED",
+              "requestDigest": "0xbff5f6aea55d6d6249471cb4b6f763d6d75519e2673f09194c27e6f7020316fb",
+              "timestamp": "1791526693"
+            },
+            {
+              "type": "DBC_AUTHORIZED",
+              "requestDigest": "0xbff5f6aea55d6d6249471cb4b6f763d6d75519e2673f09194c27e6f7020316fb",
+              "timestamp": "1791526697",
+              "grantId": "0x01e930133cdc24606e79f0053ae1200e277fbf51e75b727de3ff35cce2abf8f8",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+              "kssc": "0xe08fc08118c249128865a95e60617618970876b9",
+              "destinationChainId": "28545",
+              "recipientKeyHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+              "keyEpoch": "0"
+            },
+            {
+              "type": "RELEASE_INTENT",
+              "requestDigest": "0xbff5f6aea55d6d6249471cb4b6f763d6d75519e2673f09194c27e6f7020316fb",
+              "timestamp": "1791526707",
+              "grantId": "0x01e930133cdc24606e79f0053ae1200e277fbf51e75b727de3ff35cce2abf8f8",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            },
+            {
+              "type": "RELEASE_SENT",
+              "requestDigest": "0xbff5f6aea55d6d6249471cb4b6f763d6d75519e2673f09194c27e6f7020316fb",
+              "timestamp": "1791526707",
+              "grantId": "0x01e930133cdc24606e79f0053ae1200e277fbf51e75b727de3ff35cce2abf8f8",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            },
+            {
+              "type": "OUTCOME_RECORDED",
+              "requestDigest": "0xbff5f6aea55d6d6249471cb4b6f763d6d75519e2673f09194c27e6f7020316fb",
+              "timestamp": "1791526709",
+              "grantId": "0x01e930133cdc24606e79f0053ae1200e277fbf51e75b727de3ff35cce2abf8f8",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            }
+          ],
+          "limitations": [
+            "E/F adapter is symbolic; no measured ABE security.",
+            "Outcome recording is not proof of recipient delivery."
+          ]
+        },
+        "delivery": "unknown"
+      },
+      "bob": {
+        "startedAt": "2026-10-09T06:18:30.436765+00:00",
+        "endedAt": "2026-10-09T06:18:53.312063+00:00",
+        "ok": true,
+        "failure": null,
+        "scope": "C-E1 single control; not an RQ gate",
+        "adapterMode": "symbolic",
+        "observed": {
+          "adapterMode": "symbolic",
+          "events": [
+            {
+              "type": "REQUEST_LOGGED",
+              "requestDigest": "0x1decb48573809171b2787ffeb6d58c47e80fc1812555130ded6039706ffde0fb",
+              "timestamp": "1791526726"
+            },
+            {
+              "type": "PBC_DECIDED",
+              "requestDigest": "0x1decb48573809171b2787ffeb6d58c47e80fc1812555130ded6039706ffde0fb",
+              "timestamp": "1791526726"
+            }
+          ],
+          "error": "POLICY_DENIED",
+          "ledgerChecks": {
+            "DBC_POLICY_DENIAL_LOGGED": true,
+            "NONCE_UNCHANGED": true
+          }
+        },
+        "oracle": {
+          "ok": true,
+          "classification": "SUPPORTED",
+          "assertions": [
+            {
+              "name": "adapter mode is explicit and matches",
+              "passed": true
+            },
+            {
+              "name": "stable denial reason",
+              "passed": true
+            },
+            {
+              "name": "DBC_POLICY_DENIAL_LOGGED",
+              "passed": true
+            },
+            {
+              "name": "NONCE_UNCHANGED",
+              "passed": true
+            },
+            {
+              "name": "expected events occur in causal order",
+              "passed": true
+            },
+            {
+              "name": "at most one new grant",
+              "passed": true
+            },
+            {
+              "name": "at most one recorded outcome",
+              "passed": true
+            },
+            {
+              "name": "denial cannot release or record a successful grant outcome",
+              "passed": true
+            },
+            {
+              "name": "event 0 request binding",
+              "passed": true
+            },
+            {
+              "name": "event 1 request binding",
+              "passed": true
+            }
+          ],
+          "observedEvents": [
+            {
+              "type": "REQUEST_LOGGED",
+              "requestDigest": "0x1decb48573809171b2787ffeb6d58c47e80fc1812555130ded6039706ffde0fb",
+              "timestamp": "1791526726"
+            },
+            {
+              "type": "PBC_DECIDED",
+              "requestDigest": "0x1decb48573809171b2787ffeb6d58c47e80fc1812555130ded6039706ffde0fb",
+              "timestamp": "1791526726"
+            }
+          ],
+          "limitations": [
+            "E/F adapter is symbolic; no measured ABE security.",
+            "Outcome recording is not proof of recipient delivery."
+          ]
+        },
+        "delivery": "unknown"
+      },
+      "alice/nonce-replay": {
+        "startedAt": "2026-10-09T06:18:19.728276+00:00",
+        "endedAt": "2026-10-09T06:18:26.727711+00:00",
+        "ok": true,
+        "failure": null,
+        "scope": "C-E2 identical accepted request; not an RQ gate",
+        "delivery": "unknown",
+        "error": "REPLAY",
+        "nativeUnchanged": true,
+        "workerUnchanged": true,
+        "identicalCalldata": true,
+        "classification": "SUPPORTED",
+        "limitation": "checked reconstruction observations only; no worker retry, delivery, ABE, consensus or gate proof",
+        "rejectionCode": "8",
+        "replayTransactionHash": "0x438fffffa85912b6d01dcfd02cb4ac684ce50d2e05831b861ff4d0d029fa7d8f"
+      }
+    },
+    {
+      "case": "repaired-e-nonce-replay",
+      "status": "NONCE_REPLAY_CONTROL_PASS",
+      "sourceStatus": {
+        "status": "CONTROL_PASS",
+        "sourcesStable": true,
+        "commands": [
+          {
+            "argv": [
+              "/usr/bin/bash",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/ledger/ledger/tools/deploy_local.sh",
+              "http://127.0.0.1:18545",
+              "http://127.0.0.1:28545",
+              "repaired-e",
+              "complete-details",
+              "E2-grouped-replay-20261009-nonce-replay-repaired-e"
+            ],
+            "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/ledger",
+            "startedAt": "2026-10-09T06:18:56.953970+00:00",
+            "endedAt": "2026-10-09T06:19:18.040351+00:00",
+            "exitCode": 0,
+            "timedOut": false,
+            "elapsedSeconds": 21.086389032992884,
+            "outputSha256": "ab853ad9cfb9f53ba96180a557c982971b31269aff05a3b2997b8e854e20858b",
+            "pid": 1012047,
+            "processGroup": 1012047,
+            "groupCleanup": null,
+            "environmentSha256": "1a13e75d5fcef6245ac8dbec0857f505dd864ad029fbad5e8b37577639eb4f89"
+          },
+          {
+            "argv": [
+              "/usr/bin/bash",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/ledger/ledger/tools/bootstrap_fixture.sh",
+              "http://127.0.0.1:18545",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/ledger/ledger/exports/deployments/E2-grouped-replay-20261009-nonce-replay-repaired-e/deployment.json",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/ledger/ledger/exports/bootstrap-E2-grouped-replay-20261009-nonce-replay-repaired-e.json"
+            ],
+            "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/ledger",
+            "startedAt": "2026-10-09T06:19:19.029269+00:00",
+            "endedAt": "2026-10-09T06:19:20.900283+00:00",
+            "exitCode": 0,
+            "timedOut": false,
+            "elapsedSeconds": 1.8710270499868784,
+            "outputSha256": "9441efe84f9910dcf78095cdbeddc9b94b334ea51c7cb48b4115fab482a36982",
+            "pid": 1012560,
+            "processGroup": 1012560,
+            "groupCleanup": null,
+            "environmentSha256": "1a13e75d5fcef6245ac8dbec0857f505dd864ad029fbad5e8b37577639eb4f89"
+          },
+          {
+            "argv": [
+              "/home/karma/Documents/RIS/.venv/bin/python",
+              "-m",
+              "hmbc_protocol.worker_log",
+              "--state-dir",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/private-adapter-state"
+            ],
+            "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/protocol/protocol",
+            "startedAt": "2026-10-09T06:20:06.293688+00:00",
+            "endedAt": "2026-10-09T06:20:06.408139+00:00",
+            "exitCode": 0,
+            "timedOut": false,
+            "elapsedSeconds": 0.11445470400212798,
+            "outputSha256": "1677436e8d345eb580c68381c893cc652c2ed9eeb0a27a15c04be458873f1a1b",
+            "pid": 1017752,
+            "processGroup": 1017752,
+            "groupCleanup": null,
+            "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+          },
+          {
+            "argv": [
+              "/home/karma/Documents/RIS/.venv/bin/python",
+              "-m",
+              "hmbc_protocol.worker_log",
+              "--state-dir",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/private-adapter-state"
+            ],
+            "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/protocol/protocol",
+            "startedAt": "2026-10-09T06:20:27.077634+00:00",
+            "endedAt": "2026-10-09T06:20:27.192000+00:00",
+            "exitCode": 0,
+            "timedOut": false,
+            "elapsedSeconds": 0.11436530099308584,
+            "outputSha256": "1677436e8d345eb580c68381c893cc652c2ed9eeb0a27a15c04be458873f1a1b",
+            "pid": 1020114,
+            "processGroup": 1020114,
+            "groupCleanup": null,
+            "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+          },
+          {
+            "argv": [
+              "/home/karma/Documents/RIS/.venv/bin/python",
+              "-m",
+              "hmbc_protocol.worker_log",
+              "--state-dir",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/private-adapter-state"
+            ],
+            "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/protocol/protocol",
+            "startedAt": "2026-10-09T06:20:31.312226+00:00",
+            "endedAt": "2026-10-09T06:20:31.427056+00:00",
+            "exitCode": 0,
+            "timedOut": false,
+            "elapsedSeconds": 0.1148301640059799,
+            "outputSha256": "1677436e8d345eb580c68381c893cc652c2ed9eeb0a27a15c04be458873f1a1b",
+            "pid": 1020585,
+            "processGroup": 1020585,
+            "groupCleanup": null,
+            "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+          },
+          {
+            "argv": [
+              "/home/karma/Documents/RIS/.venv/bin/python",
+              "-m",
+              "hmbc_protocol.worker_log",
+              "--state-dir",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/private-adapter-state"
+            ],
+            "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/protocol/protocol",
+            "startedAt": "2026-10-09T06:20:32.571377+00:00",
+            "endedAt": "2026-10-09T06:20:32.736212+00:00",
+            "exitCode": 0,
+            "timedOut": false,
+            "elapsedSeconds": 0.16485212100087665,
+            "outputSha256": "a1cdb7828a5a61ba878784d0207a5ad61418b1244f42b06975b37d8ba6bbd71e",
+            "pid": 1020708,
+            "processGroup": 1020708,
+            "groupCleanup": null,
+            "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+          },
+          {
+            "argv": [
+              "/home/karma/Documents/RIS/.venv/bin/python",
+              "-m",
+              "hmbc_protocol.worker_log",
+              "--state-dir",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/private-adapter-state"
+            ],
+            "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/protocol/protocol",
+            "startedAt": "2026-10-09T06:20:50.291166+00:00",
+            "endedAt": "2026-10-09T06:20:50.456032+00:00",
+            "exitCode": 0,
+            "timedOut": false,
+            "elapsedSeconds": 0.16488625200872775,
+            "outputSha256": "a1cdb7828a5a61ba878784d0207a5ad61418b1244f42b06975b37d8ba6bbd71e",
+            "pid": 1022688,
+            "processGroup": 1022688,
+            "groupCleanup": null,
+            "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+          },
+          {
+            "argv": [
+              "/home/karma/Documents/RIS/.venv/bin/python",
+              "-m",
+              "hmbc_protocol.worker_log",
+              "--state-dir",
+              "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/private-adapter-state"
+            ],
+            "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/protocol/protocol",
+            "startedAt": "2026-10-09T06:21:09.492384+00:00",
+            "endedAt": "2026-10-09T06:21:09.657479+00:00",
+            "exitCode": 0,
+            "timedOut": false,
+            "elapsedSeconds": 0.16511234399513341,
+            "outputSha256": "a1cdb7828a5a61ba878784d0207a5ad61418b1244f42b06975b37d8ba6bbd71e",
+            "pid": 1024857,
+            "processGroup": 1024857,
+            "groupCleanup": null,
+            "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+          }
+        ],
+        "results": {
+          "alice": "repaired-e/alice/result.json",
+          "bob": "repaired-e/bob/result.json"
+        },
+        "wrongAdmin": "UNAUTHORIZED_CALLER; baseline issuer restriction, not a repair",
+        "servicesStopped": true
+      },
+      "alice": {
+        "startedAt": "2026-10-09T06:19:51.891798+00:00",
+        "endedAt": "2026-10-09T06:20:35.854428+00:00",
+        "ok": true,
+        "failure": null,
+        "scope": "C-E1 single control; not an RQ gate",
+        "adapterMode": "symbolic",
+        "observed": {
+          "adapterMode": "symbolic",
+          "events": [
+            {
+              "type": "REQUEST_LOGGED",
+              "requestDigest": "0xcf74dc0fb3a4ffb1818055a6bed2b7eec041b775e28a92e65d9f0295ea803f57",
+              "timestamp": "1791526810"
+            },
+            {
+              "type": "PBC_DECIDED",
+              "requestDigest": "0xcf74dc0fb3a4ffb1818055a6bed2b7eec041b775e28a92e65d9f0295ea803f57",
+              "timestamp": "1791526810"
+            },
+            {
+              "type": "DBC_AUTHORIZED",
+              "requestDigest": "0xcf74dc0fb3a4ffb1818055a6bed2b7eec041b775e28a92e65d9f0295ea803f57",
+              "timestamp": "1791526822",
+              "grantId": "0x568ac4a9d5093274b0b2d0d796f18a744733cf20aa1569f86498d850e25699c3",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+              "kssc": "0xe08fc08118c249128865a95e60617618970876b9",
+              "destinationChainId": "28545",
+              "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d",
+              "keyEpoch": "0"
+            },
+            {
+              "type": "RELEASE_INTENT",
+              "requestDigest": "0xcf74dc0fb3a4ffb1818055a6bed2b7eec041b775e28a92e65d9f0295ea803f57",
+              "timestamp": "1791526832",
+              "grantId": "0x568ac4a9d5093274b0b2d0d796f18a744733cf20aa1569f86498d850e25699c3",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            },
+            {
+              "type": "RELEASE_SENT",
+              "requestDigest": "0xcf74dc0fb3a4ffb1818055a6bed2b7eec041b775e28a92e65d9f0295ea803f57",
+              "timestamp": "1791526832",
+              "grantId": "0x568ac4a9d5093274b0b2d0d796f18a744733cf20aa1569f86498d850e25699c3",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            },
+            {
+              "type": "OUTCOME_RECORDED",
+              "requestDigest": "0xcf74dc0fb3a4ffb1818055a6bed2b7eec041b775e28a92e65d9f0295ea803f57",
+              "timestamp": "1791526834",
+              "grantId": "0x568ac4a9d5093274b0b2d0d796f18a744733cf20aa1569f86498d850e25699c3",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            }
+          ],
+          "error": null,
+          "ledgerChecks": {}
+        },
+        "oracle": {
+          "ok": true,
+          "classification": "REPAIR_SUPPORTED",
+          "assertions": [
+            {
+              "name": "adapter mode is explicit and matches",
+              "passed": true
+            },
+            {
+              "name": "stable denial reason",
+              "passed": true
+            },
+            {
+              "name": "expected events occur in causal order",
+              "passed": true
+            },
+            {
+              "name": "at most one new grant",
+              "passed": true
+            },
+            {
+              "name": "at most one recorded outcome",
+              "passed": true
+            },
+            {
+              "name": "event 0 request binding",
+              "passed": true
+            },
+            {
+              "name": "event 1 request binding",
+              "passed": true
+            },
+            {
+              "name": "event 2 request binding",
+              "passed": true
+            },
+            {
+              "name": "grant 2 requestDigest",
+              "passed": true
+            },
+            {
+              "name": "grant 2 grantId",
+              "passed": true
+            },
+            {
+              "name": "grant 2 gid",
+              "passed": true
+            },
+            {
+              "name": "grant 2 dataId",
+              "passed": true
+            },
+            {
+              "name": "grant 2 kssc",
+              "passed": true
+            },
+            {
+              "name": "grant 2 destinationChainId",
+              "passed": true
+            },
+            {
+              "name": "grant 2 recipientKeyHash",
+              "passed": true
+            },
+            {
+              "name": "grant 2 keyEpoch",
+              "passed": true
+            },
+            {
+              "name": "event 3 request binding",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 3 requestDigest",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 3 grantId",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 3 gid",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 3 dataId",
+              "passed": true
+            },
+            {
+              "name": "authorization precedes 3",
+              "passed": true
+            },
+            {
+              "name": "event 4 request binding",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 4 requestDigest",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 4 grantId",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 4 gid",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 4 dataId",
+              "passed": true
+            },
+            {
+              "name": "authorization precedes 4",
+              "passed": true
+            },
+            {
+              "name": "durable intent precedes send 4",
+              "passed": true
+            },
+            {
+              "name": "event 5 request binding",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 5 requestDigest",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 5 grantId",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 5 gid",
+              "passed": true
+            },
+            {
+              "name": "release/outcome 5 dataId",
+              "passed": true
+            },
+            {
+              "name": "authorization precedes 5",
+              "passed": true
+            }
+          ],
+          "observedEvents": [
+            {
+              "type": "REQUEST_LOGGED",
+              "requestDigest": "0xcf74dc0fb3a4ffb1818055a6bed2b7eec041b775e28a92e65d9f0295ea803f57",
+              "timestamp": "1791526810"
+            },
+            {
+              "type": "PBC_DECIDED",
+              "requestDigest": "0xcf74dc0fb3a4ffb1818055a6bed2b7eec041b775e28a92e65d9f0295ea803f57",
+              "timestamp": "1791526810"
+            },
+            {
+              "type": "DBC_AUTHORIZED",
+              "requestDigest": "0xcf74dc0fb3a4ffb1818055a6bed2b7eec041b775e28a92e65d9f0295ea803f57",
+              "timestamp": "1791526822",
+              "grantId": "0x568ac4a9d5093274b0b2d0d796f18a744733cf20aa1569f86498d850e25699c3",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+              "kssc": "0xe08fc08118c249128865a95e60617618970876b9",
+              "destinationChainId": "28545",
+              "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d",
+              "keyEpoch": "0"
+            },
+            {
+              "type": "RELEASE_INTENT",
+              "requestDigest": "0xcf74dc0fb3a4ffb1818055a6bed2b7eec041b775e28a92e65d9f0295ea803f57",
+              "timestamp": "1791526832",
+              "grantId": "0x568ac4a9d5093274b0b2d0d796f18a744733cf20aa1569f86498d850e25699c3",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            },
+            {
+              "type": "RELEASE_SENT",
+              "requestDigest": "0xcf74dc0fb3a4ffb1818055a6bed2b7eec041b775e28a92e65d9f0295ea803f57",
+              "timestamp": "1791526832",
+              "grantId": "0x568ac4a9d5093274b0b2d0d796f18a744733cf20aa1569f86498d850e25699c3",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            },
+            {
+              "type": "OUTCOME_RECORDED",
+              "requestDigest": "0xcf74dc0fb3a4ffb1818055a6bed2b7eec041b775e28a92e65d9f0295ea803f57",
+              "timestamp": "1791526834",
+              "grantId": "0x568ac4a9d5093274b0b2d0d796f18a744733cf20aa1569f86498d850e25699c3",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+            }
+          ],
+          "limitations": [
+            "E/F adapter is symbolic; no measured ABE security.",
+            "Outcome recording is not proof of recipient delivery."
+          ]
+        },
+        "delivery": "unknown"
+      },
+      "bob": {
+        "startedAt": "2026-10-09T06:20:35.854630+00:00",
+        "endedAt": "2026-10-09T06:21:09.658679+00:00",
+        "ok": true,
+        "failure": null,
+        "scope": "C-E1 single control; not an RQ gate",
+        "adapterMode": "symbolic",
+        "observed": {
+          "adapterMode": "symbolic",
+          "events": [
+            {
+              "type": "REQUEST_LOGGED",
+              "requestDigest": "0xeb7a651c963a491430d7edd0632f757266b3a560abec5eda4c6c734a468334ea",
+              "timestamp": "1791526854"
+            },
+            {
+              "type": "PBC_DECIDED",
+              "requestDigest": "0xeb7a651c963a491430d7edd0632f757266b3a560abec5eda4c6c734a468334ea",
+              "timestamp": "1791526854"
+            }
+          ],
+          "error": "POLICY_DENIED",
+          "ledgerChecks": {
+            "DBC_POLICY_DENIAL_LOGGED": true,
+            "NONCE_UNCHANGED": true
+          }
+        },
+        "oracle": {
+          "ok": true,
+          "classification": "REPAIR_SUPPORTED",
+          "assertions": [
+            {
+              "name": "adapter mode is explicit and matches",
+              "passed": true
+            },
+            {
+              "name": "stable denial reason",
+              "passed": true
+            },
+            {
+              "name": "DBC_POLICY_DENIAL_LOGGED",
+              "passed": true
+            },
+            {
+              "name": "NONCE_UNCHANGED",
+              "passed": true
+            },
+            {
+              "name": "expected events occur in causal order",
+              "passed": true
+            },
+            {
+              "name": "at most one new grant",
+              "passed": true
+            },
+            {
+              "name": "at most one recorded outcome",
+              "passed": true
+            },
+            {
+              "name": "denial cannot release or record a successful grant outcome",
+              "passed": true
+            },
+            {
+              "name": "event 0 request binding",
+              "passed": true
+            },
+            {
+              "name": "event 1 request binding",
+              "passed": true
+            }
+          ],
+          "observedEvents": [
+            {
+              "type": "REQUEST_LOGGED",
+              "requestDigest": "0xeb7a651c963a491430d7edd0632f757266b3a560abec5eda4c6c734a468334ea",
+              "timestamp": "1791526854"
+            },
+            {
+              "type": "PBC_DECIDED",
+              "requestDigest": "0xeb7a651c963a491430d7edd0632f757266b3a560abec5eda4c6c734a468334ea",
+              "timestamp": "1791526854"
+            }
+          ],
+          "limitations": [
+            "E/F adapter is symbolic; no measured ABE security.",
+            "Outcome recording is not proof of recipient delivery."
+          ]
+        },
+        "delivery": "unknown"
+      },
+      "alice/nonce-replay": {
+        "startedAt": "2026-10-09T06:20:24.432637+00:00",
+        "endedAt": "2026-10-09T06:20:31.427748+00:00",
+        "ok": true,
+        "failure": null,
+        "scope": "C-E2 identical accepted request; not an RQ gate",
+        "delivery": "unknown",
+        "error": "REPLAY",
+        "nativeUnchanged": true,
+        "workerUnchanged": true,
+        "identicalCalldata": true,
+        "classification": "REPAIR_SUPPORTED",
+        "limitation": "checked reconstruction observations only; no worker retry, delivery, ABE, consensus or gate proof",
+        "rejectionCode": "8",
+        "replayTransactionHash": "0x70dda8d99bcf10b4a7a7a28b9f5f48f9940e6dd5b08bb13cc791044ea1b98fda"
+      }
+    }
+  ],
+  "processes": [
+    {
+      "argv": [
+        "/home/karma/.local/share/hmbc-tools/foundry-1.8.5/anvil",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "18545",
+        "--chain-id",
+        "18545",
+        "--hardfork",
+        "cancun",
+        "--silent"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "pid": 989669,
+      "startedAt": "2026-10-09T06:14:58.178770+00:00",
+      "readyAt": "2026-10-09T06:14:58.407584+00:00",
+      "endedAt": "2026-10-09T06:16:54.851508+00:00",
+      "exitCode": 0,
+      "stopGraceSeconds": 2,
+      "failure": null,
+      "environmentSha256": "53a79768e72e7813d92db0dc61be67699fcecd9128852e3f9ed8ee2a17aa514b",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidencePath": "paper-strict-nonce-replay/paper-strict/pbc-service/process.json",
+      "pidPresent": false
+    },
+    {
+      "argv": [
+        "/home/karma/.local/share/hmbc-tools/foundry-1.8.5/anvil",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "28545",
+        "--chain-id",
+        "28545",
+        "--hardfork",
+        "cancun",
+        "--silent"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "pid": 989796,
+      "startedAt": "2026-10-09T06:14:59.141593+00:00",
+      "readyAt": "2026-10-09T06:14:59.344041+00:00",
+      "endedAt": "2026-10-09T06:16:54.847622+00:00",
+      "exitCode": 0,
+      "stopGraceSeconds": 2,
+      "failure": null,
+      "environmentSha256": "53a79768e72e7813d92db0dc61be67699fcecd9128852e3f9ed8ee2a17aa514b",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidencePath": "paper-strict-nonce-replay/paper-strict/dbc-service/process.json",
+      "pidPresent": false
+    },
+    {
+      "argv": [
+        "/home/karma/Documents/RIS/.venv/bin/python",
+        "-m",
+        "hmbc_protocol.adapter",
+        "--state-dir",
+        "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/private-adapter-state",
+        "--deployment",
+        "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/ledger/ledger/exports/deployments/E2-grouped-replay-20261009-nonce-replay-paper-strict/deployment.json"
+      ],
+      "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/protocol/protocol",
+      "pid": 993982,
+      "startedAt": "2026-10-09T06:15:59.203620+00:00",
+      "endedAt": "2026-10-09T06:16:54.843694+00:00",
+      "exitCode": 0,
+      "timeoutSeconds": 10,
+      "stopGraceSeconds": 2,
+      "failure": null,
+      "exchanges": [
+        {
+          "startedAt": "2026-10-09T06:16:10.281199+00:00",
+          "requestSha256": "baf95393a0a4ebdc9f5e3cd083280ed0a2b73bb258a76ac5197deb353a92d78d",
+          "responseSha256": "59150f31959c0ba9eefbc563dad83b2919507e4124ebebcf0f0a9967fa11cff6",
+          "endedAt": "2026-10-09T06:16:10.291069+00:00",
+          "failure": null
+        },
+        {
+          "startedAt": "2026-10-09T06:16:11.558189+00:00",
+          "requestSha256": "820f29d6d329dec02ee6c0c46923213b4fbca1d2b3674a1fc794a4154cc712d4",
+          "responseSha256": "52204d68595254a2b2cd472b5ada452db76a3f082c335c39377d6f13cbde20e4",
+          "endedAt": "2026-10-09T06:16:11.566256+00:00",
+          "failure": null
+        },
+        {
+          "startedAt": "2026-10-09T06:16:29.281135+00:00",
+          "requestSha256": "29506f4e6fde554f8a199b2349ebb95de88f18f293af1e3a91a03fe8e464fde9",
+          "responseSha256": "f7eec8494014bad85390b0f3196c2c93572660aa54484e78618ed8ec42fd50c5",
+          "endedAt": "2026-10-09T06:16:29.289348+00:00",
+          "failure": null
+        },
+        {
+          "startedAt": "2026-10-09T06:16:29.884279+00:00",
+          "requestSha256": "c2c89b71990004acc40ab5c2f10126cdc39aa05571feb9f5aeca1750d86ae42e",
+          "responseSha256": "15d88fb99c0b731f15acd31784efa2e49bd766bda3d444ac7205ae63c4607310",
+          "endedAt": "2026-10-09T06:16:29.884877+00:00",
+          "failure": null
+        },
+        {
+          "startedAt": "2026-10-09T06:16:42.804941+00:00",
+          "requestSha256": "baf95393a0a4ebdc9f5e3cd083280ed0a2b73bb258a76ac5197deb353a92d78d",
+          "responseSha256": "59150f31959c0ba9eefbc563dad83b2919507e4124ebebcf0f0a9967fa11cff6",
+          "endedAt": "2026-10-09T06:16:42.807165+00:00",
+          "failure": null
+        },
+        {
+          "startedAt": "2026-10-09T06:16:44.100806+00:00",
+          "requestSha256": "30b0efa889673cf3e4a2c15c6f78cd5a4b9a4e391dbcf470ad117b29333526ce",
+          "responseSha256": "18fd90c2346ba901413aa87d5f6ca63ff09ab611147dd0696a6c76f02b843b6d",
+          "endedAt": "2026-10-09T06:16:44.109853+00:00",
+          "failure": null
+        }
+      ],
+      "environmentSha256": "53a79768e72e7813d92db0dc61be67699fcecd9128852e3f9ed8ee2a17aa514b",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidencePath": "paper-strict-nonce-replay/paper-strict/adapter/process.json",
+      "pidPresent": false
+    },
+    {
+      "argv": [
+        "/home/karma/.local/share/hmbc-tools/foundry-1.8.5/anvil",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "18545",
+        "--chain-id",
+        "18545",
+        "--hardfork",
+        "cancun",
+        "--silent"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "pid": 1000757,
+      "startedAt": "2026-10-09T06:16:56.380951+00:00",
+      "readyAt": "2026-10-09T06:16:56.605676+00:00",
+      "endedAt": "2026-10-09T06:18:53.384063+00:00",
+      "exitCode": 0,
+      "stopGraceSeconds": 2,
+      "failure": null,
+      "environmentSha256": "53a79768e72e7813d92db0dc61be67699fcecd9128852e3f9ed8ee2a17aa514b",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidencePath": "paper-minimal-nonce-replay/paper-minimal/pbc-service/process.json",
+      "pidPresent": false
+    },
+    {
+      "argv": [
+        "/home/karma/.local/share/hmbc-tools/foundry-1.8.5/anvil",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "28545",
+        "--chain-id",
+        "28545",
+        "--hardfork",
+        "cancun",
+        "--silent"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "pid": 1000879,
+      "startedAt": "2026-10-09T06:16:57.396217+00:00",
+      "readyAt": "2026-10-09T06:16:57.625734+00:00",
+      "endedAt": "2026-10-09T06:18:53.380327+00:00",
+      "exitCode": 0,
+      "stopGraceSeconds": 2,
+      "failure": null,
+      "environmentSha256": "53a79768e72e7813d92db0dc61be67699fcecd9128852e3f9ed8ee2a17aa514b",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidencePath": "paper-minimal-nonce-replay/paper-minimal/dbc-service/process.json",
+      "pidPresent": false
+    },
+    {
+      "argv": [
+        "/home/karma/Documents/RIS/.venv/bin/python",
+        "-m",
+        "hmbc_protocol.adapter",
+        "--state-dir",
+        "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/private-adapter-state",
+        "--deployment",
+        "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/ledger/ledger/exports/deployments/E2-grouped-replay-20261009-nonce-replay-paper-minimal/deployment.json"
+      ],
+      "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/protocol/protocol",
+      "pid": 1005067,
+      "startedAt": "2026-10-09T06:17:57.987709+00:00",
+      "endedAt": "2026-10-09T06:18:53.376083+00:00",
+      "exitCode": 0,
+      "timeoutSeconds": 10,
+      "stopGraceSeconds": 2,
+      "failure": null,
+      "exchanges": [
+        {
+          "startedAt": "2026-10-09T06:18:08.981051+00:00",
+          "requestSha256": "d6dcdda6626ce1a3d3d13c411986d8f66bc681d5c9bf3a718c6b0ed4e1254c54",
+          "responseSha256": "59150f31959c0ba9eefbc563dad83b2919507e4124ebebcf0f0a9967fa11cff6",
+          "endedAt": "2026-10-09T06:18:08.990265+00:00",
+          "failure": null
+        },
+        {
+          "startedAt": "2026-10-09T06:18:10.265967+00:00",
+          "requestSha256": "b4e56f2ac3662af1f2031eccbebb1e37f10f37dfc77e0876299c65d4f2a58f9c",
+          "responseSha256": "6b75d0acaa45ca4bca5ed8704177dfc4331203ed7e8810d529af5fcf751b9158",
+          "endedAt": "2026-10-09T06:18:10.273797+00:00",
+          "failure": null
+        },
+        {
+          "startedAt": "2026-10-09T06:18:27.859049+00:00",
+          "requestSha256": "e066acf14330d407d3e328f22336c8ad06fd9a11617be5795a8ef8ec9b198ba8",
+          "responseSha256": "2ca32c4685e69caea02b391ea26f67d1d9993285d7e34bfdade54cfc69f0b9a3",
+          "endedAt": "2026-10-09T06:18:27.866917+00:00",
+          "failure": null
+        },
+        {
+          "startedAt": "2026-10-09T06:18:28.489600+00:00",
+          "requestSha256": "841c6ccd2428c07ce822a17efec4eaa724f4bfc5a3238038c4c2b68152d62b06",
+          "responseSha256": "15d88fb99c0b731f15acd31784efa2e49bd766bda3d444ac7205ae63c4607310",
+          "endedAt": "2026-10-09T06:18:28.490389+00:00",
+          "failure": null
+        },
+        {
+          "startedAt": "2026-10-09T06:18:41.444124+00:00",
+          "requestSha256": "d6dcdda6626ce1a3d3d13c411986d8f66bc681d5c9bf3a718c6b0ed4e1254c54",
+          "responseSha256": "59150f31959c0ba9eefbc563dad83b2919507e4124ebebcf0f0a9967fa11cff6",
+          "endedAt": "2026-10-09T06:18:41.447224+00:00",
+          "failure": null
+        },
+        {
+          "startedAt": "2026-10-09T06:18:42.714233+00:00",
+          "requestSha256": "248cb3ef4634d3e026a44748bcc824fee30a86fb80f52e0c72858075c56ab612",
+          "responseSha256": "65236db9687e159569ceef8a3aafde82afb258330567868f796c66bc060b01d6",
+          "endedAt": "2026-10-09T06:18:42.722163+00:00",
+          "failure": null
+        }
+      ],
+      "environmentSha256": "53a79768e72e7813d92db0dc61be67699fcecd9128852e3f9ed8ee2a17aa514b",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidencePath": "paper-minimal-nonce-replay/paper-minimal/adapter/process.json",
+      "pidPresent": false
+    },
+    {
+      "argv": [
+        "/home/karma/.local/share/hmbc-tools/foundry-1.8.5/anvil",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "18545",
+        "--chain-id",
+        "18545",
+        "--hardfork",
+        "cancun",
+        "--silent"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "pid": 1011801,
+      "startedAt": "2026-10-09T06:18:54.961967+00:00",
+      "readyAt": "2026-10-09T06:18:55.190559+00:00",
+      "endedAt": "2026-10-09T06:21:09.731247+00:00",
+      "exitCode": 0,
+      "stopGraceSeconds": 2,
+      "failure": null,
+      "environmentSha256": "53a79768e72e7813d92db0dc61be67699fcecd9128852e3f9ed8ee2a17aa514b",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidencePath": "repaired-e-nonce-replay/repaired-e/pbc-service/process.json",
+      "pidPresent": false
+    },
+    {
+      "argv": [
+        "/home/karma/.local/share/hmbc-tools/foundry-1.8.5/anvil",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "28545",
+        "--chain-id",
+        "28545",
+        "--hardfork",
+        "cancun",
+        "--silent"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "pid": 1011925,
+      "startedAt": "2026-10-09T06:18:55.939180+00:00",
+      "readyAt": "2026-10-09T06:18:56.161792+00:00",
+      "endedAt": "2026-10-09T06:21:09.727504+00:00",
+      "exitCode": 0,
+      "stopGraceSeconds": 2,
+      "failure": null,
+      "environmentSha256": "53a79768e72e7813d92db0dc61be67699fcecd9128852e3f9ed8ee2a17aa514b",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidencePath": "repaired-e-nonce-replay/repaired-e/dbc-service/process.json",
+      "pidPresent": false
+    },
+    {
+      "argv": [
+        "/home/karma/Documents/RIS/.venv/bin/python",
+        "-m",
+        "hmbc_protocol.adapter",
+        "--state-dir",
+        "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/private-adapter-state",
+        "--deployment",
+        "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/ledger/ledger/exports/deployments/E2-grouped-replay-20261009-nonce-replay-repaired-e/deployment.json"
+      ],
+      "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/protocol/protocol",
+      "pid": 1016115,
+      "startedAt": "2026-10-09T06:19:51.891277+00:00",
+      "endedAt": "2026-10-09T06:21:09.722812+00:00",
+      "exitCode": 0,
+      "timeoutSeconds": 10,
+      "stopGraceSeconds": 2,
+      "failure": null,
+      "exchanges": [
+        {
+          "startedAt": "2026-10-09T06:20:06.282344+00:00",
+          "requestSha256": "59bbe38ef9071ba958299c1ce63e9c9ce9b5b8c6a1902f9948d7498828734a7f",
+          "responseSha256": "59150f31959c0ba9eefbc563dad83b2919507e4124ebebcf0f0a9967fa11cff6",
+          "endedAt": "2026-10-09T06:20:06.292641+00:00",
+          "failure": null
+        },
+        {
+          "startedAt": "2026-10-09T06:20:07.508449+00:00",
+          "requestSha256": "2f4fd4b3ca20a86ba54a3b5b54089e0fc12c2341e8c7e7d1b7c18adc24507da8",
+          "responseSha256": "628be3620d38f388ad2bebd6a12a59c59d3ac5880e22aa3f3127cb702d520d0e",
+          "endedAt": "2026-10-09T06:20:07.516575+00:00",
+          "failure": null
+        },
+        {
+          "startedAt": "2026-10-09T06:20:13.539478+00:00",
+          "requestSha256": "3ea0a6d07feecaf5de7f799157eef63592a013e836504cad3b44c55fa0bbec5b",
+          "responseSha256": "6e3bb3fedc24cc3aeea19025179773254ddb159c8aaa9bd829e3f82612e12337",
+          "endedAt": "2026-10-09T06:20:13.558468+00:00",
+          "failure": null
+        },
+        {
+          "startedAt": "2026-10-09T06:20:17.972711+00:00",
+          "requestSha256": "9b1c14b1be72febd0b3e04dbd7692e0d1903915cf67abae167e02bc466ed563f",
+          "responseSha256": "73d883485997819389fd076f7c25f2c8b1a278005a5bcc8414e48a11e3a20f1f",
+          "endedAt": "2026-10-09T06:20:18.002543+00:00",
+          "failure": null
+        },
+        {
+          "startedAt": "2026-10-09T06:20:32.563399+00:00",
+          "requestSha256": "d5d8af00ce4487c9cea9aa2093d6a15f946d866f83314428ff8a0c00852dfbf9",
+          "responseSha256": "ca79fe2e469bad7c73483223ddca500b4e740662a88e70be159d6cba9b4fede7",
+          "endedAt": "2026-10-09T06:20:32.570275+00:00",
+          "failure": null
+        },
+        {
+          "startedAt": "2026-10-09T06:20:33.170471+00:00",
+          "requestSha256": "6702b78ab6e2058bd4099be8b017bcda24d2b6e971c48a6d547788c7c82ea9ef",
+          "responseSha256": "15d88fb99c0b731f15acd31784efa2e49bd766bda3d444ac7205ae63c4607310",
+          "endedAt": "2026-10-09T06:20:33.171259+00:00",
+          "failure": null
+        },
+        {
+          "startedAt": "2026-10-09T06:20:33.177506+00:00",
+          "requestSha256": "fd7c584477a858b8cd8461a74e480e49b2fb0440e8faccc0088e6653636748dd",
+          "responseSha256": "003c58f26e0dff4c136842b96f251422ac65b8a37c3037da83a055f8d51961fb",
+          "endedAt": "2026-10-09T06:20:33.190555+00:00",
+          "failure": null
+        },
+        {
+          "startedAt": "2026-10-09T06:20:50.286526+00:00",
+          "requestSha256": "59bbe38ef9071ba958299c1ce63e9c9ce9b5b8c6a1902f9948d7498828734a7f",
+          "responseSha256": "59150f31959c0ba9eefbc563dad83b2919507e4124ebebcf0f0a9967fa11cff6",
+          "endedAt": "2026-10-09T06:20:50.289639+00:00",
+          "failure": null
+        },
+        {
+          "startedAt": "2026-10-09T06:20:51.567236+00:00",
+          "requestSha256": "8ad8e36a88b60199159ab4d33f9377c12da68104dbae1e6a4449ee27a1ff1377",
+          "responseSha256": "68f7cc08e3ed8e8a2d267540beef1bb75167581dc6abbea4a268d4cc0341b486",
+          "endedAt": "2026-10-09T06:20:51.575369+00:00",
+          "failure": null
+        },
+        {
+          "startedAt": "2026-10-09T06:20:57.609232+00:00",
+          "requestSha256": "3ea0a6d07feecaf5de7f799157eef63592a013e836504cad3b44c55fa0bbec5b",
+          "responseSha256": "26d34f3491494e0ca11c0e4e9320a021ac09d9b4f70f81bbe832167568ccbd22",
+          "endedAt": "2026-10-09T06:20:57.623378+00:00",
+          "failure": null
+        },
+        {
+          "startedAt": "2026-10-09T06:21:02.074216+00:00",
+          "requestSha256": "f3dc623740dbf77467144a70f3de817c8d202a4a62e4e94120ff5a6cd78eac81",
+          "responseSha256": "33f1a8762c551abbc25e256ca9308fc73985be17bda71358614a7df6d9255460",
+          "endedAt": "2026-10-09T06:21:02.099031+00:00",
+          "failure": null
+        }
+      ],
+      "environmentSha256": "53a79768e72e7813d92db0dc61be67699fcecd9128852e3f9ed8ee2a17aa514b",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "evidencePath": "repaired-e-nonce-replay/repaired-e/adapter/process.json",
+      "pidPresent": false
+    }
+  ],
+  "commands": [
+    {
+      "path": "paper-strict-nonce-replay/paper-strict/commands.json",
+      "record": {
+        "argv": [
+          "/usr/bin/bash",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/ledger/ledger/tools/deploy_local.sh",
+          "http://127.0.0.1:18545",
+          "http://127.0.0.1:28545",
+          "paper-strict",
+          "complete-details",
+          "E2-grouped-replay-20261009-nonce-replay-paper-strict"
+        ],
+        "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/ledger",
+        "startedAt": "2026-10-09T06:15:00.125849+00:00",
+        "endedAt": "2026-10-09T06:15:25.515130+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 25.38929532500333,
+        "outputSha256": "edf996932cc48b2f7849f0aea4578bc224e76396a9f1cf3934b1468d50a382a4",
+        "pid": 989927,
+        "processGroup": 989927,
+        "groupCleanup": null,
+        "environmentSha256": "1a13e75d5fcef6245ac8dbec0857f505dd864ad029fbad5e8b37577639eb4f89"
+      }
+    },
+    {
+      "path": "paper-strict-nonce-replay/paper-strict/commands.json",
+      "record": {
+        "argv": [
+          "/usr/bin/bash",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/ledger/ledger/tools/bootstrap_fixture.sh",
+          "http://127.0.0.1:18545",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/ledger/ledger/exports/deployments/E2-grouped-replay-20261009-nonce-replay-paper-strict/deployment.json",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/ledger/ledger/exports/bootstrap-E2-grouped-replay-20261009-nonce-replay-paper-strict.json"
+        ],
+        "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/ledger",
+        "startedAt": "2026-10-09T06:15:26.490634+00:00",
+        "endedAt": "2026-10-09T06:15:28.260015+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 1.7693962170014856,
+        "outputSha256": "5a01d31615937c8f92723b84279f4d18ce06c5ba90ee9edb4566ef97609db772",
+        "pid": 990444,
+        "processGroup": 990444,
+        "groupCleanup": null,
+        "environmentSha256": "1a13e75d5fcef6245ac8dbec0857f505dd864ad029fbad5e8b37577639eb4f89"
+      }
+    },
+    {
+      "path": "paper-strict-nonce-replay/paper-strict/commands.json",
+      "record": {
+        "argv": [
+          "/home/karma/Documents/RIS/.venv/bin/python",
+          "-m",
+          "hmbc_protocol.worker_log",
+          "--state-dir",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/private-adapter-state"
+        ],
+        "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/protocol/protocol",
+        "startedAt": "2026-10-09T06:16:10.291933+00:00",
+        "endedAt": "2026-10-09T06:16:10.456784+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 0.1648669010028243,
+        "outputSha256": "1677436e8d345eb580c68381c893cc652c2ed9eeb0a27a15c04be458873f1a1b",
+        "pid": 995233,
+        "processGroup": 995233,
+        "groupCleanup": null,
+        "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+      }
+    },
+    {
+      "path": "paper-strict-nonce-replay/paper-strict/commands.json",
+      "record": {
+        "argv": [
+          "/home/karma/Documents/RIS/.venv/bin/python",
+          "-m",
+          "hmbc_protocol.worker_log",
+          "--state-dir",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/private-adapter-state"
+        ],
+        "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/protocol/protocol",
+        "startedAt": "2026-10-09T06:16:23.828424+00:00",
+        "endedAt": "2026-10-09T06:16:23.943144+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 0.11472238600254059,
+        "outputSha256": "1677436e8d345eb580c68381c893cc652c2ed9eeb0a27a15c04be458873f1a1b",
+        "pid": 996753,
+        "processGroup": 996753,
+        "groupCleanup": null,
+        "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+      }
+    },
+    {
+      "path": "paper-strict-nonce-replay/paper-strict/commands.json",
+      "record": {
+        "argv": [
+          "/home/karma/Documents/RIS/.venv/bin/python",
+          "-m",
+          "hmbc_protocol.worker_log",
+          "--state-dir",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/private-adapter-state"
+        ],
+        "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/protocol/protocol",
+        "startedAt": "2026-10-09T06:16:28.045114+00:00",
+        "endedAt": "2026-10-09T06:16:28.159358+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 0.11424607598746661,
+        "outputSha256": "1677436e8d345eb580c68381c893cc652c2ed9eeb0a27a15c04be458873f1a1b",
+        "pid": 997208,
+        "processGroup": 997208,
+        "groupCleanup": null,
+        "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+      }
+    },
+    {
+      "path": "paper-strict-nonce-replay/paper-strict/commands.json",
+      "record": {
+        "argv": [
+          "/home/karma/Documents/RIS/.venv/bin/python",
+          "-m",
+          "hmbc_protocol.worker_log",
+          "--state-dir",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/private-adapter-state"
+        ],
+        "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/protocol/protocol",
+        "startedAt": "2026-10-09T06:16:29.290919+00:00",
+        "endedAt": "2026-10-09T06:16:29.456028+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 0.165127462008968,
+        "outputSha256": "022e417b088f9cf1014831823a686083bb48b13a5b592d93dac7521f9d476272",
+        "pid": 997336,
+        "processGroup": 997336,
+        "groupCleanup": null,
+        "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+      }
+    },
+    {
+      "path": "paper-strict-nonce-replay/paper-strict/commands.json",
+      "record": {
+        "argv": [
+          "/home/karma/Documents/RIS/.venv/bin/python",
+          "-m",
+          "hmbc_protocol.worker_log",
+          "--state-dir",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/private-adapter-state"
+        ],
+        "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/protocol/protocol",
+        "startedAt": "2026-10-09T06:16:42.808055+00:00",
+        "endedAt": "2026-10-09T06:16:42.972829+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 0.16478460599319078,
+        "outputSha256": "022e417b088f9cf1014831823a686083bb48b13a5b592d93dac7521f9d476272",
+        "pid": 998846,
+        "processGroup": 998846,
+        "groupCleanup": null,
+        "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+      }
+    },
+    {
+      "path": "paper-strict-nonce-replay/paper-strict/commands.json",
+      "record": {
+        "argv": [
+          "/home/karma/Documents/RIS/.venv/bin/python",
+          "-m",
+          "hmbc_protocol.worker_log",
+          "--state-dir",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/private-adapter-state"
+        ],
+        "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/protocol/protocol",
+        "startedAt": "2026-10-09T06:16:54.613277+00:00",
+        "endedAt": "2026-10-09T06:16:54.777943+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 0.1646858180029085,
+        "outputSha256": "022e417b088f9cf1014831823a686083bb48b13a5b592d93dac7521f9d476272",
+        "pid": 1000142,
+        "processGroup": 1000142,
+        "groupCleanup": null,
+        "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+      }
+    },
+    {
+      "path": "paper-minimal-nonce-replay/paper-minimal/commands.json",
+      "record": {
+        "argv": [
+          "/usr/bin/bash",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/ledger/ledger/tools/deploy_local.sh",
+          "http://127.0.0.1:18545",
+          "http://127.0.0.1:28545",
+          "paper-minimal",
+          "complete-details",
+          "E2-grouped-replay-20261009-nonce-replay-paper-minimal"
+        ],
+        "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/ledger",
+        "startedAt": "2026-10-09T06:16:58.375998+00:00",
+        "endedAt": "2026-10-09T06:17:24.327900+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 25.951908046001336,
+        "outputSha256": "4c9f4b05f5202a637146b3adaabd225ce7dc003c3c571d59b81aaaf47a1689f4",
+        "pid": 1001002,
+        "processGroup": 1001002,
+        "groupCleanup": null,
+        "environmentSha256": "1a13e75d5fcef6245ac8dbec0857f505dd864ad029fbad5e8b37577639eb4f89"
+      }
+    },
+    {
+      "path": "paper-minimal-nonce-replay/paper-minimal/commands.json",
+      "record": {
+        "argv": [
+          "/usr/bin/bash",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/ledger/ledger/tools/bootstrap_fixture.sh",
+          "http://127.0.0.1:18545",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/ledger/ledger/exports/deployments/E2-grouped-replay-20261009-nonce-replay-paper-minimal/deployment.json",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/ledger/ledger/exports/bootstrap-E2-grouped-replay-20261009-nonce-replay-paper-minimal.json"
+        ],
+        "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/ledger",
+        "startedAt": "2026-10-09T06:17:25.265765+00:00",
+        "endedAt": "2026-10-09T06:17:27.085454+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 1.8197053959884215,
+        "outputSha256": "8a4c2c3e006c7f2a2f6e65454818988d7f1b3ac1c8f567e2d88dadd8cdb87874",
+        "pid": 1001485,
+        "processGroup": 1001485,
+        "groupCleanup": null,
+        "environmentSha256": "1a13e75d5fcef6245ac8dbec0857f505dd864ad029fbad5e8b37577639eb4f89"
+      }
+    },
+    {
+      "path": "paper-minimal-nonce-replay/paper-minimal/commands.json",
+      "record": {
+        "argv": [
+          "/home/karma/Documents/RIS/.venv/bin/python",
+          "-m",
+          "hmbc_protocol.worker_log",
+          "--state-dir",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/private-adapter-state"
+        ],
+        "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/protocol/protocol",
+        "startedAt": "2026-10-09T06:18:08.991146+00:00",
+        "endedAt": "2026-10-09T06:18:09.156039+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 0.16490862300270237,
+        "outputSha256": "1677436e8d345eb580c68381c893cc652c2ed9eeb0a27a15c04be458873f1a1b",
+        "pid": 1006315,
+        "processGroup": 1006315,
+        "groupCleanup": null,
+        "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+      }
+    },
+    {
+      "path": "paper-minimal-nonce-replay/paper-minimal/commands.json",
+      "record": {
+        "argv": [
+          "/home/karma/Documents/RIS/.venv/bin/python",
+          "-m",
+          "hmbc_protocol.worker_log",
+          "--state-dir",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/private-adapter-state"
+        ],
+        "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/protocol/protocol",
+        "startedAt": "2026-10-09T06:18:22.403845+00:00",
+        "endedAt": "2026-10-09T06:18:22.518617+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 0.1147687190095894,
+        "outputSha256": "1677436e8d345eb580c68381c893cc652c2ed9eeb0a27a15c04be458873f1a1b",
+        "pid": 1007802,
+        "processGroup": 1007802,
+        "groupCleanup": null,
+        "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+      }
+    },
+    {
+      "path": "paper-minimal-nonce-replay/paper-minimal/commands.json",
+      "record": {
+        "argv": [
+          "/home/karma/Documents/RIS/.venv/bin/python",
+          "-m",
+          "hmbc_protocol.worker_log",
+          "--state-dir",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/private-adapter-state"
+        ],
+        "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/protocol/protocol",
+        "startedAt": "2026-10-09T06:18:26.612582+00:00",
+        "endedAt": "2026-10-09T06:18:26.727047+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 0.11446422399603762,
+        "outputSha256": "1677436e8d345eb580c68381c893cc652c2ed9eeb0a27a15c04be458873f1a1b",
+        "pid": 1008274,
+        "processGroup": 1008274,
+        "groupCleanup": null,
+        "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+      }
+    },
+    {
+      "path": "paper-minimal-nonce-replay/paper-minimal/commands.json",
+      "record": {
+        "argv": [
+          "/home/karma/Documents/RIS/.venv/bin/python",
+          "-m",
+          "hmbc_protocol.worker_log",
+          "--state-dir",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/private-adapter-state"
+        ],
+        "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/protocol/protocol",
+        "startedAt": "2026-10-09T06:18:27.867940+00:00",
+        "endedAt": "2026-10-09T06:18:28.032635+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 0.16470138299337123,
+        "outputSha256": "5a3693190964dacf0d49a835b5ce7d93a3d363c23bf70924d7d1fae31114d9df",
+        "pid": 1008396,
+        "processGroup": 1008396,
+        "groupCleanup": null,
+        "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+      }
+    },
+    {
+      "path": "paper-minimal-nonce-replay/paper-minimal/commands.json",
+      "record": {
+        "argv": [
+          "/home/karma/Documents/RIS/.venv/bin/python",
+          "-m",
+          "hmbc_protocol.worker_log",
+          "--state-dir",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/private-adapter-state"
+        ],
+        "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/protocol/protocol",
+        "startedAt": "2026-10-09T06:18:41.448637+00:00",
+        "endedAt": "2026-10-09T06:18:41.613868+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 0.16524878500786144,
+        "outputSha256": "5a3693190964dacf0d49a835b5ce7d93a3d363c23bf70924d7d1fae31114d9df",
+        "pid": 1009886,
+        "processGroup": 1009886,
+        "groupCleanup": null,
+        "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+      }
+    },
+    {
+      "path": "paper-minimal-nonce-replay/paper-minimal/commands.json",
+      "record": {
+        "argv": [
+          "/home/karma/Documents/RIS/.venv/bin/python",
+          "-m",
+          "hmbc_protocol.worker_log",
+          "--state-dir",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/private-adapter-state"
+        ],
+        "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/protocol/protocol",
+        "startedAt": "2026-10-09T06:18:53.146575+00:00",
+        "endedAt": "2026-10-09T06:18:53.311085+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 0.16451968699402642,
+        "outputSha256": "5a3693190964dacf0d49a835b5ce7d93a3d363c23bf70924d7d1fae31114d9df",
+        "pid": 1011180,
+        "processGroup": 1011180,
+        "groupCleanup": null,
+        "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+      }
+    },
+    {
+      "path": "repaired-e-nonce-replay/repaired-e/commands.json",
+      "record": {
+        "argv": [
+          "/usr/bin/bash",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/ledger/ledger/tools/deploy_local.sh",
+          "http://127.0.0.1:18545",
+          "http://127.0.0.1:28545",
+          "repaired-e",
+          "complete-details",
+          "E2-grouped-replay-20261009-nonce-replay-repaired-e"
+        ],
+        "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/ledger",
+        "startedAt": "2026-10-09T06:18:56.953970+00:00",
+        "endedAt": "2026-10-09T06:19:18.040351+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 21.086389032992884,
+        "outputSha256": "ab853ad9cfb9f53ba96180a557c982971b31269aff05a3b2997b8e854e20858b",
+        "pid": 1012047,
+        "processGroup": 1012047,
+        "groupCleanup": null,
+        "environmentSha256": "1a13e75d5fcef6245ac8dbec0857f505dd864ad029fbad5e8b37577639eb4f89"
+      }
+    },
+    {
+      "path": "repaired-e-nonce-replay/repaired-e/commands.json",
+      "record": {
+        "argv": [
+          "/usr/bin/bash",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/ledger/ledger/tools/bootstrap_fixture.sh",
+          "http://127.0.0.1:18545",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/ledger/ledger/exports/deployments/E2-grouped-replay-20261009-nonce-replay-repaired-e/deployment.json",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/ledger/ledger/exports/bootstrap-E2-grouped-replay-20261009-nonce-replay-repaired-e.json"
+        ],
+        "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/ledger",
+        "startedAt": "2026-10-09T06:19:19.029269+00:00",
+        "endedAt": "2026-10-09T06:19:20.900283+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 1.8710270499868784,
+        "outputSha256": "9441efe84f9910dcf78095cdbeddc9b94b334ea51c7cb48b4115fab482a36982",
+        "pid": 1012560,
+        "processGroup": 1012560,
+        "groupCleanup": null,
+        "environmentSha256": "1a13e75d5fcef6245ac8dbec0857f505dd864ad029fbad5e8b37577639eb4f89"
+      }
+    },
+    {
+      "path": "repaired-e-nonce-replay/repaired-e/commands.json",
+      "record": {
+        "argv": [
+          "/home/karma/Documents/RIS/.venv/bin/python",
+          "-m",
+          "hmbc_protocol.worker_log",
+          "--state-dir",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/private-adapter-state"
+        ],
+        "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/protocol/protocol",
+        "startedAt": "2026-10-09T06:20:06.293688+00:00",
+        "endedAt": "2026-10-09T06:20:06.408139+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 0.11445470400212798,
+        "outputSha256": "1677436e8d345eb580c68381c893cc652c2ed9eeb0a27a15c04be458873f1a1b",
+        "pid": 1017752,
+        "processGroup": 1017752,
+        "groupCleanup": null,
+        "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+      }
+    },
+    {
+      "path": "repaired-e-nonce-replay/repaired-e/commands.json",
+      "record": {
+        "argv": [
+          "/home/karma/Documents/RIS/.venv/bin/python",
+          "-m",
+          "hmbc_protocol.worker_log",
+          "--state-dir",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/private-adapter-state"
+        ],
+        "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/protocol/protocol",
+        "startedAt": "2026-10-09T06:20:27.077634+00:00",
+        "endedAt": "2026-10-09T06:20:27.192000+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 0.11436530099308584,
+        "outputSha256": "1677436e8d345eb580c68381c893cc652c2ed9eeb0a27a15c04be458873f1a1b",
+        "pid": 1020114,
+        "processGroup": 1020114,
+        "groupCleanup": null,
+        "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+      }
+    },
+    {
+      "path": "repaired-e-nonce-replay/repaired-e/commands.json",
+      "record": {
+        "argv": [
+          "/home/karma/Documents/RIS/.venv/bin/python",
+          "-m",
+          "hmbc_protocol.worker_log",
+          "--state-dir",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/private-adapter-state"
+        ],
+        "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/protocol/protocol",
+        "startedAt": "2026-10-09T06:20:31.312226+00:00",
+        "endedAt": "2026-10-09T06:20:31.427056+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 0.1148301640059799,
+        "outputSha256": "1677436e8d345eb580c68381c893cc652c2ed9eeb0a27a15c04be458873f1a1b",
+        "pid": 1020585,
+        "processGroup": 1020585,
+        "groupCleanup": null,
+        "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+      }
+    },
+    {
+      "path": "repaired-e-nonce-replay/repaired-e/commands.json",
+      "record": {
+        "argv": [
+          "/home/karma/Documents/RIS/.venv/bin/python",
+          "-m",
+          "hmbc_protocol.worker_log",
+          "--state-dir",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/private-adapter-state"
+        ],
+        "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/protocol/protocol",
+        "startedAt": "2026-10-09T06:20:32.571377+00:00",
+        "endedAt": "2026-10-09T06:20:32.736212+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 0.16485212100087665,
+        "outputSha256": "a1cdb7828a5a61ba878784d0207a5ad61418b1244f42b06975b37d8ba6bbd71e",
+        "pid": 1020708,
+        "processGroup": 1020708,
+        "groupCleanup": null,
+        "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+      }
+    },
+    {
+      "path": "repaired-e-nonce-replay/repaired-e/commands.json",
+      "record": {
+        "argv": [
+          "/home/karma/Documents/RIS/.venv/bin/python",
+          "-m",
+          "hmbc_protocol.worker_log",
+          "--state-dir",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/private-adapter-state"
+        ],
+        "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/protocol/protocol",
+        "startedAt": "2026-10-09T06:20:50.291166+00:00",
+        "endedAt": "2026-10-09T06:20:50.456032+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 0.16488625200872775,
+        "outputSha256": "a1cdb7828a5a61ba878784d0207a5ad61418b1244f42b06975b37d8ba6bbd71e",
+        "pid": 1022688,
+        "processGroup": 1022688,
+        "groupCleanup": null,
+        "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+      }
+    },
+    {
+      "path": "repaired-e-nonce-replay/repaired-e/commands.json",
+      "record": {
+        "argv": [
+          "/home/karma/Documents/RIS/.venv/bin/python",
+          "-m",
+          "hmbc_protocol.worker_log",
+          "--state-dir",
+          "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/private-adapter-state"
+        ],
+        "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/protocol/protocol",
+        "startedAt": "2026-10-09T06:21:09.492384+00:00",
+        "endedAt": "2026-10-09T06:21:09.657479+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "elapsedSeconds": 0.16511234399513341,
+        "outputSha256": "a1cdb7828a5a61ba878784d0207a5ad61418b1244f42b06975b37d8ba6bbd71e",
+        "pid": 1024857,
+        "processGroup": 1024857,
+        "groupCleanup": null,
+        "environmentSha256": "e6332c859636801a05c40130b0b8543c778e9231ae9b096ec1f15a8b6f82628b"
+      }
+    }
+  ],
+  "snapshots": [
+    {
+      "case": "paper-strict-nonce-replay",
+      "module": "ledger",
+      "root": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/ledger",
+      "entries": 195,
+      "stable": true
+    },
+    {
+      "case": "paper-strict-nonce-replay",
+      "module": "protocol",
+      "root": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-strict-nonce-replay/paper-strict/snapshots/protocol",
+      "entries": 108,
+      "stable": true
+    },
+    {
+      "case": "paper-minimal-nonce-replay",
+      "module": "ledger",
+      "root": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/ledger",
+      "entries": 195,
+      "stable": true
+    },
+    {
+      "case": "paper-minimal-nonce-replay",
+      "module": "protocol",
+      "root": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/paper-minimal-nonce-replay/paper-minimal/snapshots/protocol",
+      "entries": 108,
+      "stable": true
+    },
+    {
+      "case": "repaired-e-nonce-replay",
+      "module": "ledger",
+      "root": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/ledger",
+      "entries": 195,
+      "stable": true
+    },
+    {
+      "case": "repaired-e-nonce-replay",
+      "module": "protocol",
+      "root": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z/real-e2-output/repaired-e-nonce-replay/repaired-e/snapshots/protocol",
+      "entries": 108,
+      "stable": true
+    }
+  ],
+  "frozenCopies": [
+    {
+      "path": "interfaces/v1/hmbc.schema.json",
+      "expected": "4c22092dead0982716d68acf0ad7f4a5a737568e8e2d0c37d06595add36d6fea",
+      "actual": "4c22092dead0982716d68acf0ad7f4a5a737568e8e2d0c37d06595add36d6fea",
+      "matches": true
+    },
+    {
+      "path": "interfaces/v1/BOUNDARY.md",
+      "expected": "cb100d436aba200f7a1aae9f848218827cf1afb39e5ecf4b4e923b8de14f1235",
+      "actual": "cb100d436aba200f7a1aae9f848218827cf1afb39e5ecf4b4e923b8de14f1235",
+      "matches": true
+    },
+    {
+      "path": "interfaces/v1/source-map.csv",
+      "expected": "25337ee2846b13791bf971281d885f6300a6ce1407f156ddeb4e5cb85f54a07c",
+      "actual": "25337ee2846b13791bf971281d885f6300a6ce1407f156ddeb4e5cb85f54a07c",
+      "matches": true
+    },
+    {
+      "path": "interfaces/v1/assumptions.csv",
+      "expected": "98047dda31877f286175cfcbe66fa0ada10bef452cfd6c15f42f0dac430ad39b",
+      "actual": "98047dda31877f286175cfcbe66fa0ada10bef452cfd6c15f42f0dac430ad39b",
+      "matches": true
+    },
+    {
+      "path": "interfaces/v1/scenarios/e0_cases.json",
+      "expected": "438fa38ddcbd7edd0e49fb93cc580e5219ed05349fd677b2e386bc4669f5d50e",
+      "actual": "438fa38ddcbd7edd0e49fb93cc580e5219ed05349fd677b2e386bc4669f5d50e",
+      "matches": true
+    },
+    {
+      "path": "interfaces/v1/scenarios/e0_supplement_cases.json",
+      "expected": "9ccade362c5a8853d63f06a08be3134ae32cd99527ceb36fcd78c311a9246858",
+      "actual": "9ccade362c5a8853d63f06a08be3134ae32cd99527ceb36fcd78c311a9246858",
+      "matches": true
+    },
+    {
+      "path": "interfaces/v1/scenarios/e_positive.json",
+      "expected": "95e75f10cfdaf0b0bf5bd75ea25b521df30817f85a280a8552cc62243f8ccdda",
+      "actual": "95e75f10cfdaf0b0bf5bd75ea25b521df30817f85a280a8552cc62243f8ccdda",
+      "matches": true
+    },
+    {
+      "path": "interfaces/v1/toolchain.json",
+      "expected": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746",
+      "actual": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746",
+      "matches": true
+    },
+    {
+      "path": "interfaces/v1/vectors/adapter-agent2.json",
+      "expected": "e248fceb7455ebc3ae328da294ab7b328e2a69fc43eb4975d3b35e0016f5d0b7",
+      "actual": "e248fceb7455ebc3ae328da294ab7b328e2a69fc43eb4975d3b35e0016f5d0b7",
+      "matches": true
+    },
+    {
+      "path": "interfaces/v1/vectors/boundary.json",
+      "expected": "fce967f87cce9b453ae23d7450bcb6a199f3c0f6ad5d933b378b8f90e5a42210",
+      "actual": "fce967f87cce9b453ae23d7450bcb6a199f3c0f6ad5d933b378b8f90e5a42210",
+      "matches": true
+    },
+    {
+      "path": "interfaces/v1/vectors/deployment-agent1.json",
+      "expected": "787ae701241167a2474215168752ecac7fbec260cb0df3a2acdf680598f53ee1",
+      "actual": "787ae701241167a2474215168752ecac7fbec260cb0df3a2acdf680598f53ee1",
+      "matches": true
+    },
+    {
+      "path": "interfaces/v1/vectors/eip712-agent1.json",
+      "expected": "f211c65fe9c0ea0d7c7ed3fe6904ab04b36224f5bfcd41d3bd140e6165f0bf61",
+      "actual": "f211c65fe9c0ea0d7c7ed3fe6904ab04b36224f5bfcd41d3bd140e6165f0bf61",
+      "matches": true
+    },
+    {
+      "path": "interfaces/v1/vectors/schema.json",
+      "expected": "49a9dc29298495513340db2f4e4f78d7611e52c7b42409531bc5ed97f421e4d8",
+      "actual": "49a9dc29298495513340db2f4e4f78d7611e52c7b42409531bc5ed97f421e4d8",
+      "matches": true
+    },
+    {
+      "path": "interfaces/v1/owners/ledger-source-manifest.sha256",
+      "expected": "407c86331072bdad63562541230fdd3078608287eccb373cb2f974e3bde20fc1",
+      "actual": "407c86331072bdad63562541230fdd3078608287eccb373cb2f974e3bde20fc1",
+      "matches": true
+    },
+    {
+      "path": "interfaces/v1/owners/protocol-source-manifest.sha256",
+      "expected": "b4757c18887956e1da67b7b140c4674a2970d793e6684bcc8e17ec90db442f46",
+      "actual": "b4757c18887956e1da67b7b140c4674a2970d793e6684bcc8e17ec90db442f46",
+      "matches": true
+    }
+  ],
+  "independentChecks": [
+    {
+      "case": "paper-strict-nonce-replay",
+      "identicalMinedCallFreshNonce": true,
+      "status0Rejected8": true,
+      "wholeSnapshotUnchanged": true,
+      "aliceBobControls": true,
+      "repairedReleaseExpired": false
+    },
+    {
+      "case": "paper-minimal-nonce-replay",
+      "identicalMinedCallFreshNonce": true,
+      "status0Rejected8": true,
+      "wholeSnapshotUnchanged": true,
+      "aliceBobControls": true,
+      "repairedReleaseExpired": false
+    },
+    {
+      "case": "repaired-e-nonce-replay",
+      "identicalMinedCallFreshNonce": true,
+      "status0Rejected8": true,
+      "wholeSnapshotUnchanged": true,
+      "aliceBobControls": true,
+      "repairedReleaseExpired": false
+    }
+  ],
+  "scope": "approved three identical accepted request replay comparisons only; actual control completion recorded per case; no full matrix or RQ gate",
+  "externalRawRoot": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T061325Z"
+}

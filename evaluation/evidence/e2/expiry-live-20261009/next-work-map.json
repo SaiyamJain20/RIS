@@ -1,0 +1,2259 @@
+{
+  "inputs": {
+    "interfaces/v1/scenarios/e0_cases.json": "438fa38ddcbd7edd0e49fb93cc580e5219ed05349fd677b2e386bc4669f5d50e",
+    "interfaces/v1/scenarios/e0_supplement_cases.json": "9ccade362c5a8853d63f06a08be3134ae32cd99527ceb36fcd78c311a9246858"
+  },
+  "remaining": [
+    {
+      "id": "E01-subject-substitution-paper-strict",
+      "profile": "paper-strict",
+      "variant": "subject-substitution",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A38",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "SUBSTITUTE_SUBJECT",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Compromised configured relay stress is outside paper secure isolation. Substitute only gid in the relay ForwardedRequest passed to policyEnf while keeping Alice's verified credential records. Paper profiles use no decision certificate. The DBC may authorize the substituted tuple; the grant gid is relay-asserted. With D35/A38 the symbolic response follows that gid's PBC-registered recipient key, not the original requester. An unregistered gid gets no release. This is a reconstruction/specification-gap comparison, not an HMBC exploit."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E01-subject-substitution-paper-minimal",
+      "profile": "paper-minimal",
+      "variant": "subject-substitution",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A38",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "SUBSTITUTE_SUBJECT",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Compromised configured relay stress is outside paper secure isolation. Substitute only gid in the relay ForwardedRequest passed to policyEnf while keeping Alice's verified credential records. Paper profiles use no decision certificate. The DBC may authorize the substituted tuple; the grant gid is relay-asserted. With D35/A38 the symbolic response follows that gid's PBC-registered recipient key, not the original requester. An unregistered gid gets no release. This is a reconstruction/specification-gap comparison, not an HMBC exploit."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E01-subject-substitution-repaired-e",
+      "profile": "repaired-e",
+      "variant": "subject-substitution",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A36",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "SUBSTITUTE_SUBJECT",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "qualification": "A compromised configured relay is outside the paper secure-isolation assumption. A repaired certificate must bind the original tuple. Substitute request.gid only and present the original decision certificate unchanged. Rewriting decision.requestDigest as well is a separate signature-failure control."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E01-nonce-replay-paper-strict",
+      "profile": "paper-strict",
+      "variant": "nonce-replay",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPLAY_REQUEST",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "NO_NEW_GRANT",
+        "classification": "SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Replay the identical accepted request/forward reference, not a newly fabricated relay reference. All profiles reject a new transition or expose an existing grant read; paper new-reference stress is a separate gap under A25."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E01-nonce-replay-paper-minimal",
+      "profile": "paper-minimal",
+      "variant": "nonce-replay",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPLAY_REQUEST",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "NO_NEW_GRANT",
+        "classification": "SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Replay the identical accepted request/forward reference, not a newly fabricated relay reference. All profiles reject a new transition or expose an existing grant read; paper new-reference stress is a separate gap under A25."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E01-nonce-replay-repaired-e",
+      "profile": "repaired-e",
+      "variant": "nonce-replay",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A36",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPLAY_REQUEST",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "NO_NEW_GRANT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Replay the identical accepted request/forward reference, not a newly fabricated relay reference. All profiles reject a new transition or expose an existing grant read; paper new-reference stress is a separate gap under A25."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E01-expiry-boundary-paper-strict",
+      "profile": "paper-strict",
+      "variant": "expiry-boundary",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ADVANCE_CLOCK",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Set the controlled DBC clock to expiresAt exactly. Forwarded paper tuples omit signed request expiry; compare the documented grant TTL fill."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E01-expiry-boundary-paper-minimal",
+      "profile": "paper-minimal",
+      "variant": "expiry-boundary",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ADVANCE_CLOCK",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Set the controlled DBC clock to expiresAt exactly. Forwarded paper tuples omit signed request expiry; compare the documented grant TTL fill."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E01-expiry-boundary-repaired-e",
+      "profile": "repaired-e",
+      "variant": "expiry-boundary",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A36",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ADVANCE_CLOCK",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "EXPIRED",
+        "qualification": "Set the controlled DBC clock to expiresAt exactly. Forwarded paper tuples omit signed request expiry; compare the documented grant TTL fill."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E02-signed-list-rollback-paper-strict",
+      "profile": "paper-strict",
+      "variant": "signed-list-rollback",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "INSTALL_NEW_LIST",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPLAY_OLD_LIST",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "An authorized issuer-scoped administrator submits old correctly signed CRL/TempACL v1 after v2; repaired versions reject and retain v2."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E02-signed-list-rollback-paper-minimal",
+      "profile": "paper-minimal",
+      "variant": "signed-list-rollback",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "INSTALL_NEW_LIST",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPLAY_OLD_LIST",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "An authorized issuer-scoped administrator submits old correctly signed CRL/TempACL v1 after v2; repaired versions reject and retain v2."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E02-signed-list-rollback-repaired-e",
+      "profile": "repaired-e",
+      "variant": "signed-list-rollback",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A36",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "INSTALL_NEW_LIST",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPLAY_OLD_LIST",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "STALE_ANCHOR",
+        "qualification": "An authorized issuer-scoped administrator submits old correctly signed CRL/TempACL v1 after v2; repaired versions reject and retain v2."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E02-wrong-issuer-paper-strict",
+      "profile": "paper-strict",
+      "variant": "wrong-issuer",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "WRONG_ISSUER_UPDATE",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "REJECT",
+        "classification": "SUPPORTED",
+        "error": "UNAUTHORIZED_CALLER",
+        "qualification": "H1 administrator attempts an H2 trust update. No profile drops the paper issuer/caller restriction."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E02-wrong-issuer-paper-minimal",
+      "profile": "paper-minimal",
+      "variant": "wrong-issuer",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "WRONG_ISSUER_UPDATE",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "REJECT",
+        "classification": "SUPPORTED",
+        "error": "UNAUTHORIZED_CALLER",
+        "qualification": "H1 administrator attempts an H2 trust update. No profile drops the paper issuer/caller restriction."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E02-wrong-issuer-repaired-e",
+      "profile": "repaired-e",
+      "variant": "wrong-issuer",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A36",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "WRONG_ISSUER_UPDATE",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "REJECT",
+        "classification": "SUPPORTED",
+        "error": "UNAUTHORIZED_CALLER",
+        "qualification": "H1 administrator attempts an H2 trust update. No profile drops the paper issuer/caller restriction. Issuer scoping is preserved baseline behavior, not a new repaired-e property."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E02-pre-barrier-revocation-paper-strict",
+      "profile": "paper-strict",
+      "variant": "pre-barrier-revocation",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REVOKE_ON_PBC",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Previously approved unexpired request arrives before DBC accepts the revoking checkpoint. Repaired acceptance within this measured window is intentional, not instantaneous revocation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E02-pre-barrier-revocation-paper-minimal",
+      "profile": "paper-minimal",
+      "variant": "pre-barrier-revocation",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REVOKE_ON_PBC",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Previously approved unexpired request arrives before DBC accepts the revoking checkpoint. Repaired acceptance within this measured window is intentional, not instantaneous revocation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E02-pre-barrier-revocation-repaired-e",
+      "profile": "repaired-e",
+      "variant": "pre-barrier-revocation",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A36",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REVOKE_ON_PBC",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "ACCEPT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": null,
+        "qualification": "Previously approved unexpired request arrives before DBC accepts the revoking checkpoint. Repaired acceptance within this measured window is intentional, not instantaneous revocation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E02-post-barrier-revocation-paper-strict",
+      "profile": "paper-strict",
+      "variant": "post-barrier-revocation",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REVOKE_ON_PBC",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "New checkpoint changes sequence/authEpoch. Consume the older certificate without re-collection; reject without grant/nonce mutation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation. Paper profiles have no checkpoint barrier: ACCEPT_CHECKPOINT is not applicable and is omitted, rather than submitting a WRONG_PROFILE transaction."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E02-post-barrier-revocation-paper-minimal",
+      "profile": "paper-minimal",
+      "variant": "post-barrier-revocation",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REVOKE_ON_PBC",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "New checkpoint changes sequence/authEpoch. Consume the older certificate without re-collection; reject without grant/nonce mutation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation. Paper profiles have no checkpoint barrier: ACCEPT_CHECKPOINT is not applicable and is omitted, rather than submitting a WRONG_PROFILE transaction."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E02-post-barrier-revocation-repaired-e",
+      "profile": "repaired-e",
+      "variant": "post-barrier-revocation",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A36",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REVOKE_ON_PBC",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ACCEPT_CHECKPOINT",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "STALE_STATE",
+        "qualification": "New checkpoint changes sequence/authEpoch. Consume the older certificate without re-collection; reject without grant/nonce mutation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E02-expired-duty-paper-strict",
+      "profile": "paper-strict",
+      "variant": "expired-duty",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ADVANCE_CLOCK",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Credentials were valid at PBC decision; duty expires before DBC consumption while request/checkpoint remain live. Independent record freshness is required in repaired-e."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E02-expired-duty-paper-minimal",
+      "profile": "paper-minimal",
+      "variant": "expired-duty",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ADVANCE_CLOCK",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Credentials were valid at PBC decision; duty expires before DBC consumption while request/checkpoint remain live. Independent record freshness is required in repaired-e."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E02-expired-duty-repaired-e",
+      "profile": "repaired-e",
+      "variant": "expired-duty",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A36",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ADVANCE_CLOCK",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "EXPIRED",
+        "qualification": "Credentials were valid at PBC decision; duty expires before DBC consumption while request/checkpoint remain live. Independent record freshness is required in repaired-e."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E03-dropped-outcome-paper-strict",
+      "profile": "paper-strict",
+      "variant": "dropped-outcome",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "RELEASE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "DROP_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "PENDING",
+        "classification": "SUPPORTED",
+        "error": null,
+        "qualification": "PBC remains pending with no successful outcome record. Local durable intent/send logs do not imply receipt delivery; reconciliation requires eventual delivery. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E03-dropped-outcome-paper-minimal",
+      "profile": "paper-minimal",
+      "variant": "dropped-outcome",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "RELEASE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "DROP_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "PENDING",
+        "classification": "SUPPORTED",
+        "error": null,
+        "qualification": "PBC remains pending with no successful outcome record. Local durable intent/send logs do not imply receipt delivery; reconciliation requires eventual delivery. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E03-dropped-outcome-repaired-e",
+      "profile": "repaired-e",
+      "variant": "dropped-outcome",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A36",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "RELEASE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "DROP_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "PENDING",
+        "classification": "REPAIR_SUPPORTED",
+        "error": null,
+        "qualification": "PBC remains pending with no successful outcome record. Local durable intent/send logs do not imply receipt delivery; reconciliation requires eventual delivery."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E03-fabricated-outcome-paper-strict",
+      "profile": "paper-strict",
+      "variant": "fabricated-outcome",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FABRICATE_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Configured relay reports a result without a DBC grant through the unattested paper path. Repaired path is disabled; receipt witness independently requires a matching grant."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E03-fabricated-outcome-paper-minimal",
+      "profile": "paper-minimal",
+      "variant": "fabricated-outcome",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FABRICATE_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Configured relay reports a result without a DBC grant through the unattested paper path. Repaired path is disabled; receipt witness independently requires a matching grant."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E03-fabricated-outcome-repaired-e",
+      "profile": "repaired-e",
+      "variant": "fabricated-outcome",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A36",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FABRICATE_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "WRONG_PROFILE",
+        "qualification": "Configured relay reports a result without a DBC grant through the unattested paper path. Repaired path is disabled; receipt witness independently requires a matching grant."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E03-duplicate-outcome-paper-strict",
+      "profile": "paper-strict",
+      "variant": "duplicate-outcome",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "RELEASE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "DUPLICATE_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Repeated reconciliation cannot create a second successful outcome or grant. Exact owner reporter status/return values may differ; no duplicate transition is the assertion. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E03-duplicate-outcome-paper-minimal",
+      "profile": "paper-minimal",
+      "variant": "duplicate-outcome",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "RELEASE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "DUPLICATE_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Repeated reconciliation cannot create a second successful outcome or grant. Exact owner reporter status/return values may differ; no duplicate transition is the assertion. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E03-duplicate-outcome-repaired-e",
+      "profile": "repaired-e",
+      "variant": "duplicate-outcome",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A36",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "RELEASE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "DUPLICATE_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Repeated reconciliation cannot create a second successful outcome or grant. Exact owner reporter status/return values may differ; no duplicate transition is the assertion."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E01-forged-tuple-paper-strict",
+      "profile": "paper-strict",
+      "variant": "forged-tuple",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "FABRICATE_TUPLE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "The configured relay fabricates a tuple without a PBC request/log. Repaired control uses a non-witness signature on an otherwise matching certificate; BAD_SIGNATURE must precede any grant. Paper caller restrictions remain enforced; the compromised relay stress is outside secure isolation."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E01-forged-tuple-paper-minimal",
+      "profile": "paper-minimal",
+      "variant": "forged-tuple",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "FABRICATE_TUPLE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "The configured relay fabricates a tuple without a PBC request/log. Repaired control uses a non-witness signature on an otherwise matching certificate; BAD_SIGNATURE must precede any grant. Paper caller restrictions remain enforced; the compromised relay stress is outside secure isolation."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E01-forged-tuple-repaired-e",
+      "profile": "repaired-e",
+      "variant": "forged-tuple",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A36",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "FABRICATE_TUPLE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "BAD_SIGNATURE",
+        "qualification": "The configured relay fabricates a tuple without a PBC request/log. Repaired control uses a non-witness signature on an otherwise matching certificate; BAD_SIGNATURE must precede any grant. Paper caller restrictions remain enforced; the compromised relay stress is outside secure isolation."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E01-wrong-destination-paper-strict",
+      "profile": "paper-strict",
+      "variant": "wrong-destination",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "SUBSTITUTE_DESTINATION",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Use an otherwise valid request/certificate for a different destination chain/KSSC and submit it here without rewriting its signed fields. The receiver rejects WRONG_DESTINATION before grant state changes. Paper forwarded tuples omit this authenticated destination binding; this is a chosen completion under compromised-relay stress."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E01-wrong-destination-paper-minimal",
+      "profile": "paper-minimal",
+      "variant": "wrong-destination",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "SUBSTITUTE_DESTINATION",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Use an otherwise valid request/certificate for a different destination chain/KSSC and submit it here without rewriting its signed fields. The receiver rejects WRONG_DESTINATION before grant state changes. Paper forwarded tuples omit this authenticated destination binding; this is a chosen completion under compromised-relay stress."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E01-wrong-destination-repaired-e",
+      "profile": "repaired-e",
+      "variant": "wrong-destination",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A36",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "SUBSTITUTE_DESTINATION",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "WRONG_DESTINATION",
+        "qualification": "Use an otherwise valid request/certificate for a different destination chain/KSSC and submit it here without rewriting its signed fields. The receiver rejects WRONG_DESTINATION before grant state changes. Paper forwarded tuples omit this authenticated destination binding; this is a chosen completion under compromised-relay stress."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E01-new-reference-replay-paper-strict",
+      "profile": "paper-strict",
+      "variant": "new-reference-replay",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPLAY_NEW_REFERENCE",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "After the first grant, the relay supplies a fresh pbcRequestId to paper policyEnf while repeating the same verified tuple. Paper grants again under A25. Repaired-e reuses the original signed gid/nonce/certificate (no freshly signed request); REPLAY prevents a second grant."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E01-new-reference-replay-paper-minimal",
+      "profile": "paper-minimal",
+      "variant": "new-reference-replay",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPLAY_NEW_REFERENCE",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "After the first grant, the relay supplies a fresh pbcRequestId to paper policyEnf while repeating the same verified tuple. Paper grants again under A25. Repaired-e reuses the original signed gid/nonce/certificate (no freshly signed request); REPLAY prevents a second grant."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E01-new-reference-replay-repaired-e",
+      "profile": "repaired-e",
+      "variant": "new-reference-replay",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A36",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPLAY_NEW_REFERENCE",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "NO_NEW_GRANT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "After the first grant, the relay supplies a fresh pbcRequestId to paper policyEnf while repeating the same verified tuple. Paper grants again under A25. Repaired-e reuses the original signed gid/nonce/certificate (no freshly signed request); REPLAY prevents a second grant."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E01-same-nonce-distinct-digests-repaired-e",
+      "profile": "repaired-e",
+      "variant": "same-nonce-distinct-digests",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A36",
+        "A39",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REQUEST_SAME_NONCE_DISTINCT_DIGEST",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_BOTH_REQUESTS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ACCEPT_CHECKPOINT",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "CERTIFY_BOTH_BEFORE_CONSUMPTION",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "CONSUME_FIRST",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "CONSUME_PRECOLLECTED_SECOND",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "NO_NEW_GRANT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Fresh scenario: two valid user-signed Alice requests, same gid/nonce, distinct expiresAt within live 30-second bounds. Independently verify both signatures, distinct digests and derived grantIds. Forward both BEFORE ONE checkpoint covering both. Collect BOTH honest policy-aware ALLOW certificates BEFORE either consume; each sees nonceConsumed=false. Preserve that checkpoint, credentials and TTLs; consume first then the second PRE-COLLECTED certificate without re-collection. Native repaired-e: REPLAY, no second grant, first grant unchanged. MUT_NO_NONCE (8) counterpart: second distinct allowed grant; nonce never recorded. These are NOT_RUN expectations; A2 owner measurements are separate. No evaluator witness key."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E03-receipt-binding-control-requestDigest-repaired-e",
+      "profile": "repaired-e",
+      "variant": "receipt-binding-control",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A36",
+        "A40",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ATTEST_GRANT",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "RESIGN_RECEIPT_FIELD",
+          "offsetSeconds": "0",
+          "receiptField": "requestDigest"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "qualification": "Each trial/profile begins with its OWN fresh forwarded request, actual allowed grant and honest receipt; separate fresh requests for all three fields, the positive trial and every signature trial. Change ONLY receipt.requestDigest; keep outer requestDigest, grantId, destination, epochs/expiry/membership and all other fields. Native repaired-e rejects WRONG_SUBJECT, PBC remains FORWARDED, no outcome/log/status transition. Agent2 TEST-ONLY tool signs the inconsistent receipt at runtime using actual PSC/chain domain and real grant/expiry; returns artifact only. MUT_NO_RECEIPT_BINDING (32) counterpart ACCEPTS and becomes OUTCOME_RECORDED; retain inconsistent native fields. Deliberate witness-deviation/defense-in-depth control outside honest-witness assumption, not an HMBC attack. Receipts may reconcile after expiry without reauthorizing release. NOT_RUN; owner measurements are separate."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E03-receipt-binding-control-gid-repaired-e",
+      "profile": "repaired-e",
+      "variant": "receipt-binding-control",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A36",
+        "A40",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ATTEST_GRANT",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "RESIGN_RECEIPT_FIELD",
+          "offsetSeconds": "0",
+          "receiptField": "gid"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "qualification": "Each trial/profile begins with its OWN fresh forwarded request, actual allowed grant and honest receipt; separate fresh requests for all three fields, the positive trial and every signature trial. Change ONLY receipt.gid; keep outer requestDigest, grantId, destination, epochs/expiry/membership and all other fields. Native repaired-e rejects WRONG_SUBJECT, PBC remains FORWARDED, no outcome/log/status transition. Agent2 TEST-ONLY tool signs the inconsistent receipt at runtime using actual PSC/chain domain and real grant/expiry; returns artifact only. MUT_NO_RECEIPT_BINDING (32) counterpart ACCEPTS and becomes OUTCOME_RECORDED; retain inconsistent native fields. Deliberate witness-deviation/defense-in-depth control outside honest-witness assumption, not an HMBC attack. Receipts may reconcile after expiry without reauthorizing release. NOT_RUN; owner measurements are separate."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E03-receipt-binding-control-dataId-repaired-e",
+      "profile": "repaired-e",
+      "variant": "receipt-binding-control",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A36",
+        "A40",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ATTEST_GRANT",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "RESIGN_RECEIPT_FIELD",
+          "offsetSeconds": "0",
+          "receiptField": "dataId"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "qualification": "Each trial/profile begins with its OWN fresh forwarded request, actual allowed grant and honest receipt; separate fresh requests for all three fields, the positive trial and every signature trial. Change ONLY receipt.dataId; keep outer requestDigest, grantId, destination, epochs/expiry/membership and all other fields. Native repaired-e rejects WRONG_SUBJECT, PBC remains FORWARDED, no outcome/log/status transition. Agent2 TEST-ONLY tool signs the inconsistent receipt at runtime using actual PSC/chain domain and real grant/expiry; returns artifact only. MUT_NO_RECEIPT_BINDING (32) counterpart ACCEPTS and becomes OUTCOME_RECORDED; retain inconsistent native fields. Deliberate witness-deviation/defense-in-depth control outside honest-witness assumption, not an HMBC attack. Receipts may reconcile after expiry without reauthorizing release. NOT_RUN; owner measurements are separate."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E03-receipt-signature-control-requestDigest-repaired-e",
+      "profile": "repaired-e",
+      "variant": "receipt-signature-control",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A36",
+        "A40",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ATTEST_GRANT",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ALTER_RECEIPT_KEEP_SIGNATURE",
+          "offsetSeconds": "0",
+          "receiptField": "requestDigest"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "qualification": "Each trial/profile begins with its OWN fresh forwarded request, actual allowed grant and honest receipt; separate fresh requests for all three fields, the positive trial and every signature trial. Change ONLY receipt.requestDigest; keep outer requestDigest, grantId, destination, epochs/expiry/membership and all other fields. Native repaired-e rejects WRONG_SUBJECT, PBC remains FORWARDED, no outcome/log/status transition. Retain original honest signature over the altered receipt; binding check precedes quorum in repaired-e. MUT_NO_RECEIPT_BINDING (32) reaches BAD_SIGNATURE and also rejects; this signature control cannot kill the binding mutant. Receipts may reconcile after expiry without reauthorizing release. NOT_RUN; owner measurements are separate."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E03-receipt-signature-control-gid-repaired-e",
+      "profile": "repaired-e",
+      "variant": "receipt-signature-control",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A36",
+        "A40",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ATTEST_GRANT",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ALTER_RECEIPT_KEEP_SIGNATURE",
+          "offsetSeconds": "0",
+          "receiptField": "gid"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "qualification": "Each trial/profile begins with its OWN fresh forwarded request, actual allowed grant and honest receipt; separate fresh requests for all three fields, the positive trial and every signature trial. Change ONLY receipt.gid; keep outer requestDigest, grantId, destination, epochs/expiry/membership and all other fields. Native repaired-e rejects WRONG_SUBJECT, PBC remains FORWARDED, no outcome/log/status transition. Retain original honest signature over the altered receipt; binding check precedes quorum in repaired-e. MUT_NO_RECEIPT_BINDING (32) reaches BAD_SIGNATURE and also rejects; this signature control cannot kill the binding mutant. Receipts may reconcile after expiry without reauthorizing release. NOT_RUN; owner measurements are separate."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E03-receipt-signature-control-dataId-repaired-e",
+      "profile": "repaired-e",
+      "variant": "receipt-signature-control",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A36",
+        "A40",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ATTEST_GRANT",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ALTER_RECEIPT_KEEP_SIGNATURE",
+          "offsetSeconds": "0",
+          "receiptField": "dataId"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "qualification": "Each trial/profile begins with its OWN fresh forwarded request, actual allowed grant and honest receipt; separate fresh requests for all three fields, the positive trial and every signature trial. Change ONLY receipt.dataId; keep outer requestDigest, grantId, destination, epochs/expiry/membership and all other fields. Native repaired-e rejects WRONG_SUBJECT, PBC remains FORWARDED, no outcome/log/status transition. Retain original honest signature over the altered receipt; binding check precedes quorum in repaired-e. MUT_NO_RECEIPT_BINDING (32) reaches BAD_SIGNATURE and also rejects; this signature control cannot kill the binding mutant. Receipts may reconcile after expiry without reauthorizing release. NOT_RUN; owner measurements are separate."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    },
+    {
+      "id": "E03-receipt-binding-positive-repaired-e",
+      "profile": "repaired-e",
+      "variant": "receipt-binding-positive",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A36",
+        "A40",
+        "A41"
+      ],
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ATTEST_GRANT",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "ACCEPT",
+        "classification": "SUPPORTED",
+        "error": null,
+        "qualification": "Separate fresh forwarded-and-granted request in repaired-e AND receipt-binding mutant. Honest attest_grant receipt records one matching successful outcome; preserve native fields/status/log. This positive control prevents deny-all from passing. It attests authorization only, not release/delivery. Receipts may reconcile after expiry. NOT_RUN."
+      },
+      "executionStatus": "NOT_RUN_ON_AGENT3"
+    }
+  ],
+  "byFamily": {
+    "E01": 19,
+    "E02": 15,
+    "E03": 16
+  },
+  "constraints": [
+    "public ABI/adapter exports only; no copied owner rehearsal internals",
+    "new complete source/tool/config FREEZE and both exact ACKs before changed live execution",
+    "preserve N-1 wrong-admin baseline and Q-1 receipt-signature non-discriminating classification qualifications",
+    "destination mutant needs an independent explicit wrong-destination vector; catalog recipe may mask removal",
+    "pending-tag revocation-clock measurement; owner window trials are not integrated evidence"
+  ],
+  "status": "planning index, no implementation or new expected classification"
+}

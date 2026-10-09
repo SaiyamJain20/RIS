@@ -1,0 +1,13 @@
+{
+  "failureExitCode": 1,
+  "cause": "Reused unchanged-monitor clean-checkout guard after creating its owned evidence directory; no source changed or Git writes occurred.",
+  "observedGitStatus": "?? evaluation/evidence/e0/revision-5-a2-ack-20261008/\n",
+  "resolution": "Require exactly this new owned evidence path and require equal initial/final status, preserving any unrelated-change rejection.",
+  "originalProgramSha256": "48636af5198c6aca7f26dcae6e959bf9e7c94a6681165baef1466df61ebe7201",
+  "secondFailure": {
+    "exitCode": 1,
+    "nestedGitExitCode": 128,
+    "cause": "Latest module diff included deleted old evidence filenames after the revision5 rename; old unchanged-monitor scanner attempted to read each at the new tip.",
+    "resolution": "Retain existing files with ACMRT filter; record deleted paths separately with exact deletion commit and previous SHA-256; no deletion dropped from provenance."
+  }
+}

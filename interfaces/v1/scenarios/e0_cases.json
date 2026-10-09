@@ -1,0 +1,2378 @@
+{
+  "status": "E0 candidate revision6 expectations for exact review; NOT E2 executor input or observed results",
+  "positiveControls": "evaluation/scenarios/e_positive.json: Alice/Bob/wrong-issuer, both grant-all and deny-all rejected by existing oracle tests",
+  "signedMutationInputs": "interfaces/vectors/eip712-agent1-candidate.json: exact typed messages and field/domain substitutions",
+  "scheduleSemantics": "Steps are ordered directives; offsetSeconds delays from the prior step. The executor reads the complete schedule before execution: CRASH_RESTART names workerHook=release and crashPoint, arms that hook BEFORE the immediately preceding RELEASE, then restarts at CRASH_RESTART. The following RELEASE retries before original expiry. Hooks are closed test controls, not code. ADVANCE_CLOCK uses the qualification boundary. E1 materializes local bindings; no run is asserted.",
+  "cases": [
+    {
+      "id": "E01-subject-substitution-paper-strict",
+      "caseFamily": "E01",
+      "profile": "paper-strict",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A38",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-strict",
+      "variant": "subject-substitution",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "SUBSTITUTE_SUBJECT",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Compromised configured relay stress is outside paper secure isolation. Substitute only gid in the relay ForwardedRequest passed to policyEnf while keeping Alice's verified credential records. Paper profiles use no decision certificate. The DBC may authorize the substituted tuple; the grant gid is relay-asserted. With D35/A38 the symbolic response follows that gid's PBC-registered recipient key, not the original requester. An unregistered gid gets no release. This is a reconstruction/specification-gap comparison, not an HMBC exploit."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-subject-substitution-paper-minimal",
+      "caseFamily": "E01",
+      "profile": "paper-minimal",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A38",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-minimal",
+      "variant": "subject-substitution",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "SUBSTITUTE_SUBJECT",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Compromised configured relay stress is outside paper secure isolation. Substitute only gid in the relay ForwardedRequest passed to policyEnf while keeping Alice's verified credential records. Paper profiles use no decision certificate. The DBC may authorize the substituted tuple; the grant gid is relay-asserted. With D35/A38 the symbolic response follows that gid's PBC-registered recipient key, not the original requester. An unregistered gid gets no release. This is a reconstruction/specification-gap comparison, not an HMBC exploit."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-subject-substitution-repaired-e",
+      "caseFamily": "E01",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A36",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "subject-substitution",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "SUBSTITUTE_SUBJECT",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "qualification": "A compromised configured relay is outside the paper secure-isolation assumption. A repaired certificate must bind the original tuple. Substitute request.gid only and present the original decision certificate unchanged. Rewriting decision.requestDigest as well is a separate signature-failure control."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-nonce-replay-paper-strict",
+      "caseFamily": "E01",
+      "profile": "paper-strict",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-strict",
+      "variant": "nonce-replay",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPLAY_REQUEST",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "NO_NEW_GRANT",
+        "classification": "SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Replay the identical accepted request/forward reference, not a newly fabricated relay reference. All profiles reject a new transition or expose an existing grant read; paper new-reference stress is a separate gap under A25."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-nonce-replay-paper-minimal",
+      "caseFamily": "E01",
+      "profile": "paper-minimal",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-minimal",
+      "variant": "nonce-replay",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPLAY_REQUEST",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "NO_NEW_GRANT",
+        "classification": "SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Replay the identical accepted request/forward reference, not a newly fabricated relay reference. All profiles reject a new transition or expose an existing grant read; paper new-reference stress is a separate gap under A25."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-nonce-replay-repaired-e",
+      "caseFamily": "E01",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A36",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "nonce-replay",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPLAY_REQUEST",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "NO_NEW_GRANT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Replay the identical accepted request/forward reference, not a newly fabricated relay reference. All profiles reject a new transition or expose an existing grant read; paper new-reference stress is a separate gap under A25."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-expiry-boundary-paper-strict",
+      "caseFamily": "E01",
+      "profile": "paper-strict",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-strict",
+      "variant": "expiry-boundary",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ADVANCE_CLOCK",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Set the controlled DBC clock to expiresAt exactly. Forwarded paper tuples omit signed request expiry; compare the documented grant TTL fill."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-expiry-boundary-paper-minimal",
+      "caseFamily": "E01",
+      "profile": "paper-minimal",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-minimal",
+      "variant": "expiry-boundary",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ADVANCE_CLOCK",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Set the controlled DBC clock to expiresAt exactly. Forwarded paper tuples omit signed request expiry; compare the documented grant TTL fill."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-expiry-boundary-repaired-e",
+      "caseFamily": "E01",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A36",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "expiry-boundary",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ADVANCE_CLOCK",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "EXPIRED",
+        "qualification": "Set the controlled DBC clock to expiresAt exactly. Forwarded paper tuples omit signed request expiry; compare the documented grant TTL fill."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E02-signed-list-rollback-paper-strict",
+      "caseFamily": "E02",
+      "profile": "paper-strict",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-strict",
+      "variant": "signed-list-rollback",
+      "steps": [
+        {
+          "action": "INSTALL_NEW_LIST",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPLAY_OLD_LIST",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "An authorized issuer-scoped administrator submits old correctly signed CRL/TempACL v1 after v2; repaired versions reject and retain v2."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E02-signed-list-rollback-paper-minimal",
+      "caseFamily": "E02",
+      "profile": "paper-minimal",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-minimal",
+      "variant": "signed-list-rollback",
+      "steps": [
+        {
+          "action": "INSTALL_NEW_LIST",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPLAY_OLD_LIST",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "An authorized issuer-scoped administrator submits old correctly signed CRL/TempACL v1 after v2; repaired versions reject and retain v2."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E02-signed-list-rollback-repaired-e",
+      "caseFamily": "E02",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A36",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "signed-list-rollback",
+      "steps": [
+        {
+          "action": "INSTALL_NEW_LIST",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPLAY_OLD_LIST",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "STALE_ANCHOR",
+        "qualification": "An authorized issuer-scoped administrator submits old correctly signed CRL/TempACL v1 after v2; repaired versions reject and retain v2."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E02-wrong-issuer-paper-strict",
+      "caseFamily": "E02",
+      "profile": "paper-strict",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-strict",
+      "variant": "wrong-issuer",
+      "steps": [
+        {
+          "action": "WRONG_ISSUER_UPDATE",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "REJECT",
+        "classification": "SUPPORTED",
+        "error": "UNAUTHORIZED_CALLER",
+        "qualification": "H1 administrator attempts an H2 trust update. No profile drops the paper issuer/caller restriction."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E02-wrong-issuer-paper-minimal",
+      "caseFamily": "E02",
+      "profile": "paper-minimal",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-minimal",
+      "variant": "wrong-issuer",
+      "steps": [
+        {
+          "action": "WRONG_ISSUER_UPDATE",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "REJECT",
+        "classification": "SUPPORTED",
+        "error": "UNAUTHORIZED_CALLER",
+        "qualification": "H1 administrator attempts an H2 trust update. No profile drops the paper issuer/caller restriction."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E02-wrong-issuer-repaired-e",
+      "caseFamily": "E02",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A36",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "wrong-issuer",
+      "steps": [
+        {
+          "action": "WRONG_ISSUER_UPDATE",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "REJECT",
+        "classification": "SUPPORTED",
+        "error": "UNAUTHORIZED_CALLER",
+        "qualification": "H1 administrator attempts an H2 trust update. No profile drops the paper issuer/caller restriction. Issuer scoping is preserved baseline behavior, not a new repaired-e property."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E02-pre-barrier-revocation-paper-strict",
+      "caseFamily": "E02",
+      "profile": "paper-strict",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-strict",
+      "variant": "pre-barrier-revocation",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REVOKE_ON_PBC",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Previously approved unexpired request arrives before DBC accepts the revoking checkpoint. Repaired acceptance within this measured window is intentional, not instantaneous revocation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E02-pre-barrier-revocation-paper-minimal",
+      "caseFamily": "E02",
+      "profile": "paper-minimal",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-minimal",
+      "variant": "pre-barrier-revocation",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REVOKE_ON_PBC",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Previously approved unexpired request arrives before DBC accepts the revoking checkpoint. Repaired acceptance within this measured window is intentional, not instantaneous revocation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E02-pre-barrier-revocation-repaired-e",
+      "caseFamily": "E02",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A36",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "pre-barrier-revocation",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REVOKE_ON_PBC",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "ACCEPT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": null,
+        "qualification": "Previously approved unexpired request arrives before DBC accepts the revoking checkpoint. Repaired acceptance within this measured window is intentional, not instantaneous revocation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E02-post-barrier-revocation-paper-strict",
+      "caseFamily": "E02",
+      "profile": "paper-strict",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-strict",
+      "variant": "post-barrier-revocation",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REVOKE_ON_PBC",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "New checkpoint changes sequence/authEpoch. Consume the older certificate without re-collection; reject without grant/nonce mutation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation. Paper profiles have no checkpoint barrier: ACCEPT_CHECKPOINT is not applicable and is omitted, rather than submitting a WRONG_PROFILE transaction."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E02-post-barrier-revocation-paper-minimal",
+      "caseFamily": "E02",
+      "profile": "paper-minimal",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-minimal",
+      "variant": "post-barrier-revocation",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REVOKE_ON_PBC",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "New checkpoint changes sequence/authEpoch. Consume the older certificate without re-collection; reject without grant/nonce mutation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation. Paper profiles have no checkpoint barrier: ACCEPT_CHECKPOINT is not applicable and is omitted, rather than submitting a WRONG_PROFILE transaction."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E02-post-barrier-revocation-repaired-e",
+      "caseFamily": "E02",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A36",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "post-barrier-revocation",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REVOKE_ON_PBC",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ACCEPT_CHECKPOINT",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "STALE_STATE",
+        "qualification": "New checkpoint changes sequence/authEpoch. Consume the older certificate without re-collection; reject without grant/nonce mutation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E02-expired-duty-paper-strict",
+      "caseFamily": "E02",
+      "profile": "paper-strict",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-strict",
+      "variant": "expired-duty",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ADVANCE_CLOCK",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Credentials were valid at PBC decision; duty expires before DBC consumption while request/checkpoint remain live. Independent record freshness is required in repaired-e."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E02-expired-duty-paper-minimal",
+      "caseFamily": "E02",
+      "profile": "paper-minimal",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-minimal",
+      "variant": "expired-duty",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ADVANCE_CLOCK",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Credentials were valid at PBC decision; duty expires before DBC consumption while request/checkpoint remain live. Independent record freshness is required in repaired-e."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E02-expired-duty-repaired-e",
+      "caseFamily": "E02",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A36",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "expired-duty",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "ADVANCE_CLOCK",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "EXPIRED",
+        "qualification": "Credentials were valid at PBC decision; duty expires before DBC consumption while request/checkpoint remain live. Independent record freshness is required in repaired-e."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E03-dropped-outcome-paper-strict",
+      "caseFamily": "E03",
+      "profile": "paper-strict",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-strict",
+      "variant": "dropped-outcome",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "RELEASE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "DROP_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "PENDING",
+        "classification": "SUPPORTED",
+        "error": null,
+        "qualification": "PBC remains pending with no successful outcome record. Local durable intent/send logs do not imply receipt delivery; reconciliation requires eventual delivery. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E03-dropped-outcome-paper-minimal",
+      "caseFamily": "E03",
+      "profile": "paper-minimal",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-minimal",
+      "variant": "dropped-outcome",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "RELEASE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "DROP_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "PENDING",
+        "classification": "SUPPORTED",
+        "error": null,
+        "qualification": "PBC remains pending with no successful outcome record. Local durable intent/send logs do not imply receipt delivery; reconciliation requires eventual delivery. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E03-dropped-outcome-repaired-e",
+      "caseFamily": "E03",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A36",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "dropped-outcome",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "RELEASE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "DROP_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "PENDING",
+        "classification": "REPAIR_SUPPORTED",
+        "error": null,
+        "qualification": "PBC remains pending with no successful outcome record. Local durable intent/send logs do not imply receipt delivery; reconciliation requires eventual delivery."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E03-fabricated-outcome-paper-strict",
+      "caseFamily": "E03",
+      "profile": "paper-strict",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-strict",
+      "variant": "fabricated-outcome",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FABRICATE_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Configured relay reports a result without a DBC grant through the unattested paper path. Repaired path is disabled; receipt witness independently requires a matching grant."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E03-fabricated-outcome-paper-minimal",
+      "caseFamily": "E03",
+      "profile": "paper-minimal",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-minimal",
+      "variant": "fabricated-outcome",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FABRICATE_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Configured relay reports a result without a DBC grant through the unattested paper path. Repaired path is disabled; receipt witness independently requires a matching grant."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E03-fabricated-outcome-repaired-e",
+      "caseFamily": "E03",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A36",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "fabricated-outcome",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FABRICATE_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "WRONG_PROFILE",
+        "qualification": "Configured relay reports a result without a DBC grant through the unattested paper path. Repaired path is disabled; receipt witness independently requires a matching grant."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E03-duplicate-outcome-paper-strict",
+      "caseFamily": "E03",
+      "profile": "paper-strict",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-strict",
+      "variant": "duplicate-outcome",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "RELEASE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "DUPLICATE_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Repeated reconciliation cannot create a second successful outcome or grant. Exact owner reporter status/return values may differ; no duplicate transition is the assertion. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E03-duplicate-outcome-paper-minimal",
+      "caseFamily": "E03",
+      "profile": "paper-minimal",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-minimal",
+      "variant": "duplicate-outcome",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "RELEASE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "DUPLICATE_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Repeated reconciliation cannot create a second successful outcome or grant. Exact owner reporter status/return values may differ; no duplicate transition is the assertion. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E03-duplicate-outcome-repaired-e",
+      "caseFamily": "E03",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A36",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "duplicate-outcome",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "RELEASE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "DUPLICATE_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Repeated reconciliation cannot create a second successful outcome or grant. Exact owner reporter status/return values may differ; no duplicate transition is the assertion."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E03-crash-after-intent-paper-strict",
+      "caseFamily": "E03",
+      "profile": "paper-strict",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A35",
+        "A37",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-strict",
+      "variant": "crash-after-intent",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "RELEASE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "CRASH_RESTART",
+          "offsetSeconds": "0",
+          "workerHook": "release",
+          "crashPoint": "after-intent"
+        },
+        {
+          "action": "RELEASE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "UNPROVED",
+        "classification": "BLOCKED",
+        "error": null,
+        "qualification": "Inject crash immediately after durable intent, before send. Restart uses the same persisted response; original expiry still bounds retry. E1/E2 worker implementation is required. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result.",
+        "worker": {
+          "releaseIntentCount": "1",
+          "releaseSentCount": "1",
+          "sameCachedResponse": true,
+          "delivery": "unknown",
+          "expiredRetryError": "EXPIRED"
+        }
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E03-crash-after-intent-paper-minimal",
+      "caseFamily": "E03",
+      "profile": "paper-minimal",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A35",
+        "A37",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-minimal",
+      "variant": "crash-after-intent",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "RELEASE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "CRASH_RESTART",
+          "offsetSeconds": "0",
+          "workerHook": "release",
+          "crashPoint": "after-intent"
+        },
+        {
+          "action": "RELEASE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "UNPROVED",
+        "classification": "BLOCKED",
+        "error": null,
+        "qualification": "Inject crash immediately after durable intent, before send. Restart uses the same persisted response; original expiry still bounds retry. E1/E2 worker implementation is required. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result.",
+        "worker": {
+          "releaseIntentCount": "1",
+          "releaseSentCount": "1",
+          "sameCachedResponse": true,
+          "delivery": "unknown",
+          "expiredRetryError": "EXPIRED"
+        }
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E03-crash-after-intent-repaired-e",
+      "caseFamily": "E03",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A35",
+        "A37",
+        "A36",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "crash-after-intent",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "RELEASE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "CRASH_RESTART",
+          "offsetSeconds": "0",
+          "workerHook": "release",
+          "crashPoint": "after-intent"
+        },
+        {
+          "action": "RELEASE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "CONDITIONAL",
+        "classification": "REPAIR_SUPPORTED",
+        "error": null,
+        "qualification": "Inject crash immediately after durable intent, before send. Restart uses the same persisted response; original expiry still bounds retry. E1/E2 worker implementation is required. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED.",
+        "worker": {
+          "releaseIntentCount": "1",
+          "releaseSentCount": "1",
+          "sameCachedResponse": true,
+          "delivery": "unknown",
+          "expiredRetryError": "EXPIRED"
+        }
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E03-crash-after-send-paper-strict",
+      "caseFamily": "E03",
+      "profile": "paper-strict",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A35",
+        "A37",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-strict",
+      "variant": "crash-after-send",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "RELEASE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "CRASH_RESTART",
+          "offsetSeconds": "0",
+          "workerHook": "release",
+          "crashPoint": "after-send"
+        },
+        {
+          "action": "RELEASE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "UNPROVED",
+        "classification": "BLOCKED",
+        "error": null,
+        "qualification": "Inject crash after send before PBC outcome acknowledgement. Delivery is unknown; retain that fact and reconcile idempotently without claiming exactly-once network delivery. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result.",
+        "worker": {
+          "releaseIntentCount": "1",
+          "releaseSentCount": "2",
+          "sameCachedResponse": true,
+          "delivery": "unknown",
+          "expiredRetryError": "EXPIRED"
+        }
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E03-crash-after-send-paper-minimal",
+      "caseFamily": "E03",
+      "profile": "paper-minimal",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A35",
+        "A37",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-minimal",
+      "variant": "crash-after-send",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "RELEASE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "CRASH_RESTART",
+          "offsetSeconds": "0",
+          "workerHook": "release",
+          "crashPoint": "after-send"
+        },
+        {
+          "action": "RELEASE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "UNPROVED",
+        "classification": "BLOCKED",
+        "error": null,
+        "qualification": "Inject crash after send before PBC outcome acknowledgement. Delivery is unknown; retain that fact and reconcile idempotently without claiming exactly-once network delivery. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result.",
+        "worker": {
+          "releaseIntentCount": "1",
+          "releaseSentCount": "2",
+          "sameCachedResponse": true,
+          "delivery": "unknown",
+          "expiredRetryError": "EXPIRED"
+        }
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E03-crash-after-send-repaired-e",
+      "caseFamily": "E03",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A35",
+        "A37",
+        "A36",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "crash-after-send",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "RELEASE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "CRASH_RESTART",
+          "offsetSeconds": "0",
+          "workerHook": "release",
+          "crashPoint": "after-send"
+        },
+        {
+          "action": "RELEASE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPORT_OUTCOME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "CONDITIONAL",
+        "classification": "REPAIR_SUPPORTED",
+        "error": null,
+        "qualification": "Inject crash after send before PBC outcome acknowledgement. Delivery is unknown; retain that fact and reconcile idempotently without claiming exactly-once network delivery. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED.",
+        "worker": {
+          "releaseIntentCount": "1",
+          "releaseSentCount": "2",
+          "sameCachedResponse": true,
+          "delivery": "unknown",
+          "expiredRetryError": "EXPIRED"
+        }
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-forged-tuple-paper-strict",
+      "caseFamily": "E01",
+      "profile": "paper-strict",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-strict",
+      "variant": "forged-tuple",
+      "steps": [
+        {
+          "action": "FABRICATE_TUPLE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "The configured relay fabricates a tuple without a PBC request/log. Repaired control uses a non-witness signature on an otherwise matching certificate; BAD_SIGNATURE must precede any grant. Paper caller restrictions remain enforced; the compromised relay stress is outside secure isolation."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-forged-tuple-paper-minimal",
+      "caseFamily": "E01",
+      "profile": "paper-minimal",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-minimal",
+      "variant": "forged-tuple",
+      "steps": [
+        {
+          "action": "FABRICATE_TUPLE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "The configured relay fabricates a tuple without a PBC request/log. Repaired control uses a non-witness signature on an otherwise matching certificate; BAD_SIGNATURE must precede any grant. Paper caller restrictions remain enforced; the compromised relay stress is outside secure isolation."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-forged-tuple-repaired-e",
+      "caseFamily": "E01",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A36",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "forged-tuple",
+      "steps": [
+        {
+          "action": "FABRICATE_TUPLE",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "BAD_SIGNATURE",
+        "qualification": "The configured relay fabricates a tuple without a PBC request/log. Repaired control uses a non-witness signature on an otherwise matching certificate; BAD_SIGNATURE must precede any grant. Paper caller restrictions remain enforced; the compromised relay stress is outside secure isolation."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-wrong-destination-paper-strict",
+      "caseFamily": "E01",
+      "profile": "paper-strict",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-strict",
+      "variant": "wrong-destination",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "SUBSTITUTE_DESTINATION",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Use an otherwise valid request/certificate for a different destination chain/KSSC and submit it here without rewriting its signed fields. The receiver rejects WRONG_DESTINATION before grant state changes. Paper forwarded tuples omit this authenticated destination binding; this is a chosen completion under compromised-relay stress."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-wrong-destination-paper-minimal",
+      "caseFamily": "E01",
+      "profile": "paper-minimal",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-minimal",
+      "variant": "wrong-destination",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "SUBSTITUTE_DESTINATION",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Use an otherwise valid request/certificate for a different destination chain/KSSC and submit it here without rewriting its signed fields. The receiver rejects WRONG_DESTINATION before grant state changes. Paper forwarded tuples omit this authenticated destination binding; this is a chosen completion under compromised-relay stress."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-wrong-destination-repaired-e",
+      "caseFamily": "E01",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A36",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "wrong-destination",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "SUBSTITUTE_DESTINATION",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "WRONG_DESTINATION",
+        "qualification": "Use an otherwise valid request/certificate for a different destination chain/KSSC and submit it here without rewriting its signed fields. The receiver rejects WRONG_DESTINATION before grant state changes. Paper forwarded tuples omit this authenticated destination binding; this is a chosen completion under compromised-relay stress."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-new-reference-replay-paper-strict",
+      "caseFamily": "E01",
+      "profile": "paper-strict",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-strict",
+      "variant": "new-reference-replay",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPLAY_NEW_REFERENCE",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "After the first grant, the relay supplies a fresh pbcRequestId to paper policyEnf while repeating the same verified tuple. Paper grants again under A25. Repaired-e reuses the original signed gid/nonce/certificate (no freshly signed request); REPLAY prevents a second grant."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-new-reference-replay-paper-minimal",
+      "caseFamily": "E01",
+      "profile": "paper-minimal",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-paper-minimal",
+      "variant": "new-reference-replay",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPLAY_NEW_REFERENCE",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "After the first grant, the relay supplies a fresh pbcRequestId to paper policyEnf while repeating the same verified tuple. Paper grants again under A25. Repaired-e reuses the original signed gid/nonce/certificate (no freshly signed request); REPLAY prevents a second grant."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    },
+    {
+      "id": "E01-new-reference-replay-repaired-e",
+      "caseFamily": "E01",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A36",
+        "A41"
+      ],
+      "baseScenarioId": "E-control-Alice-repaired-e",
+      "variant": "new-reference-replay",
+      "steps": [
+        {
+          "action": "REQUEST_ACCESS",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "FORWARD_OR_CONSUME",
+          "offsetSeconds": "0"
+        },
+        {
+          "action": "REPLAY_NEW_REFERENCE",
+          "offsetSeconds": "0"
+        }
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "NO_NEW_GRANT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "After the first grant, the relay supplies a fresh pbcRequestId to paper policyEnf while repeating the same verified tuple. Paper grants again under A25. Repaired-e reuses the original signed gid/nonce/certificate (no freshly signed request); REPLAY prevents a second grant."
+      },
+      "adapterMode": "symbolic",
+      "executionStatus": "NOT_RUN"
+    }
+  ],
+  "registrationCondition": "Before adversarial schedules, trusted coordinator pre-registers synthetic worker payload/policy commitments and verifies ledger owner/policy; no registrant or payload authenticity claim (A41)."
+}

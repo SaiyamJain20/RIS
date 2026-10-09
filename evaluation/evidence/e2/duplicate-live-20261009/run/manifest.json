@@ -1,0 +1,84 @@
+{
+  "rq": "E",
+  "executionMode": "two-chain-e2-duplicate-outcome-slice",
+  "adapterMode": "symbolic",
+  "status": "E2_DUPLICATE_OUTCOME_SLICE_PASS",
+  "startedAt": "2026-10-09T02:14:49.342447+00:00",
+  "endedAt": "2026-10-09T02:20:54.372216+00:00",
+  "cases": {
+    "paper-strict-duplicate-outcome": {
+      "status": "DUPLICATE_OUTCOME_CONTROL_PASS",
+      "manifest": "paper-strict-duplicate-outcome/manifest.json"
+    },
+    "paper-minimal-duplicate-outcome": {
+      "status": "DUPLICATE_OUTCOME_CONTROL_PASS",
+      "manifest": "paper-minimal-duplicate-outcome/manifest.json"
+    },
+    "repaired-e-duplicate-outcome": {
+      "status": "DUPLICATE_OUTCOME_CONTROL_PASS",
+      "manifest": "repaired-e-duplicate-outcome/manifest.json"
+    }
+  },
+  "servicesStarted": [
+    {
+      "case": "paper-strict-duplicate-outcome",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 759111
+    },
+    {
+      "case": "paper-strict-duplicate-outcome",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 28545,
+      "pid": 759236
+    },
+    {
+      "case": "paper-minimal-duplicate-outcome",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 770767
+    },
+    {
+      "case": "paper-minimal-duplicate-outcome",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 28545,
+      "pid": 770889
+    },
+    {
+      "case": "repaired-e-duplicate-outcome",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 781701
+    },
+    {
+      "case": "repaired-e-duplicate-outcome",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 28545,
+      "pid": 781827
+    }
+  ],
+  "acks": {
+    "agent-1": {
+      "commit": "b3cfb156796f50f29ad01fb8eba40d54ef359b1e",
+      "path": "communication/agent-1/outbox/0052-ack-e2-duplicate-outcome-freeze.md",
+      "sha256": "ee903c027b4f5639359803c515943ae4eac124bfc6b10468dd6487963b2be5b5",
+      "messageId": "A1-0052"
+    },
+    "agent-2": {
+      "commit": "fbab2f291c2345db2197fb4251373d3f574b2c0c",
+      "path": "communication/agent-2/outbox/0032-ack-e2-duplicate-outcome-plan.md",
+      "sha256": "8aebc1296dd365baa785012888e71d5377707a090475a2e37bf1f34a78a34c4a",
+      "messageId": "A2-0032"
+    }
+  },
+  "failure": null,
+  "sourceStable": true,
+  "limitation": "Three duplicate outcome comparisons only; no complete catalog or RQ gate.",
+  "planSha256": "5ef10dc694b0c22c5f8f46fe2a71d89b99319bd527da8a240285659f5871169a"
+}

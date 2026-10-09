@@ -1,0 +1,46 @@
+{
+  "id": "E01-subject-substitution-repaired-e",
+  "caseFamily": "E01",
+  "profile": "repaired-e",
+  "sourceRefs": [
+    "S09",
+    "S12",
+    "S13",
+    "S20",
+    "SPEC4/E01"
+  ],
+  "assumptions": [
+    "A01",
+    "A02",
+    "A14",
+    "A19",
+    "A25",
+    "A36",
+    "A41"
+  ],
+  "baseScenarioId": "E-control-Alice-repaired-e",
+  "variant": "subject-substitution",
+  "steps": [
+    {
+      "action": "REQUEST_ACCESS",
+      "offsetSeconds": "0"
+    },
+    {
+      "action": "SUBSTITUTE_SUBJECT",
+      "offsetSeconds": "0"
+    },
+    {
+      "action": "FORWARD_OR_CONSUME",
+      "offsetSeconds": "0"
+    }
+  ],
+  "expected": {
+    "property": "decision-provenance",
+    "outcome": "REJECT",
+    "classification": "REPAIR_SUPPORTED",
+    "error": "WRONG_SUBJECT",
+    "qualification": "A compromised configured relay is outside the paper secure-isolation assumption. A repaired certificate must bind the original tuple. Substitute request.gid only and present the original decision certificate unchanged. Rewriting decision.requestDigest as well is a separate signature-failure control."
+  },
+  "adapterMode": "symbolic",
+  "executionStatus": "NOT_RUN"
+}

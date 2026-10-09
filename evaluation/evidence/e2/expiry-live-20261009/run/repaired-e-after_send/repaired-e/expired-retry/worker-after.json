@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "hmbc-worker-log/v0",
+  "adapterMode": "symbolic",
+  "deploymentFingerprint": "fadada41c79ee54c8af79a060370410db2f1dd337f055a85e6c0be1bc47245f4",
+  "events": [
+    {
+      "type": "RELEASE_INTENT",
+      "requestDigest": "0x63c2723b17f3d157af494b776eef7a6bfc15dad5cdfdd8d4e56fa32dcc393bcf",
+      "timestamp": "1791509201",
+      "grantId": "0xc1ea18c09bc710c557882f1dec4d9e1995abcb841c861d45cfece85245b7d2b3",
+      "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+      "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+    },
+    {
+      "type": "RELEASE_SENT",
+      "requestDigest": "0x63c2723b17f3d157af494b776eef7a6bfc15dad5cdfdd8d4e56fa32dcc393bcf",
+      "timestamp": "1791509201",
+      "grantId": "0xc1ea18c09bc710c557882f1dec4d9e1995abcb841c861d45cfece85245b7d2b3",
+      "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+      "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+    },
+    {
+      "type": "RELEASE_SENT",
+      "requestDigest": "0x63c2723b17f3d157af494b776eef7a6bfc15dad5cdfdd8d4e56fa32dcc393bcf",
+      "timestamp": "1791509202",
+      "grantId": "0xc1ea18c09bc710c557882f1dec4d9e1995abcb841c861d45cfece85245b7d2b3",
+      "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+      "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+    }
+  ],
+  "releases": [
+    {
+      "grantId": "0xc1ea18c09bc710c557882f1dec4d9e1995abcb841c861d45cfece85245b7d2b3",
+      "requestDigest": "0x63c2723b17f3d157af494b776eef7a6bfc15dad5cdfdd8d4e56fa32dcc393bcf",
+      "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+      "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+      "ciphertextDigest": "0xf6906a0ebe73c6698feb9f54f7849d072229ad124dabde7d177bfd799d644a6c",
+      "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d",
+      "keyEpoch": "0",
+      "tokenDigest": "0xa2ab98680f948362e2975936d9cd90ed50887e6be98a931ad95f70ac9f77a593",
+      "grantExpiresAt": "1791509208",
+      "createdAt": "1791509201",
+      "delivery": "unknown",
+      "sendAttempts": 2,
+      "completedAttempts": 1
+    }
+  ],
+  "counts": {
+    "releaseIntentCount": "1",
+    "releaseSentCount": "2"
+  },
+  "note": "RELEASE_SENT records an ATTEMPTED send (write-ahead); delivery is never acknowledged, so it stays 'unknown'. Tokens are redacted to digests."
+}

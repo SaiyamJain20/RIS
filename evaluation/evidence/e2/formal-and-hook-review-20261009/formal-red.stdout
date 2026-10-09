@@ -1,0 +1,99 @@
+FFFF                                                                     [100%]
+=================================== FAILURES ===================================
+__________ test_full_signed_tuple_implies_user_and_witness_agreement ___________
+
+    def test_full_signed_tuple_implies_user_and_witness_agreement():
+        # Removing any checked binding must break full eight-field agreement.
+>       verdicts, _ = run_model('access.pv')
+                      ^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_e_correspondence.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+filename = 'access.pv'
+
+    def run_model(filename):
+        model = ROOT / 'evaluation/models/e' / filename
+>       assert model.is_file(), f'C-E2 model not implemented: {filename}'
+E       AssertionError: C-E2 model not implemented: access.pv
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/karma/Documents/RIS/evaluation/models/e/access.pv').is_file
+
+evaluation/tests/test_e_correspondence.py:15: AssertionError
+____ test_legitimate_grant_reachable_and_policy_denial_preserved[access.pv] ____
+
+model = 'access.pv'
+
+    @pytest.mark.parametrize('model', ['access.pv', 'access_mutant.pv'])
+    def test_legitimate_grant_reachable_and_policy_denial_preserved(model):
+        # A deny-all witness/sink must break reachability; grant-all breaks denial.
+>       verdicts, _ = run_model(model)
+                      ^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_e_correspondence.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+filename = 'access.pv'
+
+    def run_model(filename):
+        model = ROOT / 'evaluation/models/e' / filename
+>       assert model.is_file(), f'C-E2 model not implemented: {filename}'
+E       AssertionError: C-E2 model not implemented: access.pv
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/karma/Documents/RIS/evaluation/models/e/access.pv').is_file
+
+evaluation/tests/test_e_correspondence.py:15: AssertionError
+_ test_legitimate_grant_reachable_and_policy_denial_preserved[access_mutant.pv] _
+
+model = 'access_mutant.pv'
+
+    @pytest.mark.parametrize('model', ['access.pv', 'access_mutant.pv'])
+    def test_legitimate_grant_reachable_and_policy_denial_preserved(model):
+        # A deny-all witness/sink must break reachability; grant-all breaks denial.
+>       verdicts, _ = run_model(model)
+                      ^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_e_correspondence.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+filename = 'access_mutant.pv'
+
+    def run_model(filename):
+        model = ROOT / 'evaluation/models/e' / filename
+>       assert model.is_file(), f'C-E2 model not implemented: {filename}'
+E       AssertionError: C-E2 model not implemented: access_mutant.pv
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/karma/Documents/RIS/evaluation/models/e/access_mutant.pv').is_file
+
+evaluation/tests/test_e_correspondence.py:15: AssertionError
+___ test_unsigned_destination_mutant_has_real_attack_and_other_fields_agree ____
+
+    def test_unsigned_destination_mutant_has_real_attack_and_other_fields_agree():
+        # Reintroducing destination binding removes the attack; disabling signatures
+        # breaks the seven-field projection. Both mistakes must be detected.
+>       verdicts, output = run_model('access_mutant.pv')
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_e_correspondence.py:45: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+filename = 'access_mutant.pv'
+
+    def run_model(filename):
+        model = ROOT / 'evaluation/models/e' / filename
+>       assert model.is_file(), f'C-E2 model not implemented: {filename}'
+E       AssertionError: C-E2 model not implemented: access_mutant.pv
+E       assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/home/karma/Documents/RIS/evaluation/models/e/access_mutant.pv').is_file
+
+evaluation/tests/test_e_correspondence.py:15: AssertionError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_e_correspondence.py::test_full_signed_tuple_implies_user_and_witness_agreement
+FAILED evaluation/tests/test_e_correspondence.py::test_legitimate_grant_reachable_and_policy_denial_preserved[access.pv]
+FAILED evaluation/tests/test_e_correspondence.py::test_legitimate_grant_reachable_and_policy_denial_preserved[access_mutant.pv]
+FAILED evaluation/tests/test_e_correspondence.py::test_unsigned_destination_mutant_has_real_attack_and_other_fields_agree
+4 failed in 0.02s

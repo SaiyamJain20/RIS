@@ -1,0 +1,138 @@
+{
+  "artifacts": {
+    "commands.json": "0023aad28ce92753dbdf269c57b7ed15241d35216b0c8556819b1c0a462c1724",
+    "full-evaluator.txt": "8461a590b8b965177176257e72e96fe4b460b880a91521f3dd169a34b5262061",
+    "helper-recovery.json": "1d66403167e80d9bc099ab17580ad25912e24986a281f42556d36b3268a8c14f",
+    "integration-plan.json": "1899126e37c683fd9b4334787f71131250d7950506d845286220249b526a4b31",
+    "no-ack-probe.json": "eb0370270a8f68c966019b0d6669e7c6481aff25f525219b4ccfd0a8113e5e01",
+    "peer-communication.json": "9d920d4a0c0eccb90f387cf03b74a2f6a4926ace61dd9c54a82504fd55c0cab1",
+    "source-audit.json": "6a0f78574e18474398993745a023e772bee84407c66c7e8aed14ad53ebba25ef",
+    "source-brackets.json": "342e178faae7dc034b6b811776d96f9109d7f7bfc573c7acaad6d52d6482e70a"
+  },
+  "assumptions": [
+    "Paper-derived HMBC2020 reconstruction only; original paper source/assumption registers unchanged",
+    "Runner loads only relay/CA-admin TEST-ONLY signing keys; relay also deploys funded fixture chains as proposed in plan",
+    "Owner public producer/adapter owns authority/GID/user/witness custody",
+    "Runtime templates mask only compiler-declared immutable slots; RPC source consistency is not provider integrity",
+    "Synchronous owner shell commands must not daemonize; timeout/cancellation cleanup owns only a new unreaped process group"
+  ],
+  "automationId": "ris-agent-branch-monitor-and-continuation",
+  "baseCommit": "01a8114481c4e60119570905da0aaf4e11b22789",
+  "capturedAt": "2026-10-08T19:27:55.328528+00:00",
+  "classification": "tested reconstruction unit/static result; real integration unproved",
+  "externalRawEvidence": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261008T185322Z",
+  "fixtures": [
+    "Existing TEST-ONLY public signed/bootstrap/deployment sample (old instance, never execution authorization)",
+    "Real local synthetic process children for environment/timeout cleanup",
+    "Public ABI/RPC/adapter/worker control doubles with real codecs/signature recovery/schema/oracle checks; no gate evidence",
+    "Synthetic ACK-parser/control-flow probes, never peer identities or accepted ACK records"
+  ],
+  "interfaceFreezeSha256": "f700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2",
+  "limitations": [
+    "No actual ledger/adapter services, funding, deployment, bootstrap/access transaction or nine-control run",
+    "All56 catalog schedules and all RQ gates NOT_RUN; four paper crash cases BLOCKED/unproved; E2/E3 wait on actual E1; F/G locked",
+    "No new E2 pin, crash hook, formal correspondence, cryptographic measurement, consensus, delivery or power-loss proof",
+    "Both exact integration FREEZE ACKs absent at capture; no lease/PIDs/ports adopted",
+    "Documentation/evidence/outbox packaging follows test bracket;47 runtime source pins rechecked before publication"
+  ],
+  "locks": {
+    "cleanup": "finally result and publication status in external run/automation memory; no premature release claim",
+    "coordinator": "separate hmbc-coordinator.lock flock held by guard",
+    "scheduled": "exclusive mkdir; no stale recovery; lifetime guard310318 exact ticks4241423"
+  },
+  "newChecksByScope": {
+    "accessArtifacts": 34,
+    "accessExecution": 21,
+    "environmentAndDispatch": 4,
+    "freezeAndCancellation": 15,
+    "ownedCommand": 2
+  },
+  "ownerInputs": 211,
+  "peerReview": {
+    "A1-0036": {
+      "commit": "13f21fca32e7202a5dfd31aa9b6a06a7f35c0c9f",
+      "scope": "Owner private Anvil measured Rejected(uint8) trace support; own runner flags/auto-mining remain unverified; no source pin or ACK promoted",
+      "sha256": "c57314930ebdf9b87c31b56a814d9a251effe4bd72662150d8606d11d73de02e"
+    },
+    "newAgent2": "none"
+  },
+  "planSha256": "1899126e37c683fd9b4334787f71131250d7950506d845286220249b526a4b31",
+  "review": {
+    "deferredFinding": null,
+    "foundAndFixed": [
+      "Malformed response logged before schema validation",
+      "Schema-valid diagnostic message could contain a capability",
+      "Deployment shell timeout could orphan a Forge descendant",
+      "Interrupted root manifest remained RUNNING"
+    ],
+    "kind": "author-only; extra agents forbidden",
+    "qualification": "Weaker than independent review; exact affected owner plan ACKs still mandatory"
+  },
+  "runStart": "2026-10-08T18:53:22.962470+00:00",
+  "runtimeInputs": 47,
+  "status": "C-E1 executable runner unit verified; awaiting exact A3-0027 plan ACKs",
+  "tdd": [
+    {
+      "green": "34 passed",
+      "label": "artifacts",
+      "red": "34 failed"
+    },
+    {
+      "green": "19 passed",
+      "label": "access-execution",
+      "red": "19 failed"
+    },
+    {
+      "green": "14 passed",
+      "label": "freeze",
+      "red": "13 failed, then14 failed with runtime-template check"
+    },
+    {
+      "green": "105 combined passed",
+      "label": "driver-boundary",
+      "red": "2 failed/25 passed"
+    },
+    {
+      "green": "54 combined passed",
+      "label": "invalid-response-redaction",
+      "red": "1 failed/19 passed"
+    },
+    {
+      "green": "32 passed",
+      "label": "valid-error-redaction",
+      "red": "1 failed/31 passed"
+    },
+    {
+      "green": "15 passed",
+      "label": "rpc-environment",
+      "red": "1 failed/14 passed"
+    },
+    {
+      "green": "31 combined passed after test-assertion correction",
+      "label": "owned-command",
+      "red": "2 failed"
+    },
+    {
+      "green": "411 full-suite passed",
+      "label": "cancellation",
+      "red": "1 failed/14 passed"
+    }
+  ],
+  "tests": {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "evaluation/tests",
+      "-q",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "elapsedSeconds": 56.5003174950034,
+    "exitCode": 0,
+    "newChecks": 76,
+    "passed": 411,
+    "sourceStable": true,
+    "stableInputs": 74
+  }
+}

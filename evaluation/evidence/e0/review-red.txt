@@ -1,0 +1,63 @@
+...................FF..............F...F                                 [100%]
+=================================== FAILURES ===================================
+______________ test_signed_certificate_enforces_nested_role_order ______________
+
+    def test_signed_certificate_enforces_nested_role_order():
+        v=next(v for v in V['vectors'] if v['name']=='RoleCertificate')
+        cert=copy.deepcopy(v['typedData']['message'])
+        cert['roles']=[cert['roles'][0],cert['roles'][0]]
+>       with pytest.raises(ValueError):validate('SignedRoleCertificate',{'cert':cert,'signature':v['signature']})
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+evaluation/tests/test_schemas.py:78: Failed
+________ test_e_certificate_cannot_have_more_than_one_witness_signature ________
+
+    def test_e_certificate_cannot_have_more_than_one_witness_signature():
+        v=next(v for v in V['vectors'] if v['name']=='AccessDecision')
+        cert={'decision':v['typedData']['message'],'signatures':[v['signature'],v['signature']]}
+>       with pytest.raises(ValidationError):validate('DecisionCertificate',cert)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'jsonschema.exceptions.ValidationError'>
+
+evaluation/tests/test_schemas.py:84: Failed
+___________________ test_duplicate_outcome_transition_fails ____________________
+
+    def test_duplicate_outcome_transition_fails():
+        s=SCENARIOS[0];t=trace(s)
+        t['events'].append(copy.deepcopy(t['events'][-1]))
+>       assert not evaluate(s,t)['ok']
+E       assert not True
+
+evaluation/tests/test_access_oracle.py:69: AssertionError
+___________ test_non_object_manifest_is_blocked_instead_of_crashing ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-10/test_non_object_manifest_is_bl0')
+
+    def test_non_object_manifest_is_blocked_instead_of_crashing(tmp_path):
+        (tmp_path/'manifest.json').write_text('[]')
+>       assert check_gate(tmp_path)['decision']=='BLOCKED'
+               ^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_gate.py:25: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+run = PosixPath('/tmp/pytest-of-karma/pytest-10/test_non_object_manifest_is_bl0')
+rq = 'E'
+
+    def check_gate(run,rq='E'):
+        run=Path(run);missing=[]
+        if rq!='E':return {'rq':rq,'decision':'BLOCKED','missing':['Prior RQ gates have not passed; F/G adjudication not implemented in E.']}
+        try:manifest=json.loads((run/'manifest.json').read_text())
+        except (OSError,ValueError):return {'rq':rq,'decision':'BLOCKED','missing':['Readable manifest.json required',*E_CRITERIA]}
+>       if manifest.get('rq')!='E':missing.append('RQ mismatch')
+           ^^^^^^^^^^^^
+E       AttributeError: 'list' object has no attribute 'get'
+
+evaluation/gate.py:20: AttributeError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_schemas.py::test_signed_certificate_enforces_nested_role_order
+FAILED evaluation/tests/test_schemas.py::test_e_certificate_cannot_have_more_than_one_witness_signature
+FAILED evaluation/tests/test_access_oracle.py::test_duplicate_outcome_transition_fails
+FAILED evaluation/tests/test_gate.py::test_non_object_manifest_is_blocked_instead_of_crashing
+4 failed, 36 passed in 1.22s

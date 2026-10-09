@@ -1,0 +1,30 @@
+{
+  "classification": "navigation/helper failures, not research results",
+  "failures": [
+    {
+      "command": "git show origin/agent-1:communication/agent-1/outbox/0047-ack-e2-test-only-start-contract-r1.md",
+      "exitCode": 128,
+      "reason": "incorrect guessed filename; corrected via diff listing"
+    },
+    {
+      "command": "cat evaluation/config/e2-start-contract-r1.json",
+      "exitCode": 1,
+      "reason": "incorrect guessed location; read exact outbox source path"
+    },
+    {
+      "command": "cat evaluation/service_process.py; cat evaluation/services.py; cat evaluation/scenarios/e_audit.json",
+      "exitCode": 1,
+      "reason": "planned/guessed paths absent; used rg and actual processes.py; no claim of existing audit scenario"
+    },
+    {
+      "command": "transport-green",
+      "exitCode": 1,
+      "reason": "synthetic fixture put token literal in -c argv, which process logger retains; moved synthetic program to file; corrected GREEN verifies pipe commitment logging"
+    },
+    {
+      "command": ".venv/bin/python -m evaluation.coordination --output <evidence>/newest-communication.json",
+      "exitCode": 1,
+      "reason": "wrong guessed module name; actual evaluation.peers discovered via rg and source read; corrected scan retained"
+    }
+  ]
+}

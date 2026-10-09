@@ -1,0 +1,104 @@
+{
+  "catalogSha256": "438fa38ddcbd7edd0e49fb93cc580e5219ed05349fd677b2e386bc4669f5d50e",
+  "rows": [
+    {
+      "caseId": "E01-nonce-replay-paper-strict",
+      "profile": "paper-strict",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "NO_NEW_GRANT",
+        "classification": "SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Replay the identical accepted request/forward reference, not a newly fabricated relay reference. All profiles reject a new transition or expose an existing grant read; paper new-reference stress is a separate gap under A25."
+      },
+      "replaySubcheck": "PASS identical ACSC call/mined status0/Rejected8/whole native-worker-history unchanged",
+      "executionStatus": "COMPLETE",
+      "classification": "SUPPORTED",
+      "qualification": "Tested reconstruction result for identical accepted ACSC call only. Existing grant uniqueness precedes nonce check; distinct-digest same-(gid,nonce) and new-reference stress remain unrun. Idle worker equality is not retry/idempotence."
+    },
+    {
+      "caseId": "E01-nonce-replay-paper-minimal",
+      "profile": "paper-minimal",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "NO_NEW_GRANT",
+        "classification": "SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Replay the identical accepted request/forward reference, not a newly fabricated relay reference. All profiles reject a new transition or expose an existing grant read; paper new-reference stress is a separate gap under A25."
+      },
+      "replaySubcheck": "PASS identical ACSC call/mined status0/Rejected8/whole native-worker-history unchanged",
+      "executionStatus": "COMPLETE",
+      "classification": "SUPPORTED",
+      "qualification": "Tested reconstruction result for identical accepted ACSC call only. Existing grant uniqueness precedes nonce check; distinct-digest same-(gid,nonce) and new-reference stress remain unrun. Idle worker equality is not retry/idempotence."
+    },
+    {
+      "caseId": "E01-nonce-replay-repaired-e",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A36",
+        "A41"
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "NO_NEW_GRANT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Replay the identical accepted request/forward reference, not a newly fabricated relay reference. All profiles reject a new transition or expose an existing grant read; paper new-reference stress is a separate gap under A25."
+      },
+      "replaySubcheck": "PASS identical ACSC call/mined status0/Rejected8/whole native-worker-history unchanged",
+      "executionStatus": "COMPLETE",
+      "classification": "REPAIR_SUPPORTED",
+      "qualification": "Tested reconstruction result for identical accepted ACSC call only. Existing grant uniqueness precedes nonce check; distinct-digest same-(gid,nonce) and new-reference stress remain unrun. Idle worker equality is not retry/idempotence."
+    }
+  ],
+  "untouchedSchedules": 44,
+  "incompleteRepairedSchedules": 0,
+  "remainingCompleteSchedules": 44,
+  "fullCatalogComplete": false,
+  "historicalRecoveryExpiryRows": 6,
+  "historicalDuplicateRows": 3,
+  "paperCrashClassifications": "four BLOCKED/unproved",
+  "priorFailedTrial": "evaluation/evidence/e2/nonce-replay-live-20261009/README.md retained unchanged"
+}

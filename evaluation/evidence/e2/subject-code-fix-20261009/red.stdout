@@ -1,0 +1,47 @@
+..F..................................................F.................  [100%]
+=================================== FAILURES ===================================
+_ test_subject_substitution_distinguishes_paper_tuple_from_unchanged_certificate[repaired-e] _
+
+profile = 'repaired-e'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    def test_subject_substitution_distinguishes_paper_tuple_from_unchanged_certificate(profile):
+>       proof = oracle()(**facts(profile))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_subject_substitution.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/oracles/subject.py:60: in check_subject_substitution
+    require(success is False and rejection_code == '3' and receipt_events == [],
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, label = 'mined WRONG_SUBJECT without events'
+
+    def require(condition, label):
+        if not condition:
+>           raise ValueError('Public access '+label+' failed')
+E           ValueError: Public access mined WRONG_SUBJECT without events failed
+
+evaluation/access_artifacts.py:16: ValueError
+_ test_repaired_subject_requires_original_certificate_and_whole_rollback[wrong-code] _
+
+mutation = 'wrong-code'
+
+    @pytest.mark.parametrize('mutation', ['decision', 'signature', 'wrong-code', 'success', 'receipt', 'state'])
+    def test_repaired_subject_requires_original_certificate_and_whole_rollback(mutation):
+        d = facts('repaired-e')
+        if mutation == 'decision': d['submitted_arguments'][1]['decision']['requestDigest'] = 'rewritten'
+        if mutation == 'signature': d['submitted_arguments'][1]['signatures'] = ['replacement']
+        if mutation == 'wrong-code': d['rejection_code'] = '3'
+        if mutation == 'success': d['success'] = True
+        if mutation == 'receipt': d['receipt_events'].append({'name': 'GrantIssued'})
+        if mutation == 'state': d['after']['grant']['allowed'] = True
+>       with pytest.raises(ValueError): oracle()(**d)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+evaluation/tests/test_subject_substitution.py:98: Failed
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_substitution_distinguishes_paper_tuple_from_unchanged_certificate[repaired-e]
+FAILED evaluation/tests/test_subject_substitution.py::test_repaired_subject_requires_original_certificate_and_whole_rollback[wrong-code]
+2 failed, 69 passed in 0.34s

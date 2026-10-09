@@ -1,0 +1,40 @@
+.F..............................................                         [100%]
+=================================== FAILURES ===================================
+_ test_expected_terminal_exit_is_observed_without_token_transcript[after_send-print(json.dumps({'secret':'synthetic-token'}),flush=True)\nos._exit(86)-want1] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-61/test_expected_terminal_exit_is1')
+point = 'after_send'
+program = "print(json.dumps({'secret':'synthetic-token'}),flush=True)\nos._exit(86)"
+want = {'secret': 'synthetic-token'}
+
+    @pytest.mark.parametrize('point,program,want',[
+        ('after_intent','os._exit(86)',None),
+        ('after_send',"print(json.dumps({'secret':'synthetic-token'}),flush=True)\nos._exit(86)",{'secret':'synthetic-token'}),
+    ])
+    def test_expected_terminal_exit_is_observed_without_token_transcript(tmp_path,point,program,want):
+        calls=[]
+        with child(tmp_path,program) as p:
+            result=observe(p,point,lambda value:calls.append(value))
+            assert result==want and p.returncode==86
+        record=json.loads((tmp_path/'process/process.json').read_text())
+        assert record['exitCode']==86 and record['failure'] is None
+        assert record['exchanges'][0]['crashPoint']==point
+        assert record['exchanges'][0]['terminalObserved'] is True
+        assert record['stderrSha256']==hashlib.sha256(b'').hexdigest()
+        assert calls==([] if want is None else [want])
+>       assert 'synthetic-token' not in (tmp_path/'process/process.json').read_text()
+E       assert 'synthetic-token' not in '{\n  "argv"...52b855"\n}\n'
+E         
+E         'synthetic-token' is contained here:
+E           'secret':'synthetic-token'}),flush=True)\nos._exit(86)"
+E         ?           +++++++++++++++
+E             ],
+E             "cwd": "/tmp/pytest-of-karma/pytest-61/test_expected_terminal_exit_is1",
+E             "pid": 476210,...
+E         
+E         ...Full output truncated (20 lines hidden), use '-vv' to show
+
+evaluation/tests/test_crash_transport.py:41: AssertionError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_crash_transport.py::test_expected_terminal_exit_is_observed_without_token_transcript[after_send-print(json.dumps({'secret':'synthetic-token'}),flush=True)\nos._exit(86)-want1]
+1 failed, 47 passed in 6.23s

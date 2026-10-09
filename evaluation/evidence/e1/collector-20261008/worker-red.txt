@@ -1,0 +1,1400 @@
+FFFFFFFFFFFFFFFFFFFFFFF                                                  [100%]
+=================================== FAILURES ===================================
+______ test_checked_snapshot_preserves_attempts_and_delivery_uncertainty _______
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+>       try: module = importlib.import_module('evaluation.worker_evidence')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_worker_evidence.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.worker_evidence'
+import_ = <function _gcd_import at 0x7f2554bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.worker_evidence'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_checked_snapshot_preserves_attempts_and_delivery_uncertainty():
+>       original=snapshot(); observed=log(original)
+                                      ^^^^^^^^^^^^^
+
+evaluation/tests/test_worker_evidence.py:49: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+        try: module = importlib.import_module('evaluation.worker_evidence')
+>       except ModuleNotFoundError: pytest.fail('Independent C-E1 worker evidence checks are absent')
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: Independent C-E1 worker evidence checks are absent
+
+evaluation/tests/test_worker_evidence.py:37: Failed
+______ test_empty_snapshot_is_no_release_and_cannot_authorize_a_response _______
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '0', 'releaseSentCount': '0'}, 'deploymentFingerprint': 'abababababababababababababababababababababababababababababababab', 'events': [], ...}
+
+    def log(payload=None):
+>       try: module = importlib.import_module('evaluation.worker_evidence')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_worker_evidence.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.worker_evidence'
+import_ = <function _gcd_import at 0x7f2554bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.worker_evidence'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_empty_snapshot_is_no_release_and_cannot_authorize_a_response():
+        p=snapshot();p['events']=[];p['releases']=[]
+        p['counts']={'releaseIntentCount':'0','releaseSentCount':'0'}
+>       observed=log(p);assert observed.events_for(GRANT)==[]
+                 ^^^^^^
+
+evaluation/tests/test_worker_evidence.py:59: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '0', 'releaseSentCount': '0'}, 'deploymentFingerprint': 'abababababababababababababababababababababababababababababababab', 'events': [], ...}
+
+    def log(payload=None):
+        try: module = importlib.import_module('evaluation.worker_evidence')
+>       except ModuleNotFoundError: pytest.fail('Independent C-E1 worker evidence checks are absent')
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: Independent C-E1 worker evidence checks are absent
+
+evaluation/tests/test_worker_evidence.py:37: Failed
+_______ test_inconsistent_or_unredacted_snapshot_is_refused[fingerprint] _______
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+>       try: module = importlib.import_module('evaluation.worker_evidence')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_worker_evidence.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.worker_evidence'
+import_ = <function _gcd_import at 0x7f2554bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.worker_evidence'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+change = 'fingerprint'
+
+    @pytest.mark.parametrize('change',['fingerprint','mode','count','send-count','bool-count',
+                                      'completed','event-binding','order','duplicate-intent',
+                                      'duplicate-grant','unknown-event','raw-token','expiry','timestamp'])
+    def test_inconsistent_or_unredacted_snapshot_is_refused(change):
+        p=snapshot();r=p['releases'][0]
+        if change=='fingerprint':p['deploymentFingerprint']='cd'*32
+        if change=='mode':p['adapterMode']='abe-real'
+        if change=='count':p['counts']['releaseSentCount']='2'
+        if change=='send-count':r['sendAttempts']=2
+        if change=='bool-count':r['sendAttempts']=True
+        if change=='completed':r['completedAttempts']=2
+        if change=='event-binding':p['events'][1]['gid']='0x'+'77'*20
+        if change=='order':p['events'].reverse()
+        if change=='duplicate-intent':p['events'].append(copy.deepcopy(p['events'][0]))
+        if change=='duplicate-grant':p['releases'].append(copy.deepcopy(r))
+        if change=='unknown-event':p['events'][1]['type']='DELIVERED'
+        if change=='raw-token':r['token']='0x'+'00'*32
+        if change=='expiry':r['grantExpiresAt']='100'
+        if change=='timestamp':p['events'][0]['timestamp']='0100'
+>       with pytest.raises(ValueError):log(p)
+                                       ^^^^^^
+
+evaluation/tests/test_worker_evidence.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+        try: module = importlib.import_module('evaluation.worker_evidence')
+>       except ModuleNotFoundError: pytest.fail('Independent C-E1 worker evidence checks are absent')
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: Independent C-E1 worker evidence checks are absent
+
+evaluation/tests/test_worker_evidence.py:37: Failed
+__________ test_inconsistent_or_unredacted_snapshot_is_refused[mode] ___________
+
+payload = {'adapterMode': 'abe-real', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+>       try: module = importlib.import_module('evaluation.worker_evidence')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_worker_evidence.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.worker_evidence'
+import_ = <function _gcd_import at 0x7f2554bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.worker_evidence'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+change = 'mode'
+
+    @pytest.mark.parametrize('change',['fingerprint','mode','count','send-count','bool-count',
+                                      'completed','event-binding','order','duplicate-intent',
+                                      'duplicate-grant','unknown-event','raw-token','expiry','timestamp'])
+    def test_inconsistent_or_unredacted_snapshot_is_refused(change):
+        p=snapshot();r=p['releases'][0]
+        if change=='fingerprint':p['deploymentFingerprint']='cd'*32
+        if change=='mode':p['adapterMode']='abe-real'
+        if change=='count':p['counts']['releaseSentCount']='2'
+        if change=='send-count':r['sendAttempts']=2
+        if change=='bool-count':r['sendAttempts']=True
+        if change=='completed':r['completedAttempts']=2
+        if change=='event-binding':p['events'][1]['gid']='0x'+'77'*20
+        if change=='order':p['events'].reverse()
+        if change=='duplicate-intent':p['events'].append(copy.deepcopy(p['events'][0]))
+        if change=='duplicate-grant':p['releases'].append(copy.deepcopy(r))
+        if change=='unknown-event':p['events'][1]['type']='DELIVERED'
+        if change=='raw-token':r['token']='0x'+'00'*32
+        if change=='expiry':r['grantExpiresAt']='100'
+        if change=='timestamp':p['events'][0]['timestamp']='0100'
+>       with pytest.raises(ValueError):log(p)
+                                       ^^^^^^
+
+evaluation/tests/test_worker_evidence.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = {'adapterMode': 'abe-real', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+        try: module = importlib.import_module('evaluation.worker_evidence')
+>       except ModuleNotFoundError: pytest.fail('Independent C-E1 worker evidence checks are absent')
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: Independent C-E1 worker evidence checks are absent
+
+evaluation/tests/test_worker_evidence.py:37: Failed
+__________ test_inconsistent_or_unredacted_snapshot_is_refused[count] __________
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '2'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+>       try: module = importlib.import_module('evaluation.worker_evidence')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_worker_evidence.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.worker_evidence'
+import_ = <function _gcd_import at 0x7f2554bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.worker_evidence'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+change = 'count'
+
+    @pytest.mark.parametrize('change',['fingerprint','mode','count','send-count','bool-count',
+                                      'completed','event-binding','order','duplicate-intent',
+                                      'duplicate-grant','unknown-event','raw-token','expiry','timestamp'])
+    def test_inconsistent_or_unredacted_snapshot_is_refused(change):
+        p=snapshot();r=p['releases'][0]
+        if change=='fingerprint':p['deploymentFingerprint']='cd'*32
+        if change=='mode':p['adapterMode']='abe-real'
+        if change=='count':p['counts']['releaseSentCount']='2'
+        if change=='send-count':r['sendAttempts']=2
+        if change=='bool-count':r['sendAttempts']=True
+        if change=='completed':r['completedAttempts']=2
+        if change=='event-binding':p['events'][1]['gid']='0x'+'77'*20
+        if change=='order':p['events'].reverse()
+        if change=='duplicate-intent':p['events'].append(copy.deepcopy(p['events'][0]))
+        if change=='duplicate-grant':p['releases'].append(copy.deepcopy(r))
+        if change=='unknown-event':p['events'][1]['type']='DELIVERED'
+        if change=='raw-token':r['token']='0x'+'00'*32
+        if change=='expiry':r['grantExpiresAt']='100'
+        if change=='timestamp':p['events'][0]['timestamp']='0100'
+>       with pytest.raises(ValueError):log(p)
+                                       ^^^^^^
+
+evaluation/tests/test_worker_evidence.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '2'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+        try: module = importlib.import_module('evaluation.worker_evidence')
+>       except ModuleNotFoundError: pytest.fail('Independent C-E1 worker evidence checks are absent')
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: Independent C-E1 worker evidence checks are absent
+
+evaluation/tests/test_worker_evidence.py:37: Failed
+_______ test_inconsistent_or_unredacted_snapshot_is_refused[send-count] ________
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+>       try: module = importlib.import_module('evaluation.worker_evidence')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_worker_evidence.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.worker_evidence'
+import_ = <function _gcd_import at 0x7f2554bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.worker_evidence'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+change = 'send-count'
+
+    @pytest.mark.parametrize('change',['fingerprint','mode','count','send-count','bool-count',
+                                      'completed','event-binding','order','duplicate-intent',
+                                      'duplicate-grant','unknown-event','raw-token','expiry','timestamp'])
+    def test_inconsistent_or_unredacted_snapshot_is_refused(change):
+        p=snapshot();r=p['releases'][0]
+        if change=='fingerprint':p['deploymentFingerprint']='cd'*32
+        if change=='mode':p['adapterMode']='abe-real'
+        if change=='count':p['counts']['releaseSentCount']='2'
+        if change=='send-count':r['sendAttempts']=2
+        if change=='bool-count':r['sendAttempts']=True
+        if change=='completed':r['completedAttempts']=2
+        if change=='event-binding':p['events'][1]['gid']='0x'+'77'*20
+        if change=='order':p['events'].reverse()
+        if change=='duplicate-intent':p['events'].append(copy.deepcopy(p['events'][0]))
+        if change=='duplicate-grant':p['releases'].append(copy.deepcopy(r))
+        if change=='unknown-event':p['events'][1]['type']='DELIVERED'
+        if change=='raw-token':r['token']='0x'+'00'*32
+        if change=='expiry':r['grantExpiresAt']='100'
+        if change=='timestamp':p['events'][0]['timestamp']='0100'
+>       with pytest.raises(ValueError):log(p)
+                                       ^^^^^^
+
+evaluation/tests/test_worker_evidence.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+        try: module = importlib.import_module('evaluation.worker_evidence')
+>       except ModuleNotFoundError: pytest.fail('Independent C-E1 worker evidence checks are absent')
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: Independent C-E1 worker evidence checks are absent
+
+evaluation/tests/test_worker_evidence.py:37: Failed
+_______ test_inconsistent_or_unredacted_snapshot_is_refused[bool-count] ________
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+>       try: module = importlib.import_module('evaluation.worker_evidence')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_worker_evidence.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.worker_evidence'
+import_ = <function _gcd_import at 0x7f2554bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.worker_evidence'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+change = 'bool-count'
+
+    @pytest.mark.parametrize('change',['fingerprint','mode','count','send-count','bool-count',
+                                      'completed','event-binding','order','duplicate-intent',
+                                      'duplicate-grant','unknown-event','raw-token','expiry','timestamp'])
+    def test_inconsistent_or_unredacted_snapshot_is_refused(change):
+        p=snapshot();r=p['releases'][0]
+        if change=='fingerprint':p['deploymentFingerprint']='cd'*32
+        if change=='mode':p['adapterMode']='abe-real'
+        if change=='count':p['counts']['releaseSentCount']='2'
+        if change=='send-count':r['sendAttempts']=2
+        if change=='bool-count':r['sendAttempts']=True
+        if change=='completed':r['completedAttempts']=2
+        if change=='event-binding':p['events'][1]['gid']='0x'+'77'*20
+        if change=='order':p['events'].reverse()
+        if change=='duplicate-intent':p['events'].append(copy.deepcopy(p['events'][0]))
+        if change=='duplicate-grant':p['releases'].append(copy.deepcopy(r))
+        if change=='unknown-event':p['events'][1]['type']='DELIVERED'
+        if change=='raw-token':r['token']='0x'+'00'*32
+        if change=='expiry':r['grantExpiresAt']='100'
+        if change=='timestamp':p['events'][0]['timestamp']='0100'
+>       with pytest.raises(ValueError):log(p)
+                                       ^^^^^^
+
+evaluation/tests/test_worker_evidence.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+        try: module = importlib.import_module('evaluation.worker_evidence')
+>       except ModuleNotFoundError: pytest.fail('Independent C-E1 worker evidence checks are absent')
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: Independent C-E1 worker evidence checks are absent
+
+evaluation/tests/test_worker_evidence.py:37: Failed
+________ test_inconsistent_or_unredacted_snapshot_is_refused[completed] ________
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+>       try: module = importlib.import_module('evaluation.worker_evidence')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_worker_evidence.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.worker_evidence'
+import_ = <function _gcd_import at 0x7f2554bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.worker_evidence'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+change = 'completed'
+
+    @pytest.mark.parametrize('change',['fingerprint','mode','count','send-count','bool-count',
+                                      'completed','event-binding','order','duplicate-intent',
+                                      'duplicate-grant','unknown-event','raw-token','expiry','timestamp'])
+    def test_inconsistent_or_unredacted_snapshot_is_refused(change):
+        p=snapshot();r=p['releases'][0]
+        if change=='fingerprint':p['deploymentFingerprint']='cd'*32
+        if change=='mode':p['adapterMode']='abe-real'
+        if change=='count':p['counts']['releaseSentCount']='2'
+        if change=='send-count':r['sendAttempts']=2
+        if change=='bool-count':r['sendAttempts']=True
+        if change=='completed':r['completedAttempts']=2
+        if change=='event-binding':p['events'][1]['gid']='0x'+'77'*20
+        if change=='order':p['events'].reverse()
+        if change=='duplicate-intent':p['events'].append(copy.deepcopy(p['events'][0]))
+        if change=='duplicate-grant':p['releases'].append(copy.deepcopy(r))
+        if change=='unknown-event':p['events'][1]['type']='DELIVERED'
+        if change=='raw-token':r['token']='0x'+'00'*32
+        if change=='expiry':r['grantExpiresAt']='100'
+        if change=='timestamp':p['events'][0]['timestamp']='0100'
+>       with pytest.raises(ValueError):log(p)
+                                       ^^^^^^
+
+evaluation/tests/test_worker_evidence.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+        try: module = importlib.import_module('evaluation.worker_evidence')
+>       except ModuleNotFoundError: pytest.fail('Independent C-E1 worker evidence checks are absent')
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: Independent C-E1 worker evidence checks are absent
+
+evaluation/tests/test_worker_evidence.py:37: Failed
+______ test_inconsistent_or_unredacted_snapshot_is_refused[event-binding] ______
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+>       try: module = importlib.import_module('evaluation.worker_evidence')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_worker_evidence.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.worker_evidence'
+import_ = <function _gcd_import at 0x7f2554bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.worker_evidence'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+change = 'event-binding'
+
+    @pytest.mark.parametrize('change',['fingerprint','mode','count','send-count','bool-count',
+                                      'completed','event-binding','order','duplicate-intent',
+                                      'duplicate-grant','unknown-event','raw-token','expiry','timestamp'])
+    def test_inconsistent_or_unredacted_snapshot_is_refused(change):
+        p=snapshot();r=p['releases'][0]
+        if change=='fingerprint':p['deploymentFingerprint']='cd'*32
+        if change=='mode':p['adapterMode']='abe-real'
+        if change=='count':p['counts']['releaseSentCount']='2'
+        if change=='send-count':r['sendAttempts']=2
+        if change=='bool-count':r['sendAttempts']=True
+        if change=='completed':r['completedAttempts']=2
+        if change=='event-binding':p['events'][1]['gid']='0x'+'77'*20
+        if change=='order':p['events'].reverse()
+        if change=='duplicate-intent':p['events'].append(copy.deepcopy(p['events'][0]))
+        if change=='duplicate-grant':p['releases'].append(copy.deepcopy(r))
+        if change=='unknown-event':p['events'][1]['type']='DELIVERED'
+        if change=='raw-token':r['token']='0x'+'00'*32
+        if change=='expiry':r['grantExpiresAt']='100'
+        if change=='timestamp':p['events'][0]['timestamp']='0100'
+>       with pytest.raises(ValueError):log(p)
+                                       ^^^^^^
+
+evaluation/tests/test_worker_evidence.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+        try: module = importlib.import_module('evaluation.worker_evidence')
+>       except ModuleNotFoundError: pytest.fail('Independent C-E1 worker evidence checks are absent')
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: Independent C-E1 worker evidence checks are absent
+
+evaluation/tests/test_worker_evidence.py:37: Failed
+__________ test_inconsistent_or_unredacted_snapshot_is_refused[order] __________
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+>       try: module = importlib.import_module('evaluation.worker_evidence')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_worker_evidence.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.worker_evidence'
+import_ = <function _gcd_import at 0x7f2554bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.worker_evidence'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+change = 'order'
+
+    @pytest.mark.parametrize('change',['fingerprint','mode','count','send-count','bool-count',
+                                      'completed','event-binding','order','duplicate-intent',
+                                      'duplicate-grant','unknown-event','raw-token','expiry','timestamp'])
+    def test_inconsistent_or_unredacted_snapshot_is_refused(change):
+        p=snapshot();r=p['releases'][0]
+        if change=='fingerprint':p['deploymentFingerprint']='cd'*32
+        if change=='mode':p['adapterMode']='abe-real'
+        if change=='count':p['counts']['releaseSentCount']='2'
+        if change=='send-count':r['sendAttempts']=2
+        if change=='bool-count':r['sendAttempts']=True
+        if change=='completed':r['completedAttempts']=2
+        if change=='event-binding':p['events'][1]['gid']='0x'+'77'*20
+        if change=='order':p['events'].reverse()
+        if change=='duplicate-intent':p['events'].append(copy.deepcopy(p['events'][0]))
+        if change=='duplicate-grant':p['releases'].append(copy.deepcopy(r))
+        if change=='unknown-event':p['events'][1]['type']='DELIVERED'
+        if change=='raw-token':r['token']='0x'+'00'*32
+        if change=='expiry':r['grantExpiresAt']='100'
+        if change=='timestamp':p['events'][0]['timestamp']='0100'
+>       with pytest.raises(ValueError):log(p)
+                                       ^^^^^^
+
+evaluation/tests/test_worker_evidence.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+        try: module = importlib.import_module('evaluation.worker_evidence')
+>       except ModuleNotFoundError: pytest.fail('Independent C-E1 worker evidence checks are absent')
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: Independent C-E1 worker evidence checks are absent
+
+evaluation/tests/test_worker_evidence.py:37: Failed
+____ test_inconsistent_or_unredacted_snapshot_is_refused[duplicate-intent] _____
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+>       try: module = importlib.import_module('evaluation.worker_evidence')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_worker_evidence.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.worker_evidence'
+import_ = <function _gcd_import at 0x7f2554bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.worker_evidence'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+change = 'duplicate-intent'
+
+    @pytest.mark.parametrize('change',['fingerprint','mode','count','send-count','bool-count',
+                                      'completed','event-binding','order','duplicate-intent',
+                                      'duplicate-grant','unknown-event','raw-token','expiry','timestamp'])
+    def test_inconsistent_or_unredacted_snapshot_is_refused(change):
+        p=snapshot();r=p['releases'][0]
+        if change=='fingerprint':p['deploymentFingerprint']='cd'*32
+        if change=='mode':p['adapterMode']='abe-real'
+        if change=='count':p['counts']['releaseSentCount']='2'
+        if change=='send-count':r['sendAttempts']=2
+        if change=='bool-count':r['sendAttempts']=True
+        if change=='completed':r['completedAttempts']=2
+        if change=='event-binding':p['events'][1]['gid']='0x'+'77'*20
+        if change=='order':p['events'].reverse()
+        if change=='duplicate-intent':p['events'].append(copy.deepcopy(p['events'][0]))
+        if change=='duplicate-grant':p['releases'].append(copy.deepcopy(r))
+        if change=='unknown-event':p['events'][1]['type']='DELIVERED'
+        if change=='raw-token':r['token']='0x'+'00'*32
+        if change=='expiry':r['grantExpiresAt']='100'
+        if change=='timestamp':p['events'][0]['timestamp']='0100'
+>       with pytest.raises(ValueError):log(p)
+                                       ^^^^^^
+
+evaluation/tests/test_worker_evidence.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+        try: module = importlib.import_module('evaluation.worker_evidence')
+>       except ModuleNotFoundError: pytest.fail('Independent C-E1 worker evidence checks are absent')
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: Independent C-E1 worker evidence checks are absent
+
+evaluation/tests/test_worker_evidence.py:37: Failed
+_____ test_inconsistent_or_unredacted_snapshot_is_refused[duplicate-grant] _____
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+>       try: module = importlib.import_module('evaluation.worker_evidence')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_worker_evidence.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.worker_evidence'
+import_ = <function _gcd_import at 0x7f2554bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.worker_evidence'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+change = 'duplicate-grant'
+
+    @pytest.mark.parametrize('change',['fingerprint','mode','count','send-count','bool-count',
+                                      'completed','event-binding','order','duplicate-intent',
+                                      'duplicate-grant','unknown-event','raw-token','expiry','timestamp'])
+    def test_inconsistent_or_unredacted_snapshot_is_refused(change):
+        p=snapshot();r=p['releases'][0]
+        if change=='fingerprint':p['deploymentFingerprint']='cd'*32
+        if change=='mode':p['adapterMode']='abe-real'
+        if change=='count':p['counts']['releaseSentCount']='2'
+        if change=='send-count':r['sendAttempts']=2
+        if change=='bool-count':r['sendAttempts']=True
+        if change=='completed':r['completedAttempts']=2
+        if change=='event-binding':p['events'][1]['gid']='0x'+'77'*20
+        if change=='order':p['events'].reverse()
+        if change=='duplicate-intent':p['events'].append(copy.deepcopy(p['events'][0]))
+        if change=='duplicate-grant':p['releases'].append(copy.deepcopy(r))
+        if change=='unknown-event':p['events'][1]['type']='DELIVERED'
+        if change=='raw-token':r['token']='0x'+'00'*32
+        if change=='expiry':r['grantExpiresAt']='100'
+        if change=='timestamp':p['events'][0]['timestamp']='0100'
+>       with pytest.raises(ValueError):log(p)
+                                       ^^^^^^
+
+evaluation/tests/test_worker_evidence.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+        try: module = importlib.import_module('evaluation.worker_evidence')
+>       except ModuleNotFoundError: pytest.fail('Independent C-E1 worker evidence checks are absent')
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: Independent C-E1 worker evidence checks are absent
+
+evaluation/tests/test_worker_evidence.py:37: Failed
+______ test_inconsistent_or_unredacted_snapshot_is_refused[unknown-event] ______
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+>       try: module = importlib.import_module('evaluation.worker_evidence')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_worker_evidence.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.worker_evidence'
+import_ = <function _gcd_import at 0x7f2554bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.worker_evidence'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+change = 'unknown-event'
+
+    @pytest.mark.parametrize('change',['fingerprint','mode','count','send-count','bool-count',
+                                      'completed','event-binding','order','duplicate-intent',
+                                      'duplicate-grant','unknown-event','raw-token','expiry','timestamp'])
+    def test_inconsistent_or_unredacted_snapshot_is_refused(change):
+        p=snapshot();r=p['releases'][0]
+        if change=='fingerprint':p['deploymentFingerprint']='cd'*32
+        if change=='mode':p['adapterMode']='abe-real'
+        if change=='count':p['counts']['releaseSentCount']='2'
+        if change=='send-count':r['sendAttempts']=2
+        if change=='bool-count':r['sendAttempts']=True
+        if change=='completed':r['completedAttempts']=2
+        if change=='event-binding':p['events'][1]['gid']='0x'+'77'*20
+        if change=='order':p['events'].reverse()
+        if change=='duplicate-intent':p['events'].append(copy.deepcopy(p['events'][0]))
+        if change=='duplicate-grant':p['releases'].append(copy.deepcopy(r))
+        if change=='unknown-event':p['events'][1]['type']='DELIVERED'
+        if change=='raw-token':r['token']='0x'+'00'*32
+        if change=='expiry':r['grantExpiresAt']='100'
+        if change=='timestamp':p['events'][0]['timestamp']='0100'
+>       with pytest.raises(ValueError):log(p)
+                                       ^^^^^^
+
+evaluation/tests/test_worker_evidence.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+        try: module = importlib.import_module('evaluation.worker_evidence')
+>       except ModuleNotFoundError: pytest.fail('Independent C-E1 worker evidence checks are absent')
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: Independent C-E1 worker evidence checks are absent
+
+evaluation/tests/test_worker_evidence.py:37: Failed
+________ test_inconsistent_or_unredacted_snapshot_is_refused[raw-token] ________
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+>       try: module = importlib.import_module('evaluation.worker_evidence')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_worker_evidence.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.worker_evidence'
+import_ = <function _gcd_import at 0x7f2554bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.worker_evidence'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+change = 'raw-token'
+
+    @pytest.mark.parametrize('change',['fingerprint','mode','count','send-count','bool-count',
+                                      'completed','event-binding','order','duplicate-intent',
+                                      'duplicate-grant','unknown-event','raw-token','expiry','timestamp'])
+    def test_inconsistent_or_unredacted_snapshot_is_refused(change):
+        p=snapshot();r=p['releases'][0]
+        if change=='fingerprint':p['deploymentFingerprint']='cd'*32
+        if change=='mode':p['adapterMode']='abe-real'
+        if change=='count':p['counts']['releaseSentCount']='2'
+        if change=='send-count':r['sendAttempts']=2
+        if change=='bool-count':r['sendAttempts']=True
+        if change=='completed':r['completedAttempts']=2
+        if change=='event-binding':p['events'][1]['gid']='0x'+'77'*20
+        if change=='order':p['events'].reverse()
+        if change=='duplicate-intent':p['events'].append(copy.deepcopy(p['events'][0]))
+        if change=='duplicate-grant':p['releases'].append(copy.deepcopy(r))
+        if change=='unknown-event':p['events'][1]['type']='DELIVERED'
+        if change=='raw-token':r['token']='0x'+'00'*32
+        if change=='expiry':r['grantExpiresAt']='100'
+        if change=='timestamp':p['events'][0]['timestamp']='0100'
+>       with pytest.raises(ValueError):log(p)
+                                       ^^^^^^
+
+evaluation/tests/test_worker_evidence.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+        try: module = importlib.import_module('evaluation.worker_evidence')
+>       except ModuleNotFoundError: pytest.fail('Independent C-E1 worker evidence checks are absent')
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: Independent C-E1 worker evidence checks are absent
+
+evaluation/tests/test_worker_evidence.py:37: Failed
+_________ test_inconsistent_or_unredacted_snapshot_is_refused[expiry] __________
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+>       try: module = importlib.import_module('evaluation.worker_evidence')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_worker_evidence.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.worker_evidence'
+import_ = <function _gcd_import at 0x7f2554bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.worker_evidence'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+change = 'expiry'
+
+    @pytest.mark.parametrize('change',['fingerprint','mode','count','send-count','bool-count',
+                                      'completed','event-binding','order','duplicate-intent',
+                                      'duplicate-grant','unknown-event','raw-token','expiry','timestamp'])
+    def test_inconsistent_or_unredacted_snapshot_is_refused(change):
+        p=snapshot();r=p['releases'][0]
+        if change=='fingerprint':p['deploymentFingerprint']='cd'*32
+        if change=='mode':p['adapterMode']='abe-real'
+        if change=='count':p['counts']['releaseSentCount']='2'
+        if change=='send-count':r['sendAttempts']=2
+        if change=='bool-count':r['sendAttempts']=True
+        if change=='completed':r['completedAttempts']=2
+        if change=='event-binding':p['events'][1]['gid']='0x'+'77'*20
+        if change=='order':p['events'].reverse()
+        if change=='duplicate-intent':p['events'].append(copy.deepcopy(p['events'][0]))
+        if change=='duplicate-grant':p['releases'].append(copy.deepcopy(r))
+        if change=='unknown-event':p['events'][1]['type']='DELIVERED'
+        if change=='raw-token':r['token']='0x'+'00'*32
+        if change=='expiry':r['grantExpiresAt']='100'
+        if change=='timestamp':p['events'][0]['timestamp']='0100'
+>       with pytest.raises(ValueError):log(p)
+                                       ^^^^^^
+
+evaluation/tests/test_worker_evidence.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+        try: module = importlib.import_module('evaluation.worker_evidence')
+>       except ModuleNotFoundError: pytest.fail('Independent C-E1 worker evidence checks are absent')
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: Independent C-E1 worker evidence checks are absent
+
+evaluation/tests/test_worker_evidence.py:37: Failed
+________ test_inconsistent_or_unredacted_snapshot_is_refused[timestamp] ________
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+>       try: module = importlib.import_module('evaluation.worker_evidence')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_worker_evidence.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.worker_evidence'
+import_ = <function _gcd_import at 0x7f2554bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.worker_evidence'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+change = 'timestamp'
+
+    @pytest.mark.parametrize('change',['fingerprint','mode','count','send-count','bool-count',
+                                      'completed','event-binding','order','duplicate-intent',
+                                      'duplicate-grant','unknown-event','raw-token','expiry','timestamp'])
+    def test_inconsistent_or_unredacted_snapshot_is_refused(change):
+        p=snapshot();r=p['releases'][0]
+        if change=='fingerprint':p['deploymentFingerprint']='cd'*32
+        if change=='mode':p['adapterMode']='abe-real'
+        if change=='count':p['counts']['releaseSentCount']='2'
+        if change=='send-count':r['sendAttempts']=2
+        if change=='bool-count':r['sendAttempts']=True
+        if change=='completed':r['completedAttempts']=2
+        if change=='event-binding':p['events'][1]['gid']='0x'+'77'*20
+        if change=='order':p['events'].reverse()
+        if change=='duplicate-intent':p['events'].append(copy.deepcopy(p['events'][0]))
+        if change=='duplicate-grant':p['releases'].append(copy.deepcopy(r))
+        if change=='unknown-event':p['events'][1]['type']='DELIVERED'
+        if change=='raw-token':r['token']='0x'+'00'*32
+        if change=='expiry':r['grantExpiresAt']='100'
+        if change=='timestamp':p['events'][0]['timestamp']='0100'
+>       with pytest.raises(ValueError):log(p)
+                                       ^^^^^^
+
+evaluation/tests/test_worker_evidence.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '1'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+        try: module = importlib.import_module('evaluation.worker_evidence')
+>       except ModuleNotFoundError: pytest.fail('Independent C-E1 worker evidence checks are absent')
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: Independent C-E1 worker evidence checks are absent
+
+evaluation/tests/test_worker_evidence.py:37: Failed
+_ test_response_must_match_redacted_cache_commitments[requestDigest-0x7777777777777777777777777777777777777777777777777777777777777777] _
+
+payload = None
+
+    def log(payload=None):
+>       try: module = importlib.import_module('evaluation.worker_evidence')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_worker_evidence.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.worker_evidence'
+import_ = <function _gcd_import at 0x7f2554bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.worker_evidence'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+key = 'requestDigest'
+value = '0x7777777777777777777777777777777777777777777777777777777777777777'
+
+    @pytest.mark.parametrize('key,value',[('requestDigest','0x'+'77'*32),('dataId','0x'+'77'*32),
+                                         ('recipientKeyHash','0x'+'77'*32),('ciphertextDigest','0x'+'77'*32),
+                                         ('keyEpoch','1'),('token','0x'+'77'*32)])
+    def test_response_must_match_redacted_cache_commitments(key,value):
+        r=response()
+        if key=='token':r['responseEnvelope']['token']=value
+        else:r[key]=value
+>       with pytest.raises(ValueError):log().check_response(r)
+                                       ^^^^^
+
+evaluation/tests/test_worker_evidence.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = None
+
+    def log(payload=None):
+        try: module = importlib.import_module('evaluation.worker_evidence')
+>       except ModuleNotFoundError: pytest.fail('Independent C-E1 worker evidence checks are absent')
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: Independent C-E1 worker evidence checks are absent
+
+evaluation/tests/test_worker_evidence.py:37: Failed
+_ test_response_must_match_redacted_cache_commitments[dataId-0x7777777777777777777777777777777777777777777777777777777777777777] _
+
+payload = None
+
+    def log(payload=None):
+>       try: module = importlib.import_module('evaluation.worker_evidence')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_worker_evidence.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.worker_evidence'
+import_ = <function _gcd_import at 0x7f2554bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.worker_evidence'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+key = 'dataId'
+value = '0x7777777777777777777777777777777777777777777777777777777777777777'
+
+    @pytest.mark.parametrize('key,value',[('requestDigest','0x'+'77'*32),('dataId','0x'+'77'*32),
+                                         ('recipientKeyHash','0x'+'77'*32),('ciphertextDigest','0x'+'77'*32),
+                                         ('keyEpoch','1'),('token','0x'+'77'*32)])
+    def test_response_must_match_redacted_cache_commitments(key,value):
+        r=response()
+        if key=='token':r['responseEnvelope']['token']=value
+        else:r[key]=value
+>       with pytest.raises(ValueError):log().check_response(r)
+                                       ^^^^^
+
+evaluation/tests/test_worker_evidence.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = None
+
+    def log(payload=None):
+        try: module = importlib.import_module('evaluation.worker_evidence')
+>       except ModuleNotFoundError: pytest.fail('Independent C-E1 worker evidence checks are absent')
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: Independent C-E1 worker evidence checks are absent
+
+evaluation/tests/test_worker_evidence.py:37: Failed
+_ test_response_must_match_redacted_cache_commitments[recipientKeyHash-0x7777777777777777777777777777777777777777777777777777777777777777] _
+
+payload = None
+
+    def log(payload=None):
+>       try: module = importlib.import_module('evaluation.worker_evidence')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_worker_evidence.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.worker_evidence'
+import_ = <function _gcd_import at 0x7f2554bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.worker_evidence'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+key = 'recipientKeyHash'
+value = '0x7777777777777777777777777777777777777777777777777777777777777777'
+
+    @pytest.mark.parametrize('key,value',[('requestDigest','0x'+'77'*32),('dataId','0x'+'77'*32),
+                                         ('recipientKeyHash','0x'+'77'*32),('ciphertextDigest','0x'+'77'*32),
+                                         ('keyEpoch','1'),('token','0x'+'77'*32)])
+    def test_response_must_match_redacted_cache_commitments(key,value):
+        r=response()
+        if key=='token':r['responseEnvelope']['token']=value
+        else:r[key]=value
+>       with pytest.raises(ValueError):log().check_response(r)
+                                       ^^^^^
+
+evaluation/tests/test_worker_evidence.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = None
+
+    def log(payload=None):
+        try: module = importlib.import_module('evaluation.worker_evidence')
+>       except ModuleNotFoundError: pytest.fail('Independent C-E1 worker evidence checks are absent')
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: Independent C-E1 worker evidence checks are absent
+
+evaluation/tests/test_worker_evidence.py:37: Failed
+_ test_response_must_match_redacted_cache_commitments[ciphertextDigest-0x7777777777777777777777777777777777777777777777777777777777777777] _
+
+payload = None
+
+    def log(payload=None):
+>       try: module = importlib.import_module('evaluation.worker_evidence')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_worker_evidence.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.worker_evidence'
+import_ = <function _gcd_import at 0x7f2554bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.worker_evidence'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+key = 'ciphertextDigest'
+value = '0x7777777777777777777777777777777777777777777777777777777777777777'
+
+    @pytest.mark.parametrize('key,value',[('requestDigest','0x'+'77'*32),('dataId','0x'+'77'*32),
+                                         ('recipientKeyHash','0x'+'77'*32),('ciphertextDigest','0x'+'77'*32),
+                                         ('keyEpoch','1'),('token','0x'+'77'*32)])
+    def test_response_must_match_redacted_cache_commitments(key,value):
+        r=response()
+        if key=='token':r['responseEnvelope']['token']=value
+        else:r[key]=value
+>       with pytest.raises(ValueError):log().check_response(r)
+                                       ^^^^^
+
+evaluation/tests/test_worker_evidence.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = None
+
+    def log(payload=None):
+        try: module = importlib.import_module('evaluation.worker_evidence')
+>       except ModuleNotFoundError: pytest.fail('Independent C-E1 worker evidence checks are absent')
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: Independent C-E1 worker evidence checks are absent
+
+evaluation/tests/test_worker_evidence.py:37: Failed
+_______ test_response_must_match_redacted_cache_commitments[keyEpoch-1] ________
+
+payload = None
+
+    def log(payload=None):
+>       try: module = importlib.import_module('evaluation.worker_evidence')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_worker_evidence.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.worker_evidence'
+import_ = <function _gcd_import at 0x7f2554bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.worker_evidence'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+key = 'keyEpoch', value = '1'
+
+    @pytest.mark.parametrize('key,value',[('requestDigest','0x'+'77'*32),('dataId','0x'+'77'*32),
+                                         ('recipientKeyHash','0x'+'77'*32),('ciphertextDigest','0x'+'77'*32),
+                                         ('keyEpoch','1'),('token','0x'+'77'*32)])
+    def test_response_must_match_redacted_cache_commitments(key,value):
+        r=response()
+        if key=='token':r['responseEnvelope']['token']=value
+        else:r[key]=value
+>       with pytest.raises(ValueError):log().check_response(r)
+                                       ^^^^^
+
+evaluation/tests/test_worker_evidence.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = None
+
+    def log(payload=None):
+        try: module = importlib.import_module('evaluation.worker_evidence')
+>       except ModuleNotFoundError: pytest.fail('Independent C-E1 worker evidence checks are absent')
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: Independent C-E1 worker evidence checks are absent
+
+evaluation/tests/test_worker_evidence.py:37: Failed
+_ test_response_must_match_redacted_cache_commitments[token-0x7777777777777777777777777777777777777777777777777777777777777777] _
+
+payload = None
+
+    def log(payload=None):
+>       try: module = importlib.import_module('evaluation.worker_evidence')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_worker_evidence.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.worker_evidence'
+import_ = <function _gcd_import at 0x7f2554bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.worker_evidence'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+key = 'token'
+value = '0x7777777777777777777777777777777777777777777777777777777777777777'
+
+    @pytest.mark.parametrize('key,value',[('requestDigest','0x'+'77'*32),('dataId','0x'+'77'*32),
+                                         ('recipientKeyHash','0x'+'77'*32),('ciphertextDigest','0x'+'77'*32),
+                                         ('keyEpoch','1'),('token','0x'+'77'*32)])
+    def test_response_must_match_redacted_cache_commitments(key,value):
+        r=response()
+        if key=='token':r['responseEnvelope']['token']=value
+        else:r[key]=value
+>       with pytest.raises(ValueError):log().check_response(r)
+                                       ^^^^^
+
+evaluation/tests/test_worker_evidence.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = None
+
+    def log(payload=None):
+        try: module = importlib.import_module('evaluation.worker_evidence')
+>       except ModuleNotFoundError: pytest.fail('Independent C-E1 worker evidence checks are absent')
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: Independent C-E1 worker evidence checks are absent
+
+evaluation/tests/test_worker_evidence.py:37: Failed
+_________ test_retry_is_second_attempt_with_one_intent_and_same_cache __________
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '2'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+>       try: module = importlib.import_module('evaluation.worker_evidence')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_worker_evidence.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1395: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.worker_evidence'
+import_ = <function _gcd_import at 0x7f2554bd04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.worker_evidence'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+
+During handling of the above exception, another exception occurred:
+
+    def test_retry_is_second_attempt_with_one_intent_and_same_cache():
+        p=snapshot();p['events'].append(dict(p['events'][1],timestamp='102'))
+        p['releases'][0]['sendAttempts']=2;p['releases'][0]['completedAttempts']=1
+        p['counts']['releaseSentCount']='2'
+>       observed=log(p)
+                 ^^^^^^
+
+evaluation/tests/test_worker_evidence.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+payload = {'adapterMode': 'symbolic', 'counts': {'releaseIntentCount': '1', 'releaseSentCount': '2'}, 'deploymentFingerprint': '...222222222222222222', 'requestDigest': '0x1111111111111111111111111111111111111111111111111111111111111111', ...}], ...}
+
+    def log(payload=None):
+        try: module = importlib.import_module('evaluation.worker_evidence')
+>       except ModuleNotFoundError: pytest.fail('Independent C-E1 worker evidence checks are absent')
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: Independent C-E1 worker evidence checks are absent
+
+evaluation/tests/test_worker_evidence.py:37: Failed
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_worker_evidence.py::test_checked_snapshot_preserves_attempts_and_delivery_uncertainty
+FAILED evaluation/tests/test_worker_evidence.py::test_empty_snapshot_is_no_release_and_cannot_authorize_a_response
+FAILED evaluation/tests/test_worker_evidence.py::test_inconsistent_or_unredacted_snapshot_is_refused[fingerprint]
+FAILED evaluation/tests/test_worker_evidence.py::test_inconsistent_or_unredacted_snapshot_is_refused[mode]
+FAILED evaluation/tests/test_worker_evidence.py::test_inconsistent_or_unredacted_snapshot_is_refused[count]
+FAILED evaluation/tests/test_worker_evidence.py::test_inconsistent_or_unredacted_snapshot_is_refused[send-count]
+FAILED evaluation/tests/test_worker_evidence.py::test_inconsistent_or_unredacted_snapshot_is_refused[bool-count]
+FAILED evaluation/tests/test_worker_evidence.py::test_inconsistent_or_unredacted_snapshot_is_refused[completed]
+FAILED evaluation/tests/test_worker_evidence.py::test_inconsistent_or_unredacted_snapshot_is_refused[event-binding]
+FAILED evaluation/tests/test_worker_evidence.py::test_inconsistent_or_unredacted_snapshot_is_refused[order]
+FAILED evaluation/tests/test_worker_evidence.py::test_inconsistent_or_unredacted_snapshot_is_refused[duplicate-intent]
+FAILED evaluation/tests/test_worker_evidence.py::test_inconsistent_or_unredacted_snapshot_is_refused[duplicate-grant]
+FAILED evaluation/tests/test_worker_evidence.py::test_inconsistent_or_unredacted_snapshot_is_refused[unknown-event]
+FAILED evaluation/tests/test_worker_evidence.py::test_inconsistent_or_unredacted_snapshot_is_refused[raw-token]
+FAILED evaluation/tests/test_worker_evidence.py::test_inconsistent_or_unredacted_snapshot_is_refused[expiry]
+FAILED evaluation/tests/test_worker_evidence.py::test_inconsistent_or_unredacted_snapshot_is_refused[timestamp]
+FAILED evaluation/tests/test_worker_evidence.py::test_response_must_match_redacted_cache_commitments[requestDigest-0x7777777777777777777777777777777777777777777777777777777777777777]
+FAILED evaluation/tests/test_worker_evidence.py::test_response_must_match_redacted_cache_commitments[dataId-0x7777777777777777777777777777777777777777777777777777777777777777]
+FAILED evaluation/tests/test_worker_evidence.py::test_response_must_match_redacted_cache_commitments[recipientKeyHash-0x7777777777777777777777777777777777777777777777777777777777777777]
+FAILED evaluation/tests/test_worker_evidence.py::test_response_must_match_redacted_cache_commitments[ciphertextDigest-0x7777777777777777777777777777777777777777777777777777777777777777]
+FAILED evaluation/tests/test_worker_evidence.py::test_response_must_match_redacted_cache_commitments[keyEpoch-1]
+FAILED evaluation/tests/test_worker_evidence.py::test_response_must_match_redacted_cache_commitments[token-0x7777777777777777777777777777777777777777777777777777777777777777]
+FAILED evaluation/tests/test_worker_evidence.py::test_retry_is_second_attempt_with_one_intent_and_same_cache
+23 failed in 0.12s
