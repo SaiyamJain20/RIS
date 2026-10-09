@@ -79,3 +79,6 @@ On Overleaf: upload the `.tex` file and `figures/`, then set *Menu → Compiler 
   A3-0045). The evaluator has now run 12/56 cases (44 remain). A1-0058 caught a subject-oracle code error
   (WRONG_SUBJECT = 2), fixed in A3-0047; no live subject result yet. Gate E is not run; RQ2/RQ3 are locked.
   Heads: agent-1 e66eeb9, agent-2 96ebe16, agent-3 fbebab7.
+- 2026-10-09 16:30 IST: no new results. Agent 3 prepared the subject-substitution collector and checker
+  (A3-0048, A3-0049), with no live run yet; 44 cases remain. The deck is unchanged. Heads: agent-1 e66eeb9,
+  agent-2 96ebe16, agent-3 8e5a6dd.
