@@ -1,3 +1,34 @@
+## Current checkpoint — replay timing diagnosed, runner revision pending, 2026-10-09 UTC
+
+E/RQ1 C-E2 WORKING; interface v1 unchanged, gate E NOT_RUN, F/G locked. Read exact new
+A1-0055 (2d2d386 /334f6109..) and A2-0035 (7b00f9f /6486c9d6..) reviews; neither is
+an execution-plan/report ACK. Both support retaining the canonical repaired EXPIRED
+failure and unchanged owner pins; no peer repair or human action requested.
+
+Fresh read-only analysis of immutable prior records: all three replay probes made
+63 RPC calls plus2 worker exports. Probe10.0017–10.2104s; recorded subprocesses
+1.9005–2.1091s; outside-subprocess remainder8.0992–8.1013s. RPC source performs126
+full Cast hashes per probe. Current-host77,443,976-byte Cast benchmark (10warmup,
+30measured) median61.27ms/hash; not a historical attribution or production claim.
+Plan85 inputs/303 owner blobs/15 frozen paths verified unchanged,162 latest
+communication paths/no divergence. No services, live retest or runtime fix this run.
+Historical584 tests not rerun. Diagnostic helper failures and corrected exit0 retained.
+
+Evidence: evaluation/evidence/e2/replay-timing-review-20261009/README.md.
+A3-0043 responds with diagnosis and an owned grouped historical-read design;
+proposal only, no new full execution FREEZE or lease. Preserve both snapshots and
+worker equality before release; blindly collecting latest state after release would
+invalidate equality because worker and outcome records change. Next: implement
+bounded common-block read group with RED/GREEN identity/reorg/ABI controls, update
+complete plan and obtain BOTH NEW exact ACKs before services. No Cast hash-cache
+shortcut, TTL extension, reference/custody/pin/ABI change is authorized by this note.
+45 catalog comparisons still need completion; live mutants/windows/report/all3
+same-source ACKs/every E criterion precede F. Scheduled exclusive guard plus separate
+coordinator held before fetch; publication/finally cleanup in automation memory.
+Author self-review only under user ban on extra agents; weaker than fresh review.
+
+## Prior checkpoint records (historical)
+
 ## Current checkpoint — replay attempt FAILED at repaired release, 2026-10-09 UTC
 
 Actual CLI2/FAILED in 341.181s. Paper-strict/minimal complete PASS; repaired-e replay subcheck PASS then first release EXPIRED; completion/outcome/Bob NOT_RUN. No three-profile success. Original expiry1791521422; probe10.210406s, release04:50:22.053340UTC at corresponding wall-clock second; worker effective-clock equality not directly measured. Failure preserved, no TTL extension. Exact A1-0054/194379c+A2-0034/ca1b8ce ACKs of A3-0041 plana7732650.. verified before services. A3-0041 RELEASED/no services/lease. Evidence evaluation/evidence/e2/nonce-replay-live-20261009/README.md.

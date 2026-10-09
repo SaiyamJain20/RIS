@@ -783,3 +783,33 @@ All3 identical ACSC replays mined status0/Rejected8/no logs/whole request-grant-
 Historical6recovery-expiry+3duplicate preserved; paper2replay complete/repaired1incomplete/other44untouched:45 comparisons remain. Fourpaper crash classes BLOCKED/unproved; live mutants/windows/report/all3same-source ACKs/every gateE criterion remain. E/RQ1 active/E0closed/C-E1complete/E2-E3permitted/F-Glocked. Deliveryunknown/symbolic/safe-ledger/trusted-worker/no authors-implementation/ABE/consensus/power-loss theorem. ReadA1through0054/A2through0034,159communication/no divergence/postrun fetched branches unchanged. No runtime/tool/custody/interface change; historical584 unit tests not rerun. Author self-review weaker than independent.
 
 Scheduled+separate coordinator held before fetch/services/publication; finally cleanup/publication external20261009T044325Z/memory. No human input/peer module repair needed. Next owned runner timing revision preserving snapshots/original expiry; RED/GREEN/source-complete new FREEZE/both exact ACKs before services, then remainingE/report/gateE.
+
+
+## Current checkpoint — replay timing diagnosed, runner revision pending, 2026-10-09 UTC
+
+E/RQ1 C-E2 WORKING; interface v1 unchanged, gate E NOT_RUN, F/G locked. Read exact new
+A1-0055 (2d2d386 /334f6109..) and A2-0035 (7b00f9f /6486c9d6..) reviews; neither is
+an execution-plan/report ACK. Both support retaining the canonical repaired EXPIRED
+failure and unchanged owner pins; no peer repair or human action requested.
+
+Fresh read-only analysis of immutable prior records: all three replay probes made
+63 RPC calls plus2 worker exports. Probe10.0017–10.2104s; recorded subprocesses
+1.9005–2.1091s; outside-subprocess remainder8.0992–8.1013s. RPC source performs126
+full Cast hashes per probe. Current-host77,443,976-byte Cast benchmark (10warmup,
+30measured) median61.27ms/hash; not a historical attribution or production claim.
+Plan85 inputs/303 owner blobs/15 frozen paths verified unchanged,162 latest
+communication paths/no divergence. No services, live retest or runtime fix this run.
+Historical584 tests not rerun. Diagnostic helper failures and corrected exit0 retained.
+
+Evidence: evaluation/evidence/e2/replay-timing-review-20261009/README.md.
+A3-0043 responds with diagnosis and an owned grouped historical-read design;
+proposal only, no new full execution FREEZE or lease. Preserve both snapshots and
+worker equality before release; blindly collecting latest state after release would
+invalidate equality because worker and outcome records change. Next: implement
+bounded common-block read group with RED/GREEN identity/reorg/ABI controls, update
+complete plan and obtain BOTH NEW exact ACKs before services. No Cast hash-cache
+shortcut, TTL extension, reference/custody/pin/ABI change is authorized by this note.
+45 catalog comparisons still need completion; live mutants/windows/report/all3
+same-source ACKs/every E criterion precede F. Scheduled exclusive guard plus separate
+coordinator held before fetch; publication/finally cleanup in automation memory.
+Author self-review only under user ban on extra agents; weaker than fresh review.
