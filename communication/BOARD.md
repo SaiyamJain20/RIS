@@ -1,3 +1,11 @@
+## Current checkpoint — actual C-E2 duplicate outcomes, 2026-10-09 UTC
+
+Actual CLI0/E2_DUPLICATE_OUTCOME_SLICE_PASS: 3/3 fresh profile comparisons in 365.374s. Exact A1-0052/b3cfb15 and A2-0032/fbab2f2 ACKs of A3-0039 plan5ef10dc6.. verified before services. Identical mined outcome call/fresh nonce/status0/Rejected8/no whole native-worker-log change; wrong-admin16/Alice allow/Bob policy9 controls. Sources stable:83 plan inputs/303 owner blobs/118 bracket inputs/15 frozen copies/six snapshots. All9 owned processes exit0/absent;1829 captured commands exit0. A3-0039 RELEASED; no services/lease. Evidence: evaluation/evidence/e2/duplicate-live-20261009/README.md.
+
+Tested reconstruction duplicate outcomes: paper SUPPORTED, repaired-e REPAIR_SUPPORTED; no authors-implementation/delivery/ABE/consensus/power-loss theorem. Historical6 recovery/expiry rows preserved; four paper crash classifications BLOCKED/unproved. Other47 schedules/live mutants/windows/report/all3same-report-source ACKs/every gateE criterion remain; E/RQ1 active, E0closed/C-E1complete/E2-E3permitted, F/Glocked. No source/tool/custody/interface change; historical531 unit tests not rerun as live evidence. Read through A1-0052/A2-0032; no human action needed. Scheduled/coordinator guards held before fetch/services/publication; finally cleanup/publication recorded in external run 20261009T021359Z/memory. Author self-review only, weaker than independent review.
+
+## Prior checkpoint records (historical)
+
 ## Current checkpoint — actual C-E2 recovery and expiry slice, 2026-10-09 UTC
 
 Actual CLI0/E2_RECOVERY_EXPIRY_SLICE_PASS: 6/6 complete approved recovery+EXPIRED/no-change comparisons, 779.772s. Exact A1-0050/38e0a95/335623fc.. and A2-0030/3d60b40/7d37b9ac.. ACKs of plan a76a291d.. verified before services. Fresh chain pair/state per row; Alice allow/recovery/outcome, Bob policy9 denial, wrong-admin16 controls. Sources stable;79 plan inputs/303 owner blobs/15 frozen copies, 12 snapshots verified; all24 process records ended/PIDs absent, 3943 commands/0 nonzero. A3-0037 RELEASED; no services/lease. Evidence: evaluation/evidence/e2/expiry-live-20261009/README.md.

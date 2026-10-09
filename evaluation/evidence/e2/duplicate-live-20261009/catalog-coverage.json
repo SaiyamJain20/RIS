@@ -1,0 +1,107 @@
+{
+  "catalogSha256": "438fa38ddcbd7edd0e49fb93cc580e5219ed05349fd677b2e386bc4669f5d50e",
+  "rows": [
+    {
+      "caseId": "E03-duplicate-outcome-paper-strict",
+      "profile": "paper-strict",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Repeated reconciliation cannot create a second successful outcome or grant. Exact owner reporter status/return values may differ; no duplicate transition is the assertion. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result."
+      },
+      "observed": "mined status0/Rejected8, identical call/fresh nonce, whole native/worker/logs unchanged",
+      "classification": "SUPPORTED",
+      "qualification": "Tested paper-derived reconstruction only; not authors implementation or paper security theorem"
+    },
+    {
+      "caseId": "E03-duplicate-outcome-paper-minimal",
+      "profile": "paper-minimal",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Repeated reconciliation cannot create a second successful outcome or grant. Exact owner reporter status/return values may differ; no duplicate transition is the assertion. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result."
+      },
+      "observed": "mined status0/Rejected8, identical call/fresh nonce, whole native/worker/logs unchanged",
+      "classification": "SUPPORTED",
+      "qualification": "Tested paper-derived reconstruction only; not authors implementation or paper security theorem"
+    },
+    {
+      "caseId": "E03-duplicate-outcome-repaired-e",
+      "profile": "repaired-e",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A36",
+        "A41"
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Repeated reconciliation cannot create a second successful outcome or grant. Exact owner reporter status/return values may differ; no duplicate transition is the assertion."
+      },
+      "observed": "mined status0/Rejected8, identical call/fresh nonce, whole native/worker/logs unchanged",
+      "classification": "REPAIR_SUPPORTED",
+      "qualification": "Tested paper-derived reconstruction only; not authors implementation or paper security theorem"
+    }
+  ],
+  "remainingSchedules": 47,
+  "fullCatalogComplete": false,
+  "historicalRecoveryExpiryRows": 6,
+  "paperCrashClassifications": "four BLOCKED/unproved"
+}
