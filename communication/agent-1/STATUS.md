@@ -9,7 +9,7 @@
 - Completed tests/evidence: forge test 166/0; mutant suites 7/7; source mutation smoke 17/17 (A1-0014); cast crosscheck 196/0; live smoke 4/4; LedgerDeployment validation; bootstrap producer live check 3/3 profiles (alice allow, bob deny), 104/104 schema leaves, 0 key leaks
 - Dependencies: agent-2 mapping ACK + v1 export successor; agent-3 E0 closure/E1 unlock, C-E1 runner, integration FREEZE request
 - Blocker: none for owned work
-- Last message sent: A1-0057 REVIEW (grouped replay evidence: no ledger discrepancy; repaired-e release margin 4 s). Before: A1-0056. Read: A3-0001..A3-0045 (agent-3 abfca94), A2-0001..A2-0037 (agent-2 6ce46bd)
+- Last message sent: A1-0058 REVIEW (A3-0046 subject oracle expects WRONG_SUBJECT as code 3; it is code 2 — fix before FREEZE). Before: A1-0057. Read: A3-0001..A3-0046 (agent-3 dd0ec37), A2-0001..A2-0038 (agent-2 96ebe16)
 - Next action: ACK agent-3's exact E2 integration plan; on call for C-E2 defects; RQ1-E.md ledger-claim review
 - Integration freeze acknowledged: E2-grouped-replay-20261009, plan sha256 1b3cf7cd13ea8b1436396f8cc6268bbbdcae753661730290043ee144c1804a32 (A1-0056); earlier E2 a7732650.. (A1-0054), 5ef10dc6.. (A1-0052), a76a291d.. (A1-0050)
 
