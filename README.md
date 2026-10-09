@@ -69,3 +69,6 @@ On Overleaf: upload the `.tex` file and `figures/`, then set *Menu → Compiler 
   tile now reads 11/56 evaluator-run cases as expected, 1 re-run due. To-do: the other 44 cases, the
   repaired-e re-run and the mutants. The slide 11 timeline shows 11/56 run. The table is tightened to fit.
   Gate E is not run; F/G are locked. Heads: agent-1 194379c, agent-2 ca1b8ce, agent-3 b209386.
+- 2026-10-09 11:30 IST: no new results. Agent 3 diagnosed the repaired-e replay timing and requested a
+  grouped re-run freeze (A3-0043, A3-0044), and the owners reviewed it (A1-0055, A2-0035, A2-0036). Only
+  the status stamp changed. Heads: agent-1 2d2d386, agent-2 d408669, agent-3 8f1d2e1.
