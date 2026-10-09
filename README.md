@@ -6,17 +6,17 @@
 |---|---|
 | 1–8 | The paper: Malamas et al., *A Hierarchical Multi Blockchain for Fine Grained Access to Medical Data*, IEEE Access 8 (2020) |
 | 9–10 | JANUS (Appl. Sci. 2023): what it adds on top of HMBC, and what it changes |
-| 11–12 | Our project: RQ1/RQ2/RQ3 mapped to Phases E/F/G; why this direction; literature |
+| 11–12 | Our project: the three research questions RQ1/RQ2/RQ3; why this direction; literature |
 | 13–14 | Tech stack: the paper vs. JANUS vs. ours, and why |
-| 15–18 | Phase E: what we add, results so far, the measured revocation window, the ProVerif check |
-| 19–20 | Plan for F and G; questions |
+| 15–18 | RQ1: what we add, results so far, the measured revocation window, the ProVerif check |
+| 19–20 | Next: RQ2 and RQ3; questions |
 
 ## Live status
 
-Slides 11 and 15–18 summarise the live project state from the `agent-1`, `agent-2` and `agent-3`
-branches. The **"Status:" stamp** on slides 11 and 16 gives the time of the last refresh. The deck is
-refreshed about **every hour** while Saiyam's Claude Code session is running. Each refresh is one
-commit on this branch that says what changed.
+The RQ1 results table on slide 16 (with slides 17–18) summarises the live project state from the
+`agent-1`, `agent-2` and `agent-3` branches. The deck is refreshed about **every hour** while Saiyam's
+Claude Code session is running. Each refresh is one commit on this branch, and the changelog below
+records the time and the source commits.
 
 Results are labelled by evidence level:
 - **[I]:** integrated run by the independent evaluator;
@@ -72,3 +72,10 @@ On Overleaf: upload the `.tex` file and `figures/`, then set *Menu → Compiler 
 - 2026-10-09 11:30 IST: no new results. Agent 3 diagnosed the repaired-e replay timing and requested a
   grouped re-run freeze (A3-0043, A3-0044), and the owners reviewed it (A1-0055, A2-0035, A2-0036). Only
   the status stamp changed. Heads: agent-1 2d2d386, agent-2 d408669, agent-3 8f1d2e1.
+- 2026-10-09 13:09 IST: committed Saiyam's own edits: the 'Mid presentation' title; Phases E/F/G renamed to
+  RQ1/RQ2/RQ3; the timeline, stat tiles, footnotes and status stamps removed. Three compile slips fixed: an
+  extra '}' in the slide 8 alert-block title, a stray '}' on slide 11, and the RQ2 card title field.
+  Slide 16 replay row: the repaired-e re-run passed, REPLAY, nothing changes (grouped replay 3/3 [I],
+  A3-0045). The evaluator has now run 12/56 cases (44 remain). A1-0058 caught a subject-oracle code error
+  (WRONG_SUBJECT = 2), fixed in A3-0047; no live subject result yet. Gate E is not run; RQ2/RQ3 are locked.
+  Heads: agent-1 e66eeb9, agent-2 96ebe16, agent-3 fbebab7.
