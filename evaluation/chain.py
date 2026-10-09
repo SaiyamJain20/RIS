@@ -55,6 +55,13 @@ class PublicChain:
             raise ValueError('Public ABI changed before execution')
         return contract
 
+    def _cast_checkpoint(self, label):
+        # Checkpoint-policy RPC clients hash Cast here (A1-0061 D-5b);
+        # per-call clients and controlled test doubles keep their own checks.
+        checkpoint = getattr(self.rpc, 'checkpoint', None)
+        if checkpoint is not None:
+            checkpoint(label)
+
     def _check_chain(self):
         if str(_quantity(self.rpc.call('eth_chainId'))) != self.chain_id:
             raise ValueError('RPC chain differs from deployment')
@@ -108,6 +115,7 @@ class PublicChain:
         try:
             deadline = time.monotonic()+self.timeout
             contracts = {role: self._contract(role) for role in roles}
+            self._cast_checkpoint('read-group')
             self._check_chain()
             block = self.rpc.call('eth_getBlockByNumber', ['latest', False])
             group = _PublicReadGroup(self, contracts, block, deadline)
@@ -135,6 +143,7 @@ class PublicChain:
             raise ValueError('Explicit bounded canonical gas limit required')
         if type(expect_success) is not bool:
             raise ValueError('Expected native status must be explicit')
+        self._cast_checkpoint('submit')
         self._check_chain()
         sender = signer.address.lower()
         nonce = _quantity(self.rpc.call('eth_getTransactionCount', [sender, 'pending']))

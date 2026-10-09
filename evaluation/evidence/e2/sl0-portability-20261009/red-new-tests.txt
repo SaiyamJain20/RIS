@@ -1,0 +1,1184 @@
+FFFFFFFFFFFFFFF.FFFFFFFFFFFFFFFFFF.EEEEEEEFFFFFF
+==================================== ERRORS ====================================
+_ ERROR at setup of test_solo_ack_index_requires_committed_freeze_and_both_acks _
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_solo_ack_index_requires_c0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7552472195b0>
+
+    @pytest.fixture
+    def solo_index(tmp_path, monkeypatch):
+>       m = e1(); plan = solo_plan(); raw = json.dumps(plan).encode(); sha = hashlib.sha256(raw).hexdigest()
+                         ^^^^^^^^^^^
+
+evaluation/tests/test_solo_review.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+freeze = 'S3-0005'
+
+    def solo_plan(freeze='S3-0005'):
+>       return e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:26: TypeError
+_ ERROR at setup of test_solo_ack_index_refuses_unbound_or_uncommitted_records[missing-freeze] _
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_solo_ack_index_refuses_un0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7552472190f0>
+
+    @pytest.fixture
+    def solo_index(tmp_path, monkeypatch):
+>       m = e1(); plan = solo_plan(); raw = json.dumps(plan).encode(); sha = hashlib.sha256(raw).hexdigest()
+                         ^^^^^^^^^^^
+
+evaluation/tests/test_solo_review.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+freeze = 'S3-0005'
+
+    def solo_plan(freeze='S3-0005'):
+>       return e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:26: TypeError
+_ ERROR at setup of test_solo_ack_index_refuses_unbound_or_uncommitted_records[freeze-plan-hash] _
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_solo_ack_index_refuses_un1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x755247a5f410>
+
+    @pytest.fixture
+    def solo_index(tmp_path, monkeypatch):
+>       m = e1(); plan = solo_plan(); raw = json.dumps(plan).encode(); sha = hashlib.sha256(raw).hexdigest()
+                         ^^^^^^^^^^^
+
+evaluation/tests/test_solo_review.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+freeze = 'S3-0005'
+
+    def solo_plan(freeze='S3-0005'):
+>       return e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:26: TypeError
+_ ERROR at setup of test_solo_ack_index_refuses_unbound_or_uncommitted_records[not-ancestor] _
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_solo_ack_index_refuses_un2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x75524721ebe0>
+
+    @pytest.fixture
+    def solo_index(tmp_path, monkeypatch):
+>       m = e1(); plan = solo_plan(); raw = json.dumps(plan).encode(); sha = hashlib.sha256(raw).hexdigest()
+                         ^^^^^^^^^^^
+
+evaluation/tests/test_solo_review.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+freeze = 'S3-0005'
+
+    def solo_plan(freeze='S3-0005'):
+>       return e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:26: TypeError
+_ ERROR at setup of test_solo_ack_index_refuses_unbound_or_uncommitted_records[wrong-path] _
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_solo_ack_index_refuses_un3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x75524721f020>
+
+    @pytest.fixture
+    def solo_index(tmp_path, monkeypatch):
+>       m = e1(); plan = solo_plan(); raw = json.dumps(plan).encode(); sha = hashlib.sha256(raw).hexdigest()
+                         ^^^^^^^^^^^
+
+evaluation/tests/test_solo_review.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+freeze = 'S3-0005'
+
+    def solo_plan(freeze='S3-0005'):
+>       return e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:26: TypeError
+_ ERROR at setup of test_solo_ack_index_refuses_unbound_or_uncommitted_records[blob-hash] _
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_solo_ack_index_refuses_un4')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7552472a4750>
+
+    @pytest.fixture
+    def solo_index(tmp_path, monkeypatch):
+>       m = e1(); plan = solo_plan(); raw = json.dumps(plan).encode(); sha = hashlib.sha256(raw).hexdigest()
+                         ^^^^^^^^^^^
+
+evaluation/tests/test_solo_review.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+freeze = 'S3-0005'
+
+    def solo_plan(freeze='S3-0005'):
+>       return e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:26: TypeError
+_ ERROR at setup of test_solo_ack_index_refuses_unbound_or_uncommitted_records[extra-key] _
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_solo_ack_index_refuses_un5')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7552472a4c50>
+
+    @pytest.fixture
+    def solo_index(tmp_path, monkeypatch):
+>       m = e1(); plan = solo_plan(); raw = json.dumps(plan).encode(); sha = hashlib.sha256(raw).hexdigest()
+                         ^^^^^^^^^^^
+
+evaluation/tests/test_solo_review.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+freeze = 'S3-0005'
+
+    def solo_plan(freeze='S3-0005'):
+>       return e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:26: TypeError
+=================================== FAILURES ===================================
+______________ test_frozen_paths_are_used_unchanged_when_present _______________
+
+frozen = ({'foundry': {'binaryPaths': {'anvil': {'path': '/tmp/pytest-of-saiyamjain/pytest-5/test_frozen_paths_are_used_unc0/fr...e'), 'proverif': PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_frozen_paths_are_used_unc0/frozen/proverif'), ...})
+
+    def test_frozen_paths_are_used_unchanged_when_present(frozen):
+        doc, tools = frozen
+>       resolved = module().resolve_all(doc, dict(tools={}))
+                   ^^^^^^^^
+
+evaluation/tests/test_host_toolchain.py:41: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.host_toolchain') is not None, 'host tool resolver missing'
+E       AssertionError: host tool resolver missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x755249a3cea0>('evaluation.host_toolchain')
+E        +    where <function find_spec at 0x755249a3cea0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_host_toolchain.py:16: AssertionError
+______ test_missing_frozen_path_uses_override_with_identical_frozen_hash _______
+
+frozen = ({'foundry': {'binaryPaths': {'anvil': {'path': '/tmp/pytest-of-saiyamjain/pytest-5/test_missing_frozen_path_uses_0/fr...e'), 'proverif': PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_missing_frozen_path_uses_0/frozen/proverif'), ...})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_missing_frozen_path_uses_0')
+
+    def test_missing_frozen_path_uses_override_with_identical_frozen_hash(frozen, tmp_path):
+        doc, tools = frozen
+        tools['cast'].unlink(); moved = write(tmp_path/'host/cast', b'cast')
+>       resolved = module().resolve_all(doc, dict(tools=dict(cast=dict(path=str(moved)))))
+                   ^^^^^^^^
+
+evaluation/tests/test_host_toolchain.py:49: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.host_toolchain') is not None, 'host tool resolver missing'
+E       AssertionError: host tool resolver missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x755249a3cea0>('evaluation.host_toolchain')
+E        +    where <function find_spec at 0x755249a3cea0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_host_toolchain.py:16: AssertionError
+__________ test_any_hash_or_identity_mismatch_refuses[override-hash] ___________
+
+frozen = ({'foundry': {'binaryPaths': {'anvil': {'path': '/tmp/pytest-of-saiyamjain/pytest-5/test_any_hash_or_identity_mism0/fr...e'), 'proverif': PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_any_hash_or_identity_mism0/frozen/proverif'), ...})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_any_hash_or_identity_mism0')
+case = 'override-hash'
+
+    @pytest.mark.parametrize('case', ['override-hash', 'frozen-path-hash', 'absent', 'unknown-tool', 'relative'])
+    def test_any_hash_or_identity_mismatch_refuses(frozen, tmp_path, case):
+        doc, tools = frozen; override = dict(tools={})
+        if case == 'override-hash':
+            tools['anvil'].unlink(); override['tools']['anvil'] = dict(path=str(write(tmp_path/'host/anvil', b'other')))
+        if case == 'frozen-path-hash':
+            # A present frozen path never falls through to an override.
+            write(tools['forge'], b'tampered'); override['tools']['forge'] = dict(path=str(write(tmp_path/'host/forge', b'forge')))
+        if case == 'absent':
+            tools['solc'].unlink()
+        if case == 'unknown-tool':
+            override['tools']['geth'] = dict(path=str(write(tmp_path/'host/geth', b'geth')))
+        if case == 'relative':
+            tools['cast'].unlink(); write(tmp_path/'host/cast', b'cast'); override['tools']['cast'] = dict(path='host/cast')
+        with pytest.raises(ValueError):
+>           module().resolve_all(doc, override)
+            ^^^^^^^^
+
+evaluation/tests/test_host_toolchain.py:69: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.host_toolchain') is not None, 'host tool resolver missing'
+E       AssertionError: host tool resolver missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x755249a3cea0>('evaluation.host_toolchain')
+E        +    where <function find_spec at 0x755249a3cea0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_host_toolchain.py:16: AssertionError
+_________ test_any_hash_or_identity_mismatch_refuses[frozen-path-hash] _________
+
+frozen = ({'foundry': {'binaryPaths': {'anvil': {'path': '/tmp/pytest-of-saiyamjain/pytest-5/test_any_hash_or_identity_mism1/fr...e'), 'proverif': PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_any_hash_or_identity_mism1/frozen/proverif'), ...})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_any_hash_or_identity_mism1')
+case = 'frozen-path-hash'
+
+    @pytest.mark.parametrize('case', ['override-hash', 'frozen-path-hash', 'absent', 'unknown-tool', 'relative'])
+    def test_any_hash_or_identity_mismatch_refuses(frozen, tmp_path, case):
+        doc, tools = frozen; override = dict(tools={})
+        if case == 'override-hash':
+            tools['anvil'].unlink(); override['tools']['anvil'] = dict(path=str(write(tmp_path/'host/anvil', b'other')))
+        if case == 'frozen-path-hash':
+            # A present frozen path never falls through to an override.
+            write(tools['forge'], b'tampered'); override['tools']['forge'] = dict(path=str(write(tmp_path/'host/forge', b'forge')))
+        if case == 'absent':
+            tools['solc'].unlink()
+        if case == 'unknown-tool':
+            override['tools']['geth'] = dict(path=str(write(tmp_path/'host/geth', b'geth')))
+        if case == 'relative':
+            tools['cast'].unlink(); write(tmp_path/'host/cast', b'cast'); override['tools']['cast'] = dict(path='host/cast')
+        with pytest.raises(ValueError):
+>           module().resolve_all(doc, override)
+            ^^^^^^^^
+
+evaluation/tests/test_host_toolchain.py:69: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.host_toolchain') is not None, 'host tool resolver missing'
+E       AssertionError: host tool resolver missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x755249a3cea0>('evaluation.host_toolchain')
+E        +    where <function find_spec at 0x755249a3cea0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_host_toolchain.py:16: AssertionError
+______________ test_any_hash_or_identity_mismatch_refuses[absent] ______________
+
+frozen = ({'foundry': {'binaryPaths': {'anvil': {'path': '/tmp/pytest-of-saiyamjain/pytest-5/test_any_hash_or_identity_mism2/fr...e'), 'proverif': PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_any_hash_or_identity_mism2/frozen/proverif'), ...})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_any_hash_or_identity_mism2')
+case = 'absent'
+
+    @pytest.mark.parametrize('case', ['override-hash', 'frozen-path-hash', 'absent', 'unknown-tool', 'relative'])
+    def test_any_hash_or_identity_mismatch_refuses(frozen, tmp_path, case):
+        doc, tools = frozen; override = dict(tools={})
+        if case == 'override-hash':
+            tools['anvil'].unlink(); override['tools']['anvil'] = dict(path=str(write(tmp_path/'host/anvil', b'other')))
+        if case == 'frozen-path-hash':
+            # A present frozen path never falls through to an override.
+            write(tools['forge'], b'tampered'); override['tools']['forge'] = dict(path=str(write(tmp_path/'host/forge', b'forge')))
+        if case == 'absent':
+            tools['solc'].unlink()
+        if case == 'unknown-tool':
+            override['tools']['geth'] = dict(path=str(write(tmp_path/'host/geth', b'geth')))
+        if case == 'relative':
+            tools['cast'].unlink(); write(tmp_path/'host/cast', b'cast'); override['tools']['cast'] = dict(path='host/cast')
+        with pytest.raises(ValueError):
+>           module().resolve_all(doc, override)
+            ^^^^^^^^
+
+evaluation/tests/test_host_toolchain.py:69: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.host_toolchain') is not None, 'host tool resolver missing'
+E       AssertionError: host tool resolver missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x755249a3cea0>('evaluation.host_toolchain')
+E        +    where <function find_spec at 0x755249a3cea0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_host_toolchain.py:16: AssertionError
+___________ test_any_hash_or_identity_mismatch_refuses[unknown-tool] ___________
+
+frozen = ({'foundry': {'binaryPaths': {'anvil': {'path': '/tmp/pytest-of-saiyamjain/pytest-5/test_any_hash_or_identity_mism3/fr...e'), 'proverif': PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_any_hash_or_identity_mism3/frozen/proverif'), ...})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_any_hash_or_identity_mism3')
+case = 'unknown-tool'
+
+    @pytest.mark.parametrize('case', ['override-hash', 'frozen-path-hash', 'absent', 'unknown-tool', 'relative'])
+    def test_any_hash_or_identity_mismatch_refuses(frozen, tmp_path, case):
+        doc, tools = frozen; override = dict(tools={})
+        if case == 'override-hash':
+            tools['anvil'].unlink(); override['tools']['anvil'] = dict(path=str(write(tmp_path/'host/anvil', b'other')))
+        if case == 'frozen-path-hash':
+            # A present frozen path never falls through to an override.
+            write(tools['forge'], b'tampered'); override['tools']['forge'] = dict(path=str(write(tmp_path/'host/forge', b'forge')))
+        if case == 'absent':
+            tools['solc'].unlink()
+        if case == 'unknown-tool':
+            override['tools']['geth'] = dict(path=str(write(tmp_path/'host/geth', b'geth')))
+        if case == 'relative':
+            tools['cast'].unlink(); write(tmp_path/'host/cast', b'cast'); override['tools']['cast'] = dict(path='host/cast')
+        with pytest.raises(ValueError):
+>           module().resolve_all(doc, override)
+            ^^^^^^^^
+
+evaluation/tests/test_host_toolchain.py:69: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.host_toolchain') is not None, 'host tool resolver missing'
+E       AssertionError: host tool resolver missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x755249a3cea0>('evaluation.host_toolchain')
+E        +    where <function find_spec at 0x755249a3cea0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_host_toolchain.py:16: AssertionError
+_____________ test_any_hash_or_identity_mismatch_refuses[relative] _____________
+
+frozen = ({'foundry': {'binaryPaths': {'anvil': {'path': '/tmp/pytest-of-saiyamjain/pytest-5/test_any_hash_or_identity_mism4/fr...e'), 'proverif': PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_any_hash_or_identity_mism4/frozen/proverif'), ...})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_any_hash_or_identity_mism4')
+case = 'relative'
+
+    @pytest.mark.parametrize('case', ['override-hash', 'frozen-path-hash', 'absent', 'unknown-tool', 'relative'])
+    def test_any_hash_or_identity_mismatch_refuses(frozen, tmp_path, case):
+        doc, tools = frozen; override = dict(tools={})
+        if case == 'override-hash':
+            tools['anvil'].unlink(); override['tools']['anvil'] = dict(path=str(write(tmp_path/'host/anvil', b'other')))
+        if case == 'frozen-path-hash':
+            # A present frozen path never falls through to an override.
+            write(tools['forge'], b'tampered'); override['tools']['forge'] = dict(path=str(write(tmp_path/'host/forge', b'forge')))
+        if case == 'absent':
+            tools['solc'].unlink()
+        if case == 'unknown-tool':
+            override['tools']['geth'] = dict(path=str(write(tmp_path/'host/geth', b'geth')))
+        if case == 'relative':
+            tools['cast'].unlink(); write(tmp_path/'host/cast', b'cast'); override['tools']['cast'] = dict(path='host/cast')
+        with pytest.raises(ValueError):
+>           module().resolve_all(doc, override)
+            ^^^^^^^^
+
+evaluation/tests/test_host_toolchain.py:69: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.host_toolchain') is not None, 'host tool resolver missing'
+E       AssertionError: host tool resolver missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x755249a3cea0>('evaluation.host_toolchain')
+E        +    where <function find_spec at 0x755249a3cea0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_host_toolchain.py:16: AssertionError
+__________ test_proverif_declared_local_build_is_recorded_not_hidden ___________
+
+frozen = ({'foundry': {'binaryPaths': {'anvil': {'path': '/tmp/pytest-of-saiyamjain/pytest-5/test_proverif_declared_local_b0/fr...e'), 'proverif': PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_proverif_declared_local_b0/frozen/proverif'), ...})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_proverif_declared_local_b0')
+
+    def test_proverif_declared_local_build_is_recorded_not_hidden(frozen, tmp_path):
+        doc, tools = frozen
+        tools['proverif'].unlink(); local = write(tmp_path/'host/proverif', b'local build')
+        declared = dict(sha256=digest(b'local build'), version='2.05', sourceSha256='4871'*16, compiler='OCaml 4.14.2')
+>       resolved = module().resolve_all(doc, dict(tools=dict(proverif=dict(path=str(local), declaredLocalBuild=declared))))
+                   ^^^^^^^^
+
+evaluation/tests/test_host_toolchain.py:76: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.host_toolchain') is not None, 'host tool resolver missing'
+E       AssertionError: host tool resolver missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x755249a3cea0>('evaluation.host_toolchain')
+E        +    where <function find_spec at 0x755249a3cea0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_host_toolchain.py:16: AssertionError
+_________________ test_local_build_exception_is_narrow[binary] _________________
+
+frozen = ({'foundry': {'binaryPaths': {'anvil': {'path': '/tmp/pytest-of-saiyamjain/pytest-5/test_local_build_exception_is_0/fr...e'), 'proverif': PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_local_build_exception_is_0/frozen/proverif'), ...})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_local_build_exception_is_0')
+change = 'binary'
+
+    @pytest.mark.parametrize('change', ['binary', 'version', 'source', 'non-proverif'])
+    def test_local_build_exception_is_narrow(frozen, tmp_path, change):
+        doc, tools = frozen
+        tools['proverif'].unlink(); local = write(tmp_path/'host/proverif', b'local build')
+        declared = dict(sha256=digest(b'local build'), version='2.05', sourceSha256='4871'*16, compiler='OCaml 4.14.2')
+        override = dict(tools=dict(proverif=dict(path=str(local), declaredLocalBuild=declared)))
+        if change == 'binary': write(local, b'changed')
+        if change == 'version': declared['version'] = '2.04'
+        if change == 'source': declared['sourceSha256'] = '00'*32
+        if change == 'non-proverif':
+            tools['forge'].unlink(); other = write(tmp_path/'host/forge', b'other forge')
+            override['tools']['forge'] = dict(path=str(other), declaredLocalBuild=dict(declared, sha256=digest(b'other forge')))
+        with pytest.raises(ValueError):
+>           module().resolve_all(doc, override)
+            ^^^^^^^^
+
+evaluation/tests/test_host_toolchain.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.host_toolchain') is not None, 'host tool resolver missing'
+E       AssertionError: host tool resolver missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x755249a3cea0>('evaluation.host_toolchain')
+E        +    where <function find_spec at 0x755249a3cea0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_host_toolchain.py:16: AssertionError
+________________ test_local_build_exception_is_narrow[version] _________________
+
+frozen = ({'foundry': {'binaryPaths': {'anvil': {'path': '/tmp/pytest-of-saiyamjain/pytest-5/test_local_build_exception_is_1/fr...e'), 'proverif': PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_local_build_exception_is_1/frozen/proverif'), ...})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_local_build_exception_is_1')
+change = 'version'
+
+    @pytest.mark.parametrize('change', ['binary', 'version', 'source', 'non-proverif'])
+    def test_local_build_exception_is_narrow(frozen, tmp_path, change):
+        doc, tools = frozen
+        tools['proverif'].unlink(); local = write(tmp_path/'host/proverif', b'local build')
+        declared = dict(sha256=digest(b'local build'), version='2.05', sourceSha256='4871'*16, compiler='OCaml 4.14.2')
+        override = dict(tools=dict(proverif=dict(path=str(local), declaredLocalBuild=declared)))
+        if change == 'binary': write(local, b'changed')
+        if change == 'version': declared['version'] = '2.04'
+        if change == 'source': declared['sourceSha256'] = '00'*32
+        if change == 'non-proverif':
+            tools['forge'].unlink(); other = write(tmp_path/'host/forge', b'other forge')
+            override['tools']['forge'] = dict(path=str(other), declaredLocalBuild=dict(declared, sha256=digest(b'other forge')))
+        with pytest.raises(ValueError):
+>           module().resolve_all(doc, override)
+            ^^^^^^^^
+
+evaluation/tests/test_host_toolchain.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.host_toolchain') is not None, 'host tool resolver missing'
+E       AssertionError: host tool resolver missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x755249a3cea0>('evaluation.host_toolchain')
+E        +    where <function find_spec at 0x755249a3cea0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_host_toolchain.py:16: AssertionError
+_________________ test_local_build_exception_is_narrow[source] _________________
+
+frozen = ({'foundry': {'binaryPaths': {'anvil': {'path': '/tmp/pytest-of-saiyamjain/pytest-5/test_local_build_exception_is_2/fr...e'), 'proverif': PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_local_build_exception_is_2/frozen/proverif'), ...})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_local_build_exception_is_2')
+change = 'source'
+
+    @pytest.mark.parametrize('change', ['binary', 'version', 'source', 'non-proverif'])
+    def test_local_build_exception_is_narrow(frozen, tmp_path, change):
+        doc, tools = frozen
+        tools['proverif'].unlink(); local = write(tmp_path/'host/proverif', b'local build')
+        declared = dict(sha256=digest(b'local build'), version='2.05', sourceSha256='4871'*16, compiler='OCaml 4.14.2')
+        override = dict(tools=dict(proverif=dict(path=str(local), declaredLocalBuild=declared)))
+        if change == 'binary': write(local, b'changed')
+        if change == 'version': declared['version'] = '2.04'
+        if change == 'source': declared['sourceSha256'] = '00'*32
+        if change == 'non-proverif':
+            tools['forge'].unlink(); other = write(tmp_path/'host/forge', b'other forge')
+            override['tools']['forge'] = dict(path=str(other), declaredLocalBuild=dict(declared, sha256=digest(b'other forge')))
+        with pytest.raises(ValueError):
+>           module().resolve_all(doc, override)
+            ^^^^^^^^
+
+evaluation/tests/test_host_toolchain.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.host_toolchain') is not None, 'host tool resolver missing'
+E       AssertionError: host tool resolver missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x755249a3cea0>('evaluation.host_toolchain')
+E        +    where <function find_spec at 0x755249a3cea0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_host_toolchain.py:16: AssertionError
+______________ test_local_build_exception_is_narrow[non-proverif] ______________
+
+frozen = ({'foundry': {'binaryPaths': {'anvil': {'path': '/tmp/pytest-of-saiyamjain/pytest-5/test_local_build_exception_is_3/fr...e'), 'proverif': PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_local_build_exception_is_3/frozen/proverif'), ...})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_local_build_exception_is_3')
+change = 'non-proverif'
+
+    @pytest.mark.parametrize('change', ['binary', 'version', 'source', 'non-proverif'])
+    def test_local_build_exception_is_narrow(frozen, tmp_path, change):
+        doc, tools = frozen
+        tools['proverif'].unlink(); local = write(tmp_path/'host/proverif', b'local build')
+        declared = dict(sha256=digest(b'local build'), version='2.05', sourceSha256='4871'*16, compiler='OCaml 4.14.2')
+        override = dict(tools=dict(proverif=dict(path=str(local), declaredLocalBuild=declared)))
+        if change == 'binary': write(local, b'changed')
+        if change == 'version': declared['version'] = '2.04'
+        if change == 'source': declared['sourceSha256'] = '00'*32
+        if change == 'non-proverif':
+            tools['forge'].unlink(); other = write(tmp_path/'host/forge', b'other forge')
+            override['tools']['forge'] = dict(path=str(other), declaredLocalBuild=dict(declared, sha256=digest(b'other forge')))
+        with pytest.raises(ValueError):
+>           module().resolve_all(doc, override)
+            ^^^^^^^^
+
+evaluation/tests/test_host_toolchain.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.host_toolchain') is not None, 'host tool resolver missing'
+E       AssertionError: host tool resolver missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x755249a3cea0>('evaluation.host_toolchain')
+E        +    where <function find_spec at 0x755249a3cea0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_host_toolchain.py:16: AssertionError
+__________ test_repository_override_resolves_every_tool_on_this_host ___________
+
+    def test_repository_override_resolves_every_tool_on_this_host():
+>       m = module(); resolved = m.resolved()
+            ^^^^^^^^
+
+evaluation/tests/test_host_toolchain.py:100: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.host_toolchain') is not None, 'host tool resolver missing'
+E       AssertionError: host tool resolver missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x755249a3cea0>('evaluation.host_toolchain')
+E        +    where <function find_spec at 0x755249a3cea0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_host_toolchain.py:16: AssertionError
+_______________ test_frozen_toolchain_copy_stays_byte_identical ________________
+
+    def test_frozen_toolchain_copy_stays_byte_identical():
+>       m = module()
+            ^^^^^^^^
+
+evaluation/tests/test_host_toolchain.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def module():
+>       assert importlib.util.find_spec('evaluation.host_toolchain') is not None, 'host tool resolver missing'
+E       AssertionError: host tool resolver missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x755249a3cea0>('evaluation.host_toolchain')
+E        +    where <function find_spec at 0x755249a3cea0> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_host_toolchain.py:16: AssertionError
+__________ test_solo_plan_records_mode_ports_and_unchanged_chain_ids ___________
+
+    def test_solo_plan_records_mode_ports_and_unchanged_chain_ids():
+>       plan = solo_plan(); e1().verify_plan(plan)
+               ^^^^^^^^^^^
+
+evaluation/tests/test_solo_review.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+freeze = 'S3-0005'
+
+    def solo_plan(freeze='S3-0005'):
+>       return e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:26: TypeError
+___________ test_freeze_identity_cannot_cross_modes[strict-S3-0005] ____________
+
+mode = 'strict', freeze = 'S3-0005'
+
+    @pytest.mark.parametrize('mode,freeze', [('strict', 'S3-0005'), (SOLO, 'A3-0050'), (SOLO, 'S2-0005'), ('relaxed', 'S3-0005')])
+    def test_freeze_identity_cannot_cross_modes(mode, freeze):
+        with pytest.raises(ValueError):
+>           e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=mode)
+E           TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:53: TypeError
+_______ test_freeze_identity_cannot_cross_modes[solo-correlated-A3-0050] _______
+
+mode = 'solo-correlated', freeze = 'A3-0050'
+
+    @pytest.mark.parametrize('mode,freeze', [('strict', 'S3-0005'), (SOLO, 'A3-0050'), (SOLO, 'S2-0005'), ('relaxed', 'S3-0005')])
+    def test_freeze_identity_cannot_cross_modes(mode, freeze):
+        with pytest.raises(ValueError):
+>           e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=mode)
+E           TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:53: TypeError
+_______ test_freeze_identity_cannot_cross_modes[solo-correlated-S2-0005] _______
+
+mode = 'solo-correlated', freeze = 'S2-0005'
+
+    @pytest.mark.parametrize('mode,freeze', [('strict', 'S3-0005'), (SOLO, 'A3-0050'), (SOLO, 'S2-0005'), ('relaxed', 'S3-0005')])
+    def test_freeze_identity_cannot_cross_modes(mode, freeze):
+        with pytest.raises(ValueError):
+>           e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=mode)
+E           TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:53: TypeError
+___________ test_freeze_identity_cannot_cross_modes[relaxed-S3-0005] ___________
+
+mode = 'relaxed', freeze = 'S3-0005'
+
+    @pytest.mark.parametrize('mode,freeze', [('strict', 'S3-0005'), (SOLO, 'A3-0050'), (SOLO, 'S2-0005'), ('relaxed', 'S3-0005')])
+    def test_freeze_identity_cannot_cross_modes(mode, freeze):
+        with pytest.raises(ValueError):
+>           e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=mode)
+E           TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:53: TypeError
+___________________ test_solo_plan_fields_are_verified[mode] ___________________
+
+change = 'mode'
+
+    @pytest.mark.parametrize('change', ['mode', 'ports', 'policy', 'disclosure'])
+    def test_solo_plan_fields_are_verified(change):
+>       plan = solo_plan()
+               ^^^^^^^^^^^
+
+evaluation/tests/test_solo_review.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+freeze = 'S3-0005'
+
+    def solo_plan(freeze='S3-0005'):
+>       return e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:26: TypeError
+__________________ test_solo_plan_fields_are_verified[ports] ___________________
+
+change = 'ports'
+
+    @pytest.mark.parametrize('change', ['mode', 'ports', 'policy', 'disclosure'])
+    def test_solo_plan_fields_are_verified(change):
+>       plan = solo_plan()
+               ^^^^^^^^^^^
+
+evaluation/tests/test_solo_review.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+freeze = 'S3-0005'
+
+    def solo_plan(freeze='S3-0005'):
+>       return e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:26: TypeError
+__________________ test_solo_plan_fields_are_verified[policy] __________________
+
+change = 'policy'
+
+    @pytest.mark.parametrize('change', ['mode', 'ports', 'policy', 'disclosure'])
+    def test_solo_plan_fields_are_verified(change):
+>       plan = solo_plan()
+               ^^^^^^^^^^^
+
+evaluation/tests/test_solo_review.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+freeze = 'S3-0005'
+
+    def solo_plan(freeze='S3-0005'):
+>       return e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:26: TypeError
+________________ test_solo_plan_fields_are_verified[disclosure] ________________
+
+change = 'disclosure'
+
+    @pytest.mark.parametrize('change', ['mode', 'ports', 'policy', 'disclosure'])
+    def test_solo_plan_fields_are_verified(change):
+>       plan = solo_plan()
+               ^^^^^^^^^^^
+
+evaluation/tests/test_solo_review.py:58: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+freeze = 'S3-0005'
+
+    def solo_plan(freeze='S3-0005'):
+>       return e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:26: TypeError
+______________ test_solo_ack_headers_accept_only_owner_identities ______________
+
+    def test_solo_ack_headers_accept_only_owner_identities():
+>       m = e1(); plan = solo_plan(); sha = 'ab'*32
+                         ^^^^^^^^^^^
+
+evaluation/tests/test_solo_review.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+freeze = 'S3-0005'
+
+    def solo_plan(freeze='S3-0005'):
+>       return e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:26: TypeError
+_ test_solo_ack_headers_refuse_wrong_identity_scope_or_revision[agent-2-Message-ID: A2-0040\nFrom: agent-2\nTo: agent-3 (proxy)\nRQ: E\nType: ACK\nInterface-version: v1\nResponds-to: S3-0005\nAccepted-plan-sha256: abababababababababababababababababababababababababababababababab\n] _
+
+agent = 'agent-2'
+raw = b'Message-ID: A2-0040\nFrom: agent-2\nTo: agent-3 (proxy)\nRQ: E\nType: ACK\nInterface-version: v1\nResponds-to: S3-0005\nAccepted-plan-sha256: abababababababababababababababababababababababababababababababab\n'
+
+    @pytest.mark.parametrize('agent,raw', [
+        ('agent-2', ack('A2-0040', 'agent-2', 'ab'*32)),                      # never impersonate absent agent 2
+        ('agent-2', ack('S2-0004', 'agent-2', 'ab'*32)),                      # proxy must be declared
+        ('agent-1', ack('S1-0001', 'agent-1', 'ab'*32)),
+        ('agent-1', ack('A1-0062', 'agent-1', 'cd'*32)),                      # other plan
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, freeze='S3-0004')),    # other freeze
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, to='agent-2 (proxy)')),
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, interface='v1 (FREEZE f700292e..)')),
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, kind='REVIEW')),
+        ('agent-3', ack('S3-0006', 'agent-3 (proxy)', 'ab'*32)),              # no self ACK
+    ])
+    def test_solo_ack_headers_refuse_wrong_identity_scope_or_revision(agent, raw):
+        with pytest.raises(ValueError):
+>           e1().verify_ack_message(raw, agent=agent, plan=solo_plan(), plan_sha256='ab'*32)
+                                                           ^^^^^^^^^^^
+
+evaluation/tests/test_solo_review.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+freeze = 'S3-0005'
+
+    def solo_plan(freeze='S3-0005'):
+>       return e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:26: TypeError
+_ test_solo_ack_headers_refuse_wrong_identity_scope_or_revision[agent-2-Message-ID: S2-0004\nFrom: agent-2\nTo: agent-3 (proxy)\nRQ: E\nType: ACK\nInterface-version: v1\nResponds-to: S3-0005\nAccepted-plan-sha256: abababababababababababababababababababababababababababababababab\n] _
+
+agent = 'agent-2'
+raw = b'Message-ID: S2-0004\nFrom: agent-2\nTo: agent-3 (proxy)\nRQ: E\nType: ACK\nInterface-version: v1\nResponds-to: S3-0005\nAccepted-plan-sha256: abababababababababababababababababababababababababababababababab\n'
+
+    @pytest.mark.parametrize('agent,raw', [
+        ('agent-2', ack('A2-0040', 'agent-2', 'ab'*32)),                      # never impersonate absent agent 2
+        ('agent-2', ack('S2-0004', 'agent-2', 'ab'*32)),                      # proxy must be declared
+        ('agent-1', ack('S1-0001', 'agent-1', 'ab'*32)),
+        ('agent-1', ack('A1-0062', 'agent-1', 'cd'*32)),                      # other plan
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, freeze='S3-0004')),    # other freeze
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, to='agent-2 (proxy)')),
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, interface='v1 (FREEZE f700292e..)')),
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, kind='REVIEW')),
+        ('agent-3', ack('S3-0006', 'agent-3 (proxy)', 'ab'*32)),              # no self ACK
+    ])
+    def test_solo_ack_headers_refuse_wrong_identity_scope_or_revision(agent, raw):
+        with pytest.raises(ValueError):
+>           e1().verify_ack_message(raw, agent=agent, plan=solo_plan(), plan_sha256='ab'*32)
+                                                           ^^^^^^^^^^^
+
+evaluation/tests/test_solo_review.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+freeze = 'S3-0005'
+
+    def solo_plan(freeze='S3-0005'):
+>       return e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:26: TypeError
+_ test_solo_ack_headers_refuse_wrong_identity_scope_or_revision[agent-1-Message-ID: S1-0001\nFrom: agent-1\nTo: agent-3 (proxy)\nRQ: E\nType: ACK\nInterface-version: v1\nResponds-to: S3-0005\nAccepted-plan-sha256: abababababababababababababababababababababababababababababababab\n] _
+
+agent = 'agent-1'
+raw = b'Message-ID: S1-0001\nFrom: agent-1\nTo: agent-3 (proxy)\nRQ: E\nType: ACK\nInterface-version: v1\nResponds-to: S3-0005\nAccepted-plan-sha256: abababababababababababababababababababababababababababababababab\n'
+
+    @pytest.mark.parametrize('agent,raw', [
+        ('agent-2', ack('A2-0040', 'agent-2', 'ab'*32)),                      # never impersonate absent agent 2
+        ('agent-2', ack('S2-0004', 'agent-2', 'ab'*32)),                      # proxy must be declared
+        ('agent-1', ack('S1-0001', 'agent-1', 'ab'*32)),
+        ('agent-1', ack('A1-0062', 'agent-1', 'cd'*32)),                      # other plan
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, freeze='S3-0004')),    # other freeze
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, to='agent-2 (proxy)')),
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, interface='v1 (FREEZE f700292e..)')),
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, kind='REVIEW')),
+        ('agent-3', ack('S3-0006', 'agent-3 (proxy)', 'ab'*32)),              # no self ACK
+    ])
+    def test_solo_ack_headers_refuse_wrong_identity_scope_or_revision(agent, raw):
+        with pytest.raises(ValueError):
+>           e1().verify_ack_message(raw, agent=agent, plan=solo_plan(), plan_sha256='ab'*32)
+                                                           ^^^^^^^^^^^
+
+evaluation/tests/test_solo_review.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+freeze = 'S3-0005'
+
+    def solo_plan(freeze='S3-0005'):
+>       return e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:26: TypeError
+_ test_solo_ack_headers_refuse_wrong_identity_scope_or_revision[agent-1-Message-ID: A1-0062\nFrom: agent-1\nTo: agent-3 (proxy)\nRQ: E\nType: ACK\nInterface-version: v1\nResponds-to: S3-0005\nAccepted-plan-sha256: cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd\n] _
+
+agent = 'agent-1'
+raw = b'Message-ID: A1-0062\nFrom: agent-1\nTo: agent-3 (proxy)\nRQ: E\nType: ACK\nInterface-version: v1\nResponds-to: S3-0005\nAccepted-plan-sha256: cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd\n'
+
+    @pytest.mark.parametrize('agent,raw', [
+        ('agent-2', ack('A2-0040', 'agent-2', 'ab'*32)),                      # never impersonate absent agent 2
+        ('agent-2', ack('S2-0004', 'agent-2', 'ab'*32)),                      # proxy must be declared
+        ('agent-1', ack('S1-0001', 'agent-1', 'ab'*32)),
+        ('agent-1', ack('A1-0062', 'agent-1', 'cd'*32)),                      # other plan
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, freeze='S3-0004')),    # other freeze
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, to='agent-2 (proxy)')),
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, interface='v1 (FREEZE f700292e..)')),
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, kind='REVIEW')),
+        ('agent-3', ack('S3-0006', 'agent-3 (proxy)', 'ab'*32)),              # no self ACK
+    ])
+    def test_solo_ack_headers_refuse_wrong_identity_scope_or_revision(agent, raw):
+        with pytest.raises(ValueError):
+>           e1().verify_ack_message(raw, agent=agent, plan=solo_plan(), plan_sha256='ab'*32)
+                                                           ^^^^^^^^^^^
+
+evaluation/tests/test_solo_review.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+freeze = 'S3-0005'
+
+    def solo_plan(freeze='S3-0005'):
+>       return e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:26: TypeError
+_ test_solo_ack_headers_refuse_wrong_identity_scope_or_revision[agent-1-Message-ID: A1-0062\nFrom: agent-1\nTo: agent-3 (proxy)\nRQ: E\nType: ACK\nInterface-version: v1\nResponds-to: S3-0004\nAccepted-plan-sha256: abababababababababababababababababababababababababababababababab\n] _
+
+agent = 'agent-1'
+raw = b'Message-ID: A1-0062\nFrom: agent-1\nTo: agent-3 (proxy)\nRQ: E\nType: ACK\nInterface-version: v1\nResponds-to: S3-0004\nAccepted-plan-sha256: abababababababababababababababababababababababababababababababab\n'
+
+    @pytest.mark.parametrize('agent,raw', [
+        ('agent-2', ack('A2-0040', 'agent-2', 'ab'*32)),                      # never impersonate absent agent 2
+        ('agent-2', ack('S2-0004', 'agent-2', 'ab'*32)),                      # proxy must be declared
+        ('agent-1', ack('S1-0001', 'agent-1', 'ab'*32)),
+        ('agent-1', ack('A1-0062', 'agent-1', 'cd'*32)),                      # other plan
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, freeze='S3-0004')),    # other freeze
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, to='agent-2 (proxy)')),
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, interface='v1 (FREEZE f700292e..)')),
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, kind='REVIEW')),
+        ('agent-3', ack('S3-0006', 'agent-3 (proxy)', 'ab'*32)),              # no self ACK
+    ])
+    def test_solo_ack_headers_refuse_wrong_identity_scope_or_revision(agent, raw):
+        with pytest.raises(ValueError):
+>           e1().verify_ack_message(raw, agent=agent, plan=solo_plan(), plan_sha256='ab'*32)
+                                                           ^^^^^^^^^^^
+
+evaluation/tests/test_solo_review.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+freeze = 'S3-0005'
+
+    def solo_plan(freeze='S3-0005'):
+>       return e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:26: TypeError
+_ test_solo_ack_headers_refuse_wrong_identity_scope_or_revision[agent-1-Message-ID: A1-0062\nFrom: agent-1\nTo: agent-2 (proxy)\nRQ: E\nType: ACK\nInterface-version: v1\nResponds-to: S3-0005\nAccepted-plan-sha256: abababababababababababababababababababababababababababababababab\n] _
+
+agent = 'agent-1'
+raw = b'Message-ID: A1-0062\nFrom: agent-1\nTo: agent-2 (proxy)\nRQ: E\nType: ACK\nInterface-version: v1\nResponds-to: S3-0005\nAccepted-plan-sha256: abababababababababababababababababababababababababababababababab\n'
+
+    @pytest.mark.parametrize('agent,raw', [
+        ('agent-2', ack('A2-0040', 'agent-2', 'ab'*32)),                      # never impersonate absent agent 2
+        ('agent-2', ack('S2-0004', 'agent-2', 'ab'*32)),                      # proxy must be declared
+        ('agent-1', ack('S1-0001', 'agent-1', 'ab'*32)),
+        ('agent-1', ack('A1-0062', 'agent-1', 'cd'*32)),                      # other plan
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, freeze='S3-0004')),    # other freeze
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, to='agent-2 (proxy)')),
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, interface='v1 (FREEZE f700292e..)')),
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, kind='REVIEW')),
+        ('agent-3', ack('S3-0006', 'agent-3 (proxy)', 'ab'*32)),              # no self ACK
+    ])
+    def test_solo_ack_headers_refuse_wrong_identity_scope_or_revision(agent, raw):
+        with pytest.raises(ValueError):
+>           e1().verify_ack_message(raw, agent=agent, plan=solo_plan(), plan_sha256='ab'*32)
+                                                           ^^^^^^^^^^^
+
+evaluation/tests/test_solo_review.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+freeze = 'S3-0005'
+
+    def solo_plan(freeze='S3-0005'):
+>       return e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:26: TypeError
+_ test_solo_ack_headers_refuse_wrong_identity_scope_or_revision[agent-1-Message-ID: A1-0062\nFrom: agent-1\nTo: agent-3 (proxy)\nRQ: E\nType: ACK\nInterface-version: v1 (FREEZE f700292e..)\nResponds-to: S3-0005\nAccepted-plan-sha256: abababababababababababababababababababababababababababababababab\n] _
+
+agent = 'agent-1'
+raw = b'Message-ID: A1-0062\nFrom: agent-1\nTo: agent-3 (proxy)\nRQ: E\nType: ACK\nInterface-version: v1 (FREEZE f700292e..)\nResponds-to: S3-0005\nAccepted-plan-sha256: abababababababababababababababababababababababababababababababab\n'
+
+    @pytest.mark.parametrize('agent,raw', [
+        ('agent-2', ack('A2-0040', 'agent-2', 'ab'*32)),                      # never impersonate absent agent 2
+        ('agent-2', ack('S2-0004', 'agent-2', 'ab'*32)),                      # proxy must be declared
+        ('agent-1', ack('S1-0001', 'agent-1', 'ab'*32)),
+        ('agent-1', ack('A1-0062', 'agent-1', 'cd'*32)),                      # other plan
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, freeze='S3-0004')),    # other freeze
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, to='agent-2 (proxy)')),
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, interface='v1 (FREEZE f700292e..)')),
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, kind='REVIEW')),
+        ('agent-3', ack('S3-0006', 'agent-3 (proxy)', 'ab'*32)),              # no self ACK
+    ])
+    def test_solo_ack_headers_refuse_wrong_identity_scope_or_revision(agent, raw):
+        with pytest.raises(ValueError):
+>           e1().verify_ack_message(raw, agent=agent, plan=solo_plan(), plan_sha256='ab'*32)
+                                                           ^^^^^^^^^^^
+
+evaluation/tests/test_solo_review.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+freeze = 'S3-0005'
+
+    def solo_plan(freeze='S3-0005'):
+>       return e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:26: TypeError
+_ test_solo_ack_headers_refuse_wrong_identity_scope_or_revision[agent-1-Message-ID: A1-0062\nFrom: agent-1\nTo: agent-3 (proxy)\nRQ: E\nType: REVIEW\nInterface-version: v1\nResponds-to: S3-0005\nAccepted-plan-sha256: abababababababababababababababababababababababababababababababab\n] _
+
+agent = 'agent-1'
+raw = b'Message-ID: A1-0062\nFrom: agent-1\nTo: agent-3 (proxy)\nRQ: E\nType: REVIEW\nInterface-version: v1\nResponds-to: S3-0005\nAccepted-plan-sha256: abababababababababababababababababababababababababababababababab\n'
+
+    @pytest.mark.parametrize('agent,raw', [
+        ('agent-2', ack('A2-0040', 'agent-2', 'ab'*32)),                      # never impersonate absent agent 2
+        ('agent-2', ack('S2-0004', 'agent-2', 'ab'*32)),                      # proxy must be declared
+        ('agent-1', ack('S1-0001', 'agent-1', 'ab'*32)),
+        ('agent-1', ack('A1-0062', 'agent-1', 'cd'*32)),                      # other plan
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, freeze='S3-0004')),    # other freeze
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, to='agent-2 (proxy)')),
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, interface='v1 (FREEZE f700292e..)')),
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, kind='REVIEW')),
+        ('agent-3', ack('S3-0006', 'agent-3 (proxy)', 'ab'*32)),              # no self ACK
+    ])
+    def test_solo_ack_headers_refuse_wrong_identity_scope_or_revision(agent, raw):
+        with pytest.raises(ValueError):
+>           e1().verify_ack_message(raw, agent=agent, plan=solo_plan(), plan_sha256='ab'*32)
+                                                           ^^^^^^^^^^^
+
+evaluation/tests/test_solo_review.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+freeze = 'S3-0005'
+
+    def solo_plan(freeze='S3-0005'):
+>       return e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:26: TypeError
+_ test_solo_ack_headers_refuse_wrong_identity_scope_or_revision[agent-3-Message-ID: S3-0006\nFrom: agent-3 (proxy)\nTo: agent-3 (proxy)\nRQ: E\nType: ACK\nInterface-version: v1\nResponds-to: S3-0005\nAccepted-plan-sha256: abababababababababababababababababababababababababababababababab\n] _
+
+agent = 'agent-3'
+raw = b'Message-ID: S3-0006\nFrom: agent-3 (proxy)\nTo: agent-3 (proxy)\nRQ: E\nType: ACK\nInterface-version: v1\nResponds-to: S3-0005\nAccepted-plan-sha256: abababababababababababababababababababababababababababababababab\n'
+
+    @pytest.mark.parametrize('agent,raw', [
+        ('agent-2', ack('A2-0040', 'agent-2', 'ab'*32)),                      # never impersonate absent agent 2
+        ('agent-2', ack('S2-0004', 'agent-2', 'ab'*32)),                      # proxy must be declared
+        ('agent-1', ack('S1-0001', 'agent-1', 'ab'*32)),
+        ('agent-1', ack('A1-0062', 'agent-1', 'cd'*32)),                      # other plan
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, freeze='S3-0004')),    # other freeze
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, to='agent-2 (proxy)')),
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, interface='v1 (FREEZE f700292e..)')),
+        ('agent-1', ack('A1-0062', 'agent-1', 'ab'*32, kind='REVIEW')),
+        ('agent-3', ack('S3-0006', 'agent-3 (proxy)', 'ab'*32)),              # no self ACK
+    ])
+    def test_solo_ack_headers_refuse_wrong_identity_scope_or_revision(agent, raw):
+        with pytest.raises(ValueError):
+>           e1().verify_ack_message(raw, agent=agent, plan=solo_plan(), plan_sha256='ab'*32)
+                                                           ^^^^^^^^^^^
+
+evaluation/tests/test_solo_review.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+freeze = 'S3-0005'
+
+    def solo_plan(freeze='S3-0005'):
+>       return e1().create_plan(run_id='E2-solo-test', freeze_message=freeze, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:26: TypeError
+______________ test_solo_e2_plan_and_blocked_record_disclose_mode ______________
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_solo_e2_plan_and_blocked_0')
+
+    def test_solo_e2_plan_and_blocked_record_disclose_mode(tmp_path):
+>       m = e2(); plan = m.create_plan(run_id='E2-solo-test', freeze_message='S3-0005', review_mode=SOLO)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+
+evaluation/tests/test_solo_review.py:149: TypeError
+________________ test_per_call_policy_is_default_and_unchanged _________________
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_per_call_policy_is_defaul0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7552471b0d70>
+
+    def test_per_call_policy_is_default_and_unchanged(tmp_path, monkeypatch):
+>       c = client(tmp_path, 'per-call'); counter = count_hashes(monkeypatch)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_cast_checkpoint.py:31: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_per_call_policy_is_defaul0')
+policy = 'per-call', program = 'import json,sys;print(json.dumps(sys.argv[1:]))'
+
+    def client(tmp_path, policy, program='import json,sys;print(json.dumps(sys.argv[1:]))'):
+        executable = tmp_path/'cast-probe'; executable.write_text('#!'+sys.executable+'\n'+program+'\n'); executable.chmod(0o700)
+        module = importlib.import_module('evaluation.rpc')
+>       return module.RpcClient('http://127.0.0.1:18545', cast=executable, cast_sha256=sha256(executable), cwd=tmp_path,
+                                output=tmp_path/'rpc', timeout=2.0, hash_policy=policy)
+E       TypeError: RpcClient.__init__() got an unexpected keyword argument 'hash_policy'
+
+evaluation/tests/test_cast_checkpoint.py:18: TypeError
+___________ test_checkpoint_policy_hashes_only_at_named_checkpoints ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_checkpoint_policy_hashes_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7552471b16d0>
+
+    def test_checkpoint_policy_hashes_only_at_named_checkpoints(tmp_path, monkeypatch):
+>       c = client(tmp_path, 'checkpoint'); counter = count_hashes(monkeypatch)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_cast_checkpoint.py:41: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_checkpoint_policy_hashes_0')
+policy = 'checkpoint'
+program = 'import json,sys;print(json.dumps(sys.argv[1:]))'
+
+    def client(tmp_path, policy, program='import json,sys;print(json.dumps(sys.argv[1:]))'):
+        executable = tmp_path/'cast-probe'; executable.write_text('#!'+sys.executable+'\n'+program+'\n'); executable.chmod(0o700)
+        module = importlib.import_module('evaluation.rpc')
+>       return module.RpcClient('http://127.0.0.1:18545', cast=executable, cast_sha256=sha256(executable), cwd=tmp_path,
+                                output=tmp_path/'rpc', timeout=2.0, hash_policy=policy)
+E       TypeError: RpcClient.__init__() got an unexpected keyword argument 'hash_policy'
+
+evaluation/tests/test_cast_checkpoint.py:18: TypeError
+________ test_checkpoint_detects_changed_cast_and_refuses_further_calls ________
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_checkpoint_detects_change0')
+
+    def test_checkpoint_detects_changed_cast_and_refuses_further_calls(tmp_path):
+>       c = client(tmp_path, 'checkpoint'); c.cast.write_text('#!'+sys.executable+'\nraise SystemExit(7)\n')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_cast_checkpoint.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_checkpoint_detects_change0')
+policy = 'checkpoint'
+program = 'import json,sys;print(json.dumps(sys.argv[1:]))'
+
+    def client(tmp_path, policy, program='import json,sys;print(json.dumps(sys.argv[1:]))'):
+        executable = tmp_path/'cast-probe'; executable.write_text('#!'+sys.executable+'\n'+program+'\n'); executable.chmod(0o700)
+        module = importlib.import_module('evaluation.rpc')
+>       return module.RpcClient('http://127.0.0.1:18545', cast=executable, cast_sha256=sha256(executable), cwd=tmp_path,
+                                output=tmp_path/'rpc', timeout=2.0, hash_policy=policy)
+E       TypeError: RpcClient.__init__() got an unexpected keyword argument 'hash_policy'
+
+evaluation/tests/test_cast_checkpoint.py:18: TypeError
+_________________________ test_unknown_policy_refused __________________________
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_unknown_policy_refused0')
+
+    def test_unknown_policy_refused(tmp_path):
+        with pytest.raises(ValueError):
+>           client(tmp_path, 'never')
+
+evaluation/tests/test_cast_checkpoint.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_unknown_policy_refused0')
+policy = 'never', program = 'import json,sys;print(json.dumps(sys.argv[1:]))'
+
+    def client(tmp_path, policy, program='import json,sys;print(json.dumps(sys.argv[1:]))'):
+        executable = tmp_path/'cast-probe'; executable.write_text('#!'+sys.executable+'\n'+program+'\n'); executable.chmod(0o700)
+        module = importlib.import_module('evaluation.rpc')
+>       return module.RpcClient('http://127.0.0.1:18545', cast=executable, cast_sha256=sha256(executable), cwd=tmp_path,
+                                output=tmp_path/'rpc', timeout=2.0, hash_policy=policy)
+E       TypeError: RpcClient.__init__() got an unexpected keyword argument 'hash_policy'
+
+evaluation/tests/test_cast_checkpoint.py:18: TypeError
+___________ test_public_chain_checkpoints_each_read_group_and_submit ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-5/test_public_chain_checkpoints_0')
+
+    def test_public_chain_checkpoints_each_read_group_and_submit(tmp_path):
+        from evaluation.tests.test_chain import Replies, executor
+        replies = Replies(); recording = Recording(); replies.checkpoint = recording.checkpoint
+        chain = executor(tmp_path, replies)
+        with chain.read_group(('TMSC',)) as group:
+            group.read('TMSC', 'authEpoch')
+        chain.submit('relay', 'TMSC', 'authEpoch')
+>       assert recording.labels == ['read-group', 'submit']
+E       AssertionError: assert [] == ['read-group', 'submit']
+E         
+E         Right contains 2 more items, first extra item: 'read-group'
+E         Use -v to get more diff
+
+evaluation/tests/test_cast_checkpoint.py:80: AssertionError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_host_toolchain.py::test_frozen_paths_are_used_unchanged_when_present - AssertionError: host tool resolver missing
+FAILED evaluation/tests/test_host_toolchain.py::test_missing_frozen_path_uses_override_with_identical_frozen_hash - AssertionError: host tool resolver missing
+FAILED evaluation/tests/test_host_toolchain.py::test_any_hash_or_identity_mismatch_refuses[override-hash] - AssertionError: host tool resolver missing
+FAILED evaluation/tests/test_host_toolchain.py::test_any_hash_or_identity_mismatch_refuses[frozen-path-hash] - AssertionError: host tool resolver missing
+FAILED evaluation/tests/test_host_toolchain.py::test_any_hash_or_identity_mismatch_refuses[absent] - AssertionError: host tool resolver missing
+FAILED evaluation/tests/test_host_toolchain.py::test_any_hash_or_identity_mismatch_refuses[unknown-tool] - AssertionError: host tool resolver missing
+FAILED evaluation/tests/test_host_toolchain.py::test_any_hash_or_identity_mismatch_refuses[relative] - AssertionError: host tool resolver missing
+FAILED evaluation/tests/test_host_toolchain.py::test_proverif_declared_local_build_is_recorded_not_hidden - AssertionError: host tool resolver missing
+FAILED evaluation/tests/test_host_toolchain.py::test_local_build_exception_is_narrow[binary] - AssertionError: host tool resolver missing
+FAILED evaluation/tests/test_host_toolchain.py::test_local_build_exception_is_narrow[version] - AssertionError: host tool resolver missing
+FAILED evaluation/tests/test_host_toolchain.py::test_local_build_exception_is_narrow[source] - AssertionError: host tool resolver missing
+FAILED evaluation/tests/test_host_toolchain.py::test_local_build_exception_is_narrow[non-proverif] - AssertionError: host tool resolver missing
+FAILED evaluation/tests/test_host_toolchain.py::test_repository_override_resolves_every_tool_on_this_host - AssertionError: host tool resolver missing
+FAILED evaluation/tests/test_host_toolchain.py::test_frozen_toolchain_copy_stays_byte_identical - AssertionError: host tool resolver missing
+FAILED evaluation/tests/test_solo_review.py::test_solo_plan_records_mode_ports_and_unchanged_chain_ids - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+FAILED evaluation/tests/test_solo_review.py::test_freeze_identity_cannot_cross_modes[strict-S3-0005] - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+FAILED evaluation/tests/test_solo_review.py::test_freeze_identity_cannot_cross_modes[solo-correlated-A3-0050] - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+FAILED evaluation/tests/test_solo_review.py::test_freeze_identity_cannot_cross_modes[solo-correlated-S2-0005] - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+FAILED evaluation/tests/test_solo_review.py::test_freeze_identity_cannot_cross_modes[relaxed-S3-0005] - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+FAILED evaluation/tests/test_solo_review.py::test_solo_plan_fields_are_verified[mode] - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+FAILED evaluation/tests/test_solo_review.py::test_solo_plan_fields_are_verified[ports] - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+FAILED evaluation/tests/test_solo_review.py::test_solo_plan_fields_are_verified[policy] - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+FAILED evaluation/tests/test_solo_review.py::test_solo_plan_fields_are_verified[disclosure] - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+FAILED evaluation/tests/test_solo_review.py::test_solo_ack_headers_accept_only_owner_identities - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+FAILED evaluation/tests/test_solo_review.py::test_solo_ack_headers_refuse_wrong_identity_scope_or_revision[agent-2-Message-ID: A2-0040\nFrom: agent-2\nTo: agent-3 (proxy)\nRQ: E\nType: ACK\nInterface-version: v1\nResponds-to: S3-0005\nAccepted-plan-sha256: abababababababababababababababababababababababababababababababab\n] - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+FAILED evaluation/tests/test_solo_review.py::test_solo_ack_headers_refuse_wrong_identity_scope_or_revision[agent-2-Message-ID: S2-0004\nFrom: agent-2\nTo: agent-3 (proxy)\nRQ: E\nType: ACK\nInterface-version: v1\nResponds-to: S3-0005\nAccepted-plan-sha256: abababababababababababababababababababababababababababababababab\n] - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+FAILED evaluation/tests/test_solo_review.py::test_solo_ack_headers_refuse_wrong_identity_scope_or_revision[agent-1-Message-ID: S1-0001\nFrom: agent-1\nTo: agent-3 (proxy)\nRQ: E\nType: ACK\nInterface-version: v1\nResponds-to: S3-0005\nAccepted-plan-sha256: abababababababababababababababababababababababababababababababab\n] - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+FAILED evaluation/tests/test_solo_review.py::test_solo_ack_headers_refuse_wrong_identity_scope_or_revision[agent-1-Message-ID: A1-0062\nFrom: agent-1\nTo: agent-3 (proxy)\nRQ: E\nType: ACK\nInterface-version: v1\nResponds-to: S3-0005\nAccepted-plan-sha256: cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd\n] - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+FAILED evaluation/tests/test_solo_review.py::test_solo_ack_headers_refuse_wrong_identity_scope_or_revision[agent-1-Message-ID: A1-0062\nFrom: agent-1\nTo: agent-3 (proxy)\nRQ: E\nType: ACK\nInterface-version: v1\nResponds-to: S3-0004\nAccepted-plan-sha256: abababababababababababababababababababababababababababababababab\n] - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+FAILED evaluation/tests/test_solo_review.py::test_solo_ack_headers_refuse_wrong_identity_scope_or_revision[agent-1-Message-ID: A1-0062\nFrom: agent-1\nTo: agent-2 (proxy)\nRQ: E\nType: ACK\nInterface-version: v1\nResponds-to: S3-0005\nAccepted-plan-sha256: abababababababababababababababababababababababababababababababab\n] - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+FAILED evaluation/tests/test_solo_review.py::test_solo_ack_headers_refuse_wrong_identity_scope_or_revision[agent-1-Message-ID: A1-0062\nFrom: agent-1\nTo: agent-3 (proxy)\nRQ: E\nType: ACK\nInterface-version: v1 (FREEZE f700292e..)\nResponds-to: S3-0005\nAccepted-plan-sha256: abababababababababababababababababababababababababababababababab\n] - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+FAILED evaluation/tests/test_solo_review.py::test_solo_ack_headers_refuse_wrong_identity_scope_or_revision[agent-1-Message-ID: A1-0062\nFrom: agent-1\nTo: agent-3 (proxy)\nRQ: E\nType: REVIEW\nInterface-version: v1\nResponds-to: S3-0005\nAccepted-plan-sha256: abababababababababababababababababababababababababababababababab\n] - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+FAILED evaluation/tests/test_solo_review.py::test_solo_ack_headers_refuse_wrong_identity_scope_or_revision[agent-3-Message-ID: S3-0006\nFrom: agent-3 (proxy)\nTo: agent-3 (proxy)\nRQ: E\nType: ACK\nInterface-version: v1\nResponds-to: S3-0005\nAccepted-plan-sha256: abababababababababababababababababababababababababababababababab\n] - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+FAILED evaluation/tests/test_solo_review.py::test_solo_e2_plan_and_blocked_record_disclose_mode - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+FAILED evaluation/tests/test_cast_checkpoint.py::test_per_call_policy_is_default_and_unchanged - TypeError: RpcClient.__init__() got an unexpected keyword argument 'hash_po...
+FAILED evaluation/tests/test_cast_checkpoint.py::test_checkpoint_policy_hashes_only_at_named_checkpoints - TypeError: RpcClient.__init__() got an unexpected keyword argument 'hash_po...
+FAILED evaluation/tests/test_cast_checkpoint.py::test_checkpoint_detects_changed_cast_and_refuses_further_calls - TypeError: RpcClient.__init__() got an unexpected keyword argument 'hash_po...
+FAILED evaluation/tests/test_cast_checkpoint.py::test_unknown_policy_refused - TypeError: RpcClient.__init__() got an unexpected keyword argument 'hash_po...
+FAILED evaluation/tests/test_cast_checkpoint.py::test_public_chain_checkpoints_each_read_group_and_submit - AssertionError: assert [] == ['read-group', 'submit']
+ERROR evaluation/tests/test_solo_review.py::test_solo_ack_index_requires_committed_freeze_and_both_acks - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+ERROR evaluation/tests/test_solo_review.py::test_solo_ack_index_refuses_unbound_or_uncommitted_records[missing-freeze] - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+ERROR evaluation/tests/test_solo_review.py::test_solo_ack_index_refuses_unbound_or_uncommitted_records[freeze-plan-hash] - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+ERROR evaluation/tests/test_solo_review.py::test_solo_ack_index_refuses_unbound_or_uncommitted_records[not-ancestor] - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+ERROR evaluation/tests/test_solo_review.py::test_solo_ack_index_refuses_unbound_or_uncommitted_records[wrong-path] - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+ERROR evaluation/tests/test_solo_review.py::test_solo_ack_index_refuses_unbound_or_uncommitted_records[blob-hash] - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+ERROR evaluation/tests/test_solo_review.py::test_solo_ack_index_refuses_unbound_or_uncommitted_records[extra-key] - TypeError: create_plan() got an unexpected keyword argument 'review_mode'
+39 failed, 2 passed, 7 errors in 0.92s

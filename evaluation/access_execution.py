@@ -75,6 +75,16 @@ class _Adapter:
         self.process = process; self.deployment = deployment; self.output = output; self.exchanges = []
 
     def call(self, operation, inputs):
+        response = self.response(operation, inputs)
+        require(response['ok'] is True, 'adapter '+operation+' success')
+        return response['result']
+
+    def response(self, operation, inputs):
+        """Exchange and validate one frozen operation; return the full response.
+
+        Used directly only where a schema-valid refusal is the expected
+        observation (subject completion with the original key reference).
+        """
         request = dict(schemaVersion='v1', operation=operation, input=inputs, deploymentManifest=self.deployment)
         frozen_validate('AdapterRequest', request)
         started = now()
@@ -102,12 +112,12 @@ class _Adapter:
             if isinstance(token, str):
                 envelope['tokenSha256'] = hashlib.sha256(token.encode()).hexdigest()
         (self.output/'exchanges.json').write_text(json.dumps(self.exchanges, indent=2)+'\n')
-        require(response['ok'] is True, 'adapter '+operation+' success')
-        return response['result']
+        return response
 
 
 def execute_access(pbc, dbc, adapter, *, deployment_bytes, user_label, user, record, policy,
-                   expected_allow, worker_snapshot, output, recovery_point=None, duplicate_outcome=False, nonce_replay=False, subject_substitution=None):
+                   expected_allow, worker_snapshot, output, recovery_point=None, duplicate_outcome=False, nonce_replay=False, subject_substitution=None,
+                   subject_completion=False):
     """Run Alice ALLOW or registered Bob POLICY_DENIED against checked evidence.
 
     `worker_snapshot` executes the pinned owner's read-only exporter and returns
@@ -128,11 +138,14 @@ def execute_access(pbc, dbc, adapter, *, deployment_bytes, user_label, user, rec
             require(expected_allow is True and subject_substitution != user['gid']
                     and recovery_point is None and not duplicate_outcome and not nonce_replay,
                     'isolated pre-release subject stress')
+        require(type(subject_completion) is bool and (not subject_completion or (
+                subject_substitution is not None and subject_substitution in USERS.values())), 'subject completion follows registered-subject stress')
         if recovery_point is not None:
             result['scope'] = 'C-E2 logical crash/retry control; not an RQ gate'
         dep = strict_json(deployment_bytes); frozen_validate('LedgerDeployment', dep)
         require(dep['interfaceVersion'] == 'v1' and dep['mutations'] == '0'
                 and dep['profile'] in ('paper-strict', 'paper-minimal', 'repaired-e'), 'baseline deployment')
+        require(not subject_completion or dep['profile'] != 'repaired-e', 'repaired subject stress ends at rejection; no release')
         require(user_label in USERS and user['gid'] == USERS[user_label]
                 and expected_allow is (user_label == 'alice'), 'independent E1 actor expectation')
         frozen_validate('CredentialBundle', user['bundle'])
@@ -241,14 +254,21 @@ def execute_access(pbc, dbc, adapter, *, deployment_bytes, user_label, user, rec
             grant_method = 'policyEnf'
             grant_arguments = (dict(pbcRequestId=digest, gid=request['gid'], dataId=request['dataId'], action='1'), records)
         if subject_substitution is not None:
-            from evaluation.subject_substitution import execute_subject_substitution
+            from evaluation.subject_substitution import collect_subject_substitution, execute_subject_completion
             forwarded = dict(pbcRequestId=digest, gid=request['gid'], dataId=request['dataId'], action=request['action'])
-            proof = execute_subject_substitution(pbc, dbc, deployment=dep, request=request, prepared=prepared,
+            proof, pre_release = collect_subject_substitution(pbc, dbc, deployment=dep, request=request, prepared=prepared,
                 original_native=native_request, original_bundle=user['bundle'], forwarded=forwarded, records=records, decision=decision,
                 target_gid=subject_substitution, grant_id=gid, worker_snapshot=worker_snapshot,
                 output=output/'subject-substitution')
             result.update(ok=proof['ok'], scope='C-E2 subject pre-release stage; full case and gate incomplete',
                           subjectSubstitution=proof, delivery='unknown')
+            if subject_completion:
+                target_label = next(label for label, value in USERS.items() if value == subject_substitution)
+                completion = execute_subject_completion(pbc, dbc, provider, deployment=dep, pre_release=pre_release,
+                    ciphertext_digest=cd, original_label=user_label, target_label=target_label,
+                    worker_snapshot=worker_snapshot, output=output/'subject-completion')
+                result.update(ok=proof['ok'] and completion['ok'], subjectCompletion=completion,
+                              scope='C-E2 subject pre-release and paper completion stages; separate controls and gate apply')
             return result
         native_dbc = dbc.submit('relay', 'ACSC', grant_method, *grant_arguments)
         require(native_dbc.success is True, 'native policy status')

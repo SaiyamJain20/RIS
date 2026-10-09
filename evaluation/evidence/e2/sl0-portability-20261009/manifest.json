@@ -1,0 +1,69 @@
+{
+ "baseTree": "78cdd11c6a99ca0aaab57fc031ee0699b759ba0d + agent-1 8931563 (HEAD); evaluation changes uncommitted at READY",
+ "changedOrNewFiles": {
+  "evaluation/host_toolchain.py": "9a5b6b31a21ce1d4caaaef9c32d487acb4ff334d008b3014609ad276f1da78cf",
+  "evaluation/host-tools.json": "15e708d6733129e41351e77d1b98679f213247d5d68e6cedac37a1384acd04a3",
+  "evaluation/rpc.py": "130c763e9f09e0f8e27094f533c121cf0d316948bef97b821731d0e1cb13fb94",
+  "evaluation/chain.py": "778805715f1dd6c0dc1a45500795983368baac056881352f8eff303bb9538038",
+  "evaluation/e1.py": "ca1a53db57448f18cb8dde89e2d729270a1c3aa7d24d13b9660bc62b2a918d4b",
+  "evaluation/e2.py": "fd1c0a5fcd870c58b350a167c02e37ffb88e2e757ca46fc4d5cc6a3ff56f60de",
+  "evaluation/tests/test_host_toolchain.py": "440795e0075630ed88c3c15ad49e9590b5c23d255a160459197c0e30a1477691",
+  "evaluation/tests/test_solo_review.py": "128fa466b3f4b1c56cef9c1918e68cd2ddfb3258b2a75208e04230e6138206d3",
+  "evaluation/tests/test_cast_checkpoint.py": "6c058dc254c19a365e5a062ad4f614b6cc602694ba77e3f56fd2d080cf7a23e2",
+  "evaluation/tests/test_e_correspondence.py": "32d4091b37473443924fa15b9bbfe8819b0303075008d9aec4aae90f5de30a9a",
+  "communication/DECISIONS.md": "8b56e38a25cffff8030a27f316a590d8db23e0af1d1228e095591b8ce5a643e1",
+  "evaluation/toolchain.json": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746",
+  "interfaces/v1/toolchain.json": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746",
+  "interfaces/v1/FREEZE.json": "f700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2"
+ },
+ "suiteBracket": {
+  "files": 1950,
+  "preSha256": "0e74f378b9cee8253274aea65288b58f72c60139b773e91f8666a9eff254bd81",
+  "postSha256": "0e74f378b9cee8253274aea65288b58f72c60139b773e91f8666a9eff254bd81",
+  "stable": true,
+  "scope": "evaluation/** (excluding __pycache__/runs), interfaces/v1/**, pyproject.toml, uv.lock, AGENTS.md, SPEC.md, PLAN.md"
+ },
+ "commands": [
+  {
+   "label": "red-new-tests",
+   "argv": ".venv/bin/python -m pytest -q -p no:cacheprovider evaluation/tests/test_host_toolchain.py evaluation/tests/test_solo_review.py evaluation/tests/test_cast_checkpoint.py -o console_output_style=classic",
+   "exit": 1,
+   "result": "39 failed, 2 passed, 7 errors (features absent)",
+   "output": "red-new-tests.txt",
+   "outputSha256": "f766aec50727671cd8d9addb4c8858d06fae225d6e49ccfdd388ab26891c468f"
+  },
+  {
+   "label": "red-host-baseline",
+   "argv": ".venv/bin/python -m pytest -q -p no:cacheprovider (agent 1 P1, tree 78cdd11)",
+   "exit": 1,
+   "result": "750 passed, 27 failed",
+   "output": "communication/agent-1/solo/evidence/p1-integrated-baseline/evaluation.out.txt"
+  },
+  {
+   "label": "green-targeted",
+   "argv": "PATH=$HOME/.foundry/bin:$PATH .venv/bin/python -m pytest -q -p no:cacheprovider evaluation/tests/{test_host_toolchain,test_solo_review,test_cast_checkpoint,test_e1_freeze,test_e2_freeze,test_e_correspondence,test_rpc_cli,test_chain,test_read_group}.py",
+   "exit": 0,
+   "result": "152 passed in 96.95s"
+  },
+  {
+   "label": "green-full-suite",
+   "argv": "PATH=$HOME/.foundry/bin:$PATH .venv/bin/python -m pytest -q -rs",
+   "cwd": "/home/saiyamjain/Desktop/RIS/Project",
+   "startedAt": "2026-10-09T15:00:04Z",
+   "endedAt": "2026-10-09T15:03:40Z",
+   "wallSeconds": 215.41,
+   "exit": 0,
+   "result": "825 passed, 0 failed, 0 skipped in 214.99s",
+   "output": "full-suite.txt",
+   "outputSha256": "4e52c2cfc0b4bb328b0886c301524990703867186f6579f83e152f73f0ffdb36"
+  }
+ ],
+ "tools": {
+  "python": ".venv/bin/python 3.13.5 (frozen 3.13.13)",
+  "pytest": "9.0.2",
+  "foundry": "1.8.5 at ~/.foundry/bin (frozen hashes)",
+  "proverif": "2.05 declared local build bc2cd5ed.. (frozen binary c1087205.., same source 4871f53c..)"
+ },
+ "servicesStarted": [],
+ "gitWrites": []
+}

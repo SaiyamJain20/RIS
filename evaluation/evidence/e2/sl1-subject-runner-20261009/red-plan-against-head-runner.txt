@@ -1,0 +1,350 @@
+FFFFFFFFFFFFFFFFFF                                                       [100%]
+=================================== FAILURES ===================================
+_____ test_subject_plan_pins_three_fresh_rows_controls_and_solo_disclosure _____
+
+    def test_subject_plan_pins_three_fresh_rows_controls_and_solo_disclosure():
+>       p = plan(); module().verify_plan(p)
+            ^^^^^^
+
+evaluation/tests/test_e2_subject_plan.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def plan():
+>       return module().create_plan(run_id='E2-subject-test', freeze_message='S3-0005', subject_substitution=True, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_e2_subject_plan.py:19: TypeError
+_____ test_subject_plan_refuses_strict_mode_and_combined_probes[options0] ______
+
+options = {'freeze_message': 'A3-0050', 'review_mode': 'strict'}
+
+    @pytest.mark.parametrize('options', [dict(review_mode='strict', freeze_message='A3-0050'),
+                                         dict(nonce_replay=True), dict(duplicate_outcome=True), dict(expired_retry=True)])
+    def test_subject_plan_refuses_strict_mode_and_combined_probes(options):
+        kwargs = dict(run_id='E2-subject-test', freeze_message='S3-0005', subject_substitution=True, review_mode=SOLO)
+        kwargs.update(options)
+        with pytest.raises(ValueError):
+>           module().create_plan(**kwargs)
+E           TypeError: create_plan() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_e2_subject_plan.py:38: TypeError
+_____ test_subject_plan_refuses_strict_mode_and_combined_probes[options1] ______
+
+options = {'nonce_replay': True}
+
+    @pytest.mark.parametrize('options', [dict(review_mode='strict', freeze_message='A3-0050'),
+                                         dict(nonce_replay=True), dict(duplicate_outcome=True), dict(expired_retry=True)])
+    def test_subject_plan_refuses_strict_mode_and_combined_probes(options):
+        kwargs = dict(run_id='E2-subject-test', freeze_message='S3-0005', subject_substitution=True, review_mode=SOLO)
+        kwargs.update(options)
+        with pytest.raises(ValueError):
+>           module().create_plan(**kwargs)
+E           TypeError: create_plan() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_e2_subject_plan.py:38: TypeError
+_____ test_subject_plan_refuses_strict_mode_and_combined_probes[options2] ______
+
+options = {'duplicate_outcome': True}
+
+    @pytest.mark.parametrize('options', [dict(review_mode='strict', freeze_message='A3-0050'),
+                                         dict(nonce_replay=True), dict(duplicate_outcome=True), dict(expired_retry=True)])
+    def test_subject_plan_refuses_strict_mode_and_combined_probes(options):
+        kwargs = dict(run_id='E2-subject-test', freeze_message='S3-0005', subject_substitution=True, review_mode=SOLO)
+        kwargs.update(options)
+        with pytest.raises(ValueError):
+>           module().create_plan(**kwargs)
+E           TypeError: create_plan() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_e2_subject_plan.py:38: TypeError
+_____ test_subject_plan_refuses_strict_mode_and_combined_probes[options3] ______
+
+options = {'expired_retry': True}
+
+    @pytest.mark.parametrize('options', [dict(review_mode='strict', freeze_message='A3-0050'),
+                                         dict(nonce_replay=True), dict(duplicate_outcome=True), dict(expired_retry=True)])
+    def test_subject_plan_refuses_strict_mode_and_combined_probes(options):
+        kwargs = dict(run_id='E2-subject-test', freeze_message='S3-0005', subject_substitution=True, review_mode=SOLO)
+        kwargs.update(options)
+        with pytest.raises(ValueError):
+>           module().create_plan(**kwargs)
+E           TypeError: create_plan() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_e2_subject_plan.py:38: TypeError
+___________ test_changed_subject_plan_refuses_before_services[probe] ___________
+
+change = 'probe'
+
+    @pytest.mark.parametrize('change', ['probe', 'classification', 'controls', 'freshness'])
+    def test_changed_subject_plan_refuses_before_services(change):
+>       p = plan()
+            ^^^^^^
+
+evaluation/tests/test_e2_subject_plan.py:43: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def plan():
+>       return module().create_plan(run_id='E2-subject-test', freeze_message='S3-0005', subject_substitution=True, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_e2_subject_plan.py:19: TypeError
+______ test_changed_subject_plan_refuses_before_services[classification] _______
+
+change = 'classification'
+
+    @pytest.mark.parametrize('change', ['probe', 'classification', 'controls', 'freshness'])
+    def test_changed_subject_plan_refuses_before_services(change):
+>       p = plan()
+            ^^^^^^
+
+evaluation/tests/test_e2_subject_plan.py:43: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def plan():
+>       return module().create_plan(run_id='E2-subject-test', freeze_message='S3-0005', subject_substitution=True, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_e2_subject_plan.py:19: TypeError
+_________ test_changed_subject_plan_refuses_before_services[controls] __________
+
+change = 'controls'
+
+    @pytest.mark.parametrize('change', ['probe', 'classification', 'controls', 'freshness'])
+    def test_changed_subject_plan_refuses_before_services(change):
+>       p = plan()
+            ^^^^^^
+
+evaluation/tests/test_e2_subject_plan.py:43: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def plan():
+>       return module().create_plan(run_id='E2-subject-test', freeze_message='S3-0005', subject_substitution=True, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_e2_subject_plan.py:19: TypeError
+_________ test_changed_subject_plan_refuses_before_services[freshness] _________
+
+change = 'freshness'
+
+    @pytest.mark.parametrize('change', ['probe', 'classification', 'controls', 'freshness'])
+    def test_changed_subject_plan_refuses_before_services(change):
+>       p = plan()
+            ^^^^^^
+
+evaluation/tests/test_e2_subject_plan.py:43: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def plan():
+>       return module().create_plan(run_id='E2-subject-test', freeze_message='S3-0005', subject_substitution=True, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_e2_subject_plan.py:19: TypeError
+______ test_subject_plan_without_solo_records_is_blocked_before_services _______
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-12/test_subject_plan_without_solo0')
+
+    def test_subject_plan_without_solo_records_is_blocked_before_services(tmp_path):
+>       path = tmp_path/'plan.json'; path.write_text(json.dumps(plan()))
+                                                                ^^^^^^
+
+evaluation/tests/test_e2_subject_plan.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def plan():
+>       return module().create_plan(run_id='E2-subject-test', freeze_message='S3-0005', subject_substitution=True, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_e2_subject_plan.py:19: TypeError
+_________ test_subject_execution_requires_each_complete_proof[missing] _________
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-12/test_subject_execution_require0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x742e8e9855b0>
+mode = 'missing'
+
+    @pytest.mark.parametrize('mode', ['missing', 'wrong-code', 'paper-reject', 'repaired-release', 'no-completion',
+                                      'alice-decrypts', 'outcome', 'complete'])
+    def test_subject_execution_requires_each_complete_proof(tmp_path, monkeypatch, mode):
+>       m = module(); path = tmp_path/'plan.json'; path.write_text(json.dumps(plan()))
+                                                                              ^^^^^^
+
+evaluation/tests/test_e2_subject_plan.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def plan():
+>       return module().create_plan(run_id='E2-subject-test', freeze_message='S3-0005', subject_substitution=True, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_e2_subject_plan.py:19: TypeError
+_______ test_subject_execution_requires_each_complete_proof[wrong-code] ________
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-12/test_subject_execution_require1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x742e8cc14180>
+mode = 'wrong-code'
+
+    @pytest.mark.parametrize('mode', ['missing', 'wrong-code', 'paper-reject', 'repaired-release', 'no-completion',
+                                      'alice-decrypts', 'outcome', 'complete'])
+    def test_subject_execution_requires_each_complete_proof(tmp_path, monkeypatch, mode):
+>       m = module(); path = tmp_path/'plan.json'; path.write_text(json.dumps(plan()))
+                                                                              ^^^^^^
+
+evaluation/tests/test_e2_subject_plan.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def plan():
+>       return module().create_plan(run_id='E2-subject-test', freeze_message='S3-0005', subject_substitution=True, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_e2_subject_plan.py:19: TypeError
+______ test_subject_execution_requires_each_complete_proof[paper-reject] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-12/test_subject_execution_require2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x742e8e7a1fd0>
+mode = 'paper-reject'
+
+    @pytest.mark.parametrize('mode', ['missing', 'wrong-code', 'paper-reject', 'repaired-release', 'no-completion',
+                                      'alice-decrypts', 'outcome', 'complete'])
+    def test_subject_execution_requires_each_complete_proof(tmp_path, monkeypatch, mode):
+>       m = module(); path = tmp_path/'plan.json'; path.write_text(json.dumps(plan()))
+                                                                              ^^^^^^
+
+evaluation/tests/test_e2_subject_plan.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def plan():
+>       return module().create_plan(run_id='E2-subject-test', freeze_message='S3-0005', subject_substitution=True, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_e2_subject_plan.py:19: TypeError
+____ test_subject_execution_requires_each_complete_proof[repaired-release] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-12/test_subject_execution_require3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x742e8cc25590>
+mode = 'repaired-release'
+
+    @pytest.mark.parametrize('mode', ['missing', 'wrong-code', 'paper-reject', 'repaired-release', 'no-completion',
+                                      'alice-decrypts', 'outcome', 'complete'])
+    def test_subject_execution_requires_each_complete_proof(tmp_path, monkeypatch, mode):
+>       m = module(); path = tmp_path/'plan.json'; path.write_text(json.dumps(plan()))
+                                                                              ^^^^^^
+
+evaluation/tests/test_e2_subject_plan.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def plan():
+>       return module().create_plan(run_id='E2-subject-test', freeze_message='S3-0005', subject_substitution=True, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_e2_subject_plan.py:19: TypeError
+______ test_subject_execution_requires_each_complete_proof[no-completion] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-12/test_subject_execution_require4')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x742e8e700e20>
+mode = 'no-completion'
+
+    @pytest.mark.parametrize('mode', ['missing', 'wrong-code', 'paper-reject', 'repaired-release', 'no-completion',
+                                      'alice-decrypts', 'outcome', 'complete'])
+    def test_subject_execution_requires_each_complete_proof(tmp_path, monkeypatch, mode):
+>       m = module(); path = tmp_path/'plan.json'; path.write_text(json.dumps(plan()))
+                                                                              ^^^^^^
+
+evaluation/tests/test_e2_subject_plan.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def plan():
+>       return module().create_plan(run_id='E2-subject-test', freeze_message='S3-0005', subject_substitution=True, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_e2_subject_plan.py:19: TypeError
+_____ test_subject_execution_requires_each_complete_proof[alice-decrypts] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-12/test_subject_execution_require5')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x742e8cbd1250>
+mode = 'alice-decrypts'
+
+    @pytest.mark.parametrize('mode', ['missing', 'wrong-code', 'paper-reject', 'repaired-release', 'no-completion',
+                                      'alice-decrypts', 'outcome', 'complete'])
+    def test_subject_execution_requires_each_complete_proof(tmp_path, monkeypatch, mode):
+>       m = module(); path = tmp_path/'plan.json'; path.write_text(json.dumps(plan()))
+                                                                              ^^^^^^
+
+evaluation/tests/test_e2_subject_plan.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def plan():
+>       return module().create_plan(run_id='E2-subject-test', freeze_message='S3-0005', subject_substitution=True, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_e2_subject_plan.py:19: TypeError
+_________ test_subject_execution_requires_each_complete_proof[outcome] _________
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-12/test_subject_execution_require6')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x742e8cbd0e50>
+mode = 'outcome'
+
+    @pytest.mark.parametrize('mode', ['missing', 'wrong-code', 'paper-reject', 'repaired-release', 'no-completion',
+                                      'alice-decrypts', 'outcome', 'complete'])
+    def test_subject_execution_requires_each_complete_proof(tmp_path, monkeypatch, mode):
+>       m = module(); path = tmp_path/'plan.json'; path.write_text(json.dumps(plan()))
+                                                                              ^^^^^^
+
+evaluation/tests/test_e2_subject_plan.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def plan():
+>       return module().create_plan(run_id='E2-subject-test', freeze_message='S3-0005', subject_substitution=True, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_e2_subject_plan.py:19: TypeError
+________ test_subject_execution_requires_each_complete_proof[complete] _________
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-12/test_subject_execution_require7')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x742e8cc2c320>
+mode = 'complete'
+
+    @pytest.mark.parametrize('mode', ['missing', 'wrong-code', 'paper-reject', 'repaired-release', 'no-completion',
+                                      'alice-decrypts', 'outcome', 'complete'])
+    def test_subject_execution_requires_each_complete_proof(tmp_path, monkeypatch, mode):
+>       m = module(); path = tmp_path/'plan.json'; path.write_text(json.dumps(plan()))
+                                                                              ^^^^^^
+
+evaluation/tests/test_e2_subject_plan.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def plan():
+>       return module().create_plan(run_id='E2-subject-test', freeze_message='S3-0005', subject_substitution=True, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'subject_substitution'
+
+evaluation/tests/test_e2_subject_plan.py:19: TypeError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_e2_subject_plan.py::test_subject_plan_pins_three_fresh_rows_controls_and_solo_disclosure - TypeError: create_plan() got an unexpected keyword argument 'subject_substi...
+FAILED evaluation/tests/test_e2_subject_plan.py::test_subject_plan_refuses_strict_mode_and_combined_probes[options0] - TypeError: create_plan() got an unexpected keyword argument 'subject_substi...
+FAILED evaluation/tests/test_e2_subject_plan.py::test_subject_plan_refuses_strict_mode_and_combined_probes[options1] - TypeError: create_plan() got an unexpected keyword argument 'subject_substi...
+FAILED evaluation/tests/test_e2_subject_plan.py::test_subject_plan_refuses_strict_mode_and_combined_probes[options2] - TypeError: create_plan() got an unexpected keyword argument 'subject_substi...
+FAILED evaluation/tests/test_e2_subject_plan.py::test_subject_plan_refuses_strict_mode_and_combined_probes[options3] - TypeError: create_plan() got an unexpected keyword argument 'subject_substi...
+FAILED evaluation/tests/test_e2_subject_plan.py::test_changed_subject_plan_refuses_before_services[probe] - TypeError: create_plan() got an unexpected keyword argument 'subject_substi...
+FAILED evaluation/tests/test_e2_subject_plan.py::test_changed_subject_plan_refuses_before_services[classification] - TypeError: create_plan() got an unexpected keyword argument 'subject_substi...
+FAILED evaluation/tests/test_e2_subject_plan.py::test_changed_subject_plan_refuses_before_services[controls] - TypeError: create_plan() got an unexpected keyword argument 'subject_substi...
+FAILED evaluation/tests/test_e2_subject_plan.py::test_changed_subject_plan_refuses_before_services[freshness] - TypeError: create_plan() got an unexpected keyword argument 'subject_substi...
+FAILED evaluation/tests/test_e2_subject_plan.py::test_subject_plan_without_solo_records_is_blocked_before_services - TypeError: create_plan() got an unexpected keyword argument 'subject_substi...
+FAILED evaluation/tests/test_e2_subject_plan.py::test_subject_execution_requires_each_complete_proof[missing] - TypeError: create_plan() got an unexpected keyword argument 'subject_substi...
+FAILED evaluation/tests/test_e2_subject_plan.py::test_subject_execution_requires_each_complete_proof[wrong-code] - TypeError: create_plan() got an unexpected keyword argument 'subject_substi...
+FAILED evaluation/tests/test_e2_subject_plan.py::test_subject_execution_requires_each_complete_proof[paper-reject] - TypeError: create_plan() got an unexpected keyword argument 'subject_substi...
+FAILED evaluation/tests/test_e2_subject_plan.py::test_subject_execution_requires_each_complete_proof[repaired-release] - TypeError: create_plan() got an unexpected keyword argument 'subject_substi...
+FAILED evaluation/tests/test_e2_subject_plan.py::test_subject_execution_requires_each_complete_proof[no-completion] - TypeError: create_plan() got an unexpected keyword argument 'subject_substi...
+FAILED evaluation/tests/test_e2_subject_plan.py::test_subject_execution_requires_each_complete_proof[alice-decrypts] - TypeError: create_plan() got an unexpected keyword argument 'subject_substi...
+FAILED evaluation/tests/test_e2_subject_plan.py::test_subject_execution_requires_each_complete_proof[outcome] - TypeError: create_plan() got an unexpected keyword argument 'subject_substi...
+FAILED evaluation/tests/test_e2_subject_plan.py::test_subject_execution_requires_each_complete_proof[complete] - TypeError: create_plan() got an unexpected keyword argument 'subject_substi...
+18 failed in 0.71s

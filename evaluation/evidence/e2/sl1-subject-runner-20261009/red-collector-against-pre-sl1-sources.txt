@@ -1,0 +1,332 @@
+FFFFFFFFFFFF.                                                            [100%]
+=================================== FAILURES ===================================
+_ test_paper_completion_routes_to_target_and_refuses_original_without_outcome[paper-strict] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-10/test_paper_completion_routes_t0')
+profile = 'paper-strict'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal'])
+    def test_paper_completion_routes_to_target_and_refuses_original_without_outcome(artifacts, inputs, tmp_path, profile):
+        m = subject_model(artifacts, inputs, tmp_path, profile)
+>       result = run(m, tmp_path, subject_completion=True)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_subject_completion_collector.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+m = <evaluation.tests.test_access_execution.Model object at 0x7ce590b0fb60>
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-10/test_paper_completion_routes_t0')
+options = {'subject_completion': True}
+
+    def run(m, tmp_path, **options):
+>       return execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+            user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy, expected_allow=True,
+            worker_snapshot=m.snapshot, output=tmp_path/'access', subject_substitution=m.users['bob']['gid'], **options)
+E       TypeError: execute_access() got an unexpected keyword argument 'subject_completion'
+
+evaluation/tests/test_subject_completion_collector.py:67: TypeError
+_ test_paper_completion_routes_to_target_and_refuses_original_without_outcome[paper-minimal] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-10/test_paper_completion_routes_t1')
+profile = 'paper-minimal'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal'])
+    def test_paper_completion_routes_to_target_and_refuses_original_without_outcome(artifacts, inputs, tmp_path, profile):
+        m = subject_model(artifacts, inputs, tmp_path, profile)
+>       result = run(m, tmp_path, subject_completion=True)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_subject_completion_collector.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+m = <evaluation.tests.test_access_execution.Model object at 0x7ce5925a0a50>
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-10/test_paper_completion_routes_t1')
+options = {'subject_completion': True}
+
+    def run(m, tmp_path, **options):
+>       return execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+            user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy, expected_allow=True,
+            worker_snapshot=m.snapshot, output=tmp_path/'access', subject_substitution=m.users['bob']['gid'], **options)
+E       TypeError: execute_access() got an unexpected keyword argument 'subject_completion'
+
+evaluation/tests/test_subject_completion_collector.py:67: TypeError
+__ test_false_routing_completion_or_worker_delta_cannot_pass[route-original] ___
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-10/test_false_routing_completion_0')
+control = 'route-original'
+
+    @pytest.mark.parametrize('control', ['route-original', 'cache-gid', 'extra-send', 'original-decrypts',
+                                         'target-refused', 'completion-worker'])
+    def test_false_routing_completion_or_worker_delta_cannot_pass(artifacts, inputs, tmp_path, control):
+        m = subject_model(artifacts, inputs, tmp_path, 'paper-strict', control)
+        with pytest.raises(ValueError):
+>           run(m, tmp_path, subject_completion=True)
+
+evaluation/tests/test_subject_completion_collector.py:94: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+m = <evaluation.tests.test_access_execution.Model object at 0x7ce590a3b250>
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-10/test_false_routing_completion_0')
+options = {'subject_completion': True}
+
+    def run(m, tmp_path, **options):
+>       return execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+            user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy, expected_allow=True,
+            worker_snapshot=m.snapshot, output=tmp_path/'access', subject_substitution=m.users['bob']['gid'], **options)
+E       TypeError: execute_access() got an unexpected keyword argument 'subject_completion'
+
+evaluation/tests/test_subject_completion_collector.py:67: TypeError
+_____ test_false_routing_completion_or_worker_delta_cannot_pass[cache-gid] _____
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-10/test_false_routing_completion_1')
+control = 'cache-gid'
+
+    @pytest.mark.parametrize('control', ['route-original', 'cache-gid', 'extra-send', 'original-decrypts',
+                                         'target-refused', 'completion-worker'])
+    def test_false_routing_completion_or_worker_delta_cannot_pass(artifacts, inputs, tmp_path, control):
+        m = subject_model(artifacts, inputs, tmp_path, 'paper-strict', control)
+        with pytest.raises(ValueError):
+>           run(m, tmp_path, subject_completion=True)
+
+evaluation/tests/test_subject_completion_collector.py:94: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+m = <evaluation.tests.test_access_execution.Model object at 0x7ce590865940>
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-10/test_false_routing_completion_1')
+options = {'subject_completion': True}
+
+    def run(m, tmp_path, **options):
+>       return execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+            user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy, expected_allow=True,
+            worker_snapshot=m.snapshot, output=tmp_path/'access', subject_substitution=m.users['bob']['gid'], **options)
+E       TypeError: execute_access() got an unexpected keyword argument 'subject_completion'
+
+evaluation/tests/test_subject_completion_collector.py:67: TypeError
+____ test_false_routing_completion_or_worker_delta_cannot_pass[extra-send] _____
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-10/test_false_routing_completion_2')
+control = 'extra-send'
+
+    @pytest.mark.parametrize('control', ['route-original', 'cache-gid', 'extra-send', 'original-decrypts',
+                                         'target-refused', 'completion-worker'])
+    def test_false_routing_completion_or_worker_delta_cannot_pass(artifacts, inputs, tmp_path, control):
+        m = subject_model(artifacts, inputs, tmp_path, 'paper-strict', control)
+        with pytest.raises(ValueError):
+>           run(m, tmp_path, subject_completion=True)
+
+evaluation/tests/test_subject_completion_collector.py:94: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+m = <evaluation.tests.test_access_execution.Model object at 0x7ce590865ba0>
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-10/test_false_routing_completion_2')
+options = {'subject_completion': True}
+
+    def run(m, tmp_path, **options):
+>       return execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+            user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy, expected_allow=True,
+            worker_snapshot=m.snapshot, output=tmp_path/'access', subject_substitution=m.users['bob']['gid'], **options)
+E       TypeError: execute_access() got an unexpected keyword argument 'subject_completion'
+
+evaluation/tests/test_subject_completion_collector.py:67: TypeError
+_ test_false_routing_completion_or_worker_delta_cannot_pass[original-decrypts] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-10/test_false_routing_completion_3')
+control = 'original-decrypts'
+
+    @pytest.mark.parametrize('control', ['route-original', 'cache-gid', 'extra-send', 'original-decrypts',
+                                         'target-refused', 'completion-worker'])
+    def test_false_routing_completion_or_worker_delta_cannot_pass(artifacts, inputs, tmp_path, control):
+        m = subject_model(artifacts, inputs, tmp_path, 'paper-strict', control)
+        with pytest.raises(ValueError):
+>           run(m, tmp_path, subject_completion=True)
+
+evaluation/tests/test_subject_completion_collector.py:94: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+m = <evaluation.tests.test_access_execution.Model object at 0x7ce590831eb0>
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-10/test_false_routing_completion_3')
+options = {'subject_completion': True}
+
+    def run(m, tmp_path, **options):
+>       return execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+            user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy, expected_allow=True,
+            worker_snapshot=m.snapshot, output=tmp_path/'access', subject_substitution=m.users['bob']['gid'], **options)
+E       TypeError: execute_access() got an unexpected keyword argument 'subject_completion'
+
+evaluation/tests/test_subject_completion_collector.py:67: TypeError
+__ test_false_routing_completion_or_worker_delta_cannot_pass[target-refused] ___
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-10/test_false_routing_completion_4')
+control = 'target-refused'
+
+    @pytest.mark.parametrize('control', ['route-original', 'cache-gid', 'extra-send', 'original-decrypts',
+                                         'target-refused', 'completion-worker'])
+    def test_false_routing_completion_or_worker_delta_cannot_pass(artifacts, inputs, tmp_path, control):
+        m = subject_model(artifacts, inputs, tmp_path, 'paper-strict', control)
+        with pytest.raises(ValueError):
+>           run(m, tmp_path, subject_completion=True)
+
+evaluation/tests/test_subject_completion_collector.py:94: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+m = <evaluation.tests.test_access_execution.Model object at 0x7ce5905d18c0>
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-10/test_false_routing_completion_4')
+options = {'subject_completion': True}
+
+    def run(m, tmp_path, **options):
+>       return execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+            user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy, expected_allow=True,
+            worker_snapshot=m.snapshot, output=tmp_path/'access', subject_substitution=m.users['bob']['gid'], **options)
+E       TypeError: execute_access() got an unexpected keyword argument 'subject_completion'
+
+evaluation/tests/test_subject_completion_collector.py:67: TypeError
+_ test_false_routing_completion_or_worker_delta_cannot_pass[completion-worker] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-10/test_false_routing_completion_5')
+control = 'completion-worker'
+
+    @pytest.mark.parametrize('control', ['route-original', 'cache-gid', 'extra-send', 'original-decrypts',
+                                         'target-refused', 'completion-worker'])
+    def test_false_routing_completion_or_worker_delta_cannot_pass(artifacts, inputs, tmp_path, control):
+        m = subject_model(artifacts, inputs, tmp_path, 'paper-strict', control)
+        with pytest.raises(ValueError):
+>           run(m, tmp_path, subject_completion=True)
+
+evaluation/tests/test_subject_completion_collector.py:94: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+m = <evaluation.tests.test_access_execution.Model object at 0x7ce5905d19d0>
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-10/test_false_routing_completion_5')
+options = {'subject_completion': True}
+
+    def run(m, tmp_path, **options):
+>       return execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+            user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy, expected_allow=True,
+            worker_snapshot=m.snapshot, output=tmp_path/'access', subject_substitution=m.users['bob']['gid'], **options)
+E       TypeError: execute_access() got an unexpected keyword argument 'subject_completion'
+
+evaluation/tests/test_subject_completion_collector.py:67: TypeError
+__________ test_repaired_completion_is_refused_before_any_side_effect __________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-10/test_repaired_completion_is_re0')
+
+    def test_repaired_completion_is_refused_before_any_side_effect(artifacts, inputs, tmp_path):
+        m = subject_model(artifacts, inputs, tmp_path, 'repaired-e')
+        with pytest.raises(ValueError):
+>           run(m, tmp_path, subject_completion=True)
+
+evaluation/tests/test_subject_completion_collector.py:100: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+m = <evaluation.tests.test_access_execution.Model object at 0x7ce5905d1f20>
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-10/test_repaired_completion_is_re0')
+options = {'subject_completion': True}
+
+    def run(m, tmp_path, **options):
+>       return execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+            user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy, expected_allow=True,
+            worker_snapshot=m.snapshot, output=tmp_path/'access', subject_substitution=m.users['bob']['gid'], **options)
+E       TypeError: execute_access() got an unexpected keyword argument 'subject_completion'
+
+evaluation/tests/test_subject_completion_collector.py:67: TypeError
+______________ test_completion_flag_must_be_explicit_boolean[yes] ______________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-10/test_completion_flag_must_be_e0')
+value = 'yes'
+
+    @pytest.mark.parametrize('value', ['yes', 1])
+    def test_completion_flag_must_be_explicit_boolean(artifacts, inputs, tmp_path, value):
+        m = subject_model(artifacts, inputs, tmp_path, 'paper-strict')
+        with pytest.raises(ValueError):
+>           run(m, tmp_path, subject_completion=value)
+
+evaluation/tests/test_subject_completion_collector.py:108: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+m = <evaluation.tests.test_access_execution.Model object at 0x7ce5909c7ce0>
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-10/test_completion_flag_must_be_e0')
+options = {'subject_completion': 'yes'}
+
+    def run(m, tmp_path, **options):
+>       return execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+            user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy, expected_allow=True,
+            worker_snapshot=m.snapshot, output=tmp_path/'access', subject_substitution=m.users['bob']['gid'], **options)
+E       TypeError: execute_access() got an unexpected keyword argument 'subject_completion'
+
+evaluation/tests/test_subject_completion_collector.py:67: TypeError
+_______________ test_completion_flag_must_be_explicit_boolean[1] _______________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-10/test_completion_flag_must_be_e1')
+value = 1
+
+    @pytest.mark.parametrize('value', ['yes', 1])
+    def test_completion_flag_must_be_explicit_boolean(artifacts, inputs, tmp_path, value):
+        m = subject_model(artifacts, inputs, tmp_path, 'paper-strict')
+        with pytest.raises(ValueError):
+>           run(m, tmp_path, subject_completion=value)
+
+evaluation/tests/test_subject_completion_collector.py:108: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+m = <evaluation.tests.test_access_execution.Model object at 0x7ce5909c7790>
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-10/test_completion_flag_must_be_e1')
+options = {'subject_completion': 1}
+
+    def run(m, tmp_path, **options):
+>       return execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(),
+            user_label='alice', user=m.users['alice'], record=m.record, policy=m.policy, expected_allow=True,
+            worker_snapshot=m.snapshot, output=tmp_path/'access', subject_substitution=m.users['bob']['gid'], **options)
+E       TypeError: execute_access() got an unexpected keyword argument 'subject_completion'
+
+evaluation/tests/test_subject_completion_collector.py:67: TypeError
+___________________ test_completion_requires_subject_stress ____________________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-10/test_completion_requires_subje0')
+
+    def test_completion_requires_subject_stress(artifacts, inputs, tmp_path):
+        m = subject_model(artifacts, inputs, tmp_path, 'paper-strict')
+        with pytest.raises(ValueError):
+>           execute_access(m.pbc, m.dbc, m, deployment_bytes=json.dumps(m.dep).encode(), user_label='alice',
+                           user=m.users['alice'], record=m.record, policy=m.policy, expected_allow=True,
+                           worker_snapshot=m.snapshot, output=tmp_path/'access', subject_completion=True)
+E           TypeError: execute_access() got an unexpected keyword argument 'subject_completion'
+
+evaluation/tests/test_subject_completion_collector.py:115: TypeError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_subject_completion_collector.py::test_paper_completion_routes_to_target_and_refuses_original_without_outcome[paper-strict] - TypeError: execute_access() got an unexpected keyword argument 'subject_com...
+FAILED evaluation/tests/test_subject_completion_collector.py::test_paper_completion_routes_to_target_and_refuses_original_without_outcome[paper-minimal] - TypeError: execute_access() got an unexpected keyword argument 'subject_com...
+FAILED evaluation/tests/test_subject_completion_collector.py::test_false_routing_completion_or_worker_delta_cannot_pass[route-original] - TypeError: execute_access() got an unexpected keyword argument 'subject_com...
+FAILED evaluation/tests/test_subject_completion_collector.py::test_false_routing_completion_or_worker_delta_cannot_pass[cache-gid] - TypeError: execute_access() got an unexpected keyword argument 'subject_com...
+FAILED evaluation/tests/test_subject_completion_collector.py::test_false_routing_completion_or_worker_delta_cannot_pass[extra-send] - TypeError: execute_access() got an unexpected keyword argument 'subject_com...
+FAILED evaluation/tests/test_subject_completion_collector.py::test_false_routing_completion_or_worker_delta_cannot_pass[original-decrypts] - TypeError: execute_access() got an unexpected keyword argument 'subject_com...
+FAILED evaluation/tests/test_subject_completion_collector.py::test_false_routing_completion_or_worker_delta_cannot_pass[target-refused] - TypeError: execute_access() got an unexpected keyword argument 'subject_com...
+FAILED evaluation/tests/test_subject_completion_collector.py::test_false_routing_completion_or_worker_delta_cannot_pass[completion-worker] - TypeError: execute_access() got an unexpected keyword argument 'subject_com...
+FAILED evaluation/tests/test_subject_completion_collector.py::test_repaired_completion_is_refused_before_any_side_effect - TypeError: execute_access() got an unexpected keyword argument 'subject_com...
+FAILED evaluation/tests/test_subject_completion_collector.py::test_completion_flag_must_be_explicit_boolean[yes] - TypeError: execute_access() got an unexpected keyword argument 'subject_com...
+FAILED evaluation/tests/test_subject_completion_collector.py::test_completion_flag_must_be_explicit_boolean[1] - TypeError: execute_access() got an unexpected keyword argument 'subject_com...
+FAILED evaluation/tests/test_subject_completion_collector.py::test_completion_requires_subject_stress - TypeError: execute_access() got an unexpected keyword argument 'subject_com...
+12 failed, 1 passed in 1.02s

@@ -1,0 +1,71 @@
+{
+ "plan": {
+  "path": "evaluation/evidence/e2/sl1-subject-runner-20261009/integration-plan.json",
+  "sha256": "6fd5809b3b79963ea7094ca63c04b60c8991313ac94bb8823320939d663f1f96",
+  "runId": "E2-SL1-subject-20261009",
+  "freezeMessage": "S3-0005",
+  "agent3SourcesCount": 90,
+  "agent3SourcesAggregate": "273b350d6d97c41365f1a3db0259ae31b7a6ad18f9d11d115d4867fb587574ab"
+ },
+ "sourceFiles": {
+  "evaluation/subject_substitution.py": "b18f0e719bc0d3d94b343d1db6de2c44e9c191293264ac1b32a55d4078194acb",
+  "evaluation/access_execution.py": "5f28ebd6eb991b9f082d46c62da2e4f5d9a795dfc40649588a0d902372886f6f",
+  "evaluation/e1.py": "d236cafb0877e7007279e2a45e99d13deb76b6e5926ea3f000ac9c7e84649650",
+  "evaluation/e2.py": "f3ea42febe56f822e80421510c7890a59e1ee0eecbe369782f61583dd7d70781",
+  "evaluation/tests/test_subject_completion_collector.py": "2ce3d4ec32ba14e7b5af5c0fd3317de10d3869f4a57f1f9b593a58d62085ce4f",
+  "evaluation/tests/test_e2_subject_plan.py": "779c419c0ddb63ca8f22ae29fc7919ce07ba2aad426d3533bf9dbf4b4e616af5",
+  "evaluation/host_toolchain.py": "9a5b6b31a21ce1d4caaaef9c32d487acb4ff334d008b3014609ad276f1da78cf",
+  "evaluation/host-tools.json": "15e708d6733129e41351e77d1b98679f213247d5d68e6cedac37a1384acd04a3",
+  "evaluation/rpc.py": "130c763e9f09e0f8e27094f533c121cf0d316948bef97b821731d0e1cb13fb94",
+  "evaluation/chain.py": "778805715f1dd6c0dc1a45500795983368baac056881352f8eff303bb9538038"
+ },
+ "suiteBracket": {
+  "files": 1959,
+  "pre": "8a809e03e91572d05e3976e232b7a510df478b4cd09eaeb9a76b2de9c794aa75",
+  "post": "8a809e03e91572d05e3976e232b7a510df478b4cd09eaeb9a76b2de9c794aa75",
+  "stable": true
+ },
+ "commands": [
+  {
+   "label": "red-collector",
+   "argv": ".venv/bin/python -m pytest -q -p no:cacheprovider evaluation/tests/test_subject_completion_collector.py",
+   "cwd": "scratch copy with HEAD (pre-SL1) subject_substitution.py/access_execution.py",
+   "exit": 1,
+   "result": "12 failed, 1 passed",
+   "output": "red-collector-against-pre-sl1-sources.txt",
+   "note": "RED shown retroactively in scratch after the code was written"
+  },
+  {
+   "label": "red-plan",
+   "argv": ".venv/bin/python -m pytest -q -p no:cacheprovider evaluation/tests/test_e2_subject_plan.py",
+   "cwd": "scratch copy with HEAD e1.py/e2.py",
+   "exit": 1,
+   "result": "18 failed",
+   "output": "red-plan-against-head-runner.txt"
+  },
+  {
+   "label": "green-targeted",
+   "argv": ".venv/bin/python -m pytest -q -p no:cacheprovider evaluation/tests/test_e2_subject_plan.py evaluation/tests/test_subject_completion_collector.py",
+   "exit": 0,
+   "result": "31 passed"
+  },
+  {
+   "label": "green-full-suite",
+   "argv": "PATH=$HOME/.foundry/bin:$PATH .venv/bin/python -m pytest -q -rs",
+   "startedAt": "2026-10-09T15:13:26Z",
+   "endedAt": "2026-10-09T15:17:40Z",
+   "wallSeconds": 254.0,
+   "exit": 0,
+   "result": "856 passed, 0 failed, 0 skipped",
+   "output": "full-suite.txt",
+   "outputSha256": "6da36aedae0fdc9ef065af8fcde7500a8806fbe33c0ce1abba1b70248ea8d20f"
+  },
+  {
+   "label": "plan",
+   "argv": "e2.create_plan(run_id='E2-SL1-subject-20261009', freeze_message='S3-0005', subject_substitution=True, review_mode='solo-correlated'); e2.verify_plan(plan) before and after writing",
+   "exit": 0
+  }
+ ],
+ "servicesStarted": [],
+ "gitWrites": []
+}

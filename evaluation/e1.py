@@ -6,7 +6,6 @@ source snapshots remain owner-authored. No peer implementation is imported.
 """
 import argparse
 from contextlib import ExitStack
-import copy
 import hashlib
 import importlib.metadata
 import json
@@ -26,6 +25,7 @@ from evaluation.bootstrap import FREEZE_SHA256, frozen_validate, strict_json
 from evaluation.bootstrap_execution import execute_bootstrap
 from evaluation.chain import PublicChain, _owned_signer
 from evaluation.evm import AbiContract, _hex
+from evaluation import host_toolchain
 from evaluation.manifests import now, record_command, sha256
 from evaluation.processes import JsonLinesProcess, ServiceProcess
 from evaluation.rpc import RpcClient
@@ -33,29 +33,43 @@ from evaluation.rpc import RpcClient
 ROOT = Path(__file__).resolve().parents[1]
 PIN_REVIEW = ROOT/'evaluation/evidence/e1/collector-20261008/pin-review.json'
 PROFILES = ['paper-strict', 'paper-minimal', 'repaired-e']
+# Solo phase (A1-0059/A1-0061): agent 1 plus two same-model proxies. Strict
+# mode below is unchanged; solo plans/results carry this disclosure.
+SOLO = 'solo-correlated'
+SOLO_DISCLOSURE = ('Solo phase under the human directive A1-0059: agent 1 and the agent-2/agent-3 proxies are the same '
+                   'model, so every review and ACK is correlated self-review, not independent review.')
+SOLO_PREFIXES = {'agent-1': 'communication/agent-1/outbox/',
+                 'agent-2': 'communication/agent-1/solo/agent-2-proxy/outbox/',
+                 'freeze': 'communication/agent-1/solo/agent-3-proxy/outbox/'}
 
 
 def _runtime_sources():
     paths = list((ROOT/'evaluation').glob('*.py'))+list((ROOT/'evaluation/fixtures/e1').rglob('*.json'))
     paths += list((ROOT/'interfaces/v1').rglob('*.json'))
     paths += [ROOT/name for name in ('uv.lock', 'pyproject.toml', 'evaluation/toolchain.json', 'AGENTS.md', 'SPEC.md', 'PLAN.md')]
+    paths += [p for p in [host_toolchain.OVERRIDE] if p.is_file()]
     paths += [PIN_REVIEW]
     return {str(p.relative_to(ROOT)): sha256(p) for p in sorted(set(paths))}
 
 
-def create_plan(*, run_id, freeze_message):
+def create_plan(*, run_id, freeze_message, review_mode='strict'):
     """Create a review artifact only. Publication and ACK receipt are separate."""
     require(re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]{0,63}', run_id) is not None, 'run ID')
-    require(re.fullmatch(r'A3-[0-9]{4}', freeze_message) is not None, 'freeze message ID')
+    require(review_mode in ('strict', SOLO), 'review mode')
+    pattern = r'A3-[0-9]{4}' if review_mode == 'strict' else r'S3-[0-9]{4}'
+    require(re.fullmatch(pattern, freeze_message) is not None, 'freeze message ID')
     toolchain = json.loads((ROOT/'evaluation/toolchain.json').read_text())
     review = json.loads(PIN_REVIEW.read_text())
-    tools = copy.deepcopy(toolchain['foundry']['binaryPaths'])
-    tools['solc'] = {k: toolchain['solc'][k] for k in ('path', 'sha256')}
+    # Frozen hashes always; a path differs only via the reviewed host override.
+    resolved = host_toolchain.resolved()
+    tools = {name: dict(path=resolved[name]['path'], sha256=resolved[name]['sha256']) for name in ('forge', 'anvil', 'cast', 'solc')}
+    require(all(tools[n]['sha256'] == resolved[n]['frozenSha256'] for n in tools), 'frozen tool hashes')
     for name, path in [('python', ROOT/'.venv/bin/python'), ('python3', Path('/usr/bin/python3')), ('bash', Path('/usr/bin/bash'))]:
         tools[name] = dict(path=str(path), sha256=sha256(path))
-    return dict(schemaVersion='hmbc-e1-integration-plan/v1', rq='E', runId=run_id, freezeMessage=freeze_message,
+    plan = dict(schemaVersion='hmbc-e1-integration-plan/v1', rq='E', runId=run_id, freezeMessage=freeze_message,
                 interfaceVersion='v1', interfaceFreezeSha256=FREEZE_SHA256, adapterMode='symbolic', profiles=PROFILES,
-                logDetailMode='complete-details', ports=dict(pbc=18545, dbc=28545), chainIds=dict(pbc='18545', dbc='28545'),
+                logDetailMode='complete-details', ports=dict(pbc=18545, dbc=28545 if review_mode == 'strict' else 18546),
+                chainIds=dict(pbc='18545', dbc='28545'),
                 deployerSignerRole='relay', deploymentSpeed='owner-default-slow', owners={k: review[k] for k in ('ledger', 'protocol')},
                 agent3Sources=_runtime_sources(), tools=tools, pythonVersion=platform.python_version(),
                 packagePins={n: importlib.metadata.version(n) for n in ('eth-account', 'eth-abi', 'eth-utils', 'jsonschema', 'pytest')},
@@ -67,6 +81,14 @@ def create_plan(*, run_id, freeze_message):
                              'E1 only; all E2/E3 schedules and RQ gates remain unexecuted.',
                              'RPC consistency and masked runtime templates are not provider integrity or consensus.',
                              'RELEASE_SENT is attempted send; delivery unknown, no ABE or power-loss claim.'])
+    moved = {n: resolved[n]['resolution'] for n in ('forge', 'anvil', 'cast', 'solc') if resolved[n]['resolution'] != 'frozen-path'}
+    if moved:
+        plan['hostToolOverride'] = dict(path='evaluation/host-tools.json', sha256=sha256(host_toolchain.OVERRIDE), resolutions=moved)
+    if review_mode == SOLO:
+        plan.update(reviewMode=SOLO, reviewDirective='A1-0059', reviewDecision='A1-0061', reviewDisclosure=SOLO_DISCLOSURE,
+                    castHashPolicy='checkpoint',
+                    hostDifferences=dict(python=dict(frozen=toolchain['hostPython'], actual=platform.python_version())))
+    return plan
 
 
 def _git_blob(commit, path):
@@ -87,7 +109,7 @@ def _owner_paths(owner):
 
 
 def verify_plan(plan):
-    reference = create_plan(run_id=plan['runId'], freeze_message=plan['freezeMessage'])
+    reference = create_plan(run_id=plan['runId'], freeze_message=plan['freezeMessage'], review_mode=plan.get('reviewMode', 'strict'))
     require(plan == reference, 'current exact plan inputs/configuration')
     require(sha256(ROOT/'interfaces/v1/FREEZE.json') == FREEZE_SHA256, 'immutable interface freeze')
     require(platform.python_version() == plan['pythonVersion'], 'Python version')
@@ -100,8 +122,69 @@ def verify_plan(plan):
             require(hashlib.sha256(_git_blob(owner['commit'], path)).hexdigest() == digest, 'owner inventory blob')
 
 
+def _headers(raw):
+    fields = {}
+    for line in raw.decode('utf-8').splitlines():
+        if not line.strip(): break
+        key, sep, value = line.partition(':')
+        require(bool(sep) and key not in fields, 'unique message header')
+        fields[key] = value.strip()
+    return fields
+
+
+def _verify_solo_ack_message(raw, *, agent, plan, plan_sha256):
+    """Solo-mode ACK: agent 1 as itself, agent 2's work only as a declared proxy."""
+    require(agent in ('agent-1', 'agent-2'), 'solo ACK owner')
+    fields = _headers(raw)
+    sender = fields.get('From', '')
+    if agent == 'agent-1':
+        identity = sender == 'agent-1' and re.fullmatch(r'A1-[0-9]{4}', fields.get('Message-ID', '')) is not None
+    else:
+        identity = (re.fullmatch(r'agent-2 \(proxy[^()\n]*\)', sender) is not None
+                    and re.fullmatch(r'S2-[0-9]{4}', fields.get('Message-ID', '')) is not None)
+    recipients = [x.strip() for x in fields.get('To', '').split(',')]
+    require(identity and fields.get('Type') == 'ACK' and fields.get('RQ') == 'E'
+            and fields.get('Interface-version') == 'v1' and fields.get('Responds-to') == plan['freezeMessage']
+            and fields.get('Accepted-plan-sha256') == plan_sha256
+            and any(x == 'all' or re.fullmatch(r'agent-3( \(proxy[^()]*\))?', x) for x in recipients), 'exact solo plan ACK')
+    return fields['Message-ID']
+
+
+def _verify_solo_freeze(raw, *, plan, plan_sha256):
+    fields = _headers(raw)
+    require(fields.get('Message-ID') == plan['freezeMessage'] and fields.get('Type') == 'FREEZE'
+            and re.fullmatch(r'agent-3 \(proxy[^()\n]*\)', fields.get('From', '')) is not None
+            and fields.get('RQ') == 'E' and fields.get('Interface-version') == 'v1'
+            and fields.get('Plan-sha256') == plan_sha256, 'exact solo FREEZE for this plan')
+    return fields['Message-ID']
+
+
+def _solo_is_ancestor(commit):
+    require(re.fullmatch(r'[0-9a-f]{40}', commit) is not None, 'exact Git commit')
+    return subprocess.run(['git', 'merge-base', '--is-ancestor', commit, 'HEAD'], cwd=ROOT, timeout=10).returncode == 0
+
+
+def _solo_acks(path, plan, plan_sha256):
+    require(path is not None, 'solo FREEZE and both exact ACK records are absent')
+    acks = strict_json(Path(path).read_bytes())
+    require(set(acks) == set(SOLO_PREFIXES), 'solo FREEZE plus both ACK records')
+    checked = {}
+    for key, pin in acks.items():
+        require(set(pin) == {'commit', 'path', 'sha256'} and pin['path'].startswith(SOLO_PREFIXES[key])
+                and '..' not in PurePosixPath(pin['path']).parts, 'solo record provenance')
+        raw = _git_blob(pin['commit'], pin['path'])
+        require(hashlib.sha256(raw).hexdigest() == pin['sha256'], 'solo record file hash')
+        require(_solo_is_ancestor(pin['commit']), 'solo record committed in the integrated history')
+        message = (_verify_solo_freeze(raw, plan=plan, plan_sha256=plan_sha256) if key == 'freeze'
+                   else _verify_solo_ack_message(raw, agent=key, plan=plan, plan_sha256=plan_sha256))
+        checked[key] = dict(pin, messageId=message)
+    return checked
+
+
 def verify_ack_message(raw, *, agent, plan, plan_sha256):
     """Parse exact project ACK metadata; a READY or willingness is insufficient."""
+    if plan.get('reviewMode') == SOLO:
+        return _verify_solo_ack_message(raw, agent=agent, plan=plan, plan_sha256=plan_sha256)
     require(agent in ('agent-1', 'agent-2'), 'ACK owner')
     fields = {}
     for line in raw.decode('utf-8').splitlines():
@@ -118,6 +201,8 @@ def verify_ack_message(raw, *, agent, plan, plan_sha256):
 
 
 def _acks(path, plan, plan_sha256):
+    if plan.get('reviewMode') == SOLO:
+        return _solo_acks(path, plan, plan_sha256)
     require(path is not None, 'both exact integration FREEZE ACKs are absent')
     acks = strict_json(Path(path).read_bytes())
     require(set(acks) == {'agent-1', 'agent-2'}, 'both integration ACK records')
@@ -172,12 +257,15 @@ def _available(ports):
             s.bind(('127.0.0.1', port))
 
 
-def _profile(plan, profile, output, record, *, recovery_point=None, expired_retry=False, duplicate_outcome=False, nonce_replay=False):
+def _profile(plan, profile, output, record, *, recovery_point=None, expired_retry=False, duplicate_outcome=False, nonce_replay=False,
+             subject_substitution=False):
     require(type(expired_retry) is bool and (not expired_retry or recovery_point is not None), 'expiry probe follows explicit recovery')
     require(type(duplicate_outcome) is bool and (not duplicate_outcome or (recovery_point is None and not expired_retry)),
             'duplicate comparison uses production adapter without other fault probes')
     require(type(nonce_replay) is bool and (not nonce_replay or
             (recovery_point is None and not expired_retry and not duplicate_outcome)), 'isolated production nonce replay')
+    require(type(subject_substitution) is bool and (not subject_substitution or
+            (recovery_point is None and not expired_retry and not duplicate_outcome and not nonce_replay)), 'isolated subject stress')
     output.mkdir(parents=True, exist_ok=False)
     snapshots = output/'snapshots'
     ledger_root = materialize_owner(plan['owners']['ledger'], snapshots/'ledger')
@@ -198,10 +286,11 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
         return (output/(label+'.txt')).read_bytes()
 
     services = []
+    rpcs = {}
+    hash_policy = 'checkpoint' if plan.get('castHashPolicy') == 'checkpoint' else 'per-call'
     try:
         _available(plan['ports'])
         with ExitStack() as stack:
-            rpcs = {}
             for name in ('pbc', 'dbc'):
                 port = plan['ports'][name]; url = f'http://127.0.0.1:{port}'
                 service = stack.enter_context(ServiceProcess([tools['anvil']['path'], '--host', '127.0.0.1', '--port', str(port),
@@ -210,7 +299,8 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
                 services.append(service); record['servicesStarted'].append(dict(profile=profile, chain=name, port=port, pid=service.pid))
                 (output.parent/'manifest.json').write_text(json.dumps(record,indent=2)+'\n')
                 rpc = RpcClient(url, cast=tools['cast']['path'], cast_sha256=tools['cast']['sha256'], cwd=ROOT,
-                                output=output/(name+'-rpc'), timeout=budget['rpc'],env=service_env)
+                                output=output/(name+'-rpc'), timeout=budget['rpc'],env=service_env, hash_policy=hash_policy)
+                rpc.checkpoint('run-start')
                 # Port availability was checked before this direct child. Only
                 # this owned child may be stopped; occupied ports are never cleaned.
                 def ready(rpc=rpc, name=name):
@@ -285,14 +375,82 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
                     execute_expired_retry(chains['pbc'], chains['dbc'], process, deployment=deployment,
                                           grant_id=grants[0], worker_snapshot=worker_snapshot, output=output/'expired-retry')
             require(bootstrap['wrongAdminCode'] == '16' and all(r['ok'] for r in results.values()), 'three E1 controls')
+            if subject_substitution:
+                # SL1: controls above ran on deployment D1. The stress uses a fresh
+                # second deployment D2 on the same chain pair, its own bootstrap,
+                # adapter process and private state, so the stress oracle sees an
+                # unused grant/count/nonce state. No clock move or crash hook.
+                stress = output/'subject-instance'; stress.mkdir()
+                for name in ('pbc', 'dbc'):
+                    for role in ('relay', 'H1-ca-admin', 'H2-ca-admin', 'H3-ca-admin', 'H4-ca-admin'):
+                        rpcs[name].call('anvil_setBalance', [_owned_signer(role).address.lower(), hex(1000*10**18)])
+                stress_run = run_id+'-subject'
+                command('owner-deploy-subject', [tools['bash']['path'], str(ledger/'tools/deploy_local.sh'), rpcs['pbc'].url, rpcs['dbc'].url,
+                                                 profile, plan['logDetailMode'], stress_run], ledger_root, budget['deploy'], env)
+                stress_path = ledger/'exports/deployments'/stress_run/'deployment.json'
+                stress_bytes = stress_path.read_bytes(); stress_dep = strict_json(stress_bytes)
+                frozen_validate('LedgerDeployment', stress_dep)
+                require(stress_dep['interfaceVersion'] == 'v1' and stress_dep['profile'] == profile and stress_dep['mutations'] == '0',
+                        'owner stress deployment profile')
+                require(all(not set(stress_dep['chains'][n]['contracts'].values()) & set(deployment['chains'][n]['contracts'].values())
+                            for n in ('pbc', 'dbc')), 'fresh distinct stress deployment')
+                (stress/'deployment.json').write_bytes(stress_bytes)
+                stress_chains = {}
+                for name in ('pbc', 'dbc'):
+                    manifest = stress_dep['chains'][name]
+                    require(manifest['rpcUrl'] == rpcs[name].url and manifest['chainId'] == plan['chainIds'][name], 'owner stress deployment endpoint')
+                    contracts = {}
+                    for role, address in manifest['contracts'].items():
+                        item = stress_dep['abi'][role]; path = ledger/item['abi']
+                        require(sha256(path) == plan['owners']['ledger']['entries']['ledger/'+item['abi']], 'reviewed ABI regeneration')
+                        contracts[role] = AbiContract(path, address, item['abiSha256'])
+                        code = rpcs[name].call('eth_getCode', [address, 'latest'])
+                        compiled = json.loads((ledger/'out'/(role+'.sol')/(role+'.json')).read_text())
+                        check_runtime_bytecode(code, compiled['deployedBytecode'])
+                    stress_chains[name] = PublicChain(rpcs[name], chain_id=manifest['chainId'], contracts=contracts, output=stress/(name+'-native'))
+                stress_bootstrap_path = ledger/'exports'/('bootstrap-'+stress_run+'.json')
+                command('owner-bootstrap-subject', [tools['bash']['path'], str(ledger/'tools/bootstrap_fixture.sh'), rpcs['pbc'].url,
+                                                    str(stress_path), str(stress_bootstrap_path)], ledger_root, budget['bootstrap'], env)
+                raw = stress_bootstrap_path.read_bytes(); (stress/'bootstrap.json').write_bytes(raw)
+                stress_boot = execute_bootstrap(stress_chains['pbc'], raw, deployment_bytes=stress_bytes)
+                (stress/'bootstrap-checked.json').write_text(json.dumps(stress_boot, indent=2)+'\n')
+                require(stress_boot['wrongAdminCode'] == '16', 'stress bootstrap issuer restriction')
+                stress_state = stress/'private-adapter-state'; stress_state.mkdir(mode=0o700)
+                stress_process = stack.enter_context(JsonLinesProcess(
+                    [tools['python']['path'], '-m', 'hmbc_protocol.adapter', '--state-dir', str(stress_state), '--deployment', str(stress_path)],
+                    cwd=protocol, output=stress/'adapter', timeout=budget['transport'], stop_grace=budget['stopGrace'], env=service_env))
+                record.setdefault('adapterProcesses', []).append(dict(profile=profile, label='adapter-subject', pid=stress_process.pid))
+                (output.parent/'manifest.json').write_text(json.dumps(record, indent=2)+'\n')
+                stress_sequence = 0
+                def stress_worker_snapshot():
+                    nonlocal stress_sequence
+                    label = f'subject-worker-export-{stress_sequence:02}'; stress_sequence += 1
+                    return command(label, [tools['python']['path'], '-m', 'hmbc_protocol.worker_log', '--state-dir', str(stress_state)],
+                                   protocol, budget['transport'], service_env)
+                stress_record = dict(record_fixture, owner=next(a['root'] for a in stress_dep['fixture']['authorities'] if a['id'] == 'H2'))
+                stress_result = execute_access(stress_chains['pbc'], stress_chains['dbc'], stress_process, deployment_bytes=stress_bytes,
+                                               user_label='alice', user=stress_boot['users']['alice'], record=stress_record, policy=policy,
+                                               expected_allow=True, worker_snapshot=stress_worker_snapshot, output=output/'subject-stress',
+                                               subject_substitution=stress_boot['users']['bob']['gid'],
+                                               subject_completion=profile != 'repaired-e')
+                require(stress_result['ok'] is True, 'subject stress result')
+                record['profiles'][profile]['subjectStress'] = dict(runId=stress_run, deployment=str(Path(profile)/'subject-instance/deployment.json'),
+                                                                    result=str(Path(profile)/'subject-stress/result.json'))
             record['profiles'][profile].update(status='CONTROL_PASS', results={k: str(Path(profile)/k/'result.json') for k in results},
                                               wrongAdmin='UNAUTHORIZED_CALLER; baseline issuer restriction, not a repair')
     finally:
         stable = _snapshot_stable(plan['owners']['ledger'], ledger_root) and _snapshot_stable(plan['owners']['protocol'], protocol_root)
         record['profiles'][profile]['sourcesStable'] = stable
+        cast_stable = True
+        for rpc in rpcs.values():
+            try: rpc.checkpoint('run-end')
+            except ValueError: cast_stable = False
+        record['profiles'][profile]['castHashPolicy'] = hash_policy
+        record['profiles'][profile]['castStable'] = cast_stable
         record['profiles'][profile]['servicesStopped'] = all(s.returncode is not None for s in services)
         (output.parent/'manifest.json').write_text(json.dumps(record,indent=2)+'\n')
         require(stable, 'peer snapshot source stability')
+        require(cast_stable, 'Cast checkpoint stability')
 
 
 def execute(plan_path, ack_path, output, *, profiles=None):
@@ -304,6 +462,8 @@ def execute(plan_path, ack_path, output, *, profiles=None):
     try:
         raw = Path(plan_path).read_bytes(); plan = json.loads(raw)
         record['planSha256'] = hashlib.sha256(raw).hexdigest(); verify_plan(plan)
+        if plan.get('reviewMode') == SOLO:
+            record.update(reviewMode=SOLO, reviewDisclosure=SOLO_DISCLOSURE)
         record['acks'] = _acks(ack_path, plan, record['planSha256'])
         selected = plan['profiles'] if profiles is None else profiles
         require(selected and all(p in plan['profiles'] for p in selected) and len(selected) == len(set(selected)), 'E1 selected profiles')

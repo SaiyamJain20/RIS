@@ -365,3 +365,49 @@ review under explicit no-extra-agent rule is weaker than independent. Scheduled
 exclusive guard + separate coordinator held before fetch through publication;
 finally cleanup/publication recorded externally and in automation memory.
 Preexisting untracked scheduled-runs preserved unstaged; exact owned agent-3 only.
+
+
+## D47 — Paper crash rows relabelled SPEC_GAP next to the frozen BLOCKED label (solo phase), 2026-10-09 IST
+
+DECIDED by agent 1 under the human solo directive (A1-0059). The ruling is A1-0061 G-4 / D-S2, which amends A1-0060. Recorded by agent 3 (proxy). It is **solo, correlated self-review**: the original agents 2 and 3 can overturn it on return.
+
+**Scope:** the four rows E03-crash-after-intent and E03-crash-after-send, each in paper-strict and paper-minimal.
+
+**Ruling:**
+- Report the paper property as **SPEC_GAP (ambiguity)**, with outcome **UNPROVED**.
+- Every report table shows the **pre-registered frozen label BLOCKED** next to the decided label, citing D47.
+
+**Reasons:**
+- The frozen qualification predates D35/A2-0012: paper grants and releases now run in production.
+- The mechanics ran live (A3-0036, A3-0038).
+- HMBC is silent on worker durability, retries and crash recovery (S2-0002).
+
+**What this is not:**
+- not a pass;
+- not a changed outcome;
+- never a finding.
+
+No frozen bytes change. Repaired-e crash rows stay REPAIR_SUPPORTED for bounded logical mechanics only. Evidence: S2-0002, S3-0002 G-4, A1-0061.
+
+## D48 — Solo-phase evaluator portability (SL0), 2026-10-09 IST
+
+DECIDED by agent 1 (A1-0061, D-1..D-5), implemented by agent 3 (proxy) in SL0 (S3-0004). Solo, correlated.
+
+- **Solo review mode** (`reviewMode: solo-correlated`):
+  - FREEZE IDs are S3-NNNN; ACKs are A1-NNNN (agent 1) plus S2-NNNN from a declared `agent-2 (proxy…)`.
+  - The committed FREEZE carries `Plan-sha256`.
+  - Every FREEZE and ACK blob is read from a commit that is an ancestor of HEAD.
+  - Plans and results carry the correlated-review disclosure.
+  - Strict A2/A3 verification is unchanged. Nobody writes A2/A3 messages.
+- **Host tool override:** `evaluation/host-tools.json` maps frozen tools to local paths.
+  - Each binary must hash to the frozen `evaluation/toolchain.json` value, which stays byte-identical to `interfaces/v1/toolchain.json`.
+  - A frozen path that exists never falls through to the override.
+  - The only exception is a declared local ProVerif 2.05 build: binary bc2cd5ed.. against the frozen c1087205..; source 4871f53c.. equal.
+- **Ports:** solo plans use PBC 18545 / DBC 18546. Chain IDs stay 18545/28545. Strict plans keep 18545/28545.
+- **Cast hash policy:**
+  - Solo plans use `castHashPolicy: checkpoint`: Cast is hashed at construction, at each read group and submit, and at run start and end.
+  - A mismatch refuses that call and every later one.
+  - Strict per-call hashing is unchanged.
+- **Python:** 3.13.5 on this host is recorded against the frozen 3.13.13 as `hostDifferences`.
+
+Evidence: `evaluation/evidence/e2/sl0-portability-20261009/README.md`.

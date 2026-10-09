@@ -13,9 +13,13 @@ ROOT = Path(__file__).resolve().parents[2]
 def run_model(filename):
     model = ROOT / 'evaluation/models/e' / filename
     assert model.is_file(), f'C-E2 model not implemented: {filename}'
-    pin = json.loads((ROOT / 'evaluation/toolchain.json').read_text())['proverif']
+    # Frozen ProVerif hash, or the single declared local build of the frozen
+    # version/source (A1-0061 D-2); the resolver refuses anything else.
+    from evaluation.host_toolchain import resolve
+    pin = resolve('proverif')
     binary = Path(pin['path'])
-    assert hashlib.sha256(binary.read_bytes()).hexdigest() == pin['binarySha256']
+    assert hashlib.sha256(binary.read_bytes()).hexdigest() == pin['sha256']
+    assert pin['sha256'] == pin['frozenSha256'] or pin['resolution'] == 'declared-local-build'
     result = subprocess.run([str(binary), str(model)], cwd=ROOT, capture_output=True,
                             text=True, timeout=30)
     assert result.returncode == 0, result.stdout + result.stderr

@@ -27,6 +27,7 @@ def _sources():
     paths += list((ROOT/'interfaces/v1').rglob('*'))+list((ROOT/'interfaces/proposals/v1').rglob('*.json'))
     paths += [ROOT/p for p in ('AGENTS.md', 'SPEC.md', 'PLAN.md', 'uv.lock', 'pyproject.toml', 'evaluation/toolchain.json')]
     paths += [CONTRACT, ACCEPTANCE, e1.PIN_REVIEW]
+    paths += [p for p in [ROOT/'evaluation/host-tools.json'] if p.is_file()]
     return {str(p.relative_to(ROOT)): sha256(p) for p in sorted(set(paths)) if p.is_file()}
 
 
@@ -46,12 +47,14 @@ def _owners(contract):
     return result
 
 
-def create_plan(*, run_id, freeze_message, expired_retry=False, duplicate_outcome=False, nonce_replay=False):
+def create_plan(*, run_id, freeze_message, expired_retry=False, duplicate_outcome=False, nonce_replay=False,
+                subject_substitution=False, review_mode='strict'):
     # Retain the previously reviewed environment, mining/ports, tool and custody
     # recipe; any new exact runtime bytes require new full execution-plan ACKs.
-    require(all(type(flag) is bool for flag in (expired_retry, duplicate_outcome, nonce_replay))
-            and sum((expired_retry, duplicate_outcome, nonce_replay)) <= 1, 'explicit nonoverlapping probe selection')
-    plan = e1.create_plan(run_id=run_id, freeze_message=freeze_message)
+    flags = (expired_retry, duplicate_outcome, nonce_replay, subject_substitution)
+    require(all(type(flag) is bool for flag in flags) and sum(flags) <= 1, 'explicit nonoverlapping probe selection')
+    require(not subject_substitution or review_mode == e1.SOLO, 'SL1 subject plans are solo-phase plans (A1-0061)')
+    plan = e1.create_plan(run_id=run_id, freeze_message=freeze_message, review_mode=review_mode)
     contract = json.loads(CONTRACT.read_text())
     plan.update(schemaVersion='hmbc-e2-recovery-plan/v1', executionScope='six fresh logical crash/recovery cases; not full RQ matrix',
                 owners=_owners(contract), agent3Sources=_sources(), startContractSha256=sha256(CONTRACT),
@@ -131,13 +134,50 @@ def create_plan(*, run_id, freeze_message, expired_retry=False, duplicate_outcom
                                   '44 untouched schedules;45 catalog comparisons still need completion, plus mutants/windows/report/gate.')
         plan['limitations'].append('Grouped RPC consistency cannot detect a transient reorg restored between boundary checks; safe-ledger assumption unchanged.')
         plan.pop('workerExpected')
+    if subject_substitution:
+        plan.update(schemaVersion='hmbc-e2-subject-substitution-plan/v1', subjectSubstitution=True,
+                    executionScope='three fresh E01 subject-substitution comparisons (SL1); not full RQ matrix',
+                    matrix=[dict(profile=profile, point=None) for profile in e1.PROFILES],
+                    caseIds=['E01-subject-substitution-'+profile for profile in e1.PROFILES],
+                    controls=['wrong-admin-before-H2', 'registered-Alice-allow-release-one-outcome', 'registered-Bob-policy-deny',
+                              'fresh-second-deployment-subject-stress'],
+                    restart='none; production adapter only, no crash hook',
+                    freshness=('fresh chain pair per matrix row; controls on deployment D1; stress on a fresh second deployment D2 '
+                               'on the same chain pair with its own bootstrap, adapter process and 0700 state; relay/CA-admin balances '
+                               'reset to 1000 ETH before D2'),
+                    observation=('Alice signs and logs a real PBC request on D2; the relay changes ONLY gid to registered Bob in the '
+                                 'paper ForwardedRequest (policyEnf) or the repaired request (consumeDecision) and keeps Alice\'s '
+                                 'verified credential records and, in repaired-e, her original ALLOW certificate'),
+                    subjectProbe=dict(
+                        target='registered Bob gid from the D2 bootstrap (no doctor role; policy-denied in his own right)',
+                        preRelease=('whole block-anchored grant/request/two-nonce/access-count/decoded two-chain histories and idle '
+                                    'worker before/after one mined ACSC call; paper: one GrantIssued+AccessLog for Bob, zero native '
+                                    'recipient, TTL policyEnf+30s, original Alice request still FORWARDED; repaired-e: mined status0 '
+                                    'Rejected(2) WRONG_SUBJECT, no logs, whole state unchanged'),
+                        completion=('paper only: registered PBC recipient keys read for both subjects; one production release on '
+                                    'the substituted grant strictly before its expiry; response bound to Bob registered key; same '
+                                    'response completed with keyref:user:bob (decryptable) and keyref:user:alice (WRONG_SUBJECT); '
+                                    'exactly one worker intent/send/cache delta; completions change nothing; no outcome reported'),
+                        snapshots=('native views/logs per chain at one explicit block inside each read group; worker exports at '
+                                   'each stage; Cast hash checkpoint per read group/submit (A1-0061 D-5b)')),
+                    classification=('paper-strict/paper-minimal: SPEC_GAP (CONDITIONAL) under compromised-relay stress outside the '
+                                    'paper secure-isolation assumption (A01); repaired-e: REPAIR_SUPPORTED, WRONG_SUBJECT(2); '
+                                    'tested reconstruction results, never an HMBC exploit or authors-implementation claim'),
+                    timing='each stage strictly before the original request/grant expiry; unexpected expiry fails visibly; no TTL change',
+                    limitations=['Solo-phase plan: both exact solo ACKs (A1 and S2) and the committed S3 FREEZE precede services.',
+                                 'Three of the 44 remaining catalog comparisons; no complete matrix, live mutants/window/report/gate.',
+                                 'Delivery unknown; symbolic adapter; safe-ledger/trusted-worker/one trusted witness.',
+                                 'Grouped RPC consistency cannot detect a transient reorg restored between boundary checks.'])
+        plan.pop('workerExpected')
     return plan
 
 
 def verify_plan(plan):
     require(plan == create_plan(run_id=plan['runId'], freeze_message=plan['freezeMessage'],
                                 expired_retry=plan.get('expiredRetry', False), duplicate_outcome=plan.get('duplicateOutcome', False),
-                                nonce_replay=plan.get('nonceReplay', False)), 'exact current E2 plan/source/config')
+                                nonce_replay=plan.get('nonceReplay', False), subject_substitution=plan.get('subjectSubstitution', False),
+                                review_mode=plan.get('reviewMode', 'strict')),
+            'exact current E2 plan/source/config')
     require(sha256(ROOT/'interfaces/v1/FREEZE.json') == FREEZE_SHA256, 'immutable v1 freeze')
     require(platform.python_version() == plan['pythonVersion'], 'pinned Python version')
     for tool in plan['tools'].values():
@@ -163,6 +203,8 @@ def execute(plan_path, ack_path, output):
     try:
         raw = Path(plan_path).read_bytes(); plan = json.loads(raw)
         record['planSha256'] = hashlib.sha256(raw).hexdigest(); verify_plan(plan)
+        if plan.get('reviewMode') == e1.SOLO:
+            record.update(reviewMode=e1.SOLO, reviewDisclosure=e1.SOLO_DISCLOSURE)
         record['acks'] = e1._acks(ack_path, plan, record['planSha256'])
         if plan.get('duplicateOutcome', False):
             record.update(executionMode='two-chain-e2-duplicate-outcome-slice',
@@ -170,10 +212,14 @@ def execute(plan_path, ack_path, output):
         if plan.get('nonceReplay', False):
             record.update(executionMode='two-chain-e2-nonce-replay-slice',
                           limitation='Three identical accepted request replays only; no complete catalog or RQ gate.')
+        if plan.get('subjectSubstitution', False):
+            record.update(executionMode='two-chain-e2-subject-substitution-slice',
+                          limitation='Three subject-substitution comparisons only; no complete catalog or RQ gate.')
         authorized = True; record['status'] = 'RUNNING'
         for item in plan['matrix']:
             verify_plan(plan)
             probe_name = 'nonce-replay' if plan.get('nonceReplay', False) else 'duplicate-outcome'
+            if plan.get('subjectSubstitution', False): probe_name = 'subject-substitution'
             case = item['profile']+'-'+(item['point'] or probe_name); destination = output/case; destination.mkdir()
             child = dict(profiles={}, servicesStarted=[], adapterProcesses=[])
             case_records[case] = child
@@ -182,9 +228,25 @@ def execute(plan_path, ack_path, output):
             selected = copy.deepcopy(plan); selected['runId'] = plan['runId']+'-'+(item['point'] or probe_name)
             probe_options = {'duplicate_outcome': True} if plan.get('duplicateOutcome', False) else {}
             if plan.get('nonceReplay', False): probe_options = {'nonce_replay': True}
+            if plan.get('subjectSubstitution', False): probe_options = {'subject_substitution': True}
             e1._profile(selected, item['profile'], destination/item['profile'], child, recovery_point=item['point'],
                         expired_retry=plan.get('expiredRetry', False), **probe_options)
-            if plan.get('duplicateOutcome', False) or plan.get('nonceReplay', False):
+            if plan.get('subjectSubstitution', False):
+                stress = destination/item['profile']/'subject-stress'
+                pre = json.loads((stress/'subject-substitution/result.json').read_text())
+                repaired = item['profile'] == 'repaired-e'
+                require(pre['ok'] is True and pre['delivery'] == 'unknown' and pre['workerUnchanged'] is True
+                        and pre['classification'] == ('REPAIR_SUPPORTED' if repaired else 'SPEC_GAP')
+                        and pre['error'] == ('WRONG_SUBJECT' if repaired else None), 'complete checked subject pre-release result')
+                completion = stress/'subject-completion/result.json'
+                if repaired:
+                    require(not completion.exists(), 'repaired subject stress has no release')
+                else:
+                    done = json.loads(completion.read_text())
+                    require(done['ok'] is True and done['classification'] == 'SPEC_GAP' and done['delivery'] == 'unknown'
+                            and done['bobDecryptable'] is True and done['aliceError'] == 'WRONG_SUBJECT'
+                            and done['outcomeTested'] is False, 'complete checked paper subject completion')
+            elif plan.get('duplicateOutcome', False) or plan.get('nonceReplay', False):
                 proof = json.loads((destination/item['profile']/('alice/'+probe_name+'/result.json')).read_text())
                 require(proof['ok'] is True and proof['error'] == 'REPLAY' and proof['delivery'] == 'unknown'
                         and proof['workerUnchanged'] is True and proof['nativeUnchanged'] is True
@@ -197,10 +259,14 @@ def execute(plan_path, ack_path, output):
                 require(expiry['ok'] is True and expiry['error'] == 'EXPIRED' and expiry['delivery'] == 'unknown'
                         and expiry['workerUnchanged'] is True and expiry['nativeUnchanged'] is True, 'complete expired retry refusal')
                 record['cases'][case]['expiredRetry'] = 'EXPIRED_NO_CHANGE_PASS'
+            if plan.get('subjectSubstitution', False):
+                record['cases'][case]['status'] = 'SUBJECT_SUBSTITUTION_CONTROL_PASS'
+                continue
             record['cases'][case]['status'] = ('NONCE_REPLAY_CONTROL_PASS' if plan.get('nonceReplay', False)
                                              else ('DUPLICATE_OUTCOME_CONTROL_PASS' if plan.get('duplicateOutcome', False) else 'RECOVERY_CONTROL_PASS'))
         verify_plan(plan); record.update(status='E2_DUPLICATE_OUTCOME_SLICE_PASS' if plan.get('duplicateOutcome', False) else ('E2_RECOVERY_EXPIRY_SLICE_PASS' if plan.get('expiredRetry', False) else 'E2_RECOVERY_SLICE_PASS'), sourceStable=True)
         if plan.get('nonceReplay', False): record['status'] = 'E2_NONCE_REPLAY_SLICE_PASS'
+        if plan.get('subjectSubstitution', False): record['status'] = 'E2_SUBJECT_SUBSTITUTION_SLICE_PASS'
     except BaseException as error:
         record['failure'] = dict(type=type(error).__name__, message=str(error))
         record['status'] = 'FAILED' if authorized else 'BLOCKED'
@@ -218,7 +284,8 @@ def main():
     p.add_argument('--plan', type=Path, required=True); p.add_argument('--acks', type=Path); p.add_argument('--output', type=Path, required=True)
     args = p.parse_args(); result = execute(args.plan, args.acks, args.output)
     print(json.dumps({k: result[k] for k in ('status', 'failure', 'sourceStable', 'servicesStarted')}, indent=2))
-    return 0 if result['status'] in ('E2_RECOVERY_SLICE_PASS', 'E2_RECOVERY_EXPIRY_SLICE_PASS', 'E2_DUPLICATE_OUTCOME_SLICE_PASS', 'E2_NONCE_REPLAY_SLICE_PASS') else 2
+    return 0 if result['status'] in ('E2_RECOVERY_SLICE_PASS', 'E2_RECOVERY_EXPIRY_SLICE_PASS', 'E2_DUPLICATE_OUTCOME_SLICE_PASS',
+                                     'E2_NONCE_REPLAY_SLICE_PASS', 'E2_SUBJECT_SUBSTITUTION_SLICE_PASS') else 2
 
 
 if __name__ == '__main__': raise SystemExit(main())
