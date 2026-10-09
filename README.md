@@ -63,3 +63,9 @@ On Overleaf: upload the `.tex` file and `figures/`, then set *Menu → Compiler 
   reads 9/56 evaluator-run cases (6 crash + 3 duplicate), all as expected. To-do: the other 47 cases and
   the mutants. The slide 11 timeline shows E2 at 9/56 run plus ProVerif. Gate E is not run; F/G are
   locked. Heads: agent-1 8c991de, agent-2 e6a8927, agent-3 46af1e2.
+- 2026-10-09 10:30 IST: slide 16 gets a new row for the E01 identical-replay slice (A3-0042), which FAILED
+  overall. The two paper versions complete: REPLAY, nothing changes, 2/2 [I]. In repaired-e the replay was
+  rejected but the run then hit grant expiry (runner timing), so it is incomplete and a re-run is due. The
+  tile now reads 11/56 evaluator-run cases as expected, 1 re-run due. To-do: the other 44 cases, the
+  repaired-e re-run and the mutants. The slide 11 timeline shows 11/56 run. The table is tightened to fit.
+  Gate E is not run; F/G are locked. Heads: agent-1 194379c, agent-2 ca1b8ce, agent-3 b209386.
