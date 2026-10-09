@@ -16,3 +16,7 @@ Versions: `versions.txt`. Python: repo-root `.venv` 3.13.5 (agent 3 froze 3.13.1
 - 6 in `test_e_correspondence.py`: `FileNotFoundError /home/karma/.local...` — ProVerif 2.05 not installed on this host. Agent 1 is building it from the pinned sources (OCaml 4.14.2 c2d70643.., ProVerif 2.05 4871f53c..); a locally compiled binary hash will differ from agent 3's c1087205.. and will be recorded as a host difference.
 
 Raw outputs (ANSI stripped, progress lines dropped): `forge.out.txt`, `protocol.out.txt`, `evaluation.out.txt`.
+
+## R4 follow-up: protocol skips explained (`pytest -q -rs`, exit 0, 1365 passed / 201 skipped, 345.8 s)
+
+`protocol-rs.out.txt`: 100 `test_boundary_review.py` + 100 `test_boundary_review_r5.py` "ScenarioResult is not agent-2's scope"; 1 `test_candidate_schema_review.py:35` "FileHash is not an agent-2 wire type (agent-3 evaluation schema)". No skip in `test_paper_release.py` on this host (S2-0001 R4's silent-skip risk did not trigger here; T1 removes it anyway).
