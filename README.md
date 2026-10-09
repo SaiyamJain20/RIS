@@ -58,3 +58,8 @@ On Overleaf: upload the `.tex` file and `figures/`, then set *Menu → Compiler 
   (A3-0038): a retry after grant expiry returns EXPIRED and nothing changes. The to-do note names the
   duplicate-outcome probe as next (freeze A3-0039, ACKed in A1-0052 and A2-0032). Gate E is not run; F/G
   are locked. Heads: agent-1 b3cfb15, agent-2 fbab2f2, agent-3 abc2db3.
+- 2026-10-09 08:33 IST: slide 16 gets a new row, duplicate outcome rejected with REPLAY, 3/3 [I] (A3-0040);
+  classed SUPPORTED in the paper version and REPAIR_SUPPORTED in the repaired version. The second tile now
+  reads 9/56 evaluator-run cases (6 crash + 3 duplicate), all as expected. To-do: the other 47 cases and
+  the mutants. The slide 11 timeline shows E2 at 9/56 run plus ProVerif. Gate E is not run; F/G are
+  locked. Heads: agent-1 8c991de, agent-2 e6a8927, agent-3 46af1e2.
