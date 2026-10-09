@@ -1,0 +1,138 @@
+{
+  "rq": "E",
+  "executionMode": "two-chain-e2-recovery-slice",
+  "adapterMode": "symbolic",
+  "status": "E2_RECOVERY_SLICE_PASS",
+  "startedAt": "2026-10-09T00:14:52.415389+00:00",
+  "endedAt": "2026-10-09T00:27:50.518099+00:00",
+  "cases": {
+    "paper-strict-after_intent": {
+      "status": "RECOVERY_CONTROL_PASS",
+      "manifest": "paper-strict-after_intent/manifest.json"
+    },
+    "paper-strict-after_send": {
+      "status": "RECOVERY_CONTROL_PASS",
+      "manifest": "paper-strict-after_send/manifest.json"
+    },
+    "paper-minimal-after_intent": {
+      "status": "RECOVERY_CONTROL_PASS",
+      "manifest": "paper-minimal-after_intent/manifest.json"
+    },
+    "paper-minimal-after_send": {
+      "status": "RECOVERY_CONTROL_PASS",
+      "manifest": "paper-minimal-after_send/manifest.json"
+    },
+    "repaired-e-after_intent": {
+      "status": "RECOVERY_CONTROL_PASS",
+      "manifest": "repaired-e-after_intent/manifest.json"
+    },
+    "repaired-e-after_send": {
+      "status": "RECOVERY_CONTROL_PASS",
+      "manifest": "repaired-e-after_send/manifest.json"
+    }
+  },
+  "servicesStarted": [
+    {
+      "case": "paper-strict-after_intent",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 507738
+    },
+    {
+      "case": "paper-strict-after_intent",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 28545,
+      "pid": 507861
+    },
+    {
+      "case": "paper-strict-after_send",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 518947
+    },
+    {
+      "case": "paper-strict-after_send",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 28545,
+      "pid": 519075
+    },
+    {
+      "case": "paper-minimal-after_intent",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 530019
+    },
+    {
+      "case": "paper-minimal-after_intent",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 28545,
+      "pid": 530146
+    },
+    {
+      "case": "paper-minimal-after_send",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 541137
+    },
+    {
+      "case": "paper-minimal-after_send",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 28545,
+      "pid": 541259
+    },
+    {
+      "case": "repaired-e-after_intent",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 552180
+    },
+    {
+      "case": "repaired-e-after_intent",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 28545,
+      "pid": 552306
+    },
+    {
+      "case": "repaired-e-after_send",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 565795
+    },
+    {
+      "case": "repaired-e-after_send",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 28545,
+      "pid": 565917
+    }
+  ],
+  "acks": {
+    "agent-1": {
+      "commit": "83c084c13f182525c5ca9055f736a2a92a92abee",
+      "path": "communication/agent-1/outbox/0048-ack-e2-recovery-freeze.md",
+      "sha256": "d678342bdc2dec0661ec9ed2ff5132dfd7efd99231aac10c15147682bd03265d",
+      "messageId": "A1-0048"
+    },
+    "agent-2": {
+      "commit": "902a95be319757625e8a1874e94db0e753a38f44",
+      "path": "communication/agent-2/outbox/0028-ack-e2-recovery-slice-plan.md",
+      "sha256": "7d2e9136e7dc0a1f13fdeb23f55bd78d5d7833a928f0fde502b6f01189ee2bd8",
+      "messageId": "A2-0028"
+    }
+  },
+  "failure": null,
+  "sourceStable": true,
+  "limitation": "Six logical process recovery comparisons only; no complete catalog or RQ gate.",
+  "planSha256": "4bceffc347be2267348d8b781a4c30b5db00567712f1b0d14a48aae0bee5929a"
+}

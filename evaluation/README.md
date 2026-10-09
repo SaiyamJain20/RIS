@@ -1,3 +1,37 @@
+## Current checkpoint — actual C-E2 logical recovery slice, 2026-10-09 UTC
+
+Six of six exact A3-0035 approved pre-expiry comparisons PASS; actual CLI0 /
+E2_RECOVERY_SLICE_PASS /778.4734255s. A1-0048/83c084c/d678342b.. and
+A2-0028/902a95b/7d2e9136.. exact plan4bceffc3.. ACKs verified before services.
+111 bracket inputs stable;78 plan inputs/303 owner blobs reverified;12 snapshots/
+1818 owner-file comparisons stable;15 frozen copies exact. All24 owned processes
+ended/absent:18 normal exits0,6 natural crash exits86;3709 captured commands0.
+A3-0035 RELEASED, no active services or lease. Evidence:
+evaluation/evidence/e2/recovery-live-20261009/README.md.
+
+Measured native permission/cache/intent/send-attempt/restart/original-expiry/
+registered-recipient/one-outcome joins and allow/deny/wrong-admin controls across
+strict/minimal/repaired profiles. Deliveryunknown; paper crash classification
+BLOCKED/unproved, repaired-e supports bounded logical checks only. Author review
+found separate catalog expired-retry trials NOT_RUN; six catalog cases partially
+exercised, other50 untouched. No duplicate-outcome/full-matrix/mutant/window/report/
+RQ gate claim. GateE NOT_RUN/F-Glocked; old frozen bytes/E1/formal evidence preserved.
+141 newest communication/no divergence, post-run fetch delta empty; read A1through
+0048/A2through0028. No source/tool/dependency/key/custody change; historical472 unit
+suite not rerun. Raw/private/snapshots external, selected public/redacted evidence
+published only on reviewed exact owned paths; publication SHA/remote and finally
+scheduled guard505315/coordinator505507 cleanup in automation memory/external run
+/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T001322Z.
+
+Next: explicit expired-retry refusal/no-event checks and remaining50 scenarios,
+mutants/revocation windows under a new complete source/tool/config plan/both ACKs;
+report/all3 same-source ACKs/gate E before F. No human action needed. Author
+self-review only under human ban on extra agents/worktrees; rulings/costs in evidence
+README. No peer source/mailbox/archive/frozen/main/destructive Git change.
+
+
+## Prior checkpoint records (historical)
+
 **Current C-E2 checkpoint (2026-10-09 IST):** A1-0047/A2-0027 exact scoped startup-contract ACKs verified; supplement accepted in [acceptance evidence](evidence/e2/crash-transport-20261009/start-contract-acceptance.json), proposal bytes unchanged. Crash-process observation transport has synthetic RED/GREEN controls;435 root tests pass on100 stable inputs/15 immutable copies. Full E2 runner/configuration and separate execution FREEZE/both plan ACKs still required before services. All56 integrated schedules/gate E NOT_RUN; F/G locked. [Evidence and limits](evidence/e2/crash-transport-20261009/README.md). Earlier checkpoint prose below is historical.
 
 **Current C-E2 checkpoint (2026-10-09 IST):** actual scoped ProVerif user/witness tuple agreement, reachable legitimate grants and unreachable policy-denied grants, plus a destination-omitting mutant counterexample, are saved. Seven formal/sensitivity checks and421 root tests pass. This is a fixed-name non-injective honest-key/witness abstraction; no replay, recovery or implementation proof. All56 real Agent3 fault schedules/gate E remain NOT_RUN; F/G locked. [Evidence](evidence/e2/formal-and-hook-review-20261009/README.md). A3-0032 exact TEST-ONLY startup supplement awaits both scoped ACKs; complete E2 runner/configuration FREEZE and both exact plan ACKs precede services. Earlier status below is historical.

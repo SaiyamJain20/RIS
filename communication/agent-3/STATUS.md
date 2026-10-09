@@ -1,11 +1,12 @@
-# Agent3 status — WAITING exact E2 recovery-plan ACKs
+# Agent3 status — C-E2 recovery slice measured; full E remains open
 
-- Active E/RQ1; E0closed/frozen; C-E1 historical9/9 COMPLETE; E2/E3 permitted; gateE NOT_RUN, F/G locked.
-- Public six-case recovery runner implemented:3profiles x2points, fresh two-chain/state per case; Alice recovery/outcome, Bob policy9 deny and wrong-admin baseline controls. Native/cache/event/attempt/expiry/registered-recipient/response joins; same-state production restart; deliveryunknown.
-- Synthetic RED21 recovery, RED6 composition, RED10 gated plan ->GREEN44/48/31 related checks. Author review caught paper crash SUPPORTED attribution: RED4 ->GREEN27 corrected; final root472pass/65.50s/exit0/106 stable inputs;15 frozen copies exact. No actual E2 service or recovery run.
-- A3-0035 REQUESTS complete execution plan for this recovery slice SHA4bceffc347be2267348d8b781a4c30b5db00567712f1b0d14a48aae0bee5929a,78 own inputs/303 selected owners/tool/config/schema/fixture hashes. BOTH exact full plan ACKs pending; A1-0047/A2-0027 supplement ACKs do not substitute. CLI2/BLOCKED/no services/snapshots verified on final bytes.
-- Selected ledger933d2a7/c7b7dd51../195 and protocol0716a8e/d16ddad8../108/hookf0ab2400.. unchanged; frozen v1/lock/custody unchanged. E1 prior sources/evidence reproducible at original owned commits, not by old ACKs on changed current runtime.
-- Peer scan138 newest files/no divergence; read A1through0047/A2through0027. Owner rehearsals/windows/mutant masking remain owner evidence. Sent A3-0035 only delivered after verified normal owned-path push.
-- Services/lease:none; all56 actual catalog schedules NOT_RUN;4paper crash classifications BLOCKED/unproved, even if chosen mechanics later pass. Complete remaining50/mutants/window/report/all3same-manifest ACKs still precede gateE/F.
-- Evidence evaluation/evidence/e2/recovery-runner-20261009/README.md; commands/exits/hash/versions/source/failure/initial-vs-final plan/case map retained. No human action required while owners review exact plan.
-- Scheduled guard487463 plus coordinator487469 held through publication/checks; finally cleanup external/memory. Preexisting untracked scheduled-run files preserved unstaged. Author self-review weaker than independent; no extra agent/worktree/peer/archive/frozen/dependency/custody/main/history change.
+- Active E/RQ1; E0 frozen/C-E1 historical9/9 complete; E2/E3 permitted; gateE NOT_RUN, F/G locked.
+- Actual exact A3-0035 recovery slice CLI0/E2_RECOVERY_SLICE_PASS: six fresh profile/point comparisons in778.473s; every row Alice recovery/outcome, Bob policy9 denial and wrong-admin16 baseline control.
+- Exact A1-0048/83c084c and A2-0028/902a95b ACKs of plan4bceffc3.. verified, scope exclusions retained. A3-0035 RELEASED; no active services/lease.
+- 111 bracket inputs stable;78 plan inputs/303 immutable owner blobs verified;12 snapshots/1818 owner-file comparisons stable;15 frozen copies exact;24 owned service processes ended/absent (18exit0,6exit86);3709 captured commands0.
+- Native/cache/intent/attempt/same-state restart/original-expiry/registered-recipient/one-outcome joins passed. Deliveryunknown;4paper crash classifications BLOCKED/unproved; repaired-e bounded mechanical checks supported.
+- Separate expired-retry no-event trials NOT_RUN: six catalog cases only partially exercised, other50 untouched. Full matrix/mutants/window/report/all3same-source ACKs/gateE remain required.
+- Peer scan141 newest files/no divergence, post-run delta empty; read A1through0048/A2through0028; A3-0036 result/release delivered only after verified owned-path push.
+- Evidence evaluation/evidence/e2/recovery-live-20261009/README.md; raw/private/snapshots external run20261009T001322Z. No runtime/tool/interface/custody changes; historical472 unit tests unchanged, no redundant rerun.
+- Next permitted: owned expired-retry/full-matrix runner and new exact source/tool/config FREEZE/both ACKs before services. No human action required. Author self-review weaker than independent; no extra agent/worktree.
+- Scheduled guard505315/coordinator505507; finally release and publication SHA/remote in external run/memory. Preexisting untracked scheduled-run files remain unstaged; no peer/archive/frozen/main/history edits.
