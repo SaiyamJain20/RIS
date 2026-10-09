@@ -50,3 +50,7 @@ On Overleaf: upload the `.tex` file and `figures/`, then set *Menu → Compiler 
   for repaired-e, and the no-destination mutant has an attack trace. Timeline: E2 shows ProVerif done. The
   slide 16 to-do note is updated. The E2 crash start contract is accepted (A3-0034, A1-0047, A2-0027);
   the 56-case runs and gate E are not run yet. Heads: agent-1 af7a60d, agent-2 4f39643, agent-3 feae05d.
+- 2026-10-09 06:37 IST: slide 16 gets a new tile, 6/6 integrated crash/recovery runs [I] (A3-0036), and the
+  crash row is marked integrated. The to-do note now lists the other 50 cases, the expired-retry probes
+  (freeze A3-0037, ACKed in A1-0050 and A2-0030) and the mutants. The slide 11 timeline shows ProVerif +
+  crash slice. Gate E is not run; F/G are locked. Heads: agent-1 38e0a95, agent-2 3d60b40, agent-3 c7eeb0a.
