@@ -107,7 +107,7 @@ class _Adapter:
 
 
 def execute_access(pbc, dbc, adapter, *, deployment_bytes, user_label, user, record, policy,
-                   expected_allow, worker_snapshot, output, recovery_point=None, duplicate_outcome=False):
+                   expected_allow, worker_snapshot, output, recovery_point=None, duplicate_outcome=False, nonce_replay=False):
     """Run Alice ALLOW or registered Bob POLICY_DENIED against checked evidence.
 
     `worker_snapshot` executes the pinned owner's read-only exporter and returns
@@ -121,6 +121,8 @@ def execute_access(pbc, dbc, adapter, *, deployment_bytes, user_label, user, rec
     try:
         require(recovery_point in (None, 'after_intent', 'after_send'), 'explicit recovery point')
         require(type(duplicate_outcome) is bool and (not duplicate_outcome or expected_allow is True), 'duplicate probe after allow only')
+        require(type(nonce_replay) is bool and (not nonce_replay or
+                (expected_allow is True and recovery_point is None and not duplicate_outcome)), 'isolated nonce replay after allow')
         if recovery_point is not None:
             result['scope'] = 'C-E2 logical crash/retry control; not an RQ gate'
         dep = strict_json(deployment_bytes); frozen_validate('LedgerDeployment', dep)
@@ -227,11 +229,13 @@ def execute_access(pbc, dbc, adapter, *, deployment_bytes, user_label, user, rec
                                        nonce_consumed=dbc.read('KSSC', 'nonceConsumed', request['gid'], request['nonce'])[0])
             require(decision['decision']['result'] == ('1' if expected_allow else '0'), 'expected witness decision')
             records = decision['credentialRecords']
-            native_dbc = dbc.submit('relay', 'ACSC', 'consumeDecision', request,
-                                    {k: decision[k] for k in ('decision', 'signatures')}, records)
+            grant_method = 'consumeDecision'
+            grant_arguments = (request, {k: decision[k] for k in ('decision', 'signatures')}, records)
         else:
             require(dbc.read('ACSC', 'evaluate', request['dataId'], records) == [expected_allow], 'expected native policy')
-            native_dbc = dbc.submit('relay', 'ACSC', 'policyEnf', dict(pbcRequestId=digest, gid=request['gid'], dataId=request['dataId'], action='1'), records)
+            grant_method = 'policyEnf'
+            grant_arguments = (dict(pbcRequestId=digest, gid=request['gid'], dataId=request['dataId'], action='1'), records)
+        native_dbc = dbc.submit('relay', 'ACSC', grant_method, *grant_arguments)
         require(native_dbc.success is True, 'native policy status')
         access = _event(native_dbc, dbc.contracts['ACSC'], 'AccessLog')['fields']
         expected_access = dict(requestRef=digest, gid=request['gid'], dataId=request['dataId'], allowed=expected_allow,
@@ -258,6 +262,11 @@ def execute_access(pbc, dbc, adapter, *, deployment_bytes, user_label, user, rec
                                expiresAt=str(expiry), recipientKeyHash=recipient if repaired else ZERO, nonceConsumed=repaired, nonce=request['nonce'] if repaired else '0')
             require(ge == expected_ge and len(native_events) == 1, 'grant event/state join')
             events += native_events
+            if nonce_replay:
+                from evaluation.request_replay import execute_request_replay
+                execute_request_replay(pbc, dbc, deployment=dep, request=request, grant_id=gid,
+                                       method=grant_method, arguments=grant_arguments, original_grant=native_dbc,
+                                       worker_snapshot=worker_snapshot, output=output/'nonce-replay')
             require(int(_clock(dbc)) < expiry and pbc.read('RSC', 'recipientKeyHash', request['gid']) == [recipient], 'release live grant/recipient')
             response = provider.call('release', dict(grantId=gid))
             require(all(response[k] == v for k, v in dict(requestDigest=digest, grantId=gid, dataId=request['dataId'],

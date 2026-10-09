@@ -116,3 +116,37 @@ def test_duplicate_execution_requires_each_complete_probe(tmp_path, monkeypatch,
     result = m.execute(path, tmp_path/'synthetic-ack.json', tmp_path/'output')
     assert result['status'] == ('E2_DUPLICATE_OUTCOME_SLICE_PASS' if proof_mode == 'complete' else 'FAILED')
     if proof_mode == 'complete': assert len(result['cases']) == 3
+
+
+def test_nonce_replay_plan_requires_new_full_ack_before_services(tmp_path):
+    m = module(); p = m.create_plan(run_id='E2-replay-test', freeze_message='A3-0041', nonce_replay=True)
+    m.verify_plan(p)
+    assert len(p['matrix']) == 3 and all(row['point'] is None for row in p['matrix'])
+    assert p['caseIds'] == ['E01-nonce-replay-'+profile for profile in ('paper-strict', 'paper-minimal', 'repaired-e')]
+    path = tmp_path/'plan.json'; path.write_text(json.dumps(p))
+    result = m.execute(path, None, tmp_path/'output')
+    assert result['status'] == 'BLOCKED' and result['servicesStarted'] == [] and result['cases'] == {}
+    for option in ('expired_retry', 'duplicate_outcome'):
+        with pytest.raises(ValueError):
+            m.create_plan(run_id='E2-replay-test', freeze_message='A3-0041', nonce_replay=True, **{option: True})
+
+
+@pytest.mark.parametrize('proof_mode', ['missing', 'wrong-error', 'changed-native', 'changed-worker', 'different-call', 'complete'])
+def test_nonce_replay_execution_requires_complete_native_proof(tmp_path, monkeypatch, proof_mode):
+    m = module(); p = m.create_plan(run_id='E2-replay-test', freeze_message='A3-0041', nonce_replay=True)
+    path = tmp_path/'plan.json'; path.write_text(json.dumps(p))
+    monkeypatch.setattr(m.e1, '_acks', lambda *args: {'TEST_ONLY': 'not peer evidence'})
+    def supplied_profile(plan, profile, output, record, *, recovery_point, expired_retry, nonce_replay):
+        assert recovery_point is None and expired_retry is False and nonce_replay is True
+        if proof_mode == 'missing': return
+        destination = output/'alice/nonce-replay'; destination.mkdir(parents=True)
+        proof = dict(ok=True, error='REPLAY', delivery='unknown', workerUnchanged=True, nativeUnchanged=True, identicalCalldata=True)
+        if proof_mode == 'wrong-error': proof['error'] = 'EXPIRED'
+        if proof_mode == 'changed-native': proof['nativeUnchanged'] = False
+        if proof_mode == 'changed-worker': proof['workerUnchanged'] = False
+        if proof_mode == 'different-call': proof['identicalCalldata'] = False
+        (destination/'result.json').write_text(json.dumps(proof))
+    monkeypatch.setattr(m.e1, '_profile', supplied_profile)
+    result = m.execute(path, None, tmp_path/'output')
+    assert result['status'] == ('E2_NONCE_REPLAY_SLICE_PASS' if proof_mode == 'complete' else 'FAILED')
+    if proof_mode == 'complete': assert len(result['cases']) == 3

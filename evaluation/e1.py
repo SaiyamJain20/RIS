@@ -172,10 +172,12 @@ def _available(ports):
             s.bind(('127.0.0.1', port))
 
 
-def _profile(plan, profile, output, record, *, recovery_point=None, expired_retry=False, duplicate_outcome=False):
+def _profile(plan, profile, output, record, *, recovery_point=None, expired_retry=False, duplicate_outcome=False, nonce_replay=False):
     require(type(expired_retry) is bool and (not expired_retry or recovery_point is not None), 'expiry probe follows explicit recovery')
     require(type(duplicate_outcome) is bool and (not duplicate_outcome or (recovery_point is None and not expired_retry)),
             'duplicate comparison uses production adapter without other fault probes')
+    require(type(nonce_replay) is bool and (not nonce_replay or
+            (recovery_point is None and not expired_retry and not duplicate_outcome)), 'isolated production nonce replay')
     output.mkdir(parents=True, exist_ok=False)
     snapshots = output/'snapshots'
     ledger_root = materialize_owner(plan['owners']['ledger'], snapshots/'ledger')
@@ -271,6 +273,7 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
             results = {}
             for label in ('alice', 'bob'):
                 probe_options = {'duplicate_outcome': True} if duplicate_outcome and label == 'alice' else {}
+                if nonce_replay and label == 'alice': probe_options = {'nonce_replay': True}
                 results[label] = execute_access(chains['pbc'], chains['dbc'], process, deployment_bytes=deployment_bytes,
                                                user_label=label, user=bootstrap['users'][label], record=record_fixture, policy=policy,
                                                expected_allow=label=='alice', worker_snapshot=worker_snapshot, output=output/label,

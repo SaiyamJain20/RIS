@@ -1,0 +1,1891 @@
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF                                       [100%]
+=================================== FAILURES ===================================
+_ test_replay_requires_prior_allowed_grant_and_identical_fresh_transaction[paper-strict] _
+
+profile = 'paper-strict'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    def test_replay_requires_prior_allowed_grant_and_identical_fresh_transaction(profile):
+>       proof = oracle()(**facts(profile))
+                ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+_ test_replay_requires_prior_allowed_grant_and_identical_fresh_transaction[paper-minimal] _
+
+profile = 'paper-minimal'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    def test_replay_requires_prior_allowed_grant_and_identical_fresh_transaction(profile):
+>       proof = oracle()(**facts(profile))
+                ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+_ test_replay_requires_prior_allowed_grant_and_identical_fresh_transaction[repaired-e] _
+
+profile = 'repaired-e'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    def test_replay_requires_prior_allowed_grant_and_identical_fresh_transaction(profile):
+>       proof = oracle()(**facts(profile))
+                ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+____________ test_replay_oracle_rejects_false_evidence[no-positive] ____________
+
+mutation = 'no-positive'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+____________ test_replay_oracle_rejects_false_evidence[two-grants] _____________
+
+mutation = 'two-grants'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+______________ test_replay_oracle_rejects_false_evidence[denied] _______________
+
+mutation = 'denied'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+_____________ test_replay_oracle_rejects_false_evidence[no-grant] ______________
+
+mutation = 'no-grant'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+___________ test_replay_oracle_rejects_false_evidence[wrong-digest] ____________
+
+mutation = 'wrong-digest'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+_____________ test_replay_oracle_rejects_false_evidence[wrong-gid] _____________
+
+mutation = 'wrong-gid'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+____________ test_replay_oracle_rejects_false_evidence[wrong-data] _____________
+
+mutation = 'wrong-data'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+_____________ test_replay_oracle_rejects_false_evidence[unlogged] ______________
+
+mutation = 'unlogged'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+___________ test_replay_oracle_rejects_false_evidence[not-forwarded] ___________
+
+mutation = 'not-forwarded'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+_______________ test_replay_oracle_rejects_false_evidence[nonce] _______________
+
+mutation = 'nonce'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+______________ test_replay_oracle_rejects_false_evidence[success] ______________
+
+mutation = 'success'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+____________ test_replay_oracle_rejects_false_evidence[wrong-code] _____________
+
+mutation = 'wrong-code'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+___________ test_replay_oracle_rejects_false_evidence[receipt-event] ___________
+
+mutation = 'receipt-event'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+_____________ test_replay_oracle_rejects_false_evidence[new-grant] _____________
+
+mutation = 'new-grant'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+___________ test_replay_oracle_rejects_false_evidence[request-state] ___________
+
+mutation = 'request-state'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+______________ test_replay_oracle_rejects_false_evidence[worker] _______________
+
+mutation = 'worker'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+______________ test_replay_oracle_rejects_false_evidence[pbc-log] ______________
+
+mutation = 'pbc-log'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+______________ test_replay_oracle_rejects_false_evidence[dbc-log] ______________
+
+mutation = 'dbc-log'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+___________ test_replay_oracle_rejects_false_evidence[access-count] ____________
+
+mutation = 'access-count'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+_____________ test_replay_oracle_rejects_false_evidence[same-hash] _____________
+
+mutation = 'same-hash'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+____________ test_replay_oracle_rejects_false_evidence[same-nonce] _____________
+
+mutation = 'same-nonce'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+____________ test_replay_oracle_rejects_false_evidence[lower-nonce] ____________
+
+mutation = 'lower-nonce'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+___________ test_replay_oracle_rejects_false_evidence[changed-call] ____________
+
+mutation = 'changed-call'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+___________ test_replay_oracle_rejects_false_evidence[wrong-caller] ____________
+
+mutation = 'wrong-caller'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+_________ test_replay_oracle_rejects_false_evidence[wrong-destination] _________
+
+mutation = 'wrong-destination'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+______________ test_replay_oracle_rejects_false_evidence[expired] ______________
+
+mutation = 'expired'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+___________ test_replay_oracle_rejects_false_evidence[before-grant] ____________
+
+mutation = 'before-grant'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+___________ test_replay_oracle_rejects_false_evidence[missing-chain] ___________
+
+mutation = 'missing-chain'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+__________ test_replay_oracle_rejects_false_evidence[empty-grant-log] __________
+
+mutation = 'empty-grant-log'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+__________ test_replay_oracle_rejects_false_evidence[unknown-profile] __________
+
+mutation = 'unknown-profile'
+
+    @pytest.mark.parametrize('mutation', [
+        'no-positive', 'two-grants', 'denied', 'no-grant', 'wrong-digest', 'wrong-gid',
+        'wrong-data', 'unlogged', 'not-forwarded', 'nonce', 'success', 'wrong-code',
+        'receipt-event', 'new-grant', 'request-state', 'worker', 'pbc-log', 'dbc-log',
+        'access-count', 'same-hash', 'same-nonce', 'lower-nonce', 'changed-call',
+        'wrong-caller', 'wrong-destination', 'expired', 'before-grant', 'missing-chain',
+        'empty-grant-log', 'unknown-profile',
+    ])
+    def test_replay_oracle_rejects_false_evidence(mutation):
+        data = facts()
+        if mutation == 'no-positive': data['original_grants'] = 0
+        if mutation == 'two-grants': data['original_grants'] = 2
+        if mutation == 'denied': data['before']['grant']['allowed'] = False
+        if mutation == 'no-grant': data['before']['grant']['exists'] = False
+        if mutation == 'wrong-digest': data['before']['grant']['requestDigest'] = 'other'
+        if mutation == 'wrong-gid': data['before']['grant']['gid'] = 'bob'
+        if mutation == 'wrong-data': data['before']['request']['dataId'] = 'other'
+        if mutation == 'unlogged': data['before']['request']['requestLogId'] = '0'
+        if mutation == 'not-forwarded': data['before']['request']['status'] = '0'
+        if mutation == 'nonce': data['before']['nonceConsumed'] = True
+        if mutation == 'success': data['success'] = True
+        if mutation == 'wrong-code': data['rejection_code'] = '6'
+        if mutation == 'receipt-event': data['receipt_logs'] = [{'event': 'new-grant'}]
+        if mutation == 'new-grant': data['after']['grant']['expiresAt'] = '140'
+        if mutation == 'request-state': data['after']['request']['outcomeLogId'] = '8'
+        if mutation == 'worker': data['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'pbc-log': data['after']['logs']['pbc'].append({'request': 'two'})
+        if mutation == 'dbc-log': data['after']['logs']['dbc'].append({'grant': 'two'})
+        if mutation == 'access-count': data['after']['accessLogCount'] = '2'
+        if mutation == 'same-hash': data['replay_transaction']['hash'] = 'tx-original'
+        if mutation == 'same-nonce': data['replay_transaction']['nonce'] = '0x1'
+        if mutation == 'lower-nonce': data['replay_transaction']['nonce'] = '0x0'
+        if mutation == 'changed-call': data['replay_transaction']['input'] = 'other-call'
+        if mutation == 'wrong-caller': data['replay_transaction']['from'] = 'other-relay'
+        if mutation == 'wrong-destination': data['replay_transaction']['to'] = 'other-acsc'
+        if mutation == 'expired': data['replay_timestamp'] = '120'
+        if mutation == 'before-grant': data['replay_timestamp'] = '99'
+        if mutation == 'missing-chain': data['before']['logs'].pop('pbc')
+        if mutation == 'empty-grant-log': data['before']['logs']['dbc'] = []
+        if mutation == 'unknown-profile': data['profile'] = 'mutant-no-nonce'
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+_____________ test_repaired_replay_requires_already_consumed_nonce _____________
+
+    def test_repaired_replay_requires_already_consumed_nonce():
+        data = facts('repaired-e')
+        data['before']['nonceConsumed'] = False
+>       with pytest.raises(ValueError): oracle()(**data)
+                                        ^^^^^^^^
+
+evaluation/tests/test_request_replay.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def oracle():
+>       assert importlib.util.find_spec('evaluation.oracles.replay') is not None, 'E01 replay oracle missing'
+E       AssertionError: E01 replay oracle missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7fcb2849a480>('evaluation.oracles.replay')
+E        +    where <function find_spec at 0x7fcb2849a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_request_replay.py:13: AssertionError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_request_replay.py::test_replay_requires_prior_allowed_grant_and_identical_fresh_transaction[paper-strict]
+FAILED evaluation/tests/test_request_replay.py::test_replay_requires_prior_allowed_grant_and_identical_fresh_transaction[paper-minimal]
+FAILED evaluation/tests/test_request_replay.py::test_replay_requires_prior_allowed_grant_and_identical_fresh_transaction[repaired-e]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[no-positive]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[two-grants]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[denied]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[no-grant]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[wrong-digest]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[wrong-gid]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[wrong-data]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[unlogged]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[not-forwarded]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[nonce]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[success]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[wrong-code]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[receipt-event]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[new-grant]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[request-state]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[worker]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[pbc-log]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[dbc-log]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[access-count]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[same-hash]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[same-nonce]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[lower-nonce]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[changed-call]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[wrong-caller]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[wrong-destination]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[expired]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[before-grant]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[missing-chain]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[empty-grant-log]
+FAILED evaluation/tests/test_request_replay.py::test_replay_oracle_rejects_false_evidence[unknown-profile]
+FAILED evaluation/tests/test_request_replay.py::test_repaired_replay_requires_already_consumed_nonce
+34 failed in 0.11s

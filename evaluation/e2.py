@@ -46,11 +46,11 @@ def _owners(contract):
     return result
 
 
-def create_plan(*, run_id, freeze_message, expired_retry=False, duplicate_outcome=False):
+def create_plan(*, run_id, freeze_message, expired_retry=False, duplicate_outcome=False, nonce_replay=False):
     # Retain the previously reviewed environment, mining/ports, tool and custody
     # recipe; any new exact runtime bytes require new full execution-plan ACKs.
-    require(type(expired_retry) is bool and type(duplicate_outcome) is bool
-            and not (expired_retry and duplicate_outcome), 'explicit nonoverlapping probe selection')
+    require(all(type(flag) is bool for flag in (expired_retry, duplicate_outcome, nonce_replay))
+            and sum((expired_retry, duplicate_outcome, nonce_replay)) <= 1, 'explicit nonoverlapping probe selection')
     plan = e1.create_plan(run_id=run_id, freeze_message=freeze_message)
     contract = json.loads(CONTRACT.read_text())
     plan.update(schemaVersion='hmbc-e2-recovery-plan/v1', executionScope='six fresh logical crash/recovery cases; not full RQ matrix',
@@ -98,12 +98,36 @@ def create_plan(*, run_id, freeze_message, expired_retry=False, duplicate_outcom
                                  'Paper-derived reconstruction behavior, not authors implementation or discovered vulnerability.',
                                  'Production adapter only; symbolic crypto/safe-ledger/trusted-worker; no delivery/ABE/consensus/power-loss proof.'])
         plan.pop('workerExpected')
+    if nonce_replay:
+        plan.update(schemaVersion='hmbc-e2-nonce-replay-plan/v1', nonceReplay=True,
+                    executionScope='three fresh identical accepted request replays; not full RQ matrix',
+                    matrix=[dict(profile=profile, point=None) for profile in e1.PROFILES],
+                    caseIds=['E01-nonce-replay-'+profile for profile in e1.PROFILES],
+                    controls=['wrong-admin-before-H2', 'registered-Alice-allow-grant',
+                              'identical-ACSC-call-mined-REPLAY-no-change-before-release',
+                              'original-Alice-release-completion-one-outcome', 'registered-Bob-policy-deny'],
+                    restart='none; production adapter only, no crash hook',
+                    observation='identical accepted policyEnf/consumeDecision application calldata; fresh relay transaction nonce; status0/Rejected8/no logs',
+                    timing='replay before original request/grant expiry; Alice release remains strictly before original expiry; unexpected expiry fails',
+                    replayProbe=dict(order='after checked native Alice grant, before first release/completion/outcome',
+                                     positive='one logged FORWARDED request and one allowed matching native grant/access log',
+                                     expected='REPLAY8; complete grant/request/nonce/access count/worker/PBC and DBC histories unchanged',
+                                     nonce='paper profiles false; repaired-e true from original acceptance',
+                                     references='identical accepted request/forward reference; never fabricate a new reference',
+                                     operations='no adapter operation/clock advance/crash/restart during replay; worker exporter read-only'),
+                    classification='paper SUPPORTED as tested reconstruction; repaired-e REPAIR_SUPPORTED; no original implementation claim',
+                    limitations=['Both NEW exact full execution-plan ACKs precede services.',
+                                 'Three of remaining47 prospective schedules only; no complete matrix, live mutants/windows/report/gate result.',
+                                 'Equal idle-worker snapshots are not worker retry/idempotence evidence.',
+                                 'Symbolic crypto/safe-ledger/trusted-worker; no delivery/ABE/consensus/power-loss proof.'])
+        plan.pop('workerExpected')
     return plan
 
 
 def verify_plan(plan):
     require(plan == create_plan(run_id=plan['runId'], freeze_message=plan['freezeMessage'],
-                                expired_retry=plan.get('expiredRetry', False), duplicate_outcome=plan.get('duplicateOutcome', False)), 'exact current E2 plan/source/config')
+                                expired_retry=plan.get('expiredRetry', False), duplicate_outcome=plan.get('duplicateOutcome', False),
+                                nonce_replay=plan.get('nonceReplay', False)), 'exact current E2 plan/source/config')
     require(sha256(ROOT/'interfaces/v1/FREEZE.json') == FREEZE_SHA256, 'immutable v1 freeze')
     require(platform.python_version() == plan['pythonVersion'], 'pinned Python version')
     for tool in plan['tools'].values():
@@ -133,23 +157,28 @@ def execute(plan_path, ack_path, output):
         if plan.get('duplicateOutcome', False):
             record.update(executionMode='two-chain-e2-duplicate-outcome-slice',
                           limitation='Three duplicate outcome comparisons only; no complete catalog or RQ gate.')
+        if plan.get('nonceReplay', False):
+            record.update(executionMode='two-chain-e2-nonce-replay-slice',
+                          limitation='Three identical accepted request replays only; no complete catalog or RQ gate.')
         authorized = True; record['status'] = 'RUNNING'
         for item in plan['matrix']:
             verify_plan(plan)
-            case = item['profile']+'-'+(item['point'] or 'duplicate-outcome'); destination = output/case; destination.mkdir()
+            probe_name = 'nonce-replay' if plan.get('nonceReplay', False) else 'duplicate-outcome'
+            case = item['profile']+'-'+(item['point'] or probe_name); destination = output/case; destination.mkdir()
             child = dict(profiles={}, servicesStarted=[], adapterProcesses=[])
             case_records[case] = child
             record['cases'][case] = dict(status='RUNNING', manifest=case+'/manifest.json')
             (output/'manifest.json').write_text(json.dumps(record, indent=2)+'\n')
-            selected = copy.deepcopy(plan); selected['runId'] = plan['runId']+'-'+(item['point'] or 'duplicate-outcome')
+            selected = copy.deepcopy(plan); selected['runId'] = plan['runId']+'-'+(item['point'] or probe_name)
             probe_options = {'duplicate_outcome': True} if plan.get('duplicateOutcome', False) else {}
+            if plan.get('nonceReplay', False): probe_options = {'nonce_replay': True}
             e1._profile(selected, item['profile'], destination/item['profile'], child, recovery_point=item['point'],
                         expired_retry=plan.get('expiredRetry', False), **probe_options)
-            if plan.get('duplicateOutcome', False):
-                proof = json.loads((destination/item['profile']/'alice/duplicate-outcome/result.json').read_text())
+            if plan.get('duplicateOutcome', False) or plan.get('nonceReplay', False):
+                proof = json.loads((destination/item['profile']/('alice/'+probe_name+'/result.json')).read_text())
                 require(proof['ok'] is True and proof['error'] == 'REPLAY' and proof['delivery'] == 'unknown'
                         and proof['workerUnchanged'] is True and proof['nativeUnchanged'] is True
-                        and proof['identicalCalldata'] is True, 'complete checked duplicate outcome result')
+                        and proof['identicalCalldata'] is True, 'complete checked native replay result')
             else:
                 proof = json.loads((destination/item['profile']/'recovery/result.json').read_text())
                 require(proof['ok'] is True and proof['delivery'] == 'unknown', 'complete checked recovery result')
@@ -158,8 +187,10 @@ def execute(plan_path, ack_path, output):
                 require(expiry['ok'] is True and expiry['error'] == 'EXPIRED' and expiry['delivery'] == 'unknown'
                         and expiry['workerUnchanged'] is True and expiry['nativeUnchanged'] is True, 'complete expired retry refusal')
                 record['cases'][case]['expiredRetry'] = 'EXPIRED_NO_CHANGE_PASS'
-            record['cases'][case]['status'] = 'DUPLICATE_OUTCOME_CONTROL_PASS' if plan.get('duplicateOutcome', False) else 'RECOVERY_CONTROL_PASS'
+            record['cases'][case]['status'] = ('NONCE_REPLAY_CONTROL_PASS' if plan.get('nonceReplay', False)
+                                             else ('DUPLICATE_OUTCOME_CONTROL_PASS' if plan.get('duplicateOutcome', False) else 'RECOVERY_CONTROL_PASS'))
         verify_plan(plan); record.update(status='E2_DUPLICATE_OUTCOME_SLICE_PASS' if plan.get('duplicateOutcome', False) else ('E2_RECOVERY_EXPIRY_SLICE_PASS' if plan.get('expiredRetry', False) else 'E2_RECOVERY_SLICE_PASS'), sourceStable=True)
+        if plan.get('nonceReplay', False): record['status'] = 'E2_NONCE_REPLAY_SLICE_PASS'
     except BaseException as error:
         record['failure'] = dict(type=type(error).__name__, message=str(error))
         record['status'] = 'FAILED' if authorized else 'BLOCKED'
@@ -177,7 +208,7 @@ def main():
     p.add_argument('--plan', type=Path, required=True); p.add_argument('--acks', type=Path); p.add_argument('--output', type=Path, required=True)
     args = p.parse_args(); result = execute(args.plan, args.acks, args.output)
     print(json.dumps({k: result[k] for k in ('status', 'failure', 'sourceStable', 'servicesStarted')}, indent=2))
-    return 0 if result['status'] in ('E2_RECOVERY_SLICE_PASS', 'E2_RECOVERY_EXPIRY_SLICE_PASS', 'E2_DUPLICATE_OUTCOME_SLICE_PASS') else 2
+    return 0 if result['status'] in ('E2_RECOVERY_SLICE_PASS', 'E2_RECOVERY_EXPIRY_SLICE_PASS', 'E2_DUPLICATE_OUTCOME_SLICE_PASS', 'E2_NONCE_REPLAY_SLICE_PASS') else 2
 
 
 if __name__ == '__main__': raise SystemExit(main())

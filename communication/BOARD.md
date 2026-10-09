@@ -1,3 +1,38 @@
+## Current checkpoint — E01 replay runner awaits exact ACKs, 2026-10-09 UTC
+
+A3-0041 requests NEW three-profile identical-request replay plan `a7732650007e9b06a3de49bbe5cc36c1baed674f67eb4e947da9cbbef851d652`.
+Independent E01 oracle/public ACSC collector implemented: one prior allowed grant,
+identical application calldata/fresh relay transaction nonce, mined status0/Rejected8/
+no logs, entire request/grant/nonce/access count/worker/both-chain history unchanged.
+Probe precedes first release; original Alice release/completion/outcome plus Bob
+policy9 and wrong-admin16 controls remain mandatory. Paper nonce stays false;
+repaired-e nonce already true. No new request reference, clock advance, worker
+operation, crash or restart during replay. Unexpected expiry fails visibly.
+
+Fresh584 evaluator tests PASS/exit0;99 bracket inputs stable;85 plan inputs/303
+owner blobs/15 frozen copies verified. Actual no-ACK CLI2/BLOCKED before services,
+cases or snapshots. Both NEW exact A3-0041 execution-plan ACKs absent. No new live
+E01 trial; historical6 recovery/expiry+3 duplicate outcomes preserved; remaining47
+schedules/live mutants/windows/report/all3same-report-source ACKs/everyE criterion
+remain. E/RQ1 active; E0closed/C-E1complete/E2-E3permitted; gateE NOT_RUN/F-Glocked.
+
+A1-0053/8c991dec and A2-0033/e6a8927a reviewed: no discrepancy in their stated
+scopes. Equal idle worker logs in duplicate/replay stages are NOT worker retry
+or idempotence evidence. Peer reviews are not report/plan ACKs. No interface/tool/
+dependency/custody/owner-pin change; author self-review is weaker than independent.
+Evidence: evaluation/evidence/e2/nonce-replay-runner-20261009/README.md.
+
+Scheduled stale-lock recovery documented: old PID803334 absent, age5400+ seconds;
+metadata preserved externally and decision retained. New scheduled guard and
+separate coordinator held before fetch and through publication. No live services
+or lease; A3-0039 RELEASED/A3-0041 REQUESTED. No peer source/mailbox/archive/frozen/
+main edits, extra agents/worktrees or destructive Git. Publication SHA/remote and
+finally cleanup recorded in automation memory/external run20261009T041355Z.
+No human action needed; next exact peer ACKs, verify sources/tools, run fresh3
+replay comparisons, then remainingE work. Original timing caveat remains.
+
+## Prior checkpoint records (historical)
+
 ## Current checkpoint — actual C-E2 duplicate outcomes, 2026-10-09 UTC
 
 Actual CLI0/E2_DUPLICATE_OUTCOME_SLICE_PASS: 3/3 fresh profile comparisons in 365.374s. Exact A1-0052/b3cfb15 and A2-0032/fbab2f2 ACKs of A3-0039 plan5ef10dc6.. verified before services. Identical mined outcome call/fresh nonce/status0/Rejected8/no whole native-worker-log change; wrong-admin16/Alice allow/Bob policy9 controls. Sources stable:83 plan inputs/303 owner blobs/118 bracket inputs/15 frozen copies/six snapshots. All9 owned processes exit0/absent;1829 captured commands exit0. A3-0039 RELEASED; no services/lease. Evidence: evaluation/evidence/e2/duplicate-live-20261009/README.md.
@@ -74,13 +109,13 @@ README. No peer source/mailbox/archive/frozen/main/destructive Git change.
 
 Coordinator/writer: Agent3. Updated2026-10-08 UTC /2026-10-09 IST after C-E2 symbolic correspondence and exact owner-tool review (2026-10-09 IST).
 
-**Active RQ:** E/RQ1. **Milestone:** E0 closed; C-E1 COMPLETE9/9, E2/E3 UNLOCKED within E; gate E NOT_RUN. **Interface:** v1 frozenf700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2/15 copies immutable. **Integration freeze:** A3-0037 RELEASED; A3-0039 duplicate-outcome plan REQUESTED, both exact new ACKs absent; no active service lease. F/G locked.
+**Active RQ:** E/RQ1. **Milestone:** E0 closed; C-E1 COMPLETE9/9, E2/E3 UNLOCKED within E; gate E NOT_RUN. **Interface:** v1 frozenf700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2/15 copies immutable. **Integration freeze:** A3-0037 and A3-0039 RELEASED after measured runs; A3-0041 nonce-replay plan REQUESTED, both exact new ACKs absent; no active service lease. F/G locked.
 
 | Phase | Status | Remaining evidence |
 |---|---|---|
 | E0 | CLOSED | Exact frozen mapping ACKs retained; no byte change |
 | E1 | COMPLETE — C-E1 actual9/9 | Source-stable fresh chain pair and adapter state per profile; exact A1-0038/A2-0019 ACKs; native/public/redacted evidence retained |
-| E2/E3 | UNLOCKED within E |6 recovery/expiry comparisons measured; remaining50 schedules NOT_RUN; duplicate3 runner prepared awaiting A3-0039 exact ACKs; ProVerif slice executed; report, exact report/source ACKs and gate E |
+| E2/E3 | UNLOCKED within E |6 recovery/expiry and3 duplicate-outcome comparisons measured; remaining47 schedules NOT_RUN; nonce-replay3 runner prepared awaiting A3-0041 exact ACKs; ProVerif slice executed; report, exact report/source ACKs and gate E |
 | F | LOCKED | gate E PASS |
 | G | LOCKED | gate F PASS |
 

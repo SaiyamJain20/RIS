@@ -1,11 +1,8 @@
-**Current checkpoint2026-10-08 UTC /2026-10-09 IST:** C-E1 COMPLETE: actual fresh two-chain/service controls9/9 across paper-strict, paper-minimal and repaired-e; CLI0/E1_CONTROL_PASS in356.061s. Exact A1-0038/2f5e376 and A2-0019/6d2c867 ACKs verified for A3-0029/78e195f5.. before services. Sources stable; all9 owned PBC/DBC/adapter processes exit0/absent. A3-0029 RELEASED after completed run. E2/E3 now permitted within E/RQ1; all56 catalog schedules and every RQ gate remain NOT_RUN, four paper crash cases BLOCKED/unproved; F/G locked. Evidence evaluation/evidence/e1/integrated-controls-20261008/README.md. This paragraph supersedes prior milestone status below; prior evidence remains historical.
-
 # HMBC: access security, Byzantine operators, and key lifecycle
 
-**Current E1 checkpoint (2026-10-08 UTC):** actual paper-strict3/3 controls pass; all-profile run failed on the runner’s TIME_WAIT port probe before second-profile startup. Probe fixed with414 tests; A3-0029 revised plan 78e195f57872e0732394e3c546f665e1062b4a360083d2ee0a407d5def33b008 awaits both new exact ACKs. E1 incomplete; E2/E3/F/G remain gated. See [evaluation/evidence/e1/port-recovery-20261008/README.md](evaluation/evidence/e1/port-recovery-20261008/README.md). Earlier checkpoint text below is historical.
+**Current checkpoint (2026-10-09 UTC):** E0 closed, C-E1 completed with9/9 real controls; E2/E3 permitted within RQ1. Six recovery/expiry and three duplicate-outcome comparisons are measured reconstruction results. The new three-profile E01 identical-request replay plan A3-0041 awaits both exact peer ACKs before services. Remaining47 schedules, live mutants, revocation windows, report and gate E remain incomplete; F/G locked. See [the live board](communication/BOARD.md) and [replay preparation](evaluation/evidence/e2/nonce-replay-runner-20261009/README.md).
 
-
-**Selected scope:** directions **E, F and G**, using **HMBC2020 only**. Work directly in this repository. Interface v1 has been frozen from exact scoped peer ACKs and verified owner snapshots. Both peers’ exact frozen mapping ACKs are verified; E0 is closed and E1 is unlocked. C-E1 public runner is implemented/unit verified; exact A3-0027 plan ACKs and real integration remain pending; all RQ gates remain NOT_RUN.
+**Selected scope:** directions **E, F and G**, using **HMBC2020 only**, in this confirmed checkout. This is a paper-derived reconstruction with synthetic fixtures and symbolic E cryptography. Frozen v1 bytes and exact E0 mapping ACKs are retained; all RQ gates remain NOT_RUN.
 
 **Order: E → F → G.** All three agents complete one research question together, integrate their modules, and close its evidence gate before starting the next. The first deliverable is a complete answer to **RQ1/E**, not three unfinished prototypes.
 
@@ -28,6 +25,6 @@ references/                       HMBC and two cryptography references
 archive/                          all previous documents, papers and audit evidence
 ```
 
-The live board is **E1: unlocked; public runner verified, exact plan ACKs/service integration pending**. Read the latest `communication/**` revisions across fetched branches, preserving exact commit provenance. Each agent publishes its owned work on `agent-N` from its own machine. See [E0 progress](evaluation/reports/E0-progress.md) for historical verification and limitations; current mapping completion is recorded in communication/E0_MAPPING_ACKS.json. The root evaluator preflight is available; the public two-chain runner is implemented/unit verified; real nine-control integration and RQ gates are not complete.
+Read the latest `communication/**` revisions across fetched branches, preserving exact commit provenance. Each agent publishes its owned work on `agent-N` from its own machine. [E0 progress](evaluation/reports/E0-progress.md) is historical; current phase and dependencies belong to [BOARD.md](communication/BOARD.md). Unit tests and owner rehearsals do not substitute for integrated gate evidence.
 
 All previous content, including the uncommitted citation audit, is preserved under [archive/2026-10-06-pre-hmbc-efg/](archive/2026-10-06-pre-hmbc-efg/ARCHIVE.md). Its 51 archived files were checked against a SHA-256 manifest. JANUS, DP and abandoned directions are historical material; they are not active requirements.

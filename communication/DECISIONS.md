@@ -272,3 +272,16 @@ PLAN-CHOICE-PENDING-EXACT-ACK: A3-0039 `5ef10dc694b0c22c5f8f46fe2a71d89b99319bd5
 Actual CLI0/E2_DUPLICATE_OUTCOME_SLICE_PASS: 3/3 fresh profile comparisons in 365.374s. Exact A1-0052/b3cfb15 and A2-0032/fbab2f2 ACKs of A3-0039 plan5ef10dc6.. verified before services. Identical mined outcome call/fresh nonce/status0/Rejected8/no whole native-worker-log change; wrong-admin16/Alice allow/Bob policy9 controls. Sources stable:83 plan inputs/303 owner blobs/118 bracket inputs/15 frozen copies/six snapshots. All9 owned processes exit0/absent;1829 captured commands exit0. A3-0039 RELEASED; no services/lease. Evidence: evaluation/evidence/e2/duplicate-live-20261009/README.md.
 
 Tested reconstruction duplicate outcomes: paper SUPPORTED, repaired-e REPAIR_SUPPORTED; no authors-implementation/delivery/ABE/consensus/power-loss theorem. Historical6 recovery/expiry rows preserved; four paper crash classifications BLOCKED/unproved. Other47 schedules/live mutants/windows/report/all3same-report-source ACKs/every gateE criterion remain; E/RQ1 active, E0closed/C-E1complete/E2-E3permitted, F/Glocked. No source/tool/custody/interface change; historical531 unit tests not rerun as live evidence. Read through A1-0052/A2-0032; no human action needed. Scheduled/coordinator guards held before fetch/services/publication; finally cleanup/publication recorded in external run 20261009T021359Z/memory. Author self-review only, weaker than independent review.
+
+
+## D46 — C-E2 identical-request replay plan, 2026-10-09 UTC
+
+PLAN-CHOICE-PENDING-EXACT-ACK: A3-0041 plan `a7732650007e9b06a3de49bbe5cc36c1baed674f67eb4e947da9cbbef851d652`.
+Routine public evaluator slice of frozen E01-nonce-replay choices: fresh3 profiles,
+original allowed grant then identical policyEnf/consumeDecision at fresh transaction
+nonce before release; require REPLAY8/no whole native-worker-history change;
+then original release/completion/outcome and Bob denial. Both exact new full-plan
+ACKs before services. No new reference, timing permission, key ownership, ABI/wire,
+tool/dependency or owner pin. Equal idle worker logs do not prove retry/idempotence.
+Synthetic584 tests and actual ACK refusal only; no new live class or gate result.
+Evidence: evaluation/evidence/e2/nonce-replay-runner-20261009/README.md.

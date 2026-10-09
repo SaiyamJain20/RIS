@@ -1,0 +1,136 @@
+[
+  {
+    "argv": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "evaluation/tests/test_request_replay.py",
+      "-q"
+    ],
+    "output": "replay-red.txt",
+    "exitCode": 1,
+    "result": "34 failed; missing oracle",
+    "cwd": "/home/karma/Documents/RIS",
+    "outputSha256": "56df7b020177b30359a7bac939ec9770fbbd634925b26a9331f13b071b11f5d7"
+  },
+  {
+    "argv": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "evaluation/tests/test_request_replay.py",
+      "-q"
+    ],
+    "output": "replay-green.txt",
+    "exitCode": 0,
+    "result": "34 passed",
+    "cwd": "/home/karma/Documents/RIS",
+    "outputSha256": "51d55241f9b696a4f0c475175b9ac9c6fdaad5cfeaa17168638662e105524da8"
+  },
+  {
+    "argv": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "evaluation/tests/test_request_replay.py",
+      "-q"
+    ],
+    "output": "collector-red.txt",
+    "exitCode": 1,
+    "result": "12 failed/34 passed; missing nonce_replay argument",
+    "cwd": "/home/karma/Documents/RIS",
+    "outputSha256": "b63576ca3673adefdbfb0ce51dbfb7e7909983c07f6831623413cd5f41cfe472"
+  },
+  {
+    "argv": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "evaluation/tests/test_request_replay.py",
+      "-q"
+    ],
+    "output": "collector-green.txt",
+    "exitCode": 0,
+    "result": "46 passed",
+    "cwd": "/home/karma/Documents/RIS",
+    "outputSha256": "e3b4475e738a0c429b69143e69de7d11e4e13901437430d4d8593b696fc02b97"
+  },
+  {
+    "argv": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "evaluation/tests/test_e2_freeze.py",
+      "-q"
+    ],
+    "output": "plan-red.txt",
+    "exitCode": 1,
+    "result": "7 failed/20 passed; missing plan selector",
+    "cwd": "/home/karma/Documents/RIS",
+    "outputSha256": "19570d0965f30644c15c3085e1960583da5e785e2e59710b157e424af8419afe"
+  },
+  {
+    "argv": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "evaluation/tests/test_e2_freeze.py",
+      "-q"
+    ],
+    "output": "plan-green.txt",
+    "exitCode": 0,
+    "result": "27 passed",
+    "cwd": "/home/karma/Documents/RIS",
+    "outputSha256": "729fff56633517c6b713433fbd77743353c7f6f054dc929181741aa10153da2d"
+  },
+  {
+    "argv": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "evaluation/tests",
+      "-q"
+    ],
+    "output": "full-tests.txt",
+    "exitCode": 0,
+    "result": "584 passed in109.48s",
+    "cwd": "/home/karma/Documents/RIS",
+    "outputSha256": "b0429de01dbf14398403dcadefd113b17384f004ddf9287589968f35c73d05a0"
+  },
+  {
+    "argv": [
+      ".venv/bin/python",
+      "-m",
+      "evaluation.e2",
+      "--plan",
+      "evaluation/evidence/e2/nonce-replay-runner-20261009/integration-plan.json",
+      "--output",
+      "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T041355Z/no-ack"
+    ],
+    "output": "no-ack.txt",
+    "exitCode": 2,
+    "result": "BLOCKED absent both exact ACKs before services/cases",
+    "cwd": "/home/karma/Documents/RIS",
+    "outputSha256": "34069a429a890733416be3e620e2b56830362c38e316be899fbd152cd4f05ca4"
+  },
+  {
+    "argv": [
+      "git",
+      "fetch",
+      "origin"
+    ],
+    "exitCode": 0,
+    "cwd": "/home/karma/Documents/RIS"
+  },
+  {
+    "argv": [
+      ".venv/bin/python",
+      "-m",
+      "evaluation.peers",
+      "--output",
+      "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/20261009T041355Z/peers.json"
+    ],
+    "exitCode": 0,
+    "cwd": "/home/karma/Documents/RIS"
+  }
+]
