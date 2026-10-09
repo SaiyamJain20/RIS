@@ -1,0 +1,24 @@
+import pathlib,json,hashlib,subprocess,platform,datetime
+from importlib.metadata import version
+import sys
+sys.path.insert(0,'/home/karma/Documents/RIS')
+from evaluation import e2,e1
+r=pathlib.Path(__file__).parent
+before=json.loads((r/'suite-source-before.json').read_text())
+changed=[p for p,d in before.items() if hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()!=d]
+assert not changed,changed
+contract=json.loads(e2.CONTRACT.read_text());owners=e2._owners(contract);total=0
+for name,owner in owners.items():
+ e1._owner_paths(owner)
+ for p,d in owner['entries'].items():
+  assert hashlib.sha256(e1._git_blob(owner['commit'],p)).hexdigest()==d,p;total+=1
+ owner['remoteTreeDelta']=subprocess.check_output(['git','diff','--name-status',owner['commit'],'origin/agent-'+('1' if name=='ledger' else '2'),'--',name+'/']).decode().splitlines()
+freeze=json.loads(pathlib.Path('interfaces/v1/FREEZE.json').read_text())
+assert json.loads(pathlib.Path('interfaces/v1/hmbc.schema.json').read_text())['$defs']['LedgerDeployment']['properties']['errorCodes']['properties']['2']['const']=='WRONG_SUBJECT'
+assert json.loads(pathlib.Path('interfaces/v1/hmbc.schema.json').read_text())['$defs']['LedgerDeployment']['properties']['errorCodes']['properties']['3']['const']=='WRONG_DESTINATION'
+for p,item in freeze['frozenCopies'].items():
+ assert hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()==item['sha256'],p
+ if pathlib.Path(item['sourcePath']).is_file(): assert pathlib.Path(p).read_bytes()==pathlib.Path(item['sourcePath']).read_bytes(),p
+assert hashlib.sha256(pathlib.Path('interfaces/v1/FREEZE.json').read_bytes()).hexdigest()=='f700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2'
+d={'capturedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'suiteSources':len(before),'changedDuringSuite':changed,'ownerBlobsVerified':total,'owners':owners,'frozenCopiesVerified':len(freeze['frozenCopies']),'versions':{'python':platform.python_version(),'packages':{p:version(p) for p in ['eth-account','jsonschema','pytest']},'git':subprocess.check_output(['git','--version']).decode().strip()},'scope':'static oracle and synthetic tests only; no services, live catalog or gate','sourceSha256':before}
+(r/'audit-final.json').write_text(json.dumps(d,indent=2)+'\n');print(json.dumps({k:v for k,v in d.items() if k not in ['owners','sourceSha256']}))

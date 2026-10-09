@@ -13,6 +13,8 @@ acceptance of these observations is never an integrated catalog result.
 import copy
 
 from evaluation.access_artifacts import require
+from evaluation.bootstrap import frozen_validate
+from evaluation.worker_evidence import WorkerLog
 
 ZERO = '0x'+'00'*32
 
@@ -85,3 +87,73 @@ Never rewrite a decision digest or relabel this as a signature-failure case.
                 error='WRONG_SUBJECT' if repaired else None, delivery='unknown',
                 workerUnchanged=True, releaseTested=False,
                 qualification='pre-release reconstruction observation under compromised-relay stress; not an HMBC vulnerability or integrated gate')
+
+
+def check_subject_completion(*, pre_release, registered_recipient, original_recipient,
+                             ciphertext_digest, response, bob_completion, alice_completion,
+                             after_release, after_completion, dbc_now, fingerprint):
+    """Check paper-profile response/cache routing and symbolic completion facts.
+
+    The collector must authenticate the pre-release calls, collect the registered
+    keys and ciphertext commitment independently, submit the same response to
+    Bob/Alice key references, and retain block-anchored snapshots at each stage.
+    This checker cannot authenticate those observations or prove encryption,
+    delivery, storage durability or a completed catalog case. No outcome is
+    submitted: the original pending Alice request must stay unchanged.
+    """
+    require(pre_release['profile'] in ('paper-strict', 'paper-minimal'),
+            'paper subject completion only; repaired rejection has no release')
+    check_subject_substitution(**pre_release)
+    grant = pre_release['after']['grant']
+    original = pre_release['original_request']
+    for value in (registered_recipient, original_recipient, ciphertext_digest):
+        frozen_validate('Hash', value)
+    frozen_validate('Uint64', dbc_now)
+    require(registered_recipient != ZERO and original_recipient != ZERO
+            and registered_recipient != original_recipient
+            and original_recipient == original['recipientKeyHash'],
+            'distinct registered target and original recipient commitments')
+    before_worker = pre_release['after']['worker']
+    WorkerLog(before_worker, fingerprint=fingerprint)
+    require(before_worker['events'] == [] and before_worker['releases'] == []
+            and before_worker['counts'] == dict(releaseIntentCount='0', releaseSentCount='0'),
+            'fresh stress worker before release')
+    frozen_validate('ReleaseResult', response)
+    expected = dict(requestDigest=pre_release['request_digest'], grantId=pre_release['grant_id'],
+                    dataId=original['dataId'], ciphertextDigest=ciphertext_digest,
+                    recipientKeyHash=registered_recipient, keyEpoch='0')
+    require(all(response[k] == v for k, v in expected.items()),
+            'subject response binds original reference/data and substituted registered recipient')
+    worker = after_release['worker']
+    checked = WorkerLog(worker, fingerprint=fingerprint)
+    row = checked.check_response(response)
+    events = checked.events_for(pre_release['grant_id'])
+    issued, expires, observed = map(int, (grant['issuedAt'], grant['expiresAt'], dbc_now))
+    require(row['gid'] == pre_release['target_gid']
+            and row['grantExpiresAt'] == grant['expiresAt']
+            and issued <= int(row['createdAt']) <= observed < expires
+            and row['sendAttempts'] == row['completedAttempts'] == 1
+            and [e['type'] for e in events] == ['RELEASE_INTENT', 'RELEASE_SENT']
+            and all(issued <= int(e['timestamp']) <= observed < expires for e in events),
+            'one target-subject release intent/send within original native lifetime')
+    expected_worker = copy.deepcopy(before_worker)
+    expected_worker.update(events=events, releases=[row],
+                           counts=dict(releaseIntentCount='1', releaseSentCount='1'))
+    require(worker == expected_worker, 'only one worker release/cache delta')
+    expected_after = copy.deepcopy(pre_release['after']); expected_after['worker'] = expected_worker
+    require(after_release == expected_after,
+            'release preserves original pending request, native zero recipient, nonces and both histories')
+    for completion in (bob_completion, alice_completion):
+        frozen_validate('FinishDecryptionResponse', completion)
+    expected_bob = dict(schemaVersion='v1', adapterMode='symbolic', decryptable=True,
+                        dataId=original['dataId'], ciphertextDigest=ciphertext_digest)
+    require(bob_completion['ok'] is True and bob_completion['result'] == expected_bob,
+            'substituted subject symbolic completion for the same record')
+    require(alice_completion['ok'] is False and alice_completion['error']['code'] == 'WRONG_SUBJECT',
+            'original subject wrong-recipient refusal')
+    require(after_completion == after_release, 'both completions leave whole native/worker state unchanged')
+    return dict(ok=True, classification='SPEC_GAP', adapterMode='symbolic', delivery='unknown',
+                bobDecryptable=True, aliceError='WRONG_SUBJECT', outcomeTested=False,
+                integratedCaseComplete=False,
+                qualification='observed reconstruction routing/completion under compromised-relay stress; '
+                              'collector authentication, independent fresh controls and integrated gate remain separate')

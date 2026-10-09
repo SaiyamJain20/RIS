@@ -1,3 +1,11 @@
+**Current checkpoint (2026-10-09 UTC):** Subject routing/completion checker prepared;
+fresh777 root tests pass with190 inputs stable. Pure synthetic checks only: no
+live subject release/completion or complete case.44 comparisons remain; gateE
+NOT_RUN/F-Glocked. Next public completion collector, separate fresh controls,
+full revised plan and both exact peer ACKs before services. See
+[checker evidence](evaluation/evidence/e2/subject-completion-oracle-20261009/README.md).
+Earlier checkpoint prose below is historical.
+
 **Current checkpoint (2026-10-09 UTC):** Subject pre-release collector implemented;
 fresh690 root tests pass with124 inputs stable. No live subject release/completion
 or complete case result.44 comparisons remain; gateE NOT_RUN/F-Glocked. Next:
