@@ -82,3 +82,37 @@ def test_expiry_execution_cannot_accept_recovery_only(tmp_path, monkeypatch, omi
     monkeypatch.setattr(m.e1, '_profile', supplied_profile)
     result = m.execute(path, None, tmp_path/'output')
     assert result['status'] == ('FAILED' if omit_expiry else 'E2_RECOVERY_EXPIRY_SLICE_PASS')
+
+
+def test_duplicate_outcome_plan_requires_new_exact_acks_before_services(tmp_path):
+    m = module()
+    p = m.create_plan(run_id='E2-duplicate-test', freeze_message='A3-0039', duplicate_outcome=True)
+    m.verify_plan(p)
+    assert len(p['matrix']) == 3 and all(r['point'] is None for r in p['matrix'])
+    assert p['duplicateOutcome'] is True and p['fullCatalogComplete'] is False
+    path = tmp_path/'plan.json'; path.write_text(json.dumps(p))
+    result = m.execute(path, None, tmp_path/'output')
+    assert result['status'] == 'BLOCKED' and result['servicesStarted'] == [] and result['cases'] == {}
+    with pytest.raises(ValueError):
+        m.create_plan(run_id='E2-test', freeze_message='A3-0039', duplicate_outcome=True, expired_retry=True)
+
+
+@pytest.mark.parametrize('proof_mode', ['missing', 'wrong-error', 'changed-native', 'changed-worker', 'different-call', 'complete'])
+def test_duplicate_execution_requires_each_complete_probe(tmp_path, monkeypatch, proof_mode):
+    m = module(); p = m.create_plan(run_id='E2-duplicate-test', freeze_message='A3-0039', duplicate_outcome=True)
+    path = tmp_path/'plan.json'; path.write_text(json.dumps(p))
+    monkeypatch.setattr(m.e1, '_acks', lambda *args: {'TEST_ONLY': 'not peer evidence'})
+    def supplied_profile(plan, profile, output, record, *, recovery_point, expired_retry, duplicate_outcome):
+        assert recovery_point is None and expired_retry is False and duplicate_outcome is True
+        if proof_mode == 'missing': return
+        destination = output/'alice/duplicate-outcome'; destination.mkdir(parents=True)
+        proof = dict(ok=True, error='REPLAY', delivery='unknown', workerUnchanged=True, nativeUnchanged=True, identicalCalldata=True)
+        if proof_mode == 'wrong-error': proof['error'] = 'UNAUTHORIZED_CALLER'
+        if proof_mode == 'changed-native': proof['nativeUnchanged'] = False
+        if proof_mode == 'changed-worker': proof['workerUnchanged'] = False
+        if proof_mode == 'different-call': proof['identicalCalldata'] = False
+        (destination/'result.json').write_text(json.dumps(proof))
+    monkeypatch.setattr(m.e1, '_profile', supplied_profile)
+    result = m.execute(path, tmp_path/'synthetic-ack.json', tmp_path/'output')
+    assert result['status'] == ('E2_DUPLICATE_OUTCOME_SLICE_PASS' if proof_mode == 'complete' else 'FAILED')
+    if proof_mode == 'complete': assert len(result['cases']) == 3

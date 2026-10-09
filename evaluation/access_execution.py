@@ -107,7 +107,7 @@ class _Adapter:
 
 
 def execute_access(pbc, dbc, adapter, *, deployment_bytes, user_label, user, record, policy,
-                   expected_allow, worker_snapshot, output, recovery_point=None):
+                   expected_allow, worker_snapshot, output, recovery_point=None, duplicate_outcome=False):
     """Run Alice ALLOW or registered Bob POLICY_DENIED against checked evidence.
 
     `worker_snapshot` executes the pinned owner's read-only exporter and returns
@@ -120,6 +120,7 @@ def execute_access(pbc, dbc, adapter, *, deployment_bytes, user_label, user, rec
                   adapterMode='symbolic', observed=None, oracle=None, delivery='unknown')
     try:
         require(recovery_point in (None, 'after_intent', 'after_send'), 'explicit recovery point')
+        require(type(duplicate_outcome) is bool and (not duplicate_outcome or expected_allow is True), 'duplicate probe after allow only')
         if recovery_point is not None:
             result['scope'] = 'C-E2 logical crash/retry control; not an RQ gate'
         dep = strict_json(deployment_bytes); frozen_validate('LedgerDeployment', dep)
@@ -287,10 +288,14 @@ def execute_access(pbc, dbc, adapter, *, deployment_bytes, user_label, user, rec
                 require(all(receipt[k] == v for k, v in dict(requestDigest=digest, grantId=gid, gid=request['gid'], dataId=request['dataId'],
                                                             keyEpoch='0', grantExpiresAt=grant['expiresAt'], witnessSetVersion='1',
                                                             dbcChainId=dbc.chain_id, kssc=request['kssc']).items()), 'attested receipt joins')
-                outcome = pbc.submit('relay', 'PSC', 'reportAttestedOutcome', digest, outcome_digest, receipt, attested['signatures'])
+                outcome_method = 'reportAttestedOutcome'
+                outcome_arguments = (digest, outcome_digest, receipt, attested['signatures'])
+                outcome = pbc.submit('relay', 'PSC', outcome_method, *outcome_arguments)
                 event_name = 'AttestedOutcomeRecorded'
             else:
-                outcome = pbc.submit('relay', 'PSC', 'reportOutcome', digest, gid, outcome_digest); event_name = 'OutcomeRecorded'
+                outcome_method = 'reportOutcome'
+                outcome_arguments = (digest, gid, outcome_digest)
+                outcome = pbc.submit('relay', 'PSC', outcome_method, *outcome_arguments); event_name = 'OutcomeRecorded'
             oe = _event(outcome, pbc.contracts['PSC'], event_name)['fields']
             require(outcome.success is True and oe['requestDigest'] == digest and oe['grantId'] == gid
                     and oe['outcomeDigest'] == outcome_digest, 'outcome native event')
@@ -305,6 +310,11 @@ def execute_access(pbc, dbc, adapter, *, deployment_bytes, user_label, user, rec
                         expectedEvents=['REQUEST_LOGGED', 'PBC_DECIDED']+(['DBC_AUTHORIZED', 'RELEASE_INTENT', 'RELEASE_SENT', 'OUTCOME_RECORDED'] if expected_allow else []),
                         expectedLedgerChecks=list(ledger_checks))
         oracle = evaluate(scenario, observed); require(oracle['ok'], 'independent oracle')
+        if duplicate_outcome:
+            from evaluation.duplicate_outcome import execute_duplicate_outcome
+            execute_duplicate_outcome(pbc, dbc, deployment=dep, grant_id=gid, method=outcome_method,
+                                      arguments=outcome_arguments, original_outcome=outcome,
+                                      worker_snapshot=worker_snapshot, output=output/'duplicate-outcome')
         result.update(ok=True, observed=observed, oracle=oracle)
         return result
     except Exception as error:

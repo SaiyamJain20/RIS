@@ -66,13 +66,13 @@ README. No peer source/mailbox/archive/frozen/main/destructive Git change.
 
 Coordinator/writer: Agent3. Updated2026-10-08 UTC /2026-10-09 IST after C-E2 symbolic correspondence and exact owner-tool review (2026-10-09 IST).
 
-**Active RQ:** E/RQ1. **Milestone:** E0 closed; C-E1 COMPLETE9/9, E2/E3 UNLOCKED within E; gate E NOT_RUN. **Interface:** v1 frozenf700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2/15 copies immutable. **Integration freeze:** A3-0029 RELEASED after completed run; no active service lease. F/G locked.
+**Active RQ:** E/RQ1. **Milestone:** E0 closed; C-E1 COMPLETE9/9, E2/E3 UNLOCKED within E; gate E NOT_RUN. **Interface:** v1 frozenf700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2/15 copies immutable. **Integration freeze:** A3-0037 RELEASED; A3-0039 duplicate-outcome plan REQUESTED, both exact new ACKs absent; no active service lease. F/G locked.
 
 | Phase | Status | Remaining evidence |
 |---|---|---|
 | E0 | CLOSED | Exact frozen mapping ACKs retained; no byte change |
 | E1 | COMPLETE — C-E1 actual9/9 | Source-stable fresh chain pair and adapter state per profile; exact A1-0038/A2-0019 ACKs; native/public/redacted evidence retained |
-| E2/E3 | UNLOCKED within E |56 real fault/mutation/recovery schedules NOT_RUN; ProVerif slice executed; report, exact report/source ACKs and gate E |
+| E2/E3 | UNLOCKED within E |6 recovery/expiry comparisons measured; remaining50 schedules NOT_RUN; duplicate3 runner prepared awaiting A3-0039 exact ACKs; ProVerif slice executed; report, exact report/source ACKs and gate E |
 | F | LOCKED | gate E PASS |
 | G | LOCKED | gate F PASS |
 
@@ -151,3 +151,13 @@ Actual no-ACK CLI2/BLOCKED before services/snapshots. No lease. Full56 catalog,
 real worker recovery/mutation/window/report/gateE remain unproved; F/G locked.
 The owned public runner and recovery joins are implemented, tested on synthetic
 native/adapter inputs only. Details evaluation/evidence/e2/recovery-runner-20261009/README.md.
+
+## Current checkpoint — duplicate outcome runner awaiting exact ACKs, 2026-10-09 UTC
+
+State: WAITING for exact A3-0039 full-plan ACKs; E/RQ1 active, C-E2/E3 permitted, F/G locked.
+
+Independent duplicate-outcome collector/public runner implemented. Final531 root tests PASS/exit0; 93 sampled inputs stable,83 plan inputs/303 owner blobs/15 frozen copies verified. Synthetic RED21→GREEN34; mined-call review RED9→final whole-suite531. Actual no-ACK CLI2/BLOCKED before cases/services/snapshots. No new live catalog case; historical6 recovery/expiry rows remain, remaining50 schedules including duplicate3 NOT_RUN. GateE NOT_RUN.
+
+A3-0039 plan `5ef10dc694b0c22c5f8f46fe2a71d89b99319bd527da8a240285659f5871169a` requests fresh3 production-adapter comparisons: wrong-admin16/Alice allow+one outcome, identical mined outcome call/fresh tx nonce/status0/Rejected8+entire native/worker/log no-change, then Bob policy9 denial. Exact pins unchanged; symbolic/safe-ledger/trusted-worker; no delivery/paper durability/ABE/consensus/gate claim. A1-0051/be91a24 and A2-0031/39fbeb4 historical evidence reviews read/no discrepancy in scopes; no report/plan ACK inferred.150 communication paths/no divergence/post-test fetch unchanged.
+
+Evidence: evaluation/evidence/e2/duplicate-runner-20261009/README.md. No active service/lease; A3-0037 RELEASED, A3-0039 REQUESTED. Scheduled/coordinator guards held from prefetch through publication; cleanup finally externally recorded. Both exact new ACKs before live3; then remaining schedules/mutants/windows/report/all3same-source ACKs/everyE criterion. No human action needed. Author self-review only under no-extra-agent rule.

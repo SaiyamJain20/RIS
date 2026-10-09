@@ -172,8 +172,10 @@ def _available(ports):
             s.bind(('127.0.0.1', port))
 
 
-def _profile(plan, profile, output, record, *, recovery_point=None, expired_retry=False):
+def _profile(plan, profile, output, record, *, recovery_point=None, expired_retry=False, duplicate_outcome=False):
     require(type(expired_retry) is bool and (not expired_retry or recovery_point is not None), 'expiry probe follows explicit recovery')
+    require(type(duplicate_outcome) is bool and (not duplicate_outcome or (recovery_point is None and not expired_retry)),
+            'duplicate comparison uses production adapter without other fault probes')
     output.mkdir(parents=True, exist_ok=False)
     snapshots = output/'snapshots'
     ledger_root = materialize_owner(plan['owners']['ledger'], snapshots/'ledger')
@@ -268,10 +270,11 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
                                    dict(role='0x'+keccak(text='HMBC.role.OnDuty').hex(), kind='2', issuerMode='2')]])
             results = {}
             for label in ('alice', 'bob'):
+                probe_options = {'duplicate_outcome': True} if duplicate_outcome and label == 'alice' else {}
                 results[label] = execute_access(chains['pbc'], chains['dbc'], process, deployment_bytes=deployment_bytes,
                                                user_label=label, user=bootstrap['users'][label], record=record_fixture, policy=policy,
                                                expected_allow=label=='alice', worker_snapshot=worker_snapshot, output=output/label,
-                                               recovery_point=recovery_point)
+                                               recovery_point=recovery_point, **probe_options)
                 if label == 'alice' and expired_retry:
                     from evaluation.expired_retry import execute_expired_retry
                     grants = [e['grantId'] for e in results[label]['observed']['events'] if e['type'] == 'DBC_AUTHORIZED']
