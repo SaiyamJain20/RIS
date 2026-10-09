@@ -1,42 +1,43 @@
 # agent 3 (proxy): status
 
-State: **WAITING**. P0 (read-only preparation) is done; I am waiting for agent 1's decisions and the
-P2 assignment.
+State: **WAITING**. The SL1 actual run is done and published (S3-0006). I am waiting for the reviews
+from agent 1 and agent 2 (proxy), the commit, and the SL2 assignment.
 
 | Field | Value |
 |---|---|
 | RQ | E (gate E NOT_RUN; F and G locked) |
 | Interface | v1 (FREEZE f700292e..), unchanged |
-| Checkout | agent-1 HEAD 78cdd11 (integrated: agent-3 8e5a6dd, agent-2 96ebe16) |
-| Updated | 2026-10-09 IST |
+| Mode | solo, correlated self-review (A1-0059) |
+| Updated | 2026-10-10 IST |
 
-Services, leases and FREEZE: none. No Git writes. Only my own folder was edited.
+Services and lease: **none**. FREEZE S3-0005 is RELEASED. All 12 SL1 processes ended with exit 0;
+ports 18545 and 18546 are free. No Git writes.
+
+## Catalog progress
+
+**15/56 actual:**
+
+- recovery + expiry ×6 (paper crash rows: SPEC_GAP under D47, shown with the frozen BLOCKED label);
+- duplicate outcome ×3;
+- identical replay ×3;
+- **subject substitution ×3 (SL1)**.
+
+**41 remain.**
 
 ## Sent
 
-- **S3-0001** (`outbox/0001-review-e2-remaining-catalog-inventory.md`): all 56 comparisons. 12 have
-  actual evidence (4 of them paper crash rows classified BLOCKED); 44 are NOT_RUN. It maps runner
-  support and gaps, lists protocol needs for agent 2 (proxy) to cross-check, gives slice order
-  SL0..SL7, decisions D-1..D-6, and discrepancies.
-- **S3-0002** (`outbox/0002-review-gate-e-plan.md`): gate E criteria mapped to evidence and gaps,
-  how the runner works, retargeting ports to 18545-18599, the one-command gate design, and decisions
-  G-1..G-4.
-- **S3-0003** (`outbox/0003-review-rq1-e-report-skeleton.md`): the RQ1-E.md skeleton, with the 12
-  completed results and the E1 and formal evidence filled in.
+| Message | Content |
+|---|---|
+| S3-0001..0003 | P0: inventory, gate plan, RQ1-E skeleton |
+| S3-0004 | SL0 READY (portability: 825 passed) |
+| S3-0005 | SL1 FREEZE, plan 6fd5809b.. |
+| S3-0006 | SL1 INTEGRATION_RESULT: 3/3 PASS, 255.73 s |
 
 ## Read
 
-- A1-0001..A1-0059.
-- A3-0001..A3-0049, as merged into this checkout.
-- Solo PLAN.md and PROTOCOL.md.
-
-No S2 messages exist yet.
-
-## Waiting on
-
-- agent 1: D-1..D-6 and G-1..G-4, then the SL1 assignment.
-- agent 2 (proxy): an S2 REVIEW of the protocol-needs column in S3-0001 section 2.
+- A1-0059..A1-0062;
+- S2-0001..S2-0004.
 
 ## Next
 
-SL0 runner portability (no services). Then SL1 subject substitution, test-first, followed by a FREEZE.
+When assigned, SL2: forged tuple ×3, new-reference replay ×3, same nonce ×1. Test-first, then a FREEZE.

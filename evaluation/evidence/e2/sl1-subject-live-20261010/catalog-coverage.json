@@ -1,0 +1,103 @@
+{
+ "catalogSha256": "438fa38ddcbd7edd0e49fb93cc580e5219ed05349fd677b2e386bc4669f5d50e",
+ "rows": [
+  {
+   "caseId": "E01-subject-substitution-paper-strict",
+   "profile": "paper-strict",
+   "sourceRefs": [
+    "S09",
+    "S12",
+    "S13",
+    "S20",
+    "SPEC4/E01"
+   ],
+   "assumptions": [
+    "A01",
+    "A02",
+    "A14",
+    "A19",
+    "A25",
+    "A38",
+    "A41"
+   ],
+   "expected": {
+    "property": "decision-provenance",
+    "outcome": "CONDITIONAL",
+    "classification": "SPEC_GAP",
+    "error": null,
+    "qualification": "Compromised configured relay stress is outside paper secure isolation. Substitute only gid in the relay ForwardedRequest passed to policyEnf while keeping Alice's verified credential records. Paper profiles use no decision certificate. The DBC may authorize the substituted tuple; the grant gid is relay-asserted. With D35/A38 the symbolic response follows that gid's PBC-registered recipient key, not the original requester. An unregistered gid gets no release. This is a reconstruction/specification-gap comparison, not an HMBC exploit."
+   },
+   "observed": "mined policyEnf status1: GrantIssued(gid=Bob, recipient 0, TTL issuedAt+30)+AccessLog(allowed, gid=Bob, Alice credential digest); Alice request FORWARDED; nonces unchanged; one production release routed to Bob registered key (worker intent1/send1, 28-29 s before grant expiry); same response: Bob decryptable, Alice WRONG_SUBJECT; completions changed nothing; no outcome",
+   "executionStatus": "COMPLETE",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 denial on deployment D1",
+   "classification": "SPEC_GAP",
+   "qualification": "Tested reconstruction result under compromised configured-relay stress outside the paper secure-isolation assumption (A01); not an HMBC exploit and not the authors implementation. Paper forwarded tuple carries no source binding; the DBC authorizes the relay-asserted gid; D35/A38 routes the symbolic response to the gid registered key. Symbolic adapter; delivery unknown; safe-ledger/trusted-worker/one trusted witness; solo correlated review."
+  },
+  {
+   "caseId": "E01-subject-substitution-paper-minimal",
+   "profile": "paper-minimal",
+   "sourceRefs": [
+    "S09",
+    "S12",
+    "S13",
+    "S20",
+    "SPEC4/E01"
+   ],
+   "assumptions": [
+    "A01",
+    "A02",
+    "A14",
+    "A19",
+    "A25",
+    "A38",
+    "A41"
+   ],
+   "expected": {
+    "property": "decision-provenance",
+    "outcome": "CONDITIONAL",
+    "classification": "SPEC_GAP",
+    "error": null,
+    "qualification": "Compromised configured relay stress is outside paper secure isolation. Substitute only gid in the relay ForwardedRequest passed to policyEnf while keeping Alice's verified credential records. Paper profiles use no decision certificate. The DBC may authorize the substituted tuple; the grant gid is relay-asserted. With D35/A38 the symbolic response follows that gid's PBC-registered recipient key, not the original requester. An unregistered gid gets no release. This is a reconstruction/specification-gap comparison, not an HMBC exploit."
+   },
+   "observed": "same as paper-strict",
+   "executionStatus": "COMPLETE",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 denial on deployment D1",
+   "classification": "SPEC_GAP",
+   "qualification": "Tested reconstruction result under compromised configured-relay stress outside the paper secure-isolation assumption (A01); not an HMBC exploit and not the authors implementation. Paper forwarded tuple carries no source binding; the DBC authorizes the relay-asserted gid; D35/A38 routes the symbolic response to the gid registered key. Symbolic adapter; delivery unknown; safe-ledger/trusted-worker/one trusted witness; solo correlated review."
+  },
+  {
+   "caseId": "E01-subject-substitution-repaired-e",
+   "profile": "repaired-e",
+   "sourceRefs": [
+    "S09",
+    "S12",
+    "S13",
+    "S20",
+    "SPEC4/E01"
+   ],
+   "assumptions": [
+    "A01",
+    "A02",
+    "A14",
+    "A19",
+    "A25",
+    "A36",
+    "A41"
+   ],
+   "expected": {
+    "property": "decision-provenance",
+    "outcome": "REJECT",
+    "classification": "REPAIR_SUPPORTED",
+    "error": "WRONG_SUBJECT",
+    "qualification": "A compromised configured relay is outside the paper secure-isolation assumption. A repaired certificate must bind the original tuple. Substitute request.gid only and present the original decision certificate unchanged. Rewriting decision.requestDigest as well is a separate signature-failure control."
+   },
+   "observed": "mined consumeDecision status0 Rejected(2) WRONG_SUBJECT, no logs; whole grant/request/nonce/count/two-chain history and idle worker unchanged; no release",
+   "executionStatus": "COMPLETE",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 denial on deployment D1",
+   "classification": "REPAIR_SUPPORTED",
+   "qualification": "Tested reconstruction result under compromised configured-relay stress outside the paper secure-isolation assumption (A01); not an HMBC exploit and not the authors implementation. Repaired certificate binds the original request digest; DV step 4. Symbolic adapter; delivery unknown; safe-ledger/trusted-worker/one trusted witness; solo correlated review."
+  }
+ ],
+ "remainingCatalogComparisons": 41,
+ "fullCatalogComplete": false
+}

@@ -1,0 +1,92 @@
+{
+  "rq": "E",
+  "executionMode": "two-chain-e2-subject-substitution-slice",
+  "adapterMode": "symbolic",
+  "status": "E2_SUBJECT_SUBSTITUTION_SLICE_PASS",
+  "startedAt": "2026-10-09T19:43:45.171156+00:00",
+  "endedAt": "2026-10-09T19:48:00.186775+00:00",
+  "cases": {
+    "paper-strict-subject-substitution": {
+      "status": "SUBJECT_SUBSTITUTION_CONTROL_PASS",
+      "manifest": "paper-strict-subject-substitution/manifest.json"
+    },
+    "paper-minimal-subject-substitution": {
+      "status": "SUBJECT_SUBSTITUTION_CONTROL_PASS",
+      "manifest": "paper-minimal-subject-substitution/manifest.json"
+    },
+    "repaired-e-subject-substitution": {
+      "status": "SUBJECT_SUBSTITUTION_CONTROL_PASS",
+      "manifest": "repaired-e-subject-substitution/manifest.json"
+    }
+  },
+  "servicesStarted": [
+    {
+      "case": "paper-strict-subject-substitution",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 2378293
+    },
+    {
+      "case": "paper-strict-subject-substitution",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 2378414
+    },
+    {
+      "case": "paper-minimal-subject-substitution",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 2396243
+    },
+    {
+      "case": "paper-minimal-subject-substitution",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 2396363
+    },
+    {
+      "case": "repaired-e-subject-substitution",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 2414057
+    },
+    {
+      "case": "repaired-e-subject-substitution",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 2414177
+    }
+  ],
+  "acks": {
+    "agent-1": {
+      "commit": "aabed5b5d6d436154b82ea32d4d9a475d2e12000",
+      "path": "communication/agent-1/outbox/0062-ack-sl1-subject-freeze.md",
+      "sha256": "59d5855c3be90b1b9b67fbfd25b856a709d671b41bf7fb7b1df1d40b66a0ee33",
+      "messageId": "A1-0062"
+    },
+    "agent-2": {
+      "commit": "77a7c1f67cb796d51a63d58b0c99f342b868b840",
+      "path": "communication/agent-1/solo/agent-2-proxy/outbox/0004-ack-sl1-subject-freeze.md",
+      "sha256": "4b836b0bbbe1bed177fb0b9a0a37bea4c0d44c5aa282ec0873bd3a0ecab44161",
+      "messageId": "S2-0004"
+    },
+    "freeze": {
+      "commit": "aabed5b5d6d436154b82ea32d4d9a475d2e12000",
+      "path": "communication/agent-1/solo/agent-3-proxy/outbox/0005-freeze-sl1-subject-substitution.md",
+      "sha256": "addf60763f83dc5654b84b60c87caee357acd80ff0cef1e3de3d858beabc8033",
+      "messageId": "S3-0005"
+    }
+  },
+  "failure": null,
+  "sourceStable": true,
+  "limitation": "Three subject-substitution comparisons only; no complete catalog or RQ gate.",
+  "planSha256": "6fd5809b3b79963ea7094ca63c04b60c8991313ac94bb8823320939d663f1f96",
+  "reviewMode": "solo-correlated",
+  "reviewDisclosure": "Solo phase under the human directive A1-0059: agent 1 and the agent-2/agent-3 proxies are the same model, so every review and ACK is correlated self-review, not independent review."
+}

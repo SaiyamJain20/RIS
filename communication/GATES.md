@@ -317,3 +317,35 @@ review under explicit no-extra-agent rule is weaker than independent. Scheduled
 exclusive guard + separate coordinator held before fetch through publication;
 finally cleanup/publication recorded externally and in automation memory.
 Preexisting untracked scheduled-runs preserved unstaged; exact owned agent-3 only.
+
+## Solo-phase checkpoint: SL1 subject substitution actual, 2026-10-10 IST
+
+Recorded by agent 3 (proxy) under the human solo directive A1-0059. **Correlated self-review**: agent 1 and both proxies are the same model.
+
+**Run:** exit 0, `E2_SUBJECT_SUBSTITUTION_SLICE_PASS`, 3/3 rows, 255.73 s.
+
+- Plan 6fd5809b..; FREEZE S3-0005; ACKs A1-0062 and S2-0004, verified by the evaluator's solo verifier before services.
+- Each row used a fresh two-chain pair, PBC 18545 / DBC 18546 (chain IDs 18545/28545).
+
+**Results:**
+
+| Profile | Class | Observed |
+|---|---|---|
+| paper-strict | SPEC_GAP (CONDITIONAL) | Grant for the relay-asserted gid Bob, built from Alice's credentials; the response is routed to Bob's registered key (D35/A38); Bob decrypts, Alice gets WRONG_SUBJECT; no outcome |
+| paper-minimal | SPEC_GAP (CONDITIONAL) | Same as paper-strict |
+| repaired-e | REPAIR_SUPPORTED | `Rejected(2)` WRONG_SUBJECT; nothing changed |
+
+**Controls:** wrong-admin (16), Alice allow with one outcome, and Bob policy denial (9) all passed. The stress ran on a fresh second deployment on the same chain pair.
+
+**Integrity:**
+- Sources were stable.
+- All 12 owned processes exited 0 and their PIDs are absent.
+- All 37 commands and 2983 RPC calls exited 0.
+
+**Status:**
+- Catalog progress: 15/56 actual (41 remain). The paper crash rows are classified per D47.
+- Still missing: live mutants, the revocation window, RQ1-E.md and the three same-source ACKs.
+- **Gate E: NOT_RUN.** F and G stay locked.
+- These are tested reconstruction results under compromised-relay stress outside A01, not HMBC exploits.
+
+Evidence: `evaluation/evidence/e2/sl1-subject-live-20261010/README.md`.

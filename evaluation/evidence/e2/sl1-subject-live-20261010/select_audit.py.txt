@@ -1,0 +1,88 @@
+"""Post-run audit and redacted public selection for SL1 (scratch helper, read-only on the run).
+
+Usage: select_audit.py <repo-root> <run-output> <evidence-dir>
+Copies only selected JSON files (never *.txt raw logs, snapshots, private state or full RPC
+transcripts), refusing any file with token/private-key material, and writes live-result-audit.json.
+"""
+import hashlib, json, os, re, shutil, sys
+from pathlib import Path
+
+repo, run, evidence = (Path(a).resolve() for a in sys.argv[1:4])
+sys.path.insert(0, str(repo))
+from eth_account import Account
+from eth_utils import keccak
+
+secrets = {Account.from_key(keccak(text='hmbc-e0-synthetic-key:'+r)).key.hex().removeprefix('0x').lower()
+           for r in ('relay', 'H1-ca-admin', 'H2-ca-admin', 'H3-ca-admin', 'H4-ca-admin')}
+
+SELECT = re.compile(r'(^manifest\.json$|/manifest\.json$|/deployment\.json$|/bootstrap-checked\.json$|/commands\.json$|'
+                    r'/result\.json$|/exchanges\.json$|/worker-(before|after)\.json$|/(before|after|after-release|after-completion)(-blocks)?\.json$|'
+                    r'/public-call\.json$|/substituted-transaction\.json$|/recipients\.json$|/process\.json$|/cast-checkpoints\.json$|'
+                    r'-native/(views|transactions)\.json$)')
+EXCLUDE = re.compile(r'(/snapshots/|private-adapter-state|-rpc/\d+\.txt|\.txt$)')
+
+def walk(value, path=''):
+    if isinstance(value, dict):
+        for k, v in value.items():
+            lk = k.lower()
+            if lk == 'token' or 'private' in lk or lk == 'secret':
+                raise ValueError(f'secret-shaped field {path}/{k}')
+            walk(v, path+'/'+k)
+    elif isinstance(value, list):
+        for i, v in enumerate(value): walk(v, f'{path}[{i}]')
+    elif isinstance(value, str):
+        if any(s in value.lower() for s in secrets):
+            raise ValueError(f'TEST-ONLY runner key material at {path}')
+
+selected, refused = {}, {}
+for p in sorted(run.rglob('*')):
+    if not p.is_file(): continue
+    rel = str(p.relative_to(run))
+    if EXCLUDE.search('/'+rel) or not SELECT.search('/'+rel if '/' in rel else rel): continue
+    raw = p.read_bytes()
+    try:
+        walk(json.loads(raw))
+    except Exception as error:
+        refused[rel] = f'{type(error).__name__}: {error}'; continue
+    target = evidence/'run'/rel; target.parent.mkdir(parents=True, exist_ok=True); target.write_bytes(raw)
+    selected[rel] = hashlib.sha256(raw).hexdigest()
+
+inventory = {str(p.relative_to(run)): hashlib.sha256(p.read_bytes()).hexdigest()
+             for p in sorted(run.rglob('*')) if p.is_file() and 'private-adapter-state' not in p.parts}
+(evidence/'selected-manifest.json').write_text(json.dumps(dict(selected=selected, refused=refused), indent=1)+'\n')
+(evidence/'external-public-inventory.json').write_text(json.dumps(dict(
+    note='hashes of every non-private file in the external run directory; raw files stay in tmp/p3', files=inventory), indent=1)+'\n')
+
+# Audit
+top = json.loads((run/'manifest.json').read_text())
+audit = dict(status=top['status'], failure=top['failure'], sourceStable=top['sourceStable'], reviewMode=top.get('reviewMode'),
+             cases={}, services=[], adapters=[], commands=dict(total=0, nonzero=[]), castCheckpoints={})
+for case, entry in top['cases'].items():
+    cm = json.loads((run/entry['manifest']).read_text()) if (run/entry['manifest']).exists() else {}
+    audit['cases'][case] = dict(status=entry['status'], profiles={k: {x: v.get(x) for x in ('status', 'sourcesStable', 'servicesStopped',
+                                 'castHashPolicy', 'castStable', 'wrongAdmin', 'subjectStress')} for k, v in cm.get('profiles', {}).items()})
+    for svc in cm.get('servicesStarted', []): audit['services'].append(dict(case=case, **svc))
+    for ad in cm.get('adapterProcesses', []): audit['adapters'].append(dict(case=case, **ad))
+for cmds in run.rglob('commands.json'):
+    if '-rpc' in cmds.parent.name: continue
+    rows = json.loads(cmds.read_text())
+    for r in rows:
+        audit['commands']['total'] += 1
+        if r.get('exitCode') != 0: audit['commands']['nonzero'].append(dict(file=str(cmds.relative_to(run)), argv=r['argv'][:3], exit=r['exitCode']))
+rpc_rows = 0; rpc_nonzero = 0
+for cmds in run.rglob('*-rpc/commands.json'):
+    rows = json.loads(cmds.read_text()); rpc_rows += len(rows); rpc_nonzero += sum(r.get('exitCode') != 0 for r in rows)
+audit['rpcCommands'] = dict(total=rpc_rows, nonzero=rpc_nonzero)
+for chk in run.rglob('cast-checkpoints.json'):
+    rows = json.loads(chk.read_text())
+    audit['castCheckpoints'][str(chk.relative_to(run))] = dict(count=len(rows), allOk=all(r['ok'] for r in rows),
+                                                               labels=sorted(set(r['label'] for r in rows)))
+# PIDs absent now
+alive = []
+for item in audit['services']+audit['adapters']:
+    pid = item.get('pid')
+    if pid and Path(f'/proc/{pid}').exists(): alive.append(pid)
+audit['pidsStillPresent'] = alive
+(evidence/'live-result-audit.json').write_text(json.dumps(audit, indent=1)+'\n')
+print(json.dumps(dict(status=audit['status'], selected=len(selected), refused=refused, commands=audit['commands']['total'],
+                      nonzero=len(audit['commands']['nonzero']), rpc=audit['rpcCommands'], alive=alive), indent=1))

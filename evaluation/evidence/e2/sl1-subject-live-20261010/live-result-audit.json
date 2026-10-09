@@ -1,0 +1,221 @@
+{
+ "status": "E2_SUBJECT_SUBSTITUTION_SLICE_PASS",
+ "failure": null,
+ "sourceStable": true,
+ "reviewMode": "solo-correlated",
+ "cases": {
+  "paper-strict-subject-substitution": {
+   "status": "SUBJECT_SUBSTITUTION_CONTROL_PASS",
+   "profiles": {
+    "paper-strict": {
+     "status": "CONTROL_PASS",
+     "sourcesStable": true,
+     "servicesStopped": true,
+     "castHashPolicy": "checkpoint",
+     "castStable": true,
+     "wrongAdmin": "UNAUTHORIZED_CALLER; baseline issuer restriction, not a repair",
+     "subjectStress": {
+      "runId": "E2-SL1-subject-20261009-subject-substitution-paper-strict-subject",
+      "deployment": "paper-strict/subject-instance/deployment.json",
+      "result": "paper-strict/subject-stress/result.json"
+     }
+    }
+   }
+  },
+  "paper-minimal-subject-substitution": {
+   "status": "SUBJECT_SUBSTITUTION_CONTROL_PASS",
+   "profiles": {
+    "paper-minimal": {
+     "status": "CONTROL_PASS",
+     "sourcesStable": true,
+     "servicesStopped": true,
+     "castHashPolicy": "checkpoint",
+     "castStable": true,
+     "wrongAdmin": "UNAUTHORIZED_CALLER; baseline issuer restriction, not a repair",
+     "subjectStress": {
+      "runId": "E2-SL1-subject-20261009-subject-substitution-paper-minimal-subject",
+      "deployment": "paper-minimal/subject-instance/deployment.json",
+      "result": "paper-minimal/subject-stress/result.json"
+     }
+    }
+   }
+  },
+  "repaired-e-subject-substitution": {
+   "status": "SUBJECT_SUBSTITUTION_CONTROL_PASS",
+   "profiles": {
+    "repaired-e": {
+     "status": "CONTROL_PASS",
+     "sourcesStable": true,
+     "servicesStopped": true,
+     "castHashPolicy": "checkpoint",
+     "castStable": true,
+     "wrongAdmin": "UNAUTHORIZED_CALLER; baseline issuer restriction, not a repair",
+     "subjectStress": {
+      "runId": "E2-SL1-subject-20261009-subject-substitution-repaired-e-subject",
+      "deployment": "repaired-e/subject-instance/deployment.json",
+      "result": "repaired-e/subject-stress/result.json"
+     }
+    }
+   }
+  }
+ },
+ "services": [
+  {
+   "case": "paper-strict-subject-substitution",
+   "profile": "paper-strict",
+   "chain": "pbc",
+   "port": 18545,
+   "pid": 2378293
+  },
+  {
+   "case": "paper-strict-subject-substitution",
+   "profile": "paper-strict",
+   "chain": "dbc",
+   "port": 18546,
+   "pid": 2378414
+  },
+  {
+   "case": "paper-minimal-subject-substitution",
+   "profile": "paper-minimal",
+   "chain": "pbc",
+   "port": 18545,
+   "pid": 2396243
+  },
+  {
+   "case": "paper-minimal-subject-substitution",
+   "profile": "paper-minimal",
+   "chain": "dbc",
+   "port": 18546,
+   "pid": 2396363
+  },
+  {
+   "case": "repaired-e-subject-substitution",
+   "profile": "repaired-e",
+   "chain": "pbc",
+   "port": 18545,
+   "pid": 2414057
+  },
+  {
+   "case": "repaired-e-subject-substitution",
+   "profile": "repaired-e",
+   "chain": "dbc",
+   "port": 18546,
+   "pid": 2414177
+  }
+ ],
+ "adapters": [
+  {
+   "case": "paper-strict-subject-substitution",
+   "profile": "paper-strict",
+   "label": "adapter",
+   "pid": 2382636
+  },
+  {
+   "case": "paper-strict-subject-substitution",
+   "profile": "paper-strict",
+   "label": "adapter-subject",
+   "pid": 2391979
+  },
+  {
+   "case": "paper-minimal-subject-substitution",
+   "profile": "paper-minimal",
+   "label": "adapter",
+   "pid": 2400531
+  },
+  {
+   "case": "paper-minimal-subject-substitution",
+   "profile": "paper-minimal",
+   "label": "adapter-subject",
+   "pid": 2409820
+  },
+  {
+   "case": "repaired-e-subject-substitution",
+   "profile": "repaired-e",
+   "label": "adapter",
+   "pid": 2418326
+  },
+  {
+   "case": "repaired-e-subject-substitution",
+   "profile": "repaired-e",
+   "label": "adapter-subject",
+   "pid": 2430075
+  }
+ ],
+ "commands": {
+  "total": 37,
+  "nonzero": []
+ },
+ "castCheckpoints": {
+  "repaired-e-subject-substitution/repaired-e/dbc-rpc/cast-checkpoints.json": {
+   "count": 11,
+   "allOk": true,
+   "labels": [
+    "construct",
+    "read-group",
+    "run-end",
+    "run-start",
+    "submit"
+   ]
+  },
+  "repaired-e-subject-substitution/repaired-e/pbc-rpc/cast-checkpoints.json": {
+   "count": 21,
+   "allOk": true,
+   "labels": [
+    "construct",
+    "read-group",
+    "run-end",
+    "run-start",
+    "submit"
+   ]
+  },
+  "paper-minimal-subject-substitution/paper-minimal/dbc-rpc/cast-checkpoints.json": {
+   "count": 10,
+   "allOk": true,
+   "labels": [
+    "construct",
+    "read-group",
+    "run-end",
+    "run-start",
+    "submit"
+   ]
+  },
+  "paper-minimal-subject-substitution/paper-minimal/pbc-rpc/cast-checkpoints.json": {
+   "count": 24,
+   "allOk": true,
+   "labels": [
+    "construct",
+    "read-group",
+    "run-end",
+    "run-start",
+    "submit"
+   ]
+  },
+  "paper-strict-subject-substitution/paper-strict/dbc-rpc/cast-checkpoints.json": {
+   "count": 10,
+   "allOk": true,
+   "labels": [
+    "construct",
+    "read-group",
+    "run-end",
+    "run-start",
+    "submit"
+   ]
+  },
+  "paper-strict-subject-substitution/paper-strict/pbc-rpc/cast-checkpoints.json": {
+   "count": 24,
+   "allOk": true,
+   "labels": [
+    "construct",
+    "read-group",
+    "run-end",
+    "run-start",
+    "submit"
+   ]
+  }
+ },
+ "rpcCommands": {
+  "total": 2983,
+  "nonzero": 0
+ },
+ "pidsStillPresent": []
+}

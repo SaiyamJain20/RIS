@@ -2,59 +2,86 @@
 
 Paper-derived HMBC2020 reconstruction. Synthetic only.
 
-Phase: E / RQ1, solo mode (A1-0059, `../PLAN.md`, `../PROTOCOL.md`). Gate E NOT_RUN. F and G locked.
+Phase: E / RQ1, solo mode (A1-0059, `../PLAN.md`, `../PROTOCOL.md`, rulings A1-0061). Gate E NOT_RUN.
+F and G locked. All proxy reviews and ACKs are correlated self-review (same model as agent 1).
 
-## Current task state
+## Current state (2026-10-10 IST)
 
-P0 read-only preparation is complete. **Nothing was executed:** no tests (agent 1 owns the P1
-baseline), no services, no Git writes. The deliverables are S3-0001..S3-0003 in `outbox/`.
-
-## Key facts for restart
-
-**Catalog progress.** 12 of the 56 comparisons have actual integrated evidence (agent 3, 8e5a6dd):
-
-| Rows | Evidence | Message |
+| Step | Result | Message / evidence |
 |---|---|---|
-| crash after intent / after send × 3 profiles | `evaluation/evidence/e2/expiry-live-20261009/`, `recovery-live-20261009/` | A3-0036, A3-0038 |
-| duplicate outcome × 3 | `duplicate-live-20261009/` | A3-0040 |
-| identical replay × 3 | `grouped-replay-live-20261009/` | A3-0045 |
+| SL0 portability | done | S3-0004; `evaluation/evidence/e2/sl0-portability-20261009/` |
+| SL1 subject substitution ×3 | **actual PASS 3/3** | FREEZE S3-0005, plan 6fd5809b..; result S3-0006; `evaluation/evidence/e2/sl1-subject-live-20261010/` |
 
-- Four of the crash rows (the paper ones) are classified BLOCKED/unproved.
-- 44 rows are NOT_RUN.
+- FREEZE S3-0005 is released. No services are running.
+- Decisions D47 (paper crash relabel) and D48 (SL0 choices) are in `communication/DECISIONS.md`.
 
-**Runner.**
+**Catalog progress: 15/56 actual, 41 remaining.**
 
-- `evaluation/e2.py` supports only the expired-retry, duplicate-outcome and nonce-replay probe flags.
-- `evaluation/access_execution.py` is the single flow driver. It hard-codes nonce 1 and TTL 30 s.
+| Remaining slice | Rows |
+|---|---|
+| SL2 | forged tuple ×3, new-reference ×3, same nonce ×1 |
+| SL3 | dropped / fabricated outcome ×6 |
+| SL4 | receipts ×7 |
+| SL5 | wrong issuer, rollback ×6 |
+| SL6 | barriers, expired duty ×9 |
+| SL7 | wrong destination, expiry boundary ×6 |
 
-**Portability blockers** (S3-0001 section 4):
+After the slices: mutants, revocation window, RQ1-E.md, gate.
 
-1. The ACK verifier accepts only A1/A2/A3 IDs and branches (e1.py:49, 103-133).
-2. Tool paths point to `/home/karma`. The binaries on this host have the same hashes (`~/.foundry/bin`, `~/.svm`).
-3. The DBC port is hard-coded to 28545 (e1.py:58), outside the 18545-18599 range.
-4. `gate.py:43` always blocks.
+## Runner facts (after SL0 and SL1)
 
-**Do not edit:**
+**Solo plans** come from `e2.create_plan(..., review_mode='solo-correlated')`:
 
-- `evaluation/toolchain.json`: it is the source of the frozen copy `interfaces/v1/toolchain.json`.
-- Any `interfaces/v1` bytes.
+- FREEZE `S3-NNNN` with a `Plan-sha256:` header;
+- ACKs `A1-NNNN` (in `communication/agent-1/outbox/`) and `S2-NNNN` (in
+  `solo/agent-2-proxy/outbox/`);
+- all three must be committed in ancestors of HEAD;
+- ACK index `{agent-1, agent-2, freeze}`.
 
-**Toolchain.**
+Build the index with `git log -1 --format=%H HEAD -- <path>` plus the blob sha256, as in
+`tmp/p3/sl1-run/acks.json`.
 
-- Python: `.venv`, 3.13.5 (the frozen toolchain records 3.13.13).
+**Configuration:**
+
+- Ports: PBC 18545 and DBC 18546. Chain IDs 18545/28545.
+- Cast hash checkpoint policy.
+- Host tool override in `evaluation/host-tools.json`. Never edit `evaluation/toolchain.json`.
+
+**Second-deployment path (live-proven in SL1).** Pattern: `e1._profile(..., subject_substitution=True)`.
+
+- D1 runs the controls.
+- D2 is a fresh deployment on the same chain pair, with its own bootstrap, adapter and 0700 state.
+- SL2+ can generalize this into a stress-instance helper. That is new evaluator bytes, so it needs a
+  new plan and ACKs.
+
+**Frozen plan inputs** (`agent3Sources`): every `evaluation/**/*.py` (including evidence scripts),
+fixtures and scenarios JSON, `interfaces`, root `AGENTS.md`/`SPEC.md`/`PLAN.md`/`uv.lock`/`pyproject.toml`,
+toolchain and host-tools. Keep helper scripts out of `evaluation/` as `.py` files; store them as
+`.py.txt`.
+
+**Scratch:**
+
+- `tmp/p3/sl1-run/` holds raw SL1 outputs and the private state, which is never published.
+- Helpers live in `tmp/p3/sl0/scripts/bracket.py` and `tmp/p3/sl1-run/scripts/select_audit.py`.
+
+## Toolchain
+
+- Python: `.venv`, 3.13.5 (frozen 3.13.13). Agent 1 aligned the transitive packages with `uv.lock`
+  before SL1.
 - Foundry 1.8.5 at `~/.foundry/bin`.
-- solc 0.8.37 at `~/.svm/0.8.37/solc-0.8.37`.
-- ProVerif 2.05: agent 1 built it locally (`../evidence/host-toolchain/`, binary bc2cd5ed.. vs frozen c1087205..). Its outputs are not yet compared with A3-0033.
+- solc 0.8.37 at `~/.svm/0.8.37/`.
+- ProVerif 2.05: declared local build bc2cd5ed..; the 7 correspondence tests pass with it.
 
-**Pins.** E2 owner pins: ledger 933d2a7 (195 entries, c7b7dd51..) and protocol 0716a8e (108 entries,
-d16ddad8.., hook f0ab2400..). Ledger `src` is unchanged since the pin; only rehearsal and window
-tools were added. Protocol is unchanged since the pin.
+## Pins
+
+- Ledger 933d2a7 (195 entries, c7b7dd51..).
+- Protocol 0716a8e (108 entries, d16ddad8..; hook f0ab2400..).
+- Snapshots come from Git blobs, so working-tree edits by agent 1 or agent 2 (proxy) cannot enter a
+  run.
 
 ## Next allowed actions
 
-Run these only after agent 1 assigns them:
-
-1. SL0 portability: evaluator-only changes, test-first.
-2. SL1 subject substitution: completion collector, plumbing and a separate control deployment.
-
-Then the FREEZE (S3), the ACKs (A1 and S2), the live run, and the result.
+1. On assignment, SL2 test-first: forged tuple (paper: `policyEnf` with a fresh `pbcRequestId` and no
+   PBC log; repaired: an `eth_call` control with the honest certificate, then mined with a
+   relay-key-signed AccessDecision giving BAD_SIGNATURE 1), new-reference replay, and same nonce.
+2. Then a FREEZE, return to agent 1, and the run after both ACKs are committed.
