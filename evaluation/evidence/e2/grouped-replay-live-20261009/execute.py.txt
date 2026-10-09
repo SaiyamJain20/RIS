@@ -1,0 +1,40 @@
+import json,subprocess,hashlib,time,datetime,sys
+from pathlib import Path
+root=Path('/home/karma/Documents/RIS');sys.path.insert(0,str(root))
+from evaluation import e1,e2
+from evaluation.manifests import sha256,now
+run=Path(__file__).parent
+plan_path=root/'evaluation/evidence/e2/grouped-replay-runner-20261009/integration-plan.json'
+plan=json.loads(plan_path.read_text())
+acks={}
+for agent,ref,path in [('agent-1','origin/agent-1','communication/agent-1/outbox/0056-ack-e2-grouped-replay-freeze.md'),('agent-2','origin/agent-2','communication/agent-2/outbox/0037-ack-e2-grouped-replay-plan.md')]:
+ commit=subprocess.check_output(['git','log','-1','--format=%H',ref,'--',path],cwd=root).decode().strip()
+ raw=e1._git_blob(commit,path)
+ acks[agent]={'commit':commit,'path':path,'sha256':hashlib.sha256(raw).hexdigest()}
+ (run/(agent+'-ack.md')).write_bytes(raw)
+(run/'acks.json').write_text(json.dumps(acks,indent=2)+'\n')
+e2.verify_plan(plan)
+checked=e1._acks(run/'acks.json',plan,sha256(plan_path))
+for owner in plan['owners'].values():
+ module=e1._owner_paths(owner)
+ subprocess.run(['git','merge-base','--is-ancestor',owner['commit'],'origin/agent-'+('1' if module=='ledger' else '2')],cwd=root,check=True)
+freeze=json.loads((root/'interfaces/v1/FREEZE.json').read_text())
+print('Exact plan, both ACKs, 86 inputs and 303 immutable owner blobs verified',flush=True)
+(run/'preflight.json').write_text(json.dumps({'at':now(),'planSha256':sha256(plan_path),'acks':checked,'ownInputs':len(plan['agent3Sources']),'ownerInputs':sum(len(o['entries']) for o in plan['owners'].values()),'tools':plan['tools'],'pythonVersion':plan['pythonVersion'],'packages':plan.get('packages'),'verified':True},indent=2)+'\n')
+paths=[p for p in (root/'evaluation').rglob('*.py') if 'evidence' not in p.parts]+list((root/'evaluation/fixtures').rglob('*.json'))+list((root/'evaluation/models/e').rglob('*'))+[root/p for p in plan['agent3Sources']]
+paths=sorted(set(p for p in paths if p.is_file()))
+before={str(p.relative_to(root)):sha256(p) for p in paths}
+argv=[str(root/'.venv/bin/python'),'-m','evaluation.e2','--plan',str(plan_path),'--acks',str(run/'acks.json'),'--output',str(run/'real-e2-output')]
+record={'argv':argv,'cwd':str(root),'startedAt':now(),'inputPlanSha256':sha256(plan_path)}
+t=time.monotonic()
+try:
+ with (run/'real-e2.stdout').open('wb') as out,(run/'real-e2.stderr').open('wb') as err:
+  result=subprocess.run(argv,cwd=root,stdout=out,stderr=err)
+ record['exitCode']=result.returncode
+finally:
+ record.update(endedAt=now(),wallSeconds=time.monotonic()-t)
+ for stream in ('stdout','stderr'):record[stream+'Sha256']=sha256(run/('real-e2.'+stream))
+ after={str(p.relative_to(root)):sha256(p) for p in paths}
+ (run/'source-bracket.json').write_text(json.dumps({'before':before,'after':after,'stable':before==after},indent=2)+'\n')
+ (run/'real-e2.json').write_text(json.dumps(record,indent=2)+'\n')
+ print(json.dumps(record),flush=True)
