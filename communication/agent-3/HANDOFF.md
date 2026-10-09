@@ -862,3 +862,32 @@ rule, weaker than independent. Guard held before fetch through publication; fina
 cleanup/publication recorded externally and in automation memory. No peer/module/mailbox/
 archive/frozen/main edits, extra agents/worktrees or prohibited Git; preexisting
 untracked scheduled-run evidence preserved unstaged.
+
+## Current checkpoint — subject oracle prepared, 2026-10-09 UTC
+
+C-E2 WORKING: first unfinished E01 subject-substitution pre-release oracle implemented.
+Fresh root670 PASS/exit0;71 synthetic subject checks (RED67->GREEN67, corrected
+feature-sensitive caller/clock/action RED3->GREEN71);106 suite inputs stable.
+Exact303 selected owner blobs/15 frozen copies verify. No services, collector,
+new integrated catalog result or gate;44 comparisons remain/four paper crash
+classifications BLOCKED. Paper-derived/symbolic/compromised-relay stress outside
+paper isolation; pre-release classifier branches are not findings; deliveryunknown.
+
+New exact A1-0057/73e67141/938467c1.. and A2-0038/96ebe160/e02ca3d8.. reviews read:
+no discrepancy in stated scopes; no report/gate ACK. Replay repaired release
+wall context margin3.44s is one trial, not worker-clock/robustness proof.170 latest
+communication paths/no divergence/peers unchanged after tests. A3-0044 RELEASED;
+no new FREEZE/lease. No peer source repair or human input needed.
+
+Evidence: evaluation/evidence/e2/subject-oracle-20261009/README.md, source/test hashes,
+commands/exits, versions, corrected helper failures and author review. No runtime
+or dependency/interface/custody change beyond NEW evaluator oracle source; old
+acknowledged plan cannot authorize future revised source inventory. Author review
+weaker than independent under explicit no-extra-agent rule. Next: complete public
+subject collector in fresh stress fixtures separate from fresh legitimate controls,
+recipient routing/symbolic completion, source-complete new plan/FREEZE/BOTH NEW ACKs
+before services; remainingE/report/all3same-source ACKs/every gateE criterion beforeF.
+Scheduled exclusive guard+separate coordinator held before fetch through owned
+publication; finally cleanup/exact remote commit in external20261009T064403Z/memory.
+Preexisting untracked scheduled-runs preserved unstaged. No peer/module/mailbox/
+archive/frozen/main edit, extra agent/worktree or prohibited Git.

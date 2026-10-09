@@ -1,0 +1,46 @@
+{
+  "id": "E01-subject-substitution-paper-strict",
+  "caseFamily": "E01",
+  "profile": "paper-strict",
+  "sourceRefs": [
+    "S09",
+    "S12",
+    "S13",
+    "S20",
+    "SPEC4/E01"
+  ],
+  "assumptions": [
+    "A01",
+    "A02",
+    "A14",
+    "A19",
+    "A25",
+    "A38",
+    "A41"
+  ],
+  "baseScenarioId": "E-control-Alice-paper-strict",
+  "variant": "subject-substitution",
+  "steps": [
+    {
+      "action": "REQUEST_ACCESS",
+      "offsetSeconds": "0"
+    },
+    {
+      "action": "SUBSTITUTE_SUBJECT",
+      "offsetSeconds": "0"
+    },
+    {
+      "action": "FORWARD_OR_CONSUME",
+      "offsetSeconds": "0"
+    }
+  ],
+  "expected": {
+    "property": "decision-provenance",
+    "outcome": "CONDITIONAL",
+    "classification": "SPEC_GAP",
+    "error": null,
+    "qualification": "Compromised configured relay stress is outside paper secure isolation. Substitute only gid in the relay ForwardedRequest passed to policyEnf while keeping Alice's verified credential records. Paper profiles use no decision certificate. The DBC may authorize the substituted tuple; the grant gid is relay-asserted. With D35/A38 the symbolic response follows that gid's PBC-registered recipient key, not the original requester. An unregistered gid gets no release. This is a reconstruction/specification-gap comparison, not an HMBC exploit."
+  },
+  "adapterMode": "symbolic",
+  "executionStatus": "NOT_RUN"
+}

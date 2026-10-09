@@ -1,0 +1,2002 @@
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF  [100%]
+=================================== FAILURES ===================================
+_ test_subject_substitution_distinguishes_paper_tuple_from_unchanged_certificate[paper-strict] _
+
+profile = 'paper-strict'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    def test_subject_substitution_distinguishes_paper_tuple_from_unchanged_certificate(profile):
+>       proof = oracle()(**facts(profile))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:56: TypeError
+_ test_subject_substitution_distinguishes_paper_tuple_from_unchanged_certificate[paper-minimal] _
+
+profile = 'paper-minimal'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    def test_subject_substitution_distinguishes_paper_tuple_from_unchanged_certificate(profile):
+>       proof = oracle()(**facts(profile))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:56: TypeError
+_ test_subject_substitution_distinguishes_paper_tuple_from_unchanged_certificate[repaired-e] _
+
+profile = 'repaired-e'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    def test_subject_substitution_distinguishes_paper_tuple_from_unchanged_certificate(profile):
+>       proof = oracle()(**facts(profile))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:56: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[no-substitution-paper-strict] _
+
+profile = 'paper-strict', mutation = 'no-substitution'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[no-substitution-paper-minimal] _
+
+profile = 'paper-minimal', mutation = 'no-substitution'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[no-substitution-repaired-e] _
+
+profile = 'repaired-e', mutation = 'no-substitution'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[wrong-target-paper-strict] _
+
+profile = 'paper-strict', mutation = 'wrong-target'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[wrong-target-paper-minimal] _
+
+profile = 'paper-minimal', mutation = 'wrong-target'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[wrong-target-repaired-e] _
+
+profile = 'repaired-e', mutation = 'wrong-target'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[data-paper-strict] _
+
+profile = 'paper-strict', mutation = 'data'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[data-paper-minimal] _
+
+profile = 'paper-minimal', mutation = 'data'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[data-repaired-e] __
+
+profile = 'repaired-e', mutation = 'data'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[reference-or-nonce-paper-strict] _
+
+profile = 'paper-strict', mutation = 'reference-or-nonce'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[reference-or-nonce-paper-minimal] _
+
+profile = 'paper-minimal', mutation = 'reference-or-nonce'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[reference-or-nonce-repaired-e] _
+
+profile = 'repaired-e', mutation = 'reference-or-nonce'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[credentials-paper-strict] _
+
+profile = 'paper-strict', mutation = 'credentials'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[credentials-paper-minimal] _
+
+profile = 'paper-minimal', mutation = 'credentials'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[credentials-repaired-e] _
+
+profile = 'repaired-e', mutation = 'credentials'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[not-forwarded-paper-strict] _
+
+profile = 'paper-strict', mutation = 'not-forwarded'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[not-forwarded-paper-minimal] _
+
+profile = 'paper-minimal', mutation = 'not-forwarded'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[not-forwarded-repaired-e] _
+
+profile = 'repaired-e', mutation = 'not-forwarded'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[unlogged-paper-strict] _
+
+profile = 'paper-strict', mutation = 'unlogged'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[unlogged-paper-minimal] _
+
+profile = 'paper-minimal', mutation = 'unlogged'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[unlogged-repaired-e] _
+
+profile = 'repaired-e', mutation = 'unlogged'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[prior-grant-paper-strict] _
+
+profile = 'paper-strict', mutation = 'prior-grant'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[prior-grant-paper-minimal] _
+
+profile = 'paper-minimal', mutation = 'prior-grant'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[prior-grant-repaired-e] _
+
+profile = 'repaired-e', mutation = 'prior-grant'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[nonce-alice-paper-strict] _
+
+profile = 'paper-strict', mutation = 'nonce-alice'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[nonce-alice-paper-minimal] _
+
+profile = 'paper-minimal', mutation = 'nonce-alice'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[nonce-alice-repaired-e] _
+
+profile = 'repaired-e', mutation = 'nonce-alice'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[nonce-bob-paper-strict] _
+
+profile = 'paper-strict', mutation = 'nonce-bob'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[nonce-bob-paper-minimal] _
+
+profile = 'paper-minimal', mutation = 'nonce-bob'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[nonce-bob-repaired-e] _
+
+profile = 'repaired-e', mutation = 'nonce-bob'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[pbc-change-paper-strict] _
+
+profile = 'paper-strict', mutation = 'pbc-change'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[pbc-change-paper-minimal] _
+
+profile = 'paper-minimal', mutation = 'pbc-change'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[pbc-change-repaired-e] _
+
+profile = 'repaired-e', mutation = 'pbc-change'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[worker-change-paper-strict] _
+
+profile = 'paper-strict', mutation = 'worker-change'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[worker-change-paper-minimal] _
+
+profile = 'paper-minimal', mutation = 'worker-change'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[worker-change-repaired-e] _
+
+profile = 'repaired-e', mutation = 'worker-change'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[count-paper-strict] _
+
+profile = 'paper-strict', mutation = 'count'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[count-paper-minimal] _
+
+profile = 'paper-minimal', mutation = 'count'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[count-repaired-e] _
+
+profile = 'repaired-e', mutation = 'count'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[missing-history-paper-strict] _
+
+profile = 'paper-strict', mutation = 'missing-history'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[missing-history-paper-minimal] _
+
+profile = 'paper-minimal', mutation = 'missing-history'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[missing-history-repaired-e] _
+
+profile = 'repaired-e', mutation = 'missing-history'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[before-request-paper-strict] _
+
+profile = 'paper-strict', mutation = 'before-request'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[before-request-paper-minimal] _
+
+profile = 'paper-minimal', mutation = 'before-request'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[before-request-repaired-e] _
+
+profile = 'repaired-e', mutation = 'before-request'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[expired-paper-strict] _
+
+profile = 'paper-strict', mutation = 'expired'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[expired-paper-minimal] _
+
+profile = 'paper-minimal', mutation = 'expired'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_subject_oracle_rejects_wrong_schedule_and_false_state[expired-repaired-e] _
+
+profile = 'repaired-e', mutation = 'expired'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('mutation', ['no-substitution', 'wrong-target', 'data', 'reference-or-nonce',
+        'credentials', 'not-forwarded', 'unlogged', 'prior-grant', 'nonce-alice', 'nonce-bob',
+        'pbc-change', 'worker-change', 'count', 'missing-history', 'before-request', 'expired'])
+    def test_subject_oracle_rejects_wrong_schedule_and_false_state(profile, mutation):
+        d = facts(profile)
+        if mutation == 'no-substitution': d['submitted_arguments'][0]['gid'] = 'alice'
+        if mutation == 'wrong-target': d['submitted_arguments'][0]['gid'] = 'unregistered'
+        if mutation == 'data': d['submitted_arguments'][0]['dataId'] = 'other'
+        if mutation == 'reference-or-nonce': d['submitted_arguments'][0]['nonce' if profile == 'repaired-e' else 'pbcRequestId'] = 'other'
+        if mutation == 'credentials': d['submitted_arguments'][-1].append({'role': 'extra'})
+        if mutation == 'not-forwarded': d['before']['request']['status'] = '0'
+        if mutation == 'unlogged': d['before']['request']['requestLogId'] = '0'
+        if mutation == 'prior-grant': d['before']['grant']['exists'] = True
+        if mutation == 'nonce-alice': d['after']['nonceAlice'] = True
+        if mutation == 'nonce-bob': d['after']['nonceBob'] = True
+        if mutation == 'pbc-change': d['after']['logs']['pbc'].append({'outcome': 'new'})
+        if mutation == 'worker-change': d['after']['worker']['events'].append('RELEASE_INTENT')
+        if mutation == 'count': d['after']['accessLogCount'] = '2'
+        if mutation == 'missing-history': d['before']['logs'].pop('dbc')
+        if mutation == 'before-request': d['timestamp'] = '-1'
+        if mutation == 'expired': d['timestamp'] = '130'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:86: TypeError
+_ test_repaired_subject_requires_original_certificate_and_whole_rollback[decision] _
+
+mutation = 'decision'
+
+    @pytest.mark.parametrize('mutation', ['decision', 'signature', 'wrong-code', 'success', 'receipt', 'state'])
+    def test_repaired_subject_requires_original_certificate_and_whole_rollback(mutation):
+        d = facts('repaired-e')
+        if mutation == 'decision': d['submitted_arguments'][1]['decision']['requestDigest'] = 'rewritten'
+        if mutation == 'signature': d['submitted_arguments'][1]['signatures'] = ['replacement']
+        if mutation == 'wrong-code': d['rejection_code'] = '2'
+        if mutation == 'success': d['success'] = True
+        if mutation == 'receipt': d['receipt_events'].append({'name': 'GrantIssued'})
+        if mutation == 'state': d['after']['grant']['allowed'] = True
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:98: TypeError
+_ test_repaired_subject_requires_original_certificate_and_whole_rollback[signature] _
+
+mutation = 'signature'
+
+    @pytest.mark.parametrize('mutation', ['decision', 'signature', 'wrong-code', 'success', 'receipt', 'state'])
+    def test_repaired_subject_requires_original_certificate_and_whole_rollback(mutation):
+        d = facts('repaired-e')
+        if mutation == 'decision': d['submitted_arguments'][1]['decision']['requestDigest'] = 'rewritten'
+        if mutation == 'signature': d['submitted_arguments'][1]['signatures'] = ['replacement']
+        if mutation == 'wrong-code': d['rejection_code'] = '2'
+        if mutation == 'success': d['success'] = True
+        if mutation == 'receipt': d['receipt_events'].append({'name': 'GrantIssued'})
+        if mutation == 'state': d['after']['grant']['allowed'] = True
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:98: TypeError
+_ test_repaired_subject_requires_original_certificate_and_whole_rollback[wrong-code] _
+
+mutation = 'wrong-code'
+
+    @pytest.mark.parametrize('mutation', ['decision', 'signature', 'wrong-code', 'success', 'receipt', 'state'])
+    def test_repaired_subject_requires_original_certificate_and_whole_rollback(mutation):
+        d = facts('repaired-e')
+        if mutation == 'decision': d['submitted_arguments'][1]['decision']['requestDigest'] = 'rewritten'
+        if mutation == 'signature': d['submitted_arguments'][1]['signatures'] = ['replacement']
+        if mutation == 'wrong-code': d['rejection_code'] = '2'
+        if mutation == 'success': d['success'] = True
+        if mutation == 'receipt': d['receipt_events'].append({'name': 'GrantIssued'})
+        if mutation == 'state': d['after']['grant']['allowed'] = True
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:98: TypeError
+_ test_repaired_subject_requires_original_certificate_and_whole_rollback[success] _
+
+mutation = 'success'
+
+    @pytest.mark.parametrize('mutation', ['decision', 'signature', 'wrong-code', 'success', 'receipt', 'state'])
+    def test_repaired_subject_requires_original_certificate_and_whole_rollback(mutation):
+        d = facts('repaired-e')
+        if mutation == 'decision': d['submitted_arguments'][1]['decision']['requestDigest'] = 'rewritten'
+        if mutation == 'signature': d['submitted_arguments'][1]['signatures'] = ['replacement']
+        if mutation == 'wrong-code': d['rejection_code'] = '2'
+        if mutation == 'success': d['success'] = True
+        if mutation == 'receipt': d['receipt_events'].append({'name': 'GrantIssued'})
+        if mutation == 'state': d['after']['grant']['allowed'] = True
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:98: TypeError
+_ test_repaired_subject_requires_original_certificate_and_whole_rollback[receipt] _
+
+mutation = 'receipt'
+
+    @pytest.mark.parametrize('mutation', ['decision', 'signature', 'wrong-code', 'success', 'receipt', 'state'])
+    def test_repaired_subject_requires_original_certificate_and_whole_rollback(mutation):
+        d = facts('repaired-e')
+        if mutation == 'decision': d['submitted_arguments'][1]['decision']['requestDigest'] = 'rewritten'
+        if mutation == 'signature': d['submitted_arguments'][1]['signatures'] = ['replacement']
+        if mutation == 'wrong-code': d['rejection_code'] = '2'
+        if mutation == 'success': d['success'] = True
+        if mutation == 'receipt': d['receipt_events'].append({'name': 'GrantIssued'})
+        if mutation == 'state': d['after']['grant']['allowed'] = True
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:98: TypeError
+_ test_repaired_subject_requires_original_certificate_and_whole_rollback[state] _
+
+mutation = 'state'
+
+    @pytest.mark.parametrize('mutation', ['decision', 'signature', 'wrong-code', 'success', 'receipt', 'state'])
+    def test_repaired_subject_requires_original_certificate_and_whole_rollback(mutation):
+        d = facts('repaired-e')
+        if mutation == 'decision': d['submitted_arguments'][1]['decision']['requestDigest'] = 'rewritten'
+        if mutation == 'signature': d['submitted_arguments'][1]['signatures'] = ['replacement']
+        if mutation == 'wrong-code': d['rejection_code'] = '2'
+        if mutation == 'success': d['success'] = True
+        if mutation == 'receipt': d['receipt_events'].append({'name': 'GrantIssued'})
+        if mutation == 'state': d['after']['grant']['allowed'] = True
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:98: TypeError
+_ test_paper_subject_requires_exact_allowed_grant_and_access_evidence[deny-all] _
+
+mutation = 'deny-all'
+
+    @pytest.mark.parametrize('mutation', ['deny-all', 'grant-subject', 'grant-recipient', 'grant-expiry',
+        'no-grant-event', 'extra-event', 'access-subject', 'access-credentials', 'grant-id', 'history'])
+    def test_paper_subject_requires_exact_allowed_grant_and_access_evidence(mutation):
+        d = facts()
+        if mutation == 'deny-all': d['success'] = False
+        if mutation == 'grant-subject': d['after']['grant']['gid'] = 'alice'
+        if mutation == 'grant-recipient': d['after']['grant']['recipientKeyHash'] = 'alice-key'
+        if mutation == 'grant-expiry': d['after']['grant']['expiresAt'] = '160'
+        if mutation == 'no-grant-event': d['receipt_events'].pop(0)
+        if mutation == 'extra-event': d['receipt_events'].append({'name': 'Other'})
+        if mutation == 'access-subject': d['receipt_events'][1]['fields']['gid'] = 'alice'
+        if mutation == 'access-credentials': d['receipt_events'][1]['fields']['credentialDigest'] = 'other'
+        if mutation == 'grant-id': d['receipt_events'][0]['fields']['grantId'] = 'other'
+        if mutation == 'history': d['after']['logs']['dbc'].append({'name': 'Other'})
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:115: TypeError
+_ test_paper_subject_requires_exact_allowed_grant_and_access_evidence[grant-subject] _
+
+mutation = 'grant-subject'
+
+    @pytest.mark.parametrize('mutation', ['deny-all', 'grant-subject', 'grant-recipient', 'grant-expiry',
+        'no-grant-event', 'extra-event', 'access-subject', 'access-credentials', 'grant-id', 'history'])
+    def test_paper_subject_requires_exact_allowed_grant_and_access_evidence(mutation):
+        d = facts()
+        if mutation == 'deny-all': d['success'] = False
+        if mutation == 'grant-subject': d['after']['grant']['gid'] = 'alice'
+        if mutation == 'grant-recipient': d['after']['grant']['recipientKeyHash'] = 'alice-key'
+        if mutation == 'grant-expiry': d['after']['grant']['expiresAt'] = '160'
+        if mutation == 'no-grant-event': d['receipt_events'].pop(0)
+        if mutation == 'extra-event': d['receipt_events'].append({'name': 'Other'})
+        if mutation == 'access-subject': d['receipt_events'][1]['fields']['gid'] = 'alice'
+        if mutation == 'access-credentials': d['receipt_events'][1]['fields']['credentialDigest'] = 'other'
+        if mutation == 'grant-id': d['receipt_events'][0]['fields']['grantId'] = 'other'
+        if mutation == 'history': d['after']['logs']['dbc'].append({'name': 'Other'})
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:115: TypeError
+_ test_paper_subject_requires_exact_allowed_grant_and_access_evidence[grant-recipient] _
+
+mutation = 'grant-recipient'
+
+    @pytest.mark.parametrize('mutation', ['deny-all', 'grant-subject', 'grant-recipient', 'grant-expiry',
+        'no-grant-event', 'extra-event', 'access-subject', 'access-credentials', 'grant-id', 'history'])
+    def test_paper_subject_requires_exact_allowed_grant_and_access_evidence(mutation):
+        d = facts()
+        if mutation == 'deny-all': d['success'] = False
+        if mutation == 'grant-subject': d['after']['grant']['gid'] = 'alice'
+        if mutation == 'grant-recipient': d['after']['grant']['recipientKeyHash'] = 'alice-key'
+        if mutation == 'grant-expiry': d['after']['grant']['expiresAt'] = '160'
+        if mutation == 'no-grant-event': d['receipt_events'].pop(0)
+        if mutation == 'extra-event': d['receipt_events'].append({'name': 'Other'})
+        if mutation == 'access-subject': d['receipt_events'][1]['fields']['gid'] = 'alice'
+        if mutation == 'access-credentials': d['receipt_events'][1]['fields']['credentialDigest'] = 'other'
+        if mutation == 'grant-id': d['receipt_events'][0]['fields']['grantId'] = 'other'
+        if mutation == 'history': d['after']['logs']['dbc'].append({'name': 'Other'})
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:115: TypeError
+_ test_paper_subject_requires_exact_allowed_grant_and_access_evidence[grant-expiry] _
+
+mutation = 'grant-expiry'
+
+    @pytest.mark.parametrize('mutation', ['deny-all', 'grant-subject', 'grant-recipient', 'grant-expiry',
+        'no-grant-event', 'extra-event', 'access-subject', 'access-credentials', 'grant-id', 'history'])
+    def test_paper_subject_requires_exact_allowed_grant_and_access_evidence(mutation):
+        d = facts()
+        if mutation == 'deny-all': d['success'] = False
+        if mutation == 'grant-subject': d['after']['grant']['gid'] = 'alice'
+        if mutation == 'grant-recipient': d['after']['grant']['recipientKeyHash'] = 'alice-key'
+        if mutation == 'grant-expiry': d['after']['grant']['expiresAt'] = '160'
+        if mutation == 'no-grant-event': d['receipt_events'].pop(0)
+        if mutation == 'extra-event': d['receipt_events'].append({'name': 'Other'})
+        if mutation == 'access-subject': d['receipt_events'][1]['fields']['gid'] = 'alice'
+        if mutation == 'access-credentials': d['receipt_events'][1]['fields']['credentialDigest'] = 'other'
+        if mutation == 'grant-id': d['receipt_events'][0]['fields']['grantId'] = 'other'
+        if mutation == 'history': d['after']['logs']['dbc'].append({'name': 'Other'})
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:115: TypeError
+_ test_paper_subject_requires_exact_allowed_grant_and_access_evidence[no-grant-event] _
+
+mutation = 'no-grant-event'
+
+    @pytest.mark.parametrize('mutation', ['deny-all', 'grant-subject', 'grant-recipient', 'grant-expiry',
+        'no-grant-event', 'extra-event', 'access-subject', 'access-credentials', 'grant-id', 'history'])
+    def test_paper_subject_requires_exact_allowed_grant_and_access_evidence(mutation):
+        d = facts()
+        if mutation == 'deny-all': d['success'] = False
+        if mutation == 'grant-subject': d['after']['grant']['gid'] = 'alice'
+        if mutation == 'grant-recipient': d['after']['grant']['recipientKeyHash'] = 'alice-key'
+        if mutation == 'grant-expiry': d['after']['grant']['expiresAt'] = '160'
+        if mutation == 'no-grant-event': d['receipt_events'].pop(0)
+        if mutation == 'extra-event': d['receipt_events'].append({'name': 'Other'})
+        if mutation == 'access-subject': d['receipt_events'][1]['fields']['gid'] = 'alice'
+        if mutation == 'access-credentials': d['receipt_events'][1]['fields']['credentialDigest'] = 'other'
+        if mutation == 'grant-id': d['receipt_events'][0]['fields']['grantId'] = 'other'
+        if mutation == 'history': d['after']['logs']['dbc'].append({'name': 'Other'})
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:115: TypeError
+_ test_paper_subject_requires_exact_allowed_grant_and_access_evidence[extra-event] _
+
+mutation = 'extra-event'
+
+    @pytest.mark.parametrize('mutation', ['deny-all', 'grant-subject', 'grant-recipient', 'grant-expiry',
+        'no-grant-event', 'extra-event', 'access-subject', 'access-credentials', 'grant-id', 'history'])
+    def test_paper_subject_requires_exact_allowed_grant_and_access_evidence(mutation):
+        d = facts()
+        if mutation == 'deny-all': d['success'] = False
+        if mutation == 'grant-subject': d['after']['grant']['gid'] = 'alice'
+        if mutation == 'grant-recipient': d['after']['grant']['recipientKeyHash'] = 'alice-key'
+        if mutation == 'grant-expiry': d['after']['grant']['expiresAt'] = '160'
+        if mutation == 'no-grant-event': d['receipt_events'].pop(0)
+        if mutation == 'extra-event': d['receipt_events'].append({'name': 'Other'})
+        if mutation == 'access-subject': d['receipt_events'][1]['fields']['gid'] = 'alice'
+        if mutation == 'access-credentials': d['receipt_events'][1]['fields']['credentialDigest'] = 'other'
+        if mutation == 'grant-id': d['receipt_events'][0]['fields']['grantId'] = 'other'
+        if mutation == 'history': d['after']['logs']['dbc'].append({'name': 'Other'})
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:115: TypeError
+_ test_paper_subject_requires_exact_allowed_grant_and_access_evidence[access-subject] _
+
+mutation = 'access-subject'
+
+    @pytest.mark.parametrize('mutation', ['deny-all', 'grant-subject', 'grant-recipient', 'grant-expiry',
+        'no-grant-event', 'extra-event', 'access-subject', 'access-credentials', 'grant-id', 'history'])
+    def test_paper_subject_requires_exact_allowed_grant_and_access_evidence(mutation):
+        d = facts()
+        if mutation == 'deny-all': d['success'] = False
+        if mutation == 'grant-subject': d['after']['grant']['gid'] = 'alice'
+        if mutation == 'grant-recipient': d['after']['grant']['recipientKeyHash'] = 'alice-key'
+        if mutation == 'grant-expiry': d['after']['grant']['expiresAt'] = '160'
+        if mutation == 'no-grant-event': d['receipt_events'].pop(0)
+        if mutation == 'extra-event': d['receipt_events'].append({'name': 'Other'})
+        if mutation == 'access-subject': d['receipt_events'][1]['fields']['gid'] = 'alice'
+        if mutation == 'access-credentials': d['receipt_events'][1]['fields']['credentialDigest'] = 'other'
+        if mutation == 'grant-id': d['receipt_events'][0]['fields']['grantId'] = 'other'
+        if mutation == 'history': d['after']['logs']['dbc'].append({'name': 'Other'})
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:115: TypeError
+_ test_paper_subject_requires_exact_allowed_grant_and_access_evidence[access-credentials] _
+
+mutation = 'access-credentials'
+
+    @pytest.mark.parametrize('mutation', ['deny-all', 'grant-subject', 'grant-recipient', 'grant-expiry',
+        'no-grant-event', 'extra-event', 'access-subject', 'access-credentials', 'grant-id', 'history'])
+    def test_paper_subject_requires_exact_allowed_grant_and_access_evidence(mutation):
+        d = facts()
+        if mutation == 'deny-all': d['success'] = False
+        if mutation == 'grant-subject': d['after']['grant']['gid'] = 'alice'
+        if mutation == 'grant-recipient': d['after']['grant']['recipientKeyHash'] = 'alice-key'
+        if mutation == 'grant-expiry': d['after']['grant']['expiresAt'] = '160'
+        if mutation == 'no-grant-event': d['receipt_events'].pop(0)
+        if mutation == 'extra-event': d['receipt_events'].append({'name': 'Other'})
+        if mutation == 'access-subject': d['receipt_events'][1]['fields']['gid'] = 'alice'
+        if mutation == 'access-credentials': d['receipt_events'][1]['fields']['credentialDigest'] = 'other'
+        if mutation == 'grant-id': d['receipt_events'][0]['fields']['grantId'] = 'other'
+        if mutation == 'history': d['after']['logs']['dbc'].append({'name': 'Other'})
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:115: TypeError
+_ test_paper_subject_requires_exact_allowed_grant_and_access_evidence[grant-id] _
+
+mutation = 'grant-id'
+
+    @pytest.mark.parametrize('mutation', ['deny-all', 'grant-subject', 'grant-recipient', 'grant-expiry',
+        'no-grant-event', 'extra-event', 'access-subject', 'access-credentials', 'grant-id', 'history'])
+    def test_paper_subject_requires_exact_allowed_grant_and_access_evidence(mutation):
+        d = facts()
+        if mutation == 'deny-all': d['success'] = False
+        if mutation == 'grant-subject': d['after']['grant']['gid'] = 'alice'
+        if mutation == 'grant-recipient': d['after']['grant']['recipientKeyHash'] = 'alice-key'
+        if mutation == 'grant-expiry': d['after']['grant']['expiresAt'] = '160'
+        if mutation == 'no-grant-event': d['receipt_events'].pop(0)
+        if mutation == 'extra-event': d['receipt_events'].append({'name': 'Other'})
+        if mutation == 'access-subject': d['receipt_events'][1]['fields']['gid'] = 'alice'
+        if mutation == 'access-credentials': d['receipt_events'][1]['fields']['credentialDigest'] = 'other'
+        if mutation == 'grant-id': d['receipt_events'][0]['fields']['grantId'] = 'other'
+        if mutation == 'history': d['after']['logs']['dbc'].append({'name': 'Other'})
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:115: TypeError
+_ test_paper_subject_requires_exact_allowed_grant_and_access_evidence[history] _
+
+mutation = 'history'
+
+    @pytest.mark.parametrize('mutation', ['deny-all', 'grant-subject', 'grant-recipient', 'grant-expiry',
+        'no-grant-event', 'extra-event', 'access-subject', 'access-credentials', 'grant-id', 'history'])
+    def test_paper_subject_requires_exact_allowed_grant_and_access_evidence(mutation):
+        d = facts()
+        if mutation == 'deny-all': d['success'] = False
+        if mutation == 'grant-subject': d['after']['grant']['gid'] = 'alice'
+        if mutation == 'grant-recipient': d['after']['grant']['recipientKeyHash'] = 'alice-key'
+        if mutation == 'grant-expiry': d['after']['grant']['expiresAt'] = '160'
+        if mutation == 'no-grant-event': d['receipt_events'].pop(0)
+        if mutation == 'extra-event': d['receipt_events'].append({'name': 'Other'})
+        if mutation == 'access-subject': d['receipt_events'][1]['fields']['gid'] = 'alice'
+        if mutation == 'access-credentials': d['receipt_events'][1]['fields']['credentialDigest'] = 'other'
+        if mutation == 'grant-id': d['receipt_events'][0]['fields']['grantId'] = 'other'
+        if mutation == 'history': d['after']['logs']['dbc'].append({'name': 'Other'})
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:115: TypeError
+_ test_subject_oracle_enforces_caller_action_and_observation_clock[wrong-caller] _
+
+mutation = 'wrong-caller'
+
+    @pytest.mark.parametrize('mutation', ['wrong-caller', 'before-decision', 'wrong-action', 'unknown-profile'])
+    def test_subject_oracle_enforces_caller_action_and_observation_clock(mutation):
+        d = facts()
+        if mutation == 'wrong-caller': d['receipt_events'][1]['fields']['submitter'] = 'outsider'
+        if mutation == 'before-decision': d['timestamp'] = '99'
+        if mutation == 'wrong-action':
+            for obj in (d['original_request'], d['forwarded'], d['submitted_arguments'][0]): obj['action'] = '2'
+        if mutation == 'unknown-profile': d['profile'] = 'mutant-no-binding'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:126: TypeError
+_ test_subject_oracle_enforces_caller_action_and_observation_clock[before-decision] _
+
+mutation = 'before-decision'
+
+    @pytest.mark.parametrize('mutation', ['wrong-caller', 'before-decision', 'wrong-action', 'unknown-profile'])
+    def test_subject_oracle_enforces_caller_action_and_observation_clock(mutation):
+        d = facts()
+        if mutation == 'wrong-caller': d['receipt_events'][1]['fields']['submitter'] = 'outsider'
+        if mutation == 'before-decision': d['timestamp'] = '99'
+        if mutation == 'wrong-action':
+            for obj in (d['original_request'], d['forwarded'], d['submitted_arguments'][0]): obj['action'] = '2'
+        if mutation == 'unknown-profile': d['profile'] = 'mutant-no-binding'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:126: TypeError
+_ test_subject_oracle_enforces_caller_action_and_observation_clock[wrong-action] _
+
+mutation = 'wrong-action'
+
+    @pytest.mark.parametrize('mutation', ['wrong-caller', 'before-decision', 'wrong-action', 'unknown-profile'])
+    def test_subject_oracle_enforces_caller_action_and_observation_clock(mutation):
+        d = facts()
+        if mutation == 'wrong-caller': d['receipt_events'][1]['fields']['submitter'] = 'outsider'
+        if mutation == 'before-decision': d['timestamp'] = '99'
+        if mutation == 'wrong-action':
+            for obj in (d['original_request'], d['forwarded'], d['submitted_arguments'][0]): obj['action'] = '2'
+        if mutation == 'unknown-profile': d['profile'] = 'mutant-no-binding'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:126: TypeError
+_ test_subject_oracle_enforces_caller_action_and_observation_clock[unknown-profile] _
+
+mutation = 'unknown-profile'
+
+    @pytest.mark.parametrize('mutation', ['wrong-caller', 'before-decision', 'wrong-action', 'unknown-profile'])
+    def test_subject_oracle_enforces_caller_action_and_observation_clock(mutation):
+        d = facts()
+        if mutation == 'wrong-caller': d['receipt_events'][1]['fields']['submitter'] = 'outsider'
+        if mutation == 'before-decision': d['timestamp'] = '99'
+        if mutation == 'wrong-action':
+            for obj in (d['original_request'], d['forwarded'], d['submitted_arguments'][0]): obj['action'] = '2'
+        if mutation == 'unknown-profile': d['profile'] = 'mutant-no-binding'
+>       with pytest.raises(ValueError): oracle()(**d)
+                                        ^^^^^^^^^^^^^
+E       TypeError: check_subject_substitution() got an unexpected keyword argument 'relay'
+
+evaluation/tests/test_subject_substitution.py:126: TypeError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_substitution_distinguishes_paper_tuple_from_unchanged_certificate[paper-strict]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_substitution_distinguishes_paper_tuple_from_unchanged_certificate[paper-minimal]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_substitution_distinguishes_paper_tuple_from_unchanged_certificate[repaired-e]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[no-substitution-paper-strict]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[no-substitution-paper-minimal]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[no-substitution-repaired-e]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[wrong-target-paper-strict]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[wrong-target-paper-minimal]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[wrong-target-repaired-e]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[data-paper-strict]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[data-paper-minimal]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[data-repaired-e]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[reference-or-nonce-paper-strict]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[reference-or-nonce-paper-minimal]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[reference-or-nonce-repaired-e]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[credentials-paper-strict]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[credentials-paper-minimal]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[credentials-repaired-e]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[not-forwarded-paper-strict]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[not-forwarded-paper-minimal]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[not-forwarded-repaired-e]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[unlogged-paper-strict]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[unlogged-paper-minimal]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[unlogged-repaired-e]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[prior-grant-paper-strict]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[prior-grant-paper-minimal]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[prior-grant-repaired-e]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[nonce-alice-paper-strict]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[nonce-alice-paper-minimal]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[nonce-alice-repaired-e]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[nonce-bob-paper-strict]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[nonce-bob-paper-minimal]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[nonce-bob-repaired-e]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[pbc-change-paper-strict]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[pbc-change-paper-minimal]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[pbc-change-repaired-e]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[worker-change-paper-strict]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[worker-change-paper-minimal]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[worker-change-repaired-e]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[count-paper-strict]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[count-paper-minimal]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[count-repaired-e]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[missing-history-paper-strict]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[missing-history-paper-minimal]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[missing-history-repaired-e]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[before-request-paper-strict]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[before-request-paper-minimal]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[before-request-repaired-e]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[expired-paper-strict]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[expired-paper-minimal]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_rejects_wrong_schedule_and_false_state[expired-repaired-e]
+FAILED evaluation/tests/test_subject_substitution.py::test_repaired_subject_requires_original_certificate_and_whole_rollback[decision]
+FAILED evaluation/tests/test_subject_substitution.py::test_repaired_subject_requires_original_certificate_and_whole_rollback[signature]
+FAILED evaluation/tests/test_subject_substitution.py::test_repaired_subject_requires_original_certificate_and_whole_rollback[wrong-code]
+FAILED evaluation/tests/test_subject_substitution.py::test_repaired_subject_requires_original_certificate_and_whole_rollback[success]
+FAILED evaluation/tests/test_subject_substitution.py::test_repaired_subject_requires_original_certificate_and_whole_rollback[receipt]
+FAILED evaluation/tests/test_subject_substitution.py::test_repaired_subject_requires_original_certificate_and_whole_rollback[state]
+FAILED evaluation/tests/test_subject_substitution.py::test_paper_subject_requires_exact_allowed_grant_and_access_evidence[deny-all]
+FAILED evaluation/tests/test_subject_substitution.py::test_paper_subject_requires_exact_allowed_grant_and_access_evidence[grant-subject]
+FAILED evaluation/tests/test_subject_substitution.py::test_paper_subject_requires_exact_allowed_grant_and_access_evidence[grant-recipient]
+FAILED evaluation/tests/test_subject_substitution.py::test_paper_subject_requires_exact_allowed_grant_and_access_evidence[grant-expiry]
+FAILED evaluation/tests/test_subject_substitution.py::test_paper_subject_requires_exact_allowed_grant_and_access_evidence[no-grant-event]
+FAILED evaluation/tests/test_subject_substitution.py::test_paper_subject_requires_exact_allowed_grant_and_access_evidence[extra-event]
+FAILED evaluation/tests/test_subject_substitution.py::test_paper_subject_requires_exact_allowed_grant_and_access_evidence[access-subject]
+FAILED evaluation/tests/test_subject_substitution.py::test_paper_subject_requires_exact_allowed_grant_and_access_evidence[access-credentials]
+FAILED evaluation/tests/test_subject_substitution.py::test_paper_subject_requires_exact_allowed_grant_and_access_evidence[grant-id]
+FAILED evaluation/tests/test_subject_substitution.py::test_paper_subject_requires_exact_allowed_grant_and_access_evidence[history]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_enforces_caller_action_and_observation_clock[wrong-caller]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_enforces_caller_action_and_observation_clock[before-decision]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_enforces_caller_action_and_observation_clock[wrong-action]
+FAILED evaluation/tests/test_subject_substitution.py::test_subject_oracle_enforces_caller_action_and_observation_clock[unknown-profile]
+71 failed in 0.50s

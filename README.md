@@ -1,3 +1,5 @@
+**Current checkpoint (2026-10-09 UTC):** C-E2 subject-substitution pre-release oracle prepared;670 root tests pass on106 stable inputs. No public subject collector or new integrated catalog result.44 comparisons remain; gateE NOT_RUN/F-Glocked. Exact scoped grouped replay reviews read. Next: public collector/fresh controls/recipient checks, complete new plan/FREEZE/both new ACKs before services. See [subject oracle evidence](evaluation/evidence/e2/subject-oracle-20261009/README.md). Earlier checkpoint prose below is historical.
+
 # HMBC: access security, Byzantine operators, and key lifecycle
 
 **Current checkpoint (2026-10-09 UTC):** E0 closed/C-E1 complete; E2/E3 active. Grouped historical replay collector implemented;599 tests pass. A3-0044 complete plan awaits both exact peer ACKs before services. No new live timing/repaired release result; prior expiry failure retained.45 catalog comparisons remain; gateE NOT_RUN/F/G locked. See [the live board](communication/BOARD.md) and [runner evidence](evaluation/evidence/e2/grouped-replay-runner-20261009/README.md).
