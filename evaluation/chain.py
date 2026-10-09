@@ -5,6 +5,7 @@ the signed call as well as their block/chain. This establishes consistency of
 the supplied RPC evidence, not a light-client proof or Byzantine consensus.
 """
 import copy
+from contextlib import contextmanager
 import json
 import math
 from pathlib import Path
@@ -38,6 +39,7 @@ class PublicChain:
         self.timeout = timeout
         self.transactions = []
         self.views = []
+        self._group_active = False
         self.output.mkdir(parents=True, exist_ok=False)
         self._save()
 
@@ -87,6 +89,43 @@ class PublicChain:
     def read(self, role, method, *arguments, block=None):
         row = self.observe(role, method, *arguments, block=block)
         return self._contract(role).decode_return(method, row['returnData'])
+
+    @contextmanager
+    def read_group(self, roles):
+        """At most 16 reads/log queries at one block, with identity bracketing.
+
+        Individual ABI-bound views are published only if the whole group passes.
+        This checks RPC consistency under the existing safe-ledger assumption;
+        it cannot detect a transient reorg restored between boundary checks.
+        """
+        if self._group_active:
+            raise ValueError('Public read groups cannot nest on one chain')
+        roles = tuple(roles)
+        if not roles or len(set(roles)) != len(roles):
+            raise ValueError('Explicit distinct public ABI roles required')
+        self._group_active = True
+        group = None
+        try:
+            deadline = time.monotonic()+self.timeout
+            contracts = {role: self._contract(role) for role in roles}
+            self._check_chain()
+            block = self.rpc.call('eth_getBlockByNumber', ['latest', False])
+            group = _PublicReadGroup(self, contracts, block, deadline)
+            group.check_block('before')
+            yield group
+            group.check_budget()
+            group.check_block('during')
+            self._check_chain()
+            for role, contract in contracts.items():
+                if self._contract(role) is not contract:
+                    raise ValueError('Selected public ABI inventory changed during group')
+            group.check_budget()
+            self.views.extend(group.rows)
+            self._save()
+        finally:
+            if group is not None:
+                group.active = False
+            self._group_active = False
 
     def submit(self, signer_role, role, method, *arguments, expect_success=True, gas_limit='3000000'):
         signer = _owned_signer(signer_role)
@@ -168,3 +207,58 @@ class PublicChain:
         if not 1 <= code <= 21 or encode(['uint8'], [code]) != raw[4:]:
             raise ValueError('Unknown or malformed public rejection code')
         return str(code)
+
+
+class _PublicReadGroup:
+    """Short-lived public view reader; callers use PublicChain.read_group."""
+    def __init__(self, chain, contracts, block, deadline):
+        self.chain = chain
+        self.contracts = contracts
+        self.block = copy.deepcopy(block)
+        _hex(self.block['hash'], 32)
+        self.number = hex(_quantity(self.block['number']))
+        self.deadline = deadline
+        self.queries = 0
+        self.rows = []
+        self.active = True
+
+    def check_budget(self):
+        if not self.active:
+            raise ValueError('Public read group is closed')
+        if time.monotonic() >= self.deadline:
+            raise TimeoutError('Public read group budget exhausted')
+
+    def check_block(self, phase):
+        self.check_budget()
+        actual = self.chain.rpc.call('eth_getBlockByNumber', [self.number, False])
+        if actual['hash'] != self.block['hash'] or actual['number'] != self.number:
+            raise ValueError('Historical block identity changed '+phase+' group')
+        self.check_budget()
+
+    def _query(self, method, params):
+        self.check_budget()
+        if self.queries >= 16:
+            raise ValueError('Public read group query bound exceeded')
+        self.queries += 1
+        result = self.chain.rpc.call(method, params)
+        self.check_budget()
+        return result
+
+    def read(self, role, method, *arguments):
+        if role not in self.contracts:
+            raise ValueError('View is outside selected read group ABI scope')
+        contract = self.contracts[role]
+        calldata = contract.calldata(method, *arguments)
+        raw = self._query('eth_call', [{'to': contract.address, 'data': calldata}, self.number])
+        values = contract.decode_return(method, raw)
+        self.rows.append(dict(chainId=self.chain.chain_id, blockHash=self.block['hash'],
+                              blockNumber=str(_quantity(self.number)), address=contract.address,
+                              calldata=calldata, returnData=raw, method=method, observedAt=now()))
+        return copy.deepcopy(values)
+
+    def logs(self):
+        logs = self._query('eth_getLogs', [dict(fromBlock='0x0', toBlock=self.number,
+                                              address=[c.address for c in self.contracts.values()])])
+        if not isinstance(logs, list):
+            raise ValueError('Public contract history array required')
+        return copy.deepcopy(logs)

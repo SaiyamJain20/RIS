@@ -1,0 +1,21 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+__________ test_grouped_replay_plan_binds_historical_snapshot_recipe ___________
+
+    def test_grouped_replay_plan_binds_historical_snapshot_recipe():
+        plan = module().create_plan(run_id='E2-grouped-test', freeze_message='A3-0044', nonce_replay=True)
+>       assert plan['replayProbe']['nativeSnapshots'] == {
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'block': 'one explicit latest-selected historical block per chain per snapshot',
+            'identity': 'chain and block before/after each group; all selected ABI hashes before/after',
+            'history': 'all deployment contract addresses; from0 to the selected block number',
+            'budget': 'at most16 view/log queries per group; shared PublicChain timeout10s',
+            'evidence': 'individual ABI/calldata/return rows; separate before/after block anchors',
+            'worker': 'both full idle-worker exports before first release; no worker operation',
+        }
+E       KeyError: 'nativeSnapshots'
+
+evaluation/tests/test_e2_freeze.py:157: KeyError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_e2_freeze.py::test_grouped_replay_plan_binds_historical_snapshot_recipe
+1 failed, 27 deselected in 0.34s

@@ -1,6 +1,6 @@
 # HMBC: access security, Byzantine operators, and key lifecycle
 
-**Current checkpoint (2026-10-09 UTC):** E0 closed/C-E1 complete; E2/E3 active within RQ1. The last replay attempt passed both paper controls but repaired-e release expired. Fresh timing diagnosis finds63 RPCs/probe and about8.1s outside recorded subprocess execution; runner revision is pending. No new live result or Gate E pass;45 catalog comparisons need completion, F/G locked. See [the live board](communication/BOARD.md) and [timing diagnosis](evaluation/evidence/e2/replay-timing-review-20261009/README.md).
+**Current checkpoint (2026-10-09 UTC):** E0 closed/C-E1 complete; E2/E3 active. Grouped historical replay collector implemented;599 tests pass. A3-0044 complete plan awaits both exact peer ACKs before services. No new live timing/repaired release result; prior expiry failure retained.45 catalog comparisons remain; gateE NOT_RUN/F/G locked. See [the live board](communication/BOARD.md) and [runner evidence](evaluation/evidence/e2/grouped-replay-runner-20261009/README.md).
 
 **Selected scope:** directions **E, F and G**, using **HMBC2020 only**, in this confirmed checkout. This is a paper-derived reconstruction with synthetic fixtures and symbolic E cryptography. Frozen v1 bytes and exact E0 mapping ACKs are retained; all RQ gates remain NOT_RUN.
 

@@ -1,0 +1,325 @@
+..................................FFF.........                           [100%]
+=================================== FAILURES ===================================
+_ test_public_replay_probe_checks_mined_call_before_worker_release[none-paper-strict] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-92/test_public_replay_probe_check0')
+profile = 'paper-strict', transaction_mutation = 'none'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('transaction_mutation', ['none', 'changed-call', 'same-nonce', 'wrong-relay'])
+    def test_public_replay_probe_checks_mined_call_before_worker_release(artifacts, inputs, tmp_path, profile, transaction_mutation):
+        import json
+        from evaluation.native import NativeReceipt
+        from evaluation.tests.test_access_execution import Model
+        from evaluation.access_execution import execute_access
+        m = Model(artifacts, inputs, profile)
+        logs = {'pbc': [], 'dbc': []}; grants = []
+        for label, chain in [('pbc', m.pbc), ('dbc', m.dbc)]:
+            submit = chain.submit; call = chain.call
+            def wrapped_submit(signer, role, method, *args, expect_success=True, chain=chain, label=label, submit=submit):
+                if expect_success:
+                    native = submit(signer, role, method, *args)
+                    logs[label].extend(native.receipt['logs'])
+                    if method in ('policyEnf', 'consumeDecision'): grants.append((method, copy.deepcopy(args), native))
+                    return native
+                assert label == 'dbc' and (method, args) == grants[0][:2]
+                assert m.request_state['status'] == '1' and m.snapshot()  # exporter remains usable before release
+                n = grants[0][2]
+                receipt = dict(n.receipt, status='0x0', logs=[], transactionHash='0x'+'aa'*32)
+                return NativeReceipt(receipt=receipt, transaction=dict(hash=receipt['transactionHash'], chainId=hex(int(chain.chain_id)),
+                                      blockHash=n.block_hash, blockNumber=hex(int(n.block_number)), transactionIndex='0x0'),
+                                     block=dict(hash=n.block_hash, number=hex(int(n.block_number)), timestamp=hex(int(n.timestamp)),
+                                                transactions=[receipt['transactionHash']]), chain_id=chain.chain_id)
+            def wrapped_call(method, args=None, chain=chain, label=label, call=call):
+                if method == 'eth_getLogs': return logs[label]
+                if method == 'eth_getTransactionByHash':
+                    name, arguments, native = grants[0]
+                    duplicate = args[0] != native.receipt['transactionHash']
+                    data = dict(hash=args[0], input=chain.contracts['ACSC'].calldata(name, *arguments),
+                                to=chain.contracts['ACSC'].address, **{'from': m.dep['fixture']['relay']['address']},
+                                nonce='0x2' if duplicate else '0x1')
+                    if duplicate and transaction_mutation == 'changed-call': data['input'] += '00'
+                    if duplicate and transaction_mutation == 'same-nonce': data['nonce'] = '0x1'
+                    if duplicate and transaction_mutation == 'wrong-relay': data['from'] = '0x'+'bb'*20
+                    return data
+                return call(method, args)
+            chain.submit = wrapped_submit; chain.call = wrapped_call
+        # Exercise the production grouped reader against model ABI/RPC inputs.
+        from evaluation.chain import PublicChain
+        from evaluation.evm import _decode
+        from types import SimpleNamespace
+        for chain, label in ((m.pbc, 'pbc'), (m.dbc, 'dbc')):
+            old_call = chain.call
+            def grouped_rpc(method, params=None, chain=chain, old_call=old_call):
+                if method == 'eth_chainId': return hex(int(chain.chain_id))
+                if method == 'eth_getBlockByNumber' and params[0] == 'latest': return chain.latest_block()
+                if method == 'eth_call':
+                    tx, number = params
+                    c = next(c for c in chain.contracts.values() if c.address == tx['to'])
+                    f = next(f for f in c.abi if f['type'] == 'function'
+                             and '0x'+__import__('eth_utils').keccak(text=c._signature(f))[:4].hex() == tx['data'][:10])
+                    args = _decode(f['inputs'], bytes.fromhex(tx['data'][10:]))
+                    block = old_call('eth_getBlockByNumber', [number, False])
+                    return chain.observe(next(r for r,candidate in chain.contracts.items() if candidate is c),
+                                         f['name'], *args, block=block)['returnData']
+                return old_call(method, params)
+            reader = PublicChain(SimpleNamespace(call=grouped_rpc), chain_id=chain.chain_id,
+                                 contracts=chain.contracts, output=tmp_path/(label+'-views'))
+            chain.read_group = reader.read_group
+        m.dbc.rejection_code = lambda native: '8'
+        kwargs = dict(deployment_bytes=json.dumps(m.dep).encode(), user_label='alice', user=m.users['alice'],
+                      record=m.record, policy=m.policy, expected_allow=True, worker_snapshot=m.snapshot,
+                      output=tmp_path/'access', nonce_replay=True)
+        if transaction_mutation != 'none':
+            with pytest.raises(ValueError): execute_access(m.pbc, m.dbc, m, **kwargs)
+            return
+        result = execute_access(m.pbc, m.dbc, m, **kwargs)
+        proof = json.loads((tmp_path/'access/nonce-replay/result.json').read_text())
+>       anchors = json.loads((tmp_path/'access/nonce-replay/before-blocks.json').read_text())
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_request_replay.py:160:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/lib64/python3.13/pathlib/_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.13/pathlib/_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = PosixPath('/tmp/pytest-of-karma/pytest-92/test_public_replay_probe_check0/access/nonce-replay/before-blocks.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-karma/pytest-92/test_public_replay_probe_check0/access/nonce-replay/before-blocks.json'
+
+/usr/lib64/python3.13/pathlib/_local.py:537: FileNotFoundError
+_ test_public_replay_probe_checks_mined_call_before_worker_release[none-paper-minimal] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-92/test_public_replay_probe_check1')
+profile = 'paper-minimal', transaction_mutation = 'none'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('transaction_mutation', ['none', 'changed-call', 'same-nonce', 'wrong-relay'])
+    def test_public_replay_probe_checks_mined_call_before_worker_release(artifacts, inputs, tmp_path, profile, transaction_mutation):
+        import json
+        from evaluation.native import NativeReceipt
+        from evaluation.tests.test_access_execution import Model
+        from evaluation.access_execution import execute_access
+        m = Model(artifacts, inputs, profile)
+        logs = {'pbc': [], 'dbc': []}; grants = []
+        for label, chain in [('pbc', m.pbc), ('dbc', m.dbc)]:
+            submit = chain.submit; call = chain.call
+            def wrapped_submit(signer, role, method, *args, expect_success=True, chain=chain, label=label, submit=submit):
+                if expect_success:
+                    native = submit(signer, role, method, *args)
+                    logs[label].extend(native.receipt['logs'])
+                    if method in ('policyEnf', 'consumeDecision'): grants.append((method, copy.deepcopy(args), native))
+                    return native
+                assert label == 'dbc' and (method, args) == grants[0][:2]
+                assert m.request_state['status'] == '1' and m.snapshot()  # exporter remains usable before release
+                n = grants[0][2]
+                receipt = dict(n.receipt, status='0x0', logs=[], transactionHash='0x'+'aa'*32)
+                return NativeReceipt(receipt=receipt, transaction=dict(hash=receipt['transactionHash'], chainId=hex(int(chain.chain_id)),
+                                      blockHash=n.block_hash, blockNumber=hex(int(n.block_number)), transactionIndex='0x0'),
+                                     block=dict(hash=n.block_hash, number=hex(int(n.block_number)), timestamp=hex(int(n.timestamp)),
+                                                transactions=[receipt['transactionHash']]), chain_id=chain.chain_id)
+            def wrapped_call(method, args=None, chain=chain, label=label, call=call):
+                if method == 'eth_getLogs': return logs[label]
+                if method == 'eth_getTransactionByHash':
+                    name, arguments, native = grants[0]
+                    duplicate = args[0] != native.receipt['transactionHash']
+                    data = dict(hash=args[0], input=chain.contracts['ACSC'].calldata(name, *arguments),
+                                to=chain.contracts['ACSC'].address, **{'from': m.dep['fixture']['relay']['address']},
+                                nonce='0x2' if duplicate else '0x1')
+                    if duplicate and transaction_mutation == 'changed-call': data['input'] += '00'
+                    if duplicate and transaction_mutation == 'same-nonce': data['nonce'] = '0x1'
+                    if duplicate and transaction_mutation == 'wrong-relay': data['from'] = '0x'+'bb'*20
+                    return data
+                return call(method, args)
+            chain.submit = wrapped_submit; chain.call = wrapped_call
+        # Exercise the production grouped reader against model ABI/RPC inputs.
+        from evaluation.chain import PublicChain
+        from evaluation.evm import _decode
+        from types import SimpleNamespace
+        for chain, label in ((m.pbc, 'pbc'), (m.dbc, 'dbc')):
+            old_call = chain.call
+            def grouped_rpc(method, params=None, chain=chain, old_call=old_call):
+                if method == 'eth_chainId': return hex(int(chain.chain_id))
+                if method == 'eth_getBlockByNumber' and params[0] == 'latest': return chain.latest_block()
+                if method == 'eth_call':
+                    tx, number = params
+                    c = next(c for c in chain.contracts.values() if c.address == tx['to'])
+                    f = next(f for f in c.abi if f['type'] == 'function'
+                             and '0x'+__import__('eth_utils').keccak(text=c._signature(f))[:4].hex() == tx['data'][:10])
+                    args = _decode(f['inputs'], bytes.fromhex(tx['data'][10:]))
+                    block = old_call('eth_getBlockByNumber', [number, False])
+                    return chain.observe(next(r for r,candidate in chain.contracts.items() if candidate is c),
+                                         f['name'], *args, block=block)['returnData']
+                return old_call(method, params)
+            reader = PublicChain(SimpleNamespace(call=grouped_rpc), chain_id=chain.chain_id,
+                                 contracts=chain.contracts, output=tmp_path/(label+'-views'))
+            chain.read_group = reader.read_group
+        m.dbc.rejection_code = lambda native: '8'
+        kwargs = dict(deployment_bytes=json.dumps(m.dep).encode(), user_label='alice', user=m.users['alice'],
+                      record=m.record, policy=m.policy, expected_allow=True, worker_snapshot=m.snapshot,
+                      output=tmp_path/'access', nonce_replay=True)
+        if transaction_mutation != 'none':
+            with pytest.raises(ValueError): execute_access(m.pbc, m.dbc, m, **kwargs)
+            return
+        result = execute_access(m.pbc, m.dbc, m, **kwargs)
+        proof = json.loads((tmp_path/'access/nonce-replay/result.json').read_text())
+>       anchors = json.loads((tmp_path/'access/nonce-replay/before-blocks.json').read_text())
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_request_replay.py:160:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/lib64/python3.13/pathlib/_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.13/pathlib/_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = PosixPath('/tmp/pytest-of-karma/pytest-92/test_public_replay_probe_check1/access/nonce-replay/before-blocks.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-karma/pytest-92/test_public_replay_probe_check1/access/nonce-replay/before-blocks.json'
+
+/usr/lib64/python3.13/pathlib/_local.py:537: FileNotFoundError
+_ test_public_replay_probe_checks_mined_call_before_worker_release[none-repaired-e] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-92/test_public_replay_probe_check2')
+profile = 'repaired-e', transaction_mutation = 'none'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    @pytest.mark.parametrize('transaction_mutation', ['none', 'changed-call', 'same-nonce', 'wrong-relay'])
+    def test_public_replay_probe_checks_mined_call_before_worker_release(artifacts, inputs, tmp_path, profile, transaction_mutation):
+        import json
+        from evaluation.native import NativeReceipt
+        from evaluation.tests.test_access_execution import Model
+        from evaluation.access_execution import execute_access
+        m = Model(artifacts, inputs, profile)
+        logs = {'pbc': [], 'dbc': []}; grants = []
+        for label, chain in [('pbc', m.pbc), ('dbc', m.dbc)]:
+            submit = chain.submit; call = chain.call
+            def wrapped_submit(signer, role, method, *args, expect_success=True, chain=chain, label=label, submit=submit):
+                if expect_success:
+                    native = submit(signer, role, method, *args)
+                    logs[label].extend(native.receipt['logs'])
+                    if method in ('policyEnf', 'consumeDecision'): grants.append((method, copy.deepcopy(args), native))
+                    return native
+                assert label == 'dbc' and (method, args) == grants[0][:2]
+                assert m.request_state['status'] == '1' and m.snapshot()  # exporter remains usable before release
+                n = grants[0][2]
+                receipt = dict(n.receipt, status='0x0', logs=[], transactionHash='0x'+'aa'*32)
+                return NativeReceipt(receipt=receipt, transaction=dict(hash=receipt['transactionHash'], chainId=hex(int(chain.chain_id)),
+                                      blockHash=n.block_hash, blockNumber=hex(int(n.block_number)), transactionIndex='0x0'),
+                                     block=dict(hash=n.block_hash, number=hex(int(n.block_number)), timestamp=hex(int(n.timestamp)),
+                                                transactions=[receipt['transactionHash']]), chain_id=chain.chain_id)
+            def wrapped_call(method, args=None, chain=chain, label=label, call=call):
+                if method == 'eth_getLogs': return logs[label]
+                if method == 'eth_getTransactionByHash':
+                    name, arguments, native = grants[0]
+                    duplicate = args[0] != native.receipt['transactionHash']
+                    data = dict(hash=args[0], input=chain.contracts['ACSC'].calldata(name, *arguments),
+                                to=chain.contracts['ACSC'].address, **{'from': m.dep['fixture']['relay']['address']},
+                                nonce='0x2' if duplicate else '0x1')
+                    if duplicate and transaction_mutation == 'changed-call': data['input'] += '00'
+                    if duplicate and transaction_mutation == 'same-nonce': data['nonce'] = '0x1'
+                    if duplicate and transaction_mutation == 'wrong-relay': data['from'] = '0x'+'bb'*20
+                    return data
+                return call(method, args)
+            chain.submit = wrapped_submit; chain.call = wrapped_call
+        # Exercise the production grouped reader against model ABI/RPC inputs.
+        from evaluation.chain import PublicChain
+        from evaluation.evm import _decode
+        from types import SimpleNamespace
+        for chain, label in ((m.pbc, 'pbc'), (m.dbc, 'dbc')):
+            old_call = chain.call
+            def grouped_rpc(method, params=None, chain=chain, old_call=old_call):
+                if method == 'eth_chainId': return hex(int(chain.chain_id))
+                if method == 'eth_getBlockByNumber' and params[0] == 'latest': return chain.latest_block()
+                if method == 'eth_call':
+                    tx, number = params
+                    c = next(c for c in chain.contracts.values() if c.address == tx['to'])
+                    f = next(f for f in c.abi if f['type'] == 'function'
+                             and '0x'+__import__('eth_utils').keccak(text=c._signature(f))[:4].hex() == tx['data'][:10])
+                    args = _decode(f['inputs'], bytes.fromhex(tx['data'][10:]))
+                    block = old_call('eth_getBlockByNumber', [number, False])
+                    return chain.observe(next(r for r,candidate in chain.contracts.items() if candidate is c),
+                                         f['name'], *args, block=block)['returnData']
+                return old_call(method, params)
+            reader = PublicChain(SimpleNamespace(call=grouped_rpc), chain_id=chain.chain_id,
+                                 contracts=chain.contracts, output=tmp_path/(label+'-views'))
+            chain.read_group = reader.read_group
+        m.dbc.rejection_code = lambda native: '8'
+        kwargs = dict(deployment_bytes=json.dumps(m.dep).encode(), user_label='alice', user=m.users['alice'],
+                      record=m.record, policy=m.policy, expected_allow=True, worker_snapshot=m.snapshot,
+                      output=tmp_path/'access', nonce_replay=True)
+        if transaction_mutation != 'none':
+            with pytest.raises(ValueError): execute_access(m.pbc, m.dbc, m, **kwargs)
+            return
+        result = execute_access(m.pbc, m.dbc, m, **kwargs)
+        proof = json.loads((tmp_path/'access/nonce-replay/result.json').read_text())
+>       anchors = json.loads((tmp_path/'access/nonce-replay/before-blocks.json').read_text())
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_request_replay.py:160:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+/usr/lib64/python3.13/pathlib/_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.13/pathlib/_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = PosixPath('/tmp/pytest-of-karma/pytest-92/test_public_replay_probe_check2/access/nonce-replay/before-blocks.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-karma/pytest-92/test_public_replay_probe_check2/access/nonce-replay/before-blocks.json'
+
+/usr/lib64/python3.13/pathlib/_local.py:537: FileNotFoundError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_request_replay.py::test_public_replay_probe_checks_mined_call_before_worker_release[none-paper-strict]
+FAILED evaluation/tests/test_request_replay.py::test_public_replay_probe_checks_mined_call_before_worker_release[none-paper-minimal]
+FAILED evaluation/tests/test_request_replay.py::test_public_replay_probe_checks_mined_call_before_worker_release[none-repaired-e]
+3 failed, 43 passed in 1.46s

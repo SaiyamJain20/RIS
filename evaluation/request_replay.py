@@ -26,16 +26,22 @@ def execute_request_replay(pbc, dbc, *, deployment, request, grant_id, method,
         (output/(name+'.json')).write_text(json.dumps(payload, indent=2)+'\n')
 
     def snapshot(name):
-        grant = dbc.read('KSSC', 'grantDetails', grant_id)[0]
+        # All roles preserve complete history coverage. Views and logs on each
+        # chain share an explicit historical block; anchors are evidence sidecars
+        # because before/after block numbers differ across the mined replay.
+        with dbc.read_group(tuple(dbc.contracts)) as domain:
+            grant = domain.read('KSSC', 'grantDetails', grant_id)[0]
+            nonce = domain.read('KSSC', 'nonceConsumed', request['gid'], request['nonce'])[0]
+            count = domain.read('ACSC', 'accessLogCount')[0]
+            domain_logs = domain.logs()
+        with pbc.read_group(tuple(pbc.contracts)) as proxy:
+            request_state = proxy.read('PSC', 'getRequest', grant['requestDigest'])[0]
+            proxy_logs = proxy.logs()
         worker = strict_json(worker_snapshot()); WorkerLog(worker, fingerprint=_fingerprint(deployment))
-        payload = dict(grant=grant, request=pbc.read('PSC', 'getRequest', grant['requestDigest'])[0],
-                       worker=worker, nonceConsumed=dbc.read('KSSC', 'nonceConsumed', request['gid'], request['nonce'])[0],
-                       accessLogCount=dbc.read('ACSC', 'accessLogCount')[0], logs={})
-        for chain, label in ((pbc, 'pbc'), (dbc, 'dbc')):
-            logs = chain.rpc.call('eth_getLogs', [dict(fromBlock='0x0', toBlock='latest',
-                                                    address=[c.address for c in chain.contracts.values()])])
-            require(isinstance(logs, list), 'public contract history array')
-            payload['logs'][label] = copy.deepcopy(logs)
+        payload = dict(grant=grant, request=request_state, worker=worker,
+                       nonceConsumed=nonce, accessLogCount=count,
+                       logs=dict(pbc=proxy_logs, dbc=domain_logs))
+        save(name+'-blocks', dict(pbc=proxy.block, dbc=domain.block))
         save(name, payload); return payload
 
     try:

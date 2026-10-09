@@ -126,6 +126,28 @@ def test_public_replay_probe_checks_mined_call_before_worker_release(artifacts, 
                 return data
             return call(method, args)
         chain.submit = wrapped_submit; chain.call = wrapped_call
+    # Exercise the production grouped reader against model ABI/RPC inputs.
+    from evaluation.chain import PublicChain
+    from evaluation.evm import _decode
+    from types import SimpleNamespace
+    for chain, label in ((m.pbc, 'pbc'), (m.dbc, 'dbc')):
+        old_call = chain.call
+        def grouped_rpc(method, params=None, chain=chain, old_call=old_call):
+            if method == 'eth_chainId': return hex(int(chain.chain_id))
+            if method == 'eth_getBlockByNumber' and params[0] == 'latest': return chain.latest_block()
+            if method == 'eth_call':
+                tx, number = params
+                c = next(c for c in chain.contracts.values() if c.address == tx['to'])
+                f = next(f for f in c.abi if f['type'] == 'function'
+                         and '0x'+__import__('eth_utils').keccak(text=c._signature(f))[:4].hex() == tx['data'][:10])
+                args = _decode(f['inputs'], bytes.fromhex(tx['data'][10:]))
+                block = old_call('eth_getBlockByNumber', [number, False])
+                return chain.observe(next(r for r,candidate in chain.contracts.items() if candidate is c),
+                                     f['name'], *args, block=block)['returnData']
+            return old_call(method, params)
+        reader = PublicChain(SimpleNamespace(call=grouped_rpc), chain_id=chain.chain_id,
+                             contracts=chain.contracts, output=tmp_path/(label+'-views'))
+        chain.read_group = reader.read_group
     m.dbc.rejection_code = lambda native: '8'
     kwargs = dict(deployment_bytes=json.dumps(m.dep).encode(), user_label='alice', user=m.users['alice'],
                   record=m.record, policy=m.policy, expected_allow=True, worker_snapshot=m.snapshot,
@@ -135,6 +157,9 @@ def test_public_replay_probe_checks_mined_call_before_worker_release(artifacts, 
         return
     result = execute_access(m.pbc, m.dbc, m, **kwargs)
     proof = json.loads((tmp_path/'access/nonce-replay/result.json').read_text())
+    anchors = json.loads((tmp_path/'access/nonce-replay/before-blocks.json').read_text())
+    assert set(anchors) == {'pbc', 'dbc'}
+    assert all(anchor['number'].startswith('0x') for anchor in anchors.values())
     assert result['ok'] and proof['ok'] and proof['identicalCalldata'] and proof['error'] == 'REPLAY'
     assert proof['classification'] == ('REPAIR_SUPPORTED' if profile == 'repaired-e' else 'SUPPORTED')
 

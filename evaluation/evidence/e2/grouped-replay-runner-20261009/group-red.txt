@@ -1,0 +1,432 @@
+FFFFFFFFFFFFFF                                                           [100%]
+=================================== FAILURES ===================================
+___________ test_group_retains_individual_bindings_and_pins_history ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-90/test_group_retains_individual_0')
+
+    def test_group_retains_individual_bindings_and_pins_history(tmp_path):
+        rpc = Replies(); original = rpc.call
+        def call(method, params=None):
+            if method == 'eth_getLogs':
+                rpc.calls.append((method, params)); return []
+            return original(method, params)
+        rpc.call = call; chain = executor(tmp_path, rpc)
+>       with chain.read_group(('TMSC',)) as group:
+             ^^^^^^^^^^^^^^^^
+E       AttributeError: 'PublicChain' object has no attribute 'read_group'
+
+evaluation/tests/test_read_group.py:16: AttributeError
+_ test_group_refuses_identity_drift_without_publishing_partial_views[wrong-chain-before] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-90/test_group_refuses_identity_dr0')
+fault = 'wrong-chain-before'
+
+    @pytest.mark.parametrize('fault', ['wrong-chain-before', 'wrong-chain-during', 'reorg-before', 'reorg-during',
+                                      'abi-before', 'abi-during', 'return-malformed', 'logs-malformed', 'timeout'])
+    def test_group_refuses_identity_drift_without_publishing_partial_views(tmp_path, fault):
+        rpc = Replies(); original = rpc.call; chain = executor(tmp_path, rpc)
+        abi = tmp_path/'TMSC.json'; abi.write_bytes(contract().path.read_bytes())
+        chain.contracts['TMSC'] = AbiContract(abi, contract().address, sha256(abi))
+        if fault == 'abi-before': abi.write_text('[]')
+        counts = {'blocks': 0, 'chains': 0}
+        def call(method, params=None):
+            if method == 'eth_chainId':
+                counts['chains'] += 1
+                if fault == 'wrong-chain-before' or (fault == 'wrong-chain-during' and counts['chains'] == 2): return '0x1'
+            if method == 'eth_getLogs': return {} if fault == 'logs-malformed' else []
+            result = original(method, params)
+            if method == 'eth_getBlockByNumber':
+                counts['blocks'] += 1
+                if ((fault == 'reorg-before' and counts['blocks'] == 2)
+                        or (fault == 'reorg-during' and counts['blocks'] == 3)):
+                    result['hash'] = '0x'+'ff'*32
+            if method == 'eth_call':
+                if fault == 'abi-during': abi.write_text('[]')
+                if fault == 'return-malformed': return '0x01'
+                if fault == 'timeout':
+                    import time
+                    time.sleep(.06)
+            return result
+        rpc.call = call
+        with pytest.raises((ValueError, TimeoutError)):
+>           with chain.read_group(('TMSC',)) as group:
+                 ^^^^^^^^^^^^^^^^
+E           AttributeError: 'PublicChain' object has no attribute 'read_group'
+
+evaluation/tests/test_read_group.py:58: AttributeError
+_ test_group_refuses_identity_drift_without_publishing_partial_views[wrong-chain-during] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-90/test_group_refuses_identity_dr1')
+fault = 'wrong-chain-during'
+
+    @pytest.mark.parametrize('fault', ['wrong-chain-before', 'wrong-chain-during', 'reorg-before', 'reorg-during',
+                                      'abi-before', 'abi-during', 'return-malformed', 'logs-malformed', 'timeout'])
+    def test_group_refuses_identity_drift_without_publishing_partial_views(tmp_path, fault):
+        rpc = Replies(); original = rpc.call; chain = executor(tmp_path, rpc)
+        abi = tmp_path/'TMSC.json'; abi.write_bytes(contract().path.read_bytes())
+        chain.contracts['TMSC'] = AbiContract(abi, contract().address, sha256(abi))
+        if fault == 'abi-before': abi.write_text('[]')
+        counts = {'blocks': 0, 'chains': 0}
+        def call(method, params=None):
+            if method == 'eth_chainId':
+                counts['chains'] += 1
+                if fault == 'wrong-chain-before' or (fault == 'wrong-chain-during' and counts['chains'] == 2): return '0x1'
+            if method == 'eth_getLogs': return {} if fault == 'logs-malformed' else []
+            result = original(method, params)
+            if method == 'eth_getBlockByNumber':
+                counts['blocks'] += 1
+                if ((fault == 'reorg-before' and counts['blocks'] == 2)
+                        or (fault == 'reorg-during' and counts['blocks'] == 3)):
+                    result['hash'] = '0x'+'ff'*32
+            if method == 'eth_call':
+                if fault == 'abi-during': abi.write_text('[]')
+                if fault == 'return-malformed': return '0x01'
+                if fault == 'timeout':
+                    import time
+                    time.sleep(.06)
+            return result
+        rpc.call = call
+        with pytest.raises((ValueError, TimeoutError)):
+>           with chain.read_group(('TMSC',)) as group:
+                 ^^^^^^^^^^^^^^^^
+E           AttributeError: 'PublicChain' object has no attribute 'read_group'
+
+evaluation/tests/test_read_group.py:58: AttributeError
+_ test_group_refuses_identity_drift_without_publishing_partial_views[reorg-before] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-90/test_group_refuses_identity_dr2')
+fault = 'reorg-before'
+
+    @pytest.mark.parametrize('fault', ['wrong-chain-before', 'wrong-chain-during', 'reorg-before', 'reorg-during',
+                                      'abi-before', 'abi-during', 'return-malformed', 'logs-malformed', 'timeout'])
+    def test_group_refuses_identity_drift_without_publishing_partial_views(tmp_path, fault):
+        rpc = Replies(); original = rpc.call; chain = executor(tmp_path, rpc)
+        abi = tmp_path/'TMSC.json'; abi.write_bytes(contract().path.read_bytes())
+        chain.contracts['TMSC'] = AbiContract(abi, contract().address, sha256(abi))
+        if fault == 'abi-before': abi.write_text('[]')
+        counts = {'blocks': 0, 'chains': 0}
+        def call(method, params=None):
+            if method == 'eth_chainId':
+                counts['chains'] += 1
+                if fault == 'wrong-chain-before' or (fault == 'wrong-chain-during' and counts['chains'] == 2): return '0x1'
+            if method == 'eth_getLogs': return {} if fault == 'logs-malformed' else []
+            result = original(method, params)
+            if method == 'eth_getBlockByNumber':
+                counts['blocks'] += 1
+                if ((fault == 'reorg-before' and counts['blocks'] == 2)
+                        or (fault == 'reorg-during' and counts['blocks'] == 3)):
+                    result['hash'] = '0x'+'ff'*32
+            if method == 'eth_call':
+                if fault == 'abi-during': abi.write_text('[]')
+                if fault == 'return-malformed': return '0x01'
+                if fault == 'timeout':
+                    import time
+                    time.sleep(.06)
+            return result
+        rpc.call = call
+        with pytest.raises((ValueError, TimeoutError)):
+>           with chain.read_group(('TMSC',)) as group:
+                 ^^^^^^^^^^^^^^^^
+E           AttributeError: 'PublicChain' object has no attribute 'read_group'
+
+evaluation/tests/test_read_group.py:58: AttributeError
+_ test_group_refuses_identity_drift_without_publishing_partial_views[reorg-during] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-90/test_group_refuses_identity_dr3')
+fault = 'reorg-during'
+
+    @pytest.mark.parametrize('fault', ['wrong-chain-before', 'wrong-chain-during', 'reorg-before', 'reorg-during',
+                                      'abi-before', 'abi-during', 'return-malformed', 'logs-malformed', 'timeout'])
+    def test_group_refuses_identity_drift_without_publishing_partial_views(tmp_path, fault):
+        rpc = Replies(); original = rpc.call; chain = executor(tmp_path, rpc)
+        abi = tmp_path/'TMSC.json'; abi.write_bytes(contract().path.read_bytes())
+        chain.contracts['TMSC'] = AbiContract(abi, contract().address, sha256(abi))
+        if fault == 'abi-before': abi.write_text('[]')
+        counts = {'blocks': 0, 'chains': 0}
+        def call(method, params=None):
+            if method == 'eth_chainId':
+                counts['chains'] += 1
+                if fault == 'wrong-chain-before' or (fault == 'wrong-chain-during' and counts['chains'] == 2): return '0x1'
+            if method == 'eth_getLogs': return {} if fault == 'logs-malformed' else []
+            result = original(method, params)
+            if method == 'eth_getBlockByNumber':
+                counts['blocks'] += 1
+                if ((fault == 'reorg-before' and counts['blocks'] == 2)
+                        or (fault == 'reorg-during' and counts['blocks'] == 3)):
+                    result['hash'] = '0x'+'ff'*32
+            if method == 'eth_call':
+                if fault == 'abi-during': abi.write_text('[]')
+                if fault == 'return-malformed': return '0x01'
+                if fault == 'timeout':
+                    import time
+                    time.sleep(.06)
+            return result
+        rpc.call = call
+        with pytest.raises((ValueError, TimeoutError)):
+>           with chain.read_group(('TMSC',)) as group:
+                 ^^^^^^^^^^^^^^^^
+E           AttributeError: 'PublicChain' object has no attribute 'read_group'
+
+evaluation/tests/test_read_group.py:58: AttributeError
+_ test_group_refuses_identity_drift_without_publishing_partial_views[abi-before] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-90/test_group_refuses_identity_dr4')
+fault = 'abi-before'
+
+    @pytest.mark.parametrize('fault', ['wrong-chain-before', 'wrong-chain-during', 'reorg-before', 'reorg-during',
+                                      'abi-before', 'abi-during', 'return-malformed', 'logs-malformed', 'timeout'])
+    def test_group_refuses_identity_drift_without_publishing_partial_views(tmp_path, fault):
+        rpc = Replies(); original = rpc.call; chain = executor(tmp_path, rpc)
+        abi = tmp_path/'TMSC.json'; abi.write_bytes(contract().path.read_bytes())
+        chain.contracts['TMSC'] = AbiContract(abi, contract().address, sha256(abi))
+        if fault == 'abi-before': abi.write_text('[]')
+        counts = {'blocks': 0, 'chains': 0}
+        def call(method, params=None):
+            if method == 'eth_chainId':
+                counts['chains'] += 1
+                if fault == 'wrong-chain-before' or (fault == 'wrong-chain-during' and counts['chains'] == 2): return '0x1'
+            if method == 'eth_getLogs': return {} if fault == 'logs-malformed' else []
+            result = original(method, params)
+            if method == 'eth_getBlockByNumber':
+                counts['blocks'] += 1
+                if ((fault == 'reorg-before' and counts['blocks'] == 2)
+                        or (fault == 'reorg-during' and counts['blocks'] == 3)):
+                    result['hash'] = '0x'+'ff'*32
+            if method == 'eth_call':
+                if fault == 'abi-during': abi.write_text('[]')
+                if fault == 'return-malformed': return '0x01'
+                if fault == 'timeout':
+                    import time
+                    time.sleep(.06)
+            return result
+        rpc.call = call
+        with pytest.raises((ValueError, TimeoutError)):
+>           with chain.read_group(('TMSC',)) as group:
+                 ^^^^^^^^^^^^^^^^
+E           AttributeError: 'PublicChain' object has no attribute 'read_group'
+
+evaluation/tests/test_read_group.py:58: AttributeError
+_ test_group_refuses_identity_drift_without_publishing_partial_views[abi-during] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-90/test_group_refuses_identity_dr5')
+fault = 'abi-during'
+
+    @pytest.mark.parametrize('fault', ['wrong-chain-before', 'wrong-chain-during', 'reorg-before', 'reorg-during',
+                                      'abi-before', 'abi-during', 'return-malformed', 'logs-malformed', 'timeout'])
+    def test_group_refuses_identity_drift_without_publishing_partial_views(tmp_path, fault):
+        rpc = Replies(); original = rpc.call; chain = executor(tmp_path, rpc)
+        abi = tmp_path/'TMSC.json'; abi.write_bytes(contract().path.read_bytes())
+        chain.contracts['TMSC'] = AbiContract(abi, contract().address, sha256(abi))
+        if fault == 'abi-before': abi.write_text('[]')
+        counts = {'blocks': 0, 'chains': 0}
+        def call(method, params=None):
+            if method == 'eth_chainId':
+                counts['chains'] += 1
+                if fault == 'wrong-chain-before' or (fault == 'wrong-chain-during' and counts['chains'] == 2): return '0x1'
+            if method == 'eth_getLogs': return {} if fault == 'logs-malformed' else []
+            result = original(method, params)
+            if method == 'eth_getBlockByNumber':
+                counts['blocks'] += 1
+                if ((fault == 'reorg-before' and counts['blocks'] == 2)
+                        or (fault == 'reorg-during' and counts['blocks'] == 3)):
+                    result['hash'] = '0x'+'ff'*32
+            if method == 'eth_call':
+                if fault == 'abi-during': abi.write_text('[]')
+                if fault == 'return-malformed': return '0x01'
+                if fault == 'timeout':
+                    import time
+                    time.sleep(.06)
+            return result
+        rpc.call = call
+        with pytest.raises((ValueError, TimeoutError)):
+>           with chain.read_group(('TMSC',)) as group:
+                 ^^^^^^^^^^^^^^^^
+E           AttributeError: 'PublicChain' object has no attribute 'read_group'
+
+evaluation/tests/test_read_group.py:58: AttributeError
+_ test_group_refuses_identity_drift_without_publishing_partial_views[return-malformed] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-90/test_group_refuses_identity_dr6')
+fault = 'return-malformed'
+
+    @pytest.mark.parametrize('fault', ['wrong-chain-before', 'wrong-chain-during', 'reorg-before', 'reorg-during',
+                                      'abi-before', 'abi-during', 'return-malformed', 'logs-malformed', 'timeout'])
+    def test_group_refuses_identity_drift_without_publishing_partial_views(tmp_path, fault):
+        rpc = Replies(); original = rpc.call; chain = executor(tmp_path, rpc)
+        abi = tmp_path/'TMSC.json'; abi.write_bytes(contract().path.read_bytes())
+        chain.contracts['TMSC'] = AbiContract(abi, contract().address, sha256(abi))
+        if fault == 'abi-before': abi.write_text('[]')
+        counts = {'blocks': 0, 'chains': 0}
+        def call(method, params=None):
+            if method == 'eth_chainId':
+                counts['chains'] += 1
+                if fault == 'wrong-chain-before' or (fault == 'wrong-chain-during' and counts['chains'] == 2): return '0x1'
+            if method == 'eth_getLogs': return {} if fault == 'logs-malformed' else []
+            result = original(method, params)
+            if method == 'eth_getBlockByNumber':
+                counts['blocks'] += 1
+                if ((fault == 'reorg-before' and counts['blocks'] == 2)
+                        or (fault == 'reorg-during' and counts['blocks'] == 3)):
+                    result['hash'] = '0x'+'ff'*32
+            if method == 'eth_call':
+                if fault == 'abi-during': abi.write_text('[]')
+                if fault == 'return-malformed': return '0x01'
+                if fault == 'timeout':
+                    import time
+                    time.sleep(.06)
+            return result
+        rpc.call = call
+        with pytest.raises((ValueError, TimeoutError)):
+>           with chain.read_group(('TMSC',)) as group:
+                 ^^^^^^^^^^^^^^^^
+E           AttributeError: 'PublicChain' object has no attribute 'read_group'
+
+evaluation/tests/test_read_group.py:58: AttributeError
+_ test_group_refuses_identity_drift_without_publishing_partial_views[logs-malformed] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-90/test_group_refuses_identity_dr7')
+fault = 'logs-malformed'
+
+    @pytest.mark.parametrize('fault', ['wrong-chain-before', 'wrong-chain-during', 'reorg-before', 'reorg-during',
+                                      'abi-before', 'abi-during', 'return-malformed', 'logs-malformed', 'timeout'])
+    def test_group_refuses_identity_drift_without_publishing_partial_views(tmp_path, fault):
+        rpc = Replies(); original = rpc.call; chain = executor(tmp_path, rpc)
+        abi = tmp_path/'TMSC.json'; abi.write_bytes(contract().path.read_bytes())
+        chain.contracts['TMSC'] = AbiContract(abi, contract().address, sha256(abi))
+        if fault == 'abi-before': abi.write_text('[]')
+        counts = {'blocks': 0, 'chains': 0}
+        def call(method, params=None):
+            if method == 'eth_chainId':
+                counts['chains'] += 1
+                if fault == 'wrong-chain-before' or (fault == 'wrong-chain-during' and counts['chains'] == 2): return '0x1'
+            if method == 'eth_getLogs': return {} if fault == 'logs-malformed' else []
+            result = original(method, params)
+            if method == 'eth_getBlockByNumber':
+                counts['blocks'] += 1
+                if ((fault == 'reorg-before' and counts['blocks'] == 2)
+                        or (fault == 'reorg-during' and counts['blocks'] == 3)):
+                    result['hash'] = '0x'+'ff'*32
+            if method == 'eth_call':
+                if fault == 'abi-during': abi.write_text('[]')
+                if fault == 'return-malformed': return '0x01'
+                if fault == 'timeout':
+                    import time
+                    time.sleep(.06)
+            return result
+        rpc.call = call
+        with pytest.raises((ValueError, TimeoutError)):
+>           with chain.read_group(('TMSC',)) as group:
+                 ^^^^^^^^^^^^^^^^
+E           AttributeError: 'PublicChain' object has no attribute 'read_group'
+
+evaluation/tests/test_read_group.py:58: AttributeError
+_ test_group_refuses_identity_drift_without_publishing_partial_views[timeout] __
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-90/test_group_refuses_identity_dr8')
+fault = 'timeout'
+
+    @pytest.mark.parametrize('fault', ['wrong-chain-before', 'wrong-chain-during', 'reorg-before', 'reorg-during',
+                                      'abi-before', 'abi-during', 'return-malformed', 'logs-malformed', 'timeout'])
+    def test_group_refuses_identity_drift_without_publishing_partial_views(tmp_path, fault):
+        rpc = Replies(); original = rpc.call; chain = executor(tmp_path, rpc)
+        abi = tmp_path/'TMSC.json'; abi.write_bytes(contract().path.read_bytes())
+        chain.contracts['TMSC'] = AbiContract(abi, contract().address, sha256(abi))
+        if fault == 'abi-before': abi.write_text('[]')
+        counts = {'blocks': 0, 'chains': 0}
+        def call(method, params=None):
+            if method == 'eth_chainId':
+                counts['chains'] += 1
+                if fault == 'wrong-chain-before' or (fault == 'wrong-chain-during' and counts['chains'] == 2): return '0x1'
+            if method == 'eth_getLogs': return {} if fault == 'logs-malformed' else []
+            result = original(method, params)
+            if method == 'eth_getBlockByNumber':
+                counts['blocks'] += 1
+                if ((fault == 'reorg-before' and counts['blocks'] == 2)
+                        or (fault == 'reorg-during' and counts['blocks'] == 3)):
+                    result['hash'] = '0x'+'ff'*32
+            if method == 'eth_call':
+                if fault == 'abi-during': abi.write_text('[]')
+                if fault == 'return-malformed': return '0x01'
+                if fault == 'timeout':
+                    import time
+                    time.sleep(.06)
+            return result
+        rpc.call = call
+        with pytest.raises((ValueError, TimeoutError)):
+>           with chain.read_group(('TMSC',)) as group:
+                 ^^^^^^^^^^^^^^^^
+E           AttributeError: 'PublicChain' object has no attribute 'read_group'
+
+evaluation/tests/test_read_group.py:58: AttributeError
+_____ test_group_has_bounded_scope_and_never_certifies_failed_body[scope] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-90/test_group_has_bounded_scope_a0')
+fault = 'scope'
+
+    @pytest.mark.parametrize('fault', ['scope', 'nested', 'budget', 'body-error'])
+    def test_group_has_bounded_scope_and_never_certifies_failed_body(tmp_path, fault):
+        rpc = Replies(); chain = executor(tmp_path, rpc)
+        with pytest.raises(ValueError):
+>           with chain.read_group(('TMSC',)) as group:
+                 ^^^^^^^^^^^^^^^^
+E           AttributeError: 'PublicChain' object has no attribute 'read_group'
+
+evaluation/tests/test_read_group.py:68: AttributeError
+_____ test_group_has_bounded_scope_and_never_certifies_failed_body[nested] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-90/test_group_has_bounded_scope_a1')
+fault = 'nested'
+
+    @pytest.mark.parametrize('fault', ['scope', 'nested', 'budget', 'body-error'])
+    def test_group_has_bounded_scope_and_never_certifies_failed_body(tmp_path, fault):
+        rpc = Replies(); chain = executor(tmp_path, rpc)
+        with pytest.raises(ValueError):
+>           with chain.read_group(('TMSC',)) as group:
+                 ^^^^^^^^^^^^^^^^
+E           AttributeError: 'PublicChain' object has no attribute 'read_group'
+
+evaluation/tests/test_read_group.py:68: AttributeError
+_____ test_group_has_bounded_scope_and_never_certifies_failed_body[budget] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-90/test_group_has_bounded_scope_a2')
+fault = 'budget'
+
+    @pytest.mark.parametrize('fault', ['scope', 'nested', 'budget', 'body-error'])
+    def test_group_has_bounded_scope_and_never_certifies_failed_body(tmp_path, fault):
+        rpc = Replies(); chain = executor(tmp_path, rpc)
+        with pytest.raises(ValueError):
+>           with chain.read_group(('TMSC',)) as group:
+                 ^^^^^^^^^^^^^^^^
+E           AttributeError: 'PublicChain' object has no attribute 'read_group'
+
+evaluation/tests/test_read_group.py:68: AttributeError
+___ test_group_has_bounded_scope_and_never_certifies_failed_body[body-error] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-90/test_group_has_bounded_scope_a3')
+fault = 'body-error'
+
+    @pytest.mark.parametrize('fault', ['scope', 'nested', 'budget', 'body-error'])
+    def test_group_has_bounded_scope_and_never_certifies_failed_body(tmp_path, fault):
+        rpc = Replies(); chain = executor(tmp_path, rpc)
+        with pytest.raises(ValueError):
+>           with chain.read_group(('TMSC',)) as group:
+                 ^^^^^^^^^^^^^^^^
+E           AttributeError: 'PublicChain' object has no attribute 'read_group'
+
+evaluation/tests/test_read_group.py:68: AttributeError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_read_group.py::test_group_retains_individual_bindings_and_pins_history
+FAILED evaluation/tests/test_read_group.py::test_group_refuses_identity_drift_without_publishing_partial_views[wrong-chain-before]
+FAILED evaluation/tests/test_read_group.py::test_group_refuses_identity_drift_without_publishing_partial_views[wrong-chain-during]
+FAILED evaluation/tests/test_read_group.py::test_group_refuses_identity_drift_without_publishing_partial_views[reorg-before]
+FAILED evaluation/tests/test_read_group.py::test_group_refuses_identity_drift_without_publishing_partial_views[reorg-during]
+FAILED evaluation/tests/test_read_group.py::test_group_refuses_identity_drift_without_publishing_partial_views[abi-before]
+FAILED evaluation/tests/test_read_group.py::test_group_refuses_identity_drift_without_publishing_partial_views[abi-during]
+FAILED evaluation/tests/test_read_group.py::test_group_refuses_identity_drift_without_publishing_partial_views[return-malformed]
+FAILED evaluation/tests/test_read_group.py::test_group_refuses_identity_drift_without_publishing_partial_views[logs-malformed]
+FAILED evaluation/tests/test_read_group.py::test_group_refuses_identity_drift_without_publishing_partial_views[timeout]
+FAILED evaluation/tests/test_read_group.py::test_group_has_bounded_scope_and_never_certifies_failed_body[scope]
+FAILED evaluation/tests/test_read_group.py::test_group_has_bounded_scope_and_never_certifies_failed_body[nested]
+FAILED evaluation/tests/test_read_group.py::test_group_has_bounded_scope_and_never_certifies_failed_body[budget]
+FAILED evaluation/tests/test_read_group.py::test_group_has_bounded_scope_and_never_certifies_failed_body[body-error]
+14 failed in 0.34s

@@ -813,3 +813,40 @@ shortcut, TTL extension, reference/custody/pin/ABI change is authorized by this 
 same-source ACKs/every E criterion precede F. Scheduled exclusive guard plus separate
 coordinator held before fetch; publication/finally cleanup in automation memory.
 Author self-review only under user ban on extra agents; weaker than fresh review.
+
+
+## Current checkpoint — grouped replay runner awaits exact ACKs, 2026-10-09 UTC
+
+A3-0044 requests NEW complete three-profile replay plan `1b3cf7cd13ea8b1436396f8cc6268bbbdcae753661730290043ee144c1804a32`.
+Bounded historical read groups implemented: one explicit block per chain/snapshot,
+chain+block+all-selected-ABI identity bracketing, individual ABI/calldata/return rows,
+full contract histories pinned through group block,16-query/shared10s bounds.
+Both whole native and idle-worker before/after snapshots still precede first release;
+whole payload equality, original expiry and original Alice/Bob/wrong-admin controls
+retained. No Cast hash caching, TTL extension, owner/ABI/custody/dependency change.
+
+Synthetic reader RED14→GREEN39; collector RED3→GREEN85; plan RED1→GREEN28;
+fresh full root599 PASS/108.55s wall/exit0.78 Python inputs stable across final
+suite;86 plan inputs/303 owner blobs/15 frozen copies verified. Actual no-ACK
+CLI2/BLOCKED before services/cases/snapshots. Source-bracket, commands, versions,
+fixtures/assumptions/review: evaluation/evidence/e2/grouped-replay-runner-20261009/README.md.
+No live timing or repaired release success proved. Group bracketing does not detect
+transient identity changes restored between boundaries; safe-ledger assumption remains.
+
+Read exact A1-0055/2d2d386 and NEW A2-0036/d408669/67a548eb.. reviews;164 latest
+communication paths/no divergence. Reviews are not execution/report ACKs. A3-0041
+RELEASED; A3-0044 REQUESTED with BOTH NEW exact peer ACKs absent; no active lease
+or services. Historical paper2 replay PASS/repaired1 EXPIRED composite incomplete
+preserved, plus6 recovery/expiry+3 duplicate rows;45 catalog comparisons still need
+completion. Four paper crash classifications BLOCKED/unproved, deliveryunknown and
+symbolic E crypto. E0closed/C-E1complete/E2-E3permitted; gateE NOT_RUN/F-Glocked.
+
+Next: verify both exact A3-0044 ACK blobs/hash/owner ancestry, entire plan/tool/source
+and owner stability, then fresh3 replay comparisons under scheduled+coordinator guards.
+Do not reuse released A3-0041 ACKs. Preserve unexpected expiry and full positive controls.
+Remaining44 schedules/mutants/windows/report/all3 same-report-source ACKs/every gateE
+criterion precede F. No human input needed. Author self-review only under no-extra-agent
+rule, weaker than independent. Guard held before fetch through publication; finally
+cleanup/publication recorded externally and in automation memory. No peer/module/mailbox/
+archive/frozen/main edits, extra agents/worktrees or prohibited Git; preexisting
+untracked scheduled-run evidence preserved unstaged.

@@ -120,6 +120,16 @@ def create_plan(*, run_id, freeze_message, expired_retry=False, duplicate_outcom
                                  'Three of remaining47 prospective schedules only; no complete matrix, live mutants/windows/report/gate result.',
                                  'Equal idle-worker snapshots are not worker retry/idempotence evidence.',
                                  'Symbolic crypto/safe-ledger/trusted-worker; no delivery/ABE/consensus/power-loss proof.'])
+        plan['replayProbe']['nativeSnapshots'] = dict(
+            block='one explicit latest-selected historical block per chain per snapshot',
+            identity='chain and block before/after each group; all selected ABI hashes before/after',
+            history='all deployment contract addresses; from0 to the selected block number',
+            budget='at most16 view/log queries per group; shared PublicChain timeout10s',
+            evidence='individual ABI/calldata/return rows; separate before/after block anchors',
+            worker='both full idle-worker exports before first release; no worker operation')
+        plan['limitations'][1] = ('Three fresh replay comparisons; historical paper2 complete/repaired1 incomplete, '
+                                  '44 untouched schedules;45 catalog comparisons still need completion, plus mutants/windows/report/gate.')
+        plan['limitations'].append('Grouped RPC consistency cannot detect a transient reorg restored between boundary checks; safe-ledger assumption unchanged.')
         plan.pop('workerExpected')
     return plan
 

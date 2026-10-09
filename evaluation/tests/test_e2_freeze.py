@@ -150,3 +150,18 @@ def test_nonce_replay_execution_requires_complete_native_proof(tmp_path, monkeyp
     result = m.execute(path, None, tmp_path/'output')
     assert result['status'] == ('E2_NONCE_REPLAY_SLICE_PASS' if proof_mode == 'complete' else 'FAILED')
     if proof_mode == 'complete': assert len(result['cases']) == 3
+
+
+def test_grouped_replay_plan_binds_historical_snapshot_recipe():
+    plan = module().create_plan(run_id='E2-grouped-test', freeze_message='A3-0044', nonce_replay=True)
+    assert plan['replayProbe']['nativeSnapshots'] == {
+        'block': 'one explicit latest-selected historical block per chain per snapshot',
+        'identity': 'chain and block before/after each group; all selected ABI hashes before/after',
+        'history': 'all deployment contract addresses; from0 to the selected block number',
+        'budget': 'at most16 view/log queries per group; shared PublicChain timeout10s',
+        'evidence': 'individual ABI/calldata/return rows; separate before/after block anchors',
+        'worker': 'both full idle-worker exports before first release; no worker operation',
+    }
+    assert plan['timing'].endswith('unexpected expiry fails')
+    plan['replayProbe']['nativeSnapshots']['history'] = 'latest unpinned logs'
+    with pytest.raises(ValueError): module().verify_plan(plan)
