@@ -120,18 +120,23 @@ Rules shared by all three:
   Record exit codes and hashes.
 - Push agent-1.
 
-**P2: remaining 44 comparisons, family by family.** Order: the cheapest first, then those reusing
-existing runners.
+**P2: remaining 44 comparisons in slices.** This order was corrected by S3-0001 and accepted in
+A1-0061; the earlier list omitted E01 expiry-boundary ×3 and wrongly listed crash rows as remaining.
 
-1. E01 subject substitution ×3: finish the A3-0049 plan.
-2. E01 forged tuple ×3, wrong destination ×3 (second deployment), new-reference replay ×3, same nonce
-   with distinct digests ×1.
-3. E02 wrong issuer ×3, signed-list rollback ×3, pre-barrier and post-barrier revocation ×6, expired
-   duty ×3.
-4. E03 dropped outcome ×3, fabricated outcome ×3, receipt binding/signature/positive ×7, and the
-   remaining crash rows.
-5. The four paper crash rows remain BLOCKED/UNPROVED unless new evidence exists. They are reported
-   as an ambiguity (paper silent on durability), never as a finding.
+| Slice | Content | Rows |
+|---|---|---|
+| SL0 | evaluator portability: solo ACK mode, host tool paths, ports, timing; no services | none |
+| SL1 | E01 subject substitution | 3 |
+| SL2 | E01 forged tuple ×3, new-reference replay ×3, same nonce with distinct digests ×1 | 7 |
+| SL3 | E03 dropped outcome ×3, fabricated outcome ×3 | 6 |
+| SL4 | E03 receipt binding/signature/positive | 7 |
+| SL5 | E02 wrong issuer ×3, signed-list rollback ×3 | 6 |
+| SL6 | E02 pre-barrier and post-barrier revocation ×6, expired duty ×3 | 9 |
+| SL7 | E01 wrong destination ×3, expiry boundary ×3 | 6 |
+
+All six E03 crash rows already ran live (A3-0036/0038). The four paper crash rows are reported as
+SPEC_GAP (ambiguity), outcome UNPROVED, with the frozen BLOCKED label shown alongside (A1-0061 G-4).
+They are never a finding.
 
 Cycle for each family:
 
