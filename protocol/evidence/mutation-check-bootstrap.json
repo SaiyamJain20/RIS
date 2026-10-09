@@ -1,0 +1,187 @@
+{
+  "scope": "protocol/testtools/bootstrap_fixture.py only (A2-0015); the 73-mutant check of the production sources is protocol/evidence/mutation-check.json and was not re-run",
+  "note": "merged from two runs of `python protocol/tools/mutation_check.py --only bootstrap` (second run with --grep for the five control mutants); each run's baseline was the full suite",
+  "baselineRun1": {
+    "exitCode": 0,
+    "tail": "1341 passed, 201 skipped in 261.54s (0:04:21)"
+  },
+  "baselineRun2": {
+    "exitCode": 0,
+    "tail": "1343 passed, 201 skipped in 259.51s (0:04:19)"
+  },
+  "python": "3.13.15",
+  "mutants": [
+    {
+      "file": "protocol/testtools/bootstrap_fixture.py",
+      "old": "ROLE_RESEARCHER = \"0x\" + keccak(text=\"HMBC.role.Researcher\").hex()",
+      "new": "ROLE_RESEARCHER = ROLE_DOCTOR",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 3 passed in 0.39s"
+    },
+    {
+      "file": "protocol/testtools/bootstrap_fixture.py",
+      "old": "\"temporalClaims\": [{\"authority\": h1, \"role\": ROLE_ON_DUTY}]}",
+      "new": "\"temporalClaims\": []}",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 3 passed in 0.39s"
+    },
+    {
+      "file": "protocol/testtools/bootstrap_fixture.py",
+      "old": "\"entries\": [{\"gid\": _addr(\"alice\"),",
+      "new": "\"entries\": [{\"gid\": _addr(\"bob\"),",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 5 passed in 0.48s"
+    },
+    {
+      "file": "protocol/testtools/bootstrap_fixture.py",
+      "old": "\"possessionSignature\": _sign(led, \"Registration\", reg_alice, \"alice\")",
+      "new": "\"possessionSignature\": _sign(led, \"Registration\", reg_alice, \"relay\")",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 4 passed in 0.44s"
+    },
+    {
+      "file": "protocol/testtools/bootstrap_fixture.py",
+      "old": "REGISTRATION_SECONDS = 3600",
+      "new": "REGISTRATION_SECONDS = 600",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 5 passed in 0.48s"
+    },
+    {
+      "file": "protocol/testtools/bootstrap_fixture.py",
+      "old": "require_test_only(dep)\n        led = Ledger.from_deployment(dep)",
+      "new": "led = Ledger.from_deployment(dep)",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 11 passed in 1.36s"
+    },
+    {
+      "file": "protocol/testtools/bootstrap_fixture.py",
+      "old": "require_test_only(led.deployment)\n    h1, h2",
+      "new": "h1, h2",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 12 passed in 1.38s"
+    },
+    {
+      "file": "protocol/testtools/bootstrap_fixture.py",
+      "old": "_step(\"register-alice\", \"relay\",",
+      "new": "_step(\"register-alice\", \"H1-ca-admin\",",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed in 0.29s"
+    },
+    {
+      "file": "protocol/testtools/bootstrap_fixture.py",
+      "old": "contract.calldata(function, *args.values())",
+      "new": "contract.calldata(function, *reversed(list(args.values())))",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed in 0.29s"
+    },
+    {
+      "file": "protocol/testtools/bootstrap_fixture.py",
+      "old": "\"recipientKeyHash\": keys.recipient_key_hash(f\"keyref:user:{subject_label}\"),",
+      "new": "\"recipientKeyHash\": keys.recipient_key_hash(\"keyref:user:alice\"),",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 16 passed in 27.78s"
+    },
+    {
+      "file": "protocol/testtools/bootstrap_fixture.py",
+      "old": "\"validFrom\": str(now - 60)",
+      "new": "\"validFrom\": str(now + 60)",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 5 passed in 0.49s"
+    },
+    {
+      "file": "protocol/testtools/bootstrap_fixture.py",
+      "old": "\"steps\": steps, \"credentialBundles\": bundles, \"notes\": NOTES}",
+      "new": "\"steps\": steps, \"credentialBundles\": bundles, \"notes\": NOTES, \"debug\": keys.synthetic_private_key(\"alice\")}",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 8 passed in 0.70s"
+    },
+    {
+      "file": "protocol/testtools/bootstrap_fixture.py",
+      "old": "plan = build_plan(led, led.pbc.now())",
+      "new": "plan = build_plan(led, led.dbc.now())",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 19 passed in 79.25s (0:01:19)"
+    },
+    {
+      "file": "protocol/testtools/bootstrap_fixture.py",
+      "old": "crl1 = {\"authority\": h1, \"version\": \"1\", \"validUntil\": str(now + LIST_SECONDS)",
+      "new": "crl1 = {\"authority\": h1, \"version\": \"1\", \"validUntil\": str(now - LIST_SECONDS)",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 5 passed in 0.48s"
+    },
+    {
+      "file": "protocol/testtools/bootstrap_fixture.py",
+      "old": "_signed_cert(led, \"H2-root\", \"bob\", ROLE_RESEARCHER, \"201\")",
+      "new": "_signed_cert(led, \"H1-root\", \"bob\", ROLE_RESEARCHER, \"201\")",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 3 passed in 0.39s"
+    },
+    {
+      "file": "protocol/testtools/bootstrap_fixture.py",
+      "old": "return {\"schemaVersion\": SCHEMA, \"testOnly\": True,",
+      "new": "return {\"schemaVersion\": SCHEMA, \"testOnly\": False,",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 16 passed in 26.45s"
+    },
+    {
+      "file": "protocol/testtools/bootstrap_fixture.py",
+      "old": "_step(\"wrong-issuer-admin-h2-list\", \"H1-ca-admin\",",
+      "new": "_step(\"wrong-issuer-admin-h2-list\", \"H2-ca-admin\",",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 7 passed in 0.60s"
+    },
+    {
+      "file": "protocol/testtools/bootstrap_fixture.py",
+      "old": "crl2_next = {\"authority\": h2, \"version\": \"2\"",
+      "new": "crl2_next = {\"authority\": h2, \"version\": \"1\"",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 7 passed in 0.60s"
+    },
+    {
+      "file": "protocol/testtools/bootstrap_fixture.py",
+      "old": "control[\"expected\"] = \"UNAUTHORIZED_CALLER\"",
+      "new": "control[\"expected\"] = \"BAD_SIGNATURE\"",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 7 passed in 0.60s"
+    },
+    {
+      "file": "protocol/testtools/bootstrap_fixture.py",
+      "old": "crl2_next = {\"authority\": h2, \"version\"",
+      "new": "crl2_next = {\"authority\": h1, \"version\"",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 7 passed in 0.60s"
+    },
+    {
+      "file": "protocol/testtools/bootstrap_fixture.py",
+      "old": "\"controls\": [control],",
+      "new": "\"controls\": [],",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 7 passed in 0.59s"
+    }
+  ],
+  "detected": 21,
+  "total": 21,
+  "survivedEquivalent": 0,
+  "survivedGap": 0
+}

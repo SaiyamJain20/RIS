@@ -1,0 +1,87 @@
+{
+  "scope": "protocol/testtools/faulty_adapter.py only (A2-0020, candidate TEST-ONLY crash hook); the 73-mutant check of the production sources is protocol/evidence/mutation-check.json and was not re-run (those sources are byte-identical to 465aff5)",
+  "note": "produced by python protocol/tools/mutation_check.py --only faulty; the baseline was the full suite (before paper-minimal was added to the test profiles)",
+  "baseline": {
+    "exitCode": 0,
+    "tail": "1363 passed, 201 skipped in 302.63s (0:05:02)"
+  },
+  "python": "3.13.15",
+  "mutants": [
+    {
+      "file": "protocol/testtools/faulty_adapter.py",
+      "old": "os._exit(CRASH_EXIT)",
+      "new": "os._exit(0)",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed in 27.89s"
+    },
+    {
+      "file": "protocol/testtools/faulty_adapter.py",
+      "old": "super().release(grant_id, transmit=send if self.point == \"after_send\" else transmit)",
+      "new": "super().release(grant_id, transmit=transmit)",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 2 passed in 55.44s"
+    },
+    {
+      "file": "protocol/testtools/faulty_adapter.py",
+      "old": "CRASH_EXIT = 86",
+      "new": "CRASH_EXIT = 87",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed in 28.17s"
+    },
+    {
+      "file": "protocol/testtools/faulty_adapter.py",
+      "old": "faults={\"crash_\" + point}",
+      "new": "faults={\"crash_after_intent\"}",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 2 passed in 57.74s"
+    },
+    {
+      "file": "protocol/testtools/faulty_adapter.py",
+      "old": "if args.crash_at not in POINTS:\n        raise SystemExit",
+      "new": "if False:\n        raise SystemExit",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 5 passed in 60.65s (0:01:00)"
+    },
+    {
+      "file": "protocol/testtools/faulty_adapter.py",
+      "old": "require_test_only(deployment)",
+      "new": "pass",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 5 passed in 61.13s (0:01:01)"
+    },
+    {
+      "file": "protocol/testtools/faulty_adapter.py",
+      "old": "adapter._worker = lambda led: CrashingWorker(led, os.path.join(adapter._STATE_DIR, \"worker\"), led.dbc.now, point)",
+      "new": "pass",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed in 30.04s"
+    },
+    {
+      "file": "protocol/testtools/faulty_adapter.py",
+      "old": "sys.stdout.write(json.dumps(adapter._response(result=response), separators=(\",\", \":\")) + \"\\n\")\n            sys.stdout.flush()",
+      "new": "sys.stdout.write(json.dumps(adapter._response(result=response), separators=(\",\", \":\")) + \"\\n\")",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 2 passed in 55.46s"
+    },
+    {
+      "file": "protocol/testtools/faulty_adapter.py",
+      "old": "except SimulatedCrash:\n            os._exit(CRASH_EXIT)",
+      "new": "except SimulatedCrash:\n            raise",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed in 25.94s"
+    }
+  ],
+  "detected": 9,
+  "total": 9,
+  "survivedEquivalent": 0,
+  "survivedGap": 0
+}
