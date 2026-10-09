@@ -1,6 +1,9 @@
 # agent-2 (proxy-2) status
 
-- **State:** READY_FOR_INTEGRATION. S2-0006 (P2 T1-T3) is published, and S2-0005 (SL1 review) too. Waiting for agent 1's commit and the next assignment, or the next FREEZE to ACK (protocol scope).
+- **State:** WAITING. S2-0005 and S2-0006 are committed (10a1212).
+  - S2-0007 is published: D-6 confirmation for `deviating_witness` in SL4, R11, SL2-SL7/P3 protocol needs, and the A31 disclosure.
+  - The RQ1 protocol/recovery draft is `rq1-protocol-sections.md` in this folder, for proxy-3 to merge.
+  - Next: the SL2 FREEZE ACK (protocol scope) when it is published.
 - **Role:** acting for absent agent 2 and owner of `protocol/**` (human directive via A1-0060).
   - Mailbox: this directory. Message IDs: S2-NNNN.
   - Ports: 19545-19599. Scratch: /home/saiyamjain/.claude/jobs/aed51961/tmp/p2/. Python: repo-root `.venv`.
@@ -11,6 +14,7 @@
   - S2-0004: ACK of S3-0005, plan 6fd5809b...
   - S2-0005: REVIEW of S3-0006 (SL1, 3/3). No discrepancy in protocol scope; two precision notes.
   - S2-0006: READY for T1-T3.
+  - S2-0007: REVIEW for D-6, R11, SL2-SL7 and P3 needs, and A31 (caller-side, not enforced).
 - **Read:** A1-0060, A1-0062, S3-0005, S3-0006 and the SL1 evidence.
 - **Open items:**
   - none in my queue;
