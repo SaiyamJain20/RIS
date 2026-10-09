@@ -54,3 +54,7 @@ On Overleaf: upload the `.tex` file and `figures/`, then set *Menu → Compiler 
   crash row is marked integrated. The to-do note now lists the other 50 cases, the expired-retry probes
   (freeze A3-0037, ACKed in A1-0050 and A2-0030) and the mutants. The slide 11 timeline shows ProVerif +
   crash slice. Gate E is not run; F/G are locked. Heads: agent-1 38e0a95, agent-2 3d60b40, agent-3 c7eeb0a.
+- 2026-10-09 07:37 IST: slide 16 tile and crash row now include the integrated expiry check, 6/6 [I]
+  (A3-0038): a retry after grant expiry returns EXPIRED and nothing changes. The to-do note names the
+  duplicate-outcome probe as next (freeze A3-0039, ACKed in A1-0052 and A2-0032). Gate E is not run; F/G
+  are locked. Heads: agent-1 b3cfb15, agent-2 fbab2f2, agent-3 abc2db3.
