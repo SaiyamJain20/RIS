@@ -1,0 +1,865 @@
+
+
+
+
+
+
+
+
+
+
+
+=================================== FAILURES ===================================
+______ test_plan_pins_existing_reviewed_sources_without_starting_services ______
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-1/test_plan_pins_existing_review0')
+
+    def test_plan_pins_existing_reviewed_sources_without_starting_services(tmp_path):
+        m=module();plan=m.create_plan(run_id='E1-20261008-public-access',freeze_message='A3-0027')
+>       m.verify_plan(plan)
+
+evaluation/tests/test_e1_freeze.py:16: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/e1.py:95: in verify_plan
+    require(Path(tool['path']).is_file() and sha256(tool['path']) == tool['sha256'], 'tool binary hash')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, label = 'tool binary hash'
+
+    def require(condition, label):
+        if not condition:
+>           raise ValueError('Public access '+label+' failed')
+E           ValueError: Public access tool binary hash failed
+
+evaluation/access_artifacts.py:16: ValueError
+________ test_interruption_records_failure_and_propagates_cancellation _________
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-1/test_interruption_records_fail0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ece0181a3f0>
+
+    def test_interruption_records_failure_and_propagates_cancellation(tmp_path, monkeypatch):
+        m=module();plan=m.create_plan(run_id='E1-test',freeze_message='A3-0027')
+        p=tmp_path/'plan.json';p.write_text(json.dumps(plan))
+        # Control-flow double only: no peer identities/ACK files, services or gate evidence.
+        monkeypatch.setattr(m,'_acks',lambda *args: {'TEST_ONLY_CONTROL': 'not peer evidence'})
+        def interrupt(*args): raise KeyboardInterrupt()
+        monkeypatch.setattr(m,'_profile',interrupt)
+>       with pytest.raises(KeyboardInterrupt):m.execute(p,None,tmp_path/'run')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'KeyboardInterrupt'>
+
+evaluation/tests/test_e1_freeze.py:82: Failed
+________ test_exact_plan_pins_scoped_successors_and_all_six_fresh_cases ________
+
+    def test_exact_plan_pins_scoped_successors_and_all_six_fresh_cases():
+>       m=module();p=m.create_plan(run_id='E2-recovery-test',freeze_message='A3-0035');m.verify_plan(p)
+                                                                                       ^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_e2_freeze.py:18: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/e2.py:144: in verify_plan
+    require(Path(tool['path']).is_file() and sha256(tool['path']) == tool['sha256'], 'tool binary hash')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, label = 'tool binary hash'
+
+    def require(condition, label):
+        if not condition:
+>           raise ValueError('Public access '+label+' failed')
+E           ValueError: Public access tool binary hash failed
+
+evaluation/access_artifacts.py:16: ValueError
+___________ test_expiry_plan_cannot_start_without_new_exact_full_ack ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-1/test_expiry_plan_cannot_start_0')
+
+    def test_expiry_plan_cannot_start_without_new_exact_full_ack(tmp_path):
+        m = module()
+        p = m.create_plan(run_id='E2-expiry-test', freeze_message='A3-0037', expired_retry=True)
+>       m.verify_plan(p)
+
+evaluation/tests/test_e2_freeze.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/e2.py:144: in verify_plan
+    require(Path(tool['path']).is_file() and sha256(tool['path']) == tool['sha256'], 'tool binary hash')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, label = 'tool binary hash'
+
+    def require(condition, label):
+        if not condition:
+>           raise ValueError('Public access '+label+' failed')
+E           ValueError: Public access tool binary hash failed
+
+evaluation/access_artifacts.py:16: ValueError
+___________ test_expiry_execution_cannot_accept_recovery_only[False] ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-1/test_expiry_execution_cannot_a0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ece0181a3f0>
+omit_expiry = False
+
+    @pytest.mark.parametrize('omit_expiry', [False, True])
+    def test_expiry_execution_cannot_accept_recovery_only(tmp_path, monkeypatch, omit_expiry):
+        m = module()
+        p = m.create_plan(run_id='E2-expiry-test', freeze_message='A3-0037', expired_retry=True)
+        path = tmp_path/'plan.json'; path.write_text(json.dumps(p))
+        monkeypatch.setattr(m.e1, '_acks', lambda *args: {'TEST_ONLY': 'not peer evidence'})
+    
+        def supplied_profile(plan, profile, output, record, *, recovery_point, expired_retry):
+            assert expired_retry is True
+            (output/'recovery').mkdir(parents=True)
+            (output/'recovery/result.json').write_text(json.dumps(dict(ok=True, delivery='unknown')))
+            if not omit_expiry:
+                (output/'expired-retry').mkdir()
+                (output/'expired-retry/result.json').write_text(json.dumps(dict(ok=True, error='EXPIRED', delivery='unknown',
+                                                                              workerUnchanged=True, nativeUnchanged=True)))
+    
+        monkeypatch.setattr(m.e1, '_profile', supplied_profile)
+        result = m.execute(path, None, tmp_path/'output')
+>       assert result['status'] == ('FAILED' if omit_expiry else 'E2_RECOVERY_EXPIRY_SLICE_PASS')
+E       AssertionError: assert 'BLOCKED' == 'E2_RECOVERY_...RY_SLICE_PASS'
+E         
+E         - E2_RECOVERY_EXPIRY_SLICE_PASS
+E         + BLOCKED
+
+evaluation/tests/test_e2_freeze.py:84: AssertionError
+___________ test_expiry_execution_cannot_accept_recovery_only[True] ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-1/test_expiry_execution_cannot_a1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ece03085d90>
+omit_expiry = True
+
+    @pytest.mark.parametrize('omit_expiry', [False, True])
+    def test_expiry_execution_cannot_accept_recovery_only(tmp_path, monkeypatch, omit_expiry):
+        m = module()
+        p = m.create_plan(run_id='E2-expiry-test', freeze_message='A3-0037', expired_retry=True)
+        path = tmp_path/'plan.json'; path.write_text(json.dumps(p))
+        monkeypatch.setattr(m.e1, '_acks', lambda *args: {'TEST_ONLY': 'not peer evidence'})
+    
+        def supplied_profile(plan, profile, output, record, *, recovery_point, expired_retry):
+            assert expired_retry is True
+            (output/'recovery').mkdir(parents=True)
+            (output/'recovery/result.json').write_text(json.dumps(dict(ok=True, delivery='unknown')))
+            if not omit_expiry:
+                (output/'expired-retry').mkdir()
+                (output/'expired-retry/result.json').write_text(json.dumps(dict(ok=True, error='EXPIRED', delivery='unknown',
+                                                                              workerUnchanged=True, nativeUnchanged=True)))
+    
+        monkeypatch.setattr(m.e1, '_profile', supplied_profile)
+        result = m.execute(path, None, tmp_path/'output')
+>       assert result['status'] == ('FAILED' if omit_expiry else 'E2_RECOVERY_EXPIRY_SLICE_PASS')
+E       AssertionError: assert 'BLOCKED' == 'FAILED'
+E         
+E         - FAILED
+E         + BLOCKED
+
+evaluation/tests/test_e2_freeze.py:84: AssertionError
+_____ test_duplicate_outcome_plan_requires_new_exact_acks_before_services ______
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-1/test_duplicate_outcome_plan_re0')
+
+    def test_duplicate_outcome_plan_requires_new_exact_acks_before_services(tmp_path):
+        m = module()
+        p = m.create_plan(run_id='E2-duplicate-test', freeze_message='A3-0039', duplicate_outcome=True)
+>       m.verify_plan(p)
+
+evaluation/tests/test_e2_freeze.py:90: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/e2.py:144: in verify_plan
+    require(Path(tool['path']).is_file() and sha256(tool['path']) == tool['sha256'], 'tool binary hash')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, label = 'tool binary hash'
+
+    def require(condition, label):
+        if not condition:
+>           raise ValueError('Public access '+label+' failed')
+E           ValueError: Public access tool binary hash failed
+
+evaluation/access_artifacts.py:16: ValueError
+________ test_duplicate_execution_requires_each_complete_probe[missing] ________
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-1/test_duplicate_execution_requi0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ece017ca8b0>
+proof_mode = 'missing'
+
+    @pytest.mark.parametrize('proof_mode', ['missing', 'wrong-error', 'changed-native', 'changed-worker', 'different-call', 'complete'])
+    def test_duplicate_execution_requires_each_complete_probe(tmp_path, monkeypatch, proof_mode):
+        m = module(); p = m.create_plan(run_id='E2-duplicate-test', freeze_message='A3-0039', duplicate_outcome=True)
+        path = tmp_path/'plan.json'; path.write_text(json.dumps(p))
+        monkeypatch.setattr(m.e1, '_acks', lambda *args: {'TEST_ONLY': 'not peer evidence'})
+        def supplied_profile(plan, profile, output, record, *, recovery_point, expired_retry, duplicate_outcome):
+            assert recovery_point is None and expired_retry is False and duplicate_outcome is True
+            if proof_mode == 'missing': return
+            destination = output/'alice/duplicate-outcome'; destination.mkdir(parents=True)
+            proof = dict(ok=True, error='REPLAY', delivery='unknown', workerUnchanged=True, nativeUnchanged=True, identicalCalldata=True)
+            if proof_mode == 'wrong-error': proof['error'] = 'UNAUTHORIZED_CALLER'
+            if proof_mode == 'changed-native': proof['nativeUnchanged'] = False
+            if proof_mode == 'changed-worker': proof['workerUnchanged'] = False
+            if proof_mode == 'different-call': proof['identicalCalldata'] = False
+            (destination/'result.json').write_text(json.dumps(proof))
+        monkeypatch.setattr(m.e1, '_profile', supplied_profile)
+        result = m.execute(path, tmp_path/'synthetic-ack.json', tmp_path/'output')
+>       assert result['status'] == ('E2_DUPLICATE_OUTCOME_SLICE_PASS' if proof_mode == 'complete' else 'FAILED')
+E       AssertionError: assert 'BLOCKED' == 'FAILED'
+E         
+E         - FAILED
+E         + BLOCKED
+
+evaluation/tests/test_e2_freeze.py:117: AssertionError
+______ test_duplicate_execution_requires_each_complete_probe[wrong-error] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-1/test_duplicate_execution_requi1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ece017cae00>
+proof_mode = 'wrong-error'
+
+    @pytest.mark.parametrize('proof_mode', ['missing', 'wrong-error', 'changed-native', 'changed-worker', 'different-call', 'complete'])
+    def test_duplicate_execution_requires_each_complete_probe(tmp_path, monkeypatch, proof_mode):
+        m = module(); p = m.create_plan(run_id='E2-duplicate-test', freeze_message='A3-0039', duplicate_outcome=True)
+        path = tmp_path/'plan.json'; path.write_text(json.dumps(p))
+        monkeypatch.setattr(m.e1, '_acks', lambda *args: {'TEST_ONLY': 'not peer evidence'})
+        def supplied_profile(plan, profile, output, record, *, recovery_point, expired_retry, duplicate_outcome):
+            assert recovery_point is None and expired_retry is False and duplicate_outcome is True
+            if proof_mode == 'missing': return
+            destination = output/'alice/duplicate-outcome'; destination.mkdir(parents=True)
+            proof = dict(ok=True, error='REPLAY', delivery='unknown', workerUnchanged=True, nativeUnchanged=True, identicalCalldata=True)
+            if proof_mode == 'wrong-error': proof['error'] = 'UNAUTHORIZED_CALLER'
+            if proof_mode == 'changed-native': proof['nativeUnchanged'] = False
+            if proof_mode == 'changed-worker': proof['workerUnchanged'] = False
+            if proof_mode == 'different-call': proof['identicalCalldata'] = False
+            (destination/'result.json').write_text(json.dumps(proof))
+        monkeypatch.setattr(m.e1, '_profile', supplied_profile)
+        result = m.execute(path, tmp_path/'synthetic-ack.json', tmp_path/'output')
+>       assert result['status'] == ('E2_DUPLICATE_OUTCOME_SLICE_PASS' if proof_mode == 'complete' else 'FAILED')
+E       AssertionError: assert 'BLOCKED' == 'FAILED'
+E         
+E         - FAILED
+E         + BLOCKED
+
+evaluation/tests/test_e2_freeze.py:117: AssertionError
+____ test_duplicate_execution_requires_each_complete_probe[changed-native] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-1/test_duplicate_execution_requi2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ece01886a50>
+proof_mode = 'changed-native'
+
+    @pytest.mark.parametrize('proof_mode', ['missing', 'wrong-error', 'changed-native', 'changed-worker', 'different-call', 'complete'])
+    def test_duplicate_execution_requires_each_complete_probe(tmp_path, monkeypatch, proof_mode):
+        m = module(); p = m.create_plan(run_id='E2-duplicate-test', freeze_message='A3-0039', duplicate_outcome=True)
+        path = tmp_path/'plan.json'; path.write_text(json.dumps(p))
+        monkeypatch.setattr(m.e1, '_acks', lambda *args: {'TEST_ONLY': 'not peer evidence'})
+        def supplied_profile(plan, profile, output, record, *, recovery_point, expired_retry, duplicate_outcome):
+            assert recovery_point is None and expired_retry is False and duplicate_outcome is True
+            if proof_mode == 'missing': return
+            destination = output/'alice/duplicate-outcome'; destination.mkdir(parents=True)
+            proof = dict(ok=True, error='REPLAY', delivery='unknown', workerUnchanged=True, nativeUnchanged=True, identicalCalldata=True)
+            if proof_mode == 'wrong-error': proof['error'] = 'UNAUTHORIZED_CALLER'
+            if proof_mode == 'changed-native': proof['nativeUnchanged'] = False
+            if proof_mode == 'changed-worker': proof['workerUnchanged'] = False
+            if proof_mode == 'different-call': proof['identicalCalldata'] = False
+            (destination/'result.json').write_text(json.dumps(proof))
+        monkeypatch.setattr(m.e1, '_profile', supplied_profile)
+        result = m.execute(path, tmp_path/'synthetic-ack.json', tmp_path/'output')
+>       assert result['status'] == ('E2_DUPLICATE_OUTCOME_SLICE_PASS' if proof_mode == 'complete' else 'FAILED')
+E       AssertionError: assert 'BLOCKED' == 'FAILED'
+E         
+E         - FAILED
+E         + BLOCKED
+
+evaluation/tests/test_e2_freeze.py:117: AssertionError
+____ test_duplicate_execution_requires_each_complete_probe[changed-worker] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-1/test_duplicate_execution_requi3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ece01886d50>
+proof_mode = 'changed-worker'
+
+    @pytest.mark.parametrize('proof_mode', ['missing', 'wrong-error', 'changed-native', 'changed-worker', 'different-call', 'complete'])
+    def test_duplicate_execution_requires_each_complete_probe(tmp_path, monkeypatch, proof_mode):
+        m = module(); p = m.create_plan(run_id='E2-duplicate-test', freeze_message='A3-0039', duplicate_outcome=True)
+        path = tmp_path/'plan.json'; path.write_text(json.dumps(p))
+        monkeypatch.setattr(m.e1, '_acks', lambda *args: {'TEST_ONLY': 'not peer evidence'})
+        def supplied_profile(plan, profile, output, record, *, recovery_point, expired_retry, duplicate_outcome):
+            assert recovery_point is None and expired_retry is False and duplicate_outcome is True
+            if proof_mode == 'missing': return
+            destination = output/'alice/duplicate-outcome'; destination.mkdir(parents=True)
+            proof = dict(ok=True, error='REPLAY', delivery='unknown', workerUnchanged=True, nativeUnchanged=True, identicalCalldata=True)
+            if proof_mode == 'wrong-error': proof['error'] = 'UNAUTHORIZED_CALLER'
+            if proof_mode == 'changed-native': proof['nativeUnchanged'] = False
+            if proof_mode == 'changed-worker': proof['workerUnchanged'] = False
+            if proof_mode == 'different-call': proof['identicalCalldata'] = False
+            (destination/'result.json').write_text(json.dumps(proof))
+        monkeypatch.setattr(m.e1, '_profile', supplied_profile)
+        result = m.execute(path, tmp_path/'synthetic-ack.json', tmp_path/'output')
+>       assert result['status'] == ('E2_DUPLICATE_OUTCOME_SLICE_PASS' if proof_mode == 'complete' else 'FAILED')
+E       AssertionError: assert 'BLOCKED' == 'FAILED'
+E         
+E         - FAILED
+E         + BLOCKED
+
+evaluation/tests/test_e2_freeze.py:117: AssertionError
+____ test_duplicate_execution_requires_each_complete_probe[different-call] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-1/test_duplicate_execution_requi4')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ece011f67b0>
+proof_mode = 'different-call'
+
+    @pytest.mark.parametrize('proof_mode', ['missing', 'wrong-error', 'changed-native', 'changed-worker', 'different-call', 'complete'])
+    def test_duplicate_execution_requires_each_complete_probe(tmp_path, monkeypatch, proof_mode):
+        m = module(); p = m.create_plan(run_id='E2-duplicate-test', freeze_message='A3-0039', duplicate_outcome=True)
+        path = tmp_path/'plan.json'; path.write_text(json.dumps(p))
+        monkeypatch.setattr(m.e1, '_acks', lambda *args: {'TEST_ONLY': 'not peer evidence'})
+        def supplied_profile(plan, profile, output, record, *, recovery_point, expired_retry, duplicate_outcome):
+            assert recovery_point is None and expired_retry is False and duplicate_outcome is True
+            if proof_mode == 'missing': return
+            destination = output/'alice/duplicate-outcome'; destination.mkdir(parents=True)
+            proof = dict(ok=True, error='REPLAY', delivery='unknown', workerUnchanged=True, nativeUnchanged=True, identicalCalldata=True)
+            if proof_mode == 'wrong-error': proof['error'] = 'UNAUTHORIZED_CALLER'
+            if proof_mode == 'changed-native': proof['nativeUnchanged'] = False
+            if proof_mode == 'changed-worker': proof['workerUnchanged'] = False
+            if proof_mode == 'different-call': proof['identicalCalldata'] = False
+            (destination/'result.json').write_text(json.dumps(proof))
+        monkeypatch.setattr(m.e1, '_profile', supplied_profile)
+        result = m.execute(path, tmp_path/'synthetic-ack.json', tmp_path/'output')
+>       assert result['status'] == ('E2_DUPLICATE_OUTCOME_SLICE_PASS' if proof_mode == 'complete' else 'FAILED')
+E       AssertionError: assert 'BLOCKED' == 'FAILED'
+E         
+E         - FAILED
+E         + BLOCKED
+
+evaluation/tests/test_e2_freeze.py:117: AssertionError
+_______ test_duplicate_execution_requires_each_complete_probe[complete] ________
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-1/test_duplicate_execution_requi5')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ece011f6e40>
+proof_mode = 'complete'
+
+    @pytest.mark.parametrize('proof_mode', ['missing', 'wrong-error', 'changed-native', 'changed-worker', 'different-call', 'complete'])
+    def test_duplicate_execution_requires_each_complete_probe(tmp_path, monkeypatch, proof_mode):
+        m = module(); p = m.create_plan(run_id='E2-duplicate-test', freeze_message='A3-0039', duplicate_outcome=True)
+        path = tmp_path/'plan.json'; path.write_text(json.dumps(p))
+        monkeypatch.setattr(m.e1, '_acks', lambda *args: {'TEST_ONLY': 'not peer evidence'})
+        def supplied_profile(plan, profile, output, record, *, recovery_point, expired_retry, duplicate_outcome):
+            assert recovery_point is None and expired_retry is False and duplicate_outcome is True
+            if proof_mode == 'missing': return
+            destination = output/'alice/duplicate-outcome'; destination.mkdir(parents=True)
+            proof = dict(ok=True, error='REPLAY', delivery='unknown', workerUnchanged=True, nativeUnchanged=True, identicalCalldata=True)
+            if proof_mode == 'wrong-error': proof['error'] = 'UNAUTHORIZED_CALLER'
+            if proof_mode == 'changed-native': proof['nativeUnchanged'] = False
+            if proof_mode == 'changed-worker': proof['workerUnchanged'] = False
+            if proof_mode == 'different-call': proof['identicalCalldata'] = False
+            (destination/'result.json').write_text(json.dumps(proof))
+        monkeypatch.setattr(m.e1, '_profile', supplied_profile)
+        result = m.execute(path, tmp_path/'synthetic-ack.json', tmp_path/'output')
+>       assert result['status'] == ('E2_DUPLICATE_OUTCOME_SLICE_PASS' if proof_mode == 'complete' else 'FAILED')
+E       AssertionError: assert 'BLOCKED' == 'E2_DUPLICATE...ME_SLICE_PASS'
+E         
+E         - E2_DUPLICATE_OUTCOME_SLICE_PASS
+E         + BLOCKED
+
+evaluation/tests/test_e2_freeze.py:117: AssertionError
+_________ test_nonce_replay_plan_requires_new_full_ack_before_services _________
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-1/test_nonce_replay_plan_require0')
+
+    def test_nonce_replay_plan_requires_new_full_ack_before_services(tmp_path):
+        m = module(); p = m.create_plan(run_id='E2-replay-test', freeze_message='A3-0041', nonce_replay=True)
+>       m.verify_plan(p)
+
+evaluation/tests/test_e2_freeze.py:123: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/e2.py:144: in verify_plan
+    require(Path(tool['path']).is_file() and sha256(tool['path']) == tool['sha256'], 'tool binary hash')
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, label = 'tool binary hash'
+
+    def require(condition, label):
+        if not condition:
+>           raise ValueError('Public access '+label+' failed')
+E           ValueError: Public access tool binary hash failed
+
+evaluation/access_artifacts.py:16: ValueError
+_____ test_nonce_replay_execution_requires_complete_native_proof[missing] ______
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-1/test_nonce_replay_execution_re0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ece013db150>
+proof_mode = 'missing'
+
+    @pytest.mark.parametrize('proof_mode', ['missing', 'wrong-error', 'changed-native', 'changed-worker', 'different-call', 'complete'])
+    def test_nonce_replay_execution_requires_complete_native_proof(tmp_path, monkeypatch, proof_mode):
+        m = module(); p = m.create_plan(run_id='E2-replay-test', freeze_message='A3-0041', nonce_replay=True)
+        path = tmp_path/'plan.json'; path.write_text(json.dumps(p))
+        monkeypatch.setattr(m.e1, '_acks', lambda *args: {'TEST_ONLY': 'not peer evidence'})
+        def supplied_profile(plan, profile, output, record, *, recovery_point, expired_retry, nonce_replay):
+            assert recovery_point is None and expired_retry is False and nonce_replay is True
+            if proof_mode == 'missing': return
+            destination = output/'alice/nonce-replay'; destination.mkdir(parents=True)
+            proof = dict(ok=True, error='REPLAY', delivery='unknown', workerUnchanged=True, nativeUnchanged=True, identicalCalldata=True)
+            if proof_mode == 'wrong-error': proof['error'] = 'EXPIRED'
+            if proof_mode == 'changed-native': proof['nativeUnchanged'] = False
+            if proof_mode == 'changed-worker': proof['workerUnchanged'] = False
+            if proof_mode == 'different-call': proof['identicalCalldata'] = False
+            (destination/'result.json').write_text(json.dumps(proof))
+        monkeypatch.setattr(m.e1, '_profile', supplied_profile)
+        result = m.execute(path, None, tmp_path/'output')
+>       assert result['status'] == ('E2_NONCE_REPLAY_SLICE_PASS' if proof_mode == 'complete' else 'FAILED')
+E       AssertionError: assert 'BLOCKED' == 'FAILED'
+E         
+E         - FAILED
+E         + BLOCKED
+
+evaluation/tests/test_e2_freeze.py:151: AssertionError
+___ test_nonce_replay_execution_requires_complete_native_proof[wrong-error] ____
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-1/test_nonce_replay_execution_re1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ece013dac10>
+proof_mode = 'wrong-error'
+
+    @pytest.mark.parametrize('proof_mode', ['missing', 'wrong-error', 'changed-native', 'changed-worker', 'different-call', 'complete'])
+    def test_nonce_replay_execution_requires_complete_native_proof(tmp_path, monkeypatch, proof_mode):
+        m = module(); p = m.create_plan(run_id='E2-replay-test', freeze_message='A3-0041', nonce_replay=True)
+        path = tmp_path/'plan.json'; path.write_text(json.dumps(p))
+        monkeypatch.setattr(m.e1, '_acks', lambda *args: {'TEST_ONLY': 'not peer evidence'})
+        def supplied_profile(plan, profile, output, record, *, recovery_point, expired_retry, nonce_replay):
+            assert recovery_point is None and expired_retry is False and nonce_replay is True
+            if proof_mode == 'missing': return
+            destination = output/'alice/nonce-replay'; destination.mkdir(parents=True)
+            proof = dict(ok=True, error='REPLAY', delivery='unknown', workerUnchanged=True, nativeUnchanged=True, identicalCalldata=True)
+            if proof_mode == 'wrong-error': proof['error'] = 'EXPIRED'
+            if proof_mode == 'changed-native': proof['nativeUnchanged'] = False
+            if proof_mode == 'changed-worker': proof['workerUnchanged'] = False
+            if proof_mode == 'different-call': proof['identicalCalldata'] = False
+            (destination/'result.json').write_text(json.dumps(proof))
+        monkeypatch.setattr(m.e1, '_profile', supplied_profile)
+        result = m.execute(path, None, tmp_path/'output')
+>       assert result['status'] == ('E2_NONCE_REPLAY_SLICE_PASS' if proof_mode == 'complete' else 'FAILED')
+E       AssertionError: assert 'BLOCKED' == 'FAILED'
+E         
+E         - FAILED
+E         + BLOCKED
+
+evaluation/tests/test_e2_freeze.py:151: AssertionError
+__ test_nonce_replay_execution_requires_complete_native_proof[changed-native] __
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-1/test_nonce_replay_execution_re2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ece018faf70>
+proof_mode = 'changed-native'
+
+    @pytest.mark.parametrize('proof_mode', ['missing', 'wrong-error', 'changed-native', 'changed-worker', 'different-call', 'complete'])
+    def test_nonce_replay_execution_requires_complete_native_proof(tmp_path, monkeypatch, proof_mode):
+        m = module(); p = m.create_plan(run_id='E2-replay-test', freeze_message='A3-0041', nonce_replay=True)
+        path = tmp_path/'plan.json'; path.write_text(json.dumps(p))
+        monkeypatch.setattr(m.e1, '_acks', lambda *args: {'TEST_ONLY': 'not peer evidence'})
+        def supplied_profile(plan, profile, output, record, *, recovery_point, expired_retry, nonce_replay):
+            assert recovery_point is None and expired_retry is False and nonce_replay is True
+            if proof_mode == 'missing': return
+            destination = output/'alice/nonce-replay'; destination.mkdir(parents=True)
+            proof = dict(ok=True, error='REPLAY', delivery='unknown', workerUnchanged=True, nativeUnchanged=True, identicalCalldata=True)
+            if proof_mode == 'wrong-error': proof['error'] = 'EXPIRED'
+            if proof_mode == 'changed-native': proof['nativeUnchanged'] = False
+            if proof_mode == 'changed-worker': proof['workerUnchanged'] = False
+            if proof_mode == 'different-call': proof['identicalCalldata'] = False
+            (destination/'result.json').write_text(json.dumps(proof))
+        monkeypatch.setattr(m.e1, '_profile', supplied_profile)
+        result = m.execute(path, None, tmp_path/'output')
+>       assert result['status'] == ('E2_NONCE_REPLAY_SLICE_PASS' if proof_mode == 'complete' else 'FAILED')
+E       AssertionError: assert 'BLOCKED' == 'FAILED'
+E         
+E         - FAILED
+E         + BLOCKED
+
+evaluation/tests/test_e2_freeze.py:151: AssertionError
+__ test_nonce_replay_execution_requires_complete_native_proof[changed-worker] __
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-1/test_nonce_replay_execution_re3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ece012f44d0>
+proof_mode = 'changed-worker'
+
+    @pytest.mark.parametrize('proof_mode', ['missing', 'wrong-error', 'changed-native', 'changed-worker', 'different-call', 'complete'])
+    def test_nonce_replay_execution_requires_complete_native_proof(tmp_path, monkeypatch, proof_mode):
+        m = module(); p = m.create_plan(run_id='E2-replay-test', freeze_message='A3-0041', nonce_replay=True)
+        path = tmp_path/'plan.json'; path.write_text(json.dumps(p))
+        monkeypatch.setattr(m.e1, '_acks', lambda *args: {'TEST_ONLY': 'not peer evidence'})
+        def supplied_profile(plan, profile, output, record, *, recovery_point, expired_retry, nonce_replay):
+            assert recovery_point is None and expired_retry is False and nonce_replay is True
+            if proof_mode == 'missing': return
+            destination = output/'alice/nonce-replay'; destination.mkdir(parents=True)
+            proof = dict(ok=True, error='REPLAY', delivery='unknown', workerUnchanged=True, nativeUnchanged=True, identicalCalldata=True)
+            if proof_mode == 'wrong-error': proof['error'] = 'EXPIRED'
+            if proof_mode == 'changed-native': proof['nativeUnchanged'] = False
+            if proof_mode == 'changed-worker': proof['workerUnchanged'] = False
+            if proof_mode == 'different-call': proof['identicalCalldata'] = False
+            (destination/'result.json').write_text(json.dumps(proof))
+        monkeypatch.setattr(m.e1, '_profile', supplied_profile)
+        result = m.execute(path, None, tmp_path/'output')
+>       assert result['status'] == ('E2_NONCE_REPLAY_SLICE_PASS' if proof_mode == 'complete' else 'FAILED')
+E       AssertionError: assert 'BLOCKED' == 'FAILED'
+E         
+E         - FAILED
+E         + BLOCKED
+
+evaluation/tests/test_e2_freeze.py:151: AssertionError
+__ test_nonce_replay_execution_requires_complete_native_proof[different-call] __
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-1/test_nonce_replay_execution_re4')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ece012f5b50>
+proof_mode = 'different-call'
+
+    @pytest.mark.parametrize('proof_mode', ['missing', 'wrong-error', 'changed-native', 'changed-worker', 'different-call', 'complete'])
+    def test_nonce_replay_execution_requires_complete_native_proof(tmp_path, monkeypatch, proof_mode):
+        m = module(); p = m.create_plan(run_id='E2-replay-test', freeze_message='A3-0041', nonce_replay=True)
+        path = tmp_path/'plan.json'; path.write_text(json.dumps(p))
+        monkeypatch.setattr(m.e1, '_acks', lambda *args: {'TEST_ONLY': 'not peer evidence'})
+        def supplied_profile(plan, profile, output, record, *, recovery_point, expired_retry, nonce_replay):
+            assert recovery_point is None and expired_retry is False and nonce_replay is True
+            if proof_mode == 'missing': return
+            destination = output/'alice/nonce-replay'; destination.mkdir(parents=True)
+            proof = dict(ok=True, error='REPLAY', delivery='unknown', workerUnchanged=True, nativeUnchanged=True, identicalCalldata=True)
+            if proof_mode == 'wrong-error': proof['error'] = 'EXPIRED'
+            if proof_mode == 'changed-native': proof['nativeUnchanged'] = False
+            if proof_mode == 'changed-worker': proof['workerUnchanged'] = False
+            if proof_mode == 'different-call': proof['identicalCalldata'] = False
+            (destination/'result.json').write_text(json.dumps(proof))
+        monkeypatch.setattr(m.e1, '_profile', supplied_profile)
+        result = m.execute(path, None, tmp_path/'output')
+>       assert result['status'] == ('E2_NONCE_REPLAY_SLICE_PASS' if proof_mode == 'complete' else 'FAILED')
+E       AssertionError: assert 'BLOCKED' == 'FAILED'
+E         
+E         - FAILED
+E         + BLOCKED
+
+evaluation/tests/test_e2_freeze.py:151: AssertionError
+_____ test_nonce_replay_execution_requires_complete_native_proof[complete] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-1/test_nonce_replay_execution_re5')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ece014020a0>
+proof_mode = 'complete'
+
+    @pytest.mark.parametrize('proof_mode', ['missing', 'wrong-error', 'changed-native', 'changed-worker', 'different-call', 'complete'])
+    def test_nonce_replay_execution_requires_complete_native_proof(tmp_path, monkeypatch, proof_mode):
+        m = module(); p = m.create_plan(run_id='E2-replay-test', freeze_message='A3-0041', nonce_replay=True)
+        path = tmp_path/'plan.json'; path.write_text(json.dumps(p))
+        monkeypatch.setattr(m.e1, '_acks', lambda *args: {'TEST_ONLY': 'not peer evidence'})
+        def supplied_profile(plan, profile, output, record, *, recovery_point, expired_retry, nonce_replay):
+            assert recovery_point is None and expired_retry is False and nonce_replay is True
+            if proof_mode == 'missing': return
+            destination = output/'alice/nonce-replay'; destination.mkdir(parents=True)
+            proof = dict(ok=True, error='REPLAY', delivery='unknown', workerUnchanged=True, nativeUnchanged=True, identicalCalldata=True)
+            if proof_mode == 'wrong-error': proof['error'] = 'EXPIRED'
+            if proof_mode == 'changed-native': proof['nativeUnchanged'] = False
+            if proof_mode == 'changed-worker': proof['workerUnchanged'] = False
+            if proof_mode == 'different-call': proof['identicalCalldata'] = False
+            (destination/'result.json').write_text(json.dumps(proof))
+        monkeypatch.setattr(m.e1, '_profile', supplied_profile)
+        result = m.execute(path, None, tmp_path/'output')
+>       assert result['status'] == ('E2_NONCE_REPLAY_SLICE_PASS' if proof_mode == 'complete' else 'FAILED')
+E       AssertionError: assert 'BLOCKED' == 'E2_NONCE_REPLAY_SLICE_PASS'
+E         
+E         - E2_NONCE_REPLAY_SLICE_PASS
+E         + BLOCKED
+
+evaluation/tests/test_e2_freeze.py:151: AssertionError
+__________ test_full_signed_tuple_implies_user_and_witness_agreement ___________
+
+    def test_full_signed_tuple_implies_user_and_witness_agreement():
+        # Removing any checked binding must break full eight-field agreement.
+>       verdicts, _ = run_model('access.pv')
+                      ^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_e_correspondence.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_e_correspondence.py:18: in run_model
+    assert hashlib.sha256(binary.read_bytes()).hexdigest() == pin['binarySha256']
+                          ^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/pathlib/_abc.py:625: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/karma/.local/share/hmbc-tools/proverif-2.05/proverif')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/karma/.local/share/hmbc-tools/proverif-2.05/proverif'
+
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/pathlib/_local.py:537: FileNotFoundError
+____ test_legitimate_grant_reachable_and_policy_denial_preserved[access.pv] ____
+
+model = 'access.pv'
+
+    @pytest.mark.parametrize('model', ['access.pv', 'access_mutant.pv'])
+    def test_legitimate_grant_reachable_and_policy_denial_preserved(model):
+        # A deny-all witness/sink must break reachability; grant-all breaks denial.
+>       verdicts, _ = run_model(model)
+                      ^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_e_correspondence.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_e_correspondence.py:18: in run_model
+    assert hashlib.sha256(binary.read_bytes()).hexdigest() == pin['binarySha256']
+                          ^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/pathlib/_abc.py:625: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/karma/.local/share/hmbc-tools/proverif-2.05/proverif')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/karma/.local/share/hmbc-tools/proverif-2.05/proverif'
+
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/pathlib/_local.py:537: FileNotFoundError
+_ test_legitimate_grant_reachable_and_policy_denial_preserved[access_mutant.pv] _
+
+model = 'access_mutant.pv'
+
+    @pytest.mark.parametrize('model', ['access.pv', 'access_mutant.pv'])
+    def test_legitimate_grant_reachable_and_policy_denial_preserved(model):
+        # A deny-all witness/sink must break reachability; grant-all breaks denial.
+>       verdicts, _ = run_model(model)
+                      ^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_e_correspondence.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_e_correspondence.py:18: in run_model
+    assert hashlib.sha256(binary.read_bytes()).hexdigest() == pin['binarySha256']
+                          ^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/pathlib/_abc.py:625: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/karma/.local/share/hmbc-tools/proverif-2.05/proverif')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/karma/.local/share/hmbc-tools/proverif-2.05/proverif'
+
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/pathlib/_local.py:537: FileNotFoundError
+___ test_unsigned_destination_mutant_has_real_attack_and_other_fields_agree ____
+
+    def test_unsigned_destination_mutant_has_real_attack_and_other_fields_agree():
+        # Reintroducing destination binding removes the attack; disabling signatures
+        # breaks the seven-field projection. Both mistakes must be detected.
+>       verdicts, output = run_model('access_mutant.pv')
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_e_correspondence.py:45: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_e_correspondence.py:18: in run_model
+    assert hashlib.sha256(binary.read_bytes()).hexdigest() == pin['binarySha256']
+                          ^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/pathlib/_abc.py:625: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/karma/.local/share/hmbc-tools/proverif-2.05/proverif')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/karma/.local/share/hmbc-tools/proverif-2.05/proverif'
+
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/pathlib/_local.py:537: FileNotFoundError
+_ test_checks_detect_vacuity_policy_bypass_and_unchecked_envelope[if d = allowedData then-if allowedData = deniedData then-3-true] _
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-1/test_checks_detect_vacuity_pol0')
+old = 'if d = allowedData then', new = 'if allowedData = deniedData then'
+index = 3, expected = 'true'
+
+    @pytest.mark.parametrize('old,new,index,expected', [
+        ('if d = allowedData then', 'if allowedData = deniedData then', 3, 'true'),
+        ('if d = allowedData then', '', 4, 'false'),
+        ('if claimedDestination = t then', '', 0, 'false'),
+    ])
+    def test_checks_detect_vacuity_policy_bypass_and_unchecked_envelope(tmp_path, old, new, index, expected):
+        # Deliberate scratch mutations never alter the reviewed model in place.
+        model = tmp_path / 'sensitivity.pv'
+        baseline = (ROOT / 'evaluation/models/e/access.pv').read_text()
+        assert old in baseline
+        model.write_text(baseline.replace(old, new, 1))
+>       verdicts, _ = run_model(model)
+                      ^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_e_correspondence.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_e_correspondence.py:18: in run_model
+    assert hashlib.sha256(binary.read_bytes()).hexdigest() == pin['binarySha256']
+                          ^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/pathlib/_abc.py:625: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/karma/.local/share/hmbc-tools/proverif-2.05/proverif')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/karma/.local/share/hmbc-tools/proverif-2.05/proverif'
+
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/pathlib/_local.py:537: FileNotFoundError
+_ test_checks_detect_vacuity_policy_bypass_and_unchecked_envelope[if d = allowedData then--4-false] _
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-1/test_checks_detect_vacuity_pol1')
+old = 'if d = allowedData then', new = '', index = 4, expected = 'false'
+
+    @pytest.mark.parametrize('old,new,index,expected', [
+        ('if d = allowedData then', 'if allowedData = deniedData then', 3, 'true'),
+        ('if d = allowedData then', '', 4, 'false'),
+        ('if claimedDestination = t then', '', 0, 'false'),
+    ])
+    def test_checks_detect_vacuity_policy_bypass_and_unchecked_envelope(tmp_path, old, new, index, expected):
+        # Deliberate scratch mutations never alter the reviewed model in place.
+        model = tmp_path / 'sensitivity.pv'
+        baseline = (ROOT / 'evaluation/models/e/access.pv').read_text()
+        assert old in baseline
+        model.write_text(baseline.replace(old, new, 1))
+>       verdicts, _ = run_model(model)
+                      ^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_e_correspondence.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_e_correspondence.py:18: in run_model
+    assert hashlib.sha256(binary.read_bytes()).hexdigest() == pin['binarySha256']
+                          ^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/pathlib/_abc.py:625: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/karma/.local/share/hmbc-tools/proverif-2.05/proverif')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/karma/.local/share/hmbc-tools/proverif-2.05/proverif'
+
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/pathlib/_local.py:537: FileNotFoundError
+_ test_checks_detect_vacuity_policy_bypass_and_unchecked_envelope[if claimedDestination = t then--0-false] _
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-1/test_checks_detect_vacuity_pol2')
+old = 'if claimedDestination = t then', new = '', index = 0, expected = 'false'
+
+    @pytest.mark.parametrize('old,new,index,expected', [
+        ('if d = allowedData then', 'if allowedData = deniedData then', 3, 'true'),
+        ('if d = allowedData then', '', 4, 'false'),
+        ('if claimedDestination = t then', '', 0, 'false'),
+    ])
+    def test_checks_detect_vacuity_policy_bypass_and_unchecked_envelope(tmp_path, old, new, index, expected):
+        # Deliberate scratch mutations never alter the reviewed model in place.
+        model = tmp_path / 'sensitivity.pv'
+        baseline = (ROOT / 'evaluation/models/e/access.pv').read_text()
+        assert old in baseline
+        model.write_text(baseline.replace(old, new, 1))
+>       verdicts, _ = run_model(model)
+                      ^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_e_correspondence.py:66: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_e_correspondence.py:18: in run_model
+    assert hashlib.sha256(binary.read_bytes()).hexdigest() == pin['binarySha256']
+                          ^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/pathlib/_abc.py:625: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/home/karma/.local/share/hmbc-tools/proverif-2.05/proverif')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/karma/.local/share/hmbc-tools/proverif-2.05/proverif'
+
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/pathlib/_local.py:537: FileNotFoundError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_e1_freeze.py::test_plan_pins_existing_reviewed_sources_without_starting_services - ValueError: Public access tool binary hash failed
+FAILED evaluation/tests/test_e1_freeze.py::test_interruption_records_failure_and_propagates_cancellation - Failed: DID NOT RAISE <class 'KeyboardInterrupt'>
+FAILED evaluation/tests/test_e2_freeze.py::test_exact_plan_pins_scoped_successors_and_all_six_fresh_cases - ValueError: Public access tool binary hash failed
+FAILED evaluation/tests/test_e2_freeze.py::test_expiry_plan_cannot_start_without_new_exact_full_ack - ValueError: Public access tool binary hash failed
+FAILED evaluation/tests/test_e2_freeze.py::test_expiry_execution_cannot_accept_recovery_only[False] - AssertionError: assert 'BLOCKED' == 'E2_RECOVERY_...RY_SLICE_PASS'
+FAILED evaluation/tests/test_e2_freeze.py::test_expiry_execution_cannot_accept_recovery_only[True] - AssertionError: assert 'BLOCKED' == 'FAILED'
+FAILED evaluation/tests/test_e2_freeze.py::test_duplicate_outcome_plan_requires_new_exact_acks_before_services - ValueError: Public access tool binary hash failed
+FAILED evaluation/tests/test_e2_freeze.py::test_duplicate_execution_requires_each_complete_probe[missing] - AssertionError: assert 'BLOCKED' == 'FAILED'
+FAILED evaluation/tests/test_e2_freeze.py::test_duplicate_execution_requires_each_complete_probe[wrong-error] - AssertionError: assert 'BLOCKED' == 'FAILED'
+FAILED evaluation/tests/test_e2_freeze.py::test_duplicate_execution_requires_each_complete_probe[changed-native] - AssertionError: assert 'BLOCKED' == 'FAILED'
+FAILED evaluation/tests/test_e2_freeze.py::test_duplicate_execution_requires_each_complete_probe[changed-worker] - AssertionError: assert 'BLOCKED' == 'FAILED'
+FAILED evaluation/tests/test_e2_freeze.py::test_duplicate_execution_requires_each_complete_probe[different-call] - AssertionError: assert 'BLOCKED' == 'FAILED'
+FAILED evaluation/tests/test_e2_freeze.py::test_duplicate_execution_requires_each_complete_probe[complete] - AssertionError: assert 'BLOCKED' == 'E2_DUPLICATE...ME_SLICE_PASS'
+FAILED evaluation/tests/test_e2_freeze.py::test_nonce_replay_plan_requires_new_full_ack_before_services - ValueError: Public access tool binary hash failed
+FAILED evaluation/tests/test_e2_freeze.py::test_nonce_replay_execution_requires_complete_native_proof[missing] - AssertionError: assert 'BLOCKED' == 'FAILED'
+FAILED evaluation/tests/test_e2_freeze.py::test_nonce_replay_execution_requires_complete_native_proof[wrong-error] - AssertionError: assert 'BLOCKED' == 'FAILED'
+FAILED evaluation/tests/test_e2_freeze.py::test_nonce_replay_execution_requires_complete_native_proof[changed-native] - AssertionError: assert 'BLOCKED' == 'FAILED'
+FAILED evaluation/tests/test_e2_freeze.py::test_nonce_replay_execution_requires_complete_native_proof[changed-worker] - AssertionError: assert 'BLOCKED' == 'FAILED'
+FAILED evaluation/tests/test_e2_freeze.py::test_nonce_replay_execution_requires_complete_native_proof[different-call] - AssertionError: assert 'BLOCKED' == 'FAILED'
+FAILED evaluation/tests/test_e2_freeze.py::test_nonce_replay_execution_requires_complete_native_proof[complete] - AssertionError: assert 'BLOCKED' == 'E2_NONCE_REPLAY_SLICE_PASS'
+FAILED evaluation/tests/test_e_correspondence.py::test_full_signed_tuple_implies_user_and_witness_agreement - FileNotFoundError: [Errno 2] No such file or directory: '/home/karma/.local...
+FAILED evaluation/tests/test_e_correspondence.py::test_legitimate_grant_reachable_and_policy_denial_preserved[access.pv] - FileNotFoundError: [Errno 2] No such file or directory: '/home/karma/.local...
+FAILED evaluation/tests/test_e_correspondence.py::test_legitimate_grant_reachable_and_policy_denial_preserved[access_mutant.pv] - FileNotFoundError: [Errno 2] No such file or directory: '/home/karma/.local...
+FAILED evaluation/tests/test_e_correspondence.py::test_unsigned_destination_mutant_has_real_attack_and_other_fields_agree - FileNotFoundError: [Errno 2] No such file or directory: '/home/karma/.local...
+FAILED evaluation/tests/test_e_correspondence.py::test_checks_detect_vacuity_policy_bypass_and_unchecked_envelope[if d = allowedData then-if allowedData = deniedData then-3-true] - FileNotFoundError: [Errno 2] No such file or directory: '/home/karma/.local...
+FAILED evaluation/tests/test_e_correspondence.py::test_checks_detect_vacuity_policy_bypass_and_unchecked_envelope[if d = allowedData then--4-false] - FileNotFoundError: [Errno 2] No such file or directory: '/home/karma/.local...
+FAILED evaluation/tests/test_e_correspondence.py::test_checks_detect_vacuity_policy_bypass_and_unchecked_envelope[if claimedDestination = t then--0-false] - FileNotFoundError: [Errno 2] No such file or directory: '/home/karma/.local...
+27 failed, 750 passed in 123.41s (0:02:03)
