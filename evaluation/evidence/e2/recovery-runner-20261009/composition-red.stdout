@@ -1,0 +1,124 @@
+FFFFFF                                                                   [100%]
+=================================== FAILURES ===================================
+_ test_full_collector_joins_checked_recovery_and_outcome[after_intent-paper-strict] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-64/test_full_collector_joins_chec0')
+profile = 'paper-strict', point = 'after_intent'
+
+    @pytest.mark.parametrize('profile',['paper-strict','paper-minimal','repaired-e'])
+    @pytest.mark.parametrize('point',['after_intent','after_send'])
+    def test_full_collector_joins_checked_recovery_and_outcome(artifacts,inputs,tmp_path,profile,point):
+        m=RecoveryModel(artifacts,inputs,profile)
+>       assert importlib.util.find_spec('evaluation.recovery_execution') is not None,'Recovery adapter composition missing'
+E       AssertionError: Recovery adapter composition missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f580ba7a480>('evaluation.recovery_execution')
+E        +    where <function find_spec at 0x7f580ba7a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery_execution.py:52: AssertionError
+_ test_full_collector_joins_checked_recovery_and_outcome[after_intent-paper-minimal] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-64/test_full_collector_joins_chec1')
+profile = 'paper-minimal', point = 'after_intent'
+
+    @pytest.mark.parametrize('profile',['paper-strict','paper-minimal','repaired-e'])
+    @pytest.mark.parametrize('point',['after_intent','after_send'])
+    def test_full_collector_joins_checked_recovery_and_outcome(artifacts,inputs,tmp_path,profile,point):
+        m=RecoveryModel(artifacts,inputs,profile)
+>       assert importlib.util.find_spec('evaluation.recovery_execution') is not None,'Recovery adapter composition missing'
+E       AssertionError: Recovery adapter composition missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f580ba7a480>('evaluation.recovery_execution')
+E        +    where <function find_spec at 0x7f580ba7a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery_execution.py:52: AssertionError
+_ test_full_collector_joins_checked_recovery_and_outcome[after_intent-repaired-e] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-64/test_full_collector_joins_chec2')
+profile = 'repaired-e', point = 'after_intent'
+
+    @pytest.mark.parametrize('profile',['paper-strict','paper-minimal','repaired-e'])
+    @pytest.mark.parametrize('point',['after_intent','after_send'])
+    def test_full_collector_joins_checked_recovery_and_outcome(artifacts,inputs,tmp_path,profile,point):
+        m=RecoveryModel(artifacts,inputs,profile)
+>       assert importlib.util.find_spec('evaluation.recovery_execution') is not None,'Recovery adapter composition missing'
+E       AssertionError: Recovery adapter composition missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f580ba7a480>('evaluation.recovery_execution')
+E        +    where <function find_spec at 0x7f580ba7a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery_execution.py:52: AssertionError
+_ test_full_collector_joins_checked_recovery_and_outcome[after_send-paper-strict] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-64/test_full_collector_joins_chec3')
+profile = 'paper-strict', point = 'after_send'
+
+    @pytest.mark.parametrize('profile',['paper-strict','paper-minimal','repaired-e'])
+    @pytest.mark.parametrize('point',['after_intent','after_send'])
+    def test_full_collector_joins_checked_recovery_and_outcome(artifacts,inputs,tmp_path,profile,point):
+        m=RecoveryModel(artifacts,inputs,profile)
+>       assert importlib.util.find_spec('evaluation.recovery_execution') is not None,'Recovery adapter composition missing'
+E       AssertionError: Recovery adapter composition missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f580ba7a480>('evaluation.recovery_execution')
+E        +    where <function find_spec at 0x7f580ba7a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery_execution.py:52: AssertionError
+_ test_full_collector_joins_checked_recovery_and_outcome[after_send-paper-minimal] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-64/test_full_collector_joins_chec4')
+profile = 'paper-minimal', point = 'after_send'
+
+    @pytest.mark.parametrize('profile',['paper-strict','paper-minimal','repaired-e'])
+    @pytest.mark.parametrize('point',['after_intent','after_send'])
+    def test_full_collector_joins_checked_recovery_and_outcome(artifacts,inputs,tmp_path,profile,point):
+        m=RecoveryModel(artifacts,inputs,profile)
+>       assert importlib.util.find_spec('evaluation.recovery_execution') is not None,'Recovery adapter composition missing'
+E       AssertionError: Recovery adapter composition missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f580ba7a480>('evaluation.recovery_execution')
+E        +    where <function find_spec at 0x7f580ba7a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery_execution.py:52: AssertionError
+_ test_full_collector_joins_checked_recovery_and_outcome[after_send-repaired-e] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-64/test_full_collector_joins_chec5')
+profile = 'repaired-e', point = 'after_send'
+
+    @pytest.mark.parametrize('profile',['paper-strict','paper-minimal','repaired-e'])
+    @pytest.mark.parametrize('point',['after_intent','after_send'])
+    def test_full_collector_joins_checked_recovery_and_outcome(artifacts,inputs,tmp_path,profile,point):
+        m=RecoveryModel(artifacts,inputs,profile)
+>       assert importlib.util.find_spec('evaluation.recovery_execution') is not None,'Recovery adapter composition missing'
+E       AssertionError: Recovery adapter composition missing
+E       assert None is not None
+E        +  where None = <function find_spec at 0x7f580ba7a480>('evaluation.recovery_execution')
+E        +    where <function find_spec at 0x7f580ba7a480> = <module 'importlib.util' (frozen)>.find_spec
+E        +      where <module 'importlib.util' (frozen)> = importlib.util
+
+evaluation/tests/test_recovery_execution.py:52: AssertionError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_recovery_execution.py::test_full_collector_joins_checked_recovery_and_outcome[after_intent-paper-strict]
+FAILED evaluation/tests/test_recovery_execution.py::test_full_collector_joins_checked_recovery_and_outcome[after_intent-paper-minimal]
+FAILED evaluation/tests/test_recovery_execution.py::test_full_collector_joins_checked_recovery_and_outcome[after_intent-repaired-e]
+FAILED evaluation/tests/test_recovery_execution.py::test_full_collector_joins_checked_recovery_and_outcome[after_send-paper-strict]
+FAILED evaluation/tests/test_recovery_execution.py::test_full_collector_joins_checked_recovery_and_outcome[after_send-paper-minimal]
+FAILED evaluation/tests/test_recovery_execution.py::test_full_collector_joins_checked_recovery_and_outcome[after_send-repaired-e]
+6 failed in 0.37s

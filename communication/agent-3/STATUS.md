@@ -1,11 +1,11 @@
-# Agent3 status — WORKING C-E2; startup supplement accepted
+# Agent3 status — WAITING exact E2 recovery-plan ACKs
 
-- Active E/RQ1. E0 closed/frozen; actual C-E1 historical9/9 complete; E2/E3 permitted; gate E NOT_RUN, F/G locked.
-- Both exact A3-0032 startup-contract ACKs verified: A1-0047 af7a60d/0bde97a0..; A2-0027 0dbaed2/0002aa3b..; hash1ae63cfb.. scoped supplement ACCEPTED, not an E2 plan/FREEZE. Proposal/frozen bytes immutable.
-- Exact selected ledger933d2a7/195-entryc7b7dd51.. and protocol0716a8e/108-entryd16ddad8../hookf0ab2400.. blobs rechecked. E1 pins/evidence retained; no latest-pin promotion.
-- C-E2 process transport synthetic RED14 -> corrected GREEN48; root435pass/58.38s/exit0,100 bracket inputs stable;15 frozen copies verified. This establishes process observation only, no worker/native recovery/fault/gate result. Evidence evaluation/evidence/e2/crash-transport-20261009/README.md.
-- Read A1 through0047/A2 through0027; newest communication commit/path/hash inventory retained. A2 plan-hash alias expressly remains supplement-only. Owner catalog/window evidence and source-step1 destination-mutant masking not integrated verdicts.
-- Sent A3-0034 READY acceptance/transport slice; delivery only by verified normal agent3 push. No services/lease/integration FREEZE. All56 actual fault schedules NOT_RUN; four paper crash cases BLOCKED/unproved.
-- Next: full owned public E2 runner/oracles/configuration/clock/recovery collection; separate full FREEZE/both exact plan ACKs before services, real matrix/report/all3 same-source ACKs/gate E. No human action required.
-- Own scheduled-run guard and separate coordinator lock held through publication; finally release recorded externally/memory. Preexisting untracked scheduled-run files preserved unstaged. No extra agents/worktrees/peer/archive/frozen changes/main/force/history rewrite.
-- Author self-review only; weaker than fresh independent review. Test-fixture argv token issue and guessed-path helper failures retained; no research failure fabricated.
+- Active E/RQ1; E0closed/frozen; C-E1 historical9/9 COMPLETE; E2/E3 permitted; gateE NOT_RUN, F/G locked.
+- Public six-case recovery runner implemented:3profiles x2points, fresh two-chain/state per case; Alice recovery/outcome, Bob policy9 deny and wrong-admin baseline controls. Native/cache/event/attempt/expiry/registered-recipient/response joins; same-state production restart; deliveryunknown.
+- Synthetic RED21 recovery, RED6 composition, RED10 gated plan ->GREEN44/48/31 related checks. Author review caught paper crash SUPPORTED attribution: RED4 ->GREEN27 corrected; final root472pass/65.50s/exit0/106 stable inputs;15 frozen copies exact. No actual E2 service or recovery run.
+- A3-0035 REQUESTS complete execution plan for this recovery slice SHA4bceffc347be2267348d8b781a4c30b5db00567712f1b0d14a48aae0bee5929a,78 own inputs/303 selected owners/tool/config/schema/fixture hashes. BOTH exact full plan ACKs pending; A1-0047/A2-0027 supplement ACKs do not substitute. CLI2/BLOCKED/no services/snapshots verified on final bytes.
+- Selected ledger933d2a7/c7b7dd51../195 and protocol0716a8e/d16ddad8../108/hookf0ab2400.. unchanged; frozen v1/lock/custody unchanged. E1 prior sources/evidence reproducible at original owned commits, not by old ACKs on changed current runtime.
+- Peer scan138 newest files/no divergence; read A1through0047/A2through0027. Owner rehearsals/windows/mutant masking remain owner evidence. Sent A3-0035 only delivered after verified normal owned-path push.
+- Services/lease:none; all56 actual catalog schedules NOT_RUN;4paper crash classifications BLOCKED/unproved, even if chosen mechanics later pass. Complete remaining50/mutants/window/report/all3same-manifest ACKs still precede gateE/F.
+- Evidence evaluation/evidence/e2/recovery-runner-20261009/README.md; commands/exits/hash/versions/source/failure/initial-vs-final plan/case map retained. No human action required while owners review exact plan.
+- Scheduled guard487463 plus coordinator487469 held through publication/checks; finally cleanup external/memory. Preexisting untracked scheduled-run files preserved unstaged. Author self-review weaker than independent; no extra agent/worktree/peer/archive/frozen/dependency/custody/main/history change.

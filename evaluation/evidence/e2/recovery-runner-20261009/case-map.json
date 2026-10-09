@@ -1,0 +1,257 @@
+{
+  "planSha256": "4bceffc347be2267348d8b781a4c30b5db00567712f1b0d14a48aae0bee5929a",
+  "source": "interfaces/v1/scenarios/e0_cases.json",
+  "sourceSha256": "438fa38ddcbd7edd0e49fb93cc580e5219ed05349fd677b2e386bc4669f5d50e",
+  "cases": [
+    {
+      "caseId": "E03-crash-after-intent-paper-strict",
+      "profile": "paper-strict",
+      "point": "after_intent",
+      "expectedClass": "BLOCKED",
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "UNPROVED",
+        "classification": "BLOCKED",
+        "error": null,
+        "qualification": "Inject crash immediately after durable intent, before send. Restart uses the same persisted response; original expiry still bounds retry. E1/E2 worker implementation is required. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result.",
+        "worker": {
+          "releaseIntentCount": "1",
+          "releaseSentCount": "1",
+          "sameCachedResponse": true,
+          "delivery": "unknown",
+          "expiredRetryError": "EXPIRED"
+        }
+      },
+      "status": "NOT_RUN",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A35",
+        "A37",
+        "A24",
+        "A38",
+        "A41"
+      ]
+    },
+    {
+      "caseId": "E03-crash-after-send-paper-strict",
+      "profile": "paper-strict",
+      "point": "after_send",
+      "expectedClass": "BLOCKED",
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "UNPROVED",
+        "classification": "BLOCKED",
+        "error": null,
+        "qualification": "Inject crash after send before PBC outcome acknowledgement. Delivery is unknown; retain that fact and reconcile idempotently without claiming exactly-once network delivery. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result.",
+        "worker": {
+          "releaseIntentCount": "1",
+          "releaseSentCount": "2",
+          "sameCachedResponse": true,
+          "delivery": "unknown",
+          "expiredRetryError": "EXPIRED"
+        }
+      },
+      "status": "NOT_RUN",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A35",
+        "A37",
+        "A24",
+        "A38",
+        "A41"
+      ]
+    },
+    {
+      "caseId": "E03-crash-after-intent-paper-minimal",
+      "profile": "paper-minimal",
+      "point": "after_intent",
+      "expectedClass": "BLOCKED",
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "UNPROVED",
+        "classification": "BLOCKED",
+        "error": null,
+        "qualification": "Inject crash immediately after durable intent, before send. Restart uses the same persisted response; original expiry still bounds retry. E1/E2 worker implementation is required. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result.",
+        "worker": {
+          "releaseIntentCount": "1",
+          "releaseSentCount": "1",
+          "sameCachedResponse": true,
+          "delivery": "unknown",
+          "expiredRetryError": "EXPIRED"
+        }
+      },
+      "status": "NOT_RUN",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A35",
+        "A37",
+        "A24",
+        "A38",
+        "A41"
+      ]
+    },
+    {
+      "caseId": "E03-crash-after-send-paper-minimal",
+      "profile": "paper-minimal",
+      "point": "after_send",
+      "expectedClass": "BLOCKED",
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "UNPROVED",
+        "classification": "BLOCKED",
+        "error": null,
+        "qualification": "Inject crash after send before PBC outcome acknowledgement. Delivery is unknown; retain that fact and reconcile idempotently without claiming exactly-once network delivery. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result.",
+        "worker": {
+          "releaseIntentCount": "1",
+          "releaseSentCount": "2",
+          "sameCachedResponse": true,
+          "delivery": "unknown",
+          "expiredRetryError": "EXPIRED"
+        }
+      },
+      "status": "NOT_RUN",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A35",
+        "A37",
+        "A24",
+        "A38",
+        "A41"
+      ]
+    },
+    {
+      "caseId": "E03-crash-after-intent-repaired-e",
+      "profile": "repaired-e",
+      "point": "after_intent",
+      "expectedClass": "REPAIR_SUPPORTED",
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "CONDITIONAL",
+        "classification": "REPAIR_SUPPORTED",
+        "error": null,
+        "qualification": "Inject crash immediately after durable intent, before send. Restart uses the same persisted response; original expiry still bounds retry. E1/E2 worker implementation is required. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED.",
+        "worker": {
+          "releaseIntentCount": "1",
+          "releaseSentCount": "1",
+          "sameCachedResponse": true,
+          "delivery": "unknown",
+          "expiredRetryError": "EXPIRED"
+        }
+      },
+      "status": "NOT_RUN",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A35",
+        "A37",
+        "A36",
+        "A41"
+      ]
+    },
+    {
+      "caseId": "E03-crash-after-send-repaired-e",
+      "profile": "repaired-e",
+      "point": "after_send",
+      "expectedClass": "REPAIR_SUPPORTED",
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "CONDITIONAL",
+        "classification": "REPAIR_SUPPORTED",
+        "error": null,
+        "qualification": "Inject crash after send before PBC outcome acknowledgement. Delivery is unknown; retain that fact and reconcile idempotently without claiming exactly-once network delivery. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED.",
+        "worker": {
+          "releaseIntentCount": "1",
+          "releaseSentCount": "2",
+          "sameCachedResponse": true,
+          "delivery": "unknown",
+          "expiredRetryError": "EXPIRED"
+        }
+      },
+      "status": "NOT_RUN",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A35",
+        "A37",
+        "A36",
+        "A41"
+      ]
+    }
+  ]
+}

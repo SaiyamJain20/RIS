@@ -107,7 +107,7 @@ class _Adapter:
 
 
 def execute_access(pbc, dbc, adapter, *, deployment_bytes, user_label, user, record, policy,
-                   expected_allow, worker_snapshot, output):
+                   expected_allow, worker_snapshot, output, recovery_point=None):
     """Run Alice ALLOW or registered Bob POLICY_DENIED against checked evidence.
 
     `worker_snapshot` executes the pinned owner's read-only exporter and returns
@@ -119,6 +119,9 @@ def execute_access(pbc, dbc, adapter, *, deployment_bytes, user_label, user, rec
     result = dict(startedAt=now(), endedAt=None, ok=False, failure=None, scope='C-E1 single control; not an RQ gate',
                   adapterMode='symbolic', observed=None, oracle=None, delivery='unknown')
     try:
+        require(recovery_point in (None, 'after_intent', 'after_send'), 'explicit recovery point')
+        if recovery_point is not None:
+            result['scope'] = 'C-E2 logical crash/retry control; not an RQ gate'
         dep = strict_json(deployment_bytes); frozen_validate('LedgerDeployment', dep)
         require(dep['interfaceVersion'] == 'v1' and dep['mutations'] == '0'
                 and dep['profile'] in ('paper-strict', 'paper-minimal', 'repaired-e'), 'baseline deployment')
@@ -260,10 +263,12 @@ def execute_access(pbc, dbc, adapter, *, deployment_bytes, user_label, user, rec
                                                          keyEpoch='0', ciphertextDigest=cd, recipientKeyHash=recipient).items()), 'release native/record binding')
             after_worker, checked = worker('worker-after')
             row = checked.check_response(response); worker_events = checked.events_for(gid)
+            expected_worker_events = ['RELEASE_INTENT', 'RELEASE_SENT']+(['RELEASE_SENT'] if recovery_point == 'after_send' else [])
+            expected_attempts = 2 if recovery_point == 'after_send' else 1
             require(row['gid'] == request['gid'] and row['grantExpiresAt'] == grant['expiresAt']
                     and int(grant['issuedAt']) <= int(row['createdAt']) < expiry
-                    and [e['type'] for e in worker_events] == ['RELEASE_INTENT', 'RELEASE_SENT']
-                    and row['sendAttempts'] == row['completedAttempts'] == 1
+                    and [e['type'] for e in worker_events] == expected_worker_events
+                    and row['sendAttempts'] == expected_attempts and row['completedAttempts'] == 1
                     and all(int(grant['issuedAt']) <= int(e['timestamp']) <= int(_clock(dbc)) and int(e['timestamp']) < expiry for e in worker_events),
                     'worker native expiry/time/attempt join')
             require(after_worker['events'] == before_worker['events']+worker_events
@@ -293,7 +298,10 @@ def execute_access(pbc, dbc, adapter, *, deployment_bytes, user_label, user, rec
         observed = dict(adapterMode='symbolic', events=events, error=None if expected_allow else 'POLICY_DENIED', ledgerChecks=ledger_checks)
         fixture = dict(requestDigest=digest, grantId=gid, gid=request['gid'], dataId=request['dataId'], kssc=request['kssc'],
                        destinationChainId=dbc.chain_id, recipientKeyHash=recipient if repaired else ZERO, keyEpoch='0')
-        scenario = dict(adapterMode='symbolic', fixture=fixture, expectedError=observed['error'], expectedClass='REPAIR_SUPPORTED' if repaired else 'SUPPORTED',
+        # Crash mechanics in a chosen completion cannot establish unspecified
+        # paper durability. Keep the frozen paper-crash classification unproved.
+        classification = 'REPAIR_SUPPORTED' if repaired else ('BLOCKED' if recovery_point is not None else 'SUPPORTED')
+        scenario = dict(adapterMode='symbolic', fixture=fixture, expectedError=observed['error'], expectedClass=classification,
                         expectedEvents=['REQUEST_LOGGED', 'PBC_DECIDED']+(['DBC_AUTHORIZED', 'RELEASE_INTENT', 'RELEASE_SENT', 'OUTCOME_RECORDED'] if expected_allow else []),
                         expectedLedgerChecks=list(ledger_checks))
         oracle = evaluate(scenario, observed); require(oracle['ok'], 'independent oracle')

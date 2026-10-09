@@ -594,3 +594,68 @@ Next permitted: full Agent3 public E2 runner/oracles/recovery collection/clock
 probes and full exact source/tool/config/fixture FREEZE/both peer plan ACKs before
 services. Keep E1 reproducible. Real strict/minimal/repaired/mutant/recovery matrix,
 RQ1 report/all3 same-report/source ACKs/gate E precede F. No human action required.
+
+
+## Current C-E2 checkpoint —2026-10-09 IST six-case public recovery runner/FREEZE
+
+Resume E/RQ1; E0closed/C-E1 historical9/9complete; all56 actual E2 catalog schedules
+and gateE NOT_RUN; F/G locked. Implemented recovery.py exact redacted delta/cache/
+event-prefix/response/native identity/registered recipient/original expiry/attempt
+joins, and RecoveryAdapter composing accepted crash transport, public reads/export,
+SAME state/deployment production restart and before-expiry retry. The access executor
+retains all native/request/signature/policy/worker/completion/outcome checks and
+explicit point-dependent attempts. E1 normal default remains covered. Every fresh
+row also runs wrong-admin-before-H2 baseline and Bob policy9 denial. Deliveryunknown.
+
+Synthetic RED21 ->GREEN44 recovery/worker; RED6 ->GREEN48 composition/access/recovery;
+RED10 ->GREEN31 plan/E1/composition. Author review caught reused SUPPORTED paper
+crash attribution: RED4fail2pass, fixedGREEN27; paper oracle BLOCKED even when
+chosen mechanics pass, repaired-e REPAIR_SUPPORTED qualified. Final full root472pass/
+65.50s pytest/65.729s wall/exit0;106 source/model/config/fixture inputs
+stable/15 frozen copies exact. No actual worker/chain/service, recipient delivery,
+power-loss/OS-kill/ABE/provider-integrity/consensus proof. Formal models unchanged.
+
+A3-0035 requests plan 4bceffc347be2267348d8b781a4c30b5db00567712f1b0d14a48aae0bee5929a, integration-plan.json in
+ evaluation/evidence/e2/recovery-runner-20261009/, complete recipe for six logical
+recovery comparisons only (3profiles x2points),78 exact Agent3 runtime/config/schema/
+fixture sources,303 selected owner entries, binary/package/lock/environment/ports/
+custody/mining/compiler/budget/default slow deployment and same-state restart.
+Ledger933d2a7/c7b7dd51../195 and protocol0716a8e/d16ddad8../108/hookf0ab2400..
+reviewed pins unchanged. BOTH NEW Type ACK/From owner/To agent3-or-all/RQE/v1/
+Responds-to A3-0035/Accepted-plan-sha256 exact hash required, plus immutable
+commit/path/SHA/fetched-owner ancestry. Startup A1-0047/A2-0027 alias is not full
+plan ACK. Actual final CLI2/BLOCKED before services/snapshots on absent ACKs.
+Initial never-sent plan ebff5e6d.. preserved as integration-plan.initial.json plus
+initial refusal and initial root472 evidence; corrected hash above is publication
+revision. No evidence overwritten. Frozen wire/ABI/lock/custody unchanged; original
+E1 runner bytes are reproducible at their original owned commit, current modified
+runtime cannot reuse old plan ACKs.
+
+Source/command argv/cwd/UTC start-end/exits/outputs/hashes/tools/fixtures/case IDs/
+sourceRefs/assumptions/failed controls/classification correction/review/ACK refusal/
+plan versions under evaluation/evidence/e2/recovery-runner-20261009/README.md.
+Fetch/read138 newest communication/no divergence; A1through0047/A2through0027,
+branches af7a60d/4f39643. Owner windows/catalog/5of6mutant claims remain owner
+evidence; destination-masking and pending-clock qualification retained. No additional
+formal run or gate promotion. Full other50 catalog/mutants/windows/report/all3
+same-source ACKs still needed after6 actual comparisons. No human action needed.
+
+Author self-review only per user ban on extra agents/worktrees; no deferred material
+finding. Rulings: confirmed checkout/self-review costs independent review;
+paperBLOCKED attribution costs no original-paper durability claim; bounded recovery
+slice costs rest ofE unproved; existing owned branch push authorization supersedes
+skill menu/PR. Services/lease/PBC/DBC/adapter processes none. Own guard487463/start
+6018510 plus separate coordinator487469 held through publication and bounded peer
+check; actual publication SHA/remote/cleanup in automation memory/external run.
+Preexisting untracked scheduled-run files remain untouched/unstaged. No peer/module/
+mailbox/archive/frozen/dependency/key/custody/main/history rewrite or blanket stage.
+
+Next: verify exact A3-0035 ACKs (not startup hash), full plan/tool/source and303
+owner blob stability; run `.venv/bin/python -m evaluation.e2 --plan
+ evaluation/evidence/e2/recovery-runner-20261009/integration-plan.json --acks
+ <exact-index> --output <fresh-private-output>` under owned locks. Record actual
+raw/native/redacted/command/PID/exit/source/copy/outcome evidence and cleanup;
+release logical freeze after result/failure, preserve unexpected expiry/failures.
+Complete remaining50 scenarios/mutants/window/RQ1 report/same-report ACKs/gateE
+beforeF. Paper cases remain BLOCKED/unproved except qualified measured reconstruction
+mechanics; no relabeling of paper durability. No extra agents/worktrees.

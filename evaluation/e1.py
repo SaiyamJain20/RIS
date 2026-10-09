@@ -172,7 +172,7 @@ def _available(ports):
             s.bind(('127.0.0.1', port))
 
 
-def _profile(plan, profile, output, record):
+def _profile(plan, profile, output, record, *, recovery_point=None):
     output.mkdir(parents=True, exist_ok=False)
     snapshots = output/'snapshots'
     ledger_root = materialize_owner(plan['owners']['ledger'], snapshots/'ledger')
@@ -242,14 +242,25 @@ def _profile(plan, profile, output, record):
             bootstrap = execute_bootstrap(chains['pbc'], raw, deployment_bytes=deployment_bytes)
             (output/'bootstrap-checked.json').write_text(json.dumps(bootstrap, indent=2)+'\n')
             state = output/'private-adapter-state'; state.mkdir(mode=0o700)
-            process = stack.enter_context(JsonLinesProcess([tools['python']['path'], '-m', 'hmbc_protocol.adapter', '--state-dir', str(state),
-                                                           '--deployment', str(deployment_path)], cwd=protocol,
-                                                          output=output/'adapter', timeout=budget['transport'], stop_grace=budget['stopGrace'],env=service_env))
+            def adapter_process(label, point=None):
+                argv = [tools['python']['path'], '-m', 'hmbc_protocol.adapter'] if point is None else [tools['python']['path'], '-m', 'testtools.faulty_adapter', '--crash-at', point]
+                argv += ['--state-dir', str(state), '--deployment', str(deployment_path)]
+                child = stack.enter_context(JsonLinesProcess(argv, cwd=protocol, output=output/label,
+                                                            timeout=budget['transport'], stop_grace=budget['stopGrace'], env=service_env))
+                record.setdefault('adapterProcesses', []).append(dict(profile=profile, label=label, pid=child.pid))
+                (output.parent/'manifest.json').write_text(json.dumps(record, indent=2)+'\n')
+                return child
+            process = adapter_process('adapter', recovery_point)
             sequence = 0
             def worker_snapshot():
                 nonlocal sequence
                 label = f'worker-export-{sequence:02}'; sequence += 1
                 return command(label, [tools['python']['path'], '-m', 'hmbc_protocol.worker_log', '--state-dir', str(state)], protocol, budget['transport'],service_env)
+            if recovery_point is not None:
+                from evaluation.recovery_execution import RecoveryAdapter
+                process = RecoveryAdapter(process, restart=lambda: adapter_process('adapter-restarted'),
+                                          point=recovery_point, pbc=chains['pbc'], dbc=chains['dbc'], deployment=deployment,
+                                          worker_snapshot=worker_snapshot, output=output/'recovery')
             record_fixture = dict(dataId='0x'+keccak(text='HMBC.data.P1.MHR').hex(), owner=next(a['root'] for a in deployment['fixture']['authorities'] if a['id']=='H2'),
                                   payloadDigest='0x'+keccak(text='HMBC.synthetic.P1.MHR.E1').hex())
             policy = dict(clauses=[[dict(role='0x'+keccak(text='HMBC.role.Doctor').hex(), kind='1', issuerMode='0'),
@@ -258,7 +269,8 @@ def _profile(plan, profile, output, record):
             for label in ('alice', 'bob'):
                 results[label] = execute_access(chains['pbc'], chains['dbc'], process, deployment_bytes=deployment_bytes,
                                                user_label=label, user=bootstrap['users'][label], record=record_fixture, policy=policy,
-                                               expected_allow=label=='alice', worker_snapshot=worker_snapshot, output=output/label)
+                                               expected_allow=label=='alice', worker_snapshot=worker_snapshot, output=output/label,
+                                               recovery_point=recovery_point)
             require(bootstrap['wrongAdminCode'] == '16' and all(r['ok'] for r in results.values()), 'three E1 controls')
             record['profiles'][profile].update(status='CONTROL_PASS', results={k: str(Path(profile)/k/'result.json') for k in results},
                                               wrongAdmin='UNAUTHORIZED_CALLER; baseline issuer restriction, not a repair')

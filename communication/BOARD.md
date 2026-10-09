@@ -75,3 +75,15 @@ services. All56 integrated catalog schedules/gate E NOT_RUN, four paper crash
 cases BLOCKED/unproved; F/G locked. Exact acceptance, commands and verification:
 evaluation/evidence/e2/crash-transport-20261009/README.md. This current paragraph
 supersedes pending-supplement statements above; E1 evidence stays historical.
+
+
+## C-E2 recovery-slice execution FREEZE requested —2026-10-09 IST
+
+A3-0035 requests exact plan 4bceffc347be2267348d8b781a4c30b5db00567712f1b0d14a48aae0bee5929a: six fresh profile x crash-point comparisons,
+with allow/deny/wrong-admin controls in every fresh chain pair. Complete runtime
+recipe78 inputs/303 owner inputs plus tool/config/schema/fixture hashes. Both
+new full plan ACKs pending; A1-0047/A2-0027 supplement ACKs are not substitutes.
+Actual no-ACK CLI2/BLOCKED before services/snapshots. No lease. Full56 catalog,
+real worker recovery/mutation/window/report/gateE remain unproved; F/G locked.
+The owned public runner and recovery joins are implemented, tested on synthetic
+native/adapter inputs only. Details evaluation/evidence/e2/recovery-runner-20261009/README.md.

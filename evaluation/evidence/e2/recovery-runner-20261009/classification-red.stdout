@@ -1,0 +1,116 @@
+FF.FF.                                                                   [100%]
+=================================== FAILURES ===================================
+_ test_full_collector_joins_checked_recovery_and_outcome[after_intent-paper-strict] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-69/test_full_collector_joins_chec0')
+profile = 'paper-strict', point = 'after_intent'
+
+    @pytest.mark.parametrize('profile',['paper-strict','paper-minimal','repaired-e'])
+    @pytest.mark.parametrize('point',['after_intent','after_send'])
+    def test_full_collector_joins_checked_recovery_and_outcome(artifacts,inputs,tmp_path,profile,point):
+        m=RecoveryModel(artifacts,inputs,profile)
+        assert importlib.util.find_spec('evaluation.recovery_execution') is not None,'Recovery adapter composition missing'
+        module=importlib.import_module('evaluation.recovery_execution')
+        session=module.RecoveryAdapter(m,restart=m.restart,point=point,pbc=m.pbc,dbc=m.dbc,
+                                      deployment=m.dep,worker_snapshot=m.snapshot,output=tmp_path/'recovery')
+        access=importlib.import_module('evaluation.access_execution')
+        result=access.execute_access(m.pbc,m.dbc,session,deployment_bytes=json.dumps(m.dep).encode(),
+                                    user_label='alice',user=m.users['alice'],record=m.record,policy=m.policy,
+                                    expected_allow=True,worker_snapshot=m.snapshot,output=tmp_path/'access',recovery_point=point)
+        assert result['ok'] and m.restarts==1
+>       assert result['oracle']['classification']==('REPAIR_SUPPORTED' if profile=='repaired-e' else 'BLOCKED')
+E       AssertionError: assert 'SUPPORTED' == 'BLOCKED'
+E         
+E         - BLOCKED
+E         + SUPPORTED
+
+evaluation/tests/test_recovery_execution.py:61: AssertionError
+_ test_full_collector_joins_checked_recovery_and_outcome[after_intent-paper-minimal] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-69/test_full_collector_joins_chec1')
+profile = 'paper-minimal', point = 'after_intent'
+
+    @pytest.mark.parametrize('profile',['paper-strict','paper-minimal','repaired-e'])
+    @pytest.mark.parametrize('point',['after_intent','after_send'])
+    def test_full_collector_joins_checked_recovery_and_outcome(artifacts,inputs,tmp_path,profile,point):
+        m=RecoveryModel(artifacts,inputs,profile)
+        assert importlib.util.find_spec('evaluation.recovery_execution') is not None,'Recovery adapter composition missing'
+        module=importlib.import_module('evaluation.recovery_execution')
+        session=module.RecoveryAdapter(m,restart=m.restart,point=point,pbc=m.pbc,dbc=m.dbc,
+                                      deployment=m.dep,worker_snapshot=m.snapshot,output=tmp_path/'recovery')
+        access=importlib.import_module('evaluation.access_execution')
+        result=access.execute_access(m.pbc,m.dbc,session,deployment_bytes=json.dumps(m.dep).encode(),
+                                    user_label='alice',user=m.users['alice'],record=m.record,policy=m.policy,
+                                    expected_allow=True,worker_snapshot=m.snapshot,output=tmp_path/'access',recovery_point=point)
+        assert result['ok'] and m.restarts==1
+>       assert result['oracle']['classification']==('REPAIR_SUPPORTED' if profile=='repaired-e' else 'BLOCKED')
+E       AssertionError: assert 'SUPPORTED' == 'BLOCKED'
+E         
+E         - BLOCKED
+E         + SUPPORTED
+
+evaluation/tests/test_recovery_execution.py:61: AssertionError
+_ test_full_collector_joins_checked_recovery_and_outcome[after_send-paper-strict] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-69/test_full_collector_joins_chec3')
+profile = 'paper-strict', point = 'after_send'
+
+    @pytest.mark.parametrize('profile',['paper-strict','paper-minimal','repaired-e'])
+    @pytest.mark.parametrize('point',['after_intent','after_send'])
+    def test_full_collector_joins_checked_recovery_and_outcome(artifacts,inputs,tmp_path,profile,point):
+        m=RecoveryModel(artifacts,inputs,profile)
+        assert importlib.util.find_spec('evaluation.recovery_execution') is not None,'Recovery adapter composition missing'
+        module=importlib.import_module('evaluation.recovery_execution')
+        session=module.RecoveryAdapter(m,restart=m.restart,point=point,pbc=m.pbc,dbc=m.dbc,
+                                      deployment=m.dep,worker_snapshot=m.snapshot,output=tmp_path/'recovery')
+        access=importlib.import_module('evaluation.access_execution')
+        result=access.execute_access(m.pbc,m.dbc,session,deployment_bytes=json.dumps(m.dep).encode(),
+                                    user_label='alice',user=m.users['alice'],record=m.record,policy=m.policy,
+                                    expected_allow=True,worker_snapshot=m.snapshot,output=tmp_path/'access',recovery_point=point)
+        assert result['ok'] and m.restarts==1
+>       assert result['oracle']['classification']==('REPAIR_SUPPORTED' if profile=='repaired-e' else 'BLOCKED')
+E       AssertionError: assert 'SUPPORTED' == 'BLOCKED'
+E         
+E         - BLOCKED
+E         + SUPPORTED
+
+evaluation/tests/test_recovery_execution.py:61: AssertionError
+_ test_full_collector_joins_checked_recovery_and_outcome[after_send-paper-minimal] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-69/test_full_collector_joins_chec4')
+profile = 'paper-minimal', point = 'after_send'
+
+    @pytest.mark.parametrize('profile',['paper-strict','paper-minimal','repaired-e'])
+    @pytest.mark.parametrize('point',['after_intent','after_send'])
+    def test_full_collector_joins_checked_recovery_and_outcome(artifacts,inputs,tmp_path,profile,point):
+        m=RecoveryModel(artifacts,inputs,profile)
+        assert importlib.util.find_spec('evaluation.recovery_execution') is not None,'Recovery adapter composition missing'
+        module=importlib.import_module('evaluation.recovery_execution')
+        session=module.RecoveryAdapter(m,restart=m.restart,point=point,pbc=m.pbc,dbc=m.dbc,
+                                      deployment=m.dep,worker_snapshot=m.snapshot,output=tmp_path/'recovery')
+        access=importlib.import_module('evaluation.access_execution')
+        result=access.execute_access(m.pbc,m.dbc,session,deployment_bytes=json.dumps(m.dep).encode(),
+                                    user_label='alice',user=m.users['alice'],record=m.record,policy=m.policy,
+                                    expected_allow=True,worker_snapshot=m.snapshot,output=tmp_path/'access',recovery_point=point)
+        assert result['ok'] and m.restarts==1
+>       assert result['oracle']['classification']==('REPAIR_SUPPORTED' if profile=='repaired-e' else 'BLOCKED')
+E       AssertionError: assert 'SUPPORTED' == 'BLOCKED'
+E         
+E         - BLOCKED
+E         + SUPPORTED
+
+evaluation/tests/test_recovery_execution.py:61: AssertionError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_recovery_execution.py::test_full_collector_joins_checked_recovery_and_outcome[after_intent-paper-strict]
+FAILED evaluation/tests/test_recovery_execution.py::test_full_collector_joins_checked_recovery_and_outcome[after_intent-paper-minimal]
+FAILED evaluation/tests/test_recovery_execution.py::test_full_collector_joins_checked_recovery_and_outcome[after_send-paper-strict]
+FAILED evaluation/tests/test_recovery_execution.py::test_full_collector_joins_checked_recovery_and_outcome[after_send-paper-minimal]
+4 failed, 2 passed in 2.55s
