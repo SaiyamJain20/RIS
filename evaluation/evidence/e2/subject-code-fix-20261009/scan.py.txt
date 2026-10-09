@@ -1,0 +1,24 @@
+import subprocess,json,hashlib,datetime,sys,pathlib
+r=pathlib.Path(__file__).parent
+label=sys.argv[1]
+def git(*args): return subprocess.check_output(['git',*args])
+refs=['origin/agent-'+str(i) for i in (1,2,3)]
+paths=sorted(set(p for ref in refs for p in git('ls-tree','-r','--name-only',ref,'--','communication/').decode().splitlines()))
+rows=[];conflicts=[]
+for p in paths:
+    own=next((ref for i,ref in enumerate(refs,1) if p.startswith('communication/agent-'+str(i)+'/') and not p.endswith(('ROLE.md','START_PROMPT.md'))),None)
+    candidates=[]
+    for ref in ([own] if own else refs):
+        exists=subprocess.run(['git','cat-file','-e',ref+':'+p],capture_output=True).returncode==0
+        if not exists: continue
+        c=git('log','-1','--format=%H',ref,'--',p).decode().strip()
+        b=git('show',c+':'+p)
+        candidates.append(dict(ref=ref,commit=c,sha256=hashlib.sha256(b).hexdigest()))
+    maximal=[x for x in candidates if not any(x['commit']!=y['commit'] and subprocess.run(['git','merge-base','--is-ancestor',x['commit'],y['commit']],capture_output=True).returncode==0 for y in candidates)]
+    divergent=len(set(x['sha256'] for x in maximal))>1
+    rows.append(dict(path=p,candidates=candidates,newest=maximal,divergent=divergent))
+    if divergent:conflicts.append(p)
+d=dict(capturedAt=datetime.datetime.now(datetime.timezone.utc).isoformat(),refs={ref:git('rev-parse',ref).decode().strip() for ref in refs},pathCount=len(rows),conflicts=conflicts,rows=rows)
+(r/(label+'.json')).write_text(json.dumps(d,indent=2)+'\n')
+print(json.dumps({k:v for k,v in d.items() if k!='rows'}))
+assert not conflicts,conflicts

@@ -891,3 +891,28 @@ Scheduled exclusive guard+separate coordinator held before fetch through owned
 publication; finally cleanup/exact remote commit in external20261009T064403Z/memory.
 Preexisting untracked scheduled-runs preserved unstaged. No peer/module/mailbox/
 archive/frozen/main edit, extra agent/worktree or prohibited Git.
+
+
+## Current checkpoint — subject oracle code corrected, 2026-10-09 UTC
+
+C-E2 WORKING. Exact A1-0058/e66eeb91/1e3644dd.. identified a real evaluator
+error: frozen WRONG_SUBJECT is `2`, not `3` (WRONG_DESTINATION). Fixed the oracle
+and mirrored fixture; wrong-code control now supplies `3`. Test-first RED:
+2 failed/69 passed; GREEN71; fresh root670 PASS/exit0 in108.89s,106 inputs stable.
+Post-suite303 selected owner blobs/15 frozen copies verify. Earlier subject
+preparation prose using `(3)` is superseded; historical raw evidence is preserved.
+
+No new live subject collector, integration, release or gate result. E0closed/
+C-E1complete; gateE NOT_RUN/F-Glocked;44 comparisons remain/four paper crash
+classes BLOCKED. No services, execution FREEZE or lease. A1 review is not a plan
+or report ACK; no peer module repair or human input needed. Next: public subject
+collector in separate fresh stress/control states, recipient/symbolic completion,
+complete revised plan/FREEZE/BOTH NEW exact peer ACKs before services.
+
+Evidence: evaluation/evidence/e2/subject-code-fix-20261009/README.md.172 latest
+communication paths/no divergence; final fetched peer tips unchanged. Frozen/
+ABI/owner/tool/dependency/custody bytes preserved. Author final review under
+no-extra-agent rule; scheduled+separate coordinator guards through publication,
+finally cleanup/verified remote commit in automation memory. A3-0047 responds to
+A1-0058 with the correction; no execution ACK requested. Preexisting untracked
+scheduled-runs preserved unstaged; only reviewed owned agent-3 publication.

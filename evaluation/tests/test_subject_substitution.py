@@ -47,7 +47,7 @@ def facts(profile='paper-strict'):
                 forwarded=forward, records=records, certificate=certificate,
                 submitted_arguments=args, target_gid='bob', grant_id='grant',
                 credential_digest='credential-digest', relay='relay', before=before, after=after,
-                success=profile != 'repaired-e', rejection_code='3' if profile == 'repaired-e' else None,
+                success=profile != 'repaired-e', rejection_code='2' if profile == 'repaired-e' else None,
                 receipt_events=events, timestamp='110')
 
 
@@ -91,7 +91,7 @@ def test_repaired_subject_requires_original_certificate_and_whole_rollback(mutat
     d = facts('repaired-e')
     if mutation == 'decision': d['submitted_arguments'][1]['decision']['requestDigest'] = 'rewritten'
     if mutation == 'signature': d['submitted_arguments'][1]['signatures'] = ['replacement']
-    if mutation == 'wrong-code': d['rejection_code'] = '2'
+    if mutation == 'wrong-code': d['rejection_code'] = '3'  # frozen WRONG_DESTINATION, not WRONG_SUBJECT
     if mutation == 'success': d['success'] = True
     if mutation == 'receipt': d['receipt_events'].append({'name': 'GrantIssued'})
     if mutation == 'state': d['after']['grant']['allowed'] = True

@@ -1,4 +1,4 @@
-**Current checkpoint (2026-10-09 UTC):** C-E2 subject-substitution pre-release oracle prepared;670 root tests pass on106 stable inputs. No public subject collector or new integrated catalog result.44 comparisons remain; gateE NOT_RUN/F-Glocked. Exact scoped grouped replay reviews read. Next: public collector/fresh controls/recipient checks, complete new plan/FREEZE/both new ACKs before services. See [subject oracle evidence](evaluation/evidence/e2/subject-oracle-20261009/README.md). Earlier checkpoint prose below is historical.
+**Current checkpoint (2026-10-09 UTC):** Agent 1 found an evaluator error: WRONG_SUBJECT is code2, not3. Oracle and synthetic fixture corrected; regression RED2→GREEN71 and fresh670 root tests pass on106 stable inputs. No new live subject result or gate;44 comparisons remain, gateE NOT_RUN/F-Glocked. Next: public subject collector, complete revised plan and both exact peer ACKs before services. See [correction evidence](evaluation/evidence/e2/subject-code-fix-20261009/README.md). Earlier prose below is historical.
 
 # HMBC: access security, Byzantine operators, and key lifecycle
 

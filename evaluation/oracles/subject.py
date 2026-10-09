@@ -24,7 +24,7 @@ def check_subject_substitution(*, profile, original_request, request_digest,
     """Check a gid-only alteration before any original grant or worker release.
 
 Paper accepts the relay-asserted subject in this reconstruction; the repaired
-request retains its original certificate and must fail WRONG_SUBJECT (3).
+request retains its original certificate and must fail WRONG_SUBJECT (2).
 Never rewrite a decision digest or relabel this as a signature-failure case.
     """
     require(profile in ('paper-strict', 'paper-minimal', 'repaired-e'), 'E reconstruction profile')
@@ -57,7 +57,7 @@ Never rewrite a decision digest or relabel this as a signature-failure case.
             and all(isinstance(rows, list) for rows in before['logs'].values())
             and bool(before['logs']['pbc']), 'complete decoded two-chain histories')
     if repaired:
-        require(success is False and rejection_code == '3' and receipt_events == [],
+        require(success is False and rejection_code == '2' and receipt_events == [],
                 'mined WRONG_SUBJECT without events')
         require(after == before, 'whole native and worker state unchanged')
     else:

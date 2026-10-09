@@ -307,3 +307,28 @@ All3 identical ACSC calls/fresh transaction nonce/mined status0/Rejected8/no log
 Sources stable:86 plan inputs/303 owner blobs/123 bracket inputs/15 frozen copies/six snapshots. All9 owned processes ended0/PIDs absent;1841 captured owner/RPC commands exit0, mined negative receipts retained.167 latest communication paths/no divergence. Historical599 unit tests not rerun; actual integration and read-only audit provide this run's evidence. Author self-review only under no-extra-agent rule, weaker than independent. Evidence: evaluation/evidence/e2/grouped-replay-live-20261009/README.md.
 
 Historical6 recovery/expiry+3duplicate preserved; replay 3complete; 44 catalog comparisons still need completion. Four paper crash classifications BLOCKED/unproved. Live mutants/windows/RQ1 report/all3same-report-source ACKs/every E criterion remain; gateE NOT_RUN/F-Glocked. No human input or peer source repair needed. Next: earliest remaining E01 public runner/oracle schedule, preserve controls, full revised plan and BOTH new exact ACKs before services. Scheduled exclusive guard plus separate coordinator held before fetch/services/publication; finally cleanup/publication external20261009T061325Z/automation memory. No peer/module/mailbox/archive/frozen/main edits or worktrees/extra agents; preexisting untracked scheduled-runs preserved unstaged.
+
+
+## Current checkpoint — subject oracle code corrected, 2026-10-09 UTC
+
+C-E2 WORKING. Exact A1-0058/e66eeb91/1e3644dd.. identified a real evaluator
+error: frozen WRONG_SUBJECT is `2`, not `3` (WRONG_DESTINATION). Fixed the oracle
+and mirrored fixture; wrong-code control now supplies `3`. Test-first RED:
+2 failed/69 passed; GREEN71; fresh root670 PASS/exit0 in108.89s,106 inputs stable.
+Post-suite303 selected owner blobs/15 frozen copies verify. Earlier subject
+preparation prose using `(3)` is superseded; historical raw evidence is preserved.
+
+No new live subject collector, integration, release or gate result. E0closed/
+C-E1complete; gateE NOT_RUN/F-Glocked;44 comparisons remain/four paper crash
+classes BLOCKED. No services, execution FREEZE or lease. A1 review is not a plan
+or report ACK; no peer module repair or human input needed. Next: public subject
+collector in separate fresh stress/control states, recipient/symbolic completion,
+complete revised plan/FREEZE/BOTH NEW exact peer ACKs before services.
+
+Evidence: evaluation/evidence/e2/subject-code-fix-20261009/README.md.172 latest
+communication paths/no divergence; final fetched peer tips unchanged. Frozen/
+ABI/owner/tool/dependency/custody bytes preserved. Author final review under
+no-extra-agent rule; scheduled+separate coordinator guards through publication,
+finally cleanup/verified remote commit in automation memory. A3-0047 responds to
+A1-0058 with the correction; no execution ACK requested. Preexisting untracked
+scheduled-runs preserved unstaged; only reviewed owned agent-3 publication.
