@@ -1,0 +1,233 @@
+{
+ "paper-minimal-forged-tuple": {
+  "d2Ops": [],
+  "workerProbes": [
+   [
+    1,
+    "never-instantiated (verified)"
+   ],
+   [
+    1,
+    "never-instantiated (verified)"
+   ]
+  ],
+  "storedObservations": 2
+ },
+ "paper-minimal-new-reference-replay": {
+  "d2Ops": [
+   [
+    "prepare_request",
+    true
+   ]
+  ],
+  "workerProbes": [
+   [
+    1,
+    "never-instantiated (verified)"
+   ],
+   [
+    1,
+    "never-instantiated (verified)"
+   ]
+  ],
+  "storedObservations": 2
+ },
+ "paper-strict-forged-tuple": {
+  "d2Ops": [],
+  "workerProbes": [
+   [
+    1,
+    "never-instantiated (verified)"
+   ],
+   [
+    1,
+    "never-instantiated (verified)"
+   ]
+  ],
+  "storedObservations": 2
+ },
+ "paper-strict-new-reference-replay": {
+  "d2Ops": [
+   [
+    "prepare_request",
+    true
+   ]
+  ],
+  "workerProbes": [
+   [
+    1,
+    "never-instantiated (verified)"
+   ],
+   [
+    1,
+    "never-instantiated (verified)"
+   ]
+  ],
+  "storedObservations": 2
+ },
+ "repaired-e-forged-tuple": {
+  "d2Ops": [
+   [
+    "prepare_request",
+    true
+   ],
+   [
+    "collect_checkpoint",
+    true
+   ],
+   [
+    "collect_decision",
+    true
+   ]
+  ],
+  "workerProbes": [
+   [
+    1,
+    "never-instantiated (verified)"
+   ],
+   [
+    1,
+    "never-instantiated (verified)"
+   ]
+  ],
+  "storedObservations": 2,
+  "forgedFacts": {
+   "honestDigest": "0x698b3a6e7ea1c8efce06dd8f07a471faf9a3a490f703ce73f95ce76c4bdec292",
+   "forgedDigest": "0x698b3a6e7ea1c8efce06dd8f07a471faf9a3a490f703ce73f95ce76c4bdec292",
+   "signedDigestEqual": true,
+   "honestSigner": "0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42",
+   "recoveredSigner": "0x3df38017505bb45d1d4c77065e09aa9175a67c48",
+   "domain": {
+    "chainId": "28545",
+    "verifyingContract": "0x0c3ced2bfd14f52783701e953b3784dc210d09e3"
+   }
+  }
+ },
+ "repaired-e-new-reference-replay": {
+  "d2Ops": [
+   [
+    "prepare_request",
+    true
+   ],
+   [
+    "collect_checkpoint",
+    true
+   ],
+   [
+    "collect_decision",
+    true
+   ]
+  ],
+  "workerProbes": [
+   [
+    1,
+    "never-instantiated (verified)"
+   ],
+   [
+    1,
+    "never-instantiated (verified)"
+   ]
+  ],
+  "storedObservations": 2
+ },
+ "repaired-e-same-nonce-distinct-digests": {
+  "d2Ops": [
+   [
+    "prepare_request",
+    true
+   ],
+   [
+    "prepare_request",
+    true
+   ],
+   [
+    "collect_checkpoint",
+    true
+   ],
+   [
+    "collect_decision",
+    true
+   ],
+   [
+    "collect_decision",
+    true
+   ]
+  ],
+  "workerProbes": [
+   [
+    1,
+    "never-instantiated (verified)"
+   ],
+   [
+    1,
+    "never-instantiated (verified)"
+   ]
+  ],
+  "storedObservations": 2
+ },
+ "forgedTupleProtocolRecompute": {
+  "digest": "0x698b3a6e7ea1c8efce06dd8f07a471faf9a3a490f703ce73f95ce76c4bdec292",
+  "honestSigner": "0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42",
+  "forgedSigner": "0x3df38017505bb45d1d4c77065e09aa9175a67c48",
+  "relay": "0x3df38017505bb45d1d4c77065e09aa9175a67c48",
+  "witnesses": [
+   "0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42"
+  ],
+  "domain": {
+   "name": "HMBCDecision",
+   "version": "1",
+   "chainId": "28545",
+   "verifyingContract": "0x0c3ced2bfd14f52783701e953b3784dc210d09e3"
+  },
+  "decisionsFound": 2
+ },
+ "sameNonce": {
+  "ops": [
+   "prepare_request",
+   "prepare_request",
+   "collect_checkpoint",
+   "collect_decision",
+   "collect_decision"
+  ],
+  "timeline": {
+   "firstRequestTimestamp": "1791595472",
+   "secondRequestTimestamp": "1791595473",
+   "checkpointTimestamp": "1791595474",
+   "checkpointExpiresAt": "1791595534",
+   "decisionCollectedAtDbcBlocks": [
+    "23",
+    "23"
+   ],
+   "decisionDbcClock": [
+    "1791595475",
+    "1791595476"
+   ],
+   "decisionExpiresAt": [
+    "1791595502",
+    "1791595501"
+   ],
+   "firstConsumeTimestamp": "1791595477",
+   "secondConsumeTimestamp": "1791595477",
+   "firstExpiresAt": "1791595502",
+   "secondExpiresAt": "1791595501",
+   "marginSeconds": 24
+  },
+  "prepareExpiries": [
+   "1791595502",
+   "1791595501"
+  ],
+  "decisionDigests": [
+   "0x0d025ba5ad4cdb91744229ff09c73a89293b22cd9b12f88bb16743428c9ac7f2",
+   "0xb2bed7a5bc0a10e158d860de26cb33aeac53a561047c99463594aad9fa0a809b"
+  ]
+ },
+ "paperNewReferenceGrantFields": {
+  "paper-strict-new-reference-replay": {
+   "secondGrant": "0x1bf1f8ad3dfffebec88f6262cc26752a1e526b5eb9e445012c60f54f4d108d83"
+  },
+  "paper-minimal-new-reference-replay": {
+   "secondGrant": "0x1bf1f8ad3dfffebec88f6262cc26752a1e526b5eb9e445012c60f54f4d108d83"
+  }
+ },
+ "problems": []
+}
