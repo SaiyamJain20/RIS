@@ -1,0 +1,222 @@
+{
+ "catalogSha256": "438fa38ddcbd7edd0e49fb93cc580e5219ed05349fd677b2e386bc4669f5d50e",
+ "supplementSha256": "9ccade362c5a8853d63f06a08be3134ae32cd99527ceb36fcd78c311a9246858",
+ "rows": [
+  {
+   "caseId": "E01-forged-tuple-paper-strict",
+   "profile": "paper-strict",
+   "sourceRefs": [
+    "S09",
+    "S12",
+    "S13",
+    "S20",
+    "SPEC4/E01"
+   ],
+   "assumptions": [
+    "A01",
+    "A02",
+    "A14",
+    "A19",
+    "A25",
+    "A41"
+   ],
+   "expected": {
+    "property": "decision-provenance",
+    "outcome": "ACCEPT",
+    "classification": "SPEC_GAP",
+    "error": null,
+    "qualification": "The configured relay fabricates a tuple without a PBC request/log. Repaired control uses a non-witness signature on an otherwise matching certificate; BAD_SIGNATURE must precede any grant. Paper caller restrictions remain enforced; the compromised relay stress is outside secure isolation."
+   },
+   "executionStatus": "FAILED_BEFORE_STRESS_TRANSACTION",
+   "classification": "NOT_CLASSIFIED",
+   "observed": "D1 controls passed (wrong-admin16, Alice allow+release+outcome, Bob policy9); D2 deployed and bootstrapped; the stress before-snapshot read both chains, then the D2 worker export refused: no worker.sqlite in a fresh adapter state that had performed no worker operation; no stress transaction was submitted",
+   "cause": "agent-3 (proxy) evaluator recipe defect: relay_stress did not initialize D2 worker state (execute_access calls encrypt_record first); not a ledger or protocol defect"
+  },
+  {
+   "caseId": "E01-forged-tuple-paper-minimal",
+   "profile": "paper-minimal",
+   "sourceRefs": [
+    "S09",
+    "S12",
+    "S13",
+    "S20",
+    "SPEC4/E01"
+   ],
+   "assumptions": [
+    "A01",
+    "A02",
+    "A14",
+    "A19",
+    "A25",
+    "A41"
+   ],
+   "expected": {
+    "property": "decision-provenance",
+    "outcome": "ACCEPT",
+    "classification": "SPEC_GAP",
+    "error": null,
+    "qualification": "The configured relay fabricates a tuple without a PBC request/log. Repaired control uses a non-witness signature on an otherwise matching certificate; BAD_SIGNATURE must precede any grant. Paper caller restrictions remain enforced; the compromised relay stress is outside secure isolation."
+   },
+   "executionStatus": "NOT_RUN_ABORTED_SLICE",
+   "classification": "NOT_CLASSIFIED",
+   "observed": null,
+   "cause": "agent-3 (proxy) evaluator recipe defect: relay_stress did not initialize D2 worker state (execute_access calls encrypt_record first); not a ledger or protocol defect"
+  },
+  {
+   "caseId": "E01-forged-tuple-repaired-e",
+   "profile": "repaired-e",
+   "sourceRefs": [
+    "S09",
+    "S12",
+    "S13",
+    "S20",
+    "SPEC4/E01"
+   ],
+   "assumptions": [
+    "A01",
+    "A02",
+    "A14",
+    "A19",
+    "A25",
+    "A36",
+    "A41"
+   ],
+   "expected": {
+    "property": "decision-provenance",
+    "outcome": "REJECT",
+    "classification": "REPAIR_SUPPORTED",
+    "error": "BAD_SIGNATURE",
+    "qualification": "The configured relay fabricates a tuple without a PBC request/log. Repaired control uses a non-witness signature on an otherwise matching certificate; BAD_SIGNATURE must precede any grant. Paper caller restrictions remain enforced; the compromised relay stress is outside secure isolation."
+   },
+   "executionStatus": "NOT_RUN_ABORTED_SLICE",
+   "classification": "NOT_CLASSIFIED",
+   "observed": null,
+   "cause": "agent-3 (proxy) evaluator recipe defect: relay_stress did not initialize D2 worker state (execute_access calls encrypt_record first); not a ledger or protocol defect"
+  },
+  {
+   "caseId": "E01-new-reference-replay-paper-strict",
+   "profile": "paper-strict",
+   "sourceRefs": [
+    "S09",
+    "S12",
+    "S13",
+    "S20",
+    "SPEC4/E01"
+   ],
+   "assumptions": [
+    "A01",
+    "A02",
+    "A14",
+    "A19",
+    "A25",
+    "A41"
+   ],
+   "expected": {
+    "property": "decision-provenance",
+    "outcome": "ACCEPT",
+    "classification": "SPEC_GAP",
+    "error": null,
+    "qualification": "After the first grant, the relay supplies a fresh pbcRequestId to paper policyEnf while repeating the same verified tuple. Paper grants again under A25. Repaired-e reuses the original signed gid/nonce/certificate (no freshly signed request); REPLAY prevents a second grant."
+   },
+   "executionStatus": "NOT_RUN_ABORTED_SLICE",
+   "classification": "NOT_CLASSIFIED",
+   "observed": null,
+   "cause": "agent-3 (proxy) evaluator recipe defect: relay_stress did not initialize D2 worker state (execute_access calls encrypt_record first); not a ledger or protocol defect"
+  },
+  {
+   "caseId": "E01-new-reference-replay-paper-minimal",
+   "profile": "paper-minimal",
+   "sourceRefs": [
+    "S09",
+    "S12",
+    "S13",
+    "S20",
+    "SPEC4/E01"
+   ],
+   "assumptions": [
+    "A01",
+    "A02",
+    "A14",
+    "A19",
+    "A25",
+    "A41"
+   ],
+   "expected": {
+    "property": "decision-provenance",
+    "outcome": "ACCEPT",
+    "classification": "SPEC_GAP",
+    "error": null,
+    "qualification": "After the first grant, the relay supplies a fresh pbcRequestId to paper policyEnf while repeating the same verified tuple. Paper grants again under A25. Repaired-e reuses the original signed gid/nonce/certificate (no freshly signed request); REPLAY prevents a second grant."
+   },
+   "executionStatus": "NOT_RUN_ABORTED_SLICE",
+   "classification": "NOT_CLASSIFIED",
+   "observed": null,
+   "cause": "agent-3 (proxy) evaluator recipe defect: relay_stress did not initialize D2 worker state (execute_access calls encrypt_record first); not a ledger or protocol defect"
+  },
+  {
+   "caseId": "E01-new-reference-replay-repaired-e",
+   "profile": "repaired-e",
+   "sourceRefs": [
+    "S09",
+    "S12",
+    "S13",
+    "S20",
+    "SPEC4/E01"
+   ],
+   "assumptions": [
+    "A01",
+    "A02",
+    "A14",
+    "A19",
+    "A25",
+    "A36",
+    "A41"
+   ],
+   "expected": {
+    "property": "decision-provenance",
+    "outcome": "NO_NEW_GRANT",
+    "classification": "REPAIR_SUPPORTED",
+    "error": "REPLAY",
+    "qualification": "After the first grant, the relay supplies a fresh pbcRequestId to paper policyEnf while repeating the same verified tuple. Paper grants again under A25. Repaired-e reuses the original signed gid/nonce/certificate (no freshly signed request); REPLAY prevents a second grant."
+   },
+   "executionStatus": "NOT_RUN_ABORTED_SLICE",
+   "classification": "NOT_CLASSIFIED",
+   "observed": null,
+   "cause": "agent-3 (proxy) evaluator recipe defect: relay_stress did not initialize D2 worker state (execute_access calls encrypt_record first); not a ledger or protocol defect"
+  },
+  {
+   "caseId": "E01-same-nonce-distinct-digests-repaired-e",
+   "profile": "repaired-e",
+   "sourceRefs": [
+    "S09",
+    "S12",
+    "S13",
+    "S20",
+    "SPEC4/E01"
+   ],
+   "assumptions": [
+    "A01",
+    "A02",
+    "A14",
+    "A19",
+    "A36",
+    "A39",
+    "A41"
+   ],
+   "expected": {
+    "property": "decision-provenance",
+    "outcome": "NO_NEW_GRANT",
+    "classification": "REPAIR_SUPPORTED",
+    "error": "REPLAY",
+    "qualification": "Fresh scenario: two valid user-signed Alice requests, same gid/nonce, distinct expiresAt within live 30-second bounds. Independently verify both signatures, distinct digests and derived grantIds. Forward both BEFORE ONE checkpoint covering both. Collect BOTH honest policy-aware ALLOW certificates BEFORE either consume; each sees nonceConsumed=false. Preserve that checkpoint, credentials and TTLs; consume first then the second PRE-COLLECTED certificate without re-collection. Native repaired-e: REPLAY, no second grant, first grant unchanged. MUT_NO_NONCE (8) counterpart: second distinct allowed grant; nonce never recorded. These are NOT_RUN expectations; A2 owner measurements are separate. No evaluator witness key."
+   },
+   "executionStatus": "NOT_RUN_ABORTED_SLICE",
+   "classification": "NOT_CLASSIFIED",
+   "observed": null,
+   "cause": "agent-3 (proxy) evaluator recipe defect: relay_stress did not initialize D2 worker state (execute_access calls encrypt_record first); not a ledger or protocol defect"
+  }
+ ],
+ "completedRows": 0,
+ "remainingCatalogComparisons": 41,
+ "fullCatalogComplete": false
+}

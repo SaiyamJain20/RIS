@@ -209,8 +209,10 @@ def create_plan(*, run_id, freeze_message, expired_retry=False, duplicate_outcom
                                    'consume first (grant, nonce consumed), then the second pre-collected certificate -> REPLAY(8) at the '
                                    'nonce guard KSSC.sol:182 (lines 181-183); pre/post states read afterwards at explicit blocks second-1 '
                                    'and second (D-5c); every chain timestamp recorded against both 30 s lifetimes (A1-0064)'),
-                        snapshots=('native views/logs per chain at one explicit block per read group; idle worker exports; Cast hash '
-                                   'checkpoint per read group/submit (A1-0061 D-5b)')),
+                        snapshots=('native views/logs per chain at one explicit block per read group; Cast hash checkpoint per read '
+                                   'group/submit (A1-0061 D-5b); idle D2 worker = verified never-instantiated record (pinned exporter '
+                                   'exit 1 with its exact no-worker.sqlite message and both database paths absent; SL2 performs no '
+                                   'worker operation) or an unchanged idle export; no state-changing call instantiates it (S3-0008)')),
                     classification=('paper-strict/paper-minimal forged tuple and new reference: SPEC_GAP (configured-relay stress outside '
                                     'A01); repaired-e: REPAIR_SUPPORTED with BAD_SIGNATURE(1), REPLAY(8) and REPLAY(8); tested '
                                     'reconstruction results, never an HMBC exploit or authors-implementation claim'),

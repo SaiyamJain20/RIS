@@ -1,0 +1,86 @@
+{
+ "plan": {
+  "path": "evaluation/evidence/e2/sl2-relay-runner-r2-20261010/integration-plan.json",
+  "sha256": "b3a020989d59a9ccdbb255e9d838be6a270ae515502531e9334655c91c62a583",
+  "runId": "E2-SL2-relay-r2-20261010",
+  "freezeMessage": "S3-0009",
+  "agent3SourcesCount": 92,
+  "agent3SourcesAggregate": "90bc8f4bfb0ffdd2af77a7f9d85b1b3bf0de27a5ca96ba9915d9259ebe683ace",
+  "supersedes": "d67f178665d0b64d32fd875f1a3ab3e689da0032e3984a8747bde839512fa3b1 (S3-0007; failed run S3-0008)"
+ },
+ "sourceFiles": {
+  "evaluation/e1.py": "4539498741f805bc8c8733eec18dab2141d35a4918047197bfa7bd3d21a94e5c",
+  "evaluation/e2.py": "88095534bc9d1f429dcd5cf6c7ba881a06805e0889a9635ad3cd3c6330888195",
+  "evaluation/relay_stress.py": "28d28834cc6d4104a2bf6869792c410667f3f0709ea566cec26f2c4909d14684",
+  "evaluation/oracles/provenance.py": "9061cd42a67d492bd8e283ee6ba6700a228e3de0d0e08757515244a6fce320ff",
+  "evaluation/chain.py": "fad06c613b198e1080e5c79a0d5247659b5d0cc130e2139d7aa859a864167271",
+  "evaluation/tests/test_worker_probe.py": "1fb0605f3fea88020cc84f4a753d0705c190e0ab97f68dd7ce800e729ff710a0",
+  "evaluation/tests/test_provenance_oracle.py": "0211a7ff73336322c9839345fa112d7f7f08ae3e24ba35483ba5703a67ae2e5e",
+  "evaluation/tests/test_relay_stress_collector.py": "7e527cd3e0fd5aef8b41360b945263f92f2c5acfb94ff9078e8a13567bd07f5e",
+  "evaluation/tests/test_read_group_pinned.py": "7859d71a5348c5599e13116b7481568629f084fbccfdf21d9c3ac54fb9555387",
+  "evaluation/tests/test_e2_relay_plan.py": "dc5d18a673704dd5a0140dd05ef75c9a736836f7ed1c76b71d2390d7d5fa404b"
+ },
+ "base": "HEAD c649e12 + uncommitted fix listed above",
+ "suiteBracket": {
+  "files": 2170,
+  "pre": "217ccb69412ad22ecb1bd262f9a78651a0b2035131d69cd5a02ce526fda51a52",
+  "post": "217ccb69412ad22ecb1bd262f9a78651a0b2035131d69cd5a02ce526fda51a52",
+  "stable": true
+ },
+ "commands": [
+  {
+   "label": "red-lazy-worker-double",
+   "order": "test double changed first to model lazy worker creation (reproduces the live failure)",
+   "exit": 1,
+   "result": "7 failed, 11 passed",
+   "output": "red-lazy-worker-double.txt",
+   "outputSha256": "d4a0e2c3b65f795dd4c8b4fd1affcaf70fe8bb49eeb452f1caa9b4d0be17cd5c"
+  },
+  {
+   "label": "withdrawn-encrypt-record-fix",
+   "note": "a first fix that called encrypt_record was written, made the tests pass, and was reverted before any plan/FREEZE because A1 forbids instantiating the worker by a state-changing call; it was never run live"
+  },
+  {
+   "label": "red-never-instantiated",
+   "order": "probe/oracle/double tests written before the implementation",
+   "exit": 1,
+   "result": "103 failed, 31 passed (probe missing, oracle expects export only, collector parses dict)",
+   "output": "red-never-instantiated.txt",
+   "outputSha256": "6a041fc2d86568f4b79c053ed872da8e42320d4e9deebfde19aad165f976af44"
+  },
+  {
+   "label": "green-targeted",
+   "exit": 0,
+   "result": "142 passed (probe 10, oracle, collector, pinned group)"
+  },
+  {
+   "label": "control-reasons",
+   "exit": 0,
+   "result": "12/12 controls fail for the intended reason, including other worker refusal and worker change"
+  },
+  {
+   "label": "real-exporter-bytes",
+   "exit": 0,
+   "result": "observe_worker_export accepts the exact failed-run exporter output and state dir (verified never-instantiated)"
+  },
+  {
+   "label": "green-full-suite",
+   "argv": "PATH=$HOME/.foundry/bin:$PATH .venv/bin/python -m pytest -q -rs",
+   "startedAt": "2026-10-10T01:02:04Z",
+   "endedAt": "2026-10-10T01:06:51Z",
+   "wallSeconds": 286.5,
+   "exit": 0,
+   "result": "1015 passed, 0 failed, 0 skipped",
+   "output": "full-suite.txt",
+   "outputSha256": "a5c624d41047bb1af58d87f9513d5331cfbedc50c059ff58cdf5ef5a45069bcd"
+  },
+  {
+   "label": "plan",
+   "argv": "e2.create_plan(run_id='E2-SL2-relay-r2-20261010', freeze_message='S3-0009', relay_stress=True, review_mode='solo-correlated'); verify before/after write",
+   "exit": 0
+  }
+ ],
+ "planDiff": "plan-diff-from-d67f1786.json",
+ "servicesStarted": [],
+ "gitWrites": []
+}

@@ -1,0 +1,59 @@
+{
+  "rq": "E",
+  "executionMode": "two-chain-e2-relay-stress-slice",
+  "adapterMode": "symbolic",
+  "status": "FAILED",
+  "startedAt": "2026-10-10T00:54:19.076158+00:00",
+  "endedAt": "2026-10-10T00:55:33.873035+00:00",
+  "cases": {
+    "paper-strict-forged-tuple": {
+      "status": "RUNNING",
+      "manifest": "paper-strict-forged-tuple/manifest.json"
+    }
+  },
+  "servicesStarted": [
+    {
+      "case": "paper-strict-forged-tuple",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 2623422
+    },
+    {
+      "case": "paper-strict-forged-tuple",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 2623542
+    }
+  ],
+  "acks": {
+    "agent-1": {
+      "commit": "c649e1214d2299368ace9a072126c835bdc55c08",
+      "path": "communication/agent-1/outbox/0065-ack-sl2-relay-stress-freeze.md",
+      "sha256": "8125ba460542187c76371b4d2d2413736c13b6199446fab60a95f69319160bb4",
+      "messageId": "A1-0065"
+    },
+    "agent-2": {
+      "commit": "c649e1214d2299368ace9a072126c835bdc55c08",
+      "path": "communication/agent-1/solo/agent-2-proxy/outbox/0008-ack-sl2-relay-stress-freeze.md",
+      "sha256": "8ddc71c54eaeafc59dd54277da81ef729c518221f9e4133edae480377add144c",
+      "messageId": "S2-0008"
+    },
+    "freeze": {
+      "commit": "c649e1214d2299368ace9a072126c835bdc55c08",
+      "path": "communication/agent-1/solo/agent-3-proxy/outbox/0007-freeze-sl2-relay-stress.md",
+      "sha256": "f9786a127bd290c4edf00f94420c22b3d277bab7374ee0a195b122b204603f65",
+      "messageId": "S3-0007"
+    }
+  },
+  "failure": {
+    "type": "ValueError",
+    "message": "Public access owner command relay-worker-export-00 failed"
+  },
+  "sourceStable": true,
+  "limitation": "Seven E01 relay-stress comparisons only; no complete catalog or RQ gate.",
+  "planSha256": "d67f178665d0b64d32fd875f1a3ab3e689da0032e3984a8747bde839512fa3b1",
+  "reviewMode": "solo-correlated",
+  "reviewDisclosure": "Solo phase under the human directive A1-0059: agent 1 and the agent-2/agent-3 proxies are the same model, so every review and ACK is correlated self-review, not independent review."
+}

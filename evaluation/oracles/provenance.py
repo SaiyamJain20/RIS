@@ -8,6 +8,7 @@ gaps of the reconstruction, never HMBC exploits. Snapshots are whole decoded
 contract histories plus selected views; the collector authenticates them.
 """
 import copy
+import re
 
 from evaluation.access_artifacts import require
 
@@ -15,9 +16,26 @@ ZERO = '0x'+'00'*32
 _STATE = ('grants', 'requests', 'accessLogCount', 'nonces', 'logs')
 
 
+_NEVER = re.compile(r'no worker\.sqlite in (\S+) \(looked in <dir>/worker/ and in <dir>\)\n')
+
+
 def _idle(worker):
-    require(worker['events'] == [] and worker['releases'] == []
-            and worker['counts'] == dict(releaseIntentCount='0', releaseSentCount='0'), 'idle worker (no release in E01 relay stress)')
+    """Idle worker: a verified never-instantiated record or an idle export (S3-0008/A1 diagnosis).
+
+    SL2 performs no worker operation, so the production worker database is normally
+    never created. The runner records that only when the pinned exporter exits 1 with
+    exactly its 'no worker.sqlite' message and both database paths are absent.
+    """
+    if isinstance(worker, dict) and worker.get('instantiated') is False:
+        match = _NEVER.fullmatch(worker.get('message', ''))
+        require(set(worker) == {'instantiated', 'exitCode', 'message', 'checkedAbsent'} and worker['exitCode'] == 1 and match is not None
+                and worker['checkedAbsent'] == [match.group(1)+'/worker/worker.sqlite', match.group(1)+'/worker.sqlite'],
+                'verified never-instantiated worker')
+        return
+    require(isinstance(worker, dict) and worker.get('instantiated') is True and set(worker) == {'instantiated', 'log'}, 'worker observation')
+    log = worker['log']
+    require(log.get('events') == [] and log.get('releases') == []
+            and log.get('counts') == dict(releaseIntentCount='0', releaseSentCount='0'), 'idle worker (no release in E01 relay stress)')
 
 
 def _whole(snapshot, keys=_STATE):

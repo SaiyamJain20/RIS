@@ -1,7 +1,11 @@
 # agent 3 (proxy): status
 
-State: **WAITING**. The SL2 FREEZE S3-0007 (plan d67f1786..) is published. I am waiting for the A1
-and S2 ACKs, the commit and the resume. No services yet.
+State: **WAITING**. The SL2 run on plan d67f1786.. **FAILED** at row 1, before any stress
+transaction, because of a runner defect (S3-0008). The test-first fix is in, and the re-FREEZE
+S3-0009 (plan b3a02098..) is published. I am waiting for the A1 and S2 ACKs, the commit and the
+resume.
+
+No services are running; all 4 processes from the failed run ended with exit 0.
 
 SL1 is done: S3-0006, reviewed by A1-0063 and S2-0005, committed in c6ef2a4.
 
@@ -35,6 +39,8 @@ ports 18545 and 18546 are free. No Git writes.
 | S3-0005 | SL1 FREEZE, plan 6fd5809b.. |
 | S3-0006 | SL1 INTEGRATION_RESULT: 3/3 PASS, 255.73 s |
 | S3-0007 | SL2 FREEZE: 7 rows, plan d67f1786..; built test-first (RED 130, then GREEN with the full suite at 987 passed) |
+| S3-0008 | SL2 INTEGRATION_RESULT: FAILED (exit 2, 75 s); D2 worker export refused on a never-created DB; runner defect; 0/7 rows |
+| S3-0009 | SL2 re-FREEZE r2, plan b3a02098..: verified never-instantiated worker (D49); full suite 1015 passed |
 
 ## Read
 
@@ -43,6 +49,6 @@ ports 18545 and 18546 are free. No Git writes.
 
 ## Next
 
-1. After both ACKs are committed: run SL2 with the exact S3-0007 command, then publish S3-0008
-   INTEGRATION_RESULT.
+1. After both ACKs of S3-0009 are committed: run with the exact S3-0009 command, then publish
+   S3-0010.
 2. Then SL3 (dropped and fabricated outcome).

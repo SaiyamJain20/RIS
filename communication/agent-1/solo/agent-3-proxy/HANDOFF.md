@@ -11,7 +11,8 @@ F and G locked. All proxy reviews and ACKs are correlated self-review (same mode
 |---|---|---|
 | SL0 portability | done | S3-0004; `evaluation/evidence/e2/sl0-portability-20261009/` |
 | SL1 subject substitution ×3 | **actual PASS 3/3** | FREEZE S3-0005, plan 6fd5809b..; result S3-0006; `evaluation/evidence/e2/sl1-subject-live-20261010/` |
-| SL2 relay stress ×7 | FREEZE S3-0007, plan d67f1786..; **waiting for ACKs** | `evaluation/evidence/e2/sl2-relay-runner-20261010/`; code in `evaluation/relay_stress.py` and `oracles/provenance.py`; pinned `read_group(block=…)` |
+| SL2 relay stress ×7, first run | **FAILED** (runner defect: worker DB never created, D49) | S3-0007 plan d67f1786..; S3-0008; `evaluation/evidence/e2/sl2-relay-failed-20261010/` |
+| SL2 relay stress ×7, re-plan r2 | FREEZE S3-0009, plan b3a02098..; **waiting for ACKs** | `evaluation/evidence/e2/sl2-relay-runner-r2-20261010/`; `e1.observe_worker_export` |
 
 - FREEZE S3-0005 is released. No services are running.
 - Decisions D47 (paper crash relabel) and D48 (SL0 choices) are in `communication/DECISIONS.md`.
@@ -82,9 +83,11 @@ toolchain and host-tools. Keep helper scripts out of `evaluation/` as `.py` file
 
 ## Next allowed actions
 
-1. SL2 run, after A1 and S2 ACKs of S3-0007 are committed:
-   - build the ACK index at `tmp/p3/sl2-run/acks.json` (keys agent-1, agent-2 and freeze);
-   - run the S3-0007 command;
+1. SL2 r2 run, after A1 and S2 ACKs of S3-0009 are committed:
+   - build the ACK index at `tmp/p3/sl2-r2-run/acks.json` (keys agent-1, agent-2 and freeze);
+   - run the S3-0009 command;
+   - audit with `tmp/p3/sl2-run/scripts/select_audit.py` (it already handles the relay files, the
+     secret and token scan, and verified never-instantiated probes);
    - audit with `tmp/p3/sl1-run/scripts/select_audit.py`, after extending its `SELECT` patterns for
      the relay-stress files (`timeline`, `forged-certificate`, `stress-transaction`, the
      `before-second`/`after-second` snapshots);

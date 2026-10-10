@@ -1,0 +1,46 @@
+{
+ "argv": [
+  ".venv/bin/python",
+  "-m",
+  "evaluation.e2",
+  "--plan",
+  "evaluation/evidence/e2/sl2-relay-runner-20261010/integration-plan.json",
+  "--acks",
+  "/home/saiyamjain/.claude/jobs/aed51961/tmp/p3/sl2-run/acks.json",
+  "--output",
+  "/home/saiyamjain/.claude/jobs/aed51961/tmp/p3/sl2-run/real-e2-output"
+ ],
+ "env": "PATH=$HOME/.foundry/bin:$PATH",
+ "cwd": "/home/saiyamjain/Desktop/RIS/Project",
+ "inputPlanSha256": "d67f178665d0b64d32fd875f1a3ab3e689da0032e3984a8747bde839512fa3b1",
+ "exitCode": 2,
+ "startedAt": "2026-10-10T00:54:18.466917397Z",
+ "endedAt": "2026-10-10T00:55:33.920322421Z",
+ "wallSeconds": 75.45003636,
+ "stdoutSha256": "feb1103e072eca59f5d72bc2e6201feebfbc8bac3e4d7a9d9c40e2ce7e00961f",
+ "stderrBytes": 0,
+ "stdout": {
+  "status": "FAILED",
+  "failure": {
+   "type": "ValueError",
+   "message": "Public access owner command relay-worker-export-00 failed"
+  },
+  "sourceStable": true,
+  "servicesStarted": [
+   {
+    "case": "paper-strict-forged-tuple",
+    "profile": "paper-strict",
+    "chain": "pbc",
+    "port": 18545,
+    "pid": 2623422
+   },
+   {
+    "case": "paper-strict-forged-tuple",
+    "profile": "paper-strict",
+    "chain": "dbc",
+    "port": 18546,
+    "pid": 2623542
+   }
+  ]
+ }
+}

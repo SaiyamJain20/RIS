@@ -40,13 +40,19 @@ def events(ref, gid_, ts, *, count, consumed=False, nonce='0', expires=None, rec
                                                code='0', credentialDigest=CRED, grantId=gid_, submitter=RELAY))]
 
 
-WORKER = dict(schemaVersion='hmbc-worker-log/v0', events=[], releases=[], counts=dict(releaseIntentCount='0', releaseSentCount='0'))
+LOG = dict(schemaVersion='hmbc-worker-log/v0', events=[], releases=[], counts=dict(releaseIntentCount='0', releaseSentCount='0'))
+# An idle but instantiated worker export, and the verified never-instantiated record (S3-0008):
+# SL2 performs no worker operation, so the D2 worker database is never created.
+WORKER = dict(instantiated=True, log=LOG)
+NEVER = dict(instantiated=False, exitCode=1, message='no worker.sqlite in /tmp/p3/state (looked in <dir>/worker/ and in <dir>)\n',
+             checkedAbsent=['/tmp/p3/state/worker/worker.sqlite', '/tmp/p3/state/worker.sqlite'])
+MOVED = dict(instantiated=True, log=dict(LOG, events=[dict(type='RELEASE_INTENT')], counts=dict(releaseIntentCount='1', releaseSentCount='0')))
 
 
-def snapshot(grants, requests, count, *, nonces=None, dbc=(), pbc=()):
+def snapshot(grants, requests, count, *, nonces=None, dbc=(), pbc=(), worker=NEVER):
     return dict(grants=copy.deepcopy(grants), requests=copy.deepcopy(requests), accessLogCount=str(count),
                 nonces=copy.deepcopy(nonces or [[ALICE, '1', False]]),
-                logs=dict(pbc=[dict(name='LogRecorded', fields={})]+list(pbc), dbc=list(dbc)), worker=copy.deepcopy(WORKER))
+                logs=dict(pbc=[dict(name='LogRecorded', fields={})]+list(pbc), dbc=list(dbc)), worker=copy.deepcopy(worker))
 
 
 # ---------------------------------------------------------------- forged tuple
@@ -87,7 +93,8 @@ def test_forged_tuple_expected_classes(profile):
 @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal'])
 @pytest.mark.parametrize('mutation', ['deny-all', 'pbc-request-exists', 'pbc-log-added', 'grant-gid', 'grant-ttl',
                                       'grant-recipient', 'event-order', 'access-submitter', 'access-ref', 'count',
-                                      'nonce-changed', 'worker-changed', 'prior-grant'])
+                                      'nonce-changed', 'worker-changed', 'prior-grant', 'worker-instantiated-between',
+                                      'never-other-message', 'never-other-exit', 'never-one-path', 'empty-export'])
 def test_paper_forged_tuple_rejects_false_observations(profile, mutation):
     f = forged_facts(profile)
     if mutation == 'deny-all': f.update(success=False, rejection_code='9', receipt_events=[], after=copy.deepcopy(f['before']))
@@ -102,7 +109,15 @@ def test_paper_forged_tuple_rejects_false_observations(profile, mutation):
     if mutation == 'access-ref': f['receipt_events'][1]['fields']['requestRef'] = HONEST
     if mutation == 'count': f['after']['accessLogCount'] = '2'
     if mutation == 'nonce-changed': f['after']['nonces'][0][2] = True
-    if mutation == 'worker-changed': f['after']['worker']['counts']['releaseIntentCount'] = '1'
+    if mutation == 'worker-changed': f['after']['worker'] = copy.deepcopy(MOVED)
+    if mutation == 'worker-instantiated-between': f['after']['worker'] = copy.deepcopy(WORKER)
+    if mutation == 'never-other-message': f['before']['worker']['message'] = 'Traceback (most recent call last):\n'
+    if mutation == 'never-other-exit':
+        for k in ('before', 'after'): f[k]['worker']['exitCode'] = 2
+    if mutation == 'never-one-path':
+        for k in ('before', 'after'): f[k]['worker']['checkedAbsent'] = f[k]['worker']['checkedAbsent'][:1]
+    if mutation == 'empty-export':
+        for k in ('before', 'after'): f[k]['worker'] = dict(instantiated=True, log={})
     if mutation == 'prior-grant': f['before']['grants'][FG] = grant(FORGED, TS-5)
     with pytest.raises(ValueError):
         oracle('check_forged_tuple')(**f)
@@ -215,8 +230,8 @@ def same_nonce_facts():
     held.pop('worker')
     return dict(first=first, second=second, checkpoint=checkpoint, decisions=decisions, consume_first=consume_first,
                 before_second=held, after_second=copy.deepcopy(held), before_block='61', second_block='62',
-                success=False, rejection_code='8', receipt_events=[], worker_before=copy.deepcopy(WORKER),
-                worker_after=copy.deepcopy(WORKER))
+                success=False, rejection_code='8', receipt_events=[], worker_before=copy.deepcopy(NEVER),
+                worker_after=copy.deepcopy(NEVER))
 
 
 def test_same_nonce_second_precollected_certificate_is_replay():
@@ -229,7 +244,7 @@ def test_same_nonce_second_precollected_certificate_is_replay():
                                       'checkpoint-before-forward', 'decision-after-consume', 'decision-deny',
                                       'decision-digest', 'decision-sequence', 'first-not-consumed', 'first-failed',
                                       'second-granted', 'wrong-code', 'logs', 'state-changed', 'not-adjacent',
-                                      'worker-changed', 'nonce-not-recorded'])
+                                      'worker-changed', 'nonce-not-recorded', 'worker-instantiated-between'])
 def test_same_nonce_rejects_false_or_masked_observations(mutation):
     f = same_nonce_facts()
     if mutation == 'different-nonce': f['second']['request']['nonce'] = '2'
@@ -249,8 +264,20 @@ def test_same_nonce_rejects_false_or_masked_observations(mutation):
     if mutation == 'logs': f['receipt_events'] = [dict(name='AccessLog', fields={})]
     if mutation == 'state-changed': f['after_second']['accessLogCount'] = '2'
     if mutation == 'not-adjacent': f['before_block'] = '60'
-    if mutation == 'worker-changed': f['worker_after']['counts']['releaseIntentCount'] = '1'
+    if mutation == 'worker-changed': f['worker_after'] = copy.deepcopy(MOVED)
+    if mutation == 'worker-instantiated-between': f['worker_after'] = copy.deepcopy(WORKER)
     if mutation == 'nonce-not-recorded':
         for s in ('before_second', 'after_second'): f[s]['nonces'][0][2] = False
     with pytest.raises(ValueError):
         oracle('check_same_nonce')(**f)
+
+
+@pytest.mark.parametrize('worker', ['never-instantiated', 'idle-export'])
+@pytest.mark.parametrize('profile', ['paper-strict', 'repaired-e'])
+def test_idle_worker_may_be_never_instantiated_or_an_unchanged_idle_export(profile, worker):
+    f = forged_facts(profile)
+    for k in ('before', 'after'): f[k]['worker'] = copy.deepcopy(NEVER if worker == 'never-instantiated' else WORKER)
+    assert oracle('check_forged_tuple')(**f)['ok'] is True
+    g = new_reference_facts(profile)
+    for k in ('before', 'after'): g[k]['worker'] = copy.deepcopy(NEVER if worker == 'never-instantiated' else WORKER)
+    assert oracle('check_new_reference')(**g)['ok'] is True

@@ -1,0 +1,85 @@
+{
+ "status": "FAILED",
+ "failure": {
+  "type": "ValueError",
+  "message": "Public access owner command relay-worker-export-00 failed"
+ },
+ "sourceStable": true,
+ "reviewMode": "solo-correlated",
+ "cases": {
+  "paper-strict-forged-tuple": {
+   "status": "RUNNING",
+   "profiles": {
+    "paper-strict": {
+     "status": "RUNNING",
+     "sourcesStable": true,
+     "servicesStopped": true,
+     "castHashPolicy": "checkpoint",
+     "castStable": true,
+     "wrongAdmin": null,
+     "relayStress": null,
+     "subjectStress": null
+    }
+   }
+  }
+ },
+ "services": [
+  {
+   "case": "paper-strict-forged-tuple",
+   "profile": "paper-strict",
+   "chain": "pbc",
+   "port": 18545,
+   "pid": 2623422
+  },
+  {
+   "case": "paper-strict-forged-tuple",
+   "profile": "paper-strict",
+   "chain": "dbc",
+   "port": 18546,
+   "pid": 2623542
+  }
+ ],
+ "adapters": [
+  {
+   "case": "paper-strict-forged-tuple",
+   "profile": "paper-strict",
+   "label": "adapter",
+   "pid": 2627945
+  },
+  {
+   "case": "paper-strict-forged-tuple",
+   "profile": "paper-strict",
+   "label": "adapter-relay",
+   "pid": 2637316
+  }
+ ],
+ "commands": {
+  "total": 9,
+  "nonzero": [
+   {
+    "file": "paper-strict-forged-tuple/paper-strict/commands.json",
+    "argv": [
+     "/home/saiyamjain/Desktop/RIS/Project/.venv/bin/python",
+     "-m",
+     "hmbc_protocol.worker_log"
+    ],
+    "exit": 1
+   }
+  ]
+ },
+ "castCheckpoints": {
+  "paper-strict-forged-tuple/paper-strict/dbc-rpc/cast-checkpoints.json": {
+   "count": 6,
+   "allOk": true
+  },
+  "paper-strict-forged-tuple/paper-strict/pbc-rpc/cast-checkpoints.json": {
+   "count": 19,
+   "allOk": true
+  }
+ },
+ "rpcCommands": {
+  "total": 825,
+  "nonzero": 0
+ },
+ "pidsStillPresent": []
+}

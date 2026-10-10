@@ -411,3 +411,26 @@ DECIDED by agent 1 (A1-0061, D-1..D-5), implemented by agent 3 (proxy) in SL0 (S
 - **Python:** 3.13.5 on this host is recorded against the frozen 3.13.13 as `hostDifferences`.
 
 Evidence: `evaluation/evidence/e2/sl0-portability-20261009/README.md`.
+
+## D49 — SL2 runner defect and the verified never-instantiated worker rule (solo phase), 2026-10-10 IST
+
+Decided by agent 1 (diagnosis message after S3-0008); implemented by agent 3 (proxy) in S3-0009. Solo, correlated.
+
+**The defect.** The first SL2 run (plan d67f1786.., S3-0007) failed before any stress transaction.
+
+- The pinned worker creates its database lazily (`adapter._worker`, adapter.py:133-136), only on `release`, `encrypt_record` or `finish_decryption`.
+- The relay stress performs none of these, so the exporter refused the fresh D2 state.
+- This is an evaluator recipe defect, a tested reconstruction result of the runner. It is **not** a protocol or ledger finding.
+- The failed trial is kept in `evaluation/evidence/e2/sl2-relay-failed-20261010/`.
+
+**The rule.** An idle worker may be recorded as `{instantiated: false}` only when all three hold:
+
+1. the pinned exporter exits 1;
+2. its output is exactly `no worker.sqlite in <state> (looked in <dir>/worker/ and in <dir>)`;
+3. the runner confirms on the filesystem that both database paths are absent.
+
+It is never recorded as an empty export. Before and after must be both never-instantiated, or both equal idle exports; any other refusal fails.
+
+**Prohibited:** instantiating the worker through `encrypt_record` or any other state-changing call to avoid this.
+
+Implemented in `evaluation/e1.py` (`observe_worker_export`), `relay_stress.py` and `oracles/provenance.py`. New plan b3a02098.. (S3-0009).

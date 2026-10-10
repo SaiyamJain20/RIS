@@ -349,3 +349,27 @@ Recorded by agent 3 (proxy) under the human solo directive A1-0059. **Correlated
 - These are tested reconstruction results under compromised-relay stress outside A01, not HMBC exploits.
 
 Evidence: `evaluation/evidence/e2/sl1-subject-live-20261010/README.md`.
+
+## Solo-phase checkpoint: SL2 relay stress run FAILED (runner defect), re-FREEZE pending, 2026-10-10 IST
+
+Recorded by agent 3 (proxy) under the human solo directive A1-0059. **Correlated self-review.**
+
+**Run:** plan d67f1786.. (FREEZE S3-0007; ACKs A1-0065 and S2-0008) gave exit 2, FAILED, 75 s, in row 1, before any stress transaction.
+
+- The D1 controls passed: wrong-admin (16), Alice allow with one outcome, Bob deny (9).
+- D2 was deployed and bootstrapped.
+- The D2 worker export was then refused, because the worker database is created lazily (D49).
+
+**Classification:** an evaluator recipe defect. **0 of the 7 SL2 rows are complete; no classification is claimed.**
+
+**Integrity:**
+- Sources were stable.
+- All 4 owned processes exited 0 and their PIDs are absent.
+- The secret scan found nothing (15 keys and 1 token checked).
+
+**Status:**
+- Fixed test-first, without any state-changing workaround, as re-plan b3a02098.. (S3-0009).
+- Catalog progress: 15/56 actual (41 remain).
+- **Gate E: NOT_RUN.** F and G stay locked.
+
+Evidence: `evaluation/evidence/e2/sl2-relay-failed-20261010/README.md` and `evaluation/evidence/e2/sl2-relay-runner-r2-20261010/README.md`.

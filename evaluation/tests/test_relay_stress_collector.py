@@ -101,22 +101,32 @@ class World:
         raise AssertionError(op)
 
     def worker(self):
-        chains = self.dep['chains']
-        fp = hashlib.sha256(json.dumps(dict(pbc=[chains['pbc']['chainId'], chains['pbc']['contracts']['PSC'], chains['pbc']['contracts']['RSC']],
-                                            dbc=[chains['dbc']['chainId'], chains['dbc']['contracts']['KSSC'], chains['dbc']['contracts']['ACSC']]),
-                                       sort_keys=True).encode()).hexdigest()
-        events, releases, n = [], [], '0'
-        if self.control == 'worker-moves' and len(self.calls) >= 2:
-            # A well-formed release footprint, so only the idle-worker check can reject it.
-            identity = dict(requestDigest='0x'+'d1'*32, grantId='0x'+'d2'*32, gid=self.users['alice']['gid'], dataId=self.record['dataId'])
-            events = [dict(type=t, timestamp=str(NOW), **identity) for t in ('RELEASE_INTENT', 'RELEASE_SENT')]
-            releases = [dict(**identity, ciphertextDigest='0x'+'c1'*32, recipientKeyHash=self.users['alice']['recipientKeyHash'], keyEpoch='0',
-                             tokenDigest='0x290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e563', grantExpiresAt=str(NOW+30),
-                             createdAt=str(NOW), delivery='unknown', sendAttempts=1, completedAttempts=1)]
-            n = '1'
-        return json.dumps(dict(schemaVersion='hmbc-worker-log/v0', adapterMode='symbolic', deploymentFingerprint=fp,
-                               note='synthetic worker', events=events, releases=releases,
-                               counts=dict(releaseIntentCount=n, releaseSentCount=n))).encode()
+        """Runner worker observation double (e1.observe_worker_export shape).
+
+        SL2 performs no worker operation, so the production worker database is never
+        created: the verified never-instantiated record is the normal observation.
+        """
+        state = '/tmp/p3/synthetic-relay-state'
+        if self.control == 'worker-other-refusal':
+            raise ValueError('Public access owner command relay-worker-export-00 failed')
+        if self.control in ('worker-moves', 'worker-idle-export') and (self.control == 'worker-idle-export' or len(self.calls) >= 2):
+            chains = self.dep['chains']
+            fp = hashlib.sha256(json.dumps(dict(pbc=[chains['pbc']['chainId'], chains['pbc']['contracts']['PSC'], chains['pbc']['contracts']['RSC']],
+                                                dbc=[chains['dbc']['chainId'], chains['dbc']['contracts']['KSSC'], chains['dbc']['contracts']['ACSC']]),
+                                           sort_keys=True).encode()).hexdigest()
+            events, releases, n = [], [], '0'
+            if self.control == 'worker-moves':
+                identity = dict(requestDigest='0x'+'d1'*32, grantId='0x'+'d2'*32, gid=self.users['alice']['gid'], dataId=self.record['dataId'])
+                events = [dict(type=t, timestamp=str(NOW), **identity) for t in ('RELEASE_INTENT', 'RELEASE_SENT')]
+                releases = [dict(**identity, ciphertextDigest='0x'+'c1'*32, recipientKeyHash=self.users['alice']['recipientKeyHash'], keyEpoch='0',
+                                 tokenDigest='0x290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e563', grantExpiresAt=str(NOW+30),
+                                 createdAt=str(NOW), delivery='unknown', sendAttempts=1, completedAttempts=1)]
+                n = '1'
+            return dict(instantiated=True, export=json.dumps(dict(schemaVersion='hmbc-worker-log/v0', adapterMode='symbolic', deploymentFingerprint=fp,
+                                                                  note='synthetic worker', events=events, releases=releases,
+                                                                  counts=dict(releaseIntentCount=n, releaseSentCount=n))).encode())
+        return dict(instantiated=False, exitCode=1, message=f'no worker.sqlite in {state} (looked in <dir>/worker/ and in <dir>)\n',
+                    checkedAbsent=[state+'/worker/worker.sqlite', state+'/worker.sqlite'])
 
 
 def ok(result):
@@ -343,6 +353,8 @@ def test_paper_forged_tuple_grants_without_any_pbc_request(artifacts, inputs, tm
     assert result['ok'] and result['classification'] == 'SPEC_GAP' and result['grantWithoutPbcLog'] is True
     assert w.calls == [] and w.state['requests'] == {} and len(w.state['grants']) == 1
     assert json.loads((tmp_path/'stress/result.json').read_text())['ok'] is True
+    for name in ('before', 'after'):
+        assert json.loads((tmp_path/'stress'/(name+'.json')).read_text())['worker']['instantiated'] is False
 
 
 def test_repaired_forged_tuple_simulates_honest_then_mines_non_witness_signature(artifacts, inputs, tmp_path):
@@ -395,6 +407,8 @@ def test_same_nonce_distinct_digests_reaches_nonce_guard(artifacts, inputs, tmp_
     ('repaired-e', 'forged-tuple', 'grant-all'),
     ('repaired-e', 'forged-tuple', 'simulation-reverts'),
     ('repaired-e', 'forged-tuple', 'worker-moves'),
+    ('paper-strict', 'forged-tuple', 'worker-other-refusal'),
+    ('repaired-e', 'same-nonce-distinct-digests', 'worker-moves'),
     ('paper-minimal', 'new-reference-replay', 'paper-deny'),
     ('repaired-e', 'new-reference-replay', 'replay-other-code'),
     ('repaired-e', 'same-nonce-distinct-digests', 'no-nonce'),
@@ -414,3 +428,9 @@ def test_unsupported_selection_refuses_before_side_effects(artifacts, inputs, tm
     with pytest.raises(ValueError):
         run(w, tmp_path, variant)
     assert w.calls == [] and w.state['requests'] == {} and w.state['grants'] == {}
+
+
+def test_unchanged_idle_export_is_also_accepted(artifacts, inputs, tmp_path):
+    w = World(artifacts, inputs, 'paper-minimal', 'worker-idle-export')
+    result = run(w, tmp_path, 'new-reference-replay')
+    assert result['ok'] and json.loads((tmp_path/'stress/before.json').read_text())['worker']['instantiated'] is True

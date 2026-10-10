@@ -260,6 +260,25 @@ def _available(ports):
 RELAY_VARIANTS = ('forged-tuple', 'new-reference-replay', 'same-nonce-distinct-digests')
 
 
+def observe_worker_export(exit_code, raw, state_dir):
+    """Classify one pinned `hmbc_protocol.worker_log --state-dir` result (S3-0008).
+
+    Exit 0 with a JSON object is an instantiated export. A verified never-instantiated
+    worker needs exit 1 with exactly the exporter's own message for this state dir AND
+    both database paths absent on the filesystem; it is recorded explicitly, never as
+    an empty export. Anything else is a failure.
+    """
+    state_dir = Path(state_dir)
+    if exit_code == 0:
+        require(bool(raw) and isinstance(strict_json(raw), dict), 'non-empty worker export object')
+        return dict(instantiated=True, export=raw)
+    nested, direct = state_dir/'worker'/'worker.sqlite', state_dir/'worker.sqlite'
+    expected = f'no worker.sqlite in {state_dir} (looked in <dir>/worker/ and in <dir>)\n'.encode()
+    require(exit_code == 1 and raw == expected and not nested.exists() and not direct.exists(),
+            'verified never-instantiated worker export refusal')
+    return dict(instantiated=False, exitCode=1, message=expected.decode(), checkedAbsent=[str(nested), str(direct)])
+
+
 def _profile(plan, profile, output, record, *, recovery_point=None, expired_retry=False, duplicate_outcome=False, nonce_replay=False,
              subject_substitution=False, relay_stress=None):
     require(type(expired_retry) is bool and (not expired_retry or recovery_point is not None), 'expiry probe follows explicit recovery')
@@ -433,6 +452,18 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
                     label = f'{kind}-worker-export-{stress_sequence:02}'; stress_sequence += 1
                     return command(label, [tools['python']['path'], '-m', 'hmbc_protocol.worker_log', '--state-dir', str(stress_state)],
                                    protocol, budget['transport'], service_env)
+                def stress_worker_probe():
+                    # SL2 performs no worker operation; a never-created worker database is
+                    # an explicit, verified observation (observe_worker_export), not a failure.
+                    nonlocal stress_sequence
+                    label = f'{kind}-worker-export-{stress_sequence:02}'; stress_sequence += 1
+                    row = record_command([tools['python']['path'], '-m', 'hmbc_protocol.worker_log', '--state-dir', str(stress_state)],
+                                         protocol, output/(label+'.txt'), timeout=budget['transport'], env=service_env,
+                                         owned_process_group=True, stop_grace=budget['stopGrace'])
+                    observation = observe_worker_export(row['exitCode'], (output/(label+'.txt')).read_bytes(), stress_state)
+                    row['workerObservation'] = 'instantiated' if observation['instantiated'] else 'never-instantiated (verified)'
+                    commands.append(row); (output/'commands.json').write_text(json.dumps(commands, indent=2)+'\n')
+                    return observation
                 stress_record = dict(record_fixture, owner=next(a['root'] for a in stress_dep['fixture']['authorities'] if a['id'] == 'H2'))
                 if subject_substitution:
                     stress_result = execute_access(stress_chains['pbc'], stress_chains['dbc'], stress_process, deployment_bytes=stress_bytes,
@@ -447,7 +478,7 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
                     from evaluation.relay_stress import execute_relay_stress
                     stress_result = execute_relay_stress(stress_chains['pbc'], stress_chains['dbc'], stress_process, deployment_bytes=stress_bytes,
                                                          user_label='alice', user=stress_boot['users']['alice'], record=stress_record,
-                                                         policy=policy, variant=relay_stress, worker_snapshot=stress_worker_snapshot,
+                                                         policy=policy, variant=relay_stress, worker_snapshot=stress_worker_probe,
                                                          output=output/'relay-stress')
                     require(stress_result['ok'] is True and stress_result['variant'] == relay_stress, 'relay stress result')
                     record['profiles'][profile]['relayStress'] = dict(runId=stress_run, variant=relay_stress,

@@ -1,0 +1,284 @@
+FFFFFFF...........
+=================================== FAILURES ===================================
+_____ test_paper_forged_tuple_grants_without_any_pbc_request[paper-strict] _____
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-31/test_paper_forged_tuple_grants0')
+profile = 'paper-strict'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal'])
+    def test_paper_forged_tuple_grants_without_any_pbc_request(artifacts, inputs, tmp_path, profile):
+        w = World(artifacts, inputs, profile)
+>       result = run(w, tmp_path, 'forged-tuple')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_relay_stress_collector.py:355: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_relay_stress_collector.py:347: in run
+    return collector()(world.pbc, world.dbc, world, deployment_bytes=json.dumps(world.dep).encode(), user_label='alice',
+evaluation/relay_stress.py:358: in execute_relay_stress
+    proof = {'forged-tuple': _forged_tuple, 'new-reference-replay': _new_reference,
+evaluation/relay_stress.py:199: in _forged_tuple
+    before = ctx.snapshot('before', grants=[grant], refs=[ref], nonces=[(gid, '1')])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/relay_stress.py:98: in snapshot
+    payload['worker'] = self.worker()
+                        ^^^^^^^^^^^^^
+evaluation/relay_stress.py:82: in worker
+    payload = strict_json(self.worker_snapshot()); WorkerLog(payload, fingerprint=_fingerprint(self.dep))
+                          ^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_relay_stress_collector.World object at 0x71463bfd3e00>
+
+    def worker(self):
+        # Production worker state is created lazily by the first worker operation
+        # (SL2 live failure, S3-0008): exporting a fresh adapter state refuses.
+        if not getattr(self, 'worker_ready', False):
+>           raise ValueError('Public access owner command relay-worker-export-00 failed')
+E           ValueError: Public access owner command relay-worker-export-00 failed
+
+evaluation/tests/test_relay_stress_collector.py:116: ValueError
+____ test_paper_forged_tuple_grants_without_any_pbc_request[paper-minimal] _____
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-31/test_paper_forged_tuple_grants1')
+profile = 'paper-minimal'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal'])
+    def test_paper_forged_tuple_grants_without_any_pbc_request(artifacts, inputs, tmp_path, profile):
+        w = World(artifacts, inputs, profile)
+>       result = run(w, tmp_path, 'forged-tuple')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_relay_stress_collector.py:355: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_relay_stress_collector.py:347: in run
+    return collector()(world.pbc, world.dbc, world, deployment_bytes=json.dumps(world.dep).encode(), user_label='alice',
+evaluation/relay_stress.py:358: in execute_relay_stress
+    proof = {'forged-tuple': _forged_tuple, 'new-reference-replay': _new_reference,
+evaluation/relay_stress.py:199: in _forged_tuple
+    before = ctx.snapshot('before', grants=[grant], refs=[ref], nonces=[(gid, '1')])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/relay_stress.py:98: in snapshot
+    payload['worker'] = self.worker()
+                        ^^^^^^^^^^^^^
+evaluation/relay_stress.py:82: in worker
+    payload = strict_json(self.worker_snapshot()); WorkerLog(payload, fingerprint=_fingerprint(self.dep))
+                          ^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_relay_stress_collector.World object at 0x71463d928b90>
+
+    def worker(self):
+        # Production worker state is created lazily by the first worker operation
+        # (SL2 live failure, S3-0008): exporting a fresh adapter state refuses.
+        if not getattr(self, 'worker_ready', False):
+>           raise ValueError('Public access owner command relay-worker-export-00 failed')
+E           ValueError: Public access owner command relay-worker-export-00 failed
+
+evaluation/tests/test_relay_stress_collector.py:116: ValueError
+_ test_repaired_forged_tuple_simulates_honest_then_mines_non_witness_signature _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-31/test_repaired_forged_tuple_sim0')
+
+    def test_repaired_forged_tuple_simulates_honest_then_mines_non_witness_signature(artifacts, inputs, tmp_path):
+        w = World(artifacts, inputs, 'repaired-e')
+>       result = run(w, tmp_path, 'forged-tuple')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_relay_stress_collector.py:363: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_relay_stress_collector.py:347: in run
+    return collector()(world.pbc, world.dbc, world, deployment_bytes=json.dumps(world.dep).encode(), user_label='alice',
+evaluation/relay_stress.py:358: in execute_relay_stress
+    proof = {'forged-tuple': _forged_tuple, 'new-reference-replay': _new_reference,
+evaluation/relay_stress.py:218: in _forged_tuple
+    before = ctx.snapshot('before', grants=[req['grantId']], refs=[req['digest']], nonces=[(gid, '1')])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/relay_stress.py:98: in snapshot
+    payload['worker'] = self.worker()
+                        ^^^^^^^^^^^^^
+evaluation/relay_stress.py:82: in worker
+    payload = strict_json(self.worker_snapshot()); WorkerLog(payload, fingerprint=_fingerprint(self.dep))
+                          ^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_relay_stress_collector.World object at 0x71463bd3b9d0>
+
+    def worker(self):
+        # Production worker state is created lazily by the first worker operation
+        # (SL2 live failure, S3-0008): exporting a fresh adapter state refuses.
+        if not getattr(self, 'worker_ready', False):
+>           raise ValueError('Public access owner command relay-worker-export-00 failed')
+E           ValueError: Public access owner command relay-worker-export-00 failed
+
+evaluation/tests/test_relay_stress_collector.py:116: ValueError
+___________________ test_new_reference_replay[paper-strict] ____________________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-31/test_new_reference_replay_pape0')
+profile = 'paper-strict'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    def test_new_reference_replay(artifacts, inputs, tmp_path, profile):
+        w = World(artifacts, inputs, profile)
+>       result = run(w, tmp_path, 'new-reference-replay')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_relay_stress_collector.py:379: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_relay_stress_collector.py:347: in run
+    return collector()(world.pbc, world.dbc, world, deployment_bytes=json.dumps(world.dep).encode(), user_label='alice',
+evaluation/relay_stress.py:358: in execute_relay_stress
+    proof = {'forged-tuple': _forged_tuple, 'new-reference-replay': _new_reference,
+evaluation/relay_stress.py:271: in _new_reference
+    before = ctx.snapshot('before', grants=grants, refs=refs, nonces=[(gid, '1')])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/relay_stress.py:98: in snapshot
+    payload['worker'] = self.worker()
+                        ^^^^^^^^^^^^^
+evaluation/relay_stress.py:82: in worker
+    payload = strict_json(self.worker_snapshot()); WorkerLog(payload, fingerprint=_fingerprint(self.dep))
+                          ^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_relay_stress_collector.World object at 0x71463b94d6e0>
+
+    def worker(self):
+        # Production worker state is created lazily by the first worker operation
+        # (SL2 live failure, S3-0008): exporting a fresh adapter state refuses.
+        if not getattr(self, 'worker_ready', False):
+>           raise ValueError('Public access owner command relay-worker-export-00 failed')
+E           ValueError: Public access owner command relay-worker-export-00 failed
+
+evaluation/tests/test_relay_stress_collector.py:116: ValueError
+___________________ test_new_reference_replay[paper-minimal] ___________________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-31/test_new_reference_replay_pape1')
+profile = 'paper-minimal'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    def test_new_reference_replay(artifacts, inputs, tmp_path, profile):
+        w = World(artifacts, inputs, profile)
+>       result = run(w, tmp_path, 'new-reference-replay')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_relay_stress_collector.py:379: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_relay_stress_collector.py:347: in run
+    return collector()(world.pbc, world.dbc, world, deployment_bytes=json.dumps(world.dep).encode(), user_label='alice',
+evaluation/relay_stress.py:358: in execute_relay_stress
+    proof = {'forged-tuple': _forged_tuple, 'new-reference-replay': _new_reference,
+evaluation/relay_stress.py:271: in _new_reference
+    before = ctx.snapshot('before', grants=grants, refs=refs, nonces=[(gid, '1')])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/relay_stress.py:98: in snapshot
+    payload['worker'] = self.worker()
+                        ^^^^^^^^^^^^^
+evaluation/relay_stress.py:82: in worker
+    payload = strict_json(self.worker_snapshot()); WorkerLog(payload, fingerprint=_fingerprint(self.dep))
+                          ^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_relay_stress_collector.World object at 0x71463b94c640>
+
+    def worker(self):
+        # Production worker state is created lazily by the first worker operation
+        # (SL2 live failure, S3-0008): exporting a fresh adapter state refuses.
+        if not getattr(self, 'worker_ready', False):
+>           raise ValueError('Public access owner command relay-worker-export-00 failed')
+E           ValueError: Public access owner command relay-worker-export-00 failed
+
+evaluation/tests/test_relay_stress_collector.py:116: ValueError
+____________________ test_new_reference_replay[repaired-e] _____________________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-31/test_new_reference_replay_repa0')
+profile = 'repaired-e'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    def test_new_reference_replay(artifacts, inputs, tmp_path, profile):
+        w = World(artifacts, inputs, profile)
+>       result = run(w, tmp_path, 'new-reference-replay')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_relay_stress_collector.py:379: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_relay_stress_collector.py:347: in run
+    return collector()(world.pbc, world.dbc, world, deployment_bytes=json.dumps(world.dep).encode(), user_label='alice',
+evaluation/relay_stress.py:358: in execute_relay_stress
+    proof = {'forged-tuple': _forged_tuple, 'new-reference-replay': _new_reference,
+evaluation/relay_stress.py:289: in _new_reference
+    before = ctx.snapshot('before', grants=[req['grantId']], refs=[req['digest']], nonces=[(gid, '1')])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/relay_stress.py:98: in snapshot
+    payload['worker'] = self.worker()
+                        ^^^^^^^^^^^^^
+evaluation/relay_stress.py:82: in worker
+    payload = strict_json(self.worker_snapshot()); WorkerLog(payload, fingerprint=_fingerprint(self.dep))
+                          ^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_relay_stress_collector.World object at 0x71463bd5a8d0>
+
+    def worker(self):
+        # Production worker state is created lazily by the first worker operation
+        # (SL2 live failure, S3-0008): exporting a fresh adapter state refuses.
+        if not getattr(self, 'worker_ready', False):
+>           raise ValueError('Public access owner command relay-worker-export-00 failed')
+E           ValueError: Public access owner command relay-worker-export-00 failed
+
+evaluation/tests/test_relay_stress_collector.py:116: ValueError
+_____________ test_same_nonce_distinct_digests_reaches_nonce_guard _____________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-31/test_same_nonce_distinct_diges0')
+
+    def test_same_nonce_distinct_digests_reaches_nonce_guard(artifacts, inputs, tmp_path):
+        w = World(artifacts, inputs, 'repaired-e')
+>       result = run(w, tmp_path, 'same-nonce-distinct-digests')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_relay_stress_collector.py:390: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_relay_stress_collector.py:347: in run
+    return collector()(world.pbc, world.dbc, world, deployment_bytes=json.dumps(world.dep).encode(), user_label='alice',
+evaluation/relay_stress.py:358: in execute_relay_stress
+    proof = {'forged-tuple': _forged_tuple, 'new-reference-replay': _new_reference,
+evaluation/relay_stress.py:305: in _same_nonce
+    worker_before = ctx.worker(); _save(ctx.output, 'worker-before', worker_before)
+                    ^^^^^^^^^^^^
+evaluation/relay_stress.py:82: in worker
+    payload = strict_json(self.worker_snapshot()); WorkerLog(payload, fingerprint=_fingerprint(self.dep))
+                          ^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_relay_stress_collector.World object at 0x71463b8a1590>
+
+    def worker(self):
+        # Production worker state is created lazily by the first worker operation
+        # (SL2 live failure, S3-0008): exporting a fresh adapter state refuses.
+        if not getattr(self, 'worker_ready', False):
+>           raise ValueError('Public access owner command relay-worker-export-00 failed')
+E           ValueError: Public access owner command relay-worker-export-00 failed
+
+evaluation/tests/test_relay_stress_collector.py:116: ValueError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_relay_stress_collector.py::test_paper_forged_tuple_grants_without_any_pbc_request[paper-strict] - ValueError: Public access owner command relay-worker-export-00 failed
+FAILED evaluation/tests/test_relay_stress_collector.py::test_paper_forged_tuple_grants_without_any_pbc_request[paper-minimal] - ValueError: Public access owner command relay-worker-export-00 failed
+FAILED evaluation/tests/test_relay_stress_collector.py::test_repaired_forged_tuple_simulates_honest_then_mines_non_witness_signature - ValueError: Public access owner command relay-worker-export-00 failed
+FAILED evaluation/tests/test_relay_stress_collector.py::test_new_reference_replay[paper-strict] - ValueError: Public access owner command relay-worker-export-00 failed
+FAILED evaluation/tests/test_relay_stress_collector.py::test_new_reference_replay[paper-minimal] - ValueError: Public access owner command relay-worker-export-00 failed
+FAILED evaluation/tests/test_relay_stress_collector.py::test_new_reference_replay[repaired-e] - ValueError: Public access owner command relay-worker-export-00 failed
+FAILED evaluation/tests/test_relay_stress_collector.py::test_same_nonce_distinct_digests_reaches_nonce_guard - ValueError: Public access owner command relay-worker-export-00 failed
+7 failed, 11 passed in 1.99s

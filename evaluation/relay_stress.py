@@ -79,8 +79,19 @@ class _Context:
         return tx
 
     def worker(self):
-        payload = strict_json(self.worker_snapshot()); WorkerLog(payload, fingerprint=_fingerprint(self.dep))
-        return payload
+        """Normalize the runner's worker observation (e1.observe_worker_export).
+
+        A verified never-instantiated record is kept explicitly; an export is parsed and
+        checked against the deployment fingerprint. No worker operation is performed.
+        """
+        observed = self.worker_snapshot()
+        require(isinstance(observed, dict) and type(observed.get('instantiated')) is bool, 'worker observation')
+        if observed['instantiated'] is False:
+            require(set(observed) == {'instantiated', 'exitCode', 'message', 'checkedAbsent'}, 'never-instantiated worker record')
+            return copy.deepcopy(observed)
+        require(set(observed) == {'instantiated', 'export'}, 'worker export record')
+        payload = strict_json(observed['export']); WorkerLog(payload, fingerprint=_fingerprint(self.dep))
+        return dict(instantiated=True, log=payload)
 
     def snapshot(self, name, *, grants, refs, nonces, block=None, worker=True):
         pbc, dbc = self.pbc, self.dbc

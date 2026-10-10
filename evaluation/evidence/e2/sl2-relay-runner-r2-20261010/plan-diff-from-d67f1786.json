@@ -1,0 +1,29 @@
+{
+ "oldPlan": "d67f178665d0b64d32fd875f1a3ab3e689da0032e3984a8747bde839512fa3b1",
+ "newPlan": "b3a020989d59a9ccdbb255e9d838be6a270ae515502531e9334655c91c62a583",
+ "changedAgent3Sources": {
+  "evaluation/e1.py": {
+   "old": "2fb19665f1faa05dc53db96eb7ded70c75497fd65d04df0e7c03abdb2b69771c",
+   "new": "4539498741f805bc8c8733eec18dab2141d35a4918047197bfa7bd3d21a94e5c"
+  },
+  "evaluation/e2.py": {
+   "old": "72c5b1d1e15e997d9e32c6b0c876f50287e59dd646e065f009724687c4559efa",
+   "new": "88095534bc9d1f429dcd5cf6c7ba881a06805e0889a9635ad3cd3c6330888195"
+  },
+  "evaluation/oracles/provenance.py": {
+   "old": "d333e623f29d14be8e934450388479f58dd7ef6e41cc774f8b4b8a99a628dfa2",
+   "new": "9061cd42a67d492bd8e283ee6ba6700a228e3de0d0e08757515244a6fce320ff"
+  },
+  "evaluation/relay_stress.py": {
+   "old": "3ba48d903068fe8549a39d6911bbdc20d05c66ea7f06b8d09a10d648d02a836d",
+   "new": "28d28834cc6d4104a2bf6869792c410667f3f0709ea566cec26f2c4909d14684"
+  }
+ },
+ "changedTopLevelKeys": [
+  "freezeMessage",
+  "relayProbe",
+  "runId"
+ ],
+ "relayProbeSnapshotsOld": "native views/logs per chain at one explicit block per read group; idle worker exports; Cast hash checkpoint per read group/submit (A1-0061 D-5b)",
+ "relayProbeSnapshotsNew": "native views/logs per chain at one explicit block per read group; Cast hash checkpoint per read group/submit (A1-0061 D-5b); idle D2 worker = verified never-instantiated record (pinned exporter exit 1 with its exact no-worker.sqlite message and both database paths absent; SL2 performs no worker operation) or an unchanged idle export; no state-changing call instantiates it (S3-0008)"
+}
