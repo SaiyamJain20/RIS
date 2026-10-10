@@ -1,0 +1,257 @@
+{
+ "catalogSha256": "438fa38ddcbd7edd0e49fb93cc580e5219ed05349fd677b2e386bc4669f5d50e",
+ "rows": [
+  {
+   "caseId": "E02-wrong-issuer-paper-strict",
+   "profile": "paper-strict",
+   "variant": "wrong-issuer",
+   "sourceRefs": [
+    "S03",
+    "S04",
+    "S15",
+    "S17",
+    "SPEC4/E02"
+   ],
+   "assumptions": [
+    "A01",
+    "A08",
+    "A09",
+    "A17",
+    "A20",
+    "A22",
+    "A41"
+   ],
+   "expected": {
+    "property": "trust-freshness",
+    "outcome": "REJECT",
+    "classification": "SUPPORTED",
+    "error": "UNAUTHORIZED_CALLER",
+    "qualification": "H1 administrator attempts an H2 trust update. No profile drops the paper issuer/caller restriction."
+   },
+   "observed": "producer H2 CRL v2 (no revocations, H2 root signature verified); eth_call from the H2 CA-admin returned generation 2 (never mined); H1 CA-admin updateRevocationList 0x2ddecf74.. (block 48) mined status0 Rejected(16) UNAUTHORIZED_CALLER, no events; anchors, authEpoch, revocation, credentials and both histories unchanged",
+   "executionStatus": "COMPLETE",
+   "classification": "SUPPORTED",
+   "error": "UNAUTHORIZED_CALLER",
+   "outcome": "REJECT",
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step (baseline, WRONG_ISSUER_UPDATE) (D49)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "stressTimestamp": "1791655129"
+   },
+   "qualification": "issuer-scoped CA-admin caller restriction (TMSC.sol:181) holds in every profile; baseline behaviour (D-record N-1), not a repair; tested reconstruction result Tested reconstruction result; symbolic adapter; solo correlated review."
+  },
+  {
+   "caseId": "E02-wrong-issuer-paper-minimal",
+   "profile": "paper-minimal",
+   "variant": "wrong-issuer",
+   "sourceRefs": [
+    "S03",
+    "S04",
+    "S15",
+    "S17",
+    "SPEC4/E02"
+   ],
+   "assumptions": [
+    "A01",
+    "A08",
+    "A09",
+    "A17",
+    "A20",
+    "A22",
+    "A41"
+   ],
+   "expected": {
+    "property": "trust-freshness",
+    "outcome": "REJECT",
+    "classification": "SUPPORTED",
+    "error": "UNAUTHORIZED_CALLER",
+    "qualification": "H1 administrator attempts an H2 trust update. No profile drops the paper issuer/caller restriction."
+   },
+   "observed": "producer H2 CRL v2 (no revocations, H2 root signature verified); eth_call from the H2 CA-admin returned generation 2 (never mined); H1 CA-admin updateRevocationList 0xd5163a1c.. (block 48) mined status0 Rejected(16) UNAUTHORIZED_CALLER, no events; anchors, authEpoch, revocation, credentials and both histories unchanged",
+   "executionStatus": "COMPLETE",
+   "classification": "SUPPORTED",
+   "error": "UNAUTHORIZED_CALLER",
+   "outcome": "REJECT",
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step (baseline, WRONG_ISSUER_UPDATE) (D49)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "stressTimestamp": "1791655214"
+   },
+   "qualification": "issuer-scoped CA-admin caller restriction (TMSC.sol:181) holds in every profile; baseline behaviour (D-record N-1), not a repair; tested reconstruction result Tested reconstruction result; symbolic adapter; solo correlated review."
+  },
+  {
+   "caseId": "E02-wrong-issuer-repaired-e",
+   "profile": "repaired-e",
+   "variant": "wrong-issuer",
+   "sourceRefs": [
+    "S03",
+    "S04",
+    "S15",
+    "S17",
+    "SPEC4/E02"
+   ],
+   "assumptions": [
+    "A01",
+    "A08",
+    "A09",
+    "A17",
+    "A20",
+    "A22",
+    "A36",
+    "A41"
+   ],
+   "expected": {
+    "property": "trust-freshness",
+    "outcome": "REJECT",
+    "classification": "SUPPORTED",
+    "error": "UNAUTHORIZED_CALLER",
+    "qualification": "H1 administrator attempts an H2 trust update. No profile drops the paper issuer/caller restriction. Issuer scoping is preserved baseline behavior, not a new repaired-e property."
+   },
+   "observed": "producer H2 CRL v2 (no revocations, H2 root signature verified); eth_call from the H2 CA-admin returned generation 2 (never mined); H1 CA-admin updateRevocationList 0xbd2b0489.. (block 48) mined status0 Rejected(16) UNAUTHORIZED_CALLER, no events; anchors, authEpoch, revocation, credentials and both histories unchanged",
+   "executionStatus": "COMPLETE",
+   "classification": "SUPPORTED",
+   "error": "UNAUTHORIZED_CALLER",
+   "outcome": "REJECT",
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step (baseline, WRONG_ISSUER_UPDATE) (D49)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "stressTimestamp": "1791655312"
+   },
+   "qualification": "issuer-scoped CA-admin caller restriction (TMSC.sol:181) holds in every profile; baseline behaviour (D-record N-1), not a repair; tested reconstruction result Tested reconstruction result; symbolic adapter; solo correlated review."
+  },
+  {
+   "caseId": "E02-signed-list-rollback-paper-strict",
+   "profile": "paper-strict",
+   "variant": "signed-list-rollback",
+   "sourceRefs": [
+    "S03",
+    "S04",
+    "S15",
+    "S17",
+    "SPEC4/E02"
+   ],
+   "assumptions": [
+    "A01",
+    "A08",
+    "A09",
+    "A17",
+    "A20",
+    "A22",
+    "A41"
+   ],
+   "expected": {
+    "property": "trust-freshness",
+    "outcome": "ACCEPT",
+    "classification": "SPEC_GAP",
+    "error": null,
+    "qualification": "An authorized issuer-scoped administrator submits old correctly signed CRL/TempACL v1 after v2; repaired versions reject and retain v2."
+   },
+   "observed": "producer H1 CRL v2 revoking 101 installed (Alice REVOKED 19, authEpoch 4); bootstrap H1 CRL v1 replayed byte-for-byte 0x11c3e75e.. accepted (generation 3, version 1, authEpoch 5, Alice valid again: un-revoked); Alice request with the current authEpoch 5 forwarded, H1 certificate record anchorVersion 1 (rolled back)",
+   "executionStatus": "COMPLETE",
+   "classification": "SPEC_GAP",
+   "error": null,
+   "outcome": "ACCEPT",
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step (baseline, INSTALL_NEW_LIST, REPLAY_OLD_LIST, REQUEST_ACCESS) (D49)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "installTimestamp": "1791655404",
+    "replayTimestamp": "1791655405",
+    "requestTimestamp": "1791655407",
+    "oldListValidUntil": "1791741789",
+    "newListValidUntil": "1791741797"
+   },
+   "qualification": "paper profiles treat the latest appended list as current: an authorized issuer-scoped admin replaying the older correctly signed CRL removes a revocation; reconstruction specification gap Tested reconstruction result; symbolic adapter; solo correlated review."
+  },
+  {
+   "caseId": "E02-signed-list-rollback-paper-minimal",
+   "profile": "paper-minimal",
+   "variant": "signed-list-rollback",
+   "sourceRefs": [
+    "S03",
+    "S04",
+    "S15",
+    "S17",
+    "SPEC4/E02"
+   ],
+   "assumptions": [
+    "A01",
+    "A08",
+    "A09",
+    "A17",
+    "A20",
+    "A22",
+    "A41"
+   ],
+   "expected": {
+    "property": "trust-freshness",
+    "outcome": "ACCEPT",
+    "classification": "SPEC_GAP",
+    "error": null,
+    "qualification": "An authorized issuer-scoped administrator submits old correctly signed CRL/TempACL v1 after v2; repaired versions reject and retain v2."
+   },
+   "observed": "producer H1 CRL v2 revoking 101 installed (Alice REVOKED 19, authEpoch 4); bootstrap H1 CRL v1 replayed byte-for-byte 0x963f66a1.. accepted (generation 3, version 1, authEpoch 5, Alice valid again: un-revoked); Alice request with the current authEpoch 5 forwarded, H1 certificate record anchorVersion 1 (rolled back)",
+   "executionStatus": "COMPLETE",
+   "classification": "SPEC_GAP",
+   "error": null,
+   "outcome": "ACCEPT",
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step (baseline, INSTALL_NEW_LIST, REPLAY_OLD_LIST, REQUEST_ACCESS) (D49)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "installTimestamp": "1791655488",
+    "replayTimestamp": "1791655490",
+    "requestTimestamp": "1791655491",
+    "oldListValidUntil": "1791741873",
+    "newListValidUntil": "1791741882"
+   },
+   "qualification": "paper profiles treat the latest appended list as current: an authorized issuer-scoped admin replaying the older correctly signed CRL removes a revocation; reconstruction specification gap Tested reconstruction result; symbolic adapter; solo correlated review."
+  },
+  {
+   "caseId": "E02-signed-list-rollback-repaired-e",
+   "profile": "repaired-e",
+   "variant": "signed-list-rollback",
+   "sourceRefs": [
+    "S03",
+    "S04",
+    "S15",
+    "S17",
+    "SPEC4/E02"
+   ],
+   "assumptions": [
+    "A01",
+    "A08",
+    "A09",
+    "A17",
+    "A20",
+    "A22",
+    "A36",
+    "A41"
+   ],
+   "expected": {
+    "property": "trust-freshness",
+    "outcome": "REJECT",
+    "classification": "REPAIR_SUPPORTED",
+    "error": "STALE_ANCHOR",
+    "qualification": "An authorized issuer-scoped administrator submits old correctly signed CRL/TempACL v1 after v2; repaired versions reject and retain v2."
+   },
+   "observed": "producer H1 CRL v2 revoking 101 installed (Alice REVOKED 19, authEpoch 4); bootstrap H1 CRL v1 (validUntil 1791741959 > replay 1791655576) replayed 0x41ffc6c6.. mined status0 Rejected(5) STALE_ANCHOR (TMSC.sol:190 version order, not :192 expiry), no events, v2 retained; Alice request with the current authEpoch 4: AccessDenied REVOKED(19), no request record, denialCount 1",
+   "executionStatus": "COMPLETE",
+   "classification": "REPAIR_SUPPORTED",
+   "error": "STALE_ANCHOR",
+   "outcome": "REJECT",
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step (baseline, INSTALL_NEW_LIST, REPLAY_OLD_LIST, REQUEST_ACCESS) (D49)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "installTimestamp": "1791655575",
+    "replayTimestamp": "1791655576",
+    "requestTimestamp": "1791655578",
+    "oldListValidUntil": "1791741959",
+    "newListValidUntil": "1791741968"
+   },
+   "qualification": "repaired-e requires strictly increasing list versions (TMSC.sol:189-190); the replay is rejected and v2 retained, so the revoked credential stays revoked Tested reconstruction result; symbolic adapter; solo correlated review."
+  }
+ ],
+ "completedRows": 6,
+ "actualCatalogComparisons": 41,
+ "remainingCatalogComparisons": 15,
+ "fullCatalogComplete": false
+}

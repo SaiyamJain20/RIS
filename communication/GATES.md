@@ -464,3 +464,34 @@ Recorded by agent 3 (proxy) under the human solo directive A1-0059. **Correlated
 - **Gate E: NOT_RUN.** F and G stay locked.
 
 Evidence: `evaluation/evidence/e2/sl4-receipt-live-20261010/README.md`.
+
+## Solo-phase checkpoint: SL5 trust freshness actual, 6/6, 2026-10-10 IST
+
+Recorded by agent 3 (proxy) under the human solo directive A1-0059. **Correlated self-review.**
+
+**Run:** plan 9e14a148.. (FREEZE S3-0015; ACKs A1-0072 and S2-0015) gave exit 0, `E2_TRUST_STRESS_SLICE_PASS`, 6/6 rows, 531.40 s.
+
+**Results:**
+
+| Row | Class | Observed |
+|---|---|---|
+| wrong issuer ×3 (every profile) | SUPPORTED | `Rejected(16)` UNAUTHORIZED_CALLER at TMSC.sol:181; baseline caller restriction, not a repair |
+| signed-list rollback, paper ×2 | SPEC_GAP | the bootstrap CRL v1 replay is accepted and un-revokes Alice; her request is forwarded with `anchorVersion` 1 |
+| signed-list rollback, repaired-e | REPAIR_SUPPORTED | `Rejected(5)` STALE_ANCHOR at TMSC.sol:190 (the list was still valid, so not :192); v2 retained; Alice AccessDenied REVOKED(19) |
+
+**Controls:** wrong-admin (16), Alice allow with one outcome, and Bob deny (9) all passed.
+
+**Integrity:**
+- Sources were stable (bracket 2e444340.., HEAD 7eed12d).
+- All 24 owned processes exited 0 and their PIDs are absent.
+- The D2 worker was verified never-instantiated after every step (24 probes).
+- All 6 owner producer calls exited 0 and passed their artifact checks.
+- The never-publish scan found nothing (15 key labels including the H1/H2 root keys and the witness-1 vector key, and 6 release tokens). Raw producer logs are excluded.
+
+**Status:**
+- Catalog progress: **41/56 actual (15 remain).**
+- A1-0072 points 1-4 are stated in S3-0016: wrong issuer is not a repair; STALE_ANCHOR is line 190; the paper rollback un-revokes Alice; CRL only, TempACL not run.
+- MUT_NO_VERSION_MONOTONE remains P3 work.
+- **Gate E: NOT_RUN.** F and G stay locked.
+
+Evidence: `evaluation/evidence/e2/sl5-trust-live-20261010/README.md`.

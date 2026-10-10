@@ -1,7 +1,6 @@
 # agent 3 (proxy): status
 
-State: **WAITING** for the SL5 ACKs. **SL5 FREEZE S3-0015 is published** (6 trust rows, plan 9e14a148..).
-**SL4 is done: 7/7 PASS** (S3-0014). No services are running.
+State: **WORKING** on drafting SL6. **SL5 is done: 6/6 PASS** (S3-0016). No services are running.
 
 | Field | Value |
 |---|---|
@@ -10,12 +9,12 @@ State: **WAITING** for the SL5 ACKs. **SL5 FREEZE S3-0015 is published** (6 trus
 | Mode | solo, correlated self-review (A1-0059) |
 | Updated | 2026-10-10 IST |
 
-Services and lease: **none**. FREEZE S3-0013 is RELEASED. All 28 SL4 processes ended with exit 0;
-ports 18545 and 18546 are free. No SL5 service has started. No Git writes.
+Services and lease: **none**. FREEZE S3-0015 is RELEASED. All 24 SL5 processes ended with exit 0;
+ports 18545 and 18546 are free. No Git writes.
 
 ## Catalog progress
 
-**35/56 actual:**
+**41/56 actual:**
 
 - recovery + expiry ×6;
 - duplicate ×3;
@@ -23,9 +22,10 @@ ports 18545 and 18546 are free. No SL5 service has started. No Git writes.
 - subject ×3;
 - relay ×7;
 - audit ×6;
-- receipts ×7.
+- receipts ×7;
+- trust freshness ×6.
 
-**21 remain:** SL5 6, SL6 9, SL7 6.
+**15 remain:** SL6 9, SL7 6.
 
 ## Sent
 
@@ -44,14 +44,15 @@ ports 18545 and 18546 are free. No SL5 service has started. No Git writes.
 | S3-0013 | SL4 FREEZE: 7 repaired-e receipt rows, plan 851896f3..; test-first (RED 116, then GREEN with the full suite at 1226 passed); S2-0007 tool conditions; worker precondition checked after every step |
 | S3-0014 | SL4 INTEGRATION_RESULT: 7/7 PASS, 601.60 s; catalog now 35/56; A1-0070 points 1-4 |
 | S3-0015 | SL5 FREEZE: 6 trust rows, plan 9e14a148..; test-first (RED 124, then GREEN with the full suite at 1350 passed); sign_list.sh under D-6; current authEpoch; worker precondition checked after every step |
+| S3-0016 | SL5 INTEGRATION_RESULT: 6/6 PASS, 531.40 s; catalog now 41/56; A1-0072 points 1-4 |
 
 ## Read
 
-- A1-0059..A1-0070;
-- S2-0001..S2-0013.
+- A1-0059..A1-0072;
+- S2-0001..S2-0015.
 
 ## Next
 
-1. Wait for the A1 and S2 ACKs of S3-0015, their commit, and agent 1's clearance. No services before then.
-2. Then run SL5, audit the evidence (add `trust-stress/*` and `trust-instance/*` to the selection; never
-   publish raw producer logs), and publish S3-0016.
+1. Draft SL6 (pre-barrier ×3, post-barrier ×3, expired duty ×3) test-first: one `collect_decision` per
+   request (A31), the expired-duty decision collected while the duty is valid (A1-0064).
+2. Publish its FREEZE as S3-0017. No services before the ACKs and agent 1's clearance.
