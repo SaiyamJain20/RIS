@@ -1,0 +1,146 @@
+{
+  "rq": "E",
+  "executionMode": "two-chain-e2-audit-stress-slice",
+  "adapterMode": "symbolic",
+  "status": "E2_AUDIT_STRESS_SLICE_PASS",
+  "startedAt": "2026-10-10T06:15:14.391979+00:00",
+  "endedAt": "2026-10-10T06:22:53.676091+00:00",
+  "cases": {
+    "paper-strict-dropped-outcome": {
+      "status": "AUDIT_STRESS_CONTROL_PASS",
+      "manifest": "paper-strict-dropped-outcome/manifest.json"
+    },
+    "paper-minimal-dropped-outcome": {
+      "status": "AUDIT_STRESS_CONTROL_PASS",
+      "manifest": "paper-minimal-dropped-outcome/manifest.json"
+    },
+    "repaired-e-dropped-outcome": {
+      "status": "AUDIT_STRESS_CONTROL_PASS",
+      "manifest": "repaired-e-dropped-outcome/manifest.json"
+    },
+    "paper-strict-fabricated-outcome": {
+      "status": "AUDIT_STRESS_CONTROL_PASS",
+      "manifest": "paper-strict-fabricated-outcome/manifest.json"
+    },
+    "paper-minimal-fabricated-outcome": {
+      "status": "AUDIT_STRESS_CONTROL_PASS",
+      "manifest": "paper-minimal-fabricated-outcome/manifest.json"
+    },
+    "repaired-e-fabricated-outcome": {
+      "status": "AUDIT_STRESS_CONTROL_PASS",
+      "manifest": "repaired-e-fabricated-outcome/manifest.json"
+    }
+  },
+  "servicesStarted": [
+    {
+      "case": "paper-strict-dropped-outcome",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 2970312
+    },
+    {
+      "case": "paper-strict-dropped-outcome",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 2970433
+    },
+    {
+      "case": "paper-minimal-dropped-outcome",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 2987189
+    },
+    {
+      "case": "paper-minimal-dropped-outcome",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 2987310
+    },
+    {
+      "case": "repaired-e-dropped-outcome",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 3004066
+    },
+    {
+      "case": "repaired-e-dropped-outcome",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 3004186
+    },
+    {
+      "case": "paper-strict-fabricated-outcome",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 3024658
+    },
+    {
+      "case": "paper-strict-fabricated-outcome",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 3024785
+    },
+    {
+      "case": "paper-minimal-fabricated-outcome",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 3041331
+    },
+    {
+      "case": "paper-minimal-fabricated-outcome",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 3041458
+    },
+    {
+      "case": "repaired-e-fabricated-outcome",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 3057992
+    },
+    {
+      "case": "repaired-e-fabricated-outcome",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 3058125
+    }
+  ],
+  "acks": {
+    "agent-1": {
+      "commit": "9a4d9a560acaf8a6a9097a9998cb86d281ef339c",
+      "path": "communication/agent-1/outbox/0068-ack-sl3-audit-stress-freeze.md",
+      "sha256": "823d9a8079cb875dbe9f2cc118972272d221029a43aeb0fa75fdb87109742aae",
+      "messageId": "A1-0068"
+    },
+    "agent-2": {
+      "commit": "9a4d9a560acaf8a6a9097a9998cb86d281ef339c",
+      "path": "communication/agent-1/solo/agent-2-proxy/outbox/0011-ack-sl3-audit-stress-freeze.md",
+      "sha256": "7807ee5f29dc016adeb31a92135efdd5f9d99097c96d7104c36ab0b4c104f055",
+      "messageId": "S2-0011"
+    },
+    "freeze": {
+      "commit": "9a4d9a560acaf8a6a9097a9998cb86d281ef339c",
+      "path": "communication/agent-1/solo/agent-3-proxy/outbox/0011-freeze-sl3-audit-stress.md",
+      "sha256": "f1e3bae39022cee8d8fb373ab5bf6077f780489f7de26eb9514c60037b087e39",
+      "messageId": "S3-0011"
+    }
+  },
+  "failure": null,
+  "sourceStable": true,
+  "limitation": "Six E03 audit-stress comparisons only; no complete catalog or RQ gate.",
+  "planSha256": "d768463d51da7c2ef689cf010b8ce90002898763760bd28f663eb41f4553b2fc",
+  "reviewMode": "solo-correlated",
+  "reviewDisclosure": "Solo phase under the human directive A1-0059: agent 1 and the agent-2/agent-3 proxies are the same model, so every review and ACK is correlated self-review, not independent review."
+}

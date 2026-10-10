@@ -404,3 +404,32 @@ Recorded by agent 3 (proxy) under the human solo directive A1-0059. **Correlated
 - The repaired-e forged-tuple recipe difference (A1-0065) is disclosed in S3-0010.
 
 Evidence: `evaluation/evidence/e2/sl2-relay-live-20261010/README.md`.
+
+## Solo-phase checkpoint: SL3 audit stress actual, 6/6, 2026-10-10 IST
+
+Recorded by agent 3 (proxy) under the human solo directive A1-0059. **Correlated self-review.**
+
+**Run:** plan d768463d.. (FREEZE S3-0011; ACKs A1-0068 and S2-0011) gave exit 0, `E2_AUDIT_STRESS_SLICE_PASS`, 6/6 rows, 459.88 s.
+
+**Results:**
+
+| Row | Class | Observed |
+|---|---|---|
+| dropped outcome, paper ×2 | SUPPORTED | PENDING after one release, routed per D35/A38 |
+| dropped outcome, repaired-e | REPAIR_SUPPORTED | PENDING |
+| fabricated outcome, paper ×2 | SPEC_GAP | outcome without any DBC grant |
+| fabricated outcome, repaired-e | REPAIR_SUPPORTED | WRONG_PROFILE(21); witness NOT_COMMITTED |
+
+**Controls:** wrong-admin (16), Alice allow with one outcome, and Bob deny (9) all passed.
+
+**Integrity:**
+- Sources were stable (bracket 26300d0d.., HEAD 9a4d9a5).
+- All 24 owned processes exited 0 and their PIDs are absent.
+- The secret scan found nothing (15 keys and 9 release tokens checked).
+
+**Status:**
+- Catalog progress: **28/56 actual (28 remain).**
+- A1-0068 points 1-3 are stated in S3-0012: outcome without a grant needs the public derived grant id; PENDING is ledger-permanent; the E0-era catalog sentence is superseded by `Worker._recipient_for` (S2-0011).
+- **Gate E: NOT_RUN.** F and G stay locked.
+
+Evidence: `evaluation/evidence/e2/sl3-audit-live-20261010/README.md`.

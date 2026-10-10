@@ -1,0 +1,273 @@
+{
+ "catalogSha256": "438fa38ddcbd7edd0e49fb93cc580e5219ed05349fd677b2e386bc4669f5d50e",
+ "rows": [
+  {
+   "caseId": "E03-dropped-outcome-paper-strict",
+   "profile": "paper-strict",
+   "sourceRefs": [
+    "S06",
+    "S07",
+    "S08",
+    "S19",
+    "S21",
+    "SPEC4/E03"
+   ],
+   "assumptions": [
+    "A01",
+    "A03",
+    "A12",
+    "A13",
+    "A21",
+    "A26",
+    "A24",
+    "A38",
+    "A41"
+   ],
+   "expected": {
+    "property": "audit-correspondence",
+    "outcome": "PENDING",
+    "classification": "SUPPORTED",
+    "error": null,
+    "qualification": "PBC remains pending with no successful outcome record. Local durable intent/send logs do not imply receipt delivery; reconciliation requires eventual delivery. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result."
+   },
+   "observed": "paper policyEnf grant (recipient 0, TTL ts+30); ONE production release bound to the RSC registered key (D35/A38), intent + one attempted send, delivery unknown; no outcome report: PSC FORWARDED(1), outcomeLogId 0 (PENDING); native state unchanged by the release",
+   "executionStatus": "COMPLETE",
+   "classification": "SUPPORTED",
+   "error": null,
+   "outcome": "PENDING",
+   "workerObservation": "instantiated by encrypt_record; idle before release, exactly one release delta after",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "requestTimestamp": "1791612983",
+    "requestExpiresAt": "1791613013",
+    "grantTimestamp": "1791612984",
+    "grantExpiresAt": "1791613014",
+    "releaseDbcClock": "1791612985",
+    "marginSeconds": 29,
+    "recipientSource": "RSC registered key (D35/A38)"
+   },
+   "qualification": "local durable intent/send log only; delivery unknown; eventual reconciliation needs eventual delivery and an honest reporter; tested reconstruction result Tested reconstruction result; symbolic adapter; delivery unknown; solo correlated review."
+  },
+  {
+   "caseId": "E03-dropped-outcome-paper-minimal",
+   "profile": "paper-minimal",
+   "sourceRefs": [
+    "S06",
+    "S07",
+    "S08",
+    "S19",
+    "S21",
+    "SPEC4/E03"
+   ],
+   "assumptions": [
+    "A01",
+    "A03",
+    "A12",
+    "A13",
+    "A21",
+    "A26",
+    "A24",
+    "A38",
+    "A41"
+   ],
+   "expected": {
+    "property": "audit-correspondence",
+    "outcome": "PENDING",
+    "classification": "SUPPORTED",
+    "error": null,
+    "qualification": "PBC remains pending with no successful outcome record. Local durable intent/send logs do not imply receipt delivery; reconciliation requires eventual delivery. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result."
+   },
+   "observed": "paper policyEnf grant (recipient 0, TTL ts+30); ONE production release bound to the RSC registered key (D35/A38), intent + one attempted send, delivery unknown; no outcome report: PSC FORWARDED(1), outcomeLogId 0 (PENDING); native state unchanged by the release",
+   "executionStatus": "COMPLETE",
+   "classification": "SUPPORTED",
+   "error": null,
+   "outcome": "PENDING",
+   "workerObservation": "instantiated by encrypt_record; idle before release, exactly one release delta after",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "requestTimestamp": "1791613061",
+    "requestExpiresAt": "1791613090",
+    "grantTimestamp": "1791613061",
+    "grantExpiresAt": "1791613091",
+    "releaseDbcClock": "1791613063",
+    "marginSeconds": 28,
+    "recipientSource": "RSC registered key (D35/A38)"
+   },
+   "qualification": "local durable intent/send log only; delivery unknown; eventual reconciliation needs eventual delivery and an honest reporter; tested reconstruction result Tested reconstruction result; symbolic adapter; delivery unknown; solo correlated review."
+  },
+  {
+   "caseId": "E03-dropped-outcome-repaired-e",
+   "profile": "repaired-e",
+   "sourceRefs": [
+    "S06",
+    "S07",
+    "S08",
+    "S19",
+    "S21",
+    "SPEC4/E03"
+   ],
+   "assumptions": [
+    "A01",
+    "A03",
+    "A12",
+    "A13",
+    "A21",
+    "A26",
+    "A36",
+    "A41"
+   ],
+   "expected": {
+    "property": "audit-correspondence",
+    "outcome": "PENDING",
+    "classification": "REPAIR_SUPPORTED",
+    "error": null,
+    "qualification": "PBC remains pending with no successful outcome record. Local durable intent/send logs do not imply receipt delivery; reconciliation requires eventual delivery."
+   },
+   "observed": "repaired consumeDecision grant (expiry min(decision, request), signed recipient); ONE production release bound to the signed recipient, intent + one attempted send, delivery unknown; no attested outcome: PSC FORWARDED(1), outcomeLogId 0 (PENDING); native state unchanged by the release",
+   "executionStatus": "COMPLETE",
+   "classification": "REPAIR_SUPPORTED",
+   "error": null,
+   "outcome": "PENDING",
+   "workerObservation": "instantiated by encrypt_record; idle before release, exactly one release delta after",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "requestTimestamp": "1791613142",
+    "requestExpiresAt": "1791613172",
+    "grantTimestamp": "1791613145",
+    "grantExpiresAt": "1791613172",
+    "releaseDbcClock": "1791613146",
+    "marginSeconds": 26,
+    "recipientSource": "signed request recipient in the grant"
+   },
+   "qualification": "local durable intent/send log only; delivery unknown; eventual reconciliation needs eventual delivery and an honest reporter; tested reconstruction result Tested reconstruction result; symbolic adapter; delivery unknown; solo correlated review."
+  },
+  {
+   "caseId": "E03-fabricated-outcome-paper-strict",
+   "profile": "paper-strict",
+   "sourceRefs": [
+    "S06",
+    "S07",
+    "S08",
+    "S19",
+    "S21",
+    "SPEC4/E03"
+   ],
+   "assumptions": [
+    "A01",
+    "A03",
+    "A12",
+    "A13",
+    "A21",
+    "A26",
+    "A41"
+   ],
+   "expected": {
+    "property": "audit-correspondence",
+    "outcome": "CONDITIONAL",
+    "classification": "SPEC_GAP",
+    "error": null,
+    "qualification": "Configured relay reports a result without a DBC grant through the unattested paper path. Repaired path is disabled; receipt witness independently requires a matching grant."
+   },
+   "observed": "Alice request only, no DBC grant/consumption; relay reportOutcome(digest, derived grantId, synthetic outcome) mined: LSC OUTCOME(4) log 7 with complete details abi.encode(digest, grantId, outcome, relay) and detailsHash, OutcomeRecorded, PSC status 2; DBC grant/count/nonces/history unchanged",
+   "executionStatus": "COMPLETE",
+   "classification": "SPEC_GAP",
+   "error": null,
+   "outcome": null,
+   "workerObservation": "verified never-instantiated before and after (D49)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "requestTimestamp": "1791613219",
+    "requestExpiresAt": "1791613248",
+    "stressTimestamp": "1791613220"
+   },
+   "qualification": "configured-relay stress outside A01: the PBC records an outcome for which no DBC grant exists; reconstruction specification gap, not an HMBC exploit Tested reconstruction result; symbolic adapter; delivery unknown; solo correlated review."
+  },
+  {
+   "caseId": "E03-fabricated-outcome-paper-minimal",
+   "profile": "paper-minimal",
+   "sourceRefs": [
+    "S06",
+    "S07",
+    "S08",
+    "S19",
+    "S21",
+    "SPEC4/E03"
+   ],
+   "assumptions": [
+    "A01",
+    "A03",
+    "A12",
+    "A13",
+    "A21",
+    "A26",
+    "A41"
+   ],
+   "expected": {
+    "property": "audit-correspondence",
+    "outcome": "CONDITIONAL",
+    "classification": "SPEC_GAP",
+    "error": null,
+    "qualification": "Configured relay reports a result without a DBC grant through the unattested paper path. Repaired path is disabled; receipt witness independently requires a matching grant."
+   },
+   "observed": "Alice request only, no DBC grant/consumption; relay reportOutcome(digest, derived grantId, synthetic outcome) mined: LSC OUTCOME(4) log 7 with complete details abi.encode(digest, grantId, outcome, relay) and detailsHash, OutcomeRecorded, PSC status 2; DBC grant/count/nonces/history unchanged",
+   "executionStatus": "COMPLETE",
+   "classification": "SPEC_GAP",
+   "error": null,
+   "outcome": null,
+   "workerObservation": "verified never-instantiated before and after (D49)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "requestTimestamp": "1791613291",
+    "requestExpiresAt": "1791613320",
+    "stressTimestamp": "1791613292"
+   },
+   "qualification": "configured-relay stress outside A01: the PBC records an outcome for which no DBC grant exists; reconstruction specification gap, not an HMBC exploit Tested reconstruction result; symbolic adapter; delivery unknown; solo correlated review."
+  },
+  {
+   "caseId": "E03-fabricated-outcome-repaired-e",
+   "profile": "repaired-e",
+   "sourceRefs": [
+    "S06",
+    "S07",
+    "S08",
+    "S19",
+    "S21",
+    "SPEC4/E03"
+   ],
+   "assumptions": [
+    "A01",
+    "A03",
+    "A12",
+    "A13",
+    "A21",
+    "A26",
+    "A36",
+    "A41"
+   ],
+   "expected": {
+    "property": "audit-correspondence",
+    "outcome": "REJECT",
+    "classification": "REPAIR_SUPPORTED",
+    "error": "WRONG_PROFILE",
+    "qualification": "Configured relay reports a result without a DBC grant through the unattested paper path. Repaired path is disabled; receipt witness independently requires a matching grant."
+   },
+   "observed": "reportOutcome mined status0 Rejected(21) WRONG_PROFILE, no logs, whole state unchanged; attest_grant of the absent grant refused NOT_COMMITTED by the honest witness",
+   "executionStatus": "COMPLETE",
+   "classification": "REPAIR_SUPPORTED",
+   "error": "WRONG_PROFILE",
+   "outcome": null,
+   "workerObservation": "verified never-instantiated before and after (D49)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "requestTimestamp": "1791613369",
+    "requestExpiresAt": "1791613398",
+    "stressTimestamp": "1791613370"
+   },
+   "qualification": "unattested outcome path disabled; receipt witness requires a matching DBC grant Tested reconstruction result; symbolic adapter; delivery unknown; solo correlated review."
+  }
+ ],
+ "completedRows": 6,
+ "actualCatalogComparisons": "28/56",
+ "remainingCatalogComparisons": 28,
+ "fullCatalogComplete": false
+}
