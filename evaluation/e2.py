@@ -29,6 +29,11 @@ AUDIT_EXPECTED = {('paper-strict', 'dropped-outcome'): ('SUPPORTED', None), ('pa
                   ('repaired-e', 'dropped-outcome'): ('REPAIR_SUPPORTED', None),
                   ('paper-strict', 'fabricated-outcome'): ('SPEC_GAP', None), ('paper-minimal', 'fabricated-outcome'): ('SPEC_GAP', None),
                   ('repaired-e', 'fabricated-outcome'): ('REPAIR_SUPPORTED', 'WRONG_PROFILE')}
+RECEIPT_EXPECTED = {'receipt-binding-control': ('REPAIR_SUPPORTED', 'WRONG_SUBJECT'),
+                    'receipt-signature-control': ('SUPPORTED', 'WRONG_SUBJECT'), 'receipt-binding-positive': ('SUPPORTED', None)}
+# S2-0007/A1-0064: protocol pin 0716a8e, testtools/deviating_witness.py.
+DEVIATION_PATH = 'protocol/testtools/deviating_witness.py'
+DEVIATION_SHA256 = '0511ba571b71d960d8ffbe4b8c811da99ed7de53a4b7515ac425c5291cc3c2d7'
 ACCEPTANCE = ROOT/'evaluation/evidence/e2/crash-transport-20261009/start-contract-acceptance.json'
 
 
@@ -59,14 +64,15 @@ def _owners(contract):
 
 
 def create_plan(*, run_id, freeze_message, expired_retry=False, duplicate_outcome=False, nonce_replay=False,
-                subject_substitution=False, relay_stress=False, audit_stress=False, review_mode='strict'):
+                subject_substitution=False, relay_stress=False, audit_stress=False, receipt_stress=False, review_mode='strict'):
     # Retain the previously reviewed environment, mining/ports, tool and custody
     # recipe; any new exact runtime bytes require new full execution-plan ACKs.
-    flags = (expired_retry, duplicate_outcome, nonce_replay, subject_substitution, relay_stress, audit_stress)
+    flags = (expired_retry, duplicate_outcome, nonce_replay, subject_substitution, relay_stress, audit_stress, receipt_stress)
     require(all(type(flag) is bool for flag in flags) and sum(flags) <= 1, 'explicit nonoverlapping probe selection')
     require(not subject_substitution or review_mode == e1.SOLO, 'SL1 subject plans are solo-phase plans (A1-0061)')
     require(not relay_stress or review_mode == e1.SOLO, 'SL2 relay plans are solo-phase plans (A1-0061)')
     require(not audit_stress or review_mode == e1.SOLO, 'SL3 audit plans are solo-phase plans (A1-0061)')
+    require(not receipt_stress or review_mode == e1.SOLO, 'SL4 receipt plans are solo-phase plans (A1-0061)')
     plan = e1.create_plan(run_id=run_id, freeze_message=freeze_message, review_mode=review_mode)
     contract = json.loads(CONTRACT.read_text())
     plan.update(schemaVersion='hmbc-e2-recovery-plan/v1', executionScope='six fresh logical crash/recovery cases; not full RQ matrix',
@@ -266,6 +272,73 @@ def create_plan(*, run_id, freeze_message, expired_retry=False, duplicate_outcom
                                  'Delivery unknown: worker RELEASE_SENT is an attempted send; reconciliation needs eventual delivery.',
                                  'Symbolic adapter; safe-ledger/trusted-worker/one trusted witness.'])
         plan.pop('workerExpected')
+    if receipt_stress:
+        rows = [(variant, field) for variant, fields in e1.RECEIPT_VARIANTS.items() for field in fields]
+        owners = plan['owners']['protocol']['entries']
+        require(owners.get(DEVIATION_PATH) == DEVIATION_SHA256, 'deviating witness is the S2-0007 owner inventory entry')
+        plan.update(schemaVersion='hmbc-e2-receipt-stress-plan/v1', receiptStress=True,
+                    executionScope='seven fresh repaired-e E03 receipt controls (SL4); not full RQ matrix',
+                    matrix=[dict(profile='repaired-e', point=None, variant=variant, field=field) for variant, field in rows],
+                    caseIds=['E03-'+variant+('-'+field if field else '')+'-repaired-e' for variant, field in rows],
+                    controls=['wrong-admin-before-H2', 'registered-Alice-allow-release-one-outcome', 'registered-Bob-policy-deny',
+                              'fresh-second-deployment-receipt-control'],
+                    restart='none; production adapter only, no crash hook',
+                    freshness=('fresh chain pair per matrix row; controls on deployment D1; the receipt row on a fresh second '
+                               'deployment D2 on the same chain pair with its own bootstrap, adapter process and 0700 state, its own '
+                               'fresh forwarded request, actual allowed grant and honest receipt; relay/CA-admin balances reset to '
+                               '1000 ETH before D2'),
+                    observation=('relay-submitted public calls, production adapter operations and the pinned TEST-ONLY deviating '
+                                 'witness command; whole decoded two-chain histories; worker never-instantiated record'),
+                    receiptProbe=dict(
+                        steps=('REQUEST_ACCESS > FORWARD_OR_CONSUME (checkpoint, honest ALLOW certificate, consumeDecision) > '
+                               'ATTEST_GRANT (production witness, before any report on the request) > [binding: RESIGN_RECEIPT_FIELD '
+                               'via the deviating witness at the honest receipt dbcBlockNumber | signature: ALTER_RECEIPT_KEEP_SIGNATURE, '
+                               'same deterministic value, honest signature kept, no tool | positive: none] > REPORT_OUTCOME (relay '
+                               'PSC.reportAttestedOutcome(digest, fixed synthetic outcome digest, receipt, signatures))'),
+                        expected=('binding x3: mined Rejected WRONG_SUBJECT(2), no events, whole native state unchanged, PBC stays '
+                                  'FORWARDED (REPAIR_SUPPORTED; A40 deliberate deviation); signature x3: same rejection, the binding '
+                                  'check precedes quorum (SUPPORTED; cannot kill MUT_NO_RECEIPT_BINDING); positive: LSC OUTCOME(4) log '
+                                  'with details abi.encode(digest, outcomeDigest, receipt, relay) then AttestedOutcomeRecorded(digest, '
+                                  'grantId, outcomeDigest, dbcBlockNumber, logId), status 2, DBC unchanged (ACCEPT/SUPPORTED); ledger '
+                                  '933d2a7 PSC.sol:240-283'),
+                        deviatingWitness=dict(
+                            module='testtools.deviating_witness', path=DEVIATION_PATH, sha256=DEVIATION_SHA256,
+                            invocation=list(e1.DEVIATION_TEMPLATE), cwd='materialized protocol snapshot (protocol/)',
+                            conditions=[
+                                'S2-0007 conditions accepted in A1-0064; binding rows only; owner command, never an adapter operation.',
+                                'Exact pinned bytes re-hashed before every call; argv built only from this template; no --value.',
+                                '--deployment is the same deployment file (byte-identical) the stress adapter was pinned with (R11).',
+                                '--at-block is the honest receipt dbcBlockNumber of that row (honest attest_grant first).',
+                                'Any non-zero exit is a failed trial: no retry, no report; published only as output sha256 and first line.',
+                                'Before use, three-way check: only the named field differs from the honest receipt; the signature '
+                                'recovers to the configured witness under the evaluator own EIP-712 encoder (HMBCReceipt v1, PBC PSC '
+                                'domain); testOnly is true and deviation.field equals the row field; plus the default deterministic '
+                                'alteration value.',
+                                'Published artifact keeps testOnly and deviation and is labelled A40 deliberate witness deviation, not '
+                                'an honest-witness receipt and not an HMBC result.',
+                                'never publish private keys, seeds or anything derived from a key label, raw release tokens (D1 Alice '
+                                'control: tokenSha256 only), or the raw tool command log (it stays in the private run output).']),
+                        workerPrecondition=('re-checked for SL4 at protocol pin 0716a8e: the worker database is created only by '
+                                            'adapter.py:133-136 _worker, reached only from release, encrypt_record and finish_decryption '
+                                            '(adapter.py:179-190); prepare_request is pure; collect_checkpoint, collect_decision and '
+                                            'attest_grant use Witness only (adapter.py:153-176); the deviating witness takes no state '
+                                            'directory. SL4 performs none of the three worker operations, so the D2 worker must be a '
+                                            'verified never-instantiated record (D49), re-observed at baseline and after every catalog step; '
+                                            'any instantiation fails the row'),
+                        snapshots=('native views/logs per chain at one explicit block per read group; Cast hash checkpoint per read '
+                                   'group/submit (A1-0061 D-5b); verified never-instantiated worker record (D49)')),
+                    classification=('receipt-binding-control: REPAIR_SUPPORTED with WRONG_SUBJECT(2) (A40 deliberate witness deviation, '
+                                    'defence in depth outside the honest-witness assumption); receipt-signature-control: SUPPORTED with '
+                                    'WRONG_SUBJECT(2); receipt-binding-positive: SUPPORTED (ACCEPT); tested reconstruction results, never '
+                                    'an HMBC exploit or authors-implementation claim'),
+                    timing=('request, checkpoint, decision and consume strictly before request/decision expiry; attest and report '
+                            'may follow grant expiry (late reconciliation allowed, recorded); no TTL change'),
+                    limitations=['Solo-phase plan: both exact solo ACKs (A1 and S2) and the committed S3 FREEZE precede services.',
+                                 'Seven of the 28 remaining catalog comparisons; no complete matrix, live mutants/window/report/gate.',
+                                 'MUT_NO_RECEIPT_BINDING counterparts are P3 mutant work, not run here.',
+                                 'A receipt attests DBC authorization only, not release or delivery; delivery unknown.',
+                                 'Symbolic adapter; safe-ledger/trusted-worker/one trusted witness.'])
+        plan.pop('workerExpected')
     return plan
 
 
@@ -274,7 +347,7 @@ def verify_plan(plan):
                                 expired_retry=plan.get('expiredRetry', False), duplicate_outcome=plan.get('duplicateOutcome', False),
                                 nonce_replay=plan.get('nonceReplay', False), subject_substitution=plan.get('subjectSubstitution', False),
                                 relay_stress=plan.get('relayStress', False), audit_stress=plan.get('auditStress', False),
-                                review_mode=plan.get('reviewMode', 'strict')),
+                                receipt_stress=plan.get('receiptStress', False), review_mode=plan.get('reviewMode', 'strict')),
             'exact current E2 plan/source/config')
     require(sha256(ROOT/'interfaces/v1/FREEZE.json') == FREEZE_SHA256, 'immutable v1 freeze')
     require(platform.python_version() == plan['pythonVersion'], 'pinned Python version')
@@ -319,12 +392,16 @@ def execute(plan_path, ack_path, output):
         if plan.get('auditStress', False):
             record.update(executionMode='two-chain-e2-audit-stress-slice',
                           limitation='Six E03 audit-stress comparisons only; no complete catalog or RQ gate.')
+        if plan.get('receiptStress', False):
+            record.update(executionMode='two-chain-e2-receipt-stress-slice',
+                          limitation='Seven repaired-e E03 receipt controls only; no complete catalog or RQ gate.')
         authorized = True; record['status'] = 'RUNNING'
         for item in plan['matrix']:
             verify_plan(plan)
             probe_name = 'nonce-replay' if plan.get('nonceReplay', False) else 'duplicate-outcome'
             if plan.get('subjectSubstitution', False): probe_name = 'subject-substitution'
             if plan.get('relayStress', False) or plan.get('auditStress', False): probe_name = item['variant']
+            if plan.get('receiptStress', False): probe_name = item['variant']+('-'+item['field'] if item['field'] else '')
             case = item['profile']+'-'+(item['point'] or probe_name); destination = output/case; destination.mkdir()
             child = dict(profiles={}, servicesStarted=[], adapterProcesses=[])
             case_records[case] = child
@@ -336,9 +413,15 @@ def execute(plan_path, ack_path, output):
             if plan.get('subjectSubstitution', False): probe_options = {'subject_substitution': True}
             if plan.get('relayStress', False): probe_options = {'relay_stress': item['variant']}
             if plan.get('auditStress', False): probe_options = {'audit_stress': item['variant']}
+            if plan.get('receiptStress', False): probe_options = {'receipt_stress': item['variant'], 'receipt_field': item['field']}
             e1._profile(selected, item['profile'], destination/item['profile'], child, recovery_point=item['point'],
                         expired_retry=plan.get('expiredRetry', False), **probe_options)
-            if plan.get('auditStress', False):
+            if plan.get('receiptStress', False):
+                proof = json.loads((destination/item['profile']/'receipt-stress/result.json').read_text())
+                require(proof['ok'] is True and proof['delivery'] == 'unknown' and proof['variant'] == item['variant']
+                        and proof['field'] == item['field'] and (proof['classification'], proof['error']) == RECEIPT_EXPECTED[item['variant']],
+                        'complete checked receipt control result')
+            elif plan.get('auditStress', False):
                 proof = json.loads((destination/item['profile']/'audit-stress/result.json').read_text())
                 require(proof['ok'] is True and proof['delivery'] == 'unknown' and proof['variant'] == item['variant']
                         and (proof['classification'], proof['error']) == AUDIT_EXPECTED[(item['profile'], item['variant'])],
@@ -385,6 +468,9 @@ def execute(plan_path, ack_path, output):
             if plan.get('auditStress', False):
                 record['cases'][case]['status'] = 'AUDIT_STRESS_CONTROL_PASS'
                 continue
+            if plan.get('receiptStress', False):
+                record['cases'][case]['status'] = 'RECEIPT_STRESS_CONTROL_PASS'
+                continue
             record['cases'][case]['status'] = ('NONCE_REPLAY_CONTROL_PASS' if plan.get('nonceReplay', False)
                                              else ('DUPLICATE_OUTCOME_CONTROL_PASS' if plan.get('duplicateOutcome', False) else 'RECOVERY_CONTROL_PASS'))
         verify_plan(plan); record.update(status='E2_DUPLICATE_OUTCOME_SLICE_PASS' if plan.get('duplicateOutcome', False) else ('E2_RECOVERY_EXPIRY_SLICE_PASS' if plan.get('expiredRetry', False) else 'E2_RECOVERY_SLICE_PASS'), sourceStable=True)
@@ -392,6 +478,7 @@ def execute(plan_path, ack_path, output):
         if plan.get('subjectSubstitution', False): record['status'] = 'E2_SUBJECT_SUBSTITUTION_SLICE_PASS'
         if plan.get('relayStress', False): record['status'] = 'E2_RELAY_STRESS_SLICE_PASS'
         if plan.get('auditStress', False): record['status'] = 'E2_AUDIT_STRESS_SLICE_PASS'
+        if plan.get('receiptStress', False): record['status'] = 'E2_RECEIPT_STRESS_SLICE_PASS'
     except BaseException as error:
         record['failure'] = dict(type=type(error).__name__, message=str(error))
         record['status'] = 'FAILED' if authorized else 'BLOCKED'
@@ -411,7 +498,7 @@ def main():
     print(json.dumps({k: result[k] for k in ('status', 'failure', 'sourceStable', 'servicesStarted')}, indent=2))
     return 0 if result['status'] in ('E2_RECOVERY_SLICE_PASS', 'E2_RECOVERY_EXPIRY_SLICE_PASS', 'E2_DUPLICATE_OUTCOME_SLICE_PASS',
                                      'E2_NONCE_REPLAY_SLICE_PASS', 'E2_SUBJECT_SUBSTITUTION_SLICE_PASS', 'E2_RELAY_STRESS_SLICE_PASS',
-                                     'E2_AUDIT_STRESS_SLICE_PASS') else 2
+                                     'E2_AUDIT_STRESS_SLICE_PASS', 'E2_RECEIPT_STRESS_SLICE_PASS') else 2
 
 
 if __name__ == '__main__': raise SystemExit(main())

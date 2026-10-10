@@ -259,6 +259,22 @@ def _available(ports):
 
 RELAY_VARIANTS = ('forged-tuple', 'new-reference-replay', 'same-nonce-distinct-digests')
 AUDIT_VARIANTS = ('dropped-outcome', 'fabricated-outcome')
+RECEIPT_VARIANTS = {'receipt-binding-control': ('requestDigest', 'gid', 'dataId'),
+                    'receipt-signature-control': ('requestDigest', 'gid', 'dataId'), 'receipt-binding-positive': (None,)}
+# S2-0007 (accepted A1-0064): the only invocation of the TEST-ONLY deviating witness; never --value.
+DEVIATION_TEMPLATE = ['{python}', '-m', 'testtools.deviating_witness', '--deployment', '{deployment}', 'receipt', '--grant-id',
+                      '{grantId}', '--field', '{field}', '--at-block', '{atBlock}']
+
+
+def deviation_argv(tool, *, python, deployment, grant_id, field, at_block):
+    """Exact argv of one deviating-witness call, built only from the pinned plan template."""
+    require(tool.get('module') == 'testtools.deviating_witness' and tool.get('invocation') == DEVIATION_TEMPLATE,
+            'exact pinned deviating witness invocation')
+    require(field in RECEIPT_VARIANTS['receipt-binding-control'] and isinstance(grant_id, str)
+            and re.fullmatch(r'0x[0-9a-f]{64}', grant_id) is not None and isinstance(at_block, str)
+            and re.fullmatch(r'[0-9]+', at_block) is not None, 'deviating witness arguments')
+    values = {'{python}': str(python), '{deployment}': str(deployment), '{grantId}': grant_id, '{field}': field, '{atBlock}': at_block}
+    return [values.get(item, item) for item in tool['invocation']]
 
 
 def observe_worker_export(exit_code, raw, state_dir):
@@ -281,7 +297,7 @@ def observe_worker_export(exit_code, raw, state_dir):
 
 
 def _profile(plan, profile, output, record, *, recovery_point=None, expired_retry=False, duplicate_outcome=False, nonce_replay=False,
-             subject_substitution=False, relay_stress=None, audit_stress=None):
+             subject_substitution=False, relay_stress=None, audit_stress=None, receipt_stress=None, receipt_field=None):
     require(type(expired_retry) is bool and (not expired_retry or recovery_point is not None), 'expiry probe follows explicit recovery')
     require(type(duplicate_outcome) is bool and (not duplicate_outcome or (recovery_point is None and not expired_retry)),
             'duplicate comparison uses production adapter without other fault probes')
@@ -293,6 +309,10 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
             and not duplicate_outcome and not nonce_replay and not subject_substitution), 'isolated relay stress')
     require(audit_stress is None or (audit_stress in AUDIT_VARIANTS and recovery_point is None and not expired_retry
             and not duplicate_outcome and not nonce_replay and not subject_substitution and relay_stress is None), 'isolated audit stress')
+    require((receipt_stress is None and receipt_field is None) or (receipt_stress in RECEIPT_VARIANTS
+            and receipt_field in RECEIPT_VARIANTS[receipt_stress] and profile == 'repaired-e' and recovery_point is None
+            and not expired_retry and not duplicate_outcome and not nonce_replay and not subject_substitution
+            and relay_stress is None and audit_stress is None), 'isolated repaired-e receipt control')
     output.mkdir(parents=True, exist_ok=False)
     snapshots = output/'snapshots'
     ledger_root = materialize_owner(plan['owners']['ledger'], snapshots/'ledger')
@@ -402,12 +422,13 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
                     execute_expired_retry(chains['pbc'], chains['dbc'], process, deployment=deployment,
                                           grant_id=grants[0], worker_snapshot=worker_snapshot, output=output/'expired-retry')
             require(bootstrap['wrongAdminCode'] == '16' and all(r['ok'] for r in results.values()), 'three E1 controls')
-            if subject_substitution or relay_stress is not None or audit_stress is not None:
+            if subject_substitution or relay_stress is not None or audit_stress is not None or receipt_stress is not None:
                 # SL1/SL2: controls above ran on deployment D1. The stress uses a fresh
                 # second deployment D2 on the same chain pair, its own bootstrap,
                 # adapter process and private state, so the stress oracle sees an
                 # unused grant/count/nonce state. No clock move or crash hook.
-                kind = 'subject' if subject_substitution else ('relay' if relay_stress is not None else 'audit')
+                kind = 'subject' if subject_substitution else ('relay' if relay_stress is not None else
+                                                               ('audit' if audit_stress is not None else 'receipt'))
                 stress = output/(kind+'-instance'); stress.mkdir()
                 for name in ('pbc', 'dbc'):
                     for role in ('relay', 'H1-ca-admin', 'H2-ca-admin', 'H3-ca-admin', 'H4-ca-admin'):
@@ -456,7 +477,7 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
                     return command(label, [tools['python']['path'], '-m', 'hmbc_protocol.worker_log', '--state-dir', str(stress_state)],
                                    protocol, budget['transport'], service_env)
                 def stress_worker_probe():
-                    # SL2 performs no worker operation; a never-created worker database is
+                    # SL2, the SL3 fabricated rows and SL4 perform no worker operation; a never-created worker database is
                     # an explicit, verified observation (observe_worker_export), not a failure.
                     nonlocal stress_sequence
                     label = f'{kind}-worker-export-{stress_sequence:02}'; stress_sequence += 1
@@ -477,6 +498,36 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
                     require(stress_result['ok'] is True, 'subject stress result')
                     record['profiles'][profile]['subjectStress'] = dict(runId=stress_run, deployment=str(Path(profile)/'subject-instance/deployment.json'),
                                                                         result=str(Path(profile)/'subject-stress/result.json'))
+                elif receipt_stress is not None:
+                    from evaluation.receipt_stress import execute_receipt_stress
+                    tool = plan['receiptProbe']['deviatingWitness']
+                    deviation_sequence = 0
+                    def stress_deviate(grant_id, field, at_block):
+                        # S2-0007: pinned bytes, same deployment file as the stress adapter (R11), protocol snapshot cwd,
+                        # exact template argv. The raw command log stays in the private run output; a non-zero exit is a
+                        # failed trial that the collector keeps only as sha256 and first line.
+                        nonlocal deviation_sequence
+                        label = f'receipt-deviate-{deviation_sequence:02}'; deviation_sequence += 1
+                        require(sha256(protocol_root/tool['path']) == tool['sha256'] == plan['owners']['protocol']['entries'][tool['path']],
+                                'pinned TEST-ONLY deviating witness bytes')
+                        require(stress_path.read_bytes() == stress_bytes, 'same deployment file as the stress adapter (R11)')
+                        argv = deviation_argv(tool, python=tools['python']['path'], deployment=stress_path, grant_id=grant_id,
+                                              field=field, at_block=at_block)
+                        row = record_command(argv, protocol, output/(label+'.txt'), timeout=budget['transport'], env=service_env,
+                                             owned_process_group=True, stop_grace=budget['stopGrace'])
+                        row['testOnly'] = 'A40 deliberate witness deviation (S2-0007/A1-0064)'
+                        commands.append(row); (output/'commands.json').write_text(json.dumps(commands, indent=2)+'\n')
+                        return dict(exitCode=row['exitCode'], output=(output/(label+'.txt')).read_bytes())
+                    stress_result = execute_receipt_stress(stress_chains['pbc'], stress_chains['dbc'], stress_process, deployment_bytes=stress_bytes,
+                                                           user_label='alice', user=stress_boot['users']['alice'], record=stress_record,
+                                                           policy=policy, variant=receipt_stress, field=receipt_field,
+                                                           worker_snapshot=stress_worker_probe, deviate=stress_deviate,
+                                                           output=output/'receipt-stress')
+                    require(stress_result['ok'] is True and stress_result['variant'] == receipt_stress
+                            and stress_result['field'] == receipt_field, 'receipt control result')
+                    record['profiles'][profile]['receiptStress'] = dict(runId=stress_run, variant=receipt_stress, field=receipt_field,
+                                                                        deployment=str(Path(profile)/'receipt-instance/deployment.json'),
+                                                                        result=str(Path(profile)/'receipt-stress/result.json'))
                 elif audit_stress is not None:
                     from evaluation.audit_stress import execute_audit_stress
                     stress_result = execute_audit_stress(stress_chains['pbc'], stress_chains['dbc'], stress_process, deployment_bytes=stress_bytes,

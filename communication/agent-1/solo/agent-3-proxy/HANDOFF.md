@@ -13,16 +13,16 @@ F and G locked. All proxy reviews and ACKs are correlated self-review (same mode
 | SL1 subject substitution ×3 | **actual PASS 3/3** | FREEZE S3-0005, plan 6fd5809b..; result S3-0006; `evaluation/evidence/e2/sl1-subject-live-20261010/` |
 | SL2 relay stress ×7, first run | **FAILED** (runner defect: worker DB never created, D49) | S3-0007 plan d67f1786..; S3-0008; `evaluation/evidence/e2/sl2-relay-failed-20261010/` |
 | SL2 relay stress ×7, re-plan r2 | **actual PASS 7/7** | FREEZE S3-0009, plan b3a02098..; result S3-0010; `evaluation/evidence/e2/sl2-relay-live-20261010/` |
-| SL3 audit stress ×6 | FREEZE S3-0011, plan d768463d..; **waiting for ACKs** | `evaluation/evidence/e2/sl3-audit-runner-20261010/`; `evaluation/audit_stress.py`, `oracles/audit.py` |
+| SL3 audit stress ×6 | **actual PASS 6/6** | FREEZE S3-0011, plan d768463d..; result S3-0012; `evaluation/evidence/e2/sl3-audit-live-20261010/` |
+| SL4 receipt controls ×7 | **FREEZE published, not run** | S3-0013, plan 851896f3..; `evaluation/evidence/e2/sl4-receipt-runner-20261010/` |
 
-- FREEZE S3-0005 is released. No services are running.
+- FREEZE S3-0011 is released. No services are running. S3-0013 awaits both ACKs.
 - Decisions D47 (paper crash relabel) and D48 (SL0 choices) are in `communication/DECISIONS.md`.
 
-**Catalog progress: 22/56 actual, 34 remaining.**
+**Catalog progress: 28/56 actual, 28 remaining.**
 
 | Remaining slice | Rows |
 |---|---|
-| SL3 | dropped / fabricated outcome ×6 |
 | SL4 | receipts ×7 |
 | SL5 | wrong issuer, rollback ×6 |
 | SL6 | barriers, expired duty ×9 |
@@ -63,8 +63,9 @@ toolchain and host-tools. Keep helper scripts out of `evaluation/` as `.py` file
 
 **Scratch:**
 
-- `tmp/p3/sl1-run/` holds raw SL1 outputs and the private state, which is never published.
-- Helpers live in `tmp/p3/sl0/scripts/bracket.py` and `tmp/p3/sl1-run/scripts/select_audit.py`.
+- `tmp/p3/sl{1,2,3}-run/` hold raw outputs and the private state, which is never published.
+- Helpers live in `tmp/p3/sl0/scripts/bracket.py` and `tmp/p3/sl2-run/scripts/select_audit.py`.
+- `tmp/p3/sl4/` holds the SL4 RED, suite, bracket and control-reason outputs, plus the scratch reason test.
 
 ## Toolchain
 
@@ -81,13 +82,23 @@ toolchain and host-tools. Keep helper scripts out of `evaluation/` as `.py` file
 - Snapshots come from Git blobs, so working-tree edits by agent 1 or agent 2 (proxy) cannot enter a
   run.
 
+## SL4 runner facts (S3-0013)
+
+- `e2.create_plan(..., receipt_stress=True, review_mode='solo-correlated')`; matrix rows carry
+  `variant` and `field`; case directories are `repaired-e-<variant>[-<field>]`.
+- `e1.deviation_argv` builds the deviating-witness argv only from the plan template (no `--value`);
+  `stress_deviate` re-hashes the tool bytes and re-checks the deployment file before each call.
+- A non-zero tool exit is a failed trial; `receipt-stress/deviation-refusal.json` keeps only exit
+  code, output sha256 and first line. The raw `receipt-deviate-NN.txt` log must not be published.
+- The D2 worker is probed at baseline and after every catalog step (`workerSteps` in `result.json`).
+
 ## Next allowed actions
 
-1. **SL3 run**, after A1 and S2 ACKs of S3-0011 are committed and agent 1 clears it:
-   - build the ACK index at `tmp/p3/sl3-run/acks.json` (keys agent-1, agent-2 and freeze);
-   - run the S3-0011 command;
-   - audit with `tmp/p3/sl2-run/scripts/select_audit.py`, after adding `audit-stress/*` and
-     `audit-instance/*` patterns;
-   - publish S3-0012.
-2. **SL4 receipts (7 rows):** follow the S2-0007 `deviating_witness` invocation and never-publish
-   rules. Test-first, then a FREEZE.
+1. **SL4 run**, after A1 and S2 ACKs of S3-0013 are committed and agent 1 clears it:
+   - build the ACK index at `tmp/p3/sl4-run/acks.json` (keys agent-1, agent-2 and freeze);
+   - run the S3-0013 command;
+   - audit with `select_audit.py`, after adding `receipt-stress/*` and `receipt-instance/*`
+     patterns and excluding `receipt-deviate-*.txt`; scan for keys and release tokens;
+   - publish S3-0014 and the GATES checkpoint (35/56 if 7/7).
+2. **SL5 (wrong issuer, rollback ×6):** current `TMSC.authEpoch` in the request (A1-0064). Test-first,
+   then a FREEZE.

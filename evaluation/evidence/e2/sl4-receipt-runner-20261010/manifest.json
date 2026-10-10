@@ -1,0 +1,120 @@
+{
+  "plan": {
+    "path": "evaluation/evidence/e2/sl4-receipt-runner-20261010/integration-plan.json",
+    "sha256": "851896f3608ac7e234820c4d24a6d6d8db1e608254828ab8199cce6aa672676c",
+    "runId": "E2-SL4-receipt-20261010",
+    "freezeMessage": "S3-0013",
+    "agent3SourcesCount": 96,
+    "agent3SourcesAggregate": "fceed3253d2a5a674473152588fa60cf83765fc64f3eea1906bf1b56283ccfc3"
+  },
+  "changedAgent3SourcesSinceSL3": {
+    "evaluation/e1.py": {
+      "old": "236638b0b76545714a0cbd4eb7831e8384363f8f33be90410ca03e0ef7ca6382",
+      "new": "52b5871422a5a363f96d3ba78e59164c296d0924bee5a3a135dd45d01816b4af"
+    },
+    "evaluation/e2.py": {
+      "old": "3e35efdc317e1e34b7ebf159af29880927e8c3c7af9384b5ebaa1d1315905c2d",
+      "new": "d6e065e659e0de08e2b6ba9e0c950b1472a9d60a243bd890480e339a0b34975e"
+    },
+    "evaluation/oracles/receipt.py": {
+      "old": null,
+      "new": "899466372868e04df8952d7f2751caf61ab5bc2422819b14e5d68d662b49b943"
+    },
+    "evaluation/receipt_stress.py": {
+      "old": null,
+      "new": "e924517988fbab1dc24b851ccec62a3c09204ec532e2776cd6fa4c6f18cf4aee"
+    }
+  },
+  "sourceFiles": {
+    "evaluation/receipt_stress.py": "e924517988fbab1dc24b851ccec62a3c09204ec532e2776cd6fa4c6f18cf4aee",
+    "evaluation/oracles/receipt.py": "899466372868e04df8952d7f2751caf61ab5bc2422819b14e5d68d662b49b943",
+    "evaluation/e1.py": "52b5871422a5a363f96d3ba78e59164c296d0924bee5a3a135dd45d01816b4af",
+    "evaluation/e2.py": "d6e065e659e0de08e2b6ba9e0c950b1472a9d60a243bd890480e339a0b34975e",
+    "evaluation/tests/test_receipt_oracle.py": "7a553e8bf7df77f20e2cf48b0ce034535c050ca9fac1478114ee879616398ca1",
+    "evaluation/tests/test_receipt_stress_collector.py": "acb684b68639274d0d27612cd58967c80468d21c58af5f8e47ba36ee0962b516",
+    "evaluation/tests/test_e2_receipt_plan.py": "7d44794e2e2f8387f5ff27042ee42379ebe2ff48d7a384ef53ec29c9a329ad57"
+  },
+  "testFilesUnchangedSinceRed": true,
+  "base": "HEAD 9a4d9a5 + uncommitted SL3-result files (S3-0012 set) and the SL4 files above",
+  "deviatingWitness": {
+    "path": "protocol/testtools/deviating_witness.py",
+    "sha256": "0511ba571b71d960d8ffbe4b8c811da99ed7de53a4b7515ac425c5291cc3c2d7",
+    "ownerInventoryEntry": "0511ba571b71d960d8ffbe4b8c811da99ed7de53a4b7515ac425c5291cc3c2d7",
+    "protocolPin": "0716a8e2d46f985f35a612d42acaae02ab8701a4",
+    "gitShowSha256": "0511ba571b71d960d8ffbe4b8c811da99ed7de53a4b7515ac425c5291cc3c2d7"
+  },
+  "suiteBracket": {
+    "files": 2726,
+    "pre": "1df53733e7d33cfbddd31715386448cbcc2aa86e05304f977024d3055238025b",
+    "post": "1df53733e7d33cfbddd31715386448cbcc2aa86e05304f977024d3055238025b",
+    "stable": true
+  },
+  "commands": [
+    {
+      "label": "red-before-implementation",
+      "order": "all SL4 tests written before any SL4 code",
+      "startedAt": "2026-10-10T11:47:31Z",
+      "exit": 1,
+      "argv": ".venv/bin/python -m pytest -q -p no:cacheprovider --color=no evaluation/tests/test_receipt_oracle.py evaluation/tests/test_receipt_stress_collector.py evaluation/tests/test_e2_receipt_plan.py",
+      "result": "116 failed (74 oracle module missing, 18 collector module missing, 24 create_plan receipt_stress)",
+      "output": "red-before-implementation.txt",
+      "outputSha256": "aded784fabd2f2262a30f6a640b74f88125c269882221c8276560545ac6ba2b3"
+    },
+    {
+      "label": "green-sl4-units",
+      "exit": 0,
+      "result": "oracle 74 + collector 18 passed"
+    },
+    {
+      "label": "control-reasons",
+      "exit": 0,
+      "result": "7/7 collector negative controls fail for the intended reason",
+      "argv": "pytest -q -s job-local scratch test (not committed; see control-reasons.txt)",
+      "output": "control-reasons.txt",
+      "outputSha256": "3017612f6a43a3eeb5f502d07295b9d89acb123a675d6523b204a7bd3379f5ca"
+    },
+    {
+      "label": "green-plan-tests",
+      "exit": 0,
+      "result": "24 passed (test_e2_receipt_plan.py)"
+    },
+    {
+      "label": "green-full-suite",
+      "argv": "PATH=$HOME/.foundry/bin:$PATH .venv/bin/python -m pytest -q -rs -p no:cacheprovider --color=no",
+      "startedAt": "2026-10-10T11:52:46Z",
+      "endedAt": "2026-10-10T11:58:37Z",
+      "wallSeconds": 351.2,
+      "exit": 0,
+      "result": "1226 passed, 0 failed, 0 skipped",
+      "output": "full-suite.txt",
+      "outputSha256": "979300594bc97c44b29feef00082d88117c3779785a0b362a99623f51ea6d3d7"
+    },
+    {
+      "label": "plan",
+      "argv": "e2.create_plan(run_id='E2-SL4-receipt-20261010', freeze_message='S3-0013', receipt_stress=True, review_mode='solo-correlated'); verify before/after write",
+      "exit": 0
+    }
+  ],
+  "versions": {
+    "python": "3.13.5",
+    "foundry": "1.8.5 (~/.foundry/bin)",
+    "ledgerPin": "933d2a7",
+    "protocolPin": "0716a8e"
+  },
+  "ledgerCodeCheck": {
+    "source": "git show 933d2a7 (PSC.sol, SigLib.sol, ProtocolTypes.sol; PSC.sol byte-identical to the working tree)",
+    "order": "reportAttestedOutcome (PSC.sol:240-258): profile, relay, status NONE->WRONG_SUBJECT, OUTCOME_RECORDED->REPLAY, then _checkReceipt (PSC.sol:261-281): binding requestDigest/gid/dataId -> WRONG_SUBJECT(2) unless MUT_NO_RECEIPT_BINDING; dbcChainId/kssc/grantId -> WRONG_DESTINATION(3); keyEpoch -> WRONG_EPOCH(12); grantExpiresAt 0 or > request expiry -> MALFORMED(20); witnessSetVersion -> STALE_STATE(6); QuorumLib.verify (SigLib.sol:37-59): non-witness -> BAD_SIGNATURE(1), none -> INSUFFICIENT_QUORUM(10)",
+    "bindingRows": "deviating receipt validly witness-signed, one bound field changed -> binding check -> WRONG_SUBJECT(2) = catalog REPAIR_SUPPORTED/WRONG_SUBJECT",
+    "signatureRows": "altered receipt, honest signature kept -> binding check (before quorum) -> WRONG_SUBJECT(2) = catalog SUPPORTED/WRONG_SUBJECT",
+    "positive": "honest receipt -> lsc.outcomeLog(digest, abi.encode(digest, outcomeDigest, receipt, relay)) kind OUTCOME(4), status 2, AttestedOutcomeRecorded(digest, grantId, outcomeDigest, dbcBlockNumber, logId) = catalog ACCEPT/SUPPORTED",
+    "disagreement": null
+  },
+  "protocolCodeCheck": {
+    "source": "git show 0716a8e",
+    "workerPrecondition": "adapter.py:133-136 _worker only from release/encrypt_record/finish_decryption (178-190); prepare_request pure; collect_checkpoint/collect_decision/attest_grant use Witness only (153-176); Witness/Ledger hold no files; deviating_witness takes no state directory",
+    "attestGrant": "witness.py attest_grant: DBC latest head, getGrant allowed + derived id else NOT_COMMITTED, PBC status 1 and gid/dataId match else WRONG_SUBJECT; signs GrantReceipt in the HMBCReceipt v1 PBC PSC domain (messages.py domain_for)",
+    "tool": "deviating_witness.py: TEST-ONLY guard, field guard, --at-block decimal, getGrant allowed at block, altered != original, wire.grant_receipt, signs with keyLabels[0]; one JSON line, exit 0; refusals exit 1"
+  },
+  "servicesStarted": [],
+  "gitWrites": []
+}

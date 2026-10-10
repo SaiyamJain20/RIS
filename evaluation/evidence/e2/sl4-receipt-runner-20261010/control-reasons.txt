@@ -1,0 +1,10 @@
+REASON tool-refuses receipt-binding-control gid -> TEST-ONLY deviating witness exited 1 (failed trial; output sha256 d672761bb0cd31de8522d16792909cbbe99575cbed6ba42f1309336e4becea43)
+  "firstLine": "refusing: no allowed grant with this id exists on the DBC at that block",
+  "note": "failed trial (S2-0007): non-zero exit; output kept only as sha256 and first line"
+REASON tool-two-fields receipt-binding-control dataId -> Public access only the named field differs from the honest receipt failed
+REASON tool-wrong-signer receipt-binding-control requestDigest -> Public access deviating signature recovers to the configured witness (own HMBCReceipt encoder) failed
+REASON no-receipt-binding receipt-binding-control gid -> Native transaction status differs from expected control
+REASON no-receipt-binding receipt-signature-control dataId -> Public access mined Rejected(WRONG_SUBJECT) without events failed
+REASON worker-appears receipt-binding-positive None -> Public access verified never-instantiated worker after ATTEST_GRANT failed
+REASON worker-appears receipt-signature-control gid -> Public access verified never-instantiated worker after ATTEST_GRANT failed
+7 passed in 1.58s
