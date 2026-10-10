@@ -1,0 +1,52 @@
+{
+  "startedAt": "2026-10-10T12:12:46.993582+00:00",
+  "endedAt": "2026-10-10T12:12:56.279531+00:00",
+  "ok": true,
+  "failure": null,
+  "variant": "receipt-binding-control",
+  "field": "requestDigest",
+  "delivery": "unknown",
+  "scope": "C-E2 SL4 receipt controls (repaired-e); separate controls, plan ACKs and gate apply",
+  "classification": "REPAIR_SUPPORTED",
+  "error": "WRONG_SUBJECT",
+  "outcome": "NO_NEW_OUTCOME",
+  "deliberateDeviation": "A40",
+  "qualification": "receipt binding rejects a validly witness-signed inconsistent receipt (TEST-ONLY A40 deliberate deviation, outside the honest-witness assumption); defence in depth, not an HMBC attack",
+  "timeline": {
+    "requestTimestamp": "1791634370",
+    "requestExpiresAt": "1791634400",
+    "grantTimestamp": "1791634372",
+    "grantExpiresAt": "1791634400",
+    "receiptDbcBlock": "24",
+    "reportTimestamp": "1791634375",
+    "reportDbcClock": "1791634376",
+    "reportAfterGrantExpiry": false,
+    "note": "late reconciliation is allowed by PSC (no report deadline); recorded, not required"
+  },
+  "workerSteps": [
+    {
+      "step": "baseline",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "REQUEST_ACCESS",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "FORWARD_OR_CONSUME",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "ATTEST_GRANT",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "RESIGN_RECEIPT_FIELD",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "REPORT_OUTCOME",
+      "worker": "never-instantiated (verified)"
+    }
+  ]
+}

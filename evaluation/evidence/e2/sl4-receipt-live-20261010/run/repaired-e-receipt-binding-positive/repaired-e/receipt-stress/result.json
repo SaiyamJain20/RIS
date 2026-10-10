@@ -1,0 +1,48 @@
+{
+  "startedAt": "2026-10-10T12:21:21.557664+00:00",
+  "endedAt": "2026-10-10T12:21:30.767578+00:00",
+  "ok": true,
+  "failure": null,
+  "variant": "receipt-binding-positive",
+  "field": null,
+  "delivery": "unknown",
+  "scope": "C-E2 SL4 receipt controls (repaired-e); separate controls, plan ACKs and gate apply",
+  "classification": "SUPPORTED",
+  "error": null,
+  "outcome": "ACCEPT",
+  "deliberateDeviation": null,
+  "qualification": "honest attest_grant receipt records exactly one matching outcome; prevents deny-all from passing; attests DBC authorization only, not release or delivery; tested reconstruction result",
+  "timeline": {
+    "requestTimestamp": "1791634884",
+    "requestExpiresAt": "1791634914",
+    "grantTimestamp": "1791634887",
+    "grantExpiresAt": "1791634914",
+    "receiptDbcBlock": "24",
+    "reportTimestamp": "1791634889",
+    "reportDbcClock": "1791634890",
+    "reportAfterGrantExpiry": false,
+    "note": "late reconciliation is allowed by PSC (no report deadline); recorded, not required"
+  },
+  "workerSteps": [
+    {
+      "step": "baseline",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "REQUEST_ACCESS",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "FORWARD_OR_CONSUME",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "ATTEST_GRANT",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "REPORT_OUTCOME",
+      "worker": "never-instantiated (verified)"
+    }
+  ]
+}

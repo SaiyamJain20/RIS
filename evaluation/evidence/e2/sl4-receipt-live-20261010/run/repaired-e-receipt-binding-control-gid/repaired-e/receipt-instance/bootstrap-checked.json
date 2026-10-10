@@ -1,0 +1,162 @@
+{
+  "binding": {
+    "pbcChainId": "18545",
+    "tmsc": "0xe51ef867d3300c8e89dfb234dc0c986c5c188903",
+    "rsc": "0x2f074c0412bb4bcb987eddf07069435b5e25d705",
+    "blockNumber": "41",
+    "blockTimestamp": "1791634448",
+    "deploymentSha256": "08d0c3da668d7362a25a79545682255ecfbbe310d6e053d3e37039a9be012bec",
+    "profile": "2"
+  },
+  "trustLists": [
+    {
+      "kind": "RevocationList",
+      "call": "TMSC.updateRevocationList",
+      "submitterRole": "H1-ca-admin",
+      "submitter": "0xa3abc957ca114c86ec9cdb519cffc62beb894066",
+      "list": {
+        "authority": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+        "version": "1",
+        "validUntil": "1791720848",
+        "revokedSerials": []
+      },
+      "signature": "0x45000edb4d9749f5d8643a581dfc82fe022253bb817a3dec397a8f925529fabe08bbba758bea25a3069da203bb3bc502a7c8101c33745cc3a708271456d64d101c",
+      "signer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e"
+    },
+    {
+      "kind": "TemporalAcl",
+      "call": "TMSC.updateTemporalAcl",
+      "submitterRole": "H1-ca-admin",
+      "submitter": "0xa3abc957ca114c86ec9cdb519cffc62beb894066",
+      "list": {
+        "authority": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+        "version": "1",
+        "validUntil": "1791720848",
+        "entries": [
+          {
+            "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+            "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+            "validFrom": "1791634388",
+            "validUntil": "1791663248"
+          }
+        ]
+      },
+      "signature": "0xde6ff86eb6f9b12bac022a71652da789f49e965c4e193e8269aa7612bfaba93f48c255cf2ed592df172a9b9bb5bd9a875cdddd07bfbd1a3b544a5d2ce350eb151b",
+      "signer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e"
+    },
+    {
+      "kind": "RevocationList",
+      "call": "TMSC.updateRevocationList",
+      "submitterRole": "H2-ca-admin",
+      "submitter": "0xffd802dc742f4939e8f8a185fd85632bf596433e",
+      "list": {
+        "authority": "0x6ea73ebda053f804cad188496ec48af56b06f698",
+        "version": "1",
+        "validUntil": "1791720848",
+        "revokedSerials": []
+      },
+      "signature": "0x2846f9deae106f33710daa4d6d48f66fd13d71e96dca91d471436172ab7c9b992165b96cf1b67479f995e2c925a79ce6bb8e92b6a596178c010a513f686b65c21b",
+      "signer": "0x6ea73ebda053f804cad188496ec48af56b06f698"
+    }
+  ],
+  "users": {
+    "alice": {
+      "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+      "recipientKeyLabel": "HMBC.recipient-key.alice",
+      "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d",
+      "certificate": {
+        "cert": {
+          "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+          "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+          "roles": [
+            "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6"
+          ],
+          "serial": "101",
+          "validFrom": "1700000000",
+          "validUntil": "2100000000"
+        },
+        "signature": "0x3545c5e9f4ba9b3cc1e66993bbef60ffb2a0382c668893689810d089bf9f08db59b22fa50f02cd5a4a31537f5545998081406caaab181df42bd5a42c776108521c"
+      },
+      "registration": {
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "certDigest": "0x332c88ebe5de46cd78f86c65c89a9db81b18fd1aefb0f7929fb94ccca4b16b21",
+        "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d",
+        "expiresAt": "1791638048"
+      },
+      "possessionSignature": "0x96ecbeb7f9b9c597b497cb131b879de208ffe54b50c20b1f1989c871964cad9a0e46c6ce21237119d44ece4eeac6d1d508d32620346e71332ad1fd57d2e7d4161b",
+      "bundle": {
+        "certificates": [
+          {
+            "cert": {
+              "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+              "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+              "roles": [
+                "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6"
+              ],
+              "serial": "101",
+              "validFrom": "1700000000",
+              "validUntil": "2100000000"
+            },
+            "signature": "0x3545c5e9f4ba9b3cc1e66993bbef60ffb2a0382c668893689810d089bf9f08db59b22fa50f02cd5a4a31537f5545998081406caaab181df42bd5a42c776108521c"
+          }
+        ],
+        "temporalClaims": [
+          {
+            "authority": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+            "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829"
+          }
+        ]
+      }
+    },
+    "bob": {
+      "gid": "0xac5a40f1b6d99eca704aebc1fd7ffa5dbb5be59a",
+      "recipientKeyLabel": "HMBC.recipient-key.bob",
+      "recipientKeyHash": "0x5fe346cd69926d7120dff3cc020f4d36ad8093b7c9bb95c6ecea9705a3f8c537",
+      "certificate": {
+        "cert": {
+          "issuer": "0x6ea73ebda053f804cad188496ec48af56b06f698",
+          "gid": "0xac5a40f1b6d99eca704aebc1fd7ffa5dbb5be59a",
+          "roles": [
+            "0x2b14ce5fd3a3fd8a4ecc39fd8d67dc8af4b88e6e8f70ba61d441e2e6b93e5160"
+          ],
+          "serial": "201",
+          "validFrom": "1700000000",
+          "validUntil": "2100000000"
+        },
+        "signature": "0xb5e4a3e2948fe60ba66051a50f2b07fbc0ec42557cf05bf9d7d9e73a2a3c24ff6f2dcc5eca5f0f753c56e5183e115224bdf890abd8cf4c0144e5b4f40e115f4e1b"
+      },
+      "registration": {
+        "gid": "0xac5a40f1b6d99eca704aebc1fd7ffa5dbb5be59a",
+        "certDigest": "0x8f4416c3970bf67cf9d3cbf8527aed7b116a07323d963cbe8ded90087b68bd39",
+        "recipientKeyHash": "0x5fe346cd69926d7120dff3cc020f4d36ad8093b7c9bb95c6ecea9705a3f8c537",
+        "expiresAt": "1791638048"
+      },
+      "possessionSignature": "0xe6fd5ded978788b41501b6a997ef6f999575bf237752327d3ad9144e7167734a0cf06ac1d5ac8fde10572113f3c427e77417bc1e2cab5fda130cd7c31b5556791c",
+      "bundle": {
+        "certificates": [
+          {
+            "cert": {
+              "issuer": "0x6ea73ebda053f804cad188496ec48af56b06f698",
+              "gid": "0xac5a40f1b6d99eca704aebc1fd7ffa5dbb5be59a",
+              "roles": [
+                "0x2b14ce5fd3a3fd8a4ecc39fd8d67dc8af4b88e6e8f70ba61d441e2e6b93e5160"
+              ],
+              "serial": "201",
+              "validFrom": "1700000000",
+              "validUntil": "2100000000"
+            },
+            "signature": "0xb5e4a3e2948fe60ba66051a50f2b07fbc0ec42557cf05bf9d7d9e73a2a3c24ff6f2dcc5eca5f0f753c56e5183e115224bdf890abd8cf4c0144e5b4f40e115f4e1b"
+          }
+        ],
+        "temporalClaims": []
+      }
+    }
+  },
+  "signatureChecks": 7,
+  "wrongAdminCode": "16",
+  "registeredUsers": [
+    "alice",
+    "bob"
+  ],
+  "scope": "bootstrap only; full C-E1 runner and integrated controls still required"
+}

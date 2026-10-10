@@ -433,3 +433,34 @@ Recorded by agent 3 (proxy) under the human solo directive A1-0059. **Correlated
 - **Gate E: NOT_RUN.** F and G stay locked.
 
 Evidence: `evaluation/evidence/e2/sl3-audit-live-20261010/README.md`.
+
+## Solo-phase checkpoint: SL4 receipt controls actual, 7/7, 2026-10-10 IST
+
+Recorded by agent 3 (proxy) under the human solo directive A1-0059. **Correlated self-review.**
+
+**Run:** plan 851896f3.. (FREEZE S3-0013; ACKs A1-0070 and S2-0013) gave exit 0, `E2_RECEIPT_STRESS_SLICE_PASS`, 7/7 repaired-e rows, 601.60 s.
+
+**Results:**
+
+| Row | Class | Observed |
+|---|---|---|
+| receipt binding control ×3 (requestDigest, gid, dataId) | REPAIR_SUPPORTED | `Rejected(2)` WRONG_SUBJECT for a witness-signed receipt with one bound field changed (TEST-ONLY deviating witness; A40 deliberate deviation) |
+| receipt signature control ×3 | SUPPORTED | `Rejected(2)` WRONG_SUBJECT for an altered receipt with the honest signature kept (binding precedes quorum) |
+| receipt binding positive | SUPPORTED | honest receipt accepted: OUTCOME(4) log, `AttestedOutcomeRecorded`, status 2 |
+
+**Controls:** wrong-admin (16), Alice allow with one outcome, and Bob deny (9) all passed.
+
+**Integrity:**
+- Sources were stable (bracket 04887294.., HEAD 8c7ef72).
+- All 28 owned processes exited 0 and their PIDs are absent.
+- The D2 worker was verified never-instantiated after every step (42 probes).
+- All 3 deviating-witness calls exited 0 and passed the three-way check.
+- The never-publish scan found nothing (15 key labels including the witness-1 vector key, and 7 release tokens). Raw tool logs are excluded.
+
+**Status:**
+- Catalog progress: **35/56 actual (21 remain).**
+- A1-0070 points 1-4 are stated in S3-0014: binding and signature rows differ only in signature evidence; receipt DBC block fields are witness-attested (authorization, not delivery); there is no PBC report deadline; binding rows are A40 deliberate deviations.
+- MUT_NO_RECEIPT_BINDING counterparts remain P3 work.
+- **Gate E: NOT_RUN.** F and G stay locked.
+
+Evidence: `evaluation/evidence/e2/sl4-receipt-live-20261010/README.md`.

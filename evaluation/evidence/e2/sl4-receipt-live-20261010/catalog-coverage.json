@@ -1,0 +1,359 @@
+{
+ "catalogSha256": "9ccade362c5a8853d63f06a08be3134ae32cd99527ceb36fcd78c311a9246858",
+ "rows": [
+  {
+   "caseId": "E03-receipt-binding-control-requestDigest-repaired-e",
+   "profile": "repaired-e",
+   "variant": "receipt-binding-control",
+   "receiptField": "requestDigest",
+   "sourceRefs": [
+    "S06",
+    "S07",
+    "S08",
+    "S19",
+    "S21",
+    "SPEC4/E03"
+   ],
+   "assumptions": [
+    "A01",
+    "A03",
+    "A12",
+    "A13",
+    "A36",
+    "A40",
+    "A41"
+   ],
+   "expected": {
+    "property": "audit-correspondence",
+    "outcome": "NO_NEW_OUTCOME",
+    "classification": "REPAIR_SUPPORTED",
+    "error": "WRONG_SUBJECT",
+    "qualification": "Each trial/profile begins with its OWN fresh forwarded request, actual allowed grant and honest receipt; separate fresh requests for all three fields, the positive trial and every signature trial. Change ONLY receipt.requestDigest; keep outer requestDigest, grantId, destination, epochs/expiry/membership and all other fields. Native repaired-e rejects WRONG_SUBJECT, PBC remains FORWARDED, no outcome/log/status transition. Agent2 TEST-ONLY tool signs the inconsistent receipt at runtime using actual PSC/chain domain and real grant/expiry; returns artifact only. MUT_NO_RECEIPT_BINDING (32) counterpart ACCEPTS and becomes OUTCOME_RECORDED; retain inconsistent native fields. Deliberate witness-deviation/defense-in-depth control outside honest-witness assumption, not an HMBC attack. Receipts may reconcile after expiry without reauthorizing release. NOT_RUN; owner measurements are separate."
+   },
+   "observed": "honest attest_grant receipt (DBC block 24); TEST-ONLY deviating witness exit 0 at --at-block 24, only receipt.requestDigest changed (0xa63e3b34.. -> 0x7be23f50..), signature recovers to the witness over the altered receipt (three-way check passed); reportAttestedOutcome 0x8bac4718.. (block 49) mined status0 Rejected(2) WRONG_SUBJECT, no events, whole native state unchanged, PBC stays FORWARDED with outcomeLogId 0",
+   "executionStatus": "COMPLETE",
+   "classification": "REPAIR_SUPPORTED",
+   "error": "WRONG_SUBJECT",
+   "outcome": "NO_NEW_OUTCOME",
+   "deliberateDeviation": "A40",
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step (baseline, REQUEST_ACCESS, FORWARD_OR_CONSUME, ATTEST_GRANT, RESIGN_RECEIPT_FIELD, REPORT_OUTCOME) (D49)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "requestTimestamp": "1791634370",
+    "requestExpiresAt": "1791634400",
+    "grantTimestamp": "1791634372",
+    "grantExpiresAt": "1791634400",
+    "receiptDbcBlock": "24",
+    "reportTimestamp": "1791634375",
+    "reportDbcClock": "1791634376",
+    "reportAfterGrantExpiry": false,
+    "note": "late reconciliation is allowed by PSC (no report deadline); recorded, not required"
+   },
+   "qualification": "receipt binding rejects a validly witness-signed inconsistent receipt (TEST-ONLY A40 deliberate deviation, outside the honest-witness assumption); defence in depth, not an HMBC attack Tested reconstruction result; symbolic adapter; delivery unknown; solo correlated review."
+  },
+  {
+   "caseId": "E03-receipt-binding-control-gid-repaired-e",
+   "profile": "repaired-e",
+   "variant": "receipt-binding-control",
+   "receiptField": "gid",
+   "sourceRefs": [
+    "S06",
+    "S07",
+    "S08",
+    "S19",
+    "S21",
+    "SPEC4/E03"
+   ],
+   "assumptions": [
+    "A01",
+    "A03",
+    "A12",
+    "A13",
+    "A36",
+    "A40",
+    "A41"
+   ],
+   "expected": {
+    "property": "audit-correspondence",
+    "outcome": "NO_NEW_OUTCOME",
+    "classification": "REPAIR_SUPPORTED",
+    "error": "WRONG_SUBJECT",
+    "qualification": "Each trial/profile begins with its OWN fresh forwarded request, actual allowed grant and honest receipt; separate fresh requests for all three fields, the positive trial and every signature trial. Change ONLY receipt.gid; keep outer requestDigest, grantId, destination, epochs/expiry/membership and all other fields. Native repaired-e rejects WRONG_SUBJECT, PBC remains FORWARDED, no outcome/log/status transition. Agent2 TEST-ONLY tool signs the inconsistent receipt at runtime using actual PSC/chain domain and real grant/expiry; returns artifact only. MUT_NO_RECEIPT_BINDING (32) counterpart ACCEPTS and becomes OUTCOME_RECORDED; retain inconsistent native fields. Deliberate witness-deviation/defense-in-depth control outside honest-witness assumption, not an HMBC attack. Receipts may reconcile after expiry without reauthorizing release. NOT_RUN; owner measurements are separate."
+   },
+   "observed": "honest attest_grant receipt (DBC block 24); TEST-ONLY deviating witness exit 0 at --at-block 24, only receipt.gid changed (0xc4ff0022.. -> 0xe03bfd6f..), signature recovers to the witness over the altered receipt (three-way check passed); reportAttestedOutcome 0x2ab166ae.. (block 49) mined status0 Rejected(2) WRONG_SUBJECT, no events, whole native state unchanged, PBC stays FORWARDED with outcomeLogId 0",
+   "executionStatus": "COMPLETE",
+   "classification": "REPAIR_SUPPORTED",
+   "error": "WRONG_SUBJECT",
+   "outcome": "NO_NEW_OUTCOME",
+   "deliberateDeviation": "A40",
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step (baseline, REQUEST_ACCESS, FORWARD_OR_CONSUME, ATTEST_GRANT, RESIGN_RECEIPT_FIELD, REPORT_OUTCOME) (D49)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "requestTimestamp": "1791634459",
+    "requestExpiresAt": "1791634489",
+    "grantTimestamp": "1791634462",
+    "grantExpiresAt": "1791634489",
+    "receiptDbcBlock": "24",
+    "reportTimestamp": "1791634465",
+    "reportDbcClock": "1791634466",
+    "reportAfterGrantExpiry": false,
+    "note": "late reconciliation is allowed by PSC (no report deadline); recorded, not required"
+   },
+   "qualification": "receipt binding rejects a validly witness-signed inconsistent receipt (TEST-ONLY A40 deliberate deviation, outside the honest-witness assumption); defence in depth, not an HMBC attack Tested reconstruction result; symbolic adapter; delivery unknown; solo correlated review."
+  },
+  {
+   "caseId": "E03-receipt-binding-control-dataId-repaired-e",
+   "profile": "repaired-e",
+   "variant": "receipt-binding-control",
+   "receiptField": "dataId",
+   "sourceRefs": [
+    "S06",
+    "S07",
+    "S08",
+    "S19",
+    "S21",
+    "SPEC4/E03"
+   ],
+   "assumptions": [
+    "A01",
+    "A03",
+    "A12",
+    "A13",
+    "A36",
+    "A40",
+    "A41"
+   ],
+   "expected": {
+    "property": "audit-correspondence",
+    "outcome": "NO_NEW_OUTCOME",
+    "classification": "REPAIR_SUPPORTED",
+    "error": "WRONG_SUBJECT",
+    "qualification": "Each trial/profile begins with its OWN fresh forwarded request, actual allowed grant and honest receipt; separate fresh requests for all three fields, the positive trial and every signature trial. Change ONLY receipt.dataId; keep outer requestDigest, grantId, destination, epochs/expiry/membership and all other fields. Native repaired-e rejects WRONG_SUBJECT, PBC remains FORWARDED, no outcome/log/status transition. Agent2 TEST-ONLY tool signs the inconsistent receipt at runtime using actual PSC/chain domain and real grant/expiry; returns artifact only. MUT_NO_RECEIPT_BINDING (32) counterpart ACCEPTS and becomes OUTCOME_RECORDED; retain inconsistent native fields. Deliberate witness-deviation/defense-in-depth control outside honest-witness assumption, not an HMBC attack. Receipts may reconcile after expiry without reauthorizing release. NOT_RUN; owner measurements are separate."
+   },
+   "observed": "honest attest_grant receipt (DBC block 24); TEST-ONLY deviating witness exit 0 at --at-block 24, only receipt.dataId changed (0x53ff1533.. -> 0x54ac5b3b..), signature recovers to the witness over the altered receipt (three-way check passed); reportAttestedOutcome 0xb792bbf2.. (block 49) mined status0 Rejected(2) WRONG_SUBJECT, no events, whole native state unchanged, PBC stays FORWARDED with outcomeLogId 0",
+   "executionStatus": "COMPLETE",
+   "classification": "REPAIR_SUPPORTED",
+   "error": "WRONG_SUBJECT",
+   "outcome": "NO_NEW_OUTCOME",
+   "deliberateDeviation": "A40",
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step (baseline, REQUEST_ACCESS, FORWARD_OR_CONSUME, ATTEST_GRANT, RESIGN_RECEIPT_FIELD, REPORT_OUTCOME) (D49)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "requestTimestamp": "1791634548",
+    "requestExpiresAt": "1791634577",
+    "grantTimestamp": "1791634550",
+    "grantExpiresAt": "1791634577",
+    "receiptDbcBlock": "24",
+    "reportTimestamp": "1791634553",
+    "reportDbcClock": "1791634554",
+    "reportAfterGrantExpiry": false,
+    "note": "late reconciliation is allowed by PSC (no report deadline); recorded, not required"
+   },
+   "qualification": "receipt binding rejects a validly witness-signed inconsistent receipt (TEST-ONLY A40 deliberate deviation, outside the honest-witness assumption); defence in depth, not an HMBC attack Tested reconstruction result; symbolic adapter; delivery unknown; solo correlated review."
+  },
+  {
+   "caseId": "E03-receipt-signature-control-requestDigest-repaired-e",
+   "profile": "repaired-e",
+   "variant": "receipt-signature-control",
+   "receiptField": "requestDigest",
+   "sourceRefs": [
+    "S06",
+    "S07",
+    "S08",
+    "S19",
+    "S21",
+    "SPEC4/E03"
+   ],
+   "assumptions": [
+    "A01",
+    "A03",
+    "A12",
+    "A13",
+    "A36",
+    "A40",
+    "A41"
+   ],
+   "expected": {
+    "property": "audit-correspondence",
+    "outcome": "NO_NEW_OUTCOME",
+    "classification": "SUPPORTED",
+    "error": "WRONG_SUBJECT",
+    "qualification": "Each trial/profile begins with its OWN fresh forwarded request, actual allowed grant and honest receipt; separate fresh requests for all three fields, the positive trial and every signature trial. Change ONLY receipt.requestDigest; keep outer requestDigest, grantId, destination, epochs/expiry/membership and all other fields. Native repaired-e rejects WRONG_SUBJECT, PBC remains FORWARDED, no outcome/log/status transition. Retain original honest signature over the altered receipt; binding check precedes quorum in repaired-e. MUT_NO_RECEIPT_BINDING (32) reaches BAD_SIGNATURE and also rejects; this signature control cannot kill the binding mutant. Receipts may reconcile after expiry without reauthorizing release. NOT_RUN; owner measurements are separate."
+   },
+   "observed": "honest attest_grant receipt (DBC block 24); receipt.requestDigest changed (0x162bf288.. -> 0xcf210f91..), honest signature kept (recovers to a non-witness over the altered receipt); reportAttestedOutcome 0x6fc8c2b7.. (block 49) mined status0 Rejected(2) WRONG_SUBJECT (binding before quorum), no events, whole native state unchanged",
+   "executionStatus": "COMPLETE",
+   "classification": "SUPPORTED",
+   "error": "WRONG_SUBJECT",
+   "outcome": "NO_NEW_OUTCOME",
+   "deliberateDeviation": null,
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step (baseline, REQUEST_ACCESS, FORWARD_OR_CONSUME, ATTEST_GRANT, ALTER_RECEIPT_KEEP_SIGNATURE, REPORT_OUTCOME) (D49)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "requestTimestamp": "1791634633",
+    "requestExpiresAt": "1791634662",
+    "grantTimestamp": "1791634635",
+    "grantExpiresAt": "1791634662",
+    "receiptDbcBlock": "24",
+    "reportTimestamp": "1791634637",
+    "reportDbcClock": "1791634638",
+    "reportAfterGrantExpiry": false,
+    "note": "late reconciliation is allowed by PSC (no report deadline); recorded, not required"
+   },
+   "qualification": "altered receipt with the honest signature kept is rejected by the binding check, which precedes quorum; this control cannot kill MUT_NO_RECEIPT_BINDING (that mutant reaches BAD_SIGNATURE) Tested reconstruction result; symbolic adapter; delivery unknown; solo correlated review."
+  },
+  {
+   "caseId": "E03-receipt-signature-control-gid-repaired-e",
+   "profile": "repaired-e",
+   "variant": "receipt-signature-control",
+   "receiptField": "gid",
+   "sourceRefs": [
+    "S06",
+    "S07",
+    "S08",
+    "S19",
+    "S21",
+    "SPEC4/E03"
+   ],
+   "assumptions": [
+    "A01",
+    "A03",
+    "A12",
+    "A13",
+    "A36",
+    "A40",
+    "A41"
+   ],
+   "expected": {
+    "property": "audit-correspondence",
+    "outcome": "NO_NEW_OUTCOME",
+    "classification": "SUPPORTED",
+    "error": "WRONG_SUBJECT",
+    "qualification": "Each trial/profile begins with its OWN fresh forwarded request, actual allowed grant and honest receipt; separate fresh requests for all three fields, the positive trial and every signature trial. Change ONLY receipt.gid; keep outer requestDigest, grantId, destination, epochs/expiry/membership and all other fields. Native repaired-e rejects WRONG_SUBJECT, PBC remains FORWARDED, no outcome/log/status transition. Retain original honest signature over the altered receipt; binding check precedes quorum in repaired-e. MUT_NO_RECEIPT_BINDING (32) reaches BAD_SIGNATURE and also rejects; this signature control cannot kill the binding mutant. Receipts may reconcile after expiry without reauthorizing release. NOT_RUN; owner measurements are separate."
+   },
+   "observed": "honest attest_grant receipt (DBC block 24); receipt.gid changed (0xc4ff0022.. -> 0xe03bfd6f..), honest signature kept (recovers to a non-witness over the altered receipt); reportAttestedOutcome 0x8761efad.. (block 49) mined status0 Rejected(2) WRONG_SUBJECT (binding before quorum), no events, whole native state unchanged",
+   "executionStatus": "COMPLETE",
+   "classification": "SUPPORTED",
+   "error": "WRONG_SUBJECT",
+   "outcome": "NO_NEW_OUTCOME",
+   "deliberateDeviation": null,
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step (baseline, REQUEST_ACCESS, FORWARD_OR_CONSUME, ATTEST_GRANT, ALTER_RECEIPT_KEEP_SIGNATURE, REPORT_OUTCOME) (D49)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "requestTimestamp": "1791634715",
+    "requestExpiresAt": "1791634744",
+    "grantTimestamp": "1791634717",
+    "grantExpiresAt": "1791634744",
+    "receiptDbcBlock": "24",
+    "reportTimestamp": "1791634719",
+    "reportDbcClock": "1791634720",
+    "reportAfterGrantExpiry": false,
+    "note": "late reconciliation is allowed by PSC (no report deadline); recorded, not required"
+   },
+   "qualification": "altered receipt with the honest signature kept is rejected by the binding check, which precedes quorum; this control cannot kill MUT_NO_RECEIPT_BINDING (that mutant reaches BAD_SIGNATURE) Tested reconstruction result; symbolic adapter; delivery unknown; solo correlated review."
+  },
+  {
+   "caseId": "E03-receipt-signature-control-dataId-repaired-e",
+   "profile": "repaired-e",
+   "variant": "receipt-signature-control",
+   "receiptField": "dataId",
+   "sourceRefs": [
+    "S06",
+    "S07",
+    "S08",
+    "S19",
+    "S21",
+    "SPEC4/E03"
+   ],
+   "assumptions": [
+    "A01",
+    "A03",
+    "A12",
+    "A13",
+    "A36",
+    "A40",
+    "A41"
+   ],
+   "expected": {
+    "property": "audit-correspondence",
+    "outcome": "NO_NEW_OUTCOME",
+    "classification": "SUPPORTED",
+    "error": "WRONG_SUBJECT",
+    "qualification": "Each trial/profile begins with its OWN fresh forwarded request, actual allowed grant and honest receipt; separate fresh requests for all three fields, the positive trial and every signature trial. Change ONLY receipt.dataId; keep outer requestDigest, grantId, destination, epochs/expiry/membership and all other fields. Native repaired-e rejects WRONG_SUBJECT, PBC remains FORWARDED, no outcome/log/status transition. Retain original honest signature over the altered receipt; binding check precedes quorum in repaired-e. MUT_NO_RECEIPT_BINDING (32) reaches BAD_SIGNATURE and also rejects; this signature control cannot kill the binding mutant. Receipts may reconcile after expiry without reauthorizing release. NOT_RUN; owner measurements are separate."
+   },
+   "observed": "honest attest_grant receipt (DBC block 24); receipt.dataId changed (0x53ff1533.. -> 0x54ac5b3b..), honest signature kept (recovers to a non-witness over the altered receipt); reportAttestedOutcome 0x3f055491.. (block 49) mined status0 Rejected(2) WRONG_SUBJECT (binding before quorum), no events, whole native state unchanged",
+   "executionStatus": "COMPLETE",
+   "classification": "SUPPORTED",
+   "error": "WRONG_SUBJECT",
+   "outcome": "NO_NEW_OUTCOME",
+   "deliberateDeviation": null,
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step (baseline, REQUEST_ACCESS, FORWARD_OR_CONSUME, ATTEST_GRANT, ALTER_RECEIPT_KEEP_SIGNATURE, REPORT_OUTCOME) (D49)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "requestTimestamp": "1791634803",
+    "requestExpiresAt": "1791634833",
+    "grantTimestamp": "1791634806",
+    "grantExpiresAt": "1791634833",
+    "receiptDbcBlock": "24",
+    "reportTimestamp": "1791634808",
+    "reportDbcClock": "1791634808",
+    "reportAfterGrantExpiry": false,
+    "note": "late reconciliation is allowed by PSC (no report deadline); recorded, not required"
+   },
+   "qualification": "altered receipt with the honest signature kept is rejected by the binding check, which precedes quorum; this control cannot kill MUT_NO_RECEIPT_BINDING (that mutant reaches BAD_SIGNATURE) Tested reconstruction result; symbolic adapter; delivery unknown; solo correlated review."
+  },
+  {
+   "caseId": "E03-receipt-binding-positive-repaired-e",
+   "profile": "repaired-e",
+   "variant": "receipt-binding-positive",
+   "receiptField": null,
+   "sourceRefs": [
+    "S06",
+    "S07",
+    "S08",
+    "S19",
+    "S21",
+    "SPEC4/E03"
+   ],
+   "assumptions": [
+    "A01",
+    "A03",
+    "A12",
+    "A13",
+    "A36",
+    "A40",
+    "A41"
+   ],
+   "expected": {
+    "property": "audit-correspondence",
+    "outcome": "ACCEPT",
+    "classification": "SUPPORTED",
+    "error": null,
+    "qualification": "Separate fresh forwarded-and-granted request in repaired-e AND receipt-binding mutant. Honest attest_grant receipt records one matching successful outcome; preserve native fields/status/log. This positive control prevents deny-all from passing. It attests authorization only, not release/delivery. Receipts may reconcile after expiry. NOT_RUN."
+   },
+   "observed": "honest attest_grant receipt (DBC block 24) submitted unchanged; reportAttestedOutcome 0x7d5da1e0.. (block 49) mined status1: LSC OUTCOME(4) log 7 with details abi.encode(digest, outcomeDigest, receipt, relay) and detailsHash checked, then AttestedOutcomeRecorded(digest, grantId, outcomeDigest, dbcBlockNumber, logId); status 2; DBC unchanged",
+   "executionStatus": "COMPLETE",
+   "classification": "SUPPORTED",
+   "error": null,
+   "outcome": "ACCEPT",
+   "deliberateDeviation": null,
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step (baseline, REQUEST_ACCESS, FORWARD_OR_CONSUME, ATTEST_GRANT, REPORT_OUTCOME) (D49)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "requestTimestamp": "1791634884",
+    "requestExpiresAt": "1791634914",
+    "grantTimestamp": "1791634887",
+    "grantExpiresAt": "1791634914",
+    "receiptDbcBlock": "24",
+    "reportTimestamp": "1791634889",
+    "reportDbcClock": "1791634890",
+    "reportAfterGrantExpiry": false,
+    "note": "late reconciliation is allowed by PSC (no report deadline); recorded, not required"
+   },
+   "qualification": "honest attest_grant receipt records exactly one matching outcome; prevents deny-all from passing; attests DBC authorization only, not release or delivery; tested reconstruction result Tested reconstruction result; symbolic adapter; delivery unknown; solo correlated review."
+  }
+ ],
+ "completedRows": 7,
+ "actualCatalogComparisons": 35,
+ "remainingCatalogComparisons": 21,
+ "fullCatalogComplete": false
+}

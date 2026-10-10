@@ -1,0 +1,164 @@
+{
+  "rq": "E",
+  "executionMode": "two-chain-e2-receipt-stress-slice",
+  "adapterMode": "symbolic",
+  "status": "E2_RECEIPT_STRESS_SLICE_PASS",
+  "startedAt": "2026-10-10T12:11:31.441848+00:00",
+  "endedAt": "2026-10-10T12:21:32.354859+00:00",
+  "cases": {
+    "repaired-e-receipt-binding-control-requestDigest": {
+      "status": "RECEIPT_STRESS_CONTROL_PASS",
+      "manifest": "repaired-e-receipt-binding-control-requestDigest/manifest.json"
+    },
+    "repaired-e-receipt-binding-control-gid": {
+      "status": "RECEIPT_STRESS_CONTROL_PASS",
+      "manifest": "repaired-e-receipt-binding-control-gid/manifest.json"
+    },
+    "repaired-e-receipt-binding-control-dataId": {
+      "status": "RECEIPT_STRESS_CONTROL_PASS",
+      "manifest": "repaired-e-receipt-binding-control-dataId/manifest.json"
+    },
+    "repaired-e-receipt-signature-control-requestDigest": {
+      "status": "RECEIPT_STRESS_CONTROL_PASS",
+      "manifest": "repaired-e-receipt-signature-control-requestDigest/manifest.json"
+    },
+    "repaired-e-receipt-signature-control-gid": {
+      "status": "RECEIPT_STRESS_CONTROL_PASS",
+      "manifest": "repaired-e-receipt-signature-control-gid/manifest.json"
+    },
+    "repaired-e-receipt-signature-control-dataId": {
+      "status": "RECEIPT_STRESS_CONTROL_PASS",
+      "manifest": "repaired-e-receipt-signature-control-dataId/manifest.json"
+    },
+    "repaired-e-receipt-binding-positive": {
+      "status": "RECEIPT_STRESS_CONTROL_PASS",
+      "manifest": "repaired-e-receipt-binding-positive/manifest.json"
+    }
+  },
+  "servicesStarted": [
+    {
+      "case": "repaired-e-receipt-binding-control-requestDigest",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 3236216
+    },
+    {
+      "case": "repaired-e-receipt-binding-control-requestDigest",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 3236349
+    },
+    {
+      "case": "repaired-e-receipt-binding-control-gid",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 3257272
+    },
+    {
+      "case": "repaired-e-receipt-binding-control-gid",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 3257395
+    },
+    {
+      "case": "repaired-e-receipt-binding-control-dataId",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 3278290
+    },
+    {
+      "case": "repaired-e-receipt-binding-control-dataId",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 3278410
+    },
+    {
+      "case": "repaired-e-receipt-signature-control-requestDigest",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 3299325
+    },
+    {
+      "case": "repaired-e-receipt-signature-control-requestDigest",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 3299446
+    },
+    {
+      "case": "repaired-e-receipt-signature-control-gid",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 3320398
+    },
+    {
+      "case": "repaired-e-receipt-signature-control-gid",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 3320519
+    },
+    {
+      "case": "repaired-e-receipt-signature-control-dataId",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 3341215
+    },
+    {
+      "case": "repaired-e-receipt-signature-control-dataId",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 3341337
+    },
+    {
+      "case": "repaired-e-receipt-binding-positive",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 3362076
+    },
+    {
+      "case": "repaired-e-receipt-binding-positive",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 3362197
+    }
+  ],
+  "acks": {
+    "agent-1": {
+      "commit": "8c7ef72b3143f7afda1df2cca0b29147690851e4",
+      "path": "communication/agent-1/outbox/0070-ack-sl4-receipt-controls-freeze.md",
+      "sha256": "64f009a62c359171375fc6a80248d17de84fe0324a726edd30cffa4b5106d3b3",
+      "messageId": "A1-0070"
+    },
+    "agent-2": {
+      "commit": "8c7ef72b3143f7afda1df2cca0b29147690851e4",
+      "path": "communication/agent-1/solo/agent-2-proxy/outbox/0013-ack-sl4-receipt-controls-freeze.md",
+      "sha256": "aeb2a3072173e884d0752956b51bbf73dbd10657c3fe4ff7ed3aee71e987f838",
+      "messageId": "S2-0013"
+    },
+    "freeze": {
+      "commit": "8c7ef72b3143f7afda1df2cca0b29147690851e4",
+      "path": "communication/agent-1/solo/agent-3-proxy/outbox/0013-freeze-sl4-receipt-controls.md",
+      "sha256": "ad3735356ede700c4e37a4f4e95ab04a36d0227d629f298a62b642d88a92d117",
+      "messageId": "S3-0013"
+    }
+  },
+  "failure": null,
+  "sourceStable": true,
+  "limitation": "Seven repaired-e E03 receipt controls only; no complete catalog or RQ gate.",
+  "planSha256": "851896f3608ac7e234820c4d24a6d6d8db1e608254828ab8199cce6aa672676c",
+  "reviewMode": "solo-correlated",
+  "reviewDisclosure": "Solo phase under the human directive A1-0059: agent 1 and the agent-2/agent-3 proxies are the same model, so every review and ACK is correlated self-review, not independent review."
+}
