@@ -16,8 +16,9 @@ F and G locked. All proxy reviews and ACKs are correlated self-review (same mode
 | SL3 audit stress ×6 | **actual PASS 6/6** | FREEZE S3-0011, plan d768463d..; result S3-0012; `evaluation/evidence/e2/sl3-audit-live-20261010/` |
 | SL4 receipt controls ×7 | **actual PASS 7/7** | FREEZE S3-0013, plan 851896f3..; result S3-0014; `evaluation/evidence/e2/sl4-receipt-live-20261010/` |
 | SL5 trust freshness ×6 | **actual PASS 6/6** | FREEZE S3-0015, plan 9e14a148..; result S3-0016; `evaluation/evidence/e2/sl5-trust-live-20261010/` |
+| SL6 barrier and expired duty ×9 | **FREEZE published, not run** | S3-0017, plan 78d6ebfb..; `evaluation/evidence/e2/sl6-barrier-runner-20261011/` |
 
-- FREEZE S3-0015 is released. No services are running.
+- FREEZE S3-0015 is released. No services are running. S3-0017 awaits both ACKs.
 - Decisions D47 (paper crash relabel) and D48 (SL0 choices) are in `communication/DECISIONS.md`.
 
 **Catalog progress: 41/56 actual, 15 remaining.**
@@ -99,5 +100,13 @@ toolchain and host-tools. Keep helper scripts out of `evaluation/` as `.py` file
 3. **SL5 runner facts (S3-0015):** `e1.sign_list_argv` builds the producer argv only from the plan
    templates; `stress_sign_list` re-hashes `sign_list.sh` and `SignList.s.sol` and re-checks the
    deployment file; a non-zero producer exit writes only `trust-stress/sign-list-refusal.json`.
-4. **SL6 (barriers, expired duty ×9):** one `collect_decision` per request (A1-0064, S2-0007 A31);
-   collect the expired-duty decision while the duty is valid. Test-first, then a FREEZE.
+4. **SL6 run**, after A1 and S2 ACKs of S3-0017 are committed and agent 1 clears it:
+   - build `tmp/p3/sl6-run/acks.json` and verify it with `e1._acks`; run the S3-0017 command in the background
+     (about 14 minutes for 9 rows);
+   - copy `tmp/p3/sl5-run/scripts/select_audit.py`, add `barrier` to the stress/instance patterns, keep excluding
+     `.txt`; per row keep `barrier-instance/{deployment,bootstrap-checked}.json`, `{pbc,dbc}-native/*` and
+     `barrier-stress/*`; publish S3-0018 and the GATES checkpoint (50/56 if 9/9).
+5. **SL6 runner facts (S3-0017):** `e1.barrier_sign_argv` (templates `revoke-alice`, `short-duty`; `untilIn`
+   bounded 25..600); the collector records `current_checkpoint`, `timing`, `staleCause`, `expiredStep` and
+   `decisionCollections`; only the DBC clock moves, only in expired-duty rows.
+6. **SL7 (wrong destination, expiry boundary ×6):** multi-deployment support; record which expiry binds (A1-0064).

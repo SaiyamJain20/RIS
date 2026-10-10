@@ -1,0 +1,92 @@
+paper-strict pre-barrier-revocation worker-changed -> verified never-instantiated worker, unchanged (no SL6 step is a worker operation) failed
+paper-strict pre-barrier-revocation request-not-forwarded -> forwarded request before consumption failed
+paper-strict pre-barrier-revocation grant-existed -> no grant, nonce unused failed
+paper-strict pre-barrier-revocation rejected -> paper policyEnf grants failed
+paper-strict pre-barrier-revocation grant-other-expiry -> exact GrantIssued failed
+paper-strict pre-barrier-revocation state-unchanged -> only the grant delta failed
+paper-strict pre-barrier-revocation decision-present -> paper profiles have no certificate or checkpoint failed
+paper-strict pre-barrier-revocation consume-before-revocation-or-duty -> consumption after the PBC revocation failed
+paper-strict post-barrier-revocation worker-changed -> verified never-instantiated worker, unchanged (no SL6 step is a worker operation) failed
+paper-strict post-barrier-revocation request-not-forwarded -> forwarded request before consumption failed
+paper-strict post-barrier-revocation grant-existed -> no grant, nonce unused failed
+paper-strict post-barrier-revocation rejected -> paper policyEnf grants failed
+paper-strict post-barrier-revocation grant-other-expiry -> exact GrantIssued failed
+paper-strict post-barrier-revocation state-unchanged -> only the grant delta failed
+paper-strict post-barrier-revocation decision-present -> paper profiles have no certificate or checkpoint failed
+paper-strict post-barrier-revocation consume-before-revocation-or-duty -> consumption after the PBC revocation failed
+paper-strict expired-duty worker-changed -> verified never-instantiated worker, unchanged (no SL6 step is a worker operation) failed
+paper-strict expired-duty request-not-forwarded -> forwarded request before consumption failed
+paper-strict expired-duty grant-existed -> no grant, nonce unused failed
+paper-strict expired-duty rejected -> paper policyEnf grants failed
+paper-strict expired-duty grant-other-expiry -> exact GrantIssued failed
+paper-strict expired-duty state-unchanged -> only the grant delta failed
+paper-strict expired-duty decision-present -> paper profiles have no certificate or checkpoint failed
+paper-strict expired-duty consume-before-revocation-or-duty -> only the DBC clock moved past the duty end failed
+paper-minimal pre-barrier-revocation worker-changed -> verified never-instantiated worker, unchanged (no SL6 step is a worker operation) failed
+paper-minimal pre-barrier-revocation request-not-forwarded -> forwarded request before consumption failed
+paper-minimal pre-barrier-revocation grant-existed -> no grant, nonce unused failed
+paper-minimal pre-barrier-revocation rejected -> paper policyEnf grants failed
+paper-minimal pre-barrier-revocation grant-other-expiry -> exact GrantIssued failed
+paper-minimal pre-barrier-revocation state-unchanged -> only the grant delta failed
+paper-minimal pre-barrier-revocation decision-present -> paper profiles have no certificate or checkpoint failed
+paper-minimal pre-barrier-revocation consume-before-revocation-or-duty -> consumption after the PBC revocation failed
+paper-minimal post-barrier-revocation worker-changed -> verified never-instantiated worker, unchanged (no SL6 step is a worker operation) failed
+paper-minimal post-barrier-revocation request-not-forwarded -> forwarded request before consumption failed
+paper-minimal post-barrier-revocation grant-existed -> no grant, nonce unused failed
+paper-minimal post-barrier-revocation rejected -> paper policyEnf grants failed
+paper-minimal post-barrier-revocation grant-other-expiry -> exact GrantIssued failed
+paper-minimal post-barrier-revocation state-unchanged -> only the grant delta failed
+paper-minimal post-barrier-revocation decision-present -> paper profiles have no certificate or checkpoint failed
+paper-minimal post-barrier-revocation consume-before-revocation-or-duty -> consumption after the PBC revocation failed
+paper-minimal expired-duty worker-changed -> verified never-instantiated worker, unchanged (no SL6 step is a worker operation) failed
+paper-minimal expired-duty request-not-forwarded -> forwarded request before consumption failed
+paper-minimal expired-duty grant-existed -> no grant, nonce unused failed
+paper-minimal expired-duty rejected -> paper policyEnf grants failed
+paper-minimal expired-duty grant-other-expiry -> exact GrantIssued failed
+paper-minimal expired-duty state-unchanged -> only the grant delta failed
+paper-minimal expired-duty decision-present -> paper profiles have no certificate or checkpoint failed
+paper-minimal expired-duty consume-before-revocation-or-duty -> only the DBC clock moved past the duty end failed
+repaired-e pre-barrier-revocation worker-changed -> verified never-instantiated worker, unchanged (no SL6 step is a worker operation) failed
+repaired-e pre-barrier-revocation request-not-forwarded -> forwarded request before consumption failed
+repaired-e pre-barrier-revocation grant-existed -> no grant, nonce unused failed
+repaired-e pre-barrier-revocation rejected -> older certificate accepted before the revoking checkpoint failed
+repaired-e pre-barrier-revocation two-decisions -> exactly one collect_decision for the request (A31) failed
+repaired-e pre-barrier-revocation recollected-after-revocation -> certificate collected before the PBC update, never re-collected failed
+repaired-e pre-barrier-revocation checkpoint-after-revocation -> first checkpoint predates the revocation failed
+repaired-e pre-barrier-revocation not-revoked -> Alice revoked on the PBC (REVOKED 19, authEpoch + 1) failed
+repaired-e pre-barrier-revocation grant-other-expiry -> exact GrantIssued failed
+repaired-e pre-barrier-revocation nonce-unconsumed -> only the grant delta failed
+repaired-e pre-barrier-revocation new-checkpoint-before-consume -> the last accepted checkpoint is the one current at consumption failed
+repaired-e pre-barrier-revocation epoch-mismatch -> honest ALLOW on the first checkpoint failed
+repaired-e post-barrier-revocation worker-changed -> verified never-instantiated worker, unchanged (no SL6 step is a worker operation) failed
+repaired-e post-barrier-revocation request-not-forwarded -> forwarded request before consumption failed
+repaired-e post-barrier-revocation grant-existed -> no grant, nonce unused failed
+repaired-e post-barrier-revocation accepted -> mined Rejected(STALE_STATE) without events failed
+repaired-e post-barrier-revocation other-code -> mined Rejected(STALE_STATE) without events failed
+repaired-e post-barrier-revocation two-decisions -> exactly one collect_decision for the request (A31) failed
+repaired-e post-barrier-revocation recollected-after-revocation -> certificate collected before the PBC update, never re-collected failed
+repaired-e post-barrier-revocation cp2-same-sequence -> new checkpoint carries the revocation (sequence + 1, new authEpoch) failed
+repaired-e post-barrier-revocation cp2-old-epoch -> new checkpoint carries the revocation (sequence + 1, new authEpoch) failed
+repaired-e post-barrier-revocation cp2-before-revocation -> new checkpoint carries the revocation (sequence + 1, new authEpoch) failed
+repaired-e post-barrier-revocation state-changed -> no grant, nonce, count or log change failed
+repaired-e post-barrier-revocation no-second-checkpoint -> ACCEPT_CHECKPOINT after the revocation failed
+repaired-e post-barrier-revocation cp2-not-current -> the last accepted checkpoint is the one current at consumption failed
+repaired-e post-barrier-revocation decision-outlives-cp2 -> DV line 87 sequence cause only: older sequence, decision not outliving the new checkpoint failed
+repaired-e post-barrier-revocation consume-after-cp2-expiry -> decision and current checkpoint live at consumption (DecisionVerifier steps 9 and 10a pass) failed
+repaired-e post-barrier-revocation consume-after-decision-expiry -> decision and current checkpoint live at consumption (DecisionVerifier steps 9 and 10a pass) failed
+repaired-e post-barrier-revocation consume-after-request-expiry -> consumption strictly before request expiry failed
+repaired-e expired-duty worker-changed -> verified never-instantiated worker, unchanged (no SL6 step is a worker operation) failed
+repaired-e expired-duty request-not-forwarded -> forwarded request before consumption failed
+repaired-e expired-duty grant-existed -> no grant, nonce unused failed
+repaired-e expired-duty accepted -> mined Rejected(EXPIRED) without events failed
+repaired-e expired-duty other-code -> mined Rejected(EXPIRED) without events failed
+repaired-e expired-duty two-decisions -> exactly one collect_decision for the request (A31) failed
+repaired-e expired-duty decision-after-duty -> decision collected while the duty was valid (A1-0064) failed
+repaired-e expired-duty consume-after-request-expiry -> consumption strictly before request expiry failed
+repaired-e expired-duty consume-after-decision-expiry -> decision and current checkpoint live at consumption (DecisionVerifier steps 9 and 10a pass) failed
+repaired-e expired-duty consume-after-checkpoint-expiry -> decision and current checkpoint live at consumption (DecisionVerifier steps 9 and 10a pass) failed
+repaired-e expired-duty consume-before-duty-end -> only the DBC clock moved past the duty end failed
+repaired-e expired-duty clock-not-advanced -> only the DBC clock moved past the duty end failed
+repaired-e expired-duty state-changed -> no grant, nonce, count or log change failed
+repaired-e expired-duty request-after-duty -> duty valid at the PBC decision failed
+repaired-e expired-duty checkpoint-changed -> the last accepted checkpoint is the one current at consumption failed

@@ -1,0 +1,157 @@
+{
+  "plan": {
+    "path": "evaluation/evidence/e2/sl6-barrier-runner-20261011/integration-plan.json",
+    "sha256": "78d6ebfbe041d4db3733d56d8eab0ee2872e3803d1771151d9cac52e432aa1ba",
+    "runId": "E2-SL6-barrier-20261011",
+    "freezeMessage": "S3-0017",
+    "agent3SourcesCount": 100,
+    "agent3SourcesAggregate": "318530232cd69cb6e9182ad3c0e3099d0ce09abe6a1f7c6ee244e789ad93e036"
+  },
+  "changedAgent3SourcesSinceSL5": {
+    "evaluation/barrier_stress.py": {
+      "old": null,
+      "new": "edd619ac1e41cfd496f9565f2aba37015e84311bdd4318b4e669181eee5e9d3f"
+    },
+    "evaluation/e1.py": {
+      "old": "c3f8b4decaf523e606f001e84c4c23f7a775a9f7243b0b93767fbb7031c5478c",
+      "new": "e6a073a3ab32b4a80c5efb72186be1906face74851aa0497ca146f9b8146eed3"
+    },
+    "evaluation/e2.py": {
+      "old": "a8f838d059ff5bee040cbf5e5f7da1bb157b7b815e201bec2570b7e51848a785",
+      "new": "fa25ae8b4f68e7ca8b369f884b22495315dc56ad7210b22db81f65a2537b012e"
+    },
+    "evaluation/oracles/barrier.py": {
+      "old": null,
+      "new": "98061f88d70280c3fdf91da1f1c2e4cca62d538c503817b80c6155ffb95d0448"
+    }
+  },
+  "sourceFiles": {
+    "evaluation/barrier_stress.py": "edd619ac1e41cfd496f9565f2aba37015e84311bdd4318b4e669181eee5e9d3f",
+    "evaluation/oracles/barrier.py": "98061f88d70280c3fdf91da1f1c2e4cca62d538c503817b80c6155ffb95d0448",
+    "evaluation/e1.py": "e6a073a3ab32b4a80c5efb72186be1906face74851aa0497ca146f9b8146eed3",
+    "evaluation/e2.py": "fa25ae8b4f68e7ca8b369f884b22495315dc56ad7210b22db81f65a2537b012e",
+    "evaluation/tests/test_barrier_oracle.py": "809b12a301e8f6cae6498e04bd45ecc7c6fc43d47635148dd5488da68649bbc9",
+    "evaluation/tests/test_barrier_stress_collector.py": "075ca52000a97bd08bcbe48e923cf72cbf0b249f5d48503e5b89c570798bc498",
+    "evaluation/tests/test_e2_barrier_plan.py": "847b510064cd7952c12c31c80d8f4c005e815f09facf3fb11850f1ca2bdc95ec"
+  },
+  "a1PreFreezeConditions": "2026-10-11 ~04:00 IST message: conditions 1-7 added to the tests before RED",
+  "testFilesChangedAfterRed": [
+    {
+      "file": "evaluation/tests/test_barrier_oracle.py",
+      "change": "checkpoint mutations keep current_checkpoint consistent with the mutated checkpoint, so each fails at its intended check (found by the reason check; no test weakened)"
+    }
+  ],
+  "base": "HEAD 0b0412f + the SL6 files above",
+  "signList": {
+    "script": "ledger/tools/sign_list.sh",
+    "scriptSha256": "806e9a98a52899ca5fc4fe33e1e90e39d7607a51a4f5c6c5942c0edd21c37ded",
+    "forgeScript": "ledger/script/SignList.s.sol",
+    "forgeScriptSha256": "7aa3b1dd085f5aaaa6aa7b28191d3b6d0cfd3ff02bb0b61291daead13e3ba177",
+    "invocations": {
+      "revoke-alice": [
+        "{bash}",
+        "{script}",
+        "{pbcRpc}",
+        "{deployment}",
+        "{out}",
+        "crl",
+        "H1",
+        "--revoke",
+        "101"
+      ],
+      "short-duty": [
+        "{bash}",
+        "{script}",
+        "{pbcRpc}",
+        "{deployment}",
+        "{out}",
+        "tempacl",
+        "H1",
+        "--duty",
+        "alice:60:{untilIn}"
+      ]
+    },
+    "untilInBounds": [
+      25,
+      600
+    ]
+  },
+  "suiteBracket": {
+    "files": 3319,
+    "pre": "b9ac22d028cba0b11b19ddc8020d613b350588972abbd2383e03ae4e81f7d111",
+    "post": "b9ac22d028cba0b11b19ddc8020d613b350588972abbd2383e03ae4e81f7d111",
+    "stable": true
+  },
+  "commands": [
+    {
+      "label": "red-before-implementation",
+      "order": "all SL6 tests (with the A1 conditions) written before any SL6 code",
+      "startedAt": "2026-10-10T22:27:43Z",
+      "exit": 1,
+      "argv": ".venv/bin/python -m pytest -q -p no:cacheprovider --color=no evaluation/tests/test_barrier_oracle.py evaluation/tests/test_barrier_stress_collector.py evaluation/tests/test_e2_barrier_plan.py",
+      "result": "144 failed (101 oracle module missing, 19 collector module missing, 24 create_plan barrier_stress)",
+      "output": "red-before-implementation.txt",
+      "outputSha256": "a9e7d27cee5cba864aacd698c6771dd08513369c3653fae2c79d83485af1f299"
+    },
+    {
+      "label": "green-sl6-units",
+      "exit": 0,
+      "result": "oracle 101 + collector 19 passed"
+    },
+    {
+      "label": "oracle-reasons",
+      "exit": 0,
+      "result": "every oracle mutation fails at its intended check",
+      "output": "oracle-reasons.txt",
+      "outputSha256": "e2b6c69b7e9589145a96c3c079fc620e72897d2c675e73f3b3841193c7758bb4"
+    },
+    {
+      "label": "control-reasons",
+      "exit": 0,
+      "result": "7/7 collector controls and 3 unsupported variants fail for the intended reason; per-row double results listed",
+      "output": "control-reasons.txt",
+      "outputSha256": "b3f392dbcdf290bec17b8fd66ff680299688df7fa67432382e6d9a0c740199f4"
+    },
+    {
+      "label": "green-plan-tests",
+      "exit": 0,
+      "result": "24 passed (test_e2_barrier_plan.py)"
+    },
+    {
+      "label": "green-full-suite",
+      "argv": "PATH=$HOME/.foundry/bin:$PATH .venv/bin/python -m pytest -q -rs -p no:cacheprovider --color=no",
+      "startedAt": "2026-10-10T22:31:27Z",
+      "endedAt": "2026-10-10T22:38:27Z",
+      "wallSeconds": 419.305493038,
+      "exit": 0,
+      "result": "1494 passed in 418.94s (0:06:58)",
+      "output": "full-suite.txt",
+      "outputSha256": "f23ba810b7203430cc2438993244ab4e9b258024efb8dab02d8e3e8ae3842b44"
+    },
+    {
+      "label": "plan",
+      "argv": "e2.create_plan(run_id='E2-SL6-barrier-20261011', freeze_message='S3-0017', barrier_stress=True, review_mode='solo-correlated'); verify before/after write",
+      "exit": 0
+    }
+  ],
+  "versions": {
+    "python": "3.13.5",
+    "foundry": "1.8.5 (~/.foundry/bin)",
+    "ledgerPin": "933d2a7",
+    "protocolPin": "0716a8e"
+  },
+  "ledgerCodeCheck": {
+    "source": "git show 933d2a7 (ACSC.sol, DecisionVerifier.sol, KSSC.sol, TMSC.sol; tools/sign_list.sh, script/SignList.s.sol)",
+    "paper": "ACSC.sol:140-167 policyEnf/evaluate: relay records, no checkpoint, no record validUntil check; grant TTL block+30, recipient 0",
+    "verifier": "DecisionVerifier.sol:52-96: step 9 line 74 (decision/request expiry, EXPIRED), step 10a line 85 (checkpoint present/fresh, STALE_STATE), step 10 line 87 (sequence OR decision outliving checkpoint, STALE_STATE), step 11 line 88 (authEpoch), step 13 lines 92-94 (record validUntil, EXPIRED)",
+    "trust": "TMSC.sol: CRL v2 revocation per generation (REVOKED 19 at _checkCertificate); TempACL entries per generation (_checkTemporal EXPIRED outside the window); each update authEpoch + 1",
+    "disagreement": null
+  },
+  "protocolCodeCheck": {
+    "source": "git show 0716a8e",
+    "witness": "witness.py:133 lapsed records -> DENY with empty records; witness.py:140 decision expiresAt = min(request, checkpoint, DBC now + 30)",
+    "worker": "adapter.py:133-136 _worker only from release/encrypt_record/finish_decryption; SL6 uses prepare_request, collect_checkpoint, collect_decision (Witness only, adapter.py:153-170)"
+  },
+  "servicesStarted": [],
+  "gitWrites": []
+}

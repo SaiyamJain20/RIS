@@ -1,0 +1,17 @@
+REASON repaired-e pre-barrier-revocation tool-fails -> Owner signed-list producer exited 1 (failed trial; output sha256 58add8c901ff21415f294ad8f247816293963f6bd7bf03460c3b9842114586ae)
+REASON paper-strict expired-duty tool-fails -> Owner signed-list producer exited 1 (failed trial; output sha256 58add8c901ff21415f294ad8f247816293963f6bd7bf03460c3b9842114586ae)
+REASON repaired-e post-barrier-revocation barrier-ignored -> Native transaction status differs from expected control
+REASON repaired-e expired-duty freshness-ignored -> Native transaction status differs from expected control
+REASON paper-minimal pre-barrier-revocation revocation-not-applied -> Alice revoked on the PBC (REVOKED 19, authEpoch + 1) failed
+REASON repaired-e expired-duty duty-too-short -> TempACL: one Alice OnDuty window [t-60, t+untilIn] failed
+REASON repaired-e pre-barrier-revocation worker-appears -> verified never-instantiated worker after REQUEST_ACCESS failed
+REASON repaired-e wrong-issuer None -> frozen catalog variant/profile failed
+REASON repaired-e signed-list-rollback None -> frozen catalog variant/profile failed
+REASON repaired-e receipt-binding-control None -> frozen catalog variant/profile failed
+ROW paper-strict pre-barrier-revocation SPEC_GAP None ACCEPT {'consumeTimestamp': '1791476018', 'requestExpiresAt': '1791476046'} None None None
+ROW repaired-e pre-barrier-revocation REPAIR_SUPPORTED None ACCEPT {'consumeTimestamp': '1791476019', 'requestExpiresAt': '1791476046', 'decisionExpiresAt': '1791476046', 'checkpointExpiresAt': '1791476067', 'decisionSequence': '1', 'currentSequence': '1'} None None 1
+ROW paper-strict post-barrier-revocation SPEC_GAP None ACCEPT {'consumeTimestamp': '1791476018', 'requestExpiresAt': '1791476046'} None None None
+ROW repaired-e post-barrier-revocation REPAIR_SUPPORTED STALE_STATE REJECT {'consumeTimestamp': '1791476020', 'requestExpiresAt': '1791476046', 'decisionExpiresAt': '1791476046', 'checkpointExpiresAt': '1791476069', 'decisionSequence': '1', 'currentSequence': '2'} sequence None None
+ROW paper-strict expired-duty SPEC_GAP None ACCEPT {'consumeTimestamp': '1791476043', 'requestExpiresAt': '1791476047', 'dutyEnd': '1791476042'} None None None
+ROW repaired-e expired-duty REPAIR_SUPPORTED EXPIRED REJECT {'consumeTimestamp': '1791476043', 'requestExpiresAt': '1791476047', 'decisionExpiresAt': '1791476047', 'checkpointExpiresAt': '1791476068', 'decisionSequence': '1', 'currentSequence': '1', 'dutyEnd': '1791476042'} None 13 None
+16 passed in 1.81s

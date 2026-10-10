@@ -272,6 +272,29 @@ SIGN_LIST_TEMPLATES = {'signed-list-rollback': ['{bash}', '{script}', '{pbcRpc}'
                        'wrong-issuer': ['{bash}', '{script}', '{pbcRpc}', '{deployment}', '{out}', 'crl', 'H2']}
 
 
+BARRIER_VARIANTS = ('pre-barrier-revocation', 'post-barrier-revocation', 'expired-duty')
+# SL6 producer purposes (A1-0034, A1-0061 D-6); untilIn is the only runner-computed argument.
+BARRIER_SIGN_TEMPLATES = {'revoke-alice': ['{bash}', '{script}', '{pbcRpc}', '{deployment}', '{out}', 'crl', 'H1', '--revoke', '101'],
+                          'short-duty': ['{bash}', '{script}', '{pbcRpc}', '{deployment}', '{out}', 'tempacl', 'H1', '--duty',
+                                         'alice:60:{untilIn}']}
+UNTIL_IN_BOUNDS = [25, 600]
+
+
+def barrier_sign_argv(tool, *, purpose, bash, script, pbc_rpc, deployment, out, until_in=None):
+    """Exact argv of one SL6 producer call, built only from the pinned plan template and a bounded untilIn."""
+    require(tool.get('script') == 'ledger/tools/sign_list.sh' and tool.get('invocations') == BARRIER_SIGN_TEMPLATES
+            and tool.get('untilInBounds') == UNTIL_IN_BOUNDS, 'exact pinned SL6 producer invocation')
+    require(purpose in BARRIER_SIGN_TEMPLATES and pbc_rpc == 'http://127.0.0.1:18545' and Path(out).is_absolute()
+            and str(out).endswith('.json') and Path(deployment).is_absolute() and Path(script).is_absolute(), 'SL6 producer arguments')
+    if purpose == 'short-duty':
+        require(isinstance(until_in, str) and re.fullmatch(r'[0-9]{1,4}', until_in) is not None
+                and UNTIL_IN_BOUNDS[0] <= int(until_in) <= UNTIL_IN_BOUNDS[1], 'bounded duty untilIn')
+    else:
+        require(until_in is None, 'no untilIn for the revocation list')
+    values = {'{bash}': str(bash), '{script}': str(script), '{pbcRpc}': pbc_rpc, '{deployment}': str(deployment), '{out}': str(out)}
+    return [values.get(item, item.replace('{untilIn}', until_in) if until_in is not None else item) for item in tool['invocations'][purpose]]
+
+
 def sign_list_argv(tool, *, variant, bash, script, pbc_rpc, deployment, out):
     """Exact argv of one owner signed-list producer call, built only from the pinned plan template."""
     require(tool.get('script') == 'ledger/tools/sign_list.sh' and tool.get('invocations') == SIGN_LIST_TEMPLATES,
@@ -314,7 +337,7 @@ def observe_worker_export(exit_code, raw, state_dir):
 
 def _profile(plan, profile, output, record, *, recovery_point=None, expired_retry=False, duplicate_outcome=False, nonce_replay=False,
              subject_substitution=False, relay_stress=None, audit_stress=None, receipt_stress=None, receipt_field=None,
-             trust_stress=None):
+             trust_stress=None, barrier_stress=None):
     require(type(expired_retry) is bool and (not expired_retry or recovery_point is not None), 'expiry probe follows explicit recovery')
     require(type(duplicate_outcome) is bool and (not duplicate_outcome or (recovery_point is None and not expired_retry)),
             'duplicate comparison uses production adapter without other fault probes')
@@ -333,6 +356,9 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
     require(trust_stress is None or (trust_stress in TRUST_VARIANTS and recovery_point is None and not expired_retry
             and not duplicate_outcome and not nonce_replay and not subject_substitution and relay_stress is None
             and audit_stress is None and receipt_stress is None), 'isolated trust stress')
+    require(barrier_stress is None or (barrier_stress in BARRIER_VARIANTS and recovery_point is None and not expired_retry
+            and not duplicate_outcome and not nonce_replay and not subject_substitution and relay_stress is None
+            and audit_stress is None and receipt_stress is None and trust_stress is None), 'isolated barrier stress')
     output.mkdir(parents=True, exist_ok=False)
     snapshots = output/'snapshots'
     ledger_root = materialize_owner(plan['owners']['ledger'], snapshots/'ledger')
@@ -443,14 +469,15 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
                                           grant_id=grants[0], worker_snapshot=worker_snapshot, output=output/'expired-retry')
             require(bootstrap['wrongAdminCode'] == '16' and all(r['ok'] for r in results.values()), 'three E1 controls')
             if (subject_substitution or relay_stress is not None or audit_stress is not None or receipt_stress is not None
-                    or trust_stress is not None):
+                    or trust_stress is not None or barrier_stress is not None):
                 # SL1/SL2: controls above ran on deployment D1. The stress uses a fresh
                 # second deployment D2 on the same chain pair, its own bootstrap,
                 # adapter process and private state, so the stress oracle sees an
                 # unused grant/count/nonce state. No clock move or crash hook.
                 kind = 'subject' if subject_substitution else ('relay' if relay_stress is not None else
                                                                ('audit' if audit_stress is not None else
-                                                                ('receipt' if receipt_stress is not None else 'trust')))
+                                                                ('receipt' if receipt_stress is not None else
+                                                                 ('trust' if trust_stress is not None else 'barrier'))))
                 stress = output/(kind+'-instance'); stress.mkdir()
                 for name in ('pbc', 'dbc'):
                     for role in ('relay', 'H1-ca-admin', 'H2-ca-admin', 'H3-ca-admin', 'H4-ca-admin'):
@@ -499,7 +526,7 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
                     return command(label, [tools['python']['path'], '-m', 'hmbc_protocol.worker_log', '--state-dir', str(stress_state)],
                                    protocol, budget['transport'], service_env)
                 def stress_worker_probe():
-                    # SL2, the SL3 fabricated rows, SL4 and SL5 perform no worker operation; a never-created worker database is
+                    # SL2, the SL3 fabricated rows and SL4-SL6 perform no worker operation; a never-created worker database is
                     # an explicit, verified observation (observe_worker_export), not a failure.
                     nonlocal stress_sequence
                     label = f'{kind}-worker-export-{stress_sequence:02}'; stress_sequence += 1
@@ -520,6 +547,39 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
                     require(stress_result['ok'] is True, 'subject stress result')
                     record['profiles'][profile]['subjectStress'] = dict(runId=stress_run, deployment=str(Path(profile)/'subject-instance/deployment.json'),
                                                                         result=str(Path(profile)/'subject-stress/result.json'))
+                elif barrier_stress is not None:
+                    from evaluation.barrier_stress import execute_barrier_stress
+                    producer = plan['barrierProbe']['signList']
+                    barrier_sequence = 0
+                    def stress_barrier_sign(purpose, until_in=None):
+                        # A1-0034/A1-0061 D-6 as in SL5: pinned owner bytes, same deployment file as the stress adapter,
+                        # exact template argv with a bounded untilIn, ledger snapshot cwd; a non-zero exit is a failed trial.
+                        nonlocal barrier_sequence
+                        label = f'barrier-sign-list-{barrier_sequence:02}'; barrier_sequence += 1
+                        entries = plan['owners']['ledger']['entries']
+                        require(sha256(ledger_root/producer['script']) == producer['scriptSha256'] == entries[producer['script']]
+                                and sha256(ledger_root/producer['forgeScript']) == producer['forgeScriptSha256'] == entries[producer['forgeScript']],
+                                'pinned owner signed-list producer bytes')
+                        require(stress_path.read_bytes() == stress_bytes, 'same deployment file as the stress adapter')
+                        out = (output/(label+'.json')).resolve()
+                        argv = barrier_sign_argv(producer, purpose=purpose, bash=tools['bash']['path'], script=(ledger/'tools/sign_list.sh').resolve(),
+                                                 pbc_rpc=rpcs['pbc'].url, deployment=stress_path.resolve(), out=out, until_in=until_in)
+                        row = record_command(argv, ledger_root, output/(label+'.txt'), timeout=budget['bootstrap'],
+                                             env=dict(service_env, FOUNDRY_SOLC=tools['solc']['path']), owned_process_group=True,
+                                             stop_grace=budget['stopGrace'])
+                        row['testOnly'] = 'owner TEST-ONLY signed-list producer (A1-0034)'
+                        commands.append(row); (output/'commands.json').write_text(json.dumps(commands, indent=2)+'\n')
+                        produced = row['exitCode'] == 0 and out.is_file()
+                        return dict(exitCode=row['exitCode'], output=out.read_bytes() if produced else (output/(label+'.txt')).read_bytes())
+                    stress_result = execute_barrier_stress(stress_chains['pbc'], stress_chains['dbc'], stress_process, deployment_bytes=stress_bytes,
+                                                           bootstrap=stress_boot, user_label='alice', user=stress_boot['users']['alice'],
+                                                           record=stress_record, policy=policy, variant=barrier_stress,
+                                                           worker_snapshot=stress_worker_probe, sign_list=stress_barrier_sign,
+                                                           output=output/'barrier-stress')
+                    require(stress_result['ok'] is True and stress_result['variant'] == barrier_stress, 'barrier stress result')
+                    record['profiles'][profile]['barrierStress'] = dict(runId=stress_run, variant=barrier_stress,
+                                                                        deployment=str(Path(profile)/'barrier-instance/deployment.json'),
+                                                                        result=str(Path(profile)/'barrier-stress/result.json'))
                 elif trust_stress is not None:
                     from evaluation.trust_stress import execute_trust_stress
                     signer = plan['trustProbe']['signList']

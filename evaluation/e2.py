@@ -37,6 +37,10 @@ DEVIATION_SHA256 = '0511ba571b71d960d8ffbe4b8c811da99ed7de53a4b7515ac425c5291cc3
 TRUST_EXPECTED = {**{(p, 'wrong-issuer'): ('SUPPORTED', 'UNAUTHORIZED_CALLER') for p in e1.PROFILES},
                   ('paper-strict', 'signed-list-rollback'): ('SPEC_GAP', None), ('paper-minimal', 'signed-list-rollback'): ('SPEC_GAP', None),
                   ('repaired-e', 'signed-list-rollback'): ('REPAIR_SUPPORTED', 'STALE_ANCHOR')}
+BARRIER_EXPECTED = {**{(p, v): ('SPEC_GAP', None) for p in ('paper-strict', 'paper-minimal') for v in e1.BARRIER_VARIANTS},
+                    ('repaired-e', 'pre-barrier-revocation'): ('REPAIR_SUPPORTED', None),
+                    ('repaired-e', 'post-barrier-revocation'): ('REPAIR_SUPPORTED', 'STALE_STATE'),
+                    ('repaired-e', 'expired-duty'): ('REPAIR_SUPPORTED', 'EXPIRED')}
 # A1-0034 owner producer at ledger pin 933d2a7 (A1-0061 D-6).
 SIGN_LIST_PATH, SIGN_LIST_SHA256 = 'ledger/tools/sign_list.sh', '806e9a98a52899ca5fc4fe33e1e90e39d7607a51a4f5c6c5942c0edd21c37ded'
 SIGN_SCRIPT_PATH, SIGN_SCRIPT_SHA256 = 'ledger/script/SignList.s.sol', '7aa3b1dd085f5aaaa6aa7b28191d3b6d0cfd3ff02bb0b61291daead13e3ba177'
@@ -71,16 +75,18 @@ def _owners(contract):
 
 def create_plan(*, run_id, freeze_message, expired_retry=False, duplicate_outcome=False, nonce_replay=False,
                 subject_substitution=False, relay_stress=False, audit_stress=False, receipt_stress=False, trust_stress=False,
-                review_mode='strict'):
+                barrier_stress=False, review_mode='strict'):
     # Retain the previously reviewed environment, mining/ports, tool and custody
     # recipe; any new exact runtime bytes require new full execution-plan ACKs.
-    flags = (expired_retry, duplicate_outcome, nonce_replay, subject_substitution, relay_stress, audit_stress, receipt_stress, trust_stress)
+    flags = (expired_retry, duplicate_outcome, nonce_replay, subject_substitution, relay_stress, audit_stress, receipt_stress, trust_stress,
+             barrier_stress)
     require(all(type(flag) is bool for flag in flags) and sum(flags) <= 1, 'explicit nonoverlapping probe selection')
     require(not subject_substitution or review_mode == e1.SOLO, 'SL1 subject plans are solo-phase plans (A1-0061)')
     require(not relay_stress or review_mode == e1.SOLO, 'SL2 relay plans are solo-phase plans (A1-0061)')
     require(not audit_stress or review_mode == e1.SOLO, 'SL3 audit plans are solo-phase plans (A1-0061)')
     require(not receipt_stress or review_mode == e1.SOLO, 'SL4 receipt plans are solo-phase plans (A1-0061)')
     require(not trust_stress or review_mode == e1.SOLO, 'SL5 trust plans are solo-phase plans (A1-0061)')
+    require(not barrier_stress or review_mode == e1.SOLO, 'SL6 barrier plans are solo-phase plans (A1-0061)')
     plan = e1.create_plan(run_id=run_id, freeze_message=freeze_message, review_mode=review_mode)
     contract = json.loads(CONTRACT.read_text())
     plan.update(schemaVersion='hmbc-e2-recovery-plan/v1', executionScope='six fresh logical crash/recovery cases; not full RQ matrix',
@@ -413,6 +419,92 @@ def create_plan(*, run_id, freeze_message, expired_retry=False, duplicate_outcom
                                  'MUT_NO_VERSION_MONOTONE counterpart is P3 mutant work, not run here.',
                                  'Symbolic adapter; safe-ledger/trusted-worker/one trusted witness.'])
         plan.pop('workerExpected')
+    if barrier_stress:
+        rows = [(p, v) for v in e1.BARRIER_VARIANTS for p in e1.PROFILES]
+        entries = plan['owners']['ledger']['entries']
+        require(entries.get(SIGN_LIST_PATH) == SIGN_LIST_SHA256 and entries.get(SIGN_SCRIPT_PATH) == SIGN_SCRIPT_SHA256,
+                'signed-list producer is the A1-0034 owner inventory entry')
+        plan.update(schemaVersion='hmbc-e2-barrier-stress-plan/v1', barrierStress=True,
+                    executionScope='nine fresh E02 revocation-barrier and expired-duty comparisons (SL6); not full RQ matrix',
+                    matrix=[dict(profile=profile, point=None, variant=variant) for profile, variant in rows],
+                    caseIds=['E02-'+variant+'-'+profile for profile, variant in rows],
+                    controls=['wrong-admin-before-H2', 'registered-Alice-allow-release-one-outcome', 'registered-Bob-policy-deny',
+                              'fresh-second-deployment-barrier-stress'],
+                    restart='none; production adapter only, no crash hook',
+                    freshness=('fresh chain pair per matrix row; controls on deployment D1; the row on a fresh second deployment D2 on the '
+                               'same chain pair with its own bootstrap, adapter process and 0700 state; relay/CA-admin balances reset to '
+                               '1000 ETH before D2'),
+                    observation=('owner signed-list producer output, CA-admin and relay public calls, production prepare_request, '
+                                 'collect_checkpoint and collect_decision; DBC KSSC current checkpoint at consumption; PBC TMSC revocation, '
+                                 'credentials and authEpoch; whole decoded two-chain histories; worker never-instantiated record'),
+                    barrierProbe=dict(
+                        certificateDiscipline=('repaired-e: the checkpoint and the ONE decision are collected after REQUEST_ACCESS and '
+                                               'collected before the PBC update (catalog qualification; A1-0064); exactly one collect_decision '
+                                               'per request in exchanges.json (A31 is runner discipline, S2-0007); never re-collected'),
+                        preBarrier=('REQUEST_ACCESS > REVOKE_ON_PBC > FORWARD_OR_CONSUME, with REVOKE_ON_PBC before consume: the producer '
+                                    'CRL v2 revoking Alice serial 101 is signed before the row (read-only) and installed by the H1 CA-admin '
+                                    'at REVOKE_ON_PBC (Alice REVOKED(19) on the PBC, authEpoch + 1); no new checkpoint is accepted before '
+                                    'consume, so the DBC checkpoint is unchanged (request authEpoch == checkpoint authEpoch) and the older '
+                                    'certificate is accepted: the measured window is intentional, not instantaneous revocation '
+                                    '(REPAIR_SUPPORTED); windowSeconds = consume - revocation block time'),
+                        postBarrier=('repaired-e adds ACCEPT_CHECKPOINT after REVOKE_ON_PBC (collect_checkpoint + acceptState: sequence '
+                                     '+ 1, new authEpoch) and then consumes the older certificate -> STALE_STATE(6) at DecisionVerifier '
+                                     'step 10, line 87, required to be the sequence cause: the new checkpoint is current at consumption, '
+                                     'decision stateSequence == old sequence != new sequence, decision expiresAt <= new checkpoint expiresAt, '
+                                     'consume time < decision, request and new checkpoint expiresAt (steps 9 and 10a pass); no grant, nonce '
+                                     'unchanged. Paper profiles have no checkpoint barrier: ACCEPT_CHECKPOINT is omitted'),
+                        expiredDuty=('setup INSTALL_SHORT_DUTY: the producer signs an H1 TempACL v2 whose only entry is Alice OnDuty '
+                                     '[t-60, t+untilIn] and the H1 CA-admin installs it before REQUEST_ACCESS; the PBC request is forwarded '
+                                     'while the duty is valid; repaired-e collects the checkpoint and decision while the duty is valid '
+                                     '(the witness attests DENY with empty records once a record validUntil <= DBC now, witness.py:133; '
+                                     'decision expiresAt = min(request, checkpoint, DBC now + 30), not capped by records, witness.py:140); '
+                                     'ADVANCE_CLOCK moves only the DBC (evm_setNextBlockTimestamp(max(latest+1, duty end)) + evm_mine); the '
+                                     'PBC clock is not moved; then consume. Repaired-e: EXPIRED(7) required to be step 13: duty end <= '
+                                     'consume time < min(decision, request, checkpoint expiresAt), so step 9 (line 74) and step 10a (line 85) '
+                                     'pass; all four values and the consume block time are recorded'),
+                        paperRows=('paper ACSC.policyEnf/evaluate (ACSC.sol:140-167) takes the relay records from the PBC forward event '
+                                   'and has no record validUntil check and no checkpoint, so every paper row grants (TTL block + 30, '
+                                   'recipient 0). Frozen classes are all SPEC_GAP; frozen outcomes are ACCEPT (pre-barrier) and '
+                                   'CONDITIONAL (post-barrier, expired duty: acceptance depends on the configured relay forwarding '
+                                   'request-time records); the observed outcome is a grant in all six'),
+                        signList=dict(
+                            script=SIGN_LIST_PATH, scriptSha256=SIGN_LIST_SHA256, forgeScript=SIGN_SCRIPT_PATH,
+                            forgeScriptSha256=SIGN_SCRIPT_SHA256, invocations=copy.deepcopy(e1.BARRIER_SIGN_TEMPLATES),
+                            untilInBounds=list(e1.UNTIL_IN_BOUNDS), cwd='materialized ledger snapshot root',
+                            untilInRule=('untilIn = (PBC pending time - PBC latest block time) + 25, bounded 25..600 s: the producer '
+                                         'signs at the latest block time t, so the duty ends about 25 s after now; that lies after the '
+                                         'decision collection and before the request expiry (30 s after the request) and the witness '
+                                         'decision TTL (DBC now + 30 s); the record validUntil on both chains is the TempACL entry end '
+                                         '(repaired: min with the list validity of one day)'),
+                            conditions=[
+                                'Owner TEST-ONLY producer (A1-0034), confirmed in A1-0061 D-6; read-only; never writes keys to outputs.',
+                                'Exact pinned bytes (sign_list.sh and SignList.s.sol) re-hashed before every call; argv only from the '
+                                'per-purpose template; untilIn is the only computed argument and is bounded; never --version.',
+                                '--deployment is the same deployment file (byte-identical) the stress adapter was pinned with.',
+                                'Any non-zero exit is a failed trial: no retry; published only as output sha256 and first line.',
+                                'Before use: schema, testOnly, binding to this chain/TMSC/RSC/deployment sha256/profile, the planned '
+                                'authority and content, the next on-chain version, and the root signature under the evaluator own '
+                                'EIP-712 encoder.']),
+                        workerPrecondition=('re-checked for SL6: the adapter operations are prepare_request (pure) and collect_checkpoint '
+                                            'and collect_decision (Witness only, adapter.py:153-170 at 0716a8e); trust updates are CA-admin '
+                                            'transactions and the producer has no adapter state; release, encrypt_record and '
+                                            'finish_decryption are never reached, so the D2 worker must be a verified never-instantiated '
+                                            'record (D49), re-observed at baseline and after every catalog step; any instantiation fails the row'),
+                        snapshots=('DBC grants/nonces/count/history and the current checkpoint, PBC request state and history at one explicit '
+                                   'block per read group; PBC revocation/credentials/authEpoch around REVOKE_ON_PBC; Cast hash checkpoint '
+                                   'per read group/submit (A1-0061 D-5b); verified never-instantiated worker record (D49)')),
+                    classification=('pre-barrier: paper SPEC_GAP (ACCEPT), repaired-e REPAIR_SUPPORTED (intentional window); post-barrier: '
+                                    'paper SPEC_GAP, repaired-e REPAIR_SUPPORTED with STALE_STATE(6); expired duty: paper SPEC_GAP, '
+                                    'repaired-e REPAIR_SUPPORTED with EXPIRED(7); tested reconstruction results, never an HMBC exploit or '
+                                    'authors-implementation claim'),
+                    timing=('request, checkpoint, decision, revocation and consume inside the 30 s request lifetime; only the DBC clock '
+                            'moves and only in the expired-duty rows; unexpected expiry fails visibly; no TTL change'),
+                    limitations=['Solo-phase plan: both exact solo ACKs (A1 and S2) and the committed S3 FREEZE precede services.',
+                                 'Nine of the 15 remaining catalog comparisons; no complete matrix, live mutants/window/report/gate.',
+                                 'MUT_NO_STATE_BARRIER and MUT_NO_RECORD_FRESHNESS counterparts are P3 mutant work, not run here.',
+                                 'The revocation window is measured per row, not characterized statistically (P3 revocation window).',
+                                 'Symbolic adapter; safe-ledger/trusted-worker/one trusted witness.'])
+        plan.pop('workerExpected')
     return plan
 
 
@@ -422,7 +514,7 @@ def verify_plan(plan):
                                 nonce_replay=plan.get('nonceReplay', False), subject_substitution=plan.get('subjectSubstitution', False),
                                 relay_stress=plan.get('relayStress', False), audit_stress=plan.get('auditStress', False),
                                 receipt_stress=plan.get('receiptStress', False), trust_stress=plan.get('trustStress', False),
-                                review_mode=plan.get('reviewMode', 'strict')),
+                                barrier_stress=plan.get('barrierStress', False), review_mode=plan.get('reviewMode', 'strict')),
             'exact current E2 plan/source/config')
     require(sha256(ROOT/'interfaces/v1/FREEZE.json') == FREEZE_SHA256, 'immutable v1 freeze')
     require(platform.python_version() == plan['pythonVersion'], 'pinned Python version')
@@ -467,6 +559,9 @@ def execute(plan_path, ack_path, output):
         if plan.get('auditStress', False):
             record.update(executionMode='two-chain-e2-audit-stress-slice',
                           limitation='Six E03 audit-stress comparisons only; no complete catalog or RQ gate.')
+        if plan.get('barrierStress', False):
+            record.update(executionMode='two-chain-e2-barrier-stress-slice',
+                          limitation='Nine E02 revocation-barrier and expired-duty comparisons only; no complete catalog or RQ gate.')
         if plan.get('trustStress', False):
             record.update(executionMode='two-chain-e2-trust-stress-slice',
                           limitation='Six E02 trust-freshness comparisons only; no complete catalog or RQ gate.')
@@ -478,7 +573,7 @@ def execute(plan_path, ack_path, output):
             verify_plan(plan)
             probe_name = 'nonce-replay' if plan.get('nonceReplay', False) else 'duplicate-outcome'
             if plan.get('subjectSubstitution', False): probe_name = 'subject-substitution'
-            if plan.get('relayStress', False) or plan.get('auditStress', False) or plan.get('trustStress', False): probe_name = item['variant']
+            if any(plan.get(k, False) for k in ('relayStress', 'auditStress', 'trustStress', 'barrierStress')): probe_name = item['variant']
             if plan.get('receiptStress', False): probe_name = item['variant']+('-'+item['field'] if item['field'] else '')
             case = item['profile']+'-'+(item['point'] or probe_name); destination = output/case; destination.mkdir()
             child = dict(profiles={}, servicesStarted=[], adapterProcesses=[])
@@ -493,9 +588,15 @@ def execute(plan_path, ack_path, output):
             if plan.get('auditStress', False): probe_options = {'audit_stress': item['variant']}
             if plan.get('receiptStress', False): probe_options = {'receipt_stress': item['variant'], 'receipt_field': item['field']}
             if plan.get('trustStress', False): probe_options = {'trust_stress': item['variant']}
+            if plan.get('barrierStress', False): probe_options = {'barrier_stress': item['variant']}
             e1._profile(selected, item['profile'], destination/item['profile'], child, recovery_point=item['point'],
                         expired_retry=plan.get('expiredRetry', False), **probe_options)
-            if plan.get('trustStress', False):
+            if plan.get('barrierStress', False):
+                proof = json.loads((destination/item['profile']/'barrier-stress/result.json').read_text())
+                require(proof['ok'] is True and proof['delivery'] == 'unknown' and proof['variant'] == item['variant']
+                        and (proof['classification'], proof['error']) == BARRIER_EXPECTED[(item['profile'], item['variant'])],
+                        'complete checked barrier stress result')
+            elif plan.get('trustStress', False):
                 proof = json.loads((destination/item['profile']/'trust-stress/result.json').read_text())
                 require(proof['ok'] is True and proof['delivery'] == 'unknown' and proof['variant'] == item['variant']
                         and (proof['classification'], proof['error']) == TRUST_EXPECTED[(item['profile'], item['variant'])],
@@ -558,6 +659,9 @@ def execute(plan_path, ack_path, output):
             if plan.get('trustStress', False):
                 record['cases'][case]['status'] = 'TRUST_STRESS_CONTROL_PASS'
                 continue
+            if plan.get('barrierStress', False):
+                record['cases'][case]['status'] = 'BARRIER_STRESS_CONTROL_PASS'
+                continue
             record['cases'][case]['status'] = ('NONCE_REPLAY_CONTROL_PASS' if plan.get('nonceReplay', False)
                                              else ('DUPLICATE_OUTCOME_CONTROL_PASS' if plan.get('duplicateOutcome', False) else 'RECOVERY_CONTROL_PASS'))
         verify_plan(plan); record.update(status='E2_DUPLICATE_OUTCOME_SLICE_PASS' if plan.get('duplicateOutcome', False) else ('E2_RECOVERY_EXPIRY_SLICE_PASS' if plan.get('expiredRetry', False) else 'E2_RECOVERY_SLICE_PASS'), sourceStable=True)
@@ -567,6 +671,7 @@ def execute(plan_path, ack_path, output):
         if plan.get('auditStress', False): record['status'] = 'E2_AUDIT_STRESS_SLICE_PASS'
         if plan.get('receiptStress', False): record['status'] = 'E2_RECEIPT_STRESS_SLICE_PASS'
         if plan.get('trustStress', False): record['status'] = 'E2_TRUST_STRESS_SLICE_PASS'
+        if plan.get('barrierStress', False): record['status'] = 'E2_BARRIER_STRESS_SLICE_PASS'
     except BaseException as error:
         record['failure'] = dict(type=type(error).__name__, message=str(error))
         record['status'] = 'FAILED' if authorized else 'BLOCKED'
@@ -587,7 +692,7 @@ def main():
     return 0 if result['status'] in ('E2_RECOVERY_SLICE_PASS', 'E2_RECOVERY_EXPIRY_SLICE_PASS', 'E2_DUPLICATE_OUTCOME_SLICE_PASS',
                                      'E2_NONCE_REPLAY_SLICE_PASS', 'E2_SUBJECT_SUBSTITUTION_SLICE_PASS', 'E2_RELAY_STRESS_SLICE_PASS',
                                      'E2_AUDIT_STRESS_SLICE_PASS', 'E2_RECEIPT_STRESS_SLICE_PASS',
-                                     'E2_TRUST_STRESS_SLICE_PASS') else 2
+                                     'E2_TRUST_STRESS_SLICE_PASS', 'E2_BARRIER_STRESS_SLICE_PASS') else 2
 
 
 if __name__ == '__main__': raise SystemExit(main())
