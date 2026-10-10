@@ -1,0 +1,115 @@
+"""Protocol-scope review checks of the SL5 public evidence (S3-0016). Read-only; prints one JSON report.
+Usage: python -I review_sl5.py <evidence dir> <repo>/protocol"""
+import json
+import pathlib
+import re
+import sys
+
+sys.path.insert(0, sys.argv[2])
+from eth_utils import keccak  # noqa: E402
+from hmbc_protocol import eip712, keys, messages  # noqa: E402
+from hmbc_protocol.abi import Contract  # noqa: E402
+
+EVD = pathlib.Path(sys.argv[1]); RUN = EVD / "run"; PROTO = pathlib.Path(sys.argv[2])
+EMPTY = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+NEVER = re.compile(r"no worker\.sqlite in (\S+) \(looked in <dir>/worker/ and in <dir>\)\n")
+load = lambda p: json.loads(pathlib.Path(p).read_text())  # noqa: E731
+PSC = Contract(json.loads((PROTO / "abi/PSC.json").read_text()))
+report, problems = {}, []
+
+
+def check(c, m):
+    if not c:
+        problems.append(m)
+
+
+def walk(o):
+    yield o
+    if isinstance(o, dict):
+        for v in o.values():
+            yield from walk(v)
+    elif isinstance(o, list):
+        for v in o:
+            yield from walk(v)
+
+
+probe_total = 0
+for case in sorted(p.name for p in RUN.iterdir() if p.is_dir()):
+    profile = case.split("-signed")[0].split("-wrong")[0]
+    row, r = RUN / case / profile, {}
+    d1, d2 = load(row / "adapter/process.json"), load(row / "trust-instance/adapter/process.json")
+    for name, p in (("d1", d1), ("d2", d2)):
+        check(p["argv"][1:3] == ["-m", "hmbc_protocol.adapter"] and p["exitCode"] == 0 and p["failure"] is None
+              and p.get("stderrSha256") == EMPTY and not [e for e in p["exchanges"] if e["failure"]], f"{case} {name} adapter")
+    sd = d2["argv"][d2["argv"].index("--state-dir") + 1]
+    check(sd != d1["argv"][d1["argv"].index("--state-dir") + 1], f"{case} state dirs")
+    exf = row / "trust-stress/exchanges.json"
+    ex = load(exf) if exf.exists() else []
+    r["d2Ops"] = [(e["operation"], e["response"]["ok"]) for e in ex]
+    check(len(ex) == len(d2["exchanges"]), f"{case} exchange count")
+    # worker probes and stored observations
+    probes = [c for c in load(row / "commands.json") if c.get("workerObservation")]
+    probe_total += len(probes)
+    r["workerProbes"] = len(probes)
+    check(probes and all(c["exitCode"] == 1 and c["workerObservation"] == "never-instantiated (verified)" for c in probes), f"{case} probes")
+    obs = [o for f in (row / "trust-stress").glob("*.json") for o in walk(load(f)) if isinstance(o, dict) and o.get("instantiated") is False]
+    for o in obs:
+        m = NEVER.fullmatch(o.get("message", ""))
+        check(o.get("exitCode") == 1 and m is not None and m.group(1) == sd
+              and o.get("checkedAbsent") == [sd + "/worker/worker.sqlite", sd + "/worker.sqlite"], f"{case} stored observation")
+    check(all(o == obs[0] for o in obs) and not [o for f in (row / "trust-stress").glob("*.json") for o in walk(load(f))
+                                                if isinstance(o, dict) and o.get("instantiated") is True], f"{case} observations identical, none instantiated")
+    r["storedObservations"] = len(obs)
+    if "rollback" in case:
+        check(r["d2Ops"] == [("prepare_request", True)], f"{case} ops {r['d2Ops']}")
+        req = load(row / "trust-stress/request.json")
+        prepared = ex[0]["response"]["result"]
+        txs = load(row / "trust-instance/pbc-native/transactions.json")
+        ra = [t for t in txs if t.get("method") == "requestAccess"]
+        check(len(ra) == 1 and ra[0]["transactionHash"] == req["transactionHash"] and ra[0]["signerRole"] == "relay", f"{case} one relay requestAccess")
+        name, args = PSC.decode_input(bytes.fromhex(ra[0]["calldata"][2:]))
+        request_onchain, signature_onchain = args[0], args[1]
+        dep = load(row / "trust-instance/deployment.json")
+        digest = "0x" + messages.digest_of("AccessRequest", request_onchain, messages.domain_for("AccessRequest", request_onchain, dep)).hex()
+        signer = eip712.recover(bytes.fromhex(digest[2:]), signature_onchain)
+        check(name == "requestAccess" and request_onchain == prepared["request"] and signature_onchain == prepared["signature"]
+              and digest == prepared["requestDigest"] == req["digest"] and signer == prepared["signer"] == request_onchain["gid"], f"{case} calldata = prepared request")
+        replayed = load(row / "trust-stress/replayed.json")
+        check(request_onchain["authEpoch"] == req["authEpoch"] == req["epochAtRequestBlock"] == replayed["authEpoch"], f"{case} authEpoch current")
+        r["request"] = dict(authEpochSigned=request_onchain["authEpoch"], epochAtRequestBlock=req["epochAtRequestBlock"], epochAfterReplay=replayed["authEpoch"],
+                            nonce=request_onchain["nonce"], digest=digest, events=[e.get("name") for e in req["events"]], status=req["state"].get("status"),
+                            denialCount=req["denialCount"])
+    else:
+        check(r["d2Ops"] == [], f"{case} wrong-issuer adapter ops {r['d2Ops']}")
+    report[case] = r
+report["workerProbesTotal"] = probe_total
+
+# never-publish scan
+labels = ["witness-1", "relay", "alice", "bob", "mallory"] + [f"H{i}-{s}" for i in range(1, 5) for s in ("root", "ca-admin")]
+keyhex = {l: keys.synthetic_private_key(l)[2:] for l in labels}
+digs, hexes, files, tokfields, keyhits = set(), set(), 0, 0, []
+for f in RUN.rglob("*.json"):
+    try:
+        o = json.loads(f.read_text())
+    except Exception:
+        continue
+    for x in walk(o):
+        if isinstance(x, dict):
+            if "tokenDigest" in x:
+                digs.add(x["tokenDigest"])
+            if isinstance(x.get("export"), str):
+                try:
+                    digs |= {y["tokenDigest"] for y in json.loads(x["export"]).get("releases", [])}
+                except Exception:
+                    pass
+for f in EVD.rglob("*"):
+    if f.is_file():
+        files += 1; t = f.read_text(errors="replace").lower()
+        hexes |= set(re.findall(r"0x[0-9a-f]{64}", t)); tokfields += len(re.findall(r'"token"\s*:', t))
+        keyhits += [(str(f.relative_to(EVD)), l) for l, k in keyhex.items() if k in t]
+hits = [x for x in hexes if "0x" + keccak(bytes.fromhex(x[2:])).hex() in digs]
+check(not keyhits and not hits and tokfields == 0, "never-publish scan")
+report["neverPublishScan"] = dict(files=files, keyLabels=len(labels), keyHits=keyhits, hex32=len(hexes), tokenDigests=len(digs),
+                                  preimageHits=len(hits), tokenFields=tokfields)
+report["problems"] = problems
+print(json.dumps(report, indent=1, default=str))
