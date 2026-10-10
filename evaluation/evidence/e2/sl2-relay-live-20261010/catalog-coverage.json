@@ -1,0 +1,303 @@
+{
+ "catalogSha256": "438fa38ddcbd7edd0e49fb93cc580e5219ed05349fd677b2e386bc4669f5d50e",
+ "supplementSha256": "9ccade362c5a8853d63f06a08be3134ae32cd99527ceb36fcd78c311a9246858",
+ "rows": [
+  {
+   "caseId": "E01-forged-tuple-paper-strict",
+   "profile": "paper-strict",
+   "sourceRefs": [
+    "S09",
+    "S12",
+    "S13",
+    "S20",
+    "SPEC4/E01"
+   ],
+   "assumptions": [
+    "A01",
+    "A02",
+    "A14",
+    "A19",
+    "A25",
+    "A41"
+   ],
+   "expected": {
+    "property": "decision-provenance",
+    "outcome": "ACCEPT",
+    "classification": "SPEC_GAP",
+    "error": null,
+    "qualification": "The configured relay fabricates a tuple without a PBC request/log. Repaired control uses a non-witness signature on an otherwise matching certificate; BAD_SIGNATURE must precede any grant. Paper caller restrictions remain enforced; the compromised relay stress is outside secure isolation."
+   },
+   "observed": "mined policyEnf (relay) with a fixed synthetic pbcRequestId never sent to the PBC: GrantIssued(gid Alice, recipient 0, TTL ts+30, nonce unconsumed)+AccessLog; PBC request status 0 and PBC history unchanged",
+   "executionStatus": "COMPLETE",
+   "classification": "SPEC_GAP",
+   "error": null,
+   "workerObservation": "verified never-instantiated before and after (exporter exit 1 exact message, both DB paths absent)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "stressTimestamp": "1791595011",
+    "stressBlock": "21"
+   },
+   "qualification": "configured-relay stress outside A01: a DBC grant exists with no PBC request or log; reconstruction specification gap, not an HMBC exploit Tested reconstruction result; configured-relay stress outside A01; symbolic adapter; delivery unknown; solo correlated review."
+  },
+  {
+   "caseId": "E01-forged-tuple-paper-minimal",
+   "profile": "paper-minimal",
+   "sourceRefs": [
+    "S09",
+    "S12",
+    "S13",
+    "S20",
+    "SPEC4/E01"
+   ],
+   "assumptions": [
+    "A01",
+    "A02",
+    "A14",
+    "A19",
+    "A25",
+    "A41"
+   ],
+   "expected": {
+    "property": "decision-provenance",
+    "outcome": "ACCEPT",
+    "classification": "SPEC_GAP",
+    "error": null,
+    "qualification": "The configured relay fabricates a tuple without a PBC request/log. Repaired control uses a non-witness signature on an otherwise matching certificate; BAD_SIGNATURE must precede any grant. Paper caller restrictions remain enforced; the compromised relay stress is outside secure isolation."
+   },
+   "observed": "mined policyEnf (relay) with a fixed synthetic pbcRequestId never sent to the PBC: GrantIssued(gid Alice, recipient 0, TTL ts+30, nonce unconsumed)+AccessLog; PBC request status 0 and PBC history unchanged",
+   "executionStatus": "COMPLETE",
+   "classification": "SPEC_GAP",
+   "error": null,
+   "workerObservation": "verified never-instantiated before and after (exporter exit 1 exact message, both DB paths absent)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "stressTimestamp": "1791595081",
+    "stressBlock": "21"
+   },
+   "qualification": "configured-relay stress outside A01: a DBC grant exists with no PBC request or log; reconstruction specification gap, not an HMBC exploit Tested reconstruction result; configured-relay stress outside A01; symbolic adapter; delivery unknown; solo correlated review."
+  },
+  {
+   "caseId": "E01-forged-tuple-repaired-e",
+   "profile": "repaired-e",
+   "sourceRefs": [
+    "S09",
+    "S12",
+    "S13",
+    "S20",
+    "SPEC4/E01"
+   ],
+   "assumptions": [
+    "A01",
+    "A02",
+    "A14",
+    "A19",
+    "A25",
+    "A36",
+    "A41"
+   ],
+   "expected": {
+    "property": "decision-provenance",
+    "outcome": "REJECT",
+    "classification": "REPAIR_SUPPORTED",
+    "error": "BAD_SIGNATURE",
+    "qualification": "The configured relay fabricates a tuple without a PBC request/log. Repaired control uses a non-witness signature on an otherwise matching certificate; BAD_SIGNATURE must precede any grant. Paper caller restrictions remain enforced; the compromised relay stress is outside secure isolation."
+   },
+   "observed": "real forwarded Alice request + honest certificate; eth_call simulation of the honest certificate returned the derived grantId; honest witness and relay signatures recover under the same runner digest/domain; mined relay-signed copy: status0 Rejected(1) BAD_SIGNATURE, no logs, whole state unchanged",
+   "executionStatus": "COMPLETE",
+   "classification": "REPAIR_SUPPORTED",
+   "error": "BAD_SIGNATURE",
+   "workerObservation": "verified never-instantiated before and after (exporter exit 1 exact message, both DB paths absent)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "stressTimestamp": "1791595163",
+    "stressBlock": "24",
+    "requestTimestamp": "1791595160",
+    "requestExpiresAt": "1791595189",
+    "marginSeconds": 26
+   },
+   "qualification": "non-witness signature on an otherwise matching certificate; DecisionVerifier step 6 precedes any grant Tested reconstruction result; configured-relay stress outside A01; symbolic adapter; delivery unknown; solo correlated review. Recipe difference (A1-0065): this repaired row uses a real forwarded Alice request (a PBC request/log exists) plus an honest eth_call simulation; the DBC never reads PBC state."
+  },
+  {
+   "caseId": "E01-new-reference-replay-paper-strict",
+   "profile": "paper-strict",
+   "sourceRefs": [
+    "S09",
+    "S12",
+    "S13",
+    "S20",
+    "SPEC4/E01"
+   ],
+   "assumptions": [
+    "A01",
+    "A02",
+    "A14",
+    "A19",
+    "A25",
+    "A41"
+   ],
+   "expected": {
+    "property": "decision-provenance",
+    "outcome": "ACCEPT",
+    "classification": "SPEC_GAP",
+    "error": null,
+    "qualification": "After the first grant, the relay supplies a fresh pbcRequestId to paper policyEnf while repeating the same verified tuple. Paper grants again under A25. Repaired-e reuses the original signed gid/nonce/certificate (no freshly signed request); REPLAY prevents a second grant."
+   },
+   "observed": "original forwarded tuple granted; same verified tuple under a fixed fresh relay reference mined: second distinct grant (recipient 0, TTL ts+30), no second PBC request; original grant/request unchanged",
+   "executionStatus": "COMPLETE",
+   "classification": "SPEC_GAP",
+   "error": null,
+   "workerObservation": "verified never-instantiated before and after (exporter exit 1 exact message, both DB paths absent)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "stressTimestamp": "1791595236",
+    "stressBlock": "22",
+    "requestTimestamp": "1791595234",
+    "requestExpiresAt": "1791595264",
+    "marginSeconds": 28
+   },
+   "qualification": "configured-relay stress outside A01 (A25): a second grant without a second PBC request; reconstruction specification gap, not an HMBC exploit Tested reconstruction result; configured-relay stress outside A01; symbolic adapter; delivery unknown; solo correlated review."
+  },
+  {
+   "caseId": "E01-new-reference-replay-paper-minimal",
+   "profile": "paper-minimal",
+   "sourceRefs": [
+    "S09",
+    "S12",
+    "S13",
+    "S20",
+    "SPEC4/E01"
+   ],
+   "assumptions": [
+    "A01",
+    "A02",
+    "A14",
+    "A19",
+    "A25",
+    "A41"
+   ],
+   "expected": {
+    "property": "decision-provenance",
+    "outcome": "ACCEPT",
+    "classification": "SPEC_GAP",
+    "error": null,
+    "qualification": "After the first grant, the relay supplies a fresh pbcRequestId to paper policyEnf while repeating the same verified tuple. Paper grants again under A25. Repaired-e reuses the original signed gid/nonce/certificate (no freshly signed request); REPLAY prevents a second grant."
+   },
+   "observed": "original forwarded tuple granted; same verified tuple under a fixed fresh relay reference mined: second distinct grant (recipient 0, TTL ts+30), no second PBC request; original grant/request unchanged",
+   "executionStatus": "COMPLETE",
+   "classification": "SPEC_GAP",
+   "error": null,
+   "workerObservation": "verified never-instantiated before and after (exporter exit 1 exact message, both DB paths absent)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "stressTimestamp": "1791595312",
+    "stressBlock": "22",
+    "requestTimestamp": "1791595310",
+    "requestExpiresAt": "1791595339",
+    "marginSeconds": 27
+   },
+   "qualification": "configured-relay stress outside A01 (A25): a second grant without a second PBC request; reconstruction specification gap, not an HMBC exploit Tested reconstruction result; configured-relay stress outside A01; symbolic adapter; delivery unknown; solo correlated review."
+  },
+  {
+   "caseId": "E01-new-reference-replay-repaired-e",
+   "profile": "repaired-e",
+   "sourceRefs": [
+    "S09",
+    "S12",
+    "S13",
+    "S20",
+    "SPEC4/E01"
+   ],
+   "assumptions": [
+    "A01",
+    "A02",
+    "A14",
+    "A19",
+    "A25",
+    "A36",
+    "A41"
+   ],
+   "expected": {
+    "property": "decision-provenance",
+    "outcome": "NO_NEW_GRANT",
+    "classification": "REPAIR_SUPPORTED",
+    "error": "REPLAY",
+    "qualification": "After the first grant, the relay supplies a fresh pbcRequestId to paper policyEnf while repeating the same verified tuple. Paper grants again under A25. Repaired-e reuses the original signed gid/nonce/certificate (no freshly signed request); REPLAY prevents a second grant."
+   },
+   "observed": "original signed request+certificate consumed (grant), then identical calldata re-consumed: status0 Rejected(8) REPLAY, no logs, whole state unchanged (grant uniqueness, KSSC.sol:180)",
+   "executionStatus": "COMPLETE",
+   "classification": "REPAIR_SUPPORTED",
+   "error": "REPLAY",
+   "workerObservation": "verified never-instantiated before and after (exporter exit 1 exact message, both DB paths absent)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "stressTimestamp": "1791595393",
+    "stressBlock": "25",
+    "requestTimestamp": "1791595389",
+    "requestExpiresAt": "1791595419",
+    "marginSeconds": 26
+   },
+   "qualification": "grant uniqueness (KSSC.sol:180) rejects before the nonce check (:182); the nonce guard is reached only by the same-nonce distinct-digest row Tested reconstruction result; configured-relay stress outside A01; symbolic adapter; delivery unknown; solo correlated review."
+  },
+  {
+   "caseId": "E01-same-nonce-distinct-digests-repaired-e",
+   "profile": "repaired-e",
+   "sourceRefs": [
+    "S09",
+    "S12",
+    "S13",
+    "S20",
+    "SPEC4/E01"
+   ],
+   "assumptions": [
+    "A01",
+    "A02",
+    "A14",
+    "A19",
+    "A36",
+    "A39",
+    "A41"
+   ],
+   "expected": {
+    "property": "decision-provenance",
+    "outcome": "NO_NEW_GRANT",
+    "classification": "REPAIR_SUPPORTED",
+    "error": "REPLAY",
+    "qualification": "Fresh scenario: two valid user-signed Alice requests, same gid/nonce, distinct expiresAt within live 30-second bounds. Independently verify both signatures, distinct digests and derived grantIds. Forward both BEFORE ONE checkpoint covering both. Collect BOTH honest policy-aware ALLOW certificates BEFORE either consume; each sees nonceConsumed=false. Preserve that checkpoint, credentials and TTLs; consume first then the second PRE-COLLECTED certificate without re-collection. Native repaired-e: REPLAY, no second grant, first grant unchanged. MUT_NO_NONCE (8) counterpart: second distinct allowed grant; nonce never recorded. These are NOT_RUN expectations; A2 owner measurements are separate. No evaluator witness key."
+   },
+   "observed": "two same-(gid,nonce) Alice requests with distinct digests/grantIds, one checkpoint after both forwards, both ALLOW certificates before any consume; consume first granted (nonce consumed); second pre-collected certificate mined status0 Rejected(8) REPLAY, no logs; pinned pre/post states at blocks second-1/second equal (nonce guard KSSC.sol:182); margin 24 s",
+   "executionStatus": "COMPLETE",
+   "classification": "REPAIR_SUPPORTED",
+   "error": "REPLAY",
+   "workerObservation": "verified never-instantiated before and after (exporter exit 1 exact message, both DB paths absent)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "timeline": {
+    "firstRequestTimestamp": "1791595472",
+    "secondRequestTimestamp": "1791595473",
+    "checkpointTimestamp": "1791595474",
+    "checkpointExpiresAt": "1791595534",
+    "decisionCollectedAtDbcBlocks": [
+     "23",
+     "23"
+    ],
+    "decisionDbcClock": [
+     "1791595475",
+     "1791595476"
+    ],
+    "decisionExpiresAt": [
+     "1791595502",
+     "1791595501"
+    ],
+    "firstConsumeTimestamp": "1791595477",
+    "secondConsumeTimestamp": "1791595477",
+    "firstExpiresAt": "1791595502",
+    "secondExpiresAt": "1791595501",
+    "marginSeconds": 24
+   },
+   "qualification": "distinct digests give distinct grant ids, so grant uniqueness cannot fire; the (gid, nonce) guard at KSSC.sol:182 rejects the second consumption Tested reconstruction result; configured-relay stress outside A01; symbolic adapter; delivery unknown; solo correlated review."
+  }
+ ],
+ "completedRows": 7,
+ "actualCatalogComparisons": "22/56",
+ "remainingCatalogComparisons": 34,
+ "fullCatalogComplete": false
+}

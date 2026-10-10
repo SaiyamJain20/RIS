@@ -1,0 +1,91 @@
+{
+  "startedAt": "2026-10-10T01:21:22.503544+00:00",
+  "endedAt": "2026-10-10T01:21:27.240933+00:00",
+  "ok": true,
+  "failure": null,
+  "scope": "C-E1 single control; not an RQ gate",
+  "adapterMode": "symbolic",
+  "observed": {
+    "adapterMode": "symbolic",
+    "events": [
+      {
+        "type": "REQUEST_LOGGED",
+        "requestDigest": "0x6bbda62d667edd57d6f0d42dd98d1800afa922b84180fdc063eaebacdcb4180c",
+        "timestamp": "1791595285"
+      },
+      {
+        "type": "PBC_DECIDED",
+        "requestDigest": "0x6bbda62d667edd57d6f0d42dd98d1800afa922b84180fdc063eaebacdcb4180c",
+        "timestamp": "1791595285"
+      }
+    ],
+    "error": "POLICY_DENIED",
+    "ledgerChecks": {
+      "DBC_POLICY_DENIAL_LOGGED": true,
+      "NONCE_UNCHANGED": true
+    }
+  },
+  "oracle": {
+    "ok": true,
+    "classification": "SUPPORTED",
+    "assertions": [
+      {
+        "name": "adapter mode is explicit and matches",
+        "passed": true
+      },
+      {
+        "name": "stable denial reason",
+        "passed": true
+      },
+      {
+        "name": "DBC_POLICY_DENIAL_LOGGED",
+        "passed": true
+      },
+      {
+        "name": "NONCE_UNCHANGED",
+        "passed": true
+      },
+      {
+        "name": "expected events occur in causal order",
+        "passed": true
+      },
+      {
+        "name": "at most one new grant",
+        "passed": true
+      },
+      {
+        "name": "at most one recorded outcome",
+        "passed": true
+      },
+      {
+        "name": "denial cannot release or record a successful grant outcome",
+        "passed": true
+      },
+      {
+        "name": "event 0 request binding",
+        "passed": true
+      },
+      {
+        "name": "event 1 request binding",
+        "passed": true
+      }
+    ],
+    "observedEvents": [
+      {
+        "type": "REQUEST_LOGGED",
+        "requestDigest": "0x6bbda62d667edd57d6f0d42dd98d1800afa922b84180fdc063eaebacdcb4180c",
+        "timestamp": "1791595285"
+      },
+      {
+        "type": "PBC_DECIDED",
+        "requestDigest": "0x6bbda62d667edd57d6f0d42dd98d1800afa922b84180fdc063eaebacdcb4180c",
+        "timestamp": "1791595285"
+      }
+    ],
+    "limitations": [
+      "E/F adapter is symbolic; no measured ABE security.",
+      "Outcome recording is not proof of recipient delivery."
+    ]
+  },
+  "delivery": "unknown"
+}

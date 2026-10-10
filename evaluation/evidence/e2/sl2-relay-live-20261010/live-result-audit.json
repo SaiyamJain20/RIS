@@ -1,0 +1,459 @@
+{
+ "status": "E2_RELAY_STRESS_SLICE_PASS",
+ "failure": null,
+ "sourceStable": true,
+ "reviewMode": "solo-correlated",
+ "cases": {
+  "paper-strict-forged-tuple": {
+   "status": "RELAY_STRESS_CONTROL_PASS",
+   "profiles": {
+    "paper-strict": {
+     "status": "CONTROL_PASS",
+     "sourcesStable": true,
+     "servicesStopped": true,
+     "castHashPolicy": "checkpoint",
+     "castStable": true,
+     "wrongAdmin": "UNAUTHORIZED_CALLER; baseline issuer restriction, not a repair",
+     "relayStress": {
+      "runId": "E2-SL2-relay-r2-20261010-forged-tuple-paper-strict-relay",
+      "variant": "forged-tuple",
+      "deployment": "paper-strict/relay-instance/deployment.json",
+      "result": "paper-strict/relay-stress/result.json"
+     },
+     "subjectStress": null
+    }
+   }
+  },
+  "paper-minimal-forged-tuple": {
+   "status": "RELAY_STRESS_CONTROL_PASS",
+   "profiles": {
+    "paper-minimal": {
+     "status": "CONTROL_PASS",
+     "sourcesStable": true,
+     "servicesStopped": true,
+     "castHashPolicy": "checkpoint",
+     "castStable": true,
+     "wrongAdmin": "UNAUTHORIZED_CALLER; baseline issuer restriction, not a repair",
+     "relayStress": {
+      "runId": "E2-SL2-relay-r2-20261010-forged-tuple-paper-minimal-relay",
+      "variant": "forged-tuple",
+      "deployment": "paper-minimal/relay-instance/deployment.json",
+      "result": "paper-minimal/relay-stress/result.json"
+     },
+     "subjectStress": null
+    }
+   }
+  },
+  "repaired-e-forged-tuple": {
+   "status": "RELAY_STRESS_CONTROL_PASS",
+   "profiles": {
+    "repaired-e": {
+     "status": "CONTROL_PASS",
+     "sourcesStable": true,
+     "servicesStopped": true,
+     "castHashPolicy": "checkpoint",
+     "castStable": true,
+     "wrongAdmin": "UNAUTHORIZED_CALLER; baseline issuer restriction, not a repair",
+     "relayStress": {
+      "runId": "E2-SL2-relay-r2-20261010-forged-tuple-repaired-e-relay",
+      "variant": "forged-tuple",
+      "deployment": "repaired-e/relay-instance/deployment.json",
+      "result": "repaired-e/relay-stress/result.json"
+     },
+     "subjectStress": null
+    }
+   }
+  },
+  "paper-strict-new-reference-replay": {
+   "status": "RELAY_STRESS_CONTROL_PASS",
+   "profiles": {
+    "paper-strict": {
+     "status": "CONTROL_PASS",
+     "sourcesStable": true,
+     "servicesStopped": true,
+     "castHashPolicy": "checkpoint",
+     "castStable": true,
+     "wrongAdmin": "UNAUTHORIZED_CALLER; baseline issuer restriction, not a repair",
+     "relayStress": {
+      "runId": "E2-SL2-relay-r2-20261010-new-reference-replay-paper-strict-relay",
+      "variant": "new-reference-replay",
+      "deployment": "paper-strict/relay-instance/deployment.json",
+      "result": "paper-strict/relay-stress/result.json"
+     },
+     "subjectStress": null
+    }
+   }
+  },
+  "paper-minimal-new-reference-replay": {
+   "status": "RELAY_STRESS_CONTROL_PASS",
+   "profiles": {
+    "paper-minimal": {
+     "status": "CONTROL_PASS",
+     "sourcesStable": true,
+     "servicesStopped": true,
+     "castHashPolicy": "checkpoint",
+     "castStable": true,
+     "wrongAdmin": "UNAUTHORIZED_CALLER; baseline issuer restriction, not a repair",
+     "relayStress": {
+      "runId": "E2-SL2-relay-r2-20261010-new-reference-replay-paper-minimal-relay",
+      "variant": "new-reference-replay",
+      "deployment": "paper-minimal/relay-instance/deployment.json",
+      "result": "paper-minimal/relay-stress/result.json"
+     },
+     "subjectStress": null
+    }
+   }
+  },
+  "repaired-e-new-reference-replay": {
+   "status": "RELAY_STRESS_CONTROL_PASS",
+   "profiles": {
+    "repaired-e": {
+     "status": "CONTROL_PASS",
+     "sourcesStable": true,
+     "servicesStopped": true,
+     "castHashPolicy": "checkpoint",
+     "castStable": true,
+     "wrongAdmin": "UNAUTHORIZED_CALLER; baseline issuer restriction, not a repair",
+     "relayStress": {
+      "runId": "E2-SL2-relay-r2-20261010-new-reference-replay-repaired-e-relay",
+      "variant": "new-reference-replay",
+      "deployment": "repaired-e/relay-instance/deployment.json",
+      "result": "repaired-e/relay-stress/result.json"
+     },
+     "subjectStress": null
+    }
+   }
+  },
+  "repaired-e-same-nonce-distinct-digests": {
+   "status": "RELAY_STRESS_CONTROL_PASS",
+   "profiles": {
+    "repaired-e": {
+     "status": "CONTROL_PASS",
+     "sourcesStable": true,
+     "servicesStopped": true,
+     "castHashPolicy": "checkpoint",
+     "castStable": true,
+     "wrongAdmin": "UNAUTHORIZED_CALLER; baseline issuer restriction, not a repair",
+     "relayStress": {
+      "runId": "E2-SL2-relay-r2-20261010-same-nonce-distinct-digests-repaired-e-relay",
+      "variant": "same-nonce-distinct-digests",
+      "deployment": "repaired-e/relay-instance/deployment.json",
+      "result": "repaired-e/relay-stress/result.json"
+     },
+     "subjectStress": null
+    }
+   }
+  }
+ },
+ "services": [
+  {
+   "case": "paper-strict-forged-tuple",
+   "profile": "paper-strict",
+   "chain": "pbc",
+   "port": 18545,
+   "pid": 2709174
+  },
+  {
+   "case": "paper-strict-forged-tuple",
+   "profile": "paper-strict",
+   "chain": "dbc",
+   "port": 18546,
+   "pid": 2709308
+  },
+  {
+   "case": "paper-minimal-forged-tuple",
+   "profile": "paper-minimal",
+   "chain": "pbc",
+   "port": 18545,
+   "pid": 2725567
+  },
+  {
+   "case": "paper-minimal-forged-tuple",
+   "profile": "paper-minimal",
+   "chain": "dbc",
+   "port": 18546,
+   "pid": 2725689
+  },
+  {
+   "case": "repaired-e-forged-tuple",
+   "profile": "repaired-e",
+   "chain": "pbc",
+   "port": 18545,
+   "pid": 2741900
+  },
+  {
+   "case": "repaired-e-forged-tuple",
+   "profile": "repaired-e",
+   "chain": "dbc",
+   "port": 18546,
+   "pid": 2742021
+  },
+  {
+   "case": "paper-strict-new-reference-replay",
+   "profile": "paper-strict",
+   "chain": "pbc",
+   "port": 18545,
+   "pid": 2762339
+  },
+  {
+   "case": "paper-strict-new-reference-replay",
+   "profile": "paper-strict",
+   "chain": "dbc",
+   "port": 18546,
+   "pid": 2762460
+  },
+  {
+   "case": "paper-minimal-new-reference-replay",
+   "profile": "paper-minimal",
+   "chain": "pbc",
+   "port": 18545,
+   "pid": 2779195
+  },
+  {
+   "case": "paper-minimal-new-reference-replay",
+   "profile": "paper-minimal",
+   "chain": "dbc",
+   "port": 18546,
+   "pid": 2779315
+  },
+  {
+   "case": "repaired-e-new-reference-replay",
+   "profile": "repaired-e",
+   "chain": "pbc",
+   "port": 18545,
+   "pid": 2796048
+  },
+  {
+   "case": "repaired-e-new-reference-replay",
+   "profile": "repaired-e",
+   "chain": "dbc",
+   "port": 18546,
+   "pid": 2796178
+  },
+  {
+   "case": "repaired-e-same-nonce-distinct-digests",
+   "profile": "repaired-e",
+   "chain": "pbc",
+   "port": 18545,
+   "pid": 2816602
+  },
+  {
+   "case": "repaired-e-same-nonce-distinct-digests",
+   "profile": "repaired-e",
+   "chain": "dbc",
+   "port": 18546,
+   "pid": 2816723
+  }
+ ],
+ "adapters": [
+  {
+   "case": "paper-strict-forged-tuple",
+   "profile": "paper-strict",
+   "label": "adapter",
+   "pid": 2713529
+  },
+  {
+   "case": "paper-strict-forged-tuple",
+   "profile": "paper-strict",
+   "label": "adapter-relay",
+   "pid": 2722827
+  },
+  {
+   "case": "paper-minimal-forged-tuple",
+   "profile": "paper-minimal",
+   "label": "adapter",
+   "pid": 2729845
+  },
+  {
+   "case": "paper-minimal-forged-tuple",
+   "profile": "paper-minimal",
+   "label": "adapter-relay",
+   "pid": 2739140
+  },
+  {
+   "case": "repaired-e-forged-tuple",
+   "profile": "repaired-e",
+   "label": "adapter",
+   "pid": 2746174
+  },
+  {
+   "case": "repaired-e-forged-tuple",
+   "profile": "repaired-e",
+   "label": "adapter-relay",
+   "pid": 2757913
+  },
+  {
+   "case": "paper-strict-new-reference-replay",
+   "profile": "paper-strict",
+   "label": "adapter",
+   "pid": 2766607
+  },
+  {
+   "case": "paper-strict-new-reference-replay",
+   "profile": "paper-strict",
+   "label": "adapter-relay",
+   "pid": 2775896
+  },
+  {
+   "case": "paper-minimal-new-reference-replay",
+   "profile": "paper-minimal",
+   "label": "adapter",
+   "pid": 2783465
+  },
+  {
+   "case": "paper-minimal-new-reference-replay",
+   "profile": "paper-minimal",
+   "label": "adapter-relay",
+   "pid": 2792785
+  },
+  {
+   "case": "repaired-e-new-reference-replay",
+   "profile": "repaired-e",
+   "label": "adapter",
+   "pid": 2800316
+  },
+  {
+   "case": "repaired-e-new-reference-replay",
+   "profile": "repaired-e",
+   "label": "adapter-relay",
+   "pid": 2812078
+  },
+  {
+   "case": "repaired-e-same-nonce-distinct-digests",
+   "profile": "repaired-e",
+   "label": "adapter",
+   "pid": 2820883
+  },
+  {
+   "case": "repaired-e-same-nonce-distinct-digests",
+   "profile": "repaired-e",
+   "label": "adapter-relay",
+   "pid": 2832631
+  }
+ ],
+ "commands": {
+  "total": 70,
+  "nonzero": [],
+  "verifiedNeverInstantiatedWorkerProbes": [
+   {
+    "file": "repaired-e-same-nonce-distinct-digests/repaired-e/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "repaired-e-same-nonce-distinct-digests/repaired-e/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "repaired-e-new-reference-replay/repaired-e/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "repaired-e-new-reference-replay/repaired-e/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-minimal-forged-tuple/paper-minimal/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-minimal-forged-tuple/paper-minimal/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-strict-forged-tuple/paper-strict/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-strict-forged-tuple/paper-strict/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "repaired-e-forged-tuple/repaired-e/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "repaired-e-forged-tuple/repaired-e/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-strict-new-reference-replay/paper-strict/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-strict-new-reference-replay/paper-strict/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-minimal-new-reference-replay/paper-minimal/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-minimal-new-reference-replay/paper-minimal/commands.json",
+    "exit": 1
+   }
+  ]
+ },
+ "castCheckpoints": {
+  "repaired-e-same-nonce-distinct-digests/repaired-e/dbc-rpc/cast-checkpoints.json": {
+   "count": 12,
+   "allOk": true
+  },
+  "repaired-e-same-nonce-distinct-digests/repaired-e/pbc-rpc/cast-checkpoints.json": {
+   "count": 22,
+   "allOk": true
+  },
+  "repaired-e-new-reference-replay/repaired-e/dbc-rpc/cast-checkpoints.json": {
+   "count": 12,
+   "allOk": true
+  },
+  "repaired-e-new-reference-replay/repaired-e/pbc-rpc/cast-checkpoints.json": {
+   "count": 21,
+   "allOk": true
+  },
+  "paper-minimal-forged-tuple/paper-minimal/dbc-rpc/cast-checkpoints.json": {
+   "count": 8,
+   "allOk": true
+  },
+  "paper-minimal-forged-tuple/paper-minimal/pbc-rpc/cast-checkpoints.json": {
+   "count": 20,
+   "allOk": true
+  },
+  "paper-strict-forged-tuple/paper-strict/dbc-rpc/cast-checkpoints.json": {
+   "count": 8,
+   "allOk": true
+  },
+  "paper-strict-forged-tuple/paper-strict/pbc-rpc/cast-checkpoints.json": {
+   "count": 20,
+   "allOk": true
+  },
+  "repaired-e-forged-tuple/repaired-e/dbc-rpc/cast-checkpoints.json": {
+   "count": 11,
+   "allOk": true
+  },
+  "repaired-e-forged-tuple/repaired-e/pbc-rpc/cast-checkpoints.json": {
+   "count": 21,
+   "allOk": true
+  },
+  "paper-strict-new-reference-replay/paper-strict/dbc-rpc/cast-checkpoints.json": {
+   "count": 9,
+   "allOk": true
+  },
+  "paper-strict-new-reference-replay/paper-strict/pbc-rpc/cast-checkpoints.json": {
+   "count": 21,
+   "allOk": true
+  },
+  "paper-minimal-new-reference-replay/paper-minimal/dbc-rpc/cast-checkpoints.json": {
+   "count": 9,
+   "allOk": true
+  },
+  "paper-minimal-new-reference-replay/paper-minimal/pbc-rpc/cast-checkpoints.json": {
+   "count": 21,
+   "allOk": true
+  }
+ },
+ "rpcCommands": {
+  "total": 6812,
+  "nonzero": 0
+ },
+ "pidsStillPresent": []
+}

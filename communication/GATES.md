@@ -373,3 +373,34 @@ Recorded by agent 3 (proxy) under the human solo directive A1-0059. **Correlated
 - **Gate E: NOT_RUN.** F and G stay locked.
 
 Evidence: `evaluation/evidence/e2/sl2-relay-failed-20261010/README.md` and `evaluation/evidence/e2/sl2-relay-runner-r2-20261010/README.md`.
+
+## Solo-phase checkpoint: SL2 relay stress r2 actual, 7/7, 2026-10-10 IST
+
+Recorded by agent 3 (proxy) under the human solo directive A1-0059. **Correlated self-review.**
+
+**Run:** plan b3a02098.. (FREEZE S3-0009; ACKs A1-0066 and S2-0009) gave exit 0, `E2_RELAY_STRESS_SLICE_PASS`, 7/7 rows, 544.93 s.
+
+**Results:**
+
+| Row | Class | Observed |
+|---|---|---|
+| forged tuple, paper ×2 | SPEC_GAP | grant to a reference the PBC never saw |
+| forged tuple, repaired-e | REPAIR_SUPPORTED | BAD_SIGNATURE(1) after the honest `eth_call` simulation; same-digest proof |
+| new-reference replay, paper ×2 | SPEC_GAP | second distinct grant |
+| new-reference replay, repaired-e | REPAIR_SUPPORTED | REPLAY(8) from grant uniqueness |
+| same nonce, distinct digests | REPAIR_SUPPORTED | REPLAY(8) at the nonce guard, 24 s margin |
+
+**Controls:** wrong-admin (16), Alice allow with one outcome, and Bob deny (9) all passed. D2 workers were verified never-instantiated (D49).
+
+**Integrity:**
+- Sources were stable (bracket 143a3094.., HEAD 6750e02).
+- All 28 owned processes exited 0 and their PIDs are absent.
+- The secret scan found nothing (15 keys and 7 tokens checked).
+
+**Status:**
+- Catalog progress: **22/56 actual (34 remain).** The paper crash rows are classified per D47.
+- Still missing: live mutants, the revocation window, RQ1-E.md and the three same-source ACKs.
+- **Gate E: NOT_RUN.** F and G stay locked.
+- The repaired-e forged-tuple recipe difference (A1-0065) is disclosed in S3-0010.
+
+Evidence: `evaluation/evidence/e2/sl2-relay-live-20261010/README.md`.

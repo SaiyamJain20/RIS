@@ -1,0 +1,36 @@
+{
+  "startedAt": "2026-10-10T01:24:28.954355+00:00",
+  "endedAt": "2026-10-10T01:24:39.319122+00:00",
+  "ok": true,
+  "failure": null,
+  "variant": "same-nonce-distinct-digests",
+  "delivery": "unknown",
+  "scope": "C-E2 SL2 relay stress; separate controls, plan ACKs and gate apply",
+  "classification": "REPAIR_SUPPORTED",
+  "error": "REPLAY",
+  "nonceGuardReached": true,
+  "qualification": "distinct digests give distinct grant ids, so grant uniqueness cannot fire; the (gid, nonce) guard at KSSC.sol:182 rejects the second consumption",
+  "timeline": {
+    "firstRequestTimestamp": "1791595472",
+    "secondRequestTimestamp": "1791595473",
+    "checkpointTimestamp": "1791595474",
+    "checkpointExpiresAt": "1791595534",
+    "decisionCollectedAtDbcBlocks": [
+      "23",
+      "23"
+    ],
+    "decisionDbcClock": [
+      "1791595475",
+      "1791595476"
+    ],
+    "decisionExpiresAt": [
+      "1791595502",
+      "1791595501"
+    ],
+    "firstConsumeTimestamp": "1791595477",
+    "secondConsumeTimestamp": "1791595477",
+    "firstExpiresAt": "1791595502",
+    "secondExpiresAt": "1791595501",
+    "marginSeconds": 24
+  }
+}

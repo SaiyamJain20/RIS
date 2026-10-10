@@ -1,0 +1,164 @@
+{
+  "rq": "E",
+  "executionMode": "two-chain-e2-relay-stress-slice",
+  "adapterMode": "symbolic",
+  "status": "E2_RELAY_STRESS_SLICE_PASS",
+  "startedAt": "2026-10-10T01:15:36.582506+00:00",
+  "endedAt": "2026-10-10T01:24:40.900660+00:00",
+  "cases": {
+    "paper-strict-forged-tuple": {
+      "status": "RELAY_STRESS_CONTROL_PASS",
+      "manifest": "paper-strict-forged-tuple/manifest.json"
+    },
+    "paper-minimal-forged-tuple": {
+      "status": "RELAY_STRESS_CONTROL_PASS",
+      "manifest": "paper-minimal-forged-tuple/manifest.json"
+    },
+    "repaired-e-forged-tuple": {
+      "status": "RELAY_STRESS_CONTROL_PASS",
+      "manifest": "repaired-e-forged-tuple/manifest.json"
+    },
+    "paper-strict-new-reference-replay": {
+      "status": "RELAY_STRESS_CONTROL_PASS",
+      "manifest": "paper-strict-new-reference-replay/manifest.json"
+    },
+    "paper-minimal-new-reference-replay": {
+      "status": "RELAY_STRESS_CONTROL_PASS",
+      "manifest": "paper-minimal-new-reference-replay/manifest.json"
+    },
+    "repaired-e-new-reference-replay": {
+      "status": "RELAY_STRESS_CONTROL_PASS",
+      "manifest": "repaired-e-new-reference-replay/manifest.json"
+    },
+    "repaired-e-same-nonce-distinct-digests": {
+      "status": "RELAY_STRESS_CONTROL_PASS",
+      "manifest": "repaired-e-same-nonce-distinct-digests/manifest.json"
+    }
+  },
+  "servicesStarted": [
+    {
+      "case": "paper-strict-forged-tuple",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 2709174
+    },
+    {
+      "case": "paper-strict-forged-tuple",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 2709308
+    },
+    {
+      "case": "paper-minimal-forged-tuple",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 2725567
+    },
+    {
+      "case": "paper-minimal-forged-tuple",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 2725689
+    },
+    {
+      "case": "repaired-e-forged-tuple",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 2741900
+    },
+    {
+      "case": "repaired-e-forged-tuple",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 2742021
+    },
+    {
+      "case": "paper-strict-new-reference-replay",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 2762339
+    },
+    {
+      "case": "paper-strict-new-reference-replay",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 2762460
+    },
+    {
+      "case": "paper-minimal-new-reference-replay",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 2779195
+    },
+    {
+      "case": "paper-minimal-new-reference-replay",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 2779315
+    },
+    {
+      "case": "repaired-e-new-reference-replay",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 2796048
+    },
+    {
+      "case": "repaired-e-new-reference-replay",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 2796178
+    },
+    {
+      "case": "repaired-e-same-nonce-distinct-digests",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 2816602
+    },
+    {
+      "case": "repaired-e-same-nonce-distinct-digests",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 2816723
+    }
+  ],
+  "acks": {
+    "agent-1": {
+      "commit": "6750e028df1bef188f20a82785067bc4941a967b",
+      "path": "communication/agent-1/outbox/0066-ack-sl2-relay-stress-r2-freeze.md",
+      "sha256": "b1b73f62535c21cae3af5cb39eca23ccec2465eb9c5fef4f8e8154d981b91562",
+      "messageId": "A1-0066"
+    },
+    "agent-2": {
+      "commit": "6750e028df1bef188f20a82785067bc4941a967b",
+      "path": "communication/agent-1/solo/agent-2-proxy/outbox/0009-ack-sl2-relay-stress-r2-freeze.md",
+      "sha256": "f57b05ca67a0185a31378b40dbc10c0791da52349d6a233a8336fd60be23992f",
+      "messageId": "S2-0009"
+    },
+    "freeze": {
+      "commit": "6750e028df1bef188f20a82785067bc4941a967b",
+      "path": "communication/agent-1/solo/agent-3-proxy/outbox/0009-freeze-sl2-relay-stress-r2.md",
+      "sha256": "33ea9cf5f8dac2ab1e6acaf64c44c5eee53664789a5ce4b7d8e732ece2fe9915",
+      "messageId": "S3-0009"
+    }
+  },
+  "failure": null,
+  "sourceStable": true,
+  "limitation": "Seven E01 relay-stress comparisons only; no complete catalog or RQ gate.",
+  "planSha256": "b3a020989d59a9ccdbb255e9d838be6a270ae515502531e9334655c91c62a583",
+  "reviewMode": "solo-correlated",
+  "reviewDisclosure": "Solo phase under the human directive A1-0059: agent 1 and the agent-2/agent-3 proxies are the same model, so every review and ACK is correlated self-review, not independent review."
+}
