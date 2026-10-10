@@ -14,16 +14,16 @@ F and G locked. All proxy reviews and ACKs are correlated self-review (same mode
 | SL2 relay stress ×7, first run | **FAILED** (runner defect: worker DB never created, D49) | S3-0007 plan d67f1786..; S3-0008; `evaluation/evidence/e2/sl2-relay-failed-20261010/` |
 | SL2 relay stress ×7, re-plan r2 | **actual PASS 7/7** | FREEZE S3-0009, plan b3a02098..; result S3-0010; `evaluation/evidence/e2/sl2-relay-live-20261010/` |
 | SL3 audit stress ×6 | **actual PASS 6/6** | FREEZE S3-0011, plan d768463d..; result S3-0012; `evaluation/evidence/e2/sl3-audit-live-20261010/` |
-| SL4 receipt controls ×7 | **FREEZE published, not run** | S3-0013, plan 851896f3..; `evaluation/evidence/e2/sl4-receipt-runner-20261010/` |
+| SL4 receipt controls ×7 | **actual PASS 7/7** | FREEZE S3-0013, plan 851896f3..; result S3-0014; `evaluation/evidence/e2/sl4-receipt-live-20261010/` |
+| SL5 trust freshness ×6 | **FREEZE published, not run** | S3-0015, plan 9e14a148..; `evaluation/evidence/e2/sl5-trust-runner-20261010/` |
 
-- FREEZE S3-0011 is released. No services are running. S3-0013 awaits both ACKs.
+- FREEZE S3-0013 is released. No services are running. S3-0015 awaits both ACKs.
 - Decisions D47 (paper crash relabel) and D48 (SL0 choices) are in `communication/DECISIONS.md`.
 
-**Catalog progress: 28/56 actual, 28 remaining.**
+**Catalog progress: 35/56 actual, 21 remaining.**
 
 | Remaining slice | Rows |
 |---|---|
-| SL4 | receipts ×7 |
 | SL5 | wrong issuer, rollback ×6 |
 | SL6 | barriers, expired duty ×9 |
 | SL7 | wrong destination, expiry boundary ×6 |
@@ -94,11 +94,17 @@ toolchain and host-tools. Keep helper scripts out of `evaluation/` as `.py` file
 
 ## Next allowed actions
 
-1. **SL4 run**, after A1 and S2 ACKs of S3-0013 are committed and agent 1 clears it:
-   - build the ACK index at `tmp/p3/sl4-run/acks.json` (keys agent-1, agent-2 and freeze);
-   - run the S3-0013 command;
-   - audit with `select_audit.py`, after adding `receipt-stress/*` and `receipt-instance/*`
-     patterns and excluding `receipt-deviate-*.txt`; scan for keys and release tokens;
-   - publish S3-0014 and the GATES checkpoint (35/56 if 7/7).
-2. **SL5 (wrong issuer, rollback ×6):** current `TMSC.authEpoch` in the request (A1-0064). Test-first,
-   then a FREEZE.
+1. **SL4 is complete** (S3-0014). The selection and scan helper for SL4 is
+   `tmp/p3/sl4-run/scripts/select_audit.py` (adds the frozen-vector `signerPrivateKey` values).
+2. **SL5 run**, after A1 and S2 ACKs of S3-0015 are committed and agent 1 clears it:
+   - build `tmp/p3/sl5-run/acks.json` (keys agent-1, agent-2 and freeze) and verify it with `e1._acks`;
+   - run the S3-0015 command (background; it takes about 10 minutes);
+   - copy `tmp/p3/sl4-run/scripts/select_audit.py`, add `trust` to the `(relay|audit|receipt)-stress` and
+     `-instance` patterns, and keep excluding `.txt` (raw producer logs); scan keys and release tokens;
+   - per row keep `trust-instance/{deployment,bootstrap-checked}.json`, `{pbc,dbc}-native/*` and
+     `trust-stress/*`; publish S3-0016 and the GATES checkpoint (41/56 if 6/6).
+3. **SL5 runner facts (S3-0015):** `e1.sign_list_argv` builds the producer argv only from the plan
+   templates; `stress_sign_list` re-hashes `sign_list.sh` and `SignList.s.sol` and re-checks the
+   deployment file; a non-zero producer exit writes only `trust-stress/sign-list-refusal.json`.
+4. **SL6 (barriers, expired duty ×9):** one `collect_decision` per request (A1-0064, S2-0007 A31);
+   collect the expired-duty decision while the duty is valid. Test-first, then a FREEZE.

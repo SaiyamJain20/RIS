@@ -34,6 +34,12 @@ RECEIPT_EXPECTED = {'receipt-binding-control': ('REPAIR_SUPPORTED', 'WRONG_SUBJE
 # S2-0007/A1-0064: protocol pin 0716a8e, testtools/deviating_witness.py.
 DEVIATION_PATH = 'protocol/testtools/deviating_witness.py'
 DEVIATION_SHA256 = '0511ba571b71d960d8ffbe4b8c811da99ed7de53a4b7515ac425c5291cc3c2d7'
+TRUST_EXPECTED = {**{(p, 'wrong-issuer'): ('SUPPORTED', 'UNAUTHORIZED_CALLER') for p in e1.PROFILES},
+                  ('paper-strict', 'signed-list-rollback'): ('SPEC_GAP', None), ('paper-minimal', 'signed-list-rollback'): ('SPEC_GAP', None),
+                  ('repaired-e', 'signed-list-rollback'): ('REPAIR_SUPPORTED', 'STALE_ANCHOR')}
+# A1-0034 owner producer at ledger pin 933d2a7 (A1-0061 D-6).
+SIGN_LIST_PATH, SIGN_LIST_SHA256 = 'ledger/tools/sign_list.sh', '806e9a98a52899ca5fc4fe33e1e90e39d7607a51a4f5c6c5942c0edd21c37ded'
+SIGN_SCRIPT_PATH, SIGN_SCRIPT_SHA256 = 'ledger/script/SignList.s.sol', '7aa3b1dd085f5aaaa6aa7b28191d3b6d0cfd3ff02bb0b61291daead13e3ba177'
 ACCEPTANCE = ROOT/'evaluation/evidence/e2/crash-transport-20261009/start-contract-acceptance.json'
 
 
@@ -64,15 +70,17 @@ def _owners(contract):
 
 
 def create_plan(*, run_id, freeze_message, expired_retry=False, duplicate_outcome=False, nonce_replay=False,
-                subject_substitution=False, relay_stress=False, audit_stress=False, receipt_stress=False, review_mode='strict'):
+                subject_substitution=False, relay_stress=False, audit_stress=False, receipt_stress=False, trust_stress=False,
+                review_mode='strict'):
     # Retain the previously reviewed environment, mining/ports, tool and custody
     # recipe; any new exact runtime bytes require new full execution-plan ACKs.
-    flags = (expired_retry, duplicate_outcome, nonce_replay, subject_substitution, relay_stress, audit_stress, receipt_stress)
+    flags = (expired_retry, duplicate_outcome, nonce_replay, subject_substitution, relay_stress, audit_stress, receipt_stress, trust_stress)
     require(all(type(flag) is bool for flag in flags) and sum(flags) <= 1, 'explicit nonoverlapping probe selection')
     require(not subject_substitution or review_mode == e1.SOLO, 'SL1 subject plans are solo-phase plans (A1-0061)')
     require(not relay_stress or review_mode == e1.SOLO, 'SL2 relay plans are solo-phase plans (A1-0061)')
     require(not audit_stress or review_mode == e1.SOLO, 'SL3 audit plans are solo-phase plans (A1-0061)')
     require(not receipt_stress or review_mode == e1.SOLO, 'SL4 receipt plans are solo-phase plans (A1-0061)')
+    require(not trust_stress or review_mode == e1.SOLO, 'SL5 trust plans are solo-phase plans (A1-0061)')
     plan = e1.create_plan(run_id=run_id, freeze_message=freeze_message, review_mode=review_mode)
     contract = json.loads(CONTRACT.read_text())
     plan.update(schemaVersion='hmbc-e2-recovery-plan/v1', executionScope='six fresh logical crash/recovery cases; not full RQ matrix',
@@ -339,6 +347,72 @@ def create_plan(*, run_id, freeze_message, expired_retry=False, duplicate_outcom
                                  'A receipt attests DBC authorization only, not release or delivery; delivery unknown.',
                                  'Symbolic adapter; safe-ledger/trusted-worker/one trusted witness.'])
         plan.pop('workerExpected')
+    if trust_stress:
+        rows = [(p, v) for v in e1.TRUST_VARIANTS for p in e1.PROFILES]
+        entries = plan['owners']['ledger']['entries']
+        require(entries.get(SIGN_LIST_PATH) == SIGN_LIST_SHA256 and entries.get(SIGN_SCRIPT_PATH) == SIGN_SCRIPT_SHA256,
+                'signed-list producer is the A1-0034 owner inventory entry')
+        plan.update(schemaVersion='hmbc-e2-trust-stress-plan/v1', trustStress=True,
+                    executionScope='six fresh E02 trust-freshness comparisons (SL5); not full RQ matrix',
+                    matrix=[dict(profile=profile, point=None, variant=variant) for profile, variant in rows],
+                    caseIds=['E02-'+variant+'-'+profile for profile, variant in rows],
+                    controls=['wrong-admin-before-H2', 'registered-Alice-allow-release-one-outcome', 'registered-Bob-policy-deny',
+                              'fresh-second-deployment-trust-stress'],
+                    restart='none; production adapter only, no crash hook',
+                    freshness=('fresh chain pair per matrix row; controls on deployment D1; the trust row on a fresh second deployment D2 '
+                               'on the same chain pair with its own bootstrap, adapter process and 0700 state; relay/CA-admin balances '
+                               'reset to 1000 ETH before D2'),
+                    observation=('owner signed-list producer output, CA-admin and relay public calls, eth_call simulation, production '
+                                 'prepare_request; TMSC anchors/authEpoch/revocation/credentials and whole decoded two-chain histories; '
+                                 'worker never-instantiated record'),
+                    trustProbe=dict(
+                        wrongIssuer=('WRONG_ISSUER_UPDATE: the producer signs a fresh next-version H2 CRL (no revocations) with the H2 '
+                                     'root; eth_call of updateRevocationList from the H2 CA-admin (never mined) must return the next '
+                                     'generation; the H1 CA-admin then submits the same list -> mined Rejected UNAUTHORIZED_CALLER(16) at '
+                                     'TMSC.sol:181 in every profile, nothing changed; baseline caller restriction (D-record N-1), not a '
+                                     'repair; credited only through this row (A1-0061), not through the bootstrap wrong-admin control'),
+                        signedListRollback=('INSTALL_NEW_LIST > REPLAY_OLD_LIST > REQUEST_ACCESS: the producer signs H1 CRL v2 revoking '
+                                            'Alice certificate serial 101; the H1 CA-admin installs it (Alice REVOKED(19)); the H1 CA-admin '
+                                            'resubmits the bootstrap H1 CRL v1 byte-for-byte, still valid; Alice then requests access '
+                                            'with the current authEpoch read just before the request (A1-0064; repaired PSC refuses a '
+                                            'mismatch). Paper: replay accepted (latest appended list current), Alice forwarded with '
+                                            'anchorVersion 1 (ACCEPT/SPEC_GAP). Repaired-e: replay mined Rejected STALE_ANCHOR(5) at '
+                                            'TMSC.sol:190, v2 retained, Alice AccessDenied REVOKED(19) (REJECT/REPAIR_SUPPORTED)'),
+                        signList=dict(
+                            script=SIGN_LIST_PATH, scriptSha256=SIGN_LIST_SHA256, forgeScript=SIGN_SCRIPT_PATH,
+                            forgeScriptSha256=SIGN_SCRIPT_SHA256, invocations=copy.deepcopy(e1.SIGN_LIST_TEMPLATES),
+                            cwd='materialized ledger snapshot root',
+                            conditions=[
+                                'Owner TEST-ONLY producer (A1-0034), confirmed for SL5 in A1-0061 D-6; read-only, it sends no transaction '
+                                'and never writes keys to outputs.',
+                                'Exact pinned bytes (sign_list.sh and SignList.s.sol) re-hashed before every call; argv built only from '
+                                'the per-variant template; default next version, never --version.',
+                                '--deployment is the same deployment file (byte-identical) the stress adapter was pinned with.',
+                                'Any non-zero exit is a failed trial: no retry, no submission; published only as output sha256 and '
+                                'first line.',
+                                'Before use: schema hmbc-ledger-signed-list/v0, testOnly true, binding to this chain/TMSC/RSC/deployment '
+                                'sha256/profile, the planned authority and revocations, the next on-chain version, and the root '
+                                'signature recovered under the evaluator own EIP-712 encoder (HMBCTrust, PBC TMSC).']),
+                        workerPrecondition=('re-checked for SL5: the only adapter operation is prepare_request (pure, adapter.py:79-104 '
+                                            'at 0716a8e); trust updates are CA-admin chain transactions and the producer is a ledger '
+                                            'owner command with no adapter state. SL5 performs no worker operation, so the D2 worker '
+                                            'must be a verified never-instantiated record (D49), re-observed at baseline and after every '
+                                            'catalog step; any instantiation fails the row'),
+                        snapshots=('TMSC revocationListState (H1, H2), authEpoch, isRevoked(H1, 101), checkCredentials(Alice) and '
+                                   'decoded PBC/DBC histories at one explicit block per read group; Cast hash checkpoint per read '
+                                   'group/submit (A1-0061 D-5b); verified never-instantiated worker record (D49)')),
+                    classification=('wrong-issuer: SUPPORTED with UNAUTHORIZED_CALLER(16) in every profile (baseline caller restriction); '
+                                    'signed-list rollback: paper SPEC_GAP (ACCEPT), repaired-e REPAIR_SUPPORTED with STALE_ANCHOR(5); '
+                                    'authorized issuer-scoped administrator actions; tested reconstruction results, never an HMBC '
+                                    'exploit or authors-implementation claim'),
+                    timing=('no request lifetime binds the trust steps; the request is prepared and submitted with the authEpoch read '
+                            'immediately before it; list validity one day from the producer timestamp; unexpected expiry fails visibly'),
+                    limitations=['Solo-phase plan: both exact solo ACKs (A1 and S2) and the committed S3 FREEZE precede services.',
+                                 'Six of the 21 remaining catalog comparisons; no complete matrix, live mutants/window/report/gate.',
+                                 'CRL only: the catalog allows CRL/TempACL; TempACL rollback is not exercised (explicit choice).',
+                                 'MUT_NO_VERSION_MONOTONE counterpart is P3 mutant work, not run here.',
+                                 'Symbolic adapter; safe-ledger/trusted-worker/one trusted witness.'])
+        plan.pop('workerExpected')
     return plan
 
 
@@ -347,7 +421,8 @@ def verify_plan(plan):
                                 expired_retry=plan.get('expiredRetry', False), duplicate_outcome=plan.get('duplicateOutcome', False),
                                 nonce_replay=plan.get('nonceReplay', False), subject_substitution=plan.get('subjectSubstitution', False),
                                 relay_stress=plan.get('relayStress', False), audit_stress=plan.get('auditStress', False),
-                                receipt_stress=plan.get('receiptStress', False), review_mode=plan.get('reviewMode', 'strict')),
+                                receipt_stress=plan.get('receiptStress', False), trust_stress=plan.get('trustStress', False),
+                                review_mode=plan.get('reviewMode', 'strict')),
             'exact current E2 plan/source/config')
     require(sha256(ROOT/'interfaces/v1/FREEZE.json') == FREEZE_SHA256, 'immutable v1 freeze')
     require(platform.python_version() == plan['pythonVersion'], 'pinned Python version')
@@ -392,6 +467,9 @@ def execute(plan_path, ack_path, output):
         if plan.get('auditStress', False):
             record.update(executionMode='two-chain-e2-audit-stress-slice',
                           limitation='Six E03 audit-stress comparisons only; no complete catalog or RQ gate.')
+        if plan.get('trustStress', False):
+            record.update(executionMode='two-chain-e2-trust-stress-slice',
+                          limitation='Six E02 trust-freshness comparisons only; no complete catalog or RQ gate.')
         if plan.get('receiptStress', False):
             record.update(executionMode='two-chain-e2-receipt-stress-slice',
                           limitation='Seven repaired-e E03 receipt controls only; no complete catalog or RQ gate.')
@@ -400,7 +478,7 @@ def execute(plan_path, ack_path, output):
             verify_plan(plan)
             probe_name = 'nonce-replay' if plan.get('nonceReplay', False) else 'duplicate-outcome'
             if plan.get('subjectSubstitution', False): probe_name = 'subject-substitution'
-            if plan.get('relayStress', False) or plan.get('auditStress', False): probe_name = item['variant']
+            if plan.get('relayStress', False) or plan.get('auditStress', False) or plan.get('trustStress', False): probe_name = item['variant']
             if plan.get('receiptStress', False): probe_name = item['variant']+('-'+item['field'] if item['field'] else '')
             case = item['profile']+'-'+(item['point'] or probe_name); destination = output/case; destination.mkdir()
             child = dict(profiles={}, servicesStarted=[], adapterProcesses=[])
@@ -414,9 +492,15 @@ def execute(plan_path, ack_path, output):
             if plan.get('relayStress', False): probe_options = {'relay_stress': item['variant']}
             if plan.get('auditStress', False): probe_options = {'audit_stress': item['variant']}
             if plan.get('receiptStress', False): probe_options = {'receipt_stress': item['variant'], 'receipt_field': item['field']}
+            if plan.get('trustStress', False): probe_options = {'trust_stress': item['variant']}
             e1._profile(selected, item['profile'], destination/item['profile'], child, recovery_point=item['point'],
                         expired_retry=plan.get('expiredRetry', False), **probe_options)
-            if plan.get('receiptStress', False):
+            if plan.get('trustStress', False):
+                proof = json.loads((destination/item['profile']/'trust-stress/result.json').read_text())
+                require(proof['ok'] is True and proof['delivery'] == 'unknown' and proof['variant'] == item['variant']
+                        and (proof['classification'], proof['error']) == TRUST_EXPECTED[(item['profile'], item['variant'])],
+                        'complete checked trust stress result')
+            elif plan.get('receiptStress', False):
                 proof = json.loads((destination/item['profile']/'receipt-stress/result.json').read_text())
                 require(proof['ok'] is True and proof['delivery'] == 'unknown' and proof['variant'] == item['variant']
                         and proof['field'] == item['field'] and (proof['classification'], proof['error']) == RECEIPT_EXPECTED[item['variant']],
@@ -471,6 +555,9 @@ def execute(plan_path, ack_path, output):
             if plan.get('receiptStress', False):
                 record['cases'][case]['status'] = 'RECEIPT_STRESS_CONTROL_PASS'
                 continue
+            if plan.get('trustStress', False):
+                record['cases'][case]['status'] = 'TRUST_STRESS_CONTROL_PASS'
+                continue
             record['cases'][case]['status'] = ('NONCE_REPLAY_CONTROL_PASS' if plan.get('nonceReplay', False)
                                              else ('DUPLICATE_OUTCOME_CONTROL_PASS' if plan.get('duplicateOutcome', False) else 'RECOVERY_CONTROL_PASS'))
         verify_plan(plan); record.update(status='E2_DUPLICATE_OUTCOME_SLICE_PASS' if plan.get('duplicateOutcome', False) else ('E2_RECOVERY_EXPIRY_SLICE_PASS' if plan.get('expiredRetry', False) else 'E2_RECOVERY_SLICE_PASS'), sourceStable=True)
@@ -479,6 +566,7 @@ def execute(plan_path, ack_path, output):
         if plan.get('relayStress', False): record['status'] = 'E2_RELAY_STRESS_SLICE_PASS'
         if plan.get('auditStress', False): record['status'] = 'E2_AUDIT_STRESS_SLICE_PASS'
         if plan.get('receiptStress', False): record['status'] = 'E2_RECEIPT_STRESS_SLICE_PASS'
+        if plan.get('trustStress', False): record['status'] = 'E2_TRUST_STRESS_SLICE_PASS'
     except BaseException as error:
         record['failure'] = dict(type=type(error).__name__, message=str(error))
         record['status'] = 'FAILED' if authorized else 'BLOCKED'
@@ -498,7 +586,8 @@ def main():
     print(json.dumps({k: result[k] for k in ('status', 'failure', 'sourceStable', 'servicesStarted')}, indent=2))
     return 0 if result['status'] in ('E2_RECOVERY_SLICE_PASS', 'E2_RECOVERY_EXPIRY_SLICE_PASS', 'E2_DUPLICATE_OUTCOME_SLICE_PASS',
                                      'E2_NONCE_REPLAY_SLICE_PASS', 'E2_SUBJECT_SUBSTITUTION_SLICE_PASS', 'E2_RELAY_STRESS_SLICE_PASS',
-                                     'E2_AUDIT_STRESS_SLICE_PASS', 'E2_RECEIPT_STRESS_SLICE_PASS') else 2
+                                     'E2_AUDIT_STRESS_SLICE_PASS', 'E2_RECEIPT_STRESS_SLICE_PASS',
+                                     'E2_TRUST_STRESS_SLICE_PASS') else 2
 
 
 if __name__ == '__main__': raise SystemExit(main())

@@ -266,6 +266,22 @@ DEVIATION_TEMPLATE = ['{python}', '-m', 'testtools.deviating_witness', '--deploy
                       '{grantId}', '--field', '{field}', '--at-block', '{atBlock}']
 
 
+TRUST_VARIANTS = ('wrong-issuer', 'signed-list-rollback')
+# A1-0034 owner producer, confirmed for SL5 in A1-0061 D-6: the only invocations; never --version.
+SIGN_LIST_TEMPLATES = {'signed-list-rollback': ['{bash}', '{script}', '{pbcRpc}', '{deployment}', '{out}', 'crl', 'H1', '--revoke', '101'],
+                       'wrong-issuer': ['{bash}', '{script}', '{pbcRpc}', '{deployment}', '{out}', 'crl', 'H2']}
+
+
+def sign_list_argv(tool, *, variant, bash, script, pbc_rpc, deployment, out):
+    """Exact argv of one owner signed-list producer call, built only from the pinned plan template."""
+    require(tool.get('script') == 'ledger/tools/sign_list.sh' and tool.get('invocations') == SIGN_LIST_TEMPLATES,
+            'exact pinned signed-list producer invocation')
+    require(variant in TRUST_VARIANTS and pbc_rpc == 'http://127.0.0.1:18545' and Path(out).is_absolute() and str(out).endswith('.json')
+            and Path(deployment).is_absolute() and Path(script).is_absolute(), 'signed-list producer arguments')
+    values = {'{bash}': str(bash), '{script}': str(script), '{pbcRpc}': pbc_rpc, '{deployment}': str(deployment), '{out}': str(out)}
+    return [values.get(item, item) for item in tool['invocations'][variant]]
+
+
 def deviation_argv(tool, *, python, deployment, grant_id, field, at_block):
     """Exact argv of one deviating-witness call, built only from the pinned plan template."""
     require(tool.get('module') == 'testtools.deviating_witness' and tool.get('invocation') == DEVIATION_TEMPLATE,
@@ -297,7 +313,8 @@ def observe_worker_export(exit_code, raw, state_dir):
 
 
 def _profile(plan, profile, output, record, *, recovery_point=None, expired_retry=False, duplicate_outcome=False, nonce_replay=False,
-             subject_substitution=False, relay_stress=None, audit_stress=None, receipt_stress=None, receipt_field=None):
+             subject_substitution=False, relay_stress=None, audit_stress=None, receipt_stress=None, receipt_field=None,
+             trust_stress=None):
     require(type(expired_retry) is bool and (not expired_retry or recovery_point is not None), 'expiry probe follows explicit recovery')
     require(type(duplicate_outcome) is bool and (not duplicate_outcome or (recovery_point is None and not expired_retry)),
             'duplicate comparison uses production adapter without other fault probes')
@@ -313,6 +330,9 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
             and receipt_field in RECEIPT_VARIANTS[receipt_stress] and profile == 'repaired-e' and recovery_point is None
             and not expired_retry and not duplicate_outcome and not nonce_replay and not subject_substitution
             and relay_stress is None and audit_stress is None), 'isolated repaired-e receipt control')
+    require(trust_stress is None or (trust_stress in TRUST_VARIANTS and recovery_point is None and not expired_retry
+            and not duplicate_outcome and not nonce_replay and not subject_substitution and relay_stress is None
+            and audit_stress is None and receipt_stress is None), 'isolated trust stress')
     output.mkdir(parents=True, exist_ok=False)
     snapshots = output/'snapshots'
     ledger_root = materialize_owner(plan['owners']['ledger'], snapshots/'ledger')
@@ -422,13 +442,15 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
                     execute_expired_retry(chains['pbc'], chains['dbc'], process, deployment=deployment,
                                           grant_id=grants[0], worker_snapshot=worker_snapshot, output=output/'expired-retry')
             require(bootstrap['wrongAdminCode'] == '16' and all(r['ok'] for r in results.values()), 'three E1 controls')
-            if subject_substitution or relay_stress is not None or audit_stress is not None or receipt_stress is not None:
+            if (subject_substitution or relay_stress is not None or audit_stress is not None or receipt_stress is not None
+                    or trust_stress is not None):
                 # SL1/SL2: controls above ran on deployment D1. The stress uses a fresh
                 # second deployment D2 on the same chain pair, its own bootstrap,
                 # adapter process and private state, so the stress oracle sees an
                 # unused grant/count/nonce state. No clock move or crash hook.
                 kind = 'subject' if subject_substitution else ('relay' if relay_stress is not None else
-                                                               ('audit' if audit_stress is not None else 'receipt'))
+                                                               ('audit' if audit_stress is not None else
+                                                                ('receipt' if receipt_stress is not None else 'trust')))
                 stress = output/(kind+'-instance'); stress.mkdir()
                 for name in ('pbc', 'dbc'):
                     for role in ('relay', 'H1-ca-admin', 'H2-ca-admin', 'H3-ca-admin', 'H4-ca-admin'):
@@ -477,7 +499,7 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
                     return command(label, [tools['python']['path'], '-m', 'hmbc_protocol.worker_log', '--state-dir', str(stress_state)],
                                    protocol, budget['transport'], service_env)
                 def stress_worker_probe():
-                    # SL2, the SL3 fabricated rows and SL4 perform no worker operation; a never-created worker database is
+                    # SL2, the SL3 fabricated rows, SL4 and SL5 perform no worker operation; a never-created worker database is
                     # an explicit, verified observation (observe_worker_export), not a failure.
                     nonlocal stress_sequence
                     label = f'{kind}-worker-export-{stress_sequence:02}'; stress_sequence += 1
@@ -498,6 +520,40 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
                     require(stress_result['ok'] is True, 'subject stress result')
                     record['profiles'][profile]['subjectStress'] = dict(runId=stress_run, deployment=str(Path(profile)/'subject-instance/deployment.json'),
                                                                         result=str(Path(profile)/'subject-stress/result.json'))
+                elif trust_stress is not None:
+                    from evaluation.trust_stress import execute_trust_stress
+                    signer = plan['trustProbe']['signList']
+                    sign_sequence = 0
+                    def stress_sign_list(variant):
+                        # A1-0034/A1-0061 D-6: pinned owner bytes, same deployment file as the stress adapter, exact
+                        # template argv, ledger snapshot cwd. A non-zero exit is a failed trial that the collector
+                        # keeps only as sha256 and first line; the raw command log stays in the private run output.
+                        nonlocal sign_sequence
+                        label = f'trust-sign-list-{sign_sequence:02}'; sign_sequence += 1
+                        entries = plan['owners']['ledger']['entries']
+                        require(sha256(ledger_root/signer['script']) == signer['scriptSha256'] == entries[signer['script']]
+                                and sha256(ledger_root/signer['forgeScript']) == signer['forgeScriptSha256'] == entries[signer['forgeScript']],
+                                'pinned owner signed-list producer bytes')
+                        require(stress_path.read_bytes() == stress_bytes, 'same deployment file as the stress adapter')
+                        out = (output/(label+'.json')).resolve()
+                        argv = sign_list_argv(signer, variant=variant, bash=tools['bash']['path'], script=(ledger/'tools/sign_list.sh').resolve(),
+                                              pbc_rpc=rpcs['pbc'].url, deployment=stress_path.resolve(), out=out)
+                        row = record_command(argv, ledger_root, output/(label+'.txt'), timeout=budget['bootstrap'],
+                                             env=dict(service_env, FOUNDRY_SOLC=tools['solc']['path']), owned_process_group=True,
+                                             stop_grace=budget['stopGrace'])
+                        row['testOnly'] = 'owner TEST-ONLY signed-list producer (A1-0034)'
+                        commands.append(row); (output/'commands.json').write_text(json.dumps(commands, indent=2)+'\n')
+                        produced = row['exitCode'] == 0 and out.is_file()
+                        return dict(exitCode=row['exitCode'], output=out.read_bytes() if produced else (output/(label+'.txt')).read_bytes())
+                    stress_result = execute_trust_stress(stress_chains['pbc'], stress_chains['dbc'], stress_process, deployment_bytes=stress_bytes,
+                                                         bootstrap=stress_boot, user_label='alice', user=stress_boot['users']['alice'],
+                                                         record=stress_record, policy=policy, variant=trust_stress,
+                                                         worker_snapshot=stress_worker_probe, sign_list=stress_sign_list,
+                                                         output=output/'trust-stress')
+                    require(stress_result['ok'] is True and stress_result['variant'] == trust_stress, 'trust stress result')
+                    record['profiles'][profile]['trustStress'] = dict(runId=stress_run, variant=trust_stress,
+                                                                      deployment=str(Path(profile)/'trust-instance/deployment.json'),
+                                                                      result=str(Path(profile)/'trust-stress/result.json'))
                 elif receipt_stress is not None:
                     from evaluation.receipt_stress import execute_receipt_stress
                     tool = plan['receiptProbe']['deviatingWitness']
