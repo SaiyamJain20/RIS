@@ -11,6 +11,7 @@ F and G locked. All proxy reviews and ACKs are correlated self-review (same mode
 |---|---|---|
 | SL0 portability | done | S3-0004; `evaluation/evidence/e2/sl0-portability-20261009/` |
 | SL1 subject substitution ×3 | **actual PASS 3/3** | FREEZE S3-0005, plan 6fd5809b..; result S3-0006; `evaluation/evidence/e2/sl1-subject-live-20261010/` |
+| SL2 relay stress ×7 | FREEZE S3-0007, plan d67f1786..; **waiting for ACKs** | `evaluation/evidence/e2/sl2-relay-runner-20261010/`; code in `evaluation/relay_stress.py` and `oracles/provenance.py`; pinned `read_group(block=…)` |
 
 - FREEZE S3-0005 is released. No services are running.
 - Decisions D47 (paper crash relabel) and D48 (SL0 choices) are in `communication/DECISIONS.md`.
@@ -81,7 +82,12 @@ toolchain and host-tools. Keep helper scripts out of `evaluation/` as `.py` file
 
 ## Next allowed actions
 
-1. On assignment, SL2 test-first: forged tuple (paper: `policyEnf` with a fresh `pbcRequestId` and no
-   PBC log; repaired: an `eth_call` control with the honest certificate, then mined with a
-   relay-key-signed AccessDecision giving BAD_SIGNATURE 1), new-reference replay, and same nonce.
-2. Then a FREEZE, return to agent 1, and the run after both ACKs are committed.
+1. SL2 run, after A1 and S2 ACKs of S3-0007 are committed:
+   - build the ACK index at `tmp/p3/sl2-run/acks.json` (keys agent-1, agent-2 and freeze);
+   - run the S3-0007 command;
+   - audit with `tmp/p3/sl1-run/scripts/select_audit.py`, after extending its `SELECT` patterns for
+     the relay-stress files (`timeline`, `forged-certificate`, `stress-transaction`, the
+     `before-second`/`after-second` snapshots);
+   - publish S3-0008.
+2. Next is SL3. S2-0007 notes apply: the `deviating_witness` invocation for SL4, and A31 discipline
+   for SL6.

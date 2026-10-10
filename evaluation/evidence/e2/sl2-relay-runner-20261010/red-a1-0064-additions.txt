@@ -1,0 +1,112 @@
+......................................F...................................................F..FF...........
+=================================== FAILURES ===================================
+____ test_repaired_forged_tuple_rejects_false_observations[digest-mismatch] ____
+
+mutation = 'digest-mismatch'
+
+    @pytest.mark.parametrize('mutation', ['grant-all', 'wrong-code', 'logs', 'state-changed', 'no-simulation',
+                                          'witness-signer', 'decision-changed', 'same-signature', 'no-pbc-request', 'digest-mismatch'])
+    def test_repaired_forged_tuple_rejects_false_observations(mutation):
+        f = forged_facts('repaired-e')
+        if mutation == 'grant-all': f.update(success=True, rejection_code=None)
+        if mutation == 'wrong-code': f['rejection_code'] = '10'
+        if mutation == 'logs': f['receipt_events'] = [dict(name='AccessLog', fields={})]
+        if mutation == 'state-changed': f['after']['grants'][HG] = grant(HONEST, TS)
+        if mutation == 'no-simulation': f['forged']['honestSimulationGrantId'] = ZERO
+        if mutation == 'witness-signer': f['forged']['recoveredSigner'] = WITNESS
+        if mutation == 'decision-changed': f['forged']['decisionUnchanged'] = False
+        if mutation == 'same-signature': f['forged']['signatureChanged'] = False
+        if mutation == 'no-pbc-request':
+            for s in ('before', 'after'): f[s]['requests'][HONEST]['status'] = '0'
+        if mutation == 'digest-mismatch': f['forged']['signedDigestEqual'] = False  # A1-0064: other digest/domain proves nothing
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+evaluation/tests/test_provenance_oracle.py:126: Failed
+_ test_repaired_forged_tuple_simulates_honest_then_mines_non_witness_signature _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-26/test_repaired_forged_tuple_sim0')
+
+    def test_repaired_forged_tuple_simulates_honest_then_mines_non_witness_signature(artifacts, inputs, tmp_path):
+        w = World(artifacts, inputs, 'repaired-e')
+        result = run(w, tmp_path, 'forged-tuple')
+        assert result['ok'] and result['classification'] == 'REPAIR_SUPPORTED' and result['error'] == 'BAD_SIGNATURE'
+        assert w.calls == ['prepare_request', 'collect_checkpoint', 'collect_decision']
+        assert ('dbc', 'eth_call') in w.rpc_methods and w.state['grants'] == {} and w.state['nonces'] == {}
+        forged = json.loads((tmp_path/'stress/forged-certificate.json').read_text())
+        assert forged['recoveredSigner'] == w.dep['fixture']['relay']['address'] and forged['honestSimulationGrantId'] != ZERO
+        # A1-0064: the relay signs exactly the digest the honest witness signature recovers under (runner's own domain).
+>       assert forged['honestDigest'] == forged['forgedDigest'] and forged['signedDigestEqual'] is True
+               ^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'honestDigest'
+
+evaluation/tests/test_relay_stress_collector.py:357: KeyError
+____________________ test_new_reference_replay[repaired-e] _____________________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-26/test_new_reference_replay_repa0')
+profile = 'repaired-e'
+
+    @pytest.mark.parametrize('profile', ['paper-strict', 'paper-minimal', 'repaired-e'])
+    def test_new_reference_replay(artifacts, inputs, tmp_path, profile):
+        w = World(artifacts, inputs, profile)
+        result = run(w, tmp_path, 'new-reference-replay')
+        assert result['ok']
+        if profile == 'repaired-e':
+            assert result['error'] == 'REPLAY' and len(w.state['grants']) == 1
+>           assert int(result['timeline']['stressTimestamp']) < int(result['timeline']['requestExpiresAt'])
+                       ^^^^^^^^^^^^^^^^^^
+E           KeyError: 'timeline'
+
+evaluation/tests/test_relay_stress_collector.py:370: KeyError
+_____________ test_same_nonce_distinct_digests_reaches_nonce_guard _____________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-26/test_same_nonce_distinct_diges0')
+
+    def test_same_nonce_distinct_digests_reaches_nonce_guard(artifacts, inputs, tmp_path):
+        w = World(artifacts, inputs, 'repaired-e')
+        result = run(w, tmp_path, 'same-nonce-distinct-digests')
+        assert result['ok'] and result['error'] == 'REPLAY' and result['nonceGuardReached'] is True
+        assert w.calls == ['prepare_request', 'prepare_request', 'collect_checkpoint', 'collect_decision', 'collect_decision']
+        assert len(w.state['requests']) == 2 and len(w.state['grants']) == 1
+>       timeline = json.loads((tmp_path/'stress/timeline.json').read_text())
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_relay_stress_collector.py:381: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/pathlib/_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/pathlib/_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/tmp/pytest-of-saiyamjain/pytest-26/test_same_nonce_distinct_diges0/stress/timeline.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-saiyamjain/pytest-26/test_same_nonce_distinct_diges0/stress/timeline.json'
+
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/pathlib/_local.py:537: FileNotFoundError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_provenance_oracle.py::test_repaired_forged_tuple_rejects_false_observations[digest-mismatch] - Failed: DID NOT RAISE <class 'ValueError'>
+FAILED evaluation/tests/test_relay_stress_collector.py::test_repaired_forged_tuple_simulates_honest_then_mines_non_witness_signature - KeyError: 'honestDigest'
+FAILED evaluation/tests/test_relay_stress_collector.py::test_new_reference_replay[repaired-e] - KeyError: 'timeline'
+FAILED evaluation/tests/test_relay_stress_collector.py::test_same_nonce_distinct_digests_reaches_nonce_guard - FileNotFoundError: [Errno 2] No such file or directory: '/tmp/pytest-of-sai...
+4 failed, 102 passed in 2.26s

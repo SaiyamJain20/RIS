@@ -1,0 +1,96 @@
+{
+ "plan": {
+  "path": "evaluation/evidence/e2/sl2-relay-runner-20261010/integration-plan.json",
+  "sha256": "d67f178665d0b64d32fd875f1a3ab3e689da0032e3984a8747bde839512fa3b1",
+  "runId": "E2-SL2-relay-20261010",
+  "freezeMessage": "S3-0007",
+  "agent3SourcesCount": 92,
+  "agent3SourcesAggregate": "d9bd4035eeb18b27169f9694bad9b69cf670f88b0bda6414c57fdc811432a786"
+ },
+ "sourceFiles": {
+  "evaluation/relay_stress.py": "3ba48d903068fe8549a39d6911bbdc20d05c66ea7f06b8d09a10d648d02a836d",
+  "evaluation/oracles/provenance.py": "d333e623f29d14be8e934450388479f58dd7ef6e41cc774f8b4b8a99a628dfa2",
+  "evaluation/chain.py": "fad06c613b198e1080e5c79a0d5247659b5d0cc130e2139d7aa859a864167271",
+  "evaluation/e1.py": "2fb19665f1faa05dc53db96eb7ded70c75497fd65d04df0e7c03abdb2b69771c",
+  "evaluation/e2.py": "72c5b1d1e15e997d9e32c6b0c876f50287e59dd646e065f009724687c4559efa",
+  "evaluation/tests/test_provenance_oracle.py": "7c42f25222cbd74eeee08a6d9aa0b531ffb0a92488a1202f60b6da9eb6b7dd4e",
+  "evaluation/tests/test_read_group_pinned.py": "7859d71a5348c5599e13116b7481568629f084fbccfdf21d9c3ac54fb9555387",
+  "evaluation/tests/test_relay_stress_collector.py": "5a77bfa80509c6c99a33afc1c160a6a9c0eeea597dadeffbf16ed87f851c41d7",
+  "evaluation/tests/test_e2_relay_plan.py": "dc5d18a673704dd5a0140dd05ef75c9a736836f7ed1c76b71d2390d7d5fa404b"
+ },
+ "headAtPlan": "10a1212 (+ uncommitted SL2 evaluator files listed above)",
+ "suiteBracket": {
+  "files": 2114,
+  "pre": "6d90c9ee89f0345cd04d949a749c5251066c8aa86a6620d12be2f268feed17f9",
+  "post": "6d90c9ee89f0345cd04d949a749c5251066c8aa86a6620d12be2f268feed17f9",
+  "stable": true
+ },
+ "commands": [
+  {
+   "label": "red-before-implementation",
+   "order": "tests written first; no SL2 code existed",
+   "argv": ".venv/bin/python -m pytest -q -p no:cacheprovider evaluation/tests/{test_provenance_oracle,test_read_group_pinned,test_relay_stress_collector,test_e2_relay_plan}.py",
+   "startedAt": "2026-10-09T20:03:31Z",
+   "exit": 1,
+   "result": "130 failed (87 oracle module missing, 18 collector module missing, 17 create_plan relay_stress, 8 read_group block)",
+   "output": "red-before-implementation.txt",
+   "outputSha256": "209b431c9446c4cee73697242cb584dd560ba2c52a4e00c3f59714ed4a344ca3"
+  },
+  {
+   "label": "green-sl2-units",
+   "exit": 0,
+   "result": "113 passed (oracle 87, pinned group 8, collector 18)"
+  },
+  {
+   "label": "control-reasons",
+   "argv": "scratch pytest printing each negative-control ValueError",
+   "exit": 0,
+   "result": "10/10 controls fail for the intended reason (after making the worker-moves double well-formed)"
+  },
+  {
+   "label": "green-plan-tests",
+   "exit": 0,
+   "result": "63 passed (relay, subject and freeze plan tests)"
+  },
+  {
+   "label": "green-full-suite-1",
+   "exit": 0,
+   "result": "986 passed",
+   "startedAt": "2026-10-09T20:11:42Z"
+  },
+  {
+   "label": "red-a1-0064-additions",
+   "order": "A1-0064 digest/timeline tests written before code",
+   "exit": 1,
+   "result": "4 failed, 102 passed",
+   "output": "red-a1-0064-additions.txt",
+   "outputSha256": "65327204864a32f2edfaf8649911f03cf8fdb9755b7ea32cdddfbdb27e19b3ed"
+  },
+  {
+   "label": "green-full-suite-final",
+   "argv": "PATH=$HOME/.foundry/bin:$PATH .venv/bin/python -m pytest -q -rs",
+   "startedAt": "2026-10-09T20:18:12Z",
+   "endedAt": "2026-10-09T20:22:59Z",
+   "wallSeconds": 286.6,
+   "exit": 0,
+   "result": "987 passed, 0 failed, 0 skipped",
+   "output": "full-suite.txt",
+   "outputSha256": "bd33c53cf57e1bfd2062fff4331fa3f153553c2546ea857d76e407a4c8ec38ef"
+  },
+  {
+   "label": "plan",
+   "argv": "e2.create_plan(run_id='E2-SL2-relay-20261010', freeze_message='S3-0007', relay_stress=True, review_mode='solo-correlated'); e2.verify_plan before and after writing",
+   "exit": 0
+  }
+ ],
+ "ledgerCodeCheck": {
+  "source": "git show 933d2a7",
+  "forgedRepaired": "SigLib.sol:47 signer not in witness set -> BAD_SIGNATURE(1) = catalog",
+  "newReferenceRepaired": "KSSC.sol:180 grant exists -> REPLAY(8) = catalog",
+  "sameNonce": "KSSC.sol:182 nonce consumed -> REPLAY(8) = catalog",
+  "paperForgedAndNewReference": "ACSC.policyEnf:140-167 grants any relay tuple with valid records, TTL ts+30, recipient 0 = catalog ACCEPT",
+  "disagreement": null
+ },
+ "servicesStarted": [],
+ "gitWrites": []
+}

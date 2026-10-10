@@ -98,18 +98,22 @@ class PublicChain:
         return self._contract(role).decode_return(method, row['returnData'])
 
     @contextmanager
-    def read_group(self, roles):
+    def read_group(self, roles, block=None):
         """At most 16 reads/log queries at one block, with identity bracketing.
 
         Individual ABI-bound views are published only if the whole group passes.
         This checks RPC consistency under the existing safe-ledger assumption;
         it cannot detect a transient reorg restored between boundary checks.
+        `block` (canonical decimal string) pins an explicit historical block
+        instead of 'latest' (A1-0061 D-5c); that block must exist and match.
         """
         if self._group_active:
             raise ValueError('Public read groups cannot nest on one chain')
         roles = tuple(roles)
         if not roles or len(set(roles)) != len(roles):
             raise ValueError('Explicit distinct public ABI roles required')
+        if block is not None and (not isinstance(block, str) or not block.isdecimal() or str(int(block)) != block):
+            raise ValueError('Pinned read group needs a canonical decimal block number')
         self._group_active = True
         group = None
         try:
@@ -117,7 +121,13 @@ class PublicChain:
             contracts = {role: self._contract(role) for role in roles}
             self._cast_checkpoint('read-group')
             self._check_chain()
-            block = self.rpc.call('eth_getBlockByNumber', ['latest', False])
+            if block is None:
+                block = self.rpc.call('eth_getBlockByNumber', ['latest', False])
+            else:
+                pinned = self.rpc.call('eth_getBlockByNumber', [hex(int(block)), False])
+                if not isinstance(pinned, dict) or _quantity(pinned.get('number', '')) != int(block):
+                    raise ValueError('Pinned historical block is absent or differs')
+                block = pinned
             group = _PublicReadGroup(self, contracts, block, deadline)
             group.check_block('before')
             yield group

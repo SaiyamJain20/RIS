@@ -257,8 +257,11 @@ def _available(ports):
             s.bind(('127.0.0.1', port))
 
 
+RELAY_VARIANTS = ('forged-tuple', 'new-reference-replay', 'same-nonce-distinct-digests')
+
+
 def _profile(plan, profile, output, record, *, recovery_point=None, expired_retry=False, duplicate_outcome=False, nonce_replay=False,
-             subject_substitution=False):
+             subject_substitution=False, relay_stress=None):
     require(type(expired_retry) is bool and (not expired_retry or recovery_point is not None), 'expiry probe follows explicit recovery')
     require(type(duplicate_outcome) is bool and (not duplicate_outcome or (recovery_point is None and not expired_retry)),
             'duplicate comparison uses production adapter without other fault probes')
@@ -266,6 +269,8 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
             (recovery_point is None and not expired_retry and not duplicate_outcome)), 'isolated production nonce replay')
     require(type(subject_substitution) is bool and (not subject_substitution or
             (recovery_point is None and not expired_retry and not duplicate_outcome and not nonce_replay)), 'isolated subject stress')
+    require(relay_stress is None or (relay_stress in RELAY_VARIANTS and recovery_point is None and not expired_retry
+            and not duplicate_outcome and not nonce_replay and not subject_substitution), 'isolated relay stress')
     output.mkdir(parents=True, exist_ok=False)
     snapshots = output/'snapshots'
     ledger_root = materialize_owner(plan['owners']['ledger'], snapshots/'ledger')
@@ -375,17 +380,18 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
                     execute_expired_retry(chains['pbc'], chains['dbc'], process, deployment=deployment,
                                           grant_id=grants[0], worker_snapshot=worker_snapshot, output=output/'expired-retry')
             require(bootstrap['wrongAdminCode'] == '16' and all(r['ok'] for r in results.values()), 'three E1 controls')
-            if subject_substitution:
-                # SL1: controls above ran on deployment D1. The stress uses a fresh
+            if subject_substitution or relay_stress is not None:
+                # SL1/SL2: controls above ran on deployment D1. The stress uses a fresh
                 # second deployment D2 on the same chain pair, its own bootstrap,
                 # adapter process and private state, so the stress oracle sees an
                 # unused grant/count/nonce state. No clock move or crash hook.
-                stress = output/'subject-instance'; stress.mkdir()
+                kind = 'subject' if subject_substitution else 'relay'
+                stress = output/(kind+'-instance'); stress.mkdir()
                 for name in ('pbc', 'dbc'):
                     for role in ('relay', 'H1-ca-admin', 'H2-ca-admin', 'H3-ca-admin', 'H4-ca-admin'):
                         rpcs[name].call('anvil_setBalance', [_owned_signer(role).address.lower(), hex(1000*10**18)])
-                stress_run = run_id+'-subject'
-                command('owner-deploy-subject', [tools['bash']['path'], str(ledger/'tools/deploy_local.sh'), rpcs['pbc'].url, rpcs['dbc'].url,
+                stress_run = run_id+'-'+kind
+                command('owner-deploy-'+kind, [tools['bash']['path'], str(ledger/'tools/deploy_local.sh'), rpcs['pbc'].url, rpcs['dbc'].url,
                                                  profile, plan['logDetailMode'], stress_run], ledger_root, budget['deploy'], env)
                 stress_path = ledger/'exports/deployments'/stress_run/'deployment.json'
                 stress_bytes = stress_path.read_bytes(); stress_dep = strict_json(stress_bytes)
@@ -409,7 +415,7 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
                         check_runtime_bytecode(code, compiled['deployedBytecode'])
                     stress_chains[name] = PublicChain(rpcs[name], chain_id=manifest['chainId'], contracts=contracts, output=stress/(name+'-native'))
                 stress_bootstrap_path = ledger/'exports'/('bootstrap-'+stress_run+'.json')
-                command('owner-bootstrap-subject', [tools['bash']['path'], str(ledger/'tools/bootstrap_fixture.sh'), rpcs['pbc'].url,
+                command('owner-bootstrap-'+kind, [tools['bash']['path'], str(ledger/'tools/bootstrap_fixture.sh'), rpcs['pbc'].url,
                                                     str(stress_path), str(stress_bootstrap_path)], ledger_root, budget['bootstrap'], env)
                 raw = stress_bootstrap_path.read_bytes(); (stress/'bootstrap.json').write_bytes(raw)
                 stress_boot = execute_bootstrap(stress_chains['pbc'], raw, deployment_bytes=stress_bytes)
@@ -419,23 +425,34 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
                 stress_process = stack.enter_context(JsonLinesProcess(
                     [tools['python']['path'], '-m', 'hmbc_protocol.adapter', '--state-dir', str(stress_state), '--deployment', str(stress_path)],
                     cwd=protocol, output=stress/'adapter', timeout=budget['transport'], stop_grace=budget['stopGrace'], env=service_env))
-                record.setdefault('adapterProcesses', []).append(dict(profile=profile, label='adapter-subject', pid=stress_process.pid))
+                record.setdefault('adapterProcesses', []).append(dict(profile=profile, label='adapter-'+kind, pid=stress_process.pid))
                 (output.parent/'manifest.json').write_text(json.dumps(record, indent=2)+'\n')
                 stress_sequence = 0
                 def stress_worker_snapshot():
                     nonlocal stress_sequence
-                    label = f'subject-worker-export-{stress_sequence:02}'; stress_sequence += 1
+                    label = f'{kind}-worker-export-{stress_sequence:02}'; stress_sequence += 1
                     return command(label, [tools['python']['path'], '-m', 'hmbc_protocol.worker_log', '--state-dir', str(stress_state)],
                                    protocol, budget['transport'], service_env)
                 stress_record = dict(record_fixture, owner=next(a['root'] for a in stress_dep['fixture']['authorities'] if a['id'] == 'H2'))
-                stress_result = execute_access(stress_chains['pbc'], stress_chains['dbc'], stress_process, deployment_bytes=stress_bytes,
-                                               user_label='alice', user=stress_boot['users']['alice'], record=stress_record, policy=policy,
-                                               expected_allow=True, worker_snapshot=stress_worker_snapshot, output=output/'subject-stress',
-                                               subject_substitution=stress_boot['users']['bob']['gid'],
-                                               subject_completion=profile != 'repaired-e')
-                require(stress_result['ok'] is True, 'subject stress result')
-                record['profiles'][profile]['subjectStress'] = dict(runId=stress_run, deployment=str(Path(profile)/'subject-instance/deployment.json'),
-                                                                    result=str(Path(profile)/'subject-stress/result.json'))
+                if subject_substitution:
+                    stress_result = execute_access(stress_chains['pbc'], stress_chains['dbc'], stress_process, deployment_bytes=stress_bytes,
+                                                   user_label='alice', user=stress_boot['users']['alice'], record=stress_record, policy=policy,
+                                                   expected_allow=True, worker_snapshot=stress_worker_snapshot, output=output/'subject-stress',
+                                                   subject_substitution=stress_boot['users']['bob']['gid'],
+                                                   subject_completion=profile != 'repaired-e')
+                    require(stress_result['ok'] is True, 'subject stress result')
+                    record['profiles'][profile]['subjectStress'] = dict(runId=stress_run, deployment=str(Path(profile)/'subject-instance/deployment.json'),
+                                                                        result=str(Path(profile)/'subject-stress/result.json'))
+                else:
+                    from evaluation.relay_stress import execute_relay_stress
+                    stress_result = execute_relay_stress(stress_chains['pbc'], stress_chains['dbc'], stress_process, deployment_bytes=stress_bytes,
+                                                         user_label='alice', user=stress_boot['users']['alice'], record=stress_record,
+                                                         policy=policy, variant=relay_stress, worker_snapshot=stress_worker_snapshot,
+                                                         output=output/'relay-stress')
+                    require(stress_result['ok'] is True and stress_result['variant'] == relay_stress, 'relay stress result')
+                    record['profiles'][profile]['relayStress'] = dict(runId=stress_run, variant=relay_stress,
+                                                                      deployment=str(Path(profile)/'relay-instance/deployment.json'),
+                                                                      result=str(Path(profile)/'relay-stress/result.json'))
             record['profiles'][profile].update(status='CONTROL_PASS', results={k: str(Path(profile)/k/'result.json') for k in results},
                                               wrongAdmin='UNAUTHORIZED_CALLER; baseline issuer restriction, not a repair')
     finally:
