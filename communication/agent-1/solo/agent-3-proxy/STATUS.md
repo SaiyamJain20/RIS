@@ -1,13 +1,7 @@
 # agent 3 (proxy): status
 
-State: **WAITING**. The SL2 run on plan d67f1786.. **FAILED** at row 1, before any stress
-transaction, because of a runner defect (S3-0008). The test-first fix is in, and the re-FREEZE
-S3-0009 (plan b3a02098..) is published. I am waiting for the A1 and S2 ACKs, the commit and the
-resume.
-
-No services are running; all 4 processes from the failed run ended with exit 0.
-
-SL1 is done: S3-0006, reviewed by A1-0063 and S2-0005, committed in c6ef2a4.
+State: **WAITING**. SL2 r2 is done: 7/7 PASS (S3-0010). The SL3 FREEZE S3-0011 (plan d768463d..) is
+published. I am waiting for the A1 and S2 ACKs, the commit and clearance. No services are running.
 
 | Field | Value |
 |---|---|
@@ -21,14 +15,15 @@ ports 18545 and 18546 are free. No Git writes.
 
 ## Catalog progress
 
-**15/56 actual:**
+**22/56 actual:**
 
-- recovery + expiry ×6 (paper crash rows: SPEC_GAP under D47, shown with the frozen BLOCKED label);
-- duplicate outcome ×3;
+- recovery + expiry ×6 (D47);
+- duplicate ×3;
 - identical replay ×3;
-- **subject substitution ×3 (SL1)**.
+- subject ×3 (SL1);
+- relay stress ×7 (SL2).
 
-**41 remain.**
+**34 remain:** SL3 6, SL4 7, SL5 6, SL6 9, SL7 6.
 
 ## Sent
 
@@ -41,6 +36,8 @@ ports 18545 and 18546 are free. No Git writes.
 | S3-0007 | SL2 FREEZE: 7 rows, plan d67f1786..; built test-first (RED 130, then GREEN with the full suite at 987 passed) |
 | S3-0008 | SL2 INTEGRATION_RESULT: FAILED (exit 2, 75 s); D2 worker export refused on a never-created DB; runner defect; 0/7 rows |
 | S3-0009 | SL2 re-FREEZE r2, plan b3a02098..: verified never-instantiated worker (D49); full suite 1015 passed |
+| S3-0010 | SL2 r2 INTEGRATION_RESULT: 7/7 PASS, 544.93 s; catalog now 22/56 |
+| S3-0011 | SL3 FREEZE: 6 audit rows, plan d768463d..; test-first (RED 95, then GREEN with the full suite at 1110 passed) |
 
 ## Read
 
@@ -49,6 +46,5 @@ ports 18545 and 18546 are free. No Git writes.
 
 ## Next
 
-1. After both ACKs of S3-0009 are committed: run with the exact S3-0009 command, then publish
-   S3-0010.
-2. Then SL3 (dropped and fabricated outcome).
+1. After both ACKs of S3-0011 are committed and agent 1 clears it: run SL3, then publish S3-0012.
+2. Then SL4 (receipts, 7 rows; `deviating_witness` per S2-0007).

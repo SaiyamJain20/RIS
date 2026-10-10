@@ -12,16 +12,16 @@ F and G locked. All proxy reviews and ACKs are correlated self-review (same mode
 | SL0 portability | done | S3-0004; `evaluation/evidence/e2/sl0-portability-20261009/` |
 | SL1 subject substitution ×3 | **actual PASS 3/3** | FREEZE S3-0005, plan 6fd5809b..; result S3-0006; `evaluation/evidence/e2/sl1-subject-live-20261010/` |
 | SL2 relay stress ×7, first run | **FAILED** (runner defect: worker DB never created, D49) | S3-0007 plan d67f1786..; S3-0008; `evaluation/evidence/e2/sl2-relay-failed-20261010/` |
-| SL2 relay stress ×7, re-plan r2 | FREEZE S3-0009, plan b3a02098..; **waiting for ACKs** | `evaluation/evidence/e2/sl2-relay-runner-r2-20261010/`; `e1.observe_worker_export` |
+| SL2 relay stress ×7, re-plan r2 | **actual PASS 7/7** | FREEZE S3-0009, plan b3a02098..; result S3-0010; `evaluation/evidence/e2/sl2-relay-live-20261010/` |
+| SL3 audit stress ×6 | FREEZE S3-0011, plan d768463d..; **waiting for ACKs** | `evaluation/evidence/e2/sl3-audit-runner-20261010/`; `evaluation/audit_stress.py`, `oracles/audit.py` |
 
 - FREEZE S3-0005 is released. No services are running.
 - Decisions D47 (paper crash relabel) and D48 (SL0 choices) are in `communication/DECISIONS.md`.
 
-**Catalog progress: 15/56 actual, 41 remaining.**
+**Catalog progress: 22/56 actual, 34 remaining.**
 
 | Remaining slice | Rows |
 |---|---|
-| SL2 | forged tuple ×3, new-reference ×3, same nonce ×1 |
 | SL3 | dropped / fabricated outcome ×6 |
 | SL4 | receipts ×7 |
 | SL5 | wrong issuer, rollback ×6 |
@@ -83,14 +83,11 @@ toolchain and host-tools. Keep helper scripts out of `evaluation/` as `.py` file
 
 ## Next allowed actions
 
-1. SL2 r2 run, after A1 and S2 ACKs of S3-0009 are committed:
-   - build the ACK index at `tmp/p3/sl2-r2-run/acks.json` (keys agent-1, agent-2 and freeze);
-   - run the S3-0009 command;
-   - audit with `tmp/p3/sl2-run/scripts/select_audit.py` (it already handles the relay files, the
-     secret and token scan, and verified never-instantiated probes);
-   - audit with `tmp/p3/sl1-run/scripts/select_audit.py`, after extending its `SELECT` patterns for
-     the relay-stress files (`timeline`, `forged-certificate`, `stress-transaction`, the
-     `before-second`/`after-second` snapshots);
-   - publish S3-0008.
-2. Next is SL3. S2-0007 notes apply: the `deviating_witness` invocation for SL4, and A31 discipline
-   for SL6.
+1. **SL3 run**, after A1 and S2 ACKs of S3-0011 are committed and agent 1 clears it:
+   - build the ACK index at `tmp/p3/sl3-run/acks.json` (keys agent-1, agent-2 and freeze);
+   - run the S3-0011 command;
+   - audit with `tmp/p3/sl2-run/scripts/select_audit.py`, after adding `audit-stress/*` and
+     `audit-instance/*` patterns;
+   - publish S3-0012.
+2. **SL4 receipts (7 rows):** follow the S2-0007 `deviating_witness` invocation and never-publish
+   rules. Test-first, then a FREEZE.

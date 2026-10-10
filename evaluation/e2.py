@@ -25,6 +25,10 @@ RELAY_EXPECTED = {('paper-strict', 'forged-tuple'): ('SPEC_GAP', None), ('paper-
                   ('paper-minimal', 'new-reference-replay'): ('SPEC_GAP', None),
                   ('repaired-e', 'new-reference-replay'): ('REPAIR_SUPPORTED', 'REPLAY'),
                   ('repaired-e', 'same-nonce-distinct-digests'): ('REPAIR_SUPPORTED', 'REPLAY')}
+AUDIT_EXPECTED = {('paper-strict', 'dropped-outcome'): ('SUPPORTED', None), ('paper-minimal', 'dropped-outcome'): ('SUPPORTED', None),
+                  ('repaired-e', 'dropped-outcome'): ('REPAIR_SUPPORTED', None),
+                  ('paper-strict', 'fabricated-outcome'): ('SPEC_GAP', None), ('paper-minimal', 'fabricated-outcome'): ('SPEC_GAP', None),
+                  ('repaired-e', 'fabricated-outcome'): ('REPAIR_SUPPORTED', 'WRONG_PROFILE')}
 ACCEPTANCE = ROOT/'evaluation/evidence/e2/crash-transport-20261009/start-contract-acceptance.json'
 
 
@@ -55,13 +59,14 @@ def _owners(contract):
 
 
 def create_plan(*, run_id, freeze_message, expired_retry=False, duplicate_outcome=False, nonce_replay=False,
-                subject_substitution=False, relay_stress=False, review_mode='strict'):
+                subject_substitution=False, relay_stress=False, audit_stress=False, review_mode='strict'):
     # Retain the previously reviewed environment, mining/ports, tool and custody
     # recipe; any new exact runtime bytes require new full execution-plan ACKs.
-    flags = (expired_retry, duplicate_outcome, nonce_replay, subject_substitution, relay_stress)
+    flags = (expired_retry, duplicate_outcome, nonce_replay, subject_substitution, relay_stress, audit_stress)
     require(all(type(flag) is bool for flag in flags) and sum(flags) <= 1, 'explicit nonoverlapping probe selection')
     require(not subject_substitution or review_mode == e1.SOLO, 'SL1 subject plans are solo-phase plans (A1-0061)')
     require(not relay_stress or review_mode == e1.SOLO, 'SL2 relay plans are solo-phase plans (A1-0061)')
+    require(not audit_stress or review_mode == e1.SOLO, 'SL3 audit plans are solo-phase plans (A1-0061)')
     plan = e1.create_plan(run_id=run_id, freeze_message=freeze_message, review_mode=review_mode)
     contract = json.loads(CONTRACT.read_text())
     plan.update(schemaVersion='hmbc-e2-recovery-plan/v1', executionScope='six fresh logical crash/recovery cases; not full RQ matrix',
@@ -222,6 +227,45 @@ def create_plan(*, run_id, freeze_message, expired_retry=False, duplicate_outcom
                                  'Repaired new-reference replay cannot reach the nonce guard; only the same-nonce row does.',
                                  'Delivery unknown; symbolic adapter; safe-ledger/trusted-worker/one trusted witness.'])
         plan.pop('workerExpected')
+    if audit_stress:
+        rows = [(p, v) for v in ('dropped-outcome', 'fabricated-outcome') for p in e1.PROFILES]
+        plan.update(schemaVersion='hmbc-e2-audit-stress-plan/v1', auditStress=True,
+                    executionScope='six fresh E03 audit-stress comparisons (SL3); not full RQ matrix',
+                    matrix=[dict(profile=profile, point=None, variant=variant) for profile, variant in rows],
+                    caseIds=['E03-'+variant+'-'+profile for profile, variant in rows],
+                    controls=['wrong-admin-before-H2', 'registered-Alice-allow-release-one-outcome', 'registered-Bob-policy-deny',
+                              'fresh-second-deployment-audit-stress'],
+                    restart='none; production adapter only, no crash hook',
+                    freshness=('fresh chain pair per matrix row; controls on deployment D1; stress on a fresh second deployment D2 '
+                               'on the same chain pair with its own bootstrap, adapter process and 0700 state; relay/CA-admin balances '
+                               'reset to 1000 ETH before D2'),
+                    observation='relay-submitted public calls and production adapter operations; whole decoded two-chain histories; worker log',
+                    auditProbe=dict(
+                        droppedOutcome=('REQUEST_ACCESS > FORWARD_OR_CONSUME > RELEASE > DROP_OUTCOME (A1-0064/S2-0007 R2): '
+                                        'encrypt_record registers the record commitments and instantiates the worker as RELEASE requires; '
+                                        'Alice request, grant (paper policyEnf, repaired checkpoint+decision+consumeDecision); ONE production '
+                                        'release strictly before grant expiry, bound to the RSC registered key (paper, native recipient 0, '
+                                        'D35/A38) or the signed recipient (repaired); no outcome reported; PBC request stays FORWARDED with '
+                                        'outcomeLogId 0 (PENDING); worker gains exactly intent+one attempted send, delivery unknown; native '
+                                        'state unchanged by the release'),
+                        fabricatedOutcome=('REQUEST_ACCESS > FABRICATE_OUTCOME: relay PSC.reportOutcome(digest, derived grantId, fixed '
+                                           'synthetic outcome digest) for the logged request with no DBC grant or consumption; paper: '
+                                           'OUTCOME(4) LSC log with complete details + OutcomeRecorded, status 2, DBC unchanged (CONDITIONAL/'
+                                           'SPEC_GAP); repaired-e: mined Rejected WRONG_PROFILE(21), nothing changed, and attest_grant of the '
+                                           'absent grant refused NOT_COMMITTED by the honest witness; no worker operation (verified '
+                                           'never-instantiated worker, D49)'),
+                        snapshots=('native views/logs per chain at one explicit block per read group; Cast hash checkpoint per read '
+                                   'group/submit (A1-0061 D-5b); worker export or verified never-instantiated record (D49)')),
+                    classification=('dropped outcome: paper SUPPORTED, repaired-e REPAIR_SUPPORTED (PENDING); fabricated outcome: paper '
+                                    'SPEC_GAP (configured-relay stress outside A01), repaired-e REPAIR_SUPPORTED with WRONG_PROFILE(21); '
+                                    'tested reconstruction results, never an HMBC exploit or authors-implementation claim'),
+                    timing='paper release strictly before policyEnf + 30 s (A24); repaired steps strictly before request expiry; '
+                           'unexpected expiry fails visibly; no TTL change',
+                    limitations=['Solo-phase plan: both exact solo ACKs (A1 and S2) and the committed S3 FREEZE precede services.',
+                                 'Six of the 34 remaining catalog comparisons; no complete matrix, live mutants/window/report/gate.',
+                                 'Delivery unknown: worker RELEASE_SENT is an attempted send; reconciliation needs eventual delivery.',
+                                 'Symbolic adapter; safe-ledger/trusted-worker/one trusted witness.'])
+        plan.pop('workerExpected')
     return plan
 
 
@@ -229,7 +273,8 @@ def verify_plan(plan):
     require(plan == create_plan(run_id=plan['runId'], freeze_message=plan['freezeMessage'],
                                 expired_retry=plan.get('expiredRetry', False), duplicate_outcome=plan.get('duplicateOutcome', False),
                                 nonce_replay=plan.get('nonceReplay', False), subject_substitution=plan.get('subjectSubstitution', False),
-                                relay_stress=plan.get('relayStress', False), review_mode=plan.get('reviewMode', 'strict')),
+                                relay_stress=plan.get('relayStress', False), audit_stress=plan.get('auditStress', False),
+                                review_mode=plan.get('reviewMode', 'strict')),
             'exact current E2 plan/source/config')
     require(sha256(ROOT/'interfaces/v1/FREEZE.json') == FREEZE_SHA256, 'immutable v1 freeze')
     require(platform.python_version() == plan['pythonVersion'], 'pinned Python version')
@@ -271,12 +316,15 @@ def execute(plan_path, ack_path, output):
         if plan.get('relayStress', False):
             record.update(executionMode='two-chain-e2-relay-stress-slice',
                           limitation='Seven E01 relay-stress comparisons only; no complete catalog or RQ gate.')
+        if plan.get('auditStress', False):
+            record.update(executionMode='two-chain-e2-audit-stress-slice',
+                          limitation='Six E03 audit-stress comparisons only; no complete catalog or RQ gate.')
         authorized = True; record['status'] = 'RUNNING'
         for item in plan['matrix']:
             verify_plan(plan)
             probe_name = 'nonce-replay' if plan.get('nonceReplay', False) else 'duplicate-outcome'
             if plan.get('subjectSubstitution', False): probe_name = 'subject-substitution'
-            if plan.get('relayStress', False): probe_name = item['variant']
+            if plan.get('relayStress', False) or plan.get('auditStress', False): probe_name = item['variant']
             case = item['profile']+'-'+(item['point'] or probe_name); destination = output/case; destination.mkdir()
             child = dict(profiles={}, servicesStarted=[], adapterProcesses=[])
             case_records[case] = child
@@ -287,9 +335,15 @@ def execute(plan_path, ack_path, output):
             if plan.get('nonceReplay', False): probe_options = {'nonce_replay': True}
             if plan.get('subjectSubstitution', False): probe_options = {'subject_substitution': True}
             if plan.get('relayStress', False): probe_options = {'relay_stress': item['variant']}
+            if plan.get('auditStress', False): probe_options = {'audit_stress': item['variant']}
             e1._profile(selected, item['profile'], destination/item['profile'], child, recovery_point=item['point'],
                         expired_retry=plan.get('expiredRetry', False), **probe_options)
-            if plan.get('relayStress', False):
+            if plan.get('auditStress', False):
+                proof = json.loads((destination/item['profile']/'audit-stress/result.json').read_text())
+                require(proof['ok'] is True and proof['delivery'] == 'unknown' and proof['variant'] == item['variant']
+                        and (proof['classification'], proof['error']) == AUDIT_EXPECTED[(item['profile'], item['variant'])],
+                        'complete checked audit stress result')
+            elif plan.get('relayStress', False):
                 proof = json.loads((destination/item['profile']/'relay-stress/result.json').read_text())
                 expected = RELAY_EXPECTED[(item['profile'], item['variant'])]
                 require(proof['ok'] is True and proof['delivery'] == 'unknown' and proof['variant'] == item['variant']
@@ -328,12 +382,16 @@ def execute(plan_path, ack_path, output):
             if plan.get('relayStress', False):
                 record['cases'][case]['status'] = 'RELAY_STRESS_CONTROL_PASS'
                 continue
+            if plan.get('auditStress', False):
+                record['cases'][case]['status'] = 'AUDIT_STRESS_CONTROL_PASS'
+                continue
             record['cases'][case]['status'] = ('NONCE_REPLAY_CONTROL_PASS' if plan.get('nonceReplay', False)
                                              else ('DUPLICATE_OUTCOME_CONTROL_PASS' if plan.get('duplicateOutcome', False) else 'RECOVERY_CONTROL_PASS'))
         verify_plan(plan); record.update(status='E2_DUPLICATE_OUTCOME_SLICE_PASS' if plan.get('duplicateOutcome', False) else ('E2_RECOVERY_EXPIRY_SLICE_PASS' if plan.get('expiredRetry', False) else 'E2_RECOVERY_SLICE_PASS'), sourceStable=True)
         if plan.get('nonceReplay', False): record['status'] = 'E2_NONCE_REPLAY_SLICE_PASS'
         if plan.get('subjectSubstitution', False): record['status'] = 'E2_SUBJECT_SUBSTITUTION_SLICE_PASS'
         if plan.get('relayStress', False): record['status'] = 'E2_RELAY_STRESS_SLICE_PASS'
+        if plan.get('auditStress', False): record['status'] = 'E2_AUDIT_STRESS_SLICE_PASS'
     except BaseException as error:
         record['failure'] = dict(type=type(error).__name__, message=str(error))
         record['status'] = 'FAILED' if authorized else 'BLOCKED'
@@ -352,7 +410,8 @@ def main():
     args = p.parse_args(); result = execute(args.plan, args.acks, args.output)
     print(json.dumps({k: result[k] for k in ('status', 'failure', 'sourceStable', 'servicesStarted')}, indent=2))
     return 0 if result['status'] in ('E2_RECOVERY_SLICE_PASS', 'E2_RECOVERY_EXPIRY_SLICE_PASS', 'E2_DUPLICATE_OUTCOME_SLICE_PASS',
-                                     'E2_NONCE_REPLAY_SLICE_PASS', 'E2_SUBJECT_SUBSTITUTION_SLICE_PASS', 'E2_RELAY_STRESS_SLICE_PASS') else 2
+                                     'E2_NONCE_REPLAY_SLICE_PASS', 'E2_SUBJECT_SUBSTITUTION_SLICE_PASS', 'E2_RELAY_STRESS_SLICE_PASS',
+                                     'E2_AUDIT_STRESS_SLICE_PASS') else 2
 
 
 if __name__ == '__main__': raise SystemExit(main())

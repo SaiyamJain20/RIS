@@ -258,6 +258,7 @@ def _available(ports):
 
 
 RELAY_VARIANTS = ('forged-tuple', 'new-reference-replay', 'same-nonce-distinct-digests')
+AUDIT_VARIANTS = ('dropped-outcome', 'fabricated-outcome')
 
 
 def observe_worker_export(exit_code, raw, state_dir):
@@ -280,7 +281,7 @@ def observe_worker_export(exit_code, raw, state_dir):
 
 
 def _profile(plan, profile, output, record, *, recovery_point=None, expired_retry=False, duplicate_outcome=False, nonce_replay=False,
-             subject_substitution=False, relay_stress=None):
+             subject_substitution=False, relay_stress=None, audit_stress=None):
     require(type(expired_retry) is bool and (not expired_retry or recovery_point is not None), 'expiry probe follows explicit recovery')
     require(type(duplicate_outcome) is bool and (not duplicate_outcome or (recovery_point is None and not expired_retry)),
             'duplicate comparison uses production adapter without other fault probes')
@@ -290,6 +291,8 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
             (recovery_point is None and not expired_retry and not duplicate_outcome and not nonce_replay)), 'isolated subject stress')
     require(relay_stress is None or (relay_stress in RELAY_VARIANTS and recovery_point is None and not expired_retry
             and not duplicate_outcome and not nonce_replay and not subject_substitution), 'isolated relay stress')
+    require(audit_stress is None or (audit_stress in AUDIT_VARIANTS and recovery_point is None and not expired_retry
+            and not duplicate_outcome and not nonce_replay and not subject_substitution and relay_stress is None), 'isolated audit stress')
     output.mkdir(parents=True, exist_ok=False)
     snapshots = output/'snapshots'
     ledger_root = materialize_owner(plan['owners']['ledger'], snapshots/'ledger')
@@ -399,12 +402,12 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
                     execute_expired_retry(chains['pbc'], chains['dbc'], process, deployment=deployment,
                                           grant_id=grants[0], worker_snapshot=worker_snapshot, output=output/'expired-retry')
             require(bootstrap['wrongAdminCode'] == '16' and all(r['ok'] for r in results.values()), 'three E1 controls')
-            if subject_substitution or relay_stress is not None:
+            if subject_substitution or relay_stress is not None or audit_stress is not None:
                 # SL1/SL2: controls above ran on deployment D1. The stress uses a fresh
                 # second deployment D2 on the same chain pair, its own bootstrap,
                 # adapter process and private state, so the stress oracle sees an
                 # unused grant/count/nonce state. No clock move or crash hook.
-                kind = 'subject' if subject_substitution else 'relay'
+                kind = 'subject' if subject_substitution else ('relay' if relay_stress is not None else 'audit')
                 stress = output/(kind+'-instance'); stress.mkdir()
                 for name in ('pbc', 'dbc'):
                     for role in ('relay', 'H1-ca-admin', 'H2-ca-admin', 'H3-ca-admin', 'H4-ca-admin'):
@@ -474,6 +477,16 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
                     require(stress_result['ok'] is True, 'subject stress result')
                     record['profiles'][profile]['subjectStress'] = dict(runId=stress_run, deployment=str(Path(profile)/'subject-instance/deployment.json'),
                                                                         result=str(Path(profile)/'subject-stress/result.json'))
+                elif audit_stress is not None:
+                    from evaluation.audit_stress import execute_audit_stress
+                    stress_result = execute_audit_stress(stress_chains['pbc'], stress_chains['dbc'], stress_process, deployment_bytes=stress_bytes,
+                                                         user_label='alice', user=stress_boot['users']['alice'], record=stress_record,
+                                                         policy=policy, variant=audit_stress, worker_snapshot=stress_worker_probe,
+                                                         output=output/'audit-stress')
+                    require(stress_result['ok'] is True and stress_result['variant'] == audit_stress, 'audit stress result')
+                    record['profiles'][profile]['auditStress'] = dict(runId=stress_run, variant=audit_stress,
+                                                                      deployment=str(Path(profile)/'audit-instance/deployment.json'),
+                                                                      result=str(Path(profile)/'audit-stress/result.json'))
                 else:
                     from evaluation.relay_stress import execute_relay_stress
                     stress_result = execute_relay_stress(stress_chains['pbc'], stress_chains['dbc'], stress_process, deployment_bytes=stress_bytes,

@@ -1,0 +1,96 @@
+{
+ "plan": {
+  "path": "evaluation/evidence/e2/sl3-audit-runner-20261010/integration-plan.json",
+  "sha256": "d768463d51da7c2ef689cf010b8ce90002898763760bd28f663eb41f4553b2fc",
+  "runId": "E2-SL3-audit-20261010",
+  "freezeMessage": "S3-0011",
+  "agent3SourcesCount": 94,
+  "agent3SourcesAggregate": "7d2a70a90cf629eb2d1ad1279a743d7a9baed7d4e4ad559d6030ee6ea9a30706"
+ },
+ "changedAgent3SourcesSinceSL2r2": {
+  "evaluation/audit_stress.py": {
+   "old": null,
+   "new": "075c5face0ccb794a1eda16dfb262c2021eef24d2c93ce2809ba007a36b1912c"
+  },
+  "evaluation/e1.py": {
+   "old": "4539498741f805bc8c8733eec18dab2141d35a4918047197bfa7bd3d21a94e5c",
+   "new": "236638b0b76545714a0cbd4eb7831e8384363f8f33be90410ca03e0ef7ca6382"
+  },
+  "evaluation/e2.py": {
+   "old": "88095534bc9d1f429dcd5cf6c7ba881a06805e0889a9635ad3cd3c6330888195",
+   "new": "3e35efdc317e1e34b7ebf159af29880927e8c3c7af9384b5ebaa1d1315905c2d"
+  },
+  "evaluation/oracles/audit.py": {
+   "old": null,
+   "new": "e8e6bc12a112e7777bb66dd884a13abda6e20e5884fb3b97193523626758313c"
+  }
+ },
+ "sourceFiles": {
+  "evaluation/audit_stress.py": "075c5face0ccb794a1eda16dfb262c2021eef24d2c93ce2809ba007a36b1912c",
+  "evaluation/oracles/audit.py": "e8e6bc12a112e7777bb66dd884a13abda6e20e5884fb3b97193523626758313c",
+  "evaluation/e1.py": "236638b0b76545714a0cbd4eb7831e8384363f8f33be90410ca03e0ef7ca6382",
+  "evaluation/e2.py": "3e35efdc317e1e34b7ebf159af29880927e8c3c7af9384b5ebaa1d1315905c2d",
+  "evaluation/tests/test_audit_oracle.py": "1714486bc1204cfe479f1f1ce53cab201c56ddcec3d35551ad7f589b0a58ee87",
+  "evaluation/tests/test_audit_stress_collector.py": "23b15462d895de9e119d45d879238d68c3130d351a715a4b43a61be9743b1862",
+  "evaluation/tests/test_e2_audit_plan.py": "c572ad7c11e49635ac24f7de897e6631c767d0882985e4dff9af29832ecff3b5"
+ },
+ "base": "HEAD 6750e02 + uncommitted SL2-result and SL3 files",
+ "suiteBracket": {
+  "files": 2470,
+  "pre": "5045faa3d0d0987def6d077ed7b274a8bb69a06562e54b9d3a32b6eb8915f710",
+  "post": "5045faa3d0d0987def6d077ed7b274a8bb69a06562e54b9d3a32b6eb8915f710",
+  "stable": true
+ },
+ "commands": [
+  {
+   "label": "red-before-implementation",
+   "order": "SL3 tests written before any SL3 code",
+   "startedAt": "2026-10-10T05:56:40Z",
+   "exit": 1,
+   "result": "95 failed (67 oracle module missing, 16 collector module missing, 12 create_plan audit_stress)",
+   "output": "red-before-implementation.txt",
+   "outputSha256": "c0f0d52d188b0ac01e4fbe6d23e77a5888383f448eae8bcf7fd73fa4b47a49ee"
+  },
+  {
+   "label": "green-sl3-units",
+   "exit": 0,
+   "result": "oracle 67 + collector 16 passed"
+  },
+  {
+   "label": "control-reasons",
+   "exit": 0,
+   "result": "8/8 negative controls fail for the intended reason"
+  },
+  {
+   "label": "green-plan-tests",
+   "exit": 0,
+   "result": "29 passed (audit and relay plan tests)"
+  },
+  {
+   "label": "green-full-suite",
+   "argv": "PATH=$HOME/.foundry/bin:$PATH .venv/bin/python -m pytest -q -rs",
+   "startedAt": "2026-10-10T06:00:01Z",
+   "endedAt": "2026-10-10T06:05:17Z",
+   "wallSeconds": 316.6,
+   "exit": 0,
+   "result": "1110 passed, 0 failed, 0 skipped",
+   "output": "full-suite.txt",
+   "outputSha256": "d529ee5cd86b8b7977f4dc7d58c35ea3fca225cb10243df39a7e12cdfa8ec2ae"
+  },
+  {
+   "label": "plan",
+   "argv": "e2.create_plan(run_id='E2-SL3-audit-20261010', freeze_message='S3-0011', audit_stress=True, review_mode='solo-correlated'); verify before/after write",
+   "exit": 0
+  }
+ ],
+ "ledgerCodeCheck": {
+  "source": "git show 933d2a7",
+  "fabricatedPaper": "PSC.reportOutcome checks relay, request status FORWARDED and derived grantId only (no DBC state) -> OUTCOME(4) log + OutcomeRecorded = catalog ACCEPT-of-outcome (CONDITIONAL/SPEC_GAP)",
+  "fabricatedRepaired": "PSC.reportOutcome: profile REPAIRED_E -> Rejected(WRONG_PROFILE=21) = catalog",
+  "witness": "witness.attest_grant: no allowed grant -> NOT_COMMITTED",
+  "droppedAll": "no reportOutcome/reportAttestedOutcome call -> status FORWARDED(1), outcomeLogId 0 = catalog PENDING",
+  "disagreement": null
+ },
+ "servicesStarted": [],
+ "gitWrites": []
+}
