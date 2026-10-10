@@ -1,0 +1,132 @@
+"""Protocol-scope review checks of the SL4 public evidence (S3-0014). Read-only; prints one JSON report.
+Usage: PYTHONPATH=<repo>/protocol python -I review_sl4.py <evidence dir> <protocol dir>"""
+import json
+import pathlib
+import re
+import sys
+
+sys.path.insert(0, sys.argv[2])
+from eth_utils import keccak  # noqa: E402
+from hmbc_protocol import eip712, keys, messages  # noqa: E402
+from testtools.deviating_witness import _altered  # noqa: E402
+
+EVD = pathlib.Path(sys.argv[1]); RUN = EVD / "run"
+EMPTY = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+TEMPLATE_HEAD = ["-m", "testtools.deviating_witness", "--deployment"]
+load = lambda p: json.loads(pathlib.Path(p).read_text())  # noqa: E731
+report, problems = {}, []
+
+
+def check(c, m):
+    if not c:
+        problems.append(m)
+
+
+def signer(name, msg, sig, dep):
+    return eip712.recover(messages.digest_of(name, msg, messages.domain_for(name, msg, dep)), sig)
+
+
+probes_total = 0
+for case in sorted(p.name for p in RUN.iterdir() if p.is_dir()):
+    row, r = RUN / case / "repaired-e", {}
+    variant = "binding" if "binding-control" in case else ("signature" if "signature-control" in case else "positive")
+    field = case.rsplit("-", 1)[1] if variant != "positive" else None
+    d1, d2 = load(row / "adapter/process.json"), load(row / "receipt-instance/adapter/process.json")
+    for name, p in (("d1", d1), ("d2", d2)):
+        check(p["argv"][1:3] == ["-m", "hmbc_protocol.adapter"] and p["exitCode"] == 0 and p["failure"] is None
+              and p.get("stderrSha256") == EMPTY and not [e for e in p["exchanges"] if e["failure"]], f"{case} {name} adapter")
+    arg = lambda p, k: p["argv"][p["argv"].index(k) + 1]  # noqa: E731
+    check(arg(d1, "--state-dir") != arg(d2, "--state-dir"), f"{case} state dirs")
+    dep = load(row / "receipt-instance/deployment.json")
+    witness, relay = dep["fixture"]["witnessSet"]["witnesses"][0], dep["fixture"]["relay"]["address"]
+    ex = load(row / "receipt-stress/exchanges.json")
+    ops = [(e["operation"], e["response"]["ok"]) for e in ex]
+    r["d2Ops"] = [o for o, _ in ops]
+    check(ops == [("prepare_request", True), ("collect_checkpoint", True), ("collect_decision", True), ("attest_grant", True)]
+          and len(ex) == len(d2["exchanges"]), f"{case} D2 ops {ops}")
+    honest = load(row / "receipt-stress/honest-receipt.json")
+    att = ex[-1]["response"]["result"]
+    check(att["receipt"] == honest["receipt"] and att["signatures"] == honest["signatures"], f"{case} honest receipt = attest_grant output")
+    h = honest["receipt"]
+    check(signer("GrantReceipt", h, honest["signatures"][0], dep) == witness, f"{case} honest receipt signed by witness (protocol encoder)")
+    before = load(row / "receipt-stress/before.json")
+    grant = before["grants"][h["grantId"]]
+    req = before["requests"][h["requestDigest"]]
+    check(all(h[k] == grant[v] for k, v in (("requestDigest", "requestDigest"), ("gid", "gid"), ("dataId", "dataId"), ("keyEpoch", "keyEpoch"),
+                                             ("grantExpiresAt", "expiresAt")))
+          and h["witnessSetVersion"] == "1" and h["dbcChainId"] == dep["chains"]["dbc"]["chainId"] and h["kssc"] == dep["chains"]["dbc"]["contracts"]["KSSC"]
+          and "0x" + eip712.grant_id(bytes.fromhex(h["requestDigest"][2:]), h["kssc"], int(h["dbcChainId"])).hex() == h["grantId"]
+          and grant["allowed"] is True, f"{case} honest receipt fields = pinned witness construction for the grant")
+    check(req["status"] == "1" and req["outcomeLogId"] == "0", f"{case} request FORWARDED without outcome before report")
+    # worker probes
+    cmds = load(row / "commands.json")
+    probes = [c for c in cmds if c.get("workerObservation")]
+    probes_total += len(probes)
+    check(len(probes) == 6 and all(c["exitCode"] == 1 and c["workerObservation"] == "never-instantiated (verified)" for c in probes), f"{case} probes {len(probes)}")
+    dev_cmds = [c for c in cmds if "testtools.deviating_witness" in c.get("argv", [])]
+    if variant == "binding":
+        check(len(dev_cmds) == 1, f"{case} one deviation call")
+        c = dev_cmds[0]
+        expect = [d2["argv"][0], "-m", "testtools.deviating_witness", "--deployment", arg(d2, "--deployment"), "receipt",
+                  "--grant-id", h["grantId"], "--field", field, "--at-block", h["dbcBlockNumber"]]
+        check(c["argv"] == expect and c["exitCode"] == 0 and c["cwd"] == d2["cwd"] and "--value" not in c["argv"], f"{case} deviation argv/exit/cwd")
+        d = load(row / "receipt-stress/deviation.json")
+        rec = d["receipt"]
+        diff = {k for k in h if h[k] != rec[k]}
+        check(set(rec) == set(h) and diff == {field}, f"{case} only {field} differs ({diff})")
+        check(d["testOnly"] is True and d["deviation"]["field"] == field and d["deviation"]["original"] == h[field]
+              and d["deviation"]["altered"] == rec[field] == _altered(field, h[field]), f"{case} deviation metadata/default alteration")
+        check(len(d["signatures"]) == 1 and signer("GrantReceipt", rec, d["signatures"][0], dep) == witness, f"{case} deviating signature -> witness")
+        check(d["outputSha256"] == c["outputSha256"] and d["atBlock"] == h["dbcBlockNumber"] and "A40" in d.get("label", ""), f"{case} deviation record joins command")
+        check(rec["dbcBlockHash"] == h["dbcBlockHash"], f"{case} same block hash")
+        submitted = d
+        r["deviation"] = dict(field=field, altered=rec[field], outputSha256=c["outputSha256"], atBlock=h["dbcBlockNumber"])
+    else:
+        check(not dev_cmds, f"{case} no deviation call")
+        if variant == "signature":
+            a = load(row / "receipt-stress/altered-receipt.json")
+            diff = {k for k in h if h[k] != a["receipt"][k]}
+            check(diff == {field} and a["receipt"][field] == _altered(field, h[field]) and a["signatures"] == honest["signatures"], f"{case} altered receipt")
+            r["alteredSignerIsWitness"] = signer("GrantReceipt", a["receipt"], a["signatures"][0], dep) == witness
+            check(r["alteredSignerIsWitness"] is False, f"{case} honest signature no longer covers altered receipt")
+    pc = load(row / "receipt-stress/public-call.json")
+    r["reportMethod"] = pc.get("method")
+    report[case] = r
+
+report["workerProbesTotal"] = probes_total
+check(probes_total == 42, "42 worker probes")
+
+# never-publish scan: all TEST-ONLY keys by fixture label, plus release-token preimages
+labels = ["witness-1", "relay", "alice", "bob", "mallory"] + [f"H{i}-{s}" for i in range(1, 5) for s in ("root", "ca-admin")]
+keyhex = {l: keys.synthetic_private_key(l)[2:] for l in labels}
+digs, hexes, files, tokfields, keyhits = set(), set(), 0, 0, []
+for f in RUN.rglob("*.json"):
+    try:
+        o = json.loads(f.read_text())
+    except Exception:
+        continue
+    stack = [o]
+    while stack:
+        x = stack.pop()
+        if isinstance(x, dict):
+            if "tokenDigest" in x:
+                digs.add(x["tokenDigest"])
+            if isinstance(x.get("export"), str):
+                try:
+                    stack.append(json.loads(x["export"]))
+                except Exception:
+                    pass
+            stack.extend(x.values())
+        elif isinstance(x, list):
+            stack.extend(x)
+for f in EVD.rglob("*"):
+    if f.is_file():
+        files += 1; t = f.read_text(errors="replace").lower()
+        hexes |= set(re.findall(r"0x[0-9a-f]{64}", t)); tokfields += len(re.findall(r'"token"\s*:', t))
+        keyhits += [(str(f.relative_to(EVD)), l) for l, k in keyhex.items() if k in t]
+hits = [x for x in hexes if "0x" + keccak(bytes.fromhex(x[2:])).hex() in digs]
+check(not keyhits and not hits and tokfields == 0, "never-publish scan")
+report["neverPublishScan"] = dict(files=files, keyLabels=len(labels), keyHits=keyhits, hex32=len(hexes), tokenDigests=len(digs),
+                                  preimageHits=len(hits), tokenFields=tokfields)
+report["problems"] = problems
+print(json.dumps(report, indent=1, default=str))
