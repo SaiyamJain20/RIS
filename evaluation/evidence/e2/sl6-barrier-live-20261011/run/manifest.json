@@ -1,0 +1,200 @@
+{
+  "rq": "E",
+  "executionMode": "two-chain-e2-barrier-stress-slice",
+  "adapterMode": "symbolic",
+  "status": "E2_BARRIER_STRESS_SLICE_PASS",
+  "startedAt": "2026-10-11T07:28:59.789833+00:00",
+  "endedAt": "2026-10-11T07:41:15.835330+00:00",
+  "cases": {
+    "paper-strict-pre-barrier-revocation": {
+      "status": "BARRIER_STRESS_CONTROL_PASS",
+      "manifest": "paper-strict-pre-barrier-revocation/manifest.json"
+    },
+    "paper-minimal-pre-barrier-revocation": {
+      "status": "BARRIER_STRESS_CONTROL_PASS",
+      "manifest": "paper-minimal-pre-barrier-revocation/manifest.json"
+    },
+    "repaired-e-pre-barrier-revocation": {
+      "status": "BARRIER_STRESS_CONTROL_PASS",
+      "manifest": "repaired-e-pre-barrier-revocation/manifest.json"
+    },
+    "paper-strict-post-barrier-revocation": {
+      "status": "BARRIER_STRESS_CONTROL_PASS",
+      "manifest": "paper-strict-post-barrier-revocation/manifest.json"
+    },
+    "paper-minimal-post-barrier-revocation": {
+      "status": "BARRIER_STRESS_CONTROL_PASS",
+      "manifest": "paper-minimal-post-barrier-revocation/manifest.json"
+    },
+    "repaired-e-post-barrier-revocation": {
+      "status": "BARRIER_STRESS_CONTROL_PASS",
+      "manifest": "repaired-e-post-barrier-revocation/manifest.json"
+    },
+    "paper-strict-expired-duty": {
+      "status": "BARRIER_STRESS_CONTROL_PASS",
+      "manifest": "paper-strict-expired-duty/manifest.json"
+    },
+    "paper-minimal-expired-duty": {
+      "status": "BARRIER_STRESS_CONTROL_PASS",
+      "manifest": "paper-minimal-expired-duty/manifest.json"
+    },
+    "repaired-e-expired-duty": {
+      "status": "BARRIER_STRESS_CONTROL_PASS",
+      "manifest": "repaired-e-expired-duty/manifest.json"
+    }
+  },
+  "servicesStarted": [
+    {
+      "case": "paper-strict-pre-barrier-revocation",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 4000821
+    },
+    {
+      "case": "paper-strict-pre-barrier-revocation",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 4000941
+    },
+    {
+      "case": "paper-minimal-pre-barrier-revocation",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 4018363
+    },
+    {
+      "case": "paper-minimal-pre-barrier-revocation",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 4018483
+    },
+    {
+      "case": "repaired-e-pre-barrier-revocation",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 4035830
+    },
+    {
+      "case": "repaired-e-pre-barrier-revocation",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 4035950
+    },
+    {
+      "case": "paper-strict-post-barrier-revocation",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 4057113
+    },
+    {
+      "case": "paper-strict-post-barrier-revocation",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 4057246
+    },
+    {
+      "case": "paper-minimal-post-barrier-revocation",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 4074508
+    },
+    {
+      "case": "paper-minimal-post-barrier-revocation",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 4074628
+    },
+    {
+      "case": "repaired-e-post-barrier-revocation",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 4091912
+    },
+    {
+      "case": "repaired-e-post-barrier-revocation",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 4092033
+    },
+    {
+      "case": "paper-strict-expired-duty",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 4113698
+    },
+    {
+      "case": "paper-strict-expired-duty",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 4113821
+    },
+    {
+      "case": "paper-minimal-expired-duty",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 4130805
+    },
+    {
+      "case": "paper-minimal-expired-duty",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 4130929
+    },
+    {
+      "case": "repaired-e-expired-duty",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 4147939
+    },
+    {
+      "case": "repaired-e-expired-duty",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 4148059
+    }
+  ],
+  "acks": {
+    "agent-1": {
+      "commit": "0d9409e7d879e78d89e51a0327bff1315b54b826",
+      "path": "communication/agent-1/outbox/0074-ack-sl6-barrier-expired-duty-freeze.md",
+      "sha256": "b261134a7a199e82403b5b890b7c73ee664db921e9e6fa1db01b9f3cb31b92e4",
+      "messageId": "A1-0074"
+    },
+    "agent-2": {
+      "commit": "0d9409e7d879e78d89e51a0327bff1315b54b826",
+      "path": "communication/agent-1/solo/agent-2-proxy/outbox/0017-ack-sl6-barrier-expired-duty-freeze.md",
+      "sha256": "ea431b835eb8867235c0e1f7d4074e299d55be9b80a968df36fb1fb0d634c5d1",
+      "messageId": "S2-0017"
+    },
+    "freeze": {
+      "commit": "0d9409e7d879e78d89e51a0327bff1315b54b826",
+      "path": "communication/agent-1/solo/agent-3-proxy/outbox/0017-freeze-sl6-barrier-expired-duty.md",
+      "sha256": "465832dda2040bea95dbbf353dc1805081f67c923c4464e11983875f476617d1",
+      "messageId": "S3-0017"
+    }
+  },
+  "failure": null,
+  "sourceStable": true,
+  "limitation": "Nine E02 revocation-barrier and expired-duty comparisons only; no complete catalog or RQ gate.",
+  "planSha256": "78d6ebfbe041d4db3733d56d8eab0ee2872e3803d1771151d9cac52e432aa1ba",
+  "reviewMode": "solo-correlated",
+  "reviewDisclosure": "Solo phase under the human directive A1-0059: agent 1 and the agent-2/agent-3 proxies are the same model, so every review and ACK is correlated self-review, not independent review."
+}

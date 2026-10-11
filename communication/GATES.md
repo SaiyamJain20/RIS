@@ -495,3 +495,38 @@ Recorded by agent 3 (proxy) under the human solo directive A1-0059. **Correlated
 - **Gate E: NOT_RUN.** F and G stay locked.
 
 Evidence: `evaluation/evidence/e2/sl5-trust-live-20261010/README.md`.
+
+## Solo-phase checkpoint: SL6 revocation barrier and expired duty actual, 9/9, 2026-10-11 IST
+
+Recorded by agent 3 (proxy) under the human solo directive A1-0059. **Correlated self-review.**
+
+**Run:** plan 78d6ebfb.. (FREEZE S3-0017; ACKs A1-0074 and S2-0017) gave exit 0, `E2_BARRIER_STRESS_SLICE_PASS`, 9/9 rows, 736.64 s. Host condition: low memory (about 3.2 GiB available, 4.4 GiB swap in use); the host was kept idle.
+
+**Results:**
+
+| Row | Class | Observed |
+|---|---|---|
+| pre- and post-barrier, paper ×4 | SPEC_GAP | `policyEnf` grants with the request-time records after the PBC revocation; one paper behaviour observed twice per profile (no barrier exists) |
+| pre-barrier, repaired-e | REPAIR_SUPPORTED | grant on the unchanged checkpoint: an intentional window (2 s cross-clock, not the measured window) |
+| post-barrier, repaired-e | REPAIR_SUPPORTED | `Rejected(6)` STALE_STATE, sequence cause of DV line 87 (decision seq 1, current seq 2) |
+| expired duty, paper ×2 | SPEC_GAP | grant at DBC time = duty end (DBC-only clock move) |
+| expired duty, repaired-e | REPAIR_SUPPORTED | `Rejected(7)` at step 13: duty end ≤ consume < min(decision, request, checkpoint expiry); 7 s margin |
+
+**A31:** `decisionCollections` was 1 in each repaired row and 0 in each paper row.
+
+**Controls:** wrong-admin (16), Alice allow with one outcome, and Bob deny (9) all passed.
+
+**Integrity:**
+- Sources were stable (bracket c86da89e.., HEAD 0d9409e).
+- All 36 owned processes exited 0 and their PIDs are absent.
+- The D2 worker was verified never-instantiated after every step (49 probes).
+- All 9 owner producer calls exited 0.
+- The never-publish scan found nothing (15 key labels and the frozen-vector keys, and 9 release tokens). Raw producer files are excluded.
+
+**Status:**
+- Catalog progress: **50/56 actual (6 remain: SL7).**
+- A1-0074 points 1-6 are stated in S3-0018.
+- The MUT_NO_STATE_BARRIER and MUT_NO_RECORD_FRESHNESS counterparts, and the measured revocation window, remain P3 work.
+- **Gate E: NOT_RUN.** F and G stay locked.
+
+Evidence: `evaluation/evidence/e2/sl6-barrier-live-20261011/README.md`.

@@ -1,0 +1,406 @@
+{
+ "catalogSha256": "438fa38ddcbd7edd0e49fb93cc580e5219ed05349fd677b2e386bc4669f5d50e",
+ "rows": [
+  {
+   "caseId": "E02-pre-barrier-revocation-paper-strict",
+   "profile": "paper-strict",
+   "variant": "pre-barrier-revocation",
+   "sourceRefs": [
+    "S03",
+    "S04",
+    "S15",
+    "S17",
+    "SPEC4/E02"
+   ],
+   "assumptions": [
+    "A01",
+    "A08",
+    "A09",
+    "A17",
+    "A20",
+    "A22",
+    "A41"
+   ],
+   "expected": {
+    "property": "trust-freshness",
+    "outcome": "ACCEPT",
+    "classification": "SPEC_GAP",
+    "error": null,
+    "qualification": "Previously approved unexpired request arrives before DBC accepts the revoking checkpoint. Repaired acceptance within this measured window is intentional, not instantaneous revocation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation."
+   },
+   "observed": "paper policyEnf 0xa0598945.. granted (recipient 0, TTL +30) with the request-time records after the PBC revocation (Alice REVOKED 19 at PBC block 49)",
+   "executionStatus": "COMPLETE",
+   "classification": "SPEC_GAP",
+   "error": null,
+   "outcome": "ACCEPT",
+   "frozenOutcome": "ACCEPT",
+   "decisionCollections": 0,
+   "timing": {
+    "consumeTimestamp": "1791703820",
+    "requestExpiresAt": "1791703846"
+   },
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step (baseline, REQUEST_ACCESS, REVOKE_ON_PBC, FORWARD_OR_CONSUME) (D49)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "qualification": "paper DBC grants on request-time records after the PBC revocation; no checkpoint barrier exists; configured relay forwards the request-time records; specification gap Tested reconstruction result; symbolic adapter; solo correlated review."
+  },
+  {
+   "caseId": "E02-pre-barrier-revocation-paper-minimal",
+   "profile": "paper-minimal",
+   "variant": "pre-barrier-revocation",
+   "sourceRefs": [
+    "S03",
+    "S04",
+    "S15",
+    "S17",
+    "SPEC4/E02"
+   ],
+   "assumptions": [
+    "A01",
+    "A08",
+    "A09",
+    "A17",
+    "A20",
+    "A22",
+    "A41"
+   ],
+   "expected": {
+    "property": "trust-freshness",
+    "outcome": "ACCEPT",
+    "classification": "SPEC_GAP",
+    "error": null,
+    "qualification": "Previously approved unexpired request arrives before DBC accepts the revoking checkpoint. Repaired acceptance within this measured window is intentional, not instantaneous revocation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation."
+   },
+   "observed": "paper policyEnf 0x7ef3faba.. granted (recipient 0, TTL +30) with the request-time records after the PBC revocation (Alice REVOKED 19 at PBC block 49)",
+   "executionStatus": "COMPLETE",
+   "classification": "SPEC_GAP",
+   "error": null,
+   "outcome": "ACCEPT",
+   "frozenOutcome": "ACCEPT",
+   "decisionCollections": 0,
+   "timing": {
+    "consumeTimestamp": "1791703899",
+    "requestExpiresAt": "1791703925"
+   },
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step (baseline, REQUEST_ACCESS, REVOKE_ON_PBC, FORWARD_OR_CONSUME) (D49)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "qualification": "paper DBC grants on request-time records after the PBC revocation; no checkpoint barrier exists; configured relay forwards the request-time records; specification gap Tested reconstruction result; symbolic adapter; solo correlated review."
+  },
+  {
+   "caseId": "E02-pre-barrier-revocation-repaired-e",
+   "profile": "repaired-e",
+   "variant": "pre-barrier-revocation",
+   "sourceRefs": [
+    "S03",
+    "S04",
+    "S15",
+    "S17",
+    "SPEC4/E02"
+   ],
+   "assumptions": [
+    "A01",
+    "A08",
+    "A09",
+    "A17",
+    "A20",
+    "A22",
+    "A36",
+    "A41"
+   ],
+   "expected": {
+    "property": "trust-freshness",
+    "outcome": "ACCEPT",
+    "classification": "REPAIR_SUPPORTED",
+    "error": null,
+    "qualification": "Previously approved unexpired request arrives before DBC accepts the revoking checkpoint. Repaired acceptance within this measured window is intentional, not instantaneous revocation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation."
+   },
+   "observed": "checkpoint seq 1 and one decision before the revocation; PBC revocation block 49; no new checkpoint; consumeDecision 0x1cc96464.. granted (expiry min(decision, request)); cross-clock windowSeconds 2",
+   "executionStatus": "COMPLETE",
+   "classification": "REPAIR_SUPPORTED",
+   "error": null,
+   "outcome": "ACCEPT",
+   "frozenOutcome": "ACCEPT",
+   "decisionCollections": 1,
+   "timing": {
+    "consumeTimestamp": "1791703985",
+    "requestExpiresAt": "1791704009",
+    "decisionExpiresAt": "1791704009",
+    "checkpointExpiresAt": "1791704040",
+    "decisionSequence": "1",
+    "currentSequence": "1"
+   },
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step (baseline, REQUEST_ACCESS, REVOKE_ON_PBC, FORWARD_OR_CONSUME) (D49)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "qualification": "intentional pre-barrier window: the DBC accepts a previously approved unexpired certificate until it accepts the revoking checkpoint; not instantaneous revocation Tested reconstruction result; symbolic adapter; solo correlated review."
+  },
+  {
+   "caseId": "E02-post-barrier-revocation-paper-strict",
+   "profile": "paper-strict",
+   "variant": "post-barrier-revocation",
+   "sourceRefs": [
+    "S03",
+    "S04",
+    "S15",
+    "S17",
+    "SPEC4/E02"
+   ],
+   "assumptions": [
+    "A01",
+    "A08",
+    "A09",
+    "A17",
+    "A20",
+    "A22",
+    "A41"
+   ],
+   "expected": {
+    "property": "trust-freshness",
+    "outcome": "CONDITIONAL",
+    "classification": "SPEC_GAP",
+    "error": null,
+    "qualification": "New checkpoint changes sequence/authEpoch. Consume the older certificate without re-collection; reject without grant/nonce mutation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation. Paper profiles have no checkpoint barrier: ACCEPT_CHECKPOINT is not applicable and is omitted, rather than submitting a WRONG_PROFILE transaction."
+   },
+   "observed": "paper policyEnf 0x4fd57039.. granted (recipient 0, TTL +30) with the request-time records after the PBC revocation (Alice REVOKED 19 at PBC block 49)",
+   "executionStatus": "COMPLETE",
+   "classification": "SPEC_GAP",
+   "error": null,
+   "outcome": "ACCEPT",
+   "frozenOutcome": "CONDITIONAL",
+   "decisionCollections": 0,
+   "timing": {
+    "consumeTimestamp": "1791704061",
+    "requestExpiresAt": "1791704088"
+   },
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step (baseline, REQUEST_ACCESS, REVOKE_ON_PBC, FORWARD_OR_CONSUME) (D49)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "qualification": "paper DBC grants on request-time records after the PBC revocation; no checkpoint barrier exists; configured relay forwards the request-time records; specification gap Tested reconstruction result; symbolic adapter; solo correlated review."
+  },
+  {
+   "caseId": "E02-post-barrier-revocation-paper-minimal",
+   "profile": "paper-minimal",
+   "variant": "post-barrier-revocation",
+   "sourceRefs": [
+    "S03",
+    "S04",
+    "S15",
+    "S17",
+    "SPEC4/E02"
+   ],
+   "assumptions": [
+    "A01",
+    "A08",
+    "A09",
+    "A17",
+    "A20",
+    "A22",
+    "A41"
+   ],
+   "expected": {
+    "property": "trust-freshness",
+    "outcome": "CONDITIONAL",
+    "classification": "SPEC_GAP",
+    "error": null,
+    "qualification": "New checkpoint changes sequence/authEpoch. Consume the older certificate without re-collection; reject without grant/nonce mutation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation. Paper profiles have no checkpoint barrier: ACCEPT_CHECKPOINT is not applicable and is omitted, rather than submitting a WRONG_PROFILE transaction."
+   },
+   "observed": "paper policyEnf 0x0b62cbee.. granted (recipient 0, TTL +30) with the request-time records after the PBC revocation (Alice REVOKED 19 at PBC block 49)",
+   "executionStatus": "COMPLETE",
+   "classification": "SPEC_GAP",
+   "error": null,
+   "outcome": "ACCEPT",
+   "frozenOutcome": "CONDITIONAL",
+   "decisionCollections": 0,
+   "timing": {
+    "consumeTimestamp": "1791704137",
+    "requestExpiresAt": "1791704164"
+   },
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step (baseline, REQUEST_ACCESS, REVOKE_ON_PBC, FORWARD_OR_CONSUME) (D49)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "qualification": "paper DBC grants on request-time records after the PBC revocation; no checkpoint barrier exists; configured relay forwards the request-time records; specification gap Tested reconstruction result; symbolic adapter; solo correlated review."
+  },
+  {
+   "caseId": "E02-post-barrier-revocation-repaired-e",
+   "profile": "repaired-e",
+   "variant": "post-barrier-revocation",
+   "sourceRefs": [
+    "S03",
+    "S04",
+    "S15",
+    "S17",
+    "SPEC4/E02"
+   ],
+   "assumptions": [
+    "A01",
+    "A08",
+    "A09",
+    "A17",
+    "A20",
+    "A22",
+    "A36",
+    "A41"
+   ],
+   "expected": {
+    "property": "trust-freshness",
+    "outcome": "REJECT",
+    "classification": "REPAIR_SUPPORTED",
+    "error": "STALE_STATE",
+    "qualification": "New checkpoint changes sequence/authEpoch. Consume the older certificate without re-collection; reject without grant/nonce mutation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation."
+   },
+   "observed": "one decision on seq 1; revocation; new checkpoint seq 2 authEpoch 4 current at consume; consumeDecision 0xbf02ffaa.. Rejected(6) STALE_STATE, sequence cause (d.expiresAt 1791704248 <= cp2 1791704283; consume 1791704225 < all expiries); no grant, nonce unchanged",
+   "executionStatus": "COMPLETE",
+   "classification": "REPAIR_SUPPORTED",
+   "error": "STALE_STATE",
+   "outcome": "REJECT",
+   "frozenOutcome": "REJECT",
+   "decisionCollections": 1,
+   "timing": {
+    "consumeTimestamp": "1791704225",
+    "requestExpiresAt": "1791704248",
+    "decisionExpiresAt": "1791704248",
+    "checkpointExpiresAt": "1791704283",
+    "decisionSequence": "1",
+    "currentSequence": "2"
+   },
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step (baseline, REQUEST_ACCESS, REVOKE_ON_PBC, ACCEPT_CHECKPOINT, FORWARD_OR_CONSUME) (D49)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "qualification": "older certificate rejected after the revoking checkpoint (DecisionVerifier step 10) Tested reconstruction result; symbolic adapter; solo correlated review."
+  },
+  {
+   "caseId": "E02-expired-duty-paper-strict",
+   "profile": "paper-strict",
+   "variant": "expired-duty",
+   "sourceRefs": [
+    "S03",
+    "S04",
+    "S15",
+    "S17",
+    "SPEC4/E02"
+   ],
+   "assumptions": [
+    "A01",
+    "A08",
+    "A09",
+    "A17",
+    "A20",
+    "A22",
+    "A41"
+   ],
+   "expected": {
+    "property": "trust-freshness",
+    "outcome": "CONDITIONAL",
+    "classification": "SPEC_GAP",
+    "error": null,
+    "qualification": "Credentials were valid at PBC decision; duty expires before DBC consumption while request/checkpoint remain live. Independent record freshness is required in repaired-e."
+   },
+   "observed": "paper policyEnf 0x811f74a7.. granted (recipient 0, TTL +30) with the request-time records at DBC time 1791704326 >= duty end 1791704326 (DBC-only clock move)",
+   "executionStatus": "COMPLETE",
+   "classification": "SPEC_GAP",
+   "error": null,
+   "outcome": "ACCEPT",
+   "frozenOutcome": "CONDITIONAL",
+   "decisionCollections": 0,
+   "timing": {
+    "consumeTimestamp": "1791704326",
+    "requestExpiresAt": "1791704333",
+    "dutyEnd": "1791704326"
+   },
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step (baseline, INSTALL_SHORT_DUTY, REQUEST_ACCESS, ADVANCE_CLOCK, FORWARD_OR_CONSUME) (D49)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "qualification": "paper DBC grants with a duty record already expired at consumption; no record freshness check; configured relay forwards the request-time records; specification gap Tested reconstruction result; symbolic adapter; solo correlated review."
+  },
+  {
+   "caseId": "E02-expired-duty-paper-minimal",
+   "profile": "paper-minimal",
+   "variant": "expired-duty",
+   "sourceRefs": [
+    "S03",
+    "S04",
+    "S15",
+    "S17",
+    "SPEC4/E02"
+   ],
+   "assumptions": [
+    "A01",
+    "A08",
+    "A09",
+    "A17",
+    "A20",
+    "A22",
+    "A41"
+   ],
+   "expected": {
+    "property": "trust-freshness",
+    "outcome": "CONDITIONAL",
+    "classification": "SPEC_GAP",
+    "error": null,
+    "qualification": "Credentials were valid at PBC decision; duty expires before DBC consumption while request/checkpoint remain live. Independent record freshness is required in repaired-e."
+   },
+   "observed": "paper policyEnf 0x9ae000fa.. granted (recipient 0, TTL +30) with the request-time records at DBC time 1791704403 >= duty end 1791704403 (DBC-only clock move)",
+   "executionStatus": "COMPLETE",
+   "classification": "SPEC_GAP",
+   "error": null,
+   "outcome": "ACCEPT",
+   "frozenOutcome": "CONDITIONAL",
+   "decisionCollections": 0,
+   "timing": {
+    "consumeTimestamp": "1791704403",
+    "requestExpiresAt": "1791704411",
+    "dutyEnd": "1791704403"
+   },
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step (baseline, INSTALL_SHORT_DUTY, REQUEST_ACCESS, ADVANCE_CLOCK, FORWARD_OR_CONSUME) (D49)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "qualification": "paper DBC grants with a duty record already expired at consumption; no record freshness check; configured relay forwards the request-time records; specification gap Tested reconstruction result; symbolic adapter; solo correlated review."
+  },
+  {
+   "caseId": "E02-expired-duty-repaired-e",
+   "profile": "repaired-e",
+   "variant": "expired-duty",
+   "sourceRefs": [
+    "S03",
+    "S04",
+    "S15",
+    "S17",
+    "SPEC4/E02"
+   ],
+   "assumptions": [
+    "A01",
+    "A08",
+    "A09",
+    "A17",
+    "A20",
+    "A22",
+    "A36",
+    "A41"
+   ],
+   "expected": {
+    "property": "trust-freshness",
+    "outcome": "REJECT",
+    "classification": "REPAIR_SUPPORTED",
+    "error": "EXPIRED",
+    "qualification": "Credentials were valid at PBC decision; duty expires before DBC consumption while request/checkpoint remain live. Independent record freshness is required in repaired-e."
+   },
+   "observed": "decision collected at DBC 1791704470 < duty end 1791704490; DBC-only clock to 1791704490; consumeDecision 0x5f161242.. Rejected(7) EXPIRED at step 13 (duty end 1791704490 <= consume 1791704491 < min(1791704498, 1791704498, 1791704529)); no grant",
+   "executionStatus": "COMPLETE",
+   "classification": "REPAIR_SUPPORTED",
+   "error": "EXPIRED",
+   "outcome": "REJECT",
+   "frozenOutcome": "REJECT",
+   "decisionCollections": 1,
+   "timing": {
+    "consumeTimestamp": "1791704491",
+    "requestExpiresAt": "1791704498",
+    "decisionExpiresAt": "1791704498",
+    "checkpointExpiresAt": "1791704529",
+    "decisionSequence": "1",
+    "currentSequence": "1",
+    "dutyEnd": "1791704490"
+   },
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step (baseline, INSTALL_SHORT_DUTY, REQUEST_ACCESS, ADVANCE_CLOCK, FORWARD_OR_CONSUME) (D49)",
+   "controls": "same row: wrong-admin16 (D1 and D2 bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "qualification": "expired duty record rejected at consumption (DecisionVerifier step 13) while request, decision and checkpoint were live Tested reconstruction result; symbolic adapter; solo correlated review."
+  }
+ ],
+ "completedRows": 9,
+ "actualCatalogComparisons": 50,
+ "remainingCatalogComparisons": 6,
+ "fullCatalogComplete": false,
+ "note": "frozenOutcome CONDITIONAL rows (paper post-barrier, expired duty) observed as a grant; see A1-0074 point 1"
+}

@@ -1,0 +1,57 @@
+{
+  "startedAt": "2026-10-11T07:41:01.994610+00:00",
+  "endedAt": "2026-10-11T07:41:14.213713+00:00",
+  "ok": true,
+  "failure": null,
+  "variant": "expired-duty",
+  "delivery": "unknown",
+  "scope": "C-E2 SL6 revocation barrier and expired duty; separate controls, plan ACKs and gate apply",
+  "classification": "REPAIR_SUPPORTED",
+  "error": "EXPIRED",
+  "outcome": "REJECT",
+  "timing": {
+    "consumeTimestamp": "1791704491",
+    "requestExpiresAt": "1791704498",
+    "decisionExpiresAt": "1791704498",
+    "checkpointExpiresAt": "1791704529",
+    "decisionSequence": "1",
+    "currentSequence": "1",
+    "dutyEnd": "1791704490"
+  },
+  "expiredStep": 13,
+  "qualification": "expired duty record rejected at consumption (DecisionVerifier step 13) while request, decision and checkpoint were live",
+  "workerSteps": [
+    {
+      "step": "baseline",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "INSTALL_SHORT_DUTY",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "REQUEST_ACCESS",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "ADVANCE_CLOCK",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "FORWARD_OR_CONSUME",
+      "worker": "never-instantiated (verified)"
+    }
+  ],
+  "timeline": {
+    "requestTimestamp": "1791704468",
+    "requestExpiresAt": "1791704498",
+    "consumeTimestamp": "1791704491",
+    "revocationTimestamp": null,
+    "dutyEnd": "1791704490",
+    "decisionExpiresAt": "1791704498",
+    "checkpointExpiresAt": [
+      "1791704529"
+    ]
+  },
+  "decisionCollections": 1
+}

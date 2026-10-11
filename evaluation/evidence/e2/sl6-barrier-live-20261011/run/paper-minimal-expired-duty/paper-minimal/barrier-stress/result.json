@@ -1,0 +1,50 @@
+{
+  "startedAt": "2026-10-11T07:39:36.042753+00:00",
+  "endedAt": "2026-10-11T07:39:45.031762+00:00",
+  "ok": true,
+  "failure": null,
+  "variant": "expired-duty",
+  "delivery": "unknown",
+  "scope": "C-E2 SL6 revocation barrier and expired duty; separate controls, plan ACKs and gate apply",
+  "classification": "SPEC_GAP",
+  "error": null,
+  "outcome": "ACCEPT",
+  "timing": {
+    "consumeTimestamp": "1791704403",
+    "requestExpiresAt": "1791704411",
+    "dutyEnd": "1791704403"
+  },
+  "qualification": "paper DBC grants with a duty record already expired at consumption; no record freshness check; configured relay forwards the request-time records; specification gap",
+  "workerSteps": [
+    {
+      "step": "baseline",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "INSTALL_SHORT_DUTY",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "REQUEST_ACCESS",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "ADVANCE_CLOCK",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "FORWARD_OR_CONSUME",
+      "worker": "never-instantiated (verified)"
+    }
+  ],
+  "timeline": {
+    "requestTimestamp": "1791704381",
+    "requestExpiresAt": "1791704411",
+    "consumeTimestamp": "1791704403",
+    "revocationTimestamp": null,
+    "dutyEnd": "1791704403",
+    "decisionExpiresAt": null,
+    "checkpointExpiresAt": []
+  },
+  "decisionCollections": 0
+}

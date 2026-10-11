@@ -1,0 +1,52 @@
+{
+  "startedAt": "2026-10-11T07:32:54.415921+00:00",
+  "endedAt": "2026-10-11T07:33:06.445812+00:00",
+  "ok": true,
+  "failure": null,
+  "variant": "pre-barrier-revocation",
+  "delivery": "unknown",
+  "scope": "C-E2 SL6 revocation barrier and expired duty; separate controls, plan ACKs and gate apply",
+  "classification": "REPAIR_SUPPORTED",
+  "error": null,
+  "outcome": "ACCEPT",
+  "timing": {
+    "consumeTimestamp": "1791703985",
+    "requestExpiresAt": "1791704009",
+    "decisionExpiresAt": "1791704009",
+    "checkpointExpiresAt": "1791704040",
+    "decisionSequence": "1",
+    "currentSequence": "1"
+  },
+  "windowSeconds": 2,
+  "qualification": "intentional pre-barrier window: the DBC accepts a previously approved unexpired certificate until it accepts the revoking checkpoint; not instantaneous revocation",
+  "workerSteps": [
+    {
+      "step": "baseline",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "REQUEST_ACCESS",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "REVOKE_ON_PBC",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "FORWARD_OR_CONSUME",
+      "worker": "never-instantiated (verified)"
+    }
+  ],
+  "timeline": {
+    "requestTimestamp": "1791703980",
+    "requestExpiresAt": "1791704009",
+    "consumeTimestamp": "1791703985",
+    "revocationTimestamp": "1791703983",
+    "dutyEnd": null,
+    "decisionExpiresAt": "1791704009",
+    "checkpointExpiresAt": [
+      "1791704040"
+    ]
+  },
+  "decisionCollections": 1
+}

@@ -1,0 +1,45 @@
+{
+  "startedAt": "2026-10-11T07:35:30.643877+00:00",
+  "endedAt": "2026-10-11T07:35:38.764029+00:00",
+  "ok": true,
+  "failure": null,
+  "variant": "post-barrier-revocation",
+  "delivery": "unknown",
+  "scope": "C-E2 SL6 revocation barrier and expired duty; separate controls, plan ACKs and gate apply",
+  "classification": "SPEC_GAP",
+  "error": null,
+  "outcome": "ACCEPT",
+  "timing": {
+    "consumeTimestamp": "1791704137",
+    "requestExpiresAt": "1791704164"
+  },
+  "qualification": "paper DBC grants on request-time records after the PBC revocation; no checkpoint barrier exists; configured relay forwards the request-time records; specification gap",
+  "workerSteps": [
+    {
+      "step": "baseline",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "REQUEST_ACCESS",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "REVOKE_ON_PBC",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "FORWARD_OR_CONSUME",
+      "worker": "never-instantiated (verified)"
+    }
+  ],
+  "timeline": {
+    "requestTimestamp": "1791704134",
+    "requestExpiresAt": "1791704164",
+    "consumeTimestamp": "1791704137",
+    "revocationTimestamp": "1791704135",
+    "dutyEnd": null,
+    "decisionExpiresAt": null,
+    "checkpointExpiresAt": []
+  },
+  "decisionCollections": 0
+}
