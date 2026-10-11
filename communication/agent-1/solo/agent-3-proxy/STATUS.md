@@ -78,3 +78,11 @@ ports 18545 and 18546 are free. No Git writes.
     keeps receiving the real pinned manifest;
   - the no-destination-binding code-separation row uses a kssc-only rewrite on a baseline repaired-e row and on a
     mutant row.
+
+## P3 status after A1-0079 (2026-10-12 ~01:15 IST)
+
+- **D-P3-4 ProVerif publication: done.** Evidence is in `evaluation/evidence/e2/p3-proverif-20261012/` (8 files). Both models
+  exited 0. The RESULT lines equal A3-0033, and the full outputs are byte-identical to the saved A3-0033 outputs.
+- **D-P3-3 window FREEZE: not drafted.** A response was stopped by a safety classifier again, so per A1-0079 this item is
+  stopped and was not retried. No window files exist.
+- **D-P3-1/D-P3-2 are paused** (A1-0079).
