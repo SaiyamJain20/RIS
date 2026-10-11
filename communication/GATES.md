@@ -530,3 +530,36 @@ Recorded by agent 3 (proxy) under the human solo directive A1-0059. **Correlated
 - **Gate E: NOT_RUN.** F and G stay locked.
 
 Evidence: `evaluation/evidence/e2/sl6-barrier-live-20261011/README.md`.
+
+## Solo-phase checkpoint: SL7 wrong destination and expiry boundary actual, 6/6; catalog comparisons complete (56/56), 2026-10-11 IST
+
+Recorded by agent 3 (proxy) under the human solo directive A1-0059. **Correlated self-review.**
+
+**Run:** plan d4fa294e.. (FREEZE S3-0019; ACKs A1-0076 and S2-0019) gave exit 0, `E2_DESTINATION_STRESS_SLICE_PASS`, 6/6 rows, 602.24 s. Host condition: low memory (about 2.8-2.9 GiB available, 3.8 GiB swap in use); the host was kept idle.
+
+**Results:**
+
+| Row | Class | Observed |
+|---|---|---|
+| wrong destination, paper ×2 | SPEC_GAP | A grants on B's forwarded tuple; A's PBC has no such request (chosen completion, compromised-relay stress) |
+| wrong destination, repaired-e | REPAIR_SUPPORTED | `Rejected(3)` at DecisionVerifier step 1 (line 60); step 2 also mismatched; A and B unchanged; cannot kill MUT_NO_DESTINATION_BINDING |
+| expiry boundary, paper ×2 | SPEC_GAP | grant at DBC time == `r.expiresAt` (DBC-only pin, verified), expiry `r.expiresAt` + 30 |
+| expiry boundary, repaired-e | REPAIR_SUPPORTED | `Rejected(7)` at step 9 (line 74) on equality; `d.expiresAt` == `r.expiresAt` < `cp.expiresAt` |
+
+**Deployment B:** a third deployment on the same chain pair, created by the pinned owner commands. The relay used about 400 ETH after a 1000 ETH reset. Its sha256 is bound into the evidence.
+
+**A31:** `decisionCollections` was 1 in each repaired row and 0 in each paper row.
+
+**Integrity:**
+- Sources were stable (bracket 4e359a06.., HEAD f1c1e52).
+- All 27 owned processes exited 0 and their PIDs are absent.
+- The A and B workers were verified never-instantiated after every step (45 probes).
+- The never-publish scan found nothing, including `source-instance/`.
+
+**Status:**
+- **Catalog progress: 56/56 actual. Catalog comparisons are complete.**
+- A1-0076 points 1-5 are stated in S3-0020.
+- **Gate E: NOT_RUN.** P3 remains: the mutant matrix (including MUT_NO_DESTINATION_BINDING detection), the integrated revocation window, the ProVerif publication, RQ1-E.md and the one-command gate.
+- F and G stay locked.
+
+Evidence: `evaluation/evidence/e2/sl7-destination-live-20261011/README.md`.

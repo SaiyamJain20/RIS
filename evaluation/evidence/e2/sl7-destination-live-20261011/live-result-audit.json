@@ -1,0 +1,658 @@
+{
+ "status": "E2_DESTINATION_STRESS_SLICE_PASS",
+ "failure": null,
+ "sourceStable": true,
+ "reviewMode": "solo-correlated",
+ "cases": {
+  "paper-strict-wrong-destination": {
+   "status": "DESTINATION_STRESS_CONTROL_PASS",
+   "profiles": {
+    "paper-strict": {
+     "status": "CONTROL_PASS",
+     "sourcesStable": true,
+     "servicesStopped": true,
+     "castHashPolicy": "checkpoint",
+     "castStable": true,
+     "wrongAdmin": "UNAUTHORIZED_CALLER; baseline issuer restriction, not a repair",
+     "relayStress": null,
+     "auditStress": null,
+     "subjectStress": null,
+     "receiptStress": null,
+     "trustStress": null,
+     "barrierStress": null,
+     "destinationStress": {
+      "runId": "E2-SL7-destination-20261011-wrong-destination-paper-strict-destination",
+      "variant": "wrong-destination",
+      "deployment": "paper-strict/destination-instance/deployment.json",
+      "result": "paper-strict/destination-stress/result.json"
+     },
+     "sourceDeployment": {
+      "runId": "E2-SL7-destination-20261011-wrong-destination-paper-strict-source",
+      "deployment": "paper-strict/source-instance/deployment.json",
+      "sha256": "3988303b120d3d8af102d5364723106eac5aed33b40f79813d3d1c88dcbca4b1",
+      "sameChainPair": true,
+      "ownerCommands": [
+       "owner-deploy-source (ledger/tools/deploy_local.sh)",
+       "owner-bootstrap-source (ledger/tools/bootstrap_fixture.sh)"
+      ]
+     },
+     "destinationFunding": {
+      "receiverAfterDeployAndBootstrap": {
+       "pbc": "0x20868b1dc4f4d4a7a2",
+       "dbc": "0x3635c5e2f1d5148e9c"
+      },
+      "resetEach": "1000 ETH relay/CA-admin before each deployment",
+      "sourceBeforeDeploy": {
+       "pbc": "0x3635c9adc5dea00000",
+       "dbc": "0x3635c9adc5dea00000"
+      },
+      "sourceAfterDeploy": {
+       "pbc": "0x20868eea49906dfc86",
+       "dbc": "0x3635c87c169422f19f"
+      }
+     }
+    }
+   }
+  },
+  "paper-minimal-wrong-destination": {
+   "status": "DESTINATION_STRESS_CONTROL_PASS",
+   "profiles": {
+    "paper-minimal": {
+     "status": "CONTROL_PASS",
+     "sourcesStable": true,
+     "servicesStopped": true,
+     "castHashPolicy": "checkpoint",
+     "castStable": true,
+     "wrongAdmin": "UNAUTHORIZED_CALLER; baseline issuer restriction, not a repair",
+     "relayStress": null,
+     "auditStress": null,
+     "subjectStress": null,
+     "receiptStress": null,
+     "trustStress": null,
+     "barrierStress": null,
+     "destinationStress": {
+      "runId": "E2-SL7-destination-20261011-wrong-destination-paper-minimal-destination",
+      "variant": "wrong-destination",
+      "deployment": "paper-minimal/destination-instance/deployment.json",
+      "result": "paper-minimal/destination-stress/result.json"
+     },
+     "sourceDeployment": {
+      "runId": "E2-SL7-destination-20261011-wrong-destination-paper-minimal-source",
+      "deployment": "paper-minimal/source-instance/deployment.json",
+      "sha256": "0f18e2d9d19cfb745859c9d05b26efc85e0493803d0d713da74af3992843a5f6",
+      "sameChainPair": true,
+      "ownerCommands": [
+       "owner-deploy-source (ledger/tools/deploy_local.sh)",
+       "owner-bootstrap-source (ledger/tools/bootstrap_fixture.sh)"
+      ]
+     },
+     "destinationFunding": {
+      "receiverAfterDeployAndBootstrap": {
+       "pbc": "0x20868b1dd216edd157",
+       "dbc": "0x3635c5e2f07b71eb44"
+      },
+      "resetEach": "1000 ETH relay/CA-admin before each deployment",
+      "sourceBeforeDeploy": {
+       "pbc": "0x3635c9adc5dea00000",
+       "dbc": "0x3635c9adc5dea00000"
+      },
+      "sourceAfterDeploy": {
+       "pbc": "0x20868eea44bebecf85",
+       "dbc": "0x3635c87c1623148272"
+      }
+     }
+    }
+   }
+  },
+  "repaired-e-wrong-destination": {
+   "status": "DESTINATION_STRESS_CONTROL_PASS",
+   "profiles": {
+    "repaired-e": {
+     "status": "CONTROL_PASS",
+     "sourcesStable": true,
+     "servicesStopped": true,
+     "castHashPolicy": "checkpoint",
+     "castStable": true,
+     "wrongAdmin": "UNAUTHORIZED_CALLER; baseline issuer restriction, not a repair",
+     "relayStress": null,
+     "auditStress": null,
+     "subjectStress": null,
+     "receiptStress": null,
+     "trustStress": null,
+     "barrierStress": null,
+     "destinationStress": {
+      "runId": "E2-SL7-destination-20261011-wrong-destination-repaired-e-destination",
+      "variant": "wrong-destination",
+      "deployment": "repaired-e/destination-instance/deployment.json",
+      "result": "repaired-e/destination-stress/result.json"
+     },
+     "sourceDeployment": {
+      "runId": "E2-SL7-destination-20261011-wrong-destination-repaired-e-source",
+      "deployment": "repaired-e/source-instance/deployment.json",
+      "sha256": "11105cc3d3dd654bfb324b8b84c63237e59ca22793f85b15d1176a950c2cb8aa",
+      "sameChainPair": true,
+      "ownerCommands": [
+       "owner-deploy-source (ledger/tools/deploy_local.sh)",
+       "owner-bootstrap-source (ledger/tools/bootstrap_fixture.sh)"
+      ]
+     },
+     "destinationFunding": {
+      "receiverAfterDeployAndBootstrap": {
+       "pbc": "0x20868b1bcb74e58381",
+       "dbc": "0x3635c6c3c37b21531d"
+      },
+      "resetEach": "1000 ETH relay/CA-admin before each deployment",
+      "sourceBeforeDeploy": {
+       "pbc": "0x3635c9adc5dea00000",
+       "dbc": "0x3635c9adc5dea00000"
+      },
+      "sourceAfterDeploy": {
+       "pbc": "0x20868ee9efeafeae92",
+       "dbc": "0x3635c8c2e17d12d333"
+      }
+     }
+    }
+   }
+  },
+  "paper-strict-expiry-boundary": {
+   "status": "DESTINATION_STRESS_CONTROL_PASS",
+   "profiles": {
+    "paper-strict": {
+     "status": "CONTROL_PASS",
+     "sourcesStable": true,
+     "servicesStopped": true,
+     "castHashPolicy": "checkpoint",
+     "castStable": true,
+     "wrongAdmin": "UNAUTHORIZED_CALLER; baseline issuer restriction, not a repair",
+     "relayStress": null,
+     "auditStress": null,
+     "subjectStress": null,
+     "receiptStress": null,
+     "trustStress": null,
+     "barrierStress": null,
+     "destinationStress": {
+      "runId": "E2-SL7-destination-20261011-expiry-boundary-paper-strict-destination",
+      "variant": "expiry-boundary",
+      "deployment": "paper-strict/destination-instance/deployment.json",
+      "result": "paper-strict/destination-stress/result.json"
+     },
+     "sourceDeployment": null,
+     "destinationFunding": null
+    }
+   }
+  },
+  "paper-minimal-expiry-boundary": {
+   "status": "DESTINATION_STRESS_CONTROL_PASS",
+   "profiles": {
+    "paper-minimal": {
+     "status": "CONTROL_PASS",
+     "sourcesStable": true,
+     "servicesStopped": true,
+     "castHashPolicy": "checkpoint",
+     "castStable": true,
+     "wrongAdmin": "UNAUTHORIZED_CALLER; baseline issuer restriction, not a repair",
+     "relayStress": null,
+     "auditStress": null,
+     "subjectStress": null,
+     "receiptStress": null,
+     "trustStress": null,
+     "barrierStress": null,
+     "destinationStress": {
+      "runId": "E2-SL7-destination-20261011-expiry-boundary-paper-minimal-destination",
+      "variant": "expiry-boundary",
+      "deployment": "paper-minimal/destination-instance/deployment.json",
+      "result": "paper-minimal/destination-stress/result.json"
+     },
+     "sourceDeployment": null,
+     "destinationFunding": null
+    }
+   }
+  },
+  "repaired-e-expiry-boundary": {
+   "status": "DESTINATION_STRESS_CONTROL_PASS",
+   "profiles": {
+    "repaired-e": {
+     "status": "CONTROL_PASS",
+     "sourcesStable": true,
+     "servicesStopped": true,
+     "castHashPolicy": "checkpoint",
+     "castStable": true,
+     "wrongAdmin": "UNAUTHORIZED_CALLER; baseline issuer restriction, not a repair",
+     "relayStress": null,
+     "auditStress": null,
+     "subjectStress": null,
+     "receiptStress": null,
+     "trustStress": null,
+     "barrierStress": null,
+     "destinationStress": {
+      "runId": "E2-SL7-destination-20261011-expiry-boundary-repaired-e-destination",
+      "variant": "expiry-boundary",
+      "deployment": "repaired-e/destination-instance/deployment.json",
+      "result": "repaired-e/destination-stress/result.json"
+     },
+     "sourceDeployment": null,
+     "destinationFunding": null
+    }
+   }
+  }
+ },
+ "services": [
+  {
+   "case": "paper-strict-wrong-destination",
+   "profile": "paper-strict",
+   "chain": "pbc",
+   "port": 18545,
+   "pid": 204096
+  },
+  {
+   "case": "paper-strict-wrong-destination",
+   "profile": "paper-strict",
+   "chain": "dbc",
+   "port": 18546,
+   "pid": 204216
+  },
+  {
+   "case": "paper-minimal-wrong-destination",
+   "profile": "paper-minimal",
+   "chain": "pbc",
+   "port": 18545,
+   "pid": 226737
+  },
+  {
+   "case": "paper-minimal-wrong-destination",
+   "profile": "paper-minimal",
+   "chain": "dbc",
+   "port": 18546,
+   "pid": 226857
+  },
+  {
+   "case": "repaired-e-wrong-destination",
+   "profile": "repaired-e",
+   "chain": "pbc",
+   "port": 18545,
+   "pid": 249352
+  },
+  {
+   "case": "repaired-e-wrong-destination",
+   "profile": "repaired-e",
+   "chain": "dbc",
+   "port": 18546,
+   "pid": 249472
+  },
+  {
+   "case": "paper-strict-expiry-boundary",
+   "profile": "paper-strict",
+   "chain": "pbc",
+   "port": 18545,
+   "pid": 276080
+  },
+  {
+   "case": "paper-strict-expiry-boundary",
+   "profile": "paper-strict",
+   "chain": "dbc",
+   "port": 18546,
+   "pid": 276200
+  },
+  {
+   "case": "paper-minimal-expiry-boundary",
+   "profile": "paper-minimal",
+   "chain": "pbc",
+   "port": 18545,
+   "pid": 292698
+  },
+  {
+   "case": "paper-minimal-expiry-boundary",
+   "profile": "paper-minimal",
+   "chain": "dbc",
+   "port": 18546,
+   "pid": 292818
+  },
+  {
+   "case": "repaired-e-expiry-boundary",
+   "profile": "repaired-e",
+   "chain": "pbc",
+   "port": 18545,
+   "pid": 309336
+  },
+  {
+   "case": "repaired-e-expiry-boundary",
+   "profile": "repaired-e",
+   "chain": "dbc",
+   "port": 18546,
+   "pid": 309456
+  }
+ ],
+ "adapters": [
+  {
+   "case": "paper-strict-wrong-destination",
+   "profile": "paper-strict",
+   "label": "adapter",
+   "pid": 208408
+  },
+  {
+   "case": "paper-strict-wrong-destination",
+   "profile": "paper-strict",
+   "label": "adapter-destination",
+   "pid": 217711
+  },
+  {
+   "case": "paper-strict-wrong-destination",
+   "profile": "paper-strict",
+   "label": "adapter-source",
+   "pid": 221944
+  },
+  {
+   "case": "paper-minimal-wrong-destination",
+   "profile": "paper-minimal",
+   "label": "adapter",
+   "pid": 231013
+  },
+  {
+   "case": "paper-minimal-wrong-destination",
+   "profile": "paper-minimal",
+   "label": "adapter-destination",
+   "pid": 240294
+  },
+  {
+   "case": "paper-minimal-wrong-destination",
+   "profile": "paper-minimal",
+   "label": "adapter-source",
+   "pid": 244550
+  },
+  {
+   "case": "repaired-e-wrong-destination",
+   "profile": "repaired-e",
+   "label": "adapter",
+   "pid": 253598
+  },
+  {
+   "case": "repaired-e-wrong-destination",
+   "profile": "repaired-e",
+   "label": "adapter-destination",
+   "pid": 265321
+  },
+  {
+   "case": "repaired-e-wrong-destination",
+   "profile": "repaired-e",
+   "label": "adapter-source",
+   "pid": 269561
+  },
+  {
+   "case": "paper-strict-expiry-boundary",
+   "profile": "paper-strict",
+   "label": "adapter",
+   "pid": 280323
+  },
+  {
+   "case": "paper-strict-expiry-boundary",
+   "profile": "paper-strict",
+   "label": "adapter-destination",
+   "pid": 289603
+  },
+  {
+   "case": "paper-minimal-expiry-boundary",
+   "profile": "paper-minimal",
+   "label": "adapter",
+   "pid": 296970
+  },
+  {
+   "case": "paper-minimal-expiry-boundary",
+   "profile": "paper-minimal",
+   "label": "adapter-destination",
+   "pid": 306249
+  },
+  {
+   "case": "repaired-e-expiry-boundary",
+   "profile": "repaired-e",
+   "label": "adapter",
+   "pid": 313628
+  },
+  {
+   "case": "repaired-e-expiry-boundary",
+   "profile": "repaired-e",
+   "label": "adapter-destination",
+   "pid": 325382
+  }
+ ],
+ "commands": {
+  "total": 99,
+  "nonzero": [],
+  "verifiedNeverInstantiatedWorkerProbes": [
+   {
+    "file": "repaired-e-wrong-destination/repaired-e/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "repaired-e-wrong-destination/repaired-e/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "repaired-e-wrong-destination/repaired-e/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "repaired-e-wrong-destination/repaired-e/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "repaired-e-wrong-destination/repaired-e/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "repaired-e-wrong-destination/repaired-e/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "repaired-e-wrong-destination/repaired-e/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "repaired-e-wrong-destination/repaired-e/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "repaired-e-wrong-destination/repaired-e/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "repaired-e-wrong-destination/repaired-e/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-minimal-wrong-destination/paper-minimal/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-minimal-wrong-destination/paper-minimal/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-minimal-wrong-destination/paper-minimal/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-minimal-wrong-destination/paper-minimal/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-minimal-wrong-destination/paper-minimal/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-minimal-wrong-destination/paper-minimal/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-minimal-wrong-destination/paper-minimal/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-minimal-wrong-destination/paper-minimal/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-minimal-wrong-destination/paper-minimal/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-minimal-wrong-destination/paper-minimal/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-minimal-expiry-boundary/paper-minimal/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-minimal-expiry-boundary/paper-minimal/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-minimal-expiry-boundary/paper-minimal/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-minimal-expiry-boundary/paper-minimal/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-minimal-expiry-boundary/paper-minimal/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "repaired-e-expiry-boundary/repaired-e/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "repaired-e-expiry-boundary/repaired-e/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "repaired-e-expiry-boundary/repaired-e/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "repaired-e-expiry-boundary/repaired-e/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "repaired-e-expiry-boundary/repaired-e/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-strict-wrong-destination/paper-strict/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-strict-wrong-destination/paper-strict/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-strict-wrong-destination/paper-strict/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-strict-wrong-destination/paper-strict/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-strict-wrong-destination/paper-strict/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-strict-wrong-destination/paper-strict/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-strict-wrong-destination/paper-strict/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-strict-wrong-destination/paper-strict/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-strict-wrong-destination/paper-strict/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-strict-wrong-destination/paper-strict/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-strict-expiry-boundary/paper-strict/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-strict-expiry-boundary/paper-strict/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-strict-expiry-boundary/paper-strict/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-strict-expiry-boundary/paper-strict/commands.json",
+    "exit": 1
+   },
+   {
+    "file": "paper-strict-expiry-boundary/paper-strict/commands.json",
+    "exit": 1
+   }
+  ]
+ },
+ "castCheckpoints": {
+  "repaired-e-wrong-destination/repaired-e/dbc-rpc/cast-checkpoints.json": {
+   "count": 13,
+   "allOk": true
+  },
+  "repaired-e-wrong-destination/repaired-e/pbc-rpc/cast-checkpoints.json": {
+   "count": 29,
+   "allOk": true
+  },
+  "paper-minimal-wrong-destination/paper-minimal/dbc-rpc/cast-checkpoints.json": {
+   "count": 10,
+   "allOk": true
+  },
+  "paper-minimal-wrong-destination/paper-minimal/pbc-rpc/cast-checkpoints.json": {
+   "count": 29,
+   "allOk": true
+  },
+  "paper-minimal-expiry-boundary/paper-minimal/dbc-rpc/cast-checkpoints.json": {
+   "count": 8,
+   "allOk": true
+  },
+  "paper-minimal-expiry-boundary/paper-minimal/pbc-rpc/cast-checkpoints.json": {
+   "count": 21,
+   "allOk": true
+  },
+  "repaired-e-expiry-boundary/repaired-e/dbc-rpc/cast-checkpoints.json": {
+   "count": 11,
+   "allOk": true
+  },
+  "repaired-e-expiry-boundary/repaired-e/pbc-rpc/cast-checkpoints.json": {
+   "count": 21,
+   "allOk": true
+  },
+  "paper-strict-wrong-destination/paper-strict/dbc-rpc/cast-checkpoints.json": {
+   "count": 10,
+   "allOk": true
+  },
+  "paper-strict-wrong-destination/paper-strict/pbc-rpc/cast-checkpoints.json": {
+   "count": 29,
+   "allOk": true
+  },
+  "paper-strict-expiry-boundary/paper-strict/dbc-rpc/cast-checkpoints.json": {
+   "count": 8,
+   "allOk": true
+  },
+  "paper-strict-expiry-boundary/paper-strict/pbc-rpc/cast-checkpoints.json": {
+   "count": 21,
+   "allOk": true
+  }
+ },
+ "rpcCommands": {
+  "total": 6641,
+  "nonzero": 0
+ },
+ "pidsStillPresent": []
+}

@@ -1,0 +1,146 @@
+{
+  "rq": "E",
+  "executionMode": "two-chain-e2-destination-stress-slice",
+  "adapterMode": "symbolic",
+  "status": "E2_DESTINATION_STRESS_SLICE_PASS",
+  "startedAt": "2026-10-11T13:47:58.273913+00:00",
+  "endedAt": "2026-10-11T13:57:59.855948+00:00",
+  "cases": {
+    "paper-strict-wrong-destination": {
+      "status": "DESTINATION_STRESS_CONTROL_PASS",
+      "manifest": "paper-strict-wrong-destination/manifest.json"
+    },
+    "paper-minimal-wrong-destination": {
+      "status": "DESTINATION_STRESS_CONTROL_PASS",
+      "manifest": "paper-minimal-wrong-destination/manifest.json"
+    },
+    "repaired-e-wrong-destination": {
+      "status": "DESTINATION_STRESS_CONTROL_PASS",
+      "manifest": "repaired-e-wrong-destination/manifest.json"
+    },
+    "paper-strict-expiry-boundary": {
+      "status": "DESTINATION_STRESS_CONTROL_PASS",
+      "manifest": "paper-strict-expiry-boundary/manifest.json"
+    },
+    "paper-minimal-expiry-boundary": {
+      "status": "DESTINATION_STRESS_CONTROL_PASS",
+      "manifest": "paper-minimal-expiry-boundary/manifest.json"
+    },
+    "repaired-e-expiry-boundary": {
+      "status": "DESTINATION_STRESS_CONTROL_PASS",
+      "manifest": "repaired-e-expiry-boundary/manifest.json"
+    }
+  },
+  "servicesStarted": [
+    {
+      "case": "paper-strict-wrong-destination",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 204096
+    },
+    {
+      "case": "paper-strict-wrong-destination",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 204216
+    },
+    {
+      "case": "paper-minimal-wrong-destination",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 226737
+    },
+    {
+      "case": "paper-minimal-wrong-destination",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 226857
+    },
+    {
+      "case": "repaired-e-wrong-destination",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 249352
+    },
+    {
+      "case": "repaired-e-wrong-destination",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 249472
+    },
+    {
+      "case": "paper-strict-expiry-boundary",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 276080
+    },
+    {
+      "case": "paper-strict-expiry-boundary",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 276200
+    },
+    {
+      "case": "paper-minimal-expiry-boundary",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 292698
+    },
+    {
+      "case": "paper-minimal-expiry-boundary",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 292818
+    },
+    {
+      "case": "repaired-e-expiry-boundary",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 309336
+    },
+    {
+      "case": "repaired-e-expiry-boundary",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 309456
+    }
+  ],
+  "acks": {
+    "agent-1": {
+      "commit": "f1c1e52cd2076401e571931da1f6ab71e8c4f7d3",
+      "path": "communication/agent-1/outbox/0076-ack-sl7-destination-expiry-boundary-freeze.md",
+      "sha256": "29af9b9eede0a6acbf000bc76d1f1997dbbce2085fd3bf4b4464cd71e931e9ce",
+      "messageId": "A1-0076"
+    },
+    "agent-2": {
+      "commit": "f1c1e52cd2076401e571931da1f6ab71e8c4f7d3",
+      "path": "communication/agent-1/solo/agent-2-proxy/outbox/0019-ack-sl7-destination-expiry-boundary-freeze.md",
+      "sha256": "d2e47f0c0c9b7e62db3c8370a7d7deaf567787f2769152614fbea29277555bbc",
+      "messageId": "S2-0019"
+    },
+    "freeze": {
+      "commit": "f1c1e52cd2076401e571931da1f6ab71e8c4f7d3",
+      "path": "communication/agent-1/solo/agent-3-proxy/outbox/0019-freeze-sl7-destination-expiry-boundary.md",
+      "sha256": "4489d25bc69f1d9ae3a865e6c0948387c5b820abe9d842d2c0e487e9b7709153",
+      "messageId": "S3-0019"
+    }
+  },
+  "failure": null,
+  "sourceStable": true,
+  "limitation": "Six E01 wrong-destination and expiry-boundary comparisons only; no complete catalog or RQ gate.",
+  "planSha256": "d4fa294edd954a137abbb62e34ebfffee2119a87eb6490b81777a555daeb5908",
+  "reviewMode": "solo-correlated",
+  "reviewDisclosure": "Solo phase under the human directive A1-0059: agent 1 and the agent-2/agent-3 proxies are the same model, so every review and ACK is correlated self-review, not independent review."
+}

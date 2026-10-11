@@ -1,7 +1,7 @@
 # agent 3 (proxy): status
 
-State: **WAITING** for the SL7 ACKs. **SL7 FREEZE S3-0019 is published** (the last 6 catalog rows, plan d4fa294e..).
-**SL6 is done: 9/9 PASS** (S3-0018). No services are running.
+State: **IDLE**, waiting for the SL7 reviews and the P3 decisions. **SL7 is done: 6/6 PASS** (S3-0020).
+**Catalog comparisons are complete: 56/56.** No services are running.
 
 | Field | Value |
 |---|---|
@@ -10,12 +10,12 @@ State: **WAITING** for the SL7 ACKs. **SL7 FREEZE S3-0019 is published** (the la
 | Mode | solo, correlated self-review (A1-0059) |
 | Updated | 2026-10-10 IST |
 
-Services and lease: **none**. FREEZE S3-0017 is RELEASED. All 36 SL6 processes ended with exit 0;
+Services and lease: **none**. FREEZE S3-0019 is RELEASED. All 27 SL7 processes ended with exit 0;
 ports 18545 and 18546 are free. No Git writes.
 
 ## Catalog progress
 
-**50/56 actual:**
+**56/56 actual (catalog complete):**
 
 - recovery + expiry ×6;
 - duplicate ×3;
@@ -25,9 +25,10 @@ ports 18545 and 18546 are free. No Git writes.
 - audit ×6;
 - receipts ×7;
 - trust freshness ×6;
-- barrier and expired duty ×9.
+- barrier and expired duty ×9;
+- wrong destination and expiry boundary ×6.
 
-**6 remain:** SL7 6.
+**0 remain.** Gate E still needs P3 (mutants, revocation window, ProVerif publication), RQ1-E.md and the gate.
 
 ## Sent
 
@@ -50,14 +51,14 @@ ports 18545 and 18546 are free. No Git writes.
 | S3-0017 | SL6 FREEZE: 9 rows, plan 78d6ebfb..; test-first (RED 144, then GREEN with the full suite at 1494 passed); A1 pre-FREEZE conditions 1-7 met; one decision per request; DBC-only clock move |
 | S3-0018 | SL6 INTEGRATION_RESULT: 9/9 PASS, 736.64 s; catalog now 50/56; A1-0074 points 1-6; decisionCollections 1 (repaired) / 0 (paper) |
 | S3-0019 | SL7 FREEZE: 6 rows (wrong destination, expiry boundary), plan d4fa294e..; test-first (RED 102, then GREEN with the full suite at 1596 passed); A1 conditions 1-12 met (8 skipped as optional) |
+| S3-0020 | SL7 INTEGRATION_RESULT: 6/6 PASS, 602.24 s; catalog 56/56; A1-0076 points 1-5; firingStep 1 (wrong destination) / 9 (boundary) |
 
 ## Read
 
-- A1-0059..A1-0074 and agent 1's SL6 pre-FREEZE conditions (2026-10-11);
-- S2-0001..S2-0017.
+- A1-0059..A1-0076 and agent 1's SL6/SL7 pre-FREEZE conditions (2026-10-11);
+- S2-0001..S2-0019.
 
 ## Next
 
-1. Wait for the A1 and S2 ACKs of S3-0019, their commit, and agent 1's clearance. No services before then.
-2. Then run SL7 (add `destination`, `source` and `destination-stress/source/` to the selection; scan B's material too) and
-   publish S3-0020. After that: mutants, revocation window, RQ1-E.md, gate.
+1. Wait for the SL7 reviews and agent 1's P3 decisions (mutant matrix, integrated revocation window, ProVerif publication).
+2. Then RQ1-E.md and the one-command gate (G-1: a full fresh re-run of all 56 rows, the controls, the mutants and the window).

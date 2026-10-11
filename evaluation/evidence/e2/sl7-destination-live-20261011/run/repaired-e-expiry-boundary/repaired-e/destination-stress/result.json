@@ -1,0 +1,64 @@
+{
+  "startedAt": "2026-10-11T13:57:49.085398+00:00",
+  "endedAt": "2026-10-11T13:57:58.201330+00:00",
+  "ok": true,
+  "failure": null,
+  "variant": "expiry-boundary",
+  "delivery": "unknown",
+  "scope": "C-E2 SL7 wrong destination and expiry boundary; separate controls, plan ACKs and gate apply",
+  "classification": "REPAIR_SUPPORTED",
+  "error": "EXPIRED",
+  "outcome": "REJECT",
+  "firingStep": 9,
+  "timing": {
+    "consumeTimestamp": "1791727102",
+    "requestExpiresAt": "1791727102",
+    "decisionExpiresAt": "1791727102",
+    "checkpointExpiresAt": "1791727133"
+  },
+  "qualification": "DecisionVerifier step 9 (line 74) uses >=, so a consumption exactly at the request expiry is rejected; tested reconstruction result",
+  "workerSteps": [
+    {
+      "step": "baseline",
+      "worker": "never-instantiated (verified)",
+      "deployments": [
+        "A"
+      ]
+    },
+    {
+      "step": "REQUEST_ACCESS",
+      "worker": "never-instantiated (verified)",
+      "deployments": [
+        "A"
+      ]
+    },
+    {
+      "step": "ADVANCE_CLOCK",
+      "worker": "never-instantiated (verified)",
+      "deployments": [
+        "A"
+      ]
+    },
+    {
+      "step": "FORWARD_OR_CONSUME",
+      "worker": "never-instantiated (verified)",
+      "deployments": [
+        "A"
+      ]
+    }
+  ],
+  "timeline": {
+    "requestTimestamp": "1791727073",
+    "requestExpiresAt": "1791727102",
+    "consumeTimestamp": "1791727102",
+    "dbcBefore": "1791727074",
+    "decisionExpiresAt": "1791727102",
+    "checkpointExpiresAt": "1791727133"
+  },
+  "decisionCollections": 1,
+  "clock": {
+    "dbcBefore": "1791727074",
+    "target": "1791727102",
+    "note": "ADVANCE_CLOCK: evm_setNextBlockTimestamp(r.expiresAt) on the DBC only"
+  }
+}

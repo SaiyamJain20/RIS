@@ -1,0 +1,62 @@
+{
+  "startedAt": "2026-10-11T13:56:21.279718+00:00",
+  "endedAt": "2026-10-11T13:56:27.709409+00:00",
+  "ok": true,
+  "failure": null,
+  "variant": "expiry-boundary",
+  "delivery": "unknown",
+  "scope": "C-E2 SL7 wrong destination and expiry boundary; separate controls, plan ACKs and gate apply",
+  "classification": "SPEC_GAP",
+  "error": null,
+  "outcome": "ACCEPT",
+  "timing": {
+    "consumeTimestamp": "1791727014",
+    "requestExpiresAt": "1791727014",
+    "grantExpiresAt": "1791727044"
+  },
+  "qualification": "forwarded paper tuples omit the signed request expiry: the DBC grants at DBC time == request expiresAt and fills the grant expiry as block + grantTtl (30 s); specification gap",
+  "workerSteps": [
+    {
+      "step": "baseline",
+      "worker": "never-instantiated (verified)",
+      "deployments": [
+        "A"
+      ]
+    },
+    {
+      "step": "REQUEST_ACCESS",
+      "worker": "never-instantiated (verified)",
+      "deployments": [
+        "A"
+      ]
+    },
+    {
+      "step": "ADVANCE_CLOCK",
+      "worker": "never-instantiated (verified)",
+      "deployments": [
+        "A"
+      ]
+    },
+    {
+      "step": "FORWARD_OR_CONSUME",
+      "worker": "never-instantiated (verified)",
+      "deployments": [
+        "A"
+      ]
+    }
+  ],
+  "timeline": {
+    "requestTimestamp": "1791726984",
+    "requestExpiresAt": "1791727014",
+    "consumeTimestamp": "1791727014",
+    "dbcBefore": "1791726967",
+    "decisionExpiresAt": null,
+    "checkpointExpiresAt": null
+  },
+  "decisionCollections": 0,
+  "clock": {
+    "dbcBefore": "1791726967",
+    "target": "1791727014",
+    "note": "ADVANCE_CLOCK: evm_setNextBlockTimestamp(r.expiresAt) on the DBC only"
+  }
+}

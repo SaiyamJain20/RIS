@@ -1,0 +1,433 @@
+{
+ "catalogSha256": "438fa38ddcbd7edd0e49fb93cc580e5219ed05349fd677b2e386bc4669f5d50e",
+ "rows": [
+  {
+   "caseId": "E01-wrong-destination-paper-strict",
+   "profile": "paper-strict",
+   "variant": "wrong-destination",
+   "sourceRefs": [
+    "S09",
+    "S12",
+    "S13",
+    "S20",
+    "SPEC4/E01"
+   ],
+   "assumptions": [
+    "A01",
+    "A02",
+    "A14",
+    "A19",
+    "A25",
+    "A41"
+   ],
+   "expected": {
+    "property": "decision-provenance",
+    "outcome": "CONDITIONAL",
+    "classification": "SPEC_GAP",
+    "error": null,
+    "qualification": "Use an otherwise valid request/certificate for a different destination chain/KSSC and submit it here without rewriting its signed fields. The receiver rejects WRONG_DESTINATION before grant state changes. Paper forwarded tuples omit this authenticated destination binding; this is a chosen completion under compromised-relay stress."
+   },
+   "observed": "A policyEnf 0xc538a0da.. granted on B forwarded tuple (pbcRequestId = B digest; A PBC getRequest status 0) and B records; recipient 0, +30; B unchanged",
+   "executionStatus": "COMPLETE",
+   "classification": "SPEC_GAP",
+   "error": null,
+   "outcome": "ACCEPT",
+   "frozenOutcome": "CONDITIONAL",
+   "firingStep": null,
+   "step2Mismatch": null,
+   "decisionCollections": 0,
+   "timeline": {
+    "requestTimestamp": "1791726584",
+    "requestExpiresAt": "1791726614",
+    "consumeTimestamp": "1791726588",
+    "decisionExpiresAt": null
+   },
+   "timing": null,
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step for A and B (baseline, REQUEST_ACCESS, SUBSTITUTE_DESTINATION, FORWARD_OR_CONSUME) (D49)",
+   "controls": "same row: wrong-admin16 (D1, A and B bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "qualification": "chosen completion under compromised-relay stress: A grants on B's forwarded tuple and records although A's PBC has no such request (forwarded tuples omit the destination binding); specification gap, not an exploit Tested reconstruction result; symbolic adapter; solo correlated review.",
+   "receiver": {
+    "pbcChainId": "18545",
+    "psc": "0xd5eeb09599e4bb84d454698824481d7b85775db4",
+    "dbcChainId": "28545",
+    "kssc": "0xf6c552e258d721484e786c2bba7ad7d7f16a1fb6"
+   },
+   "source": {
+    "pbcChainId": "18545",
+    "psc": "0xbc8a9d0dde8121518c2ae861fa22948baae55818",
+    "dbcChainId": "28545",
+    "kssc": "0xe7f3222760172e50bc53578b80292611a10963f3"
+   },
+   "sourceDeployment": {
+    "runId": "E2-SL7-destination-20261011-wrong-destination-paper-strict-source",
+    "deployment": "paper-strict/source-instance/deployment.json",
+    "sha256": "3988303b120d3d8af102d5364723106eac5aed33b40f79813d3d1c88dcbca4b1",
+    "sameChainPair": true,
+    "ownerCommands": [
+     "owner-deploy-source (ledger/tools/deploy_local.sh)",
+     "owner-bootstrap-source (ledger/tools/bootstrap_fixture.sh)"
+    ]
+   },
+   "destinationFunding": {
+    "receiverAfterDeployAndBootstrap": {
+     "pbc": "0x20868b1dc4f4d4a7a2",
+     "dbc": "0x3635c5e2f1d5148e9c"
+    },
+    "resetEach": "1000 ETH relay/CA-admin before each deployment",
+    "sourceBeforeDeploy": {
+     "pbc": "0x3635c9adc5dea00000",
+     "dbc": "0x3635c9adc5dea00000"
+    },
+    "sourceAfterDeploy": {
+     "pbc": "0x20868eea49906dfc86",
+     "dbc": "0x3635c87c169422f19f"
+    }
+   }
+  },
+  {
+   "caseId": "E01-wrong-destination-paper-minimal",
+   "profile": "paper-minimal",
+   "variant": "wrong-destination",
+   "sourceRefs": [
+    "S09",
+    "S12",
+    "S13",
+    "S20",
+    "SPEC4/E01"
+   ],
+   "assumptions": [
+    "A01",
+    "A02",
+    "A14",
+    "A19",
+    "A25",
+    "A41"
+   ],
+   "expected": {
+    "property": "decision-provenance",
+    "outcome": "CONDITIONAL",
+    "classification": "SPEC_GAP",
+    "error": null,
+    "qualification": "Use an otherwise valid request/certificate for a different destination chain/KSSC and submit it here without rewriting its signed fields. The receiver rejects WRONG_DESTINATION before grant state changes. Paper forwarded tuples omit this authenticated destination binding; this is a chosen completion under compromised-relay stress."
+   },
+   "observed": "A policyEnf 0xcad47c07.. granted on B forwarded tuple (pbcRequestId = B digest; A PBC getRequest status 0) and B records; recipient 0, +30; B unchanged",
+   "executionStatus": "COMPLETE",
+   "classification": "SPEC_GAP",
+   "error": null,
+   "outcome": "ACCEPT",
+   "frozenOutcome": "CONDITIONAL",
+   "firingStep": null,
+   "step2Mismatch": null,
+   "decisionCollections": 0,
+   "timeline": {
+    "requestTimestamp": "1791726697",
+    "requestExpiresAt": "1791726727",
+    "consumeTimestamp": "1791726700",
+    "decisionExpiresAt": null
+   },
+   "timing": null,
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step for A and B (baseline, REQUEST_ACCESS, SUBSTITUTE_DESTINATION, FORWARD_OR_CONSUME) (D49)",
+   "controls": "same row: wrong-admin16 (D1, A and B bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "qualification": "chosen completion under compromised-relay stress: A grants on B's forwarded tuple and records although A's PBC has no such request (forwarded tuples omit the destination binding); specification gap, not an exploit Tested reconstruction result; symbolic adapter; solo correlated review.",
+   "receiver": {
+    "pbcChainId": "18545",
+    "psc": "0xd5eeb09599e4bb84d454698824481d7b85775db4",
+    "dbcChainId": "28545",
+    "kssc": "0xf6c552e258d721484e786c2bba7ad7d7f16a1fb6"
+   },
+   "source": {
+    "pbcChainId": "18545",
+    "psc": "0xbc8a9d0dde8121518c2ae861fa22948baae55818",
+    "dbcChainId": "28545",
+    "kssc": "0xe7f3222760172e50bc53578b80292611a10963f3"
+   },
+   "sourceDeployment": {
+    "runId": "E2-SL7-destination-20261011-wrong-destination-paper-minimal-source",
+    "deployment": "paper-minimal/source-instance/deployment.json",
+    "sha256": "0f18e2d9d19cfb745859c9d05b26efc85e0493803d0d713da74af3992843a5f6",
+    "sameChainPair": true,
+    "ownerCommands": [
+     "owner-deploy-source (ledger/tools/deploy_local.sh)",
+     "owner-bootstrap-source (ledger/tools/bootstrap_fixture.sh)"
+    ]
+   },
+   "destinationFunding": {
+    "receiverAfterDeployAndBootstrap": {
+     "pbc": "0x20868b1dd216edd157",
+     "dbc": "0x3635c5e2f07b71eb44"
+    },
+    "resetEach": "1000 ETH relay/CA-admin before each deployment",
+    "sourceBeforeDeploy": {
+     "pbc": "0x3635c9adc5dea00000",
+     "dbc": "0x3635c9adc5dea00000"
+    },
+    "sourceAfterDeploy": {
+     "pbc": "0x20868eea44bebecf85",
+     "dbc": "0x3635c87c1623148272"
+    }
+   }
+  },
+  {
+   "caseId": "E01-wrong-destination-repaired-e",
+   "profile": "repaired-e",
+   "variant": "wrong-destination",
+   "sourceRefs": [
+    "S09",
+    "S12",
+    "S13",
+    "S20",
+    "SPEC4/E01"
+   ],
+   "assumptions": [
+    "A01",
+    "A02",
+    "A14",
+    "A19",
+    "A25",
+    "A36",
+    "A41"
+   ],
+   "expected": {
+    "property": "decision-provenance",
+    "outcome": "REJECT",
+    "classification": "REPAIR_SUPPORTED",
+    "error": "WRONG_DESTINATION",
+    "qualification": "Use an otherwise valid request/certificate for a different destination chain/KSSC and submit it here without rewriting its signed fields. The receiver rejects WRONG_DESTINATION before grant state changes. Paper forwarded tuples omit this authenticated destination binding; this is a chosen completion under compromised-relay stress."
+   },
+   "observed": "B request/certificate (B PSC 0xbc8a9d0d.., B KSSC 0xe51ef867..) consumed at A (PSC 0xd5eeb095.., KSSC 0x0c3ced2b..) 0xffa505f6.. Rejected(3) WRONG_DESTINATION at step 1 (line 60), step 2 also mismatched; A and B unchanged",
+   "executionStatus": "COMPLETE",
+   "classification": "REPAIR_SUPPORTED",
+   "error": "WRONG_DESTINATION",
+   "outcome": "REJECT",
+   "frozenOutcome": "REJECT",
+   "firingStep": 1,
+   "step2Mismatch": true,
+   "decisionCollections": 1,
+   "timeline": {
+    "requestTimestamp": "1791726815",
+    "requestExpiresAt": "1791726845",
+    "consumeTimestamp": "1791726821",
+    "decisionExpiresAt": "1791726845"
+   },
+   "timing": null,
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step for A and B (baseline, REQUEST_ACCESS, SUBSTITUTE_DESTINATION, FORWARD_OR_CONSUME) (D49)",
+   "controls": "same row: wrong-admin16 (D1, A and B bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "qualification": "receiver rejects at DecisionVerifier step 1 (source chain/PSC) before grant state; step 2 (destination KSSC) also mismatches; this row cannot kill MUT_NO_DESTINATION_BINDING because step 1 still fires Tested reconstruction result; symbolic adapter; solo correlated review.",
+   "receiver": {
+    "pbcChainId": "18545",
+    "psc": "0xd5eeb09599e4bb84d454698824481d7b85775db4",
+    "dbcChainId": "28545",
+    "kssc": "0x0c3ced2bfd14f52783701e953b3784dc210d09e3"
+   },
+   "source": {
+    "pbcChainId": "18545",
+    "psc": "0xbc8a9d0dde8121518c2ae861fa22948baae55818",
+    "dbcChainId": "28545",
+    "kssc": "0xe51ef867d3300c8e89dfb234dc0c986c5c188903"
+   },
+   "sourceDeployment": {
+    "runId": "E2-SL7-destination-20261011-wrong-destination-repaired-e-source",
+    "deployment": "repaired-e/source-instance/deployment.json",
+    "sha256": "11105cc3d3dd654bfb324b8b84c63237e59ca22793f85b15d1176a950c2cb8aa",
+    "sameChainPair": true,
+    "ownerCommands": [
+     "owner-deploy-source (ledger/tools/deploy_local.sh)",
+     "owner-bootstrap-source (ledger/tools/bootstrap_fixture.sh)"
+    ]
+   },
+   "destinationFunding": {
+    "receiverAfterDeployAndBootstrap": {
+     "pbc": "0x20868b1bcb74e58381",
+     "dbc": "0x3635c6c3c37b21531d"
+    },
+    "resetEach": "1000 ETH relay/CA-admin before each deployment",
+    "sourceBeforeDeploy": {
+     "pbc": "0x3635c9adc5dea00000",
+     "dbc": "0x3635c9adc5dea00000"
+    },
+    "sourceAfterDeploy": {
+     "pbc": "0x20868ee9efeafeae92",
+     "dbc": "0x3635c8c2e17d12d333"
+    }
+   }
+  },
+  {
+   "caseId": "E01-expiry-boundary-paper-strict",
+   "profile": "paper-strict",
+   "variant": "expiry-boundary",
+   "sourceRefs": [
+    "S09",
+    "S12",
+    "S13",
+    "S20",
+    "SPEC4/E01"
+   ],
+   "assumptions": [
+    "A01",
+    "A02",
+    "A14",
+    "A19",
+    "A25",
+    "A41"
+   ],
+   "expected": {
+    "property": "decision-provenance",
+    "outcome": "CONDITIONAL",
+    "classification": "SPEC_GAP",
+    "error": null,
+    "qualification": "Set the controlled DBC clock to expiresAt exactly. Forwarded paper tuples omit signed request expiry; compare the documented grant TTL fill."
+   },
+   "observed": "DBC-only evm_setNextBlockTimestamp(1791726931), no evm_mine; consume 0x5eba8757.. mined at 1791726931 == r.expiresAt; policyEnf granted, grant expiresAt 1791726961 = block + grantTtl",
+   "executionStatus": "COMPLETE",
+   "classification": "SPEC_GAP",
+   "error": null,
+   "outcome": "ACCEPT",
+   "frozenOutcome": "CONDITIONAL",
+   "firingStep": null,
+   "step2Mismatch": null,
+   "decisionCollections": 0,
+   "timeline": {
+    "requestTimestamp": "1791726902",
+    "requestExpiresAt": "1791726931",
+    "consumeTimestamp": "1791726931",
+    "dbcBefore": "1791726884",
+    "decisionExpiresAt": null,
+    "checkpointExpiresAt": null
+   },
+   "timing": {
+    "consumeTimestamp": "1791726931",
+    "requestExpiresAt": "1791726931",
+    "grantExpiresAt": "1791726961"
+   },
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step for A (baseline, REQUEST_ACCESS, ADVANCE_CLOCK, FORWARD_OR_CONSUME) (D49)",
+   "controls": "same row: wrong-admin16 (D1, A and B bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "qualification": "forwarded paper tuples omit the signed request expiry: the DBC grants at DBC time == request expiresAt and fills the grant expiry as block + grantTtl (30 s); specification gap Tested reconstruction result; symbolic adapter; solo correlated review.",
+   "clock": {
+    "dbcBefore": "1791726884",
+    "target": "1791726931",
+    "note": "ADVANCE_CLOCK: evm_setNextBlockTimestamp(r.expiresAt) on the DBC only"
+   }
+  },
+  {
+   "caseId": "E01-expiry-boundary-paper-minimal",
+   "profile": "paper-minimal",
+   "variant": "expiry-boundary",
+   "sourceRefs": [
+    "S09",
+    "S12",
+    "S13",
+    "S20",
+    "SPEC4/E01"
+   ],
+   "assumptions": [
+    "A01",
+    "A02",
+    "A14",
+    "A19",
+    "A25",
+    "A41"
+   ],
+   "expected": {
+    "property": "decision-provenance",
+    "outcome": "CONDITIONAL",
+    "classification": "SPEC_GAP",
+    "error": null,
+    "qualification": "Set the controlled DBC clock to expiresAt exactly. Forwarded paper tuples omit signed request expiry; compare the documented grant TTL fill."
+   },
+   "observed": "DBC-only evm_setNextBlockTimestamp(1791727014), no evm_mine; consume 0x23fdb972.. mined at 1791727014 == r.expiresAt; policyEnf granted, grant expiresAt 1791727044 = block + grantTtl",
+   "executionStatus": "COMPLETE",
+   "classification": "SPEC_GAP",
+   "error": null,
+   "outcome": "ACCEPT",
+   "frozenOutcome": "CONDITIONAL",
+   "firingStep": null,
+   "step2Mismatch": null,
+   "decisionCollections": 0,
+   "timeline": {
+    "requestTimestamp": "1791726984",
+    "requestExpiresAt": "1791727014",
+    "consumeTimestamp": "1791727014",
+    "dbcBefore": "1791726967",
+    "decisionExpiresAt": null,
+    "checkpointExpiresAt": null
+   },
+   "timing": {
+    "consumeTimestamp": "1791727014",
+    "requestExpiresAt": "1791727014",
+    "grantExpiresAt": "1791727044"
+   },
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step for A (baseline, REQUEST_ACCESS, ADVANCE_CLOCK, FORWARD_OR_CONSUME) (D49)",
+   "controls": "same row: wrong-admin16 (D1, A and B bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "qualification": "forwarded paper tuples omit the signed request expiry: the DBC grants at DBC time == request expiresAt and fills the grant expiry as block + grantTtl (30 s); specification gap Tested reconstruction result; symbolic adapter; solo correlated review.",
+   "clock": {
+    "dbcBefore": "1791726967",
+    "target": "1791727014",
+    "note": "ADVANCE_CLOCK: evm_setNextBlockTimestamp(r.expiresAt) on the DBC only"
+   }
+  },
+  {
+   "caseId": "E01-expiry-boundary-repaired-e",
+   "profile": "repaired-e",
+   "variant": "expiry-boundary",
+   "sourceRefs": [
+    "S09",
+    "S12",
+    "S13",
+    "S20",
+    "SPEC4/E01"
+   ],
+   "assumptions": [
+    "A01",
+    "A02",
+    "A14",
+    "A19",
+    "A25",
+    "A36",
+    "A41"
+   ],
+   "expected": {
+    "property": "decision-provenance",
+    "outcome": "REJECT",
+    "classification": "REPAIR_SUPPORTED",
+    "error": "EXPIRED",
+    "qualification": "Set the controlled DBC clock to expiresAt exactly. Forwarded paper tuples omit signed request expiry; compare the documented grant TTL fill."
+   },
+   "observed": "DBC-only evm_setNextBlockTimestamp(1791727102), no evm_mine; consume 0x1f29861e.. mined at 1791727102 == r.expiresAt; Rejected(7) EXPIRED at step 9 (line 74) with d.expiresAt 1791727102 == r.expiresAt and cp.expiresAt 1791727133 > r.expiresAt",
+   "executionStatus": "COMPLETE",
+   "classification": "REPAIR_SUPPORTED",
+   "error": "EXPIRED",
+   "outcome": "REJECT",
+   "frozenOutcome": "REJECT",
+   "firingStep": 9,
+   "step2Mismatch": null,
+   "decisionCollections": 1,
+   "timeline": {
+    "requestTimestamp": "1791727073",
+    "requestExpiresAt": "1791727102",
+    "consumeTimestamp": "1791727102",
+    "dbcBefore": "1791727074",
+    "decisionExpiresAt": "1791727102",
+    "checkpointExpiresAt": "1791727133"
+   },
+   "timing": {
+    "consumeTimestamp": "1791727102",
+    "requestExpiresAt": "1791727102",
+    "decisionExpiresAt": "1791727102",
+    "checkpointExpiresAt": "1791727133"
+   },
+   "workerObservation": "verified never-instantiated at baseline and after every catalog step for A (baseline, REQUEST_ACCESS, ADVANCE_CLOCK, FORWARD_OR_CONSUME) (D49)",
+   "controls": "same row: wrong-admin16 (D1, A and B bootstraps), Alice allow+release+one outcome, Bob policy9 on D1",
+   "qualification": "DecisionVerifier step 9 (line 74) uses >=, so a consumption exactly at the request expiry is rejected; tested reconstruction result Tested reconstruction result; symbolic adapter; solo correlated review.",
+   "clock": {
+    "dbcBefore": "1791727074",
+    "target": "1791727102",
+    "note": "ADVANCE_CLOCK: evm_setNextBlockTimestamp(r.expiresAt) on the DBC only"
+   }
+  }
+ ],
+ "completedRows": 6,
+ "actualCatalogComparisons": 56,
+ "remainingCatalogComparisons": 0,
+ "fullCatalogComplete": true,
+ "note": "frozenOutcome CONDITIONAL paper rows observed as a grant; catalog comparisons complete; gate E still requires mutants, window, report and gate"
+}

@@ -17,18 +17,14 @@ F and G locked. All proxy reviews and ACKs are correlated self-review (same mode
 | SL4 receipt controls ×7 | **actual PASS 7/7** | FREEZE S3-0013, plan 851896f3..; result S3-0014; `evaluation/evidence/e2/sl4-receipt-live-20261010/` |
 | SL5 trust freshness ×6 | **actual PASS 6/6** | FREEZE S3-0015, plan 9e14a148..; result S3-0016; `evaluation/evidence/e2/sl5-trust-live-20261010/` |
 | SL6 barrier and expired duty ×9 | **actual PASS 9/9** | FREEZE S3-0017, plan 78d6ebfb..; result S3-0018; `evaluation/evidence/e2/sl6-barrier-live-20261011/` |
-| SL7 wrong destination and expiry boundary ×6 | **FREEZE published, not run** | S3-0019, plan d4fa294e..; `evaluation/evidence/e2/sl7-destination-runner-20261011/` |
+| SL7 wrong destination and expiry boundary ×6 | **actual PASS 6/6** | FREEZE S3-0019, plan d4fa294e..; result S3-0020; `evaluation/evidence/e2/sl7-destination-live-20261011/` |
 
-- FREEZE S3-0017 is released. No services are running. S3-0019 awaits both ACKs.
+- FREEZE S3-0019 is released. No services are running.
 - Decisions D47 (paper crash relabel) and D48 (SL0 choices) are in `communication/DECISIONS.md`.
 
-**Catalog progress: 50/56 actual, 6 remaining.**
+**Catalog progress: 56/56 actual. The catalog comparisons are complete.**
 
-| Remaining slice | Rows |
-|---|---|
-| SL7 | wrong destination, expiry boundary ×6 |
-
-After the slices: mutants, revocation window, RQ1-E.md, gate.
+No catalog slice remains. Next (P3, per agent 1's decisions): mutants, integrated revocation window, ProVerif publication, then RQ1-E.md and the gate.
 
 ## Runner facts (after SL0 and SL1)
 
@@ -104,11 +100,7 @@ toolchain and host-tools. Keep helper scripts out of `evaluation/` as `.py` file
 5. **SL6 runner facts (S3-0017):** `e1.barrier_sign_argv` (templates `revoke-alice`, `short-duty`; `untilIn`
    bounded 25..600); the collector records `current_checkpoint`, `timing`, `staleCause`, `expiredStep` and
    `decisionCollections`; only the DBC clock moves, only in expired-duty rows.
-6. **SL7 run**, after A1 and S2 ACKs of S3-0019 are committed and agent 1 clears it:
-   - build `tmp/p3/sl7-run/acks.json` and verify it with `e1._acks`; record `free -h`; run in the background;
-   - copy `tmp/p3/sl6-run/scripts/select_audit.py`, add `destination` and `source` to the `-instance` pattern,
-     `destination` to `-stress`, and a pattern for `destination-stress/source/*.json` (B's snapshots and
-     exchanges); keep excluding `.txt`; publish S3-0020 and the GATES checkpoint (56/56 if 6/6).
+6. **SL7 is complete** (S3-0020). Its selection helper is `tmp/p3/sl7-run/scripts/select_audit.py` (adds `destination`, `source` and `destination-stress/source/`).
 7. **SL7 runner facts (S3-0019):** B is `source-instance/` (third deployment, same chain pair; labels
    `owner-deploy-source`, `owner-bootstrap-source`); `destinationFunding` and `sourceDeployment` are in the case
    manifest; the expiry pin is `evm_setNextBlockTimestamp` with no `evm_mine`.
