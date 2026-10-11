@@ -1,0 +1,109 @@
+{
+ "paper-minimal-expiry-boundary": {
+  "A_ops": [
+   "prepare_request"
+  ],
+  "boundary": {
+   "requestExpiresAt": "1791727014",
+   "consumeBlockTimestamp": "1791727014",
+   "dbcBefore": "1791726967"
+  },
+  "decisionCollectionsAB": 0,
+  "workerProbes": 5,
+  "observedWorkers": 1
+ },
+ "paper-minimal-wrong-destination": {
+  "A_ops": [],
+  "B_ops": [
+   "prepare_request"
+  ],
+  "request": {
+   "psc": "0xbc8a9d0dde8121518c2ae861fa22948baae55818",
+   "kssc": "0xe7f3222760172e50bc53578b80292611a10963f3",
+   "bPsc": "0xbc8a9d0dde8121518c2ae861fa22948baae55818",
+   "aPsc": "0xd5eeb09599e4bb84d454698824481d7b85775db4"
+  },
+  "decisionCollectionsAB": 0,
+  "workerProbes": 10,
+  "observedWorkers": 2
+ },
+ "paper-strict-expiry-boundary": {
+  "A_ops": [
+   "prepare_request"
+  ],
+  "boundary": {
+   "requestExpiresAt": "1791726931",
+   "consumeBlockTimestamp": "1791726931",
+   "dbcBefore": "1791726884"
+  },
+  "decisionCollectionsAB": 0,
+  "workerProbes": 5,
+  "observedWorkers": 1
+ },
+ "paper-strict-wrong-destination": {
+  "A_ops": [],
+  "B_ops": [
+   "prepare_request"
+  ],
+  "request": {
+   "psc": "0xbc8a9d0dde8121518c2ae861fa22948baae55818",
+   "kssc": "0xe7f3222760172e50bc53578b80292611a10963f3",
+   "bPsc": "0xbc8a9d0dde8121518c2ae861fa22948baae55818",
+   "aPsc": "0xd5eeb09599e4bb84d454698824481d7b85775db4"
+  },
+  "decisionCollectionsAB": 0,
+  "workerProbes": 10,
+  "observedWorkers": 2
+ },
+ "repaired-e-expiry-boundary": {
+  "A_ops": [
+   "prepare_request",
+   "collect_checkpoint",
+   "collect_decision"
+  ],
+  "boundary": {
+   "requestExpiresAt": "1791727102",
+   "consumeBlockTimestamp": "1791727102",
+   "dbcBefore": "1791727074",
+   "decisionExpiresAt": "1791727102",
+   "checkpointExpiresAt": "1791727133",
+   "witnessDbcNowAtCheckpoint": "1791727073",
+   "lowerBoundNowPlus30": "1791727103",
+   "timelineDecision": "1791727102",
+   "timelineCheckpoint": "1791727133"
+  },
+  "decisionCollectionsAB": 1,
+  "workerProbes": 5,
+  "observedWorkers": 1
+ },
+ "repaired-e-wrong-destination": {
+  "A_ops": [],
+  "B_ops": [
+   "prepare_request",
+   "collect_checkpoint",
+   "collect_decision"
+  ],
+  "request": {
+   "psc": "0xbc8a9d0dde8121518c2ae861fa22948baae55818",
+   "kssc": "0xe51ef867d3300c8e89dfb234dc0c986c5c188903",
+   "bPsc": "0xbc8a9d0dde8121518c2ae861fa22948baae55818",
+   "aPsc": "0xd5eeb09599e4bb84d454698824481d7b85775db4"
+  },
+  "bDecisionUnderADomainIsWitness": false,
+  "decisionCollectionsAB": 1,
+  "workerProbes": 10,
+  "observedWorkers": 2
+ },
+ "workerProbesTotal": 45,
+ "neverPublishScan": {
+  "files": 285,
+  "sourceMaterialFiles": 36,
+  "keyLabels": 13,
+  "keyHits": [],
+  "hex32": 1657,
+  "tokenDigests": 6,
+  "preimageHits": 0,
+  "tokenFields": 0
+ },
+ "problems": []
+}

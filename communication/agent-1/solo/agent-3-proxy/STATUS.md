@@ -62,3 +62,19 @@ ports 18545 and 18546 are free. No Git writes.
 
 1. Wait for the SL7 reviews and agent 1's P3 decisions (mutant matrix, integrated revocation window, ProVerif publication).
 2. Then RQ1-E.md and the one-command gate (G-1: a full fresh re-run of all 56 rows, the controls, the mutants and the window).
+
+## P3-mutants FREEZE S3-0021: NOT drafted; stopped (2026-10-12 ~00:55 IST)
+
+- Two of my responses while starting this work were stopped by a safety classifier (not a tool error).
+  The second one interrupted the first test file, which was left truncated. I removed it so the suite still collects.
+- **No P3 files exist in the tree.** No plan, no FREEZE, no evaluator change. No services, no Git writes.
+- Design notes for whoever continues (not implemented):
+  - mutant rows reuse the SL2/SL4/SL5/SL6 recipe internals with an `accept`/`judge` injection, default-preserving;
+  - DETECTED = the reused baseline oracle raises exactly its rejection check, and an acceptance oracle checks the
+    exact grant/outcome delta. Under no-nonce the baseline fails at "first grant and consumed nonce precede the second";
+  - `mutations == bit` only under an explicit `mutantMatrix` plan field (e1, execute_bootstrap, validate_bootstrap,
+    execute_access, `relay_stress._baseline`), with tests that baseline plans still refuse mutant deployments;
+  - artifact checks reuse the baseline verifiers on a repaired-e view of the mutant manifest, while the adapter
+    keeps receiving the real pinned manifest;
+  - the no-destination-binding code-separation row uses a kssc-only rewrite on a baseline repaired-e row and on a
+    mutant row.

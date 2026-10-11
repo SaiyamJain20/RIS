@@ -56,13 +56,13 @@ multi-defect certificate always yields the same code:
 | E01 identical replay | grant uniqueness `KSSC.sol:180`: REPLAY | same guard, checked before the nonce |
 | E01 new reference | a fresh pbcRequestId means a new grantId and a **second grant** | same request/certificate means the same grantId: REPLAY (`KSSC.sol:180`) |
 | E01 same nonce, distinct digests | not applicable | nonce guard `KSSC.sol:181-183`: REPLAY. The **only** row reaching it |
-| E01 expiry | paper grant TTL = policyEnf block + 30 s (`ACSC.sol:154`); no request expiry check | grant expiry = min(decision.expiresAt, request.expiresAt) (`ACSC.sol:190`); DV step 9 rejects at equality |
-| E01 wrong destination | the tuple has no destination field | DV steps 1-2. The catalog's second-deployment recipe fails at **step 1** (A1-0039) |
+| E01 expiry | paper grant TTL = policyEnf block + 30 s (`ACSC.sol:154`); no request expiry check. SL7: a grant mined at DBC time == request expiry, expiring 30 s later | grant expiry = min(decision.expiresAt, request.expiresAt) (`ACSC.sol:190`); DV step 9 (line 74, `>=`) rejects at equality. SL7: consume == request expiry == decision expiry → EXPIRED |
+| E01 wrong destination | the tuple has no destination (or source) field. SL7: A grants on B's tuple although A's PBC never saw the request | DV steps 1-2 (lines 60, 61-64). The catalog's second-deployment recipe fails at **step 1** (A1-0039). SL7 confirmed this on calldata, and the certificate was signed under B's domain |
 | E02 rollback | latest appended list wins; an old signed list is re-accepted | strictly increasing version: STALE_ANCHOR (`TMSC.sol:190`) |
 | E02 wrong issuer | `UNAUTHORIZED_CALLER` (16) (`TMSC.sol:181`): **baseline caller restriction in every profile, not a repair** (D-record N-1) | same |
-| E02 revocation barrier | no barrier; a forwarded tuple stays grantable after revocation | a newer accepted checkpoint invalidates older decisions: DV step 10, STALE_STATE |
-| E02 expired duty | no record-validity check at use | DV step 13: EXPIRED |
-| E03 outcome | paper `reportOutcome` accepts a relay report for a forwarded request, even with no DBC grant (fabricated) | `reportOutcome`: WRONG_PROFILE; `reportAttestedOutcome` needs a witness receipt bound to (requestDigest, gid, dataId) (`PSC.sol:267-270`) |
+| E02 revocation barrier | no barrier; a forwarded tuple stays grantable after revocation (pre- and post-barrier paper rows are the same execution) | a newer accepted checkpoint invalidates older decisions: DV line 87, **sequence** cause (`d.stateSequence != cp.sequence`). SL6 showed this, with the expiry clause on the same line not applying. Before that checkpoint, acceptance is the intended window |
+| E02 expired duty | no record-validity check at use. SL6: grants at DBC time == record validUntil (expired under the half-open convention, zero-second margin) | DV step 13 (lines 92-94): EXPIRED. SL6 showed `duty end <= consume < min(decision, request, checkpoint expiry)`, so the rejection is not step 9 |
+| E03 outcome | paper `reportOutcome` accepts a relay report for a forwarded request, even with no DBC grant (fabricated). The relay must supply the public derived grantId = H(digest, KSSC, dbcChainId); any other value gives WRONG_DESTINATION (`PSC.sol:227-229`). A dropped outcome leaves the request FORWARDED with outcomeLogId 0 permanently, because the PSC has no time-based transition (SL3) | `reportOutcome`: WRONG_PROFILE; `reportAttestedOutcome` needs a witness receipt bound to (requestDigest, gid, dataId) (`PSC.sol:266-269`). The binding test precedes quorum, so binding and signature rows give the same code (SL4) |
 | E03 duplicate outcome | `PSC.sol:226` (paper) / `:250` (repaired) REPLAY. It is checked right after the unknown-request check (`:225`/`:249`, WRONG_SUBJECT) and before any binding or signature check | same |
 
 ## L3. Mutant sensitivity (owner evidence: `ledger/E2_HANDOFF.md` kill map, `ledger/evidence/ae2-mutants.*`)
@@ -124,4 +124,5 @@ until it runs, these rows are owner rehearsal evidence only.
 | Mutant suites, mutation smoke, cast crosscheck | `ledger/evidence/` |
 | Owner rehearsal of 56 rows | `ledger/evidence/e2-full-rehearsal/` (dropped-outcome rows without RELEASE: A1-0060 R2 correction) |
 | Revocation window | `ledger/evidence/revocation-window/` |
-| SL1 independent review | `ledger/evidence/sl1-subject-review/`, A1-0063 |
+| SL1-SL7 independent reviews | `ledger/evidence/sl{1-subject,2-relay,3-audit,4-receipt,5-trust,6-barrier,7-destination}-review/`, A1-0063, A1-0067, A1-0069, A1-0071, A1-0073, A1-0075, A1-0077. The SL6/SL7 tools were committed before their runs |
+| ProVerif re-run on the integrated tree | A1-0078 D-P3-4 (outputs published with P3) |
