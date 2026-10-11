@@ -41,6 +41,9 @@ BARRIER_EXPECTED = {**{(p, v): ('SPEC_GAP', None) for p in ('paper-strict', 'pap
                     ('repaired-e', 'pre-barrier-revocation'): ('REPAIR_SUPPORTED', None),
                     ('repaired-e', 'post-barrier-revocation'): ('REPAIR_SUPPORTED', 'STALE_STATE'),
                     ('repaired-e', 'expired-duty'): ('REPAIR_SUPPORTED', 'EXPIRED')}
+DESTINATION_EXPECTED = {**{(p, v): ('SPEC_GAP', None) for p in ('paper-strict', 'paper-minimal') for v in e1.DESTINATION_VARIANTS},
+                        ('repaired-e', 'wrong-destination'): ('REPAIR_SUPPORTED', 'WRONG_DESTINATION'),
+                        ('repaired-e', 'expiry-boundary'): ('REPAIR_SUPPORTED', 'EXPIRED')}
 # A1-0034 owner producer at ledger pin 933d2a7 (A1-0061 D-6).
 SIGN_LIST_PATH, SIGN_LIST_SHA256 = 'ledger/tools/sign_list.sh', '806e9a98a52899ca5fc4fe33e1e90e39d7607a51a4f5c6c5942c0edd21c37ded'
 SIGN_SCRIPT_PATH, SIGN_SCRIPT_SHA256 = 'ledger/script/SignList.s.sol', '7aa3b1dd085f5aaaa6aa7b28191d3b6d0cfd3ff02bb0b61291daead13e3ba177'
@@ -75,11 +78,11 @@ def _owners(contract):
 
 def create_plan(*, run_id, freeze_message, expired_retry=False, duplicate_outcome=False, nonce_replay=False,
                 subject_substitution=False, relay_stress=False, audit_stress=False, receipt_stress=False, trust_stress=False,
-                barrier_stress=False, review_mode='strict'):
+                barrier_stress=False, destination_stress=False, review_mode='strict'):
     # Retain the previously reviewed environment, mining/ports, tool and custody
     # recipe; any new exact runtime bytes require new full execution-plan ACKs.
     flags = (expired_retry, duplicate_outcome, nonce_replay, subject_substitution, relay_stress, audit_stress, receipt_stress, trust_stress,
-             barrier_stress)
+             barrier_stress, destination_stress)
     require(all(type(flag) is bool for flag in flags) and sum(flags) <= 1, 'explicit nonoverlapping probe selection')
     require(not subject_substitution or review_mode == e1.SOLO, 'SL1 subject plans are solo-phase plans (A1-0061)')
     require(not relay_stress or review_mode == e1.SOLO, 'SL2 relay plans are solo-phase plans (A1-0061)')
@@ -87,6 +90,7 @@ def create_plan(*, run_id, freeze_message, expired_retry=False, duplicate_outcom
     require(not receipt_stress or review_mode == e1.SOLO, 'SL4 receipt plans are solo-phase plans (A1-0061)')
     require(not trust_stress or review_mode == e1.SOLO, 'SL5 trust plans are solo-phase plans (A1-0061)')
     require(not barrier_stress or review_mode == e1.SOLO, 'SL6 barrier plans are solo-phase plans (A1-0061)')
+    require(not destination_stress or review_mode == e1.SOLO, 'SL7 destination plans are solo-phase plans (A1-0061)')
     plan = e1.create_plan(run_id=run_id, freeze_message=freeze_message, review_mode=review_mode)
     contract = json.loads(CONTRACT.read_text())
     plan.update(schemaVersion='hmbc-e2-recovery-plan/v1', executionScope='six fresh logical crash/recovery cases; not full RQ matrix',
@@ -505,6 +509,66 @@ def create_plan(*, run_id, freeze_message, expired_retry=False, duplicate_outcom
                                  'The revocation window is measured per row, not characterized statistically (P3 revocation window).',
                                  'Symbolic adapter; safe-ledger/trusted-worker/one trusted witness.'])
         plan.pop('workerExpected')
+    if destination_stress:
+        rows = [(p, v) for v in e1.DESTINATION_VARIANTS for p in e1.PROFILES]
+        plan.update(schemaVersion='hmbc-e2-destination-stress-plan/v1', destinationStress=True,
+                    executionScope='six fresh E01 wrong-destination and expiry-boundary comparisons (SL7); not full RQ matrix',
+                    matrix=[dict(profile=profile, point=None, variant=variant) for profile, variant in rows],
+                    caseIds=['E01-'+variant+'-'+profile for profile, variant in rows],
+                    controls=['wrong-admin-before-H2', 'registered-Alice-allow-release-one-outcome', 'registered-Bob-policy-deny',
+                              'fresh-second-deployment-destination-stress'],
+                    restart='none; production adapter only, no crash hook',
+                    freshness=('fresh chain pair per matrix row; controls on deployment D1; the row on a fresh deployment A (D2) on the same '
+                               'chain pair with its own bootstrap, adapter and 0700 state; wrong-destination rows add a source deployment B '
+                               '(third deployment, same chain pair); relay/CA-admin balances reset to 1000 ETH before each extra deployment'),
+                    observation=('relay public calls, production prepare_request/collect_checkpoint/collect_decision on the request '
+                                 'deployment; whole decoded two-chain histories of A (and B); DBC clock pin; worker never-instantiated records'),
+                    destinationProbe=dict(
+                        sourceDeployment=('wrong destination: B is a second deployment on the same chain pair (same chain ids, other contract '
+                                          'addresses) created by the pinned owner commands deploy_local.sh <pbc> <dbc> <profile> <log-mode> '
+                                          '<runId>-source and bootstrap_fixture.sh <pbc> <B deployment> <out> (labels owner-deploy-source, '
+                                          'owner-bootstrap-source; exact argv in commands.json; bytes from the ledger inventory); its own '
+                                          'adapter and 0700 state; relay/CA-admin balance reset to 1000 ETH before it as before D2, with the '
+                                          'relay balance before/after each deployment recorded to show it fits (A1-0039: about 400 ETH per '
+                                          'deployment); B deployment.json bound into the evidence with its sha256'),
+                        wrongDestinationRepaired=('REQUEST_ACCESS on B (B PSC, destination B KSSC), B checkpoint and ONE decision through B '
+                                                  'adapter; SUBSTITUTE_DESTINATION: B request, certificate and records submitted at A '
+                                                  'consumeDecision without rewriting any signed field -> Rejected(3) WRONG_DESTINATION at '
+                                                  'DecisionVerifier step 1 (line 60: r.psc is B PSC, not A); step 2 (lines 61-64: r.kssc is '
+                                                  'B KSSC) also mismatches and is recorded; nothing changes at A and the source deployment B '
+                                                  'untouched (request forwarded, no grant, nonce unused). This row cannot kill '
+                                                  'MUT_NO_DESTINATION_BINDING: step 1 still fires under the mutant (A1-0039 G-3); a kssc-only '
+                                                  'rewrite would be another recipe and is not substituted'),
+                        wrongDestinationPaper=('paper policyEnf at A with B forwarded tuple (pbcRequestId = B digest, which has no such request '
+                                               'on A PBC) and B records; authority roots are deterministic label keys, so the records evaluate '
+                                               'equally at A -> grant (recipient 0, +30); a chosen completion under compromised-relay stress, '
+                                               'outside A01'),
+                        expiryBoundaryRepaired=('REQUEST_ACCESS, checkpoint and ONE decision; ADVANCE_CLOCK on the DBC only: '
+                                                'evm_setNextBlockTimestamp(r.expiresAt) with no evm_mine, so the consumption is the next mined '
+                                                'block; its timestamp is verified to equal r.expiresAt exactly (not +1); required '
+                                                'd.expiresAt == r.expiresAt and cp.expiresAt > r.expiresAt, so DecisionVerifier step 9 '
+                                                '(line 74, >=) fires on equality -> Rejected(7) EXPIRED, nothing changed'),
+                        expiryBoundaryPaper=('the forwarded tuple omits the signed request expiry; policyEnf mined at DBC time == the PBC '
+                                             'request expiresAt grants with the documented fill block + grantTtl (30 s, ACSC.sol:154); both '
+                                             'values recorded'),
+                        supplementaryEthCall='skipped: an eth_call at expiresAt - 1 would need a separate pinned block time; not run',
+                        certificateDiscipline='exactly one collect_decision per request in the repaired rows (A31); zero in paper rows',
+                        workerPrecondition=('adapter operations are prepare_request (pure), collect_checkpoint and collect_decision (Witness '
+                                            'only, adapter.py:153-170 at 0716a8e); no release, encrypt_record or finish_decryption; the '
+                                            'workers of both deployments (A, and B in wrong-destination rows) must stay verified '
+                                            'never-instantiated (D49) at baseline and after every catalog step'),
+                        snapshots=('native views/logs of A (and B) at one explicit block per read group; Cast hash checkpoint per read '
+                                   'group/submit (A1-0061 D-5b); verified never-instantiated worker records (D49)')),
+                    classification=('wrong destination: paper SPEC_GAP, repaired-e REPAIR_SUPPORTED with WRONG_DESTINATION(3) at step 1; '
+                                    'expiry boundary: paper SPEC_GAP, repaired-e REPAIR_SUPPORTED with EXPIRED(7) at step 9 equality; '
+                                    'tested reconstruction results, never an HMBC exploit or authors-implementation claim'),
+                    timing=('request, checkpoint, decision and substitution inside the 30 s request lifetime; only the DBC clock is pinned and '
+                            'only in the expiry-boundary rows; unexpected expiry fails visibly; no TTL change'),
+                    limitations=['Solo-phase plan: both exact solo ACKs (A1 and S2) and the committed S3 FREEZE precede services.',
+                                 'The last six catalog comparisons; no live mutants/window/report/gate yet.',
+                                 'MUT_NO_DESTINATION_BINDING is not killable by this catalog recipe (step 1 fires first).',
+                                 'Symbolic adapter; safe-ledger/trusted-worker/one trusted witness.'])
+        plan.pop('workerExpected')
     return plan
 
 
@@ -514,7 +578,8 @@ def verify_plan(plan):
                                 nonce_replay=plan.get('nonceReplay', False), subject_substitution=plan.get('subjectSubstitution', False),
                                 relay_stress=plan.get('relayStress', False), audit_stress=plan.get('auditStress', False),
                                 receipt_stress=plan.get('receiptStress', False), trust_stress=plan.get('trustStress', False),
-                                barrier_stress=plan.get('barrierStress', False), review_mode=plan.get('reviewMode', 'strict')),
+                                barrier_stress=plan.get('barrierStress', False), destination_stress=plan.get('destinationStress', False),
+                                review_mode=plan.get('reviewMode', 'strict')),
             'exact current E2 plan/source/config')
     require(sha256(ROOT/'interfaces/v1/FREEZE.json') == FREEZE_SHA256, 'immutable v1 freeze')
     require(platform.python_version() == plan['pythonVersion'], 'pinned Python version')
@@ -559,6 +624,9 @@ def execute(plan_path, ack_path, output):
         if plan.get('auditStress', False):
             record.update(executionMode='two-chain-e2-audit-stress-slice',
                           limitation='Six E03 audit-stress comparisons only; no complete catalog or RQ gate.')
+        if plan.get('destinationStress', False):
+            record.update(executionMode='two-chain-e2-destination-stress-slice',
+                          limitation='Six E01 wrong-destination and expiry-boundary comparisons only; no complete catalog or RQ gate.')
         if plan.get('barrierStress', False):
             record.update(executionMode='two-chain-e2-barrier-stress-slice',
                           limitation='Nine E02 revocation-barrier and expired-duty comparisons only; no complete catalog or RQ gate.')
@@ -573,7 +641,8 @@ def execute(plan_path, ack_path, output):
             verify_plan(plan)
             probe_name = 'nonce-replay' if plan.get('nonceReplay', False) else 'duplicate-outcome'
             if plan.get('subjectSubstitution', False): probe_name = 'subject-substitution'
-            if any(plan.get(k, False) for k in ('relayStress', 'auditStress', 'trustStress', 'barrierStress')): probe_name = item['variant']
+            if any(plan.get(k, False) for k in ('relayStress', 'auditStress', 'trustStress', 'barrierStress', 'destinationStress')):
+                probe_name = item['variant']
             if plan.get('receiptStress', False): probe_name = item['variant']+('-'+item['field'] if item['field'] else '')
             case = item['profile']+'-'+(item['point'] or probe_name); destination = output/case; destination.mkdir()
             child = dict(profiles={}, servicesStarted=[], adapterProcesses=[])
@@ -589,9 +658,15 @@ def execute(plan_path, ack_path, output):
             if plan.get('receiptStress', False): probe_options = {'receipt_stress': item['variant'], 'receipt_field': item['field']}
             if plan.get('trustStress', False): probe_options = {'trust_stress': item['variant']}
             if plan.get('barrierStress', False): probe_options = {'barrier_stress': item['variant']}
+            if plan.get('destinationStress', False): probe_options = {'destination_stress': item['variant']}
             e1._profile(selected, item['profile'], destination/item['profile'], child, recovery_point=item['point'],
                         expired_retry=plan.get('expiredRetry', False), **probe_options)
-            if plan.get('barrierStress', False):
+            if plan.get('destinationStress', False):
+                proof = json.loads((destination/item['profile']/'destination-stress/result.json').read_text())
+                require(proof['ok'] is True and proof['delivery'] == 'unknown' and proof['variant'] == item['variant']
+                        and (proof['classification'], proof['error']) == DESTINATION_EXPECTED[(item['profile'], item['variant'])],
+                        'complete checked destination stress result')
+            elif plan.get('barrierStress', False):
                 proof = json.loads((destination/item['profile']/'barrier-stress/result.json').read_text())
                 require(proof['ok'] is True and proof['delivery'] == 'unknown' and proof['variant'] == item['variant']
                         and (proof['classification'], proof['error']) == BARRIER_EXPECTED[(item['profile'], item['variant'])],
@@ -662,6 +737,9 @@ def execute(plan_path, ack_path, output):
             if plan.get('barrierStress', False):
                 record['cases'][case]['status'] = 'BARRIER_STRESS_CONTROL_PASS'
                 continue
+            if plan.get('destinationStress', False):
+                record['cases'][case]['status'] = 'DESTINATION_STRESS_CONTROL_PASS'
+                continue
             record['cases'][case]['status'] = ('NONCE_REPLAY_CONTROL_PASS' if plan.get('nonceReplay', False)
                                              else ('DUPLICATE_OUTCOME_CONTROL_PASS' if plan.get('duplicateOutcome', False) else 'RECOVERY_CONTROL_PASS'))
         verify_plan(plan); record.update(status='E2_DUPLICATE_OUTCOME_SLICE_PASS' if plan.get('duplicateOutcome', False) else ('E2_RECOVERY_EXPIRY_SLICE_PASS' if plan.get('expiredRetry', False) else 'E2_RECOVERY_SLICE_PASS'), sourceStable=True)
@@ -672,6 +750,7 @@ def execute(plan_path, ack_path, output):
         if plan.get('receiptStress', False): record['status'] = 'E2_RECEIPT_STRESS_SLICE_PASS'
         if plan.get('trustStress', False): record['status'] = 'E2_TRUST_STRESS_SLICE_PASS'
         if plan.get('barrierStress', False): record['status'] = 'E2_BARRIER_STRESS_SLICE_PASS'
+        if plan.get('destinationStress', False): record['status'] = 'E2_DESTINATION_STRESS_SLICE_PASS'
     except BaseException as error:
         record['failure'] = dict(type=type(error).__name__, message=str(error))
         record['status'] = 'FAILED' if authorized else 'BLOCKED'
@@ -692,7 +771,7 @@ def main():
     return 0 if result['status'] in ('E2_RECOVERY_SLICE_PASS', 'E2_RECOVERY_EXPIRY_SLICE_PASS', 'E2_DUPLICATE_OUTCOME_SLICE_PASS',
                                      'E2_NONCE_REPLAY_SLICE_PASS', 'E2_SUBJECT_SUBSTITUTION_SLICE_PASS', 'E2_RELAY_STRESS_SLICE_PASS',
                                      'E2_AUDIT_STRESS_SLICE_PASS', 'E2_RECEIPT_STRESS_SLICE_PASS',
-                                     'E2_TRUST_STRESS_SLICE_PASS', 'E2_BARRIER_STRESS_SLICE_PASS') else 2
+                                     'E2_TRUST_STRESS_SLICE_PASS', 'E2_BARRIER_STRESS_SLICE_PASS', 'E2_DESTINATION_STRESS_SLICE_PASS') else 2
 
 
 if __name__ == '__main__': raise SystemExit(main())

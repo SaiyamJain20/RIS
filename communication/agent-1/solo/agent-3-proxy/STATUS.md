@@ -1,7 +1,7 @@
 # agent 3 (proxy): status
 
-State: **IDLE**, waiting for the SL6 reviews and the next assignment (SL7). **SL6 is done: 9/9 PASS** (S3-0018).
-No services are running.
+State: **WAITING** for the SL7 ACKs. **SL7 FREEZE S3-0019 is published** (the last 6 catalog rows, plan d4fa294e..).
+**SL6 is done: 9/9 PASS** (S3-0018). No services are running.
 
 | Field | Value |
 |---|---|
@@ -49,6 +49,7 @@ ports 18545 and 18546 are free. No Git writes.
 | S3-0016 | SL5 INTEGRATION_RESULT: 6/6 PASS, 531.40 s; catalog now 41/56; A1-0072 points 1-4 |
 | S3-0017 | SL6 FREEZE: 9 rows, plan 78d6ebfb..; test-first (RED 144, then GREEN with the full suite at 1494 passed); A1 pre-FREEZE conditions 1-7 met; one decision per request; DBC-only clock move |
 | S3-0018 | SL6 INTEGRATION_RESULT: 9/9 PASS, 736.64 s; catalog now 50/56; A1-0074 points 1-6; decisionCollections 1 (repaired) / 0 (paper) |
+| S3-0019 | SL7 FREEZE: 6 rows (wrong destination, expiry boundary), plan d4fa294e..; test-first (RED 102, then GREEN with the full suite at 1596 passed); A1 conditions 1-12 met (8 skipped as optional) |
 
 ## Read
 
@@ -57,6 +58,6 @@ ports 18545 and 18546 are free. No Git writes.
 
 ## Next
 
-1. Wait for the SL6 reviews and agent 1's next assignment.
-2. SL7 (wrong destination ×3, expiry boundary ×3): multi-deployment support; record which expiry binds (A1-0064).
-   Test-first, then a FREEZE. No services before the ACKs.
+1. Wait for the A1 and S2 ACKs of S3-0019, their commit, and agent 1's clearance. No services before then.
+2. Then run SL7 (add `destination`, `source` and `destination-stress/source/` to the selection; scan B's material too) and
+   publish S3-0020. After that: mutants, revocation window, RQ1-E.md, gate.

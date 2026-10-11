@@ -273,6 +273,7 @@ SIGN_LIST_TEMPLATES = {'signed-list-rollback': ['{bash}', '{script}', '{pbcRpc}'
 
 
 BARRIER_VARIANTS = ('pre-barrier-revocation', 'post-barrier-revocation', 'expired-duty')
+DESTINATION_VARIANTS = ('wrong-destination', 'expiry-boundary')
 # SL6 producer purposes (A1-0034, A1-0061 D-6); untilIn is the only runner-computed argument.
 BARRIER_SIGN_TEMPLATES = {'revoke-alice': ['{bash}', '{script}', '{pbcRpc}', '{deployment}', '{out}', 'crl', 'H1', '--revoke', '101'],
                           'short-duty': ['{bash}', '{script}', '{pbcRpc}', '{deployment}', '{out}', 'tempacl', 'H1', '--duty',
@@ -337,7 +338,7 @@ def observe_worker_export(exit_code, raw, state_dir):
 
 def _profile(plan, profile, output, record, *, recovery_point=None, expired_retry=False, duplicate_outcome=False, nonce_replay=False,
              subject_substitution=False, relay_stress=None, audit_stress=None, receipt_stress=None, receipt_field=None,
-             trust_stress=None, barrier_stress=None):
+             trust_stress=None, barrier_stress=None, destination_stress=None):
     require(type(expired_retry) is bool and (not expired_retry or recovery_point is not None), 'expiry probe follows explicit recovery')
     require(type(duplicate_outcome) is bool and (not duplicate_outcome or (recovery_point is None and not expired_retry)),
             'duplicate comparison uses production adapter without other fault probes')
@@ -359,6 +360,9 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
     require(barrier_stress is None or (barrier_stress in BARRIER_VARIANTS and recovery_point is None and not expired_retry
             and not duplicate_outcome and not nonce_replay and not subject_substitution and relay_stress is None
             and audit_stress is None and receipt_stress is None and trust_stress is None), 'isolated barrier stress')
+    require(destination_stress is None or (destination_stress in DESTINATION_VARIANTS and recovery_point is None and not expired_retry
+            and not duplicate_outcome and not nonce_replay and not subject_substitution and relay_stress is None and audit_stress is None
+            and receipt_stress is None and trust_stress is None and barrier_stress is None), 'isolated destination stress')
     output.mkdir(parents=True, exist_ok=False)
     snapshots = output/'snapshots'
     ledger_root = materialize_owner(plan['owners']['ledger'], snapshots/'ledger')
@@ -469,7 +473,7 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
                                           grant_id=grants[0], worker_snapshot=worker_snapshot, output=output/'expired-retry')
             require(bootstrap['wrongAdminCode'] == '16' and all(r['ok'] for r in results.values()), 'three E1 controls')
             if (subject_substitution or relay_stress is not None or audit_stress is not None or receipt_stress is not None
-                    or trust_stress is not None or barrier_stress is not None):
+                    or trust_stress is not None or barrier_stress is not None or destination_stress is not None):
                 # SL1/SL2: controls above ran on deployment D1. The stress uses a fresh
                 # second deployment D2 on the same chain pair, its own bootstrap,
                 # adapter process and private state, so the stress oracle sees an
@@ -477,7 +481,8 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
                 kind = 'subject' if subject_substitution else ('relay' if relay_stress is not None else
                                                                ('audit' if audit_stress is not None else
                                                                 ('receipt' if receipt_stress is not None else
-                                                                 ('trust' if trust_stress is not None else 'barrier'))))
+                                                                 ('trust' if trust_stress is not None else
+                                                                  ('barrier' if barrier_stress is not None else 'destination')))))
                 stress = output/(kind+'-instance'); stress.mkdir()
                 for name in ('pbc', 'dbc'):
                     for role in ('relay', 'H1-ca-admin', 'H2-ca-admin', 'H3-ca-admin', 'H4-ca-admin'):
@@ -526,7 +531,7 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
                     return command(label, [tools['python']['path'], '-m', 'hmbc_protocol.worker_log', '--state-dir', str(stress_state)],
                                    protocol, budget['transport'], service_env)
                 def stress_worker_probe():
-                    # SL2, the SL3 fabricated rows and SL4-SL6 perform no worker operation; a never-created worker database is
+                    # SL2, the SL3 fabricated rows and SL4-SL7 perform no worker operation; a never-created worker database is
                     # an explicit, verified observation (observe_worker_export), not a failure.
                     nonlocal stress_sequence
                     label = f'{kind}-worker-export-{stress_sequence:02}'; stress_sequence += 1
@@ -547,6 +552,88 @@ def _profile(plan, profile, output, record, *, recovery_point=None, expired_retr
                     require(stress_result['ok'] is True, 'subject stress result')
                     record['profiles'][profile]['subjectStress'] = dict(runId=stress_run, deployment=str(Path(profile)/'subject-instance/deployment.json'),
                                                                         result=str(Path(profile)/'subject-stress/result.json'))
+                elif destination_stress is not None:
+                    from evaluation.destination_stress import execute_destination_stress
+                    relay_address = _owned_signer('relay').address.lower()
+                    def balances():
+                        return {n: rpcs[n].call('eth_getBalance', [relay_address, 'latest']) for n in ('pbc', 'dbc')}
+                    def source_instance():
+                        # SL7 wrong destination (A1-0039): a second deployment B on the SAME chain pair (same chain ids, other
+                        # contract addresses) created with the same pinned owner commands as D2 (deploy_local.sh, then
+                        # bootstrap_fixture.sh), its own adapter and 0700 state. Relay/CA-admin balances are reset to 1000 ETH
+                        # before it, exactly as before D2, and the relay balance before/after is recorded to show it fits.
+                        label = 'source'; inst = output/(label+'-instance'); inst.mkdir()
+                        for name in ('pbc', 'dbc'):
+                            for role in ('relay', 'H1-ca-admin', 'H2-ca-admin', 'H3-ca-admin', 'H4-ca-admin'):
+                                rpcs[name].call('anvil_setBalance', [_owned_signer(role).address.lower(), hex(1000*10**18)])
+                        before = balances(); run_b = run_id+'-'+label
+                        command('owner-deploy-'+label, [tools['bash']['path'], str(ledger/'tools/deploy_local.sh'), rpcs['pbc'].url, rpcs['dbc'].url,
+                                                          profile, plan['logDetailMode'], run_b], ledger_root, budget['deploy'], env)
+                        path_b = ledger/'exports/deployments'/run_b/'deployment.json'
+                        bytes_b = path_b.read_bytes(); dep_b = strict_json(bytes_b); frozen_validate('LedgerDeployment', dep_b)
+                        require(dep_b['interfaceVersion'] == 'v1' and dep_b['profile'] == profile and dep_b['mutations'] == '0', 'owner source deployment profile')
+                        require(all(dep_b['chains'][n]['chainId'] == stress_dep['chains'][n]['chainId'] for n in ('pbc', 'dbc'))
+                                and all(not set(dep_b['chains'][n]['contracts'].values()) & (set(deployment['chains'][n]['contracts'].values())
+                                                                                              | set(stress_dep['chains'][n]['contracts'].values()))
+                                        for n in ('pbc', 'dbc')), 'source deployment B: same chain pair, distinct contracts')
+                        (inst/'deployment.json').write_bytes(bytes_b); after = balances()
+                        chains_b = {}
+                        for name in ('pbc', 'dbc'):
+                            manifest = dep_b['chains'][name]
+                            require(manifest['rpcUrl'] == rpcs[name].url and manifest['chainId'] == plan['chainIds'][name], 'owner source deployment endpoint')
+                            contracts = {}
+                            for role, address in manifest['contracts'].items():
+                                item = dep_b['abi'][role]; abi_path = ledger/item['abi']
+                                require(sha256(abi_path) == plan['owners']['ledger']['entries']['ledger/'+item['abi']], 'reviewed ABI regeneration')
+                                contracts[role] = AbiContract(abi_path, address, item['abiSha256'])
+                                code = rpcs[name].call('eth_getCode', [address, 'latest'])
+                                compiled = json.loads((ledger/'out'/(role+'.sol')/(role+'.json')).read_text())
+                                check_runtime_bytecode(code, compiled['deployedBytecode'])
+                            chains_b[name] = PublicChain(rpcs[name], chain_id=manifest['chainId'], contracts=contracts, output=inst/(name+'-native'))
+                        boot_path = ledger/'exports'/('bootstrap-'+run_b+'.json')
+                        command('owner-bootstrap-'+label, [tools['bash']['path'], str(ledger/'tools/bootstrap_fixture.sh'), rpcs['pbc'].url,
+                                                             str(path_b), str(boot_path)], ledger_root, budget['bootstrap'], env)
+                        raw_b = boot_path.read_bytes(); (inst/'bootstrap.json').write_bytes(raw_b)
+                        boot_b = execute_bootstrap(chains_b['pbc'], raw_b, deployment_bytes=bytes_b)
+                        (inst/'bootstrap-checked.json').write_text(json.dumps(boot_b, indent=2)+'\n')
+                        require(boot_b['wrongAdminCode'] == '16', 'source bootstrap issuer restriction')
+                        state_b = inst/'private-adapter-state'; state_b.mkdir(mode=0o700)
+                        process_b = stack.enter_context(JsonLinesProcess(
+                            [tools['python']['path'], '-m', 'hmbc_protocol.adapter', '--state-dir', str(state_b), '--deployment', str(path_b)],
+                            cwd=protocol, output=inst/'adapter', timeout=budget['transport'], stop_grace=budget['stopGrace'], env=service_env))
+                        record.setdefault('adapterProcesses', []).append(dict(profile=profile, label='adapter-'+label, pid=process_b.pid))
+                        (output.parent/'manifest.json').write_text(json.dumps(record, indent=2)+'\n')
+                        sequence_b = [0]
+                        def probe_b():
+                            label_b = f'{label}-worker-export-{sequence_b[0]:02}'; sequence_b[0] += 1
+                            row = record_command([tools['python']['path'], '-m', 'hmbc_protocol.worker_log', '--state-dir', str(state_b)],
+                                                 protocol, output/(label_b+'.txt'), timeout=budget['transport'], env=service_env,
+                                                 owned_process_group=True, stop_grace=budget['stopGrace'])
+                            observation = observe_worker_export(row['exitCode'], (output/(label_b+'.txt')).read_bytes(), state_b)
+                            row['workerObservation'] = 'instantiated' if observation['instantiated'] else 'never-instantiated (verified)'
+                            commands.append(row); (output/'commands.json').write_text(json.dumps(commands, indent=2)+'\n')
+                            return observation
+                        return dict(bytes=bytes_b, chains=chains_b, boot=boot_b, process=process_b, probe=probe_b, runId=run_b,
+                                    funding=dict(sourceBeforeDeploy=before, sourceAfterDeploy=after))
+                    source = None
+                    if destination_stress == 'wrong-destination':
+                        funding = dict(receiverAfterDeployAndBootstrap=balances(), resetEach='1000 ETH relay/CA-admin before each deployment')
+                        b = source_instance(); funding.update(b['funding'])
+                        record['profiles'][profile]['destinationFunding'] = funding
+                        record['profiles'][profile]['sourceDeployment'] = dict(
+                            runId=b['runId'], deployment=str(Path(profile)/'source-instance/deployment.json'),
+                            sha256=hashlib.sha256(b['bytes']).hexdigest(), sameChainPair=True,
+                            ownerCommands=['owner-deploy-source (ledger/tools/deploy_local.sh)', 'owner-bootstrap-source (ledger/tools/bootstrap_fixture.sh)'])
+                        source = dict(pbc=b['chains']['pbc'], dbc=b['chains']['dbc'], adapter=b['process'], deployment_bytes=b['bytes'],
+                                      user=b['boot']['users']['alice'], worker_snapshot=b['probe'])
+                    stress_result = execute_destination_stress(stress_chains['pbc'], stress_chains['dbc'], stress_process, deployment_bytes=stress_bytes,
+                                                               user_label='alice', user=stress_boot['users']['alice'], record=stress_record,
+                                                               policy=policy, variant=destination_stress, worker_snapshot=stress_worker_probe,
+                                                               source=source, output=output/'destination-stress')
+                    require(stress_result['ok'] is True and stress_result['variant'] == destination_stress, 'destination stress result')
+                    record['profiles'][profile]['destinationStress'] = dict(runId=stress_run, variant=destination_stress,
+                                                                            deployment=str(Path(profile)/'destination-instance/deployment.json'),
+                                                                            result=str(Path(profile)/'destination-stress/result.json'))
                 elif barrier_stress is not None:
                     from evaluation.barrier_stress import execute_barrier_stress
                     producer = plan['barrierProbe']['signList']

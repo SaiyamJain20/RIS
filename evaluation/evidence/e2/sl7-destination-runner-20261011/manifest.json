@@ -1,0 +1,118 @@
+{
+  "plan": {
+    "path": "evaluation/evidence/e2/sl7-destination-runner-20261011/integration-plan.json",
+    "sha256": "d4fa294edd954a137abbb62e34ebfffee2119a87eb6490b81777a555daeb5908",
+    "runId": "E2-SL7-destination-20261011",
+    "freezeMessage": "S3-0019",
+    "agent3SourcesCount": 102,
+    "agent3SourcesAggregate": "b14b81ebf8ba97a2eb3c1ad57baafe3de44668998115b7f7d60964d50ec11dab"
+  },
+  "changedAgent3SourcesSinceSL6": {
+    "evaluation/destination_stress.py": {
+      "old": null,
+      "new": "bc5cc0f4330b6bfe57d059945e9c7a22a59443fd15c52e0abdede8b66666b2cd"
+    },
+    "evaluation/e1.py": {
+      "old": "e6a073a3ab32b4a80c5efb72186be1906face74851aa0497ca146f9b8146eed3",
+      "new": "0a25f01f000b81bcd42bf4af9fb79e647977ade512a19008b6687f27190691c2"
+    },
+    "evaluation/e2.py": {
+      "old": "fa25ae8b4f68e7ca8b369f884b22495315dc56ad7210b22db81f65a2537b012e",
+      "new": "3ab09417f982da7c9717b8dba1b41b71849b6a59d122679c8656527c5cd3d0ee"
+    },
+    "evaluation/oracles/destination.py": {
+      "old": null,
+      "new": "794b03ad1fe81219ebc84b765665fb93cb590c8c5a8fcf2e2de1e4554fccfbcb"
+    }
+  },
+  "sourceFiles": {
+    "evaluation/destination_stress.py": "bc5cc0f4330b6bfe57d059945e9c7a22a59443fd15c52e0abdede8b66666b2cd",
+    "evaluation/oracles/destination.py": "794b03ad1fe81219ebc84b765665fb93cb590c8c5a8fcf2e2de1e4554fccfbcb",
+    "evaluation/e1.py": "0a25f01f000b81bcd42bf4af9fb79e647977ade512a19008b6687f27190691c2",
+    "evaluation/e2.py": "3ab09417f982da7c9717b8dba1b41b71849b6a59d122679c8656527c5cd3d0ee",
+    "evaluation/tests/test_destination_oracle.py": "35c45de503f77ee8242195d732ed28303aadc58652aa057c2c63bff1c0779844",
+    "evaluation/tests/test_destination_stress_collector.py": "55e6a4c876e5a9545c7242b90b8164e5da0e62d6b94ac14fa85ab4c821242130",
+    "evaluation/tests/test_e2_destination_plan.py": "f02df40dccbc1534c010926c4d3ea06572e94d80541a5d11e2aceba15a07d571"
+  },
+  "a1PreFreezeConditions": "2026-10-11 ~13:20 IST message: conditions 1-12 written into the tests before RED (point 8 skipped as allowed)",
+  "testFilesChangedAfterRed": [],
+  "base": "HEAD bf2d2b9 (0d9409e + SL6 result commits ecd0306 and bf2d2b9, which change no agent3Sources) + the SL7 files above; the suite ran before those commits with the SL6 evidence already present, byte-identical",
+  "suiteBracket": {
+    "files": 3724,
+    "pre": "982dc812dedee2a698aa10ac94a755ac3ecc2fdf424c6a4517dbaf15a05ff427",
+    "post": "982dc812dedee2a698aa10ac94a755ac3ecc2fdf424c6a4517dbaf15a05ff427",
+    "stable": true
+  },
+  "commands": [
+    {
+      "label": "red-before-implementation",
+      "order": "all SL7 tests (with the A1 conditions) written before any SL7 code",
+      "startedAt": "2026-10-11T07:51:37Z",
+      "exit": 1,
+      "argv": ".venv/bin/python -m pytest -q -p no:cacheprovider --color=no evaluation/tests/test_destination_oracle.py evaluation/tests/test_destination_stress_collector.py evaluation/tests/test_e2_destination_plan.py",
+      "result": "102 failed (71 oracle module missing, 18 collector module missing, 13 create_plan destination_stress)",
+      "output": "red-before-implementation.txt",
+      "outputSha256": "43441d849d9d6d2922718550060eb814090e5e409ff9829a23eb0b589f987531"
+    },
+    {
+      "label": "green-sl7-units",
+      "exit": 0,
+      "result": "oracle 71 + collector 18 passed"
+    },
+    {
+      "label": "oracle-reasons",
+      "exit": 0,
+      "result": "every oracle mutation fails at its intended check",
+      "output": "oracle-reasons.txt",
+      "outputSha256": "a8c8df7eff24dfd360555d46ac7aeccdd957c7df804eefdcf7ea41b19577f9bd"
+    },
+    {
+      "label": "control-reasons",
+      "exit": 0,
+      "result": "7/7 collector controls and 4 unsupported selections fail for the intended reason; the no-destination-binding double still rejects at step 1",
+      "output": "control-reasons.txt",
+      "outputSha256": "289c198f134eb4da6d2350fab08ee6b8f2f4ce7cf31c827cad5bcbc5ab4c2a5a"
+    },
+    {
+      "label": "green-plan-tests",
+      "exit": 0,
+      "result": "13 passed (test_e2_destination_plan.py)"
+    },
+    {
+      "label": "green-full-suite",
+      "argv": "PATH=$HOME/.foundry/bin:$PATH .venv/bin/python -m pytest -q -rs -p no:cacheprovider --color=no",
+      "startedAt": "2026-10-11T07:56:25Z",
+      "endedAt": "2026-10-11T08:03:58Z",
+      "wallSeconds": 453.315191807,
+      "exit": 0,
+      "result": "1596 passed in 452.90s (0:07:32)",
+      "output": "full-suite.txt",
+      "outputSha256": "6702a800e5bb9ca3db91ef03723fbac44b357daa50eecf957656a7ecca1d5f0d"
+    },
+    {
+      "label": "plan",
+      "argv": "e2.create_plan(run_id='E2-SL7-destination-20261011', freeze_message='S3-0019', destination_stress=True, review_mode='solo-correlated'); verify before/after write",
+      "exit": 0
+    }
+  ],
+  "versions": {
+    "python": "3.13.5",
+    "foundry": "1.8.5 (~/.foundry/bin)",
+    "ledgerPin": "933d2a7",
+    "protocolPin": "0716a8e"
+  },
+  "ledgerCodeCheck": {
+    "source": "git show 933d2a7 (DecisionVerifier.sol, ACSC.sol, KSSC.sol; tools/deploy_local.sh, tools/bootstrap_fixture.sh)",
+    "verifier": "DecisionVerifier.sol: step 1 line 60 (r.sourceChainId/psc vs ctx, WRONG_DESTINATION); step 2 lines 61-64 (r.destinationChainId/kssc vs ctx, WRONG_DESTINATION, skipped only by MUT_NO_DESTINATION_BINDING); step 9 line 74 (now >= d.expiresAt or r.expiresAt, EXPIRED)",
+    "lineNote": "A1 message cited step 1 as line 59 and step 2 as 60-63; at 933d2a7 they are line 60 and lines 61-64 (line 59 is the decision assignment)",
+    "paper": "ACSC.sol:140-167 policyEnf: no destination binding and no request expiry input; grant expiry block + grantTtl (line 154)",
+    "disagreement": null
+  },
+  "protocolCodeCheck": {
+    "source": "git show 0716a8e",
+    "worker": "adapter.py:133-136 _worker only from release/encrypt_record/finish_decryption; SL7 uses prepare_request, collect_checkpoint, collect_decision (Witness only, adapter.py:153-170)",
+    "witness": "witness.py:140 decision expiresAt = min(request, checkpoint, DBC now + 30)"
+  },
+  "servicesStarted": [],
+  "gitWrites": []
+}

@@ -1,0 +1,17 @@
+REASON repaired-e wrong-destination source-binding-ignored -> mined Rejected(WRONG_DESTINATION) without events failed
+REASON paper-strict wrong-destination paper-deny -> grant then access log failed
+REASON repaired-e expiry-boundary clock-plus-one -> DBC-only clock pinned: the consumption block timestamp equals request expiresAt exactly failed
+REASON paper-minimal expiry-boundary clock-plus-one -> DBC-only clock pinned: the consumption block timestamp equals request expiresAt exactly failed
+REASON repaired-e expiry-boundary decision-capped -> d.expiresAt == r.expiresAt and cp.expiresAt > r.expiresAt (neither checkpoint nor DBC-now cap is lower) failed
+REASON repaired-e expiry-boundary equality-accepted -> Native transaction status differs from expected control
+REASON repaired-e wrong-destination worker-appears -> verified never-instantiated worker (B) after REQUEST_ACCESS failed
+REASON unsupported expired-duty False -> frozen catalog variant/profile failed
+REASON unsupported wrong-issuer False -> frozen catalog variant/profile failed
+REASON unsupported wrong-destination False -> a source deployment B exactly for wrong destination failed
+REASON unsupported expiry-boundary True -> a source deployment B exactly for wrong destination failed
+ROW paper-strict wrong-destination SPEC_GAP None ACCEPT None None None {'requestTimestamp': '1791476014', 'requestExpiresAt': '1791476044', 'consumeTimestamp': '1791476014', 'decisionExpiresAt': None}
+ROW repaired-e wrong-destination REPAIR_SUPPORTED WRONG_DESTINATION REJECT 1 True None {'requestTimestamp': '1791476014', 'requestExpiresAt': '1791476044', 'consumeTimestamp': '1791476014', 'decisionExpiresAt': '1791476044'}
+ROW paper-strict expiry-boundary SPEC_GAP None ACCEPT None None {'consumeTimestamp': '1791476044', 'requestExpiresAt': '1791476044', 'grantExpiresAt': '1791476074'} {'requestTimestamp': '1791476014', 'requestExpiresAt': '1791476044', 'consumeTimestamp': '1791476044', 'dbcBefore': '1791476013', 'decisionExpiresAt': None, 'checkpointExpiresAt': None}
+ROW repaired-e expiry-boundary REPAIR_SUPPORTED EXPIRED REJECT 9 None {'consumeTimestamp': '1791476044', 'requestExpiresAt': '1791476044', 'decisionExpiresAt': '1791476044', 'checkpointExpiresAt': '1791476065'} {'requestTimestamp': '1791476014', 'requestExpiresAt': '1791476044', 'consumeTimestamp': '1791476044', 'dbcBefore': '1791476015', 'decisionExpiresAt': '1791476044', 'checkpointExpiresAt': '1791476065'}
+ROW mutant-no-destination-binding (double) REPAIR_SUPPORTED WRONG_DESTINATION 1
+16 passed in 1.71s

@@ -1,0 +1,44 @@
+dest paper-strict worker-a-changed -> verified never-instantiated worker, unchanged (no SL7 step is a worker operation) failed
+dest paper-strict worker-b-changed -> verified never-instantiated worker, unchanged (no SL7 step is a worker operation) failed
+dest paper-strict receiver-has-request -> A PBC has no such request failed
+dest paper-strict request-not-for-source -> the request is a valid request for deployment B failed
+dest paper-strict same-deployment -> B is a different deployment than the receiver A failed
+dest paper-strict source-state-changed -> source deployment B untouched: request forwarded, no grant, nonce unchanged failed
+dest paper-strict rejected -> paper policyEnf at A grants failed
+dest paper-strict grant-other-expiry -> paper GrantIssued: relay reference, recipient 0, expiry block + grantTtl (ACSC.sol:154), no nonce failed
+dest paper-strict grant-recipient -> paper GrantIssued: relay reference, recipient 0, expiry block + grantTtl (ACSC.sol:154), no nonce failed
+dest paper-strict state-unchanged -> only the paper grant delta failed
+dest paper-strict decision-present -> paper profiles have no certificate failed
+dest repaired-e worker-a-changed -> verified never-instantiated worker, unchanged (no SL7 step is a worker operation) failed
+dest repaired-e worker-b-changed -> verified never-instantiated worker, unchanged (no SL7 step is a worker operation) failed
+dest repaired-e receiver-has-request -> A PBC has no such request failed
+dest repaired-e request-not-for-source -> the request is a valid request for deployment B failed
+dest repaired-e same-deployment -> B is a different deployment than the receiver A failed
+dest repaired-e source-state-changed -> source deployment B untouched: request forwarded, no grant, nonce unchanged failed
+dest repaired-e accepted -> mined Rejected(WRONG_DESTINATION) without events failed
+dest repaired-e other-code -> mined Rejected(WRONG_DESTINATION) without events failed
+dest repaired-e two-decisions -> exactly one collect_decision for the request (A31) failed
+dest repaired-e receiver-changed -> no grant, nonce, count or log change at A failed
+dest repaired-e source-matches-receiver-psc -> B is a different deployment than the receiver A failed
+bound paper-strict worker-changed -> verified never-instantiated worker, unchanged (no SL7 step is a worker operation) failed
+bound paper-strict consume-plus-one -> DBC-only clock pinned: the consumption block timestamp equals request expiresAt exactly failed
+bound paper-strict consume-minus-one -> DBC-only clock pinned: the consumption block timestamp equals request expiresAt exactly failed
+bound paper-strict clock-target-other -> DBC-only clock pinned: the consumption block timestamp equals request expiresAt exactly failed
+bound paper-strict clock-already-past -> DBC-only clock pinned: the consumption block timestamp equals request expiresAt exactly failed
+bound paper-strict request-not-forwarded -> forwarded request, no grant failed
+bound paper-strict rejected -> paper policyEnf grants at the request expiry failed
+bound paper-strict grant-other-expiry -> paper GrantIssued: relay reference, recipient 0, expiry block + grantTtl (ACSC.sol:154), no nonce failed
+bound paper-strict state-unchanged -> only the paper grant delta failed
+bound paper-strict decision-present -> paper profiles have no certificate failed
+bound repaired-e worker-changed -> verified never-instantiated worker, unchanged (no SL7 step is a worker operation) failed
+bound repaired-e consume-plus-one -> DBC-only clock pinned: the consumption block timestamp equals request expiresAt exactly failed
+bound repaired-e consume-minus-one -> DBC-only clock pinned: the consumption block timestamp equals request expiresAt exactly failed
+bound repaired-e clock-target-other -> DBC-only clock pinned: the consumption block timestamp equals request expiresAt exactly failed
+bound repaired-e clock-already-past -> DBC-only clock pinned: the consumption block timestamp equals request expiresAt exactly failed
+bound repaired-e request-not-forwarded -> forwarded request, no grant failed
+bound repaired-e accepted -> mined Rejected(EXPIRED) without events failed
+bound repaired-e other-code -> mined Rejected(EXPIRED) without events failed
+bound repaired-e two-decisions -> exactly one collect_decision for the request (A31) failed
+bound repaired-e decision-capped -> d.expiresAt == r.expiresAt and cp.expiresAt > r.expiresAt (neither checkpoint nor DBC-now cap is lower) failed
+bound repaired-e checkpoint-not-above -> d.expiresAt == r.expiresAt and cp.expiresAt > r.expiresAt (neither checkpoint nor DBC-now cap is lower) failed
+bound repaired-e state-changed -> no grant, nonce, count or log change failed

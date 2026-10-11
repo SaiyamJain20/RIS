@@ -1,0 +1,3370 @@
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF [ 70%]
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF                                           [100%]
+=================================== FAILURES ===================================
+____________ test_wrong_destination_expected_classes[paper-strict] _____________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-strict'
+
+    @pytest.mark.parametrize('profile', PROFILES)
+    def test_wrong_destination_expected_classes(artifacts, profile):
+>       result = oracle('check_wrong_destination')(**destination_facts(artifacts, profile))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:102: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+____________ test_wrong_destination_expected_classes[paper-minimal] ____________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-minimal'
+
+    @pytest.mark.parametrize('profile', PROFILES)
+    def test_wrong_destination_expected_classes(artifacts, profile):
+>       result = oracle('check_wrong_destination')(**destination_facts(artifacts, profile))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:102: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_____________ test_wrong_destination_expected_classes[repaired-e] ______________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'repaired-e'
+
+    @pytest.mark.parametrize('profile', PROFILES)
+    def test_wrong_destination_expected_classes(artifacts, profile):
+>       result = oracle('check_wrong_destination')(**destination_facts(artifacts, profile))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:102: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_____________ test_expiry_boundary_expected_classes[paper-strict] ______________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-strict'
+
+    @pytest.mark.parametrize('profile', PROFILES)
+    def test_expiry_boundary_expected_classes(artifacts, profile):
+        f = boundary_facts(artifacts, profile)
+>       result = oracle('check_expiry_boundary')(**f)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:115: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_____________ test_expiry_boundary_expected_classes[paper-minimal] _____________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-minimal'
+
+    @pytest.mark.parametrize('profile', PROFILES)
+    def test_expiry_boundary_expected_classes(artifacts, profile):
+        f = boundary_facts(artifacts, profile)
+>       result = oracle('check_expiry_boundary')(**f)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:115: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+______________ test_expiry_boundary_expected_classes[repaired-e] _______________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'repaired-e'
+
+    @pytest.mark.parametrize('profile', PROFILES)
+    def test_expiry_boundary_expected_classes(artifacts, profile):
+        f = boundary_facts(artifacts, profile)
+>       result = oracle('check_expiry_boundary')(**f)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:115: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_____ test_wrong_destination_paper_refuses[worker-a-changed-paper-strict] ______
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-strict', mutation = 'worker-a-changed'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_PAPER)
+    def test_wrong_destination_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_____ test_wrong_destination_paper_refuses[worker-a-changed-paper-minimal] _____
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-minimal', mutation = 'worker-a-changed'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_PAPER)
+    def test_wrong_destination_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_____ test_wrong_destination_paper_refuses[worker-b-changed-paper-strict] ______
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-strict', mutation = 'worker-b-changed'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_PAPER)
+    def test_wrong_destination_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_____ test_wrong_destination_paper_refuses[worker-b-changed-paper-minimal] _____
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-minimal', mutation = 'worker-b-changed'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_PAPER)
+    def test_wrong_destination_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+___ test_wrong_destination_paper_refuses[receiver-has-request-paper-strict] ____
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-strict', mutation = 'receiver-has-request'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_PAPER)
+    def test_wrong_destination_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+___ test_wrong_destination_paper_refuses[receiver-has-request-paper-minimal] ___
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-minimal', mutation = 'receiver-has-request'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_PAPER)
+    def test_wrong_destination_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+__ test_wrong_destination_paper_refuses[request-not-for-source-paper-strict] ___
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-strict', mutation = 'request-not-for-source'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_PAPER)
+    def test_wrong_destination_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+__ test_wrong_destination_paper_refuses[request-not-for-source-paper-minimal] __
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-minimal', mutation = 'request-not-for-source'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_PAPER)
+    def test_wrong_destination_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+______ test_wrong_destination_paper_refuses[same-deployment-paper-strict] ______
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-strict', mutation = 'same-deployment'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_PAPER)
+    def test_wrong_destination_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_____ test_wrong_destination_paper_refuses[same-deployment-paper-minimal] ______
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-minimal', mutation = 'same-deployment'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_PAPER)
+    def test_wrong_destination_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+___ test_wrong_destination_paper_refuses[source-state-changed-paper-strict] ____
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-strict', mutation = 'source-state-changed'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_PAPER)
+    def test_wrong_destination_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+___ test_wrong_destination_paper_refuses[source-state-changed-paper-minimal] ___
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-minimal', mutation = 'source-state-changed'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_PAPER)
+    def test_wrong_destination_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_________ test_wrong_destination_paper_refuses[rejected-paper-strict] __________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-strict', mutation = 'rejected'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_PAPER)
+    def test_wrong_destination_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_________ test_wrong_destination_paper_refuses[rejected-paper-minimal] _________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-minimal', mutation = 'rejected'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_PAPER)
+    def test_wrong_destination_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+____ test_wrong_destination_paper_refuses[grant-other-expiry-paper-strict] _____
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-strict', mutation = 'grant-other-expiry'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_PAPER)
+    def test_wrong_destination_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+____ test_wrong_destination_paper_refuses[grant-other-expiry-paper-minimal] ____
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-minimal', mutation = 'grant-other-expiry'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_PAPER)
+    def test_wrong_destination_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+______ test_wrong_destination_paper_refuses[grant-recipient-paper-strict] ______
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-strict', mutation = 'grant-recipient'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_PAPER)
+    def test_wrong_destination_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_____ test_wrong_destination_paper_refuses[grant-recipient-paper-minimal] ______
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-minimal', mutation = 'grant-recipient'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_PAPER)
+    def test_wrong_destination_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+______ test_wrong_destination_paper_refuses[state-unchanged-paper-strict] ______
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-strict', mutation = 'state-unchanged'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_PAPER)
+    def test_wrong_destination_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_____ test_wrong_destination_paper_refuses[state-unchanged-paper-minimal] ______
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-minimal', mutation = 'state-unchanged'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_PAPER)
+    def test_wrong_destination_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_____ test_wrong_destination_paper_refuses[decision-present-paper-strict] ______
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-strict', mutation = 'decision-present'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_PAPER)
+    def test_wrong_destination_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_____ test_wrong_destination_paper_refuses[decision-present-paper-minimal] _____
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-minimal', mutation = 'decision-present'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_PAPER)
+    def test_wrong_destination_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+__________ test_wrong_destination_repaired_refuses[worker-a-changed] ___________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+mutation = 'worker-a-changed'
+
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_REPAIRED)
+    def test_wrong_destination_repaired_refuses(artifacts, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, 'repaired-e'), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+__________ test_wrong_destination_repaired_refuses[worker-b-changed] ___________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+mutation = 'worker-b-changed'
+
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_REPAIRED)
+    def test_wrong_destination_repaired_refuses(artifacts, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, 'repaired-e'), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+________ test_wrong_destination_repaired_refuses[receiver-has-request] _________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+mutation = 'receiver-has-request'
+
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_REPAIRED)
+    def test_wrong_destination_repaired_refuses(artifacts, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, 'repaired-e'), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_______ test_wrong_destination_repaired_refuses[request-not-for-source] ________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+mutation = 'request-not-for-source'
+
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_REPAIRED)
+    def test_wrong_destination_repaired_refuses(artifacts, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, 'repaired-e'), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+___________ test_wrong_destination_repaired_refuses[same-deployment] ___________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+mutation = 'same-deployment'
+
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_REPAIRED)
+    def test_wrong_destination_repaired_refuses(artifacts, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, 'repaired-e'), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+________ test_wrong_destination_repaired_refuses[source-state-changed] _________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+mutation = 'source-state-changed'
+
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_REPAIRED)
+    def test_wrong_destination_repaired_refuses(artifacts, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, 'repaired-e'), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+______________ test_wrong_destination_repaired_refuses[accepted] _______________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+mutation = 'accepted'
+
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_REPAIRED)
+    def test_wrong_destination_repaired_refuses(artifacts, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, 'repaired-e'), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_____________ test_wrong_destination_repaired_refuses[other-code] ______________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+mutation = 'other-code'
+
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_REPAIRED)
+    def test_wrong_destination_repaired_refuses(artifacts, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, 'repaired-e'), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+____________ test_wrong_destination_repaired_refuses[two-decisions] ____________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+mutation = 'two-decisions'
+
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_REPAIRED)
+    def test_wrong_destination_repaired_refuses(artifacts, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, 'repaired-e'), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+__________ test_wrong_destination_repaired_refuses[receiver-changed] ___________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+mutation = 'receiver-changed'
+
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_REPAIRED)
+    def test_wrong_destination_repaired_refuses(artifacts, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, 'repaired-e'), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_____ test_wrong_destination_repaired_refuses[source-matches-receiver-psc] _____
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+mutation = 'source-matches-receiver-psc'
+
+    @pytest.mark.parametrize('mutation', DEST_COMMON+DEST_REPAIRED)
+    def test_wrong_destination_repaired_refuses(artifacts, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_wrong_destination')(**mutate_destination(destination_facts(artifacts, 'repaired-e'), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_______ test_expiry_boundary_paper_refuses[worker-changed-paper-strict] ________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-strict', mutation = 'worker-changed'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_PAPER)
+    def test_expiry_boundary_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_______ test_expiry_boundary_paper_refuses[worker-changed-paper-minimal] _______
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-minimal', mutation = 'worker-changed'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_PAPER)
+    def test_expiry_boundary_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+______ test_expiry_boundary_paper_refuses[consume-plus-one-paper-strict] _______
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-strict', mutation = 'consume-plus-one'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_PAPER)
+    def test_expiry_boundary_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+______ test_expiry_boundary_paper_refuses[consume-plus-one-paper-minimal] ______
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-minimal', mutation = 'consume-plus-one'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_PAPER)
+    def test_expiry_boundary_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+______ test_expiry_boundary_paper_refuses[consume-minus-one-paper-strict] ______
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-strict', mutation = 'consume-minus-one'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_PAPER)
+    def test_expiry_boundary_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_____ test_expiry_boundary_paper_refuses[consume-minus-one-paper-minimal] ______
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-minimal', mutation = 'consume-minus-one'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_PAPER)
+    def test_expiry_boundary_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_____ test_expiry_boundary_paper_refuses[clock-target-other-paper-strict] ______
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-strict', mutation = 'clock-target-other'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_PAPER)
+    def test_expiry_boundary_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_____ test_expiry_boundary_paper_refuses[clock-target-other-paper-minimal] _____
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-minimal', mutation = 'clock-target-other'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_PAPER)
+    def test_expiry_boundary_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_____ test_expiry_boundary_paper_refuses[clock-already-past-paper-strict] ______
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-strict', mutation = 'clock-already-past'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_PAPER)
+    def test_expiry_boundary_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_____ test_expiry_boundary_paper_refuses[clock-already-past-paper-minimal] _____
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-minimal', mutation = 'clock-already-past'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_PAPER)
+    def test_expiry_boundary_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+____ test_expiry_boundary_paper_refuses[request-not-forwarded-paper-strict] ____
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-strict', mutation = 'request-not-forwarded'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_PAPER)
+    def test_expiry_boundary_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+___ test_expiry_boundary_paper_refuses[request-not-forwarded-paper-minimal] ____
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-minimal', mutation = 'request-not-forwarded'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_PAPER)
+    def test_expiry_boundary_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+__________ test_expiry_boundary_paper_refuses[rejected-paper-strict] ___________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-strict', mutation = 'rejected'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_PAPER)
+    def test_expiry_boundary_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+__________ test_expiry_boundary_paper_refuses[rejected-paper-minimal] __________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-minimal', mutation = 'rejected'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_PAPER)
+    def test_expiry_boundary_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_____ test_expiry_boundary_paper_refuses[grant-other-expiry-paper-strict] ______
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-strict', mutation = 'grant-other-expiry'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_PAPER)
+    def test_expiry_boundary_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_____ test_expiry_boundary_paper_refuses[grant-other-expiry-paper-minimal] _____
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-minimal', mutation = 'grant-other-expiry'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_PAPER)
+    def test_expiry_boundary_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_______ test_expiry_boundary_paper_refuses[state-unchanged-paper-strict] _______
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-strict', mutation = 'state-unchanged'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_PAPER)
+    def test_expiry_boundary_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+______ test_expiry_boundary_paper_refuses[state-unchanged-paper-minimal] _______
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-minimal', mutation = 'state-unchanged'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_PAPER)
+    def test_expiry_boundary_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+______ test_expiry_boundary_paper_refuses[decision-present-paper-strict] _______
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-strict', mutation = 'decision-present'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_PAPER)
+    def test_expiry_boundary_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+______ test_expiry_boundary_paper_refuses[decision-present-paper-minimal] ______
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+profile = 'paper-minimal', mutation = 'decision-present'
+
+    @pytest.mark.parametrize('profile', PROFILES[:2])
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_PAPER)
+    def test_expiry_boundary_paper_refuses(artifacts, profile, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, profile), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+____________ test_expiry_boundary_repaired_refuses[worker-changed] _____________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+mutation = 'worker-changed'
+
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_REPAIRED)
+    def test_expiry_boundary_repaired_refuses(artifacts, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, 'repaired-e'), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:201: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+___________ test_expiry_boundary_repaired_refuses[consume-plus-one] ____________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+mutation = 'consume-plus-one'
+
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_REPAIRED)
+    def test_expiry_boundary_repaired_refuses(artifacts, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, 'repaired-e'), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:201: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+___________ test_expiry_boundary_repaired_refuses[consume-minus-one] ___________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+mutation = 'consume-minus-one'
+
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_REPAIRED)
+    def test_expiry_boundary_repaired_refuses(artifacts, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, 'repaired-e'), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:201: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+__________ test_expiry_boundary_repaired_refuses[clock-target-other] ___________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+mutation = 'clock-target-other'
+
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_REPAIRED)
+    def test_expiry_boundary_repaired_refuses(artifacts, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, 'repaired-e'), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:201: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+__________ test_expiry_boundary_repaired_refuses[clock-already-past] ___________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+mutation = 'clock-already-past'
+
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_REPAIRED)
+    def test_expiry_boundary_repaired_refuses(artifacts, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, 'repaired-e'), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:201: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_________ test_expiry_boundary_repaired_refuses[request-not-forwarded] _________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+mutation = 'request-not-forwarded'
+
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_REPAIRED)
+    def test_expiry_boundary_repaired_refuses(artifacts, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, 'repaired-e'), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:201: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_______________ test_expiry_boundary_repaired_refuses[accepted] ________________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+mutation = 'accepted'
+
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_REPAIRED)
+    def test_expiry_boundary_repaired_refuses(artifacts, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, 'repaired-e'), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:201: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+______________ test_expiry_boundary_repaired_refuses[other-code] _______________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+mutation = 'other-code'
+
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_REPAIRED)
+    def test_expiry_boundary_repaired_refuses(artifacts, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, 'repaired-e'), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:201: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_____________ test_expiry_boundary_repaired_refuses[two-decisions] _____________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+mutation = 'two-decisions'
+
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_REPAIRED)
+    def test_expiry_boundary_repaired_refuses(artifacts, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, 'repaired-e'), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:201: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+____________ test_expiry_boundary_repaired_refuses[decision-capped] ____________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+mutation = 'decision-capped'
+
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_REPAIRED)
+    def test_expiry_boundary_repaired_refuses(artifacts, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, 'repaired-e'), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:201: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_________ test_expiry_boundary_repaired_refuses[checkpoint-not-above] __________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+mutation = 'checkpoint-not-above'
+
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_REPAIRED)
+    def test_expiry_boundary_repaired_refuses(artifacts, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, 'repaired-e'), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:201: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_____________ test_expiry_boundary_repaired_refuses[state-changed] _____________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+mutation = 'state-changed'
+
+    @pytest.mark.parametrize('mutation', BOUND_COMMON+BOUND_REPAIRED)
+    def test_expiry_boundary_repaired_refuses(artifacts, mutation):
+        with pytest.raises(ValueError):
+>           oracle('check_expiry_boundary')(**mutate_boundary(boundary_facts(artifacts, 'repaired-e'), mutation))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_oracle.py:201: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_oracle.py:34: in oracle
+    module = importlib.import_module('evaluation.oracles.destination')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.oracles.destination'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.oracles.destination'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_____________________ test_wrong_destination[paper-strict] _____________________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-67/test_wrong_destination_paper_s0')
+profile = 'paper-strict'
+
+    @pytest.mark.parametrize('profile', PROFILES)
+    def test_wrong_destination(artifacts, inputs, tmp_path, profile):
+        a = DestWorld(artifacts, inputs, profile); b = DestWorld(relocated(artifacts), inputs, profile)
+>       result = run(a, tmp_path, 'wrong-destination', b)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_stress_collector.py:104: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_stress_collector.py:94: in run
+    return collector()(a.pbc, a.dbc, a, deployment_bytes=json.dumps(a.dep).encode(), user_label='alice', user=a.users['alice'], record=a.record,
+           ^^^^^^^^^^^
+evaluation/tests/test_destination_stress_collector.py:86: in collector
+    module = importlib.import_module('evaluation.destination_stress')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.destination_stress'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.destination_stress'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+____________________ test_wrong_destination[paper-minimal] _____________________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-67/test_wrong_destination_paper_m0')
+profile = 'paper-minimal'
+
+    @pytest.mark.parametrize('profile', PROFILES)
+    def test_wrong_destination(artifacts, inputs, tmp_path, profile):
+        a = DestWorld(artifacts, inputs, profile); b = DestWorld(relocated(artifacts), inputs, profile)
+>       result = run(a, tmp_path, 'wrong-destination', b)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_stress_collector.py:104: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_stress_collector.py:94: in run
+    return collector()(a.pbc, a.dbc, a, deployment_bytes=json.dumps(a.dep).encode(), user_label='alice', user=a.users['alice'], record=a.record,
+           ^^^^^^^^^^^
+evaluation/tests/test_destination_stress_collector.py:86: in collector
+    module = importlib.import_module('evaluation.destination_stress')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.destination_stress'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.destination_stress'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+______________________ test_wrong_destination[repaired-e] ______________________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-67/test_wrong_destination_repaire0')
+profile = 'repaired-e'
+
+    @pytest.mark.parametrize('profile', PROFILES)
+    def test_wrong_destination(artifacts, inputs, tmp_path, profile):
+        a = DestWorld(artifacts, inputs, profile); b = DestWorld(relocated(artifacts), inputs, profile)
+>       result = run(a, tmp_path, 'wrong-destination', b)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_stress_collector.py:104: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_stress_collector.py:94: in run
+    return collector()(a.pbc, a.dbc, a, deployment_bytes=json.dumps(a.dep).encode(), user_label='alice', user=a.users['alice'], record=a.record,
+           ^^^^^^^^^^^
+evaluation/tests/test_destination_stress_collector.py:86: in collector
+    module = importlib.import_module('evaluation.destination_stress')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.destination_stress'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.destination_stress'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+______ test_wrong_destination_cannot_kill_the_destination_binding_mutant _______
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-67/test_wrong_destination_cannot_0')
+
+    def test_wrong_destination_cannot_kill_the_destination_binding_mutant(artifacts, inputs, tmp_path):
+        # A1-0039 G-3 / A1 condition 2: step 1 still fires when step 2 is removed, so this row passes unchanged.
+        a = DestWorld(artifacts, inputs, 'repaired-e', 'destination-binding-ignored'); b = DestWorld(relocated(artifacts), inputs, 'repaired-e')
+>       result = run(a, tmp_path, 'wrong-destination', b)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_stress_collector.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_stress_collector.py:94: in run
+    return collector()(a.pbc, a.dbc, a, deployment_bytes=json.dumps(a.dep).encode(), user_label='alice', user=a.users['alice'], record=a.record,
+           ^^^^^^^^^^^
+evaluation/tests/test_destination_stress_collector.py:86: in collector
+    module = importlib.import_module('evaluation.destination_stress')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.destination_stress'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.destination_stress'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+______________________ test_expiry_boundary[paper-strict] ______________________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-67/test_expiry_boundary_paper_str0')
+profile = 'paper-strict'
+
+    @pytest.mark.parametrize('profile', PROFILES)
+    def test_expiry_boundary(artifacts, inputs, tmp_path, profile):
+        a = DestWorld(artifacts, inputs, profile)
+>       result = run(a, tmp_path, 'expiry-boundary')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_stress_collector.py:126: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_stress_collector.py:94: in run
+    return collector()(a.pbc, a.dbc, a, deployment_bytes=json.dumps(a.dep).encode(), user_label='alice', user=a.users['alice'], record=a.record,
+           ^^^^^^^^^^^
+evaluation/tests/test_destination_stress_collector.py:86: in collector
+    module = importlib.import_module('evaluation.destination_stress')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.destination_stress'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.destination_stress'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_____________________ test_expiry_boundary[paper-minimal] ______________________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-67/test_expiry_boundary_paper_min0')
+profile = 'paper-minimal'
+
+    @pytest.mark.parametrize('profile', PROFILES)
+    def test_expiry_boundary(artifacts, inputs, tmp_path, profile):
+        a = DestWorld(artifacts, inputs, profile)
+>       result = run(a, tmp_path, 'expiry-boundary')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_stress_collector.py:126: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_stress_collector.py:94: in run
+    return collector()(a.pbc, a.dbc, a, deployment_bytes=json.dumps(a.dep).encode(), user_label='alice', user=a.users['alice'], record=a.record,
+           ^^^^^^^^^^^
+evaluation/tests/test_destination_stress_collector.py:86: in collector
+    module = importlib.import_module('evaluation.destination_stress')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.destination_stress'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.destination_stress'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_______________________ test_expiry_boundary[repaired-e] _______________________
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-67/test_expiry_boundary_repaired_0')
+profile = 'repaired-e'
+
+    @pytest.mark.parametrize('profile', PROFILES)
+    def test_expiry_boundary(artifacts, inputs, tmp_path, profile):
+        a = DestWorld(artifacts, inputs, profile)
+>       result = run(a, tmp_path, 'expiry-boundary')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/tests/test_destination_stress_collector.py:126: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_stress_collector.py:94: in run
+    return collector()(a.pbc, a.dbc, a, deployment_bytes=json.dumps(a.dep).encode(), user_label='alice', user=a.users['alice'], record=a.record,
+           ^^^^^^^^^^^
+evaluation/tests/test_destination_stress_collector.py:86: in collector
+    module = importlib.import_module('evaluation.destination_stress')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.destination_stress'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.destination_stress'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_ test_false_observations_fail_visibly[repaired-e-wrong-destination-source-binding-ignored] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-67/test_false_observations_fail_v0')
+profile = 'repaired-e', variant = 'wrong-destination'
+control = 'source-binding-ignored'
+
+    @pytest.mark.parametrize('profile,variant,control', [
+        ('repaired-e', 'wrong-destination', 'source-binding-ignored'),
+        ('paper-strict', 'wrong-destination', 'paper-deny'),
+        ('repaired-e', 'expiry-boundary', 'clock-plus-one'),
+        ('paper-minimal', 'expiry-boundary', 'clock-plus-one'),
+        ('repaired-e', 'expiry-boundary', 'decision-capped'),
+        ('repaired-e', 'expiry-boundary', 'equality-accepted'),
+        ('repaired-e', 'wrong-destination', 'worker-appears'),
+    ])
+    def test_false_observations_fail_visibly(artifacts, inputs, tmp_path, profile, variant, control):
+        a = DestWorld(artifacts, inputs, profile, control)
+        b = DestWorld(relocated(artifacts), inputs, profile, control if control == 'worker-appears' else None) if variant == 'wrong-destination' else None
+        with pytest.raises(ValueError):
+>           run(a, tmp_path, variant, b)
+
+evaluation/tests/test_destination_stress_collector.py:150: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_stress_collector.py:94: in run
+    return collector()(a.pbc, a.dbc, a, deployment_bytes=json.dumps(a.dep).encode(), user_label='alice', user=a.users['alice'], record=a.record,
+           ^^^^^^^^^^^
+evaluation/tests/test_destination_stress_collector.py:86: in collector
+    module = importlib.import_module('evaluation.destination_stress')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.destination_stress'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.destination_stress'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_ test_false_observations_fail_visibly[paper-strict-wrong-destination-paper-deny] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-67/test_false_observations_fail_v1')
+profile = 'paper-strict', variant = 'wrong-destination', control = 'paper-deny'
+
+    @pytest.mark.parametrize('profile,variant,control', [
+        ('repaired-e', 'wrong-destination', 'source-binding-ignored'),
+        ('paper-strict', 'wrong-destination', 'paper-deny'),
+        ('repaired-e', 'expiry-boundary', 'clock-plus-one'),
+        ('paper-minimal', 'expiry-boundary', 'clock-plus-one'),
+        ('repaired-e', 'expiry-boundary', 'decision-capped'),
+        ('repaired-e', 'expiry-boundary', 'equality-accepted'),
+        ('repaired-e', 'wrong-destination', 'worker-appears'),
+    ])
+    def test_false_observations_fail_visibly(artifacts, inputs, tmp_path, profile, variant, control):
+        a = DestWorld(artifacts, inputs, profile, control)
+        b = DestWorld(relocated(artifacts), inputs, profile, control if control == 'worker-appears' else None) if variant == 'wrong-destination' else None
+        with pytest.raises(ValueError):
+>           run(a, tmp_path, variant, b)
+
+evaluation/tests/test_destination_stress_collector.py:150: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_stress_collector.py:94: in run
+    return collector()(a.pbc, a.dbc, a, deployment_bytes=json.dumps(a.dep).encode(), user_label='alice', user=a.users['alice'], record=a.record,
+           ^^^^^^^^^^^
+evaluation/tests/test_destination_stress_collector.py:86: in collector
+    module = importlib.import_module('evaluation.destination_stress')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.destination_stress'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.destination_stress'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_ test_false_observations_fail_visibly[repaired-e-expiry-boundary-clock-plus-one] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-67/test_false_observations_fail_v2')
+profile = 'repaired-e', variant = 'expiry-boundary', control = 'clock-plus-one'
+
+    @pytest.mark.parametrize('profile,variant,control', [
+        ('repaired-e', 'wrong-destination', 'source-binding-ignored'),
+        ('paper-strict', 'wrong-destination', 'paper-deny'),
+        ('repaired-e', 'expiry-boundary', 'clock-plus-one'),
+        ('paper-minimal', 'expiry-boundary', 'clock-plus-one'),
+        ('repaired-e', 'expiry-boundary', 'decision-capped'),
+        ('repaired-e', 'expiry-boundary', 'equality-accepted'),
+        ('repaired-e', 'wrong-destination', 'worker-appears'),
+    ])
+    def test_false_observations_fail_visibly(artifacts, inputs, tmp_path, profile, variant, control):
+        a = DestWorld(artifacts, inputs, profile, control)
+        b = DestWorld(relocated(artifacts), inputs, profile, control if control == 'worker-appears' else None) if variant == 'wrong-destination' else None
+        with pytest.raises(ValueError):
+>           run(a, tmp_path, variant, b)
+
+evaluation/tests/test_destination_stress_collector.py:150: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_stress_collector.py:94: in run
+    return collector()(a.pbc, a.dbc, a, deployment_bytes=json.dumps(a.dep).encode(), user_label='alice', user=a.users['alice'], record=a.record,
+           ^^^^^^^^^^^
+evaluation/tests/test_destination_stress_collector.py:86: in collector
+    module = importlib.import_module('evaluation.destination_stress')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.destination_stress'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.destination_stress'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_ test_false_observations_fail_visibly[paper-minimal-expiry-boundary-clock-plus-one] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-67/test_false_observations_fail_v3')
+profile = 'paper-minimal', variant = 'expiry-boundary'
+control = 'clock-plus-one'
+
+    @pytest.mark.parametrize('profile,variant,control', [
+        ('repaired-e', 'wrong-destination', 'source-binding-ignored'),
+        ('paper-strict', 'wrong-destination', 'paper-deny'),
+        ('repaired-e', 'expiry-boundary', 'clock-plus-one'),
+        ('paper-minimal', 'expiry-boundary', 'clock-plus-one'),
+        ('repaired-e', 'expiry-boundary', 'decision-capped'),
+        ('repaired-e', 'expiry-boundary', 'equality-accepted'),
+        ('repaired-e', 'wrong-destination', 'worker-appears'),
+    ])
+    def test_false_observations_fail_visibly(artifacts, inputs, tmp_path, profile, variant, control):
+        a = DestWorld(artifacts, inputs, profile, control)
+        b = DestWorld(relocated(artifacts), inputs, profile, control if control == 'worker-appears' else None) if variant == 'wrong-destination' else None
+        with pytest.raises(ValueError):
+>           run(a, tmp_path, variant, b)
+
+evaluation/tests/test_destination_stress_collector.py:150: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_stress_collector.py:94: in run
+    return collector()(a.pbc, a.dbc, a, deployment_bytes=json.dumps(a.dep).encode(), user_label='alice', user=a.users['alice'], record=a.record,
+           ^^^^^^^^^^^
+evaluation/tests/test_destination_stress_collector.py:86: in collector
+    module = importlib.import_module('evaluation.destination_stress')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.destination_stress'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.destination_stress'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_ test_false_observations_fail_visibly[repaired-e-expiry-boundary-decision-capped] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-67/test_false_observations_fail_v4')
+profile = 'repaired-e', variant = 'expiry-boundary', control = 'decision-capped'
+
+    @pytest.mark.parametrize('profile,variant,control', [
+        ('repaired-e', 'wrong-destination', 'source-binding-ignored'),
+        ('paper-strict', 'wrong-destination', 'paper-deny'),
+        ('repaired-e', 'expiry-boundary', 'clock-plus-one'),
+        ('paper-minimal', 'expiry-boundary', 'clock-plus-one'),
+        ('repaired-e', 'expiry-boundary', 'decision-capped'),
+        ('repaired-e', 'expiry-boundary', 'equality-accepted'),
+        ('repaired-e', 'wrong-destination', 'worker-appears'),
+    ])
+    def test_false_observations_fail_visibly(artifacts, inputs, tmp_path, profile, variant, control):
+        a = DestWorld(artifacts, inputs, profile, control)
+        b = DestWorld(relocated(artifacts), inputs, profile, control if control == 'worker-appears' else None) if variant == 'wrong-destination' else None
+        with pytest.raises(ValueError):
+>           run(a, tmp_path, variant, b)
+
+evaluation/tests/test_destination_stress_collector.py:150: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_stress_collector.py:94: in run
+    return collector()(a.pbc, a.dbc, a, deployment_bytes=json.dumps(a.dep).encode(), user_label='alice', user=a.users['alice'], record=a.record,
+           ^^^^^^^^^^^
+evaluation/tests/test_destination_stress_collector.py:86: in collector
+    module = importlib.import_module('evaluation.destination_stress')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.destination_stress'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.destination_stress'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_ test_false_observations_fail_visibly[repaired-e-expiry-boundary-equality-accepted] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-67/test_false_observations_fail_v5')
+profile = 'repaired-e', variant = 'expiry-boundary'
+control = 'equality-accepted'
+
+    @pytest.mark.parametrize('profile,variant,control', [
+        ('repaired-e', 'wrong-destination', 'source-binding-ignored'),
+        ('paper-strict', 'wrong-destination', 'paper-deny'),
+        ('repaired-e', 'expiry-boundary', 'clock-plus-one'),
+        ('paper-minimal', 'expiry-boundary', 'clock-plus-one'),
+        ('repaired-e', 'expiry-boundary', 'decision-capped'),
+        ('repaired-e', 'expiry-boundary', 'equality-accepted'),
+        ('repaired-e', 'wrong-destination', 'worker-appears'),
+    ])
+    def test_false_observations_fail_visibly(artifacts, inputs, tmp_path, profile, variant, control):
+        a = DestWorld(artifacts, inputs, profile, control)
+        b = DestWorld(relocated(artifacts), inputs, profile, control if control == 'worker-appears' else None) if variant == 'wrong-destination' else None
+        with pytest.raises(ValueError):
+>           run(a, tmp_path, variant, b)
+
+evaluation/tests/test_destination_stress_collector.py:150: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_stress_collector.py:94: in run
+    return collector()(a.pbc, a.dbc, a, deployment_bytes=json.dumps(a.dep).encode(), user_label='alice', user=a.users['alice'], record=a.record,
+           ^^^^^^^^^^^
+evaluation/tests/test_destination_stress_collector.py:86: in collector
+    module = importlib.import_module('evaluation.destination_stress')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.destination_stress'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.destination_stress'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_ test_false_observations_fail_visibly[repaired-e-wrong-destination-worker-appears] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-67/test_false_observations_fail_v6')
+profile = 'repaired-e', variant = 'wrong-destination'
+control = 'worker-appears'
+
+    @pytest.mark.parametrize('profile,variant,control', [
+        ('repaired-e', 'wrong-destination', 'source-binding-ignored'),
+        ('paper-strict', 'wrong-destination', 'paper-deny'),
+        ('repaired-e', 'expiry-boundary', 'clock-plus-one'),
+        ('paper-minimal', 'expiry-boundary', 'clock-plus-one'),
+        ('repaired-e', 'expiry-boundary', 'decision-capped'),
+        ('repaired-e', 'expiry-boundary', 'equality-accepted'),
+        ('repaired-e', 'wrong-destination', 'worker-appears'),
+    ])
+    def test_false_observations_fail_visibly(artifacts, inputs, tmp_path, profile, variant, control):
+        a = DestWorld(artifacts, inputs, profile, control)
+        b = DestWorld(relocated(artifacts), inputs, profile, control if control == 'worker-appears' else None) if variant == 'wrong-destination' else None
+        with pytest.raises(ValueError):
+>           run(a, tmp_path, variant, b)
+
+evaluation/tests/test_destination_stress_collector.py:150: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_stress_collector.py:94: in run
+    return collector()(a.pbc, a.dbc, a, deployment_bytes=json.dumps(a.dep).encode(), user_label='alice', user=a.users['alice'], record=a.record,
+           ^^^^^^^^^^^
+evaluation/tests/test_destination_stress_collector.py:86: in collector
+    module = importlib.import_module('evaluation.destination_stress')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.destination_stress'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.destination_stress'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+__ test_unsupported_selection_refuses_before_side_effects[expired-duty-False] __
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-67/test_unsupported_selection_ref0')
+variant = 'expired-duty', with_source = False
+
+    @pytest.mark.parametrize('variant,with_source', [('expired-duty', False), ('wrong-issuer', False), ('wrong-destination', False),
+                                                     ('expiry-boundary', True)])
+    def test_unsupported_selection_refuses_before_side_effects(artifacts, inputs, tmp_path, variant, with_source):
+        a = DestWorld(artifacts, inputs, 'repaired-e'); b = DestWorld(relocated(artifacts), inputs, 'repaired-e')
+        with pytest.raises(ValueError):
+>           run(a, tmp_path, variant, b if with_source else None)
+
+evaluation/tests/test_destination_stress_collector.py:159: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_stress_collector.py:94: in run
+    return collector()(a.pbc, a.dbc, a, deployment_bytes=json.dumps(a.dep).encode(), user_label='alice', user=a.users['alice'], record=a.record,
+           ^^^^^^^^^^^
+evaluation/tests/test_destination_stress_collector.py:86: in collector
+    module = importlib.import_module('evaluation.destination_stress')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.destination_stress'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.destination_stress'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+__ test_unsupported_selection_refuses_before_side_effects[wrong-issuer-False] __
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-67/test_unsupported_selection_ref1')
+variant = 'wrong-issuer', with_source = False
+
+    @pytest.mark.parametrize('variant,with_source', [('expired-duty', False), ('wrong-issuer', False), ('wrong-destination', False),
+                                                     ('expiry-boundary', True)])
+    def test_unsupported_selection_refuses_before_side_effects(artifacts, inputs, tmp_path, variant, with_source):
+        a = DestWorld(artifacts, inputs, 'repaired-e'); b = DestWorld(relocated(artifacts), inputs, 'repaired-e')
+        with pytest.raises(ValueError):
+>           run(a, tmp_path, variant, b if with_source else None)
+
+evaluation/tests/test_destination_stress_collector.py:159: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_stress_collector.py:94: in run
+    return collector()(a.pbc, a.dbc, a, deployment_bytes=json.dumps(a.dep).encode(), user_label='alice', user=a.users['alice'], record=a.record,
+           ^^^^^^^^^^^
+evaluation/tests/test_destination_stress_collector.py:86: in collector
+    module = importlib.import_module('evaluation.destination_stress')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.destination_stress'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.destination_stress'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_ test_unsupported_selection_refuses_before_side_effects[wrong-destination-False] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-67/test_unsupported_selection_ref2')
+variant = 'wrong-destination', with_source = False
+
+    @pytest.mark.parametrize('variant,with_source', [('expired-duty', False), ('wrong-issuer', False), ('wrong-destination', False),
+                                                     ('expiry-boundary', True)])
+    def test_unsupported_selection_refuses_before_side_effects(artifacts, inputs, tmp_path, variant, with_source):
+        a = DestWorld(artifacts, inputs, 'repaired-e'); b = DestWorld(relocated(artifacts), inputs, 'repaired-e')
+        with pytest.raises(ValueError):
+>           run(a, tmp_path, variant, b if with_source else None)
+
+evaluation/tests/test_destination_stress_collector.py:159: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_stress_collector.py:94: in run
+    return collector()(a.pbc, a.dbc, a, deployment_bytes=json.dumps(a.dep).encode(), user_label='alice', user=a.users['alice'], record=a.record,
+           ^^^^^^^^^^^
+evaluation/tests/test_destination_stress_collector.py:86: in collector
+    module = importlib.import_module('evaluation.destination_stress')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.destination_stress'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.destination_stress'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+_ test_unsupported_selection_refuses_before_side_effects[expiry-boundary-True] _
+
+artifacts = ({'abi': {'ACSC': {'abi': 'exports/abi/ACSC.json', 'abiSha256': 'd5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08...uthEpoch': '3', 'expiresAt': '1791476070', 'keyEpoch': '0', 'policyVersion': '1', ...}], 'dbc_now': '1791476010', ...})
+inputs = ({'binding': {'blockNumber': '338', 'blockTimestamp': '1791475988', 'deploymentSha256': '859de9ae2e713bffb0e9dcd3d3880...vocation': '0', 'temporal': '0'}, '0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f': {'revocation': '0', 'temporal': '0'}}})
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-67/test_unsupported_selection_ref3')
+variant = 'expiry-boundary', with_source = True
+
+    @pytest.mark.parametrize('variant,with_source', [('expired-duty', False), ('wrong-issuer', False), ('wrong-destination', False),
+                                                     ('expiry-boundary', True)])
+    def test_unsupported_selection_refuses_before_side_effects(artifacts, inputs, tmp_path, variant, with_source):
+        a = DestWorld(artifacts, inputs, 'repaired-e'); b = DestWorld(relocated(artifacts), inputs, 'repaired-e')
+        with pytest.raises(ValueError):
+>           run(a, tmp_path, variant, b if with_source else None)
+
+evaluation/tests/test_destination_stress_collector.py:159: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/tests/test_destination_stress_collector.py:94: in run
+    return collector()(a.pbc, a.dbc, a, deployment_bytes=json.dumps(a.dep).encode(), user_label='alice', user=a.users['alice'], record=a.record,
+           ^^^^^^^^^^^
+evaluation/tests/test_destination_stress_collector.py:86: in collector
+    module = importlib.import_module('evaluation.destination_stress')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/linuxbrew/.linuxbrew/opt/python@3.13/lib/python3.13/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<frozen importlib._bootstrap>:1387: in _gcd_import
+    ???
+<frozen importlib._bootstrap>:1360: in _find_and_load
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = 'evaluation.destination_stress'
+import_ = <function _gcd_import at 0x70f3bf3d04a0>
+
+>   ???
+E   ModuleNotFoundError: No module named 'evaluation.destination_stress'
+
+<frozen importlib._bootstrap>:1324: ModuleNotFoundError
+______ test_destination_plan_pins_six_frozen_rows_and_solo_configuration _______
+
+    def test_destination_plan_pins_six_frozen_rows_and_solo_configuration():
+>       p = plan(); module().verify_plan(p)
+            ^^^^^^
+
+evaluation/tests/test_e2_destination_plan.py:31: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def plan():
+>       return module().create_plan(run_id='E2-destination-test', freeze_message='S3-0019', destination_stress=True, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'destination_stress'
+
+evaluation/tests/test_e2_destination_plan.py:27: TypeError
+_____________ test_destination_probe_states_the_ledger_conditions ______________
+
+    def test_destination_probe_states_the_ledger_conditions():
+>       probe = plan()['destinationProbe']
+                ^^^^^^
+
+evaluation/tests/test_e2_destination_plan.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def plan():
+>       return module().create_plan(run_id='E2-destination-test', freeze_message='S3-0019', destination_stress=True, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'destination_stress'
+
+evaluation/tests/test_e2_destination_plan.py:27: TypeError
+___ test_destination_plan_refuses_strict_mode_and_combined_probes[options0] ____
+
+options = {'freeze_message': 'A3-0050', 'review_mode': 'strict'}
+
+    @pytest.mark.parametrize('options', [dict(review_mode='strict', freeze_message='A3-0050'), dict(barrier_stress=True),
+                                         dict(trust_stress=True), dict(receipt_stress=True)])
+    def test_destination_plan_refuses_strict_mode_and_combined_probes(options):
+        kwargs = dict(run_id='E2-destination-test', freeze_message='S3-0019', destination_stress=True, review_mode=SOLO); kwargs.update(options)
+        with pytest.raises(ValueError):
+>           module().create_plan(**kwargs)
+E           TypeError: create_plan() got an unexpected keyword argument 'destination_stress'
+
+evaluation/tests/test_e2_destination_plan.py:70: TypeError
+___ test_destination_plan_refuses_strict_mode_and_combined_probes[options1] ____
+
+options = {'barrier_stress': True}
+
+    @pytest.mark.parametrize('options', [dict(review_mode='strict', freeze_message='A3-0050'), dict(barrier_stress=True),
+                                         dict(trust_stress=True), dict(receipt_stress=True)])
+    def test_destination_plan_refuses_strict_mode_and_combined_probes(options):
+        kwargs = dict(run_id='E2-destination-test', freeze_message='S3-0019', destination_stress=True, review_mode=SOLO); kwargs.update(options)
+        with pytest.raises(ValueError):
+>           module().create_plan(**kwargs)
+E           TypeError: create_plan() got an unexpected keyword argument 'destination_stress'
+
+evaluation/tests/test_e2_destination_plan.py:70: TypeError
+___ test_destination_plan_refuses_strict_mode_and_combined_probes[options2] ____
+
+options = {'trust_stress': True}
+
+    @pytest.mark.parametrize('options', [dict(review_mode='strict', freeze_message='A3-0050'), dict(barrier_stress=True),
+                                         dict(trust_stress=True), dict(receipt_stress=True)])
+    def test_destination_plan_refuses_strict_mode_and_combined_probes(options):
+        kwargs = dict(run_id='E2-destination-test', freeze_message='S3-0019', destination_stress=True, review_mode=SOLO); kwargs.update(options)
+        with pytest.raises(ValueError):
+>           module().create_plan(**kwargs)
+E           TypeError: create_plan() got an unexpected keyword argument 'destination_stress'
+
+evaluation/tests/test_e2_destination_plan.py:70: TypeError
+___ test_destination_plan_refuses_strict_mode_and_combined_probes[options3] ____
+
+options = {'receipt_stress': True}
+
+    @pytest.mark.parametrize('options', [dict(review_mode='strict', freeze_message='A3-0050'), dict(barrier_stress=True),
+                                         dict(trust_stress=True), dict(receipt_stress=True)])
+    def test_destination_plan_refuses_strict_mode_and_combined_probes(options):
+        kwargs = dict(run_id='E2-destination-test', freeze_message='S3-0019', destination_stress=True, review_mode=SOLO); kwargs.update(options)
+        with pytest.raises(ValueError):
+>           module().create_plan(**kwargs)
+E           TypeError: create_plan() got an unexpected keyword argument 'destination_stress'
+
+evaluation/tests/test_e2_destination_plan.py:70: TypeError
+__________________ test_changed_destination_plan_refuses[row] __________________
+
+change = 'row'
+
+    @pytest.mark.parametrize('change', ['row', 'probe', 'classification'])
+    def test_changed_destination_plan_refuses(change):
+>       p = plan()
+            ^^^^^^
+
+evaluation/tests/test_e2_destination_plan.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def plan():
+>       return module().create_plan(run_id='E2-destination-test', freeze_message='S3-0019', destination_stress=True, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'destination_stress'
+
+evaluation/tests/test_e2_destination_plan.py:27: TypeError
+_________________ test_changed_destination_plan_refuses[probe] _________________
+
+change = 'probe'
+
+    @pytest.mark.parametrize('change', ['row', 'probe', 'classification'])
+    def test_changed_destination_plan_refuses(change):
+>       p = plan()
+            ^^^^^^
+
+evaluation/tests/test_e2_destination_plan.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def plan():
+>       return module().create_plan(run_id='E2-destination-test', freeze_message='S3-0019', destination_stress=True, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'destination_stress'
+
+evaluation/tests/test_e2_destination_plan.py:27: TypeError
+____________ test_changed_destination_plan_refuses[classification] _____________
+
+change = 'classification'
+
+    @pytest.mark.parametrize('change', ['row', 'probe', 'classification'])
+    def test_changed_destination_plan_refuses(change):
+>       p = plan()
+            ^^^^^^
+
+evaluation/tests/test_e2_destination_plan.py:75: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def plan():
+>       return module().create_plan(run_id='E2-destination-test', freeze_message='S3-0019', destination_stress=True, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'destination_stress'
+
+evaluation/tests/test_e2_destination_plan.py:27: TypeError
+_____ test_destination_execution_requires_each_complete_row_proof[missing] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-67/test_destination_execution_req0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x70f3bb709940>
+mode = 'missing'
+
+    @pytest.mark.parametrize('mode', ['missing', 'wrong-class', 'other-variant', 'complete'])
+    def test_destination_execution_requires_each_complete_row_proof(tmp_path, monkeypatch, mode):
+>       m = module(); path = tmp_path/'plan.json'; path.write_text(json.dumps(plan()))
+                                                                              ^^^^^^
+
+evaluation/tests/test_e2_destination_plan.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def plan():
+>       return module().create_plan(run_id='E2-destination-test', freeze_message='S3-0019', destination_stress=True, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'destination_stress'
+
+evaluation/tests/test_e2_destination_plan.py:27: TypeError
+___ test_destination_execution_requires_each_complete_row_proof[wrong-class] ___
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-67/test_destination_execution_req1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x70f3bb7096e0>
+mode = 'wrong-class'
+
+    @pytest.mark.parametrize('mode', ['missing', 'wrong-class', 'other-variant', 'complete'])
+    def test_destination_execution_requires_each_complete_row_proof(tmp_path, monkeypatch, mode):
+>       m = module(); path = tmp_path/'plan.json'; path.write_text(json.dumps(plan()))
+                                                                              ^^^^^^
+
+evaluation/tests/test_e2_destination_plan.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def plan():
+>       return module().create_plan(run_id='E2-destination-test', freeze_message='S3-0019', destination_stress=True, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'destination_stress'
+
+evaluation/tests/test_e2_destination_plan.py:27: TypeError
+__ test_destination_execution_requires_each_complete_row_proof[other-variant] __
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-67/test_destination_execution_req2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x70f3bb5aa210>
+mode = 'other-variant'
+
+    @pytest.mark.parametrize('mode', ['missing', 'wrong-class', 'other-variant', 'complete'])
+    def test_destination_execution_requires_each_complete_row_proof(tmp_path, monkeypatch, mode):
+>       m = module(); path = tmp_path/'plan.json'; path.write_text(json.dumps(plan()))
+                                                                              ^^^^^^
+
+evaluation/tests/test_e2_destination_plan.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def plan():
+>       return module().create_plan(run_id='E2-destination-test', freeze_message='S3-0019', destination_stress=True, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'destination_stress'
+
+evaluation/tests/test_e2_destination_plan.py:27: TypeError
+____ test_destination_execution_requires_each_complete_row_proof[complete] _____
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-67/test_destination_execution_req3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x70f3bb287ce0>
+mode = 'complete'
+
+    @pytest.mark.parametrize('mode', ['missing', 'wrong-class', 'other-variant', 'complete'])
+    def test_destination_execution_requires_each_complete_row_proof(tmp_path, monkeypatch, mode):
+>       m = module(); path = tmp_path/'plan.json'; path.write_text(json.dumps(plan()))
+                                                                              ^^^^^^
+
+evaluation/tests/test_e2_destination_plan.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def plan():
+>       return module().create_plan(run_id='E2-destination-test', freeze_message='S3-0019', destination_stress=True, review_mode=SOLO)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: create_plan() got an unexpected keyword argument 'destination_stress'
+
+evaluation/tests/test_e2_destination_plan.py:27: TypeError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_expected_classes[paper-strict]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_expected_classes[paper-minimal]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_expected_classes[repaired-e]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_expected_classes[paper-strict]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_expected_classes[paper-minimal]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_expected_classes[repaired-e]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_paper_refuses[worker-a-changed-paper-strict]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_paper_refuses[worker-a-changed-paper-minimal]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_paper_refuses[worker-b-changed-paper-strict]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_paper_refuses[worker-b-changed-paper-minimal]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_paper_refuses[receiver-has-request-paper-strict]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_paper_refuses[receiver-has-request-paper-minimal]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_paper_refuses[request-not-for-source-paper-strict]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_paper_refuses[request-not-for-source-paper-minimal]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_paper_refuses[same-deployment-paper-strict]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_paper_refuses[same-deployment-paper-minimal]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_paper_refuses[source-state-changed-paper-strict]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_paper_refuses[source-state-changed-paper-minimal]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_paper_refuses[rejected-paper-strict]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_paper_refuses[rejected-paper-minimal]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_paper_refuses[grant-other-expiry-paper-strict]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_paper_refuses[grant-other-expiry-paper-minimal]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_paper_refuses[grant-recipient-paper-strict]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_paper_refuses[grant-recipient-paper-minimal]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_paper_refuses[state-unchanged-paper-strict]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_paper_refuses[state-unchanged-paper-minimal]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_paper_refuses[decision-present-paper-strict]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_paper_refuses[decision-present-paper-minimal]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_repaired_refuses[worker-a-changed]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_repaired_refuses[worker-b-changed]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_repaired_refuses[receiver-has-request]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_repaired_refuses[request-not-for-source]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_repaired_refuses[same-deployment]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_repaired_refuses[source-state-changed]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_repaired_refuses[accepted]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_repaired_refuses[other-code]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_repaired_refuses[two-decisions]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_repaired_refuses[receiver-changed]
+FAILED evaluation/tests/test_destination_oracle.py::test_wrong_destination_repaired_refuses[source-matches-receiver-psc]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_paper_refuses[worker-changed-paper-strict]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_paper_refuses[worker-changed-paper-minimal]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_paper_refuses[consume-plus-one-paper-strict]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_paper_refuses[consume-plus-one-paper-minimal]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_paper_refuses[consume-minus-one-paper-strict]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_paper_refuses[consume-minus-one-paper-minimal]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_paper_refuses[clock-target-other-paper-strict]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_paper_refuses[clock-target-other-paper-minimal]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_paper_refuses[clock-already-past-paper-strict]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_paper_refuses[clock-already-past-paper-minimal]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_paper_refuses[request-not-forwarded-paper-strict]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_paper_refuses[request-not-forwarded-paper-minimal]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_paper_refuses[rejected-paper-strict]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_paper_refuses[rejected-paper-minimal]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_paper_refuses[grant-other-expiry-paper-strict]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_paper_refuses[grant-other-expiry-paper-minimal]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_paper_refuses[state-unchanged-paper-strict]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_paper_refuses[state-unchanged-paper-minimal]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_paper_refuses[decision-present-paper-strict]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_paper_refuses[decision-present-paper-minimal]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_repaired_refuses[worker-changed]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_repaired_refuses[consume-plus-one]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_repaired_refuses[consume-minus-one]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_repaired_refuses[clock-target-other]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_repaired_refuses[clock-already-past]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_repaired_refuses[request-not-forwarded]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_repaired_refuses[accepted]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_repaired_refuses[other-code]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_repaired_refuses[two-decisions]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_repaired_refuses[decision-capped]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_repaired_refuses[checkpoint-not-above]
+FAILED evaluation/tests/test_destination_oracle.py::test_expiry_boundary_repaired_refuses[state-changed]
+FAILED evaluation/tests/test_destination_stress_collector.py::test_wrong_destination[paper-strict]
+FAILED evaluation/tests/test_destination_stress_collector.py::test_wrong_destination[paper-minimal]
+FAILED evaluation/tests/test_destination_stress_collector.py::test_wrong_destination[repaired-e]
+FAILED evaluation/tests/test_destination_stress_collector.py::test_wrong_destination_cannot_kill_the_destination_binding_mutant
+FAILED evaluation/tests/test_destination_stress_collector.py::test_expiry_boundary[paper-strict]
+FAILED evaluation/tests/test_destination_stress_collector.py::test_expiry_boundary[paper-minimal]
+FAILED evaluation/tests/test_destination_stress_collector.py::test_expiry_boundary[repaired-e]
+FAILED evaluation/tests/test_destination_stress_collector.py::test_false_observations_fail_visibly[repaired-e-wrong-destination-source-binding-ignored]
+FAILED evaluation/tests/test_destination_stress_collector.py::test_false_observations_fail_visibly[paper-strict-wrong-destination-paper-deny]
+FAILED evaluation/tests/test_destination_stress_collector.py::test_false_observations_fail_visibly[repaired-e-expiry-boundary-clock-plus-one]
+FAILED evaluation/tests/test_destination_stress_collector.py::test_false_observations_fail_visibly[paper-minimal-expiry-boundary-clock-plus-one]
+FAILED evaluation/tests/test_destination_stress_collector.py::test_false_observations_fail_visibly[repaired-e-expiry-boundary-decision-capped]
+FAILED evaluation/tests/test_destination_stress_collector.py::test_false_observations_fail_visibly[repaired-e-expiry-boundary-equality-accepted]
+FAILED evaluation/tests/test_destination_stress_collector.py::test_false_observations_fail_visibly[repaired-e-wrong-destination-worker-appears]
+FAILED evaluation/tests/test_destination_stress_collector.py::test_unsupported_selection_refuses_before_side_effects[expired-duty-False]
+FAILED evaluation/tests/test_destination_stress_collector.py::test_unsupported_selection_refuses_before_side_effects[wrong-issuer-False]
+FAILED evaluation/tests/test_destination_stress_collector.py::test_unsupported_selection_refuses_before_side_effects[wrong-destination-False]
+FAILED evaluation/tests/test_destination_stress_collector.py::test_unsupported_selection_refuses_before_side_effects[expiry-boundary-True]
+FAILED evaluation/tests/test_e2_destination_plan.py::test_destination_plan_pins_six_frozen_rows_and_solo_configuration
+FAILED evaluation/tests/test_e2_destination_plan.py::test_destination_probe_states_the_ledger_conditions
+FAILED evaluation/tests/test_e2_destination_plan.py::test_destination_plan_refuses_strict_mode_and_combined_probes[options0]
+FAILED evaluation/tests/test_e2_destination_plan.py::test_destination_plan_refuses_strict_mode_and_combined_probes[options1]
+FAILED evaluation/tests/test_e2_destination_plan.py::test_destination_plan_refuses_strict_mode_and_combined_probes[options2]
+FAILED evaluation/tests/test_e2_destination_plan.py::test_destination_plan_refuses_strict_mode_and_combined_probes[options3]
+FAILED evaluation/tests/test_e2_destination_plan.py::test_changed_destination_plan_refuses[row]
+FAILED evaluation/tests/test_e2_destination_plan.py::test_changed_destination_plan_refuses[probe]
+FAILED evaluation/tests/test_e2_destination_plan.py::test_changed_destination_plan_refuses[classification]
+FAILED evaluation/tests/test_e2_destination_plan.py::test_destination_execution_requires_each_complete_row_proof[missing]
+FAILED evaluation/tests/test_e2_destination_plan.py::test_destination_execution_requires_each_complete_row_proof[wrong-class]
+FAILED evaluation/tests/test_e2_destination_plan.py::test_destination_execution_requires_each_complete_row_proof[other-variant]
+FAILED evaluation/tests/test_e2_destination_plan.py::test_destination_execution_requires_each_complete_row_proof[complete]
+102 failed in 3.02s
