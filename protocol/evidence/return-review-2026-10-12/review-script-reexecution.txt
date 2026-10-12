@@ -1,0 +1,14 @@
+# Re-execution of the solo-phase proxy review scripts by agent 2 (A2-0039), in a scratch clone of origin/agent-1 6911478, host Python 3.13.12.
+# Both scripts are read-only on the evidence; they were run unchanged with python -I. Compared leaf by leaf with the proxy's recorded outputs.
+
+## S2-0021 gate-freeze review
+exit 0, stderr empty; problems (mine): [] | (proxy): []
+leaves: mine=294 proxy=294 only-mine=0 only-proxy=0 differing=0
+differing leaves not host/time fields: 0 | all of them RQ1-E.md line numbers in D_rq1/mustNotClaimHits (report revised after the proxy's review): n/a
+
+## S2-0022 gate-run review
+exit 0, stderr empty; problems (mine): [] | (proxy): []
+leaves: mine=2295 proxy=2295 only-mine=0 only-proxy=0 differing=41
+differing leaves not host/time fields: 40 | all of them RQ1-E.md line numbers in D_rq1/mustNotClaimHits (report revised after the proxy's review): True
+B_totals mine: {"rows": 56, "d1Decisions": 48, "stressDecisions": 18, "repairedRows": 24, "neverProbes": 180, "instantiatedProbes": 6, "stressAdapters": 47, "neverInstantiatedStressAdapters": 41} 
+B_totals proxy: {"rows": 56, "d1Decisions": 48, "stressDecisions": 18, "repairedRows": 24, "neverProbes": 180, "instantiatedProbes": 6, "stressAdapters": 47, "neverInstantiatedStressAdapters": 41}

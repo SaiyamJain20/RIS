@@ -201,3 +201,29 @@ def test_attest_grant_for_an_unknown_grant_is_not_committed_and_after_the_outcom
     r = call(led, "attest_grant", {"grantId": grant_id})
     Relay(led, "relay").report_outcome(signed["requestDigest"], "0x" + "ab" * 32, {"receipt": r["result"]["receipt"], "signatures": r["result"]["signatures"]})
     assert call(led, "attest_grant", {"grantId": grant_id})["error"]["code"] == "WRONG_SUBJECT"          # no second receipt once the outcome is recorded
+
+
+def test_only_encrypt_record_release_and_finish_decryption_ever_create_the_worker_database(world, configured, tmp_path):
+    """D49 (solo phase; relied on by 180 'verified never-instantiated' evidence probes, A2-0039): an adapter that serves prepare_request, collect_checkpoint,
+    collect_decision and attest_grant must leave NO worker directory or database behind; the first worker operation creates it. A stress adapter that never
+    called a worker operation is recorded as never-instantiated, so an eager worker would silently invalidate that evidence rule."""
+    from hmbc_protocol.relay import Relay
+    led, ctx = world
+    state = tmp_path / "adapter-state"
+    client = UserClient("alice", led.deployment)
+    prep = call(led, "prepare_request", {"request": setup.make_request(led, ctx, client), "signingKeyRef": client.ref})
+    assert prep["ok"], prep
+    relay = Relay(led, "relay")
+    assert relay.forward(prep["result"], ctx.bundle).code == "NONE"
+    cp = call(led, "collect_checkpoint", {})
+    assert cp["ok"], cp
+    relay.accept_state(cp["result"])
+    dec = call(led, "collect_decision", {"requestDigest": prep["result"]["requestDigest"]})
+    assert dec["ok"], dec
+    grant_id = relay.deliver(prep["result"], dec["result"])
+    assert grant_id is not None
+    att = call(led, "attest_grant", {"grantId": grant_id})
+    assert att["ok"], att
+    assert not state.exists() or sorted(p.name for p in state.iterdir()) == []                # no worker/ directory, no worker.sqlite
+    assert call(led, "encrypt_record", ENC)["ok"]                                              # the first worker operation creates it
+    assert (state / "worker" / "worker.sqlite").is_file()

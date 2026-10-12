@@ -1,0 +1,29 @@
+{
+  "baseline": {
+    "exitCode": 0,
+    "tail": "1382 passed, 201 skipped in 350.52s (0:05:50)"
+  },
+  "python": "3.13.12",
+  "mutants": [
+    {
+      "file": "protocol/hmbc_protocol/worker_log.py",
+      "old": "return \"file://\" + quote_from_bytes(os.fsencode(os.path.abspath(path)), safe=\"/\") + \"?mode=ro\"",
+      "new": "return f\"file:{path}?mode=ro\"",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 4 passed in 38.47s"
+    },
+    {
+      "file": "protocol/hmbc_protocol/worker_log.py",
+      "old": "quote_from_bytes(os.fsencode(os.path.abspath(path)), safe=\"/\")",
+      "new": "quote_from_bytes(os.fsencode(path), safe=\"/\")",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 10 passed in 29.07s"
+    }
+  ],
+  "detected": 2,
+  "total": 2,
+  "survivedEquivalent": 0,
+  "survivedGap": 0
+}

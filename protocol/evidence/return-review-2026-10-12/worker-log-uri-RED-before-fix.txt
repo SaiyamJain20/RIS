@@ -1,0 +1,207 @@
+FFFF.FF                                                                  [100%]
+=================================== FAILURES ===================================
+_ test_the_export_reads_exactly_the_named_directory_and_creates_nothing[has#hash] _
+
+name = 'has#hash'
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/bt-red-uri/test_the_export_reads_exactly_0')
+
+    @pytest.mark.parametrize("name", URI_METACHARACTER_NAMES)
+    def test_the_export_reads_exactly_the_named_directory_and_creates_nothing(name, tmp_path):
+        state = tmp_path / name
+        _offline_worker_with_one_event(state)
+        before = sorted(p.name for p in tmp_path.iterdir())
+>       out, _ = dump(state)
+                 ^^^^^^^^^^^
+
+protocol/tests/test_worker_log.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+state_dir = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/bt-red-uri/test_the_export_reads_exactly_0/has#hash')
+
+    def dump(state_dir):
+        p = subprocess.run([sys.executable, "-m", "hmbc_protocol.worker_log", "--state-dir", str(state_dir)], cwd=ROOT,
+                           env={"PYTHONPATH": str(ROOT), "PATH": "/usr/bin:/bin"}, capture_output=True, text=True, timeout=60)
+>       assert p.returncode == 0, p.stderr
+E       AssertionError: Traceback (most recent call last):
+E           File "<frozen runpy>", line 198, in _run_module_as_main
+E           File "<frozen runpy>", line 88, in _run_code
+E           File "/home/th4kur/Desktop/sem5/RIS/RIS/protocol/hmbc_protocol/worker_log.py", line 59, in <module>
+E             sys.exit(main())
+E                      ~~~~^^
+E           File "/home/th4kur/Desktop/sem5/RIS/RIS/protocol/hmbc_protocol/worker_log.py", line 54, in main
+E             print(json.dumps(export(ap.parse_args(argv).state_dir), indent=1))
+E                              ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "/home/th4kur/Desktop/sem5/RIS/RIS/protocol/hmbc_protocol/worker_log.py", line 34, in export
+E             for t, rd, gi, gid, did, ts in db.execute("select type,request_digest,grant_id,gid,data_id,timestamp from events order by id")]
+E                                            ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         sqlite3.OperationalError: no such table: events
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratc...^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsqlite3.OperationalError: no such table: events\n').returncode
+
+protocol/tests/test_worker_log.py:20: AssertionError
+_ test_the_export_reads_exactly_the_named_directory_and_creates_nothing[has?query] _
+
+name = 'has?query'
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/bt-red-uri/test_the_export_reads_exactly_1')
+
+    @pytest.mark.parametrize("name", URI_METACHARACTER_NAMES)
+    def test_the_export_reads_exactly_the_named_directory_and_creates_nothing(name, tmp_path):
+        state = tmp_path / name
+        _offline_worker_with_one_event(state)
+        before = sorted(p.name for p in tmp_path.iterdir())
+>       out, _ = dump(state)
+                 ^^^^^^^^^^^
+
+protocol/tests/test_worker_log.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+state_dir = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/bt-red-uri/test_the_export_reads_exactly_1/has?query')
+
+    def dump(state_dir):
+        p = subprocess.run([sys.executable, "-m", "hmbc_protocol.worker_log", "--state-dir", str(state_dir)], cwd=ROOT,
+                           env={"PYTHONPATH": str(ROOT), "PATH": "/usr/bin:/bin"}, capture_output=True, text=True, timeout=60)
+>       assert p.returncode == 0, p.stderr
+E       AssertionError: Traceback (most recent call last):
+E           File "<frozen runpy>", line 198, in _run_module_as_main
+E           File "<frozen runpy>", line 88, in _run_code
+E           File "/home/th4kur/Desktop/sem5/RIS/RIS/protocol/hmbc_protocol/worker_log.py", line 59, in <module>
+E             sys.exit(main())
+E                      ~~~~^^
+E           File "/home/th4kur/Desktop/sem5/RIS/RIS/protocol/hmbc_protocol/worker_log.py", line 54, in main
+E             print(json.dumps(export(ap.parse_args(argv).state_dir), indent=1))
+E                              ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "/home/th4kur/Desktop/sem5/RIS/RIS/protocol/hmbc_protocol/worker_log.py", line 34, in export
+E             for t, rd, gi, gid, did, ts in db.execute("select type,request_digest,grant_id,gid,data_id,timestamp from events order by id")]
+E                                            ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         sqlite3.OperationalError: no such table: events
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratc...^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsqlite3.OperationalError: no such table: events\n').returncode
+
+protocol/tests/test_worker_log.py:20: AssertionError
+_ test_the_export_reads_exactly_the_named_directory_and_creates_nothing[has%20pct] _
+
+name = 'has%20pct'
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/bt-red-uri/test_the_export_reads_exactly_2')
+
+    @pytest.mark.parametrize("name", URI_METACHARACTER_NAMES)
+    def test_the_export_reads_exactly_the_named_directory_and_creates_nothing(name, tmp_path):
+        state = tmp_path / name
+        _offline_worker_with_one_event(state)
+        before = sorted(p.name for p in tmp_path.iterdir())
+>       out, _ = dump(state)
+                 ^^^^^^^^^^^
+
+protocol/tests/test_worker_log.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+state_dir = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/bt-red-uri/test_the_export_reads_exactly_2/has%20pct')
+
+    def dump(state_dir):
+        p = subprocess.run([sys.executable, "-m", "hmbc_protocol.worker_log", "--state-dir", str(state_dir)], cwd=ROOT,
+                           env={"PYTHONPATH": str(ROOT), "PATH": "/usr/bin:/bin"}, capture_output=True, text=True, timeout=60)
+>       assert p.returncode == 0, p.stderr
+E       AssertionError: Traceback (most recent call last):
+E           File "<frozen runpy>", line 198, in _run_module_as_main
+E           File "<frozen runpy>", line 88, in _run_code
+E           File "/home/th4kur/Desktop/sem5/RIS/RIS/protocol/hmbc_protocol/worker_log.py", line 59, in <module>
+E             sys.exit(main())
+E                      ~~~~^^
+E           File "/home/th4kur/Desktop/sem5/RIS/RIS/protocol/hmbc_protocol/worker_log.py", line 54, in main
+E             print(json.dumps(export(ap.parse_args(argv).state_dir), indent=1))
+E                              ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "/home/th4kur/Desktop/sem5/RIS/RIS/protocol/hmbc_protocol/worker_log.py", line 31, in export
+E             db = sqlite3.connect(f"file:{path}?mode=ro", uri=True, timeout=15)
+E         sqlite3.OperationalError: unable to open database file
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratc...lite3.connect(f"file:{path}?mode=ro", uri=True, timeout=15)\nsqlite3.OperationalError: unable to open database file\n').returncode
+
+protocol/tests/test_worker_log.py:20: AssertionError
+_ test_the_export_reads_exactly_the_named_directory_and_creates_nothing[has%23enc] _
+
+name = 'has%23enc'
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/bt-red-uri/test_the_export_reads_exactly_3')
+
+    @pytest.mark.parametrize("name", URI_METACHARACTER_NAMES)
+    def test_the_export_reads_exactly_the_named_directory_and_creates_nothing(name, tmp_path):
+        state = tmp_path / name
+        _offline_worker_with_one_event(state)
+        before = sorted(p.name for p in tmp_path.iterdir())
+>       out, _ = dump(state)
+                 ^^^^^^^^^^^
+
+protocol/tests/test_worker_log.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+state_dir = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/bt-red-uri/test_the_export_reads_exactly_3/has%23enc')
+
+    def dump(state_dir):
+        p = subprocess.run([sys.executable, "-m", "hmbc_protocol.worker_log", "--state-dir", str(state_dir)], cwd=ROOT,
+                           env={"PYTHONPATH": str(ROOT), "PATH": "/usr/bin:/bin"}, capture_output=True, text=True, timeout=60)
+>       assert p.returncode == 0, p.stderr
+E       AssertionError: Traceback (most recent call last):
+E           File "<frozen runpy>", line 198, in _run_module_as_main
+E           File "<frozen runpy>", line 88, in _run_code
+E           File "/home/th4kur/Desktop/sem5/RIS/RIS/protocol/hmbc_protocol/worker_log.py", line 59, in <module>
+E             sys.exit(main())
+E                      ~~~~^^
+E           File "/home/th4kur/Desktop/sem5/RIS/RIS/protocol/hmbc_protocol/worker_log.py", line 54, in main
+E             print(json.dumps(export(ap.parse_args(argv).state_dir), indent=1))
+E                              ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "/home/th4kur/Desktop/sem5/RIS/RIS/protocol/hmbc_protocol/worker_log.py", line 31, in export
+E             db = sqlite3.connect(f"file:{path}?mode=ro", uri=True, timeout=15)
+E         sqlite3.OperationalError: unable to open database file
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratc...lite3.connect(f"file:{path}?mode=ro", uri=True, timeout=15)\nsqlite3.OperationalError: unable to open database file\n').returncode
+
+protocol/tests/test_worker_log.py:20: AssertionError
+______ test_the_export_never_reads_a_sibling_database_at_a_truncated_path ______
+
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/bt-red-uri/test_the_export_never_reads_a_0')
+
+    def test_the_export_never_reads_a_sibling_database_at_a_truncated_path(tmp_path):
+        """Truncated at `#`, the path of `run#1/worker.sqlite` is the sibling FILE `run`. A different, valid worker database there must not be read instead."""
+        import shutil
+        _offline_worker_with_one_event(tmp_path / "other", request_digest="0x" + "55" * 32)
+        shutil.copyfile(tmp_path / "other" / "worker.sqlite", tmp_path / "run")      # a valid worker database sitting at the truncated path
+        _offline_worker_with_one_event(tmp_path / "run#1")                           # the database that was actually asked for
+        out, _ = dump(tmp_path / "run#1")
+>       assert [e["requestDigest"] for e in out["events"]] == ["0x" + "11" * 32]
+E       AssertionError: assert ['0x555555555...555555555555'] == ['0x111111111...111111111111']
+E         
+E         At index 0 diff: '0x5555555555555555555555555555555555555555555555555555555555555555' != '0x1111111111111111111111111111111111111111111111111111111111111111'
+E         Use -v to get more diff
+
+protocol/tests/test_worker_log.py:104: AssertionError
+______________ test_the_export_accepts_a_relative_state_directory ______________
+
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/bt-red-uri/test_the_export_accepts_a_rela0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7108dcc1fce0>
+
+    def test_the_export_accepts_a_relative_state_directory(tmp_path, monkeypatch):
+        from hmbc_protocol import worker_log
+        _offline_worker_with_one_event(tmp_path / "rel dir#1")
+        monkeypatch.chdir(tmp_path)
+>       assert len(worker_log.export("rel dir#1")["events"]) == 1
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/home/th4kur/Desktop/sem5/RIS/RIS/protocol/tests/test_worker_log.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+state_dir = 'rel dir#1'
+
+    def export(state_dir: str) -> dict:
+        path = _database(state_dir)
+        db = sqlite3.connect(f"file:{path}?mode=ro", uri=True, timeout=15)
+        try:
+            events = [{"type": t, "requestDigest": rd, "timestamp": str(ts), "grantId": gi, "gid": gid, "dataId": did}
+>                     for t, rd, gi, gid, did, ts in db.execute("select type,request_digest,grant_id,gid,data_id,timestamp from events order by id")]
+                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                     sqlite3.OperationalError: no such table: events
+
+/home/th4kur/Desktop/sem5/RIS/RIS/protocol/hmbc_protocol/worker_log.py:34: OperationalError
+6 failed, 1 passed, 4 deselected in 1.10s
+EXIT=1
