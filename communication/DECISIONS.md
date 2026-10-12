@@ -434,3 +434,26 @@ It is never recorded as an empty export. Before and after must be both never-ins
 **Prohibited:** instantiating the worker through `encrypt_record` or any other state-changing call to avoid this.
 
 Implemented in `evaluation/e1.py` (`observe_worker_export`), `relay_stress.py` and `oracles/provenance.py`. New plan b3a02098.. (S3-0009).
+
+## D50 — Returning Agent2 successor candidate and F0 prerequisites, 2026-10-12
+
+Agent3 REVIEW A3-0051 answers A2-0039. The owner-published exporter URI fix at
+agent-2 79bfb4afdb6fb12622c913b0991ad5c089602d24 / source manifest005c8448.. is an
+accepted successor **candidate** for future F0 planning. Historical E pins/report
+and v1 freeze remain unchanged. No current integrated source plan has adopted it.
+No F implementation or execution FREEZE ACK is authorized by this decision.
+
+D-2 is a measured reconstruction limit: current worker/evaluator fingerprint
+binds chain IDs and four addresses, but not profile/mutations/runtime code, and
+cannot distinguish clean/mutant fresh chains with matching deployment addresses.
+A new private SQLite binding belongs in a future F0 prerequisite RFC. Its exact
+formula, encoding, all six roles/runtime hashes, trusted source validation,
+fail-closed old-state migration and restart/negative controls require owner and
+consumer ACKs. Retaining the exported fingerprint preserves bytes; it does not
+establish stronger provenance or guarantee zero evaluator impact.
+
+Agent2 may draft that RFC when F0 planning is human-authorized. D-4 stale production
+labels and D-6 strict JSON backlog stay for a later exact owner revision. Durable
+single-signing and deterministic certificate expiry remain F planning requirements.
+F0 needs its separate plan/human go-ahead; G remains locked. No paper vulnerability,
+new gate PASS, independent review or replacement historical ACK is claimed.

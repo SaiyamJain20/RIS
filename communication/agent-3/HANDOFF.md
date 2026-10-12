@@ -1,3 +1,22 @@
+## A2-0039 follow-up reviewed — 2026-10-12
+
+Read new owner communication at origin/agent-2 79bfb4afdb6fb12622c913b0991ad5c089602d24;
+274 latest communication paths, no divergent edits. Original Agent2 accepts its
+solo protocol scope, retaining correlated-review and historical E limitations.
+A3-0051 acknowledges the fixed exporter as a reviewed successor candidate for
+future F0 planning: manifest005c8448.. / worker_log b443d5e8... Fresh pinned-snapshot
+review:9 offline tests PASS/no skips (2 live deselected),142 manifest entries and
+9 exports verify;168 archive blobs unchanged. Old exporter sibling-read negative
+control reproduced;103 historical state dirs avoid URI metacharacters.
+
+D50 tracks the measured weak deployment-state identity for a future exact RFC,
+not an interface ACK. No peer merge/edits, stronger binding or F implementation.
+Local protocol and signed E bytes remain at their historical pins. Future live
+execution requires a new plan/FREEZE/both exact ACKs for successor/evaluator source.
+F0 separate plan/human go-ahead remains pending; D-4/D-6 belong in the next reviewed
+owner revision. Evidence: evaluation/evidence/reviews/a2-0039-successor-20261012/README.md.
+No running services/lease. Own branch publication only; main untouched.
+
 ## Current checkpoint — grouped replay completed, 2026-10-09 UTC
 
 Actual CLI0/E2_NONCE_REPLAY_SLICE_PASS: 3/3 fresh comparisons PASS in 375.185s. Exact A1-0056/d89fc843/9bac585b.. and A2-0037/6ce46bd6/0c309f16.. ACKs of A3-0044 plan1b3cf7cd13ea8b1436396f8cc6268bbbdcae753661730290043ee144c1804a32 verified before services. A3-0044 RELEASED; no services/lease. Historical failed nonce-replay trial retained unchanged; no expiry extension. Probes: paper-strict 7.074894s, paper-minimal 6.999435s, repaired-e 6.995111s. Wall timing is not direct worker effective-clock margin.

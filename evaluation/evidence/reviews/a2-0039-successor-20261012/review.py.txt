@@ -1,0 +1,42 @@
+import copy,hashlib,json,subprocess,sys,tempfile,types,sqlite3
+from pathlib import Path
+repo=Path(sys.argv[1]); snapshot=Path(sys.argv[2]); sys.path[:0]=[str(snapshot/'protocol'),str(repo)]
+from hmbc_protocol.ledger import Ledger
+from hmbc_protocol.worker import Worker
+from hmbc_protocol import worker_log
+from evaluation.access_execution import _fingerprint
+def blob(ref,path):return subprocess.check_output(['git','show',ref+':'+path],cwd=repo)
+old=types.ModuleType('old_worker_log'); exec(compile(blob('0716a8e','protocol/hmbc_protocol/worker_log.py'),'pinned-worker-log.py','exec'),old.__dict__)
+dep=json.loads((snapshot/'protocol/tests/fixtures/deployment-agent1-91add8c-v1-repaired-e.json').read_text())
+with tempfile.TemporaryDirectory() as d:
+ root=Path(d)
+ for dirname,digest in [('other','0x'+'55'*32),('run#1','0x'+'11'*32)]:
+  w=Worker(Ledger.from_deployment(dep),root/dirname,clock=lambda:0)
+  w.db.execute("insert into events(type,request_digest,grant_id,gid,data_id,timestamp) values('RELEASE_INTENT',?,?,?,?,1)",(digest,'0x'+'22'*32,'0x'+'33'*20,'0x'+'44'*32)); w.db.close()
+ (root/'run').write_bytes((root/'other/worker.sqlite').read_bytes())
+ before={str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in root.rglob('*') if p.is_file()}
+ bad=old.export(str(root/'run#1'))
+ before={str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in root.rglob('*') if p.is_file() and (p.name=='worker.sqlite' or p.name=='run')}
+ good=worker_log.export(str(root/'run#1'))
+ assert bad['events'][0]['requestDigest']=='0x'+'55'*32
+ assert good['events'][0]['requestDigest']=='0x'+'11'*32
+ after={str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in root.rglob('*') if p.is_file() and (p.name=='worker.sqlite' or p.name=='run')}
+ assert before==after
+ state=root/'fingerprint-state'; w=Worker(Ledger.from_deployment(dep),state,clock=lambda:0); original=w.db.execute("select value from meta where key='deployment'").fetchone()[0]; w.db.close()
+ changed=copy.deepcopy(dep); changed['profile']='mutant-no-nonce'; changed['mutations']='8'
+ w=Worker(Ledger.from_deployment(changed),state,clock=lambda:0); reopened=w.db.execute("select value from meta where key='deployment'").fetchone()[0]; w.db.close()
+ assert original==reopened==_fingerprint(dep)==_fingerprint(changed)
+ print(json.dumps({'uriNegativeControl':{'oldReadsSibling':True,'successorReadsRequested':True,'allDatabaseBytesUnchanged':True},'syntheticManifestControl':{'profileMutationChangeAcceptedByOldGuard':True,'ownerAndEvaluatorFingerprintsEqual':True,'fingerprint':original,'class':'tested reconstruction limit; offline constructor only, no adapter or fresh-chain replay'}} ,indent=2))
+# Check all gate recorded state dirs independently.
+vals=[]
+def walk(o):
+ if isinstance(o,dict):
+  for v in o.values():walk(v)
+ elif isinstance(o,list):
+  for i,v in enumerate(o):
+   if v=='--state-dir' and i+1<len(o):vals.append(o[i+1])
+   walk(v)
+for p in (repo/'evaluation/evidence/e3/gate-run-20261012').rglob('*.json'):
+ walk(json.loads(p.read_text()))
+assert vals and all(not any(c in str(v) for c in '#?%') for v in vals)
+print(json.dumps({'historicalStateDirOccurrences':len(vals),'distinct':len(set(vals)),'uriMetacharacterAbsent':True}))
