@@ -67,7 +67,17 @@ multi-defect certificate always yields the same code:
 
 ## L3. Mutant sensitivity (owner evidence: `ledger/E2_HANDOFF.md` kill map, `ledger/evidence/ae2-mutants.*`)
 
-| Mutant (bit) | Killing catalog row | Guard → mutant behaviour |
+The "catalog row" column names the row whose guard each mutant removes. The owner rehearsal ran live
+mutant probes (`ledger/tools/e2_rehearsal.py --mutants`, one fresh `mutant-*` deployment each;
+`ledger/evidence/e2-full-rehearsal/summary.json` and `mutant-*/`): 5/6 were detected, and
+no-destination-binding was not killed by the catalog recipe.
+
+- This is owner evidence on agent 1's runner with agent 2's faulty adapter. It is not the integrated
+  evaluator, and it is not part of the A1-0080 criterion-4 basis.
+- The integrated runner ran only the **baseline** rows, where the guard rejects. No mutant was ever
+  deployed there (A1-0080).
+
+| Mutant (bit) | Catalog row (guard) | Guard → mutant behaviour (owner rehearsal) |
 |---|---|---|
 | no-nonce (8) | E01-same-nonce-distinct-digests | REPLAY → second grant |
 | no-receipt-binding (32) | E03-receipt-binding-control-* | WRONG_SUBJECT → inconsistent receipt recorded |
@@ -78,12 +88,23 @@ multi-defect certificate always yields the same code:
 
 Sensitivity for no-destination-binding comes from:
 
-- forge `MutantNoDestinationBindingDecisionBindingTest`;
-- `test_E01_RequestForOtherDestinationCertifiedHere`;
-- the ProVerif destination mutant (A3-0033).
+- the forge contract `MutantNoDestinationBindingTest` (`ledger/test-mutants/Mutants.t.sol:22`, which
+  extends `DecisionBindingRepairedTest`): `test_E01_RequestFieldSubstitution` and
+  `test_E01_RequestForOtherDestinationCertifiedHere`;
+- the ProVerif destination mutant (A3-0033; re-run byte-identical in `p3-proverif-20261012`).
 
-**No integrated destination kill is claimed** (A1-0061 G-3). The integrated mutant matrix is P3;
-until it runs, these rows are owner rehearsal evidence only.
+**No integrated destination kill is claimed** (A1-0061 G-3). **The integrated live mutant matrix was
+not run.** A safety classifier stopped it (A1-0079), and the human decided it is not resumed (A1-0080).
+Criterion 4 is "met on owner, formal and baseline evidence (human decision A1-0080); integrated live
+mutant matrix not run". The evidence:
+
+- the owner forge mutant suite (`ledger/evidence/ae2-mutants.*`, re-run byte-identical in
+  `ledger/evidence/p3-mutant-suite-rerun/`);
+- the ProVerif mutant;
+- the baseline guard rows, which show the integrated runner reaches each guard, **not** a mutant
+  accepting.
+
+The forge suite covers the ledger contracts only, not the adapter, the relay or the two-chain runner.
 
 ## L4. Revocation window (repaired-e)
 
@@ -95,7 +116,11 @@ until it runs, these rows are owner rehearsal evidence only.
 - **Paper-strict:** no ledger bound. A pre-revocation tuple was still grantable at T0 + 65 s.
 - **What W is:** a runner/witness cadence parameter capped by the request TTL, not a ledger constant.
 - **Limits:** one host, one trial per delay, 1 s granularity, owner runner.
-- **The integrated measurement (P3) replaces or extends this.** Cite both.
+- **No integrated window was measured.** The D-P3-3 FREEZE was stopped by a safety classifier
+  (A1-0079/A1-0081), and the human decided to use the existing evidence (A1-0081).
+  - The report cites this owner measurement and the SL6 ordering result: the older certificate is
+    accepted before the revoking checkpoint and rejected with STALE_STATE (line 87, sequence) after it.
+  - The 2 s SL6 value is a cross-clock difference, not a window (A1-0074 point 2).
 
 ## L5. Ledger-side limitations and must-not-claims
 
@@ -125,4 +150,7 @@ until it runs, these rows are owner rehearsal evidence only.
 | Owner rehearsal of 56 rows | `ledger/evidence/e2-full-rehearsal/` (dropped-outcome rows without RELEASE: A1-0060 R2 correction) |
 | Revocation window | `ledger/evidence/revocation-window/` |
 | SL1-SL7 independent reviews | `ledger/evidence/sl{1-subject,2-relay,3-audit,4-receipt,5-trust,6-barrier,7-destination}-review/`, A1-0063, A1-0067, A1-0069, A1-0071, A1-0073, A1-0075, A1-0077. The SL6/SL7 tools were committed before their runs |
-| ProVerif re-run on the integrated tree | A1-0078 D-P3-4 (outputs published with P3) |
+| ProVerif re-run on the integrated tree | `evaluation/evidence/e2/p3-proverif-20261012/` (byte-identical to A3-0033; A1-0078 D-P3-4), and again in the gate run (stage 6) |
+| Owner mutant suite re-run (criterion 4 basis) | `ledger/evidence/p3-mutant-suite-rerun/` (byte-identical to the pinned `ae2-mutants.*`; A1-0080) |
+| Early-rows review tool (12 pre-solo rows) | `ledger/evidence/early-rows-review/` (committed in 9682e54, before the gate FREEZE) |
+| Gate E run, independent ledger review | 8 pre-registered tools (A1-0083) on the gate output: 56/56 rows pass (raw output reviewed 2026-10-12 08:2x IST). The published-copy review and paths are in agent 1's gate review message |
