@@ -1,0 +1,546 @@
+"""S2-0022: protocol-scope review of the gate E run E-gate-20261012 (S3-0022), on the PUBLISHED copy only.
+
+Read-only on the evidence and the repository. The only writes are byte-identical copies of the seven SL slice catalogs under
+<scratch>/<stamp>/ (the unchanged slice review scripts expect <evd>/run/<case>/<profile>). Prints one JSON report on stdout.
+TEST-ONLY keys are derived in memory from labels and never printed; raw tokens are never read (the private state is not published).
+Correlated self-review (A1-0059): the same model as agent 1 and agent 3 (proxy).
+
+Usage (cwd repo root): python -I review_gate_run.py <gate dir> <repo root> <scratch dir>
+"""
+import collections
+import filecmp
+import hashlib
+import json
+import os
+import pathlib
+import re
+import shutil
+import subprocess
+import sys
+import time
+
+GATE, REPO, SCR = (pathlib.Path(a).resolve() for a in sys.argv[1:4])
+PROTO = REPO / "protocol"
+sys.path.insert(0, str(PROTO))
+from eth_utils import keccak  # noqa: E402
+from hmbc_protocol import eip712, keys, messages  # noqa: E402
+from hmbc_protocol.abi import Contract  # noqa: E402
+
+CAT = GATE / "catalog"
+EMPTY = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+NEVER = re.compile(r"no worker\.sqlite in (\S+) \(looked in <dir>/worker/ and in <dir>\)\n")
+PSC = Contract(json.loads((PROTO / "abi/PSC.json").read_text()))
+PRESOLO = ("recovery-expiry", "duplicate-outcome", "nonce-replay")
+KINDS = ("subject", "relay", "audit", "receipt", "trust", "barrier", "destination", "source")
+WITNESS_OPS = {"collect_checkpoint", "collect_decision", "attest_grant"}
+WORKER_OPS = {"encrypt_record", "release", "finish_decryption"}
+load = lambda p: json.loads(pathlib.Path(p).read_text())  # noqa: E731
+sha = lambda p: hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()  # noqa: E731
+arg = lambda p, k: p["argv"][p["argv"].index(k) + 1]  # noqa: E731
+report, problems = {}, []
+
+
+def check(c, m):
+    if not c:
+        problems.append(m)
+    return bool(c)
+
+
+def walk(o):
+    yield o
+    if isinstance(o, dict):
+        for v in o.values():
+            yield from walk(v)
+    elif isinstance(o, list):
+        for v in o:
+            yield from walk(v)
+
+
+def signer(name, msg, sig, dep):
+    return eip712.recover(messages.digest_of(name, msg, messages.domain_for(name, msg, dep)), sig)
+
+
+# ---------------------------------------------------------------------------------------------------------------------------------
+# Part A: the seven committed slice review scripts, unchanged, on byte-identical copies of the gate slice catalogs
+# ---------------------------------------------------------------------------------------------------------------------------------
+OLD = {"sl1-subject": ("s2-0005-sl1/review_sl1.py.txt", "bc2c7ed8716f797ea34ad5b020a1f6943c93c1edc8fdb0ea7017d47eed890b20"),
+       "sl2-relay": ("s2-0010-sl2-r2/review_sl2.py.txt", "6e8b1b289b123e625fddba402ba8d2eaf7746a3c7bc0bf72938fa95736a415d9"),
+       "sl3-audit": ("s2-0012-sl3/review_sl3.py.txt", "ab88ba784170c6f3ab6b6698a8fdf2ebf688a8f8ecfff81ee775dcbf056045e5"),
+       "sl4-receipt": ("s2-0014-sl4/review_sl4.py.txt", "0eea5b55f4698cf605e39df5f85e426f6057ea96f6888edae63e328741b35a65"),
+       "sl5-trust": ("s2-0016-sl5/review_sl5.py.txt", "b8ea8dfc3b7f775c8a44e54eb178eda9758207601f594bfc7d103fbf7ef9b5fc"),
+       "sl6-barrier": ("s2-0018-sl6/review_sl6.py.txt", "31a5493c1eb5c0935a272e1d0b30da8bcecf3ffaff9deacf332b7e60343e7fab"),
+       "sl7-destination": ("s2-0020-sl7/review_sl7.py.txt", "d821b14e64519d4f8b3913c936ecbada805f4db26bcc2d196bf563d3a8207fe7")}
+stamp = SCR / time.strftime("run-%Y%m%dT%H%M%S")
+stamp.mkdir(parents=True, exist_ok=False)
+partA = {}
+for sl, (rel, want) in OLD.items():
+    script = PROTO / "evidence/reviews" / rel
+    r = {"script": rel, "sha256": sha(script)}
+    check(r["sha256"] == want, f"A {sl}: slice review script changed")
+    dst = stamp / sl / "run"
+    shutil.copytree(CAT / sl, dst, symlinks=False)
+    src_files = sorted(p.relative_to(CAT / sl) for p in (CAT / sl).rglob("*") if p.is_file())
+    dst_files = sorted(p.relative_to(dst) for p in dst.rglob("*") if p.is_file())
+    same = src_files == dst_files and all(filecmp.cmp(CAT / sl / f, dst / f, shallow=False) for f in src_files)
+    check(same, f"A {sl}: copy not byte-identical")
+    env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
+    pr = subprocess.run([sys.executable, "-I", str(script), str(stamp / sl), str(PROTO)], capture_output=True, text=True, env=env, timeout=900)
+    out = json.loads(pr.stdout) if pr.returncode == 0 else {}
+    r.update(copyFiles=len(src_files), copyByteIdentical=same, exit=pr.returncode, stderrBytes=len(pr.stderr), problems=out.get("problems"),
+             outputSha256=hashlib.sha256(pr.stdout.encode()).hexdigest())
+    for k in ("workerProbesTotal", "tokenScan", "neverPublishScan"):
+        if k in out:
+            r[k] = out[k]
+    if sl == "sl6-barrier":
+        r["expiredDuty"] = out.get("repaired-e-expired-duty", {}).get("expiredCheck")
+        r["witness"] = {c: out[c]["witness"] for c in out if isinstance(out[c], dict) and "witness" in out[c]}
+    if sl == "sl7-destination":
+        r["expiryBoundary"] = out.get("repaired-e-expiry-boundary", {}).get("boundary")
+        r["wrongDestination"] = {c: dict(ops=[out[c].get("A_ops"), out[c].get("B_ops")], request=out[c].get("request"),
+                                         bDecisionUnderADomainIsWitness=out[c].get("bDecisionUnderADomainIsWitness"))
+                                 for c in out if "wrong-destination" in c}
+    if sl == "sl2-relay":
+        r["sameNonceTimeline"] = out.get("sameNonce", {}).get("timeline")
+    if sl == "sl5-trust":
+        r["rollbackAuthEpoch"] = {c: (out[c]["request"]["authEpochSigned"], out[c]["request"]["epochAtRequestBlock"]) for c in out if "rollback" in c}
+    check(pr.returncode == 0 and not pr.stderr and out.get("problems") == [], f"A {sl}: slice script exit/stderr/problems")
+    partA[sl] = r
+report["A_sliceScriptsOnGateCopy"] = dict(scratch=str(stamp), slices=partA)
+
+# ---------------------------------------------------------------------------------------------------------------------------------
+# Part B: cross-cutting per-row checks over all 56 rows
+# ---------------------------------------------------------------------------------------------------------------------------------
+
+
+def expected(sl, case, rep):
+    """(stress decisions, never-instantiated probes, instantiated probes) per row, from my slice reviews S2-0005..S2-0020."""
+    if sl in PRESOLO:
+        return 0, 0, 0
+    if sl == "sl1-subject":
+        return (1 if rep else 0), 0, 0
+    if sl == "sl2-relay":
+        return ((2 if "same-nonce" in case else 1) if rep else 0), 2, 0
+    if sl == "sl3-audit":
+        return ((1 if rep else 0), 0, 2) if "dropped" in case else (0, 2, 0)
+    if sl == "sl4-receipt":
+        return 1, 6, 0
+    if sl == "sl5-trust":
+        return 0, (5 if "rollback" in case else 3), 0
+    if sl == "sl6-barrier":
+        return (1 if rep else 0), (6 if ("expired" in case or (rep and "post-" in case)) else 5), 0
+    if sl == "sl7-destination":
+        return (1 if rep else 0), (10 if "wrong-destination" in case else 5), 0
+    raise ValueError(sl)
+
+
+HIST_STRESS_DECISIONS = {"sl1-subject": 1, "sl2-relay": 4, "sl3-audit": 1, "sl4-receipt": 7, "sl5-trust": 0, "sl6-barrier": 3, "sl7-destination": 2}
+HIST_PROBES = {"sl2-relay": 14, "sl3-audit": 6, "sl4-receipt": 42, "sl5-trust": 24, "sl6-barrier": 49, "sl7-destination": 45}
+
+rows, per_slice = {}, collections.defaultdict(lambda: collections.Counter())
+timing, margins, prepares, crash, sl4ref = [], [], [], {}, {}
+labels_found = set()
+gate_numbers = {}
+for slp in sorted(p for p in CAT.iterdir() if p.is_dir()):
+    sl = slp.name
+    for casep in sorted(p for p in slp.iterdir() if p.is_dir()):
+        case = casep.name
+        profs = [p for p in casep.iterdir() if p.is_dir()]
+        check(len(profs) == 1 and case.startswith(profs[0].name + "-"), f"{case}: one profile dir named by the case")
+        row, profile = profs[0], profs[0].name
+        rep, tag = profile == "repaired-e", f"{sl}/{case}"
+        r = {}
+        # ---- adapters, state dirs, deployments --------------------------------------------------------------------------------
+        ad = {"D1": (row / "adapter/process.json", row)}
+        if (row / "adapter-restarted/process.json").exists():
+            ad["D1-restarted"] = (row / "adapter-restarted/process.json", row)
+        for k in KINDS:
+            if (row / f"{k}-instance/adapter/process.json").exists():
+                ad[k] = (row / f"{k}-instance/adapter/process.json", row / f"{k}-instance")
+        procs = {n: load(p) for n, (p, _) in ad.items()}
+        deps = {n: load(d / "deployment.json") for n, (_, d) in ad.items()}
+        for n, (_, d) in ad.items():                     # every key label named in the published deployment and bootstrap files
+            for o in (deps[n], load(d / "bootstrap.json")):
+                for x in walk(o):
+                    if isinstance(x, dict):
+                        for k, v in x.items():
+                            if k.lower().endswith("keylabel") and isinstance(v, str):
+                                labels_found.add(v)
+                            if k.lower().endswith("keylabels") and isinstance(v, list):
+                                labels_found |= {y for y in v if isinstance(y, str)}
+        recovery = sl == "recovery-expiry"
+        point = case.rsplit("-", 1)[1] if recovery else None
+        for n, p in procs.items():
+            faulty = recovery and n == "D1"
+            mod = ["-m", "testtools.faulty_adapter", "--crash-at", point] if faulty else ["-m", "hmbc_protocol.adapter"]
+            check(p["argv"][1:1 + len(mod)] == mod and p["exitCode"] == (86 if faulty else 0) and p["failure"] is None
+                  and p.get("stderrSha256") == EMPTY and not [e for e in p["exchanges"] if e["failure"]], f"{tag} {n} adapter module/exit/stderr")
+        states = {n: arg(p, "--state-dir") for n, p in procs.items()}
+        depdirs = {n: arg(p, "--deployment").split("/deployments/")[1].split("/")[0] for n, p in procs.items()}
+        main = [n for n in procs if n != "D1-restarted"]
+        check(len({states[n] for n in main}) == len(main) and len({depdirs[n] for n in main}) == len(main), f"{tag} distinct state dirs and deployments")
+        check(depdirs["D1"].startswith(f"E-gate-20261012-{sl}-") and depdirs["D1"].endswith("-" + profile), f"{tag} D1 deployment run id")
+        for n, (_, d) in ad.items():
+            check(sha(d / "deployment.json") == load(d / "bootstrap.json")["binding"]["deploymentSha256"], f"{tag} {n} published deployment = bootstrap binding")
+            if n in KINDS:
+                check(depdirs[n] == depdirs["D1"] + "-" + n, f"{tag} {n} pinned to its own deployment {depdirs[n]}")
+        if "D1-restarted" in procs:
+            check(states["D1-restarted"] == states["D1"] and depdirs["D1-restarted"] == depdirs["D1"], f"{tag} restart on the same state and deployment")
+        r["adapters"] = {n: dict(module=procs[n]["argv"][2], exit=procs[n]["exitCode"], exchanges=len(procs[n]["exchanges"]), deployment=depdirs[n],
+                                 state=states[n].split("/out/catalog/")[-1]) for n in procs}
+        # ---- exchange logs ------------------------------------------------------------------------------------------------------
+        logs = {"alice": ("D1", row / "alice/exchanges.json"), "bob": ("D1", row / "bob/exchanges.json")}
+        for k in KINDS:
+            if k in procs:
+                f = row / ("destination-stress/source/exchanges.json" if k == "source" else f"{k}-stress/exchanges.json")
+                logs[k] = (k, f)
+        ex = {n: (load(f) if f.exists() else []) for n, (_, f) in logs.items()}
+        r["ops"] = {n: [e["operation"] for e in v] for n, v in ex.items()}
+        d1_pairs = collections.Counter((e["requestSha256"], e["responseSha256"]) for e in procs["D1"]["exchanges"])
+        log_pairs = collections.Counter((e["requestSha256"], e["responseCanonicalSha256"]) for n in ("alice", "bob") for e in ex[n])
+        if not recovery:
+            check(d1_pairs == log_pairs, f"{tag} D1 process exchanges = alice+bob logs (request/response hashes)")
+        for k in KINDS:
+            if k in procs:
+                check(collections.Counter((e["requestSha256"], e["responseSha256"]) for e in procs[k]["exchanges"])
+                      == collections.Counter((e["requestSha256"], e["responseCanonicalSha256"]) for e in ex[k]), f"{tag} {k} process exchanges = log")
+        allops = [(n, e) for n, v in ex.items() for e in v]
+        check("rotate_epoch" not in {e["operation"] for _, e in allops}, f"{tag} rotate_epoch served")
+        if not rep:
+            check(not [1 for _, e in allops if e["operation"] in WITNESS_OPS], f"{tag} witness operation in a paper row")
+        rel_logs = sorted(n for n, e in allops if e["operation"] == "release")
+        want_rel = ["alice"] + (["subject"] if sl == "sl1-subject" and not rep else []) + (["audit"] if sl == "sl3-audit" and "dropped" in case else [])
+        check(rel_logs == sorted(want_rel), f"{tag} release served by {rel_logs}")
+        # ---- A31 ------------------------------------------------------------------------------------------------------------------
+        dec = [(n, e["response"]["result"]["decision"]["requestDigest"]) for n, e in allops if e["operation"] == "collect_decision" and e["response"]["ok"]]
+        check(len(dec) == len([1 for _, e in allops if e["operation"] == "collect_decision"]), f"{tag} a collect_decision failed")
+        prepared = {n: {e["response"]["result"]["requestDigest"]: e["response"]["result"] for e in ex[n] if e["operation"] == "prepare_request" and e["response"]["ok"]}
+                    for n in ex}
+        digs = [d for _, d in dec]
+        check(len(digs) == len(set(digs)), f"{tag} A31: a request digest decided twice")
+        check(all(d in prepared[n] for n, d in dec), f"{tag} A31: a decision for a request not prepared by the same adapter")
+        d1n = sum(1 for n, _ in dec if n in ("alice", "bob"))
+        stn = sum(1 for n, _ in dec if n not in ("alice", "bob"))
+        e_st, e_probe, e_inst = expected(sl, case, rep)
+        check(d1n == (2 if rep else 0) and [n for n, _ in dec if n == "alice"].count("alice") == (1 if rep else 0), f"{tag} A31 D1 decisions {d1n}")
+        check(stn == e_st, f"{tag} A31 stress decisions {stn} != {e_st}")
+        r["A31"] = dict(d1Decisions=d1n, stressDecisions=stn, distinctDigests=len(set(digs)))
+        per_slice[sl].update(rows=1, d1Decisions=d1n, stressDecisions=stn, repairedRows=int(rep))
+        # ---- D49 ------------------------------------------------------------------------------------------------------------------
+        cmds = load(row / "commands.json")
+        probes = [c for c in cmds if c.get("workerObservation")]
+        never = [c for c in probes if c["workerObservation"] == "never-instantiated (verified)"]
+        inst = [c for c in probes if c["workerObservation"] == "instantiated"]
+        check(len(probes) == len(never) + len(inst), f"{tag} unknown worker observation")
+        stress_states = {states[k]: k for k in KINDS if k in procs}
+        check(all(c["argv"][1:3] == ["-m", "hmbc_protocol.worker_log"] and c["exitCode"] == 1 and arg(c, "--state-dir") in stress_states for c in never),
+              f"{tag} D49 probe exit/target")
+        check(all(c["exitCode"] == 0 and stress_states.get(arg(c, "--state-dir")) == "audit" for c in inst), f"{tag} instantiated probe target")
+        check(len(never) == e_probe and len(inst) == e_inst, f"{tag} probes {len(never)}/{len(inst)} != {e_probe}/{e_inst}")
+        probed = collections.Counter(stress_states[arg(c, "--state-dir")] for c in never)
+        for k in KINDS:
+            if k in procs:
+                served = {e["operation"] for e in ex[k]}
+                if probed[k]:
+                    check(not served & WORKER_OPS, f"{tag} {k}: probed never-instantiated but served a worker operation")
+                else:
+                    check(bool(served & {"encrypt_record"}), f"{tag} {k}: no D49 probe although no worker was created")
+        obs = []
+        for sd in sorted(row.glob("*-stress")):
+            for f in sd.rglob("*.json"):
+                obs += [o for o in walk(load(f)) if isinstance(o, dict) and "instantiated" in o]
+        by_dir = collections.defaultdict(list)
+        for o in obs:
+            if o["instantiated"] is False:
+                m = NEVER.fullmatch(o.get("message", ""))
+                ok = m is not None and m.group(1) in stress_states and probed[stress_states[m.group(1)]] > 0 and o.get("exitCode") == 1 \
+                    and o.get("checkedAbsent") == [m.group(1) + "/worker/worker.sqlite", m.group(1) + "/worker.sqlite"]
+                check(ok, f"{tag} stored never-instantiated observation")
+                by_dir[m.group(1) if m else None].append(o)
+            else:
+                check(sl == "sl3-audit" and "dropped" in case, f"{tag} stored instantiated observation outside SL3 dropped")
+        check(all(all(x == v[0] for x in v) for v in by_dir.values()), f"{tag} stored observations not identical per worker")
+        r["D49"] = dict(neverInstantiatedProbes=len(never), instantiatedProbes=len(inst), probedAdapters=dict(probed), storedObservations=len(obs))
+        per_slice[sl].update(neverProbes=len(never), instantiatedProbes=len(inst), stressAdapters=sum(1 for k in KINDS if k in procs),
+                             neverInstantiatedStressAdapters=sum(1 for k in KINDS if k in procs and probed[k]))
+        # ---- prepare_request = mined requestAccess (every prepared request) -----------------------------------------------------
+        for n, pmap in prepared.items():
+            owner = logs[n][0]
+            dep = deps[owner]
+            txf = (row if owner == "D1" else row / f"{owner}-instance") / "pbc-native/transactions.json"
+            ras = [t for t in load(txf) if t.get("method") == "requestAccess"]
+            decoded = []
+            for t in ras:
+                name, a = PSC.decode_input(bytes.fromhex(t["calldata"][2:]))
+                decoded.append((t, a[0], a[1]))
+            for dg, res in pmap.items():
+                hit = [(t, q, s) for t, q, s in decoded if q == res["request"] and s == res["signature"]]
+                q = res["request"]
+                redig = "0x" + messages.digest_of("AccessRequest", q, messages.domain_for("AccessRequest", q, dep)).hex()
+                c = dep["chains"]
+                bound = (q["psc"] == c["pbc"]["contracts"]["PSC"] and q["kssc"] == c["dbc"]["contracts"]["KSSC"]
+                         and q["sourceChainId"] == c["pbc"]["chainId"] and q["destinationChainId"] == c["dbc"]["chainId"])
+                ok = len(hit) == 1 and hit[0][0]["signerRole"] == "relay" and redig == dg and eip712.recover(bytes.fromhex(dg[2:]), res["signature"]) == q["gid"] and bound
+                check(ok, f"{tag} {n}: prepared request {dg[:10]} not mined verbatim/bound")
+                prepares.append(dict(row=tag, log=n, digest=dg[:12], mined=len(hit), status=(hit[0][0].get("receipt") or {}).get("status") if hit else None,
+                                     authEpoch=q["authEpoch"], expiresAt=q["expiresAt"], bound=bound))
+        # ---- witness timing: every decision ---------------------------------------------------------------------------------------
+        for n, e in allops:
+            if e["operation"] != "collect_decision":
+                continue
+            owner = logs[n][0]
+            dep = deps[owner]
+            w = dep["fixture"]["witnessSet"]["witnesses"][0]
+            ttl = int(dep["fixture"]["ttlSeconds"]["checkpointMax"])
+            dres = e["response"]["result"]
+            d = dres["decision"]
+            q = prepared[n][d["requestDigest"]]["request"]
+            cps = [x["response"]["result"] for x in ex[n] if x["operation"] == "collect_checkpoint" and x["response"]["result"]["checkpoint"]["sequence"] == d["stateSequence"]]
+            check(len(cps) == 1, f"{tag} {n}: checkpoint for the decision")
+            cp = cps[0]["checkpoint"]
+            check(signer("AccessDecision", d, dres["signatures"][0], dep) == w and signer("StateCheckpoint", cp, cps[0]["signatures"][0], dep) == w,
+                  f"{tag} {n}: witness signatures under the adapter's deployment domain")
+            check(d["sourceBlockNumber"] == cp["sourceBlockNumber"] and d["sourceBlockHash"] == cp["sourceBlockHash"], f"{tag} {n}: decision on its checkpoint")
+            R, C, D = int(q["expiresAt"]), int(cp["expiresAt"]), int(d["expiresAt"])
+            L = C - ttl                                    # witness DBC now at checkpoint creation (witness.py:65); the decision follows it
+            m = min(R, C)
+            if D < m:
+                binding, okrule = "dbcNow+30", D >= L + 30
+            else:
+                binding, okrule = ("request" if R <= C else "checkpoint"), D == m
+            check(okrule and D <= m, f"{tag} {n}: decision expiry rule min(request, checkpoint, DBC now + 30)")
+            timing.append(dict(row=tag, log=n, result=d["result"], requestExpiresAt=R, checkpointExpiresAt=C, decisionExpiresAt=D, binding=binding,
+                               witnessNowLowerBound=L, lowerBoundPlus30MinusBinding=L + 30 - m, forcedByLowerBound=L + 30 >= m))
+        # ---- release margins (published worker logs) -----------------------------------------------------------------------------
+        seen = set()
+        for f in row.rglob("*.json"):
+            for o in walk(load(f)):
+                if not (isinstance(o, dict) and {"releases", "events", "deploymentFingerprint"} <= set(o)):
+                    continue
+                for rr in o["releases"]:
+                    sends = [int(ev["timestamp"]) for ev in o["events"] if ev["type"] == "RELEASE_SENT" and ev["grantId"] == rr["grantId"]]
+                    key = (o["deploymentFingerprint"], rr["grantId"], rr["sendAttempts"])
+                    if key in seen or not sends:
+                        continue
+                    seen.add(key)
+                    mg = int(rr["grantExpiresAt"]) - max(sends)
+                    check(mg > 0 and int(rr["createdAt"]) < int(rr["grantExpiresAt"]) and rr["delivery"] == "unknown", f"{tag} release at/after grant expiry")
+                    top = f.relative_to(row).parts[0]
+                    margins.append(dict(row=tag, scope="stress" if top.endswith(("-stress", "-instance")) else "D1", file=str(f.relative_to(row)),
+                                        sends=rr["sendAttempts"], completed=rr["completedAttempts"], lastSend=max(sends), marginLastSend=mg))
+        # ---- crash hook (6 recovery rows) -----------------------------------------------------------------------------------------
+        if recovery:
+            fa, rs = procs["D1"]["exchanges"], procs["D1-restarted"]["exchanges"]
+            crash_x = fa[-1]
+            rel = [e for e in ex["alice"] if e["operation"] == "release"]
+            check(len(rel) == 1 and crash_x.get("crashPoint") == point and crash_x.get("terminalObserved") is True and crash_x["requestSha256"] == rel[0]["requestSha256"],
+                  f"{tag} crash on the release exchange")
+            check((crash_x["responseSha256"] is None) == (point == "after_intent"), f"{tag} crash response presence")
+            check(rs[0]["requestSha256"] == crash_x["requestSha256"] and rs[0]["responseSha256"] == rel[0]["responseCanonicalSha256"]
+                  and (point == "after_intent" or rs[0]["responseSha256"] == crash_x["responseSha256"]), f"{tag} restart returns the cached response")
+            fa_req = collections.Counter(e["requestSha256"] for e in fa + rs)
+            lg_req = collections.Counter(e["requestSha256"] for n in ("alice", "bob") for e in ex[n])
+            check(fa_req - lg_req == collections.Counter({crash_x["requestSha256"]: 2}) and not lg_req - fa_req, f"{tag} exchanges = logs + restart retry + expired retry")
+            expired_x = [e for e in rs[1:] if e["requestSha256"] == crash_x["requestSha256"]]
+            check(len(expired_x) == 1 and expired_x[0]["responseSha256"] != rs[0]["responseSha256"], f"{tag} one expired retry of the identical release request")
+            wb, wc, wr = (load(row / f"recovery/worker-{s}.json") for s in ("before-crash", "after-crash", "after-retry"))
+            want_c = (0, 0, ["RELEASE_INTENT"]) if point == "after_intent" else (1, 0, ["RELEASE_INTENT", "RELEASE_SENT"])
+            want_r = (1, 1) if point == "after_intent" else (2, 1)
+            check(wb["events"] == [] and wb["releases"] == [], f"{tag} idle before crash")
+            check(len(wc["releases"]) == 1 and (wc["releases"][0]["sendAttempts"], wc["releases"][0]["completedAttempts"], [x["type"] for x in wc["events"]]) == want_c,
+                  f"{tag} worker at crash")
+            check(len(wr["releases"]) == 1 and (wr["releases"][0]["sendAttempts"], wr["releases"][0]["completedAttempts"]) == want_r
+                  and wr["counts"]["releaseIntentCount"] == "1" and [x["type"] for x in wr["events"]].count("RELEASE_INTENT") == 1
+                  and wr["releases"][0]["tokenDigest"] == wc["releases"][0]["tokenDigest"] and wr["deploymentFingerprint"] == wb["deploymentFingerprint"],
+                  f"{tag} worker after retry: one release, one intent, same token digest")
+            res = load(row / "recovery/result.json")
+            check(res["ok"] and res["point"] == point and res["delivery"] == "unknown" and (res["sendAttempts"], res["completedAttempts"]) == want_r
+                  and res["tokenDigest"] == wr["releases"][0]["tokenDigest"] and res["originalExpiry"] == wr["releases"][0]["grantExpiresAt"], f"{tag} recovery result")
+            er = load(row / "expired-retry/result.json")
+            ewb, ewa = load(row / "expired-retry/worker-before.json"), load(row / "expired-retry/worker-after.json")
+            nb, na = load(row / "expired-retry/native-before.json"), load(row / "expired-retry/native-after.json")
+            exp = int(res["originalExpiry"])
+            check(er["ok"] and er["error"] == "EXPIRED" and int(er["targetDbcTime"]) == exp and int(er["observedDbcTime"]) >= exp and er["grantId"] == wr["releases"][0]["grantId"]
+                  and er["workerUnchanged"] is True and er["nativeUnchanged"] is True, f"{tag} expired retry result")
+            check(ewb == ewa and nb == na and ewb["events"] == wr["events"] and ewb["releases"] == wr["releases"], f"{tag} expired retry changed worker or native state")
+            outcomes = [x for x in load(row / "alice/result.json")["observed"]["events"] if x["type"] == "OUTCOME_RECORDED"]
+            check(len(outcomes) == 1, f"{tag} one outcome after recovery (runner result)")
+            last = max(int(x["timestamp"]) for x in wr["events"] if x["type"] == "RELEASE_SENT")
+            crash[case] = dict(point=point, faultyExit=procs["D1"]["exitCode"], crashResponse=crash_x["responseSha256"] is not None, restartModule=procs["D1-restarted"]["argv"][2],
+                               atCrash=list(want_c[:2]), afterRetry=list(want_r), intents=1, originalExpiry=exp, lastSend=last, marginLastSend=exp - last,
+                               expiredRetry=dict(error=er["error"], target=er["targetDbcTime"], observed=er["observedDbcTime"]))
+            gate_numbers[f"recovery {case}"] = dict(originalExpiry=exp, marginLastSend=exp - last)
+        # ---- SL4: deviating witness and the refusal record -----------------------------------------------------------------------
+        if sl == "sl4-receipt":
+            variant = "binding" if "binding-control" in case else ("signature" if "signature-control" in case else "positive")
+            dev = [c for c in cmds if "testtools.deviating_witness" in c.get("argv", [])]
+            check(len(dev) == (1 if variant == "binding" else 0), f"{tag} deviation calls")
+            sub = load(row / {"binding": "receipt-stress/deviation.json", "signature": "receipt-stress/altered-receipt.json",
+                              "positive": "receipt-stress/honest-receipt.json"}[variant])
+            txs = [t for t in load(row / "receipt-instance/pbc-native/transactions.json") if t.get("method") == "reportAttestedOutcome"]
+            check(len(txs) == 1, f"{tag} one reportAttestedOutcome")
+            name, a = PSC.decode_input(bytes.fromhex(txs[0]["calldata"][2:]))
+            st = txs[0]["receipt"]["status"]
+            b, af = load(row / "receipt-stress/before.json"), load(row / "receipt-stress/after.json")
+            check(a[2] == sub["receipt"] and a[3] == sub["signatures"] and list(a) == load(row / "receipt-stress/public-call.json")["arguments"]
+                  and txs[0]["transactionHash"] == load(row / "receipt-stress/stress-transaction.json")["hash"], f"{tag} mined report carries the submitted receipt")
+            if variant == "positive":
+                check(st == "0x1" and txs[0]["expectedSuccess"] is True, f"{tag} positive control recorded")
+            else:
+                check(st == "0x0" and txs[0]["expectedSuccess"] is False and b["requests"] == af["requests"] and b["grants"] == af["grants"]
+                      and all(v["outcomeLogId"] == "0" for v in af["requests"].values()), f"{tag} refusal: status 0, PSC unchanged, no outcome")
+            res = load(row / "receipt-stress/result.json")
+            sl4ref[case] = dict(variant=variant, deviationCalls=len(dev), testOnly=(sub.get("testOnly") if variant == "binding" else None),
+                                label=("A40" in sub.get("label", "")) if variant == "binding" else None, status=st,
+                                returnCode=int(txs[0]["rejectionTrace"]["returnValue"][-2:], 16) if st == "0x0" else None,
+                                result=res.get("error"), outcome=res.get("outcome"))
+        # ---- thin-row numbers for the RQ1-E.md cross-check ----------------------------------------------------------------------
+        if sl == "sl7-destination" and rep and "expiry" in case:
+            tl = load(row / "destination-stress/timeline.json")
+            dx = [t for t in timing if t["row"] == tag and t["log"] == "destination"][0]
+            gate_numbers["sl7 expiry repaired"] = dict(requestTimestamp=tl["requestTimestamp"], requestExpiresAt=dx["requestExpiresAt"], decisionExpiresAt=dx["decisionExpiresAt"],
+                                                        checkpointExpiresAt=dx["checkpointExpiresAt"], witnessNowAtCheckpoint=dx["witnessNowLowerBound"],
+                                                        consume=int(load(row / "destination-stress/stress-transaction.json")["blockTimestamp"], 16), dbcBefore=tl["dbcBefore"])
+        if sl == "sl6-barrier" and "expired" in case:
+            tl, fc = load(row / "barrier-stress/timeline.json"), load(row / "barrier-stress/facts.json")
+            g = dict(dutyEnd=int(fc["clock"]["dutyEnd"]), consume=int(tl["consumeTimestamp"]), requestExpiresAt=int(tl["requestExpiresAt"]))
+            if rep:
+                now = int(fc["decision"]["collectedDbcNow"])
+                dx = [t for t in timing if t["row"] == tag and t["log"] == "barrier"][0]
+                g.update(collectedDbcNow=now, decisionExpiresAt=dx["decisionExpiresAt"], checkpointExpiresAt=dx["checkpointExpiresAt"], witnessNowLowerBound=dx["witnessNowLowerBound"])
+                check(dx["witnessNowLowerBound"] <= now < g["dutyEnd"] <= g["consume"] < min(dx["decisionExpiresAt"], dx["requestExpiresAt"], dx["checkpointExpiresAt"]),
+                      f"{tag} expired duty: witness lower bound <= collected < duty end <= consume < min(d, r, cp)")
+            gate_numbers[f"sl6 expired {profile}"] = g
+        if sl == "nonce-replay" and rep:
+            nr = load(row / "alice/nonce-replay/replay-transaction.json")
+            rel_ws = [m for m in margins if m["row"] == tag and m["scope"] == "D1"]
+            dx = [t for t in timing if t["row"] == tag and t["log"] == "alice"][0]
+            check(len(rel_ws) == 1, f"{tag} one D1 release")
+            gate_numbers["nonce-replay repaired"] = dict(replayBlock=int(nr["blockTimestamp"], 16), requestExpiresAt=dx["requestExpiresAt"],
+                                                         decisionExpiresAt=dx["decisionExpiresAt"], releaseLastSend=rel_ws[0]["lastSend"],
+                                                         releaseMargin=rel_ws[0]["marginLastSend"])
+        rows[tag] = r
+
+report["B_rows"] = rows
+check(len(rows) == 56, f"{len(rows)} rows, not 56")
+report["B_perSlice"] = {sl: dict(c) for sl, c in per_slice.items()}
+for sl, n in HIST_STRESS_DECISIONS.items():
+    check(per_slice[sl]["stressDecisions"] == n, f"{sl}: stress decisions {per_slice[sl]['stressDecisions']} != historical {n}")
+for sl, n in HIST_PROBES.items():
+    check(per_slice[sl]["neverProbes"] == n, f"{sl}: D49 probes {per_slice[sl]['neverProbes']} != historical {n}")
+tot = collections.Counter()
+for c in per_slice.values():
+    tot.update(c)
+report["B_totals"] = dict(tot)
+check(tot["neverProbes"] == 180 and tot["instantiatedProbes"] == 6 and tot["stressDecisions"] == 18 and tot["d1Decisions"] == 48, "totals")
+# 47 stress adapters (44 stress deployments + SL7's 3 B); 41 never instantiated a worker = S3-0022's 41 worker-less private state dirs
+check(tot["stressAdapters"] == 47 and tot["neverInstantiatedStressAdapters"] == 41, "stress adapter counts")
+report["B_crashHook"] = crash
+report["B_sl4DeviationAndRefusal"] = sl4ref
+report["B_witnessTiming"] = dict(decisions=len(timing), byBinding=dict(collections.Counter(t["binding"] for t in timing)),
+                                 forcedByLowerBound=sum(t["forcedByLowerBound"] for t in timing),
+                                 minLowerBoundMargin=min(t["lowerBoundPlus30MinusBinding"] for t in timing),
+                                 stress=[t for t in timing if t["log"] not in ("alice", "bob")],
+                                 d1Summary=dict(n=sum(1 for t in timing if t["log"] in ("alice", "bob")),
+                                                lowerBoundMarginRange=[min(t["lowerBoundPlus30MinusBinding"] for t in timing if t["log"] in ("alice", "bob")),
+                                                                       max(t["lowerBoundPlus30MinusBinding"] for t in timing if t["log"] in ("alice", "bob"))]))
+msl = collections.defaultdict(list)
+for m in margins:
+    msl[m["row"].split("/")[0] + " " + m["scope"]].append(m["marginLastSend"])
+report["B_releaseMargins"] = dict(releases=len(margins), perSlice={k: dict(n=len(v), min=min(v), max=max(v)) for k, v in sorted(msl.items())})
+report["B_prepareRequest"] = dict(prepared=len(prepares), minedVerbatim=sum(1 for p in prepares if p["mined"] == 1), bound=sum(p["bound"] for p in prepares),
+                                  perSlice=dict(collections.Counter(p["row"].split("/")[0] for p in prepares)),
+                                  notMined=[p for p in prepares if p["mined"] != 1],
+                                  statusCounts=dict(collections.Counter(p["status"] for p in prepares)))
+report["B_gateNumbers"] = gate_numbers
+
+# ---------------------------------------------------------------------------------------------------------------------------------
+# Part C: never-publish scan of the published copy (plus RQ1-E.md and fill_gate.py.txt)
+# ---------------------------------------------------------------------------------------------------------------------------------
+base = ["witness-1", "relay", "alice", "bob", "mallory"] + [f"H{i}-{s}" for i in range(1, 5) for s in ("root", "ca-admin")]
+labels = sorted(set(base) | {"deployer", "witness-2", "witness-3", "witness-4"} | labels_found)
+keyhex = {lb: keys.synthetic_private_key(lb)[2:].lower() for lb in labels}
+files = sorted(p for p in GATE.rglob("*"))
+check(not [p for p in files if p.is_symlink()], "symlink in the published copy")
+files = [p for p in files if p.is_file()]
+extra = [REPO / "evaluation/reports/RQ1-E.md", REPO / "evaluation/reports/fill_gate.py.txt"]
+digs, sdigs, hexes, tokf, privf, keyhits = set(), set(), set(), 0, [], []
+for f in files:
+    if f.suffix == ".json":
+        try:
+            o = json.loads(f.read_text())
+        except Exception:
+            o = None
+        for x in walk(o):
+            if isinstance(x, dict):
+                if "tokenDigest" in x:
+                    digs.add(x["tokenDigest"].lower())
+                if "tokenSha256" in x:
+                    sdigs.add(x["tokenSha256"].lower().removeprefix("0x"))
+                if isinstance(x.get("export"), str):
+                    try:
+                        digs |= {y["tokenDigest"].lower() for y in json.loads(x["export"]).get("releases", [])}
+                    except Exception:
+                        pass
+for f in files + extra:
+    t = f.read_text(errors="replace").lower()
+    hexes |= set(re.findall(r"0x[0-9a-f]{64}", t)) | {"0x" + h for h in re.findall(r"(?<![0-9a-fx])[0-9a-f]{64}(?![0-9a-f])", t)}
+    tokf += len(re.findall(r'"token"\s*:', t))
+    privf += [(str(f.relative_to(REPO)), m.group(1)) for m in re.finditer(r'"([a-z_]*(?:private_?key|secret)[a-z_]*)"\s*:', t)]
+    keyhits += [(str(f.relative_to(REPO)), lb) for lb, k in keyhex.items() if k in t]
+pre_k = [x for x in hexes if "0x" + keccak(bytes.fromhex(x[2:])).hex() in digs]
+pre_s = [x for x in hexes if hashlib.sha256(bytes.fromhex(x[2:])).hexdigest() in sdigs]
+rel = [str(p.relative_to(GATE)) for p in files]
+bad_paths = [p for p in rel if "private-adapter-state" in p or ".sqlite" in p or p.startswith("snapshots/") or "/snapshots/" in p
+             or re.search(r"(^|/)(pbc|dbc)-rpc/", p) or (p.endswith(".log") and p != "run.log") or "receipt-deviate" in p]
+check(len(files) == 2126 and "run.log" in rel, f"published file count {len(files)}")
+privf_bad = [x for x in privf if x[1] != "secretscan"]          # "secretScan" is the name of agent 3 (proxy)'s scan summary record
+check(not keyhits and not pre_k and not pre_s and tokf == 0 and not privf_bad and not bad_paths, "never-publish scan")
+report["C_neverPublish"] = dict(files=len(files), extraFiles=[str(p.relative_to(REPO)) for p in extra], keyLabels=len(labels),
+                                labelsBeyondBase=sorted(set(labels) - set(base)), keyHits=keyhits, hex32Distinct=len(hexes),
+                                tokenDigests=len(digs), tokenSha256s=len(sdigs), keccakPreimageHits=len(pre_k), sha256PreimageHits=len(pre_s),
+                                tokenFields=tokf, privateOrSecretFieldNames=privf, privateOrSecretFieldsNotScanRecords=privf_bad,
+                                forbiddenPaths=bad_paths)
+
+# ---------------------------------------------------------------------------------------------------------------------------------
+# Part D: RQ1-E.md protocol sections against my rq1-protocol-sections.md (5c4c487)
+# ---------------------------------------------------------------------------------------------------------------------------------
+rq = [x.strip() for x in (REPO / "evaluation/reports/RQ1-E.md").read_text().splitlines()]
+mine = [x.strip() for x in (REPO / "communication/agent-1/solo/agent-2-proxy/rq1-protocol-sections.md").read_text().splitlines()]
+ptab = lambda ls: [x for x in ls if re.match(r"\| P\d+ \|", x)]  # noqa: E731
+
+
+def table(ls, header):
+    i = ls.index(header)
+    out = []
+    for x in ls[i:]:
+        if not x.startswith("|"):
+            break
+        out.append(x)
+    return out
+
+
+rqset = set(rq)
+D = {"pTableIdentical": ptab(rq) == ptab(mine), "pRows": [len(ptab(mine)), len(ptab(rq))]}
+for name, hdr in (("a31Table", "| Slice (rows) | Stress-adapter operations | `collect_decision`: paper rows | `collect_decision`: repaired-e rows |"),
+                  ("d49Table", "| Slice | Worker observations | Never-publish scan (published evidence only) |"),
+                  ("timingTable", "| Item | Value | Source |"),
+                  ("crashCountTable", "| Point | At crash (sent / completed) | After retry (sent / completed) | Intents |")):
+    t = table(mine, hdr)
+    D[name] = dict(lines=len(t), missingVerbatim=[x[:140] for x in t if x not in rqset])
+check(D["pTableIdentical"], "RQ1-E.md P1-P16 differ from rq1-protocol-sections.md")
+gn = gate_numbers
+want_strings = [str(gn["sl7 expiry repaired"][k]) for k in ("requestTimestamp", "requestExpiresAt", "checkpointExpiresAt", "witnessNowAtCheckpoint", "dbcBefore")] \
+    + [str(gn["sl6 expired repaired-e"][k]) for k in ("dutyEnd", "consume", "requestExpiresAt")] \
+    + [str(gn[f"recovery {c}"]["originalExpiry"]) for c in ("repaired-e-after_intent", "repaired-e-after_send")] \
+    + [str(gn["sl6 expired paper-strict"]["consume"]), str(gn["sl6 expired paper-minimal"]["consume"])] \
+    + [str(gn["nonce-replay repaired"][k]) for k in ("requestExpiresAt", "replayBlock", "releaseLastSend")]
+text = "\n".join(rq)
+D["gateNumbersPresent"] = {s: (s in text) for s in want_strings}
+check(all(D["gateNumbersPresent"].values()), "a derived gate number is absent from RQ1-E.md")
+risky = ["exactly-once", "exactly once", "atomic", "delivered", "secret", "confidential", "exploit", "vulnerab", "byzantine", "power-loss",
+         "power loss", "decrypt", "separately keyed", "performance", "authors' implementation", "janus"]
+D["mustNotClaimHits"] = [(i + 1, x.strip()[:170]) for i, x in enumerate(rq) if any(w in x.lower() for w in risky)]
+report["D_rq1"] = D
+
+report["problems"] = problems
+print(json.dumps(report, indent=1, default=str))

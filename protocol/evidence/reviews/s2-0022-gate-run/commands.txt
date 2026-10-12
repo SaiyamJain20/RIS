@@ -1,0 +1,26 @@
+# S2-0022 protocol-scope review of the gate E run E-gate-20261012 (S3-0022), on the published copy. Correlated self-review (A1-0059).
+# repo HEAD 127d15f300f2f7eed6950ee89de19b1d94783556 (tree clean except this new directory); host Python 3.13.5 (.venv); date 2026-10-12T06:21:57Z
+# evidence: evaluation/evidence/e3/gate-run-20261012/ (2126 files; manifest.json 908fd615.., gate-evidence.json 47e38dd3.., catalog-coverage-56.json e57e4983..,
+#           README.md 8425d7e6.., never-publish-scan.json f84d18fa..); evaluation/reports/RQ1-E.md 0ec51e8e..; S3-0022 208f08cf..
+#
+# command (cwd repo root; read-only on the evidence; writes byte-identical slice copies to the scratch dir only):
+#   /usr/bin/time -v env PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I protocol/evidence/reviews/s2-0022-gate-run/review_gate_run.py.txt \
+#       evaluation/evidence/e3/gate-run-20261012 <repo root> /home/saiyamjain/.claude/jobs/aed51961/tmp/p2/s2-0022 > review_gate_run.out.json
+#   exit 0, script stderr empty, problems [], 10.03 s wall, 56332 kB max RSS
+#   scratch copies: /home/saiyamjain/.claude/jobs/aed51961/tmp/p2/s2-0022/run-20261012T115158/<slice>/run (job tmp, not published)
+#
+# Part A runs the seven committed slice review scripts UNCHANGED (sha256 checked in the script) on byte-identical copies (filecmp, shallow=False)
+# of catalog/sl{1..7}-*: s2-0005-sl1 bc2c7ed8.., s2-0010-sl2-r2 6e8b1b28.., s2-0012-sl3 ab88ba78.., s2-0014-sl4 0eea5b55.., s2-0016-sl5 b8ea8dfc..,
+# s2-0018-sl6 31a5493c.., s2-0020-sl7 d821b14e..; each: exit 0, stderr empty, problems [].
+# Part B: all 56 rows: adapters (module, exit, stderr, state dirs, deployment run id + bootstrap/manifest sha256 join), process exchanges = logs,
+#   A31 (every collect_decision, D1 and stress), D49 (every worker probe and stored observation), crash hook (6 rows), SL4 deviation + refusal
+#   record, witness timing (every decision), release margins (every published worker release row), prepare_request = mined requestAccess (every
+#   prepared request; calldata decoded with protocol/abi/PSC.json, digests and signers with hmbc_protocol.messages/eip712 at pin-identical code).
+# Part C: never-publish scan: 2126 published files + RQ1-E.md + fill_gate.py.txt; TEST-ONLY keys of 19 labels derived in memory (not printed);
+#   token-digest preimage checks (keccak for tokenDigest, sha256 for tokenSha256); "token"/private/secret field names; forbidden paths; symlinks.
+# Part D: RQ1-E.md vs communication/agent-1/solo/agent-2-proxy/rq1-protocol-sections.md (5c4c487, sha256 fa134647..): P1-P16 rows, the A31,
+#   D49, witness-timing and crash-count tables, the gate numbers derived in Part B, and a phrase list for the must-not-claim check (manual reading).
+#
+# protocol pin check: git diff 0716a8e HEAD -- protocol/hmbc_protocol protocol/testtools protocol/abi protocol/exports  -> empty
+#                     sha256sum -c --quiet protocol/evidence/source-manifest.sha256                                       -> exit 0
+# No service, no test and no suite was run for this review. Private adapter state and the raw output in job tmp were not read.

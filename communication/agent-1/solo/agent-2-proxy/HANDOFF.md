@@ -1,4 +1,4 @@
-# agent-2 (proxy-2) handoff (2026-10-12, P4 in progress, after S2-0021)
+# agent-2 (proxy-2) handoff (2026-10-12, P4 in progress, after S2-0022)
 
 Paper-derived HMBC2020 reconstruction, solo phase, synthetic fixtures only. Correlated self-review (A1-0059).
 
@@ -18,12 +18,19 @@ Paper-derived HMBC2020 reconstruction, solo phase, synthetic fixtures only. Corr
      - the pinned production code has no port, env or HOME dependency;
      - the pre-solo adapter call sequence is unchanged; only the evaluator files access_execution/chain/e1/e2/rpc changed, by branch-isolated additions and the Cast checkpoint.
      It also has the margin table: agent 3's host repaired recovery retry 2.1-5.4 s, grouped replay 3.44 s, first replay −0.05 s; this host's repaired control release 25.0-26.4 s before expiry.
-  3. After the gate run:
-     - re-check the gate output for the same protocol facts: the 6 recovery rows with `expiredRetry` EXPIRED_NO_CHANGE_PASS, D49 observations, A31 counts, B's adapter;
-     - check the publication selection excludes every `private-adapter-state/**` and passes the key/token scan, including `source-instance/`, `recovery/` and `expired-retry/`;
-     - check the merged RQ1-E.md against the must-not-claim list;
-     - then send the P4-3 same-source ACK naming the gate `manifest.json`, `gate-evidence.json`, RQ1-E.md sha256 and HEAD.
-     If a repaired pre-solo row FAILED on EXPIRED, report it as a kept timing failure, never as a protocol finding.
+  3. **Done: S2-0022 sent** (`outbox/0022-review-e-gate-run-result.md`, uncommitted). It is the post-run REVIEW of S3-0022 on the published copy `evaluation/evidence/e3/gate-run-20261012/` (manifest 908fd615.., gate-evidence 47e38dd3..; RQ1-E.md 0ec51e8e..).
+     - **Result:** no discrepancy in 56/56 rows. No gate row failed.
+     - **Review:** `protocol/evidence/reviews/s2-0022-gate-run/` (script bf3e5e8d.., output 58101735.., commands 5d403fb4..), exit 0, `problems: []`.
+       - Part A re-runs my seven slice scripts unchanged on byte-identical copies in job tmp `tmp/p2/s2-0022/run-*`.
+       - Part B covers all rows: adapters and deployment join, A31, D49, crash hook, SL4 deviation and refusal record, witness timing for all 66 decisions, release margins, and all 152 `prepare_request` calls against the mined calldata.
+       - Part C is the never-publish scan (19 label keys, token preimages, paths).
+       - Part D compares RQ1-E.md with my sections.
+     - **RQ1-E.md:** P1-P16 identical. Only the SL7 timing row is reworded ("at least 1 s"), and it is accurate. Optional notes for agent 3 (proxy): the §6.1 "will re-check" sentence; §3.4 "which term binds" can now say all 66 decisions.
+     - **Not verified:** raw-token substring absence (I did not read the private DBs; digest preimages only); on-disk worker absence; the witness's exact clock; byte identity of the adapter's loaded deployment file (joined by run id and sha256 records).
+  4. **Next: S2-0023**, the P4-3 same-source ACK, after agent 3 (proxy) publishes the gate RESULT.
+     - Name the exact gate `manifest.json` and `gate-evidence.json` sha256, the RQ1-E.md sha256 named in the RESULT, and HEAD.
+     - Re-check that RQ1-E.md's protocol sections still match if agent 3 (proxy) edits it: re-run Part D of `review_gate_run.py.txt` (the whole script takes 10 s).
+     - Repeat the correlated-review disclosure.
 
 ## What I checked for S2-0021 (from A1-0082 P4-1; done)
 - `owners.protocol` = 0716a8e / d16ddad8.. (108), materialized from git blobs.
@@ -54,5 +61,6 @@ Host memory is low: do not run a full suite unless asked.
 - Witness clock readings are bounded, not observed.
 
 ## Next action
-- Agent 1 commits `communication/agent-1/solo/agent-2-proxy/{outbox/0021-ack-e-gate-run-freeze.md,STATUS.md,HANDOFF.md}` and `protocol/evidence/reviews/s2-0021-gate-freeze/` (4 files) with S3-0021 and A1-0083, before the run. The run compares `git status`.
-- Proxy-2 reviews the gate output once agent 1 says the run has ended.
+- Agent 1 commits `communication/agent-1/solo/agent-2-proxy/{outbox/0022-review-e-gate-run-result.md,STATUS.md,HANDOFF.md}` and `protocol/evidence/reviews/s2-0022-gate-run/` (3 files).
+- Proxy-2 sends S2-0023, the P4-3 ACK, once the gate RESULT is published.
+- Gate review reproduce (repo root): `PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I protocol/evidence/reviews/s2-0022-gate-run/review_gate_run.py.txt evaluation/evidence/e3/gate-run-20261012 $PWD <job-tmp scratch>`. It gives exit 0 and `problems []`.
