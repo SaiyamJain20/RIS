@@ -597,6 +597,170 @@ def verify_plan(plan):
             require(hashlib.sha256(e1._git_blob(owner['commit'], path)).hexdigest() == digest, 'exact owner input blob')
 
 
+def probe_name(plan, item):
+    """Probe label of one matrix row (the second half of its case directory name)."""
+    name = 'nonce-replay' if plan.get('nonceReplay', False) else 'duplicate-outcome'
+    if plan.get('subjectSubstitution', False): name = 'subject-substitution'
+    if any(plan.get(k, False) for k in ('relayStress', 'auditStress', 'trustStress', 'barrierStress', 'destinationStress')):
+        name = item['variant']
+    if plan.get('receiptStress', False): name = item['variant']+('-'+item['field'] if item['field'] else '')
+    return name
+
+
+def case_name(plan, item):
+    """Case directory of one matrix row, e.g. paper-strict-after_intent or repaired-e-wrong-destination."""
+    return item['profile']+'-'+(item['point'] or probe_name(plan, item))
+
+
+def slice_mode(plan):
+    """(executionMode, limitation) of a slice record."""
+    mode = ('two-chain-e2-recovery-slice', 'Six logical process recovery comparisons only; no complete catalog or RQ gate.')
+    if plan.get('duplicateOutcome', False):
+        mode = ('two-chain-e2-duplicate-outcome-slice', 'Three duplicate outcome comparisons only; no complete catalog or RQ gate.')
+    if plan.get('nonceReplay', False):
+        mode = ('two-chain-e2-nonce-replay-slice', 'Three identical accepted request replays only; no complete catalog or RQ gate.')
+    if plan.get('subjectSubstitution', False):
+        mode = ('two-chain-e2-subject-substitution-slice', 'Three subject-substitution comparisons only; no complete catalog or RQ gate.')
+    if plan.get('relayStress', False):
+        mode = ('two-chain-e2-relay-stress-slice', 'Seven E01 relay-stress comparisons only; no complete catalog or RQ gate.')
+    if plan.get('auditStress', False):
+        mode = ('two-chain-e2-audit-stress-slice', 'Six E03 audit-stress comparisons only; no complete catalog or RQ gate.')
+    if plan.get('destinationStress', False):
+        mode = ('two-chain-e2-destination-stress-slice',
+                'Six E01 wrong-destination and expiry-boundary comparisons only; no complete catalog or RQ gate.')
+    if plan.get('barrierStress', False):
+        mode = ('two-chain-e2-barrier-stress-slice',
+                'Nine E02 revocation-barrier and expired-duty comparisons only; no complete catalog or RQ gate.')
+    if plan.get('trustStress', False):
+        mode = ('two-chain-e2-trust-stress-slice', 'Six E02 trust-freshness comparisons only; no complete catalog or RQ gate.')
+    if plan.get('receiptStress', False):
+        mode = ('two-chain-e2-receipt-stress-slice', 'Seven repaired-e E03 receipt controls only; no complete catalog or RQ gate.')
+    return mode
+
+
+def slice_status(plan):
+    """The pass status of a slice whose rows all passed."""
+    status = ('E2_DUPLICATE_OUTCOME_SLICE_PASS' if plan.get('duplicateOutcome', False)
+              else ('E2_RECOVERY_EXPIRY_SLICE_PASS' if plan.get('expiredRetry', False) else 'E2_RECOVERY_SLICE_PASS'))
+    if plan.get('nonceReplay', False): status = 'E2_NONCE_REPLAY_SLICE_PASS'
+    if plan.get('subjectSubstitution', False): status = 'E2_SUBJECT_SUBSTITUTION_SLICE_PASS'
+    if plan.get('relayStress', False): status = 'E2_RELAY_STRESS_SLICE_PASS'
+    if plan.get('auditStress', False): status = 'E2_AUDIT_STRESS_SLICE_PASS'
+    if plan.get('receiptStress', False): status = 'E2_RECEIPT_STRESS_SLICE_PASS'
+    if plan.get('trustStress', False): status = 'E2_TRUST_STRESS_SLICE_PASS'
+    if plan.get('barrierStress', False): status = 'E2_BARRIER_STRESS_SLICE_PASS'
+    if plan.get('destinationStress', False): status = 'E2_DESTINATION_STRESS_SLICE_PASS'
+    return status
+
+
+def run_row(plan, item, output, record, case_records):
+    """Run one matrix row on a fresh chain pair (e1._profile) and apply its frozen row check.
+
+    Shared by execute and the one-command gate run (A1-0082 P4-1), so both use the same slice runner and
+    the same checks. Raises on any failure; the case status then stays RUNNING in the slice record.
+    """
+    verify_plan(plan)
+    case = case_name(plan, item); probe = probe_name(plan, item); destination = output/case; destination.mkdir()
+    child = dict(profiles={}, servicesStarted=[], adapterProcesses=[])
+    case_records[case] = child
+    record['cases'][case] = dict(status='RUNNING', manifest=case+'/manifest.json')
+    (output/'manifest.json').write_text(json.dumps(record, indent=2)+'\n')
+    selected = copy.deepcopy(plan); selected['runId'] = plan['runId']+'-'+(item['point'] or probe)
+    probe_options = {'duplicate_outcome': True} if plan.get('duplicateOutcome', False) else {}
+    if plan.get('nonceReplay', False): probe_options = {'nonce_replay': True}
+    if plan.get('subjectSubstitution', False): probe_options = {'subject_substitution': True}
+    if plan.get('relayStress', False): probe_options = {'relay_stress': item['variant']}
+    if plan.get('auditStress', False): probe_options = {'audit_stress': item['variant']}
+    if plan.get('receiptStress', False): probe_options = {'receipt_stress': item['variant'], 'receipt_field': item['field']}
+    if plan.get('trustStress', False): probe_options = {'trust_stress': item['variant']}
+    if plan.get('barrierStress', False): probe_options = {'barrier_stress': item['variant']}
+    if plan.get('destinationStress', False): probe_options = {'destination_stress': item['variant']}
+    e1._profile(selected, item['profile'], destination/item['profile'], child, recovery_point=item['point'],
+                expired_retry=plan.get('expiredRetry', False), **probe_options)
+    if plan.get('destinationStress', False):
+        proof = json.loads((destination/item['profile']/'destination-stress/result.json').read_text())
+        require(proof['ok'] is True and proof['delivery'] == 'unknown' and proof['variant'] == item['variant']
+                and (proof['classification'], proof['error']) == DESTINATION_EXPECTED[(item['profile'], item['variant'])],
+                'complete checked destination stress result')
+    elif plan.get('barrierStress', False):
+        proof = json.loads((destination/item['profile']/'barrier-stress/result.json').read_text())
+        require(proof['ok'] is True and proof['delivery'] == 'unknown' and proof['variant'] == item['variant']
+                and (proof['classification'], proof['error']) == BARRIER_EXPECTED[(item['profile'], item['variant'])],
+                'complete checked barrier stress result')
+    elif plan.get('trustStress', False):
+        proof = json.loads((destination/item['profile']/'trust-stress/result.json').read_text())
+        require(proof['ok'] is True and proof['delivery'] == 'unknown' and proof['variant'] == item['variant']
+                and (proof['classification'], proof['error']) == TRUST_EXPECTED[(item['profile'], item['variant'])],
+                'complete checked trust stress result')
+    elif plan.get('receiptStress', False):
+        proof = json.loads((destination/item['profile']/'receipt-stress/result.json').read_text())
+        require(proof['ok'] is True and proof['delivery'] == 'unknown' and proof['variant'] == item['variant']
+                and proof['field'] == item['field'] and (proof['classification'], proof['error']) == RECEIPT_EXPECTED[item['variant']],
+                'complete checked receipt control result')
+    elif plan.get('auditStress', False):
+        proof = json.loads((destination/item['profile']/'audit-stress/result.json').read_text())
+        require(proof['ok'] is True and proof['delivery'] == 'unknown' and proof['variant'] == item['variant']
+                and (proof['classification'], proof['error']) == AUDIT_EXPECTED[(item['profile'], item['variant'])],
+                'complete checked audit stress result')
+    elif plan.get('relayStress', False):
+        proof = json.loads((destination/item['profile']/'relay-stress/result.json').read_text())
+        expected = RELAY_EXPECTED[(item['profile'], item['variant'])]
+        require(proof['ok'] is True and proof['delivery'] == 'unknown' and proof['variant'] == item['variant']
+                and (proof['classification'], proof['error']) == expected, 'complete checked relay stress result')
+    elif plan.get('subjectSubstitution', False):
+        stress = destination/item['profile']/'subject-stress'
+        pre = json.loads((stress/'subject-substitution/result.json').read_text())
+        repaired = item['profile'] == 'repaired-e'
+        require(pre['ok'] is True and pre['delivery'] == 'unknown' and pre['workerUnchanged'] is True
+                and pre['classification'] == ('REPAIR_SUPPORTED' if repaired else 'SPEC_GAP')
+                and pre['error'] == ('WRONG_SUBJECT' if repaired else None), 'complete checked subject pre-release result')
+        completion = stress/'subject-completion/result.json'
+        if repaired:
+            require(not completion.exists(), 'repaired subject stress has no release')
+        else:
+            done = json.loads(completion.read_text())
+            require(done['ok'] is True and done['classification'] == 'SPEC_GAP' and done['delivery'] == 'unknown'
+                    and done['bobDecryptable'] is True and done['aliceError'] == 'WRONG_SUBJECT'
+                    and done['outcomeTested'] is False, 'complete checked paper subject completion')
+    elif plan.get('duplicateOutcome', False) or plan.get('nonceReplay', False):
+        proof = json.loads((destination/item['profile']/('alice/'+probe+'/result.json')).read_text())
+        require(proof['ok'] is True and proof['error'] == 'REPLAY' and proof['delivery'] == 'unknown'
+                and proof['workerUnchanged'] is True and proof['nativeUnchanged'] is True
+                and proof['identicalCalldata'] is True, 'complete checked native replay result')
+    else:
+        proof = json.loads((destination/item['profile']/'recovery/result.json').read_text())
+        require(proof['ok'] is True and proof['delivery'] == 'unknown', 'complete checked recovery result')
+    if plan.get('expiredRetry', False):
+        expiry = json.loads((destination/item['profile']/'expired-retry/result.json').read_text())
+        require(expiry['ok'] is True and expiry['error'] == 'EXPIRED' and expiry['delivery'] == 'unknown'
+                and expiry['workerUnchanged'] is True and expiry['nativeUnchanged'] is True, 'complete expired retry refusal')
+        record['cases'][case]['expiredRetry'] = 'EXPIRED_NO_CHANGE_PASS'
+    if plan.get('subjectSubstitution', False):
+        record['cases'][case]['status'] = 'SUBJECT_SUBSTITUTION_CONTROL_PASS'
+        return case
+    if plan.get('relayStress', False):
+        record['cases'][case]['status'] = 'RELAY_STRESS_CONTROL_PASS'
+        return case
+    if plan.get('auditStress', False):
+        record['cases'][case]['status'] = 'AUDIT_STRESS_CONTROL_PASS'
+        return case
+    if plan.get('receiptStress', False):
+        record['cases'][case]['status'] = 'RECEIPT_STRESS_CONTROL_PASS'
+        return case
+    if plan.get('trustStress', False):
+        record['cases'][case]['status'] = 'TRUST_STRESS_CONTROL_PASS'
+        return case
+    if plan.get('barrierStress', False):
+        record['cases'][case]['status'] = 'BARRIER_STRESS_CONTROL_PASS'
+        return case
+    if plan.get('destinationStress', False):
+        record['cases'][case]['status'] = 'DESTINATION_STRESS_CONTROL_PASS'
+        return case
+    record['cases'][case]['status'] = ('NONCE_REPLAY_CONTROL_PASS' if plan.get('nonceReplay', False)
+                                     else ('DUPLICATE_OUTCOME_CONTROL_PASS' if plan.get('duplicateOutcome', False) else 'RECOVERY_CONTROL_PASS'))
+    return case
+
+
 def execute(plan_path, ack_path, output):
     output = Path(output); output.mkdir(parents=True, exist_ok=False, mode=0o700)
     record = dict(rq='E', executionMode='two-chain-e2-recovery-slice', adapterMode='symbolic', status='BLOCKED',
@@ -609,148 +773,11 @@ def execute(plan_path, ack_path, output):
         if plan.get('reviewMode') == e1.SOLO:
             record.update(reviewMode=e1.SOLO, reviewDisclosure=e1.SOLO_DISCLOSURE)
         record['acks'] = e1._acks(ack_path, plan, record['planSha256'])
-        if plan.get('duplicateOutcome', False):
-            record.update(executionMode='two-chain-e2-duplicate-outcome-slice',
-                          limitation='Three duplicate outcome comparisons only; no complete catalog or RQ gate.')
-        if plan.get('nonceReplay', False):
-            record.update(executionMode='two-chain-e2-nonce-replay-slice',
-                          limitation='Three identical accepted request replays only; no complete catalog or RQ gate.')
-        if plan.get('subjectSubstitution', False):
-            record.update(executionMode='two-chain-e2-subject-substitution-slice',
-                          limitation='Three subject-substitution comparisons only; no complete catalog or RQ gate.')
-        if plan.get('relayStress', False):
-            record.update(executionMode='two-chain-e2-relay-stress-slice',
-                          limitation='Seven E01 relay-stress comparisons only; no complete catalog or RQ gate.')
-        if plan.get('auditStress', False):
-            record.update(executionMode='two-chain-e2-audit-stress-slice',
-                          limitation='Six E03 audit-stress comparisons only; no complete catalog or RQ gate.')
-        if plan.get('destinationStress', False):
-            record.update(executionMode='two-chain-e2-destination-stress-slice',
-                          limitation='Six E01 wrong-destination and expiry-boundary comparisons only; no complete catalog or RQ gate.')
-        if plan.get('barrierStress', False):
-            record.update(executionMode='two-chain-e2-barrier-stress-slice',
-                          limitation='Nine E02 revocation-barrier and expired-duty comparisons only; no complete catalog or RQ gate.')
-        if plan.get('trustStress', False):
-            record.update(executionMode='two-chain-e2-trust-stress-slice',
-                          limitation='Six E02 trust-freshness comparisons only; no complete catalog or RQ gate.')
-        if plan.get('receiptStress', False):
-            record.update(executionMode='two-chain-e2-receipt-stress-slice',
-                          limitation='Seven repaired-e E03 receipt controls only; no complete catalog or RQ gate.')
+        record['executionMode'], record['limitation'] = slice_mode(plan)
         authorized = True; record['status'] = 'RUNNING'
         for item in plan['matrix']:
-            verify_plan(plan)
-            probe_name = 'nonce-replay' if plan.get('nonceReplay', False) else 'duplicate-outcome'
-            if plan.get('subjectSubstitution', False): probe_name = 'subject-substitution'
-            if any(plan.get(k, False) for k in ('relayStress', 'auditStress', 'trustStress', 'barrierStress', 'destinationStress')):
-                probe_name = item['variant']
-            if plan.get('receiptStress', False): probe_name = item['variant']+('-'+item['field'] if item['field'] else '')
-            case = item['profile']+'-'+(item['point'] or probe_name); destination = output/case; destination.mkdir()
-            child = dict(profiles={}, servicesStarted=[], adapterProcesses=[])
-            case_records[case] = child
-            record['cases'][case] = dict(status='RUNNING', manifest=case+'/manifest.json')
-            (output/'manifest.json').write_text(json.dumps(record, indent=2)+'\n')
-            selected = copy.deepcopy(plan); selected['runId'] = plan['runId']+'-'+(item['point'] or probe_name)
-            probe_options = {'duplicate_outcome': True} if plan.get('duplicateOutcome', False) else {}
-            if plan.get('nonceReplay', False): probe_options = {'nonce_replay': True}
-            if plan.get('subjectSubstitution', False): probe_options = {'subject_substitution': True}
-            if plan.get('relayStress', False): probe_options = {'relay_stress': item['variant']}
-            if plan.get('auditStress', False): probe_options = {'audit_stress': item['variant']}
-            if plan.get('receiptStress', False): probe_options = {'receipt_stress': item['variant'], 'receipt_field': item['field']}
-            if plan.get('trustStress', False): probe_options = {'trust_stress': item['variant']}
-            if plan.get('barrierStress', False): probe_options = {'barrier_stress': item['variant']}
-            if plan.get('destinationStress', False): probe_options = {'destination_stress': item['variant']}
-            e1._profile(selected, item['profile'], destination/item['profile'], child, recovery_point=item['point'],
-                        expired_retry=plan.get('expiredRetry', False), **probe_options)
-            if plan.get('destinationStress', False):
-                proof = json.loads((destination/item['profile']/'destination-stress/result.json').read_text())
-                require(proof['ok'] is True and proof['delivery'] == 'unknown' and proof['variant'] == item['variant']
-                        and (proof['classification'], proof['error']) == DESTINATION_EXPECTED[(item['profile'], item['variant'])],
-                        'complete checked destination stress result')
-            elif plan.get('barrierStress', False):
-                proof = json.loads((destination/item['profile']/'barrier-stress/result.json').read_text())
-                require(proof['ok'] is True and proof['delivery'] == 'unknown' and proof['variant'] == item['variant']
-                        and (proof['classification'], proof['error']) == BARRIER_EXPECTED[(item['profile'], item['variant'])],
-                        'complete checked barrier stress result')
-            elif plan.get('trustStress', False):
-                proof = json.loads((destination/item['profile']/'trust-stress/result.json').read_text())
-                require(proof['ok'] is True and proof['delivery'] == 'unknown' and proof['variant'] == item['variant']
-                        and (proof['classification'], proof['error']) == TRUST_EXPECTED[(item['profile'], item['variant'])],
-                        'complete checked trust stress result')
-            elif plan.get('receiptStress', False):
-                proof = json.loads((destination/item['profile']/'receipt-stress/result.json').read_text())
-                require(proof['ok'] is True and proof['delivery'] == 'unknown' and proof['variant'] == item['variant']
-                        and proof['field'] == item['field'] and (proof['classification'], proof['error']) == RECEIPT_EXPECTED[item['variant']],
-                        'complete checked receipt control result')
-            elif plan.get('auditStress', False):
-                proof = json.loads((destination/item['profile']/'audit-stress/result.json').read_text())
-                require(proof['ok'] is True and proof['delivery'] == 'unknown' and proof['variant'] == item['variant']
-                        and (proof['classification'], proof['error']) == AUDIT_EXPECTED[(item['profile'], item['variant'])],
-                        'complete checked audit stress result')
-            elif plan.get('relayStress', False):
-                proof = json.loads((destination/item['profile']/'relay-stress/result.json').read_text())
-                expected = RELAY_EXPECTED[(item['profile'], item['variant'])]
-                require(proof['ok'] is True and proof['delivery'] == 'unknown' and proof['variant'] == item['variant']
-                        and (proof['classification'], proof['error']) == expected, 'complete checked relay stress result')
-            elif plan.get('subjectSubstitution', False):
-                stress = destination/item['profile']/'subject-stress'
-                pre = json.loads((stress/'subject-substitution/result.json').read_text())
-                repaired = item['profile'] == 'repaired-e'
-                require(pre['ok'] is True and pre['delivery'] == 'unknown' and pre['workerUnchanged'] is True
-                        and pre['classification'] == ('REPAIR_SUPPORTED' if repaired else 'SPEC_GAP')
-                        and pre['error'] == ('WRONG_SUBJECT' if repaired else None), 'complete checked subject pre-release result')
-                completion = stress/'subject-completion/result.json'
-                if repaired:
-                    require(not completion.exists(), 'repaired subject stress has no release')
-                else:
-                    done = json.loads(completion.read_text())
-                    require(done['ok'] is True and done['classification'] == 'SPEC_GAP' and done['delivery'] == 'unknown'
-                            and done['bobDecryptable'] is True and done['aliceError'] == 'WRONG_SUBJECT'
-                            and done['outcomeTested'] is False, 'complete checked paper subject completion')
-            elif plan.get('duplicateOutcome', False) or plan.get('nonceReplay', False):
-                proof = json.loads((destination/item['profile']/('alice/'+probe_name+'/result.json')).read_text())
-                require(proof['ok'] is True and proof['error'] == 'REPLAY' and proof['delivery'] == 'unknown'
-                        and proof['workerUnchanged'] is True and proof['nativeUnchanged'] is True
-                        and proof['identicalCalldata'] is True, 'complete checked native replay result')
-            else:
-                proof = json.loads((destination/item['profile']/'recovery/result.json').read_text())
-                require(proof['ok'] is True and proof['delivery'] == 'unknown', 'complete checked recovery result')
-            if plan.get('expiredRetry', False):
-                expiry = json.loads((destination/item['profile']/'expired-retry/result.json').read_text())
-                require(expiry['ok'] is True and expiry['error'] == 'EXPIRED' and expiry['delivery'] == 'unknown'
-                        and expiry['workerUnchanged'] is True and expiry['nativeUnchanged'] is True, 'complete expired retry refusal')
-                record['cases'][case]['expiredRetry'] = 'EXPIRED_NO_CHANGE_PASS'
-            if plan.get('subjectSubstitution', False):
-                record['cases'][case]['status'] = 'SUBJECT_SUBSTITUTION_CONTROL_PASS'
-                continue
-            if plan.get('relayStress', False):
-                record['cases'][case]['status'] = 'RELAY_STRESS_CONTROL_PASS'
-                continue
-            if plan.get('auditStress', False):
-                record['cases'][case]['status'] = 'AUDIT_STRESS_CONTROL_PASS'
-                continue
-            if plan.get('receiptStress', False):
-                record['cases'][case]['status'] = 'RECEIPT_STRESS_CONTROL_PASS'
-                continue
-            if plan.get('trustStress', False):
-                record['cases'][case]['status'] = 'TRUST_STRESS_CONTROL_PASS'
-                continue
-            if plan.get('barrierStress', False):
-                record['cases'][case]['status'] = 'BARRIER_STRESS_CONTROL_PASS'
-                continue
-            if plan.get('destinationStress', False):
-                record['cases'][case]['status'] = 'DESTINATION_STRESS_CONTROL_PASS'
-                continue
-            record['cases'][case]['status'] = ('NONCE_REPLAY_CONTROL_PASS' if plan.get('nonceReplay', False)
-                                             else ('DUPLICATE_OUTCOME_CONTROL_PASS' if plan.get('duplicateOutcome', False) else 'RECOVERY_CONTROL_PASS'))
-        verify_plan(plan); record.update(status='E2_DUPLICATE_OUTCOME_SLICE_PASS' if plan.get('duplicateOutcome', False) else ('E2_RECOVERY_EXPIRY_SLICE_PASS' if plan.get('expiredRetry', False) else 'E2_RECOVERY_SLICE_PASS'), sourceStable=True)
-        if plan.get('nonceReplay', False): record['status'] = 'E2_NONCE_REPLAY_SLICE_PASS'
-        if plan.get('subjectSubstitution', False): record['status'] = 'E2_SUBJECT_SUBSTITUTION_SLICE_PASS'
-        if plan.get('relayStress', False): record['status'] = 'E2_RELAY_STRESS_SLICE_PASS'
-        if plan.get('auditStress', False): record['status'] = 'E2_AUDIT_STRESS_SLICE_PASS'
-        if plan.get('receiptStress', False): record['status'] = 'E2_RECEIPT_STRESS_SLICE_PASS'
-        if plan.get('trustStress', False): record['status'] = 'E2_TRUST_STRESS_SLICE_PASS'
-        if plan.get('barrierStress', False): record['status'] = 'E2_BARRIER_STRESS_SLICE_PASS'
-        if plan.get('destinationStress', False): record['status'] = 'E2_DESTINATION_STRESS_SLICE_PASS'
+            run_row(plan, item, output, record, case_records)
+        verify_plan(plan); record.update(status=slice_status(plan), sourceStable=True)
     except BaseException as error:
         record['failure'] = dict(type=type(error).__name__, message=str(error))
         record['status'] = 'FAILED' if authorized else 'BLOCKED'

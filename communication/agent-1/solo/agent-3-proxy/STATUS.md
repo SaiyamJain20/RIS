@@ -1,17 +1,18 @@
 # agent 3 (proxy): status
 
-State: **IDLE**, waiting for the SL7 reviews and the P3 decisions. **SL7 is done: 6/6 PASS** (S3-0020).
-**Catalog comparisons are complete: 56/56.** No services are running.
+State: **FREEZE S3-0021 published** (P4-1 one-command gate run, plan `c0086019..`). Waiting for the
+exact solo ACKs (agent 1, agent 2 (proxy)), agent 1's commit of the FREEZE, ACKs and paths, and agent 1's
+clearance. **The gate run has not started. No services are running.** Catalog 56/56 actual (slices).
 
 | Field | Value |
 |---|---|
 | RQ | E (gate E NOT_RUN; F and G locked) |
 | Interface | v1 (FREEZE f700292e..), unchanged |
 | Mode | solo, correlated self-review (A1-0059) |
-| Updated | 2026-10-10 IST |
+| Updated | 2026-10-12 IST |
 
-Services and lease: **none**. FREEZE S3-0019 is RELEASED. All 27 SL7 processes ended with exit 0;
-ports 18545 and 18546 are free. No Git writes.
+Services and lease: **none**. FREEZE S3-0019 is RELEASED; S3-0021 is published, not yet ACKed or run. Ports 18545 and
+18546 are free. No Git writes.
 
 ## Catalog progress
 
@@ -28,7 +29,7 @@ ports 18545 and 18546 are free. No Git writes.
 - barrier and expired duty ×9;
 - wrong destination and expiry boundary ×6.
 
-**0 remain.** Gate E still needs P3 (mutants, revocation window, ProVerif publication), RQ1-E.md and the gate.
+**0 remain.** P3 is closed (A1-0080, A1-0081). Gate E still needs the gate run (S3-0021), RQ1-E.md and the three same-source ACKs.
 
 ## Sent
 
@@ -52,18 +53,23 @@ ports 18545 and 18546 are free. No Git writes.
 | S3-0018 | SL6 INTEGRATION_RESULT: 9/9 PASS, 736.64 s; catalog now 50/56; A1-0074 points 1-6; decisionCollections 1 (repaired) / 0 (paper) |
 | S3-0019 | SL7 FREEZE: 6 rows (wrong destination, expiry boundary), plan d4fa294e..; test-first (RED 102, then GREEN with the full suite at 1596 passed); A1 conditions 1-12 met (8 skipped as optional) |
 | S3-0020 | SL7 INTEGRATION_RESULT: 6/6 PASS, 602.24 s; catalog 56/56; A1-0076 points 1-5; firingStep 1 (wrong destination) / 9 (boundary) |
+| S3-0021 | P4-1 gate run FREEZE: `evaluation/e_gate.py`, plan c0086019.. (10 embedded slice plans, 56 rows, ProVerif, brackets, manifest, gate evidence; stages 4/5 dropped by A1-0080/A1-0081); test-first (RED 48, then GREEN 48 and the full suite at 1644 passed, 574 s); A1-0082 P4-1 points 1-8 met |
 
 ## Read
 
-- A1-0059..A1-0076 and agent 1's SL6/SL7 pre-FREEZE conditions (2026-10-11);
-- S2-0001..S2-0019.
+- A1-0059..A1-0082 and agent 1's SL6/SL7 pre-FREEZE conditions (2026-10-11);
+- S2-0001..S2-0020; agent 1's early-rows review tool (9682e54).
 
 ## Next
 
-1. Wait for the SL7 reviews and agent 1's P3 decisions (mutant matrix, integrated revocation window, ProVerif publication).
-2. Then RQ1-E.md and the one-command gate (G-1: a full fresh re-run of all 56 rows, the controls, the mutants and the window).
+1. Wait for A1 and S2 ACKs of S3-0021 (exact plan c0086019..), agent 1's commit and clearance; then build the ACK index
+   (`tmp/p3/gate-run/acks.json`) and start the gate run in the background (about 1.5 h; up to 2.5 h).
+2. While it runs: draft RQ1-E.md in job tmp (P4-2). After it: select and publish the evidence with the never-publish
+   scan, INTEGRATION_RESULT, then the P4-3 gate RESULT naming one manifest.
 
-## P3-mutants FREEZE S3-0021: NOT drafted; stopped (2026-10-12 ~00:55 IST)
+## Historical: P3-mutants FREEZE (then numbered S3-0021) NOT drafted; stopped (2026-10-12 ~00:55 IST)
+
+The number S3-0021 is now used by the P4-1 gate FREEZE; the mutant FREEZE was never written.
 
 - Two of my responses while starting this work were stopped by a safety classifier (not a tool error).
   The second one interrupted the first test file, which was left truncated. I removed it so the suite still collects.

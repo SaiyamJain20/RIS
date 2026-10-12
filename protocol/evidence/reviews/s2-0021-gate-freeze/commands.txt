@@ -1,0 +1,20 @@
+# S2-0021 protocol-scope review of the gate E run FREEZE S3-0021 (plan c00860192aaa69fd2e5f7baf132f5ebf10bf14ebba377edada31c1d9372b6bb9). Correlated self-review (A1-0059).
+# repo HEAD 5c4c48791f14b14a42b5f0575a76cb88bfd8de45 (tree: the uncommitted S3-0021 files, A1-0083 and the agent-3-proxy STATUS/HANDOFF); host Python 3.13.5; date 2026-10-12 (IST)
+#
+# 1) plan/pin/embedded-plan/host-dependency/margin checks (read-only, no service):
+#    PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -I protocol/evidence/reviews/s2-0021-gate-freeze/review_gate_freeze.py.txt <repo root> > review_gate_freeze.out.json
+#    exit 0, stderr empty, problems []
+#
+# 2) e_gate.verify_plan on the frozen plan (also runs e2.verify_plan on all ten slices):
+#    PATH="$HOME/.foundry/bin:$PATH" .venv/bin/python -c "import json; from evaluation import e_gate; e_gate.verify_plan(json.load(open('evaluation/evidence/e3/gate-plan-20261012/integration-plan.json')))"
+#    returned None (exit 0), 19.2 s wall
+#
+# 3) crash hook on this host (Python 3.13.5), live test-owned Anvil on ports from 19545-19599, all stopped afterwards
+#    (no anvil process and no listener on 18545/18546/19545-19599 after the run):
+#    export PATH="$HOME/.foundry/bin:$PATH" HMBC_FOUNDRY_DIR="$HOME/.foundry/bin" HMBC_TEST_PORT_RANGE=19545-19599 PYTHONDONTWRITEBYTECODE=1
+#    /usr/bin/time -v .venv/bin/python -m pytest -q -rs -p no:cacheprovider -c protocol/pytest.ini --rootdir protocol --basetemp=<job tmp> protocol/tests/test_faulty_adapter.py
+#    exit 0, 15 passed, 0 skipped, 132.73 s (faulty-adapter-tests.txt). The production hmbc_protocol/** and testtools/** bytes equal the pin 0716a8e;
+#    the test file and conftest are the working-tree versions (S2-0006 T3 added), not the pinned ones.
+#
+# Full suite NOT re-run by proxy-2 (host memory). Cited: agent 1, exit 0, 1644 passed, 574.24 s, job-tmp eval-gate-verify.out sha256 5ee35b20e0c2a17b4af552413f63b5fa9546d44aa4198102d8c216056e65707b;
+# proxy-3, 1644 passed, evaluation/evidence/e3/gate-plan-20261012/full-suite.txt.

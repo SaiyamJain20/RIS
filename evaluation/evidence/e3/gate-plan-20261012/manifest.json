@@ -1,0 +1,184 @@
+{
+ "plan": {
+  "path": "evaluation/evidence/e3/gate-plan-20261012/integration-plan.json",
+  "sha256": "c00860192aaa69fd2e5f7baf132f5ebf10bf14ebba377edada31c1d9372b6bb9",
+  "bytes": 645935,
+  "runId": "E-gate-20261012",
+  "freezeMessage": "S3-0021",
+  "slices": [
+   {
+    "name": "recovery-expiry",
+    "flag": "expired_retry",
+    "runId": "E-gate-20261012-recovery-expiry",
+    "rows": 6,
+    "schemaVersion": "hmbc-e2-recovery-expiry-plan/v1"
+   },
+   {
+    "name": "duplicate-outcome",
+    "flag": "duplicate_outcome",
+    "runId": "E-gate-20261012-duplicate-outcome",
+    "rows": 3,
+    "schemaVersion": "hmbc-e2-duplicate-outcome-plan/v1"
+   },
+   {
+    "name": "nonce-replay",
+    "flag": "nonce_replay",
+    "runId": "E-gate-20261012-nonce-replay",
+    "rows": 3,
+    "schemaVersion": "hmbc-e2-nonce-replay-plan/v1"
+   },
+   {
+    "name": "sl1-subject",
+    "flag": "subject_substitution",
+    "runId": "E-gate-20261012-sl1-subject",
+    "rows": 3,
+    "schemaVersion": "hmbc-e2-subject-substitution-plan/v1"
+   },
+   {
+    "name": "sl2-relay",
+    "flag": "relay_stress",
+    "runId": "E-gate-20261012-sl2-relay",
+    "rows": 7,
+    "schemaVersion": "hmbc-e2-relay-stress-plan/v1"
+   },
+   {
+    "name": "sl3-audit",
+    "flag": "audit_stress",
+    "runId": "E-gate-20261012-sl3-audit",
+    "rows": 6,
+    "schemaVersion": "hmbc-e2-audit-stress-plan/v1"
+   },
+   {
+    "name": "sl4-receipt",
+    "flag": "receipt_stress",
+    "runId": "E-gate-20261012-sl4-receipt",
+    "rows": 7,
+    "schemaVersion": "hmbc-e2-receipt-stress-plan/v1"
+   },
+   {
+    "name": "sl5-trust",
+    "flag": "trust_stress",
+    "runId": "E-gate-20261012-sl5-trust",
+    "rows": 6,
+    "schemaVersion": "hmbc-e2-trust-stress-plan/v1"
+   },
+   {
+    "name": "sl6-barrier",
+    "flag": "barrier_stress",
+    "runId": "E-gate-20261012-sl6-barrier",
+    "rows": 9,
+    "schemaVersion": "hmbc-e2-barrier-stress-plan/v1"
+   },
+   {
+    "name": "sl7-destination",
+    "flag": "destination_stress",
+    "runId": "E-gate-20261012-sl7-destination",
+    "rows": 6,
+    "schemaVersion": "hmbc-e2-destination-stress-plan/v1"
+   }
+  ],
+  "rows": 56,
+  "agent3SourcesCount": 103,
+  "agent3SourcesAggregate": "6f23444c89f3adef125b3d67d6c0ec54c79bb00426be3f270e0eb2d081bcc60c",
+  "gateInputsCount": 24,
+  "gateInputsAggregate": "d592aa0ca1148ec1afc57093d8f9bc362800c08c53a5c023176280932ccff5fa"
+ },
+ "changedAgent3SourcesSinceSL7": {
+  "evaluation/e2.py": {
+   "old": "3ab09417f982da7c9717b8dba1b41b71849b6a59d122679c8656527c5cd3d0ee",
+   "new": "ab37fb135a290361a4ba25cfa32b9ea39b4062cad6ef50cb4a0ddd7b49f6fae7"
+  },
+  "evaluation/e_gate.py": {
+   "old": null,
+   "new": "bc231dd54bc1f249896c939c6dbbdfb46c4b66dd334459dd9d20b72fbdc30a92"
+  }
+ },
+ "sourceFiles": {
+  "evaluation/e_gate.py": "bc231dd54bc1f249896c939c6dbbdfb46c4b66dd334459dd9d20b72fbdc30a92",
+  "evaluation/e2.py": "ab37fb135a290361a4ba25cfa32b9ea39b4062cad6ef50cb4a0ddd7b49f6fae7",
+  "evaluation/tests/test_e_gate.py": "3b54fd2c0c68afd331232553ce26bf7a8b576dc112e3bd6df7a2ae77e4288fa0",
+  "evaluation/tests/test_e2_row_runner.py": "9761500deedf9d47900263a507d3fa4e1daaf730d9128b78b57a9625331e7427"
+ },
+ "unchangedFiles": {
+  "evaluation/gate.py": "23fbfae54decc6eb2b4bf219a4658478b705498e45a775e8c30835631cfa1970",
+  "evaluation/e1.py": "0a25f01f000b81bcd42bf4af9fb79e647977ade512a19008b6687f27190691c2"
+ },
+ "testFilesAtRed": {
+  "evaluation/tests/test_e2_row_runner.py": "9761500deedf9d47900263a507d3fa4e1daaf730d9128b78b57a9625331e7427",
+  "evaluation/tests/test_e_gate.py": "3b54fd2c0c68afd331232553ce26bf7a8b576dc112e3bd6df7a2ae77e4288fa0"
+ },
+ "testFilesChangedAfterRed": [],
+ "commands": [
+  {
+   "label": "red-before-implementation",
+   "order": "both new test files written before e_gate.py and before the e2 refactor",
+   "exit": 1,
+   "argv": "PATH=$HOME/.foundry/bin:$PATH .venv/bin/python -m pytest -q -rs -p no:cacheprovider --color=no evaluation/tests/test_e2_row_runner.py evaluation/tests/test_e_gate.py",
+   "result": "29 failed, 19 errors (48): 25 ModuleNotFoundError evaluation.e_gate; 23 AttributeError e2.case_name/slice_status/run_row",
+   "output": "red-before-implementation.txt",
+   "outputSha256": "e43fbcb1f90eb3f969acfc631f4759edc7680bd1aa5e59d7e28b7d47ed6c3805"
+  },
+  {
+   "label": "green-new-tests",
+   "exit": 0,
+   "argv": "same files, -v",
+   "result": "48 passed in 74.14s",
+   "output": "green-new-tests.txt",
+   "outputSha256": "dbb0c3778f2e7c0671d0b3046bd3fa9947f9cc4e4383feaba90fe971aea4493e"
+  },
+  {
+   "label": "green-full-suite",
+   "argv": "PATH=$HOME/.foundry/bin:$PATH .venv/bin/python -m pytest -q -rs -p no:cacheprovider --color=no",
+   "startedAt": "2026-10-12T00:49:08Z",
+   "endedAt": "2026-10-12T00:58:43Z",
+   "wallSeconds": 574.41,
+   "exit": 0,
+   "result": "1644 passed in 573.69s (0:09:33); 0 failed, 0 skipped",
+   "output": "full-suite.txt",
+   "outputSha256": "b2ca0b679b48d033cb78673313d79cdb0e47662faf9df7f8182b3d709d54acf6"
+  },
+  {
+   "label": "plan",
+   "argv": "e_gate.create_plan(run_id='E-gate-20261012', freeze_message='S3-0021'); e_gate.verify_plan before and after the write (gate equality plus e2.verify_plan of all ten slice plans)",
+   "exit": 0
+  },
+  {
+   "label": "e2-refactor-diff",
+   "argv": "git diff -w HEAD -- evaluation/e2.py",
+   "exit": 0,
+   "output": "e2-refactor-diff.txt",
+   "outputSha256": "ca43b4e0e3eb51279562ea627e25641efd7db644187b4011a206f39d651273bb",
+   "result": "only moves: loop body -> run_row; probe/case naming -> probe_name/case_name; flag ladders -> slice_mode/slice_status; continue -> return case"
+  }
+ ],
+ "suiteBracket": {
+  "scope": "evaluation/** (excluding __pycache__/runs), interfaces/v1/**, pyproject.toml, uv.lock, AGENTS.md, SPEC.md, PLAN.md",
+  "files": 4028,
+  "pre": "0d9f9834c5ca9d751c21cfda9622a19142dfa212ce82c1ff756735992d07b437",
+  "post": "0d9f9834c5ca9d751c21cfda9622a19142dfa212ce82c1ff756735992d07b437",
+  "stable": true,
+  "note": "taken before and after the full suite; the plan file was already present, the README/manifest/output copies were written after"
+ },
+ "hostMemory": {
+  "beforeSuite": "               total        used        free      shared  buff/cache   available\nMem:           15183       11504        1519         109        3369        3678\nSwap:          15183        3544       11639\n",
+  "note": "free -m; about 3.6 GiB available"
+ },
+ "versions": {
+  "python": "3.13.5 (frozen 3.13.13)",
+  "foundry": "1.8.5 (~/.foundry/bin via evaluation/host-tools.json)",
+  "proverif": "2.05 declared local build bc2cd5ed..",
+  "ledgerPin": "933d2a7",
+  "protocolPin": "0716a8e"
+ },
+ "base": "HEAD 5c4c487 (ec426c6 + 9682e54 early-rows review tool + 5c4c487 protocol sections; neither changes agent3Sources) + the files above",
+ "decisions": [
+  "A1-0082 (P4-1)",
+  "A1-0080 (mutant stage dropped; criterion 4 scope)",
+  "A1-0081 (window stage dropped)",
+  "S3-0002 section 3.1 (design)",
+  "D47 (paper crash label)"
+ ],
+ "servicesStarted": [],
+ "gitWrites": [],
+ "reviewDisclosure": "Solo phase under the human directive A1-0059: agent 1 and the agent-2/agent-3 proxies are the same model, so every review and ACK is correlated self-review, not independent review."
+}

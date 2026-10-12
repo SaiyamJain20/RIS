@@ -5,7 +5,7 @@ Paper-derived HMBC2020 reconstruction. Synthetic only.
 Phase: E / RQ1, solo mode (A1-0059, `../PLAN.md`, `../PROTOCOL.md`, rulings A1-0061). Gate E NOT_RUN.
 F and G locked. All proxy reviews and ACKs are correlated self-review (same model as agent 1).
 
-## Current state (2026-10-10 IST)
+## Current state (2026-10-12 IST)
 
 | Step | Result | Message / evidence |
 |---|---|---|
@@ -18,13 +18,15 @@ F and G locked. All proxy reviews and ACKs are correlated self-review (same mode
 | SL5 trust freshness ×6 | **actual PASS 6/6** | FREEZE S3-0015, plan 9e14a148..; result S3-0016; `evaluation/evidence/e2/sl5-trust-live-20261010/` |
 | SL6 barrier and expired duty ×9 | **actual PASS 9/9** | FREEZE S3-0017, plan 78d6ebfb..; result S3-0018; `evaluation/evidence/e2/sl6-barrier-live-20261011/` |
 | SL7 wrong destination and expiry boundary ×6 | **actual PASS 6/6** | FREEZE S3-0019, plan d4fa294e..; result S3-0020; `evaluation/evidence/e2/sl7-destination-live-20261011/` |
+| P3 | closed: ProVerif re-run done (`p3-proverif-20261012/`); mutants and window NOT RUN (A1-0080, A1-0081) | A1-0080..A1-0082 |
+| P4-1 one-command gate run | **FREEZE S3-0021 published, not run** | plan c0086019..; `evaluation/evidence/e3/gate-plan-20261012/` |
 
 - FREEZE S3-0019 is released. No services are running.
 - Decisions D47 (paper crash relabel) and D48 (SL0 choices) are in `communication/DECISIONS.md`.
 
 **Catalog progress: 56/56 actual. The catalog comparisons are complete.**
 
-No catalog slice remains. Next (P3, per agent 1's decisions): mutants, integrated revocation window, ProVerif publication, then RQ1-E.md and the gate.
+No catalog slice remains. P3 is closed. Next: ACKs of S3-0021, agent 1's clearance, the gate run, RQ1-E.md (P4-2), the P4-3 gate RESULT.
 
 ## Runner facts (after SL0 and SL1)
 
@@ -104,3 +106,20 @@ toolchain and host-tools. Keep helper scripts out of `evaluation/` as `.py` file
 7. **SL7 runner facts (S3-0019):** B is `source-instance/` (third deployment, same chain pair; labels
    `owner-deploy-source`, `owner-bootstrap-source`); `destinationFunding` and `sourceDeployment` are in the case
    manifest; the expiry pin is `evm_setNextBlockTimestamp` with no `evm_mine`.
+
+## Gate runner facts (S3-0021, P4-1)
+
+- `evaluation/e_gate.py`: `create_plan(run_id, freeze_message)` (solo only, S3 freeze) embeds the ten slice plans of the existing
+  `e2.create_plan` flags (`expired_retry` for the 6 crash rows, then duplicate, nonce replay, SL1-SL7); `verify_plan` regenerates the gate
+  plan and calls `e2.verify_plan` on every slice plan (about 18 s). Plan `evaluation/evidence/e3/gate-plan-20261012/integration-plan.json`,
+  sha256 c0086019.., runId `E-gate-20261012`, 646 KB.
+- `e2.py` refactor (behaviour-preserving): `probe_name`, `case_name`, `slice_mode`, `slice_status`, `run_row`; `execute` calls them.
+  The gate calls `e2.run_row` per row; slice output `<out>/catalog/<slice>/<case>/<profile>/...` (layouts unchanged).
+- Failures: each row once; FAILED rows recorded and the run continues; NOT_RUN rows listed; no retry. Output must be outside the repo.
+- Stage outputs: `verify-freeze.json`, `versions.json` (+ `versions/*.txt`), `bracket-pre.json`, `bracket-post.json`,
+  `catalog-coverage-56.json`, `proverif/`, `gate-evidence.json`, `manifest.json` (rows, memory, worktree, resultFiles).
+- A passing run gives 7 VERIFIED and 2 PENDING (RQ1-report, three-matching-acks). `gate.py` unchanged, still BLOCKED.
+- Run: `.venv/bin/python -m evaluation.e_gate --plan <plan> --acks tmp/p3/gate-run/acks.json --output tmp/p3/gate-run/out`, in the
+  background; stop with `kill -INT` (SIGTERM is not trapped). Expected about 1.5 h, up to 2.5 h.
+- Scratch: `tmp/p3/p4/` (RED/GREEN/suite outputs, bracket, `scripts/keyscan.py.txt`). Publication after the run needs a selection
+  helper like `tmp/p3/sl7-run/scripts/select_audit.py`, run per slice directory.
