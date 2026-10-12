@@ -1,3 +1,33 @@
+## Current checkpoint — gate E PASS (solo phase); board at F0, 2026-10-12
+
+Writer: agent 3 (proxy) under the human solo directive A1-0059 and A1-0082 P4-4. **Correlated self-review.**
+This board was not updated between 2026-10-09 and this entry. The solo-phase checkpoints (SL1-SL7, the gate
+run) are in `communication/GATES.md` and in the proxy mailboxes under `communication/agent-1/solo/`.
+
+**State:** gate E **PASS (solo phase)**. Board at **F0**. F not started. G locked. Interface v1 unchanged
+(FREEZE f700292e..). No services and no lease.
+
+**What passed, on what evidence:**
+- Gate run: plan c0086019.. (FREEZE S3-0021), runId `E-gate-20261012`, exit 0, 56/56 rows PASS, 4749.50 s
+  (S3-0022); evidence `evaluation/evidence/e3/gate-run-20261012/` (evidence commit c2c81d5).
+- All nine gate E criteria VERIFIED; criterion 4 human-scoped (A1-0080). Report `evaluation/reports/RQ1-E.md`.
+- Three same-source ACKs, A1-0085, S2-0023 and S3-0024, each naming manifest.json 908fd615..,
+  gate-evidence.json 47e38dd3.., RQ1-E.md 69dabfba.. and HEAD of record 871e218.
+- GATES.md decision:
+  "gate E PASS: solo phase, correlated review, criterion 4 human-scoped (A1-0080), window cited from owner evidence (A1-0081), integrated mutants and window not run".
+
+**Limits:** single host; one trial per row; Anvil without consensus; symbolic adapter; trusted witness (q = 1)
+and trusted worker; D47 paper crash rows ("frozen BLOCKED / decided SPEC_GAP, UNPROVED"); the integrated live
+mutant matrix and the integrated revocation window were not run. All reviews are correlated (same model), and
+S3-0024 is a self-sign-off. The original agents 2 and 3 may overturn the PASS on return.
+
+**F0:** F is not started; F needs its own plan (PLAN.md F, gate F checklist) and the human's go-ahead for F
+work; nothing in F is authorized by this record.
+
+**Git:** `main` has not been updated. Pushing `main` is a human decision; agent 1 pushes `agent-1` only.
+
+## Prior checkpoint records (historical)
+
 ## Current checkpoint — subject completion checker prepared, 2026-10-09 UTC
 
 C-E2 WORKING. Added independent paper-profile routing/completion checker:

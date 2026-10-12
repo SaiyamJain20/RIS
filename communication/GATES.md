@@ -1,20 +1,33 @@
 # Sequential RQ gates
 
-Writer: agent 3. All current statuses are **NOT RUN**. Evidence links and ACK IDs are supplied by actual runs, not by this planning task.
+Writer: agent 3 (in the solo phase, agent 3 (proxy), A1-0059). Gate E is **PASS in the solo phase** (correlated review; record of 2026-10-12 at the end of this file). Gates F and G are **NOT RUN**. Evidence links and ACK IDs are supplied by actual runs, not by this planning task.
 
 ## E — RQ1 completion
 
-- [ ] v1 interfaces frozen; source map and all paper-gap choices reviewed by agents 1/2/3.
-- [ ] Legitimate registered access succeeds; denied identity/issuer cases fail for the right reason.
-- [ ] E01, E02 and E03 each have source/profile distinction, observed traces, limitations and supported/refuted/ambiguity classification.
-- [ ] Applicable repaired scenarios pass; meaningful mutants fail; denial-of-all is rejected by positive controls.
-- [ ] Two-chain real integration and durable worker recovery run from fresh state. Symbolic crypto mode is visibly recorded.
-- [ ] ProVerif correspondence outputs and negative control are saved; state/cryptographic limits are stated.
-- [ ] `evaluation/reports/RQ1-E.md` answers RQ1; no JANUS findings are imported.
-- [ ] Source/input/output/tool hashes, commands and exit codes recorded; no input changed during the run.
-- [ ] Three ACKs refer to the same report and source manifest. Gate E PASS recorded before F starts.
+`run:` = `evaluation/evidence/e3/gate-run-20261012/`.
 
-Evidence run: not created. ACKs: none. Decision: NOT RUN.
+- [x] v1 interfaces frozen; source map and all paper-gap choices reviewed by agents 1/2/3. — `run:verify-freeze.json` (FREEZE f700292e.. UNCHANGED, 15 frozen copies); closed E0 record `communication/E0_MAPPING_ACKS.json`, `communication/E0_ACCEPTANCE.md`.
+- [x] Legitimate registered access succeeds; denied identity/issuer cases fail for the right reason. — all 56 rows ran the three D1 controls first (wrong admin 16, Alice allow with one outcome, Bob POLICY_DENIED 9): `run:catalog-coverage-56.json`, `run:catalog/`.
+- [x] E01, E02 and E03 each have source/profile distinction, observed traces, limitations and supported/refuted/ambiguity classification. — `run:catalog-coverage-56.json` (e57e4983..: PASS 56, FAILED 0, NOT_RUN 0); RQ1-E.md §6-§9; the 4 paper crash rows are "frozen BLOCKED / decided SPEC_GAP, UNPROVED" (D47), never findings.
+- [x] Applicable repaired scenarios pass; meaningful mutants fail; denial-of-all is rejected by positive controls. — human-scoped, A1-0080: met on owner, formal and baseline evidence; integrated live mutant matrix not run. `ledger/evidence/p3-mutant-suite-rerun/`, `evaluation/evidence/e2/p3-proverif-20261012/`, the 8 repaired-e guard rows under `run:catalog/`; RQ1-E.md §12.
+- [x] Two-chain real integration and durable worker recovery run from fresh state. Symbolic crypto mode is visibly recorded. — `run:manifest.json` (`executionMode` real-integrated, `adapterMode` symbolic; fresh two-Anvil pair per row); `run:catalog/recovery-expiry/` (logical process-death crash points only).
+- [x] ProVerif correspondence outputs and negative control are saved; state/cryptographic limits are stated. — `run:proverif/summary.json` (`matched` true, symbolic abstraction); `evaluation/evidence/e2/p3-proverif-20261012/`; RQ1-E.md §11, §15.
+- [x] `evaluation/reports/RQ1-E.md` answers RQ1; no JANUS findings are imported. — RQ1-E.md 69dabfba.. (answer §0); ledger claims A1-0084/A1-0085, protocol claims S2-0022/S2-0023, evidence and model S3-0024; JANUS appears only in "not used" statements.
+- [x] Source/input/output/tool hashes, commands and exit codes recorded; no input changed during the run. — `run:bracket-pre.json` = `run:bracket-post.json` (except label and time); `run:versions.json`; `run:manifest.json` (`sourceStable`, `worktreeUnchanged` with HEAD 21b37fb and empty status before and after, `planReverified`; `resultFiles` hashes).
+- [x] Three ACKs refer to the same report and source manifest. Gate E PASS recorded before F starts. — A1-0085, S2-0023 and S3-0024 name the same four items (below); recorded 2026-10-12; F not started.
+
+**Evidence run:** `evaluation/evidence/e3/gate-run-20261012/` (2126 files; evidence commit c2c81d5), from plan `evaluation/evidence/e3/gate-plan-20261012/integration-plan.json` sha256 c00860192aaa69fd2e5f7baf132f5ebf10bf14ebba377edada31c1d9372b6bb9, runId `E-gate-20261012`, FREEZE S3-0021 (plan ACKs A1-0083, S2-0021). Run HEAD 21b37fb; exit 0, 56/56 PASS, 4749.50 s (S3-0022). Gate RESULT S3-0023.
+
+**ACKs:** A1-0085 (agent 1, ledger claims and every row), S2-0023 (agent 2 (proxy), protocol and key claims) and S3-0024 (agent 3 (proxy), evidence and model; self-sign-off). Each names exactly:
+
+| Item | sha256 / commit |
+|---|---|
+| `evaluation/evidence/e3/gate-run-20261012/manifest.json` | 908fd6156ac5c6c4f640686fbddade3f9720cf29fb1e579f7c3d01f0909205a2 |
+| `evaluation/evidence/e3/gate-run-20261012/gate-evidence.json` | 47e38dd369ce686d5298f909c43c79cdf4b7eff4d20d41988a57f80974538500 |
+| `evaluation/reports/RQ1-E.md` | 69dabfbab9d9deeb0d94b448da6bf9b9674ce25c7c94e1b101f67c4804c89b8f |
+| HEAD of record | 871e21812877ff1f9a00b8877236f9970714bf57 |
+
+**Decision:** "gate E PASS: solo phase, correlated review, criterion 4 human-scoped (A1-0080), window cited from owner evidence (A1-0081), integrated mutants and window not run"
 
 ## F — RQ2 completion
 
@@ -563,3 +576,43 @@ Recorded by agent 3 (proxy) under the human solo directive A1-0059. **Correlated
 - F and G stay locked.
 
 Evidence: `evaluation/evidence/e2/sl7-destination-live-20261011/README.md`.
+
+## Solo-phase record: gate E PASS (solo phase); board at F0, 2026-10-12 IST
+
+Recorded by agent 3 (proxy) under the human solo directive A1-0059 and A1-0082 P4-4. **Correlated self-review.**
+
+**Run:** plan c0086019.. (FREEZE S3-0021; plan ACKs A1-0083 and S2-0021), runId `E-gate-20261012`, launched by agent 1, gave exit 0, manifest PASS, 56/56 rows, 4749.50 s (S3-0022). Run HEAD 21b37fb, unchanged before and after; evidence `evaluation/evidence/e3/gate-run-20261012/` (2126 files, evidence commit c2c81d5; never-publish scan 0 hits).
+
+**Reviews and RESULT:** A1-0084 (ledger) and S2-0022 (protocol) found no discrepancy. Gate RESULT S3-0023 names one manifest. RQ1-E.md is final at 69dabfba.. (1338 lines).
+
+**Same-source ACKs (A1-0082 P4-3):**
+
+| ACK | Scope | Message sha256 | Commit |
+|---|---|---|---|
+| A1-0085 | agent 1: ledger claims and every row | 56b7dc2b.. | 9d3e904 |
+| S2-0023 | agent 2 (proxy): protocol and key claims; no blocker | 9b5869f8.. | ed3f99f |
+| S3-0024 | agent 3 (proxy): evidence and model; self-sign-off | bc10947e.. | committed with this record |
+
+All three name manifest.json 908fd615.., gate-evidence.json 47e38dd3.., RQ1-E.md 69dabfba.. and HEAD of record 871e218. `git diff --name-only 871e218 HEAD -- evaluation/ interfaces/` was empty when S3-0024 was written.
+
+**Criteria (`evaluation/gate.py` `E_CRITERIA`):** 1-6 and 8 are VERIFIED in `gate-evidence.json`; criterion 4 is human-scoped (A1-0080). Criteria 7 (RQ1-report) and 9 (three-matching-acks) are PENDING in the run output by design and are adjudicated VERIFIED here on the three ACKs. `gate-evidence.json` is not edited; `evaluation/gate.py` stays fail-closed and never emits PASS.
+
+**Decision:** "gate E PASS: solo phase, correlated review, criterion 4 human-scoped (A1-0080), window cited from owner evidence (A1-0081), integrated mutants and window not run"
+
+**Limits carried with the PASS:**
+- solo phase: agent 1 and the agent-2/agent-3 proxies are the same model, so no review is independent; S3-0024 is a self-sign-off of agent 3 (proxy)'s own runner, oracles, selection and report;
+- single host, low memory; one trial per row; no statistics and no performance claim;
+- Anvil without consensus or finality; symbolic adapter (no ABE, no secrecy, no `rotate_epoch`); trusted witness (q = 1) and trusted worker;
+- paper crash rows D47: "frozen BLOCKED / decided SPEC_GAP, UNPROVED"; delivery unknown in every row;
+- not run: the integrated live mutant matrix (A1-0080), the integrated revocation window (A1-0081; owner measurement A1-0046 cited), the hash-only log mode, TempACL rollback and acceptance at `expiresAt − 1`;
+- relay-stress rows are outside A01 and are specification dependencies, not HMBC exploits; no vulnerability count is claimed;
+- paper-derived reconstruction, not the authors' implementation; synthetic fixtures only.
+
+**Disclosure:** this PASS is a solo-phase decision. The original agents 2 and 3 may overturn it on return, including D47, D48, D49, the criterion 4 scoping (A1-0080) and the window decision (A1-0081). Pushing `main` is a human decision; agent 1 pushes `agent-1` only.
+
+**Status:**
+- **Gate E: PASS (solo phase).** The board is at **F0**.
+- **F is not started.** F needs its own plan (PLAN.md §6, the gate F checklist above) and the human's go-ahead for F work. Nothing in F is authorized by this record.
+- G stays locked behind gate F.
+
+Evidence: `evaluation/evidence/e3/gate-run-20261012/README.md`; `evaluation/reports/RQ1-E.md`; S3-0023, A1-0085, S2-0023, S3-0024.

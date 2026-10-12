@@ -2,8 +2,10 @@
 
 Paper-derived HMBC2020 reconstruction. Synthetic only.
 
-Phase: E / RQ1, solo mode (A1-0059, `../PLAN.md`, `../PROTOCOL.md`, rulings A1-0061). Gate E not adjudicated
-(gate run passed its run stages; P4-3 gate RESULT S3-0023 sent; the three ACKs and P4-4 pending). F and G locked. All proxy reviews and ACKs are correlated self-review (same model as agent 1).
+Phase: E / RQ1 done, solo mode (A1-0059, `../PLAN.md`, `../PROTOCOL.md`, rulings A1-0061). **Gate E PASS (solo
+phase)**, recorded in `communication/GATES.md` on 2026-10-12 after the three same-source ACKs A1-0085, S2-0023 and
+S3-0024. Board at **F0**. **F is not started**: it needs its own plan and the human's go-ahead. G locked. All proxy
+reviews and ACKs are correlated self-review (same model as agent 1); S3-0024 is a self-sign-off.
 
 ## Current state (2026-10-12 IST)
 
@@ -23,7 +25,8 @@ Phase: E / RQ1, solo mode (A1-0059, `../PLAN.md`, `../PROTOCOL.md`, rulings A1-0
 | P4-2 RQ1-E.md | **final** at 69dabfba.. (`fill_gate.py` exit 0, 0 problems; review and ACK record added after A1-0084/S2-0022, no result changed) | `evaluation/reports/RQ1-E.md`; `evaluation/reports/fill_gate.py.txt` |
 | Post-run reviews | A1-0084 (ledger) and S2-0022 (protocol): no discrepancy | `ledger/evidence/gate-e-review/`; `protocol/evidence/reviews/s2-0022-gate-run/` |
 | P4-3 gate RESULT | **sent**: S3-0023, one manifest | `outbox/0023-gate-result-e.md` |
-| P4-3 ACKs, P4-4 | pending: A1-0085, S2-0023, S3-0024; then GATES.md and BOARD | – |
+| P4-3 ACKs | **all three match**: A1-0085 (9d3e904), S2-0023 (ed3f99f), S3-0024 (bc10947e.., awaiting agent 1's commit) | `../../outbox/0085-ack-gate-result-e.md`; `../agent-2-proxy/outbox/0023-ack-gate-result-e.md`; `outbox/0024-ack-gate-result-e.md` |
+| P4-4 | **done**: GATES.md gate E PASS (solo phase), exact A1-0082 wording; BOARD at F0 | `communication/GATES.md`; `communication/BOARD.md` |
 
 - FREEZE S3-0019 is released. No services are running.
 - Decisions D47 (paper crash relabel) and D48 (SL0 choices) are in `communication/DECISIONS.md`.
@@ -31,8 +34,13 @@ Phase: E / RQ1, solo mode (A1-0059, `../PLAN.md`, `../PROTOCOL.md`, rulings A1-0
 **Catalog progress: 56/56 actual. The catalog comparisons are complete.**
 
 No catalog slice remains. P3 is closed. The gate run and RQ1-E.md are done (S3-0022), both post-run reviews are in
-(A1-0084, S2-0022), and the P4-3 gate RESULT is S3-0023. Next: agent 1 commits S3-0023 with RQ1-E.md; then
-A1-0085 and S2-0023; then my sign-off S3-0024 and the GATES.md and BOARD record (A1-0082 P4-4).
+(A1-0084, S2-0022), the P4-3 gate RESULT is S3-0023, the three ACKs are A1-0085, S2-0023 and S3-0024, and P4-4 is
+recorded (GATES.md gate E PASS, solo phase; BOARD at F0). **Solo P4 is complete.**
+
+**Next: none** until F is planned or the original agents return. Agent 1 commits S3-0024, GATES.md, BOARD.md and
+this STATUS.md and HANDOFF.md, and pushes `agent-1` only; pushing `main` is a human decision. F needs its own plan
+(PLAN.md §6 F0, the gate F checklist) and the human's go-ahead. The original agents 2 and 3 may overturn the
+solo-phase PASS on return.
 
 ## Runner facts (after SL0 and SL1)
 
@@ -175,9 +183,17 @@ toolchain and host-tools. Keep helper scripts out of `evaluation/` as `.py` file
   - 7 (RQ1-report) is satisfied by RQ1-E.md 69dabfba.., subject to the ACKs;
   - 9 is pending: A1-0085, S2-0023, S3-0024.
   `gate-evidence.json` is never edited: criteria 7 and 9 are adjudicated in GATES.md. `gate.py` stays fail-closed.
-- **S3-0024 (next, after A1-0085 and S2-0023):**
-  - check that both ACKs name the same three sha256 and the S3-0023 commit;
-  - sign off evidence and model, with the correlated-review disclosure and the self-sign-off caveat;
-  - then draft the GATES.md entry and the BOARD move to F0 with A1-0082 P4-4's exact wording, or FAIL/BLOCKED
-    with reasons;
-  - F is not started, and it needs its own plan.
+- **S3-0024 (done, 2026-10-12):** both ACKs checked (same four items, `Type: ACK`, no blocker); evidence and model
+  signed off with the correlated-review disclosure and the self-sign-off caveat; GATES.md and BOARD written with
+  A1-0082 P4-4's exact wording. F is not started, and it needs its own plan.
+
+## P4-4 facts (S3-0024, 2026-10-12)
+
+- `gate-evidence.json` keeps criteria 7 and 9 PENDING (run output, never edited). They are adjudicated VERIFIED in
+  GATES.md on the three ACKs. `evaluation/gate.py` stays fail-closed and never emits PASS.
+- GATES.md: header says E PASS in the solo phase and F/G NOT RUN; the E checklist is ticked with pointers; the dated
+  record "Solo-phase record: gate E PASS (solo phase); board at F0, 2026-10-12 IST" is the last section. F and G
+  checklists are unticked.
+- BOARD.md: the new top section is the gate E PASS / F0 checkpoint. The board had not been updated between
+  2026-10-09 and this entry; the solo-phase slice records are in GATES.md.
+- Do not edit RQ1-E.md, the gate manifest or `gate-evidence.json`: the ACKs name their sha256.
