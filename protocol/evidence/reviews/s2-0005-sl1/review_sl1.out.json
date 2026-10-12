@@ -1,0 +1,273 @@
+{
+ "paper-strict": {
+  "d1Adapter": {
+   "module": "hmbc_protocol.adapter",
+   "exit": 0,
+   "failure": null,
+   "stderr": {
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "exchanges": 6,
+   "exchangeFailures": []
+  },
+  "d2Adapter": {
+   "module": "hmbc_protocol.adapter",
+   "exit": 0,
+   "failure": null,
+   "stderr": {
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "exchanges": 5,
+   "exchangeFailures": []
+  },
+  "stateDirsDistinct": true,
+  "deploymentsDistinct": true,
+  "contractsDisjoint": true,
+  "d2Operations": [
+   [
+    "encrypt_record",
+    true
+   ],
+   [
+    "prepare_request",
+    true
+   ],
+   [
+    "release",
+    true
+   ],
+   [
+    "finish_decryption",
+    true
+   ],
+   [
+    "finish_decryption",
+    false
+   ]
+  ],
+  "d2Fingerprint": "c6da1ea57449c74458e7b4fac76da55b2309704048af1018ec7e8b2a7f837e1d",
+  "d1Fingerprints": [
+   "fadada41c79ee54c8af79a060370410db2f1dd337f055a85e6c0be1bc47245f4"
+  ],
+  "releaseResponseKeys": [
+   "adapterMode",
+   "ciphertextDigest",
+   "dataId",
+   "grantId",
+   "keyEpoch",
+   "recipientKeyHash",
+   "requestDigest",
+   "responseEnvelope",
+   "schemaVersion"
+  ],
+  "releaseEnvelope": {
+   "kind": "symbolic-partial/v1",
+   "tokenSha256": "ba5126ec406e93550cecc726ca70e8e95995076faabb99d829399e1cda927566"
+  },
+  "afterReleaseEvents": [
+   [
+    "RELEASE_INTENT",
+    "0xac5a40f1b6d99eca704aebc1fd7ffa5dbb5be59a"
+   ],
+   [
+    "RELEASE_SENT",
+    "0xac5a40f1b6d99eca704aebc1fd7ffa5dbb5be59a"
+   ]
+  ],
+  "afterReleaseRow": {
+   "recipientKeyHash": "0x5fe346cd69926d7120dff3cc020f4d36ad8093b7c9bb95c6ecea9705a3f8c537",
+   "sendAttempts": 1,
+   "completedAttempts": 1,
+   "delivery": "unknown",
+   "ciphertextDigest": "0xf6906a0ebe73c6698feb9f54f7849d072229ad124dabde7d177bfd799d644a6c"
+  },
+  "bobCompletion": {
+   "schemaVersion": "v1",
+   "adapterMode": "symbolic",
+   "decryptable": true,
+   "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+   "ciphertextDigest": "0xf6906a0ebe73c6698feb9f54f7849d072229ad124dabde7d177bfd799d644a6c"
+  },
+  "aliceCompletion": {
+   "code": "WRONG_SUBJECT"
+  },
+  "completionResult": {
+   "ok": true,
+   "failure": null,
+   "dbcClockAfterRelease": "1791575107",
+   "targetCompletion": {
+    "ok": true,
+    "decryptable": true
+   },
+   "originalCompletion": {
+    "ok": false,
+    "error": "WRONG_SUBJECT"
+   }
+  },
+  "grantExpiresAt": "1791575136"
+ },
+ "paper-minimal": {
+  "d1Adapter": {
+   "module": "hmbc_protocol.adapter",
+   "exit": 0,
+   "failure": null,
+   "stderr": {
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "exchanges": 6,
+   "exchangeFailures": []
+  },
+  "d2Adapter": {
+   "module": "hmbc_protocol.adapter",
+   "exit": 0,
+   "failure": null,
+   "stderr": {
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "exchanges": 5,
+   "exchangeFailures": []
+  },
+  "stateDirsDistinct": true,
+  "deploymentsDistinct": true,
+  "contractsDisjoint": true,
+  "d2Operations": [
+   [
+    "encrypt_record",
+    true
+   ],
+   [
+    "prepare_request",
+    true
+   ],
+   [
+    "release",
+    true
+   ],
+   [
+    "finish_decryption",
+    true
+   ],
+   [
+    "finish_decryption",
+    false
+   ]
+  ],
+  "d2Fingerprint": "c6da1ea57449c74458e7b4fac76da55b2309704048af1018ec7e8b2a7f837e1d",
+  "d1Fingerprints": [
+   "fadada41c79ee54c8af79a060370410db2f1dd337f055a85e6c0be1bc47245f4"
+  ],
+  "releaseResponseKeys": [
+   "adapterMode",
+   "ciphertextDigest",
+   "dataId",
+   "grantId",
+   "keyEpoch",
+   "recipientKeyHash",
+   "requestDigest",
+   "responseEnvelope",
+   "schemaVersion"
+  ],
+  "releaseEnvelope": {
+   "kind": "symbolic-partial/v1",
+   "tokenSha256": "aad8ac0965a26ecea412773d794a8a4b017ae437f799147d5e3d68b19801ca91"
+  },
+  "afterReleaseEvents": [
+   [
+    "RELEASE_INTENT",
+    "0xac5a40f1b6d99eca704aebc1fd7ffa5dbb5be59a"
+   ],
+   [
+    "RELEASE_SENT",
+    "0xac5a40f1b6d99eca704aebc1fd7ffa5dbb5be59a"
+   ]
+  ],
+  "afterReleaseRow": {
+   "recipientKeyHash": "0x5fe346cd69926d7120dff3cc020f4d36ad8093b7c9bb95c6ecea9705a3f8c537",
+   "sendAttempts": 1,
+   "completedAttempts": 1,
+   "delivery": "unknown",
+   "ciphertextDigest": "0xf6906a0ebe73c6698feb9f54f7849d072229ad124dabde7d177bfd799d644a6c"
+  },
+  "bobCompletion": {
+   "schemaVersion": "v1",
+   "adapterMode": "symbolic",
+   "decryptable": true,
+   "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+   "ciphertextDigest": "0xf6906a0ebe73c6698feb9f54f7849d072229ad124dabde7d177bfd799d644a6c"
+  },
+  "aliceCompletion": {
+   "code": "WRONG_SUBJECT"
+  },
+  "completionResult": {
+   "ok": true,
+   "failure": null,
+   "dbcClockAfterRelease": "1791575189",
+   "targetCompletion": {
+    "ok": true,
+    "decryptable": true
+   },
+   "originalCompletion": {
+    "ok": false,
+    "error": "WRONG_SUBJECT"
+   }
+  },
+  "grantExpiresAt": "1791575217"
+ },
+ "repaired-e": {
+  "d1Adapter": {
+   "module": "hmbc_protocol.adapter",
+   "exit": 0,
+   "failure": null,
+   "stderr": {
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "exchanges": 11,
+   "exchangeFailures": []
+  },
+  "d2Adapter": {
+   "module": "hmbc_protocol.adapter",
+   "exit": 0,
+   "failure": null,
+   "stderr": {
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "exchanges": 4,
+   "exchangeFailures": []
+  },
+  "stateDirsDistinct": true,
+  "deploymentsDistinct": true,
+  "contractsDisjoint": true,
+  "d2Operations": [
+   [
+    "encrypt_record",
+    true
+   ],
+   [
+    "prepare_request",
+    true
+   ],
+   [
+    "collect_checkpoint",
+    true
+   ],
+   [
+    "collect_decision",
+    true
+   ]
+  ],
+  "d2Fingerprint": "521b3d3d44be78ec0c73855b5a713ad6e2814f66c2e1868ed15dd091a4016d02",
+  "d1Fingerprints": [
+   "fadada41c79ee54c8af79a060370410db2f1dd337f055a85e6c0be1bc47245f4"
+  ],
+  "verdict": "rejected before release; D2 worker idle before/after"
+ },
+ "tokenScan": {
+  "filesScanned": 143,
+  "distinctHex32": 790,
+  "tokenDigestsChecked": 5,
+  "preimageHits": 0,
+  "tokenFieldValues": [],
+  "tokenFieldFiles": 0
+ },
+ "problems": []
+}

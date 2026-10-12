@@ -1,0 +1,114 @@
+"""Protocol-scope review checks of the SL3 public evidence (S3-0012). Read-only; prints one JSON report.
+Usage: python -I review_sl3.py <evidence dir>"""
+import json
+import pathlib
+import re
+import sys
+
+from eth_utils import keccak
+
+EVD = pathlib.Path(sys.argv[1]); RUN = EVD / "run"
+EMPTY = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+ALICE = "0x" + keccak(text="HMBC.recipient-key.alice").hex()
+ZERO = "0x" + "00" * 32
+NEVER = re.compile(r"no worker\.sqlite in (\S+) \(looked in <dir>/worker/ and in <dir>\)\n")
+load = lambda p: json.loads(pathlib.Path(p).read_text())  # noqa: E731
+report, problems = {}, []
+
+
+def check(c, m):
+    if not c:
+        problems.append(m)
+
+
+for case in sorted(p.name for p in RUN.iterdir() if p.is_dir()):
+    profile = case.split("-dropped")[0].split("-fabricated")[0]
+    row, r = RUN / case / profile, {}
+    d1, d2 = load(row / "adapter/process.json"), load(row / "audit-instance/adapter/process.json")
+    for name, p in (("d1", d1), ("d2", d2)):
+        check(p["argv"][1:3] == ["-m", "hmbc_protocol.adapter"] and p["exitCode"] == 0 and p["failure"] is None
+              and p.get("stderrSha256") == EMPTY and not [e for e in p["exchanges"] if e["failure"]], f"{case} {name} adapter")
+    sd = lambda p: p["argv"][p["argv"].index("--state-dir") + 1]  # noqa: E731
+    check(sd(d1) != sd(d2), f"{case} state dirs")
+    exf = row / "audit-stress/exchanges.json"
+    ex = load(exf) if exf.exists() else []
+    r["d2Ops"] = [(e["operation"], e["response"]["ok"], (e["response"].get("error") or {}).get("code")) for e in ex]
+    check(len(ex) == len(d2["exchanges"]), f"{case} exchange count")
+    probes = [c for c in load(row / "commands.json") if c.get("workerObservation")]
+    r["workerProbes"] = [(c["exitCode"], c["workerObservation"]) for c in probes]
+    if "dropped" in case:
+        ops = [o for o, _, _ in r["d2Ops"]]
+        check(ops[0] == "encrypt_record" and ops.count("release") == 1 and all(ok for _, ok, _ in r["d2Ops"])
+              and not set(ops) - {"encrypt_record", "prepare_request", "collect_checkpoint", "collect_decision", "release"}, f"{case} ops {ops}")
+        b, a, tl = load(row / "audit-stress/before-release.json"), load(row / "audit-stress/after-release.json"), load(row / "audit-stress/timeline.json")
+        wb, wa = b["worker"], a["worker"]
+        check(wb.get("instantiated") is True and wa.get("instantiated") is True, f"{case} worker instantiated")
+        lb, la = wb["log"], wa["log"]
+        check(lb["events"] == [] and lb["releases"] == [], f"{case} idle before release")
+        check([e["type"] for e in la["events"]] == ["RELEASE_INTENT", "RELEASE_SENT"] and len(la["releases"]) == 1, f"{case} delta events")
+        row_ = la["releases"][0]
+        check((row_["sendAttempts"], row_["completedAttempts"], row_["delivery"]) == (1, 1, "unknown")
+              and la["counts"] == {"releaseIntentCount": "1", "releaseSentCount": "1"}, f"{case} delta counts")
+        rel = next(e for e in ex if e["operation"] == "release")["response"]["result"]
+        grant = b["grants"][rel["grantId"]]
+        check(rel["recipientKeyHash"] == ALICE == row_["recipientKeyHash"], f"{case} release recipient")
+        check(grant["recipientKeyHash"] == (ZERO if profile != "repaired-e" else ALICE), f"{case} native grant recipient")
+        check(all(a[k] == b[k] for k in ("grants", "requests", "nonces", "accessLogCount")), f"{case} native unchanged by release")
+        check(int(tl["releaseDbcClock"]) < int(tl["grantExpiresAt"]) and int(row_["createdAt"]) < int(grant["expiresAt"]), f"{case} release window")
+        st = a["requests"][rel["requestDigest"]]
+        r["pbcRequestAfter"] = {k: st.get(k) for k in ("status", "outcomeLogId")}
+        check(st.get("status") == "1" and st.get("outcomeLogId") == "0", f"{case} PBC request pending")
+        r["release"] = dict(recipient=rel["recipientKeyHash"], nativeGrantRecipient=grant["recipientKeyHash"], margin=tl["marginSeconds"],
+                            createdAt=row_["createdAt"], grantExpiresAt=grant["expiresAt"], tokenSha256=(rel.get("responseEnvelope") or {}).get("tokenSha256"))
+        check(len(probes) == 2 and all(c["exitCode"] == 0 and c["workerObservation"] == "instantiated" for c in probes), f"{case} probes instantiated")
+    else:
+        ops = [o for o, _, _ in r["d2Ops"]]
+        b, a = load(row / "audit-stress/before.json"), load(row / "audit-stress/after.json")
+        for o in (b["worker"], a["worker"]):
+            m = NEVER.fullmatch(o.get("message", ""))
+            check(o.get("instantiated") is False and o.get("exitCode") == 1 and m is not None and m.group(1) == sd(d2)
+                  and o.get("checkedAbsent") == [m.group(1) + "/worker/worker.sqlite", m.group(1) + "/worker.sqlite"], f"{case} never-instantiated")
+        check(b["worker"] == a["worker"], f"{case} worker unchanged")
+        check(len(probes) == 2 and all(c["exitCode"] == 1 and c["workerObservation"] == "never-instantiated (verified)" for c in probes), f"{case} probes")
+        check(not set(ops) - {"prepare_request", "attest_grant"} and "encrypt_record" not in ops and "release" not in ops, f"{case} ops {ops}")
+        if profile == "repaired-e":
+            att = [e for e in ex if e["operation"] == "attest_grant"]
+            check(len(att) == 1 and att[0]["response"]["ok"] is False and att[0]["response"]["result"] is None
+                  and att[0]["response"]["error"]["code"] == "NOT_COMMITTED", f"{case} attest NOT_COMMITTED")
+            r["attest"] = att[0]["response"]
+            check(load(row / "audit-stress/attestation.json") == {"ok": False, "error": "NOT_COMMITTED"}, f"{case} attestation.json")
+        else:
+            check("attest_grant" not in ops, f"{case} paper attest")
+    report[case] = r
+
+# token preimage scan over the whole evidence directory
+digs = set()
+for f in RUN.rglob("*.json"):
+    try:
+        w = json.loads(f.read_text())
+    except Exception:
+        continue
+    stack = [w]
+    while stack:
+        o = stack.pop()
+        if isinstance(o, dict):
+            if "tokenDigest" in o:
+                digs.add(o["tokenDigest"])
+            if "export" in o and isinstance(o["export"], str):
+                try:
+                    stack.append(json.loads(o["export"]))
+                except Exception:
+                    pass
+            stack.extend(o.values())
+        elif isinstance(o, list):
+            stack.extend(o)
+hexes, files, tokfields = set(), 0, 0
+for f in EVD.rglob("*"):
+    if f.is_file():
+        files += 1; t = f.read_text(errors="replace")
+        hexes |= set(re.findall(r"0x[0-9a-f]{64}", t)); tokfields += len(re.findall(r'"token"\s*:', t))
+hits = [h for h in hexes if "0x" + keccak(bytes.fromhex(h[2:])).hex() in digs]
+check(not hits and tokfields == 0, "token redaction")
+report["tokenScan"] = dict(files=files, hex32=len(hexes), tokenDigests=len(digs), preimageHits=len(hits), tokenFields=tokfields)
+report["problems"] = problems
+print(json.dumps(report, indent=1, default=str))

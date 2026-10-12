@@ -21,7 +21,11 @@ TESTS = {"wire": ["protocol/tests/test_candidate_schema_review.py", "protocol/te
          "controls": ["protocol/tests/test_paper_profile.py", "protocol/tests/test_paper_release.py", "protocol/tests/test_supplement_controls.py"], "eip712": ["protocol/tests/test_eip712_vs_agent1.py"],
          "bootstrap": ["protocol/tests/test_bootstrap_fixture.py"],
          "worker_log": ["protocol/tests/test_worker_log.py", "protocol/tests/test_adapter_process_paper.py"],
-         "faulty": ["protocol/tests/test_faulty_adapter.py"]}
+         "faulty": ["protocol/tests/test_faulty_adapter.py"],
+         # S2-0004 (P2 T1-T3): each new characterization test is run ALONE against its mutant, so a detection is attributable to that test
+         "routing": ["protocol/tests/test_paper_release.py::test_the_binding_follows_the_RELAY_ASSERTED_gid_so_the_spec_gap_stays_visible"],
+         "recovery": ["protocol/tests/test_recovery.py"],
+         "restart": ["protocol/tests/test_faulty_adapter.py::test_first_production_restart_after_the_original_expiry_answers_expired_with_no_new_event"]}
 
 M = [  # (suite, file, old, new, equivalent-reason or None)
     ("wire", "protocol/hmbc_protocol/wire.py", "    if any(a >= b for a, b in zip(keys, keys[1:])):", "    if False:", None),
@@ -122,6 +126,14 @@ M = [  # (suite, file, old, new, equivalent-reason or None)
     ("worker_log", "protocol/hmbc_protocol/worker_log.py", 'nested, direct = os.path.join(state_dir, "worker", "worker.sqlite"), os.path.join(state_dir, "worker.sqlite")', 'nested, direct = os.path.join(state_dir, "no-such-dir", "worker.sqlite"), os.path.join(state_dir, "worker.sqlite")', None),
     ("worker_log", "protocol/hmbc_protocol/worker_log.py", '    if len(found) == 2:\n        raise SystemExit(f"ambiguous', '    if False:\n        raise SystemExit(f"ambiguous', None),
     ("worker_log", "protocol/hmbc_protocol/worker_log.py", '    if not found:\n        raise SystemExit(f"no worker.sqlite', '    if False:\n        raise SystemExit(f"no worker.sqlite', None),
+    # S2-0004 T1: the paper-mode release binds to a fixed subject's key instead of the grant gid's registered key (subject routing broken)
+    ("routing", "protocol/hmbc_protocol/worker.py", "        return registered\n", '        return keys.recipient_key_hash("keyref:user:alice")\n', None),
+    # S2-0004 T2: a durable RELEASE_INTENT is written before the recipient binding is resolved (write-before-validate), so a crash there leaves a trace
+    ("recovery", "protocol/hmbc_protocol/worker.py", "        recipient = self._recipient_for(g)\n",
+     '        self._event("RELEASE_INTENT", (g["requestDigest"], grant_id, g["gid"], g["dataId"]), now)\n        recipient = self._recipient_for(g)\n', None),
+    # S2-0004 T3: an expired grant is still served from the cache if a release row exists (a retry would extend the grant's lifetime)
+    ("restart", "protocol/hmbc_protocol/worker.py", 'if now >= int(g["expiresAt"]):',
+     'if now >= int(g["expiresAt"]) and self.db.execute("select 1 from releases where grant_id=?", (grant_id,)).fetchone() is None:', None),
     ("faulty", "protocol/testtools/faulty_adapter.py", 'os._exit(CRASH_EXIT)', 'os._exit(0)', None),
     ("faulty", "protocol/testtools/faulty_adapter.py", 'super().release(grant_id, transmit=send if self.point == "after_send" else transmit)', 'super().release(grant_id, transmit=transmit)', None),
     ("faulty", "protocol/testtools/faulty_adapter.py", 'CRASH_EXIT = 86', 'CRASH_EXIT = 87', None),

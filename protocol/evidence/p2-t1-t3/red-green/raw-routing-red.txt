@@ -1,0 +1,13 @@
+F
+=================================== FAILURES ===================================
+_ test_the_binding_follows_the_RELAY_ASSERTED_gid_so_the_spec_gap_stays_visible[world_paper] _
+protocol/tests/test_paper_release.py:82: in test_the_binding_follows_the_RELAY_ASSERTED_gid_so_the_spec_gap_stays_visible
+    assert resp["recipientKeyHash"] == keys.recipient_key_hash("keyref:user:bob") != keys.recipient_key_hash("keyref:user:alice")
+E   AssertionError: assert '0x98d796e322...9a0117bb07e5d' == '0x5fe346cd69...a9705a3f8c537'
+E     
+E     - 0x5fe346cd69926d7120dff3cc020f4d36ad8093b7c9bb95c6ecea9705a3f8c537
+E     + 0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d
+=========================== short test summary info ============================
+FAILED protocol/tests/test_paper_release.py::test_the_binding_follows_the_RELAY_ASSERTED_gid_so_the_spec_gap_stays_visible[world_paper]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 32.82s

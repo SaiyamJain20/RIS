@@ -1,0 +1,230 @@
+{
+ "paper-minimal-expired-duty": {
+  "d2Ops": [
+   "prepare_request"
+  ],
+  "request": {
+   "authEpoch": "4",
+   "requestAt": "2026-10-11T07:39:41.840944+00:00"
+  },
+  "dutyInstallAt": "2026-10-11T07:39:40.817252+00:00",
+  "workerProbes": 6
+ },
+ "paper-minimal-post-barrier-revocation": {
+  "d2Ops": [
+   "prepare_request"
+  ],
+  "request": {
+   "authEpoch": "3",
+   "requestAt": "2026-10-11T07:35:34.492565+00:00"
+  },
+  "revocation": {
+   "block": "49",
+   "epochBefore": "3",
+   "epochAfter": "4",
+   "at": "2026-10-11T07:35:35.806189+00:00"
+  },
+  "workerProbes": 5
+ },
+ "paper-minimal-pre-barrier-revocation": {
+  "d2Ops": [
+   "prepare_request"
+  ],
+  "request": {
+   "authEpoch": "3",
+   "requestAt": "2026-10-11T07:31:35.874443+00:00"
+  },
+  "revocation": {
+   "block": "49",
+   "epochBefore": "3",
+   "epochAfter": "4",
+   "at": "2026-10-11T07:31:37.167372+00:00"
+  },
+  "workerProbes": 5
+ },
+ "paper-strict-expired-duty": {
+  "d2Ops": [
+   "prepare_request"
+  ],
+  "request": {
+   "authEpoch": "4",
+   "requestAt": "2026-10-11T07:38:23.646702+00:00"
+  },
+  "dutyInstallAt": "2026-10-11T07:38:22.546753+00:00",
+  "workerProbes": 6
+ },
+ "paper-strict-post-barrier-revocation": {
+  "d2Ops": [
+   "prepare_request"
+  ],
+  "request": {
+   "authEpoch": "3",
+   "requestAt": "2026-10-11T07:34:18.800635+00:00"
+  },
+  "revocation": {
+   "block": "49",
+   "epochBefore": "3",
+   "epochAfter": "4",
+   "at": "2026-10-11T07:34:20.046753+00:00"
+  },
+  "workerProbes": 5
+ },
+ "paper-strict-pre-barrier-revocation": {
+  "d2Ops": [
+   "prepare_request"
+  ],
+  "request": {
+   "authEpoch": "3",
+   "requestAt": "2026-10-11T07:30:17.026892+00:00"
+  },
+  "revocation": {
+   "block": "49",
+   "epochBefore": "3",
+   "epochAfter": "4",
+   "at": "2026-10-11T07:30:18.245659+00:00"
+  },
+  "workerProbes": 5
+ },
+ "repaired-e-expired-duty": {
+  "d2Ops": [
+   "prepare_request",
+   "collect_checkpoint",
+   "collect_decision"
+  ],
+  "request": {
+   "authEpoch": "4",
+   "requestAt": "2026-10-11T07:41:08.723961+00:00"
+  },
+  "dutyInstallAt": "2026-10-11T07:41:07.637645+00:00",
+  "witness": {
+   "cp": [
+    {
+     "sequence": "1",
+     "authEpoch": "4",
+     "sourceBlockNumber": "49",
+     "expiresAt": "1791704529"
+    }
+   ],
+   "decision": {
+    "stateSequence": "1",
+    "sourceBlockNumber": "49",
+    "expiresAt": "1791704498"
+   },
+   "collectedDbcNow": "1791704470",
+   "requestExpiresAt": "1791704498",
+   "recordValidUntil": [
+    "1791790853",
+    "1791704490"
+   ],
+   "decisionAt": "2026-10-11T07:41:10.237538+00:00"
+  },
+  "expiredCheck": {
+   "collectedDbcNow": "1791704470",
+   "dutyEnd": "1791704490",
+   "requestExpiresAt": "1791704498",
+   "cpExpiresAt": "1791704529",
+   "nowPlus30": "1791704500",
+   "decisionExpiresAt": "1791704498",
+   "binding": "request"
+  },
+  "workerProbes": 6
+ },
+ "repaired-e-post-barrier-revocation": {
+  "d2Ops": [
+   "prepare_request",
+   "collect_checkpoint",
+   "collect_decision",
+   "collect_checkpoint"
+  ],
+  "request": {
+   "authEpoch": "3",
+   "requestAt": "2026-10-11T07:36:59.006558+00:00"
+  },
+  "revocation": {
+   "block": "49",
+   "epochBefore": "3",
+   "epochAfter": "4",
+   "at": "2026-10-11T07:37:02.320705+00:00"
+  },
+  "witness": {
+   "cp": [
+    {
+     "sequence": "1",
+     "authEpoch": "3",
+     "sourceBlockNumber": "48",
+     "expiresAt": "1791704279"
+    },
+    {
+     "sequence": "2",
+     "authEpoch": "4",
+     "sourceBlockNumber": "49",
+     "expiresAt": "1791704283"
+    }
+   ],
+   "decision": {
+    "stateSequence": "1",
+    "sourceBlockNumber": "48",
+    "expiresAt": "1791704248"
+   },
+   "collectedDbcNow": "1791704220",
+   "requestExpiresAt": "1791704248",
+   "recordValidUntil": [
+    "1791790604",
+    "1791733004"
+   ],
+   "decisionAt": "2026-10-11T07:37:00.563081+00:00"
+  },
+  "workerProbes": 6
+ },
+ "repaired-e-pre-barrier-revocation": {
+  "d2Ops": [
+   "prepare_request",
+   "collect_checkpoint",
+   "collect_decision"
+  ],
+  "request": {
+   "authEpoch": "3",
+   "requestAt": "2026-10-11T07:33:00.226722+00:00"
+  },
+  "revocation": {
+   "block": "49",
+   "epochBefore": "3",
+   "epochAfter": "4",
+   "at": "2026-10-11T07:33:03.234323+00:00"
+  },
+  "witness": {
+   "cp": [
+    {
+     "sequence": "1",
+     "authEpoch": "3",
+     "sourceBlockNumber": "48",
+     "expiresAt": "1791704040"
+    }
+   ],
+   "decision": {
+    "stateSequence": "1",
+    "sourceBlockNumber": "48",
+    "expiresAt": "1791704009"
+   },
+   "collectedDbcNow": "1791703981",
+   "requestExpiresAt": "1791704009",
+   "recordValidUntil": [
+    "1791790366",
+    "1791732766"
+   ],
+   "decisionAt": "2026-10-11T07:33:01.514866+00:00"
+  },
+  "workerProbes": 5
+ },
+ "workerProbesTotal": 49,
+ "neverPublishScan": {
+  "files": 393,
+  "keyLabels": 13,
+  "keyHits": [],
+  "hex32": 2226,
+  "tokenDigests": 9,
+  "preimageHits": 0,
+  "tokenFields": 0
+ },
+ "problems": []
+}

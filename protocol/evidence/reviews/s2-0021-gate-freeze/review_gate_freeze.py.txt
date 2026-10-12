@@ -1,0 +1,173 @@
+"""Protocol-scope checks of the gate E run FREEZE S3-0021 (plan c0086019..). Read-only; prints one JSON report.
+
+Usage (cwd = repo root): python -I review_gate_freeze.py <repo root>
+
+Paper-derived HMBC2020 reconstruction, synthetic fixtures. Correlated self-review (A1-0059). Starts no service.
+It reads the plan, the historical slice plans, git blobs at the protocol pin and published slice evidence.
+"""
+import datetime as dt
+import hashlib
+import json
+import pathlib
+import re
+import subprocess
+import sys
+
+ROOT = pathlib.Path(sys.argv[1]).resolve()
+PLAN = ROOT / 'evaluation/evidence/e3/gate-plan-20261012/integration-plan.json'
+FREEZE = ROOT / 'communication/agent-1/solo/agent-3-proxy/outbox/0021-freeze-e-gate-run.md'
+PIN = '0716a8e2d46f985f35a612d42acaae02ab8701a4'
+PIN_INVENTORY = 'd16ddad897dac7df3d406bab200f85e5dba1c27595a3bbaf5fe658640ba184a5'
+FAULTY = 'f0ab2400db5b3667f92ad2e9061b931c8acc94696f42bcd7080e7cdd4e39bde4'
+DEVIATING = '0511ba571b71d960d8ffbe4b8c811da99ed7de53a4b7515ac425c5291cc3c2d7'
+E2 = 'evaluation/evidence/e2/'
+HISTORY = {
+    'recovery-expiry': E2 + 'expiry-runner-20261009/integration-plan.json',
+    'duplicate-outcome': E2 + 'duplicate-runner-20261009/integration-plan.json',
+    'nonce-replay': E2 + 'grouped-replay-runner-20261009/integration-plan.json',
+    'sl1-subject': E2 + 'sl1-subject-runner-20261009/integration-plan.json',
+    'sl2-relay': E2 + 'sl2-relay-runner-r2-20261010/integration-plan.json',
+    'sl3-audit': E2 + 'sl3-audit-runner-20261010/integration-plan.json',
+    'sl4-receipt': E2 + 'sl4-receipt-runner-20261010/integration-plan.json',
+    'sl5-trust': E2 + 'sl5-trust-runner-20261010/integration-plan.json',
+    'sl6-barrier': E2 + 'sl6-barrier-runner-20261011/integration-plan.json',
+    'sl7-destination': E2 + 'sl7-destination-runner-20261011/integration-plan.json',
+}
+ALWAYS = {'runId', 'freezeMessage', 'agent3Sources'}
+SL0 = {'ports', 'tools', 'pythonVersion', 'serviceEnvironment', 'castHashPolicy', 'hostDifferences', 'hostToolOverride',
+       'reviewMode', 'reviewDirective', 'reviewDecision', 'reviewDisclosure'}
+PRE_SOLO = ('recovery-expiry', 'duplicate-outcome', 'nonce-replay')
+# evaluator modules on the pre-solo row path that must be byte-identical to the historical runs
+UNCHANGED_RUNNER = ('evaluation/recovery_execution.py', 'evaluation/expired_retry.py', 'evaluation/duplicate_outcome.py',
+                    'evaluation/request_replay.py', 'evaluation/processes.py', 'evaluation/worker_evidence.py')
+report, problems = {}, []
+
+
+def check(cond, msg):
+    if not cond:
+        problems.append(msg)
+
+
+def sha(b):
+    return hashlib.sha256(b).hexdigest()
+
+
+def git_show(commit, path):
+    return subprocess.run(['git', '-C', str(ROOT), 'show', commit + ':' + path], capture_output=True, check=True).stdout
+
+
+raw = PLAN.read_bytes(); plan = json.loads(raw)
+report['planSha256'] = sha(raw); report['freezeSha256'] = sha(FREEZE.read_bytes())
+check(report['planSha256'] == 'c00860192aaa69fd2e5f7baf132f5ebf10bf14ebba377edada31c1d9372b6bb9', 'plan hash')
+check(report['freezeSha256'] == 'dcb8c72a70462aa51f7cd46d9e19518388c89b3af71eeae03561002828ecf682', 'FREEZE hash')
+slices = {s['name']: s for s in plan['slices']}
+report['slices'] = [s['name'] for s in plan['slices']]
+report['rows'] = sum(len(s['caseIds']) for s in plan['slices'])
+check(report['rows'] == 56 and len(slices) == 10, '56 rows in 10 slices')
+
+# 1. protocol pin, identical for every slice, equal to the pinned manifest and its git blobs
+owners = [s['plan']['owners']['protocol'] for s in plan['slices']]
+o = owners[0]
+check(all(x == o for x in owners), 'one protocol owner pin for every slice')
+check(o['commit'] == PIN and o['inventorySha256'] == PIN_INVENTORY and len(o['entries']) == 108, 'protocol pin 0716a8e / d16ddad8.. / 108')
+manifest = git_show(PIN, 'protocol/evidence/source-manifest.sha256')
+check(sha(manifest) == PIN_INVENTORY, 'pinned manifest bytes')
+pinned = dict(reversed(line.split(None, 1)) for line in manifest.decode().splitlines())
+pinned = {k.strip(): v for k, v in pinned.items()}
+check(pinned == o['entries'], 'plan entries dict-equal to the pinned manifest')
+blob_bad = [p for p, d in o['entries'].items() if sha(git_show(PIN, p)) != d]
+check(not blob_bad, 'pinned git blobs: ' + ', '.join(blob_bad))
+check(o['entries'].get('protocol/testtools/faulty_adapter.py') == FAULTY, 'faulty_adapter pin f0ab2400..')
+check(o['entries'].get('protocol/testtools/deviating_witness.py') == DEVIATING, 'deviating_witness pin 0511ba57..')
+prod = {p: d for p, d in o['entries'].items() if p.startswith(('protocol/hmbc_protocol/', 'protocol/testtools/', 'protocol/exports/', 'protocol/abi/'))}
+tree_diff = [p for p, d in prod.items() if not (ROOT / p).is_file() or sha((ROOT / p).read_bytes()) != d]
+check(not tree_diff, 'working-tree production bytes equal the pin: ' + ', '.join(tree_diff))
+report['protocolPin'] = dict(commit=o['commit'], inventory=o['inventorySha256'], entries=len(o['entries']), productionFiles=len(prod),
+                             productionEqualAtWorkingTree=not tree_diff, faultyAdapter=FAULTY[:8], deviatingWitness=DEVIATING[:8])
+
+# 2. host dependencies in the pinned adapter/worker/testtools code
+hits = {}
+for p in sorted(prod):
+    if not p.endswith('.py'):
+        continue
+    text = git_show(PIN, p).decode()
+    for n, line in enumerate(text.splitlines(), 1):
+        if re.search(r"28545|28546|18545|18546|os\.environ|getenv|expanduser|\bHOME\b|subprocess|sys\.version", line):
+            hits.setdefault(p, []).append(n)
+report['pinnedHostDependencyHits'] = hits
+check(not hits, 'pinned production code reads no port, env, HOME or Python version')
+
+# 3. embedded slice plans against their historical plans
+def walk(a, b, path, out):
+    if isinstance(a, dict) and isinstance(b, dict):
+        for k in sorted(set(a) | set(b)):
+            if k not in a or k not in b:
+                out.append(path + '.' + k)
+            else:
+                walk(a[k], b[k], path + '.' + k, out)
+    elif a != b:
+        out.append(path)
+
+diffs = {}
+for name, path in HISTORY.items():
+    hist = json.loads((ROOT / path).read_text()); out = []
+    walk(hist, slices[name]['plan'], '', out)
+    tops = sorted({x.split('.')[1] for x in out})
+    allowed = ALWAYS | (SL0 if name in PRE_SOLO else set())
+    diffs[name] = dict(topLevelDiffering=tops, unexpected=sorted(set(tops) - allowed))
+    check(not diffs[name]['unexpected'], name + ': unexpected differing fields ' + ', '.join(diffs[name]['unexpected']))
+    if name in PRE_SOLO:
+        changed = sorted(k for k in hist['agent3Sources'] if k in slices[name]['plan']['agent3Sources']
+                         and hist['agent3Sources'][k] != slices[name]['plan']['agent3Sources'][k])
+        diffs[name]['agent3SourcesChangedSinceRun'] = changed
+        for k in UNCHANGED_RUNNER:
+            if k in hist['agent3Sources']:
+                check(hist['agent3Sources'][k] == slices[name]['plan']['agent3Sources'][k], name + ': ' + k + ' changed since the run')
+        p = slices[name]['plan']; h = hist
+        diffs[name]['hostFields'] = dict(ports=[h['ports'], p['ports']], chainIds=[h['chainIds'], p['chainIds']],
+                                         pythonVersion=[h['pythonVersion'], p['pythonVersion']],
+                                         castHashPolicy=[h.get('castHashPolicy'), p.get('castHashPolicy')])
+        check(h['chainIds'] == p['chainIds'] == {'pbc': '18545', 'dbc': '28545'}, name + ': chain ids unchanged')
+report['embeddedPlans'] = diffs
+ref = slices['sl1-subject']['plan']
+same_host = {n: all(slices[n]['plan'].get(k) == ref.get(k) for k in SL0 | {'chainIds', 'packagePins', 'owners'}) for n in slices}
+report['hostFieldsEqualToSL1'] = same_host
+check(all(same_host.values()), 'all slices share the SL1-SL7 host fields of this host')
+report['recoveryRestart'] = slices['recovery-expiry']['plan']['restart']
+report['recoveryWorkerExpected'] = slices['recovery-expiry']['plan']['workerExpected']
+report['recoveryBudgets'] = slices['recovery-expiry']['plan']['budgets']
+
+# 4. wall-clock context: repaired-e Alice control, collect_decision end and release start against the decision expiry
+def t(s):
+    return dt.datetime.fromisoformat(s)
+
+margins = []
+for ex_path in sorted(ROOT.glob(E2 + '*-live-*/run/**/repaired-e/alice/exchanges.json')):
+    ops = {x['operation']: x for x in json.loads(ex_path.read_text())}
+    if 'release' not in ops or 'collect_decision' not in ops:
+        continue
+    exp = (((ops['collect_decision'].get('response') or {}).get('result') or {}).get('decision') or {}).get('expiresAt')
+    if exp is None:
+        continue
+    e = dt.datetime.fromtimestamp(int(exp), dt.timezone.utc)
+    run = str(ex_path.relative_to(ROOT)).split('/run/')[0].split('/')[-1]
+    margins.append(dict(run=run, case=ex_path.parts[-4],
+                        decisionToExpirySeconds=round((e - t(ops['collect_decision']['endedAt'])).total_seconds(), 2),
+                        releaseToExpirySeconds=round((e - t(ops['release']['startedAt'])).total_seconds(), 2)))
+report['repairedControlMargins'] = margins
+# recovery retry window on agent 3's host (A3-0038): restart and end of the recovery record against the original expiry
+windows = []
+for rec in sorted(ROOT.glob(E2 + 'expiry-live-20261009/run/*/*/recovery/result.json')):
+    r = json.loads(rec.read_text()); x = json.loads((rec.parent.parent / 'expired-retry/result.json').read_text())
+    e = dt.datetime.fromtimestamp(int(x['originalExpiry']), dt.timezone.utc)
+    windows.append(dict(case=rec.parts[-4], restartToExpirySeconds=round((e - t(r['restartedAt'])).total_seconds(), 2),
+                        endToExpirySeconds=round((e - t(r['endedAt'])).total_seconds(), 2)))
+report['recoveryRetryWindows'] = windows
+check(len(windows) == 6, 'six recovery windows found')
+report['repairedControlMarginsNote'] = ('wall-clock context only (Anvil automine timestamps track wall time); no worker clock '
+                                        'reading; one trial per row; pre-solo runs on agent 3 host, SL1-SL7 on this host')
+check(len(margins) >= 27, 'margin rows found')
+
+report['problems'] = problems
+print(json.dumps(report, indent=2))
+sys.exit(1 if problems else 0)

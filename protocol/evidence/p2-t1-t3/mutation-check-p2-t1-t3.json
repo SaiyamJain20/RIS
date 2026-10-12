@@ -1,0 +1,37 @@
+{
+  "baseline": {
+    "exitCode": 0,
+    "tail": "\u001b[32m\u001b[32m\u001b[1m1375 passed\u001b[0m, \u001b[33m201 skipped\u001b[0m\u001b[32m in 365.13s (0:06:05)\u001b[0m\u001b[0m"
+  },
+  "python": "3.13.5",
+  "mutants": [
+    {
+      "file": "protocol/hmbc_protocol/worker.py",
+      "old": "return registered",
+      "new": "return keys.recipient_key_hash(\"keyref:user:alice\")",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "\u001b[31m\u001b[31m\u001b[1m1 failed\u001b[0m\u001b[31m in 33.63s\u001b[0m\u001b[0m"
+    },
+    {
+      "file": "protocol/hmbc_protocol/worker.py",
+      "old": "recipient = self._recipient_for(g)",
+      "new": "self._event(\"RELEASE_INTENT\", (g[\"requestDigest\"], grant_id, g[\"gid\"], g[\"dataId\"]), now)\n        recipient = self._recipient_for(g)",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "\u001b[31m\u001b[31m\u001b[1m1 failed\u001b[0m\u001b[31m in 31.09s\u001b[0m\u001b[0m"
+    },
+    {
+      "file": "protocol/hmbc_protocol/worker.py",
+      "old": "if now >= int(g[\"expiresAt\"]):",
+      "new": "if now >= int(g[\"expiresAt\"]) and self.db.execute(\"select 1 from releases where grant_id=?\", (grant_id,)).fetchone() is None:",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "\u001b[31m\u001b[31m\u001b[1m1 failed\u001b[0m\u001b[31m in 31.94s\u001b[0m\u001b[0m"
+    }
+  ],
+  "detected": 3,
+  "total": 3,
+  "survivedEquivalent": 0,
+  "survivedGap": 0
+}

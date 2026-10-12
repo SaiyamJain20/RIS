@@ -1,0 +1,114 @@
+"""Protocol-scope review checks of the SL2 r2 public evidence (S3-0010). Read-only; prints one JSON report.
+Usage: PYTHONPATH=<repo>/protocol python -I review_sl2.py <evidence dir>   (uses the pinned-identical protocol encoder)"""
+import json
+import pathlib
+import re
+import sys
+
+sys.path.insert(0, sys.argv[2]) if len(sys.argv) > 2 else None
+from hmbc_protocol import eip712, messages  # noqa: E402
+
+EVD = pathlib.Path(sys.argv[1]); RUN = EVD / "run"
+ALLOWED = {"prepare_request", "collect_checkpoint", "collect_decision"}
+NEVER = re.compile(r"no worker\.sqlite in (\S+) \(looked in <dir>/worker/ and in <dir>\)\n")
+load = lambda p: json.loads(pathlib.Path(p).read_text())  # noqa: E731
+report, problems = {}, []
+
+
+def check(c, m):
+    if not c:
+        problems.append(m)
+
+
+def find_worker_obs(obj, out):
+    if isinstance(obj, dict):
+        if obj.get("instantiated") is False or obj.get("instantiated") is True:
+            out.append(obj)
+        for v in obj.values():
+            find_worker_obs(v, out)
+    elif isinstance(obj, list):
+        for v in obj:
+            find_worker_obs(v, out)
+
+
+for case in sorted(p.name for p in RUN.iterdir() if p.is_dir()):
+    profile = case.split("-forged")[0].split("-new-")[0].split("-same-")[0]
+    row = RUN / case / profile
+    r = {}
+    d1, d2 = load(row / "adapter/process.json"), load(row / "relay-instance/adapter/process.json")
+    for name, p in (("d1", d1), ("d2", d2)):
+        check(p["argv"][1:3] == ["-m", "hmbc_protocol.adapter"] and p["exitCode"] == 0 and p["failure"] is None
+              and p.get("stderrSha256") == "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+              and not [e for e in p["exchanges"] if e["failure"]], f"{case} {name} adapter")
+    sd = lambda p: p["argv"][p["argv"].index("--state-dir") + 1]  # noqa: E731
+    check(sd(d1) != sd(d2), f"{case} state dirs")
+    exf = row / "relay-stress/exchanges.json"
+    ex = load(exf) if exf.exists() else []
+    ops = [(e["operation"], e["response"]["ok"]) for e in ex]
+    r["d2Ops"] = ops
+    check(all(o in ALLOWED and ok for o, ok in ops) and len(ops) == len(d2["exchanges"]), f"{case} D2 ops {ops}")
+    # worker probes: command rows with a workerObservation, plus the stored observations
+    cmds = [c for c in load(row / "commands.json") if c.get("workerObservation")]
+    r["workerProbes"] = [(c["exitCode"], c["workerObservation"]) for c in cmds]
+    check(len(cmds) == 2 and all(c["exitCode"] == 1 and c["workerObservation"] == "never-instantiated (verified)" for c in cmds), f"{case} probes")
+    obs = []
+    for f in (row / "relay-stress").glob("*.json"):
+        find_worker_obs(load(f), obs)
+    r["storedObservations"] = len(obs)
+    for o in obs:
+        m = NEVER.fullmatch(o.get("message", ""))
+        check(o.get("instantiated") is False and o.get("exitCode") == 1 and m is not None
+              and o.get("checkedAbsent") == [m.group(1) + "/worker/worker.sqlite", m.group(1) + "/worker.sqlite"]
+              and m.group(1) == sd(d2), f"{case} stored worker observation")
+    if case == "repaired-e-forged-tuple":
+        fc, dep = load(row / "relay-stress/forged-certificate.json"), load(row / "relay-instance/deployment.json")
+        r["forgedFacts"] = {k: fc[k] for k in ("honestDigest", "forgedDigest", "signedDigestEqual", "honestSigner", "recoveredSigner", "domain")}
+    report[case] = r
+
+
+def _walk(o):
+    yield o
+    if isinstance(o, dict):
+        for v in o.values():
+            yield from _walk(v)
+    elif isinstance(o, list):
+        for v in o:
+            yield from _walk(v)
+
+
+# forged tuple: recompute the AccessDecision digest with the protocol encoder and recover both signers
+row = RUN / "repaired-e-forged-tuple" / "repaired-e"
+fc, dep, pc = load(row / "relay-stress/forged-certificate.json"), load(row / "relay-instance/deployment.json"), load(row / "relay-stress/public-call.json")
+decisions = [v for v in _walk(pc) if isinstance(v, dict) and {"requestDigest", "stateSequence", "credentialDigest", "result"} <= set(v)]
+check(len(decisions) >= 1 and all(d == decisions[0] for d in decisions), "decision bytes found and identical in public-call")
+dec = decisions[0]
+digest = "0x" + messages.digest_of("AccessDecision", dec, messages.domain_for("AccessDecision", dec, dep)).hex()
+hs, fs = fc["honestSignatures"][0], fc["forgedSignatures"][0]
+honest_signer, forged_signer = eip712.recover(bytes.fromhex(digest[2:]), hs), eip712.recover(bytes.fromhex(digest[2:]), fs)
+relay = dep["fixture"]["relay"]["address"]; witnesses = dep["fixture"]["witnessSet"]["witnesses"]
+report["forgedTupleProtocolRecompute"] = dict(digest=digest, honestSigner=honest_signer, forgedSigner=forged_signer, relay=relay, witnesses=witnesses,
+                                             domain=messages.domain_for("AccessDecision", dec, dep), decisionsFound=len(decisions))
+check(digest == fc["honestDigest"] == fc["forgedDigest"], "digest equals runner digests")
+check(honest_signer in witnesses and forged_signer == relay and relay not in witnesses, "signers")
+check(fc["decisionUnchanged"] is True and fc["signatureChanged"] is True and fc["simulation"] == "eth_call only; never mined", "forged facts")
+# same nonce ordering
+row = RUN / "repaired-e-same-nonce-distinct-digests" / "repaired-e"
+ex, tl = load(row / "relay-stress/exchanges.json"), load(row / "relay-stress/timeline.json")
+seq = [e["operation"] for e in ex]
+check(seq == ["prepare_request", "prepare_request", "collect_checkpoint", "collect_decision", "collect_decision"], f"same-nonce op order {seq}")
+check(all(ex[i]["endedAt"] <= ex[i + 1]["startedAt"] for i in range(len(ex) - 1)), "same-nonce exchanges sequential")
+p = [e["response"]["result"]["request"] for e in ex if e["operation"] == "prepare_request"]
+check(p[0]["nonce"] == p[1]["nonce"] == "1" and p[0]["expiresAt"] != p[1]["expiresAt"] and p[0]["gid"] == p[1]["gid"], "same nonce, distinct expiry")
+d = [e["response"]["result"]["decision"] for e in ex if e["operation"] == "collect_decision"]
+check(d[0]["result"] == d[1]["result"] == "1" and d[0]["stateSequence"] == d[1]["stateSequence"] and d[0]["requestDigest"] != d[1]["requestDigest"], "two ALLOW decisions, one checkpoint")
+check(int(tl["secondRequestTimestamp"]) <= int(tl["checkpointTimestamp"]) and max(map(int, tl["decisionDbcClock"])) <= int(tl["firstConsumeTimestamp"])
+      and int(tl["firstConsumeTimestamp"]) <= int(tl["secondConsumeTimestamp"]) < min(int(tl["firstExpiresAt"]), int(tl["secondExpiresAt"])), "same-nonce timeline order and expiry")
+report["sameNonce"] = dict(ops=seq, timeline=tl, prepareExpiries=[x["expiresAt"] for x in p], decisionDigests=[x["requestDigest"] for x in d])
+# paper new-reference grant ids
+gids = {}
+for case in ("paper-strict-new-reference-replay", "paper-minimal-new-reference-replay"):
+    res = load(RUN / case / case.split("-new-")[0] / "relay-stress/result.json")
+    gids[case] = {k: v for k, v in res.items() if "rant" in k}
+report["paperNewReferenceGrantFields"] = gids
+report["problems"] = problems
+print(json.dumps(report, indent=1, default=str))

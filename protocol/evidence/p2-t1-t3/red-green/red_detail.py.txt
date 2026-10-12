@@ -1,0 +1,43 @@
+"""RED detail for the three S2-0004 mutants, run on the SCRATCH copy that mutation_check.py used (never the real repo).
+
+For each mutant: apply the exact (old -> new) edit from protocol/tools/mutation_check.py to the scratch copy, run ONLY the new test with
+--tb=short, record the failing assertion, restore the file and verify its SHA-256 equals the original. Then run the same test unmutated (GREEN).
+Usage: python red_detail.py <scratch repo root> <output file>
+"""
+import hashlib
+import importlib.util
+import os
+import pathlib
+import subprocess
+import sys
+
+root = pathlib.Path(sys.argv[1]).resolve()
+out = pathlib.Path(sys.argv[2])
+spec = importlib.util.spec_from_file_location("mc", root / "protocol/tools/mutation_check.py")
+mc = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(mc)
+
+lines = []
+for suite in (sys.argv[3].split(",") if len(sys.argv) > 3 else ("routing", "recovery", "restart")):
+    (s, rel, old, new, eq), = [m for m in mc.M if m[0] == suite]
+    path = root / rel
+    orig = path.read_bytes()
+    h0 = hashlib.sha256(orig).hexdigest()
+    assert orig.decode().count(old) == 1
+    target = mc.TESTS[suite]
+    for label, mutate in (("RED (mutant applied)", True), ("GREEN (unmutated)", False)):
+        try:
+            if mutate:
+                path.write_text(orig.decode().replace(old, new, 1))
+            r = subprocess.run([sys.executable, "-m", "pytest", "-q", "-x", "--tb=short", "--color=no", "-p", "no:cacheprovider", "-c", "protocol/pytest.ini",
+                                "--rootdir", "protocol", *target], cwd=root, capture_output=True, text=True)
+        finally:
+            path.write_bytes(orig)
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == h0, "scratch source not restored"
+        (out.parent / f"raw-{suite}-{'red' if mutate else 'green'}.txt").write_text(r.stdout + r.stderr)
+        tail = r.stdout.strip().splitlines()
+        keep = [l for l in tail if l.startswith(("E ", ">", "FAILED", "PASSED")) or " passed" in l or " failed" in l or "Error" in l][:25]
+        lines += [f"## {suite}: {label}", f"# file: {rel} (sha256 before/after {h0[:16]}.., restored)", f"# mutant: {old.strip()!r} -> {new.strip()!r}" if mutate else "# mutant: none",
+                  f"# tests: {' '.join(target)}", f"# exit: {r.returncode}", *keep, ""]
+out.write_text("\n".join(lines) + "\n")
+print(out.read_text())

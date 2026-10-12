@@ -1,0 +1,159 @@
+"""Protocol-scope review checks of the SL6 public evidence (S3-0018). Read-only; prints one JSON report.
+Usage: python -I review_sl6.py <evidence dir> <repo>/protocol"""
+import json
+import pathlib
+import re
+import sys
+
+sys.path.insert(0, sys.argv[2])
+from eth_utils import keccak  # noqa: E402
+from hmbc_protocol import eip712, keys, messages  # noqa: E402
+from hmbc_protocol.abi import Contract  # noqa: E402
+
+EVD = pathlib.Path(sys.argv[1]); RUN = EVD / "run"; PROTO = pathlib.Path(sys.argv[2])
+EMPTY = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+NEVER = re.compile(r"no worker\.sqlite in (\S+) \(looked in <dir>/worker/ and in <dir>\)\n")
+load = lambda p: json.loads(pathlib.Path(p).read_text())  # noqa: E731
+PSC = Contract(json.loads((PROTO / "abi/PSC.json").read_text()))
+report, problems = {}, []
+
+
+def check(c, m):
+    if not c:
+        problems.append(m)
+
+
+def walk(o):
+    yield o
+    if isinstance(o, dict):
+        for v in o.values():
+            yield from walk(v)
+    elif isinstance(o, list):
+        for v in o:
+            yield from walk(v)
+
+
+def signer(name, msg, sig, dep):
+    return eip712.recover(messages.digest_of(name, msg, messages.domain_for(name, msg, dep)), sig)
+
+
+probes_total = 0
+for case in sorted(p.name for p in RUN.iterdir() if p.is_dir()):
+    profile = case.split("-pre-")[0].split("-post-")[0].split("-expired")[0]
+    variant = "pre" if "-pre-" in case else ("post" if "-post-" in case else "expired")
+    row, r = RUN / case / profile, {}
+    repaired = profile == "repaired-e"
+    d1, d2 = load(row / "adapter/process.json"), load(row / "barrier-instance/adapter/process.json")
+    for name, p in (("d1", d1), ("d2", d2)):
+        check(p["argv"][1:3] == ["-m", "hmbc_protocol.adapter"] and p["exitCode"] == 0 and p["failure"] is None
+              and p.get("stderrSha256") == EMPTY and not [e for e in p["exchanges"] if e["failure"]], f"{case} {name} adapter")
+    sd = d2["argv"][d2["argv"].index("--state-dir") + 1]
+    check(sd != d1["argv"][d1["argv"].index("--state-dir") + 1], f"{case} state dirs")
+    dep = load(row / "barrier-instance/deployment.json")
+    witness = dep["fixture"]["witnessSet"]["witnesses"][0]
+    ex = load(row / "barrier-stress/exchanges.json")
+    ops = [e["operation"] for e in ex]
+    r["d2Ops"] = ops
+    check(all(e["response"]["ok"] for e in ex) and len(ex) == len(d2["exchanges"]), f"{case} exchanges ok/count")
+    want = ["prepare_request"] + (["collect_checkpoint", "collect_decision"] + (["collect_checkpoint"] if variant == "post" else []) if repaired else [])
+    check(ops == want and ops.count("collect_decision") == (1 if repaired else 0), f"{case} ops {ops}")
+    facts = load(row / "barrier-stress/facts.json")
+    req = facts["request"]
+    # prepare_request vs raw requestAccess calldata
+    txs = load(row / "barrier-instance/pbc-native/transactions.json")
+    ra = [t for t in txs if t.get("method") == "requestAccess"]
+    check(len(ra) == 1 and ra[0]["signerRole"] == "relay", f"{case} one relay requestAccess")
+    _, args = PSC.decode_input(bytes.fromhex(ra[0]["calldata"][2:]))
+    prepared = ex[0]["response"]["result"]
+    on, sig = args[0], args[1]
+    dig = "0x" + messages.digest_of("AccessRequest", on, messages.domain_for("AccessRequest", on, dep)).hex()
+    check(on == prepared["request"] and sig == prepared["signature"] and dig == prepared["requestDigest"] == req["digest"]
+          and eip712.recover(bytes.fromhex(dig[2:]), sig) == on["gid"] == req["gid"] and on["authEpoch"] == req["authEpoch"], f"{case} calldata = prepared")
+    lists = [t for t in txs if t.get("method") in ("updateRevocationList", "updateTemporalAcl") and t.get("signerRole") == "H1-ca-admin"]
+    stress_list = [t for t in lists if t["startedAt"] > ex[0]["startedAt"] or variant == "expired"]
+    r["request"] = dict(authEpoch=on["authEpoch"], requestAt=ra[0]["startedAt"])
+    if variant in ("pre", "post"):
+        rev = facts["revocation"]
+        check(on["authEpoch"] == rev["before"]["authEpoch"] and int(req["pbcBlockNumber"]) < int(rev["blockNumber"]), f"{case} request before revocation, epoch before")
+        revtx = [t for t in lists if t["method"] == "updateRevocationList" and t["startedAt"] > ra[0]["startedAt"]]
+        check(len(revtx) == 1, f"{case} one revocation after request")
+        r["revocation"] = dict(block=rev["blockNumber"], epochBefore=rev["before"]["authEpoch"], epochAfter=rev["after"]["authEpoch"], at=revtx[0]["startedAt"])
+    else:
+        duty = [t for t in lists if t["method"] == "updateTemporalAcl" and t["startedAt"] < ra[0]["startedAt"]]
+        check(len(duty) >= 1, f"{case} TempACL install before request")
+        r["dutyInstallAt"] = duty[-1]["startedAt"]
+    if repaired:
+        cpx = [e for e in ex if e["operation"] == "collect_checkpoint"]
+        dx = [e for e in ex if e["operation"] == "collect_decision"][0]
+        cps = [c["response"]["result"]["checkpoint"] for c in cpx]
+        check(cps == facts["checkpoints"], f"{case} checkpoints = adapter outputs")
+        for c in cpx:
+            check(signer("StateCheckpoint", c["response"]["result"]["checkpoint"], c["response"]["result"]["signatures"][0], dep) == witness, f"{case} checkpoint signature")
+        dres = dx["response"]["result"]; d = dres["decision"]
+        check(d == facts["decision"]["decision"] and signer("AccessDecision", d, dres["signatures"][0], dep) == witness, f"{case} decision signature")
+        cp1 = cps[0]
+        check(cp1["sequence"] == "1" and int(cp1["sourceBlockNumber"]) >= int(req["pbcBlockNumber"]) and cp1["authEpoch"] == on["authEpoch"]
+              and cp1["psc"] == dep["chains"]["pbc"]["contracts"]["PSC"] and cp1["sourceChainId"] == dep["chains"]["pbc"]["chainId"] and cp1["keyEpoch"] == "0",
+              f"{case} cp1 rules")
+        check(d["requestDigest"] == req["digest"] and d["result"] == "1" and d["stateSequence"] == cp1["sequence"] and d["sourceBlockNumber"] == cp1["sourceBlockNumber"]
+              and d["sourceBlockHash"] == cp1["sourceBlockHash"] and d["witnessSetVersion"] == "1"
+              and d["credentialDigest"] == "0x" + eip712.credential_digest(dres["credentialRecords"]).hex() == req["credentialDigest"], f"{case} decision fields")
+        now = int(facts["decision"]["collectedDbcNow"])
+        bound = min(int(req["expiresAt"]), int(cp1["expiresAt"]))
+        exp = int(d["expiresAt"])
+        # witness reads its own DBC clock (<= the runner's later read): expiresAt == min(req, cp, witnessNow+30) <= min(req, cp, now+30)
+        check(exp <= min(bound, now + 30) and (exp == bound or exp >= now + 30 - 2), f"{case} decision expiry rule")
+        check(all(int(x["validUntil"]) > now for x in dres["credentialRecords"]), f"{case} no lapsed record at decision")
+        check(dx["endedAt"] < (r.get("revocation", {}).get("at") or "9"), f"{case} decision before revocation")
+        r["witness"] = dict(cp=[{k: c[k] for k in ("sequence", "authEpoch", "sourceBlockNumber", "expiresAt")} for c in cps],
+                            decision={k: d[k] for k in ("stateSequence", "sourceBlockNumber", "expiresAt")}, collectedDbcNow=str(now),
+                            requestExpiresAt=req["expiresAt"], recordValidUntil=[x["validUntil"] for x in dres["credentialRecords"]], decisionAt=dx["endedAt"])
+        if variant == "post":
+            cp2 = cps[1]
+            rev = facts["revocation"]
+            check(cp2["sequence"] == str(int(cp1["sequence"]) + 1) and cp2["authEpoch"] == rev["after"]["authEpoch"]
+                  and int(cp2["sourceBlockNumber"]) >= int(rev["blockNumber"]) and facts["current_checkpoint"] == cp2
+                  and cpx[1]["startedAt"] > r["revocation"]["at"], f"{case} cp2 rules")
+        if variant == "expired":
+            end = int(facts["clock"]["dutyEnd"])
+            check(now < end and any(int(x["validUntil"]) == end for x in dres["credentialRecords"] if x["kind"] == "2"), f"{case} duty valid at decision")
+            r["expiredCheck"] = dict(collectedDbcNow=str(now), dutyEnd=str(end), requestExpiresAt=req["expiresAt"], cpExpiresAt=cp1["expiresAt"],
+                                     nowPlus30=str(now + 30), decisionExpiresAt=d["expiresAt"], binding="request" if exp == int(req["expiresAt"]) else "other")
+    # worker probes
+    probes = [c for c in load(row / "commands.json") if c.get("workerObservation")]
+    probes_total += len(probes)
+    check(probes and all(c["exitCode"] == 1 and c["workerObservation"] == "never-instantiated (verified)" for c in probes), f"{case} probes")
+    obs = [o for f in (row / "barrier-stress").glob("*.json") for o in walk(load(f)) if isinstance(o, dict) and "instantiated" in o]
+    check(obs and all(o.get("instantiated") is False and o == obs[0] and NEVER.fullmatch(o["message"]).group(1) == sd for o in obs), f"{case} stored observations")
+    r["workerProbes"] = len(probes)
+    report[case] = r
+report["workerProbesTotal"] = probes_total
+
+labels = ["witness-1", "relay", "alice", "bob", "mallory"] + [f"H{i}-{s}" for i in range(1, 5) for s in ("root", "ca-admin")]
+keyhex = {l: keys.synthetic_private_key(l)[2:] for l in labels}
+digs, hexes, files, tokfields, keyhits = set(), set(), 0, 0, []
+for f in RUN.rglob("*.json"):
+    try:
+        o = json.loads(f.read_text())
+    except Exception:
+        continue
+    for x in walk(o):
+        if isinstance(x, dict):
+            if "tokenDigest" in x:
+                digs.add(x["tokenDigest"])
+            if isinstance(x.get("export"), str):
+                try:
+                    digs |= {y["tokenDigest"] for y in json.loads(x["export"]).get("releases", [])}
+                except Exception:
+                    pass
+for f in EVD.rglob("*"):
+    if f.is_file():
+        files += 1; t = f.read_text(errors="replace").lower()
+        hexes |= set(re.findall(r"0x[0-9a-f]{64}", t)); tokfields += len(re.findall(r'"token"\s*:', t))
+        keyhits += [(str(f.relative_to(EVD)), l) for l, k in keyhex.items() if k in t]
+hits = [x for x in hexes if "0x" + keccak(bytes.fromhex(x[2:])).hex() in digs]
+check(not keyhits and not hits and tokfields == 0, "never-publish scan")
+report["neverPublishScan"] = dict(files=files, keyLabels=len(labels), keyHits=keyhits, hex32=len(hexes), tokenDigests=len(digs),
+                                  preimageHits=len(hits), tokenFields=tokfields)
+report["problems"] = problems
+print(json.dumps(report, indent=1, default=str))

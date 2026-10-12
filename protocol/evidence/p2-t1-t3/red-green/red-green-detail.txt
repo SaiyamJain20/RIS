@@ -1,0 +1,56 @@
+## routing: RED (mutant applied)
+# file: protocol/hmbc_protocol/worker.py (sha256 before/after 204af36906a89521.., restored)
+# mutant: 'return registered' -> 'return keys.recipient_key_hash("keyref:user:alice")'
+# tests: protocol/tests/test_paper_release.py::test_the_binding_follows_the_RELAY_ASSERTED_gid_so_the_spec_gap_stays_visible
+# exit: 1
+E   AssertionError: assert '0x98d796e322...9a0117bb07e5d' == '0x5fe346cd69...a9705a3f8c537'
+E     
+E     - 0x5fe346cd69926d7120dff3cc020f4d36ad8093b7c9bb95c6ecea9705a3f8c537
+E     + 0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d
+FAILED protocol/tests/test_paper_release.py::test_the_binding_follows_the_RELAY_ASSERTED_gid_so_the_spec_gap_stays_visible[world_paper]
+1 failed in 32.82s
+
+## routing: GREEN (unmutated)
+# file: protocol/hmbc_protocol/worker.py (sha256 before/after 204af36906a89521.., restored)
+# mutant: none
+# tests: protocol/tests/test_paper_release.py::test_the_binding_follows_the_RELAY_ASSERTED_gid_so_the_spec_gap_stays_visible
+# exit: 0
+2 passed in 61.01s (0:01:01)
+
+## recovery: RED (mutant applied)
+# file: protocol/hmbc_protocol/worker.py (sha256 before/after 204af36906a89521.., restored)
+# mutant: 'recipient = self._recipient_for(g)' -> 'self._event("RELEASE_INTENT", (g["requestDigest"], grant_id, g["gid"], g["dataId"]), now)\n        recipient = self._recipient_for(g)'
+# tests: protocol/tests/test_recovery.py
+# exit: 1
+E   AssertionError: assert (None is None and [{'dataId': '...966835', ...}] == []
+E    +  where None = status('0xf796055a8726ae0092e7cede2268cd3d94ee716d3d3d71c95ccdd5b4e4f20031')
+E    +    where status = <hmbc_protocol.worker.Worker object at 0x753250f84830>.status
+E     
+E     Left contains one more item: {'dataId': '0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e', 'gid': '0xc4ff0022e776c3471e39abf6c69...d3d3d71c95ccdd5b4e4f20031', 'requestDigest': '0x82b52b92a863bcd8d53c013684c67db679a426f955dad6bd17f938f552966835', ...}
+E     Use -v to get more diff)
+FAILED protocol/tests/test_recovery.py::test_crash_before_intent_leaves_no_trace_and_a_restart_releases_once[world]
+1 failed in 30.34s
+
+## recovery: GREEN (unmutated)
+# file: protocol/hmbc_protocol/worker.py (sha256 before/after 204af36906a89521.., restored)
+# mutant: none
+# tests: protocol/tests/test_recovery.py
+# exit: 0
+3 passed in 93.98s (0:01:33)
+
+## restart: RED (mutant applied)
+# file: protocol/hmbc_protocol/worker.py (sha256 before/after 204af36906a89521.., restored)
+# mutant: 'if now >= int(g["expiresAt"]):' -> 'if now >= int(g["expiresAt"]) and self.db.execute("select 1 from releases where grant_id=?", (grant_id,)).fetchone() is None:'
+# tests: protocol/tests/test_faulty_adapter.py::test_first_production_restart_after_the_original_expiry_answers_expired_with_no_new_event
+# exit: 1
+E   assert (True is False)
+FAILED protocol/tests/test_faulty_adapter.py::test_first_production_restart_after_the_original_expiry_answers_expired_with_no_new_event[world-after_intent]
+1 failed in 32.68s
+
+## restart: GREEN (unmutated)
+# file: protocol/hmbc_protocol/worker.py (sha256 before/after 204af36906a89521.., restored)
+# mutant: none
+# tests: protocol/tests/test_faulty_adapter.py::test_first_production_restart_after_the_original_expiry_answers_expired_with_no_new_event
+# exit: 0
+6 passed in 105.78s (0:01:45)
+

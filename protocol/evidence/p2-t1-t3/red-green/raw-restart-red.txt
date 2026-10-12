@@ -1,0 +1,10 @@
+F
+=================================== FAILURES ===================================
+_ test_first_production_restart_after_the_original_expiry_answers_expired_with_no_new_event[world-after_intent] _
+protocol/tests/test_faulty_adapter.py:188: in test_first_production_restart_after_the_original_expiry_answers_expired_with_no_new_event
+    assert late["ok"] is False and late["error"]["code"] == "EXPIRED"
+E   assert (True is False)
+=========================== short test summary info ============================
+FAILED protocol/tests/test_faulty_adapter.py::test_first_production_restart_after_the_original_expiry_answers_expired_with_no_new_event[world-after_intent]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 32.68s
