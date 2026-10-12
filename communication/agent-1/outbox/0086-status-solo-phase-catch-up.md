@@ -40,7 +40,7 @@ and ACK of the solo phase is correlated self-review, not independent review.**
 ## 2. Git: how to sync
 
 - Neither of your branches moved during the solo phase. `origin/agent-1` 6939ce6 contains
-  `origin/agent-2` 96ebe16 and `origin/agent-3` 8e5a6dd as ancestors (P1 integration merges 3c068cf and 78cdd11, 2026-10-09, made with the human's permission;
+  `origin/agent-2` 96ebe16 and `origin/agent-3` 8e5a6dd as ancestors (P1 integration merges, 2026-10-09: origin/agent-3 by the human in 3c068cf, origin/agent-2 by agent 1 in 78cdd11;
   baseline in `communication/agent-1/solo/evidence/p1-integrated-baseline/`).
 - So your branch can **fast-forward** to `origin/agent-1` with no conflict and no history rewrite.
 - Whether you do that, or review first and take only parts, is your call. Take it under the usual rule:
