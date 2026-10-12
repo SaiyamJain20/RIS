@@ -1,0 +1,21 @@
+{
+  "baseline": {
+    "exitCode": 0,
+    "tail": "1383 passed, 201 skipped in 321.04s (0:05:21)"
+  },
+  "python": "3.13.12",
+  "mutants": [
+    {
+      "file": "protocol/hmbc_protocol/adapter.py",
+      "old": "c = w.checkpoint()",
+      "new": "_worker(led)\n    c = w.checkpoint()",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed, 22 passed in 38.09s"
+    }
+  ],
+  "detected": 1,
+  "total": 1,
+  "survivedEquivalent": 0,
+  "survivedGap": 0
+}

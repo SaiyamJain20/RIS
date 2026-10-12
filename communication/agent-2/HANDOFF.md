@@ -1,3 +1,41 @@
+# Agent 2 handoff (2026-10-12, A2-0039: return review after the solo phase)
+
+## Current state (read this block first; everything below the rule is the older record, kept verbatim)
+
+- **RQ/task:** E, return review of the solo-phase work (2026-10-09..12) in protocol scope. Gate E was recorded PASS by agent 3 under the SOLO phase (correlated, same-model review; GATES.md
+  and BOARD.md on origin/agent-1 4a68082, board at F0). F not started; G locked. No service, lease or Git write by me.
+- **Decision:** I accept the solo-phase work in protocol scope and re-open nothing about gate E in my scope. Not independent confirmation: same model as the proxy; I did not re-run the 4749 s gate
+  run, the ledger or agent 3's oracles.
+- **Interface:** v1 frozen (E0-v1-r6-20261008, FREEZE.json f700292e..), unchanged. **Integrated-run pin:** protocol 0716a8e / manifest d16ddad8.. (108 entries).
+- **Working tree protocol/**:** equals origin/agent-1 6911478 protocol/** (153 files; manifest 551e9f77.., 127 entries) plus these A2-0039 changes:
+  - `hmbc_protocol/worker_log.py` (PRODUCTION; sha256 0eacaa1c.. at the pin -> b443d5e8..): `_read_only_uri` percent-encodes the absolute state path. Defect: `#`/`?` truncated the
+    SQLite `file:` URI (read-only flag lost, stray empty database created, or a different database read silently); `%xx` was decoded into another path.
+  - `tests/test_worker_log.py` +7 tests (RED 6 failed/1 passed, then GREEN); `tests/test_adapter_live.py` +1 test (D49: only encrypt_record/release/finish_decryption create the worker DB);
+    `tools/mutation_check.py` +3 mutants (URI x2, D49 x1); `README.md` rewritten (was stale since 2026-10-08); `evidence/return-review-2026-10-12/` (index in its README.md);
+    `evidence/source-manifest.sha256` regenerated (142 entries: agent-1's 127 plus 15 return-review evidence files; sha256 005c8448faeb90d2.. entries).
+  - `testtools/**`, `exports/**` (adapter.json 7146495b.. unchanged), `abi/**` identical to the pin.
+- **Environment used:** CPython 3.13.12 from the frozen root uv.lock (1fb4777a..), eth-account 0.14.0, jsonschema 4.26.0, pytest 9.0.2; Foundry 1.8.5 (51a52c59) and solc 0.8.37 verified against the
+  pinned SHA-256 values before use; HOME redirected to a scratch directory (forge's ~/.svm cache); ledger pin 91add8c (contracts tree 47f30e7c.. is identical at 933d2a7 and agent-1's tip).
+- **Results (repository root; no PYTHONPATH):**
+  - `python -m pytest protocol/tests -q -rs -c protocol/pytest.ini --rootdir protocol -p no:cacheprovider` -> exit 0, **1383 passed, 201 skipped**, 324 s. All 201 skips are ScenarioResult/FileHash
+    out-of-scope cases; **any other skip means the live tests did not run** (they skip, not fail, when Foundry or the pinned commit is missing).
+  - Solo-phase tip 6911478 reproduced: 1375 passed, 201 skipped, exit 0, 321 s. My own tip 96ebe16: 1365 passed, 201 skipped.
+  - `PYTHONPATH=protocol python -m hmbc_protocol.export --check` -> exit 0 (9 files). `sha256sum -c protocol/evidence/source-manifest.sha256` -> exit 0.
+  - `python protocol/tools/mutation_check.py --only routing,recovery,restart` -> 3/3; `--only worker_log --grep quote_from_bytes` -> 2/2; `--only adapter_live --grep "c = w.checkpoint()"` -> 1/1.
+  - Proxy review scripts S2-0021 and S2-0022 re-run unchanged with `python -I`: exit 0, `problems: []`; S2-0023's four hashes match.
+- **Measured, not changed:** the worker's deployment fingerprint is identical (9886222d..) for repaired-e, mutant-no-nonce, mutant-no-receipt-binding, paper-strict and paper-minimal on fresh chains.
+  A2-0039 section 2 D-2 has the proposal; the formula is also recomputed by agent 3's evaluation/worker_evidence.py, so it is an interface change.
+- **Stale labels left on purpose (pinned bytes):** exports/adapter.json serviceStatus/status/draftNote and the adapter.py module docstring still describe the 2026-10-08 state.
+- **Limits:** symbolic mode; one trusted witness (q = 1) and trusted worker; TEST-ONLY keys derivable from labels; logical crash points only; delivery unknown; Anvil without consensus; single host,
+  one trial per row; this review is mechanical re-execution by the same model.
+- **Git:** nothing staged or committed. `git apply` of the origin/agent-2..origin/agent-1 diff put the proxy's verified files in the working tree (the harness blocked `git restore`).
+  Commit `protocol/**` on `agent-2`; a later merge of origin/agent-1 can conflict in README.md and tools/mutation_check.py (resolve to the working-tree versions).
+- **Messages sent:** A2-0001..A2-0039. Read this session: see STATUS.md.
+- **Reproduce the review:** scratch clone of origin/agent-1, then the commands listed in `protocol/evidence/return-review-2026-10-12/README.md`.
+
+---
+
+## Earlier record (2026-10-08 .. 2026-10-09), unchanged
 # Agent 2 handoff (2026-10-08, updated for A2-0032): E0 closed and E1 unlocked by agent-3 (A3-0023); owner service READY published (A2-0014); agent-1's bootstrap producer reviewed and cross-checked (A2-0015); no integration FREEZE ACK yet. (Older bullets below describe earlier states; the A2-0013/A2-0014/A2-0015 bullets at the end are current.)
 
 - RQ/task: E / E0 (acceptance pending) with CANDIDATE B-E1/B-E2 code built ahead of the unlock at the user's instruction. Interface: candidate v1 revision 5

@@ -1,0 +1,37 @@
+{
+  "baseline": {
+    "exitCode": 0,
+    "tail": "1375 passed, 201 skipped in 319.66s (0:05:19)"
+  },
+  "python": "3.13.12",
+  "mutants": [
+    {
+      "file": "protocol/hmbc_protocol/worker.py",
+      "old": "return registered",
+      "new": "return keys.recipient_key_hash(\"keyref:user:alice\")",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed in 29.28s"
+    },
+    {
+      "file": "protocol/hmbc_protocol/worker.py",
+      "old": "recipient = self._recipient_for(g)",
+      "new": "self._event(\"RELEASE_INTENT\", (g[\"requestDigest\"], grant_id, g[\"gid\"], g[\"dataId\"]), now)\n        recipient = self._recipient_for(g)",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed in 25.54s"
+    },
+    {
+      "file": "protocol/hmbc_protocol/worker.py",
+      "old": "if now >= int(g[\"expiresAt\"]):",
+      "new": "if now >= int(g[\"expiresAt\"]) and self.db.execute(\"select 1 from releases where grant_id=?\", (grant_id,)).fetchone() is None:",
+      "status": "DETECTED",
+      "equivalentReason": null,
+      "pytestTail": "1 failed in 25.87s"
+    }
+  ],
+  "detected": 3,
+  "total": 3,
+  "survivedEquivalent": 0,
+  "survivedGap": 0
+}

@@ -1,0 +1,10 @@
+# Manual demonstration before any fix (offline worker, no chain). Directory names, then what worker_log.export did on the unfixed code:
+plain        -> OK, events seen = 1
+has space    -> OK, events seen = 1
+has#hash     -> OperationalError: no such table: events        (path truncated at '#': mode=ro lost, another file opened read-write)
+has?query    -> OperationalError: no such table: events        (path truncated at '?')
+has%20pct    -> OperationalError: unable to open database file (%20 decoded into a space: a different path)
+has%23enc    -> OperationalError: unable to open database file
+# Side effect observed afterwards in the parent directory: a stray EMPTY file named `has` (0 bytes) created by the "read-only" exporter.
+# The regression test test_the_export_never_reads_a_sibling_database_at_a_truncated_path shows the worst case on the unfixed code: with a valid
+# worker database at the truncated path, asking for `run#1` returned the OTHER database's event (0x5555.. instead of 0x1111..) with exit 0.

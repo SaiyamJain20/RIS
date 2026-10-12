@@ -11,8 +11,15 @@ import json
 import os
 import sqlite3
 import sys
+from urllib.parse import quote_from_bytes
 
 from eth_utils import keccak
+
+
+def _read_only_uri(path: str) -> str:
+    """The SQLite `file:` URI of exactly `path`, read-only. The path is percent-encoded: unquoted, `#` and `?` truncate the URI (dropping `mode=ro`, creating or
+    reading another file) and `%xx` is decoded into a different path (A2-0039)."""
+    return "file://" + quote_from_bytes(os.fsencode(os.path.abspath(path)), safe="/") + "?mode=ro"
 
 
 def _database(state_dir: str) -> str:
@@ -28,7 +35,7 @@ def _database(state_dir: str) -> str:
 
 def export(state_dir: str) -> dict:
     path = _database(state_dir)
-    db = sqlite3.connect(f"file:{path}?mode=ro", uri=True, timeout=15)
+    db = sqlite3.connect(_read_only_uri(path), uri=True, timeout=15)
     try:
         events = [{"type": t, "requestDigest": rd, "timestamp": str(ts), "grantId": gi, "gid": gid, "dataId": did}
                   for t, rd, gi, gid, did, ts in db.execute("select type,request_digest,grant_id,gid,data_id,timestamp from events order by id")]

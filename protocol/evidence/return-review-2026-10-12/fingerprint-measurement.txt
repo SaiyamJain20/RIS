@@ -1,0 +1,26 @@
+# Worker deployment fingerprint (worker.py:62-72): sha256(json(sort_keys){pbc:[chainId,PSC,RSC], dbc:[chainId,KSSC,ACSC]}).
+# Question: can the worker's 'state belongs to ONE deployment' guard tell two deployments apart?
+
+## A. LIVE measurement on fresh Anvil pairs (measure_fingerprint.py.txt, fingerprint-live-fresh-chains.jsonl; ledger 91add8c, forge 1.8.5, host of this review)
+   repaired-e                  mutations= 0  deployBlock=['0', '0']  PSC 0xcf7ed3ac  KSSC 0x5fbdb231  fingerprint 9886222d774b769e
+   repaired-e                  mutations= 0  deployBlock=['0', '0']  PSC 0xcf7ed3ac  KSSC 0x5fbdb231  fingerprint 9886222d774b769e
+   mutant-no-nonce             mutations= 8  deployBlock=['0', '0']  PSC 0xcf7ed3ac  KSSC 0x5fbdb231  fingerprint 9886222d774b769e
+   mutant-no-receipt-binding   mutations=32  deployBlock=['0', '0']  PSC 0xcf7ed3ac  KSSC 0x5fbdb231  fingerprint 9886222d774b769e
+   paper-strict                mutations= 0  deployBlock=['0', '0']  PSC 0xcf7ed3ac  KSSC 0x5fbdb231  fingerprint 9886222d774b769e
+   paper-minimal               mutations= 0  deployBlock=['0', '0']  PSC 0xcf7ed3ac  KSSC 0x5fbdb231  fingerprint 9886222d774b769e
+   -> every profile, including both mutant-* deployments, has the SAME fingerprint.
+
+## B. Recorded manifests (not fresh chains: deployer nonces differ, so addresses differ by deploy history, not by profile)
+   deployment-agent1-54262c2-repaired-e.json                      repaired-e    deployBlock=125/140 fingerprint 758f970ef1521981
+   deployment-agent1-91add8c-v1-repaired-e.json                   repaired-e    deployBlock=136/152 fingerprint 758f970ef1521981
+   origin/agent-1 ledger/evidence/e2-rehearsal/repaired-e         repaired-e    deployBlock=184/191 fingerprint 758f970ef1521981
+   origin/agent-1 ledger/evidence/e2-rehearsal/paper-strict       paper-strict  deployBlock=  0/5   fingerprint 9886222d774b769e
+   origin/agent-1 ledger/evidence/e2-rehearsal/paper-minimal      paper-minimal deployBlock= 92/101 fingerprint f694cf7f221350ba
+   -> the two repaired-e FIXTURES are from different ledger commits (54262c2, 91add8c) and different deploy blocks and share one fingerprint;
+      the e2-rehearsal repaired-e shares it too; paper-strict's rehearsal chain was fresh and carries the fresh-chain value of section A.
+
+## Reading
+   The fingerprint ignores `profile`, `mutations`, `deployBlock`, TMSC/LSC and every runtime hash. A clean repaired-e run and a mutant-* run on fresh chains are
+   indistinguishable to the guard, so a worker state directory reused across them would be accepted. Runs used one NEW state directory per deployment (runner
+   rule), so no result was affected; the guard simply does not enforce what its comment says. agent 3's evaluation/worker_evidence.py recomputes the same formula,
+   so changing it is an interface change (RFC + agent 3 ACK). NOT changed in this review.

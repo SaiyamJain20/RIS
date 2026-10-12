@@ -126,6 +126,13 @@ M = [  # (suite, file, old, new, equivalent-reason or None)
     ("worker_log", "protocol/hmbc_protocol/worker_log.py", 'nested, direct = os.path.join(state_dir, "worker", "worker.sqlite"), os.path.join(state_dir, "worker.sqlite")', 'nested, direct = os.path.join(state_dir, "no-such-dir", "worker.sqlite"), os.path.join(state_dir, "worker.sqlite")', None),
     ("worker_log", "protocol/hmbc_protocol/worker_log.py", '    if len(found) == 2:\n        raise SystemExit(f"ambiguous', '    if False:\n        raise SystemExit(f"ambiguous', None),
     ("worker_log", "protocol/hmbc_protocol/worker_log.py", '    if not found:\n        raise SystemExit(f"no worker.sqlite', '    if False:\n        raise SystemExit(f"no worker.sqlite', None),
+    # A2-0039: the exporter's database URI is built from the raw path again (`#`/`?` truncate it: wrong or stray database), or is no longer made absolute
+    ("worker_log", "protocol/hmbc_protocol/worker_log.py", 'return "file://" + quote_from_bytes(os.fsencode(os.path.abspath(path)), safe="/") + "?mode=ro"',
+     'return f"file:{path}?mode=ro"', None),
+    ("worker_log", "protocol/hmbc_protocol/worker_log.py", 'quote_from_bytes(os.fsencode(os.path.abspath(path)), safe="/")',
+     'quote_from_bytes(os.fsencode(path), safe="/")', None),
+    # A2-0039: a witness operation instantiates the key worker (breaks D49: "never-instantiated" evidence would no longer mean what the runner records)
+    ("adapter_live", "protocol/hmbc_protocol/adapter.py", '    c = w.checkpoint()\n', '    _worker(led)\n    c = w.checkpoint()\n', None),
     # S2-0004 T1: the paper-mode release binds to a fixed subject's key instead of the grant gid's registered key (subject routing broken)
     ("routing", "protocol/hmbc_protocol/worker.py", "        return registered\n", '        return keys.recipient_key_hash("keyref:user:alice")\n', None),
     # S2-0004 T2: a durable RELEASE_INTENT is written before the recipient binding is resolved (write-before-validate), so a crash there leaves a trace
