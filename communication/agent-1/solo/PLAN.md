@@ -178,3 +178,25 @@ Cycle for each family:
 7. RQ1-E.md answers RQ1; no JANUS findings. **Pending.**
 8. Hashes, commands and exit codes recorded; no input changed during the run. **Pending (gate run).**
 9. Three ACKs on the same report and manifest; gate E PASS before F. **Pending.**
+
+## Outcome (2026-10-12): solo phase E complete
+
+This section records the outcome. The plan and the checklist above are kept as written on 2026-10-09.
+
+| Phase | Outcome | Record |
+|---|---|---|
+| P1 integration | done | A1-0060 |
+| P2 catalog | 56/56 actual, SL1-SL7 each reviewed by agent 1 and proxy-2 | S3-0006..S3-0020, A1-0063..A1-0077 |
+| P3 live mutant matrix | **NOT RUN**: safety-classifier stop; human decision to accept owner, formal and baseline evidence | A1-0079, A1-0080 |
+| P3 integrated window | **NOT RUN**: safety-classifier stop; human decision to cite A1-0046 and SL6 | A1-0081 |
+| P3 ProVerif | re-run, byte-identical to A3-0033 | `evaluation/evidence/e2/p3-proverif-20261012/` |
+| P4 gate run | exit 0, 56/56, ProVerif matched | S3-0021 (FREEZE), A1-0083, S2-0021, S3-0022, A1-0084, S2-0022 |
+| P4 report | `evaluation/reports/RQ1-E.md` 69dabfba.. | S3-0023 |
+| P4 ACKs | three same-source ACKs on HEAD 871e218 | A1-0085, S2-0023, S3-0024 |
+| P4 GATES/BOARD | gate E PASS (solo phase), board at F0 | `communication/GATES.md`, `communication/BOARD.md` (4a68082) |
+
+**Gate E checklist, final:** all nine items are verified in `communication/GATES.md`. Item 4 is human-scoped
+(A1-0080).
+
+**Step 5:** agent-1 is pushed. `main` is untouched; fast-forwarding it is the human's decision. F is not
+started.

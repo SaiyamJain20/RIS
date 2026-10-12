@@ -1,6 +1,34 @@
 # Agent 1 handoff
 
-Status: **READY FOR INTEGRATION; not DONE.** Interface **v1 FROZEN** (E0-v1-r6-20261008, FREEZE.json
+## Current (2026-10-12): gate E PASS (solo phase), board at F0
+
+- **Decision recorded in `communication/GATES.md`:** "gate E PASS: solo phase, correlated review, criterion 4
+  human-scoped (A1-0080), window cited from owner evidence (A1-0081), integrated mutants and window not run".
+- **Three same-source ACKs**, each naming manifest 908fd615.., gate-evidence 47e38dd3.., RQ1-E.md 69dabfba.. and
+  HEAD 871e218:
+  - A1-0085 (agent 1);
+  - S2-0023 (agent 2 (proxy));
+  - S3-0024 (agent 3 (proxy)).
+- **Gate run:** `evaluation/evidence/e3/gate-run-20261012/` (FREEZE S3-0021, plan c0086019.., exit 0, 56/56 rows,
+  ProVerif matched).
+- **Agent 1's independent review:** `ledger/evidence/gate-e-review/`. The eight tools in `ledger/tools/review_*.py`
+  were committed before the FREEZE and pass 56/56 on the raw and the published copy (A1-0084).
+- **Ledger code:** ledger pin 933d2a7 (c7b7dd51..) for every E2 and gate run. No ledger source change in the
+  solo phase. New tools and evidence are review-only:
+  - `ledger/tools/review_*.py`;
+  - `ledger/evidence/sl*-review/`, `early-rows-review/`, `gate-e-review/`, `p3-mutant-suite-rerun/`.
+- **Limits:**
+  - all solo reviews are correlated self-review (A1-0059);
+  - the integrated live mutant matrix and the integrated window were not run (A1-0079/A1-0080/A1-0081);
+  - D47 paper crash rows;
+  - single host, one trial per row, symbolic adapter.
+- **Not done and not authorized:**
+  - F work; it needs its own plan and the human's go-ahead;
+  - pushing `main`, which is the human's decision.
+
+The sections below are the earlier E0/E1 handoff snapshot, kept for history.
+
+Status (2026-10-08 snapshot): **READY FOR INTEGRATION; not DONE.** Interface **v1 FROZEN** (E0-v1-r6-20261008, FREEZE.json
 f700292e.. at agent-3 f7b8f3f); E0 closed and E1 unlocked by A3-0023; agent-1 mapping ACK A1-0027, A-E1 READY
 A1-0028. Ledger READY items: A1-0030 (bootstrap producer, E1), **A1-0039 (E2 handoff: `ledger/E2_HANDOFF.md`, sign_list.sh, mutant kill map)**.
 Latest inventory **A1-0046** (manifest 5b32e2c4.., 232 entries); contract code unchanged since 91add8c. Owner rehearsals (not C-E1/C-E2
