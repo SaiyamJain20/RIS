@@ -2,7 +2,8 @@
 % Compile with XeLaTeX or LuaLaTeX (Metropolis uses the Fira Sans fonts), e.g.:
 %   tectonic -X compile hmbc-presentation.tex      (or: latexmk -xelatex hmbc-presentation.tex)
 % Figures 1 and 11 are taken from the paper (CC BY 4.0); the other diagrams are redrawn from it.
-% Slides 9-18 cover JANUS (Appl. Sci. 2023), our stack and the E/F/G project status (status as of 2026-10-09).
+% Slides 9-14 cover JANUS (Appl. Sci. 2023), our RQs and our stack; slides 15-24 cover Phase E (RQ1) and slide 25 what comes next
+% (status as of 2026-10-12: gate E PASS, board at F0).
 \documentclass[aspectratio=169,10pt]{beamer}
 \usetheme[progressbar=frametitle,numbering=fraction,block=fill]{metropolis}
 % Fira Sans Light is Metropolis' regular weight; use SemiBold so bold text stands out.
@@ -29,7 +30,21 @@
 \newcommand{\pmark}{\textcolor{okgreen!80}{(\ding{51})}}
 \newcommand{\src}[1]{{\scriptsize\color{datagray}#1}}
 % Project status shown on slides 11 and 16; updated with each hourly refresh from the agent branches.
-\newcommand{\statusstamp}{9 Oct 2026, 13:09 IST}
+\newcommand{\statusstamp}{12 Oct 2026, gate E PASS}
+% Result classes of the RQ1 catalog (Phase E slides): a 4-slot categorical set; gray = undecided (BLOCKED).
+\definecolor{clsup}{HTML}{3A6FB0}
+\definecolor{clgap}{HTML}{EB811B}
+\definecolor{clrep}{HTML}{2E7D32}
+\definecolor{clblk}{HTML}{9A9A9A}
+\newcommand{\cls}[2]{\tikz[baseline=(n.base)]\node[draw=#1, fill=#1!14, rounded corners=1.5pt, inner sep=1.2pt, font=\tiny\bfseries] (n) {#2};}
+\newcommand{\cSup}{\cls{clsup}{SUPPORTED}}
+\newcommand{\cGap}{\cls{clgap}{SPEC\_GAP}}
+\newcommand{\cRep}{\cls{clrep}{REPAIR\_SUPPORTED}}
+\newcommand{\cBlk}{\cls{clblk}{BLOCKED}}
+\newcommand{\code}[1]{{\ttfamily\scriptsize #1}}
+\newcommand{\gapn}[1]{\tikz[baseline=(g.base)]\node[circle, fill=accent, text=white, font=\scriptsize\bfseries, inner sep=1.2pt, minimum size=0.42cm] (g) {#1};}
+% \wcells{group x}{first index}{y}{count}{colour}: one square per catalog row (slide "Gate E").
+\newcommand{\wcells}[5]{\foreach \k in {1,...,#4}{\fill[#5, rounded corners=0.5pt] ({#1+(#2+\k-1)*0.26},#3) rectangle ++(0.22,0.22);}}
 \newcommand{\seqmsg}[5]{\draw[msg, #5] (#1,#3) -- node[lbl, above] {#4} (#2,#3);}
 
 \tikzset{
@@ -38,6 +53,11 @@
   lane/.style={box, minimum width=1.45cm, minimum height=0.5cm, font=\scriptsize\bfseries},
   msg/.style={->, thick},
   lbl/.style={font=\scriptsize, fill=white, inner sep=1pt},
+  stat/.style={draw=#1, fill=#1!7, rounded corners=3pt, text width=3.05cm, minimum height=1.6cm, align=center, inner sep=4pt, font=\scriptsize},
+  prof/.style={draw=#1, fill=#1!9, rounded corners=2pt, text width=4.95cm, align=left, inner sep=3pt, font=\scriptsize},
+  pcard/.style={draw=#1, rounded corners=3pt, align=left, inner sep=5pt, font=\scriptsize, anchor=north},
+  phead/.style={fill=#1, rounded corners=3pt, inner sep=4pt, text=white, anchor=south},
+  dv/.style={draw=#1, fill=#1!10, rounded corners=1.5pt, minimum width=0.98cm, minimum height=0.62cm, align=center, inner sep=1pt, font=\tiny},
   tile/.style={draw=#1, fill=#1!10, rounded corners=3pt, text width=2.3cm, minimum height=1.7cm, align=center, inner sep=3pt},
 }
 
@@ -386,7 +406,7 @@ Governance & “majority consent”, mechanism unspecified & voting manager with
 \textbf{Method:} a paper-derived reconstruction (the authors' code is not available). Every case runs in \textbf{paper-strict}, \textbf{paper-minimal} and \textbf{repaired-e} profiles, plus deliberate \textbf{mutants}; each result is labelled SUPPORTED, SPEC\_GAP, REPAIR\_SUPPORTED, REFUTED or BLOCKED.
 
 \textbf{Team setup:} three modules (ledger, protocol, evaluation) built in parallel on three machines, synchronised through Git and a frozen, hash-pinned interface.
-\note{Status as of 2026-10-09: E0 closed, E1 complete (9/9 integrated controls), E2 in progress, gate E not yet run, F and G locked until the previous gate passes.}
+\note{Status as of 2026-10-12: gate E PASS (all 56 catalog rows, ProVerif, three matching sign-offs); the board is at F0. F needs its own plan before any F code; G stays locked until gate F passes.}
 \end{frame}
 
 % ---------------------------------------------------------------- 12. Why this direction
@@ -465,194 +485,477 @@ Evaluation & latency, attribute scaling & attack trees, cloud benchmarks & Forge
   \item No Fabric, Kubernetes or Vault: we study HMBC2020's design, at laptop scale.
   \item Untrusted relay: EIP-712-signed requests and decisions, checked on-chain.
   \item No consensus claims; RQ2 studies witness quorums.
-  \item Security evidence, not throughput.
 \end{itemize}
 \end{columns}
 \end{frame}
 
-% ---------------------------------------------------------------- 15. Phase E: what we add
-\begin{frame}{RQ1: what we add (the repaired-e profile)}
-\scriptsize
+% ================================================================ PHASE E (RQ1): gaps, method, results, gate
+% Source of every number below: evaluation/reports/RQ1-E.md (69dabfba..), communication/GATES.md (E section,
+% decision of 2026-10-12) and the gate run evaluation/evidence/e3/gate-run-20261012/ on origin/agent-1.
+
+% % ---------------------------------------------------------------- E-1. Where we are
+% \begin{frame}{Phase E (RQ1): where we are}
+% \begin{center}
+% \footnotesize\itshape
+% RQ1: which authorization, trust-freshness and audit properties \emph{follow} from HMBC's access flow,\\
+% which \emph{depend} on details the paper leaves out, and which explicit \emph{repairs} enforce them?
+% \end{center}
+
+% \vspace{-0.2em}
+% \centering
+% \begin{tikzpicture}[x=1cm, y=1cm,
+%     ph/.style={draw, rounded corners=3pt, text width=2.0cm, align=center, inner sep=3pt, font=\scriptsize, minimum height=1.75cm, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}]
+%   \foreach \i/\name/\when/\body/\col/\tint in {
+%       0/{E0 · Foundation}/{6–8 Oct}/{interface and 56-row catalog frozen \emph{before} any run}/okgreen/8,
+%       1/{E1 · Legit flow}/{8 Oct}/{9/9 integrated controls in all 3 profiles}/okgreen/8,
+%       2/{E2 · Attack slices}/{9–11 Oct}/{10 slices, each frozen, run live on two chains, reviewed}/okgreen/8,
+%       3/{E3 · Gate E}/{12 Oct}/{one command: 56/56 rows + ProVerif \textbf{PASS}}/okgreen/22,
+%       4/{F · RQ2}/{next}/{Byzantine witnesses: 4 signers, quorum 3}/accent/10,
+%       5/{G · RQ3}/{later}/{key lifecycle with real MA-ABE}/datagray/6} {
+%     \node[ph, draw=\col, fill=\col!\tint] (p\i) at (\i*2.36,0) {\textbf{\name}\\[-1pt]{\tiny\color{datagray}\when}\\[2pt]\body};
+%   }
+%   \foreach \i [evaluate=\i as \j using int(\i+1)] in {0,...,4} \draw[->, thick, gray] (p\i) -- (p\j);
+%   \node[font=\scriptsize\bfseries, text=accent, anchor=north] at ($(p3.south)!0.5!(p4.south)+(0,-0.05)$) {$\blacktriangle$ we are here};
+% \end{tikzpicture}
+
+% \vspace{0.6em}
+% \begin{tikzpicture}[x=1cm, y=1cm, every node/.append style={minimum height=1.85cm, font=\footnotesize, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}]
+%   \node[stat=okgreen] at (0,0)     {{\Large\bfseries 56/56}\\[2pt]catalog rows matched their frozen expected result};
+%   \node[stat=accent]  at (3.55,0)  {{\Large\bfseries 20 of 32}\\[2pt]paper-profile rows depend on a detail the paper leaves open};
+%   \node[stat=dbc]     at (7.1,0)   {{\Large\bfseries 19 of 24}\\[2pt]repaired-e rows where our explicit check enforces the property};
+%   \node[stat=datagray] at (10.65,0) {{\Large\bfseries 0}\\[2pt]HMBC ``exploits'' claimed: the gaps are spec dependencies};
+% \end{tikzpicture}
+
+% \vspace{0.6em}
+% {\footnotesize \textbf{Gate E PASS} recorded on 12 Oct 2026, after three matching sign-offs. Phase F is next.}
+% \note{Gate E PASS was recorded on 12 Oct 2026 (communication/GATES.md, three matching ACKs A1-0085, S2-0023, S3-0024). The other 5 repaired-e rows are controls (receipt signature controls, the receipt positive control, the wrong-issuer baseline). The 20 paper SPEC_GAP rows are 10 attack schedules in two paper profiles.}
+% \end{frame}
+
+% ---------------------------------------------------------------- E-2. The research gaps
+\begin{frame}{The gaps: what HMBC's access flow leaves unspecified}
+\begin{columns}[T,onlytextwidth]
+\column{0.50\textwidth}
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm,
+    gap/.style={circle, fill=accent, text=white, font=\scriptsize\bfseries, inner sep=1.2pt, minimum size=0.42cm}]
+  \node[box, fill=blue!6, text width=0.85cm] (u) at (0,0) {\textbf{User}};
+  \node[box, draw=pbc, fill=pbc!8, text width=2.55cm, minimum height=1.05cm] (pbc) at (2.65,0)
+       {\textbf{\textcolor{pbc}{Proxy chain (PBC)}}\\PSC entry · TMSC trust lists · LSC log};
+  \node[box, fill=gray!8, text width=1.4cm] (ca) at (5.65,0) {\textbf{CA admins}\\signed CRL, TempACL};
+  \node[box, draw=dbc, fill=dbc!10, text width=2.55cm, minimum height=1.05cm] (dbc) at (2.65,-3.0)
+       {\textbf{\textcolor{dbc}{Domain chain (DBC)}}\\ACSC policy · KSSC key release};
+  \node[box, fill=blue!6, text width=1.4cm] (rel) at (5.65,-3.0) {\textbf{Key release}\\to the user};
+  \draw[->, thick] (u) -- node[lbl, above, font=\tiny] {request} (pbc);
+  \draw[->, thick] (ca) -- node[lbl, below, font=\tiny] {publish} (pbc);
+  \draw[->, thick, pbc] ($(pbc.south)+(-0.75,0)$) -- node[lbl, left, align=right, text width=1.9cm, font=\tiny] {relay forwards\\$\{$GID, attributes,\\\textit{data\_id}$\}$} ($(dbc.north)+(-0.75,0)$);
+  \draw[->, thick, dbc] ($(dbc.north)+(0.75,0)$) -- node[lbl, right, align=left, font=\tiny] {outcome\\logged} ($(pbc.south)+(0.75,0)$);
+  \draw[->, thick, dbc] (dbc) -- (rel);
+  \node[gap] at ($(pbc.south)+(-0.75,-1.5)$) {1};
+  \node[gap] at ($(pbc.east)!0.5!(ca.west)+(0,0.36)$) {2};
+  \node[gap] at ($(pbc.south)+(0.75,-1.5)$) {3};
+  \node[gap] at ($(rel.north)+(0,0.35)$) {3};
+\end{tikzpicture}\\[0.2em]
+\src{Simplified from paper Fig.~6; circles mark the gaps}
+
+\column{0.47\textwidth}
+\footnotesize
 \renewcommand{\arraystretch}{1.25}
-\begin{tabular}{@{}>{\bfseries}L{0.17\textwidth} L{0.37\textwidth} L{0.42\textwidth}@{}}
+\begin{tabular}{@{}c L{0.88\linewidth}@{}}
+\gapn{1} & \textbf{RQ1-01 decision provenance.} The DBC sees a tuple, not the PBC's decision. Nothing says \emph{who} it is for, \emph{which chain} it targets, \emph{when} it expires, or that it is \emph{new}. \\
+\gapn{2} & \textbf{RQ1-02 trust-anchor freshness.} Lists are ``the latest'', with no version or expiry. Nothing says \emph{when} a revocation must reach the DBC. \\
+\gapn{3} & \textbf{RQ1-03 audit correspondence.} An outcome can be logged without DBC evidence. The paper is silent on a crash between key release and logging. \\
+\end{tabular}
+
+\end{columns}
+\note{Source map: 37 paper passages (S01-S37) and 41 recorded completions (A01-A41) in interfaces/v1. Gap 1 is A02/A14/A19/A25, gap 2 A09/A17/A20/A22, gap 3 A03/A11/A12/A26.}
+\end{frame}
+
+% ---------------------------------------------------------------- E-3. Method
+\begin{frame}{Method: the paper and our repair on one frozen catalog}
+\begin{columns}[T,onlytextwidth]
+\column{0.40\textwidth}
+\footnotesize\textbf{Four profiles of the same six contracts}\\[0.3em]
+\begin{tikzpicture}[x=1cm, y=1cm, every node/.append style={execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}]
+  \node[prof=pbc, anchor=north west] (a) at (0,0) {\textbf{paper-strict:} the paper's named callers and signed lists; missing details filled conservatively};
+  \node[prof=pbc, anchor=north west] (b) at ($(a.south west)+(0,-0.1)$) {\textbf{paper-minimal:} as strict, but the list signature is not checked on chain};
+  \node[prof=dbc, anchor=north west] (c) at ($(b.south west)+(0,-0.1)$) {\textbf{repaired-e:} our extension, the checks on the next slide (not HMBC)};
+  \node[prof=badred, anchor=north west] (d) at ($(c.south west)+(0,-0.1)$) {\textbf{mutant-* (6):} repaired-e minus one check, to prove the tests notice};
+\end{tikzpicture}
+
+\vspace{0.4em}
+\textbf{Each row gets one class}\\[0.1em]
+\scriptsize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}l L{0.60\linewidth}@{}}
+\cSup & follows from the paper (as reconstructed) \\
+\cGap & depends on a detail the paper leaves open \\
+\cRep & our repair enforces it \\
+\cBlk & cannot be decided from the paper \\
+\end{tabular}
+
+\column{0.57\textwidth}
+\footnotesize\textbf{How each result is produced}\\[0.3em]
+\begin{tikzpicture}[x=1cm, y=1cm,
+    num/.style={circle, fill=accent, text=white, font=\scriptsize\bfseries, inner sep=1pt, minimum size=0.42cm},
+    st/.style={text width=7.0cm, align=left, font=\scriptsize, anchor=north west, inner sep=0pt, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}]
+  \node[inner sep=0pt, minimum size=0pt] (t-1) at (0.4,0.3) {};
+  \foreach \i/\t in {
+      0/{\textbf{Source map:} 37 paper passages mapped to properties; 41 explicit, recorded completions where the paper is silent.},
+      1/{\textbf{Catalog:} 16 case schedules $\times$ 3 profiles + 8 repaired-only rows = \textbf{56 rows}. The expected class of each row is \emph{frozen} on 8 Oct, before any run.},
+      2/{\textbf{Every row:} a fresh pair of Anvil chains; controls first (Alice allowed, Bob denied, wrong CA admin rejected), then the case under test.},
+      3/{\textbf{Independent oracle:} reads both chains and classifies the row, without reusing the contracts' own checks.},
+      4/{\textbf{Discipline:} freeze the plan hash $\rightarrow$ owners ACK $\rightarrow$ run $\rightarrow$ review. Failed trials are kept, never silently retried.}} {
+    \pgfmathtruncatemacro{\prev}{\i-1}
+    \node[st] (t\i) at ($(t\prev.south west)+(0,-0.3)$) {\t};
+    \node[num, anchor=north] (n\i) at ($(t\i.north west)+(-0.25,0.08)$) {\the\numexpr\i+1\relax};
+  }
+  \foreach \i [evaluate=\i as \j using int(\i+1)] in {0,...,3} \draw[gray, thick] (n\i) -- (n\j);
+\end{tikzpicture}
+\end{columns}
+\note{Catalog: interfaces/v1/scenarios/e0_cases.json (48 rows = 16 schedules x 3 profiles) plus e0_supplement_cases.json (8 repaired-e rows). Positive controls: e_positive.json. Interface v1 FREEZE f700292e.. on 2026-10-08.}
+\end{frame}
+
+% ---------------------------------------------------------------- E-4. What repaired-e adds
+\begin{frame}{What we built: the repaired-e profile}
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, st/.style={box, text width=1.55cm, minimum height=0.95cm, fill=white}]
+  \foreach \i/\t/\col in {0/{user-signed request}/black, 1/{PBC logs it + checks credentials}/pbc, 2/{witness signs checkpoint + decision}/blue!60!black, 3/{DBC: 13 checks, nonce used once}/dbc, 4/{grant}/dbc, 5/{worker: durable intent, then send}/blue!60!black, 6/{signed receipt $\to$ outcome}/pbc} {
+    \node[st, draw=\col] (s\i) at (\i*2.0,0) {\t};
+  }
+  \foreach \i [evaluate=\i as \j using int(\i+1)] in {0,...,5} \draw[->, thick, gray] (s\i) -- (s\j);
+\end{tikzpicture}
+
+\vspace{0.5em}
+\begin{tikzpicture}[x=1cm, y=1cm, cw/.style={text width=4.05cm, minimum height=2.1cm, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}, hw/.style={text width=4.05cm, font=\scriptsize\bfseries}]
+  \node[pcard=accent, cw] at (0,0) {%
+    \textbf{Typed EIP-712 signatures} from the user and the witness, bound to the KSSC and the DBC chain.\\[2pt]
+    A single-use \texttt{(gid, nonce)}; request lifetime $\le$ 30\,s.};
+  \node[phead=accent, hw] at (0,0) {RQ1-01 · who, where, when, once};
+  \node[pcard=pbc, cw] at (4.6,0) {%
+    \textbf{Versioned, expiring} trust lists: an older list is refused.\\[2pt]
+    \textbf{Signed state checkpoints} (sequence + auth epoch) act as a revocation barrier; duty validity is checked at use.};
+  \node[phead=pbc, hw] at (4.6,0) {RQ1-02 · fresh trust state};
+  \node[pcard=dbc, cw] at (9.2,0) {%
+    An outcome needs a \textbf{witness-signed GrantReceipt} for the same request.\\[2pt]
+    The worker logs its \textbf{intent durably} before sending; a retry re-sends the cached response.};
+  \node[phead=dbc, hw] at (9.2,0) {RQ1-03 · evidence per outcome};
+\end{tikzpicture}
+
+\vspace{0.45em}
+{\scriptsize\textbf{DecisionVerifier on the DBC: 13 checks in a fixed order} (colours as above; step 12 is for RQ3)}\\[0.25em]
+\begin{tikzpicture}[x=1cm, y=1cm]
+  \foreach \i/\t/\col in {1/source/accent, 2/destination/accent, 3/action/accent, 4/request/accent, 5/witness set/pbc, 6/signatures/accent, 7/result/accent, 8/credential/accent, 9/expiry/accent, 10/checkpoint/pbc, 11/auth epoch/pbc, 12/key epoch/datagray, 13/record valid/pbc} {
+    \node[dv=\col, minimum width=0.96cm] at (\i*1.02,0) {\textbf{\i}\\\t};
+  }
+\end{tikzpicture}\\[0.1em]
+{\scriptsize A certificate with several defects always gets the same error code. Contracts hold no secrets.}
+\note{repaired-e is a project extension, not HMBC. DecisionVerifier.sol header fixes the 13 steps; step 12 (key epoch) is reserved for G. Six mutants each remove one check: destination binding (1), state barrier (2), record freshness (4), nonce (8), version monotonicity (16), receipt binding (32).}
+\end{frame}
+
+% ---------------------------------------------------------------- E-5. E01 results
+\begin{frame}{Results RQ1-01: decision provenance and replay}
+\scriptsize
+\renewcommand{\arraystretch}{1.22}
+\begin{tabular}{@{}L{0.27\textwidth} L{0.33\textwidth} L{0.37\textwidth}@{}}
 \toprule
-\textbf{Case family} & \textbf{Gap in the paper profiles} & \textbf{What repaired-e adds} \\
+\textbf{The relay\ldots} & \textbf{paper-strict / paper-minimal} & \textbf{repaired-e} \\
 \midrule
-\textcolor{accent}{RQ1-01} Decision provenance & The relay's forwarded tuple is not bound to the PBC decision: subject, destination, freshness and replay are unchecked. & A user-signed request and a witness-signed decision (EIP-712, bound to the KSSC and DBC chain), a fixed 13-step verifier, and a single-use \texttt{(gid, nonce)}. \\
-\textcolor{accent}{RQ1-02} Trust-anchor freshness & “Latest list” allows a rollback to an older signed CRL/TempACL; nothing stops a decision made before a revocation. & Versioned, expiring trust lists (monotone per authority), plus signed checkpoints (sequence + authEpoch) as a revocation barrier. \\
-\textcolor{accent}{RQ1-03} Audit correspondence & An outcome can be logged with no DBC evidence; a crash between release and logging is unspecified. & A witness-signed GrantReceipt is required for an outcome. The worker durably logs intent before sending and re-sends the cached response; delivery is recorded as “unknown”. \\
+replays an identical accepted request & \cSup\ rejected: \code{REPLAY}\textsuperscript{$*$} & \cRep\ rejected: \code{REPLAY} \\
+swaps the subject (GID) & \cGap\ granted; response goes to the swapped subject & \cRep\ \code{WRONG\_SUBJECT}, step 4 \\
+forges a tuple with no PBC request & \cGap\ granted & \cRep\ \code{BAD\_SIGNATURE}, step 6 \\
+replays it under a new reference & \cGap\ a second grant & \cRep\ \code{REPLAY}: grant already exists \\
+reuses a nonce on a different request & -- (the paper has no nonce) & \cRep\ \code{REPLAY}: nonce already used \\
+delivers deployment B's tuple to A & \cGap\ A grants it & \cRep\ \code{WRONG\_DESTINATION}, step 1 \\
+delivers it exactly at the request's expiry & \cGap\ granted at that instant & \cRep\ \code{EXPIRED}, step 9 (at equality) \\
 \bottomrule
 \end{tabular}
 
 \vspace{0.6em}
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, st/.style={box, text width=1.5cm, minimum height=0.95cm, fill=white}]
-  \foreach \i/\t/\col in {0/{user-signed request}/black, 1/{PBC logs + checks credentials}/pbc, 2/{witness: checkpoint + decision}/blue!60!black, 3/{DBC: 13 checks, nonce used}/dbc, 4/{grant}/dbc, 5/{worker: intent, then send}/blue!60!black, 6/{signed receipt $\to$ outcome}/pbc} {
-    \node[st, draw=\col] (s\i) at (\i*1.95,0) {\t};
-  }
-  \foreach \i [evaluate=\i as \j using int(\i+1)] in {0,...,5} \draw[->, thick, gray] (s\i) -- (s\j);
-\end{tikzpicture}\\[0.3em]
-\scriptsize Compared against \textbf{paper-strict}, \textbf{paper-minimal}, and \textbf{6 mutants}, each removing one repaired check: destination binding, state barrier, record freshness, nonce, version monotonicity, receipt binding.
+\begin{columns}[T,onlytextwidth]
+\column{0.62\textwidth}
+\begin{alertblock}{What it means}
+\scriptsize In the paper profiles the DBC grants \emph{any} well-formed tuple the configured relay forwards. Repaired-e rejects each attack at a named verifier step, and Alice's legitimate access still succeeds in every row.
+\end{alertblock}
+\column{0.35\textwidth}
+\tiny\color{datagray}
+\textsuperscript{$*$}Only because our grant id is deterministic (a recorded completion), not because the paper has a nonce.\\[3pt]
+The relay attacks use a misbehaving relay, which HMBC's isolation assumption excludes.
+\end{columns}
+\note{Catalog rows 10-22 and 51-56. Gate run E-gate-20261012: all 19 E01 rows PASS with their frozen class and code. The relay stress rows (13-22, 51-53) are outside A01 (secure isolation): specification dependencies, not exploits.}
 \end{frame}
 
-% ---------------------------------------------------------------- 16. Phase E: results so far
-\begin{frame}{RQ1: results so far}
-\centering
-
-
-\vspace{0.3em}
+% ---------------------------------------------------------------- E-6. E02 results + window
+\begin{frame}{Results RQ1-02: trust-anchor freshness and the revocation window}
+\begin{columns}[T,onlytextwidth]
+\column{0.56\textwidth}
 \scriptsize
-\renewcommand{\arraystretch}{1.04}
-\begin{tabular}{@{}L{0.35\textwidth} L{0.24\textwidth} L{0.36\textwidth}@{}}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}L{0.30\linewidth} L{0.32\linewidth} L{0.32\linewidth}@{}}
 \toprule
-\textbf{Case (observed)} & \textbf{Paper profiles} & \textbf{repaired-e} \\
+\textbf{Case} & \textbf{paper profiles} & \textbf{repaired-e} \\
 \midrule
-Relay swaps the subject, forges a tuple, replays, or delivers late & granted$^{*}$ (SPEC\_GAP) & rejected: WRONG\_SUBJECT, BAD\_SIGNATURE, REPLAY, EXPIRED \\
-Identical request replayed & rejected: REPLAY (2/2 \src{[I]}) & rejected: REPLAY, nothing changes (1/1 \src{[I]}) \\
-Older signed CRL/TempACL re-installed & accepted: revocation undone & rejected: STALE\_ANCHOR \\
-Revoked on the PBC, decision delivered later & no bound: grantable 65\,s later & STALE\_STATE at the next checkpoint; $\le$30\,s (next slide) \\
-Outcome reported without DBC evidence & recorded & rejected: needs a witness-signed receipt \\
-Same outcome reported twice & rejected: REPLAY (3/3 \src{[I]}) & rejected: REPLAY, nothing changes (3/3 \src{[I]}) \\
-Worker crash after intent / after send & recovery not specified (BLOCKED) & cached response re-sent; one grant, one outcome; delivery “unknown”; expired retry: EXPIRED, no change (6/6 \src{[I]}) \\
+CA admin updates another issuer's list & \cSup\ \code{UNAUTHORIZED\_CALLER} (baseline, not a repair) & \cSup\ same \\
+an older signed CRL is re-installed & \cGap\ accepted: a \textbf{revoked credential is un-revoked} & \cRep\ \code{STALE\_ANCHOR} \\
+revoked; decision used \emph{before} the DBC sees a new checkpoint & \cGap\ accepted & \cRep\ accepted on purpose, inside the bounded window \\
+revoked; decision used \emph{after} it & \cGap\ still accepted: there is no barrier & \cRep\ \code{STALE\_STATE} \\
+duty ended at delivery & \cGap\ granted at that instant & \cRep\ \code{EXPIRED} (step 13) \\
 \bottomrule
 \end{tabular}
 
-
-\end{frame}
-
-% ---------------------------------------------------------------- 16b. Phase E: revocation window
-\begin{frame}{RQ1: measured revocation window}
-\begin{columns}[T,onlytextwidth]
-\column{0.50\textwidth}
+\column{0.41\textwidth}
 \centering
 \begin{tikzpicture}
 \begin{axis}[
-    ybar, bar width=8pt, width=7.0cm, height=5.0cm,
+    ybar, bar width=6pt, width=6.3cm, height=4.4cm,
     ymin=0, ymax=36, axis x line*=bottom, axis y line*=left,
     symbolic x coords={0 s,5 s,10 s,20 s,never},
     xtick=data, enlarge x limits=0.15,
-    xlabel={delay before the DBC accepts a new checkpoint},
+    xlabel={delay until the DBC accepts a new checkpoint},
     ylabel={window $W$ (s)},
-    tick label style={font=\scriptsize}, label style={font=\scriptsize},
+    tick label style={font=\tiny}, label style={font=\scriptsize},
     nodes near coords, nodes near coords style={font=\tiny},
-    legend style={font=\tiny, at={(0.02,0.78)}, anchor=north west, draw=none, fill=white},
+    legend style={font=\tiny, at={(0.02,0.80)}, anchor=north west, draw=none, fill=white},
     legend cell align=left,
   ]
   \addplot[fill=dbc!70, draw=dbc] coordinates {(0 s,2) (5 s,6) (10 s,11) (20 s,21) (never,26)};
   \addplot[fill=dbc!30, draw=dbc] coordinates {(0 s,2) (5 s,6) (10 s,11) (20 s,21) (never,27)};
-  \draw[dashed, badred, thick] (rel axis cs:0,0.833) -- (rel axis cs:1,0.833) node[pos=0.25, above, font=\tiny, text=badred] {30\,s request TTL cap};
-  \legend{machine A (ledger owner), machine B (protocol owner)}
+  \draw[dashed, badred, thick] (rel axis cs:0,0.833) -- (rel axis cs:1,0.833) node[pos=0.27, above, font=\tiny, text=badred] {30\,s request lifetime cap};
+  \legend{machine A, machine B}
 \end{axis}
-\end{tikzpicture}\\[0.1em]
-\src{repaired-e, one trial per delay; same runner, two machines}
-
-\column{0.47\textwidth}
-\footnotesize
-\textbf{Experiment:} revoke Alice on the PBC at $T_0$, then probe her already-collected decision on the DBC in every block until it is refused.
-\begin{itemize}
-  \item \textbf{repaired-e:} refused in the very block where the DBC accepts the next checkpoint (STALE\_STATE). With no new checkpoint, it is refused at the request's own expiry (EXPIRED).\\[2pt]
-    $W = \min(\text{checkpoint delay}, \text{TTL left}) \le 30$\,s.
-  \item New requests after $T_0$ are refused at the PBC immediately (REVOKED).
-  \item \textbf{paper-strict:} no bound; a tuple forwarded before $T_0$ is still grantable 65\,s later.
-\end{itemize}
-\smallskip
-\scriptsize\color{datagray} $W$ is set by how often checkpoints are accepted, not by a ledger constant. 
+\end{tikzpicture}\\
+\scriptsize
+\textbf{repaired-e:} $W = \min(\text{checkpoint delay}, \text{lifetime left}) \le 30$\,s\\[1pt]
+\textbf{paper-strict:} no bound; still grantable 65\,s later\\[2pt]
+\src{owner measurement, 1 trial per delay; not the gate run}
 \end{columns}
-\note{A1-0046 (machine A) and A2-0026 (machine B): delays 0/5/10/20 s give W = 2/6/11/21 s on both; with no checkpoint W = 26 s vs 27 s, equal to the TTL left at T0 in each run.}
+\note{Rows 36-50 of the gate run. The window chart is the owner measurement A1-0046 (machine A) and A2-0026 (machine B), cited under decision A1-0081; the integrated gate run did not measure a window. The paper pre- and post-barrier rows are one execution.}
 \end{frame}
 
-% ---------------------------------------------------------------- 16c. Phase E: ProVerif correspondence
-\begin{frame}{RQ1: formal check with ProVerif}
+% ---------------------------------------------------------------- E-7. E03 results
+\begin{frame}{Results RQ1-03: audit correspondence and crash recovery}
 \begin{columns}[T,onlytextwidth]
-\column{0.50\textwidth}
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, ev/.style={box, text width=1.6cm, minimum height=0.8cm}]
-  \node[ev, fill=blue!6] (u) at (0,0) {\textbf{User}\\UserRequest};
-  \node[ev, fill=blue!6] (w) at (2.25,0) {\textbf{Witness}\\WitnessDecision};
-  \node[ev, draw=dbc, fill=dbc!12] (g) at (4.5,0) {\textbf{DBC}\\Grant};
-  \draw[->, thick] (u) -- (w);
-  \draw[->, thick, dbc] (w) -- (g);
-  \draw[->, thick, accent, dashed] (g.south) to[bend left=25] node[lbl, below, text=accent] {query} (u.south);
-\end{tikzpicture}\\[0.3em]
-{\scriptsize \textcolor{accent}{Query:} every Grant is preceded by both signed events, agreeing on all 8 fields: request id, subject, data, source, destination, action, policy, nonce.}\\[0.5em]
+\column{0.60\textwidth}
 \scriptsize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{@{}L{0.40\linewidth} L{0.22\linewidth} L{0.32\linewidth}@{}}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}L{0.30\linewidth} L{0.30\linewidth} L{0.34\linewidth}@{}}
 \toprule
-\textbf{Query} & \textbf{repaired-e} & \textbf{mutant (no destination)} \\
+\textbf{Case} & \textbf{paper profiles} & \textbf{repaired-e} \\
 \midrule
-Agreement on all 8 fields & \textcolor{okgreen}{\textbf{true}} & \textcolor{badred}{\textbf{false}}: attack trace \\
-Other 7 fields & \textcolor{okgreen}{true} & \textcolor{okgreen}{true} \\
-Legitimate grant reachable & \textcolor{okgreen}{yes} & \textcolor{okgreen}{yes} \\
-Denied-data grant & \textcolor{okgreen}{unreachable} & -- \\
+same outcome reported twice & \cSup\ \code{REPLAY} & \cRep\ \code{REPLAY} \\
+relay drops the outcome & \cSup\ request stays PENDING, visibly & \cRep\ same, plus durable worker evidence \\
+outcome fabricated, no grant exists & \cGap\ recorded & \cRep\ \code{WRONG\_PROFILE}: needs a receipt \\
+receipt names another request, GID or record & -- (no receipts) & \cRep\ \code{WRONG\_SUBJECT}, nothing recorded \\
+worker crashes after intent / after send & \cBlk\ the paper is silent on durability & \cRep\ cached response re-sent: one grant, one outcome \\
 \bottomrule
 \end{tabular}
 
-\column{0.47\textwidth}
-\footnotesize
-\textbf{What it shows:} with the repaired-e signatures, the DBC cannot issue a grant that the user and the witness did not both approve, field for field. Dropping only the destination binding gives an attack trace at once, so the check really depends on it.
-
-\medskip
-\textbf{Scope, as stated by the evaluator:}
+\column{0.37\textwidth}
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, ev/.style={box, text width=1.25cm, minimum height=0.62cm, fill=white}]
+  \node[ev, draw=dbc] (g) at (0,0) {DBC grant};
+  \node[ev, draw=blue!60!black] (i) at (1.65,0) {intent (durable)};
+  \node[ev, draw=blue!60!black] (s) at (3.3,0) {send};
+  \node[ev, draw=pbc] (o) at (3.3,-1.5) {outcome + receipt};
+  \draw[->, thick, gray] (g) -- (i);
+  \draw[->, thick, gray] (i) -- (s);
+  \draw[->, thick, gray] (s) -- (o);
+  \node[text=badred, font=\bfseries] at (2.48,0.5) {\ding{55}};
+  \node[text=badred, font=\bfseries] at (4.15,0.0) {\ding{55}};
+  \node[font=\tiny, text=badred] at (2.48,0.82) {crash};
+  \node[font=\tiny, text=badred, anchor=west] at (4.3,0.0) {crash};
+  \draw[->, thick, dbc, dashed] (i.south) to[bend right=30] node[lbl, below, font=\tiny, text=dbc] {restart: re-send cached response} (s.south west);
+\end{tikzpicture}\\[0.4em]
 \begin{itemize}\scriptsize
-  \item Symbolic model: perfect signatures, one honest user and one honest witness; ProVerif 2.05 (pinned binary).
-  \item Non-injective queries: replay is \emph{not} covered here (the nonce tests cover it).
-  \item No revocation, expiry, worker recovery, EIP-712 encoding or ABE.
-  \item The mutant is a model mutation, not the deployed ledger mutant, and not a paper vulnerability.
+  \item Before the grant expires: the \emph{same} response again, no second capability.
+  \item After it expires: \code{EXPIRED}, nothing changes.
+  \item A grant is permission to release, \textbf{not proof of delivery}: delivery stays ``unknown'', and we report it that way.
 \end{itemize}
-\smallskip
-
 \end{columns}
-\note{A3-0033: full eight-field user/witness agreement true; positive grant reachable; denied-data grant unreachable; the destination-omitting mutant has reconstructed disagreement traces while the other seven fields still agree. Symbolic abstraction result, not integration.}
+
+\vspace{0.4em}
+\raggedright\tiny\color{datagray}
+The four paper crash rows are recorded as ``BLOCKED / decided SPEC\_GAP, unproved'': never a pass, never a finding. Crash points are logical process deaths, not power loss. The receipt-substitution rows use a deliberately deviating test witness.
+\note{Dropped outcome: only local durable worker evidence is unconditional; PBC reconciliation needs eventual delivery and an honest reporter. Crash rows: D47. Receipt binding rows 29-31 use the TEST-ONLY deviating witness (A40); rows 32-35 are signature and positive controls (SUPPORTED).}
 \end{frame}
 
-% ---------------------------------------------------------------- 17. Next: F and G
-\begin{frame}{Next: RQ2 and RQ3}
+% ---------------------------------------------------------------- E-8. Sensitivity: mutants + ProVerif
+\begin{frame}{Are the checks real? Mutants and a formal model}
 \begin{columns}[T,onlytextwidth]
-\column{0.49\textwidth}
+\column{0.53\textwidth}
+\footnotesize\textbf{Remove one check, and something must fail}\\[0.3em]
+\scriptsize
+\renewcommand{\arraystretch}{1.22}
+\begin{tabular}{@{}L{0.26\linewidth} L{0.29\linewidth} L{0.39\linewidth}@{}}
+\toprule
+\textbf{Mutant} & \textbf{Ledger test that fails} & \textbf{Gate row that hits the guard} \\
+\midrule
+no nonce & nonce reuse across requests & same nonce: \code{REPLAY} \\
+no receipt binding & receipt field swap & receipt $\times$3: \code{WRONG\_SUBJECT} \\
+no state barrier & revocation barrier & post-barrier: \code{STALE\_STATE} \\
+no record freshness & duty ended at delivery & expired duty: \code{EXPIRED} \\
+no version order & stale CRL / TempACL replay & rollback: \code{STALE\_ANCHOR} \\
+no destination binding & request field swap; ProVerif & -- (step 1 fires first) \\
+\bottomrule
+\end{tabular}\\[0.4em]
+
+\column{0.44\textwidth}
+\footnotesize\textbf{ProVerif: does each grant match the approvals?}\\[0.3em]
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, ev/.style={box, text width=1.35cm, minimum height=0.7cm}]
+  \node[ev, fill=blue!6] (u) at (0,0) {\textbf{User}\\request};
+  \node[ev, fill=blue!6] (w) at (2.05,0) {\textbf{Witness}\\decision};
+  \node[ev, draw=dbc, fill=dbc!12] (g) at (4.1,0) {\textbf{DBC}\\grant};
+  \draw[->, thick] (u) -- (w);
+  \draw[->, thick, dbc] (w) -- (g);
+  \draw[->, thick, accent, dashed] (g.south) to[bend left=22] node[lbl, below, text=accent, font=\tiny] {agree on all 8 fields?} (u.south);
+\end{tikzpicture}\\[0.2em]
+\scriptsize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{@{}L{0.44\linewidth} L{0.22\linewidth} L{0.26\linewidth}@{}}
+\toprule
+\textbf{Query} & \textbf{repaired} & \textbf{mutant} \\
+\midrule
+grant agrees with user + witness on all 8 fields & \textcolor{okgreen}{\textbf{true}} & \textcolor{badred}{\textbf{false}}: attack trace \\
+other 7 fields agree & \textcolor{okgreen}{true} & \textcolor{okgreen}{true} \\
+legitimate grant reachable & \textcolor{okgreen}{yes} & \textcolor{okgreen}{yes} \\
+policy-denied grant & \textcolor{okgreen}{unreachable} & \textcolor{okgreen}{unreachable} \\
+\bottomrule
+\end{tabular}\\[0.3em]
+\raggedright\tiny\color{datagray} Symbolic model (perfect signatures, one honest user and witness); no replay, expiry or revocation.
+\end{columns}
+\note{Criterion 4 is "met on owner, formal and baseline evidence (human decision A1-0080); integrated live mutant matrix not run". The owner rehearsal (agent 1's runner) ran live mutant probes: 5/6 detected; no-destination-binding is not killable by the catalog recipe because step 1 (source binding) fires first. That rehearsal is owner evidence, not the integrated evaluator.}
+\end{frame}
+
+% % ---------------------------------------------------------------- E-9. Gate E
+% \begin{frame}{Gate E: one command, 56 rows, a recorded verdict}
+% \begin{columns}[T,onlytextwidth]
+% \column{0.56\textwidth}
+% \centering
+% \footnotesize\textbf{Every catalog row, coloured by its result}\\[0.4em]
+% \begin{tikzpicture}[x=1cm, y=1cm]
+%   % groups: paper profiles at x=0.85, repaired-e at x=4.35; pitch 0.26
+%   \node[font=\scriptsize\bfseries, text=pbc, anchor=south west] at (0.85,0.4) {paper-strict + paper-minimal};
+%   \node[font=\scriptsize\bfseries, text=dbc, anchor=south west] at (4.35,0.4) {repaired-e};
+%   \node[font=\scriptsize\bfseries, anchor=east] at (0.7,0.11)  {E01};
+%   \node[font=\scriptsize\bfseries, anchor=east] at (0.7,-0.49) {E02};
+%   \node[font=\scriptsize\bfseries, anchor=east] at (0.7,-1.09) {E03};
+%   % E01: paper 2 SUP + 10 GAP; repaired 7 REP
+%   \wcells{0.85}{0}{0}{2}{clsup}  \wcells{0.85}{2}{0}{10}{clgap}
+%   \wcells{4.35}{0}{0}{7}{clrep}
+%   % E02: paper 2 SUP + 8 GAP; repaired 4 REP + 1 SUP
+%   \wcells{0.85}{0}{-0.6}{2}{clsup}  \wcells{0.85}{2}{-0.6}{8}{clgap}
+%   \wcells{4.35}{0}{-0.6}{4}{clrep}   \wcells{4.35}{4}{-0.6}{1}{clsup}
+%   % E03: paper 4 SUP + 2 GAP + 4 BLK; repaired 8 REP + 4 SUP
+%   \wcells{0.85}{0}{-1.2}{4}{clsup}  \wcells{0.85}{4}{-1.2}{2}{clgap}  \wcells{0.85}{6}{-1.2}{4}{clblk}
+%   \wcells{4.35}{0}{-1.2}{8}{clrep}   \wcells{4.35}{8}{-1.2}{4}{clsup}
+%   % totals
+%   \node[font=\tiny, anchor=north west, align=left] at (0.85,-1.5) {32 rows: \textbf{8} supported\\\textbf{20} spec gap · \textbf{4} blocked};
+%   \node[font=\tiny, anchor=north west, align=left] at (4.35,-1.5) {24 rows: \textbf{19} repair supported\\\textbf{5} supported (controls)};
+% \end{tikzpicture}\\[0.5em]
+% \scriptsize
+% \cSup\ \ \cGap\ \ \cRep\ \ \cBlk\\[0.5em]
+% \raggedright\scriptsize Every gap in the paper profiles has a repaired-e row with an explicit check. In all 56 rows the observed class and error code equal the \textbf{frozen} expectation: 0 refuted, 0 failed.
+
+% \column{0.41\textwidth}
+% \footnotesize
+% \textbf{The run (12 Oct)}
+% \begin{itemize}\scriptsize\setlength{\itemsep}{1pt}
+%   \item One command: 56 rows, each on a fresh pair of chains, then the ProVerif re-run.
+%   \item 4,749\,s (1.3\,h), 112 services, exit 0.
+%   \item Sources and Git HEAD identical before and after; all inputs and outputs hashed.
+% \end{itemize}
+% \textbf{The verdict}
+% \begin{itemize}\scriptsize\setlength{\itemsep}{1pt}
+%   \item All 9 gate criteria met; the mutant criterion is met on scoped evidence (previous slide).
+%   \item Three matching sign-offs (ledger, protocol, evaluation) on the same report and hashes.
+%   \item \textbf{Gate E PASS} recorded on 12 Oct 2026. F may now be planned.
+% \end{itemize}
+% \begin{alertblock}{Honest caveat}
+% \scriptsize The last slices and the gate ran while two agents were offline; same-model stand-ins reviewed them (correlated review). The original owners can re-open any of it.
+% \end{alertblock}
+% \end{columns}
+% \note{Run E-gate-20261012, FREEZE S3-0021, plan c0086019..; manifest 908fd615.., gate-evidence 47e38dd3.., RQ1-E.md 69dabfba..; ACKs A1-0085, S2-0023, S3-0024 (HEAD of record 871e218). Decision text: "gate E PASS: solo phase, correlated review, criterion 4 human-scoped (A1-0080), window cited from owner evidence (A1-0081), integrated mutants and window not run".}
+% \end{frame}
+
+% ---------------------------------------------------------------- E-10. What it shows
+\begin{frame}{What RQ1 shows, and why it matters}
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, cw/.style={text width=4.1cm, draw=none, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}, hw/.style={text width=4.1cm, font=\footnotesize\bfseries}]
+  \node[pcard=accent, cw] (k1) at (0,0) {%
+    \textbf{Holds as specified:} identical replay, duplicate outcome, issuer-scoped list updates; a dropped outcome stays visible.\\[3pt]
+    \textbf{Depends on the paper's gaps:} 10 case schedules (subject, forged tuple, new reference, destination, expiry, list rollback, revocation before/after the barrier, expired duty, fabricated outcome) plus crash recovery.\\[3pt]
+    \textbf{Repairable:} each gets a named, explicit check; legitimate access keeps working.};
+  \node[phead=accent, hw] at (0,0) {Answer to RQ1};
+  \node[pcard=dbc, cw] (k2) at (4.6,0) {%
+    \textbf{For implementers of HMBC:} a concrete list of decisions the paper leaves open, each with a test that shows the consequence.\\[3pt]
+    \textbf{Revocation gets a bound:} $\le$ 30\,s in repaired-e, where the paper profile has none.\\[3pt]
+    \textbf{A reusable harness:} one frozen, one-command 56-row run that RQ2 and RQ3 must keep passing.\\[3pt]
+    To our knowledge, the first executable, instance-level analysis of HMBC.};
+  \node[phead=dbc, hw] at (4.6,0) {Why it matters};
+  \node[pcard=datagray, cw] (k3) at (9.2,0) {%
+    Symbolic crypto: no ABE, no secrecy or performance claim.\\[3pt]
+    One \textbf{trusted} witness and one trusted key worker.\\[3pt]
+    Local Anvil chains, no consensus; one host, one trial per row.\\[3pt]};
+  \node[phead=datagray, hw] at (9.2,0) {Limits we state};
+  \foreach \k/\c in {1/accent, 2/dbc, 3/datagray} \draw[\c, rounded corners=3pt] (k\k.north west) rectangle ($(k\k.north east)+(0,-5.05)$);
+\end{tikzpicture}
+
+\vspace{0.5em}
+\begin{tikzpicture}
+  \node[draw=accent, fill=accent!10, rounded corners=3pt, text width=13.2cm, align=center, inner sep=5pt, font=\footnotesize]
+    {Repaired-e puts all decision trust on \textbf{one witness}.\\RQ2 asks what survives when witnesses are Byzantine.};
+\end{tikzpicture}
+\note{The "first instance-level analysis" claim rests on our non-exhaustive literature search (slide 12). Repaired-e's pre-barrier case is accepted on purpose, inside the bounded window.}
+\end{frame}
+
+% ---------------------------------------------------------------- Next: F (and G)
+\begin{frame}{Next: Phase RQ2, then RQ3}
+\begin{columns}[T,onlytextwidth]
+\column{0.60\textwidth}
 \textbf{\textcolor{pbc}{RQ2: Byzantine operators}}\\[0.3em]
 \centering
-\begin{tikzpicture}[x=1cm, y=1cm, w/.style={circle, draw, thick, minimum size=0.62cm, font=\scriptsize\bfseries, inner sep=0pt}]
-  \node[w, draw=pbc, fill=pbc!10] (w1) at (0,0) {W1};
-  \node[w, draw=pbc, fill=pbc!10] (w2) at (1.2,0) {W2};
-  \node[w, draw=pbc, fill=pbc!10] (w3) at (2.4,0) {W3};
-  \node[w, draw=badred, fill=badred!15] (w4) at (3.6,0) {W4};
+\begin{tikzpicture}[x=1cm, y=1cm, w/.style={circle, draw, thick, minimum size=0.58cm, font=\scriptsize\bfseries, inner sep=0pt}]
+  \node[w, draw=dbc, fill=dbc!10] (e) at (0,0) {W};
+  \node[font=\tiny, text=datagray, below=1pt of e] {RQ1: one trusted witness};
+  \draw[->, thick, gray] (0.6,0) -- (1.5,0);
+  \node[w, draw=pbc, fill=pbc!10] (w1) at (2.1,0) {W1};
+  \node[w, draw=pbc, fill=pbc!10] (w2) at (3.2,0) {W2};
+  \node[w, draw=pbc, fill=pbc!10] (w3) at (4.3,0) {W3};
+  \node[w, draw=badred, fill=badred!15] (w4) at (5.4,0) {W4};
   \draw[accent, thick, rounded corners] ($(w1.north west)+(-0.12,0.18)$) rectangle ($(w3.south east)+(0.12,-0.12)$);
   \draw[dbc, thick, dashed, rounded corners] ($(w2.north west)+(-0.2,0.3)$) rectangle ($(w4.south east)+(0.2,-0.24)$);
   \node[font=\tiny, text=accent, anchor=south] at ($(w1.north)!0.5!(w3.north)+(0,0.18)$) {quorum A};
   \node[font=\tiny, text=dbc, anchor=north] at ($(w2.south)!0.5!(w4.south)+(0,-0.24)$) {quorum B};
-\end{tikzpicture}\\[-0.1em]
-{\tiny any two 3-of-4 quorums share $\ge$2 witnesses, so at least one honest when $f=1$}
+\end{tikzpicture}\\[-0.05em]
+{\tiny any two 3-of-4 quorums share $\ge$ 2 witnesses, so at least one honest one when $f=1$}
 
 \raggedright\footnotesize
-\begin{itemize}
-  \item 4 decision witnesses (one per hospital), threshold $q=3$, $f=1$; certificates with distinct signers, a set version and request/state binding.
-  \item Governance certificates bound to action, payload, nonce and expiry.
-  \item Faults: 0/1/2 bad witnesses, equivocation, withholding, stale views.
-  \item TLA+/TLC model, with $f=2$ and weakened-threshold controls.
-\end{itemize}
+\begin{enumerate}\setlength{\itemsep}{1pt}
+  \item \textbf{RQ2-01: freeze the fault model first:} $n=4$, $q=3$, $f=1$; a trust matrix over chains, relay, witnesses, CAs, key worker, client and store; expected results agreed before any run.
+  \item \textbf{Ledger:} quorum verifier and governance certificates (distinct signers, set version, bound to action, nonce, expiry).
+  \item \textbf{Protocol:} 4 independent witnesses; each stores its first signed decision, so it cannot equivocate.
+  \item \textbf{Evaluation:} 0/1/2 faulty witnesses, equivocation, withholding, stale views, worker compromise; a TLA+/TLC model; RQ1's 56 rows re-run as regression.
+\end{enumerate}
 
-\column{0.49\textwidth}
+\column{0.37\textwidth}
 \textbf{\textcolor{dbc}{RQ3: key lifecycle}}\\[0.3em]
 \centering
-\begin{tikzpicture}[x=1cm, y=1cm, ep/.style={box, text width=1.35cm, minimum height=0.62cm}]
+\begin{tikzpicture}[x=1cm, y=1cm, ep/.style={box, text width=1.15cm, minimum height=0.6cm}]
   \node[ep, draw=dbc, fill=dbc!10] (p) at (0,0) {prepare\\epoch $e{+}1$};
-  \node[ep, draw=dbc, fill=dbc!20] (c) at (2.0,0) {commit\\on-chain};
-  \node[ep, draw=datagray, fill=gray!10] (r) at (4.0,0) {retire\\epoch $e$};
+  \node[ep, draw=dbc, fill=dbc!20] (c) at (1.65,0) {commit\\on chain};
+  \node[ep, draw=datagray, fill=gray!10] (r) at (3.3,0) {retire\\epoch $e$};
   \draw[->, thick] (p) -- (c);
   \draw[->, thick] (c) -- (r);
-\end{tikzpicture}\\[0.15em]
-{\tiny epoch and ciphertext commitments on-chain; no secrets in contracts}
+\end{tikzpicture}
 
 \raggedright\footnotesize
-\begin{itemize}
-  \item \textbf{RQ3-01 gate first:} a real MA-CP-ABE adapter (Charm, Lewko–Waters) with actual decryption vectors, and a correct KSSC/user split.
-  \item Secrecy experiments: data after revocation, joining without history, later key compromise, cached outputs.
-  \item Measure real encryption, partial/final decryption and rotation cost.
+\begin{itemize}\setlength{\itemsep}{1pt}
+  \item Gate first: a real MA-CP-ABE adapter (Charm, Lewko–Waters) with a correct KSSC/user split.
+  \item What stays secret after revocation, joining, a later key compromise, and for cached outputs.
+  \item Measured encryption, decryption and rotation cost.
 \end{itemize}
 \end{columns}
-
-\vspace{0.3em}
+\note{Board is at F0. F needs its own plan and the team's go-ahead before any F code; G stays locked until gate F passes (PLAN.md sections 6 and 7, GATES.md F and G checklists).}
 \end{frame}
 
 % ---------------------------------------------------------------- 18. Close

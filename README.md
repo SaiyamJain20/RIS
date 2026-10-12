@@ -8,12 +8,16 @@
 | 9–10 | JANUS (Appl. Sci. 2023): what it adds on top of HMBC, and what it changes |
 | 11–12 | Our project: the three research questions RQ1/RQ2/RQ3; why this direction; literature |
 | 13–14 | Tech stack: the paper vs. JANUS vs. ours, and why |
-| 15–18 | RQ1: what we add, results so far, the measured revocation window, the ProVerif check |
-| 19–20 | Next: RQ2 and RQ3; questions |
+| 15–22 | RQ1, complete: the gaps in HMBC's flow (RQ1-01/02/03); method; the repaired-e design; results for RQ1-01, RQ1-02 (with the revocation window) and RQ1-03; mutants and ProVerif; what RQ1 shows, why it matters and its limits |
+| 23–24 | Next: RQ2, then RQ3; questions |
+
+Speaker script for the whole deck in about 20 minutes, with Q&A backups: [`script-hmbc-presentation.md`](script-hmbc-presentation.md). The longer [`script-hmbc-presentation-30min.md`](script-hmbc-presentation-30min.md) was written for the earlier 26-slide deck and is background only.
 
 ## Live status
 
-The RQ1 results table on slide 16 (with slides 17–18) summarises the live project state from the
+Slides 15–22 summarise RQ1 (Phase E) as recorded on the `agent-1` branch: the gate E run
+`E-gate-20261012`, `evaluation/reports/RQ1-E.md` and the gate E decision in `communication/GATES.md`.
+Before 12 Oct, the RQ1 slides summarised the live project state from the
 `agent-1`, `agent-2` and `agent-3` branches. The deck is refreshed about **every hour** while Saiyam's
 Claude Code session is running. Each refresh is one commit on this branch, and the changelog below
 records the time and the source commits.
@@ -82,3 +86,17 @@ On Overleaf: upload the `.tex` file and `figures/`, then set *Menu → Compiler 
 - 2026-10-09 16:30 IST: no new results. Agent 3 prepared the subject-substitution collector and checker
   (A3-0048, A3-0049), with no live run yet; 44 cases remain. The deck is unchanged. Heads: agent-1 e66eeb9,
   agent-2 96ebe16, agent-3 8e5a6dd.
+- 2026-10-12: Phase E rewritten as slides 15–24 after gate E PASS (solo phase; GATES.md decision of
+  2026-10-12). New slides: where we are (timeline and headline numbers), the three gaps in the paper's
+  flow, the method (profiles, frozen 56-row catalog, result classes), the repaired-e design (with the
+  13-step DecisionVerifier), one results slide each for E01/E02/E03, mutants and ProVerif, the gate run
+  (all 56 rows coloured by class) and a summary of findings, impact and limits. The old slides 15–18 are
+  folded into these. Slide 25 is the next step: F (RQ2), then G (RQ3). Slides 1–14 are unchanged.
+  Every number comes from `evaluation/reports/RQ1-E.md` (69dabfba..) and the gate evidence
+  (manifest 908fd615..); the window chart is still the owner measurement (A1-0046 / A2-0026). Stated
+  limits: integrated mutant matrix and integrated window not run; final reviews correlated (same model).
+  Heads: agent-1 6911478, agent-2 96ebe16, agent-3 8e5a6dd.
+- 2026-10-12 evening: Saiyam's edits. The "where we are" and "gate E" slides are commented out. Phases
+  E/F/G are renamed to RQ1/RQ2/RQ3, and the case families to RQ1-01/02/03. Some caveat lines are
+  removed (the mutant-run note, the correlated-review note, two limits). The deck is recompiled: 24 pages.
+  The 20-minute script is updated to match; its Q&A backups keep the removed caveats as answers.
