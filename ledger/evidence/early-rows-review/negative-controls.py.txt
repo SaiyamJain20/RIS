@@ -1,0 +1,28 @@
+import json, shutil, subprocess, sys
+from pathlib import Path
+T = Path(sys.argv[1]); E = Path("evaluation/evidence/e2")
+def case(name, src, rel, mutate):
+    d = T / name; shutil.copytree(E / src, d)
+    p = d / rel; obj = json.loads(p.read_text()); mutate(obj); p.write_text(json.dumps(obj))
+    r = subprocess.run([".venv/bin/python", "-I", "ledger/tools/review_early_rows_evidence.py", str(d)], capture_output=True, text=True)
+    rows = json.loads(r.stdout)["rows"]; bad = [x for x in rows if not x["pass"]]
+    print(f"{name}: exit {r.returncode}; failing {[ (x['row'], x['failures'][:2]) for x in bad]}")
+def find(txs, h): return [t for t in txs if t["transactionHash"].startswith(h)][0]
+# 1 replay code 8 -> 7
+def m1(txs):
+    t = find(txs, "0x70dda8d99b"); rv = t["rejectionTrace"]["returnValue"]; t["rejectionTrace"]["returnValue"] = rv[:-1] + "7"
+# 2 expired retry native-after changed
+# 3 probe before expiry
+# 4 duplicate calldata differs
+def m4(txs):
+    t = find(txs, "0xf76b88ec82"); i = t["transaction"]["input"]; k = 10 + 64 + 10; t["transaction"]["input"] = i[:k] + ("0" if i[k] != "0" else "1") + i[k+1:]
+case("dup-calldata", "duplicate-live-20261009/run/repaired-e-duplicate-outcome", "repaired-e/pbc-native/transactions.json", m4)
+# 5 repaired consume block time moved to the request expiry (DV step 9)
+def m5(txs):
+    t = [t for t in txs if t["method"] == "consumeDecision"][0]; t["receipt"]["blockTimestamp"] = hex(1791509062)
+# 6 paper grant expiry not block+30
+def m6(txs):
+    t = [t for t in txs if t["method"] == "policyEnf"][0]; b = t["receipt"]["blockTimestamp"]; t["receipt"]["blockTimestamp"] = (b if isinstance(b, int) else int(b, 16)) + 1
+case("paper-ttl", "expiry-live-20261009/run/paper-strict-after_send", "paper-strict/dbc-native/transactions.json", m6)
+# 7 recovery originalExpiry mismatch
+case("recovery-expiry", "recovery-live-20261009/run/paper-minimal-after_intent", "paper-minimal/recovery/result.json", lambda o: o.__setitem__("originalExpiry", "5"))

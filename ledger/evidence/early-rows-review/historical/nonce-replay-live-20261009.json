@@ -1,0 +1,58 @@
+{
+ "reviewer": "agent-1 (ledger scope, solo correlated)",
+ "rows": [
+  {
+   "row": "paper-minimal-nonce-replay",
+   "profile": "paper-minimal",
+   "kind": "nonce-replay",
+   "requestDigest": "0x4fbb2166c941886f378c72f1354bc0d43b65438d86b22b22f06c24625864d53a",
+   "grantTx": "0x5e56c9c5f66b437ec920316c782d1a7e45ec9f9499a3b3b8d82b4d78e5c2249f",
+   "grantId": "0x3a5789f61c929d99f4e0c5ba1eb623c95f222ed09ef055f9f1392693107eb9d9",
+   "grantExpiresAt": 1791521309,
+   "grantBlockTimestamp": 1791521279,
+   "outcomeTx": "0xa9b58de6520316c6db2adb808b63b4b279c8678bcaebf5baf728e8b9f246ee44",
+   "outcomePbcTimestamp": 1791521294,
+   "replayTx": "0x3c7b60822f721a6c3dbdf4a8049631388ad447747a5b7eddaef8f93765b00849",
+   "replayBlockTimestamp": 1791521286,
+   "rejectionCode": 8,
+   "firstFailingCheck": "KSSC.sol:180",
+   "failures": [],
+   "pass": true
+  },
+  {
+   "row": "paper-strict-nonce-replay",
+   "profile": "paper-strict",
+   "kind": "nonce-replay",
+   "requestDigest": "0xaaf4c28950a598d1b5526b421c42489c585a1609c907735bf7923f831eccc9ff",
+   "grantTx": "0x08818646f17178fc585c34726ec39aaa379479b2ea2122a1245934873c2786a5",
+   "grantId": "0x8011cd5d47d58c1b3e55608483f430173a400ed1b4b8fb7c683a5c6380e78f14",
+   "grantExpiresAt": 1791521191,
+   "grantBlockTimestamp": 1791521161,
+   "outcomeTx": "0xbf037ff0c1abc2ffb8f24fdebf966074f9b417babc5c3d06c39f8feafb5d984d",
+   "outcomePbcTimestamp": 1791521175,
+   "replayTx": "0x7447cbd8add4fd487215aeb03b559fd5b7ea164c91d63ae63467ab048aef3ee4",
+   "replayBlockTimestamp": 1791521168,
+   "rejectionCode": 8,
+   "firstFailingCheck": "KSSC.sol:180",
+   "failures": [],
+   "pass": true
+  },
+  {
+   "row": "repaired-e-nonce-replay",
+   "profile": "repaired-e",
+   "kind": "nonce-replay",
+   "decisionExpiresAt": 1791521422,
+   "requestExpiresAt": 1791521422,
+   "requestDigest": "0x58eeeda71b2d37e9fceafef7c4cc2ebf96e95a55e3c90c8620627015fdd23e9f",
+   "grantTx": "0x3b521f3d1e226056f2a21a459b30a8949ef4b1b658881abfc046dd30221d2767",
+   "grantId": "0xabc37f4fa6866acc0a598784459bd5230bafc40e1e60927b0794ffd1be3f71b2",
+   "grantExpiresAt": 1791521422,
+   "grantBlockTimestamp": 1791521408,
+   "failures": [
+    "exactly one successful outcome report for Alice's digest (got 0)",
+    "review error: IndexError: list index out of range"
+   ],
+   "pass": false
+  }
+ ]
+}

@@ -1,0 +1,38 @@
+agent 1 ledger-scope review tool for the 12 pre-solo catalog rows (crash-after-intent/send x6,
+duplicate-outcome x3, identical nonce replay x3), written for the gate E run (A1-0082 P4-1) and
+committed BEFORE the gate FREEZE S3-0021 and the gate run. Solo phase, correlated self-review (A1-0059).
+
+Tool: ledger/tools/review_early_rows_evidence.py (sha256 in tool.sha256; it imports the unchanged
+SL6 barrier tool 9edc3eb2.. and SL4 receipt tool 5fa5a7c9.., and through them the SL5/SL3/SL2 tools).
+Discovery: rglob of recovery/result.json, alice/duplicate-outcome/result.json and
+alice/nonce-replay/result.json under the given run directory (early layouts, unchanged).
+
+Baseline on the accepted historical evidence (2026-10-12 ~06:30 IST, repo HEAD ec426c6):
+
+  .venv/bin/python -I ledger/tools/review_early_rows_evidence.py evaluation/evidence/e2/<dir>/run > historical/<dir>.json
+
+  expiry-live-20261009          exit 0   6/6 crash rows (recovery + expired retry)
+  recovery-live-20261009        exit 0   6/6 crash rows (recovery only)
+  duplicate-live-20261009       exit 0   3/3 duplicate-outcome rows
+  grouped-replay-live-20261009  exit 0   3/3 identical nonce-replay rows (A3-0045, the accepted run)
+  nonce-replay-live-20261009    exit 1   paper 2/2 pass; repaired-e FAILS ("exactly one successful
+                                         outcome report for Alice's digest (got 0)"): this is the earlier,
+                                         superseded run whose repaired legitimate flow failed (its own
+                                         catalog-coverage says so). The tool correctly refuses it.
+
+Negative controls (negative-controls.py.txt; tampered copies in job tmp, never in the repo):
+each fails on exactly the intended check, exit 1.
+
+  replay rejection code 8 -> 7           "Rejected(REPLAY=8), no logs (got 7)"
+  expired-retry native-after altered     "expired retry: native-before = native-after"
+  expired-retry probe = expiry - 1       "probe DBC time >= grant expiry (expired at the instant, half-open)"
+  duplicate calldata one nibble changed  "duplicate: identical calldata, relay, after the original"
+  repaired consume time = r.expiresAt    "replayed DecisionVerifier passes at the consume block (got step9-expired)"
+  paper policyEnf block time + 1         "paper grant: block + 30 (ACSC.sol:154), recipient 0, no nonce"
+  recovery originalExpiry altered        "recovery: ok, originalExpiry = the native grant expiry"
+
+Scope: ledger-native facts only. Worker crash/restart/EXPIRED behaviour, A31 counts and release timing
+are protocol scope (agent 2 (proxy)). Paper crash rows keep their D47 label (frozen BLOCKED / decided
+SPEC_GAP, UNPROVED); the tool adjudicates no classification.
+
+Key scan (13 TEST-ONLY label keys + vector keys) over this directory and the tool: 0 hits.
