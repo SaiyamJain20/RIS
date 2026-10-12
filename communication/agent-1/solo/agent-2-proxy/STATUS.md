@@ -1,23 +1,32 @@
 # agent-2 (proxy-2) status
 
-- **State:** WAITING. S2-0005 and S2-0006 are committed (10a1212).
-  - S2-0007 is published: D-6 confirmation for `deviating_witness` in SL4, R11, SL2-SL7/P3 protocol needs, and the A31 disclosure.
-  - The RQ1 protocol/recovery draft is `rq1-protocol-sections.md` in this folder, for proxy-3 to merge.
-  - Next: the SL2 FREEZE ACK (protocol scope) when it is published.
-- **Role:** acting for absent agent 2 and owner of `protocol/**` (human directive via A1-0060).
+- **Updated:** 2026-10-12 IST, at HEAD ec426c6 (tree clean before this refresh).
+- **State:** P4 IN PROGRESS. S2-0001..S2-0020 are sent and committed. The RQ1 protocol sections are refreshed for P4 (A1-0082 P4-2).
+  - Next: the protocol-scope ACK **S2-0021** of the e_gate FREEZE **S3-0021**, when agent 1 says proxy-3 has published it. Self-check with `e1._verify_solo_ack_message(raw, agent='agent-2', plan=..., plan_sha256=...)`.
+  - After the gate run: re-check the gate output for the protocol facts in `rq1-protocol-sections.md`, check the merged RQ1-E.md against its must-not-claim list, then the P4-3 same-source ACK.
+- **Role:** acting for absent agent 2 and owner of `protocol/**` (human directive, A1-0059/A1-0060).
   - Mailbox: this directory. Message IDs: S2-NNNN.
-  - Ports: 19545-19599. Scratch: /home/saiyamjain/.claude/jobs/aed51961/tmp/p2/. Python: repo-root `.venv`.
-- **Interface:** v1 (FREEZE.json f700292e..; catalog 438fa38d..).
-- **Protocol manifest:** `protocol/evidence/source-manifest.sha256` 551e9f77.. (127 entries). The previous manifest was d16ddad8.. (108, pin 0716a8e). Production, testtools and exports are byte-identical to the pin.
-- **Sent:**
-  - S2-0001..S2-0003: P0 reviews, accepted in A1-0060.
-  - S2-0004: ACK of S3-0005, plan 6fd5809b...
-  - S2-0005: REVIEW of S3-0006 (SL1, 3/3). No discrepancy in protocol scope; two precision notes.
-  - S2-0006: READY for T1-T3.
-  - S2-0007: REVIEW for D-6, R11, SL2-SL7 and P3 needs, and A31 (caller-side, not enforced).
-- **Read:** A1-0060, A1-0062, S3-0005, S3-0006 and the SL1 evidence.
-- **Open items:**
-  - none in my queue;
-  - SL2 (forged tuple, new-reference replay, same nonce) will need a protocol-scope ACK when proxy-3 FREEZEs it. Per D-S1 the forged tuple uses a relay signature, so no H1.
+  - Ports: 19545-19599 (none in use; no services started). Scratch: /home/saiyamjain/.claude/jobs/aed51961/tmp/p2/. Python: repo-root `.venv` (3.13.5).
+- **Interface:** v1 (FREEZE.json f700292e..; catalog 438fa38d..), unchanged.
+- **Protocol pins:**
+  - E2 pin 0716a8e, manifest d16ddad8.. (108 entries; faulty_adapter f0ab2400..; deviating_witness 0511ba57..).
+  - Working manifest `protocol/evidence/source-manifest.sha256` 551e9f77.. (127 entries); `sha256sum -c` exit 0 on 2026-10-12.
+  - `hmbc_protocol/**`, `testtools/**`, `exports/**` and `abi/**` are byte-identical across the pin and HEAD.
+- **Catalog:** 56/56 actual. Every SL1-SL7 slice has my protocol-scope ACK and REVIEW, with no discrepancy:
+
+  | Slice | ACK | REVIEW | Review evidence |
+  |---|---|---|---|
+  | SL1 subject | S2-0004 | S2-0005 | `protocol/evidence/reviews/s2-0005-sl1/` |
+  | SL2 relay (r2) | S2-0008 (r1, my lazy-worker miss), S2-0009 | S2-0010 | `…/s2-0010-sl2-r2/` |
+  | SL3 audit | S2-0011 | S2-0012 | `…/s2-0012-sl3/` |
+  | SL4 receipts | S2-0013 | S2-0014 | `…/s2-0014-sl4/` |
+  | SL5 trust | S2-0015 | S2-0016 | `…/s2-0016-sl5/` |
+  | SL6 barrier | S2-0017 | S2-0018 | `…/s2-0018-sl6/` |
+  | SL7 destination | S2-0019 | S2-0020 | `…/s2-0020-sl7/` |
+
+- **Other sent:** S2-0001..S2-0003 (P0 reviews), S2-0006 (READY T1-T3), S2-0007 (D-6, A31; accepted in A1-0064).
+- **Read:** A1-0060..A1-0082, S3-0001..S3-0020. Binding: A1-0080 (criterion 4 scoped; live mutant matrix NOT RUN), A1-0081 (window from owner evidence; integrated window NOT RUN; P3 closed), A1-0082 (P4 plan).
+- **Open items:** S2-0021 (waiting for S3-0021); the P4-3 ACK. No protocol code change is pending or planned.
+- **Safety-classifier rule:** if a response is stopped, stop that item, leave things consistent, report it, no retry. The mutant matrix and the integrated window stay closed.
 - **Correlated review:** every proxy-2 review and ACK is the same model as agent 1. Agent 2 can overturn it on return.
 - **F/G:** locked.
