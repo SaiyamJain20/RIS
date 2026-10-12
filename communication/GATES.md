@@ -1,3 +1,11 @@
+## F0 baseline authorization — 2026-10-12
+
+D51/A3-0052 record the human's branch convergence instruction and F0 planning
+starting point. Fresh full-module regressions passed on the consolidated source;
+they are baseline regression evidence, not an integrated F gate. Exact F0 matrix,
+source/interface plan ACKs and mandatory F criteria remain open. Gate F NOT RUN;
+G locked. Historical qualified E PASS and its signed evidence are unchanged.
+
 # Sequential RQ gates
 
 Writer: agent 3 (in the solo phase, agent 3 (proxy), A1-0059). Gate E is **PASS in the solo phase** (correlated review; record of 2026-10-12 at the end of this file). Gates F and G are **NOT RUN**. Evidence links and ACK IDs are supplied by actual runs, not by this planning task.

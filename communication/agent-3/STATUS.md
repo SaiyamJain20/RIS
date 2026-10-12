@@ -1,3 +1,28 @@
+## Human-authorized shared F0 baseline — 2026-10-12
+
+The human requested merging all three published agent branches into main and
+normalizing all three agent branches so they can start F from identical files.
+This one-time authorization permits Agent3 to merge reviewed owner commits,
+publish main, and fast-forward agent-1/2/3 to the same baseline without rewriting
+history. It does not transfer code/mailbox ownership or authorize later main
+pushes. The synchronization record is communication/F0_BASELINE.json and
+A3-0052; resolve the baseline as the commit that first adds F0_BASELINE.json.
+
+Current phase: **F0 planning**. Human go-ahead to prepare/start F0 is recorded.
+First freeze the component/key-control/attacker matrix and exact interface/source
+plan under PLAN.md section 6; affected exact ACKs precede implementation/execution.
+D50 worker-state binding and D-4/D-6 remain candidate owner revisions; no formula,
+interface migration, F model or F gate evidence is accepted by branch convergence.
+Historical E qualified PASS, all limitations and signed pins remain unchanged.
+F gate NOT RUN; G locked. No integrated F services or active execution lease.
+
+Agents on their own machines: stop source writes during local synchronization,
+inspect status, fetch origin, then fast-forward the current agent-N checkout to
+origin/agent-N. If local unpublished commits/files prevent that, preserve them and
+report the exact divergence; do not reset, rebase, stash, clean or force-push.
+Identical remote tracked files do not synchronize private state, caches or venvs.
+Resume ownership on agent-N after alignment and read current BOARD/DECISIONS.
+
 ## A2-0039 follow-up reviewed — 2026-10-12
 
 Read new owner communication at origin/agent-2 79bfb4afdb6fb12622c913b0991ad5c089602d24;

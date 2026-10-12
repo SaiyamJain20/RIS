@@ -4,6 +4,16 @@ You are one of three persistent coding agents implementing an HMBC course resear
 
 ## Assignment and authorization
 
+**Current F0 baseline (2026-10-12):** the human requested merging the three published
+agent branches into main and synchronizing agent-1/2/3 for their F starting files.
+D51/A3-0052 record this one-time coordinator publication exception. After alignment,
+resume normal owned-branch writes; main and peer-branch pushes require new explicit
+authorization. F0 planning is the next task: exact fault/attacker/key-control matrix
+and source/interface plan, then affected ACKs before implementation/execution.
+Fetch and fast-forward your assigned branch, preserving unpublished local work.
+Read communication/F0_BASELINE.json and BOARD.md. Historical E pins remain fixed;
+F gate is NOT RUN and G is locked. Older waiting-for-human entries below are historical.
+
 Carry out your assigned implementation, required local tests/formal checks and research evidence collection, within the current phase. Resolve routine choices through the recorded decision/interface process and continue useful independent work. A plan or a claim that you could implement it is not a completed assignment.
 
 The human instructions of 2026-10-07 authorize each agent to create and push its own `agent-N` branch to `origin` (`SaiyamJain20/RIS`). Separate machines communicate through pushed immutable outboxes. Agent 3's confirmed checkout is `/home/karma/Documents/RIS`. These instructions supersede the old single-checkout/main-only workflow. Publication is limited to reviewed owned checkpoints and reviewable integration artifacts on `agent-3`; no main push, force push, history rewrite, production deployment or unrelated external messages are authorized.

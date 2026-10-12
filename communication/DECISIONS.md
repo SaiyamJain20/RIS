@@ -457,3 +457,32 @@ labels and D-6 strict JSON backlog stay for a later exact owner revision. Durabl
 single-signing and deterministic certificate expiry remain F planning requirements.
 F0 needs its separate plan/human go-ahead; G remains locked. No paper vulnerability,
 new gate PASS, independent review or replacement historical ACK is claimed.
+
+## D51 — Human-authorized main merge and common F0 starting branches, 2026-10-12
+
+The human explicitly directed: "merge work from all 3 agents' branches into main,
+and then normalise their individual branches as well so that all 3 can start F
+having the same initial files". This authorizes this one consolidation into main
+and normal fast-forward publication of the same commit to agent-1/2/3. It does
+not transfer module/mailbox ownership, rewrite history, or authorize subsequent
+main/peer-branch pushes. Existing local unpublished work on peer machines stays
+under its owner; remote convergence does not prove those checkouts were updated.
+
+Reviewed incoming commits and fresh verification are in communication/F0_BASELINE.json
+and evaluation/evidence/reviews/f0-baseline-20261012/. Agent1 was already an
+ancestor of Agent3; Agent2 is merged with three conflicts resolved to exact
+owner-authored README/manifest/mutation-checker bytes (A2-0039 recommendation).
+All protocol files remain exact owner blobs, signed E bytes and frozen v1 unchanged.
+The stronger worker binding from D50 and later D-4/D-6 remain candidate revisions.
+
+The common files are the starting point for **F0 planning**. Human go-ahead to
+prepare/start F0 is now recorded, superseding older waiting-for-go-ahead prose.
+PLAN section 6 controls the next tasks: component/attacker/key-control matrix,
+n=4/q=3/f=1 assumptions and expected safety/availability classifications, then
+exact affected source/interface ACKs before F implementation/experiments. No
+F implementation, TLC result, integrated F evidence, new source execution ACK or
+F gate PASS is created by Git synchronization. G remains locked.
+
+Local synchronization: inspect/preserve uncommitted work; git fetch origin and
+git merge --ff-only origin/agent-N on the assigned branch. A divergence or refusal
+is a blocker to report, not permission to reset/rebase/stash/clean/force-push.

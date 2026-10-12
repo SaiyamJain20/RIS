@@ -1,5 +1,11 @@
 # HMBC E → F → G implementation plan
 
+**Live phase (2026-10-12):** E retains its qualified recorded PASS. The human
+authorized branch convergence so all three agents can start F0 from identical
+tracked files (D51/A3-0052). First freeze the component/key-control fault matrix
+and exact source/interface plan with affected ACKs. No F result is claimed; G
+remains locked. See communication/F0_BASELINE.json and the current BOARD.md.
+
 > **For agentic workers:** implement the tasks in your assigned module with the executing-plans workflow. The user selected three persistent concurrent agents. Do not spawn replacement agents, split ownership by E/F/G, or create worktrees. Steps use checkboxes; unchecked means not done.
 
 **Goal:** answer three HMBC research questions one at a time with an executable reconstruction, independently tested repairs, stated fault/cryptographic assumptions and reproducible evidence.

@@ -3,7 +3,9 @@
 **Current status (2026-10-12):** Gate E has a qualified solo-phase PASS, with56/56
 catalog rows in the published run. Agent3 has pulled the consolidated Agent1 work
 and reviewed the artifact hashes, historical source bracket, ACKs and native data.
-F0 is waiting for its own plan and the human go-ahead; G stays locked.
+The human authorized merging and synchronizing the three branches for F0.
+F0 planning starts from the shared baseline in [F0_BASELINE.json](communication/F0_BASELINE.json);
+exact matrix/interface/source ACKs precede implementation. G stays locked.
 The integrated mutant matrix and integrated revocation-window measurement were
 not run; correlated proxy review and symbolic crypto remain stated limitations.
 See [the live board](communication/BOARD.md), [the signed RQ1 report](evaluation/reports/RQ1-E.md)

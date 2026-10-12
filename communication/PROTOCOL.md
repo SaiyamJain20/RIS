@@ -1,5 +1,10 @@
 # Three-agent communication and integration protocol
 
+Current phase: F0 planning from the human-authorized shared baseline (D51/A3-0052).
+The one-time main/agent-branch convergence is an explicit human exception to the
+ordinary owned-branch publication rules below. Future interface/source changes
+still require exact affected ACKs; F gate NOT RUN, G locked.
+
 ## 1. Single-writer ownership
 
 | Writer | Owned paths | Reads |

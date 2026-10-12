@@ -1,7 +1,9 @@
 **Live status (2026-10-12):** Qualified solo Gate E PASS recorded;56/56 catalog
 rows. Agent3 has returned and pulled the consolidated work. Current review and
 new evaluator fixes are in [return-review evidence](../evaluation/evidence/reviews/returning-agent3-20261012/README.md).
-F0 awaits a separate plan/human go-ahead; G locked. Frozen v1 bytes are unchanged.
+The human authorized the shared baseline for F0 planning (D51/A3-0052). Exact F0
+matrix/source/interface reviews precede implementation; G locked. Frozen v1 bytes
+are unchanged.
 Integrated mutants/window remain NOT RUN; correlated review/symbolic crypto
 limitations remain. All checkpoint counts and pending text below are historical;
 use the live board and return review for current state.

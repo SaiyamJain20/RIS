@@ -1,5 +1,11 @@
 # HMBC E/F/G research specification
 
+**Live phase (2026-10-12):** E retains its qualified recorded PASS. The human
+authorized branch convergence so all three agents can start F0 from identical
+tracked files (D51/A3-0052). First freeze the component/key-control fault matrix
+and exact source/interface plan with affected ACKs. No F result is claimed; G
+remains locked. See communication/F0_BASELINE.json and the current BOARD.md.
+
 Status: executable research design proposed on 2026-10-06. The user selected E/F/G, HMBC-only scope, three concurrent agents, sequential RQ completion and separate agent branches. The implementation choices below are explicit project choices; they are not attributed to HMBC or presented as completed results.
 
 ## 1. Research questions and order
