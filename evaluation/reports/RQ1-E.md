@@ -1,11 +1,13 @@
 # RQ1 / E: authorization, trust-anchor freshness and audit correspondence in a paper-derived HMBC2020 reconstruction
 
-> **Status: P4-2 report (A1-0082), written by agent 3 (proxy).** The gate cells of §6, the gate summary (§5)
+> **Status: P4-2 report (A1-0082), written by agent 3 (proxy), final text for the P4-3 gate RESULT S3-0023.**
+> The gate cells of §6, the gate summary (§5)
 > and the ProVerif re-run block (§11) were filled by `fill_gate.py` (`evaluation/reports/fill_gate.py.txt`)
 > from the finished gate run `E-gate-20261012` (FREEZE S3-0021, plan `c0086019..`), which agent 1 launched on
-> agent 3 (proxy)'s FREEZE. **Gate E is not yet adjudicated:** that needs the gate RESULT and the three
-> same-source ACKs (A1-0082 P4-3/P4-4). F and G stay locked. Historical slice runs are cited next to each row
-> as history.
+> agent 3 (proxy)'s FREEZE. The post-run reviews A1-0084 (ledger) and S2-0022 (protocol) found no discrepancy
+> (§18). **Gate E is not yet adjudicated:** that needs the three same-source ACKs on the gate RESULT S3-0023
+> (A1-0085, S2-0023 and agent 3 (proxy)'s sign-off S3-0024) and the GATES.md record (A1-0082 P4-3/P4-4).
+> F and G stay locked. Historical slice runs are cited next to each row as history.
 
 <!-- GATE-STATUS:BEGIN -->
 > **Gate run:** `E-gate-20261012` finished with manifest status **PASS**: 56/56 rows PASS, ProVerif matched, 7 criteria VERIFIED and 2 PENDING by design (RQ1-report, three-matching-acks). Evidence: `evaluation/evidence/e3/gate-run-20261012/`. Run status is not gate E PASS: gate E is adjudicated by the GATES.md checklist and the three same-source ACKs (A1-0082 P4-3/P4-4).
@@ -282,6 +284,7 @@ native records; same units and limits):
 | Identical replay, repaired-e | grant 1791769486; replay 1791769487 and release 1791769489, 25 s and 23 s before `r.expiresAt` 1791769512 |
 | Crash recovery, repaired-e | last send 23 s before the original expiry (1791769054 after intent, 1791769124 after send); the expired cached retry was observed at expiry + 1 and returned EXPIRED |
 | Paper rows | recovery and identical replay: 27-29 s before the paper grant expiry (block + 30); SL6 expired duty granted at DBC time = duty end (8 s and 7 s before the request expiry); SL7 expiry boundary granted at exactly `r.expiresAt` |
+| Every decision of the run (repaired-e rows: 66 = 48 D1 + 18 stress) | `d.expiresAt` = `request.expiresAt` < `checkpoint.expiresAt` in all 66. The checkpoint lower bound (cp − 60, the witness's DBC time at creation; witness.py:65) plus 30 exceeds the request expiry by 1-21 s (minimum 1 s), so the request term bound every decision, shown without the witness's private clock (agent 2 (proxy)'s post-run re-check S2-0022, item G) |
 
 A1-0082 flagged the SL7 and SL6 margins as the thin ones for the gate run; both held, with the values above.
 Every oracle refuses an overrun rather than passing it, so a miss is a visible failed trial, never a silent
@@ -589,8 +592,22 @@ The gate run re-ran these recipes. Its runner recorded **180** verified never-in
 same count as SL2-SL7), 689 owner command records (the 180 probes, which exit 1 by design, and 509 with exit 0)
 and 51823 RPC calls, all exit 0 (`evaluation/evidence/e3/gate-run-20261012/live-result-audit.json`). The gate publication was scanned in
 full for 18 TEST-ONLY label keys (a superset of agent 1's 13), the 3 frozen-vector keys (all equal to label
-keys) and the 61 release tokens of the run: 0 hits (`evaluation/evidence/e3/gate-run-20261012/never-publish-scan.json`). Agent 2 (proxy) will re-check the protocol facts and the
-never-publish selection on the gate output before its P4-3 ACK (S2-0021).
+keys) and the 61 release tokens of the run: 0 hits (`evaluation/evidence/e3/gate-run-20261012/never-publish-scan.json`).
+
+Agent 2 (proxy)'s post-run re-check **S2-0022** (the check promised in S2-0021; script and output in
+`protocol/evidence/reviews/s2-0022-gate-run/`, `problems: []`) found **no discrepancy in protocol scope** on the
+published copy:
+
+- its seven slice review scripts pass unchanged on the gate rows;
+- D1 and every stress adapter is the production adapter, except D1 in the 6 recovery rows, which is the crash
+  hook (exit 86, then a production restart with one release per row);
+- A31: **18** stress decisions, equal per slice to the slice reviews above, plus 48 D1 decisions; no request
+  digest was decided twice;
+- D49: **180** verified never-instantiated probes, equal per slice;
+- all 152 prepared requests appear verbatim in exactly one relay `requestAccess` on their own PBC;
+- its own never-publish scan (TEST-ONLY keys of 19 labels, a superset of the 18 above, and token-digest
+  preimages over 18609 distinct 32-byte hex strings) found 0 hits. S2-0022 did not repeat the raw-token
+  substring scan.
 
 ## 7. E01: decision provenance and replay
 
@@ -1198,6 +1215,7 @@ and would serve `mutant-*` deployments (static reading); no integrated run ever 
 | Owner mutant suite re-run, criterion 4 basis [A1-L6] | `ledger/evidence/p3-mutant-suite-rerun/` (byte-identical to the pinned `ae2-mutants.*`; A1-0080) |
 | Early-rows review tool, 12 pre-solo rows [A1-L6] | `ledger/evidence/early-rows-review/` (committed in 9682e54, before the gate FREEZE) |
 | Gate run, independent ledger review [A1-L6] | 8 pre-registered tools (A1-0083): 56/56 rows pass on the raw output; the published-copy review is A1-0084 |
+| Gate run post-run reviews and gate RESULT | A1-0084 (ledger; tool outputs `ledger/evidence/gate-e-review/`); S2-0022 (protocol; `protocol/evidence/reviews/s2-0022-gate-run/`); gate RESULT S3-0023 (§18.3) |
 | Owner rehearsal of 56 rows [A1-L6] | `ledger/evidence/e2-full-rehearsal/` (dropped-outcome rows without RELEASE: A1-0060 R2 correction) |
 | Revocation window (owner) | `ledger/evidence/revocation-window/` (A1-0046) |
 | SL1-SL7 independent ledger reviews [A1-L6] | `ledger/evidence/sl{1-subject,2-relay,3-audit,4-receipt,5-trust,6-barrier,7-destination}-review/`; A1-0063, A1-0067, A1-0069, A1-0071, A1-0073, A1-0075, A1-0077 (SL6/SL7 tools committed before their runs) |
@@ -1211,9 +1229,9 @@ and would serve `mutant-*` deployments (static reading); no integrated run ever 
 
 ### 18.1 Agent 1's independent ledger review of the gate run (pre-registered in A1-0083)
 
-Agent 1 committed eight review tools **before** the run and runs them on the gate output: first on the raw
-output in job tmp (done), then on the published copy (A1-0084). Any tool failure is reported as a discrepancy,
-not fixed silently (A1-0083).
+Agent 1 committed eight review tools **before** the run and ran them on the gate output: first on the raw
+output in job tmp, then on the published copy (A1-0084). Any tool failure is reported as a discrepancy, not
+fixed silently (A1-0083).
 
 | Tool | sha256 | Rows |
 |---|---|---|
@@ -1229,6 +1247,21 @@ not fixed silently (A1-0083).
 **Results:** agent 1's eight pre-registered ledger review tools (A1-0083) pass 56/56 rows on the raw gate
 output; the published-copy review is A1-0084.
 
+**A1-0084** (`communication/agent-1/outbox/0084-review-e-gate-run-result.md`, sha256 580d9a12..; tool outputs
+`ledger/evidence/gate-e-review/`). Verdict: **no discrepancy in the ledger-native evidence of the 56 gate
+rows.**
+
+- The eight tools, unchanged, pass 56/56 rows on the raw output and again on the published copy, with
+  byte-identical JSON outputs. Every value is re-derived from the native records with the ledger ABIs.
+- All 2092 published catalog files and the 7 top-level run files are byte-identical to the raw output, and
+  agent 1's key scan (13 label keys plus the vector keys) found 0 hits.
+- RQ1-E.md's ledger claims match agent 1's sections. This was a targeted check, not a line-by-line read: all
+  21 distinct ledger `file:line` citations resolve at 933d2a7, criterion 4 has the A1-0080 wording, the window
+  text is A1-0081's, the D47 labels are present, the Appendix A points are stated, and the must-not-claims
+  appear only as negations.
+- Not covered by A1-0084: the release-token scan, adapter and worker internals, and runner and oracle
+  internals. It is correlated review, not a gate E decision.
+
 Before publication, agent 3 (proxy) ran the same unchanged tools read-only on the published copy as a layout
 check: each exited 0, 56 rows in total, and every output was byte-identical to the run on the raw output
 (`evaluation/evidence/e3/gate-run-20261012/publication-check.json`). That check is not agent 1's review.
@@ -1243,13 +1276,41 @@ check: each exited 0, 56 rows in total, and every output was byte-identical to t
 - Gate FREEZE ACK S2-0021: same adapter, crash-hook, deviating-witness and B usage as the slices; timing risk
   stated; a post-run re-check of the protocol facts and the never-publish selection is promised before the
   P4-3 ACK.
+- Post-run re-check **S2-0022** (`communication/agent-1/solo/agent-2-proxy/outbox/0022-review-e-gate-run-result.md`,
+  sha256 f5a761cb..; script and output `protocol/evidence/reviews/s2-0022-gate-run/`, `problems: []`).
+  Verdict: **no discrepancy in protocol scope across all 56 gate rows, and no objection to RQ1-E.md's
+  protocol claims.** It found:
+  - A31: 18 stress decisions, equal per slice to the slice reviews;
+  - D49: 180 verified never-instantiated probes;
+  - the crash hook in all 6 recovery rows, with a single release per row;
+  - 66 decisions, all bound by the request expiry (§3.4);
+  - all 152 prepared requests verbatim in the mined calldata;
+  - 0 never-publish hits;
+  - §3.2, the §6.1 tables and the §9.4 crash-count table verbatim;
+  - the §3.4 SL7 rewording accepted.
+  It did not read the private worker databases or repeat the raw-token substring scan (§6.1).
 
 ### 18.3 Same-source ACKs (A1-0082 P4-3)
 
-**Status:** pending: the gate RESULT naming manifest, gate-evidence and RQ1-E.md hashes, then the three
-same-source ACKs (A1-0082 P4-3): agent 1 (ledger claims and every row), agent 2 (proxy) (protocol and key
-claims) and agent 3 (proxy) (evidence and model), each naming the same gate `manifest.json` sha256,
-`gate-evidence.json` sha256, RQ1-E.md sha256 and HEAD, and each repeating the correlated-review disclosure.
+**Status: pending.** The gate RESULT is **S3-0023**
+(`communication/agent-1/solo/agent-3-proxy/outbox/0023-gate-result-e.md`). It names one manifest:
+
+- the gate `manifest.json` and `gate-evidence.json` sha256;
+- the sha256 of this report;
+- the plan (c0086019..);
+- the run HEAD 21b37fb and the evidence commit c2c81d5.
+
+This report and S3-0023 are committed together in one agent-1 commit.
+
+The three same-source ACKs follow S3-0023. Each names the same hashes and that commit, and each repeats the
+correlated-review disclosure:
+
+- **A1-0085**: agent 1, the ledger claims and every row;
+- **S2-0023**: agent 2 (proxy), the protocol and key claims;
+- **S3-0024**: agent 3 (proxy), sign-off of the evidence and model.
+
+This report cannot carry its own hash or those ACKs. The final ACK record and the gate E decision live in
+`communication/GATES.md` (A1-0082 P4-4).
 
 ## Appendix A. Points stated by agent 1's ACKs and reviews (A1-0062..A1-0077)
 

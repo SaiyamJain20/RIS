@@ -1,14 +1,14 @@
 # agent 3 (proxy): status
 
-State: **gate run finished and published; RQ1-E.md published (S3-0022).** The one-command gate run under
-FREEZE S3-0021 (launched by agent 1) exited 0: manifest PASS, 56/56 rows, ProVerif matched, 7 criteria
-VERIFIED + 2 PENDING by design. **That is not gate E PASS.** Waiting for agent 1's commit of the S3-0022
-paths and the published-copy review (A1-0084), and agent 2 (proxy)'s post-run protocol re-check; then the
-P4-3 gate RESULT. **No services are running.**
+State: **P4-3 gate RESULT published (S3-0023); RQ1-E.md final (69dabfba..).** Both post-run reviews found no
+discrepancy: A1-0084 (ledger) and S2-0022 (protocol). The RESULT names one manifest: `manifest.json` 908fd615..,
+`gate-evidence.json` 47e38dd3.., RQ1-E.md 69dabfba.., plan c0086019.., run HEAD 21b37fb and evidence commit
+c2c81d5. **Gate E is not adjudicated:** it waits for agent 1's commit of S3-0023 with RQ1-E.md, then A1-0085,
+S2-0023, my sign-off S3-0024, and the GATES.md and BOARD record (A1-0082 P4-4). **No services are running.**
 
 | Field | Value |
 |---|---|
-| RQ | E (gate E not adjudicated: P4-3/P4-4 pending; F and G locked) |
+| RQ | E (gate E not adjudicated: P4-3 RESULT S3-0023 sent; three ACKs and P4-4 pending; F and G locked) |
 | Interface | v1 (FREEZE f700292e..), unchanged |
 | Mode | solo, correlated self-review (A1-0059) |
 | Updated | 2026-10-12 IST |
@@ -31,7 +31,7 @@ No Git writes.
 - barrier and expired duty ×9;
 - wrong destination and expiry boundary ×6.
 
-**0 remain.** P3 is closed (A1-0080, A1-0081). The gate run (S3-0021) reproduced all 56 rows (S3-0022). Gate E still needs the P4-3 gate RESULT and the three same-source ACKs.
+**0 remain.** P3 is closed (A1-0080, A1-0081). The gate run (S3-0021) reproduced all 56 rows (S3-0022). The P4-3 gate RESULT is S3-0023. Gate E still needs the three same-source ACKs (A1-0085, S2-0023, S3-0024) and the GATES.md record.
 
 ## Sent
 
@@ -57,19 +57,32 @@ No Git writes.
 | S3-0020 | SL7 INTEGRATION_RESULT: 6/6 PASS, 602.24 s; catalog 56/56; A1-0076 points 1-5; firingStep 1 (wrong destination) / 9 (boundary) |
 | S3-0021 | P4-1 gate run FREEZE: `evaluation/e_gate.py`, plan c0086019.. (10 embedded slice plans, 56 rows, ProVerif, brackets, manifest, gate evidence; stages 4/5 dropped by A1-0080/A1-0081); test-first (RED 48, then GREEN 48 and the full suite at 1644 passed, 574 s); A1-0082 P4-1 points 1-8 met |
 | S3-0022 | Gate run INTEGRATION_RESULT: exit 0, manifest PASS, 56/56, 4749.50 s (launched by agent 1); evidence `evaluation/evidence/e3/gate-run-20261012/` (2126 files, 27.4 MB; never-publish scan 0 hits); RQ1-E.md published (`fill_gate.py` exit 0); not gate E PASS |
+| S3-0023 | P4-3 gate RESULT: one manifest (manifest.json 908fd615.., gate-evidence.json 47e38dd3.., RQ1-E.md 69dabfba.., plan c0086019.., run HEAD 21b37fb, evidence commit c2c81d5); 7 criteria VERIFIED (4 human-scoped, A1-0080), RQ1-report satisfied by RQ1-E.md subject to the ACKs, three-matching-acks pending; proposed decision exactly as A1-0082 P4-4; RQ1-E.md 0ec51e8e.. to 69dabfba.. (review and ACK record only, no result changed) |
 
 ## Read
 
 - A1-0059..A1-0083 and agent 1's SL6/SL7 pre-FREEZE conditions (2026-10-11);
 - S2-0001..S2-0021; agent 1's early-rows review tool (9682e54); `rq1-ledger-sections.md` at 1db7246.
+- A1-0084 (580d9a12..; ledger review of the gate run, no discrepancy) and S2-0022 (f5a761cb..; protocol review, no discrepancy).
 
 ## Next
 
-1. Agent 1 commits the S3-0022 paths (`git add -f` for the evidence `run.log`, matched by `.gitignore` `*.log`)
-   and sends A1-0084 (8 tools on the published copy); agent 2 (proxy) re-checks protocol facts and the
-   never-publish selection (S2-0021 promise).
-2. Then publish the P4-3 gate RESULT naming `manifest.json` 908fd615.., `gate-evidence.json` 47e38dd3..,
-   the RQ1-E.md sha256 (0ec51e8e.. unless a review changes it) and the commit HEAD; then the three ACKs.
+1. Agent 1 commits RQ1-E.md (69dabfba..), S3-0023 and this STATUS.md and HANDOFF.md together in one commit.
+   That commit is the HEAD of record for the ACKs.
+2. Agent 1 sends A1-0085 (ledger claims and every row), and agent 2 (proxy) sends S2-0023 (protocol and key
+   claims). Both name the S3-0023 manifest and that commit.
+3. Then S3-0024: my evidence and model sign-off on the same values, and the GATES.md and BOARD drafts under
+   A1-0082 P4-4. If the three ACKs match: "gate E PASS: solo phase, correlated review, criterion 4 human-scoped
+   (A1-0080), window cited from owner evidence (A1-0081), integrated mutants and window not run", and BOARD
+   moves to F0, with F not started. Otherwise gate E is recorded as FAIL or BLOCKED, with the reasons.
+
+## P4-3 never-publish scans (2026-10-12)
+
+- Scan 1 (`select_gate.py scan`, dcca1e2b..): the 2126 evidence files plus RQ1-E.md (69dabfba..) and
+  `fill_gate.py.txt`, 2128 files in total. 18 label keys, 3 vector keys, 61 tokens: **0 hits**, exit 0. Output
+  `tmp/p3/p4/result/scan-rq1.json` (job tmp).
+- Scan 2: the same, plus S3-0023, STATUS.md and HANDOFF.md, 2131 files in total: **0 hits**, exit 0. Output
+  `tmp/p3/p4/result/scan-2.json`. A final re-scan of these bytes after this line was written is `scan-3.json`.
 
 ## Historical: P3-mutants FREEZE (then numbered S3-0021) NOT drafted; stopped (2026-10-12 ~00:55 IST)
 

@@ -3,7 +3,7 @@
 Paper-derived HMBC2020 reconstruction. Synthetic only.
 
 Phase: E / RQ1, solo mode (A1-0059, `../PLAN.md`, `../PROTOCOL.md`, rulings A1-0061). Gate E not adjudicated
-(gate run passed its run stages; P4-3/P4-4 pending). F and G locked. All proxy reviews and ACKs are correlated self-review (same model as agent 1).
+(gate run passed its run stages; P4-3 gate RESULT S3-0023 sent; the three ACKs and P4-4 pending). F and G locked. All proxy reviews and ACKs are correlated self-review (same model as agent 1).
 
 ## Current state (2026-10-12 IST)
 
@@ -20,16 +20,19 @@ Phase: E / RQ1, solo mode (A1-0059, `../PLAN.md`, `../PROTOCOL.md`, rulings A1-0
 | SL7 wrong destination and expiry boundary ×6 | **actual PASS 6/6** | FREEZE S3-0019, plan d4fa294e..; result S3-0020; `evaluation/evidence/e2/sl7-destination-live-20261011/` |
 | P3 | closed: ProVerif re-run done (`p3-proverif-20261012/`); mutants and window NOT RUN (A1-0080, A1-0081) | A1-0080..A1-0082 |
 | P4-1 one-command gate run | **run stages PASS: exit 0, 56/56, 4749.50 s** (launched by agent 1 on FREEZE S3-0021); not gate E PASS | plan c0086019..; result S3-0022; `evaluation/evidence/e3/gate-run-20261012/` |
-| P4-2 RQ1-E.md | **published** (`fill_gate.py` exit 0, 0 problems) | `evaluation/reports/RQ1-E.md`; `evaluation/reports/fill_gate.py.txt` |
-| P4-3 gate RESULT and ACKs | pending (after A1-0084 and agent 2 (proxy)'s re-check) | – |
+| P4-2 RQ1-E.md | **final** at 69dabfba.. (`fill_gate.py` exit 0, 0 problems; review and ACK record added after A1-0084/S2-0022, no result changed) | `evaluation/reports/RQ1-E.md`; `evaluation/reports/fill_gate.py.txt` |
+| Post-run reviews | A1-0084 (ledger) and S2-0022 (protocol): no discrepancy | `ledger/evidence/gate-e-review/`; `protocol/evidence/reviews/s2-0022-gate-run/` |
+| P4-3 gate RESULT | **sent**: S3-0023, one manifest | `outbox/0023-gate-result-e.md` |
+| P4-3 ACKs, P4-4 | pending: A1-0085, S2-0023, S3-0024; then GATES.md and BOARD | – |
 
 - FREEZE S3-0019 is released. No services are running.
 - Decisions D47 (paper crash relabel) and D48 (SL0 choices) are in `communication/DECISIONS.md`.
 
 **Catalog progress: 56/56 actual. The catalog comparisons are complete.**
 
-No catalog slice remains. P3 is closed. The gate run and RQ1-E.md are done (S3-0022). Next: agent 1's commit and
-A1-0084, agent 2 (proxy)'s re-check, then the P4-3 gate RESULT and the three ACKs.
+No catalog slice remains. P3 is closed. The gate run and RQ1-E.md are done (S3-0022), both post-run reviews are in
+(A1-0084, S2-0022), and the P4-3 gate RESULT is S3-0023. Next: agent 1 commits S3-0023 with RQ1-E.md; then
+A1-0085 and S2-0023; then my sign-off S3-0024 and the GATES.md and BOARD record (A1-0082 P4-4).
 
 ## Runner facts (after SL0 and SL1)
 
@@ -151,5 +154,30 @@ toolchain and host-tools. Keep helper scripts out of `evaluation/` as `.py` file
   - `fill_gate.py` refuses an existing `--out`, so delete before re-filling.
 - **Commit note:** `evaluation/evidence/e3/gate-run-20261012/run.log` matches `.gitignore` `*.log`, so it
   needs `git add -f`.
-- **P4-3 RESULT:** must name `manifest.json` 908fd615.., `gate-evidence.json` 47e38dd3.., the RQ1-E.md sha256
-  at commit, and HEAD.
+- **P4-3 RESULT:** sent as S3-0023 (see below).
+
+## P4-3 gate RESULT facts (S3-0023, 2026-10-12)
+
+- **One manifest:**
+  - `manifest.json` 908fd6156ac5c6c4f640686fbddade3f9720cf29fb1e579f7c3d01f0909205a2;
+  - `gate-evidence.json` 47e38dd369ce686d5298f909c43c79cdf4b7eff4d20d41988a57f80974538500;
+  - RQ1-E.md 69dabfbab9d9deeb0d94b448da6bf9b9674ce25c7c94e1b101f67c4804c89b8f (1338 lines);
+  - plan c0086019..;
+  - run HEAD 21b37fb and evidence commit c2c81d5.
+  S3-0023, RQ1-E.md and my STATUS.md and HANDOFF.md go into one agent-1 commit, and the ACKs name that commit.
+- **RQ1-E.md 0ec51e8e.. → 69dabfba..:** edited directly in the repository. `fill_gate.py` was not re-run, so the
+  filled cells are unchanged. The changes are: the top status block, one §3.4 row (66 request-bound decisions,
+  S2-0022 G), the S2-0022 result in §6.1, one §17 row, A1-0084 in §18.1, S2-0022 in §18.2, and the §18.3 status.
+  **Do not edit RQ1-E.md again before the ACKs:** any change alters the sha256 that S3-0023 and the ACKs name, and
+  would need a new RESULT.
+- **Criteria:**
+  - 1-6 and 8 VERIFIED in `gate-evidence.json`; criterion 4 is human-scoped (A1-0080 wording);
+  - 7 (RQ1-report) is satisfied by RQ1-E.md 69dabfba.., subject to the ACKs;
+  - 9 is pending: A1-0085, S2-0023, S3-0024.
+  `gate-evidence.json` is never edited: criteria 7 and 9 are adjudicated in GATES.md. `gate.py` stays fail-closed.
+- **S3-0024 (next, after A1-0085 and S2-0023):**
+  - check that both ACKs name the same three sha256 and the S3-0023 commit;
+  - sign off evidence and model, with the correlated-review disclosure and the self-sign-off caveat;
+  - then draft the GATES.md entry and the BOARD move to F0 with A1-0082 P4-4's exact wording, or FAIL/BLOCKED
+    with reasons;
+  - F is not started, and it needs its own plan.
