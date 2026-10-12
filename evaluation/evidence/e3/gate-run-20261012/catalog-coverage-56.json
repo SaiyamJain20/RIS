@@ -1,0 +1,2835 @@
+{
+  "catalogFiles": {
+    "evaluation/scenarios/e0_cases.json": "438fa38ddcbd7edd0e49fb93cc580e5219ed05349fd677b2e386bc4669f5d50e",
+    "evaluation/scenarios/e0_supplement_cases.json": "9ccade362c5a8853d63f06a08be3134ae32cd99527ceb36fcd78c311a9246858"
+  },
+  "runId": "E-gate-20261012",
+  "counts": {
+    "PASS": 56,
+    "FAILED": 0,
+    "NOT_RUN": 0,
+    "RUNNING": 0
+  },
+  "rows": [
+    {
+      "caseId": "E03-crash-after-intent-paper-strict",
+      "caseFamily": "E03",
+      "profile": "paper-strict",
+      "variant": "crash-after-intent",
+      "slice": "recovery-expiry",
+      "path": "run:catalog/recovery-expiry/paper-strict-after_intent",
+      "status": "PASS",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A35",
+        "A37",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "UNPROVED",
+        "classification": "BLOCKED",
+        "error": null,
+        "qualification": "Inject crash immediately after durable intent, before send. Restart uses the same persisted response; original expiry still bounds retry. E1/E2 worker implementation is required. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result.",
+        "worker": {
+          "releaseIntentCount": "1",
+          "releaseSentCount": "1",
+          "sameCachedResponse": true,
+          "delivery": "unknown",
+          "expiredRetryError": "EXPIRED"
+        }
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "delivery": "unknown",
+        "expiredRetryError": "EXPIRED"
+      },
+      "proofFiles": [
+        "run:catalog/recovery-expiry/paper-strict-after_intent/paper-strict/recovery/result.json",
+        "run:catalog/recovery-expiry/paper-strict-after_intent/paper-strict/expired-retry/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/expiry-live-20261009/",
+        "message": "A3-0038",
+        "note": "recovery only: evaluation/evidence/e2/recovery-live-20261009/ (A3-0036)"
+      },
+      "label": "frozen BLOCKED / decided SPEC_GAP, UNPROVED (D47)",
+      "reportedClassification": "frozen BLOCKED / decided SPEC_GAP, UNPROVED (D47)"
+    },
+    {
+      "caseId": "E03-crash-after-send-paper-strict",
+      "caseFamily": "E03",
+      "profile": "paper-strict",
+      "variant": "crash-after-send",
+      "slice": "recovery-expiry",
+      "path": "run:catalog/recovery-expiry/paper-strict-after_send",
+      "status": "PASS",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A35",
+        "A37",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "UNPROVED",
+        "classification": "BLOCKED",
+        "error": null,
+        "qualification": "Inject crash after send before PBC outcome acknowledgement. Delivery is unknown; retain that fact and reconcile idempotently without claiming exactly-once network delivery. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result.",
+        "worker": {
+          "releaseIntentCount": "1",
+          "releaseSentCount": "2",
+          "sameCachedResponse": true,
+          "delivery": "unknown",
+          "expiredRetryError": "EXPIRED"
+        }
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "delivery": "unknown",
+        "expiredRetryError": "EXPIRED"
+      },
+      "proofFiles": [
+        "run:catalog/recovery-expiry/paper-strict-after_send/paper-strict/recovery/result.json",
+        "run:catalog/recovery-expiry/paper-strict-after_send/paper-strict/expired-retry/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/expiry-live-20261009/",
+        "message": "A3-0038",
+        "note": "recovery only: evaluation/evidence/e2/recovery-live-20261009/ (A3-0036)"
+      },
+      "label": "frozen BLOCKED / decided SPEC_GAP, UNPROVED (D47)",
+      "reportedClassification": "frozen BLOCKED / decided SPEC_GAP, UNPROVED (D47)"
+    },
+    {
+      "caseId": "E03-crash-after-intent-paper-minimal",
+      "caseFamily": "E03",
+      "profile": "paper-minimal",
+      "variant": "crash-after-intent",
+      "slice": "recovery-expiry",
+      "path": "run:catalog/recovery-expiry/paper-minimal-after_intent",
+      "status": "PASS",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A35",
+        "A37",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "UNPROVED",
+        "classification": "BLOCKED",
+        "error": null,
+        "qualification": "Inject crash immediately after durable intent, before send. Restart uses the same persisted response; original expiry still bounds retry. E1/E2 worker implementation is required. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result.",
+        "worker": {
+          "releaseIntentCount": "1",
+          "releaseSentCount": "1",
+          "sameCachedResponse": true,
+          "delivery": "unknown",
+          "expiredRetryError": "EXPIRED"
+        }
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "delivery": "unknown",
+        "expiredRetryError": "EXPIRED"
+      },
+      "proofFiles": [
+        "run:catalog/recovery-expiry/paper-minimal-after_intent/paper-minimal/recovery/result.json",
+        "run:catalog/recovery-expiry/paper-minimal-after_intent/paper-minimal/expired-retry/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/expiry-live-20261009/",
+        "message": "A3-0038",
+        "note": "recovery only: evaluation/evidence/e2/recovery-live-20261009/ (A3-0036)"
+      },
+      "label": "frozen BLOCKED / decided SPEC_GAP, UNPROVED (D47)",
+      "reportedClassification": "frozen BLOCKED / decided SPEC_GAP, UNPROVED (D47)"
+    },
+    {
+      "caseId": "E03-crash-after-send-paper-minimal",
+      "caseFamily": "E03",
+      "profile": "paper-minimal",
+      "variant": "crash-after-send",
+      "slice": "recovery-expiry",
+      "path": "run:catalog/recovery-expiry/paper-minimal-after_send",
+      "status": "PASS",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A35",
+        "A37",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "UNPROVED",
+        "classification": "BLOCKED",
+        "error": null,
+        "qualification": "Inject crash after send before PBC outcome acknowledgement. Delivery is unknown; retain that fact and reconcile idempotently without claiming exactly-once network delivery. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result.",
+        "worker": {
+          "releaseIntentCount": "1",
+          "releaseSentCount": "2",
+          "sameCachedResponse": true,
+          "delivery": "unknown",
+          "expiredRetryError": "EXPIRED"
+        }
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "delivery": "unknown",
+        "expiredRetryError": "EXPIRED"
+      },
+      "proofFiles": [
+        "run:catalog/recovery-expiry/paper-minimal-after_send/paper-minimal/recovery/result.json",
+        "run:catalog/recovery-expiry/paper-minimal-after_send/paper-minimal/expired-retry/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/expiry-live-20261009/",
+        "message": "A3-0038",
+        "note": "recovery only: evaluation/evidence/e2/recovery-live-20261009/ (A3-0036)"
+      },
+      "label": "frozen BLOCKED / decided SPEC_GAP, UNPROVED (D47)",
+      "reportedClassification": "frozen BLOCKED / decided SPEC_GAP, UNPROVED (D47)"
+    },
+    {
+      "caseId": "E03-crash-after-intent-repaired-e",
+      "caseFamily": "E03",
+      "profile": "repaired-e",
+      "variant": "crash-after-intent",
+      "slice": "recovery-expiry",
+      "path": "run:catalog/recovery-expiry/repaired-e-after_intent",
+      "status": "PASS",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A35",
+        "A37",
+        "A36",
+        "A41"
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "CONDITIONAL",
+        "classification": "REPAIR_SUPPORTED",
+        "error": null,
+        "qualification": "Inject crash immediately after durable intent, before send. Restart uses the same persisted response; original expiry still bounds retry. E1/E2 worker implementation is required. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED.",
+        "worker": {
+          "releaseIntentCount": "1",
+          "releaseSentCount": "1",
+          "sameCachedResponse": true,
+          "delivery": "unknown",
+          "expiredRetryError": "EXPIRED"
+        }
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "delivery": "unknown",
+        "expiredRetryError": "EXPIRED"
+      },
+      "proofFiles": [
+        "run:catalog/recovery-expiry/repaired-e-after_intent/repaired-e/recovery/result.json",
+        "run:catalog/recovery-expiry/repaired-e-after_intent/repaired-e/expired-retry/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/expiry-live-20261009/",
+        "message": "A3-0038",
+        "note": "recovery only: evaluation/evidence/e2/recovery-live-20261009/ (A3-0036)"
+      },
+      "reportedClassification": "REPAIR_SUPPORTED"
+    },
+    {
+      "caseId": "E03-crash-after-send-repaired-e",
+      "caseFamily": "E03",
+      "profile": "repaired-e",
+      "variant": "crash-after-send",
+      "slice": "recovery-expiry",
+      "path": "run:catalog/recovery-expiry/repaired-e-after_send",
+      "status": "PASS",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A35",
+        "A37",
+        "A36",
+        "A41"
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "CONDITIONAL",
+        "classification": "REPAIR_SUPPORTED",
+        "error": null,
+        "qualification": "Inject crash after send before PBC outcome acknowledgement. Delivery is unknown; retain that fact and reconcile idempotently without claiming exactly-once network delivery. One durable intent per grant; RELEASE_SENT records each attempted send, including retries. Token/ciphertextDigest stay identical; delivery remains unknown. A separate expired retry emits no new worker event and returns EXPIRED.",
+        "worker": {
+          "releaseIntentCount": "1",
+          "releaseSentCount": "2",
+          "sameCachedResponse": true,
+          "delivery": "unknown",
+          "expiredRetryError": "EXPIRED"
+        }
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "delivery": "unknown",
+        "expiredRetryError": "EXPIRED"
+      },
+      "proofFiles": [
+        "run:catalog/recovery-expiry/repaired-e-after_send/repaired-e/recovery/result.json",
+        "run:catalog/recovery-expiry/repaired-e-after_send/repaired-e/expired-retry/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/expiry-live-20261009/",
+        "message": "A3-0038",
+        "note": "recovery only: evaluation/evidence/e2/recovery-live-20261009/ (A3-0036)"
+      },
+      "reportedClassification": "REPAIR_SUPPORTED"
+    },
+    {
+      "caseId": "E03-duplicate-outcome-paper-strict",
+      "caseFamily": "E03",
+      "profile": "paper-strict",
+      "variant": "duplicate-outcome",
+      "slice": "duplicate-outcome",
+      "path": "run:catalog/duplicate-outcome/paper-strict-duplicate-outcome",
+      "status": "PASS",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Repeated reconciliation cannot create a second successful outcome or grant. Exact owner reporter status/return values may differ; no duplicate transition is the assertion. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SUPPORTED",
+        "error": "REPLAY",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/duplicate-outcome/paper-strict-duplicate-outcome/paper-strict/alice/duplicate-outcome/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/duplicate-live-20261009/",
+        "message": "A3-0040",
+        "note": ""
+      },
+      "reportedClassification": "SUPPORTED"
+    },
+    {
+      "caseId": "E03-duplicate-outcome-paper-minimal",
+      "caseFamily": "E03",
+      "profile": "paper-minimal",
+      "variant": "duplicate-outcome",
+      "slice": "duplicate-outcome",
+      "path": "run:catalog/duplicate-outcome/paper-minimal-duplicate-outcome",
+      "status": "PASS",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Repeated reconciliation cannot create a second successful outcome or grant. Exact owner reporter status/return values may differ; no duplicate transition is the assertion. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SUPPORTED",
+        "error": "REPLAY",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/duplicate-outcome/paper-minimal-duplicate-outcome/paper-minimal/alice/duplicate-outcome/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/duplicate-live-20261009/",
+        "message": "A3-0040",
+        "note": ""
+      },
+      "reportedClassification": "SUPPORTED"
+    },
+    {
+      "caseId": "E03-duplicate-outcome-repaired-e",
+      "caseFamily": "E03",
+      "profile": "repaired-e",
+      "variant": "duplicate-outcome",
+      "slice": "duplicate-outcome",
+      "path": "run:catalog/duplicate-outcome/repaired-e-duplicate-outcome",
+      "status": "PASS",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A36",
+        "A41"
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Repeated reconciliation cannot create a second successful outcome or grant. Exact owner reporter status/return values may differ; no duplicate transition is the assertion."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "REPAIR_SUPPORTED",
+        "error": "REPLAY",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/duplicate-outcome/repaired-e-duplicate-outcome/repaired-e/alice/duplicate-outcome/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/duplicate-live-20261009/",
+        "message": "A3-0040",
+        "note": ""
+      },
+      "reportedClassification": "REPAIR_SUPPORTED"
+    },
+    {
+      "caseId": "E01-nonce-replay-paper-strict",
+      "caseFamily": "E01",
+      "profile": "paper-strict",
+      "variant": "nonce-replay",
+      "slice": "nonce-replay",
+      "path": "run:catalog/nonce-replay/paper-strict-nonce-replay",
+      "status": "PASS",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "NO_NEW_GRANT",
+        "classification": "SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Replay the identical accepted request/forward reference, not a newly fabricated relay reference. All profiles reject a new transition or expose an existing grant read; paper new-reference stress is a separate gap under A25."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SUPPORTED",
+        "error": "REPLAY",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/nonce-replay/paper-strict-nonce-replay/paper-strict/alice/nonce-replay/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/grouped-replay-live-20261009/",
+        "message": "A3-0045",
+        "note": "earlier trial evaluation/evidence/e2/nonce-replay-live-20261009/ failed (repaired release EXPIRED) and is kept"
+      },
+      "reportedClassification": "SUPPORTED"
+    },
+    {
+      "caseId": "E01-nonce-replay-paper-minimal",
+      "caseFamily": "E01",
+      "profile": "paper-minimal",
+      "variant": "nonce-replay",
+      "slice": "nonce-replay",
+      "path": "run:catalog/nonce-replay/paper-minimal-nonce-replay",
+      "status": "PASS",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "NO_NEW_GRANT",
+        "classification": "SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Replay the identical accepted request/forward reference, not a newly fabricated relay reference. All profiles reject a new transition or expose an existing grant read; paper new-reference stress is a separate gap under A25."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SUPPORTED",
+        "error": "REPLAY",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/nonce-replay/paper-minimal-nonce-replay/paper-minimal/alice/nonce-replay/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/grouped-replay-live-20261009/",
+        "message": "A3-0045",
+        "note": "earlier trial evaluation/evidence/e2/nonce-replay-live-20261009/ failed (repaired release EXPIRED) and is kept"
+      },
+      "reportedClassification": "SUPPORTED"
+    },
+    {
+      "caseId": "E01-nonce-replay-repaired-e",
+      "caseFamily": "E01",
+      "profile": "repaired-e",
+      "variant": "nonce-replay",
+      "slice": "nonce-replay",
+      "path": "run:catalog/nonce-replay/repaired-e-nonce-replay",
+      "status": "PASS",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A36",
+        "A41"
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "NO_NEW_GRANT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Replay the identical accepted request/forward reference, not a newly fabricated relay reference. All profiles reject a new transition or expose an existing grant read; paper new-reference stress is a separate gap under A25."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "REPAIR_SUPPORTED",
+        "error": "REPLAY",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/nonce-replay/repaired-e-nonce-replay/repaired-e/alice/nonce-replay/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/grouped-replay-live-20261009/",
+        "message": "A3-0045",
+        "note": "earlier trial evaluation/evidence/e2/nonce-replay-live-20261009/ failed (repaired release EXPIRED) and is kept"
+      },
+      "reportedClassification": "REPAIR_SUPPORTED"
+    },
+    {
+      "caseId": "E01-subject-substitution-paper-strict",
+      "caseFamily": "E01",
+      "profile": "paper-strict",
+      "variant": "subject-substitution",
+      "slice": "sl1-subject",
+      "path": "run:catalog/sl1-subject/paper-strict-subject-substitution",
+      "status": "PASS",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A38",
+        "A41"
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Compromised configured relay stress is outside paper secure isolation. Substitute only gid in the relay ForwardedRequest passed to policyEnf while keeping Alice's verified credential records. Paper profiles use no decision certificate. The DBC may authorize the substituted tuple; the grant gid is relay-asserted. With D35/A38 the symbolic response follows that gid's PBC-registered recipient key, not the original requester. An unregistered gid gets no release. This is a reconstruction/specification-gap comparison, not an HMBC exploit."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SPEC_GAP",
+        "error": null,
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl1-subject/paper-strict-subject-substitution/paper-strict/subject-stress/subject-substitution/result.json",
+        "run:catalog/sl1-subject/paper-strict-subject-substitution/paper-strict/subject-stress/subject-completion/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl1-subject-live-20261010/",
+        "message": "S3-0006",
+        "note": ""
+      },
+      "reportedClassification": "SPEC_GAP"
+    },
+    {
+      "caseId": "E01-subject-substitution-paper-minimal",
+      "caseFamily": "E01",
+      "profile": "paper-minimal",
+      "variant": "subject-substitution",
+      "slice": "sl1-subject",
+      "path": "run:catalog/sl1-subject/paper-minimal-subject-substitution",
+      "status": "PASS",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A38",
+        "A41"
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Compromised configured relay stress is outside paper secure isolation. Substitute only gid in the relay ForwardedRequest passed to policyEnf while keeping Alice's verified credential records. Paper profiles use no decision certificate. The DBC may authorize the substituted tuple; the grant gid is relay-asserted. With D35/A38 the symbolic response follows that gid's PBC-registered recipient key, not the original requester. An unregistered gid gets no release. This is a reconstruction/specification-gap comparison, not an HMBC exploit."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SPEC_GAP",
+        "error": null,
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl1-subject/paper-minimal-subject-substitution/paper-minimal/subject-stress/subject-substitution/result.json",
+        "run:catalog/sl1-subject/paper-minimal-subject-substitution/paper-minimal/subject-stress/subject-completion/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl1-subject-live-20261010/",
+        "message": "S3-0006",
+        "note": ""
+      },
+      "reportedClassification": "SPEC_GAP"
+    },
+    {
+      "caseId": "E01-subject-substitution-repaired-e",
+      "caseFamily": "E01",
+      "profile": "repaired-e",
+      "variant": "subject-substitution",
+      "slice": "sl1-subject",
+      "path": "run:catalog/sl1-subject/repaired-e-subject-substitution",
+      "status": "PASS",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A36",
+        "A41"
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "qualification": "A compromised configured relay is outside the paper secure-isolation assumption. A repaired certificate must bind the original tuple. Substitute request.gid only and present the original decision certificate unchanged. Rewriting decision.requestDigest as well is a separate signature-failure control."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "REPAIR_SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl1-subject/repaired-e-subject-substitution/repaired-e/subject-stress/subject-substitution/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl1-subject-live-20261010/",
+        "message": "S3-0006",
+        "note": ""
+      },
+      "reportedClassification": "REPAIR_SUPPORTED"
+    },
+    {
+      "caseId": "E01-forged-tuple-paper-strict",
+      "caseFamily": "E01",
+      "profile": "paper-strict",
+      "variant": "forged-tuple",
+      "slice": "sl2-relay",
+      "path": "run:catalog/sl2-relay/paper-strict-forged-tuple",
+      "status": "PASS",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "The configured relay fabricates a tuple without a PBC request/log. Repaired control uses a non-witness signature on an otherwise matching certificate; BAD_SIGNATURE must precede any grant. Paper caller restrictions remain enforced; the compromised relay stress is outside secure isolation."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SPEC_GAP",
+        "error": null,
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl2-relay/paper-strict-forged-tuple/paper-strict/relay-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl2-relay-live-20261010/",
+        "message": "S3-0010",
+        "note": "first run evaluation/evidence/e2/sl2-relay-failed-20261010/ (S3-0008) failed on a runner defect and is kept"
+      },
+      "reportedClassification": "SPEC_GAP"
+    },
+    {
+      "caseId": "E01-forged-tuple-paper-minimal",
+      "caseFamily": "E01",
+      "profile": "paper-minimal",
+      "variant": "forged-tuple",
+      "slice": "sl2-relay",
+      "path": "run:catalog/sl2-relay/paper-minimal-forged-tuple",
+      "status": "PASS",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "The configured relay fabricates a tuple without a PBC request/log. Repaired control uses a non-witness signature on an otherwise matching certificate; BAD_SIGNATURE must precede any grant. Paper caller restrictions remain enforced; the compromised relay stress is outside secure isolation."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SPEC_GAP",
+        "error": null,
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl2-relay/paper-minimal-forged-tuple/paper-minimal/relay-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl2-relay-live-20261010/",
+        "message": "S3-0010",
+        "note": "first run evaluation/evidence/e2/sl2-relay-failed-20261010/ (S3-0008) failed on a runner defect and is kept"
+      },
+      "reportedClassification": "SPEC_GAP"
+    },
+    {
+      "caseId": "E01-forged-tuple-repaired-e",
+      "caseFamily": "E01",
+      "profile": "repaired-e",
+      "variant": "forged-tuple",
+      "slice": "sl2-relay",
+      "path": "run:catalog/sl2-relay/repaired-e-forged-tuple",
+      "status": "PASS",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A36",
+        "A41"
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "BAD_SIGNATURE",
+        "qualification": "The configured relay fabricates a tuple without a PBC request/log. Repaired control uses a non-witness signature on an otherwise matching certificate; BAD_SIGNATURE must precede any grant. Paper caller restrictions remain enforced; the compromised relay stress is outside secure isolation."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "REPAIR_SUPPORTED",
+        "error": "BAD_SIGNATURE",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl2-relay/repaired-e-forged-tuple/repaired-e/relay-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl2-relay-live-20261010/",
+        "message": "S3-0010",
+        "note": "first run evaluation/evidence/e2/sl2-relay-failed-20261010/ (S3-0008) failed on a runner defect and is kept"
+      },
+      "reportedClassification": "REPAIR_SUPPORTED"
+    },
+    {
+      "caseId": "E01-new-reference-replay-paper-strict",
+      "caseFamily": "E01",
+      "profile": "paper-strict",
+      "variant": "new-reference-replay",
+      "slice": "sl2-relay",
+      "path": "run:catalog/sl2-relay/paper-strict-new-reference-replay",
+      "status": "PASS",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "After the first grant, the relay supplies a fresh pbcRequestId to paper policyEnf while repeating the same verified tuple. Paper grants again under A25. Repaired-e reuses the original signed gid/nonce/certificate (no freshly signed request); REPLAY prevents a second grant."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SPEC_GAP",
+        "error": null,
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl2-relay/paper-strict-new-reference-replay/paper-strict/relay-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl2-relay-live-20261010/",
+        "message": "S3-0010",
+        "note": "first run evaluation/evidence/e2/sl2-relay-failed-20261010/ (S3-0008) failed on a runner defect and is kept"
+      },
+      "reportedClassification": "SPEC_GAP"
+    },
+    {
+      "caseId": "E01-new-reference-replay-paper-minimal",
+      "caseFamily": "E01",
+      "profile": "paper-minimal",
+      "variant": "new-reference-replay",
+      "slice": "sl2-relay",
+      "path": "run:catalog/sl2-relay/paper-minimal-new-reference-replay",
+      "status": "PASS",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "After the first grant, the relay supplies a fresh pbcRequestId to paper policyEnf while repeating the same verified tuple. Paper grants again under A25. Repaired-e reuses the original signed gid/nonce/certificate (no freshly signed request); REPLAY prevents a second grant."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SPEC_GAP",
+        "error": null,
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl2-relay/paper-minimal-new-reference-replay/paper-minimal/relay-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl2-relay-live-20261010/",
+        "message": "S3-0010",
+        "note": "first run evaluation/evidence/e2/sl2-relay-failed-20261010/ (S3-0008) failed on a runner defect and is kept"
+      },
+      "reportedClassification": "SPEC_GAP"
+    },
+    {
+      "caseId": "E01-new-reference-replay-repaired-e",
+      "caseFamily": "E01",
+      "profile": "repaired-e",
+      "variant": "new-reference-replay",
+      "slice": "sl2-relay",
+      "path": "run:catalog/sl2-relay/repaired-e-new-reference-replay",
+      "status": "PASS",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A36",
+        "A41"
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "NO_NEW_GRANT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "After the first grant, the relay supplies a fresh pbcRequestId to paper policyEnf while repeating the same verified tuple. Paper grants again under A25. Repaired-e reuses the original signed gid/nonce/certificate (no freshly signed request); REPLAY prevents a second grant."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "REPAIR_SUPPORTED",
+        "error": "REPLAY",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl2-relay/repaired-e-new-reference-replay/repaired-e/relay-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl2-relay-live-20261010/",
+        "message": "S3-0010",
+        "note": "first run evaluation/evidence/e2/sl2-relay-failed-20261010/ (S3-0008) failed on a runner defect and is kept"
+      },
+      "reportedClassification": "REPAIR_SUPPORTED"
+    },
+    {
+      "caseId": "E01-same-nonce-distinct-digests-repaired-e",
+      "caseFamily": "E01",
+      "profile": "repaired-e",
+      "variant": "same-nonce-distinct-digests",
+      "slice": "sl2-relay",
+      "path": "run:catalog/sl2-relay/repaired-e-same-nonce-distinct-digests",
+      "status": "PASS",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A36",
+        "A39",
+        "A41"
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "NO_NEW_GRANT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "REPLAY",
+        "qualification": "Fresh scenario: two valid user-signed Alice requests, same gid/nonce, distinct expiresAt within live 30-second bounds. Independently verify both signatures, distinct digests and derived grantIds. Forward both BEFORE ONE checkpoint covering both. Collect BOTH honest policy-aware ALLOW certificates BEFORE either consume; each sees nonceConsumed=false. Preserve that checkpoint, credentials and TTLs; consume first then the second PRE-COLLECTED certificate without re-collection. Native repaired-e: REPLAY, no second grant, first grant unchanged. MUT_NO_NONCE (8) counterpart: second distinct allowed grant; nonce never recorded. These are NOT_RUN expectations; A2 owner measurements are separate. No evaluator witness key."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "REPAIR_SUPPORTED",
+        "error": "REPLAY",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl2-relay/repaired-e-same-nonce-distinct-digests/repaired-e/relay-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl2-relay-live-20261010/",
+        "message": "S3-0010",
+        "note": "first run evaluation/evidence/e2/sl2-relay-failed-20261010/ (S3-0008) failed on a runner defect and is kept"
+      },
+      "reportedClassification": "REPAIR_SUPPORTED"
+    },
+    {
+      "caseId": "E03-dropped-outcome-paper-strict",
+      "caseFamily": "E03",
+      "profile": "paper-strict",
+      "variant": "dropped-outcome",
+      "slice": "sl3-audit",
+      "path": "run:catalog/sl3-audit/paper-strict-dropped-outcome",
+      "status": "PASS",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "PENDING",
+        "classification": "SUPPORTED",
+        "error": null,
+        "qualification": "PBC remains pending with no successful outcome record. Local durable intent/send logs do not imply receipt delivery; reconciliation requires eventual delivery. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SUPPORTED",
+        "error": null,
+        "outcome": "PENDING",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl3-audit/paper-strict-dropped-outcome/paper-strict/audit-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl3-audit-live-20261010/",
+        "message": "S3-0012",
+        "note": ""
+      },
+      "reportedClassification": "SUPPORTED"
+    },
+    {
+      "caseId": "E03-dropped-outcome-paper-minimal",
+      "caseFamily": "E03",
+      "profile": "paper-minimal",
+      "variant": "dropped-outcome",
+      "slice": "sl3-audit",
+      "path": "run:catalog/sl3-audit/paper-minimal-dropped-outcome",
+      "status": "PASS",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A24",
+        "A38",
+        "A41"
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "PENDING",
+        "classification": "SUPPORTED",
+        "error": null,
+        "qualification": "PBC remains pending with no successful outcome record. Local durable intent/send logs do not imply receipt delivery; reconciliation requires eventual delivery. D35/A38: paper response recipient is RSC.recipientKeyHash(grant.gid), while the native DBC grant recipient remains zero. Verify the registered key exists. Release and any pre-expiry retry must occur strictly before policyEnf DBC block timestamp + 30 seconds (A24); set injected DBC time explicitly and retain the block/expiry. A later receipt never extends release expiry. Current production owner still refuses paper grants; option-(c) spike evidence is not an integrated case result."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SUPPORTED",
+        "error": null,
+        "outcome": "PENDING",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl3-audit/paper-minimal-dropped-outcome/paper-minimal/audit-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl3-audit-live-20261010/",
+        "message": "S3-0012",
+        "note": ""
+      },
+      "reportedClassification": "SUPPORTED"
+    },
+    {
+      "caseId": "E03-dropped-outcome-repaired-e",
+      "caseFamily": "E03",
+      "profile": "repaired-e",
+      "variant": "dropped-outcome",
+      "slice": "sl3-audit",
+      "path": "run:catalog/sl3-audit/repaired-e-dropped-outcome",
+      "status": "PASS",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A36",
+        "A41"
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "PENDING",
+        "classification": "REPAIR_SUPPORTED",
+        "error": null,
+        "qualification": "PBC remains pending with no successful outcome record. Local durable intent/send logs do not imply receipt delivery; reconciliation requires eventual delivery."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "REPAIR_SUPPORTED",
+        "error": null,
+        "outcome": "PENDING",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl3-audit/repaired-e-dropped-outcome/repaired-e/audit-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl3-audit-live-20261010/",
+        "message": "S3-0012",
+        "note": ""
+      },
+      "reportedClassification": "REPAIR_SUPPORTED"
+    },
+    {
+      "caseId": "E03-fabricated-outcome-paper-strict",
+      "caseFamily": "E03",
+      "profile": "paper-strict",
+      "variant": "fabricated-outcome",
+      "slice": "sl3-audit",
+      "path": "run:catalog/sl3-audit/paper-strict-fabricated-outcome",
+      "status": "PASS",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A41"
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Configured relay reports a result without a DBC grant through the unattested paper path. Repaired path is disabled; receipt witness independently requires a matching grant."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SPEC_GAP",
+        "error": null,
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl3-audit/paper-strict-fabricated-outcome/paper-strict/audit-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl3-audit-live-20261010/",
+        "message": "S3-0012",
+        "note": ""
+      },
+      "reportedClassification": "SPEC_GAP"
+    },
+    {
+      "caseId": "E03-fabricated-outcome-paper-minimal",
+      "caseFamily": "E03",
+      "profile": "paper-minimal",
+      "variant": "fabricated-outcome",
+      "slice": "sl3-audit",
+      "path": "run:catalog/sl3-audit/paper-minimal-fabricated-outcome",
+      "status": "PASS",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A41"
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Configured relay reports a result without a DBC grant through the unattested paper path. Repaired path is disabled; receipt witness independently requires a matching grant."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SPEC_GAP",
+        "error": null,
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl3-audit/paper-minimal-fabricated-outcome/paper-minimal/audit-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl3-audit-live-20261010/",
+        "message": "S3-0012",
+        "note": ""
+      },
+      "reportedClassification": "SPEC_GAP"
+    },
+    {
+      "caseId": "E03-fabricated-outcome-repaired-e",
+      "caseFamily": "E03",
+      "profile": "repaired-e",
+      "variant": "fabricated-outcome",
+      "slice": "sl3-audit",
+      "path": "run:catalog/sl3-audit/repaired-e-fabricated-outcome",
+      "status": "PASS",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A21",
+        "A26",
+        "A36",
+        "A41"
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "WRONG_PROFILE",
+        "qualification": "Configured relay reports a result without a DBC grant through the unattested paper path. Repaired path is disabled; receipt witness independently requires a matching grant."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "REPAIR_SUPPORTED",
+        "error": "WRONG_PROFILE",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl3-audit/repaired-e-fabricated-outcome/repaired-e/audit-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl3-audit-live-20261010/",
+        "message": "S3-0012",
+        "note": ""
+      },
+      "reportedClassification": "REPAIR_SUPPORTED"
+    },
+    {
+      "caseId": "E03-receipt-binding-control-requestDigest-repaired-e",
+      "caseFamily": "E03",
+      "profile": "repaired-e",
+      "variant": "receipt-binding-control",
+      "slice": "sl4-receipt",
+      "path": "run:catalog/sl4-receipt/repaired-e-receipt-binding-control-requestDigest",
+      "status": "PASS",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A36",
+        "A40",
+        "A41"
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "qualification": "Each trial/profile begins with its OWN fresh forwarded request, actual allowed grant and honest receipt; separate fresh requests for all three fields, the positive trial and every signature trial. Change ONLY receipt.requestDigest; keep outer requestDigest, grantId, destination, epochs/expiry/membership and all other fields. Native repaired-e rejects WRONG_SUBJECT, PBC remains FORWARDED, no outcome/log/status transition. Agent2 TEST-ONLY tool signs the inconsistent receipt at runtime using actual PSC/chain domain and real grant/expiry; returns artifact only. MUT_NO_RECEIPT_BINDING (32) counterpart ACCEPTS and becomes OUTCOME_RECORDED; retain inconsistent native fields. Deliberate witness-deviation/defense-in-depth control outside honest-witness assumption, not an HMBC attack. Receipts may reconcile after expiry without reauthorizing release. NOT_RUN; owner measurements are separate."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "REPAIR_SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "outcome": "NO_NEW_OUTCOME",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl4-receipt/repaired-e-receipt-binding-control-requestDigest/repaired-e/receipt-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl4-receipt-live-20261010/",
+        "message": "S3-0014",
+        "note": ""
+      },
+      "reportedClassification": "REPAIR_SUPPORTED"
+    },
+    {
+      "caseId": "E03-receipt-binding-control-gid-repaired-e",
+      "caseFamily": "E03",
+      "profile": "repaired-e",
+      "variant": "receipt-binding-control",
+      "slice": "sl4-receipt",
+      "path": "run:catalog/sl4-receipt/repaired-e-receipt-binding-control-gid",
+      "status": "PASS",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A36",
+        "A40",
+        "A41"
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "qualification": "Each trial/profile begins with its OWN fresh forwarded request, actual allowed grant and honest receipt; separate fresh requests for all three fields, the positive trial and every signature trial. Change ONLY receipt.gid; keep outer requestDigest, grantId, destination, epochs/expiry/membership and all other fields. Native repaired-e rejects WRONG_SUBJECT, PBC remains FORWARDED, no outcome/log/status transition. Agent2 TEST-ONLY tool signs the inconsistent receipt at runtime using actual PSC/chain domain and real grant/expiry; returns artifact only. MUT_NO_RECEIPT_BINDING (32) counterpart ACCEPTS and becomes OUTCOME_RECORDED; retain inconsistent native fields. Deliberate witness-deviation/defense-in-depth control outside honest-witness assumption, not an HMBC attack. Receipts may reconcile after expiry without reauthorizing release. NOT_RUN; owner measurements are separate."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "REPAIR_SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "outcome": "NO_NEW_OUTCOME",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl4-receipt/repaired-e-receipt-binding-control-gid/repaired-e/receipt-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl4-receipt-live-20261010/",
+        "message": "S3-0014",
+        "note": ""
+      },
+      "reportedClassification": "REPAIR_SUPPORTED"
+    },
+    {
+      "caseId": "E03-receipt-binding-control-dataId-repaired-e",
+      "caseFamily": "E03",
+      "profile": "repaired-e",
+      "variant": "receipt-binding-control",
+      "slice": "sl4-receipt",
+      "path": "run:catalog/sl4-receipt/repaired-e-receipt-binding-control-dataId",
+      "status": "PASS",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A36",
+        "A40",
+        "A41"
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "qualification": "Each trial/profile begins with its OWN fresh forwarded request, actual allowed grant and honest receipt; separate fresh requests for all three fields, the positive trial and every signature trial. Change ONLY receipt.dataId; keep outer requestDigest, grantId, destination, epochs/expiry/membership and all other fields. Native repaired-e rejects WRONG_SUBJECT, PBC remains FORWARDED, no outcome/log/status transition. Agent2 TEST-ONLY tool signs the inconsistent receipt at runtime using actual PSC/chain domain and real grant/expiry; returns artifact only. MUT_NO_RECEIPT_BINDING (32) counterpart ACCEPTS and becomes OUTCOME_RECORDED; retain inconsistent native fields. Deliberate witness-deviation/defense-in-depth control outside honest-witness assumption, not an HMBC attack. Receipts may reconcile after expiry without reauthorizing release. NOT_RUN; owner measurements are separate."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "REPAIR_SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "outcome": "NO_NEW_OUTCOME",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl4-receipt/repaired-e-receipt-binding-control-dataId/repaired-e/receipt-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl4-receipt-live-20261010/",
+        "message": "S3-0014",
+        "note": ""
+      },
+      "reportedClassification": "REPAIR_SUPPORTED"
+    },
+    {
+      "caseId": "E03-receipt-signature-control-requestDigest-repaired-e",
+      "caseFamily": "E03",
+      "profile": "repaired-e",
+      "variant": "receipt-signature-control",
+      "slice": "sl4-receipt",
+      "path": "run:catalog/sl4-receipt/repaired-e-receipt-signature-control-requestDigest",
+      "status": "PASS",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A36",
+        "A40",
+        "A41"
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "qualification": "Each trial/profile begins with its OWN fresh forwarded request, actual allowed grant and honest receipt; separate fresh requests for all three fields, the positive trial and every signature trial. Change ONLY receipt.requestDigest; keep outer requestDigest, grantId, destination, epochs/expiry/membership and all other fields. Native repaired-e rejects WRONG_SUBJECT, PBC remains FORWARDED, no outcome/log/status transition. Retain original honest signature over the altered receipt; binding check precedes quorum in repaired-e. MUT_NO_RECEIPT_BINDING (32) reaches BAD_SIGNATURE and also rejects; this signature control cannot kill the binding mutant. Receipts may reconcile after expiry without reauthorizing release. NOT_RUN; owner measurements are separate."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "outcome": "NO_NEW_OUTCOME",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl4-receipt/repaired-e-receipt-signature-control-requestDigest/repaired-e/receipt-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl4-receipt-live-20261010/",
+        "message": "S3-0014",
+        "note": ""
+      },
+      "reportedClassification": "SUPPORTED"
+    },
+    {
+      "caseId": "E03-receipt-signature-control-gid-repaired-e",
+      "caseFamily": "E03",
+      "profile": "repaired-e",
+      "variant": "receipt-signature-control",
+      "slice": "sl4-receipt",
+      "path": "run:catalog/sl4-receipt/repaired-e-receipt-signature-control-gid",
+      "status": "PASS",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A36",
+        "A40",
+        "A41"
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "qualification": "Each trial/profile begins with its OWN fresh forwarded request, actual allowed grant and honest receipt; separate fresh requests for all three fields, the positive trial and every signature trial. Change ONLY receipt.gid; keep outer requestDigest, grantId, destination, epochs/expiry/membership and all other fields. Native repaired-e rejects WRONG_SUBJECT, PBC remains FORWARDED, no outcome/log/status transition. Retain original honest signature over the altered receipt; binding check precedes quorum in repaired-e. MUT_NO_RECEIPT_BINDING (32) reaches BAD_SIGNATURE and also rejects; this signature control cannot kill the binding mutant. Receipts may reconcile after expiry without reauthorizing release. NOT_RUN; owner measurements are separate."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "outcome": "NO_NEW_OUTCOME",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl4-receipt/repaired-e-receipt-signature-control-gid/repaired-e/receipt-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl4-receipt-live-20261010/",
+        "message": "S3-0014",
+        "note": ""
+      },
+      "reportedClassification": "SUPPORTED"
+    },
+    {
+      "caseId": "E03-receipt-signature-control-dataId-repaired-e",
+      "caseFamily": "E03",
+      "profile": "repaired-e",
+      "variant": "receipt-signature-control",
+      "slice": "sl4-receipt",
+      "path": "run:catalog/sl4-receipt/repaired-e-receipt-signature-control-dataId",
+      "status": "PASS",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A36",
+        "A40",
+        "A41"
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "NO_NEW_OUTCOME",
+        "classification": "SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "qualification": "Each trial/profile begins with its OWN fresh forwarded request, actual allowed grant and honest receipt; separate fresh requests for all three fields, the positive trial and every signature trial. Change ONLY receipt.dataId; keep outer requestDigest, grantId, destination, epochs/expiry/membership and all other fields. Native repaired-e rejects WRONG_SUBJECT, PBC remains FORWARDED, no outcome/log/status transition. Retain original honest signature over the altered receipt; binding check precedes quorum in repaired-e. MUT_NO_RECEIPT_BINDING (32) reaches BAD_SIGNATURE and also rejects; this signature control cannot kill the binding mutant. Receipts may reconcile after expiry without reauthorizing release. NOT_RUN; owner measurements are separate."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SUPPORTED",
+        "error": "WRONG_SUBJECT",
+        "outcome": "NO_NEW_OUTCOME",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl4-receipt/repaired-e-receipt-signature-control-dataId/repaired-e/receipt-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl4-receipt-live-20261010/",
+        "message": "S3-0014",
+        "note": ""
+      },
+      "reportedClassification": "SUPPORTED"
+    },
+    {
+      "caseId": "E03-receipt-binding-positive-repaired-e",
+      "caseFamily": "E03",
+      "profile": "repaired-e",
+      "variant": "receipt-binding-positive",
+      "slice": "sl4-receipt",
+      "path": "run:catalog/sl4-receipt/repaired-e-receipt-binding-positive",
+      "status": "PASS",
+      "sourceRefs": [
+        "S06",
+        "S07",
+        "S08",
+        "S19",
+        "S21",
+        "SPEC4/E03"
+      ],
+      "assumptions": [
+        "A01",
+        "A03",
+        "A12",
+        "A13",
+        "A36",
+        "A40",
+        "A41"
+      ],
+      "expected": {
+        "property": "audit-correspondence",
+        "outcome": "ACCEPT",
+        "classification": "SUPPORTED",
+        "error": null,
+        "qualification": "Separate fresh forwarded-and-granted request in repaired-e AND receipt-binding mutant. Honest attest_grant receipt records one matching successful outcome; preserve native fields/status/log. This positive control prevents deny-all from passing. It attests authorization only, not release/delivery. Receipts may reconcile after expiry. NOT_RUN."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SUPPORTED",
+        "error": null,
+        "outcome": "ACCEPT",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl4-receipt/repaired-e-receipt-binding-positive/repaired-e/receipt-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl4-receipt-live-20261010/",
+        "message": "S3-0014",
+        "note": ""
+      },
+      "reportedClassification": "SUPPORTED"
+    },
+    {
+      "caseId": "E02-wrong-issuer-paper-strict",
+      "caseFamily": "E02",
+      "profile": "paper-strict",
+      "variant": "wrong-issuer",
+      "slice": "sl5-trust",
+      "path": "run:catalog/sl5-trust/paper-strict-wrong-issuer",
+      "status": "PASS",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "REJECT",
+        "classification": "SUPPORTED",
+        "error": "UNAUTHORIZED_CALLER",
+        "qualification": "H1 administrator attempts an H2 trust update. No profile drops the paper issuer/caller restriction."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SUPPORTED",
+        "error": "UNAUTHORIZED_CALLER",
+        "outcome": "REJECT",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl5-trust/paper-strict-wrong-issuer/paper-strict/trust-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl5-trust-live-20261010/",
+        "message": "S3-0016",
+        "note": ""
+      },
+      "reportedClassification": "SUPPORTED"
+    },
+    {
+      "caseId": "E02-wrong-issuer-paper-minimal",
+      "caseFamily": "E02",
+      "profile": "paper-minimal",
+      "variant": "wrong-issuer",
+      "slice": "sl5-trust",
+      "path": "run:catalog/sl5-trust/paper-minimal-wrong-issuer",
+      "status": "PASS",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "REJECT",
+        "classification": "SUPPORTED",
+        "error": "UNAUTHORIZED_CALLER",
+        "qualification": "H1 administrator attempts an H2 trust update. No profile drops the paper issuer/caller restriction."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SUPPORTED",
+        "error": "UNAUTHORIZED_CALLER",
+        "outcome": "REJECT",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl5-trust/paper-minimal-wrong-issuer/paper-minimal/trust-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl5-trust-live-20261010/",
+        "message": "S3-0016",
+        "note": ""
+      },
+      "reportedClassification": "SUPPORTED"
+    },
+    {
+      "caseId": "E02-wrong-issuer-repaired-e",
+      "caseFamily": "E02",
+      "profile": "repaired-e",
+      "variant": "wrong-issuer",
+      "slice": "sl5-trust",
+      "path": "run:catalog/sl5-trust/repaired-e-wrong-issuer",
+      "status": "PASS",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A36",
+        "A41"
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "REJECT",
+        "classification": "SUPPORTED",
+        "error": "UNAUTHORIZED_CALLER",
+        "qualification": "H1 administrator attempts an H2 trust update. No profile drops the paper issuer/caller restriction. Issuer scoping is preserved baseline behavior, not a new repaired-e property."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SUPPORTED",
+        "error": "UNAUTHORIZED_CALLER",
+        "outcome": "REJECT",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl5-trust/repaired-e-wrong-issuer/repaired-e/trust-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl5-trust-live-20261010/",
+        "message": "S3-0016",
+        "note": ""
+      },
+      "reportedClassification": "SUPPORTED"
+    },
+    {
+      "caseId": "E02-signed-list-rollback-paper-strict",
+      "caseFamily": "E02",
+      "profile": "paper-strict",
+      "variant": "signed-list-rollback",
+      "slice": "sl5-trust",
+      "path": "run:catalog/sl5-trust/paper-strict-signed-list-rollback",
+      "status": "PASS",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "An authorized issuer-scoped administrator submits old correctly signed CRL/TempACL v1 after v2; repaired versions reject and retain v2."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SPEC_GAP",
+        "error": null,
+        "outcome": "ACCEPT",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl5-trust/paper-strict-signed-list-rollback/paper-strict/trust-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl5-trust-live-20261010/",
+        "message": "S3-0016",
+        "note": ""
+      },
+      "reportedClassification": "SPEC_GAP"
+    },
+    {
+      "caseId": "E02-signed-list-rollback-paper-minimal",
+      "caseFamily": "E02",
+      "profile": "paper-minimal",
+      "variant": "signed-list-rollback",
+      "slice": "sl5-trust",
+      "path": "run:catalog/sl5-trust/paper-minimal-signed-list-rollback",
+      "status": "PASS",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "An authorized issuer-scoped administrator submits old correctly signed CRL/TempACL v1 after v2; repaired versions reject and retain v2."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SPEC_GAP",
+        "error": null,
+        "outcome": "ACCEPT",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl5-trust/paper-minimal-signed-list-rollback/paper-minimal/trust-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl5-trust-live-20261010/",
+        "message": "S3-0016",
+        "note": ""
+      },
+      "reportedClassification": "SPEC_GAP"
+    },
+    {
+      "caseId": "E02-signed-list-rollback-repaired-e",
+      "caseFamily": "E02",
+      "profile": "repaired-e",
+      "variant": "signed-list-rollback",
+      "slice": "sl5-trust",
+      "path": "run:catalog/sl5-trust/repaired-e-signed-list-rollback",
+      "status": "PASS",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A36",
+        "A41"
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "STALE_ANCHOR",
+        "qualification": "An authorized issuer-scoped administrator submits old correctly signed CRL/TempACL v1 after v2; repaired versions reject and retain v2."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "REPAIR_SUPPORTED",
+        "error": "STALE_ANCHOR",
+        "outcome": "REJECT",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl5-trust/repaired-e-signed-list-rollback/repaired-e/trust-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl5-trust-live-20261010/",
+        "message": "S3-0016",
+        "note": ""
+      },
+      "reportedClassification": "REPAIR_SUPPORTED"
+    },
+    {
+      "caseId": "E02-pre-barrier-revocation-paper-strict",
+      "caseFamily": "E02",
+      "profile": "paper-strict",
+      "variant": "pre-barrier-revocation",
+      "slice": "sl6-barrier",
+      "path": "run:catalog/sl6-barrier/paper-strict-pre-barrier-revocation",
+      "status": "PASS",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Previously approved unexpired request arrives before DBC accepts the revoking checkpoint. Repaired acceptance within this measured window is intentional, not instantaneous revocation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SPEC_GAP",
+        "error": null,
+        "outcome": "ACCEPT",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl6-barrier/paper-strict-pre-barrier-revocation/paper-strict/barrier-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl6-barrier-live-20261011/",
+        "message": "S3-0018",
+        "note": ""
+      },
+      "reportedClassification": "SPEC_GAP"
+    },
+    {
+      "caseId": "E02-pre-barrier-revocation-paper-minimal",
+      "caseFamily": "E02",
+      "profile": "paper-minimal",
+      "variant": "pre-barrier-revocation",
+      "slice": "sl6-barrier",
+      "path": "run:catalog/sl6-barrier/paper-minimal-pre-barrier-revocation",
+      "status": "PASS",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "ACCEPT",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Previously approved unexpired request arrives before DBC accepts the revoking checkpoint. Repaired acceptance within this measured window is intentional, not instantaneous revocation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SPEC_GAP",
+        "error": null,
+        "outcome": "ACCEPT",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl6-barrier/paper-minimal-pre-barrier-revocation/paper-minimal/barrier-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl6-barrier-live-20261011/",
+        "message": "S3-0018",
+        "note": ""
+      },
+      "reportedClassification": "SPEC_GAP"
+    },
+    {
+      "caseId": "E02-pre-barrier-revocation-repaired-e",
+      "caseFamily": "E02",
+      "profile": "repaired-e",
+      "variant": "pre-barrier-revocation",
+      "slice": "sl6-barrier",
+      "path": "run:catalog/sl6-barrier/repaired-e-pre-barrier-revocation",
+      "status": "PASS",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A36",
+        "A41"
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "ACCEPT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": null,
+        "qualification": "Previously approved unexpired request arrives before DBC accepts the revoking checkpoint. Repaired acceptance within this measured window is intentional, not instantaneous revocation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "REPAIR_SUPPORTED",
+        "error": null,
+        "outcome": "ACCEPT",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl6-barrier/repaired-e-pre-barrier-revocation/repaired-e/barrier-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl6-barrier-live-20261011/",
+        "message": "S3-0018",
+        "note": ""
+      },
+      "reportedClassification": "REPAIR_SUPPORTED"
+    },
+    {
+      "caseId": "E02-post-barrier-revocation-paper-strict",
+      "caseFamily": "E02",
+      "profile": "paper-strict",
+      "variant": "post-barrier-revocation",
+      "slice": "sl6-barrier",
+      "path": "run:catalog/sl6-barrier/paper-strict-post-barrier-revocation",
+      "status": "PASS",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "New checkpoint changes sequence/authEpoch. Consume the older certificate without re-collection; reject without grant/nonce mutation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation. Paper profiles have no checkpoint barrier: ACCEPT_CHECKPOINT is not applicable and is omitted, rather than submitting a WRONG_PROFILE transaction."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SPEC_GAP",
+        "error": null,
+        "outcome": "ACCEPT",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl6-barrier/paper-strict-post-barrier-revocation/paper-strict/barrier-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl6-barrier-live-20261011/",
+        "message": "S3-0018",
+        "note": ""
+      },
+      "reportedClassification": "SPEC_GAP"
+    },
+    {
+      "caseId": "E02-post-barrier-revocation-paper-minimal",
+      "caseFamily": "E02",
+      "profile": "paper-minimal",
+      "variant": "post-barrier-revocation",
+      "slice": "sl6-barrier",
+      "path": "run:catalog/sl6-barrier/paper-minimal-post-barrier-revocation",
+      "status": "PASS",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "New checkpoint changes sequence/authEpoch. Consume the older certificate without re-collection; reject without grant/nonce mutation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation. Paper profiles have no checkpoint barrier: ACCEPT_CHECKPOINT is not applicable and is omitted, rather than submitting a WRONG_PROFILE transaction."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SPEC_GAP",
+        "error": null,
+        "outcome": "ACCEPT",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl6-barrier/paper-minimal-post-barrier-revocation/paper-minimal/barrier-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl6-barrier-live-20261011/",
+        "message": "S3-0018",
+        "note": ""
+      },
+      "reportedClassification": "SPEC_GAP"
+    },
+    {
+      "caseId": "E02-post-barrier-revocation-repaired-e",
+      "caseFamily": "E02",
+      "profile": "repaired-e",
+      "variant": "post-barrier-revocation",
+      "slice": "sl6-barrier",
+      "path": "run:catalog/sl6-barrier/repaired-e-post-barrier-revocation",
+      "status": "PASS",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A36",
+        "A41"
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "STALE_STATE",
+        "qualification": "New checkpoint changes sequence/authEpoch. Consume the older certificate without re-collection; reject without grant/nonce mutation. The original certificate is collected before the PBC update; do not silently re-collect it after revocation."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "REPAIR_SUPPORTED",
+        "error": "STALE_STATE",
+        "outcome": "REJECT",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl6-barrier/repaired-e-post-barrier-revocation/repaired-e/barrier-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl6-barrier-live-20261011/",
+        "message": "S3-0018",
+        "note": ""
+      },
+      "reportedClassification": "REPAIR_SUPPORTED"
+    },
+    {
+      "caseId": "E02-expired-duty-paper-strict",
+      "caseFamily": "E02",
+      "profile": "paper-strict",
+      "variant": "expired-duty",
+      "slice": "sl6-barrier",
+      "path": "run:catalog/sl6-barrier/paper-strict-expired-duty",
+      "status": "PASS",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Credentials were valid at PBC decision; duty expires before DBC consumption while request/checkpoint remain live. Independent record freshness is required in repaired-e."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SPEC_GAP",
+        "error": null,
+        "outcome": "ACCEPT",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl6-barrier/paper-strict-expired-duty/paper-strict/barrier-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl6-barrier-live-20261011/",
+        "message": "S3-0018",
+        "note": ""
+      },
+      "reportedClassification": "SPEC_GAP"
+    },
+    {
+      "caseId": "E02-expired-duty-paper-minimal",
+      "caseFamily": "E02",
+      "profile": "paper-minimal",
+      "variant": "expired-duty",
+      "slice": "sl6-barrier",
+      "path": "run:catalog/sl6-barrier/paper-minimal-expired-duty",
+      "status": "PASS",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A41"
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Credentials were valid at PBC decision; duty expires before DBC consumption while request/checkpoint remain live. Independent record freshness is required in repaired-e."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SPEC_GAP",
+        "error": null,
+        "outcome": "ACCEPT",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl6-barrier/paper-minimal-expired-duty/paper-minimal/barrier-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl6-barrier-live-20261011/",
+        "message": "S3-0018",
+        "note": ""
+      },
+      "reportedClassification": "SPEC_GAP"
+    },
+    {
+      "caseId": "E02-expired-duty-repaired-e",
+      "caseFamily": "E02",
+      "profile": "repaired-e",
+      "variant": "expired-duty",
+      "slice": "sl6-barrier",
+      "path": "run:catalog/sl6-barrier/repaired-e-expired-duty",
+      "status": "PASS",
+      "sourceRefs": [
+        "S03",
+        "S04",
+        "S15",
+        "S17",
+        "SPEC4/E02"
+      ],
+      "assumptions": [
+        "A01",
+        "A08",
+        "A09",
+        "A17",
+        "A20",
+        "A22",
+        "A36",
+        "A41"
+      ],
+      "expected": {
+        "property": "trust-freshness",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "EXPIRED",
+        "qualification": "Credentials were valid at PBC decision; duty expires before DBC consumption while request/checkpoint remain live. Independent record freshness is required in repaired-e."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "REPAIR_SUPPORTED",
+        "error": "EXPIRED",
+        "outcome": "REJECT",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl6-barrier/repaired-e-expired-duty/repaired-e/barrier-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl6-barrier-live-20261011/",
+        "message": "S3-0018",
+        "note": ""
+      },
+      "reportedClassification": "REPAIR_SUPPORTED"
+    },
+    {
+      "caseId": "E01-wrong-destination-paper-strict",
+      "caseFamily": "E01",
+      "profile": "paper-strict",
+      "variant": "wrong-destination",
+      "slice": "sl7-destination",
+      "path": "run:catalog/sl7-destination/paper-strict-wrong-destination",
+      "status": "PASS",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Use an otherwise valid request/certificate for a different destination chain/KSSC and submit it here without rewriting its signed fields. The receiver rejects WRONG_DESTINATION before grant state changes. Paper forwarded tuples omit this authenticated destination binding; this is a chosen completion under compromised-relay stress."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SPEC_GAP",
+        "error": null,
+        "outcome": "ACCEPT",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl7-destination/paper-strict-wrong-destination/paper-strict/destination-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl7-destination-live-20261011/",
+        "message": "S3-0020",
+        "note": ""
+      },
+      "reportedClassification": "SPEC_GAP"
+    },
+    {
+      "caseId": "E01-wrong-destination-paper-minimal",
+      "caseFamily": "E01",
+      "profile": "paper-minimal",
+      "variant": "wrong-destination",
+      "slice": "sl7-destination",
+      "path": "run:catalog/sl7-destination/paper-minimal-wrong-destination",
+      "status": "PASS",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Use an otherwise valid request/certificate for a different destination chain/KSSC and submit it here without rewriting its signed fields. The receiver rejects WRONG_DESTINATION before grant state changes. Paper forwarded tuples omit this authenticated destination binding; this is a chosen completion under compromised-relay stress."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SPEC_GAP",
+        "error": null,
+        "outcome": "ACCEPT",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl7-destination/paper-minimal-wrong-destination/paper-minimal/destination-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl7-destination-live-20261011/",
+        "message": "S3-0020",
+        "note": ""
+      },
+      "reportedClassification": "SPEC_GAP"
+    },
+    {
+      "caseId": "E01-wrong-destination-repaired-e",
+      "caseFamily": "E01",
+      "profile": "repaired-e",
+      "variant": "wrong-destination",
+      "slice": "sl7-destination",
+      "path": "run:catalog/sl7-destination/repaired-e-wrong-destination",
+      "status": "PASS",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A36",
+        "A41"
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "WRONG_DESTINATION",
+        "qualification": "Use an otherwise valid request/certificate for a different destination chain/KSSC and submit it here without rewriting its signed fields. The receiver rejects WRONG_DESTINATION before grant state changes. Paper forwarded tuples omit this authenticated destination binding; this is a chosen completion under compromised-relay stress."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "REPAIR_SUPPORTED",
+        "error": "WRONG_DESTINATION",
+        "outcome": "REJECT",
+        "firingStep": 1,
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl7-destination/repaired-e-wrong-destination/repaired-e/destination-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl7-destination-live-20261011/",
+        "message": "S3-0020",
+        "note": ""
+      },
+      "reportedClassification": "REPAIR_SUPPORTED"
+    },
+    {
+      "caseId": "E01-expiry-boundary-paper-strict",
+      "caseFamily": "E01",
+      "profile": "paper-strict",
+      "variant": "expiry-boundary",
+      "slice": "sl7-destination",
+      "path": "run:catalog/sl7-destination/paper-strict-expiry-boundary",
+      "status": "PASS",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Set the controlled DBC clock to expiresAt exactly. Forwarded paper tuples omit signed request expiry; compare the documented grant TTL fill."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SPEC_GAP",
+        "error": null,
+        "outcome": "ACCEPT",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl7-destination/paper-strict-expiry-boundary/paper-strict/destination-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl7-destination-live-20261011/",
+        "message": "S3-0020",
+        "note": ""
+      },
+      "reportedClassification": "SPEC_GAP"
+    },
+    {
+      "caseId": "E01-expiry-boundary-paper-minimal",
+      "caseFamily": "E01",
+      "profile": "paper-minimal",
+      "variant": "expiry-boundary",
+      "slice": "sl7-destination",
+      "path": "run:catalog/sl7-destination/paper-minimal-expiry-boundary",
+      "status": "PASS",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A41"
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "CONDITIONAL",
+        "classification": "SPEC_GAP",
+        "error": null,
+        "qualification": "Set the controlled DBC clock to expiresAt exactly. Forwarded paper tuples omit signed request expiry; compare the documented grant TTL fill."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "SPEC_GAP",
+        "error": null,
+        "outcome": "ACCEPT",
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl7-destination/paper-minimal-expiry-boundary/paper-minimal/destination-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl7-destination-live-20261011/",
+        "message": "S3-0020",
+        "note": ""
+      },
+      "reportedClassification": "SPEC_GAP"
+    },
+    {
+      "caseId": "E01-expiry-boundary-repaired-e",
+      "caseFamily": "E01",
+      "profile": "repaired-e",
+      "variant": "expiry-boundary",
+      "slice": "sl7-destination",
+      "path": "run:catalog/sl7-destination/repaired-e-expiry-boundary",
+      "status": "PASS",
+      "sourceRefs": [
+        "S09",
+        "S12",
+        "S13",
+        "S20",
+        "SPEC4/E01"
+      ],
+      "assumptions": [
+        "A01",
+        "A02",
+        "A14",
+        "A19",
+        "A25",
+        "A36",
+        "A41"
+      ],
+      "expected": {
+        "property": "decision-provenance",
+        "outcome": "REJECT",
+        "classification": "REPAIR_SUPPORTED",
+        "error": "EXPIRED",
+        "qualification": "Set the controlled DBC clock to expiresAt exactly. Forwarded paper tuples omit signed request expiry; compare the documented grant TTL fill."
+      },
+      "frozenExecutionStatus": "NOT_RUN",
+      "observed": {
+        "ok": true,
+        "classification": "REPAIR_SUPPORTED",
+        "error": "EXPIRED",
+        "outcome": "REJECT",
+        "firingStep": 9,
+        "delivery": "unknown"
+      },
+      "proofFiles": [
+        "run:catalog/sl7-destination/repaired-e-expiry-boundary/repaired-e/destination-stress/result.json"
+      ],
+      "historicalRun": {
+        "evidence": "evaluation/evidence/e2/sl7-destination-live-20261011/",
+        "message": "S3-0020",
+        "note": ""
+      },
+      "reportedClassification": "REPAIR_SUPPORTED"
+    }
+  ],
+  "note": "aggregated from the frozen catalog and the proof files that the e2 row checks accepted; no new oracle; the 4 paper crash rows carry the D47 label and are never findings"
+}

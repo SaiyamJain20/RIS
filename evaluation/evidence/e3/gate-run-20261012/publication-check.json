@@ -1,0 +1,246 @@
+{
+ "note": "agent 3 (proxy) publication checks; correlated self-review (A1-0059). The tool pre-check is the proxy running agent 1's unchanged tools read-only (python -I -B) on both copies; it is not agent 1's review (A1-0084).",
+ "historicalPathComparison": {
+  "recovery-expiry": {
+   "historical": "evaluation/evidence/e2/expiry-live-20261009/run",
+   "historicalFiles": 181,
+   "publishedFiles": 181,
+   "onlyHistorical": {},
+   "onlyPublished": {}
+  },
+  "duplicate-outcome": {
+   "historical": "evaluation/evidence/e2/duplicate-live-20261009/run",
+   "historicalFiles": 76,
+   "publishedFiles": 76,
+   "onlyHistorical": {},
+   "onlyPublished": {}
+  },
+  "nonce-replay": {
+   "historical": "evaluation/evidence/e2/grouped-replay-live-20261009/run",
+   "historicalFiles": 82,
+   "publishedFiles": 82,
+   "onlyHistorical": {},
+   "onlyPublished": {}
+  },
+  "sl1-subject": {
+   "historical": "evaluation/evidence/e2/sl1-subject-live-20261010/run",
+   "historicalFiles": 133,
+   "publishedFiles": 127,
+   "onlyHistorical": {
+    "<case>/<profile>/dbc-rpc/cast-checkpoints.json": 3,
+    "<case>/<profile>/dbc-rpc/commands.json": 3,
+    "<case>/<profile>/pbc-rpc/cast-checkpoints.json": 3,
+    "<case>/<profile>/pbc-rpc/commands.json": 3
+   },
+   "onlyPublished": {
+    "<case>/<profile>/bootstrap.json": 3,
+    "<case>/<profile>/subject-instance/bootstrap.json": 3
+   }
+  },
+  "sl2-relay": {
+   "historical": "evaluation/evidence/e2/sl2-relay-live-20261010/run",
+   "historicalFiles": 275,
+   "publishedFiles": 261,
+   "onlyHistorical": {
+    "<case>/<profile>/dbc-rpc/cast-checkpoints.json": 7,
+    "<case>/<profile>/dbc-rpc/commands.json": 7,
+    "<case>/<profile>/pbc-rpc/cast-checkpoints.json": 7,
+    "<case>/<profile>/pbc-rpc/commands.json": 7
+   },
+   "onlyPublished": {
+    "<case>/<profile>/bootstrap.json": 7,
+    "<case>/<profile>/relay-instance/bootstrap.json": 7
+   }
+  },
+  "sl3-audit": {
+   "historical": "evaluation/evidence/e2/sl3-audit-live-20261010/run",
+   "historicalFiles": 233,
+   "publishedFiles": 221,
+   "onlyHistorical": {
+    "<case>/<profile>/dbc-rpc/cast-checkpoints.json": 6,
+    "<case>/<profile>/dbc-rpc/commands.json": 6,
+    "<case>/<profile>/pbc-rpc/cast-checkpoints.json": 6,
+    "<case>/<profile>/pbc-rpc/commands.json": 6
+   },
+   "onlyPublished": {
+    "<case>/<profile>/audit-instance/bootstrap.json": 6,
+    "<case>/<profile>/bootstrap.json": 6
+   }
+  },
+  "sl4-receipt": {
+   "historical": "evaluation/evidence/e2/sl4-receipt-live-20261010/run",
+   "historicalFiles": 294,
+   "publishedFiles": 280,
+   "onlyHistorical": {
+    "<case>/<profile>/dbc-rpc/cast-checkpoints.json": 7,
+    "<case>/<profile>/dbc-rpc/commands.json": 7,
+    "<case>/<profile>/pbc-rpc/cast-checkpoints.json": 7,
+    "<case>/<profile>/pbc-rpc/commands.json": 7
+   },
+   "onlyPublished": {
+    "<case>/<profile>/bootstrap.json": 7,
+    "<case>/<profile>/receipt-instance/bootstrap.json": 7
+   }
+  },
+  "sl5-trust": {
+   "historical": "evaluation/evidence/e2/sl5-trust-live-20261010/run",
+   "historicalFiles": 253,
+   "publishedFiles": 241,
+   "onlyHistorical": {
+    "<case>/<profile>/dbc-rpc/cast-checkpoints.json": 6,
+    "<case>/<profile>/dbc-rpc/commands.json": 6,
+    "<case>/<profile>/pbc-rpc/cast-checkpoints.json": 6,
+    "<case>/<profile>/pbc-rpc/commands.json": 6
+   },
+   "onlyPublished": {
+    "<case>/<profile>/bootstrap.json": 6,
+    "<case>/<profile>/trust-instance/bootstrap.json": 6
+   }
+  },
+  "sl6-barrier": {
+   "historical": "evaluation/evidence/e2/sl6-barrier-live-20261011/run",
+   "historicalFiles": 379,
+   "publishedFiles": 361,
+   "onlyHistorical": {
+    "<case>/<profile>/dbc-rpc/cast-checkpoints.json": 9,
+    "<case>/<profile>/dbc-rpc/commands.json": 9,
+    "<case>/<profile>/pbc-rpc/cast-checkpoints.json": 9,
+    "<case>/<profile>/pbc-rpc/commands.json": 9
+   },
+   "onlyPublished": {
+    "<case>/<profile>/barrier-instance/bootstrap.json": 9,
+    "<case>/<profile>/bootstrap.json": 9
+   }
+  },
+  "sl7-destination": {
+   "historical": "evaluation/evidence/e2/sl7-destination-live-20261011/run",
+   "historicalFiles": 271,
+   "publishedFiles": 262,
+   "onlyHistorical": {
+    "<case>/<profile>/dbc-rpc/cast-checkpoints.json": 6,
+    "<case>/<profile>/dbc-rpc/commands.json": 6,
+    "<case>/<profile>/pbc-rpc/cast-checkpoints.json": 6,
+    "<case>/<profile>/pbc-rpc/commands.json": 6
+   },
+   "onlyPublished": {
+    "<case>/<profile>/bootstrap.json": 6,
+    "<case>/<profile>/destination-instance/bootstrap.json": 6,
+    "<case>/<profile>/source-instance/bootstrap.json": 3
+   }
+  }
+ },
+ "reviewToolPreCheck": {
+  "command": ".venv/bin/python -I -B ledger/tools/<tool> <copy>/<argument> > <out>.json",
+  "copies": {
+   "published": "evaluation/evidence/e3/gate-run-20261012",
+   "raw": "tmp/p3/gate-run/out (job tmp)"
+  },
+  "tools": {
+   "early": {
+    "tool": "ledger/tools/review_early_rows_evidence.py",
+    "toolSha256": "199dd9366f500be395bd48b25278fdb9b70f698adb52810fe2dec9a44e120447",
+    "argument": "<copy>/catalog",
+    "exitPublished": 0,
+    "exitRaw": 0,
+    "rows": 12,
+    "rowsPass": 12,
+    "rowsWithFailures": 0,
+    "outputSha256": "d32b4a7bc94c6081afca70c79ffd27251511820abccd172018da472bc1c50757",
+    "identicalToRaw": true,
+    "stderrBytesPublished": 0
+   },
+   "sl1": {
+    "tool": "ledger/tools/review_subject_evidence.py",
+    "toolSha256": "3e180ac483da402ce160089c216f65180ef9b7c1fa400580090f84049a9e2c88",
+    "argument": "<copy>/catalog/sl1-subject",
+    "exitPublished": 0,
+    "exitRaw": 0,
+    "rows": 3,
+    "rowsPass": 3,
+    "rowsWithFailures": 0,
+    "outputSha256": "792d4075d71c7f910c0f7261dbf20657e5590a00d0ec341c7fb6bcec2e0715c0",
+    "identicalToRaw": true,
+    "stderrBytesPublished": 0
+   },
+   "sl2": {
+    "tool": "ledger/tools/review_relay_stress_evidence.py",
+    "toolSha256": "98a97c6365f73b63d43ad56562aa960bd95a9cc09f936a2a40109cd79a0ba616",
+    "argument": "<copy>/catalog/sl2-relay",
+    "exitPublished": 0,
+    "exitRaw": 0,
+    "rows": 7,
+    "rowsPass": 7,
+    "rowsWithFailures": 0,
+    "outputSha256": "c66ae746701d5e7355b42f36648be45f208a485026d76301c48437daaab93bad",
+    "identicalToRaw": true,
+    "stderrBytesPublished": 0
+   },
+   "sl3": {
+    "tool": "ledger/tools/review_audit_stress_evidence.py",
+    "toolSha256": "f02cbec4cead2006084cb6e04c0404233357009612b21d6c19c91bb7a220b5a7",
+    "argument": "<copy>/catalog/sl3-audit",
+    "exitPublished": 0,
+    "exitRaw": 0,
+    "rows": 6,
+    "rowsPass": 6,
+    "rowsWithFailures": 0,
+    "outputSha256": "a8066225f15ff64d2a07213c67250729c90a631b1cf05c3e3eb85fa72ccb2c9c",
+    "identicalToRaw": true,
+    "stderrBytesPublished": 0
+   },
+   "sl4": {
+    "tool": "ledger/tools/review_receipt_stress_evidence.py",
+    "toolSha256": "5fa5a7c9406b247f16c3d67d923527109cfffe7c83d1e9d6b71434c95bf0fb9e",
+    "argument": "<copy>/catalog/sl4-receipt",
+    "exitPublished": 0,
+    "exitRaw": 0,
+    "rows": 7,
+    "rowsPass": 7,
+    "rowsWithFailures": 0,
+    "outputSha256": "ce632a22c1d50bfa56c28e037e19198b1fc0269059e46fb125bd3aa285788bc7",
+    "identicalToRaw": true,
+    "stderrBytesPublished": 0
+   },
+   "sl5": {
+    "tool": "ledger/tools/review_trust_stress_evidence.py",
+    "toolSha256": "13c10d1d6e06ef62f37b0bc660fbf7d0a4ca8031cd22b499afb31cac96ee678f",
+    "argument": "<copy>/catalog/sl5-trust",
+    "exitPublished": 0,
+    "exitRaw": 0,
+    "rows": 6,
+    "rowsPass": 6,
+    "rowsWithFailures": 0,
+    "outputSha256": "1d49606f83b9e1bb903a93f16235e60ee2f759b56827f4a99d9d2f7019eb9066",
+    "identicalToRaw": true,
+    "stderrBytesPublished": 0
+   },
+   "sl6": {
+    "tool": "ledger/tools/review_barrier_stress_evidence.py",
+    "toolSha256": "9edc3eb2afbb7972e6951a6e8af7570c0d2cd22f1550fc13d273649c08412aee",
+    "argument": "<copy>/catalog/sl6-barrier",
+    "exitPublished": 0,
+    "exitRaw": 0,
+    "rows": 9,
+    "rowsPass": 9,
+    "rowsWithFailures": 0,
+    "outputSha256": "cd0bd9715ae5f93060ebcd2a6429f12c897033e57434268b5be96a2580cab0bf",
+    "identicalToRaw": true,
+    "stderrBytesPublished": 0
+   },
+   "sl7": {
+    "tool": "ledger/tools/review_destination_stress_evidence.py",
+    "toolSha256": "9e788ce91859e121a295ea7eab6a6e684c84ac335a13f6145bd205be36c84284",
+    "argument": "<copy>/catalog/sl7-destination",
+    "exitPublished": 0,
+    "exitRaw": 0,
+    "rows": 6,
+    "rowsPass": 6,
+    "rowsWithFailures": 0,
+    "outputSha256": "39da1a6c4e5d53537afc73cf93e724ae684b2e06573d546281f20ec7c5be7e02",
+    "identicalToRaw": true,
+    "stderrBytesPublished": 0
+   }
+  },
+  "totalRows": 56
+ }
+}

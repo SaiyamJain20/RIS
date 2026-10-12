@@ -1,0 +1,117 @@
+[
+  {
+    "operation": "prepare_request",
+    "startedAt": "2026-10-12T02:45:45.876625+00:00",
+    "endedAt": "2026-10-12T02:45:45.890757+00:00",
+    "requestSha256": "e70c6109a3d768ee56ab0424c2a160fbaee525ffd7426889c292b80b28dc29a3",
+    "responseCanonicalSha256": "153eb1572be7ef789de35f271426fe54d1cc907839003614a5dca154eb6fbb7d",
+    "response": {
+      "schemaVersion": "v1",
+      "ok": true,
+      "result": {
+        "schemaVersion": "v1",
+        "adapterMode": "symbolic",
+        "request": {
+          "sourceChainId": "18545",
+          "destinationChainId": "28545",
+          "psc": "0xbc8a9d0dde8121518c2ae861fa22948baae55818",
+          "kssc": "0xe51ef867d3300c8e89dfb234dc0c986c5c188903",
+          "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+          "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+          "action": "1",
+          "policyVersion": "1",
+          "authEpoch": "3",
+          "keyEpoch": "0",
+          "nonce": "1",
+          "expiresAt": "1791773175",
+          "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+        },
+        "requestDigest": "0x645c7eb490a424caaec12110f5b1757ea554475ac7fdf4b30c93d055dd114eff",
+        "signature": "0xf79c3c381d539081b95bf7c9ff22826e99558d512cbe45845f968819162a5677758d8dbc890b88860edf77c4d869dacc0424eec7755090a0ffd46f71202720511b",
+        "signer": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+      },
+      "error": null
+    },
+    "validationFailure": null
+  },
+  {
+    "operation": "collect_checkpoint",
+    "startedAt": "2026-10-12T02:45:46.912742+00:00",
+    "endedAt": "2026-10-12T02:45:46.938453+00:00",
+    "requestSha256": "bf5af74be983331f2ed84ab6cba6914e32e7e2396ba8652b090a2f6200475114",
+    "responseCanonicalSha256": "7cc07bd450d60708943ec4e9c9f07e8a8c300d1366f5edbc56d760d879dc3bc0",
+    "response": {
+      "schemaVersion": "v1",
+      "ok": true,
+      "result": {
+        "schemaVersion": "v1",
+        "adapterMode": "symbolic",
+        "checkpoint": {
+          "sequence": "1",
+          "authEpoch": "3",
+          "policyVersion": "1",
+          "keyEpoch": "0",
+          "witnessSetVersion": "1",
+          "sourceChainId": "18545",
+          "psc": "0xbc8a9d0dde8121518c2ae861fa22948baae55818",
+          "sourceBlockNumber": "70",
+          "sourceBlockHash": "0x9fcc7b745c830ff7b1307edae37c5a876f2c00ff6db3f47a4c5d1b05adbe8798",
+          "expiresAt": "1791773206"
+        },
+        "signatures": [
+          "0x36d734050169ba411db79238215ef2f15c93c1b838fd62f8058563b473fc5da01e0618147121bdc4262296f7a36c426a1c3d8c92ff044e6b36be8e71974b65491c"
+        ]
+      },
+      "error": null
+    },
+    "validationFailure": null
+  },
+  {
+    "operation": "collect_decision",
+    "startedAt": "2026-10-12T02:45:48.091802+00:00",
+    "endedAt": "2026-10-12T02:45:48.122362+00:00",
+    "requestSha256": "d08c43f3d392f9660a9a089661c8355ac13ecc22f2c73b1e07e66cb1b6f1facd",
+    "responseCanonicalSha256": "d521775329a57ed24e41914cc258cf2c33de78ae0992622958ef122d13364841",
+    "response": {
+      "schemaVersion": "v1",
+      "ok": true,
+      "result": {
+        "schemaVersion": "v1",
+        "adapterMode": "symbolic",
+        "decision": {
+          "requestDigest": "0x645c7eb490a424caaec12110f5b1757ea554475ac7fdf4b30c93d055dd114eff",
+          "result": "1",
+          "credentialDigest": "0xbf6b3a04b6311d678bc7acc2bc4d938936013c5d2dc7d705dd204ac7aa56bb9d",
+          "stateSequence": "1",
+          "witnessSetVersion": "1",
+          "sourceBlockNumber": "70",
+          "sourceBlockHash": "0x9fcc7b745c830ff7b1307edae37c5a876f2c00ff6db3f47a4c5d1b05adbe8798",
+          "expiresAt": "1791773175"
+        },
+        "signatures": [
+          "0xc9d2c417ff4a56b63ee0e3c02140e80f12f83e2635434ea3f9fe809c2a7674cf5de97c2947f55a82d4d17c24a7b2098e90326dfabd15d1089bc300bc958ec5011c"
+        ],
+        "credentialRecords": [
+          {
+            "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+            "role": "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6",
+            "kind": "1",
+            "serial": "101",
+            "anchorVersion": "1",
+            "validUntil": "1791859527"
+          },
+          {
+            "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+            "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+            "kind": "2",
+            "serial": "0",
+            "anchorVersion": "1",
+            "validUntil": "1791801927"
+          }
+        ]
+      },
+      "error": null
+    },
+    "validationFailure": null
+  }
+]

@@ -1,0 +1,3247 @@
+{
+  "rq": "E",
+  "executionMode": "real-integrated",
+  "interfaceVersion": "v1",
+  "adapterMode": "symbolic",
+  "status": "PASS",
+  "gateDecision": "run stages only; not gate E PASS. Gate E is adjudicated by the GATES.md checklist and three same-source ACKs (A1-0082 P4-3/P4-4); evaluation.gate stays fail-closed.",
+  "startedAt": "2026-10-12T01:31:36.460526+00:00",
+  "endedAt": "2026-10-12T02:50:45.957045+00:00",
+  "planPath": "evaluation/evidence/e3/gate-plan-20261012/integration-plan.json",
+  "planSha256": "c00860192aaa69fd2e5f7baf132f5ebf10bf14ebba377edada31c1d9372b6bb9",
+  "runId": "E-gate-20261012",
+  "freezeMessage": "S3-0021",
+  "acks": {
+    "agent-1": {
+      "commit": "21b37fbaf569ef37ddd679f0f1db1891fd8db75d",
+      "path": "communication/agent-1/outbox/0083-ack-e-gate-run-freeze.md",
+      "sha256": "56ea6662b29cffda07d75794f577f09594ba22efe15231c26a6d32b20f36a19e",
+      "messageId": "A1-0083"
+    },
+    "agent-2": {
+      "commit": "21b37fbaf569ef37ddd679f0f1db1891fd8db75d",
+      "path": "communication/agent-1/solo/agent-2-proxy/outbox/0021-ack-e-gate-run-freeze.md",
+      "sha256": "43a6e4c02eec2b5af31201ec7fb559bc0961024c22c611e3ea8329e24869e0aa",
+      "messageId": "S2-0021"
+    },
+    "freeze": {
+      "commit": "21b37fbaf569ef37ddd679f0f1db1891fd8db75d",
+      "path": "communication/agent-1/solo/agent-3-proxy/outbox/0021-freeze-e-gate-run.md",
+      "sha256": "dcb8c72a70462aa51f7cd46d9e19518388c89b3af71eeae03561002828ecf682",
+      "messageId": "S3-0021"
+    }
+  },
+  "failure": null,
+  "sourceStable": true,
+  "worktreeUnchanged": true,
+  "planReverified": true,
+  "stages": {
+    "verify-freeze-and-versions": {
+      "status": "PASS",
+      "startedAt": "2026-10-12T01:31:55.429744+00:00",
+      "endedAt": "2026-10-12T01:31:55.834346+00:00",
+      "freeze": "UNCHANGED",
+      "versionsOk": true
+    },
+    "source-bracket-pre": {
+      "status": "PASS",
+      "startedAt": "2026-10-12T01:31:55.834355+00:00",
+      "endedAt": "2026-10-12T01:31:56.371499+00:00"
+    },
+    "catalog-56": {
+      "status": "PASS",
+      "startedAt": "2026-10-12T01:31:56.371825+00:00",
+      "endedAt": "2026-10-12T02:50:22.340982+00:00",
+      "counts": {
+        "PASS": 56,
+        "FAILED": 0,
+        "NOT_RUN": 0
+      }
+    },
+    "proverif": {
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:50:22.347526+00:00",
+      "endedAt": "2026-10-12T02:50:22.378695+00:00"
+    },
+    "source-bracket-post": {
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:50:22.378710+00:00",
+      "endedAt": "2026-10-12T02:50:41.174172+00:00"
+    },
+    "gate-evidence": {
+      "status": "WRITTEN",
+      "at": "2026-10-12T02:50:41.199569+00:00",
+      "criteria": {
+        "interface-and-source-review": "VERIFIED",
+        "legitimate-and-denied-controls": "VERIFIED",
+        "E01-E02-E03-classification": "VERIFIED",
+        "repairs-and-mutants": "VERIFIED",
+        "real-two-chain-and-recovery": "VERIFIED",
+        "proverif-and-negative-control": "VERIFIED",
+        "RQ1-report": "PENDING",
+        "stable-hashed-input-output-tools": "VERIFIED",
+        "three-matching-acks": "PENDING"
+      }
+    },
+    "manifest": {
+      "status": "WRITTEN",
+      "at": "2026-10-12T02:50:45.956869+00:00"
+    }
+  },
+  "rows": [
+    {
+      "caseId": "E03-crash-after-intent-paper-strict",
+      "slice": "recovery-expiry",
+      "case": "paper-strict-after_intent",
+      "profile": "paper-strict",
+      "path": "catalog/recovery-expiry/paper-strict-after_intent",
+      "status": "PASS",
+      "startedAt": "2026-10-12T01:31:56.372237+00:00",
+      "memAvailableKiBAtStart": 3865324,
+      "caseStatus": "RECOVERY_CONTROL_PASS",
+      "expiredRetry": "EXPIRED_NO_CHANGE_PASS",
+      "endedAt": "2026-10-12T01:33:03.041732+00:00",
+      "elapsedSeconds": 66.662,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E03-crash-after-send-paper-strict",
+      "slice": "recovery-expiry",
+      "case": "paper-strict-after_send",
+      "profile": "paper-strict",
+      "path": "catalog/recovery-expiry/paper-strict-after_send",
+      "status": "PASS",
+      "startedAt": "2026-10-12T01:33:03.042151+00:00",
+      "memAvailableKiBAtStart": 3859672,
+      "caseStatus": "RECOVERY_CONTROL_PASS",
+      "expiredRetry": "EXPIRED_NO_CHANGE_PASS",
+      "endedAt": "2026-10-12T01:34:09.191092+00:00",
+      "elapsedSeconds": 66.149,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E03-crash-after-intent-paper-minimal",
+      "slice": "recovery-expiry",
+      "case": "paper-minimal-after_intent",
+      "profile": "paper-minimal",
+      "path": "catalog/recovery-expiry/paper-minimal-after_intent",
+      "status": "PASS",
+      "startedAt": "2026-10-12T01:34:09.191501+00:00",
+      "memAvailableKiBAtStart": 3775412,
+      "caseStatus": "RECOVERY_CONTROL_PASS",
+      "expiredRetry": "EXPIRED_NO_CHANGE_PASS",
+      "endedAt": "2026-10-12T01:35:13.800300+00:00",
+      "elapsedSeconds": 64.608,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E03-crash-after-send-paper-minimal",
+      "slice": "recovery-expiry",
+      "case": "paper-minimal-after_send",
+      "profile": "paper-minimal",
+      "path": "catalog/recovery-expiry/paper-minimal-after_send",
+      "status": "PASS",
+      "startedAt": "2026-10-12T01:35:13.800789+00:00",
+      "memAvailableKiBAtStart": 3765208,
+      "caseStatus": "RECOVERY_CONTROL_PASS",
+      "expiredRetry": "EXPIRED_NO_CHANGE_PASS",
+      "endedAt": "2026-10-12T01:36:16.814154+00:00",
+      "elapsedSeconds": 63.013,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E03-crash-after-intent-repaired-e",
+      "slice": "recovery-expiry",
+      "case": "repaired-e-after_intent",
+      "profile": "repaired-e",
+      "path": "catalog/recovery-expiry/repaired-e-after_intent",
+      "status": "PASS",
+      "startedAt": "2026-10-12T01:36:16.814644+00:00",
+      "memAvailableKiBAtStart": 3790736,
+      "caseStatus": "RECOVERY_CONTROL_PASS",
+      "expiredRetry": "EXPIRED_NO_CHANGE_PASS",
+      "endedAt": "2026-10-12T01:37:24.557813+00:00",
+      "elapsedSeconds": 67.743,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E03-crash-after-send-repaired-e",
+      "slice": "recovery-expiry",
+      "case": "repaired-e-after_send",
+      "profile": "repaired-e",
+      "path": "catalog/recovery-expiry/repaired-e-after_send",
+      "status": "PASS",
+      "startedAt": "2026-10-12T01:37:24.558390+00:00",
+      "memAvailableKiBAtStart": 3741208,
+      "caseStatus": "RECOVERY_CONTROL_PASS",
+      "expiredRetry": "EXPIRED_NO_CHANGE_PASS",
+      "endedAt": "2026-10-12T01:38:35.514579+00:00",
+      "elapsedSeconds": 70.952,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E03-duplicate-outcome-paper-strict",
+      "slice": "duplicate-outcome",
+      "case": "paper-strict-duplicate-outcome",
+      "profile": "paper-strict",
+      "path": "catalog/duplicate-outcome/paper-strict-duplicate-outcome",
+      "status": "PASS",
+      "startedAt": "2026-10-12T01:38:37.148207+00:00",
+      "memAvailableKiBAtStart": 3816040,
+      "caseStatus": "DUPLICATE_OUTCOME_CONTROL_PASS",
+      "endedAt": "2026-10-12T01:39:39.660096+00:00",
+      "elapsedSeconds": 62.506,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E03-duplicate-outcome-paper-minimal",
+      "slice": "duplicate-outcome",
+      "case": "paper-minimal-duplicate-outcome",
+      "profile": "paper-minimal",
+      "path": "catalog/duplicate-outcome/paper-minimal-duplicate-outcome",
+      "status": "PASS",
+      "startedAt": "2026-10-12T01:39:39.660575+00:00",
+      "memAvailableKiBAtStart": 3836848,
+      "caseStatus": "DUPLICATE_OUTCOME_CONTROL_PASS",
+      "endedAt": "2026-10-12T01:40:42.397639+00:00",
+      "elapsedSeconds": 62.737,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E03-duplicate-outcome-repaired-e",
+      "slice": "duplicate-outcome",
+      "case": "repaired-e-duplicate-outcome",
+      "profile": "repaired-e",
+      "path": "catalog/duplicate-outcome/repaired-e-duplicate-outcome",
+      "status": "PASS",
+      "startedAt": "2026-10-12T01:40:42.398148+00:00",
+      "memAvailableKiBAtStart": 3652276,
+      "caseStatus": "DUPLICATE_OUTCOME_CONTROL_PASS",
+      "endedAt": "2026-10-12T01:41:49.689281+00:00",
+      "elapsedSeconds": 67.291,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E01-nonce-replay-paper-strict",
+      "slice": "nonce-replay",
+      "case": "paper-strict-nonce-replay",
+      "profile": "paper-strict",
+      "path": "catalog/nonce-replay/paper-strict-nonce-replay",
+      "status": "PASS",
+      "startedAt": "2026-10-12T01:41:51.277573+00:00",
+      "memAvailableKiBAtStart": 3807168,
+      "caseStatus": "NONCE_REPLAY_CONTROL_PASS",
+      "endedAt": "2026-10-12T01:42:53.918392+00:00",
+      "elapsedSeconds": 62.634,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E01-nonce-replay-paper-minimal",
+      "slice": "nonce-replay",
+      "case": "paper-minimal-nonce-replay",
+      "profile": "paper-minimal",
+      "path": "catalog/nonce-replay/paper-minimal-nonce-replay",
+      "status": "PASS",
+      "startedAt": "2026-10-12T01:42:53.918892+00:00",
+      "memAvailableKiBAtStart": 3652564,
+      "caseStatus": "NONCE_REPLAY_CONTROL_PASS",
+      "endedAt": "2026-10-12T01:43:54.144801+00:00",
+      "elapsedSeconds": 60.22,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E01-nonce-replay-repaired-e",
+      "slice": "nonce-replay",
+      "case": "repaired-e-nonce-replay",
+      "profile": "repaired-e",
+      "path": "catalog/nonce-replay/repaired-e-nonce-replay",
+      "status": "PASS",
+      "startedAt": "2026-10-12T01:43:54.145367+00:00",
+      "memAvailableKiBAtStart": 3626100,
+      "caseStatus": "NONCE_REPLAY_CONTROL_PASS",
+      "endedAt": "2026-10-12T01:44:59.840560+00:00",
+      "elapsedSeconds": 65.695,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E01-subject-substitution-paper-strict",
+      "slice": "sl1-subject",
+      "case": "paper-strict-subject-substitution",
+      "profile": "paper-strict",
+      "path": "catalog/sl1-subject/paper-strict-subject-substitution",
+      "status": "PASS",
+      "startedAt": "2026-10-12T01:45:01.453431+00:00",
+      "memAvailableKiBAtStart": 3647136,
+      "caseStatus": "SUBJECT_SUBSTITUTION_CONTROL_PASS",
+      "endedAt": "2026-10-12T01:46:34.908527+00:00",
+      "elapsedSeconds": 93.449,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E01-subject-substitution-paper-minimal",
+      "slice": "sl1-subject",
+      "case": "paper-minimal-subject-substitution",
+      "profile": "paper-minimal",
+      "path": "catalog/sl1-subject/paper-minimal-subject-substitution",
+      "status": "PASS",
+      "startedAt": "2026-10-12T01:46:34.909551+00:00",
+      "memAvailableKiBAtStart": 3590544,
+      "caseStatus": "SUBJECT_SUBSTITUTION_CONTROL_PASS",
+      "endedAt": "2026-10-12T01:48:08.920148+00:00",
+      "elapsedSeconds": 94.01,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E01-subject-substitution-repaired-e",
+      "slice": "sl1-subject",
+      "case": "repaired-e-subject-substitution",
+      "profile": "repaired-e",
+      "path": "catalog/sl1-subject/repaired-e-subject-substitution",
+      "status": "PASS",
+      "startedAt": "2026-10-12T01:48:08.920920+00:00",
+      "memAvailableKiBAtStart": 3653956,
+      "caseStatus": "SUBJECT_SUBSTITUTION_CONTROL_PASS",
+      "endedAt": "2026-10-12T01:49:52.248439+00:00",
+      "elapsedSeconds": 103.323,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E01-forged-tuple-paper-strict",
+      "slice": "sl2-relay",
+      "case": "paper-strict-forged-tuple",
+      "profile": "paper-strict",
+      "path": "catalog/sl2-relay/paper-strict-forged-tuple",
+      "status": "PASS",
+      "startedAt": "2026-10-12T01:49:53.848248+00:00",
+      "memAvailableKiBAtStart": 3659220,
+      "caseStatus": "RELAY_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T01:51:20.829104+00:00",
+      "elapsedSeconds": 86.974,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E01-forged-tuple-paper-minimal",
+      "slice": "sl2-relay",
+      "case": "paper-minimal-forged-tuple",
+      "profile": "paper-minimal",
+      "path": "catalog/sl2-relay/paper-minimal-forged-tuple",
+      "status": "PASS",
+      "startedAt": "2026-10-12T01:51:20.829640+00:00",
+      "memAvailableKiBAtStart": 3606612,
+      "caseStatus": "RELAY_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T01:52:45.899445+00:00",
+      "elapsedSeconds": 85.065,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E01-forged-tuple-repaired-e",
+      "slice": "sl2-relay",
+      "case": "repaired-e-forged-tuple",
+      "profile": "repaired-e",
+      "path": "catalog/sl2-relay/repaired-e-forged-tuple",
+      "status": "PASS",
+      "startedAt": "2026-10-12T01:52:45.900625+00:00",
+      "memAvailableKiBAtStart": 3629972,
+      "caseStatus": "RELAY_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T01:54:25.176569+00:00",
+      "elapsedSeconds": 99.275,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E01-new-reference-replay-paper-strict",
+      "slice": "sl2-relay",
+      "case": "paper-strict-new-reference-replay",
+      "profile": "paper-strict",
+      "path": "catalog/sl2-relay/paper-strict-new-reference-replay",
+      "status": "PASS",
+      "startedAt": "2026-10-12T01:54:25.177158+00:00",
+      "memAvailableKiBAtStart": 3572916,
+      "caseStatus": "RELAY_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T01:55:54.898919+00:00",
+      "elapsedSeconds": 89.717,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E01-new-reference-replay-paper-minimal",
+      "slice": "sl2-relay",
+      "case": "paper-minimal-new-reference-replay",
+      "profile": "paper-minimal",
+      "path": "catalog/sl2-relay/paper-minimal-new-reference-replay",
+      "status": "PASS",
+      "startedAt": "2026-10-12T01:55:54.899507+00:00",
+      "memAvailableKiBAtStart": 3633608,
+      "caseStatus": "RELAY_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T01:57:25.457895+00:00",
+      "elapsedSeconds": 90.554,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E01-new-reference-replay-repaired-e",
+      "slice": "sl2-relay",
+      "case": "repaired-e-new-reference-replay",
+      "profile": "repaired-e",
+      "path": "catalog/sl2-relay/repaired-e-new-reference-replay",
+      "status": "PASS",
+      "startedAt": "2026-10-12T01:57:25.458832+00:00",
+      "memAvailableKiBAtStart": 3633768,
+      "caseStatus": "RELAY_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T01:59:05.107475+00:00",
+      "elapsedSeconds": 99.645,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E01-same-nonce-distinct-digests-repaired-e",
+      "slice": "sl2-relay",
+      "case": "repaired-e-same-nonce-distinct-digests",
+      "profile": "repaired-e",
+      "path": "catalog/sl2-relay/repaired-e-same-nonce-distinct-digests",
+      "status": "PASS",
+      "startedAt": "2026-10-12T01:59:05.108063+00:00",
+      "memAvailableKiBAtStart": 3668876,
+      "caseStatus": "RELAY_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:00:44.439281+00:00",
+      "elapsedSeconds": 99.326,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E03-dropped-outcome-paper-strict",
+      "slice": "sl3-audit",
+      "case": "paper-strict-dropped-outcome",
+      "profile": "paper-strict",
+      "path": "catalog/sl3-audit/paper-strict-dropped-outcome",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:00:46.039604+00:00",
+      "memAvailableKiBAtStart": 3653288,
+      "caseStatus": "AUDIT_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:02:16.927573+00:00",
+      "elapsedSeconds": 90.882,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E03-dropped-outcome-paper-minimal",
+      "slice": "sl3-audit",
+      "case": "paper-minimal-dropped-outcome",
+      "profile": "paper-minimal",
+      "path": "catalog/sl3-audit/paper-minimal-dropped-outcome",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:02:16.928194+00:00",
+      "memAvailableKiBAtStart": 3629512,
+      "caseStatus": "AUDIT_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:03:44.490967+00:00",
+      "elapsedSeconds": 87.559,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E03-dropped-outcome-repaired-e",
+      "slice": "sl3-audit",
+      "case": "repaired-e-dropped-outcome",
+      "profile": "repaired-e",
+      "path": "catalog/sl3-audit/repaired-e-dropped-outcome",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:03:44.491489+00:00",
+      "memAvailableKiBAtStart": 3770936,
+      "caseStatus": "AUDIT_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:05:06.100126+00:00",
+      "elapsedSeconds": 81.608,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E03-fabricated-outcome-paper-strict",
+      "slice": "sl3-audit",
+      "case": "paper-strict-fabricated-outcome",
+      "profile": "paper-strict",
+      "path": "catalog/sl3-audit/paper-strict-fabricated-outcome",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:05:06.100623+00:00",
+      "memAvailableKiBAtStart": 3735212,
+      "caseStatus": "AUDIT_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:06:23.006919+00:00",
+      "elapsedSeconds": 76.906,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E03-fabricated-outcome-paper-minimal",
+      "slice": "sl3-audit",
+      "case": "paper-minimal-fabricated-outcome",
+      "profile": "paper-minimal",
+      "path": "catalog/sl3-audit/paper-minimal-fabricated-outcome",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:06:23.007462+00:00",
+      "memAvailableKiBAtStart": 3727096,
+      "caseStatus": "AUDIT_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:07:39.360218+00:00",
+      "elapsedSeconds": 76.352,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E03-fabricated-outcome-repaired-e",
+      "slice": "sl3-audit",
+      "case": "repaired-e-fabricated-outcome",
+      "profile": "repaired-e",
+      "path": "catalog/sl3-audit/repaired-e-fabricated-outcome",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:07:39.360786+00:00",
+      "memAvailableKiBAtStart": 3695756,
+      "caseStatus": "AUDIT_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:08:59.374233+00:00",
+      "elapsedSeconds": 80.013,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E03-receipt-binding-control-requestDigest-repaired-e",
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-binding-control-requestDigest",
+      "profile": "repaired-e",
+      "path": "catalog/sl4-receipt/repaired-e-receipt-binding-control-requestDigest",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:09:00.691167+00:00",
+      "memAvailableKiBAtStart": 3734652,
+      "caseStatus": "RECEIPT_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:10:26.456869+00:00",
+      "elapsedSeconds": 85.765,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E03-receipt-binding-control-gid-repaired-e",
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-binding-control-gid",
+      "profile": "repaired-e",
+      "path": "catalog/sl4-receipt/repaired-e-receipt-binding-control-gid",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:10:26.457398+00:00",
+      "memAvailableKiBAtStart": 3856800,
+      "caseStatus": "RECEIPT_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:11:47.776765+00:00",
+      "elapsedSeconds": 81.319,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E03-receipt-binding-control-dataId-repaired-e",
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-binding-control-dataId",
+      "profile": "repaired-e",
+      "path": "catalog/sl4-receipt/repaired-e-receipt-binding-control-dataId",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:11:47.777333+00:00",
+      "memAvailableKiBAtStart": 3947136,
+      "caseStatus": "RECEIPT_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:13:10.960349+00:00",
+      "elapsedSeconds": 83.183,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E03-receipt-signature-control-requestDigest-repaired-e",
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-signature-control-requestDigest",
+      "profile": "repaired-e",
+      "path": "catalog/sl4-receipt/repaired-e-receipt-signature-control-requestDigest",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:13:10.960912+00:00",
+      "memAvailableKiBAtStart": 3802628,
+      "caseStatus": "RECEIPT_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:14:33.649313+00:00",
+      "elapsedSeconds": 82.688,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E03-receipt-signature-control-gid-repaired-e",
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-signature-control-gid",
+      "profile": "repaired-e",
+      "path": "catalog/sl4-receipt/repaired-e-receipt-signature-control-gid",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:14:33.649899+00:00",
+      "memAvailableKiBAtStart": 3805264,
+      "caseStatus": "RECEIPT_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:15:56.855887+00:00",
+      "elapsedSeconds": 83.206,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E03-receipt-signature-control-dataId-repaired-e",
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-signature-control-dataId",
+      "profile": "repaired-e",
+      "path": "catalog/sl4-receipt/repaired-e-receipt-signature-control-dataId",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:15:56.856461+00:00",
+      "memAvailableKiBAtStart": 3935400,
+      "caseStatus": "RECEIPT_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:17:19.933251+00:00",
+      "elapsedSeconds": 83.076,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E03-receipt-binding-positive-repaired-e",
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-binding-positive",
+      "profile": "repaired-e",
+      "path": "catalog/sl4-receipt/repaired-e-receipt-binding-positive",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:17:19.933884+00:00",
+      "memAvailableKiBAtStart": 3939600,
+      "caseStatus": "RECEIPT_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:18:36.606566+00:00",
+      "elapsedSeconds": 76.672,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E02-wrong-issuer-paper-strict",
+      "slice": "sl5-trust",
+      "case": "paper-strict-wrong-issuer",
+      "profile": "paper-strict",
+      "path": "catalog/sl5-trust/paper-strict-wrong-issuer",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:18:37.902513+00:00",
+      "memAvailableKiBAtStart": 3711892,
+      "caseStatus": "TRUST_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:19:51.889470+00:00",
+      "elapsedSeconds": 73.981,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E02-wrong-issuer-paper-minimal",
+      "slice": "sl5-trust",
+      "case": "paper-minimal-wrong-issuer",
+      "profile": "paper-minimal",
+      "path": "catalog/sl5-trust/paper-minimal-wrong-issuer",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:19:51.890066+00:00",
+      "memAvailableKiBAtStart": 3733072,
+      "caseStatus": "TRUST_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:21:03.357184+00:00",
+      "elapsedSeconds": 71.467,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E02-wrong-issuer-repaired-e",
+      "slice": "sl5-trust",
+      "case": "repaired-e-wrong-issuer",
+      "profile": "repaired-e",
+      "path": "catalog/sl5-trust/repaired-e-wrong-issuer",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:21:03.357794+00:00",
+      "memAvailableKiBAtStart": 3717708,
+      "caseStatus": "TRUST_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:22:19.687820+00:00",
+      "elapsedSeconds": 76.33,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E02-signed-list-rollback-paper-strict",
+      "slice": "sl5-trust",
+      "case": "paper-strict-signed-list-rollback",
+      "profile": "paper-strict",
+      "path": "catalog/sl5-trust/paper-strict-signed-list-rollback",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:22:19.688398+00:00",
+      "memAvailableKiBAtStart": 3672312,
+      "caseStatus": "TRUST_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:23:34.907653+00:00",
+      "elapsedSeconds": 75.219,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E02-signed-list-rollback-paper-minimal",
+      "slice": "sl5-trust",
+      "case": "paper-minimal-signed-list-rollback",
+      "profile": "paper-minimal",
+      "path": "catalog/sl5-trust/paper-minimal-signed-list-rollback",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:23:34.908230+00:00",
+      "memAvailableKiBAtStart": 3881268,
+      "caseStatus": "TRUST_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:24:46.475624+00:00",
+      "elapsedSeconds": 71.567,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E02-signed-list-rollback-repaired-e",
+      "slice": "sl5-trust",
+      "case": "repaired-e-signed-list-rollback",
+      "profile": "repaired-e",
+      "path": "catalog/sl5-trust/repaired-e-signed-list-rollback",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:24:46.476273+00:00",
+      "memAvailableKiBAtStart": 3813388,
+      "caseStatus": "TRUST_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:26:10.581815+00:00",
+      "elapsedSeconds": 84.105,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E02-pre-barrier-revocation-paper-strict",
+      "slice": "sl6-barrier",
+      "case": "paper-strict-pre-barrier-revocation",
+      "profile": "paper-strict",
+      "path": "catalog/sl6-barrier/paper-strict-pre-barrier-revocation",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:26:12.017972+00:00",
+      "memAvailableKiBAtStart": 3943228,
+      "caseStatus": "BARRIER_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:27:39.607578+00:00",
+      "elapsedSeconds": 87.583,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E02-pre-barrier-revocation-paper-minimal",
+      "slice": "sl6-barrier",
+      "case": "paper-minimal-pre-barrier-revocation",
+      "profile": "paper-minimal",
+      "path": "catalog/sl6-barrier/paper-minimal-pre-barrier-revocation",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:27:39.608567+00:00",
+      "memAvailableKiBAtStart": 3897044,
+      "caseStatus": "BARRIER_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:29:08.493569+00:00",
+      "elapsedSeconds": 88.884,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E02-pre-barrier-revocation-repaired-e",
+      "slice": "sl6-barrier",
+      "case": "repaired-e-pre-barrier-revocation",
+      "profile": "repaired-e",
+      "path": "catalog/sl6-barrier/repaired-e-pre-barrier-revocation",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:29:08.494840+00:00",
+      "memAvailableKiBAtStart": 3741140,
+      "caseStatus": "BARRIER_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:30:47.484346+00:00",
+      "elapsedSeconds": 98.989,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E02-post-barrier-revocation-paper-strict",
+      "slice": "sl6-barrier",
+      "case": "paper-strict-post-barrier-revocation",
+      "profile": "paper-strict",
+      "path": "catalog/sl6-barrier/paper-strict-post-barrier-revocation",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:30:47.485154+00:00",
+      "memAvailableKiBAtStart": 3729524,
+      "caseStatus": "BARRIER_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:32:16.668565+00:00",
+      "elapsedSeconds": 89.183,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E02-post-barrier-revocation-paper-minimal",
+      "slice": "sl6-barrier",
+      "case": "paper-minimal-post-barrier-revocation",
+      "profile": "paper-minimal",
+      "path": "catalog/sl6-barrier/paper-minimal-post-barrier-revocation",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:32:16.669312+00:00",
+      "memAvailableKiBAtStart": 3769688,
+      "caseStatus": "BARRIER_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:33:47.509101+00:00",
+      "elapsedSeconds": 90.839,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E02-post-barrier-revocation-repaired-e",
+      "slice": "sl6-barrier",
+      "case": "repaired-e-post-barrier-revocation",
+      "profile": "repaired-e",
+      "path": "catalog/sl6-barrier/repaired-e-post-barrier-revocation",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:33:47.509962+00:00",
+      "memAvailableKiBAtStart": 3741004,
+      "caseStatus": "BARRIER_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:35:28.763806+00:00",
+      "elapsedSeconds": 101.253,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E02-expired-duty-paper-strict",
+      "slice": "sl6-barrier",
+      "case": "paper-strict-expired-duty",
+      "profile": "paper-strict",
+      "path": "catalog/sl6-barrier/paper-strict-expired-duty",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:35:28.764619+00:00",
+      "memAvailableKiBAtStart": 3913516,
+      "caseStatus": "BARRIER_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:37:03.468621+00:00",
+      "elapsedSeconds": 94.703,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E02-expired-duty-paper-minimal",
+      "slice": "sl6-barrier",
+      "case": "paper-minimal-expired-duty",
+      "profile": "paper-minimal",
+      "path": "catalog/sl6-barrier/paper-minimal-expired-duty",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:37:03.469798+00:00",
+      "memAvailableKiBAtStart": 3883672,
+      "caseStatus": "BARRIER_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:38:30.608315+00:00",
+      "elapsedSeconds": 87.138,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E02-expired-duty-repaired-e",
+      "slice": "sl6-barrier",
+      "case": "repaired-e-expired-duty",
+      "profile": "repaired-e",
+      "path": "catalog/sl6-barrier/repaired-e-expired-duty",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:38:30.609171+00:00",
+      "memAvailableKiBAtStart": 3889264,
+      "caseStatus": "BARRIER_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:40:06.396447+00:00",
+      "elapsedSeconds": 95.787,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E01-wrong-destination-paper-strict",
+      "slice": "sl7-destination",
+      "case": "paper-strict-wrong-destination",
+      "profile": "paper-strict",
+      "path": "catalog/sl7-destination/paper-strict-wrong-destination",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:40:07.929698+00:00",
+      "memAvailableKiBAtStart": 3929324,
+      "caseStatus": "DESTINATION_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:42:01.620508+00:00",
+      "elapsedSeconds": 113.684,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E01-wrong-destination-paper-minimal",
+      "slice": "sl7-destination",
+      "case": "paper-minimal-wrong-destination",
+      "profile": "paper-minimal",
+      "path": "catalog/sl7-destination/paper-minimal-wrong-destination",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:42:01.621310+00:00",
+      "memAvailableKiBAtStart": 3818272,
+      "caseStatus": "DESTINATION_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:43:53.969393+00:00",
+      "elapsedSeconds": 112.348,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E01-wrong-destination-repaired-e",
+      "slice": "sl7-destination",
+      "case": "repaired-e-wrong-destination",
+      "profile": "repaired-e",
+      "path": "catalog/sl7-destination/repaired-e-wrong-destination",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:43:53.970182+00:00",
+      "memAvailableKiBAtStart": 3930552,
+      "caseStatus": "DESTINATION_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:45:55.295380+00:00",
+      "elapsedSeconds": 121.325,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E01-expiry-boundary-paper-strict",
+      "slice": "sl7-destination",
+      "case": "paper-strict-expiry-boundary",
+      "profile": "paper-strict",
+      "path": "catalog/sl7-destination/paper-strict-expiry-boundary",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:45:55.296186+00:00",
+      "memAvailableKiBAtStart": 3913444,
+      "caseStatus": "DESTINATION_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:47:17.942153+00:00",
+      "elapsedSeconds": 82.645,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E01-expiry-boundary-paper-minimal",
+      "slice": "sl7-destination",
+      "case": "paper-minimal-expiry-boundary",
+      "profile": "paper-minimal",
+      "path": "catalog/sl7-destination/paper-minimal-expiry-boundary",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:47:17.942949+00:00",
+      "memAvailableKiBAtStart": 3978348,
+      "caseStatus": "DESTINATION_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:48:44.009732+00:00",
+      "elapsedSeconds": 86.066,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    },
+    {
+      "caseId": "E01-expiry-boundary-repaired-e",
+      "slice": "sl7-destination",
+      "case": "repaired-e-expiry-boundary",
+      "profile": "repaired-e",
+      "path": "catalog/sl7-destination/repaired-e-expiry-boundary",
+      "status": "PASS",
+      "startedAt": "2026-10-12T02:48:44.010547+00:00",
+      "memAvailableKiBAtStart": 3939560,
+      "caseStatus": "DESTINATION_STRESS_CONTROL_PASS",
+      "endedAt": "2026-10-12T02:50:20.883462+00:00",
+      "elapsedSeconds": 96.872,
+      "servicesStopped": true,
+      "sourcesStable": true,
+      "castStable": true
+    }
+  ],
+  "slices": {
+    "recovery-expiry": {
+      "status": "E2_RECOVERY_EXPIRY_SLICE_PASS",
+      "manifest": "catalog/recovery-expiry/manifest.json"
+    },
+    "duplicate-outcome": {
+      "status": "E2_DUPLICATE_OUTCOME_SLICE_PASS",
+      "manifest": "catalog/duplicate-outcome/manifest.json"
+    },
+    "nonce-replay": {
+      "status": "E2_NONCE_REPLAY_SLICE_PASS",
+      "manifest": "catalog/nonce-replay/manifest.json"
+    },
+    "sl1-subject": {
+      "status": "E2_SUBJECT_SUBSTITUTION_SLICE_PASS",
+      "manifest": "catalog/sl1-subject/manifest.json"
+    },
+    "sl2-relay": {
+      "status": "E2_RELAY_STRESS_SLICE_PASS",
+      "manifest": "catalog/sl2-relay/manifest.json"
+    },
+    "sl3-audit": {
+      "status": "E2_AUDIT_STRESS_SLICE_PASS",
+      "manifest": "catalog/sl3-audit/manifest.json"
+    },
+    "sl4-receipt": {
+      "status": "E2_RECEIPT_STRESS_SLICE_PASS",
+      "manifest": "catalog/sl4-receipt/manifest.json"
+    },
+    "sl5-trust": {
+      "status": "E2_TRUST_STRESS_SLICE_PASS",
+      "manifest": "catalog/sl5-trust/manifest.json"
+    },
+    "sl6-barrier": {
+      "status": "E2_BARRIER_STRESS_SLICE_PASS",
+      "manifest": "catalog/sl6-barrier/manifest.json"
+    },
+    "sl7-destination": {
+      "status": "E2_DESTINATION_STRESS_SLICE_PASS",
+      "manifest": "catalog/sl7-destination/manifest.json"
+    }
+  },
+  "proverif": {
+    "tool": {
+      "path": "/home/saiyamjain/.local/share/hmbc-tools/src-proverif/proverif2.05/proverif",
+      "sha256": "bc2cd5eddb8976fbab0194b6a10f6f05cf057287cf49dbbc97b37322b46af1cb",
+      "frozenSha256": "c1087205c639702fa4a3f5e8518abfe97bbd867eb0a0c1aab3f7293448b2726f",
+      "resolution": "declared-local-build",
+      "declaredLocalBuild": {
+        "sha256": "bc2cd5eddb8976fbab0194b6a10f6f05cf057287cf49dbbc97b37322b46af1cb",
+        "version": "2.05",
+        "sourceSha256": "4871f53c32ab4a04669a060c4886ba5d9080496963fb980a9a62d2c429ceabc4",
+        "compiler": "OCaml 4.14.2 built locally from source c2d70643.. (agent 1, 2026-10-09)",
+        "reason": "frozen binary c1087205.. was compiled on agent 3's host; a local compile of the same source differs. RESULT lines for access.pv/access_mutant.pv match A3-0033 (agent 1 host-toolchain evidence)."
+      },
+      "hashOk": true
+    },
+    "environment": {
+      "PATH": "/home/saiyamjain/.foundry/bin:/bin:/usr/bin",
+      "HOME": "/home/saiyamjain",
+      "LC_ALL": "C.UTF-8",
+      "PYTHONNOUSERSITE": "1"
+    },
+    "runs": {
+      "access": {
+        "model": "evaluation/models/e/access.pv",
+        "modelSha256": "1ca655061e9eb6d5717a919f554a6071eefdcf71b155a7a08f863464d64f01f8",
+        "modelUnchanged": true,
+        "argv": [
+          "/home/saiyamjain/.local/share/hmbc-tools/src-proverif/proverif2.05/proverif",
+          "evaluation/models/e/access.pv"
+        ],
+        "cwd": "/home/saiyamjain/Desktop/RIS/Project",
+        "startedAt": "2026-10-12T02:50:22.353331+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "wallSeconds": 0.011577,
+        "stdoutSha256": "b7710c155be1c1888b06da8d97773a5a5dd1497b785c6e3021e9559836bfb8df",
+        "stderrBytes": 0,
+        "results": [
+          "RESULT event(Grant(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) ==> event(UserRequest(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) is true.",
+          "RESULT event(Grant(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) ==> event(WitnessDecision(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) is true.",
+          "RESULT event(Grant(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) ==> event(WitnessDecision(r_4,g_2,d_4,s_2,approvedDestination,a_2,p_2,n_4)) is true.",
+          "RESULT not event(AllowedGrant) is false.",
+          "RESULT not event(DeniedGrant) is true."
+        ],
+        "verdicts": [
+          "true",
+          "true",
+          "true",
+          "false",
+          "true"
+        ],
+        "expectedVerdicts": [
+          "true",
+          "true",
+          "true",
+          "false",
+          "true"
+        ],
+        "references": {
+          "A3-0033": {
+            "path": "evaluation/evidence/e2/formal-and-hook-review-20261009/positive-final.stdout",
+            "sha256": "b7710c155be1c1888b06da8d97773a5a5dd1497b785c6e3021e9559836bfb8df",
+            "referenceUnchanged": true,
+            "fullOutputIdentical": true
+          },
+          "p3-proverif-20261012": {
+            "path": "evaluation/evidence/e2/p3-proverif-20261012/access.stdout",
+            "sha256": "b7710c155be1c1888b06da8d97773a5a5dd1497b785c6e3021e9559836bfb8df",
+            "referenceUnchanged": true,
+            "fullOutputIdentical": true
+          }
+        },
+        "matched": true
+      },
+      "access_mutant": {
+        "model": "evaluation/models/e/access_mutant.pv",
+        "modelSha256": "1c6e1acc6346d9f3859180f76f2a7a5e679477d3a61c4a132eefa46da1775537",
+        "modelUnchanged": true,
+        "argv": [
+          "/home/saiyamjain/.local/share/hmbc-tools/src-proverif/proverif2.05/proverif",
+          "evaluation/models/e/access_mutant.pv"
+        ],
+        "cwd": "/home/saiyamjain/Desktop/RIS/Project",
+        "startedAt": "2026-10-12T02:50:22.366067+00:00",
+        "exitCode": 0,
+        "timedOut": false,
+        "wallSeconds": 0.011618,
+        "stdoutSha256": "40fd634f8ed7197b2a7677c34d8d968d1669df1753e56c89a9e08854fcac1919",
+        "stderrBytes": 0,
+        "results": [
+          "RESULT event(Grant(r_4,g_2,d_4,s_2,t_1,a_2,p_2,n_4)) ==> event(UserRequest(r_4,g_2,d_4,s_2,t_1,a_2,p_2,n_4)) is false.",
+          "RESULT event(Grant(r_4,g_2,d_4,s_2,t_1,a_2,p_2,n_4)) ==> event(WitnessDecision(r_4,g_2,d_4,s_2,t_1,a_2,p_2,n_4)) is false.",
+          "RESULT event(Grant(r_4,g_2,d_4,s_2,t_1,a_2,p_2,n_4)) ==> event(WitnessDecision(r_4,g_2,d_4,s_2,approvedDestination,a_2,p_2,n_4)) is true.",
+          "RESULT not event(AllowedGrant) is false.",
+          "RESULT not event(DeniedGrant) is true."
+        ],
+        "verdicts": [
+          "false",
+          "false",
+          "true",
+          "false",
+          "true"
+        ],
+        "expectedVerdicts": [
+          "false",
+          "false",
+          "true",
+          "false",
+          "true"
+        ],
+        "references": {
+          "A3-0033": {
+            "path": "evaluation/evidence/e2/formal-and-hook-review-20261009/mutant-final.stdout",
+            "sha256": "40fd634f8ed7197b2a7677c34d8d968d1669df1753e56c89a9e08854fcac1919",
+            "referenceUnchanged": true,
+            "fullOutputIdentical": true
+          },
+          "p3-proverif-20261012": {
+            "path": "evaluation/evidence/e2/p3-proverif-20261012/access_mutant.stdout",
+            "sha256": "40fd634f8ed7197b2a7677c34d8d968d1669df1753e56c89a9e08854fcac1919",
+            "referenceUnchanged": true,
+            "fullOutputIdentical": true
+          }
+        },
+        "matched": true
+      }
+    },
+    "matched": true,
+    "scope": "symbolic abstraction of the access flow; not the deployed ledger and not a computational proof"
+  },
+  "servicesStarted": [
+    {
+      "slice": "recovery-expiry",
+      "case": "paper-strict-after_intent",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 571995
+    },
+    {
+      "slice": "recovery-expiry",
+      "case": "paper-strict-after_intent",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 572115
+    },
+    {
+      "slice": "recovery-expiry",
+      "case": "paper-strict-after_send",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 583610
+    },
+    {
+      "slice": "recovery-expiry",
+      "case": "paper-strict-after_send",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 583730
+    },
+    {
+      "slice": "recovery-expiry",
+      "case": "paper-minimal-after_intent",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 595365
+    },
+    {
+      "slice": "recovery-expiry",
+      "case": "paper-minimal-after_intent",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 595485
+    },
+    {
+      "slice": "recovery-expiry",
+      "case": "paper-minimal-after_send",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 607049
+    },
+    {
+      "slice": "recovery-expiry",
+      "case": "paper-minimal-after_send",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 607185
+    },
+    {
+      "slice": "recovery-expiry",
+      "case": "repaired-e-after_intent",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 618838
+    },
+    {
+      "slice": "recovery-expiry",
+      "case": "repaired-e-after_intent",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 618958
+    },
+    {
+      "slice": "recovery-expiry",
+      "case": "repaired-e-after_send",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 632910
+    },
+    {
+      "slice": "recovery-expiry",
+      "case": "repaired-e-after_send",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 633050
+    },
+    {
+      "slice": "duplicate-outcome",
+      "case": "paper-strict-duplicate-outcome",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 647210
+    },
+    {
+      "slice": "duplicate-outcome",
+      "case": "paper-strict-duplicate-outcome",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 647330
+    },
+    {
+      "slice": "duplicate-outcome",
+      "case": "paper-minimal-duplicate-outcome",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 657989
+    },
+    {
+      "slice": "duplicate-outcome",
+      "case": "paper-minimal-duplicate-outcome",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 658109
+    },
+    {
+      "slice": "duplicate-outcome",
+      "case": "repaired-e-duplicate-outcome",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 668684
+    },
+    {
+      "slice": "duplicate-outcome",
+      "case": "repaired-e-duplicate-outcome",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 668804
+    },
+    {
+      "slice": "nonce-replay",
+      "case": "paper-strict-nonce-replay",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 682151
+    },
+    {
+      "slice": "nonce-replay",
+      "case": "paper-strict-nonce-replay",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 682271
+    },
+    {
+      "slice": "nonce-replay",
+      "case": "paper-minimal-nonce-replay",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 692989
+    },
+    {
+      "slice": "nonce-replay",
+      "case": "paper-minimal-nonce-replay",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 693111
+    },
+    {
+      "slice": "nonce-replay",
+      "case": "repaired-e-nonce-replay",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 703744
+    },
+    {
+      "slice": "nonce-replay",
+      "case": "repaired-e-nonce-replay",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 703865
+    },
+    {
+      "slice": "sl1-subject",
+      "case": "paper-strict-subject-substitution",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 717249
+    },
+    {
+      "slice": "sl1-subject",
+      "case": "paper-strict-subject-substitution",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 717369
+    },
+    {
+      "slice": "sl1-subject",
+      "case": "paper-minimal-subject-substitution",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 735006
+    },
+    {
+      "slice": "sl1-subject",
+      "case": "paper-minimal-subject-substitution",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 735133
+    },
+    {
+      "slice": "sl1-subject",
+      "case": "repaired-e-subject-substitution",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 752922
+    },
+    {
+      "slice": "sl1-subject",
+      "case": "repaired-e-subject-substitution",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 753056
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "paper-strict-forged-tuple",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 774076
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "paper-strict-forged-tuple",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 774196
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "paper-minimal-forged-tuple",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 790329
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "paper-minimal-forged-tuple",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 790449
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "repaired-e-forged-tuple",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 806601
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "repaired-e-forged-tuple",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 806721
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "paper-strict-new-reference-replay",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 826991
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "paper-strict-new-reference-replay",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 827111
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "paper-minimal-new-reference-replay",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 843752
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "paper-minimal-new-reference-replay",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 843872
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "repaired-e-new-reference-replay",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 860508
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "repaired-e-new-reference-replay",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 860630
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "repaired-e-same-nonce-distinct-digests",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 880997
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "repaired-e-same-nonce-distinct-digests",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 881123
+    },
+    {
+      "slice": "sl3-audit",
+      "case": "paper-strict-dropped-outcome",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 902872
+    },
+    {
+      "slice": "sl3-audit",
+      "case": "paper-strict-dropped-outcome",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 902992
+    },
+    {
+      "slice": "sl3-audit",
+      "case": "paper-minimal-dropped-outcome",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 919600
+    },
+    {
+      "slice": "sl3-audit",
+      "case": "paper-minimal-dropped-outcome",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 919720
+    },
+    {
+      "slice": "sl3-audit",
+      "case": "repaired-e-dropped-outcome",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 936336
+    },
+    {
+      "slice": "sl3-audit",
+      "case": "repaired-e-dropped-outcome",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 936456
+    },
+    {
+      "slice": "sl3-audit",
+      "case": "paper-strict-fabricated-outcome",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 956726
+    },
+    {
+      "slice": "sl3-audit",
+      "case": "paper-strict-fabricated-outcome",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 956849
+    },
+    {
+      "slice": "sl3-audit",
+      "case": "paper-minimal-fabricated-outcome",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 973253
+    },
+    {
+      "slice": "sl3-audit",
+      "case": "paper-minimal-fabricated-outcome",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 973373
+    },
+    {
+      "slice": "sl3-audit",
+      "case": "repaired-e-fabricated-outcome",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 989779
+    },
+    {
+      "slice": "sl3-audit",
+      "case": "repaired-e-fabricated-outcome",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 989899
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-binding-control-requestDigest",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1009431
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-binding-control-requestDigest",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1009551
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-binding-control-gid",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1030098
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-binding-control-gid",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1030219
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-binding-control-dataId",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1050806
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-binding-control-dataId",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1050926
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-signature-control-requestDigest",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1071473
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-signature-control-requestDigest",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1071593
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-signature-control-gid",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1092139
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-signature-control-gid",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1092259
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-signature-control-dataId",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1112824
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-signature-control-dataId",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1112944
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-binding-positive",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1133506
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-binding-positive",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1133626
+    },
+    {
+      "slice": "sl5-trust",
+      "case": "paper-strict-wrong-issuer",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1154465
+    },
+    {
+      "slice": "sl5-trust",
+      "case": "paper-strict-wrong-issuer",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1154585
+    },
+    {
+      "slice": "sl5-trust",
+      "case": "paper-minimal-wrong-issuer",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1170964
+    },
+    {
+      "slice": "sl5-trust",
+      "case": "paper-minimal-wrong-issuer",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1171084
+    },
+    {
+      "slice": "sl5-trust",
+      "case": "repaired-e-wrong-issuer",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1187493
+    },
+    {
+      "slice": "sl5-trust",
+      "case": "repaired-e-wrong-issuer",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1187613
+    },
+    {
+      "slice": "sl5-trust",
+      "case": "paper-strict-signed-list-rollback",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1206832
+    },
+    {
+      "slice": "sl5-trust",
+      "case": "paper-strict-signed-list-rollback",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1206952
+    },
+    {
+      "slice": "sl5-trust",
+      "case": "paper-minimal-signed-list-rollback",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1224067
+    },
+    {
+      "slice": "sl5-trust",
+      "case": "paper-minimal-signed-list-rollback",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1224187
+    },
+    {
+      "slice": "sl5-trust",
+      "case": "repaired-e-signed-list-rollback",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1241329
+    },
+    {
+      "slice": "sl5-trust",
+      "case": "repaired-e-signed-list-rollback",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1241449
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "paper-strict-pre-barrier-revocation",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1261802
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "paper-strict-pre-barrier-revocation",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1261922
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "paper-minimal-pre-barrier-revocation",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1279201
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "paper-minimal-pre-barrier-revocation",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1279321
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "repaired-e-pre-barrier-revocation",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1296585
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "repaired-e-pre-barrier-revocation",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1296705
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "paper-strict-post-barrier-revocation",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1317900
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "paper-strict-post-barrier-revocation",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1318020
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "paper-minimal-post-barrier-revocation",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1335303
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "paper-minimal-post-barrier-revocation",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1335423
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "repaired-e-post-barrier-revocation",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1352676
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "repaired-e-post-barrier-revocation",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1352796
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "paper-strict-expired-duty",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1374450
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "paper-strict-expired-duty",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1374570
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "paper-minimal-expired-duty",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1391694
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "paper-minimal-expired-duty",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1391821
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "repaired-e-expired-duty",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1408769
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "repaired-e-expired-duty",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1408890
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "paper-strict-wrong-destination",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1430083
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "paper-strict-wrong-destination",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1430204
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "paper-minimal-wrong-destination",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1452613
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "paper-minimal-wrong-destination",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1452733
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "repaired-e-wrong-destination",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1475127
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "repaired-e-wrong-destination",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1475247
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "paper-strict-expiry-boundary",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1501813
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "paper-strict-expiry-boundary",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1501933
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "paper-minimal-expiry-boundary",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1518428
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "paper-minimal-expiry-boundary",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1518548
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "repaired-e-expiry-boundary",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 1535078
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "repaired-e-expiry-boundary",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 1535199
+    }
+  ],
+  "adapterProcesses": [
+    {
+      "slice": "recovery-expiry",
+      "case": "paper-strict-after_intent",
+      "profile": "paper-strict",
+      "label": "adapter",
+      "pid": 576293
+    },
+    {
+      "slice": "recovery-expiry",
+      "case": "paper-strict-after_intent",
+      "profile": "paper-strict",
+      "label": "adapter-restarted",
+      "pid": 579376
+    },
+    {
+      "slice": "recovery-expiry",
+      "case": "paper-strict-after_send",
+      "profile": "paper-strict",
+      "label": "adapter",
+      "pid": 588063
+    },
+    {
+      "slice": "recovery-expiry",
+      "case": "paper-strict-after_send",
+      "profile": "paper-strict",
+      "label": "adapter-restarted",
+      "pid": 591096
+    },
+    {
+      "slice": "recovery-expiry",
+      "case": "paper-minimal-after_intent",
+      "profile": "paper-minimal",
+      "label": "adapter",
+      "pid": 599735
+    },
+    {
+      "slice": "recovery-expiry",
+      "case": "paper-minimal-after_intent",
+      "profile": "paper-minimal",
+      "label": "adapter-restarted",
+      "pid": 602793
+    },
+    {
+      "slice": "recovery-expiry",
+      "case": "paper-minimal-after_send",
+      "profile": "paper-minimal",
+      "label": "adapter",
+      "pid": 611472
+    },
+    {
+      "slice": "recovery-expiry",
+      "case": "paper-minimal-after_send",
+      "profile": "paper-minimal",
+      "label": "adapter-restarted",
+      "pid": 614501
+    },
+    {
+      "slice": "recovery-expiry",
+      "case": "repaired-e-after_intent",
+      "profile": "repaired-e",
+      "label": "adapter",
+      "pid": 623246
+    },
+    {
+      "slice": "recovery-expiry",
+      "case": "repaired-e-after_intent",
+      "profile": "repaired-e",
+      "label": "adapter-restarted",
+      "pid": 627444
+    },
+    {
+      "slice": "recovery-expiry",
+      "case": "repaired-e-after_send",
+      "profile": "repaired-e",
+      "label": "adapter",
+      "pid": 637197
+    },
+    {
+      "slice": "recovery-expiry",
+      "case": "repaired-e-after_send",
+      "profile": "repaired-e",
+      "label": "adapter-restarted",
+      "pid": 641394
+    },
+    {
+      "slice": "duplicate-outcome",
+      "case": "paper-strict-duplicate-outcome",
+      "profile": "paper-strict",
+      "label": "adapter",
+      "pid": 651536
+    },
+    {
+      "slice": "duplicate-outcome",
+      "case": "paper-minimal-duplicate-outcome",
+      "profile": "paper-minimal",
+      "label": "adapter",
+      "pid": 662230
+    },
+    {
+      "slice": "duplicate-outcome",
+      "case": "repaired-e-duplicate-outcome",
+      "profile": "repaired-e",
+      "label": "adapter",
+      "pid": 672942
+    },
+    {
+      "slice": "nonce-replay",
+      "case": "paper-strict-nonce-replay",
+      "profile": "paper-strict",
+      "label": "adapter",
+      "pid": 686484
+    },
+    {
+      "slice": "nonce-replay",
+      "case": "paper-minimal-nonce-replay",
+      "profile": "paper-minimal",
+      "label": "adapter",
+      "pid": 697242
+    },
+    {
+      "slice": "nonce-replay",
+      "case": "repaired-e-nonce-replay",
+      "profile": "repaired-e",
+      "label": "adapter",
+      "pid": 707991
+    },
+    {
+      "slice": "sl1-subject",
+      "case": "paper-strict-subject-substitution",
+      "profile": "paper-strict",
+      "label": "adapter",
+      "pid": 721500
+    },
+    {
+      "slice": "sl1-subject",
+      "case": "paper-strict-subject-substitution",
+      "profile": "paper-strict",
+      "label": "adapter-subject",
+      "pid": 730762
+    },
+    {
+      "slice": "sl1-subject",
+      "case": "paper-minimal-subject-substitution",
+      "profile": "paper-minimal",
+      "label": "adapter",
+      "pid": 739305
+    },
+    {
+      "slice": "sl1-subject",
+      "case": "paper-minimal-subject-substitution",
+      "profile": "paper-minimal",
+      "label": "adapter-subject",
+      "pid": 748646
+    },
+    {
+      "slice": "sl1-subject",
+      "case": "repaired-e-subject-substitution",
+      "profile": "repaired-e",
+      "label": "adapter",
+      "pid": 757246
+    },
+    {
+      "slice": "sl1-subject",
+      "case": "repaired-e-subject-substitution",
+      "profile": "repaired-e",
+      "label": "adapter-subject",
+      "pid": 769083
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "paper-strict-forged-tuple",
+      "profile": "paper-strict",
+      "label": "adapter",
+      "pid": 778339
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "paper-strict-forged-tuple",
+      "profile": "paper-strict",
+      "label": "adapter-relay",
+      "pid": 787606
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "paper-minimal-forged-tuple",
+      "profile": "paper-minimal",
+      "label": "adapter",
+      "pid": 794606
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "paper-minimal-forged-tuple",
+      "profile": "paper-minimal",
+      "label": "adapter-relay",
+      "pid": 803873
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "repaired-e-forged-tuple",
+      "profile": "repaired-e",
+      "label": "adapter",
+      "pid": 810853
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "repaired-e-forged-tuple",
+      "profile": "repaired-e",
+      "label": "adapter-relay",
+      "pid": 822584
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "paper-strict-new-reference-replay",
+      "profile": "paper-strict",
+      "label": "adapter",
+      "pid": 831226
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "paper-strict-new-reference-replay",
+      "profile": "paper-strict",
+      "label": "adapter-relay",
+      "pid": 840508
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "paper-minimal-new-reference-replay",
+      "profile": "paper-minimal",
+      "label": "adapter",
+      "pid": 847987
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "paper-minimal-new-reference-replay",
+      "profile": "paper-minimal",
+      "label": "adapter-relay",
+      "pid": 857263
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "repaired-e-new-reference-replay",
+      "profile": "repaired-e",
+      "label": "adapter",
+      "pid": 864764
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "repaired-e-new-reference-replay",
+      "profile": "repaired-e",
+      "label": "adapter-relay",
+      "pid": 876475
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "repaired-e-same-nonce-distinct-digests",
+      "profile": "repaired-e",
+      "label": "adapter",
+      "pid": 885241
+    },
+    {
+      "slice": "sl2-relay",
+      "case": "repaired-e-same-nonce-distinct-digests",
+      "profile": "repaired-e",
+      "label": "adapter-relay",
+      "pid": 896961
+    },
+    {
+      "slice": "sl3-audit",
+      "case": "paper-strict-dropped-outcome",
+      "profile": "paper-strict",
+      "label": "adapter",
+      "pid": 907124
+    },
+    {
+      "slice": "sl3-audit",
+      "case": "paper-strict-dropped-outcome",
+      "profile": "paper-strict",
+      "label": "adapter-audit",
+      "pid": 916427
+    },
+    {
+      "slice": "sl3-audit",
+      "case": "paper-minimal-dropped-outcome",
+      "profile": "paper-minimal",
+      "label": "adapter",
+      "pid": 923851
+    },
+    {
+      "slice": "sl3-audit",
+      "case": "paper-minimal-dropped-outcome",
+      "profile": "paper-minimal",
+      "label": "adapter-audit",
+      "pid": 933154
+    },
+    {
+      "slice": "sl3-audit",
+      "case": "repaired-e-dropped-outcome",
+      "profile": "repaired-e",
+      "label": "adapter",
+      "pid": 940550
+    },
+    {
+      "slice": "sl3-audit",
+      "case": "repaired-e-dropped-outcome",
+      "profile": "repaired-e",
+      "label": "adapter-audit",
+      "pid": 952240
+    },
+    {
+      "slice": "sl3-audit",
+      "case": "paper-strict-fabricated-outcome",
+      "profile": "paper-strict",
+      "label": "adapter",
+      "pid": 960952
+    },
+    {
+      "slice": "sl3-audit",
+      "case": "paper-strict-fabricated-outcome",
+      "profile": "paper-strict",
+      "label": "adapter-audit",
+      "pid": 970238
+    },
+    {
+      "slice": "sl3-audit",
+      "case": "paper-minimal-fabricated-outcome",
+      "profile": "paper-minimal",
+      "label": "adapter",
+      "pid": 977474
+    },
+    {
+      "slice": "sl3-audit",
+      "case": "paper-minimal-fabricated-outcome",
+      "profile": "paper-minimal",
+      "label": "adapter-audit",
+      "pid": 986743
+    },
+    {
+      "slice": "sl3-audit",
+      "case": "repaired-e-fabricated-outcome",
+      "profile": "repaired-e",
+      "label": "adapter",
+      "pid": 994022
+    },
+    {
+      "slice": "sl3-audit",
+      "case": "repaired-e-fabricated-outcome",
+      "profile": "repaired-e",
+      "label": "adapter-audit",
+      "pid": 1005708
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-binding-control-requestDigest",
+      "profile": "repaired-e",
+      "label": "adapter",
+      "pid": 1013651
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-binding-control-requestDigest",
+      "profile": "repaired-e",
+      "label": "adapter-receipt",
+      "pid": 1025360
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-binding-control-gid",
+      "profile": "repaired-e",
+      "label": "adapter",
+      "pid": 1034317
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-binding-control-gid",
+      "profile": "repaired-e",
+      "label": "adapter-receipt",
+      "pid": 1046056
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-binding-control-dataId",
+      "profile": "repaired-e",
+      "label": "adapter",
+      "pid": 1055013
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-binding-control-dataId",
+      "profile": "repaired-e",
+      "label": "adapter-receipt",
+      "pid": 1066718
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-signature-control-requestDigest",
+      "profile": "repaired-e",
+      "label": "adapter",
+      "pid": 1075691
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-signature-control-requestDigest",
+      "profile": "repaired-e",
+      "label": "adapter-receipt",
+      "pid": 1087397
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-signature-control-gid",
+      "profile": "repaired-e",
+      "label": "adapter",
+      "pid": 1096386
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-signature-control-gid",
+      "profile": "repaired-e",
+      "label": "adapter-receipt",
+      "pid": 1108093
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-signature-control-dataId",
+      "profile": "repaired-e",
+      "label": "adapter",
+      "pid": 1117049
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-signature-control-dataId",
+      "profile": "repaired-e",
+      "label": "adapter-receipt",
+      "pid": 1128764
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-binding-positive",
+      "profile": "repaired-e",
+      "label": "adapter",
+      "pid": 1137725
+    },
+    {
+      "slice": "sl4-receipt",
+      "case": "repaired-e-receipt-binding-positive",
+      "profile": "repaired-e",
+      "label": "adapter-receipt",
+      "pid": 1149427
+    },
+    {
+      "slice": "sl5-trust",
+      "case": "paper-strict-wrong-issuer",
+      "profile": "paper-strict",
+      "label": "adapter",
+      "pid": 1158682
+    },
+    {
+      "slice": "sl5-trust",
+      "case": "paper-strict-wrong-issuer",
+      "profile": "paper-strict",
+      "label": "adapter-trust",
+      "pid": 1167941
+    },
+    {
+      "slice": "sl5-trust",
+      "case": "paper-minimal-wrong-issuer",
+      "profile": "paper-minimal",
+      "label": "adapter",
+      "pid": 1175187
+    },
+    {
+      "slice": "sl5-trust",
+      "case": "paper-minimal-wrong-issuer",
+      "profile": "paper-minimal",
+      "label": "adapter-trust",
+      "pid": 1184485
+    },
+    {
+      "slice": "sl5-trust",
+      "case": "repaired-e-wrong-issuer",
+      "profile": "repaired-e",
+      "label": "adapter",
+      "pid": 1191723
+    },
+    {
+      "slice": "sl5-trust",
+      "case": "repaired-e-wrong-issuer",
+      "profile": "repaired-e",
+      "label": "adapter-trust",
+      "pid": 1203437
+    },
+    {
+      "slice": "sl5-trust",
+      "case": "paper-strict-signed-list-rollback",
+      "profile": "paper-strict",
+      "label": "adapter",
+      "pid": 1211049
+    },
+    {
+      "slice": "sl5-trust",
+      "case": "paper-strict-signed-list-rollback",
+      "profile": "paper-strict",
+      "label": "adapter-trust",
+      "pid": 1220300
+    },
+    {
+      "slice": "sl5-trust",
+      "case": "paper-minimal-signed-list-rollback",
+      "profile": "paper-minimal",
+      "label": "adapter",
+      "pid": 1228305
+    },
+    {
+      "slice": "sl5-trust",
+      "case": "paper-minimal-signed-list-rollback",
+      "profile": "paper-minimal",
+      "label": "adapter-trust",
+      "pid": 1237550
+    },
+    {
+      "slice": "sl5-trust",
+      "case": "repaired-e-signed-list-rollback",
+      "profile": "repaired-e",
+      "label": "adapter",
+      "pid": 1245615
+    },
+    {
+      "slice": "sl5-trust",
+      "case": "repaired-e-signed-list-rollback",
+      "profile": "repaired-e",
+      "label": "adapter-trust",
+      "pid": 1257312
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "paper-strict-pre-barrier-revocation",
+      "profile": "paper-strict",
+      "label": "adapter",
+      "pid": 1266039
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "paper-strict-pre-barrier-revocation",
+      "profile": "paper-strict",
+      "label": "adapter-barrier",
+      "pid": 1275324
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "paper-minimal-pre-barrier-revocation",
+      "profile": "paper-minimal",
+      "label": "adapter",
+      "pid": 1283462
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "paper-minimal-pre-barrier-revocation",
+      "profile": "paper-minimal",
+      "label": "adapter-barrier",
+      "pid": 1292717
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "repaired-e-pre-barrier-revocation",
+      "profile": "repaired-e",
+      "label": "adapter",
+      "pid": 1300830
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "repaired-e-pre-barrier-revocation",
+      "profile": "repaired-e",
+      "label": "adapter-barrier",
+      "pid": 1312578
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "paper-strict-post-barrier-revocation",
+      "profile": "paper-strict",
+      "label": "adapter",
+      "pid": 1322150
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "paper-strict-post-barrier-revocation",
+      "profile": "paper-strict",
+      "label": "adapter-barrier",
+      "pid": 1331434
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "paper-minimal-post-barrier-revocation",
+      "profile": "paper-minimal",
+      "label": "adapter",
+      "pid": 1339538
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "paper-minimal-post-barrier-revocation",
+      "profile": "paper-minimal",
+      "label": "adapter-barrier",
+      "pid": 1348807
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "repaired-e-post-barrier-revocation",
+      "profile": "repaired-e",
+      "label": "adapter",
+      "pid": 1356922
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "repaired-e-post-barrier-revocation",
+      "profile": "repaired-e",
+      "label": "adapter-barrier",
+      "pid": 1368638
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "paper-strict-expired-duty",
+      "profile": "paper-strict",
+      "label": "adapter",
+      "pid": 1378860
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "paper-strict-expired-duty",
+      "profile": "paper-strict",
+      "label": "adapter-barrier",
+      "pid": 1388144
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "paper-minimal-expired-duty",
+      "profile": "paper-minimal",
+      "label": "adapter",
+      "pid": 1395953
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "paper-minimal-expired-duty",
+      "profile": "paper-minimal",
+      "label": "adapter-barrier",
+      "pid": 1405227
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "repaired-e-expired-duty",
+      "profile": "repaired-e",
+      "label": "adapter",
+      "pid": 1413018
+    },
+    {
+      "slice": "sl6-barrier",
+      "case": "repaired-e-expired-duty",
+      "profile": "repaired-e",
+      "label": "adapter-barrier",
+      "pid": 1424732
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "paper-strict-wrong-destination",
+      "profile": "paper-strict",
+      "label": "adapter",
+      "pid": 1434327
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "paper-strict-wrong-destination",
+      "profile": "paper-strict",
+      "label": "adapter-destination",
+      "pid": 1443606
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "paper-strict-wrong-destination",
+      "profile": "paper-strict",
+      "label": "adapter-source",
+      "pid": 1447835
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "paper-minimal-wrong-destination",
+      "profile": "paper-minimal",
+      "label": "adapter",
+      "pid": 1456848
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "paper-minimal-wrong-destination",
+      "profile": "paper-minimal",
+      "label": "adapter-destination",
+      "pid": 1466116
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "paper-minimal-wrong-destination",
+      "profile": "paper-minimal",
+      "label": "adapter-source",
+      "pid": 1470332
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "repaired-e-wrong-destination",
+      "profile": "repaired-e",
+      "label": "adapter",
+      "pid": 1479356
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "repaired-e-wrong-destination",
+      "profile": "repaired-e",
+      "label": "adapter-destination",
+      "pid": 1491092
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "repaired-e-wrong-destination",
+      "profile": "repaired-e",
+      "label": "adapter-source",
+      "pid": 1495334
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "paper-strict-expiry-boundary",
+      "profile": "paper-strict",
+      "label": "adapter",
+      "pid": 1506063
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "paper-strict-expiry-boundary",
+      "profile": "paper-strict",
+      "label": "adapter-destination",
+      "pid": 1515340
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "paper-minimal-expiry-boundary",
+      "profile": "paper-minimal",
+      "label": "adapter",
+      "pid": 1522671
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "paper-minimal-expiry-boundary",
+      "profile": "paper-minimal",
+      "label": "adapter-destination",
+      "pid": 1531982
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "repaired-e-expiry-boundary",
+      "profile": "repaired-e",
+      "label": "adapter",
+      "pid": 1539306
+    },
+    {
+      "slice": "sl7-destination",
+      "case": "repaired-e-expiry-boundary",
+      "profile": "repaired-e",
+      "label": "adapter-destination",
+      "pid": 1551065
+    }
+  ],
+  "resultFiles": {
+    "bracket-post.json": "c6154eb4a58bdf044a24260807bdebed6d322a1da3b26b802000506471b8011e",
+    "bracket-pre.json": "1c99e136209af2bde3976ed01bf8830884b3c8075fbc402aa8e450dfb7bf120a",
+    "catalog/duplicate-outcome/manifest.json": "6aa1041b73df64df85ba534585908214cc75a823514c3550cbbf886ea01a47bc",
+    "catalog/duplicate-outcome/paper-minimal-duplicate-outcome/manifest.json": "469b0dd4d26341dafb3af09be94a0aac055c3fd7f1096e773e6eea7c23e5a066",
+    "catalog/duplicate-outcome/paper-minimal-duplicate-outcome/paper-minimal/alice/duplicate-outcome/result.json": "cd636ebee221ae740acc7905e88d8e97d340f10f8a3e58fa9a11cc91a49421c5",
+    "catalog/duplicate-outcome/paper-minimal-duplicate-outcome/paper-minimal/alice/result.json": "7d611da2dd3aac3adab14f8ec4ef650e2bdb7f57e3ae1c9704381cbda1532917",
+    "catalog/duplicate-outcome/paper-minimal-duplicate-outcome/paper-minimal/bob/result.json": "f3d1bcc8458d022514f23c34ff04a8222b4316866638ade05d02c8fc33104965",
+    "catalog/duplicate-outcome/paper-minimal-duplicate-outcome/paper-minimal/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/duplicate-outcome/paper-minimal-duplicate-outcome/paper-minimal/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/duplicate-outcome/paper-strict-duplicate-outcome/manifest.json": "3539563d82dd80340ec788a3f940cdf087beba5d9f0ab85dbab6388c450735ab",
+    "catalog/duplicate-outcome/paper-strict-duplicate-outcome/paper-strict/alice/duplicate-outcome/result.json": "193c0e53a24e90ed5ab387029e2f10889844f7e65ebc6f1bab43f0a6c1980892",
+    "catalog/duplicate-outcome/paper-strict-duplicate-outcome/paper-strict/alice/result.json": "26d3bc2d58604fdbdc4e6a2aea5e2cf163e49bbce4a2a741435e1b77cd1b2cfb",
+    "catalog/duplicate-outcome/paper-strict-duplicate-outcome/paper-strict/bob/result.json": "e31315e75e7f947cab502118816bbb0edbbdc67efe315e7998a58916b153c88e",
+    "catalog/duplicate-outcome/paper-strict-duplicate-outcome/paper-strict/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/duplicate-outcome/paper-strict-duplicate-outcome/paper-strict/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/duplicate-outcome/repaired-e-duplicate-outcome/manifest.json": "f8e0cf343d77697eb33c2bc9a2fda9d1bd779a6f1265b810d50bb885a203c0dc",
+    "catalog/duplicate-outcome/repaired-e-duplicate-outcome/repaired-e/alice/duplicate-outcome/result.json": "ba81a91c6fbcf34ca88e2cb5dfbacff87f277f6b68e4b3b1157aae0e5dcedd3d",
+    "catalog/duplicate-outcome/repaired-e-duplicate-outcome/repaired-e/alice/result.json": "0a253b8f50baa4a3b7ad24171d23ae57497b41b3e7cf2d5dfd04970d7e3984e1",
+    "catalog/duplicate-outcome/repaired-e-duplicate-outcome/repaired-e/bob/result.json": "8740f65542b7bc2e9ef29753cc4380d48f6ac1401ccbcb12ca7e0e2e13eabc73",
+    "catalog/duplicate-outcome/repaired-e-duplicate-outcome/repaired-e/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/duplicate-outcome/repaired-e-duplicate-outcome/repaired-e/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/nonce-replay/manifest.json": "7f61f6c20ebded0f69685a54bcc87c1aa82d3b34a07b2e2b0b733a59e767a1de",
+    "catalog/nonce-replay/paper-minimal-nonce-replay/manifest.json": "fbc423829b872788736470258fac507039c6e08a07ad67be5e3c765705961e7e",
+    "catalog/nonce-replay/paper-minimal-nonce-replay/paper-minimal/alice/nonce-replay/result.json": "6cc8d72f888e3e940656f14fa66541509e491d29fd769b9b319ad6b780504007",
+    "catalog/nonce-replay/paper-minimal-nonce-replay/paper-minimal/alice/result.json": "b0bbded6256518d9447db107575c324f46e44b71b6edb4438632ef4c03463d73",
+    "catalog/nonce-replay/paper-minimal-nonce-replay/paper-minimal/bob/result.json": "e5874699401d4620bd87e99d1e5e8b4460d3b62d0709f5ec60f3a38cb92a78fc",
+    "catalog/nonce-replay/paper-minimal-nonce-replay/paper-minimal/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/nonce-replay/paper-minimal-nonce-replay/paper-minimal/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/nonce-replay/paper-strict-nonce-replay/manifest.json": "22583a34da99b02ffffdc66a5feb31f0f699c3aaf9f0922e7fc3dfaab9d018d5",
+    "catalog/nonce-replay/paper-strict-nonce-replay/paper-strict/alice/nonce-replay/result.json": "24a8cb80269d59e2b1926931a469291e7c9d5f9b2df34b0d332a4a1529849cfc",
+    "catalog/nonce-replay/paper-strict-nonce-replay/paper-strict/alice/result.json": "bf3037e64ebef3f50d048b8f472462b3afadcb44ceec9b93b290bd23a817870a",
+    "catalog/nonce-replay/paper-strict-nonce-replay/paper-strict/bob/result.json": "8c5df20b10889da612498095584ee8014d8c92d47e1b126b98b5dff123208e27",
+    "catalog/nonce-replay/paper-strict-nonce-replay/paper-strict/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/nonce-replay/paper-strict-nonce-replay/paper-strict/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/nonce-replay/repaired-e-nonce-replay/manifest.json": "5ece74aa5d23be0925df2d8c6d6179a2684144cdbb585b3e0a83b719b10d102b",
+    "catalog/nonce-replay/repaired-e-nonce-replay/repaired-e/alice/nonce-replay/result.json": "036b31cae96f6dcb21f6ed13558d251b63c1dea3c68471bfacfc9564223f5fab",
+    "catalog/nonce-replay/repaired-e-nonce-replay/repaired-e/alice/result.json": "92ee5058f5f5fdae19c060265f13e7ba6928ca632f29591622480d937319d8dc",
+    "catalog/nonce-replay/repaired-e-nonce-replay/repaired-e/bob/result.json": "a053bb3232adeec0bb86bc0f590d37135420a06c1f7c41f0ee646dad8bb1fd18",
+    "catalog/nonce-replay/repaired-e-nonce-replay/repaired-e/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/nonce-replay/repaired-e-nonce-replay/repaired-e/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/recovery-expiry/manifest.json": "da39ac952cc34b15f3a4e283c8c118892cc7d72f901a942c9c5ffa8b17de83a6",
+    "catalog/recovery-expiry/paper-minimal-after_intent/manifest.json": "affef20bed77058f9b123d0b1288854d8728a92513b176d379dd0935c2e1250b",
+    "catalog/recovery-expiry/paper-minimal-after_intent/paper-minimal/alice/result.json": "cc58202fa42fc1958e9df618c69a2f2dd73a5f4767cbb2e4c9285f2cac76b964",
+    "catalog/recovery-expiry/paper-minimal-after_intent/paper-minimal/bob/result.json": "bea2a6fb66890879c6d349d093228cf2b505117d954ca40e5eb41a3794b1407b",
+    "catalog/recovery-expiry/paper-minimal-after_intent/paper-minimal/expired-retry/result.json": "533c482375030a8582d3025df0f0c581fb121004d0a94158306be670c16b3db0",
+    "catalog/recovery-expiry/paper-minimal-after_intent/paper-minimal/recovery/result.json": "21eb1bec8ce5f7a404d5532103536b41c01b91f1bb119b79fdc8118e614592ea",
+    "catalog/recovery-expiry/paper-minimal-after_intent/paper-minimal/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/recovery-expiry/paper-minimal-after_intent/paper-minimal/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/recovery-expiry/paper-minimal-after_send/manifest.json": "b425e5d032f6bcf8720414c5b4611c4577fe662c7f2a363f832a367faa279b64",
+    "catalog/recovery-expiry/paper-minimal-after_send/paper-minimal/alice/result.json": "dc0023cbfeb4d1b100364d9f7aac9d7de769127e6d2b677365d6212c8bd062a0",
+    "catalog/recovery-expiry/paper-minimal-after_send/paper-minimal/bob/result.json": "acab303df2b21ba70a3b7defa06caf6d13d5130eca1fd8568431664a74595fa8",
+    "catalog/recovery-expiry/paper-minimal-after_send/paper-minimal/expired-retry/result.json": "474d406768d5c1251011ddc4d44103d6de648d7ee62fd4396ebd948dac5b0dad",
+    "catalog/recovery-expiry/paper-minimal-after_send/paper-minimal/recovery/result.json": "e3caba271f6343b53dc1aadbad30508ea752296e69c04676bc9d12a6bb07975d",
+    "catalog/recovery-expiry/paper-minimal-after_send/paper-minimal/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/recovery-expiry/paper-minimal-after_send/paper-minimal/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/recovery-expiry/paper-strict-after_intent/manifest.json": "262c5715b8f11ae92ef3f68a16467efd29f064532d945e4591f5ab1e65281e53",
+    "catalog/recovery-expiry/paper-strict-after_intent/paper-strict/alice/result.json": "2e97a556f446989bfa5527fc74d90e97bc306376aefe8ae55a65bd22c6558349",
+    "catalog/recovery-expiry/paper-strict-after_intent/paper-strict/bob/result.json": "c738be4e42039dd8c9f81738032e812efe5cc30601c3b765226f358ad880dc76",
+    "catalog/recovery-expiry/paper-strict-after_intent/paper-strict/expired-retry/result.json": "6385712c69f5e64d05d0a7dfa55d961164478977d47bd4158da7281e13d8ee41",
+    "catalog/recovery-expiry/paper-strict-after_intent/paper-strict/recovery/result.json": "40f720ea996bd64529c1c6bd4c0f0114b1a1d7e0dc3e4964f6d7afbec9106755",
+    "catalog/recovery-expiry/paper-strict-after_intent/paper-strict/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/recovery-expiry/paper-strict-after_intent/paper-strict/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/recovery-expiry/paper-strict-after_send/manifest.json": "5433fc3065a63d45391e4342c92c9f39d503610499dcae92c2aa74c0ce8dc95d",
+    "catalog/recovery-expiry/paper-strict-after_send/paper-strict/alice/result.json": "6421cda3ce668df1c6551baea99635e075b791ba3d68b69f28f2551852131326",
+    "catalog/recovery-expiry/paper-strict-after_send/paper-strict/bob/result.json": "9ead300442a4f54209f89722a1ef573786f8e58ecba7f85d9d39475c8f169a86",
+    "catalog/recovery-expiry/paper-strict-after_send/paper-strict/expired-retry/result.json": "77692261834d3c93ae86379273496f86a2730e0c44f4d8f70297e998e55b690d",
+    "catalog/recovery-expiry/paper-strict-after_send/paper-strict/recovery/result.json": "cbe4570710adc48b6c1a1059eb57b56fa128ecc1deb57e012b5e9495694923b3",
+    "catalog/recovery-expiry/paper-strict-after_send/paper-strict/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/recovery-expiry/paper-strict-after_send/paper-strict/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/recovery-expiry/repaired-e-after_intent/manifest.json": "37daf3a89b58f9196ef3475ecadaed3d734b0ed6a8906d0a87ddc8b7cf99b852",
+    "catalog/recovery-expiry/repaired-e-after_intent/repaired-e/alice/result.json": "03937d39c14c0c33569dfe0fbc749ea338d58ca1ff85766423bf1e7fd25322cd",
+    "catalog/recovery-expiry/repaired-e-after_intent/repaired-e/bob/result.json": "eec1b7cea5bdfb04a0acd0a7abb893d08c66c05ec71c7e9cbbc60e89347b30c2",
+    "catalog/recovery-expiry/repaired-e-after_intent/repaired-e/expired-retry/result.json": "4c84c934cef96a35c01230c567e563d9bc3c23acf210740ed2eb8428a34eff30",
+    "catalog/recovery-expiry/repaired-e-after_intent/repaired-e/recovery/result.json": "263e73154a4f3c45e367850de431e7da1b3bd7bb5053569eb4d8d3fd62eee817",
+    "catalog/recovery-expiry/repaired-e-after_intent/repaired-e/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/recovery-expiry/repaired-e-after_intent/repaired-e/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/recovery-expiry/repaired-e-after_send/manifest.json": "9103d0a92c78c6ffc4d1a47e5c7e02b8f32dcfc06f71488ef44960e51565ecb1",
+    "catalog/recovery-expiry/repaired-e-after_send/repaired-e/alice/result.json": "99d8b8277ddd9384f3cd9d47022f112a93fa13037ccb74a6741d1d51e6578445",
+    "catalog/recovery-expiry/repaired-e-after_send/repaired-e/bob/result.json": "e342eeabf81fb871948a6d99a00f0a618ff0dcac366ddaa79e9ffc6dcf93d7ac",
+    "catalog/recovery-expiry/repaired-e-after_send/repaired-e/expired-retry/result.json": "fa66f517313aa576fcf1422b2673eec36e11495900be2bc476d5a6efc4751196",
+    "catalog/recovery-expiry/repaired-e-after_send/repaired-e/recovery/result.json": "fc05fb57a68462f502b9d973ab0331c3ddda42d8d71fdab9e88918d4dadda894",
+    "catalog/recovery-expiry/repaired-e-after_send/repaired-e/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/recovery-expiry/repaired-e-after_send/repaired-e/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl1-subject/manifest.json": "fe73bb2ae2f103e263bfac77150af7e6f1d804638e310e5acd159f938f0db841",
+    "catalog/sl1-subject/paper-minimal-subject-substitution/manifest.json": "f58661626f8e554918d4511291ef5540cf1c05e6322556070321b9eb15d4525c",
+    "catalog/sl1-subject/paper-minimal-subject-substitution/paper-minimal/alice/result.json": "03da9d464a89a320535a075e678e2136ed29abe11cccd00851bcfbd838c63c67",
+    "catalog/sl1-subject/paper-minimal-subject-substitution/paper-minimal/bob/result.json": "d792bd04aedf69f8819fffea49047458cf67885b9782a7732a1060ffdb854735",
+    "catalog/sl1-subject/paper-minimal-subject-substitution/paper-minimal/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl1-subject/paper-minimal-subject-substitution/paper-minimal/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl1-subject/paper-minimal-subject-substitution/paper-minimal/subject-stress/result.json": "e4f47a6e3603ce74f3cf6bf2dddf7685b15f199206adea48651522560061fd08",
+    "catalog/sl1-subject/paper-minimal-subject-substitution/paper-minimal/subject-stress/subject-completion/result.json": "4b1719b952cda9302ea373c8de40df94bff981e5da83992dab64335637b994e0",
+    "catalog/sl1-subject/paper-minimal-subject-substitution/paper-minimal/subject-stress/subject-substitution/result.json": "d895e975792bd08323470e7c857a2e37b07540cbf9e7a007da4a1d50bca19b44",
+    "catalog/sl1-subject/paper-strict-subject-substitution/manifest.json": "5d0c2d6bcc71127aebdd6dc9920fe5dc516d23a7c3810d24081aa3c073d88987",
+    "catalog/sl1-subject/paper-strict-subject-substitution/paper-strict/alice/result.json": "5b5f534e08a83a76860132e095ad94c5055e41e319161046488579d3a6fd54a1",
+    "catalog/sl1-subject/paper-strict-subject-substitution/paper-strict/bob/result.json": "b63743e3c2feaa71709eb640c63bfa8bb2fdb689ac195fb737d0ec31c13e72d4",
+    "catalog/sl1-subject/paper-strict-subject-substitution/paper-strict/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl1-subject/paper-strict-subject-substitution/paper-strict/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl1-subject/paper-strict-subject-substitution/paper-strict/subject-stress/result.json": "5dd43f28d16b5b5408faaeee28e6cd53d55437bfa2a339db72557528a0e39dbe",
+    "catalog/sl1-subject/paper-strict-subject-substitution/paper-strict/subject-stress/subject-completion/result.json": "1f6e253eb0f184268bcd52d25b9b87ff3d477e990ddebd41cd6e867c58e94c0c",
+    "catalog/sl1-subject/paper-strict-subject-substitution/paper-strict/subject-stress/subject-substitution/result.json": "2d37e5666468949f73ce3f56f3d5670da226c3c8cf3188696fa573b3ecc0dd0a",
+    "catalog/sl1-subject/repaired-e-subject-substitution/manifest.json": "2b30b7b8209768f55df9da5c43b485a386563ff5ea03e2d598593018cc2a9729",
+    "catalog/sl1-subject/repaired-e-subject-substitution/repaired-e/alice/result.json": "94d2ce662594f9e9e04706dd721cb9f86492bf8a8c2a6fe1b50718a9702b88c5",
+    "catalog/sl1-subject/repaired-e-subject-substitution/repaired-e/bob/result.json": "a076df03df818b4ab5438621d844e43b3680224f44edbf9453ad17203618a098",
+    "catalog/sl1-subject/repaired-e-subject-substitution/repaired-e/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl1-subject/repaired-e-subject-substitution/repaired-e/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl1-subject/repaired-e-subject-substitution/repaired-e/subject-stress/result.json": "75fa46d6dd1645c8a25a781e40ebb081d735d88cb4700ee9133a163ed032b38f",
+    "catalog/sl1-subject/repaired-e-subject-substitution/repaired-e/subject-stress/subject-substitution/result.json": "97b6a8b95039243e145c6ce6e701676fd949e989edacfda4783f12f2a0eed921",
+    "catalog/sl2-relay/manifest.json": "6a236f5055dc3e0f289561f6d96473d40b8a0ce0395efed3f5150a1a595521c4",
+    "catalog/sl2-relay/paper-minimal-forged-tuple/manifest.json": "823a5f1ba513ff64f024a3258a2e4f5094b40e33391fa369705490d985d3ce81",
+    "catalog/sl2-relay/paper-minimal-forged-tuple/paper-minimal/alice/result.json": "4f194bfdc8097de54009214d209e0a060f311c59c21b60849c9b284733d93e42",
+    "catalog/sl2-relay/paper-minimal-forged-tuple/paper-minimal/bob/result.json": "afd524f8005c3773baa14d8bd95cb9ca1fb589a5b3bff43152b09c44e52f9f51",
+    "catalog/sl2-relay/paper-minimal-forged-tuple/paper-minimal/relay-stress/result.json": "5345e7bc46f9c6a24f7ebe51169aacde1e551f8d92d9d887be1ac1744e9ac453",
+    "catalog/sl2-relay/paper-minimal-forged-tuple/paper-minimal/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl2-relay/paper-minimal-forged-tuple/paper-minimal/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl2-relay/paper-minimal-new-reference-replay/manifest.json": "b36473d4ca2a1560e2aad018ef41db18270f7c9aa3183f6e5326ffa8843e48d3",
+    "catalog/sl2-relay/paper-minimal-new-reference-replay/paper-minimal/alice/result.json": "7d93a6379406bcb8b9246beea344a96b08e581529d2787a8d2abe476c7355535",
+    "catalog/sl2-relay/paper-minimal-new-reference-replay/paper-minimal/bob/result.json": "428b6f9ccf25632cd58d8f6a194329b3a6a44b7e1d1c9d3adbe8941086fdb262",
+    "catalog/sl2-relay/paper-minimal-new-reference-replay/paper-minimal/relay-stress/result.json": "510e603bd677d2c017329601a064c1b37f12bb1dc97424192bdcfa667e9ffa8d",
+    "catalog/sl2-relay/paper-minimal-new-reference-replay/paper-minimal/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl2-relay/paper-minimal-new-reference-replay/paper-minimal/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl2-relay/paper-strict-forged-tuple/manifest.json": "8967bfbfb80f2abb4abf980c128db1f65d885fc6380a293355cf7a645f3f06bc",
+    "catalog/sl2-relay/paper-strict-forged-tuple/paper-strict/alice/result.json": "85bf7bfabbe09fa836b13cef13143ec2a6620650f8dfbb701bebc6a698fb6ec1",
+    "catalog/sl2-relay/paper-strict-forged-tuple/paper-strict/bob/result.json": "a8f3773861dd1ebe1c5f084ff34cb9c0262532a51370b70c08d05cc8d015ad5c",
+    "catalog/sl2-relay/paper-strict-forged-tuple/paper-strict/relay-stress/result.json": "fd8443666fc52cf575aba0cfb785296aef9622cc874f4f3da3b76a6c9216d0ae",
+    "catalog/sl2-relay/paper-strict-forged-tuple/paper-strict/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl2-relay/paper-strict-forged-tuple/paper-strict/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl2-relay/paper-strict-new-reference-replay/manifest.json": "045d174bdbbab3bae43c9c054df5a85f84a670409dff4bdbfdd0669b07ef2c37",
+    "catalog/sl2-relay/paper-strict-new-reference-replay/paper-strict/alice/result.json": "ebbcc1e0fe6b6d1a8adc904dc3e0c92a9e98e1899f7b3e96a8b0a94e36562fcf",
+    "catalog/sl2-relay/paper-strict-new-reference-replay/paper-strict/bob/result.json": "5d1ea82d81f21f6541f91ebb7f583566dc499a1322566fb1971711c61614c49d",
+    "catalog/sl2-relay/paper-strict-new-reference-replay/paper-strict/relay-stress/result.json": "c2eb56a31e14c6c109bbff9a8c828bed6c1da6824fa5cee82a31265188c90b33",
+    "catalog/sl2-relay/paper-strict-new-reference-replay/paper-strict/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl2-relay/paper-strict-new-reference-replay/paper-strict/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl2-relay/repaired-e-forged-tuple/manifest.json": "817e73f51f7a85cddcb9111dd76ec35d9e93831656e9ddd74fabe2232865415e",
+    "catalog/sl2-relay/repaired-e-forged-tuple/repaired-e/alice/result.json": "330381443f6746e5ec7313cfc1085514592049738370a8d82d382f004ae59998",
+    "catalog/sl2-relay/repaired-e-forged-tuple/repaired-e/bob/result.json": "803bf9604ed4b08fae484f9dad8fdeb004e2082234d4f7baca3a1f7286877e2e",
+    "catalog/sl2-relay/repaired-e-forged-tuple/repaired-e/relay-stress/result.json": "4706c95dacbd89734364beab2f3a259fa8a5ca48d1777ad0f14fa7193cb3c4f3",
+    "catalog/sl2-relay/repaired-e-forged-tuple/repaired-e/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl2-relay/repaired-e-forged-tuple/repaired-e/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl2-relay/repaired-e-new-reference-replay/manifest.json": "f8015208892a762542a5ca337dd4166fb7a080e63fe1bb2851070dc587520588",
+    "catalog/sl2-relay/repaired-e-new-reference-replay/repaired-e/alice/result.json": "f20236a21be3394fe0238e99e72176df3e605eee86d495fad30f14b030f50f78",
+    "catalog/sl2-relay/repaired-e-new-reference-replay/repaired-e/bob/result.json": "b56035a1768ea1ebd5924b6e368926fb952032726696337cb9e11897c16e1518",
+    "catalog/sl2-relay/repaired-e-new-reference-replay/repaired-e/relay-stress/result.json": "9b84d25fb18d46967cc68f1ab418bb64a52f0873de16695fe1e8fac68f1e1bd5",
+    "catalog/sl2-relay/repaired-e-new-reference-replay/repaired-e/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl2-relay/repaired-e-new-reference-replay/repaired-e/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl2-relay/repaired-e-same-nonce-distinct-digests/manifest.json": "a2b5f90824162b32e9e84586fa2705829f4dda8db8660670abc1b3d54ad3a515",
+    "catalog/sl2-relay/repaired-e-same-nonce-distinct-digests/repaired-e/alice/result.json": "44d699db0ad1b31253cda76c0a91ae7c8bc65827c79f30ebd486e7aa7b30fc7a",
+    "catalog/sl2-relay/repaired-e-same-nonce-distinct-digests/repaired-e/bob/result.json": "d3182757ed0eff68fab8744781cab2b2cd41f6be541b77c55b2f26ba167477b7",
+    "catalog/sl2-relay/repaired-e-same-nonce-distinct-digests/repaired-e/relay-stress/result.json": "f21aa4086d6caf863010a7eb538716fc68e0c9fe1847e1ba4d0299ba0a16407e",
+    "catalog/sl2-relay/repaired-e-same-nonce-distinct-digests/repaired-e/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl2-relay/repaired-e-same-nonce-distinct-digests/repaired-e/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl3-audit/manifest.json": "f52a46c4f561eb8bfbb50af0fccf78e1e370a28b5fb22faec16b446774c5e075",
+    "catalog/sl3-audit/paper-minimal-dropped-outcome/manifest.json": "97d27f5625919b8cc11d2417c678da43070c46900c3065a71368a53ee1c02e95",
+    "catalog/sl3-audit/paper-minimal-dropped-outcome/paper-minimal/alice/result.json": "9d497f259d068dbb090fc357f14ceefe39d6037e0ccb3707d79ce8dc5a915043",
+    "catalog/sl3-audit/paper-minimal-dropped-outcome/paper-minimal/audit-stress/result.json": "39a0d6b68677dfe2f5df266fcbfef938d373b5a67c989f6ea61774bcba43ee04",
+    "catalog/sl3-audit/paper-minimal-dropped-outcome/paper-minimal/bob/result.json": "58110b96959351900ae182df769f27b93b29e780bbe3b13536aca228c783d660",
+    "catalog/sl3-audit/paper-minimal-dropped-outcome/paper-minimal/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl3-audit/paper-minimal-dropped-outcome/paper-minimal/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl3-audit/paper-minimal-fabricated-outcome/manifest.json": "f83d3463ec645afc7c78f8bd9f9bf92f223dc7871e202a4308e34050588b963c",
+    "catalog/sl3-audit/paper-minimal-fabricated-outcome/paper-minimal/alice/result.json": "390e1a13ccd48657253cf98e10f03d91c59621861cbba75610ac162db9e7a7e3",
+    "catalog/sl3-audit/paper-minimal-fabricated-outcome/paper-minimal/audit-stress/result.json": "95e374cdc2a51db7844d1424c368bc79a47a41458f20068e35689ec135936e61",
+    "catalog/sl3-audit/paper-minimal-fabricated-outcome/paper-minimal/bob/result.json": "229c5ee7c73b0789561f137113974ace04da34f7f492e61bd2a5f35c6feef622",
+    "catalog/sl3-audit/paper-minimal-fabricated-outcome/paper-minimal/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl3-audit/paper-minimal-fabricated-outcome/paper-minimal/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl3-audit/paper-strict-dropped-outcome/manifest.json": "8b4c0c5ea52286d8fb96eb2039e07f672b17b3740f79f4110161f9e22c40a775",
+    "catalog/sl3-audit/paper-strict-dropped-outcome/paper-strict/alice/result.json": "cab323afbe59c472f8bcb7c456dda8e19e738a0454c195fd6bf1b0168c10309a",
+    "catalog/sl3-audit/paper-strict-dropped-outcome/paper-strict/audit-stress/result.json": "ed306b8f815f3fd0ad5bec5309291650900c5fb710e4a0a7c2e1532663f0b058",
+    "catalog/sl3-audit/paper-strict-dropped-outcome/paper-strict/bob/result.json": "71e46034c41a9a1ba4f5b420a332cf8cf288c933deafd0567e38e2861638d89d",
+    "catalog/sl3-audit/paper-strict-dropped-outcome/paper-strict/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl3-audit/paper-strict-dropped-outcome/paper-strict/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl3-audit/paper-strict-fabricated-outcome/manifest.json": "da5b34155a17cbf618d039c0aafd9eb29d076ce4beb0513cc997d301091d3598",
+    "catalog/sl3-audit/paper-strict-fabricated-outcome/paper-strict/alice/result.json": "e582da996aeca834f0b8cc158430df9a23b1099ca295050e29ae3fe1bcd965db",
+    "catalog/sl3-audit/paper-strict-fabricated-outcome/paper-strict/audit-stress/result.json": "ae611095a6c29ea2536e6e7b1a0155667809928f67931c14a5226c6d56a777fd",
+    "catalog/sl3-audit/paper-strict-fabricated-outcome/paper-strict/bob/result.json": "69c55320577474ceb2d8674d14bf387f0e34dbbf5fb8194b4873763dc8b0103a",
+    "catalog/sl3-audit/paper-strict-fabricated-outcome/paper-strict/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl3-audit/paper-strict-fabricated-outcome/paper-strict/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl3-audit/repaired-e-dropped-outcome/manifest.json": "c5d42ef11e0c7f6297c2859bce21cf69118fd454dab5ad1c191eb0ab72edb2c2",
+    "catalog/sl3-audit/repaired-e-dropped-outcome/repaired-e/alice/result.json": "9f1c02488b5abc7e4149a46752ad6934e5ddad5d6e0f51ebb8df152de051deeb",
+    "catalog/sl3-audit/repaired-e-dropped-outcome/repaired-e/audit-stress/result.json": "793fdc2876189d0a7799dd76afbd9a6d32db4defc712a961f548a9e77f5770ee",
+    "catalog/sl3-audit/repaired-e-dropped-outcome/repaired-e/bob/result.json": "429764106d50bad80a7d3a3d077b1319985880f8f28fe30af14cfe834946483d",
+    "catalog/sl3-audit/repaired-e-dropped-outcome/repaired-e/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl3-audit/repaired-e-dropped-outcome/repaired-e/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl3-audit/repaired-e-fabricated-outcome/manifest.json": "666941dfc1ba0441bc7153eef1337fd339d26c9f5cb2fbca5cff4e194c85ec37",
+    "catalog/sl3-audit/repaired-e-fabricated-outcome/repaired-e/alice/result.json": "6c4a67f49211f795f2d7b8fae2f48f2fd857455083b71a1b96f22c2b2f10f723",
+    "catalog/sl3-audit/repaired-e-fabricated-outcome/repaired-e/audit-stress/result.json": "98f07b4e56991f915413f56837379bbc15db0bc78620611d8d53a199256e6f3e",
+    "catalog/sl3-audit/repaired-e-fabricated-outcome/repaired-e/bob/result.json": "0261b5c8225a1c7d3eb9c54a3689910a5689ac4323033ed0c243e71cddbdd285",
+    "catalog/sl3-audit/repaired-e-fabricated-outcome/repaired-e/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl3-audit/repaired-e-fabricated-outcome/repaired-e/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl4-receipt/manifest.json": "11800e6b8cd20d887ad6c3a59e2bd406bf01d02226da5c289391937966c219b4",
+    "catalog/sl4-receipt/repaired-e-receipt-binding-control-dataId/manifest.json": "b78b64e03fea60fcdb318858b4c8ecb10a9218f87436fb68b1c2d09b92d1630f",
+    "catalog/sl4-receipt/repaired-e-receipt-binding-control-dataId/repaired-e/alice/result.json": "13487ab8a63976d66e8e054396fd79cbfb9b93718d6d6020778f290a2d0869da",
+    "catalog/sl4-receipt/repaired-e-receipt-binding-control-dataId/repaired-e/bob/result.json": "9f026d40c9cdb5e58451e698ee7d95edb6bfbfc3fa065347ccd9d1e291d1c345",
+    "catalog/sl4-receipt/repaired-e-receipt-binding-control-dataId/repaired-e/receipt-stress/result.json": "c8631375fd37e67c7e2e5a7aa5af9ecc0701f85e0a241a5e3b24affef6f27833",
+    "catalog/sl4-receipt/repaired-e-receipt-binding-control-dataId/repaired-e/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl4-receipt/repaired-e-receipt-binding-control-dataId/repaired-e/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl4-receipt/repaired-e-receipt-binding-control-gid/manifest.json": "97f733c0f18e4ac7ecd8e3e1070837b031e2d812e45f317476d31e261b8a76bf",
+    "catalog/sl4-receipt/repaired-e-receipt-binding-control-gid/repaired-e/alice/result.json": "df7ddb6c57dba3dc4b9b25b136868d8e8a31506316c213708a3c0d4a2a69d397",
+    "catalog/sl4-receipt/repaired-e-receipt-binding-control-gid/repaired-e/bob/result.json": "3333424b442dd4ed4953022f392d8c20e6c7c056382e96459db90cc63bbf1135",
+    "catalog/sl4-receipt/repaired-e-receipt-binding-control-gid/repaired-e/receipt-stress/result.json": "763cf6ee16709ffac0c3cfc416de6a938a82376b594e24eb6a2d76dae772368d",
+    "catalog/sl4-receipt/repaired-e-receipt-binding-control-gid/repaired-e/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl4-receipt/repaired-e-receipt-binding-control-gid/repaired-e/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl4-receipt/repaired-e-receipt-binding-control-requestDigest/manifest.json": "ef2ede62313e2267ab961685e696ed53a8baf4883ed5d793e0bc3223d34899dd",
+    "catalog/sl4-receipt/repaired-e-receipt-binding-control-requestDigest/repaired-e/alice/result.json": "a8aedf4d160545378133bbf7b8f6592598fbdc21af320315f20f816bc999fa84",
+    "catalog/sl4-receipt/repaired-e-receipt-binding-control-requestDigest/repaired-e/bob/result.json": "24e7c0355bf57dca46108831bc362a08211ce0febab2545573a59f5bffdb05b3",
+    "catalog/sl4-receipt/repaired-e-receipt-binding-control-requestDigest/repaired-e/receipt-stress/result.json": "0495fe28be3781cd901d4b03202318f87220c5641668d864727f559a37e92b82",
+    "catalog/sl4-receipt/repaired-e-receipt-binding-control-requestDigest/repaired-e/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl4-receipt/repaired-e-receipt-binding-control-requestDigest/repaired-e/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl4-receipt/repaired-e-receipt-binding-positive/manifest.json": "44797ff32fe4a5753d950fa9ba9329c9362ce75a117975f808f7850398c4266c",
+    "catalog/sl4-receipt/repaired-e-receipt-binding-positive/repaired-e/alice/result.json": "d32810cdd5a0e9784f0bb33401aab87fda7997b7052bba958a84cd159f8774c4",
+    "catalog/sl4-receipt/repaired-e-receipt-binding-positive/repaired-e/bob/result.json": "4056c2c17715332904404c585359999810dd21791e3ee85698713fc3104363a6",
+    "catalog/sl4-receipt/repaired-e-receipt-binding-positive/repaired-e/receipt-stress/result.json": "1377034a0eff7152ca36f217cd65ff457f521021c41180f220ad8f4db2e1022f",
+    "catalog/sl4-receipt/repaired-e-receipt-binding-positive/repaired-e/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl4-receipt/repaired-e-receipt-binding-positive/repaired-e/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl4-receipt/repaired-e-receipt-signature-control-dataId/manifest.json": "2388d357911e926e29d28a3df437c215c57a34d017bd2a2c630dd3365306d265",
+    "catalog/sl4-receipt/repaired-e-receipt-signature-control-dataId/repaired-e/alice/result.json": "11b7d06cae743854e8017ed7fbb665dcc32bc6a9e9e5c617b878f3f5cc597c3c",
+    "catalog/sl4-receipt/repaired-e-receipt-signature-control-dataId/repaired-e/bob/result.json": "e75ed202b864aa211b02bf3eac3fa0ef2ab7e69faeacd29fdda75ab07cc98538",
+    "catalog/sl4-receipt/repaired-e-receipt-signature-control-dataId/repaired-e/receipt-stress/result.json": "c3300d645de79d5bb3ffbb07c69df092013ae6475b6a268194d491f13749600a",
+    "catalog/sl4-receipt/repaired-e-receipt-signature-control-dataId/repaired-e/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl4-receipt/repaired-e-receipt-signature-control-dataId/repaired-e/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl4-receipt/repaired-e-receipt-signature-control-gid/manifest.json": "9b5229e8b0c5b1d413e667c796997d2fc951b80bcf4a4fb43da10298654b7770",
+    "catalog/sl4-receipt/repaired-e-receipt-signature-control-gid/repaired-e/alice/result.json": "ba1878daa2fc612524866be98e28862d7fc2c10fe1e7a17d13092e89583353fc",
+    "catalog/sl4-receipt/repaired-e-receipt-signature-control-gid/repaired-e/bob/result.json": "675bc277d048c74c561cdd02f2d2bc22d26d10506debaaad09d4bc964834ce57",
+    "catalog/sl4-receipt/repaired-e-receipt-signature-control-gid/repaired-e/receipt-stress/result.json": "41f393bcd2f901cca2e9ed0d7916559b47949e5bd8bf3d50bd13f621538bc82d",
+    "catalog/sl4-receipt/repaired-e-receipt-signature-control-gid/repaired-e/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl4-receipt/repaired-e-receipt-signature-control-gid/repaired-e/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl4-receipt/repaired-e-receipt-signature-control-requestDigest/manifest.json": "358cb898465860cfc73f5516ea111b25cd4e4b66198a1fdea8497f5979759bf6",
+    "catalog/sl4-receipt/repaired-e-receipt-signature-control-requestDigest/repaired-e/alice/result.json": "030ec7989ab8c6cc66e427b0b524e7f1923620909f88ce6eae7ac0af993e984a",
+    "catalog/sl4-receipt/repaired-e-receipt-signature-control-requestDigest/repaired-e/bob/result.json": "1ac4a5b2d4c5bb3fd1828a227d4abda5b587030884a274a72dde820a272d1276",
+    "catalog/sl4-receipt/repaired-e-receipt-signature-control-requestDigest/repaired-e/receipt-stress/result.json": "f5e79a6b6af3d688f3e265d5b84a962365a0e09a568b5bccd6f74e4f3e7fb136",
+    "catalog/sl4-receipt/repaired-e-receipt-signature-control-requestDigest/repaired-e/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl4-receipt/repaired-e-receipt-signature-control-requestDigest/repaired-e/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl5-trust/manifest.json": "c03cb4e8c70f24bd4c2f64e9e290f5e26a1dfc1c1f1e3742041429919c66deb6",
+    "catalog/sl5-trust/paper-minimal-signed-list-rollback/manifest.json": "4da7a34e9a1d5bb1b13e2fc35f4337bca3df63196ec0ab6efa1d78b768227a4f",
+    "catalog/sl5-trust/paper-minimal-signed-list-rollback/paper-minimal/alice/result.json": "a72dcd1a5dcb187aa386bb01115f453f8d0321aef307a92e1ad8560d5d118456",
+    "catalog/sl5-trust/paper-minimal-signed-list-rollback/paper-minimal/bob/result.json": "e7b1612cc3b27570d49399f01e79689aa88d5d52b29d7c7cbecf7d087b6136d2",
+    "catalog/sl5-trust/paper-minimal-signed-list-rollback/paper-minimal/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl5-trust/paper-minimal-signed-list-rollback/paper-minimal/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl5-trust/paper-minimal-signed-list-rollback/paper-minimal/trust-stress/result.json": "a3045e63ecccd5ffb372ad69fe840320341de2728d61fafe0623b0965998afd3",
+    "catalog/sl5-trust/paper-minimal-wrong-issuer/manifest.json": "59413f2c25bda6a881329b415f32dac46bd69d34a82ec649d8a191c6b70c0bb2",
+    "catalog/sl5-trust/paper-minimal-wrong-issuer/paper-minimal/alice/result.json": "29def4e4e06e293e30441d2198cccd47c8e3498dfdf2e354e0ff9bfa3797cc40",
+    "catalog/sl5-trust/paper-minimal-wrong-issuer/paper-minimal/bob/result.json": "1c5500542010eaecbf0c5c8dff66c3bd00adaca5131bb19eed0370959742f643",
+    "catalog/sl5-trust/paper-minimal-wrong-issuer/paper-minimal/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl5-trust/paper-minimal-wrong-issuer/paper-minimal/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl5-trust/paper-minimal-wrong-issuer/paper-minimal/trust-stress/result.json": "a1e2f8b2935400e01f0ebdde7af9c5414eaf5bcd7c8516a524f4271c609d25eb",
+    "catalog/sl5-trust/paper-strict-signed-list-rollback/manifest.json": "8ea8db2fa4f5061e4de257e1b42a136506786831a6552b729a9f02e1981fcc23",
+    "catalog/sl5-trust/paper-strict-signed-list-rollback/paper-strict/alice/result.json": "a26638c46dfb980b5e8d1a58648bf483f9659b102e725dad87692f25cb76d079",
+    "catalog/sl5-trust/paper-strict-signed-list-rollback/paper-strict/bob/result.json": "86af1a2ce3342faba4d63cfafaad48821db260f5df1f49bd041cdaeed186bbef",
+    "catalog/sl5-trust/paper-strict-signed-list-rollback/paper-strict/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl5-trust/paper-strict-signed-list-rollback/paper-strict/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl5-trust/paper-strict-signed-list-rollback/paper-strict/trust-stress/result.json": "6772ead2421038d278705f129af344724542160b8c1cb571b2e601bfbc59bc68",
+    "catalog/sl5-trust/paper-strict-wrong-issuer/manifest.json": "6f1b516c89110f3dbd43d043b752b8eef273fedb32bbb552c8ee21c25dd86e2d",
+    "catalog/sl5-trust/paper-strict-wrong-issuer/paper-strict/alice/result.json": "3e0409ca8bd4d018e23afd818ce4b601eddbf4424021eef714fccccf8aa705cc",
+    "catalog/sl5-trust/paper-strict-wrong-issuer/paper-strict/bob/result.json": "e966d29548576acd96a3f3d025aa7b3e01ad8b416b0511db3631f25a2996348f",
+    "catalog/sl5-trust/paper-strict-wrong-issuer/paper-strict/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl5-trust/paper-strict-wrong-issuer/paper-strict/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl5-trust/paper-strict-wrong-issuer/paper-strict/trust-stress/result.json": "d34d3823439579655031454af0b9830fb3c4f1a71e2b99500d69a0235411d9f0",
+    "catalog/sl5-trust/repaired-e-signed-list-rollback/manifest.json": "9549c862e55e4b534052611e1e96c0eb80fcd06fb00233976d1ec49ae09755d6",
+    "catalog/sl5-trust/repaired-e-signed-list-rollback/repaired-e/alice/result.json": "e0f1db14d097210b01dbffb76f2223dec3f5e0a6df9a826b7990e7ee87518e75",
+    "catalog/sl5-trust/repaired-e-signed-list-rollback/repaired-e/bob/result.json": "34265c79a8f93638967cf2915502e583e36009888c925702db755a2b1e8bfbe7",
+    "catalog/sl5-trust/repaired-e-signed-list-rollback/repaired-e/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl5-trust/repaired-e-signed-list-rollback/repaired-e/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl5-trust/repaired-e-signed-list-rollback/repaired-e/trust-stress/result.json": "cbe5070d1d81e2c500306c94b85c7d99b4fb7ff5ffe349ffb3e43bca15f5ed86",
+    "catalog/sl5-trust/repaired-e-wrong-issuer/manifest.json": "bb4a67188a79c9a952f8e6f6594bd5ca8705ab61e63fc109a2b5933eb75aca24",
+    "catalog/sl5-trust/repaired-e-wrong-issuer/repaired-e/alice/result.json": "784298a4457b6e5a70c424d545767459e6350821df81990a100ba06169c8b4c9",
+    "catalog/sl5-trust/repaired-e-wrong-issuer/repaired-e/bob/result.json": "f25034b5f4511f5db6cc6b4be7acbaa68b3d9b85e24f384bacd7d66482144862",
+    "catalog/sl5-trust/repaired-e-wrong-issuer/repaired-e/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl5-trust/repaired-e-wrong-issuer/repaired-e/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl5-trust/repaired-e-wrong-issuer/repaired-e/trust-stress/result.json": "196671aad3a428ed26804e9a49ff1beec25514e1d70e87d502a3cefd4f814063",
+    "catalog/sl6-barrier/manifest.json": "db3bf626c5f2c9ca17f9140d210c4fb1cdd22d4bcd260fe098404fecb52a05d3",
+    "catalog/sl6-barrier/paper-minimal-expired-duty/manifest.json": "18ae6abae778b8fae3847118ec2d94a6984435d0bfb403b90f981876a052449c",
+    "catalog/sl6-barrier/paper-minimal-expired-duty/paper-minimal/alice/result.json": "c8207cd35df4a62a37b533eaa73350058fcd190dd1c88a0425190ccf443c19c6",
+    "catalog/sl6-barrier/paper-minimal-expired-duty/paper-minimal/barrier-stress/result.json": "08fa1c6cd332fa43f594c33edbaaca1e7c19a957c5aff7ef11e3f66f89077fd6",
+    "catalog/sl6-barrier/paper-minimal-expired-duty/paper-minimal/bob/result.json": "16f193714bfaec7ef47d1ddcdbbd218c1e9a9627e7f7011e179ccbadfd979d07",
+    "catalog/sl6-barrier/paper-minimal-expired-duty/paper-minimal/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl6-barrier/paper-minimal-expired-duty/paper-minimal/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl6-barrier/paper-minimal-post-barrier-revocation/manifest.json": "ab4e1198785062d479931ff809b66e887823d65eb5fad7091ad1c818d81942c9",
+    "catalog/sl6-barrier/paper-minimal-post-barrier-revocation/paper-minimal/alice/result.json": "89f69596551db5230b41280b3f4385ba498947355d42b8d55a4359275f1a151a",
+    "catalog/sl6-barrier/paper-minimal-post-barrier-revocation/paper-minimal/barrier-stress/result.json": "4a0b01bf524ed11f8f95fce763d43cdb48286d74420a33da2672915c84afabc3",
+    "catalog/sl6-barrier/paper-minimal-post-barrier-revocation/paper-minimal/bob/result.json": "9b715af563d84d27e0bce6519f41d917b127fe49c082846e0af689f89ff43745",
+    "catalog/sl6-barrier/paper-minimal-post-barrier-revocation/paper-minimal/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl6-barrier/paper-minimal-post-barrier-revocation/paper-minimal/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl6-barrier/paper-minimal-pre-barrier-revocation/manifest.json": "838002bb9bcd0deda10c7bde45b416d185373c38ed06afb538c4e9c7abb8779b",
+    "catalog/sl6-barrier/paper-minimal-pre-barrier-revocation/paper-minimal/alice/result.json": "ce6561fe80e452f54cd415dae4a82d1f0bf0c37b87e8930be5e9ee374b7b490d",
+    "catalog/sl6-barrier/paper-minimal-pre-barrier-revocation/paper-minimal/barrier-stress/result.json": "1bdccd65b0bbf6d724eabbd26fecc7f839e4bdd87f361c9e84ddd3d8c8e5361e",
+    "catalog/sl6-barrier/paper-minimal-pre-barrier-revocation/paper-minimal/bob/result.json": "7499a32f1ee05a105da0afa17f56c92cc68c0b873ee8748ee2902bc01bcf6de9",
+    "catalog/sl6-barrier/paper-minimal-pre-barrier-revocation/paper-minimal/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl6-barrier/paper-minimal-pre-barrier-revocation/paper-minimal/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl6-barrier/paper-strict-expired-duty/manifest.json": "fb8c622857a61369c437330ab35306a2743c248b01e937489ae6f9ad6cb0c11b",
+    "catalog/sl6-barrier/paper-strict-expired-duty/paper-strict/alice/result.json": "faa4eca75a62a62d11a64eae2ab732a63f6ac5115c1889f2ca6dfa6d9414b9fc",
+    "catalog/sl6-barrier/paper-strict-expired-duty/paper-strict/barrier-stress/result.json": "a23c3399a6013e2b0f40175de998cefe916697a7f63b9c0fd8bb1d4d1bd5bfac",
+    "catalog/sl6-barrier/paper-strict-expired-duty/paper-strict/bob/result.json": "c506ec859ac9353f1efe9efe1be13463beb9889de400754bd9211b791647a9bf",
+    "catalog/sl6-barrier/paper-strict-expired-duty/paper-strict/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl6-barrier/paper-strict-expired-duty/paper-strict/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl6-barrier/paper-strict-post-barrier-revocation/manifest.json": "22a0428f406d21e4ada75a26f8d7d4aa8fefe5cc7d4373de47d7479cde85c4ea",
+    "catalog/sl6-barrier/paper-strict-post-barrier-revocation/paper-strict/alice/result.json": "e08d3897ef232beac032abb3602594326f9d29af43a4e7fc3fa1aace53ddcf67",
+    "catalog/sl6-barrier/paper-strict-post-barrier-revocation/paper-strict/barrier-stress/result.json": "d65ac9e75d3735f84d89c3713592a05997b1a0a730bf97a1d00f32ced3563571",
+    "catalog/sl6-barrier/paper-strict-post-barrier-revocation/paper-strict/bob/result.json": "7c505316684b542d20236ec8fdd8a2a34806de6136826570d7bc5f5c13b870e1",
+    "catalog/sl6-barrier/paper-strict-post-barrier-revocation/paper-strict/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl6-barrier/paper-strict-post-barrier-revocation/paper-strict/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl6-barrier/paper-strict-pre-barrier-revocation/manifest.json": "439360a395ab2a8131401e45a89c5d1476dc4297a2c73b7612ba4ddcf884775b",
+    "catalog/sl6-barrier/paper-strict-pre-barrier-revocation/paper-strict/alice/result.json": "f97fbc262828d9fc90ed2ae1656fa5ca93b10c5c5ff3b1915f6c2b4b0add773e",
+    "catalog/sl6-barrier/paper-strict-pre-barrier-revocation/paper-strict/barrier-stress/result.json": "519f1b7232dafd87686bb1922660bf6db5d4f7b582630512da9a6c4f5131e9b0",
+    "catalog/sl6-barrier/paper-strict-pre-barrier-revocation/paper-strict/bob/result.json": "787247ac9d87080889864f587dfec235a3b3417717ec542ce0398a819cf45dad",
+    "catalog/sl6-barrier/paper-strict-pre-barrier-revocation/paper-strict/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl6-barrier/paper-strict-pre-barrier-revocation/paper-strict/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl6-barrier/repaired-e-expired-duty/manifest.json": "48e14865d3bc385e4ed7f1fb2427c505c3d9b0c73177d019cf1deecb73d0b63a",
+    "catalog/sl6-barrier/repaired-e-expired-duty/repaired-e/alice/result.json": "467f72dcf84a10e8a84adf1b2c4703a2fb9cd76ee0a45d8e0ade88457383e131",
+    "catalog/sl6-barrier/repaired-e-expired-duty/repaired-e/barrier-stress/result.json": "2e6e41f8112db5dd503be194cf3dda36006dbf25b8c7b25ce6433a5d25be9fa0",
+    "catalog/sl6-barrier/repaired-e-expired-duty/repaired-e/bob/result.json": "effeca6b4ab58b7d2c357fe8974fb435a0158383d8b88f7a8dc0d7c5fd2743b8",
+    "catalog/sl6-barrier/repaired-e-expired-duty/repaired-e/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl6-barrier/repaired-e-expired-duty/repaired-e/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl6-barrier/repaired-e-post-barrier-revocation/manifest.json": "2a62e01062676236a1e8361f1b0f990e29700c4de2be2dfdb0d79087b74e76ac",
+    "catalog/sl6-barrier/repaired-e-post-barrier-revocation/repaired-e/alice/result.json": "d754068543a36d5ff78b69516b84778c1850cc3f610a6322fede908c461bac82",
+    "catalog/sl6-barrier/repaired-e-post-barrier-revocation/repaired-e/barrier-stress/result.json": "71c92c0748495bf27e7f69ba5ab4b07cd2e4fa5d96d602f10eae4e49beb4d2e8",
+    "catalog/sl6-barrier/repaired-e-post-barrier-revocation/repaired-e/bob/result.json": "a71c6ee08409623f8ae346e857000026adb2e994fc4d58eea0462e6c7021ec17",
+    "catalog/sl6-barrier/repaired-e-post-barrier-revocation/repaired-e/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl6-barrier/repaired-e-post-barrier-revocation/repaired-e/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl6-barrier/repaired-e-pre-barrier-revocation/manifest.json": "a86c3b95a0b6bdd055fff2b2b38e3ddc8e5e94780455b58902525e7262e7a997",
+    "catalog/sl6-barrier/repaired-e-pre-barrier-revocation/repaired-e/alice/result.json": "729daa3b3af1945cc661cb10c154d7becc5998832aa03e75dc5abfb5e07914ca",
+    "catalog/sl6-barrier/repaired-e-pre-barrier-revocation/repaired-e/barrier-stress/result.json": "2d02778b6f01ca1e47cc109b0e8da79b71f6f908c3dfcddff6db086db4116521",
+    "catalog/sl6-barrier/repaired-e-pre-barrier-revocation/repaired-e/bob/result.json": "6e106cf6c1f534b8c2ae00f4d993a0d1c1a05f0b40addd810f693ab4550e57c7",
+    "catalog/sl6-barrier/repaired-e-pre-barrier-revocation/repaired-e/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl6-barrier/repaired-e-pre-barrier-revocation/repaired-e/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl7-destination/manifest.json": "3e0f70d9437e0d4f7077e644958ad1819197d22df0d106c2cc8c0813b28bedad",
+    "catalog/sl7-destination/paper-minimal-expiry-boundary/manifest.json": "60eb878dba12cee7058399e56cdcba55965b71e0d55619a192cfcd8126eb1c11",
+    "catalog/sl7-destination/paper-minimal-expiry-boundary/paper-minimal/alice/result.json": "b7259187d1a3cb6ba5c595e6767130a6a53aa75c7b47002d61438b3c4193f05c",
+    "catalog/sl7-destination/paper-minimal-expiry-boundary/paper-minimal/bob/result.json": "5a2e7080d34c63d147bbbf96e37d63d6de7893d7b16a8bdf6b69b8a96ea22c72",
+    "catalog/sl7-destination/paper-minimal-expiry-boundary/paper-minimal/destination-stress/result.json": "26899eb50f0a6d3166404862449931f347285603f93a97f935141f716656e3e9",
+    "catalog/sl7-destination/paper-minimal-expiry-boundary/paper-minimal/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl7-destination/paper-minimal-expiry-boundary/paper-minimal/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl7-destination/paper-minimal-wrong-destination/manifest.json": "be5b5c935e2338b357ead776779a83cea0e1401c7c33bcc4b4a960aa9761b99f",
+    "catalog/sl7-destination/paper-minimal-wrong-destination/paper-minimal/alice/result.json": "cac64d20310c936b7df1843177beab9b3f73be85d0091be95614126edab7020b",
+    "catalog/sl7-destination/paper-minimal-wrong-destination/paper-minimal/bob/result.json": "4f87d692257235fe010ba7607ffde63e126e8b6d14a5230e1bd831d1774c6b37",
+    "catalog/sl7-destination/paper-minimal-wrong-destination/paper-minimal/destination-stress/result.json": "836e64881757fb8f718b61e4bd2fb19e16adeef2114e7cde469bed16b229bf20",
+    "catalog/sl7-destination/paper-minimal-wrong-destination/paper-minimal/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl7-destination/paper-minimal-wrong-destination/paper-minimal/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl7-destination/paper-strict-expiry-boundary/manifest.json": "5add1e5577c119ac8877ba56dce0a6b40f736e8636af8713eb60015bff8cfa0d",
+    "catalog/sl7-destination/paper-strict-expiry-boundary/paper-strict/alice/result.json": "5c7f7737fb183147e19cc0d0ceaa739091687ee92881a8c8bc182eb500938eb6",
+    "catalog/sl7-destination/paper-strict-expiry-boundary/paper-strict/bob/result.json": "c1025c38b77f72541c8a3305783fda3f0b90029e37d30602b5af7b43c38b17db",
+    "catalog/sl7-destination/paper-strict-expiry-boundary/paper-strict/destination-stress/result.json": "7c8b82bb9f56554ffc028663717406fbe4d2c2d2355a2858c584cf430a14c9b2",
+    "catalog/sl7-destination/paper-strict-expiry-boundary/paper-strict/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl7-destination/paper-strict-expiry-boundary/paper-strict/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl7-destination/paper-strict-wrong-destination/manifest.json": "9bef2a125df703ab2db2b4c8f1dfdd3459fa5931e456378a60acb9870d10a395",
+    "catalog/sl7-destination/paper-strict-wrong-destination/paper-strict/alice/result.json": "e1fc908db668fe3b1fe3699269dc27f339bb9d77e2530f5d469e4e0470da9621",
+    "catalog/sl7-destination/paper-strict-wrong-destination/paper-strict/bob/result.json": "65cb98f165871504b1ee93dc4e9e8392a2459626ccf5a18f25604e86ceaf5ab9",
+    "catalog/sl7-destination/paper-strict-wrong-destination/paper-strict/destination-stress/result.json": "89c135c528567d782282dd8390a89653a680ebb38795d88ad4fdaa0a6ae4b8f2",
+    "catalog/sl7-destination/paper-strict-wrong-destination/paper-strict/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl7-destination/paper-strict-wrong-destination/paper-strict/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl7-destination/repaired-e-expiry-boundary/manifest.json": "8fa99e0923cabceaba389dde1c6d7cc65453dafd19491c3f45c5a2cf370bb97b",
+    "catalog/sl7-destination/repaired-e-expiry-boundary/repaired-e/alice/result.json": "61751908b7964060f2b0dc473fd263846375a6039106f0c01e2ce633ca77c179",
+    "catalog/sl7-destination/repaired-e-expiry-boundary/repaired-e/bob/result.json": "b136f84689be7abc23a4196c54e4f80657ef0f24f19414650a26d5ac82454496",
+    "catalog/sl7-destination/repaired-e-expiry-boundary/repaired-e/destination-stress/result.json": "635c87bc2549c60689b4f8262076e292defbe8094e752202abb1f36f1968d4b5",
+    "catalog/sl7-destination/repaired-e-expiry-boundary/repaired-e/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl7-destination/repaired-e-expiry-boundary/repaired-e/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl7-destination/repaired-e-wrong-destination/manifest.json": "c2034dcba5fde3df7bdcb8e0185eeaa786525b8fe90bc040532627acfc78e813",
+    "catalog/sl7-destination/repaired-e-wrong-destination/repaired-e/alice/result.json": "11198922c1ff2e93f0995a5430cdc98a4d2a541fb98046b0b297e5feb65eb8ea",
+    "catalog/sl7-destination/repaired-e-wrong-destination/repaired-e/bob/result.json": "63e9cc31a75a61bbe331591d8e59282ed7da414acf686a39baace181fc223a0f",
+    "catalog/sl7-destination/repaired-e-wrong-destination/repaired-e/destination-stress/result.json": "db32cd714707c9558a2046e8974f7ff080a8a892083252dc742bfe6e71ff9872",
+    "catalog/sl7-destination/repaired-e-wrong-destination/repaired-e/snapshots/ledger/ledger/exports/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog/sl7-destination/repaired-e-wrong-destination/repaired-e/snapshots/protocol/protocol/abi/manifest.json": "cea427047b142ac97441c79e344be123a168c322837f923cb783acc6da2a34d7",
+    "catalog-coverage-56.json": "e57e49835a7addead3e7aa210ad12ea0604093342ad33961052c450dbebba8f4",
+    "gate-evidence.json": "47e38dd369ce686d5298f909c43c79cdf4b7eff4d20d41988a57f80974538500",
+    "proverif/access.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "proverif/access.stdout": "b7710c155be1c1888b06da8d97773a5a5dd1497b785c6e3021e9559836bfb8df",
+    "proverif/access_mutant.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "proverif/access_mutant.stdout": "40fd634f8ed7197b2a7677c34d8d968d1669df1753e56c89a9e08854fcac1919",
+    "proverif/summary.json": "d8c4a946231593d7be4ef18734c21354ee5e491e469fb60c89a6edb0416faab7",
+    "verify-freeze.json": "5f18538a27b01524347699df61306c0b8ea7067c21a83f2b2919ae54ad3b7fe6",
+    "versions/anvil.txt": "3cbcc463c186bd9c162ef08e89d762368d93ca1c26ca622ea5e0193972fd2453",
+    "versions/bash.txt": "2863f49cc4f8660ba23be8f2a4d3468281ba704a263409e4e5179033c9a770f0",
+    "versions/cast.txt": "51a75a4180ba3499402a8954a847a711adbdfed3afc38c066a6e54198192c038",
+    "versions/forge.txt": "3ecb821e24278b54261fe72dd6d92425cd8d0cc9539de26c9acffdc63789e3f2",
+    "versions/proverif.txt": "46b498c4b3d698a4cbc97efca5fdf6ff4c8d89bbaaa4a234bacb9bef2e1771da",
+    "versions/python.txt": "01870de7caca112afeefd77b3c3b4c5e263cf5539a33af3f3411100727fad7d3",
+    "versions/python3.txt": "5b3e43dc38ca01e3f5a7854ba50d4330864b0c1e0f646650b2c78cf072acc366",
+    "versions/solc.txt": "eceb819b86658915a2116dcfc40e48d484833d74a64a8f40811611c24e615c02",
+    "versions.json": "10bfe7d6c97ebd94b71089f12f96fb4ae3f21cd316dbe2d5fbcbe98291e575e0"
+  },
+  "hostMemory": {
+    "before": {
+      "MemTotal": 15548284,
+      "MemFree": 1135764,
+      "MemAvailable": 3896088,
+      "SwapTotal": 15548412,
+      "SwapFree": 11936576,
+      "unit": "kB",
+      "at": "2026-10-12T01:31:36.460695+00:00"
+    },
+    "after": {
+      "MemTotal": 15548284,
+      "MemFree": 804212,
+      "MemAvailable": 3841492,
+      "SwapTotal": 15548412,
+      "SwapFree": 11940988,
+      "unit": "kB",
+      "at": "2026-10-12T02:50:45.957039+00:00"
+    }
+  },
+  "worktree": {
+    "pre": {
+      "head": "21b37fbaf569ef37ddd679f0f1db1891fd8db75d",
+      "status": [],
+      "at": "2026-10-12T01:31:55.429076+00:00"
+    },
+    "post": {
+      "head": "21b37fbaf569ef37ddd679f0f1db1891fd8db75d",
+      "status": [],
+      "at": "2026-10-12T02:50:22.925892+00:00"
+    }
+  },
+  "droppedStages": {
+    "mutants": "S3-0002 stage 4 dropped by the human decision A1-0080 (after the A1-0079 safety-classifier stop): criterion 4 rests on owner, formal and baseline evidence; the integrated live mutant matrix is not run and is never resumed",
+    "window": "S3-0002 stage 5 dropped by the human decision A1-0081: no revocation window is measured by this run; the report cites the owner measurement A1-0046 and the SL6 ordering result"
+  },
+  "limitation": "run stages only; not gate E PASS. Gate E is adjudicated by the GATES.md checklist and three same-source ACKs (A1-0082 P4-3/P4-4); evaluation.gate stays fail-closed.",
+  "reviewMode": "solo-correlated",
+  "reviewDisclosure": "Solo phase under the human directive A1-0059: agent 1 and the agent-2/agent-3 proxies are the same model, so every review and ACK is correlated self-review, not independent review."
+}

@@ -1,0 +1,166 @@
+{
+  "rq": "E",
+  "executionMode": "two-chain-e2-recovery-slice",
+  "adapterMode": "symbolic",
+  "status": "E2_RECOVERY_EXPIRY_SLICE_PASS",
+  "startedAt": "2026-10-12T01:31:56.371945+00:00",
+  "endedAt": "2026-10-12T01:38:37.146586+00:00",
+  "cases": {
+    "paper-strict-after_intent": {
+      "status": "RECOVERY_CONTROL_PASS",
+      "manifest": "paper-strict-after_intent/manifest.json",
+      "expiredRetry": "EXPIRED_NO_CHANGE_PASS"
+    },
+    "paper-strict-after_send": {
+      "status": "RECOVERY_CONTROL_PASS",
+      "manifest": "paper-strict-after_send/manifest.json",
+      "expiredRetry": "EXPIRED_NO_CHANGE_PASS"
+    },
+    "paper-minimal-after_intent": {
+      "status": "RECOVERY_CONTROL_PASS",
+      "manifest": "paper-minimal-after_intent/manifest.json",
+      "expiredRetry": "EXPIRED_NO_CHANGE_PASS"
+    },
+    "paper-minimal-after_send": {
+      "status": "RECOVERY_CONTROL_PASS",
+      "manifest": "paper-minimal-after_send/manifest.json",
+      "expiredRetry": "EXPIRED_NO_CHANGE_PASS"
+    },
+    "repaired-e-after_intent": {
+      "status": "RECOVERY_CONTROL_PASS",
+      "manifest": "repaired-e-after_intent/manifest.json",
+      "expiredRetry": "EXPIRED_NO_CHANGE_PASS"
+    },
+    "repaired-e-after_send": {
+      "status": "RECOVERY_CONTROL_PASS",
+      "manifest": "repaired-e-after_send/manifest.json",
+      "expiredRetry": "EXPIRED_NO_CHANGE_PASS"
+    }
+  },
+  "servicesStarted": [
+    {
+      "case": "paper-strict-after_intent",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 571995
+    },
+    {
+      "case": "paper-strict-after_intent",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 572115
+    },
+    {
+      "case": "paper-strict-after_send",
+      "profile": "paper-strict",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 583610
+    },
+    {
+      "case": "paper-strict-after_send",
+      "profile": "paper-strict",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 583730
+    },
+    {
+      "case": "paper-minimal-after_intent",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 595365
+    },
+    {
+      "case": "paper-minimal-after_intent",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 595485
+    },
+    {
+      "case": "paper-minimal-after_send",
+      "profile": "paper-minimal",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 607049
+    },
+    {
+      "case": "paper-minimal-after_send",
+      "profile": "paper-minimal",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 607185
+    },
+    {
+      "case": "repaired-e-after_intent",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 618838
+    },
+    {
+      "case": "repaired-e-after_intent",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 618958
+    },
+    {
+      "case": "repaired-e-after_send",
+      "profile": "repaired-e",
+      "chain": "pbc",
+      "port": 18545,
+      "pid": 632910
+    },
+    {
+      "case": "repaired-e-after_send",
+      "profile": "repaired-e",
+      "chain": "dbc",
+      "port": 18546,
+      "pid": 633050
+    }
+  ],
+  "acks": {
+    "agent-1": {
+      "commit": "21b37fbaf569ef37ddd679f0f1db1891fd8db75d",
+      "path": "communication/agent-1/outbox/0083-ack-e-gate-run-freeze.md",
+      "sha256": "56ea6662b29cffda07d75794f577f09594ba22efe15231c26a6d32b20f36a19e",
+      "messageId": "A1-0083"
+    },
+    "agent-2": {
+      "commit": "21b37fbaf569ef37ddd679f0f1db1891fd8db75d",
+      "path": "communication/agent-1/solo/agent-2-proxy/outbox/0021-ack-e-gate-run-freeze.md",
+      "sha256": "43a6e4c02eec2b5af31201ec7fb559bc0961024c22c611e3ea8329e24869e0aa",
+      "messageId": "S2-0021"
+    },
+    "freeze": {
+      "commit": "21b37fbaf569ef37ddd679f0f1db1891fd8db75d",
+      "path": "communication/agent-1/solo/agent-3-proxy/outbox/0021-freeze-e-gate-run.md",
+      "sha256": "dcb8c72a70462aa51f7cd46d9e19518388c89b3af71eeae03561002828ecf682",
+      "messageId": "S3-0021"
+    }
+  },
+  "failure": null,
+  "sourceStable": true,
+  "limitation": "Six logical process recovery comparisons only; no complete catalog or RQ gate.",
+  "gateRun": {
+    "runId": "E-gate-20261012",
+    "freezeMessage": "S3-0021",
+    "planSha256": "c00860192aaa69fd2e5f7baf132f5ebf10bf14ebba377edada31c1d9372b6bb9",
+    "slice": "recovery-expiry",
+    "caseIds": [
+      "E03-crash-after-intent-paper-strict",
+      "E03-crash-after-send-paper-strict",
+      "E03-crash-after-intent-paper-minimal",
+      "E03-crash-after-send-paper-minimal",
+      "E03-crash-after-intent-repaired-e",
+      "E03-crash-after-send-repaired-e"
+    ]
+  },
+  "slicePlanCanonicalSha256": "91c86b541656fa0c5e3d07e967396ce1cdde29746997a340aa2d1dc449462010",
+  "reviewMode": "solo-correlated",
+  "reviewDisclosure": "Solo phase under the human directive A1-0059: agent 1 and the agent-2/agent-3 proxies are the same model, so every review and ACK is correlated self-review, not independent review."
+}

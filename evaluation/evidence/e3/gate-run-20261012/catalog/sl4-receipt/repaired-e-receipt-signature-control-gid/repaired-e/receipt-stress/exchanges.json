@@ -1,0 +1,150 @@
+[
+  {
+    "operation": "prepare_request",
+    "startedAt": "2026-10-12T02:15:50.024053+00:00",
+    "endedAt": "2026-10-12T02:15:50.035537+00:00",
+    "requestSha256": "f7b16cba9c74f05b961c995d603bf0d7c03d3a63d9361a9fa2fb44c496bb19ec",
+    "responseCanonicalSha256": "8d1341032272915b99349e4cdc9eaeaaf652c6190c972e89f71621cc9ab149a8",
+    "response": {
+      "schemaVersion": "v1",
+      "ok": true,
+      "result": {
+        "schemaVersion": "v1",
+        "adapterMode": "symbolic",
+        "request": {
+          "sourceChainId": "18545",
+          "destinationChainId": "28545",
+          "psc": "0xd5eeb09599e4bb84d454698824481d7b85775db4",
+          "kssc": "0x0c3ced2bfd14f52783701e953b3784dc210d09e3",
+          "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+          "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+          "action": "1",
+          "policyVersion": "1",
+          "authEpoch": "3",
+          "keyEpoch": "0",
+          "nonce": "1",
+          "expiresAt": "1791771379",
+          "recipientKeyHash": "0x98d796e3229ebf5c50610744cf35aece58511751e387e8eef569a0117bb07e5d"
+        },
+        "requestDigest": "0x6a247c2d63fdde94d7438337e2f8dfdd7003fe123f774bff3ad08145dddef285",
+        "signature": "0x5c8787842cb3270ddbe604e56fc432513bc924acf832d23b16d0ad1d9d0abc5711b7b50fd5144d783e733526164e66cdbf27e0a420fa24eea9c803966837b30f1b",
+        "signer": "0xc4ff0022e776c3471e39abf6c69ce679440c956d"
+      },
+      "error": null
+    },
+    "validationFailure": null
+  },
+  {
+    "operation": "collect_checkpoint",
+    "startedAt": "2026-10-12T02:15:51.062235+00:00",
+    "endedAt": "2026-10-12T02:15:51.084633+00:00",
+    "requestSha256": "cd5200ed920acc889db56c900b9ca04a28693088c638200e52ad0082c691c689",
+    "responseCanonicalSha256": "48621bd51c7d4b179b5b791bea80baec27ab56cd839ef2a196c9376a1b246574",
+    "response": {
+      "schemaVersion": "v1",
+      "ok": true,
+      "result": {
+        "schemaVersion": "v1",
+        "adapterMode": "symbolic",
+        "checkpoint": {
+          "sequence": "1",
+          "authEpoch": "3",
+          "policyVersion": "1",
+          "keyEpoch": "0",
+          "witnessSetVersion": "1",
+          "sourceChainId": "18545",
+          "psc": "0xd5eeb09599e4bb84d454698824481d7b85775db4",
+          "sourceBlockNumber": "48",
+          "sourceBlockHash": "0xb180dd8adf97353b1bb608635a040d0e510c87bed4f2d30fd33f7b41b7d53ce6",
+          "expiresAt": "1791771411"
+        },
+        "signatures": [
+          "0x6a7935d4c054b0db9e2e3637d58af72f7637c5f8f022257a1cefae0263b4b1941befd33563441fe44f7538673192e2ff7bbb4edc598e77c547e7b1acdda4574e1c"
+        ]
+      },
+      "error": null
+    },
+    "validationFailure": null
+  },
+  {
+    "operation": "collect_decision",
+    "startedAt": "2026-10-12T02:15:52.134857+00:00",
+    "endedAt": "2026-10-12T02:15:52.160742+00:00",
+    "requestSha256": "5244ebb4cd13d85a740d7cdeff181d74ec12108a1b99b5d1b5a2503cc6fcfc07",
+    "responseCanonicalSha256": "e2db08ce9dc4dd4656def65af79285b02599e5e664d6caa9e49dd02293bb6a93",
+    "response": {
+      "schemaVersion": "v1",
+      "ok": true,
+      "result": {
+        "schemaVersion": "v1",
+        "adapterMode": "symbolic",
+        "decision": {
+          "requestDigest": "0x6a247c2d63fdde94d7438337e2f8dfdd7003fe123f774bff3ad08145dddef285",
+          "result": "1",
+          "credentialDigest": "0xb564f4da101ba48caa45f6ea38a2aed492ceb41bfc16089227549a40489fd23f",
+          "stateSequence": "1",
+          "witnessSetVersion": "1",
+          "sourceBlockNumber": "48",
+          "sourceBlockHash": "0xb180dd8adf97353b1bb608635a040d0e510c87bed4f2d30fd33f7b41b7d53ce6",
+          "expiresAt": "1791771379"
+        },
+        "signatures": [
+          "0xd2fa78002686b566a401b5ca97ef69ec77951732b518ae869d8f2012eb11a1316b7b74a20ef1a0e9515e24414a7bc2f4124b193e9f02ab7211874dae9740078f1c"
+        ],
+        "credentialRecords": [
+          {
+            "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+            "role": "0xf51d4401bd3575166c7f7ac52cf46d84a70e0c17db90c7bc2867df9f705849e6",
+            "kind": "1",
+            "serial": "101",
+            "anchorVersion": "1",
+            "validUntil": "1791857737"
+          },
+          {
+            "issuer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+            "role": "0xdea1b49f7acdbf768ea3ce16ade31f6a736b249087134be20dd23adb92895829",
+            "kind": "2",
+            "serial": "0",
+            "anchorVersion": "1",
+            "validUntil": "1791800137"
+          }
+        ]
+      },
+      "error": null
+    },
+    "validationFailure": null
+  },
+  {
+    "operation": "attest_grant",
+    "startedAt": "2026-10-12T02:15:53.822823+00:00",
+    "endedAt": "2026-10-12T02:15:53.839692+00:00",
+    "requestSha256": "b2a7e9c0442ddf499620e5be5831a71f5e6c344e844bf4d4d5a97c3b3b3c4a00",
+    "responseCanonicalSha256": "7f955a7e90010cd2be6b99436aed2d3e87480e748896d3ec8057bdeb7f36a5af",
+    "response": {
+      "schemaVersion": "v1",
+      "ok": true,
+      "result": {
+        "schemaVersion": "v1",
+        "adapterMode": "symbolic",
+        "receipt": {
+          "requestDigest": "0x6a247c2d63fdde94d7438337e2f8dfdd7003fe123f774bff3ad08145dddef285",
+          "grantId": "0x064ddd7a1e2a04f1021255e00d4b17346fd3de434ab065291a91793894a0e3bb",
+          "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+          "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+          "keyEpoch": "0",
+          "grantExpiresAt": "1791771379",
+          "witnessSetVersion": "1",
+          "dbcChainId": "28545",
+          "kssc": "0x0c3ced2bfd14f52783701e953b3784dc210d09e3",
+          "dbcBlockNumber": "24",
+          "dbcBlockHash": "0x806ae7a69d4bd1281e34162dd2ecd31aaf65391fe0d3c6e22ad3b10f650b7bf5"
+        },
+        "signatures": [
+          "0xee525fa40618bee6e63f6e4d8f401ca1a04ee09422fe38a166f2b038a670d67c015b42c5933e2a753db46f3ea7e728922bb2fbdbbe5c59d55688a51629f951f31c"
+        ]
+      },
+      "error": null
+    },
+    "validationFailure": null
+  }
+]

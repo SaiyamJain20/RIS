@@ -1,0 +1,35 @@
+"""Thin-row margins from the published gate copy (evaluator result files and native records). Scratch, read-only."""
+import json, sys
+from pathlib import Path
+cat = Path(sys.argv[1])
+J = lambda p: json.loads(Path(p).read_text())
+out = {}
+for prof in ('paper-strict', 'paper-minimal', 'repaired-e'):
+    for point in ('after_intent', 'after_send'):
+        base = cat/'recovery-expiry'/f'{prof}-{point}'/prof
+        rec, exp = J(base/'recovery/result.json'), J(base/'expired-retry/result.json')
+        ev = J(base/'recovery/worker-after-retry.json')['events']
+        sends = [int(e['timestamp']) for e in ev if e['type'] == 'RELEASE_SENT']
+        intents = [int(e['timestamp']) for e in ev if e['type'] == 'RELEASE_INTENT']
+        oe = int(rec['originalExpiry'])
+        out[f'recovery {prof} {point}'] = dict(originalExpiry=oe, releaseIntent=intents, releaseSent=sends, sendAttempts=rec['sendAttempts'],
+            marginLastSendToExpiry=oe - max(sends), expiredRetryTarget=int(exp['targetDbcTime']), expiredRetryObserved=int(exp['observedDbcTime']),
+            expiredRetryError=exp['error'])
+    base = cat/'nonce-replay'/f'{prof}-nonce-replay'/prof
+    txs = J(base/'dbc-native/transactions.json')
+    grant = [t for t in txs if t['method'] in ('consumeDecision', 'policyEnf') and t['expectedSuccess']][0]
+    replay = [t for t in txs if t['method'] in ('consumeDecision', 'policyEnf') and not t['expectedSuccess']][0]
+    gts, rts = int(grant['block']['timestamp'], 16) if isinstance(grant['block']['timestamp'], str) and grant['block']['timestamp'].startswith('0x') else int(grant['block']['timestamp']), None
+    rb = replay['block']['timestamp']; rts = int(rb, 16) if isinstance(rb, str) and rb.startswith('0x') else int(rb)
+    ev = J(base/'alice/result.json')['observed']['events']
+    rel = [int(e['timestamp']) for e in ev if e['type'] == 'RELEASE_SENT']
+    pc = J(base/'alice/nonce-replay/public-call.json')
+    rexp = int(pc['arguments'][0]['expiresAt']) if prof == 'repaired-e' else None
+    gexp = rexp if prof == 'repaired-e' else gts + 30
+    out[f'nonce-replay {prof}'] = dict(grantBlock=gts, grantExpiry=gexp, grantExpirySource='r.expiresAt = d.expiresAt (public-call)' if rexp else 'paper policyEnf block + 30',
+        releaseSent=rel, replayBlock=rts, marginReleaseToExpiry=gexp - max(rel), marginReplayToExpiry=gexp - rts)
+    for v, sl in (('expired-duty', 'sl6-barrier/{p}-expired-duty/{p}/barrier-stress/result.json'), ('expiry-boundary', 'sl7-destination/{p}-expiry-boundary/{p}/destination-stress/result.json')):
+        r = J(cat/sl.format(p=prof))
+        out[f'{v} {prof}'] = dict(classification=r.get('classification'), error=r.get('error'), timing=r.get('timing'), timeline=r.get('timeline'),
+                                  expiredStep=r.get('expiredStep'), firingStep=r.get('firingStep'), clock=r.get('clock'))
+print(json.dumps(out, indent=1))

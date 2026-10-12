@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# agent 1: run the 8 pre-registered ledger review tools on a gate output (A1-0083). Usage: gate-review.sh <catalog dir> <dest dir>
+set -u
+C="$1"; D="$2"; mkdir -p "$D"; cd /home/saiyamjain/Desktop/RIS/Project
+export PYTHONDONTWRITEBYTECODE=1
+run() { local name="$1" tool="$2" dir="$3"; .venv/bin/python -I -B "ledger/tools/$tool" "$dir" > "$D/$name.json" 2> "$D/$name.stderr"; local rc=$?
+  .venv/bin/python -I -c "import json,sys; d=json.load(open(sys.argv[1])); r=d['rows']; print(f'{sys.argv[2]:16} exit {sys.argv[3]}  {sum(x[\"pass\"] for x in r)}/{len(r)} pass', [ (x['row'], x['failures'][:2]) for x in r if not x['pass']])" "$D/$name.json" "$name" "$rc" 2>/dev/null || echo "$name exit $rc (no parsable output)"; }
+run early-rows   review_early_rows_evidence.py         "$C"
+run sl1-subject  review_subject_evidence.py            "$C/sl1-subject"
+run sl2-relay    review_relay_stress_evidence.py       "$C/sl2-relay"
+run sl3-audit    review_audit_stress_evidence.py       "$C/sl3-audit"
+run sl4-receipt  review_receipt_stress_evidence.py     "$C/sl4-receipt"
+run sl5-trust    review_trust_stress_evidence.py       "$C/sl5-trust"
+run sl6-barrier  review_barrier_stress_evidence.py     "$C/sl6-barrier"
+run sl7-dest     review_destination_stress_evidence.py "$C/sl7-destination"

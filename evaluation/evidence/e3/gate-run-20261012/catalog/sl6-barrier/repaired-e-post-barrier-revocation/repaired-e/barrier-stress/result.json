@@ -1,0 +1,57 @@
+{
+  "startedAt": "2026-10-12T02:35:12.752402+00:00",
+  "endedAt": "2026-10-12T02:35:28.300281+00:00",
+  "ok": true,
+  "failure": null,
+  "variant": "post-barrier-revocation",
+  "delivery": "unknown",
+  "scope": "C-E2 SL6 revocation barrier and expired duty; separate controls, plan ACKs and gate apply",
+  "classification": "REPAIR_SUPPORTED",
+  "error": "STALE_STATE",
+  "outcome": "REJECT",
+  "timing": {
+    "consumeTimestamp": "1791772526",
+    "requestExpiresAt": "1791772548",
+    "decisionExpiresAt": "1791772548",
+    "checkpointExpiresAt": "1791772584",
+    "decisionSequence": "1",
+    "currentSequence": "2"
+  },
+  "staleCause": "sequence",
+  "qualification": "older certificate rejected after the revoking checkpoint (DecisionVerifier step 10)",
+  "workerSteps": [
+    {
+      "step": "baseline",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "REQUEST_ACCESS",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "REVOKE_ON_PBC",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "ACCEPT_CHECKPOINT",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "FORWARD_OR_CONSUME",
+      "worker": "never-instantiated (verified)"
+    }
+  ],
+  "timeline": {
+    "requestTimestamp": "1791772519",
+    "requestExpiresAt": "1791772548",
+    "consumeTimestamp": "1791772526",
+    "revocationTimestamp": "1791772523",
+    "dutyEnd": null,
+    "decisionExpiresAt": "1791772548",
+    "checkpointExpiresAt": [
+      "1791772579",
+      "1791772584"
+    ]
+  },
+  "decisionCollections": 1
+}

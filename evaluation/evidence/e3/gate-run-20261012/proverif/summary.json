@@ -1,0 +1,130 @@
+{
+  "tool": {
+    "path": "/home/saiyamjain/.local/share/hmbc-tools/src-proverif/proverif2.05/proverif",
+    "sha256": "bc2cd5eddb8976fbab0194b6a10f6f05cf057287cf49dbbc97b37322b46af1cb",
+    "frozenSha256": "c1087205c639702fa4a3f5e8518abfe97bbd867eb0a0c1aab3f7293448b2726f",
+    "resolution": "declared-local-build",
+    "declaredLocalBuild": {
+      "sha256": "bc2cd5eddb8976fbab0194b6a10f6f05cf057287cf49dbbc97b37322b46af1cb",
+      "version": "2.05",
+      "sourceSha256": "4871f53c32ab4a04669a060c4886ba5d9080496963fb980a9a62d2c429ceabc4",
+      "compiler": "OCaml 4.14.2 built locally from source c2d70643.. (agent 1, 2026-10-09)",
+      "reason": "frozen binary c1087205.. was compiled on agent 3's host; a local compile of the same source differs. RESULT lines for access.pv/access_mutant.pv match A3-0033 (agent 1 host-toolchain evidence)."
+    },
+    "hashOk": true
+  },
+  "environment": {
+    "PATH": "/home/saiyamjain/.foundry/bin:/bin:/usr/bin",
+    "HOME": "/home/saiyamjain",
+    "LC_ALL": "C.UTF-8",
+    "PYTHONNOUSERSITE": "1"
+  },
+  "runs": {
+    "access": {
+      "model": "evaluation/models/e/access.pv",
+      "modelSha256": "1ca655061e9eb6d5717a919f554a6071eefdcf71b155a7a08f863464d64f01f8",
+      "modelUnchanged": true,
+      "argv": [
+        "/home/saiyamjain/.local/share/hmbc-tools/src-proverif/proverif2.05/proverif",
+        "evaluation/models/e/access.pv"
+      ],
+      "cwd": "/home/saiyamjain/Desktop/RIS/Project",
+      "startedAt": "2026-10-12T02:50:22.353331+00:00",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 0.011577,
+      "stdoutSha256": "b7710c155be1c1888b06da8d97773a5a5dd1497b785c6e3021e9559836bfb8df",
+      "stderrBytes": 0,
+      "results": [
+        "RESULT event(Grant(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) ==> event(UserRequest(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) is true.",
+        "RESULT event(Grant(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) ==> event(WitnessDecision(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) is true.",
+        "RESULT event(Grant(r_4,g_2,d_4,s_2,t_2,a_2,p_2,n_4)) ==> event(WitnessDecision(r_4,g_2,d_4,s_2,approvedDestination,a_2,p_2,n_4)) is true.",
+        "RESULT not event(AllowedGrant) is false.",
+        "RESULT not event(DeniedGrant) is true."
+      ],
+      "verdicts": [
+        "true",
+        "true",
+        "true",
+        "false",
+        "true"
+      ],
+      "expectedVerdicts": [
+        "true",
+        "true",
+        "true",
+        "false",
+        "true"
+      ],
+      "references": {
+        "A3-0033": {
+          "path": "evaluation/evidence/e2/formal-and-hook-review-20261009/positive-final.stdout",
+          "sha256": "b7710c155be1c1888b06da8d97773a5a5dd1497b785c6e3021e9559836bfb8df",
+          "referenceUnchanged": true,
+          "fullOutputIdentical": true
+        },
+        "p3-proverif-20261012": {
+          "path": "evaluation/evidence/e2/p3-proverif-20261012/access.stdout",
+          "sha256": "b7710c155be1c1888b06da8d97773a5a5dd1497b785c6e3021e9559836bfb8df",
+          "referenceUnchanged": true,
+          "fullOutputIdentical": true
+        }
+      },
+      "matched": true
+    },
+    "access_mutant": {
+      "model": "evaluation/models/e/access_mutant.pv",
+      "modelSha256": "1c6e1acc6346d9f3859180f76f2a7a5e679477d3a61c4a132eefa46da1775537",
+      "modelUnchanged": true,
+      "argv": [
+        "/home/saiyamjain/.local/share/hmbc-tools/src-proverif/proverif2.05/proverif",
+        "evaluation/models/e/access_mutant.pv"
+      ],
+      "cwd": "/home/saiyamjain/Desktop/RIS/Project",
+      "startedAt": "2026-10-12T02:50:22.366067+00:00",
+      "exitCode": 0,
+      "timedOut": false,
+      "wallSeconds": 0.011618,
+      "stdoutSha256": "40fd634f8ed7197b2a7677c34d8d968d1669df1753e56c89a9e08854fcac1919",
+      "stderrBytes": 0,
+      "results": [
+        "RESULT event(Grant(r_4,g_2,d_4,s_2,t_1,a_2,p_2,n_4)) ==> event(UserRequest(r_4,g_2,d_4,s_2,t_1,a_2,p_2,n_4)) is false.",
+        "RESULT event(Grant(r_4,g_2,d_4,s_2,t_1,a_2,p_2,n_4)) ==> event(WitnessDecision(r_4,g_2,d_4,s_2,t_1,a_2,p_2,n_4)) is false.",
+        "RESULT event(Grant(r_4,g_2,d_4,s_2,t_1,a_2,p_2,n_4)) ==> event(WitnessDecision(r_4,g_2,d_4,s_2,approvedDestination,a_2,p_2,n_4)) is true.",
+        "RESULT not event(AllowedGrant) is false.",
+        "RESULT not event(DeniedGrant) is true."
+      ],
+      "verdicts": [
+        "false",
+        "false",
+        "true",
+        "false",
+        "true"
+      ],
+      "expectedVerdicts": [
+        "false",
+        "false",
+        "true",
+        "false",
+        "true"
+      ],
+      "references": {
+        "A3-0033": {
+          "path": "evaluation/evidence/e2/formal-and-hook-review-20261009/mutant-final.stdout",
+          "sha256": "40fd634f8ed7197b2a7677c34d8d968d1669df1753e56c89a9e08854fcac1919",
+          "referenceUnchanged": true,
+          "fullOutputIdentical": true
+        },
+        "p3-proverif-20261012": {
+          "path": "evaluation/evidence/e2/p3-proverif-20261012/access_mutant.stdout",
+          "sha256": "40fd634f8ed7197b2a7677c34d8d968d1669df1753e56c89a9e08854fcac1919",
+          "referenceUnchanged": true,
+          "fullOutputIdentical": true
+        }
+      },
+      "matched": true
+    }
+  },
+  "matched": true,
+  "scope": "symbolic abstraction of the access flow; not the deployed ledger and not a computational proof"
+}

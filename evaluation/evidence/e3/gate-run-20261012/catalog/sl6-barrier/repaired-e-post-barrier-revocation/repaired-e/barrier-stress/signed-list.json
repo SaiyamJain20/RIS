@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "hmbc-ledger-signed-list/v0",
+  "producer": "agent-1 ledger/tools/sign_list.sh (script/SignList.s.sol)",
+  "testOnly": true,
+  "binding": {
+    "pbcChainId": "18545",
+    "tmsc": "0xe51ef867d3300c8e89dfb234dc0c986c5c188903",
+    "rsc": "0x2f074c0412bb4bcb987eddf07069435b5e25d705",
+    "blockNumber": "47",
+    "blockTimestamp": "1791772512",
+    "deploymentSha256": "ab9dc6f59f8b7367fba7b15c1b03302ab22907e9fd3080b5c72aad07d1e72c3a",
+    "profile": "2"
+  },
+  "item": {
+    "kind": "RevocationList",
+    "call": "TMSC.updateRevocationList",
+    "submitterRole": "H1-ca-admin",
+    "submitter": "0xa3abc957ca114c86ec9cdb519cffc62beb894066",
+    "list": {
+      "authority": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+      "version": "2",
+      "validUntil": "1791858912",
+      "revokedSerials": [
+        "101"
+      ]
+    },
+    "signature": "0x5a353c911d9c16bc6d1a8e6d841d8d261a7c38deb570a5e80a8696a26fbddcdb4bbbbb547acdc1d41e31460713b7af1cc025bb3637fcb9dbec3fc5c649408e9d1c",
+    "signer": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e"
+  },
+  "outputSha256": "19c6bf212aecb5a4e01142d9c5caea991dee51c521664933535fbe7e4b33fc47",
+  "contentDigest": "0x95d93ea5470691c013939423a8156e95ccfbe9f4bf0e72928a852fb74489565a",
+  "purpose": "revoke-alice",
+  "label": "TEST-ONLY owner producer output (A1-0034); no key material"
+}

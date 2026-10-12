@@ -1,0 +1,52 @@
+{
+  "startedAt": "2026-10-12T02:17:09.718380+00:00",
+  "endedAt": "2026-10-12T02:17:19.604814+00:00",
+  "ok": true,
+  "failure": null,
+  "variant": "receipt-signature-control",
+  "field": "dataId",
+  "delivery": "unknown",
+  "scope": "C-E2 SL4 receipt controls (repaired-e); separate controls, plan ACKs and gate apply",
+  "classification": "SUPPORTED",
+  "error": "WRONG_SUBJECT",
+  "outcome": "NO_NEW_OUTCOME",
+  "deliberateDeviation": null,
+  "qualification": "altered receipt with the honest signature kept is rejected by the binding check, which precedes quorum; this control cannot kill MUT_NO_RECEIPT_BINDING (that mutant reaches BAD_SIGNATURE)",
+  "timeline": {
+    "requestTimestamp": "1791771433",
+    "requestExpiresAt": "1791771463",
+    "grantTimestamp": "1791771436",
+    "grantExpiresAt": "1791771463",
+    "receiptDbcBlock": "24",
+    "reportTimestamp": "1791771438",
+    "reportDbcClock": "1791771439",
+    "reportAfterGrantExpiry": false,
+    "note": "late reconciliation is allowed by PSC (no report deadline); recorded, not required"
+  },
+  "workerSteps": [
+    {
+      "step": "baseline",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "REQUEST_ACCESS",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "FORWARD_OR_CONSUME",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "ATTEST_GRANT",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "ALTER_RECEIPT_KEEP_SIGNATURE",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "REPORT_OUTCOME",
+      "worker": "never-instantiated (verified)"
+    }
+  ]
+}

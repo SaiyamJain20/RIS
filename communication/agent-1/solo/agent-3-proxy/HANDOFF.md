@@ -2,8 +2,8 @@
 
 Paper-derived HMBC2020 reconstruction. Synthetic only.
 
-Phase: E / RQ1, solo mode (A1-0059, `../PLAN.md`, `../PROTOCOL.md`, rulings A1-0061). Gate E NOT_RUN.
-F and G locked. All proxy reviews and ACKs are correlated self-review (same model as agent 1).
+Phase: E / RQ1, solo mode (A1-0059, `../PLAN.md`, `../PROTOCOL.md`, rulings A1-0061). Gate E not adjudicated
+(gate run passed its run stages; P4-3/P4-4 pending). F and G locked. All proxy reviews and ACKs are correlated self-review (same model as agent 1).
 
 ## Current state (2026-10-12 IST)
 
@@ -19,14 +19,17 @@ F and G locked. All proxy reviews and ACKs are correlated self-review (same mode
 | SL6 barrier and expired duty ×9 | **actual PASS 9/9** | FREEZE S3-0017, plan 78d6ebfb..; result S3-0018; `evaluation/evidence/e2/sl6-barrier-live-20261011/` |
 | SL7 wrong destination and expiry boundary ×6 | **actual PASS 6/6** | FREEZE S3-0019, plan d4fa294e..; result S3-0020; `evaluation/evidence/e2/sl7-destination-live-20261011/` |
 | P3 | closed: ProVerif re-run done (`p3-proverif-20261012/`); mutants and window NOT RUN (A1-0080, A1-0081) | A1-0080..A1-0082 |
-| P4-1 one-command gate run | **FREEZE S3-0021 published, not run** | plan c0086019..; `evaluation/evidence/e3/gate-plan-20261012/` |
+| P4-1 one-command gate run | **run stages PASS: exit 0, 56/56, 4749.50 s** (launched by agent 1 on FREEZE S3-0021); not gate E PASS | plan c0086019..; result S3-0022; `evaluation/evidence/e3/gate-run-20261012/` |
+| P4-2 RQ1-E.md | **published** (`fill_gate.py` exit 0, 0 problems) | `evaluation/reports/RQ1-E.md`; `evaluation/reports/fill_gate.py.txt` |
+| P4-3 gate RESULT and ACKs | pending (after A1-0084 and agent 2 (proxy)'s re-check) | – |
 
 - FREEZE S3-0019 is released. No services are running.
 - Decisions D47 (paper crash relabel) and D48 (SL0 choices) are in `communication/DECISIONS.md`.
 
 **Catalog progress: 56/56 actual. The catalog comparisons are complete.**
 
-No catalog slice remains. P3 is closed. Next: ACKs of S3-0021, agent 1's clearance, the gate run, RQ1-E.md (P4-2), the P4-3 gate RESULT.
+No catalog slice remains. P3 is closed. The gate run and RQ1-E.md are done (S3-0022). Next: agent 1's commit and
+A1-0084, agent 2 (proxy)'s re-check, then the P4-3 gate RESULT and the three ACKs.
 
 ## Runner facts (after SL0 and SL1)
 
@@ -123,3 +126,30 @@ toolchain and host-tools. Keep helper scripts out of `evaluation/` as `.py` file
   background; stop with `kill -INT` (SIGTERM is not trapped). Expected about 1.5 h, up to 2.5 h.
 - Scratch: `tmp/p3/p4/` (RED/GREEN/suite outputs, bracket, `scripts/keyscan.py.txt`). Publication after the run needs a selection
   helper like `tmp/p3/sl7-run/scripts/select_audit.py`, run per slice directory.
+
+## Gate run publication facts (S3-0022, 2026-10-12)
+
+- **Raw output** (job tmp, never published unselected): `tmp/p3/gate-run/out` (78299 files incl. 122 SQLite side
+  files created after the run by read-only DB opens), plus `run.log`, `run.meta`, `run.exit`, `acks.json`.
+- **Selection and scan helper:** `tmp/p3/gate-run/scripts/select_gate.py` (= published
+  `evaluation/evidence/e3/gate-run-20261012/select_gate.py.txt`, dcca1e2b..):
+  - `select <repo> <raw-out> <gate-run-dir> <evidence-dir>` (refuses a non-empty target);
+  - `scan <repo> <raw-out> <evidence-dir> [extra files]`.
+  - The forbidden set is 18 label keys (incl. `deployer`, as in agent 1's scans), the 64-hex private keys of every
+    `**/vectors/*.json`, and the 61 release tokens. The databases are opened `immutable=1`, so nothing in
+    the raw output is touched.
+- **Checks:**
+  - `tmp/p3/gate-run/check/publication_check.py`: historical path comparison and the pre-check of agent 1's
+    8 tools;
+  - `tmp/p3/gate-run/check/margins.py`: thin-row margins.
+  - Both are published as `.py.txt`.
+- **RQ1-E.md build:**
+  - the merged draft is `tmp/p3/p4/final/RQ1-E.merged.md`, made by `merge_edits.py` from `tmp/p3/p4/RQ1-E.md`
+    plus later edits;
+  - fill with `tmp/p3/p4/final/fill_gate.py` against the **raw** output (the published copy lacks the 112
+    snapshot `resultFiles`);
+  - `fill_gate.py` refuses an existing `--out`, so delete before re-filling.
+- **Commit note:** `evaluation/evidence/e3/gate-run-20261012/run.log` matches `.gitignore` `*.log`, so it
+  needs `git add -f`.
+- **P4-3 RESULT:** must name `manifest.json` 908fd615.., `gate-evidence.json` 47e38dd3.., the RQ1-E.md sha256
+  at commit, and HEAD.

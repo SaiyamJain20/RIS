@@ -1,0 +1,39 @@
+{
+  "startedAt": "2026-10-12T02:25:59.618435+00:00",
+  "endedAt": "2026-10-12T02:26:10.178636+00:00",
+  "ok": true,
+  "failure": null,
+  "variant": "signed-list-rollback",
+  "delivery": "unknown",
+  "scope": "C-E2 SL5 trust freshness; separate controls, plan ACKs and gate apply",
+  "classification": "REPAIR_SUPPORTED",
+  "error": "STALE_ANCHOR",
+  "outcome": "REJECT",
+  "rolledBack": false,
+  "qualification": "repaired-e requires strictly increasing list versions (TMSC.sol:189-190); the replay is rejected and v2 retained, so the revoked credential stays revoked",
+  "workerSteps": [
+    {
+      "step": "baseline",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "INSTALL_NEW_LIST",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "REPLAY_OLD_LIST",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "REQUEST_ACCESS",
+      "worker": "never-instantiated (verified)"
+    }
+  ],
+  "timeline": {
+    "installTimestamp": "1791771965",
+    "replayTimestamp": "1791771967",
+    "requestTimestamp": "1791771969",
+    "oldListValidUntil": "1791858349",
+    "newListValidUntil": "1791858359"
+  }
+}

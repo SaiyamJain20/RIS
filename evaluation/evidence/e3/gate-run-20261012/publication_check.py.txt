@@ -1,0 +1,43 @@
+"""Publication checks for evaluation/evidence/e3/gate-run-20261012 (agent 3 (proxy), scratch helper, read-only).
+
+1. Per slice: the published catalog/<slice>/ path set against the historical slice publication
+   evaluation/evidence/e2/<dir>/run/ (which files each side has that the other lacks, by pattern).
+2. Proxy pre-check of agent 1's eight pre-registered review tools (A1-0083): exit code, rows, output
+   sha256, on the published copy and on the raw output (outputs kept in job tmp, never published).
+   This is not agent 1's review (A1-0084).
+Usage: publication_check.py <repo> <published-dir> <tool-out-dir-pub> <tool-out-dir-raw> <exit-codes-json>
+"""
+import hashlib, json, re, sys
+from pathlib import Path
+repo, pub, tpub, traw, exits = (Path(a) for a in sys.argv[1:6])
+hist = {'recovery-expiry': 'expiry-live-20261009', 'duplicate-outcome': 'duplicate-live-20261009', 'nonce-replay': 'grouped-replay-live-20261009',
+        'sl1-subject': 'sl1-subject-live-20261010', 'sl2-relay': 'sl2-relay-live-20261010', 'sl3-audit': 'sl3-audit-live-20261010',
+        'sl4-receipt': 'sl4-receipt-live-20261010', 'sl5-trust': 'sl5-trust-live-20261010', 'sl6-barrier': 'sl6-barrier-live-20261011',
+        'sl7-destination': 'sl7-destination-live-20261011'}
+pattern = lambda rel: re.sub(r'\d{2}', 'NN', re.sub(r'^[^/]+/[^/]+/', '<case>/<profile>/', rel))
+slices = {}
+for sl, h in hist.items():
+    hroot, groot = repo/'evaluation/evidence/e2'/h/'run', pub/'catalog'/sl
+    H = {p.relative_to(hroot).as_posix() for p in hroot.rglob('*') if p.is_file()}
+    G = {p.relative_to(groot).as_posix() for p in groot.rglob('*') if p.is_file()}
+    count = lambda s: {k: sum(pattern(x) == k for x in s) for k in sorted({pattern(x) for x in s})}
+    slices[sl] = dict(historical=f'evaluation/evidence/e2/{h}/run', historicalFiles=len(H), publishedFiles=len(G),
+                      onlyHistorical=count(H - G), onlyPublished=count(G - H))
+ex = json.loads(exits.read_text())
+tools = {}
+for name, (tool, arg) in {'early': ('review_early_rows_evidence.py', 'catalog'), 'sl1': ('review_subject_evidence.py', 'catalog/sl1-subject'),
+                          'sl2': ('review_relay_stress_evidence.py', 'catalog/sl2-relay'), 'sl3': ('review_audit_stress_evidence.py', 'catalog/sl3-audit'),
+                          'sl4': ('review_receipt_stress_evidence.py', 'catalog/sl4-receipt'), 'sl5': ('review_trust_stress_evidence.py', 'catalog/sl5-trust'),
+                          'sl6': ('review_barrier_stress_evidence.py', 'catalog/sl6-barrier'),
+                          'sl7': ('review_destination_stress_evidence.py', 'catalog/sl7-destination')}.items():
+    a, b = (tpub/f'{name}.json').read_bytes(), (traw/f'{name}.json').read_bytes()
+    rows = json.loads(a)['rows']
+    tools[name] = dict(tool=f'ledger/tools/{tool}', toolSha256=hashlib.sha256((repo/'ledger/tools'/tool).read_bytes()).hexdigest(), argument=f'<copy>/{arg}',
+                       exitPublished=ex[f'pub {name}'], exitRaw=ex[f'raw {name}'], rows=len(rows), rowsPass=sum(r.get('pass') is True for r in rows) if all('pass' in r for r in rows) else None,
+                       rowsWithFailures=sum(bool(r.get('failures')) for r in rows), outputSha256=hashlib.sha256(a).hexdigest(), identicalToRaw=a == b,
+                       stderrBytesPublished=(tpub/f'{name}.err').stat().st_size)
+print(json.dumps(dict(note=('agent 3 (proxy) publication checks; correlated self-review (A1-0059). The tool pre-check is the proxy running agent 1\'s '
+                            'unchanged tools read-only (python -I -B) on both copies; it is not agent 1\'s review (A1-0084).'),
+                      historicalPathComparison=slices, reviewToolPreCheck=dict(command='.venv/bin/python -I -B ledger/tools/<tool> <copy>/<argument> > <out>.json',
+                      copies=dict(published='evaluation/evidence/e3/gate-run-20261012', raw='tmp/p3/gate-run/out (job tmp)'), tools=tools,
+                      totalRows=sum(t['rows'] for t in tools.values()))), indent=1))

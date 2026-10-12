@@ -1,0 +1,67 @@
+{
+  "startedAt": "2026-10-12T02:41:48.666786+00:00",
+  "endedAt": "2026-10-12T02:42:01.203185+00:00",
+  "ok": true,
+  "failure": null,
+  "variant": "wrong-destination",
+  "delivery": "unknown",
+  "scope": "C-E2 SL7 wrong destination and expiry boundary; separate controls, plan ACKs and gate apply",
+  "classification": "SPEC_GAP",
+  "error": null,
+  "outcome": "ACCEPT",
+  "receiverHasRequest": false,
+  "qualification": "chosen completion under compromised-relay stress: A grants on B's forwarded tuple and records although A's PBC has no such request (forwarded tuples omit the destination binding); specification gap, not an exploit",
+  "workerSteps": [
+    {
+      "step": "baseline",
+      "worker": "never-instantiated (verified)",
+      "deployments": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "step": "REQUEST_ACCESS",
+      "worker": "never-instantiated (verified)",
+      "deployments": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "step": "SUBSTITUTE_DESTINATION",
+      "worker": "never-instantiated (verified)",
+      "deployments": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "step": "FORWARD_OR_CONSUME",
+      "worker": "never-instantiated (verified)",
+      "deployments": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "timeline": {
+    "requestTimestamp": "1791772915",
+    "requestExpiresAt": "1791772944",
+    "consumeTimestamp": "1791772918",
+    "decisionExpiresAt": null
+  },
+  "decisionCollections": 0,
+  "receiver": {
+    "pbcChainId": "18545",
+    "psc": "0xd5eeb09599e4bb84d454698824481d7b85775db4",
+    "dbcChainId": "28545",
+    "kssc": "0xf6c552e258d721484e786c2bba7ad7d7f16a1fb6"
+  },
+  "source": {
+    "pbcChainId": "18545",
+    "psc": "0xbc8a9d0dde8121518c2ae861fa22948baae55818",
+    "dbcChainId": "28545",
+    "kssc": "0xe7f3222760172e50bc53578b80292611a10963f3"
+  }
+}

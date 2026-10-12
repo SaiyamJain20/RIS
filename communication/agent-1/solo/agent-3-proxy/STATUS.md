@@ -1,18 +1,20 @@
 # agent 3 (proxy): status
 
-State: **FREEZE S3-0021 published** (P4-1 one-command gate run, plan `c0086019..`). Waiting for the
-exact solo ACKs (agent 1, agent 2 (proxy)), agent 1's commit of the FREEZE, ACKs and paths, and agent 1's
-clearance. **The gate run has not started. No services are running.** Catalog 56/56 actual (slices).
+State: **gate run finished and published; RQ1-E.md published (S3-0022).** The one-command gate run under
+FREEZE S3-0021 (launched by agent 1) exited 0: manifest PASS, 56/56 rows, ProVerif matched, 7 criteria
+VERIFIED + 2 PENDING by design. **That is not gate E PASS.** Waiting for agent 1's commit of the S3-0022
+paths and the published-copy review (A1-0084), and agent 2 (proxy)'s post-run protocol re-check; then the
+P4-3 gate RESULT. **No services are running.**
 
 | Field | Value |
 |---|---|
-| RQ | E (gate E NOT_RUN; F and G locked) |
+| RQ | E (gate E not adjudicated: P4-3/P4-4 pending; F and G locked) |
 | Interface | v1 (FREEZE f700292e..), unchanged |
 | Mode | solo, correlated self-review (A1-0059) |
 | Updated | 2026-10-12 IST |
 
-Services and lease: **none**. FREEZE S3-0019 is RELEASED; S3-0021 is published, not yet ACKed or run. Ports 18545 and
-18546 are free. No Git writes.
+Services and lease: **none**. FREEZE S3-0021 has run (exit 0) and holds no lease. Ports 18545 and 18546 are free.
+No Git writes.
 
 ## Catalog progress
 
@@ -29,7 +31,7 @@ Services and lease: **none**. FREEZE S3-0019 is RELEASED; S3-0021 is published, 
 - barrier and expired duty ×9;
 - wrong destination and expiry boundary ×6.
 
-**0 remain.** P3 is closed (A1-0080, A1-0081). Gate E still needs the gate run (S3-0021), RQ1-E.md and the three same-source ACKs.
+**0 remain.** P3 is closed (A1-0080, A1-0081). The gate run (S3-0021) reproduced all 56 rows (S3-0022). Gate E still needs the P4-3 gate RESULT and the three same-source ACKs.
 
 ## Sent
 
@@ -54,18 +56,20 @@ Services and lease: **none**. FREEZE S3-0019 is RELEASED; S3-0021 is published, 
 | S3-0019 | SL7 FREEZE: 6 rows (wrong destination, expiry boundary), plan d4fa294e..; test-first (RED 102, then GREEN with the full suite at 1596 passed); A1 conditions 1-12 met (8 skipped as optional) |
 | S3-0020 | SL7 INTEGRATION_RESULT: 6/6 PASS, 602.24 s; catalog 56/56; A1-0076 points 1-5; firingStep 1 (wrong destination) / 9 (boundary) |
 | S3-0021 | P4-1 gate run FREEZE: `evaluation/e_gate.py`, plan c0086019.. (10 embedded slice plans, 56 rows, ProVerif, brackets, manifest, gate evidence; stages 4/5 dropped by A1-0080/A1-0081); test-first (RED 48, then GREEN 48 and the full suite at 1644 passed, 574 s); A1-0082 P4-1 points 1-8 met |
+| S3-0022 | Gate run INTEGRATION_RESULT: exit 0, manifest PASS, 56/56, 4749.50 s (launched by agent 1); evidence `evaluation/evidence/e3/gate-run-20261012/` (2126 files, 27.4 MB; never-publish scan 0 hits); RQ1-E.md published (`fill_gate.py` exit 0); not gate E PASS |
 
 ## Read
 
-- A1-0059..A1-0082 and agent 1's SL6/SL7 pre-FREEZE conditions (2026-10-11);
-- S2-0001..S2-0020; agent 1's early-rows review tool (9682e54).
+- A1-0059..A1-0083 and agent 1's SL6/SL7 pre-FREEZE conditions (2026-10-11);
+- S2-0001..S2-0021; agent 1's early-rows review tool (9682e54); `rq1-ledger-sections.md` at 1db7246.
 
 ## Next
 
-1. Wait for A1 and S2 ACKs of S3-0021 (exact plan c0086019..), agent 1's commit and clearance; then build the ACK index
-   (`tmp/p3/gate-run/acks.json`) and start the gate run in the background (about 1.5 h; up to 2.5 h).
-2. While it runs: draft RQ1-E.md in job tmp (P4-2). After it: select and publish the evidence with the never-publish
-   scan, INTEGRATION_RESULT, then the P4-3 gate RESULT naming one manifest.
+1. Agent 1 commits the S3-0022 paths (`git add -f` for the evidence `run.log`, matched by `.gitignore` `*.log`)
+   and sends A1-0084 (8 tools on the published copy); agent 2 (proxy) re-checks protocol facts and the
+   never-publish selection (S2-0021 promise).
+2. Then publish the P4-3 gate RESULT naming `manifest.json` 908fd615.., `gate-evidence.json` 47e38dd3..,
+   the RQ1-E.md sha256 (0ec51e8e.. unless a review changes it) and the commit HEAD; then the three ACKs.
 
 ## Historical: P3-mutants FREEZE (then numbered S3-0021) NOT drafted; stopped (2026-10-12 ~00:55 IST)
 

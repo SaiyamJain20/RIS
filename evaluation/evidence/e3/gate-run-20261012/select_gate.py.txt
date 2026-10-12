@@ -1,0 +1,335 @@
+"""Gate E run E-gate-20261012: redacted public selection, audit and never-publish scan (agent 3 (proxy)).
+
+Paper-derived HMBC2020 reconstruction, solo phase (A1-0059, correlated self-review). Scratch helper,
+read-only on the raw run output. It is the union of the per-slice selection rules used for the
+historical publications (pre-solo early rows: recovery/expiry, duplicate, nonce replay; SL1-SL7
+`select_audit.py`), plus the gate's own top-level files.
+
+Usage:
+  select_gate.py select <repo> <raw-out> <gate-run-dir> <evidence-dir> [--dry-run]
+  select_gate.py scan   <repo> <raw-out> <evidence-dir> [<extra file> ...]
+
+select: copies the selected files to <evidence-dir>/<same relative path> (layout
+        catalog/<slice>/<case>/<profile>/... kept), copies run.log, run.meta, run.exit and acks.json
+        from <gate-run-dir> as-is, and writes selected-manifest.json, external-public-inventory.json and
+        live-result-audit.json. A selected file is refused (not copied) if it has a secret-shaped JSON
+        field or contains forbidden material.
+scan:   substring scan of EVERY file under <evidence-dir> (and each extra file) for the forbidden set;
+        exit 1 on any hit. Hits are reported by file and kind only, never with key or token bytes.
+
+Forbidden set: the TEST-ONLY private key of every fixture label (keccak256('hmbc-e0-synthetic-key:' ||
+label); the 15 base labels of the SL4-SL7 helpers, `deployer` (in agent 1's scans), and every
+*KeyLabel(s) value named in a deployment.json or bootstrap.json of the run), every private-key value
+(incl. signerPrivateKey) in the repository's vector files (**/vectors/*.json, as in agent 1's scans;
+interfaces/v1/vectors/eip712-agent1.json at the time of the selection), and every release token read from
+the run's private worker databases (worker.sqlite). Compared as
+lower-case hex without 0x, as substrings, so material embedded in longer strings is caught.
+
+Never selected: snapshots/ (materialized owner sources), pbc-rpc/ and dbc-rpc/ in full (RPC
+transcripts, and also the RPC command records and cast checkpoints that the SL1-SL7 publications
+kept: 224 files, about 50 MB here; summarized in live-result-audit.json, hashed in
+external-public-inventory.json), every private-adapter-state/ (D1, D2 and B), *.log, raw tool outputs
+*.txt (incl. receipt-deviate-NN.txt) except the top-level versions/*.txt, *.txt.process.json, and the
+raw producer records <kind>-sign-list-NN.json (no historical rule selected them).
+The early-row rule adds bootstrap.json in every row (the pre-solo publications kept it).
+
+Review status: drafted by an earlier proxy-3 attempt (unreviewed, sha256 8d2f52b3..), then read and
+checked by proxy-3: per-slice path sets compared with the historical publications, refusal and
+scan messages changed to carry no key or token prefix, extra-file scan added. After the selection:
+immutable=1 database opens; the `deployer` label and all repository vector files added to the forbidden
+set, to match agent 1's scans (the selection-time refusal check did not have them; the final scan does).
+"""
+import filecmp
+import hashlib
+import json
+import re
+import sqlite3
+import sys
+from pathlib import Path
+
+from eth_utils import keccak
+
+BASE_LABELS = ({'relay', 'alice', 'bob', 'deployer'} | {f'H{i}-{k}' for i in range(1, 5) for k in ('root', 'ca-admin')}
+               | {f'witness-{i}' for i in range(1, 5)})
+
+TOP = re.compile(r'^((manifest|gate-evidence|catalog-coverage-56|verify-freeze|versions|bracket-pre|bracket-post)\.json'
+                 r'|versions/[^/]+\.txt|proverif/(access|access_mutant)\.(stdout|stderr)|proverif/summary\.json)$')
+# SL2-SL7 select_audit.py rule (SL1 rule is a subset), unchanged:
+SLICE = (r'/manifest\.json$|/deployment\.json$|/bootstrap-checked\.json$|/commands\.json$|'
+         r'/result\.json$|/exchanges\.json$|/worker-(before|after)\.json$|'
+         r'/(before|after|after-release|after-completion|before-second|after-second)(-blocks)?\.json$|'
+         r'/public-call\.json$|/substituted-transaction\.json$|/stress-transaction\.json$|/forged-certificate\.json$|'
+         r'/timeline\.json$|/recipients\.json$|/process\.json$|/cast-checkpoints\.json$|-native/(views|transactions)\.json$|'
+         r'/(relay|audit|receipt|trust|barrier|destination)-stress/[^/]+\.json$|/destination-stress/source/[^/]+\.json$|'
+         r'/(relay|audit|receipt|trust|barrier|destination|source)-instance/(deployment|bootstrap-checked)\.json$')
+# Pre-solo early-row publications (recovery/expiry, duplicate, grouped nonce replay) also kept:
+EARLY = (r'/bootstrap\.json$|/recovery/worker-(before|after)-crash\.json$|/recovery/worker-after-retry\.json$|'
+         r'/expired-retry/native-(before|after)\.json$|/duplicate-outcome/duplicate-transaction\.json$|'
+         r'/nonce-replay/replay-transaction\.json$')
+SELECT = re.compile(SLICE + '|' + EARLY)
+EXCLUDE = re.compile(r'(/snapshots/|private-adapter-state|-rpc/|\.log$|receipt-deviate-|\.txt$|\.txt\.process\.json$)')
+
+
+def sha(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def forbidden_set(repo, run):
+    labels = set(BASE_LABELS)
+    for name in ('deployment.json', 'bootstrap.json'):
+        for dep in run.rglob(name):
+            if 'private-adapter-state' in dep.parts or 'snapshots' in dep.parts:
+                continue
+            def grab(value):
+                if isinstance(value, dict):
+                    for k, v in value.items():
+                        if k.lower().endswith('keylabel') and isinstance(v, str):
+                            labels.add(v)
+                        elif k.lower().endswith('keylabels') and isinstance(v, list):
+                            labels.update(x for x in v if isinstance(x, str))
+                        grab(v)
+                elif isinstance(value, list):
+                    for v in value:
+                        grab(v)
+            grab(json.loads(dep.read_text()))
+    keys = {keccak(b'hmbc-e0-synthetic-key:' + l.encode()).hex().removeprefix('0x').lower() for l in labels}
+    vector_keys = set()
+
+    def vkeys(value):
+        if isinstance(value, dict):
+            for k, v in value.items():
+                # 64-hex values only: boundary.json carries the non-key string "forbidden" under privateKey
+                if 'private' in k.lower() and isinstance(v, str) and re.fullmatch(r'[0-9a-f]{64}', v.lower().removeprefix('0x')):
+                    vector_keys.add(v.lower().removeprefix('0x'))
+                vkeys(v)
+        elif isinstance(value, list):
+            for v in value:
+                vkeys(v)
+    vector_files = sorted(p for p in repo.glob('**/vectors/*.json')
+                          if p.is_file() and not ({'.git', '.venv', 'node_modules'} & set(p.relative_to(repo).parts)))
+    for vf in vector_files:
+        vkeys(json.loads(vf.read_text()))
+    tokens, dbs, opens = set(), 0, {}
+    for db in sorted(run.rglob('worker.sqlite')):
+        if 'private-adapter-state' not in db.parts:
+            continue
+        # mode=ro alone makes SQLite create or touch the -wal/-shm side files next to a WAL-mode database
+        # (it did so for the selection run). With an absent or empty -wal file the main file holds every
+        # row, so immutable=1 reads the same rows and writes nothing; a non-empty WAL falls back to mode=ro.
+        wal = db.with_name(db.name + '-wal')
+        mode = 'mode=ro&immutable=1' if not wal.exists() or wal.stat().st_size == 0 else 'mode=ro'
+        opens[mode] = opens.get(mode, 0) + 1
+        con = sqlite3.connect(f'file:{db}?{mode}', uri=True)
+        try:
+            for (tok,) in con.execute('select token from releases'):
+                tokens.add(tok.lower().removeprefix('0x'))
+            dbs += 1
+        finally:
+            con.close()
+    info = dict(labels=sorted(labels), labelKeys=len(keys), vectorFiles=len(vector_files), frozenVectorKeys=len(vector_keys),
+                distinctKeys=len(keys | vector_keys), workerDatabases=dbs, sqliteOpenModes=opens, releaseTokens=len(tokens))
+    return keys | vector_keys, tokens, info
+
+
+def walk(value, path=''):
+    if isinstance(value, dict):
+        for k, v in value.items():
+            lk = k.lower()
+            if lk == 'token' or 'private' in lk or lk == 'secret':
+                raise ValueError(f'secret-shaped field {path}/{k}')
+            walk(v, path + '/' + k)
+    elif isinstance(value, list):
+        for i, v in enumerate(value):
+            walk(v, f'{path}[{i}]')
+
+
+def hits_in(raw, keys, tokens):
+    """Kinds of forbidden material found (one entry per distinct secret); never the secret bytes."""
+    text = raw.decode('utf-8', 'replace').lower()
+    return ['key' for s in keys if s in text] + ['token' for s in tokens if s in text]
+
+
+def describe(found):
+    return f'forbidden material: {found.count("key")} key(s), {found.count("token")} token(s)'
+
+
+def select(repo, run, gate_dir, evidence, dry):
+    keys, tokens, info = forbidden_set(repo, run)
+    selected, refused, excluded = {}, {}, {}
+    total = 0
+    for p in sorted(run.rglob('*')):
+        if not p.is_file():
+            continue
+        rel = p.relative_to(run).as_posix()
+        if TOP.match(rel):
+            pass
+        elif EXCLUDE.search('/' + rel) or not SELECT.search('/' + rel):
+            cat = ('snapshots' if '/snapshots/' in '/' + rel else 'private-adapter-state' if 'private-adapter-state' in rel
+                   else 'rpc' if '-rpc/' in rel else 'log' if rel.endswith('.log') else 'raw-tool-output-txt' if rel.endswith('.txt')
+                   else 'tool-process-record' if rel.endswith('.txt.process.json') else 'not-in-selection-rules')
+            excluded[cat] = excluded.get(cat, 0) + 1
+            continue
+        raw = p.read_bytes()
+        try:
+            if rel.endswith('.json'):
+                walk(json.loads(raw))
+            found = hits_in(raw, keys, tokens)
+            if found:
+                raise ValueError(describe(found))
+        except Exception as error:  # noqa: BLE001 - every refusal is recorded
+            refused[rel] = f'{type(error).__name__}: {error}'
+            continue
+        selected[rel] = hashlib.sha256(raw).hexdigest()
+        total += len(raw)
+        if not dry:
+            target = evidence / rel
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(raw)
+    not_rule = sorted({re.sub(r'\d{2}', 'NN', re.sub(r'^catalog/[^/]+/[^/]+/[^/]+/', '', p.relative_to(run).as_posix()))
+                       for p in run.rglob('*') if p.is_file() and not TOP.match(p.relative_to(run).as_posix())
+                       and not EXCLUDE.search('/' + p.relative_to(run).as_posix())
+                       and not SELECT.search('/' + p.relative_to(run).as_posix())})
+    summary = dict(selected=len(selected), bytes=total, refused=refused, excludedByCategory=excluded,
+                   notInSelectionRulesPatterns=not_rule, secretScan=info)
+    if dry:
+        print(json.dumps(summary, indent=1))
+        return 0
+    copy_mismatch = [rel for rel in selected if not filecmp.cmp(run / rel, evidence / rel, shallow=False)]
+    extra = {}
+    for name in ('run.log', 'run.meta', 'run.exit', 'acks.json'):
+        raw = (gate_dir / name).read_bytes()
+        found = hits_in(raw, keys, tokens)
+        if found:
+            refused['../' + name] = describe(found)
+            continue
+        (evidence / name).write_bytes(raw)
+        extra[name] = hashlib.sha256(raw).hexdigest()
+    (evidence / 'selected-manifest.json').write_text(json.dumps(dict(
+        note='files selected from the raw gate output (same relative paths) and the run wrapper files copied as-is; sha256 of each',
+        rawOutput=str(run), selected=selected, runWrapperFiles=extra, refused=refused, copyMismatches=copy_mismatch,
+        excludedByCategory=excluded, notInSelectionRulesPatterns=not_rule, secretScan=info), indent=1) + '\n')
+    # Compact inventory of the raw output: per-file hashes outside snapshots/ and *-rpc/, one aggregate per such directory.
+    files, aggregates, private = {}, {}, dict(directories=0, files=0, bytes=0)
+    for p in sorted(run.rglob('*')):
+        rel = p.relative_to(run).as_posix()
+        if p.is_dir():
+            if p.name == 'private-adapter-state':
+                private['directories'] += 1
+            continue
+        if 'private-adapter-state' in p.parts:
+            private['files'] += 1
+            private['bytes'] += p.stat().st_size
+            continue
+        m = re.match(r'^(.*?/(snapshots|pbc-rpc|dbc-rpc))/', rel)
+        digest = sha(p)
+        if m:
+            agg = aggregates.setdefault(m.group(1), dict(files=0, bytes=0, lines=[]))
+            agg['files'] += 1
+            agg['bytes'] += p.stat().st_size
+            agg['lines'].append(f'{rel[len(m.group(1)) + 1:]}\t{digest}\n')
+        else:
+            files[rel] = digest
+    for agg in aggregates.values():
+        agg['sha256OfSortedLines'] = hashlib.sha256(''.join(sorted(agg.pop('lines'))).encode()).hexdigest()
+    (evidence / 'external-public-inventory.json').write_text(json.dumps(dict(
+        note=('hashes of the raw gate output, which stays in job tmp (tmp/p3/gate-run/out). Every non-private file outside '
+              'snapshots/, pbc-rpc/ and dbc-rpc/ is listed with its sha256; each snapshots/, pbc-rpc/ and dbc-rpc/ directory is '
+              'one aggregate: file count, bytes and the sha256 of its sorted "<relative path>\\t<sha256>\\n" lines. '
+              'private-adapter-state/ is counted only, never hashed or published.'),
+        files=files, aggregates=aggregates, privateAdapterState=private), indent=1) + '\n')
+    audit(run, evidence)
+    print(json.dumps(dict(selected=len(selected), bytes=total, refused=refused, copyMismatches=copy_mismatch,
+                          runWrapperFiles=sorted(extra), inventoryFiles=len(files), aggregates=len(aggregates),
+                          private=private, secretScan={k: v for k, v in info.items() if k != 'labels'}), indent=1))
+    return 1 if refused or copy_mismatch else 0
+
+
+def audit(run, evidence):
+    top = json.loads((run / 'manifest.json').read_text())
+    out = dict(runId=top['runId'], planSha256=top['planSha256'], status=top['status'], failure=top['failure'],
+               sourceStable=top['sourceStable'], worktreeUnchanged=top['worktreeUnchanged'], planReverified=top['planReverified'],
+               reviewMode=top.get('reviewMode'),
+               rows=[{k: r.get(k) for k in ('caseId', 'slice', 'case', 'profile', 'status', 'elapsedSeconds', 'memAvailableKiBAtStart')}
+                     for r in top['rows']],
+               slices={}, services=len(top['servicesStarted']), adapters=len(top['adapterProcesses']),
+               commands=dict(total=0, nonzero=[], verifiedNeverInstantiatedWorkerProbes=0), castCheckpoints={})
+    fields = ('status', 'sourcesStable', 'servicesStopped', 'castHashPolicy', 'castStable', 'wrongAdmin', 'relayStress', 'auditStress',
+              'subjectStress', 'receiptStress', 'trustStress', 'barrierStress', 'destinationStress', 'sourceDeployment', 'destinationFunding')
+    for name, sl in top['slices'].items():
+        sm = json.loads((run / sl['manifest']).read_text())
+        cases = {}
+        for case, entry in sm['cases'].items():
+            cm_path = run / 'catalog' / name / entry['manifest']
+            cm = json.loads(cm_path.read_text()) if cm_path.exists() else {}
+            cases[case] = dict(status=entry['status'], profiles={k: {x: v.get(x) for x in fields if x in v}
+                                                                 for k, v in cm.get('profiles', {}).items()})
+        out['slices'][name] = dict(status=sm['status'], sourceStable=sm.get('sourceStable'), cases=cases)
+    for cmds in sorted(run.rglob('commands.json')):
+        if '-rpc' in cmds.parent.name or 'snapshots' in cmds.parts:
+            continue
+        for r in json.loads(cmds.read_text()):
+            out['commands']['total'] += 1
+            if r.get('exitCode') != 0 and r.get('workerObservation') == 'never-instantiated (verified)':
+                out['commands']['verifiedNeverInstantiatedWorkerProbes'] += 1
+            elif r.get('exitCode') != 0:
+                out['commands']['nonzero'].append(dict(file=cmds.relative_to(run).as_posix(), argv=r['argv'][:3], exit=r['exitCode']))
+    rpc_rows = rpc_nonzero = rpc_files = 0
+    for cmds in run.rglob('*-rpc/commands.json'):
+        rows = json.loads(cmds.read_text())
+        rpc_files += 1
+        rpc_rows += len(rows)
+        rpc_nonzero += sum(r.get('exitCode') != 0 for r in rows)
+    out['rpcCommands'] = dict(files=rpc_files, total=rpc_rows, nonzero=rpc_nonzero,
+                              note='from the raw *-rpc/commands.json files, which are not published')
+    chk_total = chk_files = 0
+    chk_all = True
+    for chk in sorted(run.rglob('cast-checkpoints.json')):
+        rows = json.loads(chk.read_text())
+        ok = all(r['ok'] for r in rows)
+        out['castCheckpoints'][chk.relative_to(run).as_posix()] = dict(count=len(rows), allOk=ok)
+        chk_total += len(rows)
+        chk_files += 1
+        chk_all &= ok
+    out['castCheckpointSummary'] = dict(files=chk_files, checkpoints=chk_total, allOk=chk_all,
+                                        note='from the raw *-rpc/cast-checkpoints.json files, which are not published')
+    pids = [i['pid'] for i in top['servicesStarted'] + top['adapterProcesses'] if i.get('pid')]
+    out['pidsChecked'] = len(pids)
+    out['pidsStillPresent'] = [p for p in pids if Path(f'/proc/{p}').exists()]
+    (evidence / 'live-result-audit.json').write_text(json.dumps(out, indent=1) + '\n')
+
+
+def scan(repo, run, evidence, extra=()):
+    keys, tokens, info = forbidden_set(repo, run)
+    hits, count, size = [], 0, 0
+    targets = [p for p in sorted(evidence.rglob('*')) if p.is_file()] + [Path(x).resolve() for x in extra]
+    for p in targets:
+        raw = p.read_bytes()
+        count += 1
+        size += len(raw)
+        found = hits_in(raw, keys, tokens)
+        if found:
+            name = p.relative_to(evidence).as_posix() if p.is_relative_to(evidence) else str(p)
+            hits.append(dict(file=name, keys=found.count('key'), tokens=found.count('token')))
+    print(json.dumps(dict(evidenceDir=str(evidence), files=count, extraFiles=len(extra), bytes=size, hits=hits,
+                          secretScan={k: v for k, v in info.items() if k != 'labels'}, labels=info['labels']), indent=1))
+    return 1 if hits else 0
+
+
+def main(argv):
+    mode = argv[0]
+    if mode == 'select':
+        repo, run, gate_dir, evidence = (Path(a).resolve() for a in argv[1:5])
+        dry = '--dry-run' in argv[5:]
+        if not dry:
+            if evidence.exists() and any(evidence.iterdir()):
+                raise SystemExit(f'{evidence} exists and is not empty')
+            evidence.mkdir(parents=True, exist_ok=True)
+        return select(repo, run, gate_dir, evidence, dry)
+    if mode == 'scan':
+        repo, run, evidence = (Path(a).resolve() for a in argv[1:4])
+        return scan(repo, run, evidence, argv[4:])
+    raise SystemExit(__doc__)
+
+
+if __name__ == '__main__':
+    raise SystemExit(main(sys.argv[1:]))

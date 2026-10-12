@@ -1,0 +1,260 @@
+{
+  "startedAt": "2026-10-12T01:39:24.659794+00:00",
+  "endedAt": "2026-10-12T01:39:33.384043+00:00",
+  "ok": true,
+  "failure": null,
+  "scope": "C-E1 single control; not an RQ gate",
+  "adapterMode": "symbolic",
+  "observed": {
+    "adapterMode": "symbolic",
+    "events": [
+      {
+        "type": "REQUEST_LOGGED",
+        "requestDigest": "0xe370bc564b638f85afd7d070f2825439c7b90817b2415e1d09514eeadf428020",
+        "timestamp": "1791769168"
+      },
+      {
+        "type": "PBC_DECIDED",
+        "requestDigest": "0xe370bc564b638f85afd7d070f2825439c7b90817b2415e1d09514eeadf428020",
+        "timestamp": "1791769168"
+      },
+      {
+        "type": "DBC_AUTHORIZED",
+        "requestDigest": "0xe370bc564b638f85afd7d070f2825439c7b90817b2415e1d09514eeadf428020",
+        "timestamp": "1791769169",
+        "grantId": "0x4a4b45d9083766ec39771e007002c77728a9ae4bc204dc259f28dad0dbb5a25d",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+        "kssc": "0xe08fc08118c249128865a95e60617618970876b9",
+        "destinationChainId": "28545",
+        "recipientKeyHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "keyEpoch": "0"
+      },
+      {
+        "type": "RELEASE_INTENT",
+        "requestDigest": "0xe370bc564b638f85afd7d070f2825439c7b90817b2415e1d09514eeadf428020",
+        "timestamp": "1791769170",
+        "grantId": "0x4a4b45d9083766ec39771e007002c77728a9ae4bc204dc259f28dad0dbb5a25d",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+      },
+      {
+        "type": "RELEASE_SENT",
+        "requestDigest": "0xe370bc564b638f85afd7d070f2825439c7b90817b2415e1d09514eeadf428020",
+        "timestamp": "1791769170",
+        "grantId": "0x4a4b45d9083766ec39771e007002c77728a9ae4bc204dc259f28dad0dbb5a25d",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+      },
+      {
+        "type": "OUTCOME_RECORDED",
+        "requestDigest": "0xe370bc564b638f85afd7d070f2825439c7b90817b2415e1d09514eeadf428020",
+        "timestamp": "1791769171",
+        "grantId": "0x4a4b45d9083766ec39771e007002c77728a9ae4bc204dc259f28dad0dbb5a25d",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+      }
+    ],
+    "error": null,
+    "ledgerChecks": {}
+  },
+  "oracle": {
+    "ok": true,
+    "classification": "SUPPORTED",
+    "assertions": [
+      {
+        "name": "adapter mode is explicit and matches",
+        "passed": true
+      },
+      {
+        "name": "stable denial reason",
+        "passed": true
+      },
+      {
+        "name": "expected events occur in causal order",
+        "passed": true
+      },
+      {
+        "name": "at most one new grant",
+        "passed": true
+      },
+      {
+        "name": "at most one recorded outcome",
+        "passed": true
+      },
+      {
+        "name": "event 0 request binding",
+        "passed": true
+      },
+      {
+        "name": "event 1 request binding",
+        "passed": true
+      },
+      {
+        "name": "event 2 request binding",
+        "passed": true
+      },
+      {
+        "name": "grant 2 requestDigest",
+        "passed": true
+      },
+      {
+        "name": "grant 2 grantId",
+        "passed": true
+      },
+      {
+        "name": "grant 2 gid",
+        "passed": true
+      },
+      {
+        "name": "grant 2 dataId",
+        "passed": true
+      },
+      {
+        "name": "grant 2 kssc",
+        "passed": true
+      },
+      {
+        "name": "grant 2 destinationChainId",
+        "passed": true
+      },
+      {
+        "name": "grant 2 recipientKeyHash",
+        "passed": true
+      },
+      {
+        "name": "grant 2 keyEpoch",
+        "passed": true
+      },
+      {
+        "name": "event 3 request binding",
+        "passed": true
+      },
+      {
+        "name": "release/outcome 3 requestDigest",
+        "passed": true
+      },
+      {
+        "name": "release/outcome 3 grantId",
+        "passed": true
+      },
+      {
+        "name": "release/outcome 3 gid",
+        "passed": true
+      },
+      {
+        "name": "release/outcome 3 dataId",
+        "passed": true
+      },
+      {
+        "name": "authorization precedes 3",
+        "passed": true
+      },
+      {
+        "name": "event 4 request binding",
+        "passed": true
+      },
+      {
+        "name": "release/outcome 4 requestDigest",
+        "passed": true
+      },
+      {
+        "name": "release/outcome 4 grantId",
+        "passed": true
+      },
+      {
+        "name": "release/outcome 4 gid",
+        "passed": true
+      },
+      {
+        "name": "release/outcome 4 dataId",
+        "passed": true
+      },
+      {
+        "name": "authorization precedes 4",
+        "passed": true
+      },
+      {
+        "name": "durable intent precedes send 4",
+        "passed": true
+      },
+      {
+        "name": "event 5 request binding",
+        "passed": true
+      },
+      {
+        "name": "release/outcome 5 requestDigest",
+        "passed": true
+      },
+      {
+        "name": "release/outcome 5 grantId",
+        "passed": true
+      },
+      {
+        "name": "release/outcome 5 gid",
+        "passed": true
+      },
+      {
+        "name": "release/outcome 5 dataId",
+        "passed": true
+      },
+      {
+        "name": "authorization precedes 5",
+        "passed": true
+      }
+    ],
+    "observedEvents": [
+      {
+        "type": "REQUEST_LOGGED",
+        "requestDigest": "0xe370bc564b638f85afd7d070f2825439c7b90817b2415e1d09514eeadf428020",
+        "timestamp": "1791769168"
+      },
+      {
+        "type": "PBC_DECIDED",
+        "requestDigest": "0xe370bc564b638f85afd7d070f2825439c7b90817b2415e1d09514eeadf428020",
+        "timestamp": "1791769168"
+      },
+      {
+        "type": "DBC_AUTHORIZED",
+        "requestDigest": "0xe370bc564b638f85afd7d070f2825439c7b90817b2415e1d09514eeadf428020",
+        "timestamp": "1791769169",
+        "grantId": "0x4a4b45d9083766ec39771e007002c77728a9ae4bc204dc259f28dad0dbb5a25d",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+        "kssc": "0xe08fc08118c249128865a95e60617618970876b9",
+        "destinationChainId": "28545",
+        "recipientKeyHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "keyEpoch": "0"
+      },
+      {
+        "type": "RELEASE_INTENT",
+        "requestDigest": "0xe370bc564b638f85afd7d070f2825439c7b90817b2415e1d09514eeadf428020",
+        "timestamp": "1791769170",
+        "grantId": "0x4a4b45d9083766ec39771e007002c77728a9ae4bc204dc259f28dad0dbb5a25d",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+      },
+      {
+        "type": "RELEASE_SENT",
+        "requestDigest": "0xe370bc564b638f85afd7d070f2825439c7b90817b2415e1d09514eeadf428020",
+        "timestamp": "1791769170",
+        "grantId": "0x4a4b45d9083766ec39771e007002c77728a9ae4bc204dc259f28dad0dbb5a25d",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+      },
+      {
+        "type": "OUTCOME_RECORDED",
+        "requestDigest": "0xe370bc564b638f85afd7d070f2825439c7b90817b2415e1d09514eeadf428020",
+        "timestamp": "1791769171",
+        "grantId": "0x4a4b45d9083766ec39771e007002c77728a9ae4bc204dc259f28dad0dbb5a25d",
+        "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+        "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e"
+      }
+    ],
+    "limitations": [
+      "E/F adapter is symbolic; no measured ABE security.",
+      "Outcome recording is not proof of recipient delivery."
+    ]
+  },
+  "delivery": "unknown"
+}

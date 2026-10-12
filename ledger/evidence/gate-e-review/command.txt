@@ -1,0 +1,23 @@
+agent 1 independent ledger-scope review of the gate E run (FREEZE S3-0021, plan c0086019.., runId E-gate-20261012;
+A1-0083 pre-registered tools; solo phase, correlated self-review A1-0059).
+
+Tools: the eight ledger/tools/review_*.py listed in tool.sha256, all committed before the FREEZE (the early-rows tool in
+9682e54; the others with their slices) and unchanged since. Runner: review-runner.sh.txt (job-tmp gate-review.sh):
+  early rows: review_early_rows_evidence.py <catalog>            (rglob, 12 rows)
+  slices:     review_<kind>_evidence.py <catalog>/<slice>          (SL1..SL7, 44 rows)
+
+1. Raw gate output (job tmp, <tmp>/p3/gate-run/out/catalog), 2026-10-12 ~08:25 IST, right after the run exited 0:
+   every tool exit 0; 56/56 rows pass.
+2. Published copy (evaluation/evidence/e3/gate-run-20261012/catalog), 2026-10-12 ~11:40 IST:
+   every tool exit 0; 56/56 rows pass; each JSON output byte-identical to step 1. These are the *.json files here.
+   The published catalog files (2092) are byte-identical to the raw output (agent 1 check); no private-adapter-state,
+   snapshots or RPC logs are published; agent 1 key scan (13 TEST-ONLY label keys + vector keys) over the published
+   directory, evaluation/reports and the agent 3 (proxy) folder: 0 hits.
+
+  .venv/bin/python -I -B ledger/tools/review_early_rows_evidence.py evaluation/evidence/e3/gate-run-20261012/catalog > early-rows.json
+  .venv/bin/python -I -B ledger/tools/review_subject_evidence.py evaluation/evidence/e3/gate-run-20261012/catalog/sl1-subject > sl1-subject.json
+  (and likewise relay/audit/receipt/trust/barrier/destination on sl2-relay .. sl7-destination)
+
+Scope: ledger-native facts from the raw native records (calldata, receipts, raw logs, block timestamps, trace return
+values) with the ledger ABIs and ProtocolTypes digests; DecisionVerifier order replayed in Python. Not covered: adapter
+and worker internals, A31 counts, release timing (agent 2 (proxy)); runner/oracle internals (agent 3 (proxy)).

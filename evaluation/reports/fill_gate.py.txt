@@ -1,0 +1,338 @@
+"""Fill the gate placeholders of the RQ1-E.md draft from one finished gate E output directory.
+
+Paper-derived HMBC2020 reconstruction, solo phase (A1-0059): the author is agent 3 (proxy); this is
+correlated self-review. The script reads JSON only (no repository import, no service, no Git).
+
+Placeholders in the draft:
+  - one literal `<<GATE>>` cell per results row; the row's case ID is the first backticked value in the
+    same table line;
+  - `<<GATE_ROOT>>`: the published gate evidence directory (option --gate-root);
+  - the block between `<!-- GATE-STATUS:BEGIN -->` and `<!-- GATE-STATUS:END -->` (top of the report);
+  - the block between `<!-- GATE-SUMMARY:BEGIN -->` and `<!-- GATE-SUMMARY:END -->` (gate run section);
+  - the block between `<!-- GATE-PROVERIF:BEGIN -->` and `<!-- GATE-PROVERIF:END -->` (formal section).
+
+Refusals (exit 2, nothing written) unless --write-failures is given:
+  - the manifest status is not PASS, any row is not PASS, ProVerif did not match, a criterion is not the
+    expected 7 VERIFIED + 2 PENDING, sourceStable or worktreeUnchanged is not true, a result-file hash in
+    the manifest does not match, a PASS row's observed classification/error differs from the frozen one,
+    or the draft's row set differs from the coverage rows.
+  With --write-failures the draft is filled anyway and every problem is written plainly: in a banner at
+  the top, in the gate summary and in each affected row.
+Always refused (exit 3): the run has not finished (status RUNNING or endedAt null), --out equals --draft,
+--out already exists, or a `<<GATE` placeholder would remain.
+
+Usage:
+  python3 -I fill_gate.py --draft RQ1-E.md --gate-out <gate output dir> --out RQ1-E.filled.md \
+      [--gate-root evaluation/evidence/e3/gate-run-20261012/] [--write-failures]
+
+Published as evaluation/reports/fill_gate.py.txt (kept out of the frozen evaluation/**/*.py inputs). It was
+run against the raw gate output in job tmp (tmp/p3/gate-run/out), whose manifest resultFiles are all
+present; the published copy omits the 112 snapshot ABI manifests listed there (see the evidence README).
+"""
+import argparse
+import datetime
+import hashlib
+import json
+import re
+import sys
+from pathlib import Path
+
+D47_ROWS = {'E03-crash-after-intent-paper-strict', 'E03-crash-after-intent-paper-minimal',
+            'E03-crash-after-send-paper-strict', 'E03-crash-after-send-paper-minimal'}
+D47_LABEL = 'frozen BLOCKED / decided SPEC_GAP, UNPROVED (D47)'
+PENDING_BY_DESIGN = {'RQ1-report', 'three-matching-acks'}
+E_CRITERIA = ('interface-and-source-review', 'legitimate-and-denied-controls', 'E01-E02-E03-classification',
+              'repairs-and-mutants', 'real-two-chain-and-recovery', 'proverif-and-negative-control', 'RQ1-report',
+              'stable-hashed-input-output-tools', 'three-matching-acks')
+EXPECTED_STEP = {'E01-wrong-destination-repaired-e': 1, 'E01-expiry-boundary-repaired-e': 9}
+BLOCKS = ('GATE-STATUS', 'GATE-SUMMARY', 'GATE-PROVERIF')
+ROW_RE = re.compile(r'^\|.*<<GATE>>.*\|\s*$')
+ID_RE = re.compile(r'`(E0[123]-[A-Za-z0-9-]+)`')
+
+
+class Refuse(Exception):
+    def __init__(self, code, message):
+        super().__init__(message)
+        self.code = code
+
+
+def sha256(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def load(path):
+    try:
+        return json.loads(Path(path).read_text())
+    except (OSError, ValueError):
+        return None
+
+
+def cell(text):
+    return str(text).replace('|', '\\|').replace('\n', ' ')
+
+
+def dash(value):
+    return '–' if value in (None, '') else str(value)
+
+
+def mib(kb):
+    return f'{kb / 1024:.0f} MiB' if isinstance(kb, (int, float)) else '–'
+
+
+def parse_time(value):
+    try:
+        return datetime.datetime.fromisoformat(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def draft_rows(text):
+    ids = []
+    for line in text.splitlines():
+        if ROW_RE.match(line):
+            found = ID_RE.search(line)
+            if not found:
+                raise Refuse(3, 'a <<GATE>> row has no backticked case ID: ' + line[:120])
+            ids.append(found.group(1))
+    return ids
+
+
+def analyse(gate, draft_ids):
+    """Return (problems, data). Every problem is a plain sentence."""
+    problems = []
+    manifest = load(gate / 'manifest.json')
+    if not isinstance(manifest, dict):
+        raise Refuse(3, f'no readable manifest.json in {gate}')
+    if manifest.get('status') == 'RUNNING' or manifest.get('endedAt') is None:
+        raise Refuse(3, f"the gate run has not finished (status {manifest.get('status')}, endedAt {manifest.get('endedAt')})")
+    coverage = load(gate / 'catalog-coverage-56.json')
+    evidence = load(gate / 'gate-evidence.json')
+    if manifest.get('status') != 'PASS':
+        problems.append(f"manifest status is {manifest.get('status')}, not PASS"
+                        + (f" (failure: {manifest['failure'].get('type')}: {manifest['failure'].get('message')})" if manifest.get('failure') else ''))
+    for key in ('sourceStable', 'worktreeUnchanged', 'planReverified'):
+        if manifest.get(key) is not True:
+            problems.append(f'manifest {key} is {manifest.get(key)}, not true')
+    for name, stage in (manifest.get('stages') or {}).items():
+        if stage.get('status') not in ('PASS', 'WRITTEN'):
+            problems.append(f"stage {name} is {stage.get('status')}")
+    rows = manifest.get('rows') or []
+    by_id = {r.get('caseId'): r for r in rows}
+    if len(rows) != 56 or len(by_id) != 56:
+        problems.append(f'manifest lists {len(rows)} rows ({len(by_id)} distinct), not 56')
+    for r in rows:
+        if r.get('status') != 'PASS':
+            failure = r.get('failure') or {}
+            problems.append(f"row {r.get('caseId')} is {r.get('status')}"
+                            + (f" ({failure.get('type')}: {failure.get('message')})" if failure else ''))
+    if set(draft_ids) != set(by_id) or len(draft_ids) != len(set(draft_ids)):
+        problems.append(f'draft rows ({len(draft_ids)}) and manifest rows ({len(by_id)}) differ: '
+                        f'only in draft {sorted(set(draft_ids) - set(by_id))}, only in manifest {sorted(set(by_id) - set(draft_ids))}')
+    cov, row_problems = {}, {}
+
+    def flag(case_id, message):
+        problems.append(f'row {case_id}: {message}')
+        row_problems.setdefault(case_id, []).append(message)
+    if not isinstance(coverage, dict):
+        problems.append('catalog-coverage-56.json is missing or unreadable')
+    else:
+        cov = {r['caseId']: r for r in coverage.get('rows', [])}
+        for case_id, r in cov.items():
+            if r.get('status') != 'PASS':
+                continue
+            exp, obs = r.get('expected') or {}, r.get('observed') or {}
+            want = D47_LABEL if case_id in D47_ROWS else exp.get('classification')
+            if r.get('reportedClassification') != want:
+                flag(case_id, f"reported classification {r.get('reportedClassification')} differs from {want}")
+            if 'classification' in obs and case_id not in D47_ROWS and obs['classification'] != exp.get('classification'):
+                flag(case_id, f"observed classification {obs['classification']} differs from frozen {exp.get('classification')}")
+            if 'error' in obs and obs['error'] != exp.get('error'):
+                flag(case_id, f"observed error {obs['error']} differs from frozen {exp.get('error')}")
+            if r.get('slice') == 'recovery-expiry' and obs.get('expiredRetryError') != 'EXPIRED':
+                flag(case_id, f"expired cached retry gave {obs.get('expiredRetryError')}, not EXPIRED")
+            if case_id in EXPECTED_STEP and obs.get('firingStep') != EXPECTED_STEP[case_id]:
+                flag(case_id, f"firing step {obs.get('firingStep')}, expected {EXPECTED_STEP[case_id]}")
+    proverif = manifest.get('proverif') or {}
+    if proverif.get('matched') is not True:
+        problems.append(f"ProVerif stage matched = {proverif.get('matched')}")
+    criteria = (evidence or {}).get('criteria') if isinstance(evidence, dict) else None
+    if not isinstance(criteria, dict):
+        problems.append('gate-evidence.json is missing or has no criteria')
+        criteria = {}
+    for name in E_CRITERIA:
+        status = (criteria.get(name) or {}).get('status')
+        want = 'PENDING' if name in PENDING_BY_DESIGN else 'VERIFIED'
+        if status != want:
+            problems.append(f'criterion {name} is {status}, expected {want} after the run')
+    files = {}
+    for name in ('manifest.json', 'gate-evidence.json', 'catalog-coverage-56.json', 'proverif/summary.json'):
+        if (gate / name).is_file():
+            files[name] = sha256(gate / name)
+    for name, digest in (manifest.get('resultFiles') or {}).items():
+        path = gate / name
+        if not path.is_file():
+            problems.append(f'result file {name} listed in the manifest is missing')
+        elif sha256(path) != digest:
+            problems.append(f'result file {name} does not match its manifest hash')
+    return problems, dict(manifest=manifest, coverage=cov, criteria=criteria, files=files, by_id=by_id, rowProblems=row_problems)
+
+
+def row_cell(case_id, data):
+    row = data['by_id'].get(case_id) or {}
+    cov = data['coverage'].get(case_id) or {}
+    status = row.get('status', 'MISSING')
+    secs = f", {row['elapsedSeconds']:.0f} s" if isinstance(row.get('elapsedSeconds'), (int, float)) else ''
+    if status != 'PASS':
+        failure = row.get('failure') or cov.get('failure') or {}
+        detail = f": {failure.get('type')}: {str(failure.get('message'))[:300]}" if failure else ''
+        return cell(f'**{status}**{detail}{secs}')
+    obs = cov.get('observed') or {}
+    parts = [f"PASS · {cov.get('reportedClassification') or '–'}"]
+    if case_id in D47_ROWS:
+        parts = ['PASS (mechanics) · frozen BLOCKED / decided SPEC_GAP, UNPROVED']
+    parts.append(dash(obs.get('error')) if 'error' in obs else '–')
+    text = ' · '.join(parts)
+    if obs.get('outcome'):
+        text += f" ({obs['outcome']})"
+    if obs.get('firingStep') is not None:
+        text += f", step {obs['firingStep']}"
+    if 'expiredRetryError' in obs:
+        text += f"; expired retry {obs['expiredRetryError']}"
+    issues = data['rowProblems'].get(case_id)
+    if issues:
+        text += ' **[DISCREPANCY: ' + '; '.join(issues) + ']**'
+    return cell(text + secs)
+
+
+def status_block(problems, data, gate_root):
+    m = data['manifest']
+    counts = {s: sum(r.get('status') == s for r in m.get('rows') or []) for s in ('PASS', 'FAILED', 'NOT_RUN', 'RUNNING')}
+    if not problems:
+        return (f"> **Gate run:** `{m.get('runId')}` finished with manifest status **PASS**: 56/56 rows PASS, ProVerif matched, "
+                f"7 criteria VERIFIED and 2 PENDING by design (RQ1-report, three-matching-acks). Evidence: `{gate_root}`. "
+                "Run status is not gate E PASS: gate E is adjudicated by the GATES.md checklist and the three same-source ACKs (A1-0082 P4-3/P4-4).")
+    lines = [f"> **GATE RUN NOT PASSED.** `{m.get('runId')}` ended with manifest status **{m.get('status')}**: "
+             f"{counts['PASS']} PASS, {counts['FAILED']} FAILED, {counts['NOT_RUN']} NOT_RUN of {len(m.get('rows') or [])} rows. "
+             "The answer and tables below therefore do **not** have gate-run support where a row or stage failed; the historical "
+             "slice runs cited next to each row are not a substitute. A failed row is kept and may be re-run only under a new FREEZE (A1-0082). "
+             'Problems, as recorded:']
+    lines += [f'> - {cell(p)}' for p in problems]
+    return '\n'.join(lines)
+
+
+def summary_block(problems, data, gate_root):
+    m, crit, files = data['manifest'], data['criteria'], data['files']
+    rows = m.get('rows') or []
+    counts = {s: sum(r.get('status') == s for r in rows) for s in ('PASS', 'FAILED', 'NOT_RUN', 'RUNNING')}
+    start, end = parse_time(m.get('startedAt')), parse_time(m.get('endedAt'))
+    wall = f'{(end - start).total_seconds():.0f} s ({(end - start).total_seconds() / 3600:.2f} h)' if start and end else '–'
+    before, after = (m.get('hostMemory') or {}).get('before') or {}, (m.get('hostMemory') or {}).get('after') or {}
+    pre, post = (m.get('worktree') or {}).get('pre') or {}, (m.get('worktree') or {}).get('post') or {}
+    out = ['| Item | Value |', '|---|---|',
+           f"| Run ID / FREEZE | `{m.get('runId')}` / {m.get('freezeMessage')} |",
+           f"| Plan sha256 | `{m.get('planSha256')}` |",
+           f"| Manifest status | **{m.get('status')}** (run stages only; not gate E PASS) |",
+           f"| Rows | {counts['PASS']} PASS, {counts['FAILED']} FAILED, {counts['NOT_RUN']} NOT_RUN, {counts['RUNNING']} RUNNING (of {len(rows)}) |",
+           f"| ProVerif matched | {(m.get('proverif') or {}).get('matched')} |",
+           f"| sourceStable / worktreeUnchanged / planReverified | {m.get('sourceStable')} / {m.get('worktreeUnchanged')} / {m.get('planReverified')} |",
+           f"| HEAD before / after | `{pre.get('head')}` / `{post.get('head')}` |",
+           f"| Started / ended (UTC) | {m.get('startedAt')} / {m.get('endedAt')} |",
+           f'| Wall time | {wall} |',
+           f"| MemAvailable before / after | {mib(before.get('MemAvailable'))} / {mib(after.get('MemAvailable'))} |",
+           f"| MemFree before / after | {mib(before.get('MemFree'))} / {mib(after.get('MemFree'))} |",
+           f"| SwapFree before / after | {mib(before.get('SwapFree'))} / {mib(after.get('SwapFree'))} |",
+           f"| Lowest MemAvailable at a row start | {mib(min((r['memAvailableKiBAtStart'] for r in rows if isinstance(r.get('memAvailableKiBAtStart'), int)), default=None))} |",
+           f'| Published evidence | `{gate_root}` |']
+    out += [f'| sha256 `{name}` | `{digest}` |' for name, digest in files.items()]
+    out += ['', '| Stage | Status |', '|---|---|']
+    out += [f"| {name} | {stage.get('status')} |" for name, stage in (m.get('stages') or {}).items()]
+    out += [f'| {name} (dropped) | not run: {cell(reason)} |' for name, reason in (m.get('droppedStages') or {}).items()]
+    out += ['', '| Slice | Status | Rows PASS | Row wall time (sum) |', '|---|---|---|---|']
+    for name, sl in (m.get('slices') or {}).items():
+        mine = [r for r in rows if r.get('slice') == name]
+        secs = sum(r.get('elapsedSeconds') or 0 for r in mine)
+        out.append(f"| {name} | {sl.get('status')} | {sum(r.get('status') == 'PASS' for r in mine)}/{len(mine)} | {secs:.0f} s |")
+    out += ['', '| Criterion (`gate-evidence.json`) | Status |', '|---|---|']
+    for name in E_CRITERIA:
+        c = crit.get(name) or {}
+        note = ' (human-scoped, A1-0080)' if name == 'repairs-and-mutants' and c.get('status') == 'VERIFIED' else ''
+        note = ' (by design: adjudicated after the run)' if name in PENDING_BY_DESIGN and c.get('status') == 'PENDING' else note
+        out.append(f"| {name} | {c.get('status')}{note} |")
+    if problems:
+        out += ['', '**Problems recorded (not explained away):**', '']
+        out += [f'- {cell(p)}' for p in problems]
+    return '\n'.join(out)
+
+
+def proverif_block(data):
+    pv = data['manifest'].get('proverif') or {}
+    runs = pv.get('runs') or {}
+    if not runs:
+        return '**Gate re-run:** no ProVerif result in the gate manifest (stage not reached or failed).'
+    out = [f"**Gate re-run (stage 6):** matched = **{pv.get('matched')}**, tool sha256 `{(pv.get('tool') or {}).get('sha256')}` "
+           '(declared local ProVerif 2.05 build).', '',
+           '| Model | Exit | stderr bytes | Verdicts | Expected | Byte-identical to A3-0033 / p3-proverif-20261012 |', '|---|---|---|---|---|---|']
+    for name, r in runs.items():
+        refs = r.get('references') or {}
+        ident = ' / '.join(str((refs.get(k) or {}).get('fullOutputIdentical')) for k in ('A3-0033', 'p3-proverif-20261012'))
+        out.append(f"| `{r.get('model')}` | {r.get('exitCode')} | {r.get('stderrBytes')} | {', '.join(r.get('verdicts') or [])} | "
+                   f"{', '.join(r.get('expectedVerdicts') or [])} | {ident} |")
+    return '\n'.join(out)
+
+
+def replace_block(text, name, body):
+    begin, end = f'<!-- {name}:BEGIN -->', f'<!-- {name}:END -->'
+    if text.count(begin) != 1 or text.count(end) != 1:
+        raise Refuse(3, f'the draft must contain exactly one {begin} ... {end} block')
+    head, rest = text.split(begin)
+    _, tail = rest.split(end)
+    return head + begin + '\n' + body + '\n' + end + tail
+
+
+def fill(draft_text, gate, gate_root, write_failures):
+    ids = draft_rows(draft_text)
+    problems, data = analyse(gate, ids)
+    if problems and not write_failures:
+        raise Refuse(2, 'refusing to fill: the gate run did not fully pass; re-run with --write-failures to write the failures plainly:\n- '
+                     + '\n- '.join(problems))
+    lines = []
+    for line in draft_text.splitlines():
+        if ROW_RE.match(line):
+            line = line.replace('<<GATE>>', row_cell(ID_RE.search(line).group(1), data), 1)
+        lines.append(line)
+    text = '\n'.join(lines) + ('\n' if draft_text.endswith('\n') else '')
+    text = text.replace('<<GATE_ROOT>>', gate_root)
+    text = replace_block(text, 'GATE-STATUS', status_block(problems, data, gate_root))
+    text = replace_block(text, 'GATE-SUMMARY', summary_block(problems, data, gate_root))
+    text = replace_block(text, 'GATE-PROVERIF', proverif_block(data))
+    if '<<GATE' in text:
+        raise Refuse(3, 'a <<GATE placeholder would remain after filling')
+    return text, problems
+
+
+def main(argv=None):
+    p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    p.add_argument('--draft', type=Path, required=True)
+    p.add_argument('--gate-out', type=Path, required=True)
+    p.add_argument('--out', type=Path, required=True)
+    p.add_argument('--gate-root', default='evaluation/evidence/e3/gate-run-20261012/')
+    p.add_argument('--write-failures', action='store_true')
+    a = p.parse_args(argv)
+    try:
+        if a.out.resolve() == a.draft.resolve():
+            raise Refuse(3, '--out must differ from --draft')
+        if a.out.exists():
+            raise Refuse(3, f'{a.out} already exists; refusing to overwrite')
+        text, problems = fill(a.draft.read_text(), a.gate_out, a.gate_root, a.write_failures)
+    except Refuse as error:
+        print(str(error), file=sys.stderr)
+        return error.code
+    a.out.write_text(text)
+    others = sorted(set(re.findall(r'<<[A-Z0-9_:-]+>>', text)))
+    print(json.dumps(dict(out=str(a.out), sha256=sha256(a.out), gatePassed=not problems, problems=problems,
+                          remainingManualPlaceholders=others), indent=2))
+    return 0 if not problems else 1
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

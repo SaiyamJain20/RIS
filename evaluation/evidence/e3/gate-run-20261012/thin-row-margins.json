@@ -1,0 +1,264 @@
+{
+ "recovery paper-strict after_intent": {
+  "originalExpiry": 1791768799,
+  "releaseIntent": [
+   1791768771
+  ],
+  "releaseSent": [
+   1791768772
+  ],
+  "sendAttempts": 1,
+  "marginLastSendToExpiry": 27,
+  "expiredRetryTarget": 1791768799,
+  "expiredRetryObserved": 1791768800,
+  "expiredRetryError": "EXPIRED"
+ },
+ "recovery paper-strict after_send": {
+  "originalExpiry": 1791768865,
+  "releaseIntent": [
+   1791768837
+  ],
+  "releaseSent": [
+   1791768837,
+   1791768838
+  ],
+  "sendAttempts": 2,
+  "marginLastSendToExpiry": 27,
+  "expiredRetryTarget": 1791768865,
+  "expiredRetryObserved": 1791768866,
+  "expiredRetryError": "EXPIRED"
+ },
+ "nonce-replay paper-strict": {
+  "grantBlock": 1791769363,
+  "grantExpiry": 1791769393,
+  "grantExpirySource": "paper policyEnf block + 30",
+  "releaseSent": [
+   1791769366
+  ],
+  "replayBlock": 1791769364,
+  "marginReleaseToExpiry": 27,
+  "marginReplayToExpiry": 29
+ },
+ "expired-duty paper-strict": {
+  "classification": "SPEC_GAP",
+  "error": null,
+  "timing": {
+   "consumeTimestamp": "1791772640",
+   "requestExpiresAt": "1791772648",
+   "dutyEnd": "1791772640"
+  },
+  "timeline": {
+   "requestTimestamp": "1791772619",
+   "requestExpiresAt": "1791772648",
+   "consumeTimestamp": "1791772640",
+   "revocationTimestamp": null,
+   "dutyEnd": "1791772640",
+   "decisionExpiresAt": null,
+   "checkpointExpiresAt": []
+  },
+  "expiredStep": null,
+  "firingStep": null,
+  "clock": null
+ },
+ "expiry-boundary paper-strict": {
+  "classification": "SPEC_GAP",
+  "error": null,
+  "timing": {
+   "consumeTimestamp": "1791773263",
+   "requestExpiresAt": "1791773263",
+   "grantExpiresAt": "1791773293"
+  },
+  "timeline": {
+   "requestTimestamp": "1791773234",
+   "requestExpiresAt": "1791773263",
+   "consumeTimestamp": "1791773263",
+   "dbcBefore": "1791773218",
+   "decisionExpiresAt": null,
+   "checkpointExpiresAt": null
+  },
+  "expiredStep": null,
+  "firingStep": null,
+  "clock": {
+   "dbcBefore": "1791773218",
+   "target": "1791773263",
+   "note": "ADVANCE_CLOCK: evm_setNextBlockTimestamp(r.expiresAt) on the DBC only"
+  }
+ },
+ "recovery paper-minimal after_intent": {
+  "originalExpiry": 1791768930,
+  "releaseIntent": [
+   1791768902
+  ],
+  "releaseSent": [
+   1791768903
+  ],
+  "sendAttempts": 1,
+  "marginLastSendToExpiry": 27,
+  "expiredRetryTarget": 1791768930,
+  "expiredRetryObserved": 1791768931,
+  "expiredRetryError": "EXPIRED"
+ },
+ "recovery paper-minimal after_send": {
+  "originalExpiry": 1791768993,
+  "releaseIntent": [
+   1791768965
+  ],
+  "releaseSent": [
+   1791768965,
+   1791768966
+  ],
+  "sendAttempts": 2,
+  "marginLastSendToExpiry": 27,
+  "expiredRetryTarget": 1791768993,
+  "expiredRetryObserved": 1791768994,
+  "expiredRetryError": "EXPIRED"
+ },
+ "nonce-replay paper-minimal": {
+  "grantBlock": 1791769423,
+  "grantExpiry": 1791769453,
+  "grantExpirySource": "paper policyEnf block + 30",
+  "releaseSent": [
+   1791769426
+  ],
+  "replayBlock": 1791769425,
+  "marginReleaseToExpiry": 27,
+  "marginReplayToExpiry": 28
+ },
+ "expired-duty paper-minimal": {
+  "classification": "SPEC_GAP",
+  "error": null,
+  "timing": {
+   "consumeTimestamp": "1791772728",
+   "requestExpiresAt": "1791772735",
+   "dutyEnd": "1791772728"
+  },
+  "timeline": {
+   "requestTimestamp": "1791772706",
+   "requestExpiresAt": "1791772735",
+   "consumeTimestamp": "1791772728",
+   "revocationTimestamp": null,
+   "dutyEnd": "1791772728",
+   "decisionExpiresAt": null,
+   "checkpointExpiresAt": []
+  },
+  "expiredStep": null,
+  "firingStep": null,
+  "clock": null
+ },
+ "expiry-boundary paper-minimal": {
+  "classification": "SPEC_GAP",
+  "error": null,
+  "timing": {
+   "consumeTimestamp": "1791773349",
+   "requestExpiresAt": "1791773349",
+   "grantExpiresAt": "1791773379"
+  },
+  "timeline": {
+   "requestTimestamp": "1791773320",
+   "requestExpiresAt": "1791773349",
+   "consumeTimestamp": "1791773349",
+   "dbcBefore": "1791773302",
+   "decisionExpiresAt": null,
+   "checkpointExpiresAt": null
+  },
+  "expiredStep": null,
+  "firingStep": null,
+  "clock": {
+   "dbcBefore": "1791773302",
+   "target": "1791773349",
+   "note": "ADVANCE_CLOCK: evm_setNextBlockTimestamp(r.expiresAt) on the DBC only"
+  }
+ },
+ "recovery repaired-e after_intent": {
+  "originalExpiry": 1791769054,
+  "releaseIntent": [
+   1791769030
+  ],
+  "releaseSent": [
+   1791769031
+  ],
+  "sendAttempts": 1,
+  "marginLastSendToExpiry": 23,
+  "expiredRetryTarget": 1791769054,
+  "expiredRetryObserved": 1791769055,
+  "expiredRetryError": "EXPIRED"
+ },
+ "recovery repaired-e after_send": {
+  "originalExpiry": 1791769124,
+  "releaseIntent": [
+   1791769100
+  ],
+  "releaseSent": [
+   1791769100,
+   1791769101
+  ],
+  "sendAttempts": 2,
+  "marginLastSendToExpiry": 23,
+  "expiredRetryTarget": 1791769124,
+  "expiredRetryObserved": 1791769125,
+  "expiredRetryError": "EXPIRED"
+ },
+ "nonce-replay repaired-e": {
+  "grantBlock": 1791769486,
+  "grantExpiry": 1791769512,
+  "grantExpirySource": "r.expiresAt = d.expiresAt (public-call)",
+  "releaseSent": [
+   1791769489
+  ],
+  "replayBlock": 1791769487,
+  "marginReleaseToExpiry": 23,
+  "marginReplayToExpiry": 25
+ },
+ "expired-duty repaired-e": {
+  "classification": "REPAIR_SUPPORTED",
+  "error": "EXPIRED",
+  "timing": {
+   "consumeTimestamp": "1791772821",
+   "requestExpiresAt": "1791772828",
+   "decisionExpiresAt": "1791772828",
+   "checkpointExpiresAt": "1791772860",
+   "decisionSequence": "1",
+   "currentSequence": "1",
+   "dutyEnd": "1791772820"
+  },
+  "timeline": {
+   "requestTimestamp": "1791772799",
+   "requestExpiresAt": "1791772828",
+   "consumeTimestamp": "1791772821",
+   "revocationTimestamp": null,
+   "dutyEnd": "1791772820",
+   "decisionExpiresAt": "1791772828",
+   "checkpointExpiresAt": [
+    "1791772860"
+   ]
+  },
+  "expiredStep": 13,
+  "firingStep": null,
+  "clock": null
+ },
+ "expiry-boundary repaired-e": {
+  "classification": "REPAIR_SUPPORTED",
+  "error": "EXPIRED",
+  "timing": {
+   "consumeTimestamp": "1791773444",
+   "requestExpiresAt": "1791773444",
+   "decisionExpiresAt": "1791773444",
+   "checkpointExpiresAt": "1791773475"
+  },
+  "timeline": {
+   "requestTimestamp": "1791773414",
+   "requestExpiresAt": "1791773444",
+   "consumeTimestamp": "1791773444",
+   "dbcBefore": "1791773416",
+   "decisionExpiresAt": "1791773444",
+   "checkpointExpiresAt": "1791773475"
+  },
+  "expiredStep": null,
+  "firingStep": 9,
+  "clock": {
+   "dbcBefore": "1791773416",
+   "target": "1791773444",
+   "note": "ADVANCE_CLOCK: evm_setNextBlockTimestamp(r.expiresAt) on the DBC only"
+  }
+ }
+}

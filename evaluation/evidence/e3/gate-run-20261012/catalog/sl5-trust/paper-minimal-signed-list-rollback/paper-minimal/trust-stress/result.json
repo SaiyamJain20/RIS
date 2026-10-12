@@ -1,0 +1,39 @@
+{
+  "startedAt": "2026-10-12T02:24:38.306938+00:00",
+  "endedAt": "2026-10-12T02:24:46.155171+00:00",
+  "ok": true,
+  "failure": null,
+  "variant": "signed-list-rollback",
+  "delivery": "unknown",
+  "scope": "C-E2 SL5 trust freshness; separate controls, plan ACKs and gate apply",
+  "classification": "SPEC_GAP",
+  "error": null,
+  "outcome": "ACCEPT",
+  "rolledBack": true,
+  "qualification": "paper profiles treat the latest appended list as current: an authorized issuer-scoped admin replaying the older correctly signed CRL removes a revocation; reconstruction specification gap",
+  "workerSteps": [
+    {
+      "step": "baseline",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "INSTALL_NEW_LIST",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "REPLAY_OLD_LIST",
+      "worker": "never-instantiated (verified)"
+    },
+    {
+      "step": "REQUEST_ACCESS",
+      "worker": "never-instantiated (verified)"
+    }
+  ],
+  "timeline": {
+    "installTimestamp": "1791771882",
+    "replayTimestamp": "1791771883",
+    "requestTimestamp": "1791771885",
+    "oldListValidUntil": "1791858271",
+    "newListValidUntil": "1791858277"
+  }
+}
