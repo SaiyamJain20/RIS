@@ -1,0 +1,50 @@
+{
+  "utc": "2026-10-12T10:35:51.205497+00:00",
+  "base": "8e5a6ddadddeac62ea9ade79d8474266452d3b08",
+  "incoming": "691147873fb077322d33a0a8dd14b78764d01f70",
+  "findings": [
+    {
+      "kind": "tested reconstruction evaluator issue",
+      "file": "evaluation/tests/test_e_gate.py",
+      "problem": "gate test hard-coded an allowed rebuilt ProVerif, failing with the exact original frozen binary",
+      "fix": "validate actual binary and frozen or declared-build provenance"
+    },
+    {
+      "kind": "tested reconstruction evaluator issue",
+      "file": "evaluation/e_gate.py",
+      "problem": "version command exit status ignored in tool verification",
+      "fix": "nonzero exit prevents versions ok"
+    },
+    {
+      "kind": "tested reconstruction evaluator issue",
+      "file": "evaluation/e_gate.py",
+      "problem": "tool/model pin mismatches detected after execution; binary drift not checked afterward",
+      "fix": "pre-execution binary/model hash guards and post-execution binary hash"
+    },
+    {
+      "kind": "active documentation inconsistency",
+      "file": "README.md and Agent3 live status",
+      "problem": "current entry points still said44 cases remained and E was not run",
+      "fix": "current qualified solo gate state and separate return review; signed snapshots unchanged"
+    }
+  ],
+  "reviewMode": "single-session review under no-extra-agent instructions",
+  "limitations": [
+    "original check design still correlated; replaying owner reviewers does not make them independent",
+    "no access to omitted raw RPC/private worker DBs, no full fresh two-chain gate rerun",
+    "historical signed source/evidence accepted in its recorded scope; changed runner needs new exact execution recipe/ACKs"
+  ],
+  "sourceDiff": [
+    "README.md",
+    "communication/BOARD.md",
+    "communication/GATES.md",
+    "communication/INTEGRATION.md",
+    "communication/agent-3/HANDOFF.md",
+    "communication/agent-3/STATUS.md",
+    "evaluation/README.md",
+    "evaluation/e_gate.py",
+    "evaluation/tests/test_e_gate.py",
+    "interfaces/README.md"
+  ],
+  "newTestSha256": "841d007deea6646a858c0add4c6cf48cdbcc64e5ddf91541068efea81da32c1e"
+}

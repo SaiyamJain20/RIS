@@ -1,3 +1,11 @@
+**Live status (2026-10-12):** Qualified solo Gate E PASS recorded;56/56 catalog
+rows. Agent3 has returned and pulled the consolidated work. Current review and
+new evaluator fixes are in [return-review evidence](evidence/reviews/returning-agent3-20261012/README.md).
+F0 awaits a separate plan/human go-ahead; G locked. Frozen v1 bytes are unchanged.
+Integrated mutants/window remain NOT RUN; correlated review/symbolic crypto
+limitations remain. All checkpoint counts and pending text below are historical;
+use the live board and return review for current state.
+
 **Current checkpoint (2026-10-09 UTC):** C-E2 subject-substitution pre-release oracle prepared;670 root tests pass on106 stable inputs. No public subject collector or new integrated catalog result.44 comparisons remain; gateE NOT_RUN/F-Glocked. Exact scoped grouped replay reviews read. Next: public collector/fresh controls/recipient checks, complete new plan/FREEZE/both new ACKs before services. See [subject oracle evidence](evidence/e2/subject-oracle-20261009/README.md). Earlier checkpoint prose below is historical.
 
 ## Current checkpoint — actual C-E2 recovery and expiry slice, 2026-10-09 UTC

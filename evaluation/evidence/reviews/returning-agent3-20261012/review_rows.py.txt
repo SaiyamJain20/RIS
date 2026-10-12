@@ -1,0 +1,12 @@
+import pathlib,subprocess,json,hashlib,datetime
+root=pathlib.Path('/home/karma/Documents/RIS');run=root/'.git/ris-review-20261012';pub=root/'evaluation/evidence/e3/gate-run-20261012';rows=[]
+tools=[('early','review_early_rows_evidence.py','catalog'),('subject','review_subject_evidence.py','catalog/sl1-subject'),('relay','review_relay_stress_evidence.py','catalog/sl2-relay'),('audit','review_audit_stress_evidence.py','catalog/sl3-audit'),('receipt','review_receipt_stress_evidence.py','catalog/sl4-receipt'),('trust','review_trust_stress_evidence.py','catalog/sl5-trust'),('barrier','review_barrier_stress_evidence.py','catalog/sl6-barrier'),('destination','review_destination_stress_evidence.py','catalog/sl7-destination')]
+for name,tool,arg in tools:
+ argv=[str(root/'.venv/bin/python'),'-I','-B',str(root/'ledger/tools'/tool),str(pub/arg)]
+ p=subprocess.run(argv,cwd=root,capture_output=True,timeout=120);(run/('rows-'+name+'.stdout')).write_bytes(p.stdout);(run/('rows-'+name+'.stderr')).write_bytes(p.stderr)
+ assert p.returncode==0,(tool,p.returncode,p.stderr.decode()[:900])
+ result=json.loads(p.stdout);n=len(result['rows']);failures=[r for r in result['rows'] if r.get('failures') or r.get('pass') is False];assert not failures,(name,failures)
+ rows.append(dict(tool=tool,toolSha256=hashlib.sha256((root/'ledger/tools'/tool).read_bytes()).hexdigest(),argv=argv,exitCode=p.returncode,rows=n,failures=failures,stdoutSha256=hashlib.sha256(p.stdout).hexdigest(),stderrSha256=hashlib.sha256(p.stderr).hexdigest()))
+assert sum(x['rows'] for x in rows)==56
+(run/'native-row-review-result.json').write_text(json.dumps(dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),rows=rows,totalRows=56,limitations='Re-execution of original owner decoders and checks on the published native data; not a new live run or independent original test design'),indent=2)+'\n')
+print(json.dumps(dict(totalRows=56,rows=[dict(tool=x['tool'],rows=x['rows'],exitCode=x['exitCode']) for x in rows])))

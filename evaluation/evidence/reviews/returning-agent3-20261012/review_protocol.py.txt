@@ -1,0 +1,8 @@
+import subprocess,json,pathlib,hashlib,datetime
+root=pathlib.Path('/home/karma/Documents/RIS');out=root/'.git/ris-review-20261012';script=root/'protocol/evidence/reviews/s2-0022-gate-run/review_gate_run.py.txt'
+argv=[str(root/'.venv/bin/python'),'-I','-B',str(script),str(root/'evaluation/evidence/e3/gate-run-20261012'),str(root),str(out/'protocol-review-scratch')]
+p=subprocess.run(argv,cwd=root,capture_output=True,timeout=240)
+(out/'protocol-evidence-review.stdout').write_bytes(p.stdout);(out/'protocol-evidence-review.stderr').write_bytes(p.stderr);assert p.returncode==0,(p.returncode,p.stderr.decode()[:900])
+r=json.loads(p.stdout);assert r['problems']==[],r['problems']
+s=dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),argv=argv,exitCode=p.returncode,problems=r['problems'],scriptSha256=hashlib.sha256(script.read_bytes()).hexdigest(),stdoutSha256=hashlib.sha256(p.stdout).hexdigest(),stderrSha256=hashlib.sha256(p.stderr).hexdigest(),sections=list(r),scope='Fresh execution of original protocol reviewer on published data; no new live run, raw-token audit or independent original check design')
+(out/'protocol-evidence-review-result.json').write_text(json.dumps(s,indent=2)+'\n');print(json.dumps(s))

@@ -1,0 +1,29 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_gate_plan_hashes_its_evidence_inputs_and_pins_the_declared_proverif_build _
+
+plan = {'adapterMode': 'symbolic', 'aggregation': 'every row runs through evaluation.e2.run_row with its embedded slice plan ...with release and one outcome, registered Bob POLICY_DENIED(9)) and e1._profile refuses the row otherwise.'}, ...}, ...}
+
+    def test_gate_plan_hashes_its_evidence_inputs_and_pins_the_declared_proverif_build(plan):
+        inputs = plan['gateInputs']
+        for path in ('evaluation/models/e/access.pv', 'evaluation/models/e/access_mutant.pv',
+                     'evaluation/evidence/e2/formal-and-hook-review-20261009/positive-final.stdout',
+                     'evaluation/evidence/e2/formal-and-hook-review-20261009/mutant-final.stdout',
+                     'evaluation/evidence/e2/p3-proverif-20261012/access.stdout', 'evaluation/evidence/e2/p3-proverif-20261012/access_mutant.stdout',
+                     'ledger/evidence/p3-mutant-suite-rerun/mutants.json', 'ledger/evidence/p3-mutant-suite-rerun/mutants.txt',
+                     'communication/agent-1/outbox/0080-decision-human-mutant-evidence-scope.md',
+                     'communication/agent-1/outbox/0081-decision-human-window-evidence-p3-closed.md',
+                     'communication/agent-1/outbox/0082-decision-p4-gate-run-report-acks.md'):
+            assert inputs[path] == hashlib.sha256((ROOT/path).read_bytes()).hexdigest(), path
+        assert inputs['ledger/evidence/p3-mutant-suite-rerun/mutants.json'].startswith('60a30adc')
+        tool = plan['proverif']['tool']
+>       assert tool['resolution'] == 'declared-local-build' and tool['sha256'].startswith('bc2cd5ed')
+E       AssertionError: assert ('frozen-path' == 'declared-local-build'
+E         
+E         - declared-local-build
+E         + frozen-path)
+
+evaluation/tests/test_e_gate.py:118: AssertionError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_e_gate.py::test_gate_plan_hashes_its_evidence_inputs_and_pins_the_declared_proverif_build
+1 failed in 2.96s

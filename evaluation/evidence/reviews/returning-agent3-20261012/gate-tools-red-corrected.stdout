@@ -1,0 +1,177 @@
+FFFFFFFF.FFF.                                                            [100%]
+=================================== FAILURES ===================================
+________ test_nonzero_version_command_cannot_mark_tools_verified[forge] ________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-2/test_nonzero_version_command_c0')
+failed = 'forge'
+
+    @pytest.mark.parametrize('failed', ['forge', 'anvil', 'cast', 'solc', 'python', 'python3', 'bash', 'proverif'])
+    def test_nonzero_version_command_cannot_mark_tools_verified(tmp_path, failed):
+        plan, marker = versions_plan(tmp_path, failed)
+        result = e_gate._versions(plan, tmp_path/'output')
+        assert result['tools'][failed]['exitCode'] == 1
+        assert all(row['hashOk'] for row in result['tools'].values())
+>       assert result['ok'] is False
+E       assert True is False
+
+.git/ris-review-20261012/test_gate_tools.py:43: AssertionError
+________ test_nonzero_version_command_cannot_mark_tools_verified[anvil] ________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-2/test_nonzero_version_command_c1')
+failed = 'anvil'
+
+    @pytest.mark.parametrize('failed', ['forge', 'anvil', 'cast', 'solc', 'python', 'python3', 'bash', 'proverif'])
+    def test_nonzero_version_command_cannot_mark_tools_verified(tmp_path, failed):
+        plan, marker = versions_plan(tmp_path, failed)
+        result = e_gate._versions(plan, tmp_path/'output')
+        assert result['tools'][failed]['exitCode'] == 1
+        assert all(row['hashOk'] for row in result['tools'].values())
+>       assert result['ok'] is False
+E       assert True is False
+
+.git/ris-review-20261012/test_gate_tools.py:43: AssertionError
+________ test_nonzero_version_command_cannot_mark_tools_verified[cast] _________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-2/test_nonzero_version_command_c2')
+failed = 'cast'
+
+    @pytest.mark.parametrize('failed', ['forge', 'anvil', 'cast', 'solc', 'python', 'python3', 'bash', 'proverif'])
+    def test_nonzero_version_command_cannot_mark_tools_verified(tmp_path, failed):
+        plan, marker = versions_plan(tmp_path, failed)
+        result = e_gate._versions(plan, tmp_path/'output')
+        assert result['tools'][failed]['exitCode'] == 1
+        assert all(row['hashOk'] for row in result['tools'].values())
+>       assert result['ok'] is False
+E       assert True is False
+
+.git/ris-review-20261012/test_gate_tools.py:43: AssertionError
+________ test_nonzero_version_command_cannot_mark_tools_verified[solc] _________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-2/test_nonzero_version_command_c3')
+failed = 'solc'
+
+    @pytest.mark.parametrize('failed', ['forge', 'anvil', 'cast', 'solc', 'python', 'python3', 'bash', 'proverif'])
+    def test_nonzero_version_command_cannot_mark_tools_verified(tmp_path, failed):
+        plan, marker = versions_plan(tmp_path, failed)
+        result = e_gate._versions(plan, tmp_path/'output')
+        assert result['tools'][failed]['exitCode'] == 1
+        assert all(row['hashOk'] for row in result['tools'].values())
+>       assert result['ok'] is False
+E       assert True is False
+
+.git/ris-review-20261012/test_gate_tools.py:43: AssertionError
+_______ test_nonzero_version_command_cannot_mark_tools_verified[python] ________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-2/test_nonzero_version_command_c4')
+failed = 'python'
+
+    @pytest.mark.parametrize('failed', ['forge', 'anvil', 'cast', 'solc', 'python', 'python3', 'bash', 'proverif'])
+    def test_nonzero_version_command_cannot_mark_tools_verified(tmp_path, failed):
+        plan, marker = versions_plan(tmp_path, failed)
+        result = e_gate._versions(plan, tmp_path/'output')
+        assert result['tools'][failed]['exitCode'] == 1
+        assert all(row['hashOk'] for row in result['tools'].values())
+>       assert result['ok'] is False
+E       assert True is False
+
+.git/ris-review-20261012/test_gate_tools.py:43: AssertionError
+_______ test_nonzero_version_command_cannot_mark_tools_verified[python3] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-2/test_nonzero_version_command_c5')
+failed = 'python3'
+
+    @pytest.mark.parametrize('failed', ['forge', 'anvil', 'cast', 'solc', 'python', 'python3', 'bash', 'proverif'])
+    def test_nonzero_version_command_cannot_mark_tools_verified(tmp_path, failed):
+        plan, marker = versions_plan(tmp_path, failed)
+        result = e_gate._versions(plan, tmp_path/'output')
+        assert result['tools'][failed]['exitCode'] == 1
+        assert all(row['hashOk'] for row in result['tools'].values())
+>       assert result['ok'] is False
+E       assert True is False
+
+.git/ris-review-20261012/test_gate_tools.py:43: AssertionError
+________ test_nonzero_version_command_cannot_mark_tools_verified[bash] _________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-2/test_nonzero_version_command_c6')
+failed = 'bash'
+
+    @pytest.mark.parametrize('failed', ['forge', 'anvil', 'cast', 'solc', 'python', 'python3', 'bash', 'proverif'])
+    def test_nonzero_version_command_cannot_mark_tools_verified(tmp_path, failed):
+        plan, marker = versions_plan(tmp_path, failed)
+        result = e_gate._versions(plan, tmp_path/'output')
+        assert result['tools'][failed]['exitCode'] == 1
+        assert all(row['hashOk'] for row in result['tools'].values())
+>       assert result['ok'] is False
+E       assert True is False
+
+.git/ris-review-20261012/test_gate_tools.py:43: AssertionError
+______ test_nonzero_version_command_cannot_mark_tools_verified[proverif] _______
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-2/test_nonzero_version_command_c7')
+failed = 'proverif'
+
+    @pytest.mark.parametrize('failed', ['forge', 'anvil', 'cast', 'solc', 'python', 'python3', 'bash', 'proverif'])
+    def test_nonzero_version_command_cannot_mark_tools_verified(tmp_path, failed):
+        plan, marker = versions_plan(tmp_path, failed)
+        result = e_gate._versions(plan, tmp_path/'output')
+        assert result['tools'][failed]['exitCode'] == 1
+        assert all(row['hashOk'] for row in result['tools'].values())
+>       assert result['ok'] is False
+E       assert True is False
+
+.git/ris-review-20261012/test_gate_tools.py:43: AssertionError
+___________ test_changed_version_binary_is_refused_before_execution ____________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-2/test_changed_version_binary_is0')
+
+    def test_changed_version_binary_is_refused_before_execution(tmp_path):
+        plan, marker = versions_plan(tmp_path)
+        plan['slices'][0]['plan']['tools']['forge']['sha256'] = '00'*32
+>       with pytest.raises(ValueError, match='hash'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+.git/ris-review-20261012/test_gate_tools.py:55: Failed
+________ test_changed_proverif_input_is_refused_before_execution[tool] _________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-2/test_changed_proverif_input_is0')
+changed = 'tool'
+
+    @pytest.mark.parametrize('changed', ['tool', 'model'])
+    def test_changed_proverif_input_is_refused_before_execution(tmp_path, changed):
+        plan, marker = proverif_plan(tmp_path)
+        if changed == 'tool': plan['proverif']['tool']['sha256'] = '00'*32
+        else: plan['proverif']['models'][0]['sha256'] = '00'*32
+>       with pytest.raises(ValueError, match='hash'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+.git/ris-review-20261012/test_gate_tools.py:79: Failed
+________ test_changed_proverif_input_is_refused_before_execution[model] ________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-2/test_changed_proverif_input_is1')
+changed = 'model'
+
+    @pytest.mark.parametrize('changed', ['tool', 'model'])
+    def test_changed_proverif_input_is_refused_before_execution(tmp_path, changed):
+        plan, marker = proverif_plan(tmp_path)
+        if changed == 'tool': plan['proverif']['tool']['sha256'] = '00'*32
+        else: plan['proverif']['models'][0]['sha256'] = '00'*32
+>       with pytest.raises(ValueError, match='hash'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+.git/ris-review-20261012/test_gate_tools.py:79: Failed
+=========================== short test summary info ============================
+FAILED .git/ris-review-20261012/test_gate_tools.py::test_nonzero_version_command_cannot_mark_tools_verified[forge]
+FAILED .git/ris-review-20261012/test_gate_tools.py::test_nonzero_version_command_cannot_mark_tools_verified[anvil]
+FAILED .git/ris-review-20261012/test_gate_tools.py::test_nonzero_version_command_cannot_mark_tools_verified[cast]
+FAILED .git/ris-review-20261012/test_gate_tools.py::test_nonzero_version_command_cannot_mark_tools_verified[solc]
+FAILED .git/ris-review-20261012/test_gate_tools.py::test_nonzero_version_command_cannot_mark_tools_verified[python]
+FAILED .git/ris-review-20261012/test_gate_tools.py::test_nonzero_version_command_cannot_mark_tools_verified[python3]
+FAILED .git/ris-review-20261012/test_gate_tools.py::test_nonzero_version_command_cannot_mark_tools_verified[bash]
+FAILED .git/ris-review-20261012/test_gate_tools.py::test_nonzero_version_command_cannot_mark_tools_verified[proverif]
+FAILED .git/ris-review-20261012/test_gate_tools.py::test_changed_version_binary_is_refused_before_execution
+FAILED .git/ris-review-20261012/test_gate_tools.py::test_changed_proverif_input_is_refused_before_execution[tool]
+FAILED .git/ris-review-20261012/test_gate_tools.py::test_changed_proverif_input_is_refused_before_execution[model]
+11 failed, 2 passed in 3.71s

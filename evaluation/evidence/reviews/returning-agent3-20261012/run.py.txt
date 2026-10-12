@@ -1,0 +1,5 @@
+import subprocess,json,datetime,time,hashlib,pathlib,sys
+r=pathlib.Path(__file__).parent;label=sys.argv[1];argv=sys.argv[2:];p=r/(label+'.json');assert not p.exists()
+started=datetime.datetime.now(datetime.timezone.utc).isoformat();t=time.monotonic();q=subprocess.run(argv,cwd='/home/karma/Documents/RIS',capture_output=True)
+for n,b in [('stdout',q.stdout),('stderr',q.stderr)]:(r/(label+'.'+n)).write_bytes(b)
+d=dict(argv=argv,cwd='/home/karma/Documents/RIS',startedAt=started,endedAt=datetime.datetime.now(datetime.timezone.utc).isoformat(),elapsedSeconds=time.monotonic()-t,exitCode=q.returncode,stdoutSha256=hashlib.sha256(q.stdout).hexdigest(),stderrSha256=hashlib.sha256(q.stderr).hexdigest());p.write_text(json.dumps(d,indent=2)+'\n');print(json.dumps(d));print(q.stdout.decode()[-5500:]);print(q.stderr.decode()[-1700:])

@@ -1,0 +1,87 @@
+{
+ "reviewer": "agent-1 (ledger scope, solo correlated)",
+ "rows": [
+  {
+   "row": "paper-minimal-signed-list-rollback",
+   "profile": "paper-minimal",
+   "variant": "signed-list-rollback",
+   "installTx": "0xa19b343e32fa784e46aed81b9712bf122d8435100f0afb0999c4dba24d5380f8",
+   "replayTx": "0x588bf58efdd78b4856c8588c32eb14e50f0a6a3fa7c27b631aa31b4d0b05f260",
+   "requestDigest": "0xb4d983924ea0e2a6b90456ea2a3c45f0a0cf3edd588bd248b99e45fd5253608c",
+   "requestAuthEpoch": 5,
+   "oldValidUntil": 1791858271,
+   "replayTimestamp": 1791771883,
+   "requestEvents": [
+    "LogRecorded",
+    "AccessForwarded"
+   ],
+   "failures": [],
+   "pass": true
+  },
+  {
+   "row": "paper-minimal-wrong-issuer",
+   "profile": "paper-minimal",
+   "variant": "wrong-issuer",
+   "stressTx": "0x67a74b020c8d7edb6b52aa5dd558cd5e0d5e7f43f003cf61227fce96e5a5a86a",
+   "rejectionCode": 16,
+   "listVersion": 2,
+   "failures": [],
+   "pass": true
+  },
+  {
+   "row": "paper-strict-signed-list-rollback",
+   "profile": "paper-strict",
+   "variant": "signed-list-rollback",
+   "installTx": "0xd20661f72b211c2a41f7167986c1ef82f0c3575e28442c0859d1382b52d781c8",
+   "replayTx": "0x425dd202927be32d3ca804ccf0b9f03191b4b4f9153448fd5062f1166a6f5899",
+   "requestDigest": "0x9e0204b44c01b66f21bc808be76ba3f761bacd381f444698c1b2858bab16e5a4",
+   "requestAuthEpoch": 5,
+   "oldValidUntil": 1791858196,
+   "replayTimestamp": 1791771812,
+   "requestEvents": [
+    "LogRecorded",
+    "AccessForwarded"
+   ],
+   "failures": [],
+   "pass": true
+  },
+  {
+   "row": "paper-strict-wrong-issuer",
+   "profile": "paper-strict",
+   "variant": "wrong-issuer",
+   "stressTx": "0x355fbd72beb74fb68cff027176de9b441e5f1e79a18fd2b97eceeba27682c4db",
+   "rejectionCode": 16,
+   "listVersion": 2,
+   "failures": [],
+   "pass": true
+  },
+  {
+   "row": "repaired-e-signed-list-rollback",
+   "profile": "repaired-e",
+   "variant": "signed-list-rollback",
+   "rejectionCode": 5,
+   "installTx": "0x739b3d454a700b280f46c882845a3b264632a19b1508d28f7303f2a03d349d1a",
+   "replayTx": "0xb370bed5b0a6491baf32bc36030da4bca594bc08f3a9abd32b5bb8c6c0489538",
+   "requestDigest": "0x2e06b74c938cabf80b37d74e4185a4847fc47e4e994cc909475c227b209cb992",
+   "requestAuthEpoch": 4,
+   "oldValidUntil": 1791858349,
+   "replayTimestamp": 1791771967,
+   "requestEvents": [
+    "LogRecorded",
+    "AccessDenied"
+   ],
+   "failures": [],
+   "pass": true
+  },
+  {
+   "row": "repaired-e-wrong-issuer",
+   "profile": "repaired-e",
+   "variant": "wrong-issuer",
+   "stressTx": "0xafd776768c4f68a21a81b21aeec06e2d6e477c35440a39779dba794f9034779a",
+   "rejectionCode": 16,
+   "listVersion": 2,
+   "failures": [],
+   "pass": true
+  }
+ ]
+}

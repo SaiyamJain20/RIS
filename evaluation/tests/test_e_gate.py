@@ -102,7 +102,7 @@ def test_gate_plan_drops_the_mutant_and_window_stages_by_human_decision(plan):
     assert 'cannot kill' in plan['guardRows']['E01-wrong-destination-repaired-e']['mutant']
 
 
-def test_gate_plan_hashes_its_evidence_inputs_and_pins_the_declared_proverif_build(plan):
+def test_gate_plan_hashes_its_evidence_inputs_and_pins_the_resolved_proverif_build(plan):
     inputs = plan['gateInputs']
     for path in ('evaluation/models/e/access.pv', 'evaluation/models/e/access_mutant.pv',
                  'evaluation/evidence/e2/formal-and-hook-review-20261009/positive-final.stdout',
@@ -115,7 +115,18 @@ def test_gate_plan_hashes_its_evidence_inputs_and_pins_the_declared_proverif_bui
         assert inputs[path] == hashlib.sha256((ROOT/path).read_bytes()).hexdigest(), path
     assert inputs['ledger/evidence/p3-mutant-suite-rerun/mutants.json'].startswith('60a30adc')
     tool = plan['proverif']['tool']
-    assert tool['resolution'] == 'declared-local-build' and tool['sha256'].startswith('bc2cd5ed')
+    frozen = json.loads((ROOT/'evaluation/toolchain.json').read_text())['proverif']
+    assert tool['frozenSha256'] == frozen['binarySha256']
+    assert tool['sha256'] == hashlib.sha256(Path(tool['path']).read_bytes()).hexdigest()
+    if tool['sha256'] == frozen['binarySha256']:
+        assert tool['resolution'] in ('frozen-path', 'host-override')
+        assert tool['declaredLocalBuild'] is None
+    else:
+        assert tool['resolution'] == 'declared-local-build'
+        declared = tool['declaredLocalBuild']
+        assert declared['sha256'] == tool['sha256']
+        assert declared['version'] == frozen['version']
+        assert declared['sourceSha256'] == frozen['sourceSha256']
     expected = {Path(m['model']).name: m['expectedVerdicts'] for m in plan['proverif']['models']}
     assert expected == {'access.pv': ['true', 'true', 'true', 'false', 'true'],
                         'access_mutant.pv': ['false', 'false', 'true', 'false', 'true']}

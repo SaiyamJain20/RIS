@@ -1,25 +1,15 @@
-**Current checkpoint (2026-10-09 UTC):** Subject routing/completion checker prepared;
-fresh777 root tests pass with190 inputs stable. Pure synthetic checks only: no
-live subject release/completion or complete case.44 comparisons remain; gateE
-NOT_RUN/F-Glocked. Next public completion collector, separate fresh controls,
-full revised plan and both exact peer ACKs before services. See
-[checker evidence](evaluation/evidence/e2/subject-completion-oracle-20261009/README.md).
-Earlier checkpoint prose below is historical.
-
-**Current checkpoint (2026-10-09 UTC):** Subject pre-release collector implemented;
-fresh690 root tests pass with124 inputs stable. No live subject release/completion
-or complete case result.44 comparisons remain; gateE NOT_RUN/F-Glocked. Next:
-recipient routing, separate fresh controls, complete revised plan and both exact
-peer ACKs. See [collector evidence](evaluation/evidence/e2/subject-collector-20261009/README.md).
-Earlier checkpoint prose below is historical.
-
-**Current checkpoint (2026-10-09 UTC):** Agent 1 found an evaluator error: WRONG_SUBJECT is code2, not3. Oracle and synthetic fixture corrected; regression RED2→GREEN71 and fresh670 root tests pass on106 stable inputs. No new live subject result or gate;44 comparisons remain, gateE NOT_RUN/F-Glocked. Next: public subject collector, complete revised plan and both exact peer ACKs before services. See [correction evidence](evaluation/evidence/e2/subject-code-fix-20261009/README.md). Earlier prose below is historical.
-
 # HMBC: access security, Byzantine operators, and key lifecycle
 
-**Current checkpoint (2026-10-09 UTC):** E0 closed/C-E1 complete; E2/E3 active. Grouped historical replay collector implemented;599 tests pass. A3-0044 complete plan awaits both exact peer ACKs before services. No new live timing/repaired release result; prior expiry failure retained.45 catalog comparisons remain; gateE NOT_RUN/F/G locked. See [the live board](communication/BOARD.md) and [runner evidence](evaluation/evidence/e2/grouped-replay-runner-20261009/README.md).
+**Current status (2026-10-12):** Gate E has a qualified solo-phase PASS, with56/56
+catalog rows in the published run. Agent3 has pulled the consolidated Agent1 work
+and reviewed the artifact hashes, historical source bracket, ACKs and native data.
+F0 is waiting for its own plan and the human go-ahead; G stays locked.
+The integrated mutant matrix and integrated revocation-window measurement were
+not run; correlated proxy review and symbolic crypto remain stated limitations.
+See [the live board](communication/BOARD.md), [the signed RQ1 report](evaluation/reports/RQ1-E.md)
+and [the returning review](evaluation/evidence/reviews/returning-agent3-20261012/README.md).
 
-**Selected scope:** directions **E, F and G**, using **HMBC2020 only**, in this confirmed checkout. This is a paper-derived reconstruction with synthetic fixtures and symbolic E cryptography. Frozen v1 bytes and exact E0 mapping ACKs are retained; all RQ gates remain NOT_RUN.
+**Selected scope:** directions **E, F and G**, using **HMBC2020 only**, in this confirmed checkout. This is a paper-derived reconstruction with synthetic fixtures and symbolic E cryptography. Frozen v1 bytes and exact E0 mapping ACKs are retained; E has the qualified recorded PASS, while F/G remain NOT_RUN.
 
 **Order: E → F → G.** All three agents complete one research question together, integrate their modules, and close its evidence gate before starting the next. The first deliverable is a complete answer to **RQ1/E**, not three unfinished prototypes.
 

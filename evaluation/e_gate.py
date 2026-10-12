@@ -311,6 +311,8 @@ def _versions(plan, output):
     rows = {}
     for name, args in VERSION_ARGS:
         tool = tools[name]; log = Path(output)/'versions'/(name+'.txt')
+        require(Path(tool['path']).is_file() and sha256(tool['path']) == tool['sha256'],
+                'version command binary hash: '+name)
         row = record_command([tool['path'], *args], ROOT, log, timeout=30, env=plan['proverif']['environment'])
         lines = log.read_text(errors='replace').strip().splitlines()
         rows[name] = dict(path=tool['path'], sha256=tool['sha256'], hashOk=Path(tool['path']).is_file() and sha256(tool['path']) == tool['sha256'],
@@ -318,15 +320,21 @@ def _versions(plan, output):
     sub = plan['slices'][0]['plan']
     return dict(recordedAt=now(), tools=rows, pythonVersion=platform.python_version(), plannedPythonVersion=sub['pythonVersion'],
                 hostDifferences=sub.get('hostDifferences'), packagePins=sub['packagePins'], hostToolOverride=sub.get('hostToolOverride'),
-                ok=all(r['hashOk'] for r in rows.values()) and platform.python_version() == sub['pythonVersion'])
+                ok=all(r['hashOk'] and r['exitCode'] == 0 for r in rows.values())
+                   and platform.python_version() == sub['pythonVersion'])
 
 
 def run_proverif(plan, output):
     """Stage 6: both models with the pinned build; verdicts and stdout bytes compared with A3-0033 and p3-proverif-20261012."""
     pv = plan['proverif']; folder = Path(output)/'proverif'; folder.mkdir(parents=True, exist_ok=True)
     tool = pv['tool']; tool_ok = Path(tool['path']).is_file() and sha256(tool['path']) == tool['sha256']
+    require(tool_ok, 'ProVerif binary hash before execution')
     runs = {}
     for model in pv['models']:
+        require(Path(tool['path']).is_file() and sha256(tool['path']) == tool['sha256'],
+                'ProVerif binary hash before execution')
+        require((ROOT/model['model']).is_file() and sha256(ROOT/model['model']) == model['sha256'],
+                'ProVerif model hash before execution')
         name = Path(model['model']).stem; argv = [tool['path'], model['model']]
         started = now(); began = time.monotonic(); timed_out = False
         try:
@@ -344,6 +352,7 @@ def run_proverif(plan, output):
             references[label] = dict(path=ref['path'], sha256=ref['sha256'], referenceUnchanged=unchanged,
                                      fullOutputIdentical=unchanged and digest == ref['sha256'])
         model_ok = sha256(ROOT/model['model']) == model['sha256']
+        tool_ok = tool_ok and Path(tool['path']).is_file() and sha256(tool['path']) == tool['sha256']
         matched = (tool_ok and model_ok and not timed_out and code == 0 and not err and 'cannot be proved' not in text
                    and verdicts == model['expectedVerdicts'] and all(r['fullOutputIdentical'] for r in references.values()))
         runs[name] = dict(model=model['model'], modelSha256=model['sha256'], modelUnchanged=model_ok, argv=argv, cwd=str(ROOT),

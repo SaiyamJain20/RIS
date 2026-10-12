@@ -1,3 +1,11 @@
+**Live status (2026-10-12):** Qualified solo Gate E PASS recorded;56/56 catalog
+rows. Agent3 has returned and pulled the consolidated work. Current review and
+new evaluator fixes are in [return-review evidence](../evaluation/evidence/reviews/returning-agent3-20261012/README.md).
+F0 awaits a separate plan/human go-ahead; G locked. Frozen v1 bytes are unchanged.
+Integrated mutants/window remain NOT RUN; correlated review/symbolic crypto
+limitations remain. All checkpoint counts and pending text below are historical;
+use the live board and return review for current state.
+
 **Current C-E1 checkpoint (2026-10-08 UTC /2026-10-09 IST):** actual fresh two-chain/service controls pass 9/9 in all three profiles after exact A1-0038/A2-0019 plan ACKs. C-E1 complete; A3-0029 released; no active services. E2/E3 now permitted within E; every RQ gate remains NOT_RUN; F/G locked. Frozen v1 bytes are unchanged. Evidence: [integrated-controls-20261008](../evaluation/evidence/e1/integrated-controls-20261008/README.md). Earlier runtime status below is historical.
 
 # Cross-module contract v1

@@ -1,0 +1,44 @@
+{
+  "selected": 2112,
+  "runWrapperFiles": 4,
+  "rows": 56,
+  "resultFiles": {
+    "total": 376,
+    "published": 264,
+    "reconstructedFromOwnerGit": 112
+  },
+  "historicalBracketGitBlobs": 4047,
+  "executionAcks": {
+    "agent-1": {
+      "commit": "21b37fbaf569ef37ddd679f0f1db1891fd8db75d",
+      "path": "communication/agent-1/outbox/0083-ack-e-gate-run-freeze.md",
+      "sha256": "56ea6662b29cffda07d75794f577f09594ba22efe15231c26a6d32b20f36a19e",
+      "messageId": "A1-0083"
+    },
+    "agent-2": {
+      "commit": "21b37fbaf569ef37ddd679f0f1db1891fd8db75d",
+      "path": "communication/agent-1/solo/agent-2-proxy/outbox/0021-ack-e-gate-run-freeze.md",
+      "sha256": "43a6e4c02eec2b5af31201ec7fb559bc0961024c22c611e3ea8329e24869e0aa",
+      "messageId": "S2-0021"
+    },
+    "freeze": {
+      "commit": "21b37fbaf569ef37ddd679f0f1db1891fd8db75d",
+      "path": "communication/agent-1/solo/agent-3-proxy/outbox/0021-freeze-e-gate-run.md",
+      "sha256": "dcb8c72a70462aa51f7cd46d9e19518388c89b3af71eeae03561002828ecf682",
+      "messageId": "S3-0021"
+    }
+  },
+  "sameSourceAcks": [
+    "communication/agent-1/outbox/0085-ack-gate-result-e.md",
+    "communication/agent-1/solo/agent-2-proxy/outbox/0023-ack-gate-result-e.md",
+    "communication/agent-1/solo/agent-3-proxy/outbox/0024-ack-gate-result-e.md"
+  ],
+  "frozenInterface": "UNCHANGED",
+  "limitations": [
+    "Public evidence consistency review, not a new live two-chain gate run",
+    "112 omitted ABI records reconstructed from pinned blobs; other raw RPC/snapshots/private worker state unavailable",
+    "Proxy ACKs remain correlated; existing human mutant/window scope unchanged",
+    "Report bytes frozen; stale report adjudication prose handled via separate review note"
+  ],
+  "utc": "2026-10-12T10:22:19.408237+00:00"
+}

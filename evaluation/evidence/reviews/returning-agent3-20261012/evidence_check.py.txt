@@ -1,0 +1,57 @@
+import sys,json,hashlib,subprocess,datetime,io
+from pathlib import Path
+sys.path.insert(0,'/home/karma/Documents/RIS')
+from evaluation import e_gate,e1
+root=Path('/home/karma/Documents/RIS');out=root/'.git/ris-review-20261012';gate=root/'evaluation/evidence/e3/gate-run-20261012'
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def git(*a):return subprocess.check_output(['git',*a],cwd=root)
+manifest=json.loads((gate/'manifest.json').read_text());coverage=json.loads((gate/'catalog-coverage-56.json').read_text());selection=json.loads((gate/'selected-manifest.json').read_text())
+checks={}
+for section in ['selected','runWrapperFiles']:
+ for p,d in selection[section].items():assert sha(gate/p)==d,('selected artifact',p)
+ checks[section]=len(selection[section])
+assert manifest['status']=='PASS' and manifest['failure'] is None
+assert coverage['counts']==dict(PASS=56,FAILED=0,NOT_RUN=0,RUNNING=0)
+assert len(manifest['rows'])==56==len(coverage['rows'])
+catalog=e_gate._catalog();assert set(catalog)==set(r['caseId'] for r in coverage['rows'])
+for row in coverage['rows']:
+ case=catalog[row['caseId']];assert row['expected']==case['expected'];assert row['profile']==case['profile'];assert row['status']=='PASS'
+ for p in row['proofFiles']:
+  rel=p.removeprefix('run:');assert (gate/rel).is_file(),rel
+  data=json.loads((gate/rel).read_text());assert data['ok'] is True,rel
+  if 'delivery' in data:assert data['delivery']=='unknown',rel
+ if row['caseId'] in e_gate.D47_ROWS:assert row['label']==e_gate.D47_LABEL and row['expected']['classification']=='BLOCKED'
+checks['rows']=56
+omitted=[]
+for p,d in manifest['resultFiles'].items():
+ if (gate/p).is_file():assert sha(gate/p)==d,('run result hash',p)
+ else:
+  assert p.endswith('/abi/manifest.json') and '/snapshots/' in p,p
+  d1=hashlib.sha256(git('show','933d2a7:ledger/exports/abi/manifest.json')).hexdigest();d2=hashlib.sha256(git('show','0716a8e:protocol/abi/manifest.json')).hexdigest();assert d==d1==d2,p;omitted.append(p)
+checks['resultFiles']=dict(total=len(manifest['resultFiles']),published=len(manifest['resultFiles'])-len(omitted),reconstructedFromOwnerGit=len(omitted))
+pre=json.loads((gate/'bracket-pre.json').read_text());post=json.loads((gate/'bracket-post.json').read_text())
+for k in ['counts','aggregates','agent3Sources','gateInputs','broad']:assert pre[k]==post[k],k
+runhead=manifest['worktree']['pre']['head'];assert runhead==manifest['worktree']['post']['head'];assert manifest['worktree']['pre']['status']==manifest['worktree']['post']['status']==[]
+# Batch Git blob reads avoid trusting the current branch or file mtimes.
+entries={**pre['broad'],**pre['agent3Sources'],**pre['gateInputs']}
+queries=''.join(runhead+':'+p+'\n' for p in entries).encode()
+raw=git('cat-file','--batch') if False else subprocess.check_output(['git','cat-file','--batch'],input=queries,cwd=root)
+stream=io.BytesIO(raw)
+for path,d in entries.items():
+ head=stream.readline().decode().strip().split();assert len(head)==3 and head[1]=='blob',path
+ b=stream.read(int(head[2]));assert stream.read(1)==b'\n';assert hashlib.sha256(b).hexdigest()==d,('historical source bracket',path)
+checks['historicalBracketGitBlobs']=len(entries)
+planpath=root/'evaluation/evidence/e3/gate-plan-20261012/integration-plan.json';plan=json.loads(planpath.read_text());assert sha(planpath)==manifest['planSha256']
+acks=e1._acks(gate/'acks.json',plan,manifest['planSha256']);assert acks==manifest['acks'];checks['executionAcks']=acks
+expected={'manifest.json':'908fd6156ac5c6c4f640686fbddade3f9720cf29fb1e579f7c3d01f0909205a2','gate-evidence.json':'47e38dd369ce686d5298f909c43c79cdf4b7eff4d20d41988a57f80974538500'}
+for p,d in expected.items():assert sha(gate/p)==d
+report=root/'evaluation/reports/RQ1-E.md';rd=sha(report);assert rd=='69dabfbab9d9deeb0d94b448da6bf9b9674ce25c7c94e1b101f67c4804c89b8f'
+reporthead='871e218e45d7ff8c7850ac1936569f047154e77c' if False else git('rev-parse','871e218').decode().strip()
+ackpaths=['communication/agent-1/outbox/0085-ack-gate-result-e.md','communication/agent-1/solo/agent-2-proxy/outbox/0023-ack-gate-result-e.md','communication/agent-1/solo/agent-3-proxy/outbox/0024-ack-gate-result-e.md']
+for p in ackpaths:
+ data=(root/p).read_text();assert '\nType: ACK\n' in data
+ for v in [*expected.values(),rd,reporthead]:assert v in data,(p,v)
+ commit=git('log','-1','--format=%H','HEAD','--',p).decode().strip();assert subprocess.run(['git','merge-base','--is-ancestor',reporthead,commit],cwd=root).returncode==0
+checks['sameSourceAcks']=ackpaths;checks['frozenInterface']=e_gate.verify_freeze()['status'];assert checks['frozenInterface']=='UNCHANGED'
+checks['limitations']=['Public evidence consistency review, not a new live two-chain gate run','112 omitted ABI records reconstructed from pinned blobs; other raw RPC/snapshots/private worker state unavailable','Proxy ACKs remain correlated; existing human mutant/window scope unchanged','Report bytes frozen; stale report adjudication prose handled via separate review note']
+checks['utc']=datetime.datetime.now(datetime.timezone.utc).isoformat();(out/'evidence-check-result.json').write_text(json.dumps(checks,indent=2)+'\n');print(json.dumps({k:v for k,v in checks.items() if k not in ['executionAcks','sameSourceAcks']}))

@@ -1,0 +1,20 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+__________ test_proverif_binary_change_during_execution_cannot_match ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-4/test_proverif_binary_change_du0')
+
+    def test_proverif_binary_change_during_execution_cannot_match(tmp_path):
+        plan, _ = proverif_plan(tmp_path)
+        path = tmp_path/'proverif'
+        source = ('from pathlib import Path; Path('+repr(str(path))+').write_text("changed binary"); '
+                  'print("RESULT event(Grant()) is true.")')
+        plan['proverif']['tool'] = executable(path, source)
+        result = e_gate.run_proverif(plan, tmp_path/'output')
+>       assert result['matched'] is False and result['tool']['hashOk'] is False
+E       assert (True is False)
+
+evaluation/tests/test_e_gate_tools.py:97: AssertionError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_e_gate_tools.py::test_proverif_binary_change_during_execution_cannot_match
+1 failed in 0.52s

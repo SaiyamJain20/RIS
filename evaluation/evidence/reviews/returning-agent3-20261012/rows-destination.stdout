@@ -1,0 +1,89 @@
+{
+ "reviewer": "agent-1 (ledger scope, solo correlated)",
+ "rows": [
+  {
+   "row": "paper-minimal-expiry-boundary",
+   "profile": "paper-minimal",
+   "variant": "expiry-boundary",
+   "requestDigest": "0x8d1f887ff42c78a403d060cc5e9605408b49e09794b387515ff490521152d943",
+   "stressTx": "0x27e0a7d29cc20d9adc87c57e5d168ca52c7d2cd05580a696eb0640c0fee9b012",
+   "consumeTimestamp": 1791773349,
+   "requestExpiresAt": 1791773349,
+   "failures": [],
+   "pass": true
+  },
+  {
+   "row": "paper-minimal-wrong-destination",
+   "profile": "paper-minimal",
+   "variant": "wrong-destination",
+   "requestDigest": "0xd6a2826d67b73dfaa5fbd9da68ea702c08fed05bb8e19f3fd66e46bfc64e08fe",
+   "bPsc": "0xbc8a9d0dde8121518c2ae861fa22948baae55818",
+   "aPsc": "0xd5eeb09599e4bb84d454698824481d7b85775db4",
+   "bKssc": "0xe7f3222760172e50bc53578b80292611a10963f3",
+   "aKssc": "0xf6c552e258d721484e786c2bba7ad7d7f16a1fb6",
+   "stressTx": "0x24856cd7403b7184de6b007e3958168548c1b3d95ed7d1aee6748985bb02cac1",
+   "consumeTimestamp": 1791773031,
+   "failures": [],
+   "pass": true
+  },
+  {
+   "row": "paper-strict-expiry-boundary",
+   "profile": "paper-strict",
+   "variant": "expiry-boundary",
+   "requestDigest": "0x9cef130eac2aaf5529545ec9c910801cef92c9f16a7d16af82f7e84afd904e8c",
+   "stressTx": "0x5869dd9e843ae8ce44413b001204545d9f85709d9fff3437c318954e9416cd59",
+   "consumeTimestamp": 1791773263,
+   "requestExpiresAt": 1791773263,
+   "failures": [],
+   "pass": true
+  },
+  {
+   "row": "paper-strict-wrong-destination",
+   "profile": "paper-strict",
+   "variant": "wrong-destination",
+   "requestDigest": "0xa6d38a8891540fa60696281fb36cd5ddb70af19963f1624ce3fece00a3b3b4bc",
+   "bPsc": "0xbc8a9d0dde8121518c2ae861fa22948baae55818",
+   "aPsc": "0xd5eeb09599e4bb84d454698824481d7b85775db4",
+   "bKssc": "0xe7f3222760172e50bc53578b80292611a10963f3",
+   "aKssc": "0xf6c552e258d721484e786c2bba7ad7d7f16a1fb6",
+   "stressTx": "0x1249b0a80e31ceeddade14efd410722d71a86e56d1a1659e82ca1931b33b220c",
+   "consumeTimestamp": 1791772918,
+   "failures": [],
+   "pass": true
+  },
+  {
+   "row": "repaired-e-expiry-boundary",
+   "profile": "repaired-e",
+   "variant": "expiry-boundary",
+   "requestDigest": "0x20307cb0d38eeef0a357b09914430c1f207765ae1753d25096603554577a3e3b",
+   "stressTx": "0x1d44228eac55a7c2d01c20af9030b4713c5e7155ad112eb8f965cfe3c223742a",
+   "consumeTimestamp": 1791773444,
+   "requestExpiresAt": 1791773444,
+   "dvFirstFailure": "step9-expired",
+   "decisionExpiresAt": 1791773444,
+   "checkpointExpiresAt": 1791773475,
+   "failures": [],
+   "pass": true
+  },
+  {
+   "row": "repaired-e-wrong-destination",
+   "profile": "repaired-e",
+   "variant": "wrong-destination",
+   "requestDigest": "0x645c7eb490a424caaec12110f5b1757ea554475ac7fdf4b30c93d055dd114eff",
+   "bPsc": "0xbc8a9d0dde8121518c2ae861fa22948baae55818",
+   "aPsc": "0xd5eeb09599e4bb84d454698824481d7b85775db4",
+   "bKssc": "0xe51ef867d3300c8e89dfb234dc0c986c5c188903",
+   "aKssc": "0x0c3ced2bfd14f52783701e953b3784dc210d09e3",
+   "stressTx": "0x7176db4e5b74ffb42273406387fc0023a853338cee16cc46ecd6440a3e330edd",
+   "consumeTimestamp": 1791773152,
+   "dvFirstFailure": "step1-source",
+   "step2Mismatch": true,
+   "signersUnderBDomain": [
+    "0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42"
+   ],
+   "signerUnderADomainIsWitness": false,
+   "failures": [],
+   "pass": true
+  }
+ ]
+}

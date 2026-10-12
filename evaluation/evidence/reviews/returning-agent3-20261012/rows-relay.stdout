@@ -1,0 +1,129 @@
+{
+ "reviewer": "agent-1 (ledger scope, solo correlated)",
+ "rows": [
+  {
+   "row": "paper-minimal-forged-tuple",
+   "profile": "paper-minimal",
+   "variant": "forged-tuple",
+   "stressTx": "0xd0fc0038a14e7c34b6ad75ac06b106ebdfa1ecd8d24526a651fcb0c6e3a2d3e3",
+   "stressBlockTimestamp": 1791769964,
+   "reference": "0x558f49ebe4f697376aaf4e2b4b20bba2b43588cdc3fa991dfdfddad15e8faad9",
+   "pbcRequests": 0,
+   "grant": {
+    "grantId": "0xff3c4709022618d425342d7127f34a0eb776a9d680aaf4725b24085207fac048",
+    "expiresAt": 1791769994,
+    "blockTimestamp": 1791769964
+   },
+   "failures": [],
+   "pass": true
+  },
+  {
+   "row": "paper-minimal-new-reference-replay",
+   "profile": "paper-minimal",
+   "variant": "new-reference-replay",
+   "stressTx": "0x57e29ece6340803d1d31fea4e39990a274eaf04c6992e69dfd551f2d054d8c7e",
+   "stressBlockTimestamp": 1791770243,
+   "originalRef": "0xf02ecfbfb4e70f6565ab9b3ee9001890504ca51a4d0f912bb2b7cf26b7294230",
+   "replayRef": "0x4897e539419c898bac9b85322772fd12bde2e8afbf5a1dc5292f5810e896bd71",
+   "originalGrant": {
+    "grantId": "0xfe9dfd5745d939f116b6061f3ea78c93c9922324b70590ccf1d31604ebc2cc2e",
+    "expiresAt": 1791770272,
+    "blockTimestamp": 1791770242
+   },
+   "replayGrant": {
+    "grantId": "0x1bf1f8ad3dfffebec88f6262cc26752a1e526b5eb9e445012c60f54f4d108d83",
+    "expiresAt": 1791770273,
+    "blockTimestamp": 1791770243
+   },
+   "failures": [],
+   "pass": true
+  },
+  {
+   "row": "paper-strict-forged-tuple",
+   "profile": "paper-strict",
+   "variant": "forged-tuple",
+   "stressTx": "0xc4952631c380a7571d7367336558856863fc4c6a77f994afd0a7679d135300dd",
+   "stressBlockTimestamp": 1791769879,
+   "reference": "0x558f49ebe4f697376aaf4e2b4b20bba2b43588cdc3fa991dfdfddad15e8faad9",
+   "pbcRequests": 0,
+   "grant": {
+    "grantId": "0xff3c4709022618d425342d7127f34a0eb776a9d680aaf4725b24085207fac048",
+    "expiresAt": 1791769909,
+    "blockTimestamp": 1791769879
+   },
+   "failures": [],
+   "pass": true
+  },
+  {
+   "row": "paper-strict-new-reference-replay",
+   "profile": "paper-strict",
+   "variant": "new-reference-replay",
+   "stressTx": "0x0d03a51366752349653f64abb4fddc4a383ca8e29f4b7b20ead597178ab77e4e",
+   "stressBlockTimestamp": 1791770153,
+   "originalRef": "0x103c70f9509bfe7a0d69575a80533242da05faa303b84ee64a8f5806c1395524",
+   "replayRef": "0x4897e539419c898bac9b85322772fd12bde2e8afbf5a1dc5292f5810e896bd71",
+   "originalGrant": {
+    "grantId": "0x4967d9ff3870ea1e7e76427123e0236c00fde7a3038eb5e45f7c876836aa10b8",
+    "expiresAt": 1791770181,
+    "blockTimestamp": 1791770151
+   },
+   "replayGrant": {
+    "grantId": "0x1bf1f8ad3dfffebec88f6262cc26752a1e526b5eb9e445012c60f54f4d108d83",
+    "expiresAt": 1791770183,
+    "blockTimestamp": 1791770153
+   },
+   "failures": [],
+   "pass": true
+  },
+  {
+   "row": "repaired-e-forged-tuple",
+   "profile": "repaired-e",
+   "variant": "forged-tuple",
+   "stressTx": "0xf17176fb7b2beff0ae5b841b9ca3bd9d268c228afab623ff7c7dd475fb02e5ba",
+   "stressBlockTimestamp": 1791770063,
+   "requestDigest": "0x1ce87f4f068f70bdddc23dcd49f71f782d954902ed17120dac650b454cfd542e",
+   "decisionDigest": "0x8cbb06e78e2b81332a0815421759db2048778a592ae46bd5a25bc11c4003118d",
+   "minedSigner": "0x3df38017505bb45d1d4c77065e09aa9175a67c48",
+   "honestSigner": "0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42",
+   "witnesses": [
+    "0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42"
+   ],
+   "rejectionCode": 1,
+   "realPbcRequest": true,
+   "failures": [],
+   "pass": true
+  },
+  {
+   "row": "repaired-e-new-reference-replay",
+   "profile": "repaired-e",
+   "variant": "new-reference-replay",
+   "stressTx": "0x5a14d72e5a61c6d5c6dad0c532e6eaab5ed037c11e9b9e3e0844a60f1e28e3b5",
+   "stressBlockTimestamp": 1791770343,
+   "requestDigest": "0x504d2178aec967a20e495ba4366f5d96fd04d49350f40dba1a10ddd61708ecf1",
+   "grantId": "0x1cc5b68217b065ff699e156bb0982d72804260737c5508a94d63f0383512808e",
+   "rejectionCode": 8,
+   "failures": [],
+   "pass": true
+  },
+  {
+   "row": "repaired-e-same-nonce-distinct-digests",
+   "profile": "repaired-e",
+   "variant": "same-nonce-distinct-digests",
+   "stressTx": "0x9e77b02a82194578f96ca7c71cc815b1bd65e5e158bfcb9e538f044a1d4ce2ea",
+   "stressBlockTimestamp": 1791770441,
+   "digests": [
+    "0xb92f72980e52df5eb57e159f5b21bad9aac74ffaf9ae41de2614695e0894f39e",
+    "0xd2a42a2c0a19bbac42cc24d1e8cdffe41c60bb540956a39868297efffda1971c"
+   ],
+   "grantIds": [
+    "0xd39533229b780d58403162a748a181bf30e565e8e0dc2f459f5f7d57a4c2e7ac",
+    "0x17fbbef7def10e5dcd342e3800953e708496a6d9190faae808a4862e94f02105"
+   ],
+   "rejectionCode": 8,
+   "secondExpiry": 1791770464,
+   "marginSeconds": 23,
+   "failures": [],
+   "pass": true
+  }
+ ]
+}

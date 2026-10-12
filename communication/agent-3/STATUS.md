@@ -1,3 +1,54 @@
+## Return review completed — 2026-10-12
+
+State: WAITING at F0 for its separate plan/human go-ahead; return review/fixes
+complete. Final evaluator1658 PASS/exit0/447.11s,6272 suite inputs unchanged;
+protocol1375 PASS/201 deliberate evaluator-type SKIP/exit0, fixtures stopped;
+ledger suite and existing owner mutant checker exit0; protocol exports9 match.
+Published gate artifact/source/ACK audits and all56 native-row checks pass;
+protocol public-evidence reviewer reports0 problems. Signed report/manifest/
+criteria and frozen interface unchanged. No fresh full live gate rerun.
+
+Agent3 accepts the recorded qualified solo E closure in its original pinned
+scope, with correlated review, human-scoped criterion4/window and all stated
+UNPROVED/NOT_RUN limits retained. This review is not a substitute Agent2 ACK.
+New evaluator guards/test fixes have fresh unit/regression proof; future live
+execution needs revised source/tool plan and both exact affected ACKs.
+See evaluation/evidence/reviews/returning-agent3-20261012/README.md and A3-0050.
+Only reviewed owned checkpoint on agent-3; no main push/F implementation.
+
+## Agent 3 return review — 2026-10-12
+
+Human request: pull all changes, gather context, verify and fix issues. Agent3
+fast-forwarded8e5a6dd to consolidated6911478 on agent-3. A1-0086/S3-0023 and
+A1-0080..0082 reviewed. Gate E remains the recorded **qualified solo-phase PASS**
+for the original pinned report/source; board stays F0, F not started, G locked.
+Integrated mutant matrix and integrated revocation-window measurement remain
+NOT RUN under the recorded human scope. Four paper crash properties remain
+frozen BLOCKED / decided SPEC_GAP, UNPROVED (D47); symbolic crypto/delivery unknown.
+
+Fresh review verifies2112 selected gate artifacts +4 wrapper files,376 result
+hashes (264 published/112 ABI blobs reconstructed),4047 historical source blobs,
+all56 catalog entries/proofs and exact execution/same-source ACKs. All8 original
+native review tools pass56/56 on the published data; original protocol reviewer
+reports no problems. This is published-data verification, not a new live gate run
+or access to omitted raw RPC/private worker databases. Frozen v1/archive and
+pinned ledger/protocol production bytes remain unchanged.
+
+Found and fixed owned evaluator issues: a gate test assumed only Agent1's rebuilt
+ProVerif, version commands could fail while being marked verified, and ProVerif
+binary/model pins were checked after execution (binary drift could also pass).
+Baseline1643 PASS/1 FAIL, new probes RED11 and driftRED1; targetedGREEN15.
+Historical gate version commands all exited0 with matching hashes; no recorded
+row or report claim was changed. New evaluator source needs a revised exact plan
+and affected ACKs before any future integrated service run.
+
+Verification/publication details and final results:
+evaluation/evidence/reviews/returning-agent3-20261012/README.md.
+No automatic F work or main push. Original Agent2 review still remains distinct
+from its correlated proxy reviews. Preexisting scheduled-runs remains untouched.
+
+## Previous records
+
 ## Current checkpoint — subject completion checker prepared, 2026-10-09 UTC
 
 C-E2 WORKING. Added independent paper-profile routing/completion checker:
