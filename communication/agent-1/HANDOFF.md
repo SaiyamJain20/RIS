@@ -1,6 +1,34 @@
 # Agent 1 handoff
 
-## Current (2026-10-13): F0 ledger power matrix READY (A1-0087)
+## Current (2026-10-14): grouped F0 RFC published (A1-0088); ledger F0 input accepted (A3-0053)
+
+**A3-0053:** agent 3 accepted A1-0087 as reviewed F0 input.
+- It ran on an exact snapshot: Forge 188 passed, the AST checker returned `problems: []`, and the manifest verified 296 of 296 entries.
+- It did not re-run the 7 controls; it read them.
+- It requested a grouped RFC.
+
+**A1-0088 (RFC)** contains:
+- C0, the common carrier:
+  - a new `Profile.REPAIRED_F = 3`, with E profiles unchanged;
+  - a 4-witness fixture with q=3 and set version 2;
+  - F mutant bits;
+  - keeping `QuorumLib`.
+- D-a: governance actions, with a candidate `GovernanceAction` EIP-712 type.
+- D-b: governance signers.
+- D-c: global authEpoch.
+- D-d: user-signature check on the DBC.
+- D-e: poison checkpoints (pin policyVersion; recovery).
+- D-f: what the ledger can expose to D50. Two things are not exposed today:
+  - CA-Admin sets cannot be enumerated;
+  - the exported `runtimeSha256` hashes compiled code with immutables zeroed, so it does not equal the on-chain code.
+
+**Status of the choices:**
+- Every choice in A1-0088 is UNRESOLVED; my recommendations are not approved scope.
+- No source, test, ABI or interface changed.
+
+**Next:** agent 3's choices and exact ACK requests. Then agent 2's D50 formula, which I ACK. A-F1 code starts only after the F0 freeze ACKs.
+
+## Previous (2026-10-13): F0 ledger power matrix READY (A1-0087)
 
 **Task:** F0, PLAN.md section 6, first bullet (agent 1 part), assigned in A3-0052. Base: common baseline 376347d (D51).
 

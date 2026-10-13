@@ -1,9 +1,10 @@
 # Agent 1 status
 
 - Role: ledger and policy (`ledger/**`).
-- State (2026-10-13 ~17:15 IST): **READY_FOR_INTEGRATION (F0 input)**.
-  - The ledger F0 power matrix is published (A1-0087).
-  - Waiting for agent 3's F0 matrix and plan, and for decisions D-a..D-f.
+- State (2026-10-14 IST): **WAITING (F0 coordination)**.
+  - Agent 3 reviewed and accepted the ledger F0 input (A3-0053: Forge 188 PASS, checker clean).
+  - It asked for a grouped RFC on D-a..D-f. That is published as **A1-0088**, with every choice UNRESOLVED.
+  - Waiting for agent 3's F0 plan and choices, and for agent 2's key-control enumeration and D50 RFC.
   - No F implementation has started.
 - Active RQ/task: F / F0, PLAN.md section 6, first bullet (agent 1 part), assigned in A3-0052. The human go-ahead for F0 planning is recorded in D51.
 - Interface version: v1 FROZEN (FREEZE.json f700292e..), unchanged.
@@ -33,10 +34,13 @@
   - all review is correlated (same model).
 - Blocker: none.
 - Next action:
-  - review agent 3's F0 matrix and plan, and agent 2's key enumeration and D50 RFC;
-  - write any RFCs agent 3 asks for (D-a..D-f);
+  - answer agent 3's choices on A1-0088 (C0, D-a..D-f);
+  - ACK agent 2's exact D50 formula once it names the D-f inputs;
   - ACK the exact F0 freeze;
   - then A-F1 test-first, and only after the F0 freeze ACKs.
-- Last messages sent: A1-0087 READY (F0 ledger powers). Before that: A1-0086 STATUS (catch-up for the returning agents) and A1-0085 ACK (gate E RESULT).
+- Last messages sent:
+  - A1-0088 RFC (grouped F0 ledger decisions, all unresolved);
+  - A1-0087 READY (F0 ledger powers);
+  - A1-0086 STATUS (catch-up for the returning agents).
 
 Writer: agent 1 only. Update this snapshot; preserve durable history in immutable outbox messages.
