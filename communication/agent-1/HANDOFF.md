@@ -1,6 +1,54 @@
 # Agent 1 handoff
 
-## Current (2026-10-12): gate E PASS (solo phase), board at F0
+## Current (2026-10-13): F0 ledger power matrix READY (A1-0087)
+
+**Task:** F0, PLAN.md section 6, first bullet (agent 1 part), assigned in A3-0052. Base: common baseline 376347d (D51).
+
+**Exported artifacts** (`ledger/f0/`, which README.md explains):
+
+| File | Content |
+|---|---|
+| `ledger-state.csv` | 29 rows covering all 70 state variables |
+| `entry-points.csv` | All 33 constructors and state-changing or placeholder entry points |
+| `actor-powers.csv` | 12 actors |
+
+**Consumers:**
+- agent 3 for `fault-model.csv` and `f_matrix.json`;
+- agent 2 for the B-F1 honest-witness checks and the D50 RFC.
+
+**Commands and results** (repository root, Foundry 1.8.5, solc 0.8.37 hash 5de843c2..):
+
+| Command | Result |
+|---|---|
+| `forge test --root ledger --match-path test/F0Powers.t.sol` | exit 0, 22 passed, expectations written before the first run |
+| `forge test --root ledger` | exit 0, 188 passed |
+| `ledger/tools/f0_controls.sh <empty scratch dir>` | exit 0, 7/7 sensitive. The first run matched no tests and is kept as `controls-run1-no-match.txt` |
+| `python3 -I ledger/tools/check_f0_powers.py` | exit 0, `problems: []`. A negative control catches 3 injected errors |
+
+**Evidence:** `ledger/evidence/f0-powers/`.
+
+**Source manifest:** 186e28fb.. (296 entries). It only adds entries to 5b32e2c4... Production ledger bytes are unchanged since 933d2a7.
+
+**Open decisions** (README D-a..D-f; agent 3 coordinates):
+
+| Ref | Decision |
+|---|---|
+| D-a | Governance actions in core F |
+| D-b | Old-set q=3 witness signers |
+| D-c | Global authEpoch (L5) |
+| D-d | User-signature check in `consumeDecision` (ABI change, needs an RFC) |
+| D-e | Poison-checkpoint mitigation (L8) |
+| D-f | Deployment verification, folded into D50 |
+
+**Limits:**
+- tests run in a single EVM with the E fixture (q=1);
+- pre-seal deployer powers, ledger-operator powers, `sourceBlockNumber` poison and QuorumLib at n=4 are read, not tested;
+- the checker proves coverage and citations, not the power claims;
+- all review is correlated.
+
+**Next action for the receiving agent:** read A1-0087 and `ledger/f0/README.md`. Agent 3 then folds the rows into the F0 matrix and asks for any RFCs it wants. A-F1 starts only after the F0 freeze ACKs.
+
+## Previous (2026-10-12): gate E PASS (solo phase), board at F0
 
 - **Decision recorded in `communication/GATES.md`:** "gate E PASS: solo phase, correlated review, criterion 4
   human-scoped (A1-0080), window cited from owner evidence (A1-0081), integrated mutants and window not run".

@@ -1,0 +1,34 @@
+id,chain,contract,function,mutability,caller_rule,signatures_checked,writes,profiles,source,faulty_holder_power
+E01,both,Bootstrapped,constructor,nonpayable,anyone deploying,none,S01,all,src/lib/Bootstrapped.sol:16,"Whoever deploys becomes the bootstrap authority of that contract."
+E02,both,Bootstrapped,seal,nonpayable,deployer while unsealed,none,S02,all,src/lib/Bootstrapped.sol:31,"The deployer decides when configuration becomes permanent; sealing a wrong wiring, policy or witness set is irreversible (no governance path)."
+E03,PBC,LSC,constructor,nonpayable,deployer,none,S01|S03,all,src/LSC.sol:44,
+E04,PBC,LSC,wire,nonpayable,deployer while unsealed,none,S04,all,src/LSC.sol:48,"Pre-seal: give any account the log-append right of RSC/TMSC/PSC."
+E05,PBC,LSC,registrationLog,nonpayable,RSC only,none,S05,all,src/LSC.sol:64,
+E06,PBC,LSC,updateLog,nonpayable,TMSC only,none,S05,all,src/LSC.sol:74,
+E07,PBC,LSC,requestLog,nonpayable,PSC only,none,S05|S06,all,src/LSC.sol:80,
+E08,PBC,LSC,outcomeLog,nonpayable,PSC only,none,S05|S07,all,src/LSC.sol:91,
+E09,PBC,LSC,retrieveLog,pure,reverts NOT_IMPLEMENTED_IN_PHASE,none,,all,src/LSC.sol:106,"Table 2 Auditor + majorityConsent: F governance placeholder. Log contents are publicly readable anyway."
+E10,PBC,TMSC,constructor,nonpayable,deployer,none,S01|S08|S10,all,src/TMSC.sol:94,"Chooses the authority set, root keys and CA-Admins for the deployment's life."
+E11,PBC,TMSC,wire,nonpayable,deployer while unsealed,none,S09,all,src/TMSC.sol:113,
+E12,PBC,TMSC,updateRevocationList,nonpayable,CA-Admin of list.authority,authority root signature (strict/repaired); none (minimal),S11|S13|S05,all,src/TMSC.sol:125,"Revoke or un-revoke any serial of its own authority; bump the global authEpoch."
+E13,PBC,TMSC,updateTemporalAcl,nonpayable,CA-Admin of acl.authority,authority root signature (strict/repaired); none (minimal),S12|S13|S05,all,src/TMSC.sol:146,"Grant or remove temporal roles of its own authority for any GID; bump the global authEpoch."
+E14,PBC,TMSC,addCA,pure,reverts NOT_IMPLEMENTED_IN_PHASE,none,,all,src/TMSC.sol:171,"Table 2 CA Admin + majorityConsent: F governance placeholder."
+E15,PBC,TMSC,removeCA,pure,reverts NOT_IMPLEMENTED_IN_PHASE,none,,all,src/TMSC.sol:175,"Table 2 CA Admin + majorityConsent: F governance placeholder."
+E16,PBC,RSC,constructor,nonpayable,deployer,none,S01|S14,all,src/RSC.sol:40,
+E17,PBC,RSC,register,nonpayable,any submitter,GID possession signature + authority-signed certificate,S15|S05,all,src/RSC.sol:49,"One registration per GID forever; recipient key write-once."
+E18,PBC,PSC,constructor,nonpayable,deployer,none,S01|S16|S17,all,src/PSC.sol:108,"Chooses the relay, policy version, request TTL and receipt witness set and threshold."
+E19,PBC,PSC,configureDestination,nonpayable,deployer while unsealed,none,S18,all,src/PSC.sol:137,
+E20,PBC,PSC,requestAccess,nonpayable,any submitter,user signature over the request (checked after logging),S05|S06|S19|S20,all,src/PSC.sol:151,"Any account appends a request log entry and a denial; a forwardable record needs the GID's signature and valid credentials."
+E21,PBC,PSC,reportOutcome,nonpayable,relay only,none (outcome unattested),S19|S05|S07,paper-strict|paper-minimal,src/PSC.sol:216,"The relay alone records an arbitrary outcome digest for any forwarded request."
+E22,PBC,PSC,reportAttestedOutcome,nonpayable,relay only,quorum of PSC witnesses over the GrantReceipt,S19|S05|S07,repaired-e,src/PSC.sol:240,"The relay chooses whether and when to record; it cannot record without a quorum receipt."
+E23,PBC,PSC,majorityConsent,pure,reverts NOT_IMPLEMENTED_IN_PHASE,none,,all,src/PSC.sol:296,"Table 2 majorityConsent (placement ambiguity S18 in the source map): F governance placeholder."
+E24,DBC,KSSC,constructor,nonpayable,deployer,none,S01|S21|S22,all,src/KSSC.sol:99,"Chooses the decision witness set, threshold and checkpoint TTL."
+E25,DBC,KSSC,wire,nonpayable,deployer while unsealed,none,S23,all,src/KSSC.sol:127,
+E26,DBC,KSSC,acceptState,nonpayable,any submitter,quorum of KSSC witnesses over the checkpoint,S24,repaired-e,src/KSSC.sol:139,"With a quorum: install any well-formed checkpoint, including an unbounded monotone field that blocks all later ones (P-WIT-2/3/4)."
+E27,DBC,KSSC,requestData,nonpayable,ACSC only,none (ACSC has checked),S25,all,src/KSSC.sol:177,
+E28,DBC,ACSC,constructor,nonpayable,deployer,none,S01|S26,all,src/ACSC.sol:80,
+E29,DBC,ACSC,wire,nonpayable,deployer while unsealed,none,S27,all,src/ACSC.sol:103,"Pre-seal: name any account as the paper-profile relay (pscRelay)."
+E30,DBC,ACSC,addPolicy,nonpayable,deployer while unsealed,none,S28,all,src/ACSC.sol:109,
+E31,DBC,ACSC,registerData,nonpayable,deployer while unsealed,none,S28,all,src/ACSC.sol:124,
+E32,DBC,ACSC,policyEnf,nonpayable,pscRelay only,none (attributes taken as verified),S29|S25,paper-strict|paper-minimal,src/ACSC.sol:140,"The relay alone creates grants for any GID and data with asserted attributes that satisfy the policy (E01 tests)."
+E33,DBC,ACSC,consumeDecision,nonpayable,any submitter,quorum of KSSC witnesses over the decision (no user signature check on the DBC),S29|S25,repaired-e,src/ACSC.sol:174,"With a quorum: a grant for any request digest and any signed records (test_E03_TrustedWitnessBoundaryUnloggedRequest, P-WIT-1)."
