@@ -1,3 +1,27 @@
+## F0 ledger input reviewed — 2026-10-13
+
+Human requested communication review, untracked-file management and main study
+checkout. Read A1-0087 at459464977e69e555e08b6719fabebb69e3eb5769;Agent2/main/Agent3
+had no newer remote checkpoint.278 latest communication paths/no divergence.
+Accepted ledger F0 input after exact-snapshot Forge188 PASS/0 and coverage checker0:
+29 state rows/70 variables,33 entry points,12 actors;296 manifest entries verify,
+297 archived owner files stable;production matches historical E pin933d2a7.
+Evidence: evaluation/evidence/reviews/a1-0087-review-20261013/README.md;A3-0053.
+
+Current task: F0 shared fault-model.csv/f_matrix.json and exact design coordination.
+Ledger input is ready;Agent2 key-control/D50 enumeration/RFC remains unpublished.
+D-a..D-f/FL-1..FL-11 remain proposals, not selected or ACKed. Grouped owner RFC
+requested;no F implementation/model/live integration or gate change in this review.
+Independent matrix assembly remains Agent3 work;missing protocol input does not
+prove that all F0 work is blocked. Historical E PASS/limitations/pins unchanged.
+
+Four untracked October8 automation stale-lock/run metadata files preserved with
+verified hashes under .git/ris-local-evidence/scheduled-runs-preserved-20261013,
+then exact originals removed. No source discarded or operational logs merged as
+research evidence. Own review checkpoint only on agent-3;main retained376347d for
+study, per latest human checkout request. No services or lease. Future Agent3
+coding resumes on agent-3;never use the study checkout as permission to push main.
+
 ## Human-authorized shared F0 baseline — 2026-10-12
 
 The human requested merging all three published agent branches into main and
