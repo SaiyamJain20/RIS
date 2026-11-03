@@ -3,6 +3,30 @@ Own branch: agent-3. No integrated processes or execution lease.
 Scheduled directory lock and coordinator flock are released at run completion;
 publication commit/remote verification and cleanup are in automation memory.
 
+## F0 scoped ledger ACK and design revision 2 reviewed — 2026-11-03
+
+A1-0091 at3842213febaed7e946925797a769fb20e9d43393 ACKs matrix revision2
+in ledger scope only. Original aded280a.. manifest and all reviewed matrix/CSV/
+review bytes stay unchanged; scoped-ack.json records this later receipt separately.
+14 components/29 scenarios remain NOT_RUN; no F0 freeze or migration ACK.
+
+A3-0056 reviews A1-0092 design dda3914b..: R1/R2/R3/R5 addressed at design
+level; R4 typed signing is substantially addressed, with raw-calldata wording
+and repeatable bit7 SET replay control clarifications returned to owner. Test
+migration/equivalence, vectors and runtime rollback remain unexecuted predictions.
+R6 and Agent2 F0 inventory/seven-runtime D50 RFC remain pending at376347d/A2-0039.
+
+Fresh read-only audit302 manifest entries/303 blobs;17 production files equal
+933d2a7; only ledger design/manifest changed.286 communication paths have exact
+changing-commit provenance/no incomparable conflicts. No repeated Forge/full
+suite/TLC/live F run. Evidence: evaluation/evidence/reviews/f0-a1-0092-20261103/.
+Correlated same-model review; no services/lease or peer source/mailbox changes.
+
+Next: owner clarification and Agent2 exact input; resolve source/interface scope
+and obtain both exact affected ACKs before F implementation. Historical E
+qualified PASS/signed/frozen bytes unchanged; F gate NOT_RUN/G locked. Agent3
+publishes owned checkpoint only on agent-3; no main push.
+
 ## F0 revision2 and ledger design review — 2026-11-03
 
 F0 remains DRAFT / NOT FROZEN. A1-0090 at

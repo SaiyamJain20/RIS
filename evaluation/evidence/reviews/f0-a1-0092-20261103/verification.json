@@ -1,0 +1,84 @@
+{
+  "startedAt": "2026-11-03T14:32:34.915260+00:00",
+  "endedAt": "2026-11-03T14:32:34.957109+00:00",
+  "components": 14,
+  "scenarios": 29,
+  "allNotRun": true,
+  "scopedAck": "A1-0091 ledger review only",
+  "matrixBytesUnchanged": true,
+  "agent2Ack": null,
+  "executionAuthorized": false,
+  "protectedPathsUnchanged": [
+    "ledger",
+    "protocol",
+    "interfaces",
+    "archive",
+    "evaluation/reports/RQ1-E.md",
+    "evaluation/evidence/e3/gate-run-20261012",
+    "evaluation/evidence/fault-model.csv",
+    "evaluation/scenarios/f_matrix.json",
+    "evaluation/evidence/reviews/f0-a1-0090-20261103"
+  ],
+  "refs": {
+    "origin/agent-1": "3842213febaed7e946925797a769fb20e9d43393",
+    "origin/agent-2": "376347d9b0979d1e46824a30197b935ffe91e4fb",
+    "origin/agent-3": "80439e91db9d91bb2012c5db1e9bf7ec28ac8f57",
+    "origin/main": "376347d9b0979d1e46824a30197b935ffe91e4fb"
+  },
+  "commands": [
+    {
+      "argv": [
+        "python3",
+        "communication/build_prompts.py",
+        "--check"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-11-03T14:32:34.926811+00:00",
+      "endedAt": "2026-11-03T14:32:34.949518+00:00",
+      "exitCode": 0,
+      "outputSha256": "8f29a69f6b3463b624687ea89c034e86c0217602a093168e78b810d5ef4ac781"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-11-03T14:32:34.949546+00:00",
+      "endedAt": "2026-11-03T14:32:34.954253+00:00",
+      "exitCode": 0,
+      "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "python3",
+        "--version"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-11-03T14:32:34.954282+00:00",
+      "endedAt": "2026-11-03T14:32:34.955820+00:00",
+      "exitCode": 0,
+      "outputSha256": "6b64edf0fc8f22e798fb64873acba6b4106df290f0bf458b507e8cb409b63e49"
+    },
+    {
+      "argv": [
+        "git",
+        "--version"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-11-03T14:32:34.955864+00:00",
+      "endedAt": "2026-11-03T14:32:34.957073+00:00",
+      "exitCode": 0,
+      "outputSha256": "fff575d3fa43a92d932e4eb8bc03394140ce40699f9c8a97c3126016a244dfb8"
+    }
+  ],
+  "auditCommand": [
+    "python3",
+    ".git/ris-a1-0092-review.py"
+  ],
+  "auditExitCode": 0,
+  "auditToolSha256": "f46dee91202fb33e2bb378f14416ddfd208e1d1de6d1248cffe48da4e532b7b9",
+  "verificationToolSha256": "86db1217f12f02c59714d12704fceba2db1264c531a8a76d6021fdd3840a2173",
+  "classification": "read-only proposed extension/design review; no fresh runtime/gate test"
+}
