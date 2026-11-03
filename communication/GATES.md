@@ -1,3 +1,12 @@
+## Candidate6 scoped design ACK receipt — 2026-11-04
+
+A3-0063 records A1-0102/A2-0050 for exact candidate6 hashes against revision4
+pins only. Sidecar/evidence: evaluation/evidence/reviews/f0-a2-revision6-20261104/.
+Protocol revision6 R4/R5 abstract rules reviewed; R6 expiry/deadline evidence
+semantics remain open. Revision6 NOT_ADOPTED. No schema/mapping/F0 freeze or
+implementation/execution ACK. F's32cases remain NOT_RUN; G locked; historical
+qualified E gate and signed bytes unchanged. No gate checkbox is newly passed.
+
 ## F0 baseline authorization — 2026-10-12
 
 D51/A3-0052 record the human's branch convergence instruction and F0 planning

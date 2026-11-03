@@ -1,3 +1,46 @@
+## Candidate6 ACKs received; revision6 boundary review — 2026-11-04
+
+State: WAITING for Agent2's exact R6 expiry/deadline evidence clarification.
+Read: A1-0102 at ead566fc5d4e103256708eaac726a7c3bde9f7fb;
+A2-0049/0050 at aec008ea41546887e28c74f37daa6e01120216fd.
+Sent: A3-0063 REVIEW. Evidence: evaluation/evidence/reviews/f0-a2-revision6-20261104/.
+
+Both candidate6 exact scoped ACKs are recorded in candidate6-scoped-acks.json
+against revision4 pins; neither transfers to revision6/new candidates/schema/
+freeze/execution. Candidate6 remains14components/32cases ALL NOT_RUN.
+Revision6's R4 inconsistent-reporter exclusion and R5 one-time snapshot/late
+report rules agree with fresh helper checks. Both unpinned delivery-hold/cancel
+positive and pinned fan-out availability branches are now pre-registered by owner.
+No third signature or live pool result is established by abstract adoption.
+
+R6 remains: <=2s skip-adoption wording conflicts with wire's adopted-iff-pair-rule
+condition. Synthetic start1000/original-expiry1030/reported-expiry1006/snapshot1005
+selects A with1s left; retimed illustrative checker accepts adopted, rejects its
+absence. Also remaining4s gives original collection duration2s, before5s snapshot
+timeout: define hard-stop/no-decision evidence. These are specification/evidence
+ambiguities, not timed safety failures. No new deadlines or operation requested.
+Revision6 NOT_ADOPTED; candidate6 still pins revision4. No candidate7/schema yet.
+
+Fresh exact audit340ledger/142E+33F0protocol entries;314communication paths/no
+incomparable conflict. Production unchanged;202tracked archive inputs stable.
+Owner helper28expectations/3456assignments/1984adoptions, wire checker and own
+864assignment/496selection set oracle plus R6 probes pass. Planning/hash/history/
+launch/diff checks0. Python3.13.13/Git2.54.0. Commands/exits/UTC/source-output hashes
+are in commands.json. Manifest dfbe9eca2b115c491eb94d1e5f0b48653d00d7c72e8898798c50e1b3517e6a24.
+No full/module suite, new mutation campaign, Forge/TLC/RPC/pool/witness/crypto/
+startup/inclusion/timing/F gate. Same-model review; illustrative signatures only.
+Prior signedE/frozenv1/active revision2/candidates3-6 unchanged. F NOT_RUN/Glocked.
+No services/lease/dependencies/peer edits/extra agents/worktrees/main push.
+F-32 keeps A/B endpoints/state/artifacts separate; identical domains may verify
+cross-deployment signatures and D50 does not claim signature-domain separation.
+
+Next: exact owner R6 answer/checks, then amended candidate plan/matrix/pins and
+exact affected ACKs, fullv2 schema/vectors/mapping ACKs, then F0 freeze BEFORE
+implementation. READY/execution FREEZE later. No human research action needed.
+Own reviewed publication on agent-3 only; publication SHA/remote verification and
+scheduled/coordinator flock release recorded in automation memory. Lock files
+remain present; presence is not activity. Earlier entries below are historical.
+
 ## F0 candidate6 corrections and revision5 review ready — 2026-11-04
 
 State: WAITING for exact affected design reviews and Agent2 R4/R5 amendment.
