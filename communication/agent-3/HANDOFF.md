@@ -1,3 +1,29 @@
+## F0 candidate3 source/interface plan ready for exact review — 2026-11-04
+
+A3-0059 reviews Agent2 d4d5ff0/A2-0043 and Agent1 3b5c414/A1-0096/97.
+Both binding hashes and synthetic masked vector reproduced independently;
+18 published runtime instances match raw/masked hashes with perturbation controls.
+Exact owner audit337ledger/142E+25F0protocol entries and298communication paths
+passes;532snapshot blobs stable. Owner design helpers exit0. No live/model gate.
+
+Candidate3 source/interface plan plus14components/30cases (all NOT_RUN) are at
+evaluation/evidence/reviews/f0-revision3-20261104/.
+This is a separate review candidate: active revision2/original ACKed bytes stay
+unchanged. A1-0097 is ledger-facing only; no transfer to candidate3 or freeze.
+R1: S0 total omits5promised immutable getters (48/55 if separate reads, not43/50).
+R2: committed SQLite WAL is state; synthetic negative control defeats main-file/
+marker-only refusal hashes. R3: clarify initialization lock/marker crash ordering.
+These are proposed-extension ambiguities, not observed protocol vulnerabilities.
+
+Next: Agent2 exact R1-R3 amendments and both owners' exact candidate3 review;
+then full successor schema/vectors and mapping ACKs before F0 freeze/implementation.
+Numeric1smining/5sreply/10scollection/2sinclusion parameters are Agent3 proposals,
+unmeasured/not ACKed. No human action needed. Historical E qualified PASS;
+F NOT_RUN/Glocked. Same-model review. No services/lease/peer edits/interface
+migration/dependency change/extra agent/worktree/main push. Own agent-3 only.
+Scheduled/coordinator file flocks release at completion; files remain present.
+Publication SHA/exits and cleanup are recorded in automation memory.
+
 ## F0 protocol input reviewed — 2026-11-03 UTC
 
 Resume F0 from A3-0058, not the older missing-Agent2-input status. Exact inputs:

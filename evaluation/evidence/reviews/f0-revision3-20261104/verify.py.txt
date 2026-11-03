@@ -1,0 +1,43 @@
+import csv, datetime, hashlib, json, pathlib, subprocess, sys
+R=pathlib.Path('/home/karma/Documents/RIS')
+O=R/'evaluation/evidence/reviews/f0-revision3-20261104'
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def now():return datetime.datetime.now(datetime.timezone.utc).isoformat()
+def git(*a):return subprocess.check_output(['git',*a],cwd=R)
+a=json.loads((O/'owner-review.json').read_text())
+assert all(git('rev-parse',r).decode().strip()==t for r,t in a['refs'].items())
+assert git('branch','--show-current').decode().strip()=='agent-3'
+assert not git('diff','--cached','--name-only').strip()
+protected=['ledger','protocol','interfaces','archive','evaluation/reports/RQ1-E.md','evaluation/evidence/e3/gate-run-20261012','evaluation/evidence/fault-model.csv','evaluation/scenarios/f_matrix.json','evaluation/evidence/reviews/f0-a1-0090-20261103','evaluation/evidence/reviews/f0-a1-0092-20261103']
+assert not git('diff','HEAD','--',*protected).strip()
+old=json.loads((R/'evaluation/evidence/reviews/f0-a1-0092-20261103/scoped-ack.json').read_text())
+assert sha(R/old['draftManifest'])==old['draftManifestSha256']
+assert all(sha(R/p)==h for p,h in old['reviewedFiles'].items())
+d=json.loads((O/'f_matrix.json').read_text())
+assert d['revision']==3 and len(d['cases'])==30
+assert len({x['id'] for x in d['cases']})==30
+assert all(x['executionStatus']=='NOT_RUN' for x in d['cases'])
+assert not d['executionAuthorized'] and not d['actualFResults'] and not d['exactOwnerAcks']
+rows=list(csv.DictReader((O/'fault-model.csv').open()))
+assert len(rows)==14 and len({x['id'] for x in rows})==14
+assert all(set(c['components']) <= {r['id'] for r in rows} for c in d['cases'])
+assert (R/d['design']).is_file() and (R/d['faultModel']).is_file()
+r=json.loads((O/'reproduction.json').read_text())
+assert len(r['replays'])==18 and r['snapshotInputsStable']==532
+assert r['walNegativeControl']['logicalStateChanged']
+assert all(c['exitCode']==0 for c in r['ownerCheckCommands'])
+for c in r['ownerCheckCommands']:
+    name=c['argv'][-1]
+    assert sha(O/(name+'.stdout.txt'))==c['stdoutSha256']
+    assert sha(O/(name+'.stderr.txt'))==c['stderrSha256']
+commands=[]
+for label,argv in [('launch-prompts',[sys.executable,'communication/build_prompts.py','--check']),('diff-check',['git','diff','--check']),('python-version',[sys.executable,'--version']),('git-version',['git','--version'])]:
+    start=now();p=subprocess.run(argv,cwd=R,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+    out=O/(label+'.stdout.txt');out.write_bytes(p.stdout)
+    commands.append({'argv':argv,'startedAt':start,'endedAt':now(),'exitCode':p.returncode,'outputSha256':sha(out)})
+    assert p.returncode==0,(label,p.stdout.decode())
+verification={'capturedAt':now(),'refs':a['refs'],'commands':commands,'auditCommand':[sys.executable,str(O/'audit-owner.py.txt')],'auditExitCode':0,'reproductionCommand':[sys.executable,str(O/'reproduce.py.txt')],'reproductionExitCode':0,'diagnostics':[{'command':'initial reproduce.py.txt','exitCode':1,'result':'raw .hex has no 0x; mistaken prefix removal caused length assertion; helper corrected before successful rerun'}],'components':14,'cases':30,'allNotRun':True,'protectedPathsUnchanged':protected,'executionAuthorized':False,'scope':'offline design-review evidence only; no new live/RPC/model/gate result'}
+(O/'verification.json').write_text(json.dumps(verification,indent=2)+'\n')
+files={str(p.relative_to(R)):sha(p) for p in sorted(O.rglob('*')) if p.is_file() and p.name!='review-manifest.json'}
+(O/'review-manifest.json').write_text(json.dumps({'format':'RIS-F0-review-1','capturedAt':now(),'status':'CANDIDATE3_REVIEW_NOT_ACK_NOT_FROZEN','executionAuthorized':False,'files':files},indent=2)+'\n')
+print(json.dumps({'verification':'PASS','components':14,'cases':30,'allNotRun':True,'files':len(files),'manifestSha256':sha(O/'review-manifest.json')}))
