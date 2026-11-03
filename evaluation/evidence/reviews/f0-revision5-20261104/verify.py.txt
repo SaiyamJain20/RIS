@@ -1,0 +1,66 @@
+import csv, datetime, hashlib, json, pathlib, re, subprocess, sys
+
+R=pathlib.Path('/home/karma/Documents/RIS')
+O=R/'evaluation/evidence/reviews/f0-revision5-20261104'
+OLD=R/'evaluation/evidence/reviews/f0-revision4-20261104'
+def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
+def now(): return datetime.datetime.now(datetime.timezone.utc).isoformat()
+def git(*a): return subprocess.check_output(['git',*a],cwd=R)
+def dump(name,obj): (O/name).write_text(json.dumps(obj,indent=2)+'\n')
+a=json.loads((O/'owner-review.json').read_text())
+assert git('branch','--show-current').decode().strip()=='agent-3'
+assert not git('diff','--cached','--name-only').strip()
+assert all(git('rev-parse',ref).decode().strip()==tip for ref,tip in a['refs'].items())
+previous=json.loads((OLD/'owner-review.json').read_text())
+assert all(a['owners'][m]['blobs']==previous['owners'][m]['blobs'] for m in a['owners'])
+protected=['ledger','protocol','interfaces','archive','evaluation/reports/RQ1-E.md','evaluation/evidence/e3/gate-run-20261012','evaluation/evidence/fault-model.csv','evaluation/scenarios/f_matrix.json','evaluation/evidence/reviews/f0-a1-0090-20261103','evaluation/evidence/reviews/f0-a1-0092-20261103','evaluation/evidence/reviews/f0-revision3-20261104','evaluation/evidence/reviews/f0-revision4-20261104']
+assert not git('diff','HEAD','--',*protected).strip()
+manifest=json.loads((OLD/'review-manifest.json').read_text())
+assert all(sha(R/p)==h for p,h in manifest['files'].items())
+legacy=json.loads((R/'evaluation/evidence/reviews/f0-a1-0092-20261103/scoped-ack.json').read_text())
+assert sha(R/legacy['draftManifest'])==legacy['draftManifestSha256']
+assert all(sha(R/p)==h for p,h in legacy['reviewedFiles'].items())
+received=json.loads((O/'received-reviews.json').read_text())
+assert not received['exactCandidate5Acks']
+assert received['ownerModuleBlobsUnchangedSinceCandidate4'] and received['noNewRuntimeTests']
+for r in received['reviews']:
+    assert hashlib.sha256(git('show',r['commit']+':'+r['path'])).hexdigest()==r['sha256']
+prov=json.loads((O/'communication-provenance.json').read_text())
+assert len(prov['files'])==306 and not prov['incomparableContentConflicts']
+d=json.loads((O/'f_matrix.json').read_text()); before=json.loads((OLD/'f_matrix.json').read_text())
+c={x['id']:x for x in d['cases']}; b={x['id']:x for x in before['cases']}
+assert d['revision']==5 and len(c)==len(d['cases'])==32
+assert set(c)==set(b)|{'F-31','F-32'}
+assert not d['executionAuthorized'] and not d['actualFResults'] and not d['exactOwnerAcks']
+assert all(x['executionStatus']=='NOT_RUN' and x['ownerAckStatus']=='PENDING_BOTH' for x in c.values())
+assert all(x['experimentMode']==('ANALYSIS_ONLY' if x['id'] in ('F-25','F-26') else 'INTEGRATED_SYNTHETIC') for x in c.values())
+rows=list(csv.DictReader((O/'fault-model.csv').open()))
+oldrows=list(csv.DictReader((OLD/'fault-model.csv').open()))
+assert len(rows)==14 and len({x['id'] for x in rows})==14
+for x,y in zip(rows,oldrows):
+    assert all(x[k]==y[k] for k in x if k not in ('source','open_dependency'))
+assert all(set(x['components']) <= {r['id'] for r in rows} for x in c.values())
+assert (R/d['design']).is_file() and (R/d['faultModel']).is_file()
+plan=(O/'SOURCE-INTERFACE-PLAN.md').read_text()
+for p in ('protocol/f0/D50-DEPLOYMENT-BINDING.md','protocol/f0/SUCCESSOR-WIRE.md','protocol/f0/MANIFEST.sha256'):
+    assert a['owners']['protocol']['blobs'][p] in plan
+assert all(name in plan for name in ('A1-0100','A2-0046','H3','H5','H6','F-16','F-17','F-18','F-19','F-20','F-31','F-32','T+31','T+32'))
+mapping={'M1':['F-12'],'M2':['F-12','F-13'],'M3':['F-29'],'M4':['FL-7','F-24'],'M5':['FL-5','F-22'],'M6':['FL-1'],'M7':['FL-1']}
+for mutant,cases in mapping.items():
+    assert all(mutant in ' '.join(c[k]['controls']) for k in cases)
+assert 'WRONG_DESTINATION/LEGACY_STATE' in c['F-32']['prospectiveSafety']
+assert 'before a new-epoch checkpoint' in ' '.join(c['F-28']['controls'])
+assert 'after the new-epoch checkpoint' in ' '.join(c['F-28']['controls'])
+assert all(s in ' '.join(c['FL-10']['controls']) for s in ('SET_CA_ADMINS','bit 6','bit 7','EXPIRED','REPLAY','MALFORMED'))
+# Ignore the new explicit mode annotation when reporting semantically changed old rows.
+changed=[k for k in b if {x:v for x,v in c[k].items() if x!='experimentMode'}!={x:v for x,v in b[k].items() if x!='experimentMode'}]
+commands=[]
+for label,argv in [('launch-prompts',[sys.executable,'communication/build_prompts.py','--check']),('diff-check',['git','diff','--check']),('python-version',[sys.executable,'--version']),('git-version',['git','--version'])]:
+    start=now(); p=subprocess.run(argv,cwd=R,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+    out=O/(label+'.stdout.txt');out.write_bytes(p.stdout)
+    commands.append({'argv':argv,'startedAt':start,'endedAt':now(),'exitCode':p.returncode,'outputSha256':sha(out)})
+    assert p.returncode==0,(label,p.stdout.decode())
+dump('verification.json',{'capturedAt':now(),'refs':a['refs'],'commands':commands,'auditCommand':[sys.executable,str(O/'audit-owner.py.txt')],'auditExitCode':0,'verificationCommand':[sys.executable,str(O/'verify.py.txt')],'verificationExitCode':0,'components':14,'cases':32,'allNotRun':True,'mutationMappings':mapping,'changedOldCases':changed,'protectedPathsUnchanged':protected,'ownerModuleBlobsUnchanged':537,'communicationPaths':306,'executionAuthorized':False,'freshRuntimeTests':False,'classification':'planning and provenance checks; no implemented F/model/runtime or gate result','diagnostics':['Initial mkdir lock attempt exited1 because the existing lock is a file; verified available via flock and acquired persistent TTY flock before repository work.','Initial draft generator exited1 KeyError scenarios: CSV has no scenarios column; corrected to existing open_dependency field before verification.','Two guessed evidence/message paths were absent (git show/cat diagnostics); corrected by tracked-path discovery, no content inferred.']})
+files={str(p.relative_to(R)):sha(p) for p in sorted(O.rglob('*')) if p.is_file() and p.name!='review-manifest.json'}
+dump('review-manifest.json',{'format':'RIS-F0-review-1','capturedAt':now(),'status':'CANDIDATE5_REVIEW_NOT_FROZEN','executionAuthorized':False,'files':files})
+print(json.dumps({'verification':'PASS','components':14,'cases':32,'allNotRun':True,'changedOldCases':changed,'files':len(files),'manifestSha256':sha(O/'review-manifest.json')}))

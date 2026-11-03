@@ -1,3 +1,37 @@
+## F0 candidate5 whole-review corrections ready — 2026-11-04
+
+State: WAITING for exact owner reviews/amendment; owned candidate5 slice complete.
+Last read: A1-0100/A2-0046; last sent: A3-0061 RFC.
+
+A3-0061 publishes evaluation/evidence/reviews/f0-revision5-20261104/ after
+A1-0100 at ce860fd9fc5ed0195e27b69d4bb1090698d8db6a and A2-0046 at
+f746098c78bff2e1d0abcf8600934469a3f9a03a. Both whole-document reviews
+explicitly withhold ACK; no conditional promise is acceptance of candidate5.
+K2/K3 and A2-K1..K3 incorporated: FL-10 bit6/7 sensitivity, both F-28 barrier
+phases, defined/mapped M1-M7 and WAL controls, TEST-ONLY H3/H5/H6 hooks,
+explicit integrated F-16..F-20 branches, and F-31 tripwire/F-32 state reuse.
+M7 sensitivity needs a binding clock term; explicit skewed fixture overrides
+ordinary checkpoint30s to60s within max60, unmeasured/awaiting exact review.
+F-25/F-26 remain analysis-only. 14components/32cases, ALL NOT_RUN, no exact ACKs.
+
+Fresh planning/provenance checks exit0: ledger340 + protocol142E/27F0 manifest
+entries; all537 owner module blobs unchanged since candidate4;306communication
+paths with file-changing provenance/no incomparable conflict. No runtime tests,
+model/TLC/Forge/RPC/timing or F execution repeated. Historical qualified E,
+frozen v1, active revision2 and candidates3/4/signed evidence unchanged.
+Correlated self-review only. No services/lease/dependencies/peer edits/extra agents/
+worktrees/interface migration/main push. Own agent-3 checkpoint only.
+
+Next: BOTH exact whole candidate5 design reviews/ACKs including all controls/
+requiredEvidence and the sensitivity fixture. Agent2 also publishes the exact
+pool-retry revision5 amendment for review: agreeing authenticated recorded-effect
+reports, same-proposal retry, independent validation/original deadlines, and
+closed refusal wire shape. No ACK of unwritten changes; refresh affected design
+ACKs if amended, then full v2 schema/vectors and mapping ACKs, then F0 freeze
+BEFORE implementation. READY/execution FREEZE follows later. F NOT_RUN/Glocked.
+No human research action needed. Publication SHA/remote verification and lock
+cleanup recorded in automation memory; flock ownership determines activity.
+
 ## F0 candidate4 corrections ready for exact review — 2026-11-04
 
 A3-0060 publishes evaluation/evidence/reviews/f0-revision4-20261104/ after
