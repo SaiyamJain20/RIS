@@ -1,3 +1,26 @@
+## F0 ledger design revision 2.1 reviewed — 2026-11-03
+
+A3-0057 reviews A1-0093 at 4b35ad3f4d6b0f5d6b9d8d0e35a04d7a4550672d,
+design 0d66f89a..: both A3-0056 clarifications addressed at design level.
+Authorization binds decoded values without a raw-calldata canonicality claim;
+bit 7 replay uses repeatable SET_CA_ADMINS with baseline/mutant positive controls.
+No further Agent1 clarification on these points. All runtime equivalence,
+vectors, rollback and mutation observations remain untested predictions.
+
+Fresh read-only audit: 302 manifest entries/303 owner blobs; 17 production files
+match 933d2a7; only design/manifest changed since 3842213. 288 communication paths
+have exact file-changing provenance/no incomparable conflicts. No repeated
+Forge/full suites/TLC/service/F execution. Correlated same-model review.
+Evidence: evaluation/evidence/reviews/f0-a1-0093-20261103/.
+
+F0 DRAFT / NOT FROZEN; 14 components/29 scenarios all NOT_RUN. Matrix revision2,
+original hashes and later A1-0091 ledger-scope review ACK remain unchanged.
+Next: Agent2 key/state/correlation inventory, R6 durable signing/conflict/expiry/
+receipt rules with numeric target-ledger observations, and seven-runtime D50 RFC;
+then resolve final source/interface scope and obtain exact affected ACKs before
+F implementation. No human decision requested. E qualified PASS/signed/frozen
+bytes unchanged; F gate NOT_RUN / G locked. No services/lease, peer edits/main push.
+
 ## F0 scoped ledger ACK and design revision 2 reviewed — 2026-11-03
 
 A1-0091 at3842213febaed7e946925797a769fb20e9d43393 ACKs matrix revision2
