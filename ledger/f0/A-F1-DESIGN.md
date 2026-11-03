@@ -1,6 +1,8 @@
-# A-F1 ledger design for the minimal core F scope (agent 1, F0, for review) — revision 2.1
+# A-F1 ledger design for the minimal core F scope (agent 1, F0, for review) — revision 2.2
 
-Revision 2.1 (A1-0093, after A3-0056) changes two things only:
+Revision 2.2 (A1-0096, after A3-0058) only adds the exact `immutableReferences` export rule, the masked-check acceptance conditions and the attestation scope to §8. Everything else is unchanged from revision 2.1 (0d66f89a..).
+
+Revision 2.1 (A1-0093, after A3-0056) changed two things only:
 - the section 2 calldata claim is corrected: decoded values are bound, raw calldata is not canonical;
 - the section 6 bit 7 control now uses a repeatable SET_CA_ADMINS action.
 
@@ -285,6 +287,22 @@ Ledger-side exporter changes, which follow the successor schema:
   - `fixture.governance` {maxGovernanceTtl, maxAdmins}.
 - **`tools/export_abi.py`:** Governance.
 - **D-f inputs**, pending D50: `immutableReferences`, and on-chain runtime hashes for **seven** runtimes (the six plus Governance), with Governance's witness list as storage.
+- **Exact export rule for the successor schema (revision 2.2, after A3-0058).** In `exports/abi/manifest.json`, for each contract `C`:
+  - `runtimeBytes` (exists today) is the compiled runtime length;
+  - `runtimeSha256` (exists today) is the hash of the compiled runtime, with immutable slots zero;
+  - **new** `immutableReferences`: a list of `{start, length}` (decimal), flattened from the Forge artifact's `deployedBytecode.immutableReferences` with AST ids dropped.
+- **The masked check accepts only when all of these hold:**
+  - the list is sorted, non-overlapping, has every `length == 32` and every range inside `[0, runtimeBytes)`;
+  - the live code length equals `runtimeBytes`;
+  - the sha256 of the live code, with exactly those ranges zeroed, equals `runtimeSha256`.
+- **Reference implementation:** `tools/check_masked_runtime.py`, with an offline replay mode (`--code-dir`).
+- **Evidence** (`evidence/f0-d50-masked/`): 18 of 18 instances match on fresh chains. The offline replay from the published code equals the online run, and one flipped non-immutable byte is detected.
+- **What the masked check does and does not attest:**
+  - It shows that the code at an address is the compiled build, so its getters are the compiled getters. It is **not** by itself an attestation of constructor values.
+  - All immutables of the six E contracts are `public` (checked on the AST: ACSC 7, KSSC 8, LSC 1, PSC 11, RSC 3, TMSC 4, Bootstrapped 1). Reading those getters after a passing masked check therefore attests **every immutable constructor value**.
+  - Constructor-written **storage** is attested only through its views: `witnesses()` and `authorities()`.
+  - **Exception: E CA-Admin sets.** `isCaAdmin` is a mapping, so only declared admins can be confirmed, and an extra admin is not detectable. F closes this with the `caAdmins(root)` view (§3).
+  - Governance's immutables and getters (§2) follow the same rule, but none of this is measured, because Governance does not exist.
 - The runner's profile allow-list and the adapter operations are agent 3's and agent 2's parts of the source plan.
 
 ## 9. Witness conflict keys — ledger bindings for agent 2 (R6 is agent 2's)

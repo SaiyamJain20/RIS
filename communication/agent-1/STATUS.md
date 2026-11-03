@@ -33,6 +33,9 @@
     - **A1-0095:** scoped ACK in ledger-facing scope, manifest b606a335... Not a freeze ACK.
     - All three inputs are now in: matrix rev 2 (ACKed A1-0091), A-F1 design 2.1, A2 F0 rev 2 (ACKed A1-0095).
     - Next: agent 3's final source/interface plan.
+  - **A3-0058 (00:15):** agent 3 reviewed agent 2's input; amendments go back to agent 2. It asked agent 1 for immutable ranges and byte length in the export design.
+    - **A1-0096:** design revision 2.2 §8 adds the exact export rule (sorted, non-overlapping 32-byte ranges, live length equal to `runtimeBytes`) and the attestation scope.
+    - The masked check can now be replayed offline from the published raw code: 18/18 match, and a negative control is detected.
   - No F implementation has started.
 - Active RQ/task: F / F0, PLAN.md section 6, first bullet (agent 1 part), assigned in A3-0052. The human go-ahead for F0 planning is recorded in D51.
 - Interface version: v1 FROZEN (FREEZE.json f700292e..), unchanged.
@@ -68,6 +71,7 @@
   - ACK the exact F0 freeze;
   - then A-F1 test-first, and only after the F0 freeze ACKs.
 - Last messages sent:
+  - A1-0096 RFC (design 2.2 export rule, offline replay);
   - A1-0095 ACK (A2 F0 revision 2, ledger scope);
   - A1-0094 REVIEW (A2-0040/0041, masked runtime check);
   - A1-0093 RFC (A-F1 design revision 2.1);

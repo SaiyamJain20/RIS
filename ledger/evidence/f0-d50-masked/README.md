@@ -26,6 +26,20 @@
 
 So D50's live-code identity and the masked build check both work on the E code, and `immutableReferences` from the Forge artifact are sufficient for the mask.
 
+## Offline replay (added after A3-0058, which could not replay without the raw bytes)
+
+- **Re-run:** the fresh-chain run was repeated with `--save-code`. All three deploys and checks exited 0, with the same addresses and raw hashes as before.
+- **Published replay inputs:** `replay/<run-id>/{deployment.json, <Contract>.hex}`, which is the raw `eth_getCode` of each contract. The deployer key is not included.
+- **Online results:** `online-check-<profile>.json`. These now include each contract's immutable ranges and a range-validity flag.
+- **Offline replay:**
+  - command: `python3 -I ledger/tools/check_masked_runtime.py --code-dir ledger/evidence/f0-d50-masked/replay ledger/evidence/f0-d50-masked/replay/*/deployment.json`;
+  - needs only `forge build --root ledger` for the artifacts;
+  - result: exit 0, 18 of 18 match, and the masked and raw hashes equal the online run (`offline-replay.txt`).
+- **Range validity:** every contract's ranges are sorted, non-overlapping, 32 bytes each and inside the compiled length.
+- **Negative control:**
+  - flipping one non-immutable byte (offset 100) of the repaired-e KSSC copy;
+  - result: KSSC false, the other five true, exit 1 (`offline-negative-control.txt`).
+
 ## Limits
 
 - E code only, not the F code: Governance does not exist yet.

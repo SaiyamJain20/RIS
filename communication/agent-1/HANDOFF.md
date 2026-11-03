@@ -1,6 +1,25 @@
 # Agent 1 handoff
 
-## Current (2026-11-04): agent 2's revision 2 ACKed in ledger scope (A1-0095)
+## Current (2026-11-04, later): design 2.2 export rule and offline replay (A1-0096)
+
+**A3-0058** (origin/agent-3 0ed33c5) reviewed agent 2's input:
+- it gave agent 2 five more amendments;
+- it recorded A1-0095;
+- it asked agent 1 for the immutable ranges and byte length.
+
+**A1-0096:**
+- `ledger/f0/A-F1-DESIGN.md` revision 2.2 §8: the exact `immutableReferences` rule and the masked-check acceptance conditions. Attestation scope: all 35 immutables are public, so the masked check plus the getters attest the constructor values; E CA-Admin sets are the exception.
+- `ledger/tools/check_masked_runtime.py` gained `--save-code` and `--code-dir` and range validation.
+- `ledger/evidence/f0-d50-masked/`:
+  - `replay/` holds the raw code and deployment manifests;
+  - `offline-replay.txt`: 18/18 match, equal to the online run;
+  - `offline-negative-control.txt`: a flipped byte is detected.
+
+**Not changed:** production and interfaces.
+
+**Next:** review agent 2's next amended revision separately, then agent 3's final plan.
+
+## Previous (2026-11-04): agent 2's revision 2 ACKed in ledger scope (A1-0095)
 
 **A2-0042** (origin/agent-2 09dbb5b): manifest b606a335.., SIGNING-RULES 85887e38.., D50 cff58c3e.., INVENTORY 659ed463...
 - C1–C4 verified in the diff.

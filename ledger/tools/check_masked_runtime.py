@@ -6,8 +6,12 @@ compiled `deployedBytecode`, whose immutable slots are zero; live code (`eth_get
 values there, so the two differ per deployment. This tool zeroes the `immutableReferences` ranges of the Forge
 artifact in the live code and checks that the result hashes to the compiled runtime. It also prints the raw live hash.
 
-Usage (repository root; `forge build --root ledger` artifacts present; chains running):
-  python3 -I ledger/tools/check_masked_runtime.py <deployment.json> [<deployment.json> ...]
+Usage (repository root; `forge build --root ledger` artifacts present):
+  python3 -I ledger/tools/check_masked_runtime.py [--save-code DIR] <deployment.json> [...]   # chains running
+  python3 -I ledger/tools/check_masked_runtime.py --code-dir DIR <deployment.json> [...]       # offline replay
+`--save-code` writes each live runtime to DIR/<deployment dir name>/<Contract>.hex; `--code-dir` reads it back
+instead of calling the RPC. The immutable ranges must be sorted, non-overlapping, 32 bytes each and inside the
+compiled length, and the live length must equal the compiled length.
 Standard library only. Exit 0 when every contract's masked live code equals the compiled runtime, 1 otherwise.
 """
 import hashlib
@@ -38,13 +42,36 @@ def artifact(name):
     return code, sorted(ranges)
 
 
-def check(deployment_path):
+def ranges_valid(ranges, size):
+    """Sorted, non-overlapping, inside [0, size), each 32 bytes (one EVM word per immutable read)."""
+    end = 0
+    for start, length in ranges:
+        if start < end or length != 32 or start + length > size:
+            return False
+        end = start + length
+    return True
+
+
+def live_code(d, name, chain, code_dir, save_dir, stem):
+    """Live runtime from RPC, or from `<code_dir>/<stem>/<name>.hex` for an offline replay."""
+    if code_dir:
+        return bytes.fromhex((Path(code_dir) / stem / f"{name}.hex").read_text().strip())
+    addr = d["chains"][chain]["contracts"][name]
+    code = bytes.fromhex(rpc(d["chains"][chain]["rpcUrl"], "eth_getCode", [addr, "latest"])[2:])
+    if save_dir:
+        out = Path(save_dir) / stem
+        out.mkdir(parents=True, exist_ok=True)
+        (out / f"{name}.hex").write_text(code.hex() + "\n")
+    return code
+
+
+def check(deployment_path, code_dir=None, save_dir=None):
     d = json.loads(Path(deployment_path).read_text())
+    stem = Path(deployment_path).parent.name
     rows, ok = [], True
     for name, chain in CHAIN_OF.items():
         addr = d["chains"][chain]["contracts"][name]
-        url = d["chains"][chain]["rpcUrl"]
-        live = bytes.fromhex(rpc(url, "eth_getCode", [addr, "latest"])[2:])
+        live = live_code(d, name, chain, code_dir, save_dir, stem)
         compiled, ranges = artifact(name)
         masked = bytearray(live)
         for start, length in ranges:
@@ -52,10 +79,12 @@ def check(deployment_path):
         compiled_sha = hashlib.sha256(compiled).hexdigest()
         manifest_sha = d["abi"][name]["runtimeSha256"]
         masked_sha = hashlib.sha256(bytes(masked)).hexdigest()
-        match = len(live) == len(compiled) and masked_sha == compiled_sha == manifest_sha
+        valid = ranges_valid(ranges, len(compiled))
+        match = valid and len(live) == len(compiled) and masked_sha == compiled_sha == manifest_sha
         ok &= match
         rows.append({
-            "contract": name, "address": addr, "liveBytes": len(live), "immutableRanges": len(ranges),
+            "contract": name, "address": addr, "liveBytes": len(live), "compiledBytes": len(compiled),
+            "immutableRanges": [{"start": s, "length": n} for s, n in ranges], "rangesValid": valid,
             "rawLiveSha256": hashlib.sha256(live).hexdigest(), "maskedLiveSha256": masked_sha,
             "compiledSha256": compiled_sha, "manifestRuntimeSha256": manifest_sha, "maskedEqualsCompiled": match,
         })
@@ -64,10 +93,17 @@ def check(deployment_path):
 
 
 def main():
-    if len(sys.argv) < 2:
+    args = sys.argv[1:]
+    opts = {}
+    for flag in ("--code-dir", "--save-code"):
+        if flag in args:
+            i = args.index(flag)
+            opts[flag] = args[i + 1]
+            del args[i:i + 2]
+    if not args:
         print(__doc__, file=sys.stderr)
         return 2
-    results = [check(p) for p in sys.argv[1:]]
+    results = [check(p, opts.get("--code-dir"), opts.get("--save-code")) for p in args]
     raw = {}
     for res in results:
         for row in res["contracts"]:
