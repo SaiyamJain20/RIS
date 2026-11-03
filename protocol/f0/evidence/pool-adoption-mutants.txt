@@ -1,8 +1,11 @@
-DETECTED P1 count a witness every time it reports (no per-witness dedupe) | failed expectations: 3
-DETECTED P2 adopt on a single report | failed expectations: 7
-DETECTED P3 threshold three instead of two (liveness mutant) | failed expectations: 5
-DETECTED P4 no ambiguity check: take the first candidate | failed expectations: 2
-DETECTED P5 ignore the sequence filter | failed expectations: 2
-DETECTED P6 count reports whose signature did not verify | failed expectations: 3
-DETECTED P7 accept any witness index | failed expectations: 2
-detected 7 of 7
+DETECTED Q1 first-report projection: an equivocator counts with its smallest value (revision-5-like) | failed expectations: 5 
+DETECTED Q2 adopt on a single report | failed expectations: 9 
+DETECTED Q3 threshold three instead of two (liveness mutant) | failed expectations: 9 
+DETECTED Q4 no ambiguity check: take the first candidate | failed expectations: 3 
+DETECTED Q5 ignore the sequence filter | failed expectations: 3 
+DETECTED Q6 count reports whose signature did not verify | failed expectations: 4 
+DETECTED Q7 accept any witness index | failed expectations: 2 
+DETECTED Q8 decide() counts late reports in the decision | failed expectations: 5 
+DETECTED Q9 decide() cancels an adoption when late reports make the union ambiguous | failed expectations: 4 
+DETECTED Q10 identical repeats treated as equivocation | failed expectations: 3 
+detected 10 of 10

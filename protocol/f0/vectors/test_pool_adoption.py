@@ -1,4 +1,5 @@
-"""Expectations for the pool's recorded-value adoption rule (agent 2, F0 revision 5; answers A3-0061). Written BEFORE the reference exists.
+"""Expectations for the pool's recorded-value adoption rule (agent 2, F0 revision 6; answers A3-0062 R4 and R5). Revision 5 expectations were written before that reference existed;
+the revision-6 changes below were written BEFORE the reference was changed.
 
 Rule under test (SIGNING-RULES section 8, items 7-9): after a StateCheckpoint collection round in which witnesses refused CONFLICT_PINNED and returned the value they
 recorded, the pool adopts a value M* iff EXACTLY ONE value has at least two distinct witnesses reporting it (valid signature, right sequence). Otherwise it adopts nothing.
@@ -13,6 +14,16 @@ PREDICTIONS (written first):
   A5  one witness reporting the same value several times counts once.
   A6  reports for another sequence, and reports whose signature does not verify, are ignored.
   A7  adoption is a pure function of the reports: the order of reports does not matter.
+  --- revision 6 (R4: equivocation) ---
+  A8  a witness that reports two DIFFERENT valid values in one snapshot is INCONSISTENT and contributes nothing to adoption; this REVERSES the revision-5 expectation for
+      [(3,FAKE),(3,A),(0,A)] (revision 5 adopted A, which the one-report-per-witness wire could not serialize). Order independent, unlike a first-report projection.
+  A9  an inconsistent witness never helps: adoption of any report set equals adoption of the same set with that witness's reports removed.
+  A10 classify() partitions the valid reports exactly as the wire carries them: one entry per consistent witness, and the list of distinct values per inconsistent witness.
+  A1' the exhaustive f <= 1 safety property (A1) still holds with the exclusion (the Byzantine witness may send any subset, which includes equivocation).
+  --- revision 6 (R5: decision snapshot and late reports) ---
+  A11 the decision is a function of the SNAPSHOT only: prefix [(0,A),(1,A)] adopts A even if late reports (2,B),(3,B) follow; a snapshot [(2,B),(3,B)] adopts B even if (0,A),(1,A)
+      are late; a snapshot with no adoption stays without adoption even if late reports would complete a pair. Late reports never cancel or create an adoption.
+  A12 two different arrival orders may adopt different values (A vs B); each adopted value was recorded by an honest witness (f <= 1), so both are safe.
 
     python3 -B -I protocol/f0/vectors/test_pool_adoption.py   (standard library only; exit 0 = all expectations hold)
 """
@@ -72,7 +83,7 @@ check("a single report adopts nothing", pa.adopt_recorded([rep(0, A)], SEQ) is N
 check("no reports adopts nothing", pa.adopt_recorded([], SEQ) is None)
 check("A4 control outside the bound: two Byzantine witnesses reporting FAKE get FAKE adopted", pa.adopt_recorded([rep(0, FAKE), rep(1, FAKE)], SEQ) == FAKE)
 check("A5 one witness repeating a value counts once", pa.adopt_recorded([rep(3, FAKE), rep(3, FAKE), rep(3, FAKE)], SEQ) is None)
-check("A5 a witness reporting two different values counts once for EACH value: A has two distinct reporters (3 and 0), so A is adopted, and honest witness 0 recorded it", pa.adopt_recorded([rep(3, FAKE), rep(3, A), rep(0, A)], SEQ) == A)
+check("A8 (reverses revision 5) a witness reporting two different values is inconsistent and excluded: [(3,FAKE),(3,A),(0,A)] adopts nothing", pa.adopt_recorded([rep(3, FAKE), rep(3, A), rep(0, A)], SEQ) is None)
 check("A5 the same witness reporting FAKE twice and A once, with nobody else, adopts nothing", pa.adopt_recorded([rep(3, FAKE), rep(3, FAKE), rep(3, A)], SEQ) is None)
 check("A6 other-sequence reports are ignored", pa.adopt_recorded([rep(0, WRONG), rep(1, WRONG)], SEQ) is None)
 check("A6 invalid-signature reports are ignored", pa.adopt_recorded([rep(0, A, valid=False), rep(1, A, valid=False)], SEQ) is None)
@@ -81,6 +92,38 @@ reports = [rep(0, A), rep(1, A), rep(2, B), rep(3, FAKE)]
 check("A7 order independent", all(pa.adopt_recorded(list(p), SEQ) == pa.adopt_recorded(reports, SEQ) for p in itertools.permutations(reports)))
 check("witness index outside 0..3 is refused", pa.refuses(lambda: pa.adopt_recorded([rep(4, A), rep(1, A)], SEQ)))
 check("a non-boolean validSignature is refused", pa.refuses(lambda: pa.adopt_recorded([{"witness": 0, "message": A, "validSignature": "yes"}], SEQ)))
+
+
+# --- A8-A10: equivocation --------------------------------------------------------------------------------------------------
+check("A8 order independent with an equivocator", all(pa.adopt_recorded(list(p), SEQ) is None for p in itertools.permutations([rep(3, FAKE), rep(3, A), rep(0, A)])))
+check("A8 an equivocator does not block two honest agreeing reporters", pa.adopt_recorded([rep(3, FAKE), rep(3, B), rep(0, A), rep(1, A)], SEQ) == A)
+check("A8 identical repeats are NOT equivocation: the witness counts once and still helps", pa.adopt_recorded([rep(0, A), rep(0, A), rep(1, A)], SEQ) == A)
+bad = []
+for byz in range(4):
+    honest = [i for i in range(4) if i != byz]
+    for hv in itertools.product([None, A, B], repeat=3):
+        for mask in range(1 << 5):
+            reports = [rep(w, v) for w, v in zip(honest, hv) if v is not None]
+            extra = [rep(byz, x) for j, x in enumerate([A, B, FAKE, WRONG, ("7", "Z")]) if mask >> j & 1]
+            full = reports + extra
+            kinds = {w: {r["message"] for r in full if r["witness"] == w and r["message"][0] == "7"} for w in range(4)}
+            inconsistent = {w for w, ks in kinds.items() if len(ks) >= 2}
+            without = [r for r in full if r["witness"] not in inconsistent]
+            if pa.adopt_recorded(full, SEQ) != pa.adopt_recorded(without, SEQ):
+                bad.append((byz, hv, mask))
+check("A9 exhaustive: removing every inconsistent witness's reports never changes the adoption", not bad)
+cons, incons = pa.classify([rep(3, FAKE), rep(3, A), rep(0, A), rep(1, A), rep(1, A), rep(2, WRONG)], SEQ)
+check("A10 classify: consistent witnesses one value each; inconsistent witnesses their distinct values (canonical order); wrong-sequence reports dropped",
+      cons == {0: A, 1: A} and incons == {3: sorted([A, FAKE])})
+check("A10 classify ignores invalid signatures", pa.classify([rep(0, A, valid=False)], SEQ) == ({}, {}))
+
+# --- A11-A12: decision snapshot and late reports ---------------------------------------------------------------------------
+late_split = [rep(2, B), rep(3, B)]
+check("A11 prefix (0,A),(1,A) adopts A; the late split (2,B),(3,B) does not cancel it", pa.decide([rep(0, A), rep(1, A)], late_split, SEQ) == A)
+check("A11 reversed order: snapshot (2,B),(3,B) adopts B although (0,A),(1,A) arrive late", pa.decide(late_split, [rep(0, A), rep(1, A)], SEQ) == B)
+check("A11 a snapshot without adoption stays so even if late reports would complete a pair", pa.decide([rep(0, A)], [rep(1, A)], SEQ) is None)
+check("A11 late reports never create an adoption on an ambiguous snapshot", pa.decide([rep(0, A), rep(1, A), rep(2, B), rep(3, B)], [rep(1, A)], SEQ) is None)
+check("A12 the two arrival orders adopt different values and both were recorded by an honest witness", {pa.decide([rep(0, A), rep(1, A)], late_split, SEQ), pa.decide(late_split, [rep(0, A), rep(1, A)], SEQ)} == {A, B})
 
 print("\nFAILED: %d" % len(FAILS) if FAILS else "\nall expectations hold")
 sys.exit(1 if FAILS else 0)

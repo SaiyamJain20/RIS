@@ -62,31 +62,64 @@ def report_ok(r):
             and isinstance(r.get("signature"), str) and SIG.fullmatch(r["signature"]) is not None)
 
 
+def _canon(m):
+    return json.dumps(m, sort_keys=True)
+
+
 def reports_ok(c, result_checkpoint=None):
-    """`collection.recordedReports` = [{witnessIndex, message, signature}] with strictly ascending indices that exist in `outcomes`; `collection.adopted` = {message, reporters}
-    where reporters are the indices whose report equals `message`, the rule of pool_adoption.py picks exactly this message from the reports, and (on success) the certificate is
-    over this very message. `adopted` requires `recordedReports`."""
-    rr, ad = c.get("recordedReports"), c.get("adopted")
-    if rr is None and ad is None:
+    """Revision 6 (A3-0062 R4/R5). The DECISION SNAPSHOT is `recordedReports` (consistent witnesses, one report each, ascending) plus `inconsistentReports` (witnesses that returned
+    two or more different valid values, with every value and signature, ascending); the two lists are disjoint and are EXACTLY the partition pool_adoption.classify computes from the
+    snapshot's reports. `lateReports` (reports after the snapshot closed, sorted by witness index then canonical message) are evidence only. `adopted` = {message, reporters} is present
+    iff pool_adoption.adopt_recorded(snapshot) yields a value, equals it, `reporters` are the consistent witnesses reporting it, and on success the certificate is over it."""
+    rr, inc, late, ad = c.get("recordedReports"), c.get("inconsistentReports"), c.get("lateReports"), c.get("adopted")
+    if rr is None and inc is None and late is None and ad is None:
         return True
-    if rr is None or not isinstance(rr, list):
+    rr = [] if rr is None else rr
+    inc = [] if inc is None else inc
+    known = {o["witnessIndex"] for o in c["outcomes"]}
+    if not (isinstance(rr, list) and isinstance(inc, list)):
         return False
     idx = [r.get("witnessIndex") for r in rr]
-    known = {o["witnessIndex"] for o in c["outcomes"]}
-    if not (all(isinstance(x, str) and DEC.fullmatch(x) and x in known for x in idx) and idx == sorted(set(idx), key=int)):
+    iidx = [r.get("witnessIndex") for r in inc]
+    if not (all(isinstance(x, str) and DEC.fullmatch(x) and x in known for x in idx + iidx) and idx == sorted(set(idx), key=int) and iidx == sorted(set(iidx), key=int) and not set(idx) & set(iidx)):
         return False
     if not all(set(r) == {"witnessIndex", "message", "signature"} and report_ok({"message": r["message"], "signature": r["signature"]}) for r in rr):
         return False
+    for e in inc:
+        subs = e.get("reports")
+        if not (set(e) == {"witnessIndex", "reports"} and isinstance(subs, list) and len(subs) >= 2 and all(isinstance(x, dict) and set(x) == {"message", "signature"} and report_ok(x) for x in subs)):
+            return False
+        msgs = [_canon(x["message"]) for x in subs]
+        if msgs != sorted(set(msgs)):
+            return False                                   # at least two DISTINCT values, in canonical order
+    if late is not None:
+        if not (isinstance(late, list) and all(isinstance(x, dict) and set(x) == {"witnessIndex", "message", "signature"} and report_ok({"message": x["message"], "signature": x["signature"]}) and x["witnessIndex"] in known for x in late)):
+            return False
+        keys = [(int(x["witnessIndex"]), _canon(x["message"])) for x in late]
+        if keys != sorted(set(keys)):
+            return False
+    snapshot = [{"witness": int(r["witnessIndex"]), "message": (r["message"]["sequence"], _canon(r["message"])), "validSignature": True} for r in rr]
+    snapshot += [{"witness": int(e["witnessIndex"]), "message": (x["message"]["sequence"], _canon(x["message"])), "validSignature": True} for e in inc for x in e["reports"]]
+    if not snapshot:
+        return ad is None
+    seqs = {m[0] for m in (r["message"] for r in snapshot)}
+    if len(seqs) != 1:
+        return False
+    seq = seqs.pop()
+    consistent, inconsistent = pool.classify(snapshot, seq)
+    if consistent != {int(r["witnessIndex"]): (r["message"]["sequence"], _canon(r["message"])) for r in rr}:
+        return False                                       # the wire lists must be exactly the reference's classification
+    if inconsistent != {int(e["witnessIndex"]): sorted((x["message"]["sequence"], _canon(x["message"])) for x in e["reports"]) for e in inc}:
+        return False
+    picked = pool.adopt_recorded(snapshot, seq)
+    if (picked is None) != (ad is None):
+        return False                                       # adopted present iff the rule adopts, decided on the snapshot only
     if ad is None:
         return True
-    if not (isinstance(ad, dict) and set(ad) == {"message", "reporters"} and isinstance(ad["message"], dict) and set(ad["message"]) == CHECKPOINT_KEYS):
+    if not (isinstance(ad, dict) and set(ad) == {"message", "reporters"} and isinstance(ad["message"], dict) and set(ad["message"]) == CHECKPOINT_KEYS and picked[1] == _canon(ad["message"])):
         return False
     rp = ad["reporters"]
-    if not (isinstance(rp, list) and len(rp) >= 2 and rp == sorted(set(rp), key=int) and rp == [r["witnessIndex"] for r in rr if r["message"] == ad["message"]]):
-        return False
-    reports = [{"witness": int(r["witnessIndex"]), "message": (r["message"]["sequence"], json.dumps(r["message"], sort_keys=True)), "validSignature": True} for r in rr]
-    picked = pool.adopt_recorded(reports, ad["message"]["sequence"])
-    if picked is None or picked[1] != json.dumps(ad["message"], sort_keys=True):
+    if not (isinstance(rp, list) and len(rp) >= 2 and rp == [r["witnessIndex"] for r in rr if r["message"] == ad["message"]]):
         return False
     return result_checkpoint is None or result_checkpoint == ad["message"]
 
@@ -135,6 +168,19 @@ n_single = sum(1 for ex in examples if "recorded" in (ex.get("error") or {}))
 check("revision 5: the document carries a collection example with recordedReports (>= 1)", n_rec >= 1)
 check("revision 5: the document carries an adoption example (>= 1)", n_adopted >= 1)
 check("revision 5: the document carries a single-witness refusal with a recorded value (>= 1)", n_single >= 1)
+n_inc = sum(1 for ex in examples if _coll(ex).get("inconsistentReports"))
+n_late_adopt = sum(1 for ex in examples if _coll(ex).get("lateReports") and "adopted" in _coll(ex))
+unions = {}
+for ex in examples:
+    c = _coll(ex)
+    if c.get("lateReports") and "adopted" in c:
+        u = frozenset(_canon(r["message"]) + r["witnessIndex"] for r in (c.get("recordedReports") or []) + (c["lateReports"] or []))
+        unions.setdefault(u, set()).add(_canon(c["adopted"]["message"]))
+n_reversed = sum(1 for v in unions.values() if len(v) >= 2)
+check("revision 6: the document carries an equivocator example with inconsistentReports (>= 1)", n_inc >= 1)
+check("revision 6: the document carries a prefix-adoption-then-late-split example (>= 1)", n_late_adopt >= 1)
+check("revision 6: the document carries a reversed-arrival-order example: same reports, a different adopted value (>= 1 pair)", n_reversed >= 1)
+check("revision 6: the document defines the decision snapshot, late reports and inconsistent reporters", all(w in text for w in ("decision snapshot", "late reports", "inconsistent")))
 check("revision 5: the document states the adoption rule (exactly one value with two distinct reporters)", "exactly one value" in text and "two distinct" in text)
 print("\nFAILED: %d" % len(fails) if fails else "\nall wire-document checks hold")
 sys.exit(1 if fails else 0)

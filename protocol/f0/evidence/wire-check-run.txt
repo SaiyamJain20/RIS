@@ -35,9 +35,28 @@ ok   example 7: exactly one of result/error is non-null
 ok   example 7: error code is a frozen v1 code
 ok   example 7: error reason (if any) is mapped to this code
 ok   example 7: single-witness `recorded` only with CONFLICT_PINNED, closed shape {message, signature}
+ok   example 8: envelope has schemaVersion v2 and ok/result/error
+ok   example 8: exactly one of result/error is non-null
+ok   example 8: error code is a frozen v1 code
+ok   example 8: error reason (if any) is mapped to this code
+ok   example 8: collection failure invariants
+ok   example 9: envelope has schemaVersion v2 and ok/result/error
+ok   example 9: exactly one of result/error is non-null
+ok   example 9: error code is a frozen v1 code
+ok   example 9: error reason (if any) is mapped to this code
+ok   example 9: collection failure invariants
+ok   example 10: envelope has schemaVersion v2 and ok/result/error
+ok   example 10: exactly one of result/error is non-null
+ok   example 10: error code is a frozen v1 code
+ok   example 10: error reason (if any) is mapped to this code
+ok   example 10: collection failure invariants
 ok   revision 5: the document carries a collection example with recordedReports (>= 1)
 ok   revision 5: the document carries an adoption example (>= 1)
 ok   revision 5: the document carries a single-witness refusal with a recorded value (>= 1)
+ok   revision 6: the document carries an equivocator example with inconsistentReports (>= 1)
+ok   revision 6: the document carries a prefix-adoption-then-late-split example (>= 1)
+ok   revision 6: the document carries a reversed-arrival-order example: same reports, a different adopted value (>= 1 pair)
+ok   revision 6: the document defines the decision snapshot, late reports and inconsistent reporters
 ok   revision 5: the document states the adoption rule (exactly one value with two distinct reporters)
 
 all wire-document checks hold
