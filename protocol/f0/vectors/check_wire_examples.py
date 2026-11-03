@@ -6,10 +6,18 @@ submits nothing and carries QUORUM_UNAVAILABLE). Documentation consistency only:
 
     python3 -B -I check_wire_examples.py [path-to-SUCCESSOR-WIRE.md]
 """
+import importlib.util
 import json
 import os
 import re
 import sys
+
+_spec = importlib.util.spec_from_file_location("pool_adoption", os.path.join(os.path.dirname(os.path.abspath(__file__)), "pool_adoption.py"))
+pool = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(pool)
+CHECKPOINT_KEYS = {"sequence", "authEpoch", "policyVersion", "keyEpoch", "witnessSetVersion", "sourceChainId", "psc", "sourceBlockNumber", "sourceBlockHash", "expiresAt"}
+SIG = re.compile(r"0x[0-9a-f]{130}")
+DEC = re.compile(r"(0|[1-9][0-9]*)")
 
 V1_CODES = {"BAD_SIGNATURE", "WRONG_SUBJECT", "WRONG_DESTINATION", "UNKNOWN_AUTHORITY", "STALE_ANCHOR", "STALE_STATE", "EXPIRED", "REPLAY", "POLICY_DENIED",
             "INSUFFICIENT_QUORUM", "DUPLICATE_SIGNER", "WRONG_EPOCH", "NOT_COMMITTED", "ADAPTER_UNAVAILABLE", "NOT_IMPLEMENTED_IN_PHASE", "UNAUTHORIZED_CALLER",
@@ -47,7 +55,43 @@ examples = [json.loads(b) for b in re.findall(r"```json\n(.*?)\n```", text, re.S
 check("examples found (>= 4)", len(examples) >= 4)
 
 
-def collection_ok(c, success, sigs=None):
+def report_ok(r):
+    """One recorded-value report: closed shape {message, signature}; message is a StateCheckpoint of decimal strings and 0x hashes/addresses."""
+    m = r.get("message") if isinstance(r, dict) else None
+    return (isinstance(m, dict) and set(m) == CHECKPOINT_KEYS and all(isinstance(v, str) and (DEC.fullmatch(v) or v.startswith("0x")) for v in m.values())
+            and isinstance(r.get("signature"), str) and SIG.fullmatch(r["signature"]) is not None)
+
+
+def reports_ok(c, result_checkpoint=None):
+    """`collection.recordedReports` = [{witnessIndex, message, signature}] with strictly ascending indices that exist in `outcomes`; `collection.adopted` = {message, reporters}
+    where reporters are the indices whose report equals `message`, the rule of pool_adoption.py picks exactly this message from the reports, and (on success) the certificate is
+    over this very message. `adopted` requires `recordedReports`."""
+    rr, ad = c.get("recordedReports"), c.get("adopted")
+    if rr is None and ad is None:
+        return True
+    if rr is None or not isinstance(rr, list):
+        return False
+    idx = [r.get("witnessIndex") for r in rr]
+    known = {o["witnessIndex"] for o in c["outcomes"]}
+    if not (all(isinstance(x, str) and DEC.fullmatch(x) and x in known for x in idx) and idx == sorted(set(idx), key=int)):
+        return False
+    if not all(set(r) == {"witnessIndex", "message", "signature"} and report_ok({"message": r["message"], "signature": r["signature"]}) for r in rr):
+        return False
+    if ad is None:
+        return True
+    if not (isinstance(ad, dict) and set(ad) == {"message", "reporters"} and isinstance(ad["message"], dict) and set(ad["message"]) == CHECKPOINT_KEYS):
+        return False
+    rp = ad["reporters"]
+    if not (isinstance(rp, list) and len(rp) >= 2 and rp == sorted(set(rp), key=int) and rp == [r["witnessIndex"] for r in rr if r["message"] == ad["message"]]):
+        return False
+    reports = [{"witness": int(r["witnessIndex"]), "message": (r["message"]["sequence"], json.dumps(r["message"], sort_keys=True)), "validSignature": True} for r in rr]
+    picked = pool.adopt_recorded(reports, ad["message"]["sequence"])
+    if picked is None or picked[1] != json.dumps(ad["message"], sort_keys=True):
+        return False
+    return result_checkpoint is None or result_checkpoint == ad["message"]
+
+
+def collection_ok(c, success, sigs=None, checkpoint=None):
     q = int(c["quorum"])
     outs = c["outcomes"]
     ok = [o["witnessIndex"] for o in outs] == [str(i) for i in range(len(outs))] and len(outs) == 4
@@ -55,6 +99,7 @@ def collection_ok(c, success, sigs=None):
     for o in outs:
         if o["status"] == "refused":
             ok &= o.get("code") in V1_CODES and (("reason" not in o) or mapping.get(o["reason"]) == o["code"])
+    ok &= reports_ok(c, checkpoint if success else None)
     sub = c["submittedSigners"]
     if success:
         signed = {o["witness"] for o in outs if o["status"] == "signed"}
@@ -73,10 +118,23 @@ for i, ex in enumerate(examples):
         e = ex["error"]
         check(tag + ": error code is a frozen v1 code", e["code"] in V1_CODES)
         check(tag + ": error reason (if any) is mapped to this code", "reason" not in e or mapping.get(e["reason"]) == e["code"])
+        if "recorded" in e:
+            check(tag + ": single-witness `recorded` only with CONFLICT_PINNED, closed shape {message, signature}", e.get("reason") == "CONFLICT_PINNED" and set(e["recorded"]) == {"message", "signature"} and report_ok(e["recorded"]))
         if "collection" in e:
             check(tag + ": collection failure invariants", collection_ok(e["collection"], False) and e.get("reason") == "QUORUM_UNAVAILABLE")
     elif "collection" in ex["result"]:
-        check(tag + ": collection success invariants", collection_ok(ex["result"]["collection"], True, ex["result"].get("signatures")))
+        check(tag + ": collection success invariants", collection_ok(ex["result"]["collection"], True, ex["result"].get("signatures"), ex["result"].get("checkpoint")))
 
+def _coll(ex):
+    return (ex.get("result") or {}).get("collection") or (ex.get("error") or {}).get("collection") or {}
+
+
+n_rec = sum(1 for ex in examples if _coll(ex).get("recordedReports"))
+n_adopted = sum(1 for ex in examples if "adopted" in _coll(ex))
+n_single = sum(1 for ex in examples if "recorded" in (ex.get("error") or {}))
+check("revision 5: the document carries a collection example with recordedReports (>= 1)", n_rec >= 1)
+check("revision 5: the document carries an adoption example (>= 1)", n_adopted >= 1)
+check("revision 5: the document carries a single-witness refusal with a recorded value (>= 1)", n_single >= 1)
+check("revision 5: the document states the adoption rule (exactly one value with two distinct reporters)", "exactly one value" in text and "two distinct" in text)
 print("\nFAILED: %d" % len(fails) if fails else "\nall wire-document checks hold")
 sys.exit(1 if fails else 0)
