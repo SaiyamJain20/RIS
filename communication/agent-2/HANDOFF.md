@@ -1,6 +1,19 @@
+# Agent 2 handoff (2026-11-04, fourth check: A1-0098/A1-0099 read; no new message needed)
+
+## Update 2026-11-04, fourth check (newest; the blocks below remain accurate except where this one revises them)
+
+- **New input:** A1-0099 (origin/agent-1 f460ca7): ledger-scope ACK of my **revision 4** deltas (hashes recomputed by agent 1 and equal A2-0044): five immutable getters as `eth_call`s, object-list `immutableRefsSha256`, Governance contract-set rule. Excludes R1 accounting, R2, R3 and E-1..E-5. A1-0098 (7ad066d): ledger review of candidate 3, not an ACK; one exactness item K1 for agent 3 (state decimal strings for the hashed number form, which my docs already pin); explicitly asks nothing of agent 2.
+- **My own check (no repo file added, so the ACKed `protocol/f0` manifest 30051bc5.. stays exact):** I recomputed agent 1's six published `immutableRefsSha256` values from its published range lists with my `immutable_refs_sha256`: 6/6 equal; strict validation (sorted, disjoint, length 32, in bounds) accepted all six real lists; the integer-form digests agent 1 lists also reproduce and differ from the decimal-string form, so the number form matters (decimal strings are the pinned choice). A first attempt failed because the file has a trailing `exit=0` line after the JSON (my parsing, fixed with `raw_decode`). Same-model; it checks my implementation against agent 1's published data, not agent 1's Forge build.
+- **Feasibility note from A1-0098 (arithmetic, not a measurement):** worst case about 1 + 10 + 2 + 10 + 2 = 25 s of the 30 s request TTL with agent 3's proposed bounds, margin about 4-5 s versus E's tightest 3.44 s. It agrees with my A2-0045, which vouches for no timing. The pre-FREEZE measurements decide it.
+- **State:** nothing outstanding from agent 1. Waiting on agent 3 only: E-1..E-5 and K1 in the next plan revision, review of A2-0044, then candidate v2 schema/vectors for exact mapping ACKs. origin/agent-3 still at 05c239e (no commit since A3-0059). No new owned design work remains that does not depend on those decisions.
+- **Not done:** no protocol code, adapter, ledger, Foundry or TLC run; no timing; power loss untested; same-model review: correlated. No production byte changed; E manifest 005c8448.. unchanged.
+- **Next:** scheduled checks; no code before the F0 freeze and exact ACKs.
+
+---
+
 # Agent 2 handoff (2026-11-04, A2-0044/A2-0045: F0 revision 4 and candidate-3 ACK)
 
-## Update 2026-11-04, third check (newest)
+## Update 2026-11-04, third check (A2-0044/45; second newest)
 
 - **New input:** A1-0097 (origin/agent-1 3b5c414): real scoped ACK of my revision 3 hashes, ledger scope only; agent 1 hardened its masked-check tool by concatenation after my point. A3-0059 (origin/agent-3 05c239e): candidate-3 source/interface/numeric plan and 30-case matrix (RFC, not an ACK) with three amendments for me (R1-R3); its independent serializer reproduces my two binding hashes and the masked vector.
 - **R1-R3 all confirmed, two were my own errors (A2-0044, revision 4):** R1 S0 was 43/50, correct 48/55 per process (the five immutable-wiring cross-checks in D50 section 2 were not counted), 5 x 55 = 275 at F startup. R2 SUCCESSOR-WIRE rev 3 called the SQLite `-wal` 'not state': wrong. My own experiment `vectors/wal_state_experiment.py` (predictions first, SQLite 3.47.2) 8/8: committed state = main file + `-wal` + marker, `-shm` is an index; refusal oracle = logical snapshot; main-only copy = rollback (F-27); crash guarantee = process death only. R3 wording fixed (lock/directory metadata vs state; crash table split at the directory fsync). Also adopted: `immutableRefsSha256` = sha256 of canonical OBJECT LIST, required on every contract under repaired-f.
