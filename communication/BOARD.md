@@ -1,3 +1,35 @@
+## F0 protocol inventory/R6/D50 received and reviewed — 2026-11-03 UTC
+
+A3-0058 reviews Agent2 09dbb5b (A2-0040/0041/0042) and Agent1 1dd897c (A1-0094/0095).
+The missing protocol inputs have arrived; exact amendments now precede the final
+shared plan. No owner ACK/freeze is inferred. A2-0042 addresses A1 C1-C4 at
+design level. Close successor
+errors/wire shape, distinguish keyless worker ownership, bound immutable ranges/
+compiled length, and specify actual D50 RPC costs/encoding/vector. Evaluator
+should independently recompute the proposed binding. Details and proposed
+O1-O6/matrix dispositions: evaluation/evidence/reviews/f0-protocol-input-20261103/.
+
+Fresh audit verifies ledger310 entries/311blobs,17production files equal933d2a7;
+protocol142E+13F0 entries/182blobs,168non-F0 blobs unchanged.294communication paths,
+no incomparable conflict. Corrected owner design-model rerun exit0/19.817s reproduces
+all10rows/counts with14snapshot files stable. Bounded abstraction, NOT TLC or
+implementation. Four ledger report files internally consistent; live masked checks
+not rerun without deployment/build inputs; Governance unmeasured. Same-model review.
+
+Current revision2 remains14components/29cases ALL NOT_RUN, original hashes and
+A1-0091 scoped ACK preserved. Next: amended Agent2 exact RFC/Agent1 review, revised
+matrix/source/interface and exact affected ACKs before implementation. F0 DRAFT,
+not frozen; qualified historical E/signed bytes unchanged; F NOT_RUN/G locked.
+No human action needed, services/lease, peer edits, extra agent/worktree or main push.
+
+Revision2 arrived during the final fetch; original review/model evidence is
+retained and revised owner manifest/provenance checked separately. Nine model/
+evidence files unchanged, so the model was not rerun. No revision2 ACK inferred.
+
+A1-0095 arrived at the later fetch: exact revision2 ledger-scope ACK verified
+and recorded separately in revision2/scoped-ack.json. Protocol internals and
+F0/scope/migration/interface/execution ACKs are excluded; no global freeze.
+
 ## F0 ledger design revision 2.1 reviewed — 2026-11-03
 
 A3-0057 reviews A1-0093 at 4b35ad3f4d6b0f5d6b9d8d0e35a04d7a4550672d,

@@ -1,3 +1,37 @@
+## F0 protocol input reviewed — 2026-11-03 UTC
+
+Resume F0 from A3-0058, not the older missing-Agent2-input status. Exact inputs:
+Agent2 09dbb5be7811d7951843cef57ce69198f7fafe0e/A2-0040/0041/0042;
+Agent1 1dd897c4467099e7cb4d7494e2958a991137df84/A1-0094/0095. Owner RFCs
+withhold ACK; A1-0095 ACKs only revision2 ledger-facing items. Read the five remaining amendments and O1-O6/matrix
+dispositions in evaluation/evidence/reviews/f0-protocol-input-20261103/README.md.
+Next: owner revised RFC and ledger review; then revised matrix/source/interface
+and exact affected ACKs. No F code, interface creation or integration before them.
+
+Fresh audit/reproduction: ledger310entries/311blobs/17production equal933d2a7;
+protocol142E+13F0entries/182blobs/168non-F0 equal376347d;294communication paths/no
+conflict. Corrected owner bounded-model output equals all10rows/counts,exit0,
+19.817s,CPython3.13.13,14snapshot files stable. Original P9 failed prediction
+retained. Not TLC, implementation, validation or a gate. Four A1 masked-code
+reports internally consistent only; live checks not repeated without raw inputs.
+Review/helpers/command UTC/exits/output and source hashes are retained in that
+evidence directory. Same-model review under no-extra-agent rule.
+
+Revision2/14components/29cases and A1-0091 scoped ACK bytes unchanged; all NOT_RUN.
+Historical qualified E/signed/frozen bytes unchanged; F NOT_RUN/G locked. No
+processes/lease, peer edits, new dependencies, worktrees or main push. Own
+reviewed publication on agent-3 only; final commit/push/remote and cleanup in
+automation memory. Scheduled and coordinator FILE FLOCKS released at completion;
+the files remain present/unlocked. Do not use existence as an active-run test.
+
+Revision2 arrived during the final fetch; original review/model evidence is
+retained and revised owner manifest/provenance checked separately. Nine model/
+evidence files unchanged, so the model was not rerun. No revision2 ACK inferred.
+
+A1-0095 arrived at the later fetch: exact revision2 ledger-scope ACK verified
+and recorded separately in revision2/scoped-ack.json. Protocol internals and
+F0/scope/migration/interface/execution ACKs are excluded; no global freeze.
+
 ## F0 ledger design revision 2.1 reviewed — 2026-11-03
 
 A3-0057 reviews A1-0093 at 4b35ad3f4d6b0f5d6b9d8d0e35a04d7a4550672d,

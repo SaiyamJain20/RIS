@@ -1,0 +1,123 @@
+{
+  "startedAt": "2026-11-03T18:37:43.534987+00:00",
+  "endedAt": "2026-11-03T18:37:43.599620+00:00",
+  "refs": {
+    "origin/agent-1": "1dd897c4467099e7cb4d7494e2958a991137df84",
+    "origin/agent-2": "09dbb5be7811d7951843cef57ce69198f7fafe0e",
+    "origin/agent-3": "143619fa43e87c1f604774186fdfac86bb59f708",
+    "origin/main": "376347d9b0979d1e46824a30197b935ffe91e4fb"
+  },
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "communication/build_prompts.py",
+        "--check"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-11-03T18:37:43.564968+00:00",
+      "endedAt": "2026-11-03T18:37:43.591951+00:00",
+      "exitCode": 0,
+      "outputSha256": "8f29a69f6b3463b624687ea89c034e86c0217602a093168e78b810d5ef4ac781"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-11-03T18:37:43.591992+00:00",
+      "endedAt": "2026-11-03T18:37:43.597088+00:00",
+      "exitCode": 0,
+      "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "--version"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-11-03T18:37:43.597128+00:00",
+      "endedAt": "2026-11-03T18:37:43.598474+00:00",
+      "exitCode": 0,
+      "outputSha256": "6b64edf0fc8f22e798fb64873acba6b4106df290f0bf458b507e8cb409b63e49"
+    },
+    {
+      "argv": [
+        "git",
+        "--version"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-11-03T18:37:43.598519+00:00",
+      "endedAt": "2026-11-03T18:37:43.599583+00:00",
+      "exitCode": 0,
+      "outputSha256": "fff575d3fa43a92d932e4eb8bc03394140ce40699f9c8a97c3126016a244dfb8"
+    }
+  ],
+  "auditCommand": [
+    "/usr/bin/python3",
+    ".git/ris-f0-input-review.py"
+  ],
+  "auditExitCode": 0,
+  "revision2AuditCommand": [
+    "/usr/bin/python3",
+    ".git/ris-f0-input-revision2.py"
+  ],
+  "revision2AuditExitCode": 0,
+  "initialPrepublicationCheck": "REFUSED because peer ref advanced; revision2 then read and audited",
+  "auditToolSha256": "342f499e76ebc93e95bd0de61d407f48a6f1e83e3f01785bd4c2bb6a51b07796",
+  "verificationToolSha256": "cbd37800cd424487db862667a91db0a19f0b462d07f406dd8a1571bd95bcdb80",
+  "components": 14,
+  "cases": 29,
+  "matrixUnchanged": true,
+  "allNotRun": true,
+  "exactOwnerAcks": [],
+  "executionAuthorized": false,
+  "protectedPathsUnchanged": [
+    "ledger",
+    "protocol",
+    "interfaces",
+    "archive",
+    "evaluation/reports/RQ1-E.md",
+    "evaluation/evidence/e3/gate-run-20261012",
+    "evaluation/evidence/fault-model.csv",
+    "evaluation/scenarios/f_matrix.json",
+    "evaluation/evidence/reviews/f0-a1-0090-20261103",
+    "evaluation/evidence/reviews/f0-a1-0092-20261103"
+  ],
+  "modelRerun": {
+    "startedAt": "2026-11-03T18:30:09.815652+00:00",
+    "endedAt": "2026-11-03T18:30:29.632723+00:00",
+    "wallSeconds": 19.817064013001072,
+    "argv": [
+      "/usr/bin/python3",
+      "-I",
+      "conflict_key_model.py"
+    ],
+    "cwd": "/home/karma/Documents/RIS/.git/ris-f0-protocol-input-snapshot/protocol/f0/model",
+    "exitCode": 0,
+    "python": "3.13.13 (main, Apr  8 2026, 00:00:00) [GCC 15.2.1 20260123 (Red Hat 15.2.1-7)]",
+    "stdoutSha256": "a6e0283aa31b265bb37cf6bb524663c6e5e241f04c5743f6d4090ba07030a0eb",
+    "stderrSha256": "e60c4fc02c92f2a686f291e0f9bf9bfa08767352e640b2b6da044855a4d27b62",
+    "ownerOutputSemanticEqual": true,
+    "snapshotFilesStable": {
+      "protocol/f0/D50-DEPLOYMENT-BINDING.md": "f615e0f9dd3ccb33d4192149ff1489ed3a8cdb4e25ea039bb0eb50581d020e4b",
+      "protocol/f0/INVENTORY.md": "6210006e0591df8710c0b413a74e67f35988fa0a0e6f12f489c73c305af0d25f",
+      "protocol/f0/MANIFEST.sha256": "2d9395aac7047ac64437027867252e13083886f35f0013159726dc931ed0a3ce",
+      "protocol/f0/README.md": "b88994d0ea4b468518cdde0c791e6f02d2b56ff9e30298b29acf68a9a2df79c5",
+      "protocol/f0/SIGNING-RULES.md": "3d5ca717190cd465df888270e4c4c048e661ac10d9121ce6097bb87dc04115b0",
+      "protocol/f0/evidence/MODEL-RUNS.md": "a8e9e975e7269b0f567deaf9840ddab5b72c584870bbe1ef37daf3abcef41f14",
+      "protocol/f0/evidence/conflict_key_model.run1.py": "13ddf926921ce8b413f07e546a257f83c10411722ff33990c1851dfc5b34560c",
+      "protocol/f0/evidence/model-python-version.txt": "6b64edf0fc8f22e798fb64873acba6b4106df290f0bf458b507e8cb409b63e49",
+      "protocol/f0/evidence/model-run1-initial.json": "cccc53fb3262854690b42a32321cdd6f18c97b13a210cf7b23d7798c3f503fe5",
+      "protocol/f0/evidence/model-run1-initial.stderr.txt": "e9277110636454a3c6daa0480459c42196c70a74091050f0d7876fefadca2397",
+      "protocol/f0/evidence/model-run2-corrected.json": "a6e0283aa31b265bb37cf6bb524663c6e5e241f04c5743f6d4090ba07030a0eb",
+      "protocol/f0/evidence/model-run2-corrected.stderr.txt": "e60c4fc02c92f2a686f291e0f9bf9bfa08767352e640b2b6da044855a4d27b62",
+      "protocol/f0/model/PREDICTIONS.md": "cd7b2740be0a8a0a84b1c8eaa7125d45ee2630f821cd74c8a50c6a194ff79024",
+      "protocol/f0/model/conflict_key_model.py": "de8fc9e1753aade841d2570ba0d40186b494467acbe45074f87c5eadd029e334"
+    },
+    "scope": "owner design abstraction rerun only; no TLC, validation, RPC, implementation or gate claim"
+  },
+  "scope": "planning/provenance and design-model reproduction; no full suite/TLC/RPC/gate"
+}

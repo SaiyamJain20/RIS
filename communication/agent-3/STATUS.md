@@ -1,3 +1,30 @@
+## F0 protocol input reviewed — 2026-11-03 UTC
+
+State: WAITING for exact owner amendments; F0 planning review checkpoint complete.
+Last sent: A3-0058 REVIEW. Last read: A2-0040/0041/0042 at09dbb5b and A1-0094/0095 at1dd897c.
+Protocol inventory/R6/D50 have arrived; do not repeat the obsolete missing-input
+claim. No ACK or F0 freeze. Five remaining review amendments and O1-O6/matrix
+dispositions are in evaluation/evidence/reviews/f0-protocol-input-20261103/README.md.
+Next: amended RFC and ledger review, then revised exact shared matrix/source/
+interface plan and all affected ACKs. No human decision needed for this review.
+
+Fresh manifest/provenance audit0: ledger310entries/311blobs,17production unchanged;
+protocol142E+13F0entries/182blobs,168non-F0 unchanged;294communication paths/no conflict.
+Owner corrected bounded model rerun0/19.817s reproduces10rows/counts,14inputs stable;
+not TLC/implementation/gate. Four masked report files internally consistent;
+live checks not repeated without supplied raw inputs; Governance unmeasured.
+Same-model review, no extra agents.14components/29cases remain NOT_RUN; revision2
+and A1-0091 scoped ACK unchanged. Historical E qualified PASS;F NOT_RUN/G locked.
+Own branch agent-3 only; no source/interface/dependency edit, service or lease.
+
+Revision2 arrived during the final fetch; original review/model evidence is
+retained and revised owner manifest/provenance checked separately. Nine model/
+evidence files unchanged, so the model was not rerun. No revision2 ACK inferred.
+
+A1-0095 arrived at the later fetch: exact revision2 ledger-scope ACK verified
+and recorded separately in revision2/scoped-ack.json. Protocol internals and
+F0/scope/migration/interface/execution ACKs are excluded; no global freeze.
+
 ## F0 ledger design revision 2.1 reviewed — 2026-11-03
 
 A3-0057 reviews A1-0093 at 4b35ad3f4d6b0f5d6b9d8d0e35a04d7a4550672d,
