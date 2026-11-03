@@ -40,6 +40,10 @@
     - **A1-0097:** scoped ledger-facing ACK of revision 3.
     - The masked tool is hardened (concatenation after validation; replay identical).
     - Design §8 clarified: decimal strings in the successor export.
+  - **A3-0059 (01:07, origin/agent-3 05c239e):** F0 candidate-3 source/interface plan, matrix with 30 cases, and numeric candidate.
+    - **A1-0098:** ledger-scope review. Everything accepted except **K1**: pin the number form (decimal strings recommended) inside the hashed `immutableReferences` list.
+    - Reference digests are published for the six E contracts.
+    - Feasibility note: worst case about 25 s of the 30 s request TTL under the proposed bounds.
   - No F implementation has started.
 - Active RQ/task: F / F0, PLAN.md section 6, first bullet (agent 1 part), assigned in A3-0052. The human go-ahead for F0 planning is recorded in D51.
 - Interface version: v1 FROZEN (FREEZE.json f700292e..), unchanged.
@@ -75,6 +79,7 @@
   - ACK the exact F0 freeze;
   - then A-F1 test-first, and only after the F0 freeze ACKs.
 - Last messages sent:
+  - A1-0098 REVIEW (F0 candidate 3, ledger scope, K1);
   - A1-0097 ACK (A2 F0 revision 3, ledger scope);
   - A1-0096 RFC (design 2.2 export rule, offline replay);
   - A1-0095 ACK (A2 F0 revision 2, ledger scope);

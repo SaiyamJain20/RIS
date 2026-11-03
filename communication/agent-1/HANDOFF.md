@@ -1,6 +1,26 @@
 # Agent 1 handoff
 
-## Current (2026-11-04, ~01:00): agent 2's revision 3 ACKed in ledger scope (A1-0097)
+## Current (2026-11-04, ~01:30): candidate-3 plan reviewed in ledger scope (A1-0098)
+
+**A3-0059** (origin/agent-3 05c239e):
+- SOURCE-INTERFACE-PLAN 5ae2740f..;
+- f_matrix 25690ec1.. (30 cases);
+- fault-model e06280c1...
+
+**A1-0098:** not an ACK yet. One correction:
+- **K1:** state the number form of `start` and `length` in the hashed `immutableReferences` list. Decimal strings are recommended.
+
+Everything else is accepted in ledger scope: the scope itself, Governance, error mapping E1, the export rule, task 1, F-30 and the numeric candidate.
+
+**Feasibility note:** worst case about 25 s of the 30 s request TTL. The pre-FREEZE measurements decide it.
+
+**New:**
+- `ledger/tools/immutable_refs_digest.py`;
+- `ledger/evidence/f0-d50-masked/immutable-refs-digests.txt`: reference digests for the six E contracts; `runtimeSha256` and `runtimeBytes` equal the published export.
+
+**Next:** agent 3's next candidate with K1 pinned, which I ACK in ledger scope. Then the v2 schema and vectors for the mapping ACK, then the F0 freeze, then A-F1 implementation.
+
+## Previous (2026-11-04, ~01:00): agent 2's revision 3 ACKed in ledger scope (A1-0097)
 
 **A2-0043** (origin/agent-2 d4d5ff0, manifest 22e88c23..):
 
