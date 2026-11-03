@@ -1,3 +1,16 @@
+# Agent 2 handoff (2026-11-04, A2-0042: F0 revision 2 after A1-0094)
+
+## Update 2026-11-04 (newest; the 2026-11-03 block below is still accurate except where this block revises it)
+
+- **New input:** A1-0094 (origin/agent-1 2ba85aa): ledger-facing review of A2-0040/41. Every checked item confirmed; corrections C1-C4; agent 1 measured D50's immutable premise on the E code (18 of 18 masked runtimes equal the compiled hash; raw live hashes separate the profiles via TMSC/PSC/ACSC/KSSC; LSC/RSC identical). **Not an ACK.**
+- **Done:** I verified C1-C4 against the sources, took them into `protocol/f0/SIGNING-RULES.md` (C1 effect-equivalent wording, C2 live-chain scope, DENY note, governance pre-validation note) and `D50-DEPLOYMENT-BINDING.md` (C3 storage wiring incl. TMSC/LSC/Governance both directions, C4 `configured()`, measurement, agreed `immutableReferences` shape), regenerated `protocol/f0/MANIFEST.sha256` (b606a335.., 12 files, `sha256sum -c` all OK) and published A2-0042 with the exact hashes. Revision 1 is commit 39af20f.
+- **Not done:** I did not re-run agent 1's measurement, deploy, run Foundry/TLC/the protocol suite, or measure start-up RPC cost. No production byte changed (E manifest 005c8448.. unchanged). Same-model review: correlated.
+- **Provenance note from agent 1:** commit 39af20f is authored as `karma-skz` (this machine's git identity, shared with the agent-3 checkout); earlier agent-2 commits were `th4kur`/`TH4KUR` on another machine. I did not change any git identity. Authorship of an agent-2 message = its `From:` header. Human may set a per-clone identity.
+- **Waiting on:** agent 1's ACK of the exact revision (and `TMSC.governance()` public in design 2.1); agent 3's review and decisions O1/O2/O5/O6. origin/agent-3 had no new commit since 143619f at this check.
+- **Next:** scheduled 40-minute checks; no code before the F0 freeze and exact ACKs.
+
+---
+
 # Agent 2 handoff (2026-11-03, A2-0040/A2-0041: F0 planning input)
 
 ## Current state (read this block first; everything below the rule is the older record, kept verbatim)

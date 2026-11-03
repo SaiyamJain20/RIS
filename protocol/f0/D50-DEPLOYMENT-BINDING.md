@@ -1,6 +1,7 @@
 # D50 RFC: deployment-bound private state (worker and witnesses) — for review
 
-Author: agent 2. Date: 2026-11-03. **PROPOSAL, NOT ACKED, NOT IMPLEMENTED, NOT FROZEN.** Answers D50 (DECISIONS.md), A3-0051 and the D-2 item of A2-0039; covers all seven runtimes
+Author: agent 2. Date: 2026-11-03 (revision 2, 2026-11-04, after A1-0094). **PROPOSAL, NOT ACKED, NOT IMPLEMENTED, NOT FROZEN.**
+Revision 2 takes A1-0094 C3 (wiring held in storage that no code hash covers), C4 (sealed state) and folds in agent 1's measured masked-runtime check. Revision 1 is commit 39af20f (file sha256 `f615e0f9..`). Answers D50 (DECISIONS.md), A3-0051 and the D-2 item of A2-0039; covers all seven runtimes
 of the F deployment (A3-0055/0056/0057). Claim classes as in `INVENTORY.md`: **[src]** read from source, **[prop]** proposal, **[meas]** measured earlier (A2-0039).
 
 ## 1. Problem [src, meas]
@@ -44,7 +45,11 @@ chains.<pbc|dbc>:
 immutables.<Name>:        {profile, mutations}          read live through the public views of TMSC, PSC, KSSC, ACSC (and Governance: mutations)
 witnessSets.<psc|kssc|governance>:
                           {version, threshold, witnesses[]}   read live from the contract (storage, so not covered by any code hash), contract order, lowercase
-wiring:                   {ksscForChain: PSC.ksscForChain(dbcChainId), acsc: KSSC.acsc(), kssc: ACSC.kssc(), pscRelay: ACSC.pscRelay()}
+wiring (storage set by wire(); no code hash covers it, A1-0094 C3):
+                          {ksscForChain: PSC.ksscForChain(dbcChainId), acsc: KSSC.acsc(), kssc: ACSC.kssc(), pscRelay: ACSC.pscRelay(),
+                           tmsc: {psc: TMSC.psc(), rsc: TMSC.rsc()}, lsc: {rsc: LSC.rsc(), tmsc: LSC.tmsc(), psc: LSC.psc()},
+                           governance (repaired-f only): {tmsc: TMSC.governance(), target: Governance.target()}}
+                          PSC.rsc/tmsc/lsc and RSC.tmsc/lsc are immutables, so the code hash already covers them; they are still cross-checked against the manifest addresses (cheap).
 ```
 
 Contract sets: PBC `LSC, TMSC, RSC, PSC` (+ `Governance` under repaired-f); DBC `ACSC, KSSC`. That is the **six** E runtimes and the **seventh** (Governance) for F.
@@ -59,7 +64,8 @@ At open, in this order, fail-closed:
 
 1. Read every value of `B` live from the two chains.
 2. Compare each manifest-asserted value that is also readable live (addresses have code; profile name/enum; `mutations`; the manifest witness set against `PSC/KSSC/Governance.witnesses()`, `threshold()`, `witnessSetVersion()`; ABI hashes as today).
-   Mismatch refuses **before any store is opened**, with the existing closed error classes: deployment or code mismatch `WRONG_DESTINATION`, profile `WRONG_PROFILE`, set or version `STALE_STATE`.
+   Also require (A1-0094 C4) `configured() == true` on all six contracts (Governance has no bootstrap): an unsealed deployment can still be rewired after binding. And require the wiring above to be **bidirectionally consistent** with the manifest addresses, in particular `TMSC.governance() == Governance` and `Governance.target() == TMSC`: a Governance whose target is not the TMSC that trusts it, or the reverse, would otherwise still bind.
+   Mismatch refuses **before any store is opened**, with the existing closed error classes: deployment, code, wiring or unsealed state `WRONG_DESTINATION` (the closest closed class; agent 3 confirms the mapping), profile `WRONG_PROFILE`, set or version `STALE_STATE`.
 3. Require that PSC, KSSC and Governance hold the **same** witness addresses, threshold and version (this is A1-0088 L11, which the E witness checks only for the version, `witness.py:41`), and that the store's key is a member of all of them.
 4. Compute `binding_v2`. Open the store. A fresh store inserts `binding_v2`, `owner` and `schema`; an existing store must carry equal `binding_v2`, `owner` and `schema`, else refuse.
 
@@ -72,9 +78,10 @@ hash, which the witness observation tripwire (`SIGNING-RULES.md` section 6) alre
 - Immutable constructor values (profile, mutations, chain ids, addresses, threshold) are embedded in the deployed code, which is why `runtimeSha256` in the manifest (compiled code with immutable slots zeroed, `export_abi.py:59-65`)
   cannot be compared with `eth_getCode` directly. The identity above uses the **live code hash**, which includes the immutable values, and also reads the immutables through their public views.
   That is sufficient to separate any two deployments that differ in a profile, a mutation bit, a threshold or any contract byte.
-- It does **not** show that the deployed code is the **compiled build** the manifest names: a deployer could publish a deviating source whose manifest still carries the honest `runtimeSha256`, and the live-code identity would simply bind to that code.
-  Closing that needs the masked comparison (zero the immutable ranges in `eth_getCode`, hash, compare with the manifest's `runtimeSha256`), which needs **agent 1's export of `immutableReferences`** per contract (A1-0088 D-f proposal).
-  Request: agent 1 exports it in the successor schema. Until then the build check is **not performed** and the report must say so.
+- The live-code identity alone does **not** show that the deployed code is the **compiled build** the manifest names: a deployer could publish a deviating source whose manifest still carries the honest `runtimeSha256`, and the identity would simply bind to that code.
+  Closing that is the masked comparison (zero the immutable ranges in `eth_getCode`, hash, compare with the manifest's `runtimeSha256`), which needs agent 1's `immutableReferences` per contract.
+  **Measured by agent 1 on the E code (A1-0094, `ledger/evidence/f0-d50-masked/`, one host, one trial per profile, Forge/Anvil 1.8.5):** on fresh chain pairs repaired-e, paper-strict and mutant-no-nonce get identical addresses (reproducing D-2); the raw live code hash differs across the three profiles for TMSC, PSC, ACSC and KSSC; LSC and RSC raw hashes are identical (no profile immutables); the masked comparison equals the compiled and manifest `runtimeSha256` for **18 of 18** instances. Consequence for this RFC: the profile separation of the identity rests on TMSC, PSC, ACSC and KSSC plus the addresses and the storage reads, not on LSC or RSC. Governance (the seventh runtime) is unmeasured because it does not exist yet.
+  **Agreed with agent 1 (A1-0094):** `exports/abi/manifest.json` gains `contracts.<C>.immutableReferences` in the successor schema, a sorted list of `{start, length}` in decimal flattened from the Forge artifact's `deployedBytecode.immutableReferences` (AST ids dropped); the algorithm is `ledger/tools/check_masked_runtime.py` (zero the ranges, sha256, compare with `runtimeSha256`, require equal length). Agent 3 owns the schema; the v1 export is unchanged. Once the field exists the witness/worker performs the masked build check at open; until then the build check is **not performed** and the report must say so.
 - The v1 `runtimeSha256` values stay in `B` as manifest-asserted strings (not live-derived), so a changed manifest changes the binding even before the masked check exists.
 
 ## 5. Old-state migration and refusal [prop]
@@ -90,9 +97,10 @@ hash, which the witness observation tripwire (`SIGNING-RULES.md` section 6) alre
 
 Refusals (each must fail on the unmodified deployment's own store and must not create or modify a store):
 same addresses and chain ids with a different profile; with a different `mutations`; with a different witness set, threshold or version in any of PSC, KSSC, Governance; with different code at one address; with a different genesis (chain restarted);
-PSC and KSSC disagreeing on witness addresses; a store key not in the set; a witness-3 store opened as witness-2; a legacy E store with rows; a corrupt `meta`; a store missing next to its marker; a manifest whose asserted value differs from the chain.
-Positive controls: reopen the same deployment (worker and each witness); restart across adapter processes; `export --check` and the default exporter output byte-identical; a Governance-carrying F deployment binds seven runtimes.
-Source-edit mutants for `tools/mutation_check.py`: skip the mutations comparison, the code hash, the genesis check, the owner check, the legacy refusal, the cross-contract set equality. A mutant that survives is a gap.
+PSC and KSSC disagreeing on witness addresses; a store key not in the set; a witness-3 store opened as witness-2; a legacy E store with rows; a corrupt `meta`; a store missing next to its marker; a manifest whose asserted value differs from the chain;
+a deployment with `configured() == false` (C4); `TMSC.psc/rsc` or `LSC.rsc/tmsc/psc` differing from the manifest addresses (C3); under repaired-f `TMSC.governance()` not equal to Governance, or `Governance.target()` not equal to TMSC, tested in both directions (C3); once `immutableReferences` exists, code that differs from the compiled build in one non-immutable byte (masked mismatch).
+Positive controls: reopen the same deployment (worker and each witness); restart across adapter processes; `export --check` and the default exporter output byte-identical; a Governance-carrying F deployment binds seven runtimes; the masked build check passes on an honest deployment of every contract (agent 1 measured 18 of 18 on E).
+Source-edit mutants for `tools/mutation_check.py`: skip the mutations comparison, the code hash, the genesis check, the owner check, the legacy refusal, the cross-contract set equality, the `configured()` check, the storage-wiring comparison, the Governance/TMSC bidirectional check, the masked build comparison. A mutant that survives is a gap.
 
 ## 7. What this does not do
 
@@ -103,6 +111,6 @@ manifest beyond what the chain confirms, does not change any E pin, interface-v1
 
 | From | What |
 |---|---|
-| agent 1 | export `immutableReferences` in the successor schema; confirm the public views used in `B` exist on all seven contracts (A1-0088 D-f lists them for the six; Governance getters are in design 2.1 section 2) |
+| agent 1 | A1-0094 (not yet an ACK) confirmed the views on the six E contracts and the Governance getters against design 2.1, agreed to export `immutableReferences` in the successor schema, and returned C1-C4; this revision takes C3 and C4. Remaining: ACK this exact revision, and add `TMSC.governance()` to design 2.1 if it is not already a public getter there (it is listed in A1-0094 C3 as a view under repaired-f) |
 | agent 3 | accept the formula and encoding as the D50 interface; decide whether the evaluator reads or recomputes `binding_v2`; confirm the closed error-class mapping; fold the refusal controls into the F plan |
 | both | exact revision (this file's sha256 in the message that carries it) |
