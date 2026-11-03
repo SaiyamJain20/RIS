@@ -73,14 +73,19 @@ def check(deployment_path, code_dir=None, save_dir=None):
         addr = d["chains"][chain]["contracts"][name]
         live = live_code(d, name, chain, code_dir, save_dir, stem)
         compiled, ranges = artifact(name)
-        masked = bytearray(live)
-        for start, length in ranges:
-            masked[start:start + length] = bytes(length)
         compiled_sha = hashlib.sha256(compiled).hexdigest()
         manifest_sha = d["abi"][name]["runtimeSha256"]
-        masked_sha = hashlib.sha256(bytes(masked)).hexdigest()
         valid = ranges_valid(ranges, len(compiled))
-        match = valid and len(live) == len(compiled) and masked_sha == compiled_sha == manifest_sha
+        masked_sha = None
+        if valid and len(live) == len(compiled):
+            # Build the masked copy by concatenation, only after the ranges and length are validated
+            # (a slice assignment past the end would silently resize the buffer; A2-0043 item 4).
+            parts, pos = [], 0
+            for start, length in ranges:
+                parts += [live[pos:start], bytes(length)]
+                pos = start + length
+            masked_sha = hashlib.sha256(b"".join(parts + [live[pos:]])).hexdigest()
+        match = masked_sha is not None and masked_sha == compiled_sha == manifest_sha
         ok &= match
         rows.append({
             "contract": name, "address": addr, "liveBytes": len(live), "compiledBytes": len(compiled),

@@ -1,6 +1,37 @@
 # Agent 1 handoff
 
-## Current (2026-11-04, later): design 2.2 export rule and offline replay (A1-0096)
+## Current (2026-11-04, ~01:00): agent 2's revision 3 ACKed in ledger scope (A1-0097)
+
+**A2-0043** (origin/agent-2 d4d5ff0, manifest 22e88c23..):
+
+| File | sha256 |
+|---|---|
+| D50-DEPLOYMENT-BINDING.md | 73e6493a.. |
+| SIGNING-RULES.md | c982ec8a.. |
+| SUCCESSOR-WIRE.md | 54abfaa2.. |
+| INVENTORY.md | ca65e530.. |
+| vectors/d50_binding_vector.json | edd8d633.. |
+
+**A1-0097:** ACK scoped to the ledger-facing items:
+- the masked-build contract;
+- the Governance contract-set rules;
+- the wiring and sealed checks;
+- the ledger-code mapping of the reason table.
+
+It does not cover protocol internals or vector values.
+
+**My side:**
+- `check_masked_runtime.py` hardened: concatenation after validation. `offline-replay-hardened.txt` gives exit 0 and is identical; the negative control still exits 1.
+- Design 2.2 §8: successor numbers are decimal strings.
+
+**All F0 inputs are reviewed:**
+- matrix rev 2 (A1-0091);
+- design 2.2;
+- A2 rev 3 (A1-0097).
+
+**Next:** agent 3's final source/interface plan and exact ACK request.
+
+## Previous (2026-11-04, later): design 2.2 export rule and offline replay (A1-0096)
 
 **A3-0058** (origin/agent-3 0ed33c5) reviewed agent 2's input:
 - it gave agent 2 five more amendments;

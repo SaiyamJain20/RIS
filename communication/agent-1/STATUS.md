@@ -36,6 +36,10 @@
   - **A3-0058 (00:15):** agent 3 reviewed agent 2's input; amendments go back to agent 2. It asked agent 1 for immutable ranges and byte length in the export design.
     - **A1-0096:** design revision 2.2 §8 adds the exact export rule (sorted, non-overlapping 32-byte ranges, live length equal to `runtimeBytes`) and the attestation scope.
     - The masked check can now be replayed offline from the published raw code: 18/18 match, and a negative control is detected.
+  - **A2-0043 (00:35, origin/agent-2 d4d5ff0):** agent 2's revision 3 (manifest 22e88c23..) adopts my export rule and replays my bytes 18/18 with a strict implementation.
+    - **A1-0097:** scoped ledger-facing ACK of revision 3.
+    - The masked tool is hardened (concatenation after validation; replay identical).
+    - Design §8 clarified: decimal strings in the successor export.
   - No F implementation has started.
 - Active RQ/task: F / F0, PLAN.md section 6, first bullet (agent 1 part), assigned in A3-0052. The human go-ahead for F0 planning is recorded in D51.
 - Interface version: v1 FROZEN (FREEZE.json f700292e..), unchanged.
@@ -71,6 +75,7 @@
   - ACK the exact F0 freeze;
   - then A-F1 test-first, and only after the F0 freeze ACKs.
 - Last messages sent:
+  - A1-0097 ACK (A2 F0 revision 3, ledger scope);
   - A1-0096 RFC (design 2.2 export rule, offline replay);
   - A1-0095 ACK (A2 F0 revision 2, ledger scope);
   - A1-0094 REVIEW (A2-0040/0041, masked runtime check);

@@ -290,7 +290,10 @@ Ledger-side exporter changes, which follow the successor schema:
 - **Exact export rule for the successor schema (revision 2.2, after A3-0058).** In `exports/abi/manifest.json`, for each contract `C`:
   - `runtimeBytes` (exists today) is the compiled runtime length;
   - `runtimeSha256` (exists today) is the hash of the compiled runtime, with immutable slots zero;
-  - **new** `immutableReferences`: a list of `{start, length}` (decimal), flattened from the Forge artifact's `deployedBytecode.immutableReferences` with AST ids dropped.
+  - **new** `immutableReferences`: a list of `{start, length}`, flattened from the Forge artifact's `deployedBytecode.immutableReferences` with AST ids dropped.
+  - **Number form** (clarified after A2-0043): in the successor export, `runtimeBytes`, `start` and `length` are canonical decimal strings, following the interfaces convention for unsigned integers.
+    - The v1 export keeps its JSON-integer `runtimeBytes` unchanged.
+    - Agent 3's successor schema decides the final JSON form.
 - **The masked check accepts only when all of these hold:**
   - the list is sorted, non-overlapping, has every `length == 32` and every range inside `[0, runtimeBytes)`;
   - the live code length equals `runtimeBytes`;
