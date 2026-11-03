@@ -1,4 +1,10 @@
-# A-F1 ledger design for the minimal core F scope (agent 1, F0, for review) — revision 2
+# A-F1 ledger design for the minimal core F scope (agent 1, F0, for review) — revision 2.1
+
+Revision 2.1 (A1-0093, after A3-0056) changes two things only:
+- the section 2 calldata claim is corrected: decoded values are bound, raw calldata is not canonical;
+- the section 6 bit 7 control now uses a repeatable SET_CA_ADMINS action.
+
+Everything else is unchanged from revision 2 (dda3914b..). All source-level predictions, vectors and equivalence claims are untested until their planned runs.
 
 **Status: DESIGN FOR REVIEW. NOT IMPLEMENTED. NOT ACKED.**
 - Revision 1 (sha256 02447d02.., commit 5992a0a, A1-0090) was reviewed in A3-0055 / DESIGN-REVIEW.md as R1–R6.
@@ -33,7 +39,14 @@ Base: `ledger/src` and `ledger/test` at 5992a0a. Production is identical to 933d
 
 ## 2. Governance (D-a a1, D-b b1) — new `src/Governance.sol`, PBC only
 
-**R4 change: the action is a fully typed EIP-712 struct.** There is no free-form `bytes` payload, so there is nothing to decode and no trailing or non-canonical byte case. Solidity's ABI decoder rejects malformed calldata, including dirty high bits in address fields, before any check runs. It reverts without a `Rejected` code; tests assert a revert.
+**R4 change: the action is a fully typed EIP-712 struct.** There is no free-form `bytes` payload, so no payload-decoding step exists.
+
+**What this does and does not guarantee (corrected in revision 2.1, after A3-0056):**
+- Authorization binds the **decoded values**, through the EIP-712 struct hash. The design does **not** claim that raw calldata is unique or canonical.
+  - Solidity's ABI decoder rejects some malformed calldata, such as out-of-range offsets or lengths and dirty high bits in address fields, with a revert that carries no `Rejected` code.
+  - It does **not** reject trailing bytes, and different raw encodings can decode to the same values.
+- This is sufficient here: any encoding that decodes to the signed values authorizes exactly the signed action, and the nonce rules out a second execution.
+- If a later scope needs canonical calldata, that is an extra explicit check, for example re-encoding and comparing length. It is not proposed now.
 
 ```
 struct GovernanceAction { uint8 action; address root; address[] admins; uint64 nonce; uint64 witnessSetVersion; uint64 expiresAt; }
@@ -177,13 +190,19 @@ CaAdminsSet(uint64 indexed governanceNonce, address indexed root, address[] admi
 | Bit | Name | REPAIRED_F effect | Sensitivity control |
 |---|---|---|---|
 | 6 | `MUT_NO_GOV_ACTION_BINDING` | Governance hashes `action := 0` and dispatches the calldata `action` | see below |
-| 7 | `MUT_NO_GOV_NONCE` | step 4 skipped; the nonce is not advanced | replay of an executed certificate succeeds |
+| 7 | `MUT_NO_GOV_NONCE` | step 4 skipped; the nonce is not advanced | replay of an executed **SET_CA_ADMINS** certificate succeeds (see below) |
 | 8 | `MUT_NO_POLICY_PIN` | section 4 skipped | the P-WIT-4 analogue is accepted |
 
 **Bit 6 control (R4):**
 - **Mutant run:** in the mutant fixture the witnesses sign the **action=0** digest, as the mutant verifier hashes it. A certificate for SET_CA_ADMINS(Hx, []) (suspend) is then submitted as REMOVE(Hx, []). The mutant removes Hx.
 - **Baseline run:** with bit 6 clear, a certificate signed over action=3 and submitted as action=2 gives BAD_SIGNATURE.
 - **Mutant positive control:** a matching action still succeeds under the mutant.
+
+**Bit 7 control (revision 2.1, after A3-0056).** Replaying ADD or REMOVE is not a valid sensitivity test: their TMSC preconditions fail on a second run even without any nonce check. The root is already an authority, or already removed (MALFORMED or UNKNOWN_AUTHORITY). Use the repeatable SET_CA_ADMINS, which succeeds on identical state:
+- **Baseline:** execute SET(Hx, [a]) with nonce N. Replay the same certificate before its expiry: REPLAY, with no second `authEpoch` increment, LSC entry or `CaAdminsSet` event.
+- **Baseline positive control:** a fresh certificate with nonce N+1 executes.
+- **Mutant (bit 7):** the same replay succeeds and repeats the effects: `authEpoch` +1 again, a second `updateLog` entry and a second `CaAdminsSet`. The baseline REPLAY assertion fails, which shows sensitivity.
+- **Mutant positive control:** the first execution still succeeds.
 
 - `MUT_ALL` becomes `(1 << 9) - 1`.
 - `mutant-f-q2` (F-18) is a deployment configuration with threshold 2 in PSC, KSSC and Governance. It has no code bit.

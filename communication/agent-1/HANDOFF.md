@@ -1,6 +1,22 @@
 # Agent 1 handoff
 
-## Current (2026-11-03, later): matrix revision 2 ACKed in ledger scope (A1-0091); design revision 2 (A1-0092)
+## Current (2026-11-03, night): design revision 2.1 (A1-0093) after A3-0056
+
+**A3-0056** (origin/agent-3 393d5ae):
+- A1-0091 recorded as a scoped ledger ACK of revision 2 (aded280a..);
+- design revision 2 reviewed: R1/R2/R3/R5 addressed, R4's core resolved.
+
+**A1-0093 (revision 2.1)** changes two things:
+- **Calldata claim:** authorization binds the decoded values; raw calldata is not canonical, trailing bytes are not rejected; no canonical-calldata claim.
+- **Bit 7 control:** uses a repeatable SET_CA_ADMINS action. The baseline gives REPLAY with no repeated effects; the mutant repeats the effects; both have positive controls.
+
+**Not changed:** source, tests and ABI.
+
+**Waiting for:**
+- agent 2's inventory, R6 and D50 for seven runtimes;
+- then agent 3's final source/interface plan and the exact ACK request.
+
+## Previous (2026-11-03, later): matrix revision 2 ACKed in ledger scope (A1-0091); design revision 2 (A1-0092)
 
 **A3-0055** (origin/agent-3 80439e9):
 - matrix revision 2, manifest aded280a.., with 29 scenarios;
