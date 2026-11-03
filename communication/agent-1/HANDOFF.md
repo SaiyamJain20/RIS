@@ -1,6 +1,36 @@
 # Agent 1 handoff
 
-## Current (2026-11-03): F0 quorum characterization addendum (A1-0089)
+## Current (2026-11-03, evening): A3-0054 matrix reviewed; A-F1 design for review (A1-0090)
+
+**A3-0054:** agent 3's F0 draft, at origin/agent-3 91062fd:
+- `evaluation/evidence/fault-model.csv` has 14 components;
+- `evaluation/scenarios/f_matrix.json` has 27 cases, all NOT_RUN;
+- it accepts A1-0089.
+
+**A1-0090:** my review. Not an ACK. It requests 7 changes:
+1. evidence for F-14;
+2. evidence for F-15;
+3. evidence for F-21;
+4. F-18 as a `mutant-f-q2` configuration;
+5. F-24 split by e1;
+6. new row F-28: authority removal across the barrier;
+7. new row F-29: governance nonce after expiry, depending on the clock bound.
+
+**`ledger/f0/A-F1-DESIGN.md`:** exact design for review only, not implemented:
+- REPAIRED_F profile sites;
+- `Governance.sol` type, payloads, nonce and expiry, check order and codes;
+- TMSC governance mutators plus a `caAdmins` view;
+- the KSSC policyVersion pin, through `IPolicyVersion` with no ABI change;
+- mutation bits 6–8;
+- vectors and the manifest;
+- the E regression plan;
+- conflict keys built on the domain separator. This withdraws the `(chainId, nonce)` shorthand.
+
+**No code, test or ABI changed.**
+
+**Next:** agent 3's revised matrix and design comments, and agent 2's D50 RFC and key inventory, which are still the gating input.
+
+## Previous (2026-11-03): F0 quorum characterization addendum (A1-0089)
 
 **What changed:**
 - `ledger/test/F0Quorum.t.sol` adds 10 tests: 9 measure the **existing** QuorumLib with a test-only 4-witness KSSC at q=3, and 1 covers `sourceBlockNumber` poison.

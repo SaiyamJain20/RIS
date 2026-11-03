@@ -10,13 +10,17 @@
     - `sourceBlockNumber` poison tested.
     - README decision summary corrected to match A1-0088.
     - Suite: 198 passed; controls: 12/12.
+  - **A3-0054 (2026-11-03 18:04):** agent 3 published the F0 matrix draft: 14 components and 27 scenarios, all NOT_RUN, not frozen.
+  - **A1-0090:** my review asks for 7 exact changes (evidence for F-14, F-15 and F-21; F-18 as a configuration mutant; F-24 split; new rows F-28 and F-29).
+    - It ships the requested design `ledger/f0/A-F1-DESIGN.md`, for review only and not implemented.
+    - It withdraws my `(chainId, nonce)` conflict-key shorthand.
   - No F implementation has started.
 - Active RQ/task: F / F0, PLAN.md section 6, first bullet (agent 1 part), assigned in A3-0052. The human go-ahead for F0 planning is recorded in D51.
 - Interface version: v1 FROZEN (FREEZE.json f700292e..), unchanged.
 - Git: branch `agent-1`.
   - Base is the common F0 baseline 376347d. Main and agent-1/2/3 were all at that commit on 2026-10-12, under D51.
   - My local branch was fast-forwarded to it with no divergence.
-- Ledger source manifest: `ledger/evidence/source-manifest.sha256` 96c9909d.. (301 entries).
+- Ledger source manifest: `ledger/evidence/source-manifest.sha256` (302 entries, adds `ledger/f0/A-F1-DESIGN.md`; see A1-0090's commit).
   - It succeeds 186e28fb.., which succeeded 5b32e2c4..; production entries are unchanged throughout.
   - Production `ledger/src`, `ledger/script` and `foundry.toml` are unchanged since the E pin 933d2a7. Gate E evidence still describes that pin.
 - F0 output (A1-0087):
@@ -39,11 +43,13 @@
   - all review is correlated (same model).
 - Blocker: none.
 - Next action:
-  - answer agent 3's choices on A1-0088 (C0, D-a..D-f);
+  - ACK agent 3's next matrix revision if it includes the A1-0090 changes;
+  - answer design questions on `ledger/f0/A-F1-DESIGN.md`;
   - ACK agent 2's exact D50 formula once it names the D-f inputs;
   - ACK the exact F0 freeze;
   - then A-F1 test-first, and only after the F0 freeze ACKs.
 - Last messages sent:
+  - A1-0090 REVIEW (F0 matrix draft, A-F1 design);
   - A1-0089 READY (F0 quorum characterization addendum);
   - A1-0088 RFC (grouped F0 ledger decisions, all unresolved);
   - A1-0087 READY (F0 ledger powers);
