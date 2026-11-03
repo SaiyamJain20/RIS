@@ -1,0 +1,88 @@
+{
+  "capturedAt": "2026-11-03T20:33:50.178695+00:00",
+  "refs": {
+    "origin/agent-1": "f460ca79441e738e17b1b04d699fc26aa7547cb2",
+    "origin/agent-2": "84ce872d3265b53cf3e385371dd758a1d8113a06",
+    "origin/agent-3": "05c239e33fac3ac8530cd9f0ed3cc05941355fab",
+    "origin/main": "376347d9b0979d1e46824a30197b935ffe91e4fb"
+  },
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "communication/build_prompts.py",
+        "--check"
+      ],
+      "startedAt": "2026-11-03T20:33:50.147929+00:00",
+      "endedAt": "2026-11-03T20:33:50.170097+00:00",
+      "exitCode": 0,
+      "outputSha256": "8f29a69f6b3463b624687ea89c034e86c0217602a093168e78b810d5ef4ac781"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "startedAt": "2026-11-03T20:33:50.170131+00:00",
+      "endedAt": "2026-11-03T20:33:50.175832+00:00",
+      "exitCode": 0,
+      "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "--version"
+      ],
+      "startedAt": "2026-11-03T20:33:50.175882+00:00",
+      "endedAt": "2026-11-03T20:33:50.177376+00:00",
+      "exitCode": 0,
+      "outputSha256": "6b64edf0fc8f22e798fb64873acba6b4106df290f0bf458b507e8cb409b63e49"
+    },
+    {
+      "argv": [
+        "git",
+        "--version"
+      ],
+      "startedAt": "2026-11-03T20:33:50.177396+00:00",
+      "endedAt": "2026-11-03T20:33:50.178653+00:00",
+      "exitCode": 0,
+      "outputSha256": "fff575d3fa43a92d932e4eb8bc03394140ce40699f9c8a97c3126016a244dfb8"
+    }
+  ],
+  "auditCommand": [
+    "/usr/bin/python3",
+    "/home/karma/Documents/RIS/evaluation/evidence/reviews/f0-revision4-20261104/audit-owner.py.txt"
+  ],
+  "auditExitCode": 0,
+  "reproductionCommand": [
+    "/usr/bin/python3",
+    "/home/karma/Documents/RIS/evaluation/evidence/reviews/f0-revision4-20261104/reproduce.py.txt"
+  ],
+  "reproductionExitCode": 0,
+  "diagnostics": [
+    {
+      "command": "mkdir .git/ris-agent3-scheduled.lock",
+      "exitCode": 1,
+      "result": "existing FILE lock; corrected to flock; first non-TTY read reached EOF and released, then TTY lock acquired before repository reads"
+    }
+  ],
+  "components": 14,
+  "cases": 30,
+  "allNotRun": true,
+  "protectedPathsUnchanged": [
+    "ledger",
+    "protocol",
+    "interfaces",
+    "archive",
+    "evaluation/reports/RQ1-E.md",
+    "evaluation/evidence/e3/gate-run-20261012",
+    "evaluation/evidence/fault-model.csv",
+    "evaluation/scenarios/f_matrix.json",
+    "evaluation/evidence/reviews/f0-a1-0090-20261103",
+    "evaluation/evidence/reviews/f0-a1-0092-20261103",
+    "evaluation/evidence/reviews/f0-revision3-20261104"
+  ],
+  "executionAuthorized": false,
+  "scope": "offline design-review evidence only; no new live/RPC/model/gate result"
+}

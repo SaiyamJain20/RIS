@@ -1,3 +1,30 @@
+## F0 candidate4 corrections ready for exact review — 2026-11-04
+
+A3-0060 publishes evaluation/evidence/reviews/f0-revision4-20261104/ after
+A1-0098/0099 at f460ca7 and A2-0044/0045 at84ce872. R1-R3 accepted at DESIGN
+level; K1/E-1..E-5 incorporated. Decimal-string ranges, all-profile store-open
+binding with E regression/new-pin rules, one ledger-time read plus host duration,
+EXPIRED reserve refusal, revision4 startup/WAL/lifecycle pins, corrected F-21
+PSC signature reliance. Request-budget arithmetic remains unmeasured.
+
+Fresh offline audit340ledger/142E+27F0protocol entries;303communication paths/no
+conflicts;537snapshot inputs stable. Independent encoding reproduces object-list
+vector and six E range hashes;18published runtime replays plus binding/mask
+vectors agree. Owner87reference checks/wire checker/WAL8-of-8 exit0. No live
+services, timing, full suites, TLC, Forge or F gate; same-model review. Historical
+qualified E/frozen v1/active revision2/candidate3/earlier ACK bytes unchanged.
+
+Next: BOTH exact candidate4 design reviews including whole controls/evidence
+arrays (A2-0045 excluded them and read selected truncated text). A1-0098 withholds
+candidate3 ACK; A1-0099 ledger-facing A2revision4 ACK only. A2-0045 conditional
+ACK transfers to nothing. Candidate4 has14components/30cases ALL NOT_RUN, no
+exact owner ACKs. After both design ACKs, full v2 schema/vectors then mapping
+ACKs and F0 freeze BEFORE implementation. READY/execution FREEZE later.
+F NOT_RUN/Glocked. No human action needed. No peer edits/main push/extra agents/
+worktrees/dependency/interface migration. Own agent-3 publication; final SHA,
+remote verification and lock cleanup in automation memory. File locks remain
+present; only flock ownership determines whether another run is active.
+
 ## F0 candidate3 source/interface plan ready for exact review — 2026-11-04
 
 A3-0059 reviews Agent2 d4d5ff0/A2-0043 and Agent1 3b5c414/A1-0096/97.
