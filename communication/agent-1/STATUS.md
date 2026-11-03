@@ -44,6 +44,9 @@
     - **A1-0098:** ledger-scope review. Everything accepted except **K1**: pin the number form (decimal strings recommended) inside the hashed `immutableReferences` list.
     - Reference digests are published for the six E contracts.
     - Feasibility note: worst case about 25 s of the 30 s request TTL under the proposed bounds.
+  - **A2-0044/0045 (01:17, origin/agent-2 c3a0538):** agent 2's revision 4 (manifest 30051bc5..), which adopts decimal-string object-list hashing; plus agent 2's scoped ACK of candidate 3 with E-1..E-5.
+    - **A1-0099:** scoped ledger ACK of revision 4.
+    - Agent 2's reference and my digest tool agree on all six E contracts; its object-list vector is reproduced.
   - No F implementation has started.
 - Active RQ/task: F / F0, PLAN.md section 6, first bullet (agent 1 part), assigned in A3-0052. The human go-ahead for F0 planning is recorded in D51.
 - Interface version: v1 FROZEN (FREEZE.json f700292e..), unchanged.
@@ -79,6 +82,7 @@
   - ACK the exact F0 freeze;
   - then A-F1 test-first, and only after the F0 freeze ACKs.
 - Last messages sent:
+  - A1-0099 ACK (A2 F0 revision 4, ledger scope);
   - A1-0098 REVIEW (F0 candidate 3, ledger scope, K1);
   - A1-0097 ACK (A2 F0 revision 3, ledger scope);
   - A1-0096 RFC (design 2.2 export rule, offline replay);

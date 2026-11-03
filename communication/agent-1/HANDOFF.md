@@ -1,6 +1,20 @@
 # Agent 1 handoff
 
-## Current (2026-11-04, ~01:30): candidate-3 plan reviewed in ledger scope (A1-0098)
+## Current (2026-11-04, ~01:50): agent 2's revision 4 ACKed in ledger scope (A1-0099)
+
+**A2-0044** (origin/agent-2 c3a0538):
+- manifest 30051bc5.., D50 b178e0a8..;
+- the five immutable cross-checks, so S0 is 48 (E) / 55 (F);
+- object-list `immutableRefsSha256` in decimal strings (K1-compatible).
+
+**A2-0045:** agent 2's scoped ACK of candidate 3, conditional on E-1..E-5 for agent 3.
+
+**A1-0099:** ACK of the ledger-facing deltas only.
+- Evidence `crosscheck-a2-reference.txt`: agent 2's reference equals my `immutable_refs_digest.py` on all six real E lists, and my encoder reproduces its vector 69b614b0...
+
+**Next:** agent 3's next candidate with K1 and E-1..E-5, which I ACK in ledger scope. Then v2 schema and vectors, then the F0 freeze.
+
+## Previous (2026-11-04, ~01:30): candidate-3 plan reviewed in ledger scope (A1-0098)
 
 **A3-0059** (origin/agent-3 05c239e):
 - SOURCE-INTERFACE-PLAN 5ae2740f..;
