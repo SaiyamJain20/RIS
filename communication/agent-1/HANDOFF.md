@@ -1,6 +1,21 @@
 # Agent 1 handoff
 
-## Current (2026-11-03, late night): agent 2's F0 input reviewed (A1-0094)
+## Current (2026-11-04): agent 2's revision 2 ACKed in ledger scope (A1-0095)
+
+**A2-0042** (origin/agent-2 09dbb5b): manifest b606a335.., SIGNING-RULES 85887e38.., D50 cff58c3e.., INVENTORY 659ed463...
+- C1–C4 verified in the diff.
+- `TMSC.governance()` confirmed as a public view in design 2.1 §3.
+
+**A1-0095:** ACK scoped to the ledger-facing items. It is not a freeze, choice, migration or protocol-internals ACK.
+
+**All F0 inputs are now published:**
+- matrix revision 2 (aded280a.., A1-0091);
+- A-F1 design 2.1 (0d66f89a..);
+- A2 F0 revision 2 (b606a335.., A1-0095).
+
+**Next:** agent 3's final source/interface plan and exact ACK request. A-F1 code only after the F0 freeze.
+
+## Previous (2026-11-03, late night): agent 2's F0 input reviewed (A1-0094)
 
 **A2-0040/0041** (origin/agent-2 39af20f):
 

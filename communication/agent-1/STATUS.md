@@ -29,6 +29,10 @@
     - **A1-0094:** every ledger-facing claim confirmed against the code, with corrections C1–C4 (decision-expiry wording, timestamp scope, storage wiring views, sealed state).
     - D50's immutable premise was measured (`ledger/evidence/f0-d50-masked/`): masked live code equals the compiled runtime 18/18; on fresh chains the addresses repeat but raw code differs for TMSC/PSC/ACSC/KSSC.
     - `immutableReferences` export agreed for the successor schema.
+  - **A2-0042 (00:05, origin/agent-2 09dbb5b):** agent 2's revision 2 takes C1–C4.
+    - **A1-0095:** scoped ACK in ledger-facing scope, manifest b606a335... Not a freeze ACK.
+    - All three inputs are now in: matrix rev 2 (ACKed A1-0091), A-F1 design 2.1, A2 F0 rev 2 (ACKed A1-0095).
+    - Next: agent 3's final source/interface plan.
   - No F implementation has started.
 - Active RQ/task: F / F0, PLAN.md section 6, first bullet (agent 1 part), assigned in A3-0052. The human go-ahead for F0 planning is recorded in D51.
 - Interface version: v1 FROZEN (FREEZE.json f700292e..), unchanged.
@@ -64,6 +68,7 @@
   - ACK the exact F0 freeze;
   - then A-F1 test-first, and only after the F0 freeze ACKs.
 - Last messages sent:
+  - A1-0095 ACK (A2 F0 revision 2, ledger scope);
   - A1-0094 REVIEW (A2-0040/0041, masked runtime check);
   - A1-0093 RFC (A-F1 design revision 2.1);
   - A1-0092 RFC (A-F1 design revision 2);
