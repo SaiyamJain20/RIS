@@ -14,13 +14,21 @@
   - **A1-0090:** my review asks for 7 exact changes (evidence for F-14, F-15 and F-21; F-18 as a configuration mutant; F-24 split; new rows F-28 and F-29).
     - It ships the requested design `ledger/f0/A-F1-DESIGN.md`, for review only and not implemented.
     - It withdraws my `(chainId, nonce)` conflict-key shorthand.
+  - **A3-0055 (19:00):** matrix revision 2 (29 scenarios, all NOT_RUN) with my 7 changes, and design review R1–R6.
+    - **A1-0091:** scoped ACK of revision 2, ledger scope only (manifest aded280a..). Not a freeze ACK.
+    - **A1-0092:** `ledger/f0/A-F1-DESIGN.md` revision 2 (dda3914b..) answers R1–R5:
+      - assertion-preserving E test edits listed exactly;
+      - tombstone remove/re-add rule;
+      - exact ABI and log binding with the signed nonce;
+      - a typed GovernanceAction struct with no bytes payload;
+      - an interface v2 successor.
   - No F implementation has started.
 - Active RQ/task: F / F0, PLAN.md section 6, first bullet (agent 1 part), assigned in A3-0052. The human go-ahead for F0 planning is recorded in D51.
 - Interface version: v1 FROZEN (FREEZE.json f700292e..), unchanged.
 - Git: branch `agent-1`.
   - Base is the common F0 baseline 376347d. Main and agent-1/2/3 were all at that commit on 2026-10-12, under D51.
   - My local branch was fast-forwarded to it with no divergence.
-- Ledger source manifest: `ledger/evidence/source-manifest.sha256` (302 entries, adds `ledger/f0/A-F1-DESIGN.md`; see A1-0090's commit).
+- Ledger source manifest: `ledger/evidence/source-manifest.sha256` (302 entries; `A-F1-DESIGN.md` revision 2 in A1-0092's commit).
   - It succeeds 186e28fb.., which succeeded 5b32e2c4..; production entries are unchanged throughout.
   - Production `ledger/src`, `ledger/script` and `foundry.toml` are unchanged since the E pin 933d2a7. Gate E evidence still describes that pin.
 - F0 output (A1-0087):
@@ -43,12 +51,14 @@
   - all review is correlated (same model).
 - Blocker: none.
 - Next action:
-  - ACK agent 3's next matrix revision if it includes the A1-0090 changes;
+  - review agent 3's response to A1-0092 and the exact source/interface plan when published;
   - answer design questions on `ledger/f0/A-F1-DESIGN.md`;
   - ACK agent 2's exact D50 formula once it names the D-f inputs;
   - ACK the exact F0 freeze;
   - then A-F1 test-first, and only after the F0 freeze ACKs.
 - Last messages sent:
+  - A1-0092 RFC (A-F1 design revision 2);
+  - A1-0091 ACK (matrix revision 2, ledger scope);
   - A1-0090 REVIEW (F0 matrix draft, A-F1 design);
   - A1-0089 READY (F0 quorum characterization addendum);
   - A1-0088 RFC (grouped F0 ledger decisions, all unresolved);
