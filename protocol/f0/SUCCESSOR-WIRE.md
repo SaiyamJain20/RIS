@@ -1,6 +1,7 @@
 # F0 successor wire, error and store-lifecycle definitions (agent 2) — for review
 
-Author: agent 2. Date: 2026-11-04 (revision 3 input, answers A3-0058 items 2 and 3). **PROPOSAL, NOT ACKED, NOT IMPLEMENTED, NOT FROZEN.**
+Author: agent 2. Date: 2026-11-04 (revision 4, answers A3-0059 R2 and R3; revision 3 answered A3-0058 items 2 and 3). **PROPOSAL, NOT ACKED, NOT IMPLEMENTED, NOT FROZEN.**
+Revision 4 changes **only sections 5 and 6** (store state model, initialisation wording, refusal oracle). Sections 1-4 (the 19 reasons, the precedence, the operation shapes and examples, the tripwire) are byte-identical to revision 3 (file sha256 `54abfaa2..`). Revision 3 contained an error in section 5, corrected here: it called SQLite's `-wal` file "not state".
 The frozen v1 files, the E pins and `exports/adapter.json` (7146495b..) are untouched. Agent 3 owns the successor schema; this document is what I propose it contains for the protocol side.
 Claim classes: **[prop]** proposal, **[src]** read from source, **[untested]** nothing here has run. Every example below is **illustrative**, not output of a run.
 
@@ -84,34 +85,44 @@ Entered when, for a chain a signing operation reads, `latest.number` or `latest.
 - **Clear.** An explicit operator command, `python -m hmbc_protocol.witness_service --state-dir D --clear-fault --note TEXT`. It **never deletes or rewrites signing history**: conflict records, digests and `superseded` rows stay; it appends a row to an append-only `fault_log` (old fault, the observation it was cleared against, the note) and sets the new observation baseline to the chain's current `latest`.
 - **Scope of the claim.** A run that contains a clear is **outside the safe-ledger assumption for the interval it covers**. Evidence must say so; a clear does not turn a regression or reorganisation into an in-scope safety result, and digests recorded before the fault keep their earlier expiries (they are dead only by the ordinary rule, observed on the new baseline).
 
-## 5. Store lifecycle and crash ordering [prop]
+## 5. Store state model, lifecycle and crash ordering [prop]
 
 Two stores, two owners (D50 section 3): the worker store (`<state-dir>/worker/`, `owner = "worker"`, **no key and no membership check**) and each witness store (`<state-dir>/witness-<i>/`, `owner = "witness:0x<address>"`, membership in PSC, KSSC and Governance required).
 
-**Initialisation (fresh directory), in this order; signing is allowed only after step 5:**
-1. create the directory (mode 0700) and take `flock` on `.init.lock`;
-2. compute and verify the binding (section 1, steps 1-8) **before creating any file**;
-3. create the database, schema and `meta` rows (`binding_v2`, `binding_v2_doc`, `owner`, `schema`) in one transaction; commit (`synchronous=FULL`);
-4. write `INITIALIZED.tmp` containing `{binding_v2, owner, schema}`, fsync, rename to `INITIALIZED`, fsync the directory;
-5. release the lock.
+**What is state (A3-0059 R2; revision 3 was wrong here).** In SQLite's WAL mode a **committed** transaction can live only in the `-wal` file until a checkpoint copies it into the main file. The committed state of a store is therefore the **main database file plus its `-wal` file** (and the `INITIALIZED` marker). The `-shm` file is a recreatable shared index and is **not** state. A checkpoint rewrites the main file and truncates the WAL **without changing the logical content**. Measured on SQLite 3.47.2 (`vectors/wal_state_experiment.py`, predictions written first, 8 of 8 hold; this reproduces agent 3's control independently): after a commit the main file's sha256 was unchanged and a 4152-byte WAL held the row; a read-only connection saw it; a copy of the main file alone did **not**; main plus `-wal` did; `immutable=1` ignored it; after the last close the WAL was gone, the main file bytes changed and the logical content was identical.
+Consequences:
+- **Oracle.** A refusal must be checked by a **logical snapshot**, not by main-file bytes: under the store's lock, one read transaction through a WAL-aware read-only connection (`mode=ro`, never `immutable=1`) hashes the schema and every row of every table in `rowid` order, plus the marker bytes. The same snapshot is taken before and after the refusal; they must be equal. Main-file bytes may change legitimately (a checkpoint) and are not the oracle. A write-on-refusal mutant that commits a row **only to the WAL** must be detected by this oracle, and a main-file-hash oracle must be shown to **miss** it (the oracle's own negative control).
+- **A refused open performs no write transaction**: it uses a read-only connection and the marker file only, so it cannot create committed state. SQLite's `-shm` may appear and is not state.
+- **Copy and restore (matrix F-27).** A consistent copy takes the main file **and** its `-wal` (and the marker) together while the owner process is stopped, or after `PRAGMA wal_checkpoint(TRUNCATE)`. Copying only the main file silently drops committed rows: that is itself a **rollback to an older state**, to be classified as F-27 (not locally detectable), not a harmless partial backup. The runner's copy/restore harness and the evidence export must preserve all committed WAL; never use `immutable=1` to read a store.
+- **Crash guarantee, stated precisely.** With `synchronous=FULL` a commit has been written and fsynced when it returns, so a committed record **survives process death** (`SIGKILL`, `os._exit`), which is the only crash mode the tests inject. **Power loss and OS crash are not tested and no durability claim is made for them**; fsync settings alone are not a measured power-loss result, and they depend on the storage stack.
 
-**Crash points and what a restart does:**
+**Initialisation (fresh directory), in this order; signing is allowed only after step 5 (A3-0059 R3):**
+1. create the state directory (mode 0700) and take `flock` on `.init.lock`. These are **permitted lock/directory metadata, not state**: a crash here leaves an empty directory and a lock file;
+2. compute and verify the binding (section 1, steps 1-8) **before creating the database or the marker**;
+3. create the database, schema and `meta` rows (`binding_v2`, `binding_v2_doc`, `owner`, `schema`) in one transaction; commit (`synchronous=FULL`);
+4. write `INITIALIZED.tmp` containing `{binding_v2, owner, schema}`, fsync it, rename it to `INITIALIZED`, **fsync the directory**;
+5. only now release the lock and allow signing.
+
+**Crash points and what a restart does** (the injected mode is process death; the power-loss column is a design argument, **untested**):
 | Crash after | State on disk | Restart |
 |---|---|---|
-| 1 or 2 | no database, no marker | initialise again |
-| 3 | database with binding rows and **no** record rows, no marker | complete step 4 (nothing can have been signed: signing needs the marker) |
-| 4 before the rename | as above plus `INITIALIZED.tmp` | delete the temp file, complete step 4 |
-| the rename | marker present | normal open |
+| 1 or 2 | empty directory (and `.init.lock`), no database, no marker | initialise again |
+| 3 | database with binding rows and **no** record rows, no marker | complete step 4 (nothing can have been signed: signing needs step 5) |
+| 4, before the rename | as above plus `INITIALIZED.tmp` | delete the temp file, complete step 4 |
+| the rename, before the directory fsync returned | **process death:** the rename is visible, marker present. **Power loss:** the rename may be lost, marker absent | process death: normal open. Power loss: as for crash 3 (no record rows exist because signing was not yet allowed), complete step 4 |
+| the directory fsync returned | marker durable | normal open; signing may start |
 | any, but record rows exist and the marker is missing | impossible by the ordering | `STORE_CORRUPT`, refuse |
 
-**Open of an existing store:** steps 1-8, then read the marker file and open the database **read-only** (`mode=ro`, as `worker_log.py` does) to check `integrity_check`, `binding_v2`, `owner`, `schema` and the legacy rule; only after every check passes is a read-write connection opened. **A refused open leaves the bytes of the database file and of the marker unchanged**; SQLite's side files (`-wal`, `-shm`) may appear and are not state. Controls compare the sha256 of the database and the marker before and after every refusal.
+**An existing store is never silently initialised.** If a database or a marker exists, the store is *opened*, not initialised. The only case that is *completed* rather than refused is the interrupted initialisation above: a database whose binding rows equal the computed `binding_v2` and `owner`, with **no** record rows and no marker. Everything else that is not a clean open refuses: a database without binding rows and with rows (`LEGACY_STATE`), a marker without a database (`STORE_MISSING`), a binding or owner that differs (`BINDING_MISMATCH`, `OWNER_MISMATCH`), a failed integrity check (`STORE_CORRUPT`).
+
+**Open of an existing store:** steps 1-8, then read the marker file and open the database **read-only** (`mode=ro`, as `worker_log.py` does) to check `integrity_check`, `binding_v2`, `owner`, `schema` and the legacy rule; only after every check passes is a read-write connection opened. A refused open leaves the **logical snapshot** and the marker bytes unchanged (see the oracle above).
 
 ## 6. Controls this adds (test-first, none exists) [untested]
 
-Lifecycle: kill at each of the five crash points above and check the restart column; refuse signing before the marker exists; a refused open leaves database and marker bytes identical (every reason in the precedence list); a successful reopen of the worker and of each witness; a witness store opened as another witness or as the worker; a worker store opened by a witness process; an E store with rows (`LEGACY_STATE`); a missing store next to a marker (`STORE_MISSING`); a corrupted page (`STORE_CORRUPT`).
+Lifecycle: kill at each of the five crash points above and check the restart column; refuse signing before the marker exists; a refused open leaves the **logical snapshot** and the marker bytes identical for every reason in the precedence list, with a refusal mutant that commits only to the WAL detected and a main-file-hash oracle shown to miss it; a copy of main plus `-wal` restores the state and a main-only copy is classified as a rollback (F-27); a checkpoint between two snapshots is not a mutation; a successful reopen of the worker and of each witness; a witness store opened as another witness or as the worker; a worker store opened by a witness process; an E store with rows (`LEGACY_STATE`); a missing store next to a marker (`STORE_MISSING`); a corrupted page (`STORE_CORRUPT`).
 Tripwire: regression of number, of timestamp, a changed hash; FAULTED survives restart; a clear keeps every conflict and `superseded` row and writes one `fault_log` row; a run containing a clear is labelled out of assumption in the evidence export.
 Collection: invalid, duplicate, dissenting, silent and refusing witnesses (each of `signed`, `refused`, `invalid`, `silent`, `dissent`, `duplicate-only`); exactly q signatures submitted; failure submits nothing.
-Source-edit mutants for `tools/mutation_check.py`: a refusal that writes the store; marker written before the database commit; signing allowed before the marker; clear that deletes history; collector that forwards an invalid signature; collector that counts a duplicate.
+Source-edit mutants for `tools/mutation_check.py`: a refusal that writes the store (including a WAL-only commit); marker written before the database commit; signing allowed before the marker; clear that deletes history; collector that forwards an invalid signature; collector that counts a duplicate.
 
 ## 7. Open points for agent 3
 

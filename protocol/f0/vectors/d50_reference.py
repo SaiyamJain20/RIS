@@ -84,6 +84,8 @@ def validate(doc) -> bool:
                 _match(_SHA, r["immutableRefsSha256"], name + ".immutableRefsSha256")
     if any(pins) and not all(pins):
         raise ValueError("immutableRefsSha256 must be present on every contract or on none")
+    if f and not all(pins):
+        raise ValueError("repaired-f requires immutableRefsSha256 on every contract (A3-0059)")
     imm_names = ("TMSC", "PSC", "KSSC", "ACSC") + (("Governance",) if f else ())
     im = _closed(d["immutables"], list(imm_names), [], "immutables")
     for n, row in im.items():
@@ -141,6 +143,32 @@ def _ranges(ranges, n):
         out.append((start, length))
         prev_end = start + length
     return out
+
+
+def pairs_from_object_list(refs):
+    """Object list `[{"start": "8", "length": "32"}, ...]` (the wire form, agent 1's export and agent 3's schema) -> `[[start, length], ...]`, the argument of masked_runtime_sha256."""
+    if not isinstance(refs, list):
+        raise ValueError("ranges must be a list")
+    out = []
+    for i, r in enumerate(refs):
+        if not isinstance(r, dict):
+            raise ValueError(f"range {i}: expected an object with keys start and length")
+        if set(r) != {"start", "length"}:
+            raise ValueError(f"range {i}: keys {sorted(r)} must be exactly ['length', 'start']")
+        out.append([r["start"], r["length"]])
+    return out
+
+
+def immutable_refs_canonical_json(refs, runtime_bytes) -> str:
+    """Canonical UTF-8 text of the pinned object list: sorted object keys, compact separators, ensure_ascii. Validates every range rule first (the pair form is NOT accepted)."""
+    pairs = pairs_from_object_list(refs)
+    _ranges(pairs, _dec(runtime_bytes, "runtimeBytes", 32))
+    return json.dumps(refs, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
+
+
+def immutable_refs_sha256(refs, runtime_bytes) -> str:
+    """`immutableRefsSha256` of B: lowercase sha256 hex of the canonical JSON of the pinned object list (A3-0059). Never hash ranges that came from RPC."""
+    return hashlib.sha256(immutable_refs_canonical_json(refs, runtime_bytes).encode("utf-8")).hexdigest()
 
 
 def masked_runtime_sha256(code_hex, ranges, runtime_bytes) -> str:
@@ -230,6 +258,10 @@ def emit() -> dict:
                           "maskedSha256": masked_runtime_sha256("0x" + live.hex(), ranges, "128"),
                           "rule": "ranges and runtimeBytes are TRUSTED build pins; refuse unsorted, overlapping, zero-length, length != 32 (A1-0096), out-of-bounds or non-decimal ranges, a live length different from runtimeBytes, and non-canonical hex",
                           "limit": "checks the runtime outside the immutable slots only; it is NOT constructor or source attestation"}
+    refs = [{"start": r[0], "length": r[1]} for r in ranges]
+    out["immutableRefs"] = {"objectList": refs, "runtimeBytes": "128", "canonicalJson": immutable_refs_canonical_json(refs, "128"),
+                            "immutableRefsSha256": immutable_refs_sha256(refs, "128"),
+                            "note": "pins the representation of immutableRefsSha256; the synthetic documents above carry a placeholder value for that field, so their binding_v2 values are unaffected"}
     return out
 
 

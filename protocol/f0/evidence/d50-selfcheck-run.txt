@@ -67,6 +67,24 @@ ok   uppercase hex code refused
 ok   odd-length hex refused
 ok   missing 0x refused
 ok   documented hazard: naive slice masking of an out-of-bounds range EXTENDS the buffer
+ok   object-list canonical JSON: sorted keys, compact, decimal strings
+ok   immutableRefsSha256 = sha256 of that UTF-8 text, lowercase hex
+ok   input key order does not matter
+ok   an empty list is valid and hashes the text []
+ok   the pair form is NOT a second wire representation: refused
+ok   an extra key is refused
+ok   a missing key is refused
+ok   integers instead of decimal strings are refused
+ok   unsorted object list refused
+ok   overlapping object list refused
+ok   length other than 32 refused
+ok   a range ending after runtimeBytes is refused
+ok   a list that is not a list is refused
+ok   object list and pair list drive the same masked hash
+ok   E document without any immutableRefsSha256 is valid (all or none)
+ok   F document without immutableRefsSha256 is refused
+ok   F document missing it on one contract is refused
+ok   E document with it on one contract only is refused
 
 all expectations hold
 exit=0

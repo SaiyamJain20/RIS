@@ -154,5 +154,38 @@ naive = bytearray(code)
 naive[124:124 + 8] = bytes(8)
 check("documented hazard: naive slice masking of an out-of-bounds range EXTENDS the buffer", len(naive) == 132 != len(code))
 
+# --- immutableRefsSha256 as a canonical OBJECT LIST (A3-0059; agent 3's proposal, accepted) -------------------------------------
+OBJ = [{"start": "8", "length": "32"}, {"start": "64", "length": "32"}]
+want_json = '[{"length":"32","start":"8"},{"length":"32","start":"64"}]'
+check("object-list canonical JSON: sorted keys, compact, decimal strings", ref.immutable_refs_canonical_json(OBJ, "128") == want_json)
+check("immutableRefsSha256 = sha256 of that UTF-8 text, lowercase hex", ref.immutable_refs_sha256(OBJ, "128") == hashlib.sha256(want_json.encode("utf-8")).hexdigest())
+check("input key order does not matter", ref.immutable_refs_sha256([{"length": "32", "start": "8"}, {"length": "32", "start": "64"}], "128") == ref.immutable_refs_sha256(OBJ, "128"))
+check("an empty list is valid and hashes the text []", ref.immutable_refs_sha256([], "128") == hashlib.sha256(b"[]").hexdigest())
+check("the pair form is NOT a second wire representation: refused", raises(lambda: ref.immutable_refs_sha256([["8", "32"], ["64", "32"]], "128"), "object"))
+check("an extra key is refused", raises(lambda: ref.immutable_refs_sha256([{"start": "8", "length": "32", "id": "7"}], "128"), "keys"))
+check("a missing key is refused", raises(lambda: ref.immutable_refs_sha256([{"start": "8"}], "128"), "keys"))
+check("integers instead of decimal strings are refused", raises(lambda: ref.immutable_refs_sha256([{"start": 8, "length": 32}], "128"), "decimal string"))
+check("unsorted object list refused", raises(lambda: ref.immutable_refs_sha256([OBJ[1], OBJ[0]], "128"), "unsorted or overlapping"))
+check("overlapping object list refused", raises(lambda: ref.immutable_refs_sha256([{"start": "8", "length": "32"}, {"start": "39", "length": "32"}], "128"), "unsorted or overlapping"))
+check("length other than 32 refused", raises(lambda: ref.immutable_refs_sha256([{"start": "8", "length": "31"}], "128"), "length must be 32"))
+check("a range ending after runtimeBytes is refused", raises(lambda: ref.immutable_refs_sha256([{"start": "100", "length": "32"}], "128"), "past the"))
+check("a list that is not a list is refused", raises(lambda: ref.immutable_refs_sha256("x", "128"), "must be a list"))
+check("object list and pair list drive the same masked hash", ref.masked_runtime_sha256("0x" + live.hex(), ref.pairs_from_object_list(OBJ), "128") == want)
+
+# --- repaired-f REQUIRES immutableRefsSha256 on every contract; E documents allow all-or-none -----------------------------------
+def drop_refs(doc, only=None):
+    d = copy.deepcopy(doc)
+    for side in ("pbc", "dbc"):
+        for n, row in d["chains"][side]["contracts"].items():
+            if only is None or n == only:
+                row.pop("immutableRefsSha256", None)
+    return d
+
+
+check("E document without any immutableRefsSha256 is valid (all or none)", ref.binding_v2(drop_refs(E)) != "")
+check("F document without immutableRefsSha256 is refused", raises(lambda: ref.binding_v2(drop_refs(F)), "repaired-f"))
+check("F document missing it on one contract is refused", raises(lambda: ref.binding_v2(drop_refs(F, only="KSSC"))))
+check("E document with it on one contract only is refused", raises(lambda: ref.binding_v2(drop_refs(E, only="KSSC"))))
+
 print("\nFAILED: %d" % len(FAILS) if FAILS else "\nall expectations hold")
 sys.exit(1 if FAILS else 0)

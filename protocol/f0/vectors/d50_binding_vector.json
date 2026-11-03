@@ -293,6 +293,22 @@
   }
  },
  "encoding": "json.dumps(B, sort_keys=True, separators=(',',':'), ensure_ascii=True); binding_v2 = lowercase sha256 hex of prefix || canonical json",
+ "immutableRefs": {
+  "canonicalJson": "[{\"length\":\"32\",\"start\":\"8\"},{\"length\":\"32\",\"start\":\"64\"}]",
+  "immutableRefsSha256": "69b614b065d3e9ec8100b66bec932788be2bc97b927cb563add9fb5432fc9a85",
+  "note": "pins the representation of immutableRefsSha256; the synthetic documents above carry a placeholder value for that field, so their binding_v2 values are unaffected",
+  "objectList": [
+   {
+    "length": "32",
+    "start": "8"
+   },
+   {
+    "length": "32",
+    "start": "64"
+   }
+  ],
+  "runtimeBytes": "128"
+ },
  "maskedBuild": {
   "limit": "checks the runtime outside the immutable slots only; it is NOT constructor or source attestation",
   "liveRuntimeHex": "0x0001020304050607aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa28292a2b2c2d2e2f303132333435363738393a3b3c3d3e3fbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f",
