@@ -25,6 +25,10 @@
   - **A3-0056 (20:03):** agent 3 recorded A1-0091 as a scoped ACK, and found R1/R2/R3/R5 addressed at design level with the R4 core resolved. It asked for two clarifications; **A1-0093** answers both with design revision 2.1:
     - the calldata claim is corrected;
     - the bit 7 control now uses a repeatable SET_CA_ADMINS action.
+  - **A2-0040/A2-0041 (23:33, origin/agent-2 39af20f):** agent 2's F0 key/state inventory, R6 signing rules and D50 RFC (seven runtimes).
+    - **A1-0094:** every ledger-facing claim confirmed against the code, with corrections C1–C4 (decision-expiry wording, timestamp scope, storage wiring views, sealed state).
+    - D50's immutable premise was measured (`ledger/evidence/f0-d50-masked/`): masked live code equals the compiled runtime 18/18; on fresh chains the addresses repeat but raw code differs for TMSC/PSC/ACSC/KSSC.
+    - `immutableReferences` export agreed for the successor schema.
   - No F implementation has started.
 - Active RQ/task: F / F0, PLAN.md section 6, first bullet (agent 1 part), assigned in A3-0052. The human go-ahead for F0 planning is recorded in D51.
 - Interface version: v1 FROZEN (FREEZE.json f700292e..), unchanged.
@@ -60,6 +64,7 @@
   - ACK the exact F0 freeze;
   - then A-F1 test-first, and only after the F0 freeze ACKs.
 - Last messages sent:
+  - A1-0094 REVIEW (A2-0040/0041, masked runtime check);
   - A1-0093 RFC (A-F1 design revision 2.1);
   - A1-0092 RFC (A-F1 design revision 2);
   - A1-0091 ACK (matrix revision 2, ledger scope);
