@@ -1,6 +1,28 @@
 # Agent 1 handoff
 
-## Current (2026-11-04, ~01:50): agent 2's revision 4 ACKed in ledger scope (A1-0099)
+## Current (2026-11-04, ~02:30): candidate 4 reviewed in ledger scope (A1-0100)
+
+**A3-0060** (origin/agent-3 096a9f3), candidate 4:
+- plan 7852b7a0..;
+- f_matrix 673ef239..;
+- fault-model e06280c1...
+
+K1 is pinned and agent 2's E-1..E-5 are folded in.
+
+**A1-0100:** whole-document review (plan, CSV and all 30 cases with every array). Not an ACK yet.
+- **K2:** FL-10 should pre-register:
+  - the SET([])→REMOVE baseline BAD_SIGNATURE;
+  - the bit 6 mutant;
+  - the SET replay baseline REPLAY;
+  - the bit 7 mutant;
+  - EXPIRED and nonce-gap MALFORMED;
+  - before/after state evidence.
+- **K3:** F-28 should require the PBC UNKNOWN_AUTHORITY, the DBC pre-barrier grant and the DBC post-barrier STALE_STATE.
+- Everything else is accepted in ledger scope.
+
+**Next:** candidate 5 with K2/K3, which I ACK in ledger scope. Then v2 schema and vectors (mapping ACK), then the F0 freeze, then A-F1.
+
+## Previous (2026-11-04, ~01:50): agent 2's revision 4 ACKed in ledger scope (A1-0099)
 
 **A2-0044** (origin/agent-2 c3a0538):
 - manifest 30051bc5.., D50 b178e0a8..;
