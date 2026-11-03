@@ -1,0 +1,36 @@
+import csv,datetime,hashlib,json,pathlib,re,subprocess,sys
+R=pathlib.Path('/home/karma/Documents/RIS')
+O=R/'evaluation/evidence/reviews/f0-a1-0090-20261103'
+def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
+def git(*args): return subprocess.check_output(['git',*args],cwd=R)
+start=datetime.datetime.now(datetime.timezone.utc).isoformat()
+m=json.loads((O/'draft-manifest.json').read_text())
+assert all(sha(R/p)==h for p,h in m['files'].items())
+d=json.loads((R/'evaluation/scenarios/f_matrix.json').read_text())
+rows=list(csv.DictReader((R/'evaluation/evidence/fault-model.csv').open()))
+assert len(rows)==14 and len(d['cases'])==29
+assert len({x['id'] for x in d['cases']})==29
+assert not d['executionAuthorized'] and not d['actualFResults'] and not d['exactOwnerAcks'] and not m['acks']
+assert all(x['executionStatus']=='NOT_RUN' and x['ownerAckStatus']=='PENDING_BOTH' and set(x['components'])<=set(y['id'] for y in rows) for x in d['cases'])
+audit=json.loads((O/'owner-review.json').read_text())
+for ref,t in audit['refs'].items(): assert git('rev-parse',ref).decode().strip()==t,ref
+tests='\n'.join(git('show',audit['refs']['origin/agent-1']+':'+p).decode() for p in audit['ownerBlobs'] if p.startswith('ledger/test/') and p.endswith('.sol'))
+cited=sorted(set(re.findall(r'\btest_\w+',json.dumps(d))))
+assert all(re.search(r'function\s+'+n+r'\s*\(',tests) for n in cited)
+protected=['ledger','protocol','interfaces/v1','archive','evaluation/reports/RQ1-E.md','evaluation/evidence/e3/gate-run-20261012']
+assert not git('diff','HEAD','--',*protected).strip()
+commands=[]
+for name,argv,expected in [
+ ('launch-prompts',['python3','communication/build_prompts.py','--check'],0),
+ ('diff-check',['git','diff','--check'],0),
+ ('f-execution-refusal',[str(R/'.venv/bin/python'),'-m','evaluation.run','--rq','F','--profile','repaired-e','--output',str(R/'.git/ris-a1-0090-f-refusal')],2),
+ ('python-version',['python3','--version'],0),('git-version',['git','--version'],0)]:
+    s=datetime.datetime.now(datetime.timezone.utc).isoformat()
+    run=subprocess.run(argv,cwd=R,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+    out=O/(name+'.stdout.txt');out.write_bytes(run.stdout)
+    commands.append({'name':name,'argv':argv,'cwd':str(R),'startedAt':s,'endedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'exitCode':run.returncode,'expectedExit':expected,'outputSha256':sha(out)})
+    assert run.returncode==expected,(name,run.stdout.decode())
+assert not (R/'.git/ris-a1-0090-f-refusal').exists()
+result={'startedAt':start,'endedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'components':len(rows),'scenarios':len(d['cases']),'allNotRun':True,'allOwnerAcksPending':True,'historicalTestNamesVerified':len(cited),'manifestSha256':sha(O/'draft-manifest.json'),'protectedPathsUnchanged':protected,'refsUnchanged':audit['refs'],'commands':commands,'auditCommand':['python3','.git/ris-a1-0090-review.py'],'auditExitCode':0,'auditToolSha256':sha(O/'audit-owner.py.txt'),'verificationToolSha256':sha(pathlib.Path(__file__))}
+(O/'verification.json').write_text(json.dumps(result,indent=2)+'\n')
+print(json.dumps({k:result[k] for k in ['components','scenarios','allNotRun','allOwnerAcksPending','historicalTestNamesVerified','manifestSha256']}))

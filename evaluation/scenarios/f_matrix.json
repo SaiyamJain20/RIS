@@ -13,8 +13,8 @@
   },
   "interfaceVersion": "v1 unchanged; any successor requires exact affected ACKs",
   "faultModel": "evaluation/evidence/fault-model.csv",
-  "design": "evaluation/evidence/reviews/f0-planning-20261103/F0-DRAFT.md",
-  "ledgerCommit": "39893536c1a4d5f3c27b789dcedc935b2ad8b88d",
+  "design": "evaluation/evidence/reviews/f0-a1-0090-20261103/DESIGN-REVIEW.md",
+  "ledgerCommit": "5992a0af38485ecb817b10d025145f81d51ee348",
   "protocolCommit": "376347d9b0979d1e46824a30197b935ffe91e4fb",
   "actualFResults": [],
   "exactOwnerAcks": [],
@@ -23,7 +23,8 @@
     "C0 and D-a..D-f choices",
     "Conflict keys and canonical proposal/expiry rules for all signed object types",
     "Numeric clock/inclusion/delivery bounds and deadlines",
-    "Exact source/interface/tool/run freeze"
+    "Exact source/interface/tool/run freeze",
+    "A1-0090 migration review R1-R6: profile-aware regressions, authority re-add, nonce/log binding, canonical payloads/vectors, successor schema, conflict lifetime"
   ],
   "measurementPlan": {
     "warmups": 10,
@@ -434,7 +435,7 @@
       "bound": "within",
       "prospectiveSafety": "Refuse at original expiry or stale state; no refreshed retry deadline",
       "prospectiveAvailability": "Fresh authorized request/checkpoint required",
-      "historicalLedgerEvidence": "",
+      "historicalLedgerEvidence": "repaired-e q1: test_E01_DecisionExpiryBoundary; test_E01_RequestExpiryAtDbc; test_E02_DecisionMayNotOutliveCheckpoint; test_E02_CheckpointMonotonicityAndFreshness. Historical E evidence only.",
       "dependencies": [
         "Agent2 agreed expiry and stale-view rules"
       ],
@@ -463,7 +464,7 @@
       "bound": "within",
       "prospectiveSafety": "Monotone versions reject rollback; revocation barrier is accepted DBC checkpoint",
       "prospectiveAvailability": "Delayed newer update limits freshness; no immediate cross-chain guarantee",
-      "historicalLedgerEvidence": "",
+      "historicalLedgerEvidence": "repaired-e q1: test_E02_StaleSignedCrlReplay; test_E02_StaleSignedTempAclReplay; test_E02_EqualVersionDifferentContent; test_E02_RevocationBarrierBlocksOlderDecision; test_E02_DelayedDeliveryAcrossPbcRevocationBeforeBarrier. Pre-barrier acceptance differs from post-barrier refusal.",
       "dependencies": [],
       "executionStatus": "NOT_RUN",
       "ownerAckStatus": "PENDING_BOTH",
@@ -545,10 +546,11 @@
       "byzantineWitnesses": 1,
       "bound": "deliberate mutation",
       "prospectiveSafety": "Two q2 sets can intersect only at faulty signer; agreement counterexample under divergent honest views",
-      "prospectiveAvailability": "Record mutation separately from repaired-f",
+      "prospectiveAvailability": "Proposed deployment configuration mutant-f-q2, separate from repaired-f; NOT IMPLEMENTED",
       "historicalLedgerEvidence": "No TLC result",
       "dependencies": [
-        "Exact mutant bit and divergent-view condition"
+        "Exact configuration label mutant-f-q2: threshold 2 in PSC, KSSC and Governance; no mutation bit",
+        "Explicit divergent honest-view condition"
       ],
       "executionStatus": "NOT_RUN",
       "ownerAckStatus": "PENDING_BOTH",
@@ -632,7 +634,7 @@
       "bound": "within",
       "prospectiveSafety": "Honest witnesses independently validate PBC request/signature/policy; no forged grant",
       "prospectiveAvailability": "Fresh legitimate control still grants",
-      "historicalLedgerEvidence": "E relay stress differs by profile",
+      "historicalLedgerEvidence": "repaired-e q1 signed-content refusal: test_E01_RequestFieldSubstitution; test_E01_DecisionFieldSubstitution; test_E01_RecordSubstitution. Paper relay stress: test_E01_RelaySubjectSubstitution; test_E01_RelayFabricatedRequest. Contrasting trusted-witness boundary: test_F0_SingleWitnessAttestsFabricatedRecords. No measured F independent validation.",
       "dependencies": [
         "Agent2 independent validation",
         "D-d"
@@ -714,18 +716,21 @@
       ],
       "byzantineWitnesses": 3,
       "bound": "outside honest-validation assumptions",
-      "prospectiveSafety": "Existing E checkpoint accepts monotone poison; sequence poison blocks honest successor",
+      "prospectiveSafety": "Under proposed D-e e1: policyVersion poison is STALE_STATE at acceptState even with three signatures. Sequence, authEpoch and sourceBlockNumber monotone poison can still be accepted with three signers, outside the bound. No recovery guarantee.",
       "prospectiveAvailability": "No recovery guarantee in minimal core proposal",
-      "historicalLedgerEvidence": "test_F0Q_ThreeSignersCanPoison; sourceBlockNumber poison permits grants until checkpoint expiry",
+      "historicalLedgerEvidence": "Existing repaired-e: test_F0Q_ThreeSignersCanPoison (n4/q3 checkpoint path); test_F0_PoisonCheckpointSourceBlockNumberBlocksTheDbc (q1) permits grants until checkpoint expiry. No e1 or F mutant measurement.",
       "dependencies": [
-        "D-e"
+        "D-e choice and exact policyVersion comparison/check order",
+        "Proposed bit8 MUT_NO_POLICY_PIN sensitivity control"
       ],
       "executionStatus": "NOT_RUN",
       "ownerAckStatus": "PENDING_BOTH",
       "controls": [
         "fresh valid access",
         "correct policy denial",
-        "fresh no-fault comparison"
+        "fresh no-fault comparison",
+        "Under e1, signed policyVersion poison refuses; same valid signatures with current policy succeed",
+        "MUT_NO_POLICY_PIN admits policyVersion poison; other poison dimensions classified separately"
       ],
       "requiredEvidence": [
         "exact source/config/tool hashes",
@@ -821,6 +826,71 @@
         "whole relevant state before/after",
         "explicit exits/timeouts and original deadlines"
       ]
+    },
+    {
+      "id": "F-28",
+      "title": "Authority removal across checkpoint barrier",
+      "components": [
+        "FM-05",
+        "FM-07",
+        "FM-02"
+      ],
+      "byzantineWitnesses": 0,
+      "bound": "within",
+      "prospectiveSafety": "Under C0/D-a proposal: PBC credential validation gives UNKNOWN_AUTHORITY after removal. A previously issued decision tied to the old authEpoch can still grant before the DBC accepts a new-epoch checkpoint if all other checks/expiries hold; afterward STALE_STATE. Window bounded by checkpoint TTL and decision expiry <= checkpoint expiry.",
+      "prospectiveAvailability": "Global authEpoch change invalidates in-flight PBC requests and, after the barrier, old-epoch decisions; unrelated issuers share the availability cost.",
+      "historicalLedgerEvidence": "Proposed extension; no governance or F execution",
+      "dependencies": [
+        "C0 and D-a selection",
+        "Exact remove/re-add/history semantics and ledger design revision",
+        "Agreed checkpoint timing and witness validation"
+      ],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "F-29",
+      "title": "Expired unexecuted governance nonce or checkpoint sequence",
+      "components": [
+        "FM-04",
+        "FM-14"
+      ],
+      "byzantineWitnesses": 0,
+      "bound": "within",
+      "prospectiveSafety": "Expired governance action cannot execute (EXPIRED subject to earlier check precedence). Any re-signing must establish old value is no longer acceptable on the relevant ledger; local wall-clock expiry alone is insufficient.",
+      "prospectiveAvailability": "Strict permanent single-signing can stall an unused nonce/sequence. Safe reuse after expiry remains unresolved; no recovery guarantee is assumed.",
+      "historicalLedgerEvidence": "Proposed extension; no governance or F execution",
+      "dependencies": [
+        "Agent2 exact persistent conflict key/value and re-signing rule for governance and checkpoints",
+        "Numeric ledger-clock/skew/observation bounds",
+        "Agreement scope for simultaneously live certificates if temporal reuse is selected"
+      ],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
     }
-  ]
+  ],
+  "revision": 2,
+  "respondsTo": "A1-0090"
 }

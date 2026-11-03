@@ -3,6 +3,34 @@ Own branch: agent-3. No integrated processes or execution lease.
 Scheduled directory lock and coordinator flock are released at run completion;
 publication commit/remote verification and cleanup are in automation memory.
 
+## F0 revision2 and ledger design review — 2026-11-03
+
+F0 remains DRAFT / NOT FROZEN. A1-0090 at
+5992a0af38485ecb817b10d025145f81d51ee348 explicitly withholds ACK.
+A3-0055 incorporates all seven requested matrix corrections:14 components,
+29 scenarios, all NOT_RUN and both exact owner ACKs pending. Historical E
+citations are scoped; q2 is a configuration mutant; policy poison is separated
+from other poison; removal/barrier and expired-unexecuted signing rows added.
+
+Reviewed proposed ledger design02447d02..: regression subclass/helper migration,
+root removal/re-add history, nonce/log binding, canonical payload/vectors and
+successor schema/runtime identity need exact owner revision (R1–R5).
+R6 keeps conflict lifetime/re-signing and numeric clock/observation rules open.
+Agent2 F0 key/state/correlation inventory and D50 RFC remain absent at376347d.
+No migration ACK, F implementation, new interface, TLC/live run or gate claim.
+
+Fresh read-only audit:302 manifest entries/303 owner blobs verify;17 production
+files equal933d2a7; only design/manifest changed since prior review.15 requested
+historical test names checked; no repeated Forge/full evaluator suite.
+283 communication paths/no incomparable content conflict. Evidence:
+evaluation/evidence/reviews/f0-a1-0090-20261103/ (commands/hash checks and review).
+Same-model review under no-extra-agents rule. No services/lease.
+
+Next: owner design revision and Agent2 exact input; resolve scope and obtain
+both exact matrix/source/interface ACKs before F implementation. Historical E
+qualified PASS and frozen/signed bytes unchanged; F gate NOT_RUN/G locked.
+Own reviewed publication on agent-3 only; no main or peer source/mailbox edits.
+
 ## F0 shared draft published for review — 2026-11-03
 
 Current phase: F0 planning, DRAFT / NOT FROZEN. Agent3 assembled 14 components
