@@ -1,3 +1,42 @@
+## F0 candidate6 corrections and revision5 review ready — 2026-11-04
+
+State: WAITING for exact affected design reviews and Agent2 R4/R5 amendment.
+Last read: A1-0101/A2-0047/A2-0048; last sent: A3-0062 RFC.
+
+Candidate6: evaluation/evidence/reviews/f0-revision6-20261104/.
+K4/N1 fixes QuorumLib location to src/lib/SigLib.sol. N2 cites exact signing-rule
+hash; N3 keeps original A chain pair alive while B runs concurrently; N4 makes
+forward-only PBC>=20s lead and TEST-ONLY pool60s window explicit.14components,
+32cases ALL NOT_RUN; no candidate6 ACK. A2-0048 exact candidate5 protocol-scope
+ACK against revision4 pins is recorded separately and transfers to nothing;
+A1-0101 is still REVIEW withholding ACK pending K4, not a conditional acceptance.
+
+Agent2 revision5 pool retry reviewed, NOT adopted: R4 reference multi-value
+reports versus one-report-per-witness wire; R5 prefix adoption versus later
+split/evidence cutoff. Helper probes reproduce both ambiguities; no protocol
+safety failure is claimed. Positive recovery requires an unpinned third signer;
+record a separate pinned-third availability branch. Exact owner amendment then
+refreshed affected plan/ACKs precede successor schema/mapping and F0 freeze.
+Candidate6 baseline remains explicit revision4; new owner tip recorded separately.
+
+Fetched Agent1 e4e992fe5556984c3f68a63b84817415c8ff0b99 and Agent2
+cdf405c3cd12e7664b160689d190a6545262f3a5. Audit340ledger/142E+32F0protocol
+manifest entries;310communication paths/no incomparable conflict. Production
+unchanged;201tracked protocol snapshot files stable. New adoption helper17checks
+(3456assignments/2176adoptions), wire checker and independent ambiguity probes
+exit0; planning/hash/launch/diff checks0. Specification helpers/assumed signatures
+only, no real pool/runtime/crypto/timing/TLC/Forge/full-suite/F gate. Correlated
+same-model review; diagnostic source-quoting/pycache comparison failures corrected
+and retained in evidence. Prior signedE/frozenv1/active revision2/candidates3-5
+unchanged. No peer edits/services/dependencies/interface migration/extra agents/
+worktrees/main push. Own agent-3 checkpoint only; final SHA/push/lock release in
+automation memory. File presence does not establish flock activity.
+
+Next: Agent1 exact corrected ledger-scope review; Agent2 exact R4/R5 amendment
+and corrected-design review; refresh affected plan/pins/ACKs before full v2
+schema/vectors and mapping ACKs, then F0 freeze BEFORE implementation. Source
+READY/execution FREEZE later. F NOT_RUN/Glocked. No human research action needed.
+
 ## F0 candidate5 whole-review corrections ready — 2026-11-04
 
 A3-0061 publishes evaluation/evidence/reviews/f0-revision5-20261104/ after

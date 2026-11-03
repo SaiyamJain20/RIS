@@ -1,0 +1,47 @@
+import contextlib, copy, importlib.util, io, itertools, json, pathlib, re, runpy
+R=pathlib.Path('/home/karma/Documents/RIS')
+S=R/'.git/ris-f0-revision6-snapshot/protocol/f0'
+spec=importlib.util.spec_from_file_location('review_pool', S/'vectors/pool_adoption.py')
+p=importlib.util.module_from_spec(spec);spec.loader.exec_module(p)
+def report(w,m): return {'witness':w,'message':m,'validSignature':True}
+A,B,F=('7','A'),('7','B'),('7','FAKE')
+# Expected arithmetic and set results, written before executing the probe.
+assert p.adopt_recorded([report(0,A),report(1,A)],7)==A
+assert p.adopt_recorded([report(3,F),report(3,F)],7) is None
+r=[report(3,F),report(3,A),report(0,A)]
+assert p.adopt_recorded(r,7)==A
+assert len({x['witness'] for x in r})!=len(r)
+# Under first-report projection the answer differs; no such projection is chosen by the proposal.
+first={}
+for x in r:first.setdefault(x['witness'],x)
+assert p.adopt_recorded(list(first.values()),7) is None
+prefix=[report(0,A),report(1,A)]
+assert p.adopt_recorded(prefix,7)==A
+assert p.adopt_recorded(prefix+[report(2,B),report(3,B)],7) is None
+# Owner checker must reject retained adoption if final reports acquire a second candidate.
+# Use AST to obtain only helper definitions/constants, avoiding main checker side effects.
+import ast
+mod=ast.parse((S/'vectors/check_wire_examples.py').read_text())
+ns={'pool':p,'json':json,'re':re}
+for n in mod.body:
+ if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id in ('CHECKPOINT_KEYS','SIG','DEC') for t in n.targets):exec(compile(ast.Module(body=[n],type_ignores=[]),'owner-helper','exec'),ns)
+ if isinstance(n,ast.FunctionDef) and n.name in ('report_ok','reports_ok'):exec(compile(ast.Module(body=[n],type_ignores=[]),'owner-helper','exec'),ns)
+examples=[json.loads(x) for x in re.findall(r'```json\n(.*?)\n```',(S/'SUCCESSOR-WIRE.md').read_text(),re.S)]
+c=copy.deepcopy(next(x['result']['collection'] for x in examples if x.get('result') and 'adopted' in x['result'].get('collection',{})))
+assert ns['reports_ok'](c)
+base=copy.deepcopy(c['recordedReports'][0]);base['message']['sourceBlockNumber']='251';base['message']['sourceBlockHash']='0x'+'66'*32
+for w in ('2','3'):
+ x=copy.deepcopy(base);x['witnessIndex']=w;c['recordedReports'].append(x)
+assert not ns['reports_ok'](c)
+# A recovery positive requires an unpinned third signer; simple durable-record eligibility only.
+records={0:A,1:A,2:B,3:None}
+assert [w for w in (0,1,2) if records[w] in (None,A)]==[0,1]
+records[2]=None
+assert [w for w in (0,1,2) if records[w] in (None,A)]==[0,1,2]
+print(json.dumps({'classification':'design-helper probes; no cryptography, runtime protocol, timing or F gate',
+ 'duplicateReporterReference':'A adopted from reports [(3,FAKE),(3,A),(0,A)]',
+ 'firstReportProjection':'none; policy is unspecified and changes adoption',
+ 'prefixAdoption':'A', 'afterLateTwoReports':'none', 'ownerWireCheckerRetainedAdoptionWithLateSplit':False,
+ 'recoveryIfWitness2AlreadyPinnedB':'only 0 and 1 eligible; silent 3 gives no q3',
+ 'recoveryIfWitness2Unpinned':'0,1,2 eligible; scheduling and actual protocol remain untested',
+ 'controls':'two agreeing reports positive, duplicates do not inflate count, early-vs-final and unpinned-vs-pinned contrasts'},indent=2))

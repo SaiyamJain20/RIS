@@ -1,0 +1,69 @@
+import datetime, hashlib, json, pathlib, subprocess, sys, time
+
+R = pathlib.Path('/home/karma/Documents/RIS')
+O = R / 'evaluation/evidence/reviews/f0-revision6-20261104'
+O.mkdir(parents=True, exist_ok=True)
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=R)
+def sha(b): return hashlib.sha256(b).hexdigest()
+def save(name, obj): (O/name).write_text(json.dumps(obj, indent=2)+'\n')
+def now(): return datetime.datetime.now(datetime.timezone.utc).isoformat()
+refs={r:git('rev-parse',r).decode().strip() for r in ['origin/agent-1','origin/agent-2','origin/agent-3','origin/main']}
+assert refs['origin/agent-1']=='e4e992fe5556984c3f68a63b84817415c8ff0b99'
+assert refs['origin/agent-2']=='cdf405c3cd12e7664b160689d190a6545262f3a5'
+owners={}
+for ref, module, base in [('origin/agent-1','ledger','4b35ad3f4d6b0f5d6b9d8d0e35a04d7a4550672d'),('origin/agent-2','protocol','376347d9b0979d1e46824a30197b935ffe91e4fb')]:
+    tip=refs[ref]
+    paths=git('ls-tree','-r','--name-only',tip,'--',module).decode().splitlines()
+    blobs={p:git('show',f'{tip}:{p}') for p in paths}
+    manifests=[f'{module}/evidence/source-manifest.sha256']
+    if module=='protocol': manifests.append('protocol/f0/MANIFEST.sha256')
+    checked={}
+    for m in manifests:
+        entries={}
+        for line in blobs[m].decode().splitlines():
+            h,p=line.split(None,1);p=p.lstrip('*')
+            assert sha(blobs[p])==h,(m,p)
+            entries[p]=h
+        checked[m]={'sha256':sha(blobs[m]),'entries':len(entries)}
+    delta=git('diff','--name-only',base,tip,'--',module).decode().splitlines()
+    if module=='ledger':
+        prod=[p for p in paths if p.startswith(('ledger/src/','ledger/script/')) or p=='ledger/foundry.toml']
+        assert all(blobs[p]==git('show',f'933d2a7:{p}') for p in prod)
+    else:
+        prod=[p for p in paths if not p.startswith('protocol/f0/')]
+        assert not git('diff',base,tip,'--',module,':(exclude)protocol/f0').strip()
+    owners[module]={'commit':tip,'files':len(paths),'manifests':checked,'deltaSince':base,'delta':delta,'unchangedComparedFiles':len(prod),'blobs':{p:sha(b) for p,b in blobs.items()}}
+save('owner-review.json',{'capturedAt':now(),'refs':refs,'owners':owners,'commits':{r:git('show','-s','--format=fuller',t).decode() for r,t in refs.items()},'classification':'exact source and published evidence audit; not fresh live execution'})
+# File-changing commit provenance and partial-order conflict detection.
+paths=sorted(set(p for t in refs.values() for p in git('ls-tree','-r','--name-only',t,'--','communication').decode().splitlines()))
+records={};conflicts=[];ancestry={}
+def ancestor(x,y):
+    if (x,y) not in ancestry:
+        ancestry[x,y]=subprocess.run(['git','merge-base','--is-ancestor',x,y],cwd=R).returncode==0
+    return ancestry[x,y]
+for p in paths:
+    cs=[]
+    for ref,t in refs.items():
+        if subprocess.run(['git','cat-file','-e',f'{t}:{p}'],cwd=R,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode: continue
+        c=git('log','-1','--format=%H',t,'--',p).decode().strip()
+        cs.append({'ref':ref,'tip':t,'changeCommit':c,'sha256':sha(git('show',f'{t}:{p}'))})
+    maximal=[x for x in cs if not any(x['changeCommit']!=y['changeCommit'] and ancestor(x['changeCommit'],y['changeCommit']) for y in cs)]
+    if len(set(x['sha256'] for x in maximal))>1:conflicts.append(p)
+    records[p]={'candidates':cs,'latest':maximal}
+save('communication-provenance.json',{'capturedAt':now(),'refs':refs,'files':records,'incomparableContentConflicts':conflicts})
+assert not conflicts,conflicts
+
+previous=json.loads((R/'evaluation/evidence/reviews/f0-revision5-20261104/owner-review.json').read_text())
+assert owners['ledger']['blobs']==previous['owners']['ledger']['blobs']
+changed={m:[p for p,h in owners[m]['blobs'].items() if previous['owners'][m]['blobs'].get(p)!=h] for m in owners}
+save('owner-delta.json',{'previousCandidate':5,'changed':changed,'noProductionChanges':True})
+reviews=[]
+for ref,path,kind in [
+ ('origin/agent-1','communication/agent-1/outbox/0101-review-f0-candidate5-ledger-scope.md','REVIEW_WITHHOLDS_ACK_K4'),
+ ('origin/agent-2','communication/agent-2/outbox/0047-rfc-f0-revision5-pool-retry-adoption.md','RFC_NOT_ACK'),
+ ('origin/agent-2','communication/agent-2/outbox/0048-ack-f0-candidate5-protocol-scope.md','EXACT_CANDIDATE5_PROTOCOL_SCOPE_ACK_REVISION4_PINS')]:
+ b=git('show',refs[ref]+':'+path)
+ reviews.append({'commit':refs[ref],'path':path,'sha256':sha(b),'messageId':b.decode().splitlines()[0].split(': ',1)[1],'classification':kind})
+save('received-reviews.json',{'reviews':reviews,'exactCandidate6Acks':[], 'noAckTransfer':True})
+print(json.dumps({'manifests':{k:v['manifests'] for k,v in owners.items()},'communicationPaths':len(records),'conflicts':conflicts,'changed':changed,'reviews':reviews}))
