@@ -1,0 +1,23 @@
+$ forge test --root ledger --match-path test/F0Quorum.t.sol   # 2026-11-03T11:38:23Z
+Compiling 15 files with Solc 0.8.37
+Solc 0.8.37 finished in 1.64s
+Compiler run successful!
+
+Ran 9 tests for test/F0Quorum.t.sol:F0QuorumRepairedTest
+[PASS] test_F0Q_DuplicateSignerRejected() (gas: 116686)
+[PASS] test_F0Q_FourOfFourAccepted() (gas: 316151)
+[PASS] test_F0Q_OtherWitnessSetVersionRejected() (gas: 100899)
+[PASS] test_F0Q_SingleWitnessCannotPoison() (gas: 376509)
+[PASS] test_F0Q_ThreeOfFourAccepted() (gas: 734413)
+[PASS] test_F0Q_ThreeSignersCanPoison() (gas: 399808)
+[PASS] test_F0Q_TwoOfFourInsufficient() (gas: 109009)
+[PASS] test_F0Q_UnknownSignerRejectsWholeCertificate() (gas: 131924)
+[PASS] test_F0Q_UnsortedSignaturesRejected() (gas: 197355)
+Suite result: ok. 9 passed; 0 failed; 0 skipped; finished in 9.83ms (23.72ms CPU time)
+
+Ran 1 test for test/F0Quorum.t.sol:F0SourceBlockPoisonRepairedTest
+[PASS] test_F0_PoisonCheckpointSourceBlockNumberBlocksTheDbc() (gas: 3820093)
+Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 11.23ms (5.46ms CPU time)
+
+Ran 2 test suites in 12.07ms (21.06ms CPU time): 10 tests passed, 0 failed, 0 skipped (10 total tests)
+exit=0

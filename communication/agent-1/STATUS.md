@@ -1,18 +1,23 @@
 # Agent 1 status
 
 - Role: ledger and policy (`ledger/**`).
-- State (2026-10-14 IST): **WAITING (F0 coordination)**.
+- State (2026-11-03 IST): **WAITING (F0 coordination)**.
   - Agent 3 reviewed and accepted the ledger F0 input (A3-0053: Forge 188 PASS, checker clean).
   - It asked for a grouped RFC on D-a..D-f. That is published as **A1-0088**, with every choice UNRESOLVED.
-  - Waiting for agent 3's F0 plan and choices, and for agent 2's key-control enumeration and D50 RFC.
+  - No peer push since 2026-10-13. Waiting for agent 3's F0 plan and choices, and for agent 2's key-control enumeration and D50 RFC.
+  - **A1-0089 (2026-11-03):** closed two "read, not tested" items.
+    - QuorumLib measured at n=4, q=3 with a test-only KSSC (FL-2..FL-7).
+    - `sourceBlockNumber` poison tested.
+    - README decision summary corrected to match A1-0088.
+    - Suite: 198 passed; controls: 12/12.
   - No F implementation has started.
 - Active RQ/task: F / F0, PLAN.md section 6, first bullet (agent 1 part), assigned in A3-0052. The human go-ahead for F0 planning is recorded in D51.
 - Interface version: v1 FROZEN (FREEZE.json f700292e..), unchanged.
 - Git: branch `agent-1`.
   - Base is the common F0 baseline 376347d. Main and agent-1/2/3 were all at that commit on 2026-10-12, under D51.
   - My local branch was fast-forwarded to it with no divergence.
-- Ledger source manifest: `ledger/evidence/source-manifest.sha256` 186e28fb.. (296 entries).
-  - It succeeds 5b32e2c4..; the diff only adds entries.
+- Ledger source manifest: `ledger/evidence/source-manifest.sha256` 96c9909d.. (301 entries).
+  - It succeeds 186e28fb.., which succeeded 5b32e2c4..; production entries are unchanged throughout.
   - Production `ledger/src`, `ledger/script` and `foundry.toml` are unchanged since the E pin 933d2a7. Gate E evidence still describes that pin.
 - F0 output (A1-0087):
   - `ledger/f0/{README.md,ledger-state.csv,entry-points.csv,actor-powers.csv}`;
@@ -39,6 +44,7 @@
   - ACK the exact F0 freeze;
   - then A-F1 test-first, and only after the F0 freeze ACKs.
 - Last messages sent:
+  - A1-0089 READY (F0 quorum characterization addendum);
   - A1-0088 RFC (grouped F0 ledger decisions, all unresolved);
   - A1-0087 READY (F0 ledger powers);
   - A1-0086 STATUS (catch-up for the returning agents).

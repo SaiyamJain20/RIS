@@ -21,16 +21,18 @@ Agents 1, 2 and 3 are the same model, so peer review of this file is correlated 
 | `entry-points.csv` | Every constructor and every external or public non-view function (33). Each row gives the caller rule, the signatures checked, the state written and the power of a faulty key holder. |
 | `actor-powers.csv` | Twelve actors and the keys they hold. For each: what it changes alone, what needs others, what it cannot change, the evidence tests and a classification. |
 | `../test/F0Powers.t.sol` | 22 characterization tests: 5 in each of the 3 profiles plus 7 repaired-e only. Expectations were written before the first run. |
+| `../test/F0Quorum.t.sol` | 10 characterization tests (added 2026-11-03), repaired-e only, expectations written before the first run. 9 measure the **existing** `QuorumLib` with a test-only 4-witness KSSC at q=3; 1 covers `sourceBlockNumber` poison in the E fixture. |
 | `../tools/check_f0_powers.py` | Recompiles `ledger/src` with the pinned solc (hash-checked). It verifies that every state variable and entry point is covered exactly once, that every `file:line` declares what it names, and that every cited test and id exists. |
-| `../tools/f0_controls.sh` | Sensitivity controls: removes each injected fault in a scratch copy and requires the matching test to fail. |
-| `../evidence/f0-powers/` | First run, full suite, controls (including the first, non-matching run), checker run and checker negative control. |
+| `../tools/f0_controls.sh` | Sensitivity controls: removes each injected fault in a scratch copy and requires the matching test to fail. 12 controls: 7 for `F0Powers`, 5 for `F0Quorum`. |
+| `../evidence/f0-powers/` | First runs, full suites and controls. Kept as well: the first non-matching controls run (`controls-run1-no-match.txt`) and the `F0Quorum` compile error from a wrong integer type in the test (`quorum-compile-error.txt`). Also the checker run and its negative control. |
 
 ## Reproduce (repository root, Foundry 1.8.5 on PATH)
 
 ```
 forge test --root ledger --match-path test/F0Powers.t.sol            # 22 passed
-forge test --root ledger                                             # 188 passed (166 E + 22 F0)
-ledger/tools/f0_controls.sh <empty scratch dir>                      # 7/7 controls sensitive
+forge test --root ledger --match-path test/F0Quorum.t.sol            # 10 passed
+forge test --root ledger                                             # 198 passed (166 E + 32 F0)
+ledger/tools/f0_controls.sh <empty scratch dir>                      # 12/12 controls sensitive
 python3 -I ledger/tools/check_f0_powers.py                           # problems: []
 ```
 
@@ -145,7 +147,7 @@ Repaired-e's bounded list validity holds only if each issuer chooses a short lif
 
 ### L8 — Poison checkpoints block the DBC permanently
 
-**Evidence:** `test_F0_PoisonCheckpointSequenceBlocksTheDbc`, `...AuthEpochBlocksTheDbc`, `...PolicyVersionBlocksTheDbc`.
+**Evidence:** `test_F0_PoisonCheckpointSequenceBlocksTheDbc`, `...AuthEpochBlocksTheDbc`, `...PolicyVersionBlocksTheDbc`, `...SourceBlockNumberBlocksTheDbc` (added 2026-11-03); at q=3, `test_F0Q_SingleWitnessCannotPoison` and `test_F0Q_ThreeSignersCanPoison`.
 
 **Class:** tested reconstruction result (availability), under a violated E assumption.
 
@@ -153,17 +155,19 @@ Repaired-e's bounded list validity holds only if each issuer chooses a short lif
 - `acceptState` requires sequence, authEpoch, policyVersion, keyEpoch and sourceBlockNumber to be monotone, but sets no upper bound and has no reset.
 - A single quorum-signed extreme value is accepted and blocks every later checkpoint.
 - Once that checkpoint expires, every decision is STALE_STATE.
-- `sourceBlockNumber` follows the same code path but is untested.
+- **`sourceBlockNumber` is now tested** and behaves the same way, with one difference: `DecisionVerifier` never compares a decision's sourceBlockNumber with the checkpoint's. So grants keep passing while the poisoned checkpoint is fresh, and the DBC blocks only once it expires.
 
 **In E:** one witness can do this.
 
-**In F (q=3):**
-- It needs three signers, so at least two honest witnesses would have to sign a bad value.
-- That is prevented only if honest witnesses validate each field against the PBC (agent 2's B-F1).
+**In F (q=3), measured on the existing code with a 4-witness KSSC:**
+- one signer gives INSUFFICIENT_QUORUM, and the honest checkpoint stays current;
+- three signers do install the poison value.
+- So it needs at least two honest witnesses to sign a bad value. That is prevented only if honest witnesses validate each field against the PBC (agent 2's B-F1).
 
-**F options (D-e):**
-- a q=3, action-bound "checkpoint recovery" governance action;
-- and/or a per-step bound on the sequence.
+**F options (D-e, current form in A1-0088, all unresolved):**
+- pin `policyVersion` to the deployment's value, which closes P-WIT-4;
+- a q=3, action-bound "checkpoint recovery" governance action, itself a rollback lever.
+- I no longer propose a per-step bound: a faulty quorum can sign repeatedly, so a bound only slows it.
 
 ### L9 — Most ledger writes are permissionless; the relay key gates only outcome recording
 
@@ -203,17 +207,37 @@ PSC (receipts) and KSSC (decisions and checkpoints) each hold their own immutabl
 
 **F impact:** F deployment verification must check that they are equal (D50 scope).
 
-### L12 — QuorumLib is already q-of-n; n=4 and q=3 are untested
+### L12 — QuorumLib is already q-of-n; measured at n=4, q=3
 
-**Evidence:** read (`src/lib/SigLib.sol:36-59`).
+**Evidence:** `test/F0Quorum.t.sol`, a test-only KSSC constructed with four witnesses and threshold 3 (no production change):
+- `test_F0Q_ThreeOfFourAccepted`, each of the four possible missing witnesses;
+- `test_F0Q_FourOfFourAccepted`;
+- `test_F0Q_TwoOfFourInsufficient`;
+- `test_F0Q_DuplicateSignerRejected`;
+- `test_F0Q_UnknownSignerRejectsWholeCertificate`;
+- `test_F0Q_UnsortedSignaturesRejected`;
+- `test_F0Q_OtherWitnessSetVersionRejected`.
 
-**What it already enforces:** distinct signers in strictly increasing order. An unknown signer gives BAD_SIGNATURE, a repeat gives DUPLICATE_SIGNER, too few give INSUFFICIENT_QUORUM.
+**Class:** tested reconstruction result.
 
-**Gaps:**
-- E deploys only 1-of-1.
-- One invalid or unknown signature anywhere rejects the whole certificate, even with q valid ones present. The submitter must filter, so a faulty witness causes rejection only if the submitter includes its signature.
+**What it enforces:** distinct signers in strictly increasing address order.
 
-**F impact:** A-F1's first failing tests cover n=4, q=3.
+| Input | Result |
+|---|---|
+| Unknown signer | BAD_SIGNATURE |
+| Repeated signer | DUPLICATE_SIGNER |
+| Distinct signers out of order | MALFORMED |
+| Too few signers | INSUFFICIENT_QUORUM |
+| Another set version | STALE_STATE |
+
+**Behaviour to plan around:**
+- One unknown signature anywhere rejects the whole certificate, even with three valid ones present (measured).
+- The submitter must therefore filter; a faulty witness causes a rejection only if the submitter includes its signature.
+
+**Scope:**
+- Only the checkpoint path was exercised.
+- Decisions (`DecisionVerifier`) and receipts (`PSC`) call the same `QuorumLib.verify`; that is read, not tested.
+- A-F1 still writes its own tests for the F contracts.
 
 ### L13 — Ledger operators sit outside the contract model
 
@@ -228,37 +252,45 @@ PSC (receipts) and KSSC (decisions and checkpoints) each hold their own immutabl
 
 These are proposals for pre-registration. They are not ACKed, and agent 3 owns the matrix.
 
-| Ref | Scenario (n=4, q=3) | Expected ledger outcome |
-|---|---|---|
-| FL-1 | 0 faulty witnesses, honest request | Grant (control) |
-| FL-2 | 1 witness withholds, 3 sign | Grant |
-| FL-3 | 2 withhold, 2 sign | INSUFFICIENT_QUORUM; no state change |
-| FL-4 | One signer's signature included twice | DUPLICATE_SIGNER; no state change |
-| FL-5 | Unknown signer among 3 | BAD_SIGNATURE; no state change |
-| FL-6 | Old `witnessSetVersion` | STALE_STATE |
-| FL-7 | 1 faulty witness signs a poison checkpoint alone | INSUFFICIENT_QUORUM; checkpoint unchanged |
-| FL-8 | Faulty authority repeatedly updates its own lists | Safety preserved. In-flight requests are STALE_STATE while it continues. Measured, and depends on D-c. |
-| FL-9 | Faulty authority credentials for its own GID | Grant: a residual, not a quorum failure (L3) |
-| FL-10 | Governance certificate for `addCA` replayed as `removeCA` | Reject; action binding (A-F1) |
-| FL-11 | Faulty relay withholds outcomes (repaired) | Request stays pending; no forged outcome |
+The last column says what the **existing** E code already does in a single-EVM test. That is not an integrated F result.
+
+| Ref | Scenario (n=4, q=3) | Expected ledger outcome | Measured on the E code |
+|---|---|---|---|
+| FL-1 | 0 faulty witnesses, honest request | Grant (control) | E positive controls (q=1) |
+| FL-2 | 1 witness withholds, 3 sign | Grant | checkpoint path: `test_F0Q_ThreeOfFourAccepted` |
+| FL-3 | 2 withhold, 2 sign | INSUFFICIENT_QUORUM; no state change | `test_F0Q_TwoOfFourInsufficient` |
+| FL-4 | One signer's signature included twice | DUPLICATE_SIGNER; no state change | `test_F0Q_DuplicateSignerRejected` |
+| FL-5 | Unknown signer among 3 | BAD_SIGNATURE; no state change, even when 3 valid signatures are present | `test_F0Q_UnknownSignerRejectsWholeCertificate` |
+| FL-6 | Old `witnessSetVersion` | STALE_STATE | `test_F0Q_OtherWitnessSetVersionRejected` |
+| FL-7 | 1 faulty witness signs a poison checkpoint alone | INSUFFICIENT_QUORUM; checkpoint unchanged. With 3 signers it is accepted (boundary). | `test_F0Q_SingleWitnessCannotPoison`, `test_F0Q_ThreeSignersCanPoison` |
+| FL-8 | Faulty authority repeatedly updates its own lists | Safety preserved. In-flight requests are STALE_STATE while it continues. Depends on D-c. | one update: `test_F0_UnrelatedAuthorityUpdateInvalidatesOtherUsersRequests` |
+| FL-9 | Faulty authority credentials for its own GID | Grant: a residual, not a quorum failure (L3) | `test_F0_OneAuthorityAloneAuthorizesItsOwnGidForAnotherHospitalsRecord` |
+| FL-10 | Governance certificate for `addCA` replayed as `removeCA` | Reject; action binding (A-F1) | not measurable: no governance code |
+| FL-11 | Faulty relay withholds outcomes (repaired) | Request stays pending; no forged outcome | `test_E03_DroppedOutcomeStaysVisiblyPending` |
 
 ## Decisions needed before the F0 freeze
 
-Recommendations are mine. All of these are open.
+**The authoritative text is the grouped RFC A1-0088** (2026-10-14). It gives every alternative, with its source, ABI, interface and fixture impact. All of it is UNRESOLVED.
 
-- **D-a: governance actions in core F.**
-  - In: `addCA` and `removeCA`, CA-Admin rotation, authority root-key refresh, and checkpoint recovery (L8).
-  - Out: policy updates and witness rotation. SPEC keeps the four witness identities fixed.
-  - Optional: relay replacement.
-- **D-b: governance signers.** The four witness keys, q=3, under the **old** set (SPEC section 5). Record the correlation: each hospital's witness and its credential authority are one organization.
-- **D-c: global `authEpoch` (L5).** Either keep it and measure the availability lever (FL-8), or bind per-issuer versions, which changes the interface. I recommend keeping it for core F and measuring FL-8, unless agent 3's RQ2 matrix needs availability under a faulty authority.
-- **D-d: user-signature check on the DBC (L7).** Defence in depth, not required by the q=3 argument. It needs an RFC because the `consumeDecision` ABI changes.
-- **D-e: poison-checkpoint mitigation (L8).** A q=3 recovery action, plus a sequence step bound.
-- **D-f: deployment verification (L1, L11).** Fold into agent 2's D50 RFC: witness sets, thresholds, profile, mutations and runtime code hashes of all six contracts.
+This summary was corrected on 2026-11-03 to match A1-0088. Two changes:
+- the first version listed root-key refresh as in scope;
+- it proposed a sequence step bound.
+
+Current recommendations, which are not approved scope:
+- **C0, common carrier:** a new `REPAIRED_F` profile, with E profiles unchanged; a 4-witness q=3 fixture with set version 2; F mutant bits; keep `QuorumLib`.
+- **D-a, governance actions in core F:**
+  - in: `addCA`/`removeCA` and CA-Admin rotation, through a new `Governance.sol` with an action-bound q=3 EIP-712 type;
+  - out: root-key refresh (use remove+add), `retrieveLog` gating (logs are public), policy updates and witness rotation.
+- **D-b, governance signers:** the four witness keys, q=3 (SPEC section 5). Each hospital's witness and its authority are one organization.
+- **D-c, global `authEpoch`:** keep it and measure FL-8. Per-issuer versions would be interface v2. A rate limit is rejected because it delays revocation.
+- **D-d, user-signature check on the DBC:** keep as is for the core f=1 claim. The optional `consumeSignedDecision` is defence in depth and needs an ABI change.
+- **D-e, poison checkpoints:** pin `policyVersion` (no struct change), plus optional q=3 checkpoint recovery. No step bound.
+- **D-f, deployment verification:** agent 2's D50 formula. The ledger can export `immutableReferences` and on-chain code hashes. CA-Admin sets cannot be enumerated today.
 
 ## Limits
 
 - **Test setup:** the tests run in one EVM that simulates two chains (`test/utils/Fixture.sol`), with the E fixture of one witness at q=1. There is no live two-chain run, one trial per test, and a symbolic setting.
-- **Read, not tested:** pre-seal deployer powers, ledger-operator powers, `sourceBlockNumber` poison, and QuorumLib at n=4.
+  - Exception: `F0Quorum` adds a test-only 4-witness KSSC, exercising only the checkpoint path.
+- **Read, not tested:** pre-seal deployer powers, ledger-operator powers, and QuorumLib at n=4 on the decision and receipt paths. Those paths share the same `QuorumLib.verify`.
 - **Checker scope:** `check_f0_powers.py` proves coverage and citation accuracy only. It does not evaluate the power claims.
 - **Review:** correlated same-model review.
