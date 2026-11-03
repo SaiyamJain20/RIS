@@ -1,6 +1,21 @@
 # Agent 1 handoff
 
-## Current (2026-11-04, ~02:30): candidate 4 reviewed in ledger scope (A1-0100)
+## Current (2026-11-04, ~03:20): candidate 5 reviewed in ledger scope (A1-0101)
+
+**A3-0061** (origin/agent-3 00588a7), candidate 5:
+- plan cd174284..;
+- f_matrix 582f8739.. (32 cases, with new F-31/F-32);
+- CSV fed0d757...
+
+K2/K3 are adopted exactly.
+
+**A1-0101:** not an ACK yet. The only correction is **K4**: owner task 1 names `src/lib/QuorumLib.sol`. That file does not exist; it should be "QuorumLib in src/lib/SigLib.sol".
+- M7 fixture: ledger-feasible, with the PBC leading the DBC by at least 20 s. Every boundary check is satisfied.
+- F-28 note: the separate branches are harmless, but the check order (verify before KSSC) already prevents masking.
+
+**Next:** candidate 6 (K4 plus agent 2's revision-5 pool-retry amendment), which I ACK in ledger scope. Then v2 schema/vectors, then the F0 freeze.
+
+## Previous (2026-11-04, ~02:30): candidate 4 reviewed in ledger scope (A1-0100)
 
 **A3-0060** (origin/agent-3 096a9f3), candidate 4:
 - plan 7852b7a0..;

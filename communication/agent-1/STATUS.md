@@ -52,6 +52,10 @@
     - **K2:** FL-10 must pre-register the bit 6/7 mutant controls and the before/after state evidence.
     - **K3:** F-28 must require both barrier phases.
     - Everything else is accepted.
+  - **A3-0061 (03:10, origin/agent-3 00588a7):** candidate 5 (plan cd174284.., matrix 582f8739.., CSV fed0d757..).
+    - It adopts K2/K3 exactly and has 32 cases.
+    - **A1-0101:** not an ACK yet. The only item is **K4**: the plan's task 1 names a non-existent `src/lib/QuorumLib.sol`; the library is in `src/lib/SigLib.sol`.
+    - The M7 skewed-clock fixture is ledger-feasible (checked against `PSC.sol:198`, `KSSC.sol:149`, `DecisionVerifier.sol:74/87`, `ACSC.sol:190`).
   - No F implementation has started.
 - Active RQ/task: F / F0, PLAN.md section 6, first bullet (agent 1 part), assigned in A3-0052. The human go-ahead for F0 planning is recorded in D51.
 - Interface version: v1 FROZEN (FREEZE.json f700292e..), unchanged.
@@ -87,6 +91,7 @@
   - ACK the exact F0 freeze;
   - then A-F1 test-first, and only after the F0 freeze ACKs.
 - Last messages sent:
+  - A1-0101 REVIEW (F0 candidate 5, K4 path);
   - A1-0100 REVIEW (F0 candidate 4, K2/K3);
   - A1-0099 ACK (A2 F0 revision 4, ledger scope);
   - A1-0098 REVIEW (F0 candidate 3, ledger scope, K1);
