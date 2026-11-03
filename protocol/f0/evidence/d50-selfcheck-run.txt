@@ -1,0 +1,72 @@
+ok   canonical json has no spaces and sorted keys
+ok   key order of the input does not matter
+ok   binding_v2 = sha256(prefix || canonical json), lowercase hex without 0x
+ok   E and F documents bind differently
+ok   sensitive: interfaceVersion
+ok   sensitive: profile.name
+ok   sensitive: profile.enum
+ok   sensitive: chains.pbc.chainId
+ok   sensitive: chains.pbc.genesisHash
+ok   sensitive: chains.dbc.deployBlock.number
+ok   sensitive: chains.dbc.deployBlock.hash
+ok   sensitive: chains.pbc.contracts.PSC.address
+ok   sensitive: chains.pbc.contracts.TMSC.codeSha256
+ok   sensitive: chains.dbc.contracts.KSSC.abiSha256
+ok   sensitive: chains.dbc.contracts.ACSC.runtimeSha256
+ok   sensitive: chains.pbc.contracts.LSC.runtimeBytes
+ok   sensitive: immutables.KSSC.mutations
+ok   sensitive: immutables.PSC.profile
+ok   sensitive: witnessSets.psc.threshold
+ok   sensitive: witnessSets.kssc.version
+ok   sensitive: witnessSets.psc.witnesses
+ok   sensitive: wiring.pscRelay
+ok   sensitive: wiring.tmsc.psc
+ok   sensitive: wiring.lsc.tmsc
+ok   sensitive (F only): witnessSets.governance.threshold
+ok   sensitive (F only): immutables.Governance.mutations
+ok   sensitive (F only): wiring.governance.target
+ok   sensitive (F only): chains.pbc.contracts.Governance.codeSha256
+ok   an excluded mutable field is refused, never silently ignored
+ok   owner is not part of B
+ok   E document must not carry Governance
+ok   F document must carry Governance (contract set)
+ok   integers are decimal strings: a JSON int is refused
+ok   leading zero refused
+ok   negative refused
+ok   uppercase address refused
+ok   0x prefix on a sha256 value refused
+ok   block hash needs 0x and 64 hex
+ok   a block number that is a bool is refused
+ok   masked hash of a valid vector equals the independently built value
+ok   masked hash ignores what sits in the immutable slots
+ok   a changed byte outside the slots changes the masked hash
+ok   an empty range list is valid (no immutables)
+ok   malformed range refused by the primary check: unsorted
+ok   malformed range refused by the primary check: overlapping
+ok   malformed range refused by the primary check: overlap by one byte
+ok   malformed range refused by the primary check: duplicate
+ok   malformed range refused by the primary check: zero length
+ok   malformed range refused by the primary check: length not 32 (short)
+ok   malformed range refused by the primary check: length not 32 (long)
+ok   malformed range refused by the primary check: length larger than the code
+ok   malformed range refused by the primary check: start at the end
+ok   malformed range refused by the primary check: end past the end
+ok   malformed range refused by the primary check: leading zero
+ok   malformed range refused by the primary check: negative start
+ok   malformed range refused by the primary check: non-numeric
+ok   malformed range refused by the primary check: integer instead of string
+ok   malformed range refused by the primary check: bool
+ok   malformed range refused by the primary check: wrong arity
+ok   malformed range refused by the primary check: not a list
+ok   adjacent ranges (end == next start) are accepted
+ok   the last 32 bytes can be a range (end == runtimeBytes)
+ok   code length differing from the pinned length is refused by the length check
+ok   a longer pin is refused too
+ok   pinned length must be a decimal string
+ok   uppercase hex code refused
+ok   odd-length hex refused
+ok   missing 0x refused
+ok   documented hazard: naive slice masking of an out-of-bounds range EXTENDS the buffer
+
+all expectations hold
+exit=0

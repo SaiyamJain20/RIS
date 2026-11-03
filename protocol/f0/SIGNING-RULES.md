@@ -1,7 +1,7 @@
 # F0 witness signing rules (R6) — proposal for review
 
-Author: agent 2. Date: 2026-11-03 (revision 2, 2026-11-04, after A1-0094). Phase: F0 planning. **PROPOSAL, NOT ACKED, NOT IMPLEMENTED, NOT FROZEN.**
-Revision 2 takes A1-0094 C1 (wording of the decision-expiry bound) and C2 (scope of the monotone-timestamp assumption) and adds A1's ledger-side notes on DENY decisions and on governance pre-validation. Revision 1 is commit 39af20f (file sha256 `3d5ca717..`); nothing else changed.
+Author: agent 2. Date: 2026-11-03 (revision 3, 2026-11-04, after A3-0058). Phase: F0 planning. **PROPOSAL, NOT ACKED, NOT IMPLEMENTED, NOT FROZEN.**
+Revision 3 (2026-11-04, after A3-0058) maps `CONFLICT` and `QUORUM_UNAVAILABLE` onto existing v1 codes with reasons (`SUCCESSOR-WIRE.md`), says that a same-value renewal never extends a request or a grant, points the tripwire's FAULTED response and recovery to `SUCCESSOR-WIRE.md` section 4, lists what the bounded check does **not** check, and records agent 3's O1-O6 recommendations as recommendations (not ACKs). Revision 2 (commit 09dbb5b, sha256 `85887e38..`) took A1-0094 C1 (wording of the decision-expiry bound) and C2 (scope of the monotone-timestamp assumption) and added A1's ledger-side notes on DENY decisions and on governance pre-validation. Revision 1 is commit 39af20f (file sha256 `3d5ca717..`).
 Paper-derived reconstruction, symbolic adapter, synthetic data. Nothing here changes interface v1, E pins or any production byte.
 Claim classes used below: **[src]** read from current source (file:line, not executed here); **[prop]** a proposed rule; **[model]** result of the
 bounded check in `model/` (design check only); **[untested]** a prediction that no run has touched.
@@ -55,7 +55,7 @@ An honest witness executes the following inside one SQLite `BEGIN IMMEDIATE ... 
    - exists and `vHash` equal: insert the new `digest` if it is not already present (same effect, possibly another expiry). **Idempotent re-sign.** The signature is deterministic
      (RFC 6979), the stored one is returned for a digest already signed.
    - exists and `vHash` differs: allowed only if **every digest recorded under K is dead** (section 6) under an observation taken **after** this request arrived. Then move the old
-     record to an append-only `superseded` table (with the death evidence: chain, block number, block hash, block timestamp) and insert the new one. Otherwise refuse `CONFLICT`.
+     record to an append-only `superseded` table (with the death evidence: chain, block number, block hash, block timestamp) and insert the new one. Otherwise refuse with reason `CONFLICT_PINNED` (an internal reason on the existing code `STALE_STATE`; `SUCCESSOR-WIRE.md` section 1).
 3. Commit. Only then sign and return.
 
 A crash before the commit signs nothing; a crash after the commit and before the reply leaves a record that makes the retry idempotent. A restarted witness has no in-memory
@@ -91,6 +91,7 @@ reconstruction choice with a trust consequence: a q=3 coalition of approving hos
   The proposer should choose **30 s (checkpoint) and 60 s (governance)** after its own observation so that witnesses whose observations differ by up to half the window still agree.
   These two numbers are **proposed defaults, not measured**; they only affect availability. If delivery is slower than the window the proposal is re-issued with a later `expiresAt`:
   the effect value is unchanged, so section 2 allows it (idempotent re-sign). Without this a late proposal would wedge the key until it expired. [model: P2 vs P5]
+  **A same-value renewal is permission to sign a new digest for the same effect; it is not permission to extend an `AccessRequest` or an already issued grant** (A3-0058). A decision's `expiresAt` is deterministic and bounded by the request and the checkpoint, so a renewal cannot lengthen it; a checkpoint or governance renewal changes only when that one certificate may still be submitted.
 - **GrantReceipt:** no expiry field; the ledger allows late reconciliation (`PSC.sol:reportAttestedOutcome` comment).
 
 ## 5. Receipt equivalence [prop]
@@ -128,7 +129,7 @@ Numeric observation parameters (the bounds A3-0056/0057 asked for), all **propos
   is not a committed block. On an idle auto-mining Anvil `latest` stands still (E measured this, A2-0025), so no death is observable and the key stays pinned: a **liveness** stall, never a safety loss.
   The runner must provide a block producer (Anvil `--block-time`, or explicit mining) or accept the stall as the F-29 measurement.
 - **Tripwire** [prop]: the witness stores its last observation per chain and refuses to sign (state FAULTED until an operator clears it) when `latest.number` or `latest.timestamp` decreases or the stored
-  hash for the stored number changed. This turns a violated monotone-clock / no-reorg assumption into a refusal instead of silent unsafety. It cannot detect a violation that never shows up in its own observations.
+  hash for the stored number changed. This turns a violated monotone-clock / no-reorg assumption into a refusal instead of silent unsafety. It cannot detect a violation that never shows up in its own observations. The FAULTED response (`ADAPTER_UNAVAILABLE` with reason `WITNESS_FAULTED`), its persistence and the operator clear that keeps all signing history and leaves the interval **outside** the safe-ledger assumption are defined in `SUCCESSOR-WIRE.md` section 4.
 
 ## 7. Safety argument and what the bounded check shows
 
@@ -148,6 +149,8 @@ two Byzantine witnesses, q = 2, a wiped durable record, or a ledger clock that m
 The bounded check shares the rule with this document only; agent 3's TLC model must state the same lifetime rule (A3-0055). **Both are design checks; neither is the implementation.**
 The first run of the check mis-modelled rollback (prediction P9 failed); that defect, its fix and the unchanged other nine verdicts are recorded in `evidence/MODEL-RUNS.md`.
 
+**What the bounded check does not check** (agent 3's review, which I confirm): it models expiry-death only, not the state predicates (overtaken sequence or nonce, grant exists, outcome recorded); it has no receipt lifetime and no governance preconditions; it replaces independent validation by adversarial proposals of any value; and its recovery check asks whether, after every old digest expired, a fresh digest can still be signed by three honest witnesses. That is an existence check, **not a temporal liveness proof**. The C-F1 model should additionally distinguish emitted signatures from durable records, expiry-death from state-overtaking, certificates from accepted effects, and independent validation from the adversarial-value abstraction.
+
 ## 8. Collector (pool) rules: filtering and continued collection [prop]
 
 The collector holds no witness key and signs nothing. For one proposal it sends the same proposal to all four witnesses and, per reply:
@@ -157,21 +160,21 @@ The collector holds no witness key and signs nothing. For one proposal it sends 
 3. Deduplicate by signer address (first valid reply wins; duplicates are recorded, they never raise the count).
 4. Continue collecting after an invalid reply until q = 3 distinct valid signers or the deadline.
 5. Submit exactly q signatures sorted by signer address (`QuorumLib` requires it); never alter the signed value.
-6. At the deadline report a classified timeout `QUORUM_UNAVAILABLE` with the per-witness outcomes (valid, refusal with its code, invalid, silent). Never report a denial for a missing quorum.
+6. At the deadline report a classified timeout (reason `QUORUM_UNAVAILABLE` on the existing code `ADAPTER_UNAVAILABLE`; deliberately **not** `INSUFFICIENT_QUORUM`, which is the ledger's rejection of a submitted certificate) with the per-witness outcomes (signed, refused with its code, invalid, silent, dissent, duplicate-only). Never report a denial for a missing quorum. Exact envelopes: `SUCCESSOR-WIRE.md` sections 1-2.
 
 Why: one invalid signature in the array fails the whole certificate (section 0), so a collector without these rules turns one Byzantine reply into a denial of service (FL-5, F-22). The ledger-side negative
 controls (FL-4 duplicate, FL-5 unknown signer, F-23 unsorted) need the runner to craft raw certificates from per-witness signatures; the witness service therefore returns one signature per call and the runner assembles.
 
 ## 9. Open points that need a decision, not an assumption
 
-| # | Point | Owner |
+| # | Point | Owner (and agent 3's recommendation, A3-0058: a recommendation, not an ACK) |
 |---|---|---|
-| O1 | Governance approval policy (section 3). The allow-list is a modelling choice. | agent 3 with the human, since it defines "who decides" |
-| O2 | D-e2 (checkpoint reset). Reset breaks the Checkpoint "overtaken" predicate (a lower sequence becomes acceptable again). Under e2 only the expiry predicate stays valid and K needs a reset-generation in its key. Agent 2 can sign a reset action under the single-signing rule only after that rewrite; the answer to A1-0088 is **conditional yes**. | agent 3 chooses; agent 1 then specifies the generation field |
-| O3 | D-d2 (user signature on the DBC). The `signed` object that `Relay.deliver(signed, ...)` already receives is what `prepare_request` returned and contains the user's signature (`relay.py:46` uses it for the PBC call; `deliver` does not forward it), so carrying it to the DBC is a one-argument change on the relay side; witnesses do not need it. Answer to A1-0088: **yes, no protocol obstacle**. It matters only in the f = 2 boundary run. | agent 3 |
-| O4 | The F-profile receipt canonicalisation (section 5) and the dropped decision TTL term (section 4) change witness bytes under repaired-f only. | agents 1 and 3 |
-| O5 | Numeric defaults of section 4 (30 s / 60 s) and k = 0. | agent 3, in the matrix' numeric plan |
-| O6 | Whether the pool lives inside the adapter process or the four witnesses are separate OS processes (isolation differs). See `INVENTORY.md` section 5. | agent 3 |
+| O1 | Governance approval policy (section 3). The allow-list is a modelling choice. | agent 3 with the human, since it defines "who decides". **Recommended:** a TEST-ONLY per-witness allowed-action fixture plus the structural and TMSC checks; every witness's fixture and dissent is published. This is a bounded synthetic experiment: it chooses no real hospital's policy and does not reconstruct the paper's consent algorithm, so no human policy decision is needed for it |
+| O2 | D-e2 (checkpoint reset). Reset breaks the Checkpoint "overtaken" predicate (a lower sequence becomes acceptable again). Under e2 only the expiry predicate stays valid and K needs a reset-generation in its key. Agent 2 can sign a reset action under the single-signing rule only after that rewrite; the answer to A1-0088 is **conditional yes**. | agent 3 chooses; agent 1 then specifies the generation field **Recommended:** retain e1 (no reset) as the core and defer e2 with its generation migration; overtaking is usable only with monotone, non-reset state. |
+| O3 | D-d2 (user signature on the DBC). The `signed` object that `Relay.deliver(signed, ...)` already receives is what `prepare_request` returned and contains the user's signature (`relay.py:46` uses it for the PBC call; `deliver` does not forward it), so carrying it to the DBC is a one-argument change on the relay side; witnesses do not need it. Answer to A1-0088: **yes, no protocol obstacle**. It matters only in the f = 2 boundary run. | agent 3 **Recommended:** retain d1 and label the f = 2 request-authenticity residual; defer d2. |
+| O4 | The F-profile receipt canonicalisation (section 5) and the dropped decision TTL term (section 4) change witness bytes under repaired-f only. | agents 1 and 3 **Recommended:** carry `min(request, checkpoint)` and the unique `GrantIssued` block into repaired-f only, preserve E pins, and require three-signer byte-equality controls. |
+| O5 | Numeric defaults of section 4 (30 s / 60 s) and k = 0. | agent 3, in the matrix' numeric plan **Recommended:** k = 0 under safe no-reorg ledgers, proposer windows 30 s (checkpoint) and 60 s (governance), bounds 60 s and 120 s, MAX_ADMINS 8, as explicit proposed values; finite collection and inclusion deadlines, block cadence and measured delivery bounds stay unresolved. |
+| O6 | Whether the pool lives inside the adapter process or the four witnesses are separate OS processes (isolation differs). See `INVENTORY.md` section 5. | agent 3 **Recommended:** four supervised witness processes with separate state and locks under one adapter command; same-user, same-host and public-synthetic-key correlation stay explicit. |
 
 ## 10. Not claimed
 
