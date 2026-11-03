@@ -1,3 +1,23 @@
+# Agent 2 handoff (2026-11-03, A2-0040/A2-0041: F0 planning input)
+
+## Current state (read this block first; everything below the rule is the older record, kept verbatim)
+
+- **RQ/task:** F / F0 planning. Published two RFCs: A2-0040 (key/state/correlation inventory, R6 signing rules, protocol-side matrix review, answers to A1-0088) and A2-0041 (D50 deployment-state binding, seven runtimes).
+  Everything is a proposal; no ACK given or inferred; no code, interface, service or lease. Gate E record, F NOT_RUN, G locked: as on the board of origin/agent-3 143619f.
+- **Where I work:** `/home/karma/Documents/RIS-agent-2` (separate clone, branch `agent-2`, origin SaiyamJain20/RIS). The human approved the clone because another local agent works as agent 3 in `/home/karma/Documents/RIS`. No worktree; the agent-3 checkout is not touched.
+- **New files (all under owned paths):** `protocol/f0/{README,INVENTORY,SIGNING-RULES,D50-DEPLOYMENT-BINDING}.md`, `protocol/f0/model/{PREDICTIONS.md,conflict_key_model.py}`, `protocol/f0/evidence/*`, `protocol/f0/MANIFEST.sha256` (2d9395aa.., 12 files, does not list itself); communication/agent-2/outbox/0040 and 0041; this file and STATUS.md.
+  **No production byte changed:** E manifest 005c8448.. (142 entries) verifies, and `git diff 376347d -- protocol` outside `protocol/f0` is empty.
+- **Results to cite carefully:** the bounded conflict-key check is a design check of one key (2 values, 2 expiries, 6 ticks), not TLC and not the implementation. Run 1 held 9/10 predictions; P9 failed because my model erased emitted signatures on rollback (a model bug), run 2 fixed it and holds 10/10;
+  the other nine verdicts and state counts are identical. Both runs are kept (`protocol/f0/evidence/`). Command: `cd protocol/f0/model && python3 -I conflict_key_model.py`; exit 0; CPython 3.13.13.
+- **Source readings behind the design (not executed by me):** E witness stateless and clock-dependent (witness.py:54-67, 100-142, 145-162); `QuorumLib` fails the whole certificate on one bad signature; `DecisionVerifier` compares only `stateSequence`; `KSSC.acceptState` accepts any larger sequence; the PSC ignores the receipt block reference; no data store exists in symbolic mode.
+- **Open decisions (agent 3, with the human where noted):** O1 governance approval policy (specification gap, may need the human), O2 D-e2, O5 numeric defaults (k = 0, 30 s / 60 s windows), O6 one adapter process vs four supervised witness processes (I recommend four processes under one adapter command). Agent 1: `immutableReferences` export; ledger-facing review.
+- **Not done / not claimed:** no TLC, no live q=3 run, no implementation, no measurement of the proposed start-up RPC cost, no independent review (same model), no re-run of the 5-6 minute protocol suite (nothing in it changed).
+- **Next:** scheduled 40-minute checks (session-only jobs; they die with the session and expire after 7 days). Respond to replies. After exact ACKs: failing tests first (conflict store, collector, D50 binding), then the witness rewrite, live q=3 fixture, mutants M1-M7, Byzantine variants.
+- **Messages sent:** A2-0001..A2-0041. Read: see STATUS.md.
+
+---
+
+## Earlier record (2026-10-12, A2-0039), unchanged
 # Agent 2 handoff (2026-10-12, A2-0039: return review after the solo phase)
 
 ## Current state (read this block first; everything below the rule is the older record, kept verbatim)
