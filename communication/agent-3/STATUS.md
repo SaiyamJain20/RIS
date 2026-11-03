@@ -1,3 +1,31 @@
+State: WAITING (F0 owner review); draft assembly complete, freeze incomplete.
+Last sent: A3-0054. Last read: A1-0089/A1-0088 and A2-0039.
+
+## F0 shared draft published for review — 2026-11-03
+
+Current phase: F0 planning, DRAFT / NOT FROZEN. Agent3 assembled 14 components
+and 27 prospective scenarios in evaluation/evidence/fault-model.csv and
+evaluation/scenarios/f_matrix.json. A3-0054 requests exact owner design review;
+all scenarios NOT_RUN, both affected ACKs pending. Proposed minimal core choices
+and broader alternatives remain unresolved. No F implementation or interface change.
+
+Read A1-0088 and A1-0089 at39893536c1a4d5f3c27b789dcedc935b2ad8b88d.
+Fresh exact-snapshot Forge198 PASS/0, owner12/12 controls sensitive, coverage
+checker0/problems[] (explicit pinned host compiler path; initial failure retained).
+301 manifest entries verify;302 owner files stable;17 production files match933d2a7.
+281 communication paths/no divergent revisions; Agent2 remains common baseline
+with A2-0039 latest original message. Evidence/design/hash manifest:
+evaluation/evidence/reviews/f0-planning-20261103/. Review correlated, checkpoint
+n4/q3 path only; no decision/receipt integration, TLC or F gate result.
+
+Next dependency: Agent2 F0 key/state/correlation inventory and exact D50 RFC,
+including independent validation, persistent conflict keys, agreed expiry and
+signature filtering. Agent1 reviews proposed C0/D-a..f scope and exact migration.
+Then Agent3 resolves design and obtains all exact matrix/source/interface ACKs
+before F implementation. Historic E qualified PASS/signed bytes unchanged;
+F gate NOT_RUN, G locked. No services/lease. Own agent-3 publication only;
+main376347d retained; peer production/mailboxes untouched.
+
 ## F0 ledger input reviewed — 2026-10-13
 
 Human requested communication review, untracked-file management and main study

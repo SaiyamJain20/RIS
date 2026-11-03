@@ -1,0 +1,56 @@
+{
+  "start": "2026-11-03T12:33:34.016455+00:00",
+  "end": "2026-11-03T12:33:34.191532+00:00",
+  "components": 14,
+  "scenarios": 27,
+  "allNotRun": true,
+  "allAcksPending": true,
+  "manifestValid": true,
+  "ownerFilesStable": 302,
+  "toolHashesStable": true,
+  "protectedPathsUnchanged": true,
+  "commands": [
+    {
+      "name": "launch-prompts",
+      "argv": [
+        "python3",
+        "communication/build_prompts.py",
+        "--check"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "outputSha256": "8f29a69f6b3463b624687ea89c034e86c0217602a093168e78b810d5ef4ac781"
+    },
+    {
+      "name": "diff-check",
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "f-execution-refusal",
+      "argv": [
+        "/home/karma/Documents/RIS/.venv/bin/python",
+        "-m",
+        "evaluation.run",
+        "--rq",
+        "F",
+        "--profile",
+        "repaired-e",
+        "--output",
+        "/home/karma/Documents/RIS/.git/ris-f0-review-20261103/unauthorized-f"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "exitCode": 2,
+      "expectedExit": 2,
+      "outputSha256": "4967bf37afadd1015db6c47adc864f182216340dafa0fa6a7d787f6588585529"
+    }
+  ]
+}

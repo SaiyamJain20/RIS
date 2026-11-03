@@ -1,0 +1,826 @@
+{
+  "format": "RIS-F0-planning-draft-1",
+  "rq": "F",
+  "phase": "F0",
+  "status": "DRAFT_NOT_FROZEN",
+  "executionAuthorized": false,
+  "profile": "repaired-f PROPOSED_NOT_IMPLEMENTED",
+  "applicationWitnesses": {
+    "n": 4,
+    "q": 3,
+    "f": 1,
+    "witnessSetVersion": "2 PROPOSED"
+  },
+  "interfaceVersion": "v1 unchanged; any successor requires exact affected ACKs",
+  "faultModel": "evaluation/evidence/fault-model.csv",
+  "design": "evaluation/evidence/reviews/f0-planning-20261103/F0-DRAFT.md",
+  "ledgerCommit": "39893536c1a4d5f3c27b789dcedc935b2ad8b88d",
+  "protocolCommit": "376347d9b0979d1e46824a30197b935ffe91e4fb",
+  "actualFResults": [],
+  "exactOwnerAcks": [],
+  "unresolved": [
+    "Agent2 complete F0 key/state inventory and D50 RFC",
+    "C0 and D-a..D-f choices",
+    "Conflict keys and canonical proposal/expiry rules for all signed object types",
+    "Numeric clock/inclusion/delivery bounds and deadlines",
+    "Exact source/interface/tool/run freeze"
+  ],
+  "measurementPlan": {
+    "warmups": 10,
+    "repetitions": 30,
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "status": "SPEC requirement; NOT RUN"
+  },
+  "cases": [
+    {
+      "id": "FL-1",
+      "title": "No faulty witnesses",
+      "components": [
+        "FM-04"
+      ],
+      "byzantineWitnesses": 0,
+      "bound": "within",
+      "prospectiveSafety": "Valid request grants; denied policy refuses",
+      "prospectiveAvailability": "Success conditional on timely inclusion/delivery and original expiry",
+      "historicalLedgerEvidence": "E q1 controls only; no q3 integrated decision result",
+      "dependencies": [],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "FL-2",
+      "title": "One witness withholds",
+      "components": [
+        "FM-04"
+      ],
+      "byzantineWitnesses": 1,
+      "bound": "within",
+      "prospectiveSafety": "Three honest distinct signatures suffice",
+      "prospectiveAvailability": "Access succeeds if remaining messages arrive before expiry",
+      "historicalLedgerEvidence": "test_F0Q_ThreeOfFourAccepted (checkpoint only)",
+      "dependencies": [],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "FL-3",
+      "title": "Two witnesses unavailable",
+      "components": [
+        "FM-04"
+      ],
+      "byzantineWitnesses": 2,
+      "bound": "outside",
+      "prospectiveSafety": "No q3 certificate; no authorization-state change",
+      "prospectiveAvailability": "Classified timeout/unavailability; never deny-all success",
+      "historicalLedgerEvidence": "test_F0Q_TwoOfFourInsufficient (checkpoint only)",
+      "dependencies": [],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "FL-4",
+      "title": "Repeated signer",
+      "components": [
+        "FM-03",
+        "FM-04"
+      ],
+      "byzantineWitnesses": 1,
+      "bound": "within",
+      "prospectiveSafety": "DUPLICATE_SIGNER; rollback; duplicate never increases count",
+      "prospectiveAvailability": "Collector must collect remaining distinct valid signers",
+      "historicalLedgerEvidence": "test_F0Q_DuplicateSignerRejected (checkpoint only)",
+      "dependencies": [],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "FL-5",
+      "title": "Unknown or invalid signature mixed with valid quorum",
+      "components": [
+        "FM-03",
+        "FM-04"
+      ],
+      "byzantineWitnesses": 1,
+      "bound": "within",
+      "prospectiveSafety": "BAD_SIGNATURE for unknown signer even alongside three valid signatures; rollback",
+      "prospectiveAvailability": "Filtering/continued collection required for availability",
+      "historicalLedgerEvidence": "test_F0Q_UnknownSignerRejectsWholeCertificate (checkpoint only)",
+      "dependencies": [
+        "Agent2 filtering policy"
+      ],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "FL-6",
+      "title": "Stale witness set",
+      "components": [
+        "FM-03"
+      ],
+      "byzantineWitnesses": 0,
+      "bound": "within",
+      "prospectiveSafety": "STALE_STATE; rollback",
+      "prospectiveAvailability": "Only current-set certificate may progress",
+      "historicalLedgerEvidence": "test_F0Q_OtherWitnessSetVersionRejected (checkpoint only)",
+      "dependencies": [],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "FL-7",
+      "title": "One witness signs poisoned checkpoint",
+      "components": [
+        "FM-04"
+      ],
+      "byzantineWitnesses": 1,
+      "bound": "within",
+      "prospectiveSafety": "Insufficient quorum; independently validating honest witnesses refuse poison",
+      "prospectiveAvailability": "Honest checkpoint remains usable",
+      "historicalLedgerEvidence": "test_F0Q_SingleWitnessCannotPoison; three-signature poison is a separate validation-failure boundary",
+      "dependencies": [
+        "Agent2 all-field checkpoint validation"
+      ],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "FL-8",
+      "title": "Authority repeatedly changes its trust lists",
+      "components": [
+        "FM-05",
+        "FM-06",
+        "FM-07"
+      ],
+      "byzantineWitnesses": 1,
+      "bound": "within correlated-hospital stress",
+      "prospectiveSafety": "Issuer scoping remains; stale requests refuse after global epoch update",
+      "prospectiveAvailability": "Starvation possible while updates continue; no unconditional availability claim",
+      "historicalLedgerEvidence": "test_F0_UnrelatedAuthorityUpdateInvalidatesOtherUsersRequests (single update)",
+      "dependencies": [
+        "D-c"
+      ],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "FL-9",
+      "title": "Faulty authority issues to controlled GID",
+      "components": [
+        "FM-05",
+        "FM-07",
+        "FM-09"
+      ],
+      "byzantineWitnesses": 1,
+      "bound": "within correlated-hospital stress",
+      "prospectiveSafety": "Grant may be policy-valid; classify authority trust residual, not quorum forgery",
+      "prospectiveAvailability": "Policy-valid access may succeed",
+      "historicalLedgerEvidence": "test_F0_OneAuthorityAloneAuthorizesItsOwnGidForAnotherHospitalsRecord",
+      "dependencies": [],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "FL-10",
+      "title": "Governance add certificate reused for remove",
+      "components": [
+        "FM-03",
+        "FM-04"
+      ],
+      "byzantineWitnesses": 1,
+      "bound": "within",
+      "prospectiveSafety": "Action/payload-bound verification rejects substitution and nonce replay; rollback",
+      "prospectiveAvailability": "Fresh correctly bound q3 action succeeds",
+      "historicalLedgerEvidence": "No governance implementation exists",
+      "dependencies": [
+        "C0",
+        "D-a",
+        "D-b"
+      ],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "FL-11",
+      "title": "Relay suppresses outcomes",
+      "components": [
+        "FM-03"
+      ],
+      "byzantineWitnesses": 0,
+      "bound": "within",
+      "prospectiveSafety": "Pending state; no fabricated outcome; retain worker local evidence",
+      "prospectiveAvailability": "Eventual reconciliation requires honest reconciler and delivery",
+      "historicalLedgerEvidence": "test_E03_DroppedOutcomeStaysVisiblyPending",
+      "dependencies": [],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "F-12",
+      "title": "One equivocating witness proposes conflicting values",
+      "components": [
+        "FM-04"
+      ],
+      "byzantineWitnesses": 1,
+      "bound": "within",
+      "prospectiveSafety": "No two conflicting q3 certificates under durable honest single-signing",
+      "prospectiveAvailability": "Progress depends on shared valid proposal and timely honest responses",
+      "historicalLedgerEvidence": "",
+      "dependencies": [
+        "Agent2 conflict key and canonical value"
+      ],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "F-13",
+      "title": "Honest signer restarts after first signature",
+      "components": [
+        "FM-04",
+        "FM-14"
+      ],
+      "byzantineWitnesses": 1,
+      "bound": "within",
+      "prospectiveSafety": "Persistent first choice survives restart; refuse conflicting signing",
+      "prospectiveAvailability": "Same-value retries can complete before original deadline",
+      "historicalLedgerEvidence": "",
+      "dependencies": [
+        "Agent2 persistence and deterministic expiry"
+      ],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "F-14",
+      "title": "Expired or stale-view certificate",
+      "components": [
+        "FM-03",
+        "FM-04"
+      ],
+      "byzantineWitnesses": 1,
+      "bound": "within",
+      "prospectiveSafety": "Refuse at original expiry or stale state; no refreshed retry deadline",
+      "prospectiveAvailability": "Fresh authorized request/checkpoint required",
+      "historicalLedgerEvidence": "",
+      "dependencies": [
+        "Agent2 agreed expiry and stale-view rules"
+      ],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "F-15",
+      "title": "Reordered issuer trust updates",
+      "components": [
+        "FM-03",
+        "FM-06"
+      ],
+      "byzantineWitnesses": 0,
+      "bound": "within",
+      "prospectiveSafety": "Monotone versions reject rollback; revocation barrier is accepted DBC checkpoint",
+      "prospectiveAvailability": "Delayed newer update limits freshness; no immediate cross-chain guarantee",
+      "historicalLedgerEvidence": "",
+      "dependencies": [],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "F-16",
+      "title": "Replayed or split decision view at one faulty witness",
+      "components": [
+        "FM-03",
+        "FM-04"
+      ],
+      "byzantineWitnesses": 1,
+      "bound": "within",
+      "prospectiveSafety": "Honest independent validation prevents conflicting accepted decision",
+      "prospectiveAvailability": "No liveness promise for arbitrary delay",
+      "historicalLedgerEvidence": "",
+      "dependencies": [
+        "Agent2 accepted-source observation rule"
+      ],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "F-17",
+      "title": "Two Byzantine witnesses with divergent honest views",
+      "components": [
+        "FM-04"
+      ],
+      "byzantineWitnesses": 2,
+      "bound": "outside",
+      "prospectiveSafety": "Two faulty plus different honest signer on each value can form conflicting q3 certificates if divergent accepted views are allowed",
+      "prospectiveAvailability": "No one-fault guarantee",
+      "historicalLedgerEvidence": "No TLC or integrated result",
+      "dependencies": [
+        "Explicit divergent-view model condition"
+      ],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "F-18",
+      "title": "Weakened q2 threshold negative control",
+      "components": [
+        "FM-04"
+      ],
+      "byzantineWitnesses": 1,
+      "bound": "deliberate mutation",
+      "prospectiveSafety": "Two q2 sets can intersect only at faulty signer; agreement counterexample under divergent honest views",
+      "prospectiveAvailability": "Record mutation separately from repaired-f",
+      "historicalLedgerEvidence": "No TLC result",
+      "dependencies": [
+        "Exact mutant bit and divergent-view condition"
+      ],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "F-19",
+      "title": "Compromised worker host",
+      "components": [
+        "FM-08"
+      ],
+      "byzantineWitnesses": 0,
+      "bound": "outside trusted-worker assumption",
+      "prospectiveSafety": "Symbolic release may bypass certificate layer; no real crypto secrecy conclusion",
+      "prospectiveAvailability": "Not a witness availability result",
+      "historicalLedgerEvidence": "",
+      "dependencies": [
+        "Agent2 synthetic worker-compromise fixture"
+      ],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "F-20",
+      "title": "Arbitrary message delay",
+      "components": [
+        "FM-01",
+        "FM-02",
+        "FM-03"
+      ],
+      "byzantineWitnesses": 0,
+      "bound": "outside eventual timely-delivery condition",
+      "prospectiveSafety": "No unauthorized release; expired work stays refused",
+      "prospectiveAvailability": "Finite timeout retained; no infinite-time liveness conclusion",
+      "historicalLedgerEvidence": "",
+      "dependencies": [
+        "Numeric delay/expiry/inclusion plan"
+      ],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "F-21",
+      "title": "Relay forges request or credential contents",
+      "components": [
+        "FM-03"
+      ],
+      "byzantineWitnesses": 0,
+      "bound": "within",
+      "prospectiveSafety": "Honest witnesses independently validate PBC request/signature/policy; no forged grant",
+      "prospectiveAvailability": "Fresh legitimate control still grants",
+      "historicalLedgerEvidence": "E relay stress differs by profile",
+      "dependencies": [
+        "Agent2 independent validation",
+        "D-d"
+      ],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "F-22",
+      "title": "One unknown signature filtered before submission",
+      "components": [
+        "FM-03",
+        "FM-04"
+      ],
+      "byzantineWitnesses": 1,
+      "bound": "within",
+      "prospectiveSafety": "Submit only valid distinct sorted signatures; do not alter signed value",
+      "prospectiveAvailability": "Three honest replies complete before expiry",
+      "historicalLedgerEvidence": "Only unfiltered ledger rejection measured",
+      "dependencies": [
+        "Agent2 collector filter plus continued collection"
+      ],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "F-23",
+      "title": "Unsorted distinct signatures",
+      "components": [
+        "FM-03"
+      ],
+      "byzantineWitnesses": 0,
+      "bound": "within",
+      "prospectiveSafety": "MALFORMED; rollback; hidden duplicates give DUPLICATE_SIGNER",
+      "prospectiveAvailability": "Canonical sorted valid certificate succeeds",
+      "historicalLedgerEvidence": "test_F0Q_UnsortedSignaturesRejected (checkpoint only)",
+      "dependencies": [],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "F-24",
+      "title": "Three signatures on poison checkpoint",
+      "components": [
+        "FM-04"
+      ],
+      "byzantineWitnesses": 3,
+      "bound": "outside honest-validation assumptions",
+      "prospectiveSafety": "Existing E checkpoint accepts monotone poison; sequence poison blocks honest successor",
+      "prospectiveAvailability": "No recovery guarantee in minimal core proposal",
+      "historicalLedgerEvidence": "test_F0Q_ThreeSignersCanPoison; sourceBlockNumber poison permits grants until checkpoint expiry",
+      "dependencies": [
+        "D-e"
+      ],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "F-25",
+      "title": "Common host compromise",
+      "components": [
+        "FM-13",
+        "FM-08"
+      ],
+      "byzantineWitnesses": 4,
+      "bound": "outside",
+      "prospectiveSafety": "May expose all witness and worker secrets; distinct process keys do not protect host",
+      "prospectiveAvailability": "No independent-host resilience claim",
+      "historicalLedgerEvidence": "",
+      "dependencies": [
+        "Agent2 custody/placement inventory"
+      ],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "F-26",
+      "title": "Storage withholds or corrupts synthetic data",
+      "components": [
+        "FM-10",
+        "FM-09"
+      ],
+      "byzantineWitnesses": 0,
+      "bound": "outside storage-availability assumption",
+      "prospectiveSafety": "Ledger permission does not prove delivery or real payload authenticity",
+      "prospectiveAvailability": "Withholding can prevent completion",
+      "historicalLedgerEvidence": "",
+      "dependencies": [
+        "Agent2 storage fixture"
+      ],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    },
+    {
+      "id": "F-27",
+      "title": "Adversarial durable database rollback",
+      "components": [
+        "FM-14",
+        "FM-04",
+        "FM-08"
+      ],
+      "byzantineWitnesses": null,
+      "bound": "outside persistent-state integrity assumption",
+      "prospectiveSafety": "Erasing prior signing choices invalidates durable single-signing assumption; classify separately from logical process restart",
+      "prospectiveAvailability": "Corrupt state must not silently reset identity; exact fail-closed behavior needs owner specification",
+      "historicalLedgerEvidence": "",
+      "dependencies": [
+        "Agent2 state integrity and backup/rollback model"
+      ],
+      "executionStatus": "NOT_RUN",
+      "ownerAckStatus": "PENDING_BOTH",
+      "controls": [
+        "fresh valid access",
+        "correct policy denial",
+        "fresh no-fault comparison"
+      ],
+      "requiredEvidence": [
+        "exact source/config/tool hashes",
+        "public boundary traces",
+        "whole relevant state before/after",
+        "explicit exits/timeouts and original deadlines"
+      ]
+    }
+  ]
+}

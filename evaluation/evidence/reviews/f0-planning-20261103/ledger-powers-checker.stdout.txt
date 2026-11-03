@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "/home/karma/Documents/RIS/.git/ris-f0-review-20261103/snapshot/ledger/tools/check_f0_powers.py", line 171, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/home/karma/Documents/RIS/.git/ris-f0-review-20261103/snapshot/ledger/tools/check_f0_powers.py", line 97, in main
+    sources, solc_sha, digests = solc_ast(solc)
+                                 ~~~~~~~~^^^^^^
+  File "/home/karma/Documents/RIS/.git/ris-f0-review-20261103/snapshot/ledger/tools/check_f0_powers.py", line 34, in solc_ast
+    actual = hashlib.sha256(Path(solc).read_bytes()).hexdigest()
+                            ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib64/python3.13/pathlib/_abc.py", line 625, in read_bytes
+    with self.open(mode='rb') as f:
+         ~~~~~~~~~^^^^^^^^^^^
+  File "/usr/lib64/python3.13/pathlib/_local.py", line 537, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/home/karma/.svm/0.8.37/solc-0.8.37'

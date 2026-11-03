@@ -1,0 +1,13 @@
+CONTROL unrelated-authority-update: OK (fault removed -> test fails) [FAIL: assertCode failed: PBC: Alice's request was signed at the previous authEpoch got=0 want=6] test_F0_UnrelatedAuthorityUpdateInvalidatesOtherUsersRequests() (gas: 2356328)
+CONTROL poison-sequence: OK (fault removed -> test fails) [FAIL: next call did not revert as expected] test_F0_PoisonCheckpointSequenceBlocksTheDbc() (gas: 2045406)
+CONTROL poison-authepoch: OK (fault removed -> test fails) [FAIL: next call did not revert as expected] test_F0_PoisonCheckpointAuthEpochBlocksTheDbc() (gas: 2967498)
+CONTROL poison-policyversion: OK (fault removed -> test fails) [FAIL: next call did not revert as expected] test_F0_PoisonCheckpointPolicyVersionBlocksTheDbc() (gas: 2967542)
+CONTROL unrevoke-by-omission: OK (fault removed -> test fails) [FAIL: assertFalse failed: omitted from list 3: no longer revoked] test_F0_AuthorityUnrevokesBySerialOmission() (gas: 2158422)
+CONTROL fabricated-records: OK (fault removed -> test fails) [FAIL: Rejected(9)] test_F0_SingleWitnessAttestsFabricatedRecords() (gas: 2768403)
+CONTROL one-authority-own-gid: OK (fault removed -> test fails) [FAIL: assertCode failed: PBC forwards: H3 credentials are genuinely valid got=19 want=0] test_F0_OneAuthorityAloneAuthorizesItsOwnGidForAnotherHospitalsRecord() (gas: 1791121)
+CONTROL q-two-of-four: OK (fault removed -> test fails) [FAIL: next call did not revert as expected] test_F0Q_TwoOfFourInsufficient() (gas: 282429)
+CONTROL q-duplicate-signer: OK (fault removed -> test fails) [FAIL: next call did not revert as expected] test_F0Q_DuplicateSignerRejected() (gas: 284969)
+CONTROL q-unknown-signer: OK (fault removed -> test fails) [FAIL: next call did not revert as expected] test_F0Q_UnknownSignerRejectsWholeCertificate() (gas: 282932)
+CONTROL q-other-set-version: OK (fault removed -> test fails) [FAIL: next call did not revert as expected] test_F0Q_OtherWitnessSetVersionRejected() (gas: 297099)
+CONTROL poison-sourceblocknumber: OK (fault removed -> test fails) [FAIL: next call did not revert as expected] test_F0_PoisonCheckpointSourceBlockNumberBlocksTheDbc() (gas: 3057657)
+controls not sensitive or broken: 0
