@@ -69,7 +69,10 @@ def check(deployment_path, code_dir=None, save_dir=None):
     d = json.loads(Path(deployment_path).read_text())
     stem = Path(deployment_path).parent.name
     rows, ok = [], True
-    for name, chain in CHAIN_OF.items():
+    chain_of = dict(CHAIN_OF)
+    if "Governance" in d["chains"]["pbc"]["contracts"]:  # REPAIRED_F (A-F1): the seventh runtime
+        chain_of["Governance"] = "pbc"
+    for name, chain in chain_of.items():
         addr = d["chains"][chain]["contracts"][name]
         live = live_code(d, name, chain, code_dir, save_dir, stem)
         compiled, ranges = artifact(name)

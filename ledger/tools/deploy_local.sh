@@ -8,7 +8,11 @@
 #               removed: no-destination-binding, no-state-barrier, no-record-freshness, no-nonce,
 #               no-version-monotone, no-receipt-binding; mutants exist only to show that checks/oracles
 #               detect them)
+#               | repaired-f | mutant-f-no-gov-action-binding | mutant-f-no-gov-nonce | mutant-f-no-policy-pin
+#               | mutant-f-q2   (A-F1: four witnesses, Governance; mutant-f-q2 = threshold 2, mask 0)
 #     log-mode: hash-only | complete-details
+# F profiles write an interfaces/v2 deployment.json. SUCCESSOR_EXPORT=1 adds deployment-v2.json (the v2
+# successor carrier) for an E profile; the default E manifest is unchanged.
 # Output: ledger/exports/deployments/<run-id>/{pbc-stage,dbc-stage,deployment}.json
 # Chain ids default to 18545 (PBC) and 28545 (DBC); override with PBC_CHAIN_ID / DBC_CHAIN_ID.
 # LEDGER_DEPLOY_FAST=1 omits forge's --slow (each stage has one sender, so nonce order fixes
@@ -16,12 +20,12 @@
 set -euo pipefail
 
 if [ "$#" -ne 5 ]; then
-  sed -n '2,15p' "$0" >&2
+  sed -n '2,19p' "$0" >&2
   exit 2
 fi
 PBC_RPC="$1"; DBC_RPC="$2"; PROFILE_NAME="$3"; LOG_NAME="$4"; RUN_ID="$5"
 : "${DEPLOYER_PK:?set DEPLOYER_PK to a funded key on both chains}"
-MUTATIONS=0
+MUTATIONS=0; THRESHOLD=1; SUCCESSOR=0
 case "$PROFILE_NAME" in
   paper-strict) PROFILE=0 ;; paper-minimal) PROFILE=1 ;; repaired-e) PROFILE=2 ;;
   mutant-no-destination-binding) PROFILE=2; MUTATIONS=1 ;;
@@ -30,6 +34,11 @@ case "$PROFILE_NAME" in
   mutant-no-nonce) PROFILE=2; MUTATIONS=8 ;;
   mutant-no-version-monotone) PROFILE=2; MUTATIONS=16 ;;
   mutant-no-receipt-binding) PROFILE=2; MUTATIONS=32 ;;
+  repaired-f) PROFILE=3; THRESHOLD=3; SUCCESSOR=1 ;;
+  mutant-f-no-gov-action-binding) PROFILE=3; MUTATIONS=64; THRESHOLD=3; SUCCESSOR=1 ;;
+  mutant-f-no-gov-nonce) PROFILE=3; MUTATIONS=128; THRESHOLD=3; SUCCESSOR=1 ;;
+  mutant-f-no-policy-pin) PROFILE=3; MUTATIONS=256; THRESHOLD=3; SUCCESSOR=1 ;;
+  mutant-f-q2) PROFILE=3; THRESHOLD=2; SUCCESSOR=1 ;;
   *) echo "unknown profile $PROFILE_NAME" >&2; exit 2 ;;
 esac
 case "$LOG_NAME" in
@@ -43,7 +52,8 @@ esac
 LEDGER="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SLOW=(--slow); [ "${LEDGER_DEPLOY_FAST:-0}" = 1 ] && SLOW=()
 export PBC_CHAIN_ID="${PBC_CHAIN_ID:-18545}" DBC_CHAIN_ID="${DBC_CHAIN_ID:-28545}"
-export PROFILE MUTATIONS LOG_MODE DEPLOYER_PK
+[ "${SUCCESSOR_EXPORT:-0}" = 1 ] && SUCCESSOR=1
+export PROFILE MUTATIONS THRESHOLD LOG_MODE DEPLOYER_PK
 export OUT_DIR="exports/deployments/$RUN_ID"
 mkdir -p "$LEDGER/$OUT_DIR"
 
@@ -51,6 +61,7 @@ field() { python3 -I -c 'import json,sys; print(json.load(open(sys.argv[1]))[sys
 
 forge build --root "$LEDGER" >/dev/null
 python3 -I "$LEDGER/tools/export_abi.py" >/dev/null
+[ "$SUCCESSOR" = 1 ] && python3 -I "$LEDGER/tools/export_abi.py" --successor >/dev/null
 
 STAGE=pbc forge script "$LEDGER/script/Deploy.s.sol:Deploy" --root "$LEDGER" --rpc-url "$PBC_RPC" --broadcast ${SLOW[@]+"${SLOW[@]}"}
 export PSC LSC TMSC RSC
@@ -65,5 +76,6 @@ KSSC="$(field "$LEDGER/$OUT_DIR/dbc-stage.json" kssc)"
 
 STAGE=finalize forge script "$LEDGER/script/Deploy.s.sol:Deploy" --root "$LEDGER" --rpc-url "$PBC_RPC" --broadcast ${SLOW[@]+"${SLOW[@]}"}
 
-python3 -I "$LEDGER/tools/make_manifest.py" "$LEDGER/$OUT_DIR" "$PROFILE_NAME" "$LOG_NAME" \
+MANIFEST_FLAGS=(); [ "$SUCCESSOR" = 1 ] && [ "$PROFILE" != 3 ] && MANIFEST_FLAGS=(--successor)
+python3 -I "$LEDGER/tools/make_manifest.py" ${MANIFEST_FLAGS[@]+"${MANIFEST_FLAGS[@]}"} "$LEDGER/$OUT_DIR" "$PROFILE_NAME" "$LOG_NAME" \
   "$PBC_CHAIN_ID" "$DBC_CHAIN_ID" "$PBC_RPC" "$DBC_RPC"

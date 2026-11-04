@@ -9,6 +9,7 @@ import {RSC} from "../src/RSC.sol";
 import {PSC} from "../src/PSC.sol";
 import {KSSC} from "../src/KSSC.sol";
 import {ACSC} from "../src/ACSC.sol";
+import {Governance} from "../src/Governance.sol";
 import {FixtureConfig} from "./FixtureConfig.sol";
 
 /// Staged two-chain deployment of the six HMBC roles with the synthetic E fixture.
@@ -17,7 +18,9 @@ import {FixtureConfig} from "./FixtureConfig.sol";
 ///   STAGE=dbc       on the DBC: deploy KSSC, ACSC with PSC=<addr>; policy; seal both
 ///   STAGE=finalize  on the PBC: PSC.configureDestination(DBC, KSSC=<addr>); seal LSC/TMSC/RSC/PSC
 /// Use tools/deploy_local.sh, which runs the stages and writes the deployment manifest.
-/// Env: STAGE, PROFILE (0 strict, 1 minimal, 2 repaired-e), LOG_MODE (0 hash-only, 1 complete),
+/// REPAIRED_F (A-F1): four witnesses witness-1..4 at THRESHOLD (3, or 2 for mutant-f-q2), witness-set
+/// version 2, and Governance (PBC stage) wired into TMSC before sealing.
+/// Env: STAGE, PROFILE (0 strict, 1 minimal, 2 repaired-e, 3 repaired-f), LOG_MODE (0 hash-only, 1 complete),
 /// DEPLOYER_PK, PBC_CHAIN_ID, DBC_CHAIN_ID, OUT_DIR (under exports/), and per stage PSC / LSC, TMSC,
 /// RSC, KSSC addresses. Synthetic actors (authorities, CA-Admins, relay, witness) come from
 /// FixtureConfig labels; CA-Admins and the relay are funded so they can send transactions.
@@ -35,8 +38,31 @@ contract Deploy {
 
     function _profile() internal view returns (Profile) {
         uint256 p = vm.envUint("PROFILE");
-        require(p <= uint256(Profile.REPAIRED_E), "PROFILE");
+        require(p <= uint256(Profile.REPAIRED_F), "PROFILE");
         return Profile(p);
+    }
+
+    /// E: witness-1 alone, version 1, q = 1. REPAIRED_F: witness-1..4, version 2, q = THRESHOLD (default 3).
+    function _witnessSet(Profile p) internal view returns (address[] memory ws, uint256 q, uint64 version) {
+        if (p != Profile.REPAIRED_F) {
+            ws = new address[](1);
+            ws[0] = _actor("witness-1");
+            return (ws, 1, FixtureConfig.WITNESS_SET_VERSION);
+        }
+        ws = new address[](FixtureConfig.F_WITNESS_COUNT);
+        for (uint256 i = 0; i < ws.length; i++) {
+            ws[i] = _actor(FixtureConfig.witnessLabel(i));
+        }
+        q = vm.envOr("THRESHOLD", FixtureConfig.F_THRESHOLD);
+        require(q == 2 || q == 3, "THRESHOLD must be 3, or 2 for mutant-f-q2");
+        return (ws, q, FixtureConfig.F_WITNESS_SET_VERSION);
+    }
+
+    function _addressList(address[] memory xs) internal pure returns (string memory out) {
+        for (uint256 i = 0; i < xs.length; i++) {
+            out = string.concat(out, i == 0 ? "" : '","', vm.toString(xs[i]));
+        }
+        out = string.concat('["', out, '"]');
     }
 
     function _actor(string memory label) internal pure returns (address) {
@@ -62,23 +88,7 @@ contract Deploy {
         LSC lsc = new LSC(LogDetailMode(mode));
         TMSC tmsc = new TMSC(p, vm.envOr("MUTATIONS", uint256(0)), lsc, cfg);
         RSC rsc = new RSC(pbcChainId, tmsc, lsc);
-        address[] memory ws = new address[](1);
-        ws[0] = _actor("witness-1");
-        PSC psc = new PSC(
-            PSC.Config(
-                p,
-                vm.envOr("MUTATIONS", uint256(0)),
-                rsc,
-                tmsc,
-                lsc,
-                _actor("relay"),
-                FixtureConfig.POLICY_VERSION,
-                FixtureConfig.REQUEST_TTL,
-                FixtureConfig.WITNESS_SET_VERSION,
-                ws,
-                1
-            )
-        );
+        (PSC psc, string memory fExtra) = _pscAndGovernance(p, lsc, tmsc, rsc);
         lsc.wire(address(rsc), address(tmsc), address(psc));
         tmsc.wire(address(psc), address(rsc));
         for (uint256 i = 0; i < 4; i++) {
@@ -97,9 +107,41 @@ contract Deploy {
         string memory json = string.concat(
             '{"lsc":"', vm.toString(address(lsc)), '","tmsc":"', vm.toString(address(tmsc)), '","rsc":"',
             vm.toString(address(rsc)), '","psc":"', vm.toString(address(psc)), '","blockNumber":"',
-            vm.toString(block.number), '","relay":"', vm.toString(_actor("relay")), '","authorities":[', actors, "]}"
+            vm.toString(block.number), '","relay":"', vm.toString(_actor("relay")), '","authorities":[', actors, "]",
+            fExtra, "}"
         );
         vm.writeFile(string.concat(vm.envString("OUT_DIR"), "/pbc-stage.json"), json);
+    }
+
+    /// PSC with this profile's witness set; under REPAIRED_F also Governance, wired into TMSC.
+    /// Returns the extra pbc-stage.json members for REPAIRED_F (empty for E, so E output is unchanged).
+    function _pscAndGovernance(Profile p, LSC lsc, TMSC tmsc, RSC rsc) internal returns (PSC psc, string memory fExtra) {
+        (address[] memory ws, uint256 q, uint64 version) = _witnessSet(p);
+        uint256 mutations = vm.envOr("MUTATIONS", uint256(0));
+        psc = new PSC(
+            PSC.Config(
+                p,
+                mutations,
+                rsc,
+                tmsc,
+                lsc,
+                _actor("relay"),
+                FixtureConfig.POLICY_VERSION,
+                FixtureConfig.REQUEST_TTL,
+                version,
+                ws,
+                q
+            )
+        );
+        if (p != Profile.REPAIRED_F) return (psc, "");
+        Governance gov = new Governance(
+            Governance.Config(address(tmsc), version, ws, q, FixtureConfig.GOVERNANCE_MAX_TTL, mutations)
+        );
+        tmsc.wireGovernance(address(gov));
+        fExtra = string.concat(
+            ',"governance":"', vm.toString(address(gov)), '","threshold":"', vm.toString(q), '","witnesses":',
+            _addressList(ws)
+        );
     }
 
     function _dbc() internal {
@@ -108,8 +150,7 @@ contract Deploy {
         require(block.chainid == dbcChainId, "connected to the wrong chain for STAGE=dbc");
         Profile p = _profile();
         address psc = vm.envAddress("PSC");
-        address[] memory ws = new address[](1);
-        ws[0] = _actor("witness-1");
+        (address[] memory ws, uint256 q, uint64 version) = _witnessSet(p);
 
         vm.startBroadcast(vm.envUint("DEPLOYER_PK"));
         uint256 mutations = vm.envOr("MUTATIONS", uint256(0));
@@ -120,9 +161,9 @@ contract Deploy {
                 dbcChainId,
                 pbcChainId,
                 psc,
-                FixtureConfig.WITNESS_SET_VERSION,
+                version,
                 ws,
-                1,
+                q,
                 FixtureConfig.CHECKPOINT_TTL
             )
         );
@@ -139,8 +180,9 @@ contract Deploy {
 
         string memory json = string.concat(
             '{"kssc":"', vm.toString(address(kssc)), '","acsc":"', vm.toString(address(acsc)), '","blockNumber":"',
-            vm.toString(block.number), '","witnesses":["', vm.toString(ws[0]), '"],"dataOwner":"',
-            vm.toString(_actor("H2-root")), '"}'
+            vm.toString(block.number), '","witnesses":', _addressList(ws), ',"dataOwner":"',
+            vm.toString(_actor("H2-root")), '"', p == Profile.REPAIRED_F ? string.concat(',"threshold":"', vm.toString(q), '"') : "",
+            "}"
         );
         vm.writeFile(string.concat(vm.envString("OUT_DIR"), "/dbc-stage.json"), json);
     }

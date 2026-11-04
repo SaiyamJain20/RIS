@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# A-F1 slice 6 isolated deploy smoke (agent 1's own local Anvil chains; stopped by exact PID at the end).
+set -uo pipefail
+R=/home/saiyamjain/Desktop/RIS/Project
+S="$1"                                   # scratch root
+export PATH="$HOME/.foundry/bin:$PATH"
+PY="$R/.venv/bin/python"                 # read-only use of the root venv for jsonschema
+SCHEMA_V2="$2"                           # interfaces/v2/hmbc.schema.json (published copy)
+L="$S/ledger"
+rm -rf "$L"; cp -r "$R/ledger" "$L"; rm -rf "$L/exports/deployments"
+anvil --port 38545 --chain-id 18545 --block-time 1 --silent & PBC_PID=$!
+anvil --port 48545 --chain-id 28545 --block-time 1 --silent & DBC_PID=$!
+trap 'kill $PBC_PID $DBC_PID 2>/dev/null' EXIT
+sleep 3
+export DEPLOYER_PK="${ANVIL_DEV_KEY:?}" LEDGER_DEPLOY_FAST=1
+for spec in "repaired-f:f-base" "mutant-f-q2:f-q2" "mutant-f-no-gov-nonce:f-bit7" "repaired-e:e-successor"; do
+  prof="${spec%%:*}"; run="${spec##*:}"
+  if [ "$prof" = repaired-e ]; then SUCC=1; else SUCC=0; fi
+  SUCCESSOR_EXPORT=$SUCC "$L/tools/deploy_local.sh" http://127.0.0.1:38545 http://127.0.0.1:48545 "$prof" complete-details "$run" \
+    > "$S/deploy-$run.log" 2>&1
+  echo "deploy $prof ($run): exit $?"
+done
+D="$L/exports/deployments"
+"$PY" -I "$L/tools/check_successor_export.py" --schema "$SCHEMA_V2" --live \
+  "$D/f-base/deployment.json" "$D/f-q2/deployment.json" "$D/f-bit7/deployment.json" "$D/e-successor/deployment-v2.json"
+echo "check_successor_export: exit $?"
+"$PY" -I - "$R/interfaces/v1/hmbc.schema.json" "$D/e-successor/deployment.json" <<'PYEOF'
+import json, sys, jsonschema
+s = json.load(open(sys.argv[1])); defs = s.get("$defs") or s.get("definitions")
+v = jsonschema.Draft202012Validator({"$ref": "#/$defs/LedgerDeployment", "$defs": defs})
+errs = [e.message[:160] for e in v.iter_errors(json.load(open(sys.argv[2])))]
+print("default E deployment.json against frozen v1 LedgerDeployment:", "VALID" if not errs else errs)
+sys.exit(1 if errs else 0)
+PYEOF
+echo "v1 validation: exit $?"
+python3 -I "$L/tools/check_masked_runtime.py" "$D/f-base/deployment.json" "$D/f-q2/deployment.json" "$D/f-bit7/deployment.json" \
+  "$D/e-successor/deployment.json" > "$S/masked.json"
+echo "masked check: exit $?"
+python3 -I -c 'import json,sys; d=json.load(open(sys.argv[1])); print(json.dumps(d["summary"])); [print(r["deployment"].split("/")[-2], [(c["contract"], c["maskedEqualsCompiled"]) for c in r["contracts"]]) for r in d["results"]]' "$S/masked.json"

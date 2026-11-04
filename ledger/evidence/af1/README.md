@@ -151,3 +151,55 @@ Also covered:
 - `python3 -I ledger/tools/check_mutants.py`, **first run: exit 0**, all 12 mutants (7 E and 5 F) detected, with no missed and no unexpected failures; the unmutated base suites have no failures (`slice5-check-mutants.txt`, `slice5-mutants-report.json`).
 - The mutants profile has 22 failures, every one an expected detection (10 E and 12 F). All 5 demonstration tests pass (`slice5-mutant-demonstrations.txt`).
 - Normal profile: 316 of 316, exit 0.
+
+## Slice 6: deployment, the successor exports and the governance vectors (design §8, A1-0109)
+
+**Changes:**
+- `script/Deploy.s.sol`:
+  - PROFILE 3 (REPAIRED_F) deploys four witnesses witness-1..4 at `THRESHOLD` (3, or 2 for mutant-f-q2) with witness-set version 2;
+  - Governance is deployed in the PBC stage with the full mask and wired into TMSC before sealing.
+  - **E output is unchanged:** the same JSON members, and the F-only members are added only under REPAIRED_F.
+  - PSC and Governance deployment moved into `_pscAndGovernance` to avoid a "stack too deep" error; there is no `--via-ir`, so no compiled runtime changes because of it.
+- `tools/deploy_local.sh`:
+  - new names `repaired-f`, `mutant-f-no-gov-action-binding` (64), `mutant-f-no-gov-nonce` (128), `mutant-f-no-policy-pin` (256) and `mutant-f-q2` (threshold 2, mask 0);
+  - `SUCCESSOR_EXPORT=1` adds the v2 carrier for an E profile.
+- `tools/export_abi.py`:
+  - **Default (v1) mode keeps its exact shape:** the six contracts and the closed ten-file v1 source map, now listed explicitly instead of globbing `src/`. Compile inputs outside that map are reported on stderr (`slice6-export-default-stderr.txt`).
+  - `--successor` writes `Governance.json` and `manifest-v2.json`: seven runtimes, decimal-string `runtimeBytes`, `immutableReferences` and `immutableRefsSha256`, and the twelve-file F source map.
+  - It refuses to export a range that breaks the export rule.
+- `tools/make_manifest.py`:
+  - **E path byte-for-byte as before.** `--successor` adds `deployment-v2.json`, the v2 E carrier.
+  - F names write an interfaces/v2 `LedgerDeploymentF` `deployment.json`:
+    - profile `repaired-f`, enum `3`, and the mask;
+    - the F fixture witness set (four witnesses, threshold 3 or 2, version 2);
+    - `fixture.governance` {120, 8};
+    - `chains.pbc.contracts.Governance`;
+    - the F `mutantNote` disclaimer.
+  - It refuses stage outputs whose threshold or witness set differ from the named profile.
+- `tools/check_masked_runtime.py` covers Governance as the seventh runtime when present.
+- New `tools/check_successor_export.py`, the producer self-check:
+  - the v2 schema, through the union and the profile's branch;
+  - the export rule against the compiled artifacts;
+  - `--live`, the M4 equalities over RPC with `cast`: five masks, four profiles, the three ordered witness sets with threshold and version, the Governance getters, both wiring directions, and `configured()` on six contracts.
+- New `script/ExportGovernanceVectors.s.sol` writes `exports/vectors/eip712-f-governance.json`. **It is a separate script, not `ExportVectors.s.sol` as design §8 says,** so the E vector files cannot change. Its contents:
+  - the three actions with all four witness signatures;
+  - 15 boundary vectors, each **executed** against an in-memory sealed REPAIRED_F TMSC and Governance, with the observed code recorded next to the expected one. All 15 are equal, and the script refuses to write on any mismatch.
+  - the bit-6 action-0 vector with its baseline counterpart.
+  - Its type hash `0xbe41..361e` equals interfaces/v2 `signing.json`.
+
+**Isolated deploy smoke** (`slice6-smoke/`). This used agent 1's own local Anvil 1.8.5 chains (ports 38545 and 48545, `--block-time 1`), stopped by exact PID. The deployer is the Anvil dev key, taken from the environment and not recorded. The run was from a scratch copy of `ledger/`, so the repository's `exports/` was not touched by deploys.
+- `repaired-f`, `mutant-f-q2`, `mutant-f-no-gov-nonce` and `repaired-e` with `SUCCESSOR_EXPORT=1`: all deploy, exit 0.
+- `check_successor_export.py --live` with the root `.venv` jsonschema 4.26.0 (used read-only) against the published `interfaces/v2/hmbc.schema.json` (FREEZE 7bb1d243..): **all four v2 manifests pass** the schema, the export rule and every live M4 equality, exit 0.
+- The default E `deployment.json` validates against the **frozen v1** `LedgerDeployment`.
+- Masked runtime check: **27 of 27 runtimes** (3 × 7 F plus 6 E) equal the compiled build, exit 0.
+- **Checker controls** (`checker-negative-controls.txt`): a corrupted `immutableRefsSha256`, threshold 2 with mask 64, and a missing `fixture.governance` are each refused, exit 1.
+- The first smoke run used an earlier checker version with union-only schema errors; the recorded run uses the final tools.
+
+**Committed exports regenerated from the F tree:**
+- `exports/abi/*.json` and `manifest.json` (default), plus `Governance.json` and `manifest-v2.json` (successor).
+- **ABIs:** LSC, RSC, PSC, ACSC and KSSC are byte-identical to the previous export. TMSC changed (additive: governance, removedAuthority, caAdmins, wireGovernance, the gov* mutators and three events).
+- Every runtime hash changes, because the sources and the metadata hash changed.
+- **E vectors:** re-running `ExportVectors.s.sol` leaves `exports/vectors/eip712-v0-ledger.json` and `typed/` **byte-identical**.
+- The historical E exports stay at their E commit.
+
+**Gap to raise with agent 3 (RFC at READY; not changed here):** interfaces/v1 `LedgerSourceHashes`, which the v2 E carrier reuses, is closed at ten files. In the F tree, KSSC imports `src/interfaces/IPolicyVersion.sol`, so an E manifest built from this tree cannot list one of its compile inputs, nor `Governance.sol`. The runtime hashes still pin the bytecode. F manifests use the twelve-file `LedgerSourceHashesF` and are complete.
