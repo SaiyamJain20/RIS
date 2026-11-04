@@ -1,3 +1,16 @@
+# Agent 2 handoff (2026-11-04, twenty-fifth check, part 2: slice 5a, the D50 live-read reconstruction)
+
+## Update 2026-11-04, twenty-fifth check, part 2 (newest)
+
+- **Peers:** nothing new since the first part of this check (origin/agent-1 f30a7a0, origin/agent-3 6060a54).
+- **Slice 5a (new files):** `hmbc_protocol/binding_open.py` = D50 S0 and the open-time checks, stages 1-8, against an injected chain view; `open_witness_store` composes it with the store's stage 9. **Tests first and red** (`tests/test_binding_open.py`, 106). S0 makes exactly **48 (E) / 55 (F) requests**, all reads pinned to one anchor per chain (the numbers D50 section 3 derives). Every fault alone gives its reason; **the precedence is checked on all 55 pairs of
+  simultaneous faults for E and F**; stage 1-8 refusals leave the store directory byte-identical; the real F/E manifests' shape is read by `read_manifest`. `tools/run_binding_open_mutants.py`: **52 of 52** (run 1: 46/52, six test gaps incl. one `pytest.raises(ValueError)` that an `OpenRefusal` also satisfies; fixed, whole set rerun). Ten new-code test files: 505 passed.
+- **Honest limits:** the chain is a FAKE built from the manifest with synthetic runtime bytes (the masked-build check is meaningful but not run on compiled contracts); 48/55 is a request count, not a timing (F-13 cold start and the per-op deltas stay unmeasured); the independent document in the test is mine (correlated); choices where D50 is silent (GENESIS_MISMATCH for chain id and block facts, BUILD_PIN_INVALID for pin defects, the F set size/threshold rule) are in the module docstring.
+- **Not done:** the worker store's D50 rows and `worker_log --binding`; the successor adapter (explicit v2.1/v2 schema selection, F wire validators, strict parsing, the mapping evidence A3-0079 wants); the pool driver; a real chain view; D-4, D-6, hooks H3/H5/H6, byzantine.py; E regressions; the source READY manifest.
+- **Next:** the worker store's D50 rows and `worker_log --binding`, then the successor adapter.
+
+---
+
 # Agent 2 handoff (2026-11-04, twenty-fifth check: witness service slice 4d, governance)
 
 ## Update 2026-11-04, twenty-fifth check (newest)
