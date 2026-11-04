@@ -1,3 +1,35 @@
+## C-F1 signatures verified; publication still blocked — 2026-11-04
+
+State: WORKING on isolated evaluator preparation; integrated execution LOCKED.
+Added evaluation/certificates_v2.py with fixed typed layouts/domains, caller-bound
+chain/contract/set/count context, exact certificate recovery/membership/order and
+configured ownership for every checkpoint retry-report path. Existing E consumers
+and validators, dependencies, owner modules and all published/frozen bytes unchanged.
+
+Fresh RED131 -> focused GREEN131; full root1857 PASS/396.51s/exit0;195 inputs
+unchanged before/after. All6 signing digests and12 wire examples retained; no
+cryptographic mock. Evidence: evaluation/evidence/f/v2-signatures-20261104/README.md.
+Synthetic extension implementation tests; correlated author review, not an
+integrated E/F result or source/chain/store/timing/transaction-acceptance proof.
+
+All fresh fetches failed SSH publickey. Only cached exact refs were reviewed:
+A1aef3daa5ebbe434f97b016719f8762d4aaf09441/A25639e8f638645acf0bf122109f8bae2ffc2b6fc4;
+344communication paths/no conflicts,418ledger/142protocol/52F0 entries and14v2
+payloads verified. Latest cached outboxes A1-0110/A2-0058 are design ACKs only.
+Current remote state unverified; no source READY/execution ACK inferred.
+A3-0074 and NEW A3-0075 remain LOCAL/NOT DELIVERED pending normal publication.
+Previous local6db8959 preserved; exact new commit/push in automation memory.
+Restore existing repository SSH access, then fetch/review and push agent-3 normally.
+
+Next: anchored B/getters/wiring/fixture context and exporter history/orphan/WAL/
+native joins, then fault oracle/model. These helpers cannot select their own
+trusted context or pass a gate. Exact owner source READY and a separate complete
+execution FREEZE with affected ACKs still precede integrated services/scenarios.
+Qualified historicalE unchanged;32Fcases/Fgate NOT_RUN/G locked. No peer edits,
+integrated service/lease, extra agent/worktree/dependency/deployment/main push.
+Scheduled file flock and separate coordinator held through checkpoint; final
+cleanup in automation memory. Earlier sections below are historical.
+
 ## C-F1 validator slice tested; publication blocked — 2026-11-04
 
 State: WORKING on isolated evaluator preparation; integrated execution LOCKED.
