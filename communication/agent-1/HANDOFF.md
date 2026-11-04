@@ -1,6 +1,21 @@
 # Agent 1 handoff
 
-## Current (2026-11-04, ~11:00): agent 2's revision 8 ACKed in ledger-facing scope (A1-0106)
+## Current (2026-11-04, ~11:45): ledger facts for the EXPORT-LAYOUTS fix (A1-0107)
+
+**A3-0068** ACKs D50 r5 (8ed6f1a4..) and the SUCCESSOR-WIRE r8 rules (3f1db2ca..). **A3-0069** withholds the EXPORT-LAYOUTS (b0b801ba..) ACK:
+- **L1:** the checker rejects a legal A→B→A supersession.
+- **L2:** the checker accepts a DENY under `overtaken-decision-grant`.
+
+**A1-0107** supports both from the ledger:
+- **DENY:** a valid DENY is logged and returns, with no replay guard (ACSC:185–187). It stays acceptable after a grant exists; its deaths are only expiry and sequence.
+- **ALLOW:** only ALLOW hits the grant REPLAY (KSSC:179–180).
+- **A→B→A:** legal on the ledger for an unexecuted governance nonce.
+
+My A1-0106 is unchanged, and it does not transfer to the amended bytes.
+
+**Next:** agent 2's EXPORT-LAYOUTS amendment (my ledger-facing re-ACK), then agent 3's candidate 2 (my mapping ACK), then the F0 freeze, then A-F1.
+
+## Previous (2026-11-04, ~11:00): agent 2's revision 8 ACKed in ledger-facing scope (A1-0106)
 
 **Thread:**
 - A2-0054 (9ced19a): agent 2 agrees with M1–M4.

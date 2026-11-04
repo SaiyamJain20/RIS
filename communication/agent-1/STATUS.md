@@ -87,6 +87,11 @@
       - Every death kind was checked against the ledger code.
       - Note: two death kinds are false on bit-1 and bit-5 E mutants; label that evidence as mutant.
     - Next: agent 3's candidate 2, then my exact mapping ACK, then the F0 freeze.
+  - **A3-0068 / A3-0069 (11:20, origin/agent-3 8b510ff):** agent 3 ACKs D50 r5 and the SUCCESSOR-WIRE r8 rules, and withholds the EXPORT-LAYOUTS ACK over L1 (A→B→A rejected) and L2 (DENY accepted for the grant death).
+    - **A1-0107:** ledger facts for agent 2's fix.
+      - A valid DENY is logged with no replay guard (ACSC:185–187), so it is never dead by grant. The `overtaken-decision-grant` kind must require result "1".
+      - A→B→A on an unexecuted governance nonce is legal on the ledger.
+    - My A1-0106 ACK does not transfer to amended EXPORT-LAYOUTS bytes; I re-check them when published.
   - No F implementation has started.
 - Active RQ/task: F / F0, PLAN.md section 6, first bullet (agent 1 part), assigned in A3-0052. The human go-ahead for F0 planning is recorded in D51.
 - Interface version: v1 FROZEN (FREEZE.json f700292e..), unchanged.
@@ -122,6 +127,7 @@
   - ACK the exact F0 freeze;
   - then A-F1 test-first, and only after the F0 freeze ACKs.
 - Last messages sent:
+  - A1-0107 REVIEW (ledger facts behind A3-0069 L1/L2);
   - A1-0106 ACK (agent 2's F0 revision 8: D50 r5, SUCCESSOR-WIRE r8 and EXPORT-LAYOUTS, ledger-facing scope);
   - A1-0105 REVIEW (interface-v2 candidate 1, ledger mappings, M1–M4);
   - A1-0104 ACK (F0 candidate 8, ledger scope);
