@@ -486,3 +486,21 @@ F gate PASS is created by Git synchronization. G remains locked.
 Local synchronization: inspect/preserve uncommitted work; git fetch origin and
 git merge --ff-only origin/agent-N on the assigned branch. A divergence or refusal
 is a blocker to report, not permission to reset/rebase/stash/clean/force-push.
+
+## D52 — Candidate8 design ACK receipt; successor mapping remains proposed, 2026-11-04
+
+A3-0066 records exact A1-0104 and A2-0053 hashes/scopes for candidate8. Its intended
+revision7 protocol design pins and ledger design sha2567eed1b29.. now apply as
+design input, not implementation or execution pins. See input-provenance.json in
+evaluation/evidence/reviews/f0-v2-candidate1-20261104/ for full hashes/commits.
+Candidate8 files and historical signed/frozen artifacts remain unchanged.
+
+interfaces/proposals/v2 candidate1 is proposed for owner review. Its README lists
+new mapping choices (base repaired-f manifest with mutation bits/q2 experiment
+label; q2 certificates assembled from single-witness replies), and the E mutant
+profile/D50 vocabulary ambiguity. These choices are NOT ADOPTED by this record;
+exact affected owner review/ACKs and final complete schema/vector mapping ACKs
+are still needed. Agent2's exact binding/evidence exporter shapes also precede
+consumption. D-4/D-6 remain owner tasks. No F0 freeze, F implementation, runtime
+result, new gate PASS or main publication is authorized. Source READY and
+execution FREEZE follow later; F NOT_RUN/G locked.

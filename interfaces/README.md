@@ -1,3 +1,5 @@
+**Live F0 status (2026-11-04):** Both exact candidate8 design ACKs are verified. Successor [v2 candidate1](proposals/v2/README.md) is a proposal for mapping review, with explicit profile/q2/export-layout dependencies. No mapping ACK, F0 freeze or implementation/execution authorization; F NOT_RUN/G locked. Frozen v1 and qualified E evidence remain unchanged.
+
 **Live status (2026-10-12):** Qualified solo Gate E PASS recorded;56/56 catalog
 rows. Agent3 has returned and pulled the consolidated work. Current review and
 new evaluator fixes are in [return-review evidence](../evaluation/evidence/reviews/returning-agent3-20261012/README.md).

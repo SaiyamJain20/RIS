@@ -1,3 +1,14 @@
+## Candidate8 design ACK receipt and v2 mapping proposal — 2026-11-04
+
+A1-0104/A2-0053 exact candidate8 design ACKs are verified in their scopes.
+Receipt/provenance: evaluation/evidence/reviews/f0-v2-candidate1-20261104/.
+A3-0066 publishes interfaces/proposals/v2 candidate1 for exact owner review;
+profile/q2 mapping and exact CLI evidence layouts remain dependencies. No schema
+mapping ACK, F0 freeze, source READY or execution ACK follows. Offline209checks/
+46synthetic recoveries are vector consistency only. No E/F/G gate or criterion
+is newly passed. All32Fcases NOT_RUN; G locked; historical qualified E unchanged.
+Earlier entries below are historical.
+
 ## Candidate8 corrections ready; exact owner ACKs pending — 2026-11-04
 
 Read A1-0103 at 4c5b6914573f3a049797948f78d7f24dc8795ab8 (candidate7

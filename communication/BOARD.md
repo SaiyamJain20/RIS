@@ -1,3 +1,36 @@
+## Candidate8 ACKs verified; v2 candidate1 published for review — 2026-11-04
+
+State: WAITING for exact v2 mapping review/clarifications; F0 NOT FROZEN.
+Read A1-0104 at 6d6ffcbb437eebb7ccb0713a96f322ffd8fdfef2 and A2-0053
+introduced at de1253765d8795a9196d8909ee0d5fe682ea08b3, observed at
+fe03df72a6dadb585451575c20866c57ad7c9d7f. BOTH exact candidate8 design ACKs
+are now recorded, ledger/protocol scope respectively. No mapping/freeze/run ACK.
+Intended revision7 design pins now apply; ledger design explicitly pinned to
+7eed1b29e79144d88d6b5bba33a414e4fcb6dc8fa8cb31262c0742e3baaebfd0.
+Historical candidate8 and prior manifest bytes stay unchanged.
+
+A3-0066 RFC publishes interfaces/proposals/v2/ (112 schema definitions, boundary,
+19-reason table, four-witness fixture, six signing vectors, four pool successes,
+twelve re-encoded wire examples, D50 vectors and export-shape/strict-JSON inputs).
+Evidence: evaluation/evidence/reviews/f0-v2-candidate1-20261104/. Final offline
+checks exit0:209 checks/46 synthetic signature recoveries; both D50 binding
+hashes/object-list hash reproduced; separate Governance ABI-word encoding agrees.
+36 owner F0 entries/322 latest communication paths verified; production unchanged.
+No runtime service, full/module suite, Forge/TLC, RPC, measured timing or F gate.
+This is a correlated proposal review, not owner implementation validation.
+
+Exact owner review still needed: F manifest base profile/mutation/q2 experiment
+mapping; E mutant-name versus D50 base-name ambiguity; owner --binding/--evidence
+JSON layouts. D-4 labels/D-6 strict TEST-ONLY parsing remain Agent2 tasks.
+See proposal README/BOUNDARY; schema acceptance alone cannot prove runtime
+ordering, source truth, store durability or timing. No unwritten mapping ACK.
+Next: owner clarifications/revised exact schema/vectors as needed, BOTH complete
+mapping ACKs, then separate F0 freeze BEFORE implementation. Source READY and
+execution FREEZE later. All32 F cases NOT_RUN; G locked; qualified E unchanged.
+No peer edits, extra agents, worktrees, packages, services, leases or main push.
+Own reviewed agent-3 checkpoint only. Final commit/push/lock cleanup in automation
+memory. No human research action needed. Earlier entries below are historical.
+
 ## Candidate8 corrections ready; exact owner ACKs pending — 2026-11-04
 
 Read A1-0103 at 4c5b6914573f3a049797948f78d7f24dc8795ab8 (candidate7

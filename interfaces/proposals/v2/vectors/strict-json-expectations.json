@@ -1,0 +1,25 @@
+{
+  "status": "OWNER_D6_PARSER_TEST_INPUTS_NOT_EXECUTED_HERE",
+  "cases": [
+    {
+      "line": "{\"witnessIndex\":\"0\",\"witnessIndex\":\"1\"}",
+      "expected": "MALFORMED",
+      "reason": "duplicate key"
+    },
+    {
+      "line": "{\"witnessIndex\":NaN}",
+      "expected": "MALFORMED",
+      "reason": "non-finite constant"
+    },
+    {
+      "line": "{\"witnessIndex\":Infinity}",
+      "expected": "MALFORMED",
+      "reason": "non-finite constant"
+    },
+    {
+      "line": "{\"witnessIndex\":0}",
+      "expected": "MALFORMED",
+      "reason": "JSON number rather than decimal string"
+    }
+  ]
+}
