@@ -1,3 +1,14 @@
+## Publication receipts and ledger migration reviewed; no gate change — 2026-11-04
+
+E_SOURCE_CLOSURE_MAPPING.json verifies A1-0115/A2-0061 exact v2.1 publication
+receipts with distinct scopes. Ledger migration85c59f5/429-entry70f541cd.. is
+reviewed for isolated consumption: fresh four compiled-carrier checks,28synthetic
+producer comparisons and95schema tests pass. A2 successor consumer mapping/full
+READY remains absent. These are neither execution ACKs nor integrated E/F tests.
+No services/TLC/timing/gate progression; all32Fcases/GateF NOT_RUN/G locked.
+Historical qualifiedE and frozen publication bytes unchanged. See A3-0080 and
+evaluation/evidence/reviews/v21-migration-20261104/README.md.
+
 ## Additive E source-closure publication; no gate change — 2026-11-04
 
 Both exact proposal ACKs A1-0114/A2-0060 receipted in

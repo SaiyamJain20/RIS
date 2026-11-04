@@ -1,7 +1,10 @@
 The additive [v2.1 schema revision](v2.1/README.md) closes the opt-in E carrier's
 source inventory after exact A1-0114/A2-0060 proposal ACKs. Its separate
 [freeze](v2.1/FREEZE.json) preserves the v2 wire family and original v2 bytes.
-Owner publication receipts and migrated source READYs remain pending.
+Both owner publication receipts are verified in
+[the live migration record](../communication/E_SOURCE_CLOSURE_MAPPING.json).
+Agent1's exact migrated exporter READY is reviewed; Agent2's consumer mapping
+and full source READY remain pending. Frozen publication bytes stay unchanged.
 
 Published successor contract: [v2/FREEZE.json](v2/FREEZE.json) pins the exact reviewed payloads; its acceptance sidecar governs live state. Frozen [v1](v1/FREEZE.json) remains reproducible.
 

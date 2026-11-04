@@ -1,0 +1,130 @@
+[
+  {
+    "argv": [
+      "/home/karma/.local/share/hmbc-tools/foundry-1.8.5/forge",
+      "--version"
+    ],
+    "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/v21-mapping-review-20261104T135024Z/scratch",
+    "startedAt": "2026-11-04T13:52:21.374184+00:00",
+    "endedAt": "2026-11-04T13:52:21.381875+00:00",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 0.007693593986914493,
+    "outputSha256": "3ecb821e24278b54261fe72dd6d92425cd8d0cc9539de26c9acffdc63789e3f2",
+    "pid": null,
+    "processGroup": null,
+    "groupCleanup": null,
+    "environmentSha256": "84ffbcab9cd83a39453c59affaa4bbd7c298a3c3eb57bf7e5086eae5af087cab",
+    "log": "evaluation/evidence/reviews/v21-migration-20261104/forge-version.txt"
+  },
+  {
+    "argv": [
+      "/home/karma/.local/share/hmbc-tools/foundry-1.8.5/forge",
+      "build",
+      "--root",
+      "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/v21-mapping-review-20261104T135024Z/scratch/ledger"
+    ],
+    "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/v21-mapping-review-20261104T135024Z/scratch",
+    "startedAt": "2026-11-04T13:52:21.382171+00:00",
+    "endedAt": "2026-11-04T13:52:41.904993+00:00",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 20.52284621099534,
+    "outputSha256": "eccf97cca6b027e7b8a3b3b2a9a4220f33841832c7031c97f6fbd480b409cc02",
+    "pid": null,
+    "processGroup": null,
+    "groupCleanup": null,
+    "environmentSha256": "84ffbcab9cd83a39453c59affaa4bbd7c298a3c3eb57bf7e5086eae5af087cab",
+    "log": "evaluation/evidence/reviews/v21-migration-20261104/build.txt.gz",
+    "contentEncoding": "gzip",
+    "compressedSha256": "a9b0a981785799d026feab04dc762f0f2893fef607a5362fc0d09e335d3662fc"
+  },
+  {
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-I",
+      "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/v21-mapping-review-20261104T135024Z/scratch/ledger/tools/check_successor_export.py",
+      "--schema",
+      "/home/karma/Documents/RIS/interfaces/v2.1/hmbc.schema.json",
+      "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/v21-mapping-review-20261104T135024Z/scratch/ledger/evidence/af1/migration-v2.1/e-successor/deployment-v2.json",
+      "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/v21-mapping-review-20261104T135024Z/scratch/ledger/evidence/af1/migration-v2.1/f-base/deployment.json",
+      "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/v21-mapping-review-20261104T135024Z/scratch/ledger/evidence/af1/migration-v2.1/f-q2/deployment.json",
+      "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/v21-mapping-review-20261104T135024Z/scratch/ledger/evidence/af1/migration-v2.1/f-bit7/deployment.json"
+    ],
+    "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/v21-mapping-review-20261104T135024Z/scratch",
+    "startedAt": "2026-11-04T13:52:41.905892+00:00",
+    "endedAt": "2026-11-04T13:52:42.070465+00:00",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 0.16460986899619456,
+    "outputSha256": "b75aba3f6494f4659a981b4fe7feac0382874e41771fb9c83be28063b58bed49",
+    "pid": null,
+    "processGroup": null,
+    "groupCleanup": null,
+    "environmentSha256": null,
+    "log": "evaluation/evidence/reviews/v21-migration-20261104/compiled-exports.txt"
+  },
+  {
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-I",
+      "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/v21-mapping-review-20261104T135024Z/scratch/ledger/tools/check_successor_export.py",
+      "--schema",
+      "/home/karma/Documents/RIS/interfaces/v2.1/hmbc.schema.json",
+      "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/v21-mapping-review-20261104T135024Z/scratch/ledger/evidence/af1/slice6-smoke/e-successor/deployment-v2.json"
+    ],
+    "cwd": "/home/karma/.codex/automations/ris-agent-branch-monitor-and-continuation/runs/v21-mapping-review-20261104T135024Z/scratch",
+    "startedAt": "2026-11-04T13:52:42.071819+00:00",
+    "endedAt": "2026-11-04T13:52:42.186359+00:00",
+    "exitCode": 1,
+    "timedOut": false,
+    "elapsedSeconds": 0.11452956299763173,
+    "outputSha256": "1affc243a4af1f89987e3ff00d7570adfd9c3732663736cd373e440490be3384",
+    "pid": null,
+    "processGroup": null,
+    "groupCleanup": null,
+    "environmentSha256": null,
+    "log": "evaluation/evidence/reviews/v21-migration-20261104/old-carrier-rejected.txt"
+  },
+  {
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-m",
+      "pytest",
+      "evaluation/tests/test_schema_v2_1.py",
+      "evaluation/tests/test_schema_v2.py",
+      "-q"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-11-04T13:54:28.501237+00:00",
+    "endedAt": "2026-11-04T13:54:29.467921+00:00",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 0.9667011980054667,
+    "outputSha256": "313137b07bfe058562af51a18c897304792d55c8f768371c41582c3990eb5ae0",
+    "pid": null,
+    "processGroup": null,
+    "groupCleanup": null,
+    "environmentSha256": null,
+    "log": "evaluation/evidence/reviews/v21-migration-20261104/focused.txt"
+  },
+  {
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "communication/build_prompts.py",
+      "--check"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedAt": "2026-11-04T13:56:44.138940+00:00",
+    "endedAt": "2026-11-04T13:56:44.170865+00:00",
+    "exitCode": 0,
+    "timedOut": false,
+    "elapsedSeconds": 0.03192584900534712,
+    "outputSha256": "8f29a69f6b3463b624687ea89c034e86c0217602a093168e78b810d5ef4ac781",
+    "pid": null,
+    "processGroup": null,
+    "groupCleanup": null,
+    "environmentSha256": null,
+    "log": "evaluation/evidence/reviews/v21-migration-20261104/launch-check.txt"
+  }
+]

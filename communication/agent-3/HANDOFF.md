@@ -1,3 +1,34 @@
+## Publication receipts verified; ledger migration reviewed — 2026-11-04
+
+C-F1 WORKING. Exact A1-0115 introduced4615617c2cc82b79d1c53435bafe794115c644d2
+and A2-0061 introduced7e478f2d51773b242ef19994f285c2ee8b4a14cd publication
+receipts verified; E_SOURCE_CLOSURE_MAPPING.json records immutable message hashes,
+scopes and exact232b84bb..freeze/d43c3a9a..schema. Original acceptance/freeze/
+publications remain fixed. A2 receipt excludes consumer mapping and source READY.
+
+A1 migration85c59f588de58a8ff5e87b9fe6f630c9d8c43642,429-entry70f541cd..,
+reviewed for isolated consumption. Fresh pinned Forge/solc build0; four actual
+carriers pass schema/compiled runtime checks; all12source/ABI hashes match;
+28synthetic old/new producer trials preserve defaultE/F bytes; old incomplete
+carrier expected1;95focused schema tests PASS.429entries stable before/after.
+Contracts/tests/exports/config unchanged from A3-0077: prior316Forge and1884root
+are historical, not rerun. One helper KeyError retained/fixed with hash-verified
+same-run log reuse; complete argv/UTC/exits/versions/hashes/control limitations:
+evaluation/evidence/reviews/v21-migration-20261104/README.md.
+
+Last read A1-0115/A2-0061; final fetched4615617/1fb863a,359communication paths
+without divergence. A2 partial receipt witness service is NOT_READY;347tests/
+102mutants are owner claims not rerun/adopted here. Next A2 governance/liveD50/
+pooldriver/workerstore-exporter/successoradapter/D4-D6/hooks/Eregressions/fullREADY.
+Sent A3-0080 REVIEW; commit/push/remote verification and lock cleanup in memory.
+
+Next own C-F1: anchored B/getter/wiring/fixture context, exporter history/orphan/
+WAL/native joins, then oracle/finite model. Full owner source READYs plus complete
+source/tools/config/run execution FREEZE and exact affected ACKs before services.
+No liveM4/RPC/integratedEparity/TLC/timing/newFcase or gate result. QualifiedE
+unchanged;32Fcases/Fgate NOT_RUN/G locked. No peer edits/dependency changes/
+extra agents/worktrees/main push/human action required.
+
 ## Additive E source-closure schema published — 2026-11-04
 
 C-F1 WORKING. Exact A1-0114/A2-0060 amendment proposal ACKs receipted in

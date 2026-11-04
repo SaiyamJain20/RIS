@@ -1,0 +1,61 @@
+{
+  "format": "RIS-interface-migration-receipts-1",
+  "recordedUtc": "2026-11-04T13:55:20.885972+00:00",
+  "status": "PUBLICATION_RECEIPTS_VERIFIED_LEDGER_MIGRATION_REVIEWED_PROTOCOL_MAPPING_PENDING",
+  "publication": {
+    "commit": "11deed61710792aea8b2817edd7a1333263ce73a",
+    "freeze": {
+      "path": "interfaces/v2.1/FREEZE.json",
+      "sha256": "232b84bb7f997b687a5dc671d79ab6ecdd592d17cd38e531d8460d33ed81660a"
+    },
+    "schema": {
+      "path": "interfaces/v2.1/hmbc.schema.json",
+      "sha256": "d43c3a9a4cbb10214135afb767a2adc109da462f88bd11a81a8c8955d44fd1f3"
+    }
+  },
+  "publicationReceipts": [
+    {
+      "owner": "agent-1",
+      "messageId": "A1-0115",
+      "path": "communication/agent-1/outbox/0115-ready-v21-e-carrier-migration.md",
+      "commit": "4615617c2cc82b79d1c53435bafe794115c644d2",
+      "fileChangingCommit": "4615617c2cc82b79d1c53435bafe794115c644d2",
+      "sha256": "8aff183e5162f5ef09cb9e0ef4a8b5f7a134e1cca55b40648aaeff600dc11772",
+      "scope": "ledger publication receipt and producer migration READY"
+    },
+    {
+      "owner": "agent-2",
+      "messageId": "A2-0061",
+      "path": "communication/agent-2/outbox/0061-receipt-v2.1-publication-protocol-scope.md",
+      "commit": "1fb863af4810bfd1b4a83ef9c22ec8da29bc926b",
+      "fileChangingCommit": "7e478f2d51773b242ef19994f285c2ee8b4a14cd",
+      "sha256": "eb4fa7075c86854a960a2966d1c7f675aa49f41b4e9da418f47208c0900088c2",
+      "scope": "protocol publication receipt only; consumer mapping and source READY explicitly excluded"
+    }
+  ],
+  "ledgerMigration": {
+    "status": "REVIEWED_FOR_ISOLATED_CONSUMPTION",
+    "sourceCommit": "85c59f588de58a8ff5e87b9fe6f630c9d8c43642",
+    "manifest": {
+      "path": "ledger/evidence/source-manifest.sha256",
+      "sha256": "70f541cd63bb8e8c4c0c1202dda0e5611ab15fde6d1ab4b8a0451497b6fb08dd",
+      "entries": 429
+    },
+    "review": "evaluation/evidence/reviews/v21-migration-20261104/README.md",
+    "verificationSha256": "22ff8125cab312b7aa508ca4224c03fa6ed7a78fc689116a199eff435709c350"
+  },
+  "protocolMigration": {
+    "status": "NOT_READY",
+    "consumerMappingAck": null,
+    "sourceReady": null,
+    "explanation": "A2-0061 explicitly says successor adapter does not exist yet. Partial witness service at 1fb863a is not a complete READY."
+  },
+  "historicalAcceptanceUnchanged": {
+    "path": "communication/E_SOURCE_CLOSURE_ACCEPTANCE.json",
+    "sha256": "511e235f3aff86a57822e26136282f97bcb9550e84c95263b14ed1bbab8e9fb6"
+  },
+  "executionAuthorized": false,
+  "sourceReadyRequired": true,
+  "fGate": "NOT_RUN",
+  "gGate": "LOCKED"
+}

@@ -1,3 +1,14 @@
+## Publication receipts reviewed; no execution freeze — 2026-11-04
+
+Both v2.1 publication receipts A1-0115/A2-0061 verified; exact scopes and ledger
+migration source85c59f5/manifest70f541cd.. recorded in
+E_SOURCE_CLOSURE_MAPPING.json. Fresh isolated compile/export/synthetic checks
+pass; no Anvil/cast/liveRPC, protocol process, lease, port or integration started.
+A2 successor adapter/consumer mapping/full READY remains pending; own C-F1
+context/evidence/model work and separate complete execution FREEZE/exact owner
+ACKs still required.95focused schema tests pass, full1884historical not rerun.
+All32Fcases/Fgate NOT_RUN/G locked; qualified historicalE unchanged.
+
 ## Additive E source-closure publication; no execution freeze — 2026-11-04
 
 Separate interfaces/v2.1/FREEZE.json232b84bb.. applies the exact amendment after

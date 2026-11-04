@@ -14,6 +14,15 @@ Proposal ACKs are not publication mapping receipts or execution ACKs. The origin
 ten-source E carrier is historical compatibility with a known provenance omission.
 Existing accepted F work continues; no integrated execution is unlocked.
 
+Live migration receipts: E_SOURCE_CLOSURE_MAPPING.json records exact A1-0115
+and A2-0061 publication hashes/scopes. A1-0115 source85c59f5/manifest70f541cd..
+(429 entries) is reviewed for isolated migration consumption; A3-0080 and
+evaluation/evidence/reviews/v21-migration-20261104/ describe fresh compiled
+checks and 28 synthetic producer comparisons. A2-0061 is a publication receipt
+only: its successor adapter/consumer mapping and full source READY are pending.
+The original acceptance/freeze/publication-time receipt array remains immutable.
+No execution ACK, new integrated E parity or F result is inferred.
+
 This defines the handoff already required by the accepted F0 plan. It does not
 change the reviewed interface or authorize an integrated run. The live design
 acceptance is `F0_ACCEPTANCE_CANDIDATE2.json`; the exact published payloads and

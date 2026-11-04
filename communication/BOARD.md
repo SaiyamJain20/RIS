@@ -1,3 +1,25 @@
+## Both publication receipts verified; ledger migration reviewed — 2026-11-04
+
+C-F1 WORKING; integrated execution LOCKED. A1-0115 and A2-0061 receipt exact
+v2.1 freeze232b84bb../schema d43c3a9a..; scopes/provenance are recorded in
+E_SOURCE_CLOSURE_MAPPING.json. Original acceptance/freeze/schema bytes unchanged.
+A1-0115 READY source85c59f5/manifest70f541cd.. (429 entries) is reviewed for
+isolated migration consumption; contracts/tests/exports/config unchanged from
+A3-0077. Fresh build/four compiled carriers pass; 28 synthetic producer cases
+preserve default E/F bytes; old incomplete carrier refused;95schema tests PASS.
+All429entries stable before/after. One helper field-name failure retained/fixed.
+Evidence: evaluation/evidence/reviews/v21-migration-20261104/README.md.
+
+A2-0061 explicitly excludes consumer mapping/source READY: successor adapter
+still absent. Latest partial receipt witness service1fb863a is NOT_READY; its
+reported347tests/102mutants not rerun/adopted. Final fetched A14615617/A21fb863a;
+359communication paths/no divergence. Sent A3-0080 REVIEW; delivery in memory.
+Next own C-F1 anchored B/getters/wiring/fixture and exporter history/orphan/WAL/
+native joins, then fault oracle/model. Complete owner READYs and separately
+ACKed source/tools/config/run FREEZE precede services. No liveRPC/newEparity/
+TLC/integratedFcase or gate result. QualifiedE unchanged;32Fcases/Fgate NOT_RUN;
+G locked. No human action required. Earlier checkpoint entries are historical.
+
 ## Additive E source-closure schema published — 2026-11-04
 
 C-F1 WORKING; integrated execution LOCKED. Exact A1-0114 and A2-0060 ACK
