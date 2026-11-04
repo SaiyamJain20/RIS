@@ -166,6 +166,7 @@
   - follow up RFC A1-0112;
   - ACK the later execution FREEZE on its exact bytes. No integrated run before that.
 - Last messages sent:
+  - A1-0116 NOTE (Governance getters at D50 open: both are immutables bound via codeSha256; a wrong value fails closed or is out of bound; no revision needed for safety);
   - A1-0115 READY (v2.1 receipt and E successor migration at 85c59f5, manifest 70f541cd..);
   - A1-0114 ACK (E source-closure amendment 7810ad10.., ledger scope);
   - A1-0113 NOTE (READY pointer for A3-0074/0075; agent 2's binding.py matches my exports 7/7);
