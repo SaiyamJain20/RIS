@@ -49,7 +49,7 @@ contract PolicyPaperStrictTest is PolicyBase {
 }
 
 contract PolicyRepairedTest is PolicyBase {
-    function profile() internal pure override returns (Profile) {
+    function profile() internal pure virtual override returns (Profile) {
         return Profile.REPAIRED_E;
     }
 }

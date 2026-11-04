@@ -4,6 +4,7 @@ pragma solidity 0.8.37;
 import {HMBCFixture} from "./utils/Fixture.sol";
 import {
     Profile,
+    isRepaired,
     ErrorCode,
     HMBCHash,
     Registration,
@@ -47,7 +48,7 @@ abstract contract AccessFlowBase is HMBCFixture {
         assertEq(gEpoch, 0, "keyEpoch 0 in E");
         assertTrue(gExp > block.timestamp, "grant unexpired");
         assertEq(acsc.accessLogCount(), 1, "one ACSC accessLog");
-        if (profile() == Profile.REPAIRED_E) {
+        if (isRepaired(profile())) {
             assertTrue(kssc.nonceConsumed(alice, 1), "nonce consumed with grant");
             assertEq(kssc.grantDetails(grantId).recipientKeyHash, ALICE_RECIPIENT_KEY_HASH, "recipient bound");
         } else {
@@ -205,7 +206,7 @@ abstract contract AccessFlowBase is HMBCFixture {
     /// Unattested (paper) outcome path. Repaired-e disables it; its attested equivalents are in
     /// OutcomeEvidence.t.sol, so this test only exercises the paper profiles.
     function test_OutcomeRequiresRelayForwardedRequestAndMatchingGrant() public {
-        if (profile() == Profile.REPAIRED_E) return;
+        if (isRepaired(profile())) return;
         publishTrustLists(one(alice));
         registerAlice();
         (AccessRequest memory r, bytes32 digest, CredentialRecord[] memory recs) = aliceForwarded(1);
@@ -255,7 +256,7 @@ abstract contract AccessFlowBase is HMBCFixture {
         expectRejected(ErrorCode.UNAUTHORIZED_CALLER);
         kssc.requestData(KSSC.GrantParams(bytes32(uint256(1)), DATA_P1, mallory, 0, T0 + 30, bytes32(0), false, 0));
 
-        if (profile() != Profile.REPAIRED_E) {
+        if (!isRepaired(profile())) {
             vm.prank(mallory);
             expectRejected(ErrorCode.UNAUTHORIZED_CALLER);
             acsc.policyEnf(ForwardedRequest(bytes32(uint256(1)), mallory, DATA_P1, ACTION_READ), new CredentialRecord[](0));
@@ -315,7 +316,7 @@ contract AccessFlowPaperMinimalTest is AccessFlowBase {
 }
 
 contract AccessFlowRepairedTest is AccessFlowBase {
-    function profile() internal pure override returns (Profile) {
+    function profile() internal pure virtual override returns (Profile) {
         return Profile.REPAIRED_E;
     }
 

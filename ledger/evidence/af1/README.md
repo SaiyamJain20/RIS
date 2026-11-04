@@ -103,3 +103,28 @@ Also covered:
 - **Green:** `slice3-green.txt`, 9 of 9.
 - **Full suite:** 245 passed, exit 0, and every baseline test still passes.
 - **Mutant checker:** exit 0.
+
+## Slice 4: the E property suites rerun under REPAIRED_F (design §7)
+
+**Assertion-preserving E test edits.** No assertion, expected code or message text changed:
+- `virtual` on `profile()` in the 8 repaired-e contracts: Audit:132 and :155, AccessFlow:318, DecisionBinding:93, Freshness:176, OutcomeEvidence:27, Policy:52, TrustAnchors:177.
+- 7 equality branches become `isRepaired(profile())`: Audit:54/57, AccessFlow:50/208/258, Freshness:27, TrustAnchors:110. The two Fixture branches were changed in slice 2.
+- OutcomeEvidence:133 uses `witnessSetVersion()` instead of the constant.
+- **Beyond the design's site list:**
+  - 4 import lines (`isRepaired`), needed to compile;
+  - **OutcomeEvidence:74**: the literal `2`, meaning "another witness-set version", becomes `witnessSetVersion() + 1`. That is still 2 under E, so the E test is byte-for-byte equivalent in effect.
+
+  My design §7.3 site list missed that literal. The first F rerun exposed it (`slice4-freruns-run1-version-literal.txt`): under F the deployment's version **is** 2, so the "foreign" receipt was valid and correctly accepted. This was a fixture constant, not a contract regression.
+
+**Equivalence:** after the E edits and before any F subclass, the full PASS list is **identical** to slice 3's: 245 entries (`slice4-e-edits-245-pass-list.txt`).
+
+**F reruns:** `test/RepairedF.t.sol` holds 8 `*RepairedFTest` subclasses, each changing only `profile()` to REPAIRED_F.
+- **First run:** 70 of 71. The one failure is the version literal explained above.
+- **After the literal fix:** 71 of 71 (`slice4-freruns.txt`).
+- **Per suite** (`slice4-e-vs-f-suites.txt`), every F suite has the **identical** test names and PASS results as its E base: Audit 5, AuditHashOnly 4, AccessFlow 21, DecisionBinding 10, Freshness 10, OutcomeEvidence 7, Policy 2, TrustAnchors 12.
+- This confirms the design §7.5 prediction for `test_E01_SignatureEncodings` at q = 3, which passes unchanged.
+- `F0Powers` and `F0Quorum` stay E characterization and are not subclassed.
+
+**Totals:**
+- Full suite: 316 passed (245 + 71), exit 0, and every slice-3 test still passes.
+- Mutant checker: exit 0.

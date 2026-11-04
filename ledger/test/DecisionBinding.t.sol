@@ -90,7 +90,7 @@ contract DecisionBindingRepairedTest is HMBCFixture {
     StateCheckpoint internal cp;
     DecisionCertificate internal cert;
 
-    function profile() internal pure override returns (Profile) {
+    function profile() internal pure virtual override returns (Profile) {
         return Profile.REPAIRED_E;
     }
 

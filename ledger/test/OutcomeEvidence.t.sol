@@ -24,7 +24,7 @@ contract OutcomeEvidenceRepairedTest is HMBCFixture {
     bytes32 internal grantId;
     GrantReceipt internal g;
 
-    function profile() internal pure override returns (Profile) {
+    function profile() internal pure virtual override returns (Profile) {
         return Profile.REPAIRED_E;
     }
 
@@ -71,7 +71,7 @@ contract OutcomeEvidenceRepairedTest is HMBCFixture {
             if (i == 4) (x.keyEpoch, want) = (1, ErrorCode.WRONG_EPOCH);
             if (i == 5) (x.grantExpiresAt, want) = (r.expiresAt + 1, ErrorCode.MALFORMED);
             if (i == 6) (x.grantExpiresAt, want) = (0, ErrorCode.MALFORMED);
-            if (i == 7) (x.witnessSetVersion, want) = (2, ErrorCode.STALE_STATE);
+            if (i == 7) (x.witnessSetVersion, want) = (witnessSetVersion() + 1, ErrorCode.STALE_STATE);
             if (i == 8) (x.dbcChainId, want) = (DBC_CHAIN_ID + 1, ErrorCode.WRONG_DESTINATION);
             if (i == 9) (x.kssc, want) = (mallory, ErrorCode.WRONG_DESTINATION);
             rejects(digest, x, signReceipt(x, witnessPk), want, string.concat("receipt field case ", vm.toString(i)));
@@ -130,7 +130,7 @@ contract OutcomeEvidenceRepairedTest is HMBCFixture {
         expectRejected(ErrorCode.WRONG_PROFILE);
         psc.reportOutcome(d2, g2, OUTCOME);
         GrantReceipt memory forged = GrantReceipt(
-            d2, g2, alice, DATA_P1, 0, r2.expiresAt, WITNESS_SET_VERSION, DBC_CHAIN_ID, address(kssc), 1, bytes32(0)
+            d2, g2, alice, DATA_P1, 0, r2.expiresAt, witnessSetVersion(), DBC_CHAIN_ID, address(kssc), 1, bytes32(0)
         );
         vm.prank(relay);
         expectRejected(ErrorCode.BAD_SIGNATURE);
