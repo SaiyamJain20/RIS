@@ -1,0 +1,64 @@
+ok   B1 the worker and witness exports validate and have exactly the four members {owner, binding_v2, document, anchor}
+ok   B1 binding_v2 is the D50 hash of the document (E 242f7ca6.., F is the revision-5 value)
+ok   B2 the output is ONE line: canonical compact JSON with sorted keys, ASCII, one LF
+ok   B2 key order of the input does not change the output
+ok   B3 an extra member is refused
+ok   B3 a missing member is refused
+ok   B4 a wrong binding_v2 is refused
+ok   B4 a document changed without recomputing binding_v2 is refused
+ok   B4 an invalid D50 document is refused (an excluded mutable field cannot leak in)
+ok   B5 owner 'Worker' is refused
+ok   B5 owner 'witness:' is refused
+ok   B5 owner 'witness:0xABABABABABABABABABABABABABABABABABABABAB' is refused
+ok   B5 owner 'witness:0x11111111111111111111111111111111111111' is refused
+ok   B5 owner 'witness:1111111111111111111111111111111111111111' is refused
+ok   B5 owner 'worker ' is refused
+ok   B5 owner 'witness:0x1111111111111111111111111111111111111111x' is refused
+ok   B6 anchor must have exactly the chains pbc and dbc
+ok   B6 anchor number must be a decimal string and the hash 0x + 64 lowercase hex
+ok   B6 an anchor below the deploy block is refused
+ok   B7 the E and F exports bind differently
+ok   B8 the stderr refusal line is canonical JSON {code, message, reason} with the code the reason maps to
+ok   B8 an exporter may refuse only STORE_MISSING, STORE_CORRUPT or LEGACY_STATE (it reads the store only and makes no RPC)
+ok   E1 the synthetic history document validates
+ok   E1 the synthetic faulted document validates
+ok   E1 the synthetic cleared document validates
+ok   E1 evidenceSha256 is the sha256 of the canonical JSON of the document without that member
+ok   E1 the three variants differ (a fault and a clear change the evidence)
+ok   E1 the history covers all four types, a supersession by expiry and one by a decision overtaken by the checkpoint sequence
+ok   E2 an extra top-level member is refused
+ok   E2 a missing top-level member is refused
+ok   E2 a wrong schemaVersion is refused
+ok   E3 owner must be a witness (the worker has no signing store): changed together with the marker so that only this rule can refuse
+ok   E3 the marker must equal the binding and the owner
+ok   E3 binding.binding_v2 must be the D50 hash of binding.document
+ok   E3 a wrong evidenceSha256 is refused (any unsealed change is caught)
+ok   E4 observations: exactly one per chain, ascending chainId, closed shape
+ok   E5 conflicts are sorted by (type order, domainSeparator, witnessSetVersion, key) and unique per K
+ok   E5 digests inside a record are sorted by (expiresAt, digest)
+ok   E5 vHash must be the sha256 of the canonical JSON of the effect
+ok   E5 the effect is closed per type: a missing and an extra field are refused
+ok   E5 effect.witnessSetVersion must equal the key's witnessSetVersion (1 versus 2: both legal alone, so only the equality rule can refuse)
+ok   E5 keyField format per type: decimal for StateCheckpoint and GovernanceAction, 0x + 64 hex for AccessDecision and GrantReceipt
+ok   E5 expiresAt is present on every digest of a type with a liveness field and absent for GrantReceipt
+ok   E5 a record has at least one digest, and signatures and digests are well formed
+ok   E5 a digest occurs once in the whole store (live and superseded)
+ok   E6 superseded rows are numbered 1..n in append order
+ok   E6 death by expiry needs observation.timestamp >= the latest expiresAt of every digest of the record
+ok   E6 death by overtaken-decision-sequence needs observed > effect.stateSequence
+ok   E6 a death kind must match the type of the record
+ok   E6 observed is present exactly for the three numeric kinds
+ok   E6 the death observation's chain must be one of the observed chains
+ok   E6 a superseded effect must differ from the live effect for the same K (otherwise it is not a supersession)
+ok   E7 without a fault, no recorded observation may exceed the stored last observation of its chain (number, timestamp), and equal numbers need equal hashes
+ok   E7 the same regression inside a store that has a fault log is accepted (explicitly out of the safe-ledger assumption for that interval)
+ok   E7 a digest's observation must be of the target ledger of its type (DBC for checkpoint and decision, PBC for governance and receipt)
+ok   E7 a fault must be consistent with its reason (number-regression, timestamp-regression, hash-changed)
+ok   E7 a faulted store keeps the previous observation as its last one
+ok   E7 a cleared fault is a fault-log row with a note, appended in order, and the store is no longer faulted
+ok   E7 a store that is faulted again after an earlier clear is accepted (the log row's baseline is not later than the stored last observation)
+ok   E8 the vector can be emitted (the emitter validates every document it lists)
+ok   E8 the emitted vector holds the binding exports, the three evidence documents and the refusal lines, and every one validates
+ok   E8 the emitted vector is deterministic
+
+all expectations hold

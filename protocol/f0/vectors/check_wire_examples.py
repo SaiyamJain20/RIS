@@ -73,6 +73,8 @@ def reports_ok(c, result_checkpoint=None):
     iff pool_adoption.adopt_recorded(snapshot) yields a value, equals it, `reporters` are the consistent witnesses reporting it, and on success the certificate is over it."""
     rr, inc, late, ad = c.get("recordedReports"), c.get("inconsistentReports"), c.get("lateReports"), c.get("adopted")
     tm = c.get("timing")
+    if any(x == [] for x in (rr, inc, late)):              # revision 8 (A2-0054 P-4): a report array is present only when non-empty (one encoding of "none")
+        return False
     if rr is None and inc is None and late is None and ad is None:
         return tm is None                                  # timing is present iff pool-retry evidence is present
     rr = [] if rr is None else rr
@@ -203,5 +205,10 @@ check("revision 7: the document carries an earlier-hard-stop example (snapshot c
 check("revision 7: the document defines selection versus action, the effort gate and the hard stop", all(w in text for w in ("selection", "effort gate", "hard stop", "skipped_validity", "skipped_deadline")))
 check("revision 6: the document defines the decision snapshot, late reports and inconsistent reporters", all(w in text for w in ("decision snapshot", "late reports", "inconsistent")))
 check("revision 5: the document states the adoption rule (exactly one value with two distinct reporters)", "exactly one value" in text and "two distinct" in text)
+check("revision 8: the document states that a report array is present only when non-empty", "is present only when non-empty** (revision 8" in text)
+check("revision 8: the document states both refusals (an unconfigured witnessIndex is MALFORMED; a declared witnessSetVersion mismatch is STALE_STATE with reason WITNESS_SET_MISMATCH)",
+      "not configured in this deployment" in text and "`MALFORMED`" in text and "declared `witnessSetVersion`" in text and text.count("WITNESS_SET_MISMATCH") >= 3)
+check("revision 8: the document states that the pool quorum is the constant 3 and when an F deployment is refused", "pool quorum is the constant 3" in text and "threshold is not 2 or 3" in text)
+check("revision 8: the document points to EXPORT-LAYOUTS.md for the --binding and --evidence layouts", "are in `EXPORT-LAYOUTS.md` (revision 8).**" in text)
 print("\nFAILED: %d" % len(fails) if fails else "\nall wire-document checks hold")
 sys.exit(1 if fails else 0)

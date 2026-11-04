@@ -59,4 +59,16 @@ DETECTED W29 snapshot closed after the original deadline
     checker said: FAIL example 12: collection failure invariants
 DETECTED W30 adopted.reproposal missing
     checker said: FAIL example 8: collection failure invariants
-detected 30 of 30 (skipped 0)
+DETECTED W31 empty lateReports on an adopted success (timing present: two encodings of 'no late reports')
+    checker said: FAIL example 5: collection success invariants
+DETECTED W32 empty inconsistentReports on an adopted success
+    checker said: FAIL example 5: collection success invariants
+DETECTED W33 the non-empty rule for report arrays is deleted from the document
+    checker said: FAIL revision 8: the document states that a report array is present only when non-empty
+DETECTED W34 the pool-quorum statement is deleted (pool quorum no longer the constant 3)
+    checker said: FAIL revision 8: the document states that the pool quorum is the constant 3 and when an F deployment is refused
+DETECTED W35 the unconfigured-selector refusal is deleted
+    checker said: FAIL revision 8: the document states both refusals (an unconfigured witnessIndex is MALFORMED; a declared witnessSetVersion mismatch is STALE_STATE with reason WITNESS_SET_MISMATCH)
+DETECTED W36 the pointer to the export layouts is deleted
+    checker said: FAIL revision 8: the document points to EXPORT-LAYOUTS.md for the --binding and --evidence layouts
+detected 36 of 36 (skipped 0)

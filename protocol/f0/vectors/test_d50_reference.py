@@ -64,8 +64,7 @@ def flip(hexstr):
 
 SENSITIVE = [
     (["interfaceVersion"], "v2"),
-    (["profile", "name"], "paper-strict"),
-    (["profile", "enum"], "0"),
+    (["profile"], {"name": "paper-strict", "enum": "0"}),    # revision 5: a lone name or enum change is now REFUSED (R5-5, the name is derived from the enum); the pair still changes the hash
     (["chains", "pbc", "chainId"], "18546"),
     (["chains", "pbc", "genesisHash"], flip(E["chains"]["pbc"]["genesisHash"])),
     (["chains", "dbc", "deployBlock", "number"], "999"),
@@ -77,8 +76,7 @@ SENSITIVE = [
     (["chains", "pbc", "contracts", "LSC", "runtimeBytes"], "3725"),
     (["immutables", "KSSC", "mutations"], "8"),
     (["immutables", "PSC", "profile"], "1"),
-    (["witnessSets", "psc", "threshold"], "2"),
-    (["witnessSets", "kssc", "version"], "9"),
+    (["witnessSets", "kssc", "version"], "9"),     # revision 5: the E threshold-2 case moved to the F list below (2 of 1 witness is now refused as unsatisfiable, R5-7)
     (["witnessSets", "psc", "witnesses"], ["0x" + "11" * 20]),
     (["wiring", "pscRelay"], "0x" + "22" * 20),
     (["wiring", "tmsc", "psc"], "0x" + "33" * 20),
@@ -86,7 +84,7 @@ SENSITIVE = [
 ]
 for path, value in SENSITIVE:
     check("sensitive: " + ".".join(path), ref.binding_v2(mutate(E, path, value)) != ref.binding_v2(E))
-for path, value in [(["witnessSets", "governance", "threshold"], "2"), (["immutables", "Governance", "mutations"], "64"),
+for path, value in [(["witnessSets", "psc", "threshold"], "2"), (["witnessSets", "governance", "threshold"], "2"), (["immutables", "Governance", "mutations"], "64"),
                     (["wiring", "governance", "target"], "0x" + "55" * 20), (["chains", "pbc", "contracts", "Governance", "codeSha256"], flip(F["chains"]["pbc"]["contracts"]["Governance"]["codeSha256"]))]:
     check("sensitive (F only): " + ".".join(path), ref.binding_v2(mutate(F, path, value)) != ref.binding_v2(F))
 
@@ -186,6 +184,94 @@ check("E document without any immutableRefsSha256 is valid (all or none)", ref.b
 check("F document without immutableRefsSha256 is refused", raises(lambda: ref.binding_v2(drop_refs(F)), "repaired-f"))
 check("F document missing it on one contract is refused", raises(lambda: ref.binding_v2(drop_refs(F, only="KSSC"))))
 check("E document with it on one contract only is refused", raises(lambda: ref.binding_v2(drop_refs(E, only="KSSC"))))
+
+# =================================================================================================================================
+# REVISION 5 (A2-0054 P-1, P-7; agent 1's A1-0105 N3). Written BEFORE the reference changes; every expectation below fails on the revision-4 reference.
+# The manifest `profile` name versus B.profile: a closed table, B.profile = {name: BASE[enum], enum}, open-time refusals, and four shape rules.
+# =================================================================================================================================
+def refusal(fn):
+    """The `reason` of the OpenRefusal that fn raises, None when it does not refuse, 'other' for any other exception."""
+    try:
+        fn()
+    except getattr(ref, "OpenRefusal", ()) as e:
+        return e.reason
+    except Exception:  # noqa: BLE001
+        return "other"
+    return None
+
+
+E_MUTANTS = {"mutant-no-destination-binding": "1", "mutant-no-state-barrier": "2", "mutant-no-record-freshness": "4",
+             "mutant-no-nonce": "8", "mutant-no-version-monotone": "16", "mutant-no-receipt-binding": "32"}      # agent 1, make_manifest.py:17-21
+LIVE_E = {n: "0" for n in ("TMSC", "PSC", "KSSC", "ACSC")}
+LIVE_F = {n: "0" for n in ("TMSC", "PSC", "KSSC", "ACSC", "Governance")}
+check("R5-1 the manifest-name table is closed: four base names, six E mutants",
+      set(getattr(ref, "PROFILE_TABLE", {})) == {"paper-strict", "paper-minimal", "repaired-e", "repaired-f"} | set(E_MUTANTS))
+check("R5-1 base names map to enums 0..3 and every E mutant is enum 2 with one distinct bit (1, 2, 4, 8, 16, 32)",
+      all(getattr(ref, "PROFILE_TABLE", {}).get(n, (None, None))[0] == int(e) for n, e in
+          (("paper-strict", "0"), ("paper-minimal", "1"), ("repaired-e", "2"), ("repaired-f", "3")))
+      and all(getattr(ref, "PROFILE_TABLE", {}).get(n) == (2, int(m)) for n, m in E_MUTANTS.items()))
+pfm = getattr(ref, "profile_from_manifest", None)
+
+
+def pf(*a):
+    """Non-raising form for POSITIVE expectations: a refusal where a mapping was expected is a failed expectation, not a crash."""
+    try:
+        return pfm(*a)
+    except Exception as e:  # noqa: BLE001
+        return ("refused", getattr(e, "reason", repr(e)))
+
+
+check("R5-2 the baseline name maps to itself", pfm and pf("repaired-e", "2", "0", "2", LIVE_E) == {"name": "repaired-e", "enum": "2"})
+for name, mask in E_MUTANTS.items():
+    live = {n: mask for n in LIVE_E}
+    check("R5-2 %s binds under the BASE name repaired-e (enum 2)" % name, pfm and pf(name, "2", mask, "2", live) == {"name": "repaired-e", "enum": "2"})
+check("R5-2 paper-strict and paper-minimal bind under themselves", pfm and pf("paper-strict", "0", "0", "0", LIVE_E) == {"name": "paper-strict", "enum": "0"}
+      and pf("paper-minimal", "1", "0", "1", LIVE_E) == {"name": "paper-minimal", "enum": "1"})
+check("R5-2 repaired-f accepts any mask 0..511 (0, 64, 511)", pfm and all(pf("repaired-f", "3", m, "3", {n: m for n in LIVE_F}) == {"name": "repaired-f", "enum": "3"} for m in ("0", "64", "511")))
+mutE = ref.synthetic_binding_document("repaired-e", mutations="8") if "mutations" in ref.synthetic_binding_document.__code__.co_varnames else None
+check("R5-3 a mutant's B differs from the baseline's: the live per-contract mutations (and code hashes) separate them",
+      mutE is not None and ref.binding_v2(mutE) != ref.binding_v2(E) and mutE["profile"] == E["profile"]
+      and all(mutE["immutables"][n]["mutations"] == "8" for n in LIVE_E))
+check("R5-3 the baseline E binding is UNCHANGED by revision 5 (pinned regression: 242f7ca6..)", ref.binding_v2(E).startswith("242f7ca6977e22c9"))
+check("R5-4 unknown manifest name is PROFILE_MISMATCH", refusal(lambda: pfm("mutant-no-such", "2", "0", "2", LIVE_E)) == "PROFILE_MISMATCH")
+check("R5-4 a mutant name with the wrong manifest enum is PROFILE_MISMATCH", refusal(lambda: pfm("mutant-no-nonce", "3", "8", "3", {n: "8" for n in LIVE_F})) == "PROFILE_MISMATCH")
+check("R5-4 manifest enum differing from the live profile() is PROFILE_MISMATCH", refusal(lambda: pfm("repaired-e", "2", "0", "3", LIVE_E)) == "PROFILE_MISMATCH")
+check("R5-4 a baseline mislabelled as a mutant (live mask 0, name mutant-no-nonce) is MUTATIONS_MISMATCH", refusal(lambda: pfm("mutant-no-nonce", "2", "8", "2", LIVE_E)) == "MUTATIONS_MISMATCH")
+check("R5-4 a mutant mislabelled as the baseline (live mask 8, name repaired-e) is MUTATIONS_MISMATCH", refusal(lambda: pfm("repaired-e", "2", "0", "2", {n: "8" for n in LIVE_E})) == "MUTATIONS_MISMATCH")
+check("R5-4 the manifest mask differing from the table mask for an E name is MUTATIONS_MISMATCH", refusal(lambda: pfm("mutant-no-nonce", "2", "4", "2", {n: "4" for n in LIVE_E})) == "MUTATIONS_MISMATCH")
+check("R5-4 one contract's live mask differing is MUTATIONS_MISMATCH", refusal(lambda: pfm("mutant-no-nonce", "2", "8", "2", {**{n: "8" for n in LIVE_E}, "KSSC": "0"})) == "MUTATIONS_MISMATCH")
+check("R5-4 repaired-f mask 512 is MUTATIONS_MISMATCH", refusal(lambda: pfm("repaired-f", "3", "512", "3", {n: "512" for n in LIVE_F})) == "MUTATIONS_MISMATCH")
+check("R5-4 F without Governance in the live masks is MUTATIONS_MISMATCH", refusal(lambda: pfm("repaired-f", "3", "0", "3", LIVE_E)) == "MUTATIONS_MISMATCH")
+check("R5-4 E with a Governance live mask is MUTATIONS_MISMATCH", refusal(lambda: pfm("repaired-e", "2", "0", "2", LIVE_F)) == "MUTATIONS_MISMATCH")
+check("R5-4 precedence: a wrong profile is reported before wrong mutations", refusal(lambda: pfm("mutant-no-such", "2", "99", "2", {n: "7" for n in LIVE_E})) == "PROFILE_MISMATCH")
+check("R5-4 non-decimal manifest enum or mutations is PROFILE_MISMATCH / MUTATIONS_MISMATCH, never another exception",
+      refusal(lambda: pfm("repaired-e", 2, "0", "2", LIVE_E)) == "PROFILE_MISMATCH" and refusal(lambda: pfm("repaired-e", "2", 0, "2", LIVE_E)) == "MUTATIONS_MISMATCH")
+# shape rules of B (all four were accepted by BOTH the revision-4 reference and the candidate-1 schema for at least one case; A2-0054 differential)
+check("R5-5 B.profile.name must equal BASE[enum]: a name/enum disagreement is refused", raises(lambda: ref.binding_v2(mutate(E, ["profile", "enum"], "3")), "profile"))
+check("R5-5 B.profile.enum 4 is refused", raises(lambda: ref.binding_v2(mutate(E, ["profile", "enum"], "4")), "profile"))
+check("R5-5 a mutant name in B.profile is refused (the name is derived, never copied)", raises(lambda: ref.binding_v2(mutate(E, ["profile", "name"], "mutant-no-nonce")), "profile"))
+check("R5-6 repaired-f requires interfaceVersion v2 (A1-0105 N3)", raises(lambda: ref.binding_v2(mutate(F, ["interfaceVersion"], "v1")), "interfaceVersion"))
+check("R5-6 the synthetic F document carries v2", F["interfaceVersion"] == "v2")
+check("R5-6 E accepts v1 (historical manifests) and v2 (successor carriers)", ref.binding_v2(mutate(E, ["interfaceVersion"], "v1")) != "" and ref.binding_v2(mutate(E, ["interfaceVersion"], "v2")) != "")
+def dup(doc, which):
+    d = copy.deepcopy(doc); w = d["witnessSets"][which]["witnesses"]; w.append(w[0]); return d
+check("R5-7 a duplicate witness member is refused", raises(lambda: ref.binding_v2(dup(F, "psc")), "duplicate") and raises(lambda: ref.binding_v2(dup(E, "kssc")), "duplicate"))
+check("R5-7 a threshold above the witness count is refused", raises(lambda: ref.binding_v2(mutate(F, ["witnessSets", "kssc", "threshold"], "5")), "threshold"))
+check("R5-7 threshold 0 is refused", raises(lambda: ref.binding_v2(mutate(E, ["witnessSets", "psc", "threshold"], "0")), "threshold"))
+check("R5-7 threshold 2 of 4 (the q2 control deployment) is accepted", ref.binding_v2(mutate(mutate(mutate(F, ["witnessSets", "psc", "threshold"], "2"), ["witnessSets", "kssc", "threshold"], "2"), ["witnessSets", "governance", "threshold"], "2")) != "")
+try:
+    emitted = ref.emit()
+except Exception as _e:  # noqa: BLE001 - reported as a failed expectation, not a crash (the emitter asserts its own cases)
+    emitted = {}
+check("R5-8 the vector can be emitted: every manifest-profile case it lists refuses or maps exactly as the function does", bool(emitted))
+check("R5-8 the emitted vector carries the closed table and the manifest-profile cases, each equal to the function's result",
+      "profileTable" in emitted and "manifestProfileCases" in emitted and all(
+          (refusal(lambda c=c: pfm(*c["input"])) == c["expectedRefusal"]) if "expectedRefusal" in c else (pf(*c["input"]) == c["expectedProfile"])
+          for c in emitted.get("manifestProfileCases", [])) and len(emitted.get("manifestProfileCases", [])) >= 12)
+check("R5-8 the emitted vector carries a mutant document under the base name", "repaired-e-mutant-no-nonce" in emitted.get("documents", {}))
+check("R5-8 the emitted F document is the v2 one and its binding is not the revision-4 value e6a14cab..", emitted.get("documents", {}).get("repaired-f", {}).get("document", {}).get("interfaceVersion") == "v2"
+      and not emitted.get("documents", {}).get("repaired-f", {}).get("bindingV2", "").startswith("e6a14cab"))
+check("R5-8 the emitted E binding is still 242f7ca6..", emitted.get("documents", {}).get("repaired-e", {}).get("bindingV2", "").startswith("242f7ca6977e22c9"))
 
 print("\nFAILED: %d" % len(FAILS) if FAILS else "\nall expectations hold")
 sys.exit(1 if FAILS else 0)

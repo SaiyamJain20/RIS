@@ -94,6 +94,13 @@ def claim_all_replied(d):
 block_mut("W28 all-replied claimed while a witness was silent",4,claim_all_replied)
 block_mut("W29 snapshot closed after the original deadline",11,lambda d:d["error"]["collection"]["timing"].__setitem__("snapshotClosedAtMs","3000"))
 block_mut("W30 adopted.reproposal missing",7,lambda d:d["error"]["collection"]["adopted"].pop("reproposal"))
+# revision 8 (A2-0054 P-4): a report array is present only when non-empty
+block_mut("W31 empty lateReports on an adopted success (timing present: two encodings of 'no late reports')",4,lambda d:d["result"]["collection"].__setitem__("lateReports",[]))
+block_mut("W32 empty inconsistentReports on an adopted success",4,lambda d:d["result"]["collection"].__setitem__("inconsistentReports",[]))
+text_mut("W33 the non-empty rule for report arrays is deleted from the document", "**A report array (`recordedReports`, `inconsistentReports`, `lateReports`) is present only when non-empty**", "A report array may be present")
+text_mut("W34 the pool-quorum statement is deleted (pool quorum no longer the constant 3)", "**The pool quorum is the constant 3**", "The pool quorum follows the deployment")
+text_mut("W35 the unconfigured-selector refusal is deleted", "that is **not configured in this deployment** is refused `MALFORMED` with no reason", "is accepted")
+text_mut("W36 the pointer to the export layouts is deleted", "**The exact closed JSON layouts, the command-line contract and the checker are in `EXPORT-LAYOUTS.md` (revision 8).**", "The layouts are not defined here.")
 det=sum(ok for _,ok in results)
 for line,_ in results: print(line)
 print(f"detected {det} of {len(results)} (skipped 0)")
