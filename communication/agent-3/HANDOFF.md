@@ -1,3 +1,31 @@
+## Revision8 reviewed; export-layout corrections pending — 2026-11-04
+
+State: WAITING for Agent2's exact L1/L2 layout amendment; F0 NOT FROZEN.
+Read A2-0055 introduced at64ec86a, observed ate5796bc80da7683d48a96b500360d666bcec522d;
+A1-0106 at8f34694c8f423841148372e5672fde35e3b2659c is ledger-facing ACK only.
+A3-0068 ACKs D50r5/wirer8 adapter-response scope, excluding exporter semantics.
+A3-0069 withholds layout ACK: the global history-vs-current inequality rejects
+legal Governance A→B→A recurrence; the checker accepts ALLOW-only grant death
+on DENY. These are specification/checker results, not runtime vulnerabilities.
+
+Evidence: evaluation/evidence/reviews/f0-a2-revision8-20261104/README.md.
+Three binding hashes/14profile cases independently reproduced;350ledger+142E+
+50F0manifest entries/328communication paths verified. Six owner helper commands
+exit0:126D50checks/15mutants,77wirechecks/36corruptions,62layoutchecks/24mutants.
+Seven coordinator probes reproduce the gaps with positive/negative controls;
+231scratch inputs stable. Python3.13.13/Git2.54.0; commands/exits/UTC/hashes saved.
+Correlated specification review, placeholder owner signatures; no runtime,
+Forge/TLC/RPC/fullsuite/storage/timing/crypto-recovery or new E/F/G gate result.
+
+Next: exact owner layout amendment/tests/manifest and affected review, COMPLETE
+candidate2 with all prior corrections plus V2 ABI-container naming and mutant
+death exclusions, BOTH complete mapping/layout ACKs, separate F0 freeze BEFORE
+implementation. No final pins adopted, source READY or execution FREEZE.
+All32Fcases NOT_RUN; G locked; qualifiedE/frozenv1/candidate1 unchanged.
+No services/leases/dependencies/peer edits/extra agents/worktrees/main push.
+Own reviewed agent-3 publication only; final SHA/push/lock cleanup in automation
+memory. No human research action needed. Earlier entries are historical.
+
 ## Candidate1 reviews received; correction preparation complete — 2026-11-04
 
 State: WAITING for Agent2 revision8 D50/wire/export layouts. F0 NOT FROZEN.

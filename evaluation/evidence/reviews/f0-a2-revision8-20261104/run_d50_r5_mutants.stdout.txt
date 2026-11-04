@@ -1,0 +1,17 @@
+control: unmutated reference passes all expectations
+DETECTED D1 B.profile.name copied from the manifest instead of BASE[enum] (the revision-4 behaviour) | failed expectations: 6
+DETECTED D2 the live profile() is not compared with the table | failed expectations: 6
+DETECTED D3 the manifest profileEnum is not compared with the table | failed expectations: 1
+DETECTED D4 the manifest mask is not compared with the table mask | failed expectations: 1
+DETECTED D5 the live per-contract mutations are not compared with the manifest | failed expectations: 8
+DETECTED D6 an F deployment may omit the Governance live mask | failed expectations: 7
+DETECTED D7 an unknown manifest name is reported as MUTATIONS_MISMATCH | failed expectations: 7
+DETECTED D8 the name/enum agreement of B.profile is not checked | failed expectations: 1
+DETECTED D9 repaired-f no longer requires interfaceVersion v2 | failed expectations: 1
+DETECTED D10 a duplicate witness member is accepted | failed expectations: 1
+DETECTED D11 the threshold bound is not checked | failed expectations: 2
+DETECTED D12 repaired-f admits masks up to 1023 | failed expectations: 6
+DETECTED D13 the table mask of mutant-no-nonce is wrong (16) | failed expectations: 7
+DETECTED D14 paper-minimal has the wrong table enum (2) | failed expectations: 7
+DETECTED D15 a non-string live mask is accepted as the integer value | failed expectations: 1
+detected 15 of 15

@@ -1,0 +1,79 @@
+ok   the frozen v1 enum has 21 codes
+ok   the reason table parsed and names the four internal reasons
+ok   every reason named in the precedence list is in the table
+ok   every reason in the table is named in the precedence list or is an operation-time reason
+ok   every mapped code is a frozen v1 code
+ok   QUORUM_UNAVAILABLE maps to ADAPTER_UNAVAILABLE and not to INSUFFICIENT_QUORUM
+ok   no reason maps to POLICY_DENIED or INSUFFICIENT_QUORUM
+ok   examples found (>= 4)
+ok   example 1: envelope has schemaVersion v2 and ok/result/error
+ok   example 1: exactly one of result/error is non-null
+ok   example 1: collection success invariants
+ok   example 2: envelope has schemaVersion v2 and ok/result/error
+ok   example 2: exactly one of result/error is non-null
+ok   example 2: error code is a frozen v1 code
+ok   example 2: error reason (if any) is mapped to this code
+ok   example 2: collection failure invariants
+ok   example 3: envelope has schemaVersion v2 and ok/result/error
+ok   example 3: exactly one of result/error is non-null
+ok   example 3: error code is a frozen v1 code
+ok   example 3: error reason (if any) is mapped to this code
+ok   example 4: envelope has schemaVersion v2 and ok/result/error
+ok   example 4: exactly one of result/error is non-null
+ok   example 4: error code is a frozen v1 code
+ok   example 4: error reason (if any) is mapped to this code
+ok   example 5: envelope has schemaVersion v2 and ok/result/error
+ok   example 5: exactly one of result/error is non-null
+ok   example 5: collection success invariants
+ok   example 6: envelope has schemaVersion v2 and ok/result/error
+ok   example 6: exactly one of result/error is non-null
+ok   example 6: error code is a frozen v1 code
+ok   example 6: error reason (if any) is mapped to this code
+ok   example 6: collection failure invariants
+ok   example 7: envelope has schemaVersion v2 and ok/result/error
+ok   example 7: exactly one of result/error is non-null
+ok   example 7: error code is a frozen v1 code
+ok   example 7: error reason (if any) is mapped to this code
+ok   example 7: single-witness `recorded` only with CONFLICT_PINNED, closed shape {message, signature}
+ok   example 8: envelope has schemaVersion v2 and ok/result/error
+ok   example 8: exactly one of result/error is non-null
+ok   example 8: error code is a frozen v1 code
+ok   example 8: error reason (if any) is mapped to this code
+ok   example 8: collection failure invariants
+ok   example 9: envelope has schemaVersion v2 and ok/result/error
+ok   example 9: exactly one of result/error is non-null
+ok   example 9: error code is a frozen v1 code
+ok   example 9: error reason (if any) is mapped to this code
+ok   example 9: collection failure invariants
+ok   example 10: envelope has schemaVersion v2 and ok/result/error
+ok   example 10: exactly one of result/error is non-null
+ok   example 10: error code is a frozen v1 code
+ok   example 10: error reason (if any) is mapped to this code
+ok   example 10: collection failure invariants
+ok   example 11: envelope has schemaVersion v2 and ok/result/error
+ok   example 11: exactly one of result/error is non-null
+ok   example 11: error code is a frozen v1 code
+ok   example 11: error reason (if any) is mapped to this code
+ok   example 11: collection failure invariants
+ok   example 12: envelope has schemaVersion v2 and ok/result/error
+ok   example 12: exactly one of result/error is non-null
+ok   example 12: error code is a frozen v1 code
+ok   example 12: error reason (if any) is mapped to this code
+ok   example 12: collection failure invariants
+ok   revision 5: the document carries a collection example with recordedReports (>= 1)
+ok   revision 5: the document carries an adoption example (>= 1)
+ok   revision 5: the document carries a single-witness refusal with a recorded value (>= 1)
+ok   revision 6: the document carries an equivocator example with inconsistentReports (>= 1)
+ok   revision 6: the document carries a prefix-adoption-then-late-split example (>= 1)
+ok   revision 6: the document carries a reversed-arrival-order example: same reports, a different adopted value (>= 1 pair)
+ok   revision 7: the document carries examples of each re-proposal status (sent, skipped_validity, skipped_deadline)
+ok   revision 7: the document carries an earlier-hard-stop example (snapshot closed by the deadline) (>= 1)
+ok   revision 7: the document defines selection versus action, the effort gate and the hard stop
+ok   revision 6: the document defines the decision snapshot, late reports and inconsistent reporters
+ok   revision 5: the document states the adoption rule (exactly one value with two distinct reporters)
+ok   revision 8: the document states that a report array is present only when non-empty
+ok   revision 8: the document states both refusals (an unconfigured witnessIndex is MALFORMED; a declared witnessSetVersion mismatch is STALE_STATE with reason WITNESS_SET_MISMATCH)
+ok   revision 8: the document states that the pool quorum is the constant 3 and when an F deployment is refused
+ok   revision 8: the document points to EXPORT-LAYOUTS.md for the --binding and --evidence layouts
+
+all wire-document checks hold
