@@ -1,3 +1,34 @@
+## C-F1 validator slice tested; publication blocked — 2026-11-04
+
+State: WORKING on isolated evaluator preparation; integrated execution LOCKED.
+Added explicit evaluation/schema_v2.py without switching any E consumer or
+changing frozen/proposal/published interface bytes. Checks declared uint/signature
+encodings, nested E ordering, governance admins, immutable ranges/hash, D50
+profile/set/mask/hash consistency, and checkpoint retry selection/timing fields.
+It does not yet recover signatures, reconstruct anchored B/native/wiring facts,
+validate full exporter history/completeness or prove storage/timing/source truth.
+
+Fresh focused68/root1726 tests PASS; root393.55s/exit0;193 pinned inputs stable.
+RED67fail/1pass and the subsequent invalid5000ms test-fixture failure preserved.
+Evidence: evaluation/evidence/f/v2-validator-20261104/README.md. Correlated self-
+review; synthetic extension implementation tests, no new integrated E/F result.
+
+Initial fetch: A1aef3daa5ebbe434f97b016719f8762d4aaf09441; A2 unchanged5639e8f.
+418ledger/142protocol/52F0 manifest entries and14published payloads verified;
+344communication paths/no conflict. Owner316Forge/26vector/13control logs read,
+not rerun/adopted. Latest messages still A1-0110/A2-0058, design ACKs only;
+no source READY inferred. A3-0074 is prepared LOCALLY and NOT DELIVERED.
+
+Refresh/publication blocked: SSH publickey failure; ssh-add reports no identities.
+Connected GitHub account cannot access repository (404). Remote state after the
+first successful fetch is unverified. Restore existing authentication, then
+fetch/review and normal agent-3 push; do not bypass with peer/main writes.
+No peer edits/services/new dependency/worktrees/extra agents/main push. Qualified
+E unchanged;32Fcases NOT_RUN/G locked. Next owned work: context-bound signature/
+anchored binding and exporter joins, then fault oracle/model; exact source READY
+and separate full execution FREEZE ACKs still precede integrated scenarios.
+Earlier entries below are historical. Commit/push/lock cleanup in automation memory.
+
 ## F0 accepted; v2 published for implementation — 2026-11-04
 
 State: WORKING on owned F implementation; integrated execution LOCKED.

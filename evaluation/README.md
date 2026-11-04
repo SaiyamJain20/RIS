@@ -1,3 +1,11 @@
+**C-F1 evaluator checkpoint (2026-11-04):** Separate `schema_v2.py` and68
+focused tests; fresh full evaluator suite1726PASS/193inputs stable. Existing E
+validator/consumers and frozen/published interfaces unchanged. This is declared
+artifact consistency only; signature/source/history/WAL/native joins and the
+fault oracle/model remain. Integrated F NOT_RUN/G locked. Publication is blocked
+by SSH authentication; A3-0074 remains local. See [evidence](evidence/f/v2-validator-20261104/README.md)
+and the [live board](../communication/BOARD.md).
+
 **Live state (2026-11-04):** F0 design accepted after exact A1-0110/A2-0058
 freeze ACKs; shared v2 published byte-for-byte from candidate2. Owned implementation
 and isolated tests may start. Integrated execution still requires source READY
