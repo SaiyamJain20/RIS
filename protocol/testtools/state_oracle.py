@@ -12,10 +12,11 @@ import os
 import sqlite3
 
 
-def logical_snapshot(directory: str) -> str:
-    """sha256 over (schema, every row of every table in rowid order, marker bytes); `-` marks an absent database or marker."""
+def logical_snapshot(directory: str, db_name: str = "signing.sqlite") -> str:
+    """sha256 over (schema, every row of every table in rowid order, marker bytes); `-` marks an absent database or marker. `db_name` is the witness store's `signing.sqlite` by default and
+    `worker.sqlite` for the key worker's store."""
     h = hashlib.sha256()
-    db = os.path.join(directory, "signing.sqlite")
+    db = os.path.join(directory, db_name)
     if os.path.exists(db):
         con = sqlite3.connect(f"file:{db}?mode=ro", uri=True)
         try:

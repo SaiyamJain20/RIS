@@ -1,3 +1,17 @@
+# Agent 2 handoff (2026-11-04, twenty-seventh check: slice 5b, the worker store's D50 rows)
+
+## Update 2026-11-04, twenty-seventh check (newest)
+
+- **Peers:** A3-0082 (origin/agent-3 d106cb3): D56 keeps the frozen D50 S0 (no RFC, so my 55 stays); the evaluator separately collects both Governance getters; my A2-0062 differential reviewed, "correlated cross-implementation observation, not an independent oracle". A1-0116 (origin/agent-1 8c0285f): ledger facts, no D50 revision needed for safety. Nothing asked of me; I still owe the consumer mapping and ONE source READY.
+- **Slice 5b:** `worker_binding.py` (the key worker's D50 identity: meta rows, marker, crash points, refusals, `bind_worker_dir`) and the opt-in `worker_log --state-dir D --binding` (one canonical line / one canonical error line, reads `<D>/worker/` only). Tests first and red (`tests/test_worker_binding.py`, 42); `tools/run_worker_binding_mutants.py` **32 of 32** (run 1: 30/32, two test gaps); the E `Worker` runs unchanged on a bound directory (tested).
+- **ONE carried E file changed: `protocol/hmbc_protocol/worker_log.py`** (the `--binding` flag; default output compared byte-for-byte with the E-era file when git can show it). `sha256sum -c` of the E source manifest now shows exactly 1 mismatch of 142; `test_worker_log.py` and `test_exports.py` (23, live Anvils) pass; the FULL E suite has not been rerun since slice 1. Listed for the READY.
+- **Own defect found and fixed (slice 1):** my witness `_classify` called a marker next to missing binding rows LEGACY_STATE / STORE_MISSING and `init_store` crashed with a raw sqlite error; EXPORT-LAYOUTS says STORE_CORRUPT. Six tests first (red), fix, `run_state_mutants.py` S25: 33 of 33. This is a real gap in an earlier "tested" slice: the mutation run had not covered that case.
+- **Limits:** process death modelled by an exception at the hook point for the worker (real process death only for the witness store); no adapter wires `bind_worker_dir` yet; the E parity of everything else is unrerun; power loss untested.
+- **Not done:** the successor adapter (explicit v2.1/v2 selection, F wire validators, strict parsing, the mapping evidence A3-0079 wants); the pool driver; a real chain view; D-4, D-6, hooks H3/H5/H6, byzantine.py; the full E regressions; the source READY manifest.
+- **Next:** the successor adapter.
+
+---
+
 # Agent 2 handoff (2026-11-04, twenty-sixth check: D50 differential, A2-0062)
 
 ## Update 2026-11-04, twenty-sixth check (newest)

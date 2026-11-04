@@ -41,6 +41,7 @@ M = [
     ("S22 the effect fields of V are not enforced", [('        if not isinstance(effect, dict) or set(effect) != EFFECT_FIELDS[type]:\n            raise ValueError("effect must carry exactly the fields of V for this type")\n', "")]),
     ("S23 a regression of the hash at the same number is not a fault", [('                      else "hash-changed" if obs["blockNumber"] == last["blockNumber"] and obs["blockHash"] != last["blockHash"] else None)', "                      else None)")]),
     ("S24 the directory is not made private", [("    os.chmod(directory, 0o700)\n", "")]),
+    ("S25 a marker next to missing binding rows is not corrupt", [('                if has_marker:\n                    raise StoreError("STORE_CORRUPT", "the INITIALIZED marker exists but the binding rows are missing")\n', "")]),
     ("C1 the exporter refusal exits 1 instead of 3", [("        return 3\n    sys.stdout.write", "        return 1\n    sys.stdout.write")]),
     ("C2 the exporter success prints two newlines", [('    sys.stdout.write(canonical_json(doc) + "\\n")\n    return 0', '    sys.stdout.write(canonical_json(doc) + "\\n\\n")\n    return 0')]),
     ("C3 the exporter refusal line is not canonical JSON", [('sys.stderr.write(canonical_json({"code": e.code, "message": e.message, "reason": e.reason}) + "\\n")', 'sys.stderr.write(json.dumps({"code": e.code, "message": e.message, "reason": e.reason}, indent=1) + "\\n")')]),

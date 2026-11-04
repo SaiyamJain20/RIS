@@ -442,3 +442,22 @@ def test_the_binding_export_validates_and_renders_one_canonical_line(store):
 def test_a_store_with_no_signing_history_exports_empty_evidence(store):
     ev = store.evidence(); LAY.validate_evidence(ev)
     assert ev["conflicts"] == [] and ev["superseded"] == [] and ev["observations"] == [] and ev["faulted"] is None and ev["faultLog"] == []
+
+
+# ---- found by the worker-store slice (5b): a marker next to MISSING binding rows ---------------------------------------------------------------------
+@pytest.mark.parametrize("sql", ["delete from meta", "delete from meta where key in ('binding_v2','binding_v2_doc','owner')"], ids=["all meta rows", "binding rows only"])
+@pytest.mark.parametrize("entry", ["open_store", "view_for_export", "init_store"])
+def test_a_marker_next_to_missing_binding_rows_is_store_corrupt_and_nothing_is_initialised_over_it(tmp_path, sql, entry):
+    """EXPORT-LAYOUTS section 1: `STORE_CORRUPT` includes 'missing binding rows next to a marker'; SUCCESSOR-WIRE section 5: an existing store is opened, never silently initialised. My slice-1 classifier
+    called the first variant LEGACY_STATE and the second STORE_MISSING, and `init_store` died with a raw sqlite error; found while writing the worker store's lifecycle."""
+    d = str(tmp_path / "w0")
+    ws.init_store(d, BIND, B, OWNER).close()
+    con = sqlite3.connect(os.path.join(d, "signing.sqlite"))
+    con.execute(sql)
+    con.commit()
+    con.close()
+    before = state_oracle.logical_snapshot(d)
+    call = {"open_store": lambda: ws.open_store(d, BIND, OWNER), "view_for_export": lambda: ws.view_for_export(d), "init_store": lambda: ws.init_store(d, BIND, B, OWNER)}[entry]
+    with pytest.raises(ws.StoreError) as e:
+        call()
+    assert (e.value.reason, e.value.code) == ("STORE_CORRUPT", "ADAPTER_UNAVAILABLE") and state_oracle.logical_snapshot(d) == before

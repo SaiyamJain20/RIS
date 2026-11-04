@@ -106,6 +106,8 @@ def _classify(directory: str):
             tables = {r[0] for r in con.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'")}
             meta = dict(con.execute("SELECT key, value FROM meta")) if "meta" in tables else {}
             if not all(k in meta for k in ("binding_v2", "binding_v2_doc", "owner", "schema")):
+                if has_marker:
+                    raise StoreError("STORE_CORRUPT", "the INITIALIZED marker exists but the binding rows are missing")
                 if any(con.execute(f'SELECT COUNT(*) FROM "{t}"').fetchone()[0] for t in tables):
                     raise StoreError("LEGACY_STATE", "a database with rows and no binding rows (an unbound legacy store)")
                 return "fresh", None                                   # an empty database without binding rows: nothing was ever recorded
