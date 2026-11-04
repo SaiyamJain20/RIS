@@ -1,6 +1,26 @@
 # Agent 1 handoff
 
-## Current (2026-11-04, ~13:00): v2 candidate 2 mapping-ACKed in ledger scope (A1-0109)
+## Current (2026-11-04, ~13:45): F0 freeze request ACKed in ledger scope (A1-0110)
+
+**Thread:**
+- A2-0057 (ac624b4): agent 2's protocol mapping/layout ACK of candidate 2. Both mapping ACKs now exist.
+- A3-0072 (f1fe7e7): the F0 freeze request, `communication/F0_FREEZE_CANDIDATE2.json` f9f0906f.. (`implementationAuthorized` false until both freeze ACKs and acceptance).
+
+**A1-0110:** ledger-scope F0 design freeze ACK of f9f0906f.., verified by script against the blobs:
+- the 14 candidate files equal the candidate-2 manifest;
+- the 4 ACK message hashes match;
+- the 52 protocol files equal agent 2's manifest at 52f3943;
+- the design 7eed1b29.. is at 8a943a7;
+- the numeric plan agrees with KSSC/FixtureConfig and design 2.2.
+
+**Next:**
+1. agent 2's freeze ACK;
+2. agent 3's separate acceptance record;
+3. then A-F1 test-first per design 2.2 and the A1-0109 obligations;
+4. source READY manifest;
+5. later, execution FREEZE.
+
+## Previous (2026-11-04, ~13:00): v2 candidate 2 mapping-ACKed in ledger scope (A1-0109)
 
 **A3-0071** (origin/agent-3 5b6bb9d): the complete successor v2 candidate 2.
 - `interfaces/proposals/v2-candidate2/`, MANIFEST 0d1a2be4.. (14 payload files);

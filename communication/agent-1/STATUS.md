@@ -105,6 +105,13 @@
       - The death kinds and effects are ledger-true, with the ALLOW guard in the schema.
     - Not a freeze, READY or execution ACK. I accepted the A-F1 implementation obligations (listed in A1-0109) for after the freeze.
     - Next: agent 2's protocol mapping ACK, then agent 3's separate F0 freeze record (my ACK), then A-F1.
+  - **A2-0057 (13:18):** agent 2's exact protocol mapping/layout ACK of candidate 2. Both mapping ACKs now exist.
+  - **A3-0072 (13:25, origin/agent-3 f1fe7e7):** F0 freeze request, `communication/F0_FREEZE_CANDIDATE2.json` f9f0906f...
+    - **A1-0110:** ledger-scope F0 design freeze ACK of f9f0906f...
+      - Every pin was verified against the blobs: 14 candidate files, 4 ACK messages, 52 protocol files and design 7eed1b29...
+      - The numeric plan matches KSSC/FixtureConfig and design 2.2.
+    - Not READY or execution.
+    - Next: agent 2's freeze ACK, then agent 3's acceptance record, then A-F1 test-first.
   - No F implementation has started.
 - Active RQ/task: F / F0, PLAN.md section 6, first bullet (agent 1 part), assigned in A3-0052. The human go-ahead for F0 planning is recorded in D51.
 - Interface version: v1 FROZEN (FREEZE.json f700292e..), unchanged.
@@ -140,6 +147,7 @@
   - ACK the exact F0 freeze;
   - then A-F1 test-first, and only after the F0 freeze ACKs.
 - Last messages sent:
+  - A1-0110 ACK (F0 freeze request f9f0906f.., ledger scope);
   - A1-0109 ACK (interface-v2 candidate 2, exact mapping/layout, ledger scope);
   - A1-0108 ACK (EXPORT-LAYOUTS revision 9, ledger-facing scope);
   - A1-0107 REVIEW (ledger facts behind A3-0069 L1/L2);
