@@ -203,3 +203,41 @@ Also covered:
 - The historical E exports stay at their E commit.
 
 **Gap to raise with agent 3 (RFC at READY; not changed here):** interfaces/v1 `LedgerSourceHashes`, which the v2 E carrier reuses, is closed at ten files. In the F tree, KSSC imports `src/interfaces/IPolicyVersion.sol`, so an E manifest built from this tree cannot list one of its compile inputs, nor `Governance.sol`. The runtime hashes still pin the bytecode. F manifests use the twelve-file `LedgerSourceHashesF` and are complete.
+
+## Slice 7: sensitivity controls, the mapping receipt and the READY verification set
+
+**`tools/af1_controls.sh`** (new): 13 source-level controls, run in a scratch copy. Each injects one fault into the implementation and requires the named A-F1 test to fail:
+- the E guard admits bits 6–8;
+- `isRepaired` covers E only;
+- F wiring without governance;
+- no tombstone;
+- admin flags not cleared;
+- governance without the epoch advance;
+- the log without the nonce;
+- a removed root left listed;
+- any caller;
+- any profile;
+- no set-version check;
+- nine admins;
+- the nonce gap allowed.
+
+**13 of 13 sensitive, exit 0** (`ready/af1-controls.txt`). Bits 6–8 are covered by the code-level mutants (slice 5).
+- The first run matched no test, because the filter's anchored `$` does not match forge's test names (`slice7-controls-run1-filter-matched-nothing.txt`). The anchor was dropped, as in `f0_controls.sh`; every control name is a unique prefix.
+- Two failures are reported indirectly: the injected fault stops a `new` from reverting, so Foundry fails at the next `expectRevert`. Both are still detections.
+
+**`tools/gen_v2_vector_test.py --implemented`:** the GovernanceAction cases also require that the implemented `HMBCHash.GOVERNANCE_ACTION_TYPEHASH`, `hashGovernanceAction` and `governanceActionDigest` equal the vector. On the **published `interfaces/v2`** bytes (FREEZE `7bb1d243..`) this gives **26 of 26** (`ready/v2-vector-receipt.txt`, inputs in `ready/interfaces-v2-inputs.txt`).
+
+**`tools/check_f0_powers.py --tree`:** the F0 powers inventory describes the E tree. On HEAD it now reports shifted lines and the new F state and entry points (exit 1, by design, `ready/check-f0-powers-head.txt`). Against the pre-A-F1 tree d8eddf1 (production sources identical to the E pin), it passes with no problems and the same counts as at F0 (`ready/check-f0-powers-pre-af1-tree.txt`).
+
+**READY verification set** (`ready/`, one source state, recorded with UTC and versions):
+
+| Command | Result |
+|---|---|
+| `forge build --root ledger` | exit 0 |
+| `forge test --root ledger` | 316 passed, exit 0; no baseline test missing from the PASS list |
+| `python3 -I ledger/tools/check_mutants.py` | exit 0, 12 of 12 mutants (7 E, 5 F) |
+| `ledger/tools/af1_controls.sh <scratch>` | exit 0, 13 of 13 |
+| `ledger/tools/f0_controls.sh <scratch>` | exit 0, 12 of 12 (F0 characterization unaffected) |
+| `check_f0_powers.py --tree <d8eddf1>` | exit 0; on HEAD exit 1 by design |
+| v2 vector receipt (`--implemented`) | 26 of 26, exit 0 |
+| slice 6 Anvil smoke | all exits 0 (see slice 6) |

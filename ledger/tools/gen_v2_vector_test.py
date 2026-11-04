@@ -13,9 +13,12 @@ It then runs the existing QuorumLib (`src/lib/SigLib.sol`) on the vector signatu
 gives BAD_SIGNATURE, and SET signatures do not authorize REMOVE. It also checks that each witness address follows the
 TEST-ONLY derivation keccak256("hmbc-e0-synthetic-key:" || label); no key is printed or written.
 
+With --implemented (the A-F1 tree), the GovernanceAction cases also require that the implemented
+HMBCHash.hashGovernanceAction / governanceActionDigest / GOVERNANCE_ACTION_TYPEHASH equal the vector.
+
 Usage (repository root): build a scratch copy, never inside ledger/:
   cp -r ledger/src ledger/foundry.toml <scratch>/ && mkdir <scratch>/test
-  python3 -I ledger/tools/gen_v2_vector_test.py <proposal dir> > <scratch>/test/V2VectorsCheck.t.sol
+  python3 -I ledger/tools/gen_v2_vector_test.py [--implemented] <interface dir> > <scratch>/test/V2VectorsCheck.t.sol
   forge test --root <scratch>
 Standard library only. Prints Solidity to stdout; exit 0, or exit 1 on an unknown vector type.
 """
@@ -49,6 +52,15 @@ def digest_body(name, d, m):
             f"uint64({m['expiresAt']})));",
             "        dig = HMBCHash.toTypedDigest(dom, sh);",
         ]
+        if IMPLEMENTED:
+            # A-F1 tree: the implemented library must give the same struct hash and digest.
+            out += [
+                f"        GovernanceAction memory ga = GovernanceAction({m['action']}, {addr(m['root'])}, admins, "
+                f"{m['nonce']}, {m['witnessSetVersion']}, {m['expiresAt']});",
+                '        require(HMBCHash.hashGovernanceAction(ga) == sh, "implemented structHash");',
+                f'        require(HMBCHash.governanceActionDigest(ga, {chain}, {vc}) == dig, "implemented digest");',
+                '        require(HMBCHash.GOVERNANCE_ACTION_TYPEHASH == th, "implemented typehash");',
+            ]
     elif name == "StateCheckpoint":
         out += [
             f"        StateCheckpoint memory x = StateCheckpoint({m['sequence']}, {m['authEpoch']}, {m['policyVersion']}, "
@@ -78,11 +90,19 @@ def digest_body(name, d, m):
     return out
 
 
+IMPLEMENTED = False
+
+
 def main():
-    if len(sys.argv) != 2:
+    global IMPLEMENTED
+    args = sys.argv[1:]
+    IMPLEMENTED = "--implemented" in args
+    if IMPLEMENTED:
+        args.remove("--implemented")
+    if len(args) != 1:
         print(__doc__, file=sys.stderr)
         return 2
-    proposal = sys.argv[1]
+    proposal = args[0]
     vectors = json.load(open(f"{proposal}/vectors/signing.json"))["vectors"]
     witnesses = json.load(open(f"{proposal}/vectors/witnesses.json"))["witnesses"]
     o = [

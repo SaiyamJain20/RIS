@@ -13,7 +13,11 @@ Completeness and citation checks, standard library only:
 This proves coverage and citation accuracy only. The power claims themselves are backed by the cited
 tests (forge test) and by reading; the checker does not evaluate them.
 
-Usage (repository root): python3 -I ledger/tools/check_f0_powers.py [--solc PATH]
+Usage (repository root): python3 -I ledger/tools/check_f0_powers.py [--solc PATH] [--tree LEDGER_DIR]
+--tree checks the inventory against another ledger tree (its src/ and test/), for example the pre-A-F1 tree
+the F0 matrix describes; the CSVs and the pinned toolchain always come from this checkout. Since A-F1 the
+current src/ has new state, entry points and shifted lines, so the F0 (E) inventory is checked against the
+tree it characterizes, not HEAD.
 Exit 0 when every check passes, 1 otherwise; a JSON summary goes to stdout.
 """
 import csv
@@ -27,6 +31,7 @@ from pathlib import Path
 
 LEDGER = Path(__file__).resolve().parent.parent
 F0 = LEDGER / "f0"
+TREE = LEDGER  # the ledger tree whose src/ and test/ are checked (--tree)
 
 
 def solc_ast(solc):
@@ -34,10 +39,10 @@ def solc_ast(solc):
     actual = hashlib.sha256(Path(solc).read_bytes()).hexdigest()
     if actual != pinned:
         raise SystemExit(f"solc hash {actual} != pinned {pinned}")
-    sources = sorted(p for p in (LEDGER / "src").rglob("*.sol"))
+    sources = sorted(p for p in (TREE / "src").rglob("*.sol"))
     inp = {
         "language": "Solidity",
-        "sources": {str(p.relative_to(LEDGER)): {"content": p.read_text()} for p in sources},
+        "sources": {str(p.relative_to(TREE)): {"content": p.read_text()} for p in sources},
         "settings": {"outputSelection": {"*": {"": ["ast"]}}, "evmVersion": "cancun"},
     }
     run = subprocess.run([solc, "--standard-json"], input=json.dumps(inp), capture_output=True, text=True)
@@ -77,7 +82,7 @@ def check_line(ref, token, kind, problems):
     if not m:
         problems.append(f"bad source reference {ref!r}")
         return
-    lines = (LEDGER / m.group(1)).read_text().splitlines()
+    lines = (TREE / m.group(1)).read_text().splitlines()
     n = int(m.group(2))
     line = lines[n - 1] if 0 < n <= len(lines) else ""
     if kind == "state":
@@ -92,6 +97,9 @@ def check_line(ref, token, kind, problems):
 
 def main():
     solc = os.path.expanduser("~/.svm/0.8.37/solc-0.8.37")
+    global TREE
+    if "--tree" in sys.argv:
+        TREE = Path(sys.argv[sys.argv.index("--tree") + 1]).resolve()
     if "--solc" in sys.argv:
         solc = sys.argv[sys.argv.index("--solc") + 1]
     sources, solc_sha, digests = solc_ast(solc)
@@ -134,7 +142,7 @@ def main():
     state_ids = {r["id"] for r in state_rows}
     entry_ids = {r["id"] for r in entry_rows}
     tests = set()
-    for p in (LEDGER / "test").glob("*.t.sol"):
+    for p in (TREE / "test").glob("*.t.sol"):
         tests |= set(re.findall(r"function\s+(test\w+)\s*\(", p.read_text()))
     for r in entry_rows:
         for sid in filter(None, r["writes"].split("|")):
