@@ -1,6 +1,33 @@
 # Agent 1 handoff
 
-## Current (2026-11-04, ~07:40): candidate 7 ACKed in ledger scope (A1-0103)
+## Current (2026-11-04, ~08:40): candidate 8 ACKed in ledger scope (A1-0104)
+
+**Thread:**
+- A2-0052 (e0f25ef): agent 2 withheld its candidate-7 ACK pending C-1 (F-12 controls), C-2 (F-29 SIGNING-RULES hash) and C-3 (revision-4 F0 set label).
+- A3-0065 (731833c): candidate 8 adopts C-1..C-3 and N-1..N-3.
+- A2-0053 (de12537): agent 2's exact protocol-scope ACK of candidate 8.
+
+**A1-0104:** ACK of the exact candidate-8 hashes, ledger scope:
+- plan 76069506..;
+- f_matrix 2230daf3..;
+- CSV 5bf01f05.. (byte-identical to candidate 7);
+- review-manifest 1388af02...
+
+Checked:
+- Only F-12 (controls, dependencies) and F-29 (dependencies) changed among the 32 cases. No ledger line of the plan changed (task 1, K1, K2, K4, F-18).
+- The f=2 control's "no certificate forms" has a ledger backstop: q3 rejects two signatures (`test_F0Q_TwoOfFourInsufficient`, re-run 9/9, exit 0). That holds only while every honest witness refuses, because three signers can poison (L8).
+- Note for the freeze: record `A-F1-DESIGN.md` sha256 `7eed1b29e79144d88d6b5bba33a414e4fcb6dc8fa8cb31262c0742e3baaebfd0`. "Design 2.2" alone also names `45004b72..` (3de2ee6).
+
+**Next:** the full successor v2 schema and vectors from agent 3. For my mapping ACK, I review:
+- the export fields (`runtimeBytes`, `immutableReferences`, `immutableRefsSha256`);
+- the Governance ABI and `GovernanceAction` type;
+- repaired-f and `profileEnum` 3;
+- the four-witness fixture with set version 2;
+- the mutation names for bits 6–8 and `mutant-f-q2`.
+
+Then the F0 freeze, then A-F1.
+
+## Previous (2026-11-04, ~07:40): candidate 7 ACKed in ledger scope (A1-0103)
 
 **Pool-retry thread (agent 2 / agent 3):**
 - A2-0049: revision 6, answering R4/R5.

@@ -62,6 +62,10 @@
   - **A2-0049..0051 / A3-0063..0064 (04:31–07:32):** agent 2's revisions 6 and 7 (pool-retry R4/R5/R6) were reviewed. Agent 3 published candidate 7 (plan 04d6c67f.., matrix 114dfa06.., CSV 5bf01f05..) with revision 7 adopted.
     - **A1-0103:** ACK of the exact candidate-7 hashes in ledger scope. K4 is retained; ledger rows are unchanged; revision 7 has no ledger effect.
     - Next: the full successor v2 schema/vectors, which needs my mapping ACK, then the F0 freeze.
+  - **A2-0052 / A3-0065 / A2-0053 (08:01–08:20):** agent 2 withheld its candidate-7 ACK pending C-1..C-3 (all protocol rows). Agent 3 published candidate 8 (plan 76069506.., matrix 2230daf3.., CSV 5bf01f05.. unchanged), and agent 2 ACKed it in protocol scope.
+    - **A1-0104:** ACK of the exact candidate-8 hashes in ledger scope. Only F-12 and F-29 changed, with no ledger expectation changed. `F0Quorum` was re-run: 9 passed, exit 0.
+    - Note for the freeze: record `A-F1-DESIGN.md` sha256 7eed1b29.. explicitly, because "design 2.2" alone also names 45004b72...
+    - Both owners' exact candidate-8 design ACKs now exist. Next: the full successor v2 schema/vectors (my mapping ACK), then the F0 freeze.
   - No F implementation has started.
 - Active RQ/task: F / F0, PLAN.md section 6, first bullet (agent 1 part), assigned in A3-0052. The human go-ahead for F0 planning is recorded in D51.
 - Interface version: v1 FROZEN (FREEZE.json f700292e..), unchanged.
@@ -97,6 +101,7 @@
   - ACK the exact F0 freeze;
   - then A-F1 test-first, and only after the F0 freeze ACKs.
 - Last messages sent:
+  - A1-0104 ACK (F0 candidate 8, ledger scope);
   - A1-0103 ACK (F0 candidate 7, ledger scope);
   - A1-0102 ACK (F0 candidate 6, ledger scope);
   - A1-0101 REVIEW (F0 candidate 5, K4 path);
