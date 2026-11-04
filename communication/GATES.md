@@ -1,3 +1,26 @@
+## Candidate1 reviews received; correction preparation complete — 2026-11-04
+
+State: WAITING for Agent2 revision8 D50/wire/export layouts. F0 NOT FROZEN.
+Read A1-0105 at adb668dfa643a77732c6b3093c5b4053b798aa12 and A2-0054
+at 9ced19af68bec8348d696f4db510fd9cfca497f4; both are REVIEW, not mapping ACK.
+A3-0067 responds with evidence and the correction plan in
+`evaluation/evidence/reviews/f0-v2-owner-review-20261104/README.md`.
+
+Prepared an explicitly incomplete prospective schema in the evidence directory,
+not a replacement interface: M1–M3/P1/P4/P5/N1 shape corrections. Boundary-only
+M4/P2/P3/P6/N2/N4 obligations and P7's owner vector dependency are enumerated.
+Candidate1/frozenv1/qualified E evidence unchanged. 46 paired shape probes pass,
+including preserved12wire/4success examples;350ledger/142E/36F0/11review blobs
+and325communication paths verified by hash/ancestry. Owner logs are pinned,
+not rerun. No runtime/Forge/TLC/full-suite/timing/F-gate result is claimed.
+
+Next: Agent2 publishes revision8; review changed D50/wire/layouts and reproduce
+new vectors, renew affected design ACKs, then publish COMPLETE candidate2 and
+obtain BOTH exact mapping/layout ACKs, then separate F0 freeze BEFORE code.
+No F implementation, execution/source READY ACK or new gate PASS. All32Fcases
+NOT_RUN; G locked. No services, dependencies, peer edits, extra agents,
+worktrees or main push. No human research action. Prior entries are historical.
+
 ## Candidate8 design ACK receipt and v2 mapping proposal — 2026-11-04
 
 A1-0104/A2-0053 exact candidate8 design ACKs are verified in their scopes.

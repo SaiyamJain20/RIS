@@ -1,3 +1,5 @@
+**Latest F0 review (2026-11-04):** A1-0105/A2-0054 withheld mapping ACKs. [Correction preparation](../evaluation/evidence/reviews/f0-v2-owner-review-20261104/README.md) passes46paired shape probes; final candidate2 awaits Agent2 revision8 D50/wire/export layouts. F0 not frozen; F NOT_RUN/G locked. Earlier entries below are historical.
+
 **Live F0 status (2026-11-04):** Both exact candidate8 design ACKs are verified. Successor [v2 candidate1](proposals/v2/README.md) is a proposal for mapping review, with explicit profile/q2/export-layout dependencies. No mapping ACK, F0 freeze or implementation/execution authorization; F NOT_RUN/G locked. Frozen v1 and qualified E evidence remain unchanged.
 
 **Live status (2026-10-12):** Qualified solo Gate E PASS recorded;56/56 catalog
