@@ -61,6 +61,12 @@ uint8 constant CREDENTIAL_TEMPORAL = 2;
 uint8 constant ANCHOR_CRL = 1;
 uint8 constant ANCHOR_TEMP_ACL = 2;
 
+// GovernanceAction.action values and the admin-list bound (A-F1 design 2.2 section 2, REPAIRED_F).
+uint8 constant GOV_ADD_AUTHORITY = 1;
+uint8 constant GOV_REMOVE_AUTHORITY = 2;
+uint8 constant GOV_SET_CA_ADMINS = 3;
+uint256 constant GOV_MAX_ADMINS = 8;
+
 // Deliberate check removals for `mutant-*` deployments. They exist to show that tests and the
 // evaluation oracle detect a missing check; a mutant result is never evidence about HMBC. Bits 0-5
 // are allowed in either repaired profile, bits 6-8 only in REPAIRED_F; paper profiles reject any
@@ -220,6 +226,17 @@ struct GrantReceipt {
     bytes32 dbcBlockHash;
 }
 
+/// A-F1 (design 2.2 section 2): a quorum-signed change to the authority set, executed by Governance
+/// on the PBC. Fully typed; there is no free-form payload. `admins` is strictly ascending.
+struct GovernanceAction {
+    uint8 action;
+    address root;
+    address[] admins;
+    uint64 nonce;
+    uint64 witnessSetVersion;
+    uint64 expiresAt;
+}
+
 /// Paper-profile relay tuple: Fig. 6 step (4) [GID, verified attributes, data_id] plus the PBC
 /// request reference (Fig. 6 step (9) carries trans_hash). Not signed: the paper specifies no
 /// PBC->DBC message authentication beyond the PSC actuator.
@@ -242,6 +259,7 @@ library HMBCHash {
     string internal constant DECISION_DOMAIN = "HMBCDecision"; // chain destination(DBC), contract KSSC
     string internal constant STATE_DOMAIN = "HMBCState"; // chain destination(DBC), contract KSSC
     string internal constant RECEIPT_DOMAIN = "HMBCReceipt"; // chain PBC, contract PSC
+    string internal constant GOVERNANCE_DOMAIN = "HMBCGovernance"; // chain PBC, contract Governance
 
     bytes32 internal constant REGISTRATION_TYPEHASH =
         keccak256("Registration(address gid,bytes32 certDigest,bytes32 recipientKeyHash,uint64 expiresAt)");
@@ -278,6 +296,10 @@ library HMBCHash {
         "GrantReceipt(bytes32 requestDigest,bytes32 grantId,address gid,bytes32 dataId,uint64 keyEpoch,"
         "uint64 grantExpiresAt,uint64 witnessSetVersion,uint256 dbcChainId,address kssc,uint256 dbcBlockNumber,"
         "bytes32 dbcBlockHash)"
+    );
+    bytes32 internal constant GOVERNANCE_ACTION_TYPEHASH = keccak256(
+        "GovernanceAction(uint8 action,address root,address[] admins,uint64 nonce,uint64 witnessSetVersion,"
+        "uint64 expiresAt)"
     );
 
     function domainSeparator(string memory name, uint256 chainId, address verifyingContract)
@@ -399,6 +421,21 @@ library HMBCHash {
         return keccak256(bytes.concat(head, tail));
     }
 
+    /// address[] is hashed as keccak256 of the 32-byte-padded elements, as `roles` in hashRoleCertificate.
+    function hashGovernanceAction(GovernanceAction memory a) internal pure returns (bytes32) {
+        return keccak256(
+            abi.encode(
+                GOVERNANCE_ACTION_TYPEHASH,
+                a.action,
+                a.root,
+                keccak256(abi.encodePacked(a.admins)),
+                a.nonce,
+                a.witnessSetVersion,
+                a.expiresAt
+            )
+        );
+    }
+
     // ---- full typed digests (domain + struct) ----
 
     function registrationDigest(Registration memory r, uint256 pbcChainId, address rsc)
@@ -465,5 +502,13 @@ library HMBCHash {
     /// grantId = keccak256(abi.encode(requestDigest, kssc, destinationChainId)) (v0).
     function grantId(bytes32 requestDigest, address kssc, uint256 destinationChainId) internal pure returns (bytes32) {
         return keccak256(abi.encode(requestDigest, kssc, destinationChainId));
+    }
+
+    function governanceActionDigest(GovernanceAction memory a, uint256 pbcChainId, address governance)
+        internal
+        pure
+        returns (bytes32)
+    {
+        return toTypedDigest(domainSeparator(GOVERNANCE_DOMAIN, pbcChainId, governance), hashGovernanceAction(a));
     }
 }

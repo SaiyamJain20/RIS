@@ -1,0 +1,75 @@
+Compiling 17 files with Solc 0.8.37
+Solc 0.8.37 finished in 2.41s
+Compiler run successful!
+
+Ran 30 tests for test/Governance.t.sol:GovernanceTest
+[FAIL: Rejected(15)] test_AF1G_AddAuthorityByQuorum() (gas: 53770)
+[FAIL: Error != expected error: Rejected(15) != Rejected(20)] test_AF1G_AddExistingAuthorityIsMalformed() (gas: 39415)
+[FAIL: assertEq(uint) failed: H1 has one constructor admin got=0 want=1] test_AF1G_CaAdminsViewListsConstructorAdmins() (gas: 15554)
+[FAIL: Error != expected error: Rejected(15) != Rejected(20)] test_AF1G_CheckOrderStructureNonceExpirySignatures() (gas: 17448)
+[FAIL: Error != expected error: vm.expectRevert: you must call another function prior to expecting a second revert != Rejected(20)] test_AF1G_ConstructorRejectsMalformedConfig() (gas: 20120)
+[PASS] test_AF1G_DeploymentReportsTheConfiguredGetters() (gas: 86530)
+[FAIL: Rejected(15)] test_AF1G_EventsCarryTheSignedNonce() (gas: 38919)
+[FAIL: Error != expected error: Rejected(15) != Rejected(7)] test_AF1G_ExpiryBounds() (gas: 36957)
+[FAIL: Rejected(15)] test_AF1G_F28_DbcPostBarrierIsStaleState() (gas: 2726701)
+[FAIL: Rejected(15)] test_AF1G_F28_DbcPreBarrierStillGrants() (gas: 2726703)
+[FAIL: Rejected(15)] test_AF1G_F28_PbcRefusesTheRemovedRootImmediately() (gas: 2726743)
+[FAIL: Rejected(15)] test_AF1G_FailedExecuteLeavesNoTrace() (gas: 36074)
+[FAIL: Rejected(15)] test_AF1G_FreshRootStartsUnpublishedThenValidatesAfterItsCrl() (gas: 38539)
+[FAIL: Error != expected error: Rejected(15) != Rejected(13)] test_AF1G_MutatorsRejectNonFProfilesAndUnsealed() (gas: 13035)
+[FAIL: Error != expected error: Rejected(15) != Rejected(8)] test_AF1G_NonceReplayAndGap() (gas: 36925)
+[FAIL: Error != expected error: Rejected(15) != Rejected(16)] test_AF1G_OnlyGovernanceMayCallTmscMutators() (gas: 16707)
+[FAIL: Error != expected error: Rejected(15) != Rejected(10)] test_AF1G_QuorumFailures() (gas: 38584)
+[FAIL: Rejected(15)] test_AF1G_RemoveAuthorityByQuorum() (gas: 43889)
+[FAIL: Error != expected error: Rejected(15) != Rejected(4)] test_AF1G_RemoveOrSetUnknownRootIsUnknownAuthority() (gas: 36880)
+[FAIL: Rejected(15)] test_AF1G_RemovedRootCannotBeReAdded() (gas: 36095)
+[FAIL: Rejected(15)] test_AF1G_RemovedRootCertificatesAndAdminsAreRejected() (gas: 494410)
+[FAIL: Rejected(15)] test_AF1G_ReplayedSetIsReplayWithNoSecondEffect() (gas: 38574)
+[FAIL: Rejected(15)] test_AF1G_SetCaAdminsByQuorum() (gas: 38961)
+[FAIL: Rejected(15)] test_AF1G_SetCaAdminsEmptySuspendsPublishing() (gas: 36029)
+[FAIL: Error != expected error: Rejected(15) != Rejected(1)] test_AF1G_SetCertificateSubmittedAsRemoveIsBadSignature() (gas: 111711)
+[FAIL: Error != expected error: Rejected(15) != Rejected(20)] test_AF1G_StructuralRulesAreMalformed() (gas: 52957)
+[FAIL: next call did not revert as expected] test_AF1G_TmscRequiresGovernanceWiringOnlyUnderF() (gas: 108752)
+[FAIL: Error != expected error: Rejected(15) != Rejected(20)] test_AF1G_UnknownActionIsMalformed() (gas: 36932)
+[FAIL: Rejected(15)] test_AF1G_UpdateLogBindsActionNonceAndAdmins() (gas: 38649)
+[FAIL: Error != expected error: Rejected(15) != Rejected(6)] test_AF1G_WrongWitnessSetVersionIsStaleStateFirst() (gas: 12953)
+Suite result: FAILED. 1 passed; 29 failed; 0 skipped; finished in 7.48ms (23.02ms CPU time)
+
+Ran 1 test suite in 7.95ms (7.48ms CPU time): 1 tests passed, 29 failed, 0 skipped (30 total tests)
+
+Failing tests:
+Encountered 29 failing tests in test/Governance.t.sol:GovernanceTest
+[FAIL: Rejected(15)] test_AF1G_AddAuthorityByQuorum() (gas: 53770)
+[FAIL: Error != expected error: Rejected(15) != Rejected(20)] test_AF1G_AddExistingAuthorityIsMalformed() (gas: 39415)
+[FAIL: assertEq(uint) failed: H1 has one constructor admin got=0 want=1] test_AF1G_CaAdminsViewListsConstructorAdmins() (gas: 15554)
+[FAIL: Error != expected error: Rejected(15) != Rejected(20)] test_AF1G_CheckOrderStructureNonceExpirySignatures() (gas: 17448)
+[FAIL: Error != expected error: vm.expectRevert: you must call another function prior to expecting a second revert != Rejected(20)] test_AF1G_ConstructorRejectsMalformedConfig() (gas: 20120)
+[FAIL: Rejected(15)] test_AF1G_EventsCarryTheSignedNonce() (gas: 38919)
+[FAIL: Error != expected error: Rejected(15) != Rejected(7)] test_AF1G_ExpiryBounds() (gas: 36957)
+[FAIL: Rejected(15)] test_AF1G_F28_DbcPostBarrierIsStaleState() (gas: 2726701)
+[FAIL: Rejected(15)] test_AF1G_F28_DbcPreBarrierStillGrants() (gas: 2726703)
+[FAIL: Rejected(15)] test_AF1G_F28_PbcRefusesTheRemovedRootImmediately() (gas: 2726743)
+[FAIL: Rejected(15)] test_AF1G_FailedExecuteLeavesNoTrace() (gas: 36074)
+[FAIL: Rejected(15)] test_AF1G_FreshRootStartsUnpublishedThenValidatesAfterItsCrl() (gas: 38539)
+[FAIL: Error != expected error: Rejected(15) != Rejected(13)] test_AF1G_MutatorsRejectNonFProfilesAndUnsealed() (gas: 13035)
+[FAIL: Error != expected error: Rejected(15) != Rejected(8)] test_AF1G_NonceReplayAndGap() (gas: 36925)
+[FAIL: Error != expected error: Rejected(15) != Rejected(16)] test_AF1G_OnlyGovernanceMayCallTmscMutators() (gas: 16707)
+[FAIL: Error != expected error: Rejected(15) != Rejected(10)] test_AF1G_QuorumFailures() (gas: 38584)
+[FAIL: Rejected(15)] test_AF1G_RemoveAuthorityByQuorum() (gas: 43889)
+[FAIL: Error != expected error: Rejected(15) != Rejected(4)] test_AF1G_RemoveOrSetUnknownRootIsUnknownAuthority() (gas: 36880)
+[FAIL: Rejected(15)] test_AF1G_RemovedRootCannotBeReAdded() (gas: 36095)
+[FAIL: Rejected(15)] test_AF1G_RemovedRootCertificatesAndAdminsAreRejected() (gas: 494410)
+[FAIL: Rejected(15)] test_AF1G_ReplayedSetIsReplayWithNoSecondEffect() (gas: 38574)
+[FAIL: Rejected(15)] test_AF1G_SetCaAdminsByQuorum() (gas: 38961)
+[FAIL: Rejected(15)] test_AF1G_SetCaAdminsEmptySuspendsPublishing() (gas: 36029)
+[FAIL: Error != expected error: Rejected(15) != Rejected(1)] test_AF1G_SetCertificateSubmittedAsRemoveIsBadSignature() (gas: 111711)
+[FAIL: Error != expected error: Rejected(15) != Rejected(20)] test_AF1G_StructuralRulesAreMalformed() (gas: 52957)
+[FAIL: next call did not revert as expected] test_AF1G_TmscRequiresGovernanceWiringOnlyUnderF() (gas: 108752)
+[FAIL: Error != expected error: Rejected(15) != Rejected(20)] test_AF1G_UnknownActionIsMalformed() (gas: 36932)
+[FAIL: Rejected(15)] test_AF1G_UpdateLogBindsActionNonceAndAdmins() (gas: 38649)
+[FAIL: Error != expected error: Rejected(15) != Rejected(6)] test_AF1G_WrongWitnessSetVersionIsStaleStateFirst() (gas: 12953)
+
+Encountered a total of 29 failing tests, 1 tests succeeded
+
+Tip: Run `forge test --rerun` to retry only the 29 failed tests
+Tip: Run `forge test --debug --match-test <TEST_NAME>` to inspect one failing test in the debugger
