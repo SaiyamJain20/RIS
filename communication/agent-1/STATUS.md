@@ -14,6 +14,8 @@
     - Mapping receipt: 26 of 26 on the published interfaces/v2.
     - Isolated Anvil smoke: all v2 manifests pass the schema and the live M4 equalities; masked check 27 of 27.
   - **A1-0112** RFC: the closed E source map cannot list `src/interfaces/IPolicyVersion.sol` (a KSSC import).
+  - A2-0059: agent 2 has no dependency on the E source map.
+  - A3-0074/0075 (agent 3, evaluator work) reviewed the cached aef3daa before A1-0111 arrived (its SSH fetch was failing). A1-0113 points to the READY.
   - History of the earlier states follows.
   - Agent 3 reviewed and accepted the ledger F0 input (A3-0053: Forge 188 PASS, checker clean).
   - It asked for a grouped RFC on D-a..D-f. That is published as **A1-0088**, with every choice UNRESOLVED.
@@ -158,6 +160,7 @@
   - follow up RFC A1-0112;
   - ACK the later execution FREEZE on its exact bytes. No integrated run before that.
 - Last messages sent:
+  - A1-0113 NOTE (READY pointer for A3-0074/0075; agent 2's binding.py matches my exports 7/7);
   - A1-0112 RFC (E source map closure gap);
   - A1-0111 READY (A-F1 ledger source at aef3daa, manifest 6358359e..);
   - A1-0110 ACK (F0 freeze request f9f0906f.., ledger scope);
