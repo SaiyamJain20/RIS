@@ -76,6 +76,17 @@
       - **M4:** state the per-contract mask and witness-set equalities. This includes my clarification that Governance stores the full mask.
     - Items 1 and 2 are accepted (item 1 subject to M3/M4; item 2 needs sorted signatures).
     - Next: candidate 2, then my exact mapping ACK, then the F0 freeze.
+  - **A2-0054 / A3-0067 / A2-0055 (10:09–10:35):**
+    - Agent 2 agrees with M1–M4.
+    - Agent 3 prepared a corrected schema (not candidate 2) and waits for agent 2's revision 8.
+    - Agent 2 published revision 8 (manifest 19220e0f..): D50 revision 5 8ed6f1a4.., SUCCESSOR-WIRE 3f1db2ca.., the new EXPORT-LAYOUTS b0b801ba...
+    - **A1-0106:** ledger-facing ACK of those exact files.
+      - The name → (enum, mask) table equals `make_manifest.py`.
+      - The reporting set (TMSC, PSC, KSSC, ACSC + Governance) and the threshold and uniqueness rules match the code.
+      - The 3 bindings were recomputed independently and are equal.
+      - Every death kind was checked against the ledger code.
+      - Note: two death kinds are false on bit-1 and bit-5 E mutants; label that evidence as mutant.
+    - Next: agent 3's candidate 2, then my exact mapping ACK, then the F0 freeze.
   - No F implementation has started.
 - Active RQ/task: F / F0, PLAN.md section 6, first bullet (agent 1 part), assigned in A3-0052. The human go-ahead for F0 planning is recorded in D51.
 - Interface version: v1 FROZEN (FREEZE.json f700292e..), unchanged.
@@ -111,6 +122,7 @@
   - ACK the exact F0 freeze;
   - then A-F1 test-first, and only after the F0 freeze ACKs.
 - Last messages sent:
+  - A1-0106 ACK (agent 2's F0 revision 8: D50 r5, SUCCESSOR-WIRE r8 and EXPORT-LAYOUTS, ledger-facing scope);
   - A1-0105 REVIEW (interface-v2 candidate 1, ledger mappings, M1–M4);
   - A1-0104 ACK (F0 candidate 8, ledger scope);
   - A1-0103 ACK (F0 candidate 7, ledger scope);

@@ -1,6 +1,29 @@
 # Agent 1 handoff
 
-## Current (2026-11-04, ~10:30): interface-v2 candidate 1 reviewed in ledger scope (A1-0105)
+## Current (2026-11-04, ~11:00): agent 2's revision 8 ACKed in ledger-facing scope (A1-0106)
+
+**Thread:**
+- A2-0054 (9ced19a): agent 2 agrees with M1–M4.
+- A3-0067 (4fc3882): a prospective schema with M1–M3 and N1, accepting M4. Candidate 2 waits for revision 8.
+- A2-0055 (64ec86a): revision 8 (manifest 19220e0f..):
+  - D50 r5 8ed6f1a4..;
+  - SUCCESSOR-WIRE 3f1db2ca..;
+  - EXPORT-LAYOUTS b0b801ba.. (new);
+  - SIGNING-RULES unchanged.
+
+**A1-0106:** ACK of those exact files in ledger-facing scope. Checked:
+- the table equals `make_manifest.py` (AST compare);
+- the profile/mutations holders are exactly TMSC/PSC/KSSC/ACSC, plus Governance's mask in F;
+- the paper profiles' mask 0 is enforced on chain;
+- the thresholds 1..n and unique witnesses are constructor rules;
+- all 3 bindings were recomputed with my encoder;
+- each death kind was checked against the code: KSSC:148/153/179–180, DecisionVerifier:74/86–87, PSC:250, and design §2 for Governance.
+
+Note: under bit 1 and bit 5, "overtaken-decision-sequence" and "executed-receipt" are false on the ledger, so that evidence must be labelled mutant.
+
+**Next:** agent 3's candidate 2 (M1–M4 plus the revision-8 layouts), then my exact mapping ACK (with the `LedgerAbiContracts` naming note), then the F0 freeze, then A-F1.
+
+## Previous (2026-11-04, ~10:30): interface-v2 candidate 1 reviewed in ledger scope (A1-0105)
 
 **A3-0066** (origin/agent-3 4de6274):
 - both candidate-8 ACKs recorded;
