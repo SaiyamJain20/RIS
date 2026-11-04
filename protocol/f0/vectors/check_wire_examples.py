@@ -72,8 +72,9 @@ def reports_ok(c, result_checkpoint=None):
     snapshot's reports. `lateReports` (reports after the snapshot closed, sorted by witness index then canonical message) are evidence only. `adopted` = {message, reporters} is present
     iff pool_adoption.adopt_recorded(snapshot) yields a value, equals it, `reporters` are the consistent witnesses reporting it, and on success the certificate is over it."""
     rr, inc, late, ad = c.get("recordedReports"), c.get("inconsistentReports"), c.get("lateReports"), c.get("adopted")
+    tm = c.get("timing")
     if rr is None and inc is None and late is None and ad is None:
-        return True
+        return tm is None                                  # timing is present iff pool-retry evidence is present
     rr = [] if rr is None else rr
     inc = [] if inc is None else inc
     known = {o["witnessIndex"] for o in c["outcomes"]}
@@ -98,6 +99,19 @@ def reports_ok(c, result_checkpoint=None):
         keys = [(int(x["witnessIndex"]), _canon(x["message"])) for x in late]
         if keys != sorted(set(keys)):
             return False
+    # revision 7 (R6): the timing observations make the snapshot close and the re-proposal gate checkable against the reference's own time functions
+    if not (isinstance(tm, dict) and set(tm) == {"ledgerNowAtStart", "proposalExpiresAt", "collectionDeadlineMs", "snapshotClosedAtMs", "snapshotClosedBy"}
+            and all(isinstance(tm[k], str) and DEC.fullmatch(tm[k]) for k in ("ledgerNowAtStart", "proposalExpiresAt", "collectionDeadlineMs", "snapshotClosedAtMs"))
+            and tm["snapshotClosedBy"] in ("all-replied", "reply-timeout", "deadline")):
+        return False
+    now0, prop, dl, close, by = int(tm["ledgerNowAtStart"]), int(tm["proposalExpiresAt"]), int(tm["collectionDeadlineMs"]), int(tm["snapshotClosedAtMs"]), tm["snapshotClosedBy"]
+    if pool.collection_deadline_ms(now0, prop) != dl:
+        return False                                       # the deadline is min(10 s, remaining - 2 s) and a collection exists only when more than 2 s remain
+    replied_all = all(o["status"] != "silent" for o in c["outcomes"])
+    if pool.snapshot_close(dl, close if by == "all-replied" else None) != (close, by) or (by == "all-replied" and not replied_all):
+        return False
+    if by == "deadline" and late:
+        return False                                       # nothing arriving after the original deadline is collected
     snapshot = [{"witness": int(r["witnessIndex"]), "message": (r["message"]["sequence"], _canon(r["message"])), "validSignature": True} for r in rr]
     snapshot += [{"witness": int(e["witnessIndex"]), "message": (x["message"]["sequence"], _canon(x["message"])), "validSignature": True} for e in inc for x in e["reports"]]
     if not snapshot:
@@ -116,8 +130,10 @@ def reports_ok(c, result_checkpoint=None):
         return False                                       # adopted present iff the rule adopts, decided on the snapshot only
     if ad is None:
         return True
-    if not (isinstance(ad, dict) and set(ad) == {"message", "reporters"} and isinstance(ad["message"], dict) and set(ad["message"]) == CHECKPOINT_KEYS and picked[1] == _canon(ad["message"])):
+    if not (isinstance(ad, dict) and set(ad) == {"message", "reporters", "reproposal"} and isinstance(ad["message"], dict) and set(ad["message"]) == CHECKPOINT_KEYS and picked[1] == _canon(ad["message"])):
         return False
+    if ad["reproposal"] != pool.reproposal_status(now0, int(ad["message"]["expiresAt"]), close, dl):
+        return False                                       # `adopted` is the SELECTION; `reproposal` is the ACTION, gated by the deadline and the 2 s validity reserve
     rp = ad["reporters"]
     if not (isinstance(rp, list) and len(rp) >= 2 and rp == [r["witnessIndex"] for r in rr if r["message"] == ad["message"]]):
         return False
@@ -180,6 +196,11 @@ n_reversed = sum(1 for v in unions.values() if len(v) >= 2)
 check("revision 6: the document carries an equivocator example with inconsistentReports (>= 1)", n_inc >= 1)
 check("revision 6: the document carries a prefix-adoption-then-late-split example (>= 1)", n_late_adopt >= 1)
 check("revision 6: the document carries a reversed-arrival-order example: same reports, a different adopted value (>= 1 pair)", n_reversed >= 1)
+reps = [(_coll(ex).get("adopted") or {}).get("reproposal") for ex in examples]
+n_by_deadline = sum(1 for ex in examples if (_coll(ex).get("timing") or {}).get("snapshotClosedBy") == "deadline")
+check("revision 7: the document carries examples of each re-proposal status (sent, skipped_validity, skipped_deadline)", {"sent", "skipped_validity", "skipped_deadline"} <= set(reps))
+check("revision 7: the document carries an earlier-hard-stop example (snapshot closed by the deadline) (>= 1)", n_by_deadline >= 1)
+check("revision 7: the document defines selection versus action, the effort gate and the hard stop", all(w in text for w in ("selection", "effort gate", "hard stop", "skipped_validity", "skipped_deadline")))
 check("revision 6: the document defines the decision snapshot, late reports and inconsistent reporters", all(w in text for w in ("decision snapshot", "late reports", "inconsistent")))
 check("revision 5: the document states the adoption rule (exactly one value with two distinct reporters)", "exactly one value" in text and "two distinct" in text)
 print("\nFAILED: %d" % len(fails) if fails else "\nall wire-document checks hold")

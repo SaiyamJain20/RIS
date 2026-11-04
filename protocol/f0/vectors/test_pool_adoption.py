@@ -24,6 +24,15 @@ PREDICTIONS (written first):
   A11 the decision is a function of the SNAPSHOT only: prefix [(0,A),(1,A)] adopts A even if late reports (2,B),(3,B) follow; a snapshot [(2,B),(3,B)] adopts B even if (0,A),(1,A)
       are late; a snapshot with no adoption stays without adoption even if late reports would complete a pair. Late reports never cancel or create an adoption.
   A12 two different arrival orders may adopt different values (A vs B); each adopted value was recorded by an honest witness (f <= 1), so both are safe.
+  --- revision 7 (R6: selection versus action, and the original deadline) --- written BEFORE the functions exist ---
+  B1  collection_deadline_ms(now0, proposal_expires_at) = min(10000, (remaining - 2) * 1000) ms, and None (refuse before contacting any witness) when remaining <= 2 s.
+  B2  snapshot_close(deadline_ms, all_replied_at_ms) -> (ms, by): "all-replied" iff every witness replied strictly before min(5000, deadline); otherwise "deadline" when the
+      deadline is at most the 5 s reply timeout (a tie is the deadline), else "reply-timeout". The close time never exceeds min(5000, deadline).
+  B3  reproposal_status(now0, adopted_expires_at, snapshot_closed_at_ms, deadline_ms) is "skipped_deadline" when the snapshot closed at or after the deadline (checked first),
+      "skipped_validity" when the adopted value has 2000 ms or less of validity left at the close, and "sent" otherwise. The exact boundary is 2000 ms (skipped) versus 2001 ms (sent).
+      Agent 3's synthetic observation (start 1000, new proposal expiry 1030, original deadline 10 s, value expiring 1006, snapshot closing at 5 s) is skipped_validity although the
+      pair rule selects the value (the selection is `adopted`, the action is `reproposal`; they are different facts).
+  B4  the status is deterministic, monotone in the value's expiry (a later expiry never turns "sent" into a skip), and "sent" implies close < deadline and > 2000 ms left.
 
     python3 -B -I protocol/f0/vectors/test_pool_adoption.py   (standard library only; exit 0 = all expectations hold)
 """
@@ -124,6 +133,55 @@ check("A11 reversed order: snapshot (2,B),(3,B) adopts B although (0,A),(1,A) ar
 check("A11 a snapshot without adoption stays so even if late reports would complete a pair", pa.decide([rep(0, A)], [rep(1, A)], SEQ) is None)
 check("A11 late reports never create an adoption on an ambiguous snapshot", pa.decide([rep(0, A), rep(1, A), rep(2, B), rep(3, B)], [rep(1, A)], SEQ) is None)
 check("A12 the two arrival orders adopt different values and both were recorded by an honest witness", {pa.decide([rep(0, A), rep(1, A)], late_split, SEQ), pa.decide(late_split, [rep(0, A), rep(1, A)], SEQ)} == {A, B})
+
+
+# --- B1-B4: R6 -------------------------------------------------------------------------------------------------------------
+cd, sc, rs = pa.collection_deadline_ms, pa.snapshot_close, pa.reproposal_status
+check("B1 original: start 1000, expiry 1030 -> 10 s", cd(1000, 1030) == 10000)
+check("B1 remaining 12 s -> still capped at 10 s", cd(1000, 1012) == 10000)
+check("B1 remaining 11 s -> 9 s", cd(1000, 1011) == 9000)
+check("B1 agent 3's earlier hard stop: remaining 4 s -> 2 s, before the 5 s reply timeout", cd(1000, 1004) == 2000)
+check("B1 remaining 3 s -> 1 s", cd(1000, 1003) == 1000)
+check("B1 remaining exactly 2 s -> refuse before contacting any witness", cd(1000, 1002) is None)
+check("B1 remaining below 2 s and an expired proposal -> refuse", cd(1000, 1001) is None and cd(1000, 1000) is None and cd(1000, 999) is None)
+check("B2 all four replied at 1200 ms -> all-replied", sc(10000, 1200) == (1200, "all-replied"))
+check("B2 a witness silent -> the 5 s reply timeout closes it", sc(10000, None) == (5000, "reply-timeout"))
+check("B2 all replied exactly at 5000 is not 'before' the limit -> reply-timeout", sc(10000, 5000) == (5000, "reply-timeout"))
+check("B2 deadline 2 s, nobody completes -> the deadline closes it", sc(2000, None) == (2000, "deadline"))
+check("B2 deadline exactly 5 s is a tie and is the deadline", sc(5000, None) == (5000, "deadline"))
+check("B2 deadline 6 s -> the reply timeout still closes first", sc(6000, None) == (5000, "reply-timeout"))
+check("B2 deadline 2 s but all replied at 1500 -> all-replied", sc(2000, 1500) == (1500, "all-replied"))
+check("B3 agent 3's observation: value expiring 1006, close 5 s -> skipped_validity", rs(1000, 1006, 5000, 10000) == "skipped_validity")
+check("B3 exactly 2 s left (expiry 1007, close 5 s) -> skipped_validity", rs(1000, 1007, 5000, 10000) == "skipped_validity")
+check("B3 2001 ms left (expiry 1007, close 4999 ms) -> sent", rs(1000, 1007, 4999, 10000) == "sent")
+check("B3 below 2 s (expiry 1005) -> skipped_validity", rs(1000, 1005, 5000, 10000) == "skipped_validity")
+check("B3 already expired at the close (expiry 1004) -> skipped_validity", rs(1000, 1004, 5000, 10000) == "skipped_validity")
+check("B3 eligible (expiry 1030, close 5 s) -> sent", rs(1000, 1030, 5000, 10000) == "sent")
+check("B3 earlier hard stop: deadline 2 s, close at 2 s, plenty of validity -> skipped_deadline", rs(1000, 1030, 2000, 2000) == "skipped_deadline")
+check("B3 close exactly at the deadline -> skipped_deadline even with plenty of validity", rs(1000, 1030, 5000, 5000) == "skipped_deadline")
+check("B3 the deadline is checked before validity (both fail -> skipped_deadline)", rs(1000, 1001, 2000, 2000) == "skipped_deadline")
+bad, n = [], 0
+for prop in range(1000, 1016):
+    d = cd(1000, prop)
+    if d is None:
+        continue
+    for t_all in [None, 0, 500, 1999, 2000, 4999, 5000, 7000]:
+        close, by = sc(d, t_all)
+        n += 1
+        if not 0 <= close <= min(5000, d) or by not in ("all-replied", "reply-timeout", "deadline"):
+            bad.append(("close", prop, t_all, close, by))
+        prev = None
+        for exp in range(1000, 1041):
+            st = rs(1000, exp, close, d)
+            if st == "sent" and not (close < d and exp * 1000 - (1000 * 1000 + close) > 2000):
+                bad.append(("sent-eligibility", prop, t_all, exp))
+            if (close >= d) != (st == "skipped_deadline"):
+                bad.append(("deadline-iff", prop, t_all, exp))
+            if prev == "sent" and st != "sent":
+                bad.append(("monotone", prop, t_all, exp))
+            prev = st
+check(f"B4 exhaustive ({n} schedule shapes x 41 expiries): close bounded, deadline iff, sent implies eligible, monotone in the expiry", not bad)
+check("B3 refuses non-integer inputs", pa.refuses(lambda: rs(1000.5, 1006, 5000, 10000)) and pa.refuses(lambda: rs(1000, True, 5000, 10000)) and pa.refuses(lambda: cd("1000", 1030)))
 
 print("\nFAILED: %d" % len(FAILS) if FAILS else "\nall expectations hold")
 sys.exit(1 if FAILS else 0)
