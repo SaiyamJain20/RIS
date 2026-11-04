@@ -19,7 +19,8 @@ import {
     ANCHOR_CRL,
     ANCHOR_TEMP_ACL,
     MUT_NO_VERSION_MONOTONE,
-    MUT_ALL
+    mutationsAllowed,
+    isRepaired
 } from "./types/ProtocolTypes.sol";
 import {SigLib} from "./lib/SigLib.sol";
 import {Bootstrapped} from "./lib/Bootstrapped.sol";
@@ -92,7 +93,7 @@ contract TMSC is Bootstrapped {
 
     /// The PBC chain id is the chain this contract is deployed on.
     constructor(Profile profile_, uint256 mutations_, LSC lsc_, AuthorityConfig[] memory authorities_) {
-        if (mutations_ & ~MUT_ALL != 0 || (mutations_ != 0 && profile_ != Profile.REPAIRED_E)) {
+        if (!mutationsAllowed(profile_, mutations_)) {
             revert Rejected(ErrorCode.MALFORMED);
         }
         profile = profile_;
@@ -185,7 +186,7 @@ contract TMSC is Bootstrapped {
     }
 
     function _checkFreshness(AnchorState storage st, uint64 version, uint64 validUntil) internal view {
-        if (profile != Profile.REPAIRED_E) return;
+        if (!isRepaired(profile)) return;
         if (st.published && version <= st.version && mutations & MUT_NO_VERSION_MONOTONE == 0) {
             revert Rejected(ErrorCode.STALE_ANCHOR);
         }
@@ -298,7 +299,7 @@ contract TMSC is Bootstrapped {
         if (atTime < c.validFrom || atTime >= c.validUntil) return (ErrorCode.EXPIRED, 0, 0);
         AnchorState storage st = _crl[c.issuer];
         validUntil = c.validUntil;
-        if (profile == Profile.REPAIRED_E) {
+        if (isRepaired(profile)) {
             if (!st.published || atTime >= st.validUntil) return (ErrorCode.STALE_ANCHOR, 0, 0);
             if (st.validUntil < validUntil) validUntil = st.validUntil;
         }
@@ -316,7 +317,7 @@ contract TMSC is Bootstrapped {
     {
         if (!isAuthority[t.authority]) return (ErrorCode.UNKNOWN_AUTHORITY, 0, 0);
         AnchorState storage st = _acl[t.authority];
-        if (profile == Profile.REPAIRED_E && (!st.published || atTime >= st.validUntil)) {
+        if (isRepaired(profile) && (!st.published || atTime >= st.validUntil)) {
             return (ErrorCode.STALE_ANCHOR, 0, 0);
         }
         if (!st.published) return (ErrorCode.REVOKED, 0, 0);
@@ -324,7 +325,7 @@ contract TMSC is Bootstrapped {
         if (!w.present) return (ErrorCode.REVOKED, 0, 0);
         if (atTime < w.validFrom || atTime >= w.validUntil) return (ErrorCode.EXPIRED, 0, 0);
         validUntil = w.validUntil;
-        if (profile == Profile.REPAIRED_E && st.validUntil < validUntil) validUntil = st.validUntil;
+        if (isRepaired(profile) && st.validUntil < validUntil) validUntil = st.validUntil;
         return (ErrorCode.NONE, st.version, validUntil);
     }
 

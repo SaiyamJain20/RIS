@@ -9,7 +9,13 @@ pragma solidity 0.8.37;
 enum Profile {
     PAPER_STRICT, // paper actuators, signed issuer-scoped lists, latest-appended list wins
     PAPER_MINIMAL, // as strict, but list signatures are not verified on chain (admin caller trusted)
-    REPAIRED_E // signed decisions, checkpoints, nonces, monotone versions (project extension)
+    REPAIRED_E, // signed decisions, checkpoints, nonces, monotone versions (project extension)
+    REPAIRED_F // REPAIRED_E plus q-of-n witnesses, quorum governance and a policy pin (F extension)
+}
+
+/// True for the profiles that carry the project's repairs (A-F1 design 2.2 section 1).
+function isRepaired(Profile p) pure returns (bool) {
+    return p == Profile.REPAIRED_E || p == Profile.REPAIRED_F;
 }
 
 /// @dev Stable rejection classes. Indices 0-15 follow interfaces/README.md v0 order;
@@ -55,16 +61,29 @@ uint8 constant CREDENTIAL_TEMPORAL = 2;
 uint8 constant ANCHOR_CRL = 1;
 uint8 constant ANCHOR_TEMP_ACL = 2;
 
-// Deliberate check removals for `mutant-*` deployments (REPAIRED_E only). They exist to show that
-// tests and the evaluation oracle detect a missing check; a mutant result is never evidence about
-// HMBC. Paper profiles reject any non-zero mutation set.
+// Deliberate check removals for `mutant-*` deployments. They exist to show that tests and the
+// evaluation oracle detect a missing check; a mutant result is never evidence about HMBC. Bits 0-5
+// are allowed in either repaired profile, bits 6-8 only in REPAIRED_F; paper profiles reject any
+// non-zero mutation set.
 uint256 constant MUT_NO_DESTINATION_BINDING = 1 << 0; // DecisionVerifier step 2 skipped
 uint256 constant MUT_NO_STATE_BARRIER = 1 << 1; // stateSequence and authEpoch vs checkpoint skipped
 uint256 constant MUT_NO_RECORD_FRESHNESS = 1 << 2; // DecisionVerifier step 13 skipped
 uint256 constant MUT_NO_NONCE = 1 << 3; // KSSC neither checks nor consumes (gid, nonce)
 uint256 constant MUT_NO_VERSION_MONOTONE = 1 << 4; // TMSC accepts non-increasing list versions
 uint256 constant MUT_NO_RECEIPT_BINDING = 1 << 5; // PSC skips receipt requestDigest/gid/dataId checks
-uint256 constant MUT_ALL = (1 << 6) - 1;
+uint256 constant MUT_NO_GOV_ACTION_BINDING = 1 << 6; // Governance hashes action := 0 (REPAIRED_F)
+uint256 constant MUT_NO_GOV_NONCE = 1 << 7; // Governance neither checks nor advances its nonce (REPAIRED_F)
+uint256 constant MUT_NO_POLICY_PIN = 1 << 8; // KSSC skips the checkpoint policyVersion pin (REPAIRED_F)
+uint256 constant MUT_E_BITS = (1 << 6) - 1;
+uint256 constant MUT_ALL = (1 << 9) - 1;
+
+/// Constructor guard shared by every mask holder (design 2.2 section 1).
+function mutationsAllowed(Profile p, uint256 m) pure returns (bool) {
+    if (m & ~MUT_ALL != 0) return false;
+    if (m == 0) return true;
+    if (p == Profile.REPAIRED_F) return true;
+    return p == Profile.REPAIRED_E && m & ~MUT_E_BITS == 0;
+}
 
 /// Possession proof signed by the GID key (III-D2 "signed challenge"; GID = address, IV-D).
 struct Registration {

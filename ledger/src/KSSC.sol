@@ -2,7 +2,7 @@
 pragma solidity 0.8.37;
 
 import {
-    ErrorCode, Rejected, Profile, HMBCHash, StateCheckpoint, MUT_NO_NONCE, MUT_ALL
+    ErrorCode, Rejected, Profile, HMBCHash, StateCheckpoint, MUT_NO_NONCE, mutationsAllowed, isRepaired
 } from "./types/ProtocolTypes.sol";
 import {QuorumLib} from "./lib/SigLib.sol";
 import {Bootstrapped} from "./lib/Bootstrapped.sol";
@@ -99,10 +99,10 @@ contract KSSC is Bootstrapped {
     constructor(Config memory c) {
         if (c.dbcChainId != block.chainid) revert Rejected(ErrorCode.WRONG_DESTINATION);
         if (c.sourcePsc == address(0) || c.sourceChainId == c.dbcChainId) revert Rejected(ErrorCode.MALFORMED);
-        if (c.mutations & ~MUT_ALL != 0 || (c.mutations != 0 && c.profile != Profile.REPAIRED_E)) {
+        if (!mutationsAllowed(c.profile, c.mutations)) {
             revert Rejected(ErrorCode.MALFORMED);
         }
-        if (c.profile == Profile.REPAIRED_E) {
+        if (isRepaired(c.profile)) {
             if (c.threshold == 0 || c.threshold > c.witnesses.length || c.maxCheckpointTtl == 0) {
                 revert Rejected(ErrorCode.MALFORMED);
             }
@@ -137,7 +137,7 @@ contract KSSC is Bootstrapped {
     /// Accepts a witness-signed view of PBC state. Revocation takes effect for new grants
     /// when the checkpoint containing it is accepted here (interfaces v0).
     function acceptState(StateCheckpoint calldata cp, bytes[] calldata signatures) external whenSealed {
-        if (profile != Profile.REPAIRED_E) revert Rejected(ErrorCode.WRONG_PROFILE);
+        if (!isRepaired(profile)) revert Rejected(ErrorCode.WRONG_PROFILE);
         StateCheckpoint memory c = cp;
         if (c.sourceChainId != sourceChainId || c.psc != sourcePsc) revert Rejected(ErrorCode.WRONG_DESTINATION);
         if (c.witnessSetVersion != witnessSetVersion) revert Rejected(ErrorCode.STALE_STATE);

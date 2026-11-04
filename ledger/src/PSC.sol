@@ -11,7 +11,8 @@ import {
     CredentialRecord,
     GrantReceipt,
     ACTION_READ,
-    MUT_ALL,
+    mutationsAllowed,
+    isRepaired,
     MUT_NO_RECEIPT_BINDING
 } from "./types/ProtocolTypes.sol";
 import {SigLib, QuorumLib} from "./lib/SigLib.sol";
@@ -107,10 +108,10 @@ contract PSC is Bootstrapped {
     /// The PBC chain id is the chain this contract is deployed on.
     constructor(Config memory c) {
         if (c.relay == address(0) || c.maxRequestTtl == 0) revert Rejected(ErrorCode.MALFORMED);
-        if (c.mutations & ~MUT_ALL != 0 || (c.mutations != 0 && c.profile != Profile.REPAIRED_E)) {
+        if (!mutationsAllowed(c.profile, c.mutations)) {
             revert Rejected(ErrorCode.MALFORMED);
         }
-        if (c.profile == Profile.REPAIRED_E) {
+        if (isRepaired(c.profile)) {
             if (c.threshold == 0 || c.threshold > c.witnesses.length) revert Rejected(ErrorCode.MALFORMED);
             for (uint256 i = 0; i < c.witnesses.length; i++) {
                 if (c.witnesses[i] == address(0)) revert Rejected(ErrorCode.MALFORMED);
@@ -201,7 +202,7 @@ contract PSC is Bootstrapped {
         if (_requests[requestDigest].status != RequestStatus.NONE) return ErrorCode.REPLAY;
         if (r.keyEpoch != 0) return ErrorCode.WRONG_EPOCH;
         if (r.policyVersion != policyVersion) return ErrorCode.STALE_STATE;
-        if (profile == Profile.REPAIRED_E && r.authEpoch != tmsc.authEpoch()) return ErrorCode.STALE_STATE;
+        if (isRepaired(profile) && r.authEpoch != tmsc.authEpoch()) return ErrorCode.STALE_STATE;
         return ErrorCode.NONE;
     }
 
@@ -219,7 +220,7 @@ contract PSC is Bootstrapped {
         returns (uint256 logId)
     {
         // Repaired-e records outcomes only with DBC grant evidence (reportAttestedOutcome, A1-0008).
-        if (profile == Profile.REPAIRED_E) revert Rejected(ErrorCode.WRONG_PROFILE);
+        if (isRepaired(profile)) revert Rejected(ErrorCode.WRONG_PROFILE);
         if (msg.sender != relay) revert Rejected(ErrorCode.UNAUTHORIZED_CALLER);
         RequestRecord storage rec = _requests[requestDigest];
         if (rec.status == RequestStatus.NONE) revert Rejected(ErrorCode.WRONG_SUBJECT);
@@ -243,7 +244,7 @@ contract PSC is Bootstrapped {
         GrantReceipt calldata receipt,
         bytes[] calldata signatures
     ) external whenSealed returns (uint256 logId) {
-        if (profile != Profile.REPAIRED_E) revert Rejected(ErrorCode.WRONG_PROFILE);
+        if (!isRepaired(profile)) revert Rejected(ErrorCode.WRONG_PROFILE);
         if (msg.sender != relay) revert Rejected(ErrorCode.UNAUTHORIZED_CALLER);
         RequestRecord storage rec = _requests[requestDigest];
         if (rec.status == RequestStatus.NONE) revert Rejected(ErrorCode.WRONG_SUBJECT);

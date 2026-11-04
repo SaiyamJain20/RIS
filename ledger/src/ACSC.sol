@@ -13,7 +13,8 @@ import {
     ForwardedRequest,
     ACTION_READ,
     RESULT_ALLOW,
-    MUT_ALL
+    mutationsAllowed,
+    isRepaired
 } from "./types/ProtocolTypes.sol";
 import {Bootstrapped} from "./lib/Bootstrapped.sol";
 import {DecisionVerifier} from "./DecisionVerifier.sol";
@@ -88,7 +89,7 @@ contract ACSC is Bootstrapped {
     ) {
         if (dbcChainId_ != block.chainid) revert Rejected(ErrorCode.WRONG_DESTINATION);
         if (sourcePsc_ == address(0) || grantTtl_ == 0) revert Rejected(ErrorCode.MALFORMED);
-        if (mutations_ & ~MUT_ALL != 0 || (mutations_ != 0 && profile_ != Profile.REPAIRED_E)) {
+        if (!mutationsAllowed(profile_, mutations_)) {
             revert Rejected(ErrorCode.MALFORMED);
         }
         profile = profile_;
@@ -130,7 +131,7 @@ contract ACSC is Bootstrapped {
 
     function _checkWiring() internal view override {
         if (address(kssc) == address(0)) revert Rejected(ErrorCode.MALFORMED);
-        if (profile != Profile.REPAIRED_E && pscRelay == address(0)) revert Rejected(ErrorCode.MALFORMED);
+        if (!isRepaired(profile) && pscRelay == address(0)) revert Rejected(ErrorCode.MALFORMED);
     }
 
     // ------------------------------------------------------------------ paper profiles
@@ -142,7 +143,7 @@ contract ACSC is Bootstrapped {
         whenSealed
         returns (bool allowed, bytes32 grantId)
     {
-        if (profile == Profile.REPAIRED_E) revert Rejected(ErrorCode.WRONG_PROFILE);
+        if (isRepaired(profile)) revert Rejected(ErrorCode.WRONG_PROFILE);
         if (msg.sender != pscRelay) revert Rejected(ErrorCode.UNAUTHORIZED_CALLER);
         if (fwd.action != ACTION_READ || fwd.gid == address(0)) revert Rejected(ErrorCode.MALFORMED);
         if (!_data[fwd.dataId].exists) revert Rejected(ErrorCode.MALFORMED);
@@ -176,7 +177,7 @@ contract ACSC is Bootstrapped {
         DecisionCertificate calldata certificate,
         CredentialRecord[] calldata records
     ) external whenSealed returns (bytes32 grantId) {
-        if (profile != Profile.REPAIRED_E) revert Rejected(ErrorCode.WRONG_PROFILE);
+        if (!isRepaired(profile)) revert Rejected(ErrorCode.WRONG_PROFILE);
         AccessRequest memory r = request;
         DecisionCertificate memory c = certificate;
         CredentialRecord[] memory recs = records;
