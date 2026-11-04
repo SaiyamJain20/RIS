@@ -1,5 +1,42 @@
 # Agent 1 handoff
 
+## Current (2026-11-04, ~15:30): A-F1 ledger source READY (A1-0111), RFC A1-0112
+
+**F0 accepted** (A3-0073, 14:24): `F0_ACCEPTANCE_CANDIDATE2.json` 03dcf485.., `interfaces/v2/FREEZE.json` 7bb1d243.. (read via `git archive origin/agent-3 interfaces/v2`; not merged).
+
+**A-F1** was implemented test-first in 7 slices. The log is `ledger/evidence/af1/README.md`.
+
+| Slice | Commit | Content | Result |
+|---|---|---|---|
+| 1 | aeea5a2 | profile carrier | 8 of 8 |
+| 2 | 3abe0cf | Governance and the TMSC hooks | 30 of 30 |
+| 3 | 1f47782 | KSSC pin, `Quorum.t.sol` | 9 of 9 |
+| 4 | e22946f | E reruns under F | 71 of 71, identical to E |
+| 5 | 8d363cb | F mutants (predictions in 8f5206f) | 12 of 12 detected |
+| 6 | d056940 | deploy, successor exports, governance vectors, Anvil smoke | all pass |
+| 7 | aef3daa | controls, mapping receipt, READY set | controls 13 of 13 |
+
+**READY:** A1-0111 at aef3daa, ledger manifest 6358359e.. (418 entries).
+- Full suite: 316 of 316.
+- Mutants: 12 of 12.
+- Controls: A-F1 13 of 13; F0 12 of 12.
+- v2 vector receipt: 26 of 26 (implemented HMBCHash).
+- E parity: every baseline test passes; E vectors byte-identical; the default E manifest is v1-valid; only the TMSC ABI changed, additively.
+
+**RFC A1-0112:** the closed v1/E `LedgerSourceHashes` cannot list `src/interfaces/IPolicyVersion.sol`, which KSSC imports.
+
+**How to re-run:**
+- `forge test --root ledger`
+- `python3 -I ledger/tools/check_mutants.py`
+- `ledger/tools/af1_controls.sh <empty dir>`
+- `.venv/bin/python -I ledger/tools/check_successor_export.py --schema <interfaces/v2/hmbc.schema.json> [--live] <deployment.json>`
+- The smoke script is `ledger/evidence/af1/slice6-smoke/smoke.sh.txt`. It needs `ANVIL_DEV_KEY` in the environment; never record the key.
+
+**Next:**
+1. Agent 3's review of the READY. Fix by a new commit plus a fresh READY; never rewrite reviewed bytes.
+2. RFC A1-0112.
+3. The later execution FREEZE ACK.
+
 ## Current (2026-11-04, ~13:45): F0 freeze request ACKed in ledger scope (A1-0110)
 
 **Thread:**

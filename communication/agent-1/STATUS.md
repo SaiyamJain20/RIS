@@ -1,7 +1,20 @@
 # Agent 1 status
 
 - Role: ledger and policy (`ledger/**`).
-- State (2026-11-03 IST): **WAITING (F0 coordination)**.
+- State (2026-11-04 IST): **READY: A-F1 ledger source (A1-0111) at aef3daa**, ledger manifest 6358359e.. (418 entries). It awaits agent 3's review.
+  - F0 was accepted at 14:24 (A3-0073: `F0_ACCEPTANCE_CANDIDATE2.json` 03dcf485.., `interfaces/v2/FREEZE.json` 7bb1d243..).
+  - Implementation and isolated tests only; integrated execution stays locked.
+  - **A-F1 implemented in 7 slices** (log `ledger/evidence/af1/README.md`):
+    - Profile carrier, Governance, TMSC hooks and the KSSC policy pin.
+    - E reruns under F: 71 tests, identical to E.
+    - F mutants: 12 of 12 detected, against predictions pre-registered first.
+    - The F deploy, the v2 successor exports and the governance vectors.
+    - Controls: 13 of 13.
+    - Full suite 316 of 316, with every baseline test passing.
+    - Mapping receipt: 26 of 26 on the published interfaces/v2.
+    - Isolated Anvil smoke: all v2 manifests pass the schema and the live M4 equalities; masked check 27 of 27.
+  - **A1-0112** RFC: the closed E source map cannot list `src/interfaces/IPolicyVersion.sol` (a KSSC import).
+  - History of the earlier states follows.
   - Agent 3 reviewed and accepted the ledger F0 input (A3-0053: Forge 188 PASS, checker clean).
   - It asked for a grouped RFC on D-a..D-f. That is published as **A1-0088**, with every choice UNRESOLVED.
   - No peer push since 2026-10-13. Waiting for agent 3's F0 plan and choices, and for agent 2's key-control enumeration and D50 RFC.
@@ -113,7 +126,7 @@
     - Not READY or execution.
     - Next: agent 2's freeze ACK, then agent 3's acceptance record, then A-F1 test-first.
   - No F implementation has started.
-- Active RQ/task: F / F0, PLAN.md section 6, first bullet (agent 1 part), assigned in A3-0052. The human go-ahead for F0 planning is recorded in D51.
+- Active RQ/task: F, the A-F1 ledger implementation (accepted F0 plan, design 2.2, A1-0109). Source READY is A1-0111. F0 (PLAN.md section 6) is complete.
 - Interface version: v1 FROZEN (FREEZE.json f700292e..), unchanged.
 - Git: branch `agent-1`.
   - Base is the common F0 baseline 376347d. Main and agent-1/2/3 were all at that commit on 2026-10-12, under D51.
@@ -141,12 +154,12 @@
   - all review is correlated (same model).
 - Blocker: none.
 - Next action:
-  - review agent 3's response to A1-0092 and the exact source/interface plan when published;
-  - answer design questions on `ledger/f0/A-F1-DESIGN.md`;
-  - ACK agent 2's exact D50 formula once it names the D-f inputs;
-  - ACK the exact F0 freeze;
-  - then A-F1 test-first, and only after the F0 freeze ACKs.
+  - answer agent 3's review of A1-0111 (fixes are made by new commits and a fresh READY; reviewed bytes are never rewritten);
+  - follow up RFC A1-0112;
+  - ACK the later execution FREEZE on its exact bytes. No integrated run before that.
 - Last messages sent:
+  - A1-0112 RFC (E source map closure gap);
+  - A1-0111 READY (A-F1 ledger source at aef3daa, manifest 6358359e..);
   - A1-0110 ACK (F0 freeze request f9f0906f.., ledger scope);
   - A1-0109 ACK (interface-v2 candidate 2, exact mapping/layout, ledger scope);
   - A1-0108 ACK (EXPORT-LAYOUTS revision 9, ledger-facing scope);
