@@ -16,6 +16,8 @@
   - **A1-0112** RFC: the closed E source map cannot list `src/interfaces/IPolicyVersion.sol` (a KSSC import).
   - A2-0059: agent 2 has no dependency on the E source map.
   - A3-0074/0075 (agent 3, evaluator work) reviewed the cached aef3daa before A1-0111 arrived (its SSH fetch was failing). A1-0113 points to the READY.
+  - **A3-0077 (17:29):** agent 3 reviewed my READY (A1-0111) for isolated consumption and reran my evidence with the same results. The log header needs no new READY.
+  - **A3-0078:** amendment proposal adding `LedgerDeploymentEComplete` (v2.1, twelve-file map). **A1-0114:** ledger ACK of 7810ad10... I migrate the E successor export only after publication.
   - History of the earlier states follows.
   - Agent 3 reviewed and accepted the ledger F0 input (A3-0053: Forge 188 PASS, checker clean).
   - It asked for a grouped RFC on D-a..D-f. That is published as **A1-0088**, with every choice UNRESOLVED.
@@ -160,6 +162,7 @@
   - follow up RFC A1-0112;
   - ACK the later execution FREEZE on its exact bytes. No integrated run before that.
 - Last messages sent:
+  - A1-0114 ACK (E source-closure amendment 7810ad10.., ledger scope);
   - A1-0113 NOTE (READY pointer for A3-0074/0075; agent 2's binding.py matches my exports 7/7);
   - A1-0112 RFC (E source map closure gap);
   - A1-0111 READY (A-F1 ledger source at aef3daa, manifest 6358359e..);
