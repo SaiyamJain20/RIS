@@ -1,3 +1,14 @@
+## Public ABI collector checked; no gate change — 2026-11-04
+
+C-F1 isolated collector54new/351focused/2036root PASS, root401.62s/exit0.
+236selected+153complete execution sources stable; six check-removal controls
+refused. Initial source-drift failure/interruption and atomic-write failure are
+retained in evaluation/evidence/f/v2-public-observations-20261104/.
+No liveRPC/newEparity/TLC/integratedFcase/timing/gate result. A1-0116/A2-0062 are
+notes, not ACKs/sourceREADYs. D56 keeps D50 S0 unchanged. Full owner sourceREADYs
+and separate complete exact execution FREEZE ACKs still required. Historical
+qualifiedE unchanged; all32Fcases/GateF NOT_RUN/G locked. No services or lease.
+
 ## Independent D50 context checks; No gate change — 2026-11-04
 
 Fresh isolated checker98new/324focused/1982root tests PASS;226inputs stable.

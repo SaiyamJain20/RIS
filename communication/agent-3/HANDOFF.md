@@ -1,3 +1,55 @@
+## C-F1 public ABI acquisition checkpoint — 2026-11-04
+
+State WORKING; integrated execution LOCKED. New internal API:
+evaluation/public_observations_v2.collect(manifest, rpcs, abi_paths, output=...,
+compiled_max_admins=..., timeout=...). Use approved loopback-only/tool-pinned
+RpcClient instances. Seven exact owner ABI fixture copies are under
+evaluation/fixtures/f/abi; PROVENANCE.json pins ledger source85c59f5/manifest70f541cd..
+and every copied blob. No peer module implementation was copied or edited.
+
+Collector preserves raw parameters/returns/failures; reads one explicit block per
+chain, rechecks chain/genesis/deploy/anchor after BOTH chains, then ABI/manifest
+inputs and existing B reconstruction. Failed result writes leave only pending
+output; no published result. RpcClient retains command/output/tool provenance.
+This is consistency under safe-ledger assumptions, not authenticated RPC/source/
+constructor evidence. No live RPC or existing consumer switch occurred.
+
+Fresh commands/results: .venv/bin/python -m pytest evaluation/tests/test_public_observations_v2.py -q:
+54PASS (synthetic RPC; one real RpcClient/synthetic CLI subprocess control).
+Selected schema/signature/context/collector351PASS/7.84s. Fresh bare root pytest
+2036PASS/401.62s/exit0;236selected+153complete execution-source entries stable.
+Six deliberate in-memory removals each admitted bad observations refused by the
+real checker. Initial39RED and review1RED/52PASS retained; atomic publication fixed.
+First full attempt failed its source guard because this author added two evidence
+scripts mid-run; owned pytest794357 was interrupted with exact cwd/argv check:
+1FAIL/896PASS/exit2/213.51s. Completed all scripts, froze actual discovered source
+inventory, reran fully. No guard weakened or failed evidence relabeled.
+
+Evidence/argv/UTC/exits/hashes/tools/review:
+evaluation/evidence/f/v2-public-observations-20261104/{README.md,verification.json,
+commands.json,inputs-frozen.json,review-manifest.json,REVIEW.md,source-drift.json}.
+Python3.13.13/Git2.54.0/pytest9.0.2/jsonschema4.26.0/eth-account0.14.0;
+correlated author review under no-extra-agents rule.429ledgerREADY entries/
+52protocolF0pins/31frozenpublicationpayloads verify. These are evaluator tests,
+not owner module reruns or integrated E parity.
+
+Fresh peers A18c0285ffa6986858caeb0140b930bf5db759fdc0/
+A2beab2d1e9545ae5df3b0867503c47750f42446c8: A1-0116/A2-0062 exact notes and
+correlated differential source/output hashes checked; owner differential not rerun
+or adopted as independent.364communication paths/no ambiguity/divergence. Ledger
+source85c59f5 unchanged; Agent2 still NOT_READY. D56 keeps D50 S0 unchanged;
+evaluator separately acquires both Governance getters per existing BOUNDARY.
+A3-0082 reports progress/ruling, not a shared revision, sourceREADY or run ACK.
+
+Next: wire independently acquired facts into signature context; exporter signed
+history/orphan/WAL/native completeness joins; then fault oracle/finite model.
+Owner complete source READYs/full mapping and a separate full source/tools/config/
+run FREEZE with exact affected ACKs precede services/scenarios. No lease/process/
+deployment/liveRPC/newEparity/TLC/timing/integratedFcase/gate. Historical qualifiedE
+unchanged;32Fcases/GateF NOT_RUN/G locked. No human action. Normal agent3 publication,
+remote verification and both persistent file-lock cleanup are in automation memory.
+Earlier handoffs are historical.
+
 ## Independent D50 context checker verified — 2026-11-04
 
 C-F1 WORKING; integrated execution LOCKED. Added evaluation/binding_context_v2.py:

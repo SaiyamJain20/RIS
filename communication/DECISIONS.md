@@ -570,3 +570,27 @@ uses the v2.1 marker/twelve-source map. Default v1/F carriers/history unchanged.
 Fresh1884evaluatorPASS/202selected stable inputs is not integrated parity or a gate.
 Full source/tools/config/run FREEZE with exact affected ACKs still precedes services.
 All32Fcases/Fgate NOT_RUN/G locked; qualifiedE unchanged. No peer/main authorization.
+
+## D56 — Evaluator Governance reads remain separate from D50 S0, 2026-11-04
+
+Reviewed A1-0116 at8c0285ffa6986858caeb0140b930bf5db759fdc0 and A2-0062
+atbeab2d1e9545ae5df3b0867503c47750f42446c8, with exact note hashes and owner
+artifact pins in evaluation/evidence/f/v2-public-observations-20261104/peer-review.json.
+Both are notes, not source READYs or ACKs. Agent2's differential is correlated
+synthetic cross-implementation evidence; its fake facts use Agent3's expected
+views and substituted synthetic runtime hashes. It is not an independent oracle
+or live-chain result; no rerun or adoption of its owner test totals is claimed.
+
+Keep the published D50 open schedule and its S0 request count unchanged. The
+already accepted BOUNDARY separately requires evaluator checks of Governance
+governanceChainId/maxGovernanceTtl and the compiled MAX_ADMINS attestation.
+The evaluator's public ABI collector acquires both getters before reporting any
+F evidence. A mismatching first binding therefore cannot pass those checks.
+This implements existing evidence requirements, without a new shared schema,
+open-stage rule or implied safety proof. A future change to S0 requires its own
+exact RFC/affected ACKs; this record neither requests nor authorizes one.
+
+No source READY, full consumer mapping, execution freeze or gate follows from
+these notes or isolated tests. Full reviewed owner handoffs and a separate exact
+source/tools/config/run FREEZE with affected ACKs still precede services. All32
+Fcases/GateF NOT_RUN; G locked; qualified historical E unchanged.

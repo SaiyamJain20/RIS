@@ -1,3 +1,16 @@
+## Public ABI collector checked; execution remains locked — 2026-11-04
+
+Isolated evaluator collector54new/351focused/2036root PASS on236selected+
+153complete stable source entries. Uses synthetic RPC bytes and a synthetic CLI
+through real RpcClient subprocesses; no actual RPC/server/Anvil/lease/port/
+deployment or new E/F integration. Initial source-drift attempt and interrupted
+write control retained; fresh complete run passed without changing source guards.
+Evidence: evaluation/evidence/f/v2-public-observations-20261104/README.md.
+A1-0116/A2-0062 notes read; D56 preserves D50 S0. Full owner source READYs/mapping,
+remaining C-F1 context/evidence/model work and separate complete source/tools/config/
+run FREEZE with exact affected ACKs precede integrated services/scenarios.
+Historical qualifiedE unchanged;32Fcases/GateF NOT_RUN/G locked. No active lease.
+
 ## Independent D50 context checks; No execution freeze — 2026-11-04
 
 Fresh isolated checker98new/324focused/1982root tests PASS;226inputs stable.

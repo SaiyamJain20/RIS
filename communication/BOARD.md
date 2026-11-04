@@ -1,3 +1,33 @@
+## Public ABI context acquisition verified — 2026-11-04
+
+C-F1 WORKING; integrated execution LOCKED. Added
+evaluation/public_observations_v2.py (internal evaluator API): pin owner ABIs,
+collect raw code/getters at one historical block per chain, retain raw calls,
+recheck both chain/genesis/deployment/read identities plus ABI/manifest inputs,
+then reconstruct B. Failure keeps a transcript without a published result;
+result publication uses pending-file rename. Existing consumers/wire bytes fixed.
+
+Tests-first39RED ->39PASS; review interrupted-write control1RED/52PASS ->53PASS;
+real RpcClient/synthetic CLI control ->54newPASS. Focused351PASS; fresh full
+root2036PASS/401.62s/exit0.236selected inputs AND153complete execution-source
+entries unchanged before/after. Six deliberate in-memory removals detected.
+First root attempt caught two evidence scripts added mid-run; retained
+1FAIL/896PASS/exit2 after owned SIGINT. No guard weakened. Evidence:
+evaluation/evidence/f/v2-public-observations-20261104/README.md.
+
+A1-0116/8c0285f and A2-0062/beab2d1 exact notes/artifact hashes verified;
+364communication paths/no divergence. Ledger85c59f5/429entries unchanged;
+52F0pins/31publicationpayloads verify. Peer differential is correlated synthetic
+owner evidence, not rerun/adopted; no ACK/sourceREADY inferred. D56 keeps D50
+S0 unchanged; evaluator separately reads both required Governance getters.
+A3-0082 reports the slice/ruling; delivery/remote verification in automation memory.
+
+Next: signing-context wiring, exporter history/orphan/WAL/native completeness,
+then fault oracle/finite model. Complete owner READYs/full consumer mapping and
+separate exact source/tools/config/run FREEZE ACKs precede services. No liveRPC,
+newEparity/TLC/timing/integratedFcase/gate. Historical qualifiedE unchanged;
+32Fcases/GateF NOT_RUN/G locked. No human action. Earlier entries are historical.
+
 ## Independent D50 context checker verified — 2026-11-04
 
 C-F1 WORKING; integrated execution LOCKED. Added evaluation/binding_context_v2.py:

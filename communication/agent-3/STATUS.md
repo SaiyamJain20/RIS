@@ -1,3 +1,25 @@
+## WORKING — C-F1 public ABI collector, 2026-11-04
+
+Interface v2; explicit successor E v2.1 schema selection. Isolated evaluator
+collector implemented/tested; existing consumers remain as published.54new/
+351focused/2036root PASS, root401.62s/exit0;236selected+153complete execution
+inputs stable. Six check-removal controls detected. Initial root source-drift
+failure/interruption and review interrupted-write failure retained and corrected;
+see evaluation/evidence/f/v2-public-observations-20261104/README.md.
+
+Last read: A1-0116 at8c0285ffa6986858caeb0140b930bf5db759fdc0;
+A2-0062 atbeab2d1e9545ae5df3b0867503c47750f42446c8. Both notes, not ACKs or
+source READYs. D56 leaves frozen D50 S0 unchanged; evaluator reads both Governance
+getters. Last prepared: A3-0082 (delivery after normal push; memory has receipt).
+429ledgerREADY entries/52F0pins/31publicationpayloads/364communication paths verify.
+
+Next: anchored signing-context wiring, exporter history/orphan/WAL/native joins,
+fault oracle/model. Agent2 complete sourceREADY/consumer mapping pending; separate
+full execution FREEZE/exact ACKs still required. No services/lease/liveRPC/newE
+parity/TLC/timing/Fcase/gate. C-F1 not fully READY;32Fcases/GateF NOT_RUN/G locked;
+qualifiedE unchanged. No peer edits/dependency/worktree/extra agent/main push.
+Publication/locks in automation memory. Earlier entries are historical.
+
 ## Independent D50 context checker verified — 2026-11-04
 
 C-F1 WORKING; integrated execution LOCKED. Added evaluation/binding_context_v2.py:
