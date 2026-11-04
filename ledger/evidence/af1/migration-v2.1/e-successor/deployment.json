@@ -1,0 +1,205 @@
+{
+  "schemaVersion": "hmbc-ledger-deployment/v0",
+  "interfaceVersion": "v1",
+  "producer": "agent-1 ledger/tools/deploy_local.sh",
+  "createdAt": "2026-11-04T13:13:25Z",
+  "profile": "repaired-e",
+  "profileEnum": "2",
+  "mutations": "0",
+  "mutantNote": "non-zero only for mutant-* deployments: a deliberate check removal, never HMBC evidence",
+  "logDetailMode": "complete-details",
+  "chains": {
+    "pbc": {
+      "chainId": "18545",
+      "rpcUrl": "http://127.0.0.1:38545",
+      "deployBlock": "72",
+      "contracts": {
+        "LSC": "0x82e01223d51eb87e16a03e24687edf0f294da6f1",
+        "TMSC": "0x2bdcc0de6be1f7d2ee689a0342d76f52e8efaba3",
+        "RSC": "0x7969c5ed335650692bc04293b07f5bf2e7a673c0",
+        "PSC": "0x7bc06c482dead17c0e297afbc32f6e63d3846650"
+      }
+    },
+    "dbc": {
+      "chainId": "28545",
+      "rpcUrl": "http://127.0.0.1:48545",
+      "deployBlock": "79",
+      "contracts": {
+        "ACSC": "0xc5a5c42992decbae36851359345fe25997f5c42d",
+        "KSSC": "0x09635f643e140090a9a8dcd712ed6285858cebef"
+      }
+    }
+  },
+  "fixture": {
+    "keyDerivation": "TEST-ONLY privateKey = keccak256('hmbc-e0-synthetic-key:' || label)",
+    "authorities": [
+      {
+        "id": "H1",
+        "root": "0x88a358e9636d8c7f121f9beb24cbc9f2fb329c1e",
+        "caAdmins": [
+          "0xa3abc957ca114c86ec9cdb519cffc62beb894066"
+        ],
+        "rootKeyLabel": "H1-root",
+        "caAdminKeyLabel": "H1-ca-admin"
+      },
+      {
+        "id": "H2",
+        "root": "0x6ea73ebda053f804cad188496ec48af56b06f698",
+        "caAdmins": [
+          "0xffd802dc742f4939e8f8a185fd85632bf596433e"
+        ],
+        "rootKeyLabel": "H2-root",
+        "caAdminKeyLabel": "H2-ca-admin"
+      },
+      {
+        "id": "H3",
+        "root": "0x66076f6e7cba6e9b94d1edafd46725c49e688df1",
+        "caAdmins": [
+          "0x7ed85372da4cdf9263b5fe92958667cb2e207cac"
+        ],
+        "rootKeyLabel": "H3-root",
+        "caAdminKeyLabel": "H3-ca-admin"
+      },
+      {
+        "id": "H4",
+        "root": "0x9eb4709fd8fcb27f09d9e660843b06bdaeff5a2f",
+        "caAdmins": [
+          "0x2f96a398001121e74e92756ffec6d3166d035461"
+        ],
+        "rootKeyLabel": "H4-root",
+        "caAdminKeyLabel": "H4-ca-admin"
+      }
+    ],
+    "relay": {
+      "address": "0x3df38017505bb45d1d4c77065e09aa9175a67c48",
+      "keyLabel": "relay",
+      "roles": [
+        "ACSC.policyEnf caller (paper profiles)",
+        "PSC.reportOutcome caller"
+      ]
+    },
+    "witnessSet": {
+      "version": "1",
+      "threshold": "1",
+      "witnesses": [
+        "0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42"
+      ],
+      "keyLabels": [
+        "witness-1"
+      ],
+      "usedBy": "repaired-e only"
+    },
+    "policyVersion": "1",
+    "keyEpoch": "0",
+    "ttlSeconds": {
+      "requestMax": "30",
+      "decision": "30",
+      "checkpointMax": "60",
+      "paperGrant": "30"
+    },
+    "roles": {
+      "Doctor": "keccak256('HMBC.role.Doctor')",
+      "OnDuty": "keccak256('HMBC.role.OnDuty')",
+      "Researcher": "keccak256('HMBC.role.Researcher')"
+    },
+    "data": [
+      {
+        "dataId": "keccak256('HMBC.data.P1.MHR')",
+        "owner": "0x6ea73ebda053f804cad188496ec48af56b06f698",
+        "ownerId": "H2",
+        "policy": "emergency: Doctor(LONG_TERM, any issuer) AND OnDuty(TEMPORAL, same issuer as Doctor)"
+      }
+    ]
+  },
+  "abi": {
+    "LSC": {
+      "abi": "exports/abi/LSC.json",
+      "abiSha256": "3c9acabbb8978e6330f5878b9a979326ca22f1519300a5277cffeea3911d42de",
+      "runtimeBytes": 3724,
+      "runtimeSha256": "c1348e78b68e1437a735eea4204e81e408d57f090cd2abc94b53d26865b46b5c",
+      "source": "src/LSC.sol"
+    },
+    "TMSC": {
+      "abi": "exports/abi/TMSC.json",
+      "abiSha256": "e6b76ff7ce2347f02aa46eba28be469d2ad407fefb31711bc1662be1757eb0ec",
+      "runtimeBytes": 16127,
+      "runtimeSha256": "16112c79cce1324a3deb9ada024ad74b48b7cfb5ac9c0a31ddc58be766ebf904",
+      "source": "src/TMSC.sol"
+    },
+    "RSC": {
+      "abi": "exports/abi/RSC.json",
+      "abiSha256": "f0bc3732ee5646db945a68e06434cd46ba2637df04e4fe2260cf0d16bde1eebc",
+      "runtimeBytes": 4174,
+      "runtimeSha256": "31bf45155060ac3870668a81778d3671c6be5bf5e2edf6c52ace1a83f9476bfc",
+      "source": "src/RSC.sol"
+    },
+    "PSC": {
+      "abi": "exports/abi/PSC.json",
+      "abiSha256": "559d3f011fe7687b0a422e8f6f61c2e8f72a9a7a61c8795973da0d543a1c3fe1",
+      "runtimeBytes": 12516,
+      "runtimeSha256": "ccb7bd27f2c99751040a07547d6d1dec0c285c31e09e150f3d67475a2e81f62e",
+      "source": "src/PSC.sol"
+    },
+    "ACSC": {
+      "abi": "exports/abi/ACSC.json",
+      "abiSha256": "d5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08dbf8ad9a568",
+      "runtimeBytes": 12370,
+      "runtimeSha256": "00ccd3a3263cab5213be3cfcb22507419125eeae49061b7895af83e81dfe8681",
+      "source": "src/ACSC.sol"
+    },
+    "KSSC": {
+      "abi": "exports/abi/KSSC.json",
+      "abiSha256": "391841544b43c967bd8004c95376f139baaa2dd8c553f13310accecd83e1c6e7",
+      "runtimeBytes": 7767,
+      "runtimeSha256": "af7d1c3e6ed52fa6681f933a19bba2b97832ef70619e5afe7f4e2810674f48d9",
+      "source": "src/KSSC.sol"
+    }
+  },
+  "compiler": {
+    "solc": "0.8.37+commit.f401782d",
+    "evmVersion": "cancun",
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "viaIR": false
+  },
+  "foundryTomlSha256": "432f310d0541f63a745a2f18acaa56ffa8c0a3c989188781e646bb9c4d79261f",
+  "sources": {
+    "src/ACSC.sol": "c1f6b1631593c0fc163ded84df36ea618f91a98e4a2468315321e32a5439d546",
+    "src/DecisionVerifier.sol": "b5c92a6bf2fbe8a504adfbf05a07675af1569d45ecdd7cc869f9d825e19ff114",
+    "src/KSSC.sol": "6b6ddf8712f0912fefd4fdff8da18ecf919f0b46bd41b790f1bbaf653228fce1",
+    "src/LSC.sol": "de1f9850c81786beb23f4ab85d2b33023bc294c7474ee8c300e18e92977f5224",
+    "src/PSC.sol": "8c9a96dddb02b2c6f6fac7088c163f59952cbb2fe9f8e81395f2336d8dbcb032",
+    "src/RSC.sol": "083e6e5f24f190be95a3fcfd8cc79d3763512c07badf2762c96522e3b3fb4c96",
+    "src/TMSC.sol": "e0903a6e36e232bb7238566bd9e82d1e5a05f881b3f50ae64a61b508b824d85b",
+    "src/lib/Bootstrapped.sol": "6184f2d07075d19dee617ae3a239ec259533b9c006f366be57b7639bd719ee4f",
+    "src/lib/SigLib.sol": "c08a87ea13045f03ec4f456f9ebbeb38eed801448ad70348e7dd3cbb39535830",
+    "src/types/ProtocolTypes.sol": "97b47cb2cba69b9eb64523e0872e8c57f97a55ee8f20b11cca7beee9a7981c00"
+  },
+  "errorCodes": {
+    "0": "NONE",
+    "1": "BAD_SIGNATURE",
+    "2": "WRONG_SUBJECT",
+    "3": "WRONG_DESTINATION",
+    "4": "UNKNOWN_AUTHORITY",
+    "5": "STALE_ANCHOR",
+    "6": "STALE_STATE",
+    "7": "EXPIRED",
+    "8": "REPLAY",
+    "9": "POLICY_DENIED",
+    "10": "INSUFFICIENT_QUORUM",
+    "11": "DUPLICATE_SIGNER",
+    "12": "WRONG_EPOCH",
+    "13": "NOT_COMMITTED",
+    "14": "ADAPTER_UNAVAILABLE",
+    "15": "NOT_IMPLEMENTED_IN_PHASE",
+    "16": "UNAUTHORIZED_CALLER",
+    "17": "NOT_REGISTERED",
+    "18": "ALREADY_REGISTERED",
+    "19": "REVOKED",
+    "20": "MALFORMED",
+    "21": "WRONG_PROFILE"
+  },
+  "errorEncoding": "custom error Rejected(uint8 code); selector = bytes4(keccak256('Rejected(uint8)'))"
+}

@@ -1,0 +1,18 @@
+deploy repaired-f (f-base): exit 0
+deploy mutant-f-q2 (f-q2): exit 0
+deploy mutant-f-no-gov-nonce (f-bit7): exit 0
+deploy repaired-e (e-successor): exit 0
+{"manifest": "<scratch-ledger>/exports/deployments/f-base/deployment.json", "profile": "repaired-f", "mutations": "0", "threshold": "3", "schemaChecked": true, "live": true, "problems": []}
+{"manifest": "<scratch-ledger>/exports/deployments/f-q2/deployment.json", "profile": "repaired-f", "mutations": "0", "threshold": "2", "schemaChecked": true, "live": true, "problems": []}
+{"manifest": "<scratch-ledger>/exports/deployments/f-bit7/deployment.json", "profile": "repaired-f", "mutations": "128", "threshold": "3", "schemaChecked": true, "live": true, "problems": []}
+{"manifest": "<scratch-ledger>/exports/deployments/e-successor/deployment-v2.json", "profile": "repaired-e", "mutations": "0", "threshold": "1", "schemaChecked": true, "live": true, "problems": []}
+ALL SUCCESSOR EXPORT CHECKS PASS
+check_successor_export: exit 0
+default E deployment.json against frozen v1 LedgerDeployment: VALID
+v1 validation: exit 0
+masked check: exit 0
+{"deployments": 4, "allMaskedMatch": true, "distinctRawLiveHashesPerContract": {"ACSC": 4, "Governance": 3, "KSSC": 4, "LSC": 1, "PSC": 4, "RSC": 4, "TMSC": 4}}
+f-base [('LSC', True), ('TMSC', True), ('RSC', True), ('PSC', True), ('ACSC', True), ('KSSC', True), ('Governance', True)]
+f-q2 [('LSC', True), ('TMSC', True), ('RSC', True), ('PSC', True), ('ACSC', True), ('KSSC', True), ('Governance', True)]
+f-bit7 [('LSC', True), ('TMSC', True), ('RSC', True), ('PSC', True), ('ACSC', True), ('KSSC', True), ('Governance', True)]
+e-successor [('LSC', True), ('TMSC', True), ('RSC', True), ('PSC', True), ('ACSC', True), ('KSSC', True)]

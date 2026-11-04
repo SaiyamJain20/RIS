@@ -241,3 +241,24 @@ Also covered:
 | `check_f0_powers.py --tree <d8eddf1>` | exit 0; on HEAD exit 1 by design |
 | v2 vector receipt (`--implemented`) | 26 of 26, exit 0 |
 | slice 6 Anvil smoke | all exits 0 (see slice 6) |
+
+## Migration to the interfaces/v2.1 source-complete E carrier (after A3-0079)
+
+**Authority:** A3-0079 published `interfaces/v2.1` (FREEZE `232b84bb..`, schema `d43c3a9a..`, receipt `E_SOURCE_CLOSURE_ACCEPTANCE.json` `511e235f..`) after my ACK A1-0114 and agent 2's A2-0060 of proposal `7810ad10..`. Verified here: the published v2.1 schema **equals** the published v2 schema plus exactly the two ACKed additions.
+
+**Changes (tools only; no `src/`, `test/` or `script/` change):**
+- `make_manifest.py --successor` for E profiles writes `deployment-v2.json` as the **v2.1** carrier: schemaVersion `hmbc-ledger-deployment/v2.1`, interfaceVersion `v2`, the six V2 ABI entries and the **twelve-file** source map of this tree.
+- The ten-file v2 E carrier is no longer produced. Earlier files of that shape stay as historical-compatibility data with the known omission.
+- The default v1 `deployment.json` is unchanged.
+- `check_successor_export.py`:
+  - new **source-completeness** rule: the manifest's `sources` must list every `.sol` file of the compiled `src/` tree;
+  - the schema branch is chosen by `schemaVersion` (`LedgerDeploymentEComplete` for v2.1).
+
+**Runs:**
+- **Red** (`red-completeness-on-v2-e-carrier.txt`): the new rule refuses the slice-6 ten-file v2 E carrier for omitting `src/Governance.sol` and `src/interfaces/IPolicyVersion.sol` (exit 1). The F manifest passes.
+- **Green** (`smoke-v21-run.txt`): the full isolated Anvil smoke was re-run with the migrated tools against the **published v2.1 schema**. All four manifests pass the schema, the export rule, completeness and every live M4 equality (exit 0).
+  - The E carrier is `v2.1`, `v2`, with 12 sources.
+  - The default E manifest is still valid against frozen v1.
+  - The masked check passes 27 of 27.
+- The first attempt failed before deploying anything, because I passed a scratch directory that did not exist. It is recorded in the session, not here, since no tool ran.
+- `forge test --root ledger`: 316 passed, exit 0. The sources are unchanged from the A1-0111 snapshot.

@@ -7,7 +7,10 @@ Usage: python3 -I ledger/tools/make_manifest.py [--successor] <out_dir> <profile
 
 E profiles (paper-*, repaired-e, mutant-no-*): the interface-v1 manifest, unchanged; it needs
 exports/abi/manifest.json (tools/export_abi.py). With --successor, also <out_dir>/deployment-v2.json,
-the interfaces/v2 successor E carrier (needs exports/abi/manifest-v2.json, export_abi.py --successor).
+the source-complete successor E carrier of interfaces/v2.1 (A3-0079): schemaVersion
+"hmbc-ledger-deployment/v2.1", interfaceVersion "v2", the six V2 ABI entries and the twelve-file source map of
+this tree (needs exports/abi/manifest-v2.json, export_abi.py --successor). The earlier ten-file v2 E carrier
+omitted src/interfaces/IPolicyVersion.sol (a KSSC import) and is no longer produced.
 
 F profiles (A-F1): repaired-f, mutant-f-no-gov-action-binding, mutant-f-no-gov-nonce,
 mutant-f-no-policy-pin, mutant-f-q2. deployment.json is the interfaces/v2 LedgerDeploymentF manifest:
@@ -66,8 +69,8 @@ def main(argv):
     code = write(out / "deployment.json", manifest)
     if successor and code == 0:
         v2 = json.loads((LEDGER / "exports" / "abi" / "manifest-v2.json").read_text())
-        carrier = dict(manifest, schemaVersion="hmbc-ledger-deployment/v2", interfaceVersion="v2",
-                       abi={k: v2["contracts"][k] for k in manifest["abi"]})
+        carrier = dict(manifest, schemaVersion="hmbc-ledger-deployment/v2.1", interfaceVersion="v2",
+                       abi={k: v2["contracts"][k] for k in manifest["abi"]}, sources=v2["sources"])
         code = write(out / "deployment-v2.json", carrier)
     return code
 

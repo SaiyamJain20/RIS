@@ -11,7 +11,7 @@
 #               | repaired-f | mutant-f-no-gov-action-binding | mutant-f-no-gov-nonce | mutant-f-no-policy-pin
 #               | mutant-f-q2   (A-F1: four witnesses, Governance; mutant-f-q2 = threshold 2, mask 0)
 #     log-mode: hash-only | complete-details
-# F profiles write an interfaces/v2 deployment.json. SUCCESSOR_EXPORT=1 adds deployment-v2.json (the v2
+# F profiles write an interfaces/v2 deployment.json. SUCCESSOR_EXPORT=1 adds deployment-v2.json (the v2.1
 # successor carrier) for an E profile; the default E manifest is unchanged.
 # Output: ledger/exports/deployments/<run-id>/{pbc-stage,dbc-stage,deployment}.json
 # Chain ids default to 18545 (PBC) and 28545 (DBC); override with PBC_CHAIN_ID / DBC_CHAIN_ID.

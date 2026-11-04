@@ -8,6 +8,9 @@ Usage (repository root, after `forge build --root ledger`):
 Checks, per manifest:
 - schema: validates against `$defs/LedgerDeployment` of the given schema (skipped, and reported, when the
   interpreter has no `jsonschema`);
+- source completeness (interfaces/v2.1, A3-0079): the manifest's `sources` list every `.sol` file of the compiled
+  `src/` tree, so an E carrier must be the v2.1 source-complete carrier (the ten-file v2 E carrier omits
+  `src/interfaces/IPolicyVersion.sol`, a KSSC import, and `src/Governance.sol`);
 - export rule (design 2.2 section 8, interfaces/v2 BOUNDARY): every runtime's `runtimeBytes` < 2^32; the
   ranges are sorted, disjoint, length 32 and in bounds; `immutableRefsSha256` is the SHA-256 of the
   canonical JSON of the object list; each entry equals the compiled Forge artifact (runtime hash, length,
@@ -40,6 +43,13 @@ def compiled(name):
     code = bytes.fromhex(db["object"][2:] if db["object"].startswith("0x") else db["object"])
     ranges = sorted((r["start"], r["length"]) for refs in db.get("immutableReferences", {}).values() for r in refs)
     return code, [{"start": str(s), "length": str(n)} for s, n in ranges]
+
+
+def source_completeness(d, problems):
+    tree = sorted(str(p.relative_to(LEDGER)) for p in (LEDGER / "src").rglob("*.sol"))
+    missing = [rel for rel in tree if rel not in d["sources"]]
+    if missing:
+        problems.append(f"sources omit compile inputs of this tree: {missing}")
 
 
 def export_rule(d, problems):
@@ -134,11 +144,20 @@ def main(argv):
         if validator is not None:
             # The union (LedgerDeployment = oneOf E/F) must hold; errors are reported from the branch the
             # profile selects, which names the failing member instead of the other branch's complaint.
-            branch = "LedgerDeploymentF" if d.get("profile") == "repaired-f" else "LedgerDeploymentE"
+            if d.get("profile") == "repaired-f":
+                branch = "LedgerDeploymentF"
+            elif d.get("schemaVersion") == "hmbc-ledger-deployment/v2.1":
+                branch = "LedgerDeploymentEComplete"
+            else:
+                branch = "LedgerDeploymentE"
+            if branch not in schema["$defs"]:
+                problems.append(f"schema has no {branch} (use the interfaces/v2.1 schema)")
+                branch = "LedgerDeployment"
             problems += [f"schema {branch}: {e.json_path}: {e.message[:160]}" for e in validator(branch).iter_errors(d)]
             if not validator("LedgerDeployment").is_valid(d) and not problems:
                 problems.append("schema: not valid against the LedgerDeployment union")
         export_rule(d, problems)
+        source_completeness(d, problems)
         if want_live:
             live(d, problems)
         ok &= not problems
