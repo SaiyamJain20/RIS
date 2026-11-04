@@ -17,7 +17,7 @@ import {
     GOV_REMOVE_AUTHORITY,
     GOV_SET_CA_ADMINS,
     RESULT_ALLOW,
-    MUT_NO_GOV_NONCE
+    MUT_NO_GOV_ACTION_BINDING
 } from "../src/types/ProtocolTypes.sol";
 import {LSC} from "../src/LSC.sol";
 import {TMSC} from "../src/TMSC.sol";
@@ -61,8 +61,21 @@ contract GovernanceTest is HMBCFixture {
         return GovernanceAction(kind, root, admins, nonce, witnessSetVersion(), uint64(block.timestamp) + 60);
     }
 
+    /// What the witnesses sign. Under the bit-6 mutant fixture they sign the action := 0 struct, as
+    /// the mutant verifier hashes it (design 2.2 section 6); otherwise the action itself. A new
+    /// struct, never an alias of `a`.
+    function signedForm(GovernanceAction memory a) internal pure returns (GovernanceAction memory) {
+        uint8 k = mutations() & MUT_NO_GOV_ACTION_BINDING != 0 ? 0 : a.action;
+        return GovernanceAction(k, a.root, a.admins, a.nonce, a.witnessSetVersion, a.expiresAt);
+    }
+
     function govDigest(GovernanceAction memory a) internal view returns (bytes32) {
-        return HMBCHash.governanceActionDigest(a, PBC_CHAIN_ID, address(gov));
+        return HMBCHash.governanceActionDigest(signedForm(a), PBC_CHAIN_ID, address(gov));
+    }
+
+    function firstThree() internal view returns (uint256[] memory xs) {
+        xs = new uint256[](3);
+        (xs[0], xs[1], xs[2]) = (witnessPks[0], witnessPks[1], witnessPks[2]);
     }
 
     function quorum(GovernanceAction memory a) internal view returns (bytes[] memory) {
@@ -128,9 +141,9 @@ contract GovernanceTest is HMBCFixture {
         assertEq(gov.target(), address(tmsc), "target is the TMSC");
         assertEq(gov.governanceChainId(), PBC_CHAIN_ID, "governanceChainId");
         assertEq(gov.witnessSetVersion(), 2, "witnessSetVersion");
-        assertEq(gov.threshold(), 3, "threshold");
+        assertEq(gov.threshold(), threshold(), "threshold (3; 2 in mutant-f-q2)");
         assertEq(gov.maxGovernanceTtl(), 120, "maxGovernanceTtl");
-        assertEq(gov.mutations(), 0, "mutations");
+        assertEq(gov.mutations(), mutations(), "mutations is the deployment mask");
         assertEq(gov.governanceNonce(), 0, "nonce starts at 0");
         address[] memory ws = gov.witnesses();
         assertEq(ws.length, 4, "four witnesses");
@@ -400,7 +413,7 @@ contract GovernanceTest is HMBCFixture {
     function test_AF1G_QuorumFailures() public {
         GovernanceAction memory a = action(GOV_SET_CA_ADMINS, h1, none(), 1);
         bytes32 d = govDigest(a);
-        bytes[] memory three = quorum(a);
+        bytes[] memory three = sortedSigs(firstThree(), d);
         bytes[] memory two = new bytes[](2);
         (two[0], two[1]) = (three[0], three[1]);
         expectRejected(ErrorCode.INSUFFICIENT_QUORUM);
@@ -520,7 +533,7 @@ contract GovernanceTest is HMBCFixture {
                 assertEq(uint256(rec[i].topics[1]), 1, "GovernanceApplied nonce");
                 assertEq(uint256(rec[i].topics[2]), GOV_SET_CA_ADMINS, "GovernanceApplied action");
                 (bytes32 structHash, address submitter) = abi.decode(rec[i].data, (bytes32, address));
-                assertEq(structHash, HMBCHash.hashGovernanceAction(a), "structHash");
+                assertEq(structHash, HMBCHash.hashGovernanceAction(signedForm(a)), "structHash of the signed struct");
                 assertEq(submitter, mallory, "submitter");
             }
         }
