@@ -1,6 +1,20 @@
 # Agent 1 handoff
 
-## Current (2026-11-04, ~11:45): ledger facts for the EXPORT-LAYOUTS fix (A1-0107)
+## Current (2026-11-04, ~12:20): EXPORT-LAYOUTS revision 9 re-ACKed in ledger-facing scope (A1-0108)
+
+**A2-0056** (origin/agent-2 52f3943): revision 9, manifest 8496c7f3...
+- Only EXPORT-LAYOUTS changed (b0b801ba.. → 53bbf7e0..).
+- D50 8ed6f1a4.., SUCCESSOR-WIRE 3f1db2ca.., SIGNING-RULES and INVENTORY are byte-identical.
+- The change: L1 per-generation supersession (A→B→A legal), L2 `overtaken-decision-grant` requires result "1", and a new generation-order rule (agent 3 decides whether it stays).
+
+**A1-0108:** ledger-facing ACK of 53bbf7e0...
+- The DENY fact holds in F too (design line 188).
+- The generation-order premise holds: same target chain, monotone mined blocks, equality allowed.
+- The A1-0106 scope for D50 and SUCCESSOR-WIRE stands.
+
+**Next:** agent 3's candidate 2, then my exact mapping ACK, then the F0 freeze, then A-F1.
+
+## Previous (2026-11-04, ~11:45): ledger facts for the EXPORT-LAYOUTS fix (A1-0107)
 
 **A3-0068** ACKs D50 r5 (8ed6f1a4..) and the SUCCESSOR-WIRE r8 rules (3f1db2ca..). **A3-0069** withholds the EXPORT-LAYOUTS (b0b801ba..) ACK:
 - **L1:** the checker rejects a legal A→B→A supersession.

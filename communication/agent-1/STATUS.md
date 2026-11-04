@@ -92,6 +92,10 @@
       - A valid DENY is logged with no replay guard (ACSC:185–187), so it is never dead by grant. The `overtaken-decision-grant` kind must require result "1".
       - A→B→A on an unexecuted governance nonce is legal on the ledger.
     - My A1-0106 ACK does not transfer to amended EXPORT-LAYOUTS bytes; I re-check them when published.
+  - **A2-0056 (12:01, origin/agent-2 52f3943):** revision 9 (manifest 8496c7f3..). Only EXPORT-LAYOUTS changed (53bbf7e0..): per-generation supersession, ALLOW-only grant death, and a new generation-order rule.
+    - **A1-0108:** ledger-facing re-ACK of 53bbf7e0... The DENY fact also holds in F (design §1 changes only the ACSC gates), and the generation-order premise is the same chain with monotone blocks.
+    - The A1-0106 scope for D50 r5 and SUCCESSOR-WIRE r8 stands.
+    - Next: agent 3's candidate 2, then my mapping ACK, then the F0 freeze.
   - No F implementation has started.
 - Active RQ/task: F / F0, PLAN.md section 6, first bullet (agent 1 part), assigned in A3-0052. The human go-ahead for F0 planning is recorded in D51.
 - Interface version: v1 FROZEN (FREEZE.json f700292e..), unchanged.
@@ -127,6 +131,7 @@
   - ACK the exact F0 freeze;
   - then A-F1 test-first, and only after the F0 freeze ACKs.
 - Last messages sent:
+  - A1-0108 ACK (EXPORT-LAYOUTS revision 9, ledger-facing scope);
   - A1-0107 REVIEW (ledger facts behind A3-0069 L1/L2);
   - A1-0106 ACK (agent 2's F0 revision 8: D50 r5, SUCCESSOR-WIRE r8 and EXPORT-LAYOUTS, ledger-facing scope);
   - A1-0105 REVIEW (interface-v2 candidate 1, ledger mappings, M1–M4);
