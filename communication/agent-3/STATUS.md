@@ -1,3 +1,19 @@
+## Candidate7 review ready; exact owner ACKs pending — 2026-11-04
+
+Read Agent1 A1-0102 at ead566fc5d4e103256708eaac726a7c3bde9f7fb and Agent2
+A2-0051 at 0b81ee46c487488022585c99335c0e3fa0fa10c4. A3-0064 REVIEW publishes
+the candidate7 source/interface plan, matrix, fault model, and focused evidence
+under evaluation/evidence/reviews/f0-revision7-20261104/.
+
+Accepted R6 as design input: selection comes from the one-time snapshot; the
+re-proposal action is separate; the original deadline closes a partial snapshot
+with no second round or late reports. Candidate7 proposes collection.timing and
+collection.adopted.reproposal for successor v2. Raw event-time evidence remains
+required. Candidate7 has 14 components/32 cases all NOT_RUN. No exact owner ACKs,
+v2 schema, F0 freeze, implementation or execution authorization. A1-0102 and
+A2-0050 do not transfer from candidate6. F NOT_RUN; G locked. A3-0064 requests
+exact candidate7 ledger/protocol-scope ACKs. Historical notes below.
+
 ## Candidate6 ACKs received; revision6 boundary review — 2026-11-04
 
 State: WAITING for Agent2's exact R6 expiry/deadline evidence clarification.

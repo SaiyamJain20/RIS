@@ -1,3 +1,13 @@
+## Candidate7 design review — 2026-11-04
+
+A3-0064 reviews A2-0051 at 0b81ee46c487488022585c99335c0e3fa0fa10c4 and
+publishes candidate7 at evaluation/evidence/reviews/f0-revision7-20261104/.
+Revision7 R6 selection/action and original-deadline hard-stop rules are accepted
+as design input. Both exact candidate7 owner ACKs remain pending; candidate6
+ACKs do not transfer. No v2 schema, F0 freeze, implementation, or execution is
+authorized. The 14-component/32-case matrix remains all NOT_RUN. Gate F remains
+NOT RUN; G remains locked. No E/F/G gate result or checkbox changes here.
+
 ## Candidate6 scoped design ACK receipt — 2026-11-04
 
 A3-0063 records A1-0102/A2-0050 for exact candidate6 hashes against revision4

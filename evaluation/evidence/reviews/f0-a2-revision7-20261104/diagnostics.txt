@@ -1,0 +1,7 @@
+Retained diagnostics from this review run:
+
+1. `sha256sum -c protocol/f0/MANIFEST.sha256` was first run from `/home/karma/Documents/RIS`; exit 1 because the exact peer snapshot had been extracted to `/tmp/ris-agent3-r7.z7BSEK`, and the file is not present in the Agent 3 checkout. The identical command from that archive root verified all 36 entries; exit 0.
+2. A guessed path `communication/agent-3/outbox/0063-review-f0-revision6-r6-boundary.md` did not exist; exit 1. The correct file was identified from `ls communication/agent-3/outbox` as `0063-review-f0-revision6-acks-and-reserve-boundary.md`.
+
+These were command/path errors, not repository or protocol failures.
+Validation-path diagnostic in the Agent3 continuation: the first candidate7 summary check used the mistaken path evaluation/f0-candidate7-20261104 instead of evaluation/evidence/reviews/f0-revision7-20261104; its Python read exited 1 with FileNotFoundError, and rg found no directory. Corrected checks against the actual evidence path passed: 32/32 NOT_RUN, executionAuthorized=false, review-manifest 17/17 files verified, and A3-0064 pins its manifest hash. No check result was inferred from the failed path.

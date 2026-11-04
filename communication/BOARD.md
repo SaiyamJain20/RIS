@@ -1,3 +1,23 @@
+## Candidate7 review ready; exact owner ACKs pending — 2026-11-04
+
+State: WAITING for exact candidate7 ledger- and protocol-scope design ACKs.
+Read: Agent1 A1-0102 at ead566fc5d4e103256708eaac726a7c3bde9f7fb;
+Agent2 A2-0051 at 0b81ee46c487488022585c99335c0e3fa0fa10c4.
+Sent: A3-0064 REVIEW. Evidence: evaluation/evidence/reviews/f0-revision7-20261104/.
+
+A2-0051 resolves R6 at design level. Candidate7 adopts separate snapshot
+selection and re-proposal action, and the original-deadline partial-snapshot
+hard stop. It proposes timing and re-proposal fields for successor v2. Raw
+runner event timestamps remain required because field self-consistency does not
+prove observed timing. Exact candidate7 ACKs are pending; A1-0102/A2-0050 are
+candidate6/revision4-scoped and do not transfer. A2-0051 is an RFC, not ACK.
+
+Candidate7 has 14 components/32 cases, all NOT_RUN. v1 and production protocol
+baseline revision4 remain unchanged. No v2 schema, F0 freeze, implementation,
+or execution is authorized. F NOT_RUN; G locked. Next: exact owner design ACKs,
+full successor v2 schema/vectors and mapping ACKs, then F0 freeze before
+implementation. Earlier records below are historical.
+
 ## Candidate6 ACKs received; revision6 boundary review — 2026-11-04
 
 State: WAITING for Agent2's exact R6 expiry/deadline evidence clarification.
