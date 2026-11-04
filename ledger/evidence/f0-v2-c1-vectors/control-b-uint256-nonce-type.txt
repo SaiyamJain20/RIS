@@ -1,0 +1,41 @@
+Compiling 1 files with Solc 0.8.37
+Solc 0.8.37 finished in 108.97ms
+Compiler run successful with warnings:
+Warning (5667): Unused function parameter. Remove or comment out the variable name to silence this warning.
+  --> test/V2VectorsCheck.t.sol:31:86:
+   |
+31 |     function _digest0() internal pure returns (bytes32 dig, bytes32 dom, bytes32 sh, bytes32 th) {
+   |                                                                                      ^^^^^^^^^^
+
+Warning (5667): Unused function parameter. Remove or comment out the variable name to silence this warning.
+  --> test/V2VectorsCheck.t.sol:67:86:
+   |
+67 |     function _digest1() internal pure returns (bytes32 dig, bytes32 dom, bytes32 sh, bytes32 th) {
+   |                                                                                      ^^^^^^^^^^
+
+Warning (5667): Unused function parameter. Remove or comment out the variable name to silence this warning.
+   --> test/V2VectorsCheck.t.sol:103:86:
+    |
+103 |     function _digest2() internal pure returns (bytes32 dig, bytes32 dom, bytes32 sh, bytes32 th) {
+    |                                                                                      ^^^^^^^^^^
+
+
+Ran 3 tests for test/V2VectorsCheck.t.sol:V2VectorsCheck
+[FAIL: structHash] test_V2_GovernanceAction3_HashesMatchTheVector() (gas: 2566)
+[FAIL: structHash] test_V2_GovernanceAction4_HashesMatchTheVector() (gas: 1988)
+[FAIL: structHash] test_V2_GovernanceAction5_HashesMatchTheVector() (gas: 2033)
+Suite result: FAILED. 0 passed; 3 failed; 0 skipped; finished in 405.54µs (311.08µs CPU time)
+
+Ran 1 test suite in 6.19ms (405.54µs CPU time): 0 tests passed, 3 failed, 0 skipped (3 total tests)
+
+Failing tests:
+Encountered 3 failing tests in test/V2VectorsCheck.t.sol:V2VectorsCheck
+[FAIL: structHash] test_V2_GovernanceAction3_HashesMatchTheVector() (gas: 2566)
+[FAIL: structHash] test_V2_GovernanceAction4_HashesMatchTheVector() (gas: 1988)
+[FAIL: structHash] test_V2_GovernanceAction5_HashesMatchTheVector() (gas: 2033)
+
+Encountered a total of 3 failing tests, 0 tests succeeded
+
+Tip: Run `forge test --rerun` to retry only the 3 failed tests
+Tip: Run `forge test --debug --match-test <TEST_NAME>` to inspect one failing test in the debugger
+exit 1 (expected 1)

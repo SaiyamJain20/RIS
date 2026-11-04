@@ -66,13 +66,23 @@
     - **A1-0104:** ACK of the exact candidate-8 hashes in ledger scope. Only F-12 and F-29 changed, with no ledger expectation changed. `F0Quorum` was re-run: 9 passed, exit 0.
     - Note for the freeze: record `A-F1-DESIGN.md` sha256 7eed1b29.. explicitly, because "design 2.2" alone also names 45004b72...
     - Both owners' exact candidate-8 design ACKs now exist. Next: the full successor v2 schema/vectors (my mapping ACK), then the F0 freeze.
+  - **A3-0066 (09:30, origin/agent-3 4de6274):** interface-v2 candidate 1 (MANIFEST 6acceadf..), with both candidate-8 ACKs recorded and my design pinned as 7eed1b29...
+    - **A1-0105:** ledger mapping REVIEW, not an ACK yet.
+    - All six signing vectors were checked in Solidity with the ledger's own hashing and QuorumLib: 26/26, plus 2 sensitivity controls (`ledger/evidence/f0-v2-c1-vectors/`, new tool `gen_v2_vector_test.py`).
+    - Corrections:
+      - **M1:** `fixture.governance` is missing;
+      - **M2:** the v2 E carrier reuses schemaVersion v0 for a new shape;
+      - **M3:** `mutantNote` is not an identifier;
+      - **M4:** state the per-contract mask and witness-set equalities. This includes my clarification that Governance stores the full mask.
+    - Items 1 and 2 are accepted (item 1 subject to M3/M4; item 2 needs sorted signatures).
+    - Next: candidate 2, then my exact mapping ACK, then the F0 freeze.
   - No F implementation has started.
 - Active RQ/task: F / F0, PLAN.md section 6, first bullet (agent 1 part), assigned in A3-0052. The human go-ahead for F0 planning is recorded in D51.
 - Interface version: v1 FROZEN (FREEZE.json f700292e..), unchanged.
 - Git: branch `agent-1`.
   - Base is the common F0 baseline 376347d. Main and agent-1/2/3 were all at that commit on 2026-10-12, under D51.
   - My local branch was fast-forwarded to it with no divergence.
-- Ledger source manifest: `ledger/evidence/source-manifest.sha256` (302 entries; `A-F1-DESIGN.md` revision 2 in A1-0092's commit).
+- Ledger source manifest: `ledger/evidence/source-manifest.sha256`, 350 entries at A1-0105 (52e20552..), regenerated as `sha256sum` of the tracked ledger files except itself, in C-locale order.
   - It succeeds 186e28fb.., which succeeded 5b32e2c4..; production entries are unchanged throughout.
   - Production `ledger/src`, `ledger/script` and `foundry.toml` are unchanged since the E pin 933d2a7. Gate E evidence still describes that pin.
 - F0 output (A1-0087):
@@ -101,6 +111,7 @@
   - ACK the exact F0 freeze;
   - then A-F1 test-first, and only after the F0 freeze ACKs.
 - Last messages sent:
+  - A1-0105 REVIEW (interface-v2 candidate 1, ledger mappings, M1–M4);
   - A1-0104 ACK (F0 candidate 8, ledger scope);
   - A1-0103 ACK (F0 candidate 7, ledger scope);
   - A1-0102 ACK (F0 candidate 6, ledger scope);

@@ -1,6 +1,37 @@
 # Agent 1 handoff
 
-## Current (2026-11-04, ~08:40): candidate 8 ACKed in ledger scope (A1-0104)
+## Current (2026-11-04, ~10:30): interface-v2 candidate 1 reviewed in ledger scope (A1-0105)
+
+**A3-0066** (origin/agent-3 4de6274):
+- both candidate-8 ACKs recorded;
+- `A-F1-DESIGN.md` pinned as 7eed1b29..;
+- interface-v2 candidate 1: `interfaces/proposals/v2/`, MANIFEST 6acceadf.., review-manifest fd4b037c...
+
+**A1-0105:** REVIEW, not a mapping ACK yet.
+
+Verified:
+- **Signing vectors:** all six, in Solidity, with `HMBCHash` and QuorumLib. The governance type hash, domain, struct hash and digest match, and each vector passes at q3: 26/26. Two sensitivity controls fail as expected.
+- **Immutable ranges and masked build:** recomputed.
+- **Schema:** the ledger definitions, read and diffed against v1.
+
+Corrections:
+- **M1:** add `fixture.governance {maxGovernanceTtl "120", maxAdmins "8"}`, which design §8 lists.
+- **M2:** the v2 E carrier keeps `schemaVersion` "hmbc-ledger-deployment/v0" with a changed entry shape. Use v2 and rename the entry.
+- **M3:** `mutantNote` is a fixed disclaimer (`make_manifest.py:52`). Classify by mask + threshold only, and forbid q2 combined with bits.
+- **M4:** BOUNDARY must state the equalities: all five contracts' `mutations()` equal the mask, and all three witness sets equal the fixture.
+  - Clarification, not a design revision: "non-F bit" means a bit outside `MUT_ALL`. Governance stores the full mask, and its config values are public immutables.
+
+Answers:
+- **Item 1:** accepted, subject to M3/M4.
+- **Item 2:** accepted. The runner must sort the q2 signatures by address.
+
+**Implementation commitments recorded in A1-0105, for A-F1 after the freeze:**
+- Governance stores the full mask, with public immutables;
+- an opt-in successor export mode (default E export byte-identical) carrying `fixture.governance` and the F `mutantNote` text.
+
+**Next:** candidate 2, then my exact mapping ACK, then the F0 freeze, then A-F1.
+
+## Previous (2026-11-04, ~08:40): candidate 8 ACKed in ledger scope (A1-0104)
 
 **Thread:**
 - A2-0052 (e0f25ef): agent 2 withheld its candidate-7 ACK pending C-1 (F-12 controls), C-2 (F-29 SIGNING-RULES hash) and C-3 (revision-4 F0 set label).
