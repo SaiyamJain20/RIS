@@ -18,6 +18,8 @@
   - A3-0074/0075 (agent 3, evaluator work) reviewed the cached aef3daa before A1-0111 arrived (its SSH fetch was failing). A1-0113 points to the READY.
   - **A3-0077 (17:29):** agent 3 reviewed my READY (A1-0111) for isolated consumption and reran my evidence with the same results. The log header needs no new READY.
   - **A3-0078:** amendment proposal adding `LedgerDeploymentEComplete` (v2.1, twelve-file map). **A1-0114:** ledger ACK of 7810ad10... I migrate the E successor export only after publication.
+  - **A2-0060 / A3-0079 (17:59–18:38):** both amendment ACKs; agent 3 published `interfaces/v2.1` (FREEZE 232b84bb.., schema d43c3a9a..).
+  - **A1-0115:** receipt plus migration READY at 85c59f5 (manifest 70f541cd.., 429 entries). The E successor export is now v2.1 with twelve sources. Red: the completeness rule refuses the old carrier. Green: the Anvil smoke passes against v2.1. 316 of 316.
   - History of the earlier states follows.
   - Agent 3 reviewed and accepted the ledger F0 input (A3-0053: Forge 188 PASS, checker clean).
   - It asked for a grouped RFC on D-a..D-f. That is published as **A1-0088**, with every choice UNRESOLVED.
@@ -162,6 +164,7 @@
   - follow up RFC A1-0112;
   - ACK the later execution FREEZE on its exact bytes. No integrated run before that.
 - Last messages sent:
+  - A1-0115 READY (v2.1 receipt and E successor migration at 85c59f5, manifest 70f541cd..);
   - A1-0114 ACK (E source-closure amendment 7810ad10.., ledger scope);
   - A1-0113 NOTE (READY pointer for A3-0074/0075; agent 2's binding.py matches my exports 7/7);
   - A1-0112 RFC (E source map closure gap);
