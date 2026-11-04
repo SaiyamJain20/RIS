@@ -1,0 +1,36 @@
+control: unmutated module passes all tests
+DETECTED V1 the psc is not compared with the deployment's | failed tests: 2
+DETECTED V2 the source chain id is not compared | failed tests: 2
+DETECTED V3 the next sequence is current plus two | failed tests: 2
+DETECTED V4 a gap in the sequence is accepted | failed tests: 3
+DETECTED V5 a block after the observed head is accepted when the read succeeds | failed tests: 1
+DETECTED V6 the block hash is not compared | failed tests: 2
+DETECTED V7 a block equal to the DBC current block is refused | failed tests: 1
+DETECTED V8 the DBC current block is not a lower bound | failed tests: 1
+DETECTED V9 keyEpoch is not checked | failed tests: 2
+DETECTED V10 the configured witnessSetVersion is not compared | failed tests: 1
+DETECTED V11 the witnessSetVersion read at the block is not compared | failed tests: 1
+DETECTED V12 the epochs at the proposal's block are not compared | failed tests: 1
+DETECTED V13 the epochs at the witness's own head are not compared (no stale-view refusal) | failed tests: 1
+DETECTED V14 the epochs are read at the head instead of at the proposal's block | failed tests: 1
+DETECTED V15 the freshness read repeats the block read | failed tests: 1
+DETECTED V16 an expiry equal to the observation is accepted | failed tests: 2
+DETECTED V17 an expiry exactly at the window edge is refused | failed tests: 2
+DETECTED V18 the window has no upper bound | failed tests: 3
+DETECTED V19 the window observes the PBC instead of the DBC | failed tests: 12
+DETECTED V20 the store is told no expiry | failed tests: 11
+DETECTED V21 the store observes the PBC | failed tests: 11
+DETECTED V22 the store gets another domain | failed tests: 1
+DETECTED V23 an unreadable ledger escapes as a raw exception | failed tests: 1
+DETECTED V24 the recorded value is dropped from a pinned refusal | failed tests: 1
+DETECTED V25 the proposal's shape is not validated | failed tests: 15
+DETECTED V26 the proposer's sequence is current plus two | failed tests: 2
+DETECTED V27 the proposer's expiry is twice the ttl | failed tests: 2
+DETECTED V28 the overtaken evidence claims a far sequence | failed tests: 2
+DETECTED V29 the maximum window default is 61 s | failed tests: 3
+DETECTED V30 the proposer's default ttl is 31 s | failed tests: 2
+DETECTED V31 the effect carries the sequence key instead of the source block hash | failed tests: 11
+DETECTED V32 the conflict key is the block number instead of the sequence | failed tests: 3
+DETECTED V33 the proposer reads the epochs at block 0 | failed tests: 1
+DETECTED V34 a non-positive max ttl is accepted | failed tests: 2
+detected 34 of 34
