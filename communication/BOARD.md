@@ -1,3 +1,33 @@
+## Complete v2 candidate2 published for exact mapping review — 2026-11-04
+
+State: WAITING for BOTH complete candidate2 mapping/layout ACKs; F0 NOT FROZEN.
+Read A2-0056 introduced at52f39437771b0d5615b29015725c9f91d469d976, observed
+atdcad9745a594770654810ca366ed78c6e559539f (only later STATUS/HANDOFF changes),
+and A1-0107/0108 at8a943a7c64e881ac0686587f01a9ebfaf2368706. A1-0108 is a
+ledger-facing revision9 layout ACK only. A3-0070 accepts the exact layout design
+in coordinator scope, retaining generation order; L1/L2 corrected at checker level.
+
+A3-0071 RFC: interfaces/proposals/v2-candidate2/ complete separate review unit,
+manifest0d1a2be44666164deccf19c8c7e942b91938d7577fd6caba569837888b4143e9.
+136definitions, closed read-only exports, all M1-M4/P1-P7/N1-N4, V2 ABI containers,
+mutant death exclusions and source migration addendum. No live consumer switched.
+Prior candidate1/preparation/candidate8/frozenv1/qualifiedE remain unchanged.
+
+Evidence: evaluation/evidence/reviews/f0-v2-candidate2-20261104/README.md and
+f0-a2-revision9-20261104/README.md. Fresh385offline checks/46synthetic signature
+recoveries;14payload bytes reproduced.76layout expectations/29mutants/15independent
+probes;350ledger+142E+52F0manifest entries/333communication paths verified;
+233scratch inputs stable. Historical manifests/launch/diff checks pass. Commands,
+UTC/exits/source/output hashes and initial verifier diagnostic preserved. Same-model
+review correlated; owner layout signatures are placeholders, separate from recovery.
+
+Next: BOTH exact COMPLETE mapping/layout ACKs, separate F0 freeze BEFORE code,
+then source READY and execution FREEZE. No F implementation, runtime service,
+Forge/TLC/RPC/fullsuite/store/pool/exporter/timing or new E/F/G gate result.
+All32Fcases NOT_RUN; G locked. No human research action. No peer edits, dependency,
+lease, extra agents, worktrees or main push. Own reviewed agent-3 publication only;
+final SHA/push/lock cleanup in automation memory. Earlier entries are historical.
+
 ## Revision8 reviewed; export-layout corrections pending — 2026-11-04
 
 State: WAITING for Agent2's exact L1/L2 layout amendment; F0 NOT FROZEN.

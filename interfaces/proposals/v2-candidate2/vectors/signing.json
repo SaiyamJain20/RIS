@@ -1,0 +1,585 @@
+{
+  "status": "SYNTHETIC_OFFLINE_VECTOR_NOT_SOLIDITY_MEASUREMENT",
+  "vectors": [
+    {
+      "name": "StateCheckpoint",
+      "typedData": {
+        "types": {
+          "EIP712Domain": [
+            {
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "name": "version",
+              "type": "string"
+            },
+            {
+              "name": "chainId",
+              "type": "uint256"
+            },
+            {
+              "name": "verifyingContract",
+              "type": "address"
+            }
+          ],
+          "StateCheckpoint": [
+            {
+              "name": "sequence",
+              "type": "uint64"
+            },
+            {
+              "name": "authEpoch",
+              "type": "uint64"
+            },
+            {
+              "name": "policyVersion",
+              "type": "uint64"
+            },
+            {
+              "name": "keyEpoch",
+              "type": "uint64"
+            },
+            {
+              "name": "witnessSetVersion",
+              "type": "uint64"
+            },
+            {
+              "name": "sourceChainId",
+              "type": "uint256"
+            },
+            {
+              "name": "psc",
+              "type": "address"
+            },
+            {
+              "name": "sourceBlockNumber",
+              "type": "uint256"
+            },
+            {
+              "name": "sourceBlockHash",
+              "type": "bytes32"
+            },
+            {
+              "name": "expiresAt",
+              "type": "uint64"
+            }
+          ]
+        },
+        "primaryType": "StateCheckpoint",
+        "domain": {
+          "name": "HMBCState",
+          "version": "1",
+          "chainId": "28545",
+          "verifyingContract": "0xe3657551ab073fe9146c434569370ef433ff85b4"
+        },
+        "message": {
+          "sequence": "5",
+          "authEpoch": "4",
+          "policyVersion": "1",
+          "keyEpoch": "0",
+          "witnessSetVersion": "2",
+          "sourceChainId": "18545",
+          "psc": "0xbaf0d260f32ee1cdc0d6bcca688fd02f7aca3a13",
+          "sourceBlockNumber": "1234",
+          "sourceBlockHash": "0x819d6524fa6fc164dc9fb5f471892ef7403a2b9110b8cf9e2ded9c5225275713",
+          "expiresAt": "1800000060"
+        }
+      },
+      "digest": "0x586386388be7ed47f33edf1bd6784cf42eee056d17f550c3f6a70b56907f7b96",
+      "domainSeparator": "0x0e597a3c8d3239f87537c73f4c863e336fc13527a8cf00ca04778ea3b967590c",
+      "structHash": "0xa92c9b6a661d1b2d64b748583586f7449a4ba5d65ec24dc478b28f3da67e7e61",
+      "signatures": [
+        {
+          "witnessIndex": "0",
+          "signer": "0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42",
+          "signature": "0x75269867884dd159686fdd7892666d6b9ea905fa2c314a34079d2e4fef33dbda0ee7d9867b60b61082252e586816a8484060bb086e9dba03b599d802df129bbe1b"
+        },
+        {
+          "witnessIndex": "3",
+          "signer": "0x1e054b33476173deeffaea9124f293eecb6de4d0",
+          "signature": "0x21cb6a4cef4ae1c7d36b3c5d7a4770f56a3c435cceeaeaa5c7b0b16b2325d04f7c2044c666efea64a4aa9e198aa0bcfbbe66816fadbb9673774a8ca3888706571c"
+        },
+        {
+          "witnessIndex": "2",
+          "signer": "0x6ae8de0489163ba82609d6358c85b3b47c24cb45",
+          "signature": "0xe858cca446b9a07466ef9774db134880b62f35b7e5e5298b0e726376969d07b02f7ffc5e420575075cba4fa7a325171b52a9da9a3317877ffb1acff249779e541c"
+        }
+      ]
+    },
+    {
+      "name": "AccessDecision",
+      "typedData": {
+        "types": {
+          "EIP712Domain": [
+            {
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "name": "version",
+              "type": "string"
+            },
+            {
+              "name": "chainId",
+              "type": "uint256"
+            },
+            {
+              "name": "verifyingContract",
+              "type": "address"
+            }
+          ],
+          "AccessDecision": [
+            {
+              "name": "requestDigest",
+              "type": "bytes32"
+            },
+            {
+              "name": "result",
+              "type": "uint8"
+            },
+            {
+              "name": "credentialDigest",
+              "type": "bytes32"
+            },
+            {
+              "name": "stateSequence",
+              "type": "uint64"
+            },
+            {
+              "name": "witnessSetVersion",
+              "type": "uint64"
+            },
+            {
+              "name": "sourceBlockNumber",
+              "type": "uint256"
+            },
+            {
+              "name": "sourceBlockHash",
+              "type": "bytes32"
+            },
+            {
+              "name": "expiresAt",
+              "type": "uint64"
+            }
+          ]
+        },
+        "primaryType": "AccessDecision",
+        "domain": {
+          "name": "HMBCDecision",
+          "version": "1",
+          "chainId": "28545",
+          "verifyingContract": "0xe3657551ab073fe9146c434569370ef433ff85b4"
+        },
+        "message": {
+          "requestDigest": "0xcb802061aae6df7e515bdf8f21b4cc0ed1e0e2184f1025222f149717412ad7c2",
+          "result": "1",
+          "credentialDigest": "0x4ac43f5a41f745b7ade201d76ae9c7b9055e0d290a321be8f2bfd3eea6b61bc1",
+          "stateSequence": "5",
+          "witnessSetVersion": "2",
+          "sourceBlockNumber": "1234",
+          "sourceBlockHash": "0x819d6524fa6fc164dc9fb5f471892ef7403a2b9110b8cf9e2ded9c5225275713",
+          "expiresAt": "1800000030"
+        }
+      },
+      "digest": "0xebe8d17345046e96f46bbcace060c7019733fa7e1b645af11734e4bae71dcd7f",
+      "domainSeparator": "0x7670aef010750fa8dccdd19dc952d91ae9b77a0c585f50fc900d914c92813762",
+      "structHash": "0x654ded64e70d4774182730fa8ff3e934d4aaa09755ba48235e9f1252bdf8a75e",
+      "signatures": [
+        {
+          "witnessIndex": "0",
+          "signer": "0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42",
+          "signature": "0x876f7a541e1db50ecc50dff5d36f201ba44c39262658522da94c841cbc6517df00e596a3f4b240cb1567210c901b4e43e11001c0862e90d0a7da845a81dea4c21b"
+        },
+        {
+          "witnessIndex": "3",
+          "signer": "0x1e054b33476173deeffaea9124f293eecb6de4d0",
+          "signature": "0x98f55665877ba99855983e0872dd48c4eee991860844ebac185f54f50b12a1690cf31b0c925bb381a578fa510fba05cb7364e51e7afe6db99fe69610e4891d661c"
+        },
+        {
+          "witnessIndex": "2",
+          "signer": "0x6ae8de0489163ba82609d6358c85b3b47c24cb45",
+          "signature": "0x4e455ccf8615ee28ff80d678ca8eda7ae90d5f78f62d435dc4b56c4aef1d5535676860419f19319ca41636a17c98c5832a9f1e46760497151ad2b8b7d84654641b"
+        }
+      ]
+    },
+    {
+      "name": "GrantReceipt",
+      "typedData": {
+        "types": {
+          "EIP712Domain": [
+            {
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "name": "version",
+              "type": "string"
+            },
+            {
+              "name": "chainId",
+              "type": "uint256"
+            },
+            {
+              "name": "verifyingContract",
+              "type": "address"
+            }
+          ],
+          "GrantReceipt": [
+            {
+              "name": "requestDigest",
+              "type": "bytes32"
+            },
+            {
+              "name": "grantId",
+              "type": "bytes32"
+            },
+            {
+              "name": "gid",
+              "type": "address"
+            },
+            {
+              "name": "dataId",
+              "type": "bytes32"
+            },
+            {
+              "name": "keyEpoch",
+              "type": "uint64"
+            },
+            {
+              "name": "grantExpiresAt",
+              "type": "uint64"
+            },
+            {
+              "name": "witnessSetVersion",
+              "type": "uint64"
+            },
+            {
+              "name": "dbcChainId",
+              "type": "uint256"
+            },
+            {
+              "name": "kssc",
+              "type": "address"
+            },
+            {
+              "name": "dbcBlockNumber",
+              "type": "uint256"
+            },
+            {
+              "name": "dbcBlockHash",
+              "type": "bytes32"
+            }
+          ]
+        },
+        "primaryType": "GrantReceipt",
+        "domain": {
+          "name": "HMBCReceipt",
+          "version": "1",
+          "chainId": "18545",
+          "verifyingContract": "0xbaf0d260f32ee1cdc0d6bcca688fd02f7aca3a13"
+        },
+        "message": {
+          "requestDigest": "0xcb802061aae6df7e515bdf8f21b4cc0ed1e0e2184f1025222f149717412ad7c2",
+          "grantId": "0xe7cbcccf5384fcf23d61ed0d816214984f2818f9138e80be6b752444103782e3",
+          "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+          "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+          "keyEpoch": "0",
+          "grantExpiresAt": "1800000030",
+          "witnessSetVersion": "2",
+          "dbcChainId": "28545",
+          "kssc": "0xe3657551ab073fe9146c434569370ef433ff85b4",
+          "dbcBlockNumber": "4321",
+          "dbcBlockHash": "0x0f4c0914f6381b5288f5e421df381335ab216e747313f81e6c80bf8fd5dda16f"
+        }
+      },
+      "digest": "0xc0c459e346b9820fb952740af2fe27e5c8b22375caacf139c372fe0e9230e094",
+      "domainSeparator": "0x19270c4132e963db37fcec9bbede994e23950ed4ad8e60ce839bbcb1080e7fd7",
+      "structHash": "0xaf8d319484c87dd64d864f17c55475b161f0fadea5cf4d9a7a98ce454d5dba15",
+      "signatures": [
+        {
+          "witnessIndex": "0",
+          "signer": "0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42",
+          "signature": "0xe07e848758ef8cb30d79e84721c4637dc8d904e0b3e019f8ae1baa83368633fb2b7e5c4500a5a156fb74eb253f80fc6f131ead85b12d9ba34495cc302d4a197f1b"
+        },
+        {
+          "witnessIndex": "3",
+          "signer": "0x1e054b33476173deeffaea9124f293eecb6de4d0",
+          "signature": "0x1f2ddfd23448cd708487403e6d3166d58b2e6561b73c6b7f64463c08527a76c9128dc9582d6382a8082b4d10a0e07e5a776355d72bbe36619f1315da9948e9af1b"
+        },
+        {
+          "witnessIndex": "2",
+          "signer": "0x6ae8de0489163ba82609d6358c85b3b47c24cb45",
+          "signature": "0x91acc5d7b6f15c9065e8dc3e18557182b32ca4e0fc4064ecc3d5fdc166bb3549792437c8191b2208e63f571d4393ade681e356756b8c550217b4aa0f4d4919a71b"
+        }
+      ]
+    },
+    {
+      "name": "GovernanceAction",
+      "typedData": {
+        "types": {
+          "EIP712Domain": [
+            {
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "name": "version",
+              "type": "string"
+            },
+            {
+              "name": "chainId",
+              "type": "uint256"
+            },
+            {
+              "name": "verifyingContract",
+              "type": "address"
+            }
+          ],
+          "GovernanceAction": [
+            {
+              "name": "action",
+              "type": "uint8"
+            },
+            {
+              "name": "root",
+              "type": "address"
+            },
+            {
+              "name": "admins",
+              "type": "address[]"
+            },
+            {
+              "name": "nonce",
+              "type": "uint64"
+            },
+            {
+              "name": "witnessSetVersion",
+              "type": "uint64"
+            },
+            {
+              "name": "expiresAt",
+              "type": "uint64"
+            }
+          ]
+        },
+        "primaryType": "GovernanceAction",
+        "domain": {
+          "name": "HMBCGovernance",
+          "version": "1",
+          "chainId": "18545",
+          "verifyingContract": "0x7777777777777777777777777777777777777777"
+        },
+        "message": {
+          "action": "1",
+          "root": "0x8888888888888888888888888888888888888888",
+          "admins": [
+            "0x1111111111111111111111111111111111111111",
+            "0x2222222222222222222222222222222222222222"
+          ],
+          "nonce": "1",
+          "witnessSetVersion": "2",
+          "expiresAt": "1800000060"
+        }
+      },
+      "digest": "0x36c4849e13ff8b6590429f9af548ca7fe52cf73b61aa8878d6d15ca970c73828",
+      "domainSeparator": "0xf705dfb98ee198057bfd614df5c10d6718ca3124eb078ac31489f00d331fba65",
+      "structHash": "0x89373119beb011318594b7b36bd1451ee2dc33beef9e34a60abb9ea7153a4f01",
+      "signatures": [
+        {
+          "witnessIndex": "0",
+          "signer": "0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42",
+          "signature": "0xd78160ef77a6bb8330880e0574cba6eba6d562cc4c34ec4ff6c79d9f5beeee3b4f8e3b953252ef0cf8071f38f2eacbeabfb5adf0a0fdd5413105ebd78e199e731b"
+        },
+        {
+          "witnessIndex": "3",
+          "signer": "0x1e054b33476173deeffaea9124f293eecb6de4d0",
+          "signature": "0x7309a11af79a352f53bfa8c3b68c1c7aacbc5cd17639e710043a0b177cffdc7f5317a62c9cf576031be8b6c96843139d8f89805d7b7453465fcf72e8ce97aad01b"
+        },
+        {
+          "witnessIndex": "2",
+          "signer": "0x6ae8de0489163ba82609d6358c85b3b47c24cb45",
+          "signature": "0xc4d22c3acc03dd812c934d428134b479f295818c5f80ef25793507ad0b271e245e921bd59b0cead55075cf7a897f5340ea58fb0e65c56e7137c6b8d0dde9f28a1c"
+        }
+      ],
+      "independentAbiWordEncodingMatches": true,
+      "typeHash": "0xbe41094558fdd6d7e5f1a8ceda5dc28b582e5bb003758ed41907ef9ed6bc361e"
+    },
+    {
+      "name": "GovernanceAction",
+      "typedData": {
+        "types": {
+          "EIP712Domain": [
+            {
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "name": "version",
+              "type": "string"
+            },
+            {
+              "name": "chainId",
+              "type": "uint256"
+            },
+            {
+              "name": "verifyingContract",
+              "type": "address"
+            }
+          ],
+          "GovernanceAction": [
+            {
+              "name": "action",
+              "type": "uint8"
+            },
+            {
+              "name": "root",
+              "type": "address"
+            },
+            {
+              "name": "admins",
+              "type": "address[]"
+            },
+            {
+              "name": "nonce",
+              "type": "uint64"
+            },
+            {
+              "name": "witnessSetVersion",
+              "type": "uint64"
+            },
+            {
+              "name": "expiresAt",
+              "type": "uint64"
+            }
+          ]
+        },
+        "primaryType": "GovernanceAction",
+        "domain": {
+          "name": "HMBCGovernance",
+          "version": "1",
+          "chainId": "18545",
+          "verifyingContract": "0x7777777777777777777777777777777777777777"
+        },
+        "message": {
+          "action": "2",
+          "root": "0x8888888888888888888888888888888888888888",
+          "admins": [],
+          "nonce": "1",
+          "witnessSetVersion": "2",
+          "expiresAt": "1800000060"
+        }
+      },
+      "digest": "0x84fd8ceaf26fa148f911f4b93139fe81e6f3d0e4d657ed1334a0934f6037c562",
+      "domainSeparator": "0xf705dfb98ee198057bfd614df5c10d6718ca3124eb078ac31489f00d331fba65",
+      "structHash": "0x0edcbf6897318d4ec2c559aad2883da9ec3159e3ca927dfb184ee1a7a2c57f62",
+      "signatures": [
+        {
+          "witnessIndex": "0",
+          "signer": "0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42",
+          "signature": "0x40893ed954dc27db0f1935e147f4de294d85959e8954944594c7aadb8907435b3308f376532be4adf6034bc06403ca6a89b73d25ac1957f5df8b82c79fec5d2d1b"
+        },
+        {
+          "witnessIndex": "3",
+          "signer": "0x1e054b33476173deeffaea9124f293eecb6de4d0",
+          "signature": "0x9bf146a30813ae11fa00b6966533c2d1783e75513962ebea24ace8f8f945c9d943e8a75a68b857231a1ee6f6de828dbaafa3261f546c08d825ef8be760cb17341b"
+        },
+        {
+          "witnessIndex": "2",
+          "signer": "0x6ae8de0489163ba82609d6358c85b3b47c24cb45",
+          "signature": "0xd14b16acbe625d120a6ec49d614b35faf7ebd138beb6b94acec0293e19bac24f115a2eb369fd8bf8b9215347321e52e41776f0b54307befd606657e1804d0d421b"
+        }
+      ],
+      "independentAbiWordEncodingMatches": true,
+      "typeHash": "0xbe41094558fdd6d7e5f1a8ceda5dc28b582e5bb003758ed41907ef9ed6bc361e"
+    },
+    {
+      "name": "GovernanceAction",
+      "typedData": {
+        "types": {
+          "EIP712Domain": [
+            {
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "name": "version",
+              "type": "string"
+            },
+            {
+              "name": "chainId",
+              "type": "uint256"
+            },
+            {
+              "name": "verifyingContract",
+              "type": "address"
+            }
+          ],
+          "GovernanceAction": [
+            {
+              "name": "action",
+              "type": "uint8"
+            },
+            {
+              "name": "root",
+              "type": "address"
+            },
+            {
+              "name": "admins",
+              "type": "address[]"
+            },
+            {
+              "name": "nonce",
+              "type": "uint64"
+            },
+            {
+              "name": "witnessSetVersion",
+              "type": "uint64"
+            },
+            {
+              "name": "expiresAt",
+              "type": "uint64"
+            }
+          ]
+        },
+        "primaryType": "GovernanceAction",
+        "domain": {
+          "name": "HMBCGovernance",
+          "version": "1",
+          "chainId": "18545",
+          "verifyingContract": "0x7777777777777777777777777777777777777777"
+        },
+        "message": {
+          "action": "3",
+          "root": "0x8888888888888888888888888888888888888888",
+          "admins": [],
+          "nonce": "1",
+          "witnessSetVersion": "2",
+          "expiresAt": "1800000060"
+        }
+      },
+      "digest": "0xdaae86dfda7bde066c630d4dc2c8b29ab7228fa5e71b881c9a0fb23a80254ccd",
+      "domainSeparator": "0xf705dfb98ee198057bfd614df5c10d6718ca3124eb078ac31489f00d331fba65",
+      "structHash": "0x5b3dcd94ab9f2a37ac4af8d2cc47976704ba45baa42f2c0af24a6bcadf8736f3",
+      "signatures": [
+        {
+          "witnessIndex": "0",
+          "signer": "0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42",
+          "signature": "0x358fe892cc4d81fc545458806a6929c00be928bb2e138232c4d84d5e7ddaf45e4f8eaac549d7f850feb637a86e73c7165784d897279ca8735adc53a30ec3f6ed1c"
+        },
+        {
+          "witnessIndex": "3",
+          "signer": "0x1e054b33476173deeffaea9124f293eecb6de4d0",
+          "signature": "0x6d191d8e6eec88e3d82e82a683dc758db96829447630e49b9000b314d9efcf9956e9eccb967d9bc2460804b7e36285cfbd8b15da502e65d422c8420f6c7478111b"
+        },
+        {
+          "witnessIndex": "2",
+          "signer": "0x6ae8de0489163ba82609d6358c85b3b47c24cb45",
+          "signature": "0xeedf4555c9a61785ca66848dbc2b96fca18bed9ce85a7e31d3c4998a0adf3c567897345f16633fb2c5e1af34c963ea5f41e317e95e7204c93ad4ed2d09640a3e1c"
+        }
+      ],
+      "independentAbiWordEncodingMatches": true,
+      "typeHash": "0xbe41094558fdd6d7e5f1a8ceda5dc28b582e5bb003758ed41907ef9ed6bc361e"
+    }
+  ]
+}

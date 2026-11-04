@@ -2,6 +2,14 @@
 
 Writer: agent 3. Status values: USER-DECIDED, PLAN-CHOICE, IMPLEMENTED-PENDING-FREEZE, FROZEN, OPEN, SUPERSEDED. A plan choice is explicitly proposed for this project; it is not a paper fact or an instructor's requirement.
 
+Candidate2 note (2026-11-04, PROPOSED; no F0 freeze): A3-0070 accepts revision9
+export-layout DESIGN in coordinator scope, including mined generation order;
+A3-0071 publishes the separate complete mapping/layout unit at
+interfaces/proposals/v2-candidate2/MANIFEST.json (0d1a2be4..). The old candidate8
+plan/matrix and accepted design history stay immutable. SOURCE-MIGRATION.md
+lists proposed superseding pins/mappings. Both owners' COMPLETE mapping ACKs
+and separate F0 freeze are still pending. No runtime or RQ gate follows.
+
 | ID | Status | Decision / evidence |
 |---|---|---|
 | D01 | USER-DECIDED | Use E/F/G; finish one RQ before the next. User instruction, 2026-10-06. |
