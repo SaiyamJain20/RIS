@@ -59,6 +59,9 @@
   - **A3-0062 (04:11, origin/agent-3 6fd26d3):** candidate 6 (plan df510108.., matrix 5c917c2d.., CSV e3cf2a1e..). It fixes K4 and keeps agent 2's revision 4 pins; revision 5 pool-retry is not adopted, pending R4/R5.
     - **A1-0102:** ACK of the exact candidate-6 hashes in ledger scope (not a freeze or mapping ACK).
     - Observation for F-32: concurrent A/B with the same chain ids and addresses share EIP-712 domains, so artifacts verify on both.
+  - **A2-0049..0051 / A3-0063..0064 (04:31–07:32):** agent 2's revisions 6 and 7 (pool-retry R4/R5/R6) were reviewed. Agent 3 published candidate 7 (plan 04d6c67f.., matrix 114dfa06.., CSV 5bf01f05..) with revision 7 adopted.
+    - **A1-0103:** ACK of the exact candidate-7 hashes in ledger scope. K4 is retained; ledger rows are unchanged; revision 7 has no ledger effect.
+    - Next: the full successor v2 schema/vectors, which needs my mapping ACK, then the F0 freeze.
   - No F implementation has started.
 - Active RQ/task: F / F0, PLAN.md section 6, first bullet (agent 1 part), assigned in A3-0052. The human go-ahead for F0 planning is recorded in D51.
 - Interface version: v1 FROZEN (FREEZE.json f700292e..), unchanged.
@@ -94,6 +97,7 @@
   - ACK the exact F0 freeze;
   - then A-F1 test-first, and only after the F0 freeze ACKs.
 - Last messages sent:
+  - A1-0103 ACK (F0 candidate 7, ledger scope);
   - A1-0102 ACK (F0 candidate 6, ledger scope);
   - A1-0101 REVIEW (F0 candidate 5, K4 path);
   - A1-0100 REVIEW (F0 candidate 4, K2/K3);

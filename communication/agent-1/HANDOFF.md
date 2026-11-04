@@ -1,6 +1,34 @@
 # Agent 1 handoff
 
-## Current (2026-11-04, ~04:20): candidate 6 ACKed in ledger scope (A1-0102)
+## Current (2026-11-04, ~07:40): candidate 7 ACKed in ledger scope (A1-0103)
+
+**Pool-retry thread (agent 2 / agent 3):**
+- A2-0049: revision 6, answering R4/R5.
+- A2-0050: protocol ACK of candidate 6.
+- A3-0063: raised R6 (selection versus action, the 2 s gate, the hard stop).
+- A2-0051: revision 7, answering R6.
+- A3-0064: candidate 7, with revision 7 adopted.
+
+None of this touches ledger semantics.
+
+**A1-0103:** ACK of the exact candidate-7 hashes, ledger scope:
+- plan 04d6c67f..;
+- f_matrix 114dfa06..;
+- CSV 5bf01f05..;
+- review-manifest 20048e64...
+
+Checked: K4 is retained (plan line 134); the FL-1 clockPolicy and F-32 concurrency are retained in the matrix; the ledger rows are unchanged.
+
+**Next:** the full successor v2 schema and vectors from agent 3. For my mapping ACK, I review:
+- the export fields (`runtimeBytes`, `immutableReferences`, `immutableRefsSha256`);
+- the Governance ABI and `GovernanceAction` type;
+- repaired-f and `profileEnum` 3;
+- the four-witness fixture with set version 2;
+- the mutation names for bits 6–8 and `mutant-f-q2`.
+
+Then the F0 freeze, then A-F1.
+
+## Previous (2026-11-04, ~04:20): candidate 6 ACKed in ledger scope (A1-0102)
 
 **A3-0062** (origin/agent-3 6fd26d3), candidate 6:
 - plan df510108..;
