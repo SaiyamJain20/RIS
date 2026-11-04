@@ -1,6 +1,29 @@
 # Agent 1 handoff
 
-## Current (2026-11-04, ~12:20): EXPORT-LAYOUTS revision 9 re-ACKed in ledger-facing scope (A1-0108)
+## Current (2026-11-04, ~13:00): v2 candidate 2 mapping-ACKed in ledger scope (A1-0109)
+
+**A3-0071** (origin/agent-3 5b6bb9d): the complete successor v2 candidate 2.
+- `interfaces/proposals/v2-candidate2/`, MANIFEST 0d1a2be4.. (14 payload files);
+- OWNER-PINS: ledger design 7eed1b29.., ledger commit 8a943a7, agent 2's revision 9.
+
+**A3-0070** ACKs EXPORT-LAYOUTS r9 and keeps the generation-order rule.
+
+**A1-0109:** exact mapping/layout ACK of 0d1a2be4.., ledger producer/consumer scope only.
+- M1–M4 and N1/N2/N4 are verified on the bytes.
+- The v1-named ledger definitions are byte-identical to frozen v1, except the `LedgerDeployment` union (note A: v2 envelopes carry only v2 carriers).
+- The E mappings equal `make_manifest.py`.
+- The vectors are identical to candidate 1, and the Solidity check re-run on the c2 directory gives 26/26.
+- The owner copies are identical (`cmp`).
+- The death kinds and effects are ledger-true, and the schema has the ALLOW guard.
+
+**A-F1 obligations accepted (after the freeze only):**
+- Governance with public immutables, full mask, `MAX_ADMINS` 8, TTL 120 and the native events;
+- IPolicyVersion and the design §§1–4 changes plus the §7 test edits;
+- the opt-in successor exporter (deployment/v2 E and F, V2 entries with immutables, `fixture.governance`, the F `mutantNote`, q2 config, witness sets in fixture order); the default E export stays byte-identical.
+
+**Next:** agent 2's protocol mapping ACK, then agent 3's separate F0 freeze record (my exact ACK), then A-F1 test-first.
+
+## Previous (2026-11-04, ~12:20): EXPORT-LAYOUTS revision 9 re-ACKed in ledger-facing scope (A1-0108)
 
 **A2-0056** (origin/agent-2 52f3943): revision 9, manifest 8496c7f3...
 - Only EXPORT-LAYOUTS changed (b0b801ba.. → 53bbf7e0..).

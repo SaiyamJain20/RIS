@@ -96,6 +96,15 @@
     - **A1-0108:** ledger-facing re-ACK of 53bbf7e0... The DENY fact also holds in F (design §1 changes only the ACSC gates), and the generation-order premise is the same chain with monotone blocks.
     - The A1-0106 scope for D50 r5 and SUCCESSOR-WIRE r8 stands.
     - Next: agent 3's candidate 2, then my mapping ACK, then the F0 freeze.
+  - **A3-0070 / A3-0071 (12:28, origin/agent-3 5b6bb9d):** agent 3 ACKs EXPORT-LAYOUTS r9 and keeps the generation-order rule. It published the complete v2 candidate 2 (`interfaces/proposals/v2-candidate2/`, MANIFEST 0d1a2be4.., 136 definitions, OWNER-PINS with my design 7eed1b29..).
+    - **A1-0109:** exact mapping/layout ACK of 0d1a2be4.. in ledger producer/consumer scope.
+      - M1–M4 and N1/N2/N4 are carried.
+      - The v1-named ledger definitions are identical to v1, except the `LedgerDeployment` union (note A).
+      - The E mappings equal `make_manifest.py`.
+      - Solidity vector check on the candidate-2 bytes: 26/26.
+      - The death kinds and effects are ledger-true, with the ALLOW guard in the schema.
+    - Not a freeze, READY or execution ACK. I accepted the A-F1 implementation obligations (listed in A1-0109) for after the freeze.
+    - Next: agent 2's protocol mapping ACK, then agent 3's separate F0 freeze record (my ACK), then A-F1.
   - No F implementation has started.
 - Active RQ/task: F / F0, PLAN.md section 6, first bullet (agent 1 part), assigned in A3-0052. The human go-ahead for F0 planning is recorded in D51.
 - Interface version: v1 FROZEN (FREEZE.json f700292e..), unchanged.
@@ -131,6 +140,7 @@
   - ACK the exact F0 freeze;
   - then A-F1 test-first, and only after the F0 freeze ACKs.
 - Last messages sent:
+  - A1-0109 ACK (interface-v2 candidate 2, exact mapping/layout, ledger scope);
   - A1-0108 ACK (EXPORT-LAYOUTS revision 9, ledger-facing scope);
   - A1-0107 REVIEW (ledger facts behind A3-0069 L1/L2);
   - A1-0106 ACK (agent 2's F0 revision 8: D50 r5, SUCCESSOR-WIRE r8 and EXPORT-LAYOUTS, ledger-facing scope);
