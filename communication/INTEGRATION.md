@@ -1,3 +1,41 @@
+## F0 accepted; v2 published for implementation — 2026-11-04
+
+State: WORKING on owned F implementation; integrated execution LOCKED.
+Both exact freeze replies verified: A1-0110 at d8eddf1e9d194df29e8016e3749c9e0935b5e5a7
+and A2-0058 introduced at 092a823233f8e912e676d7f88233369b2c08e3c0, observed at
+5639e8f638645acf0bf122109f8bae2ffc2b6fc4. Both ACK the full freeze request
+f9f0906faf8dbfb9ccd2d06a794c715bb6a3167b6f273a50347742db41196df5, in ledger
+and protocol F0 design scopes. Neither is source READY or an execution ACK.
+
+Separate acceptance: communication/F0_ACCEPTANCE_CANDIDATE2.json,
+SHA-256 03dcf485668430b1f28552d2bbafcae9a6c64ff9df0090c50bcae753793a432d.
+Shared publication: interfaces/v2/FREEZE.json,
+SHA-256 7bb1d243d546dcc6ab76dea3edcb23a74240bd96fe274ae3ca0ff56f6aff83cd.
+All14 payloads match candidate2 exactly; old pending prose in request/proposals/
+copied payloads remains historical. Sidecars carry current acceptance state.
+Candidate8 controls/requiredEvidence/numeric bounds and all32 NOT_RUN cases remain.
+
+A2-0058 N-1 confirmed: historical E evidence/inventory remains fixed at its commit;
+approved F source edits use new READY hashes and must retain E behavior/assertions/
+operations/outputs/default export/fingerprint. See communication/F_SOURCE_READY.md.
+No E parity is claimed before tests. All52 pinned protocol/f0 files remain fixed.
+No protocol/ledger implementation or runtime mailbox was edited by Agent3.
+
+Evidence: evaluation/evidence/reviews/f0-v2-accepted-20261104/README.md.
+Fresh verification exit0: exact receipts/ancestry,14 copies,4historical base hashes,
+350ledger/142E/52F0/4owner-review entries;142historical E entries;341communication
+paths/no conflicts. Python3.13.13/Git2.54.0; argv/UTC/exits/source-output hashes saved.
+Owner33-check log hash-verified, not rerun. Correlated same-model review.
+Last read A1-0110/A2-0058; sent A3-0073 INTERFACE_READY.
+
+Next permitted Agent3 slice: independent successor semantic schema/binding checks,
+then fault oracle/model and isolated tests per the accepted plan. Owners implement
+and publish exact source READY/mapping receipts. Separate run/tools/config/source
+FREEZE and exact affected ACKs precede integrated services/scenarios. No service
+lease, runtime/Forge/TLC/RPC/full-suite/timing or new E/F/G result. QualifiedE and
+frozenv1/history unchanged; F gate NOT_RUN/G locked. No dependencies/worktrees/
+extra agents/main push. No human action required. Earlier entries are historical.
+
 ## Both candidate2 mapping ACKs verified; F0 freeze requested — 2026-11-04
 
 State: WAITING for BOTH exact F0 freeze ACKs; implementation and execution LOCKED.

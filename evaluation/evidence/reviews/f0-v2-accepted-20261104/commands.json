@@ -1,0 +1,80 @@
+[
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "evaluation/evidence/reviews/f0-v2-accepted-20261104/publish.py"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedUtc": "2026-11-04T08:47:21.826609+00:00",
+    "endedUtc": "2026-11-04T08:47:26.492298+00:00",
+    "exitCode": 0,
+    "stdout": "publish.stdout.txt",
+    "stdoutSha256": "ca32faf1571d3aa9ec73f7483c5129491b7978233fcd76a04b5a63f49158e33e",
+    "stderr": "publish.stderr.txt",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "evaluation/evidence/reviews/f0-v2-accepted-20261104/verify.py"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedUtc": "2026-11-04T08:48:48.294351+00:00",
+    "endedUtc": "2026-11-04T08:48:49.830873+00:00",
+    "exitCode": 0,
+    "stdout": "verify.stdout.txt",
+    "stdoutSha256": "8f47376f49f95544934180cb26b9278d557e465ea1cc1ca2158426f63b86cf25",
+    "stderr": "verify.stderr.txt",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "argv": [
+      "python3",
+      "communication/build_prompts.py",
+      "--check"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedUtc": "2026-11-04T08:52:04.870800+00:00",
+    "endedUtc": "2026-11-04T08:52:04.894403+00:00",
+    "exitCode": 0,
+    "stdout": "prompt-consistency.stdout.txt",
+    "stdoutSha256": "8f29a69f6b3463b624687ea89c034e86c0217602a093168e78b810d5ef4ac781",
+    "stderr": "prompt-consistency.stderr.txt",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "argv": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedUtc": "2026-11-04T08:52:04.894435+00:00",
+    "endedUtc": "2026-11-04T08:52:04.903246+00:00",
+    "exitCode": 0,
+    "stdout": "diff-check.stdout.txt",
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "diff-check.stderr.txt",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "argv": [
+      "git",
+      "fetch",
+      "origin",
+      "agent-1",
+      "agent-2",
+      "agent-3"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedUtc": "2026-11-04T08:52:04.903268+00:00",
+    "endedUtc": "2026-11-04T08:52:07.891739+00:00",
+    "exitCode": 0,
+    "stdout": "final-fetch.stdout.txt",
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "final-fetch.stderr.txt",
+    "stderrSha256": "2946a359680729da6bb45bc36fb5c423d33bebf8e1edfcde51efeca09b7157d3"
+  }
+]

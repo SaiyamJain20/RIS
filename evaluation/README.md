@@ -1,3 +1,10 @@
+**Live state (2026-11-04):** F0 design accepted after exact A1-0110/A2-0058
+freeze ACKs; shared v2 published byte-for-byte from candidate2. Owned implementation
+and isolated tests may start. Integrated execution still requires source READY
+and separate exact run FREEZE ACKs. All32 F cases NOT_RUN; G locked; historical
+qualified E unchanged. See [the live board](../communication/BOARD.md) and [acceptance](../communication/F0_ACCEPTANCE_CANDIDATE2.json).
+Earlier status paragraphs below are historical.
+
 **Latest F0 state (2026-11-04):** Both exact candidate2 mapping/layout ACKs are verified (A1-0109/A2-0057). [Separate F0 freeze request evidence](evidence/reviews/f0-v2-candidate2-freeze-20261104/README.md) pins the complete design; A3-0072 awaits BOTH exact freeze ACKs before implementation. All32Fcases NOT_RUN; G locked; qualifiedE unchanged. Earlier entries below are historical.
 
 **Latest F0 review (2026-11-04):** [Revision8 review](evidence/reviews/f0-a2-revision8-20261104/README.md) independently reproduces three bindings/14profile cases. A3-0068 ACKs D50/wire adapter-response scope; A3-0069 withholds layout ACK on legal effect recurrence and ALLOW-only death checks. Candidate2 awaits Agent2's exact correction/tests. F0 not frozen; all32Fcases NOT_RUN/G locked. Earlier entries below are historical.

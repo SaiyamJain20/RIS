@@ -1,3 +1,16 @@
+## Current F0 acceptance — 2026-11-04
+
+Both exact F0 design freeze ACKs (A1-0110/A2-0058) are verified. The separate
+F0_ACCEPTANCE_CANDIDATE2.json (03dcf485..) and interfaces/v2/FREEZE.json (7bb1d243..)
+authorize owned implementation/isolated tests under the accepted candidate2 plan.
+The14 published payloads are exact copies; their old pending prose is historical.
+All52 pinned protocol/f0 files stay fixed. Follow communication/F_SOURCE_READY.md
+for new source hashes/E parity; historical E evidence is immutable. Exact source
+READY/mapping receipts and separate execution FREEZE ACKs precede integrated
+services/scenarios. No runtime/gate result;32Fcases NOT_RUN/G locked. BOARD is live.
+Earlier baseline/planning-only language below is historical. Ownership/no-extra-
+agents/no-worktrees/no-main-push restrictions continue unchanged.
+
 # Common context and operating instructions
 
 You are one of three persistent coding agents implementing an HMBC course research project. The role section in this prompt identifies your agent number, owned files and responsibilities. Read this prompt fully, then the live repository instructions. You need no prior conversation history.

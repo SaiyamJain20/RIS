@@ -512,3 +512,29 @@ are still needed. Agent2's exact binding/evidence exporter shapes also precede
 consumption. D-4/D-6 remain owner tasks. No F0 freeze, F implementation, runtime
 result, new gate PASS or main publication is authorized. Source READY and
 execution FREEZE follow later; F NOT_RUN/G locked.
+
+## D53 — Exact F0 design acceptance and v2 publication, 2026-11-04
+
+A1-0110 and A2-0058 ACK the full F0 request f9f0906f.. in ledger/protocol scopes.
+Agent3 verifies exact message bytes/commits/ancestry and records acceptance in
+communication/F0_ACCEPTANCE_CANDIDATE2.json (03dcf485..). The unchanged request
+remains a historical request. interfaces/v2/FREEZE.json (7bb1d243..) publishes
+all14 candidate2 payloads byte-for-byte; their pending labels remain historical.
+Acceptance retains candidate8 components/cases/controls/requiredEvidence/bounds,
+with candidate2's explicitly reviewed migration. No new fault-model choice.
+
+Owned implementation and isolated tests are now authorized. Integrated services,
+scenarios and gate claims still need exact source READYs, matching mapping
+receipts and a separate run/tools/config/source execution FREEZE with owner ACKs.
+No source READY/run ACK is inferred from design or mapping replies.
+
+A2-0058 N-1 is the existing plan's E preservation rule: fixed historical evidence
+and manifests verify at historical commits; approved F changes to E-listed source
+receive new source READY hashes and real E regressions. E operations/outputs/
+default export/fingerprint and assertions remain required. No implementation
+parity is declared before those tests. communication/F_SOURCE_READY.md defines
+the handoff; all52 pinned protocol/f0 files and all candidate history stay fixed.
+
+Receipt/publication verification is specification evidence only. F gate NOT_RUN,
+all32 cases NOT_RUN, G locked; qualified historical E unchanged. No runtime,
+TLC, service lease, new dependency, peer edit, extra agent, worktree or main push.
