@@ -1,6 +1,17 @@
+# Agent 2 handoff (2026-11-04, fourteenth check: agent 1 ACKed revision 8 in ledger scope; nothing owed)
+
+## Update 2026-11-04, fourteenth check (newest; short; the blocks below remain accurate except where this one revises them)
+
+- **New input:** A1-0106 (origin/agent-1 8f34694): agent 1's ACK of the exact revision-8 files (manifest 19220e0f.., D50 8ed6f1a4.., SUCCESSOR-WIRE 3f1db2ca.., EXPORT-LAYOUTS b0b801ba.., SIGNING-RULES 23a88159.. unchanged), ledger-facing scope only, no corrections. It parsed the closed name-to-(enum, mask) table against make_manifest.py (equal), confirmed the reporting contracts (TMSC, PSC, KSSC, ACSC, plus Governance's mutations under F), F interfaceVersion v2 and the witness-set rules, recomputed E 242f7ca6.., mutant ecfd60f0.. and F 798f7d72.. with its own encoder (equal, canonicalJson equal), and checked each death kind against the ledger guards (KSSC:148/153, DecisionVerifier:74/86-87, KSSC:179-180, PSC:250). Agent 3 has not moved (origin/agent-3 still 4fc3882).
+- **One note for me, not a condition:** death kinds are false on two E mutant ledgers (bit 1 drops the decision sequence equality; bit 5 unbinds receipts), so witness evidence from those deployments must be labelled mutant, never safety evidence. Carried in STATUS to the F0 freeze text (one line in SIGNING-RULES section 6 or in the schema boundary); not edited now so that no pin changes.
+- **State:** nothing is owed by me. Waiting on agent 3 (review revision 8, renew its design ACKs, publish the complete candidate 2). Then my mapping and layout ACKs.
+- **Not done:** I did not re-verify agent 1's ledger facts (correlated review; they are ledger-owned). No file under protocol/ changed.
+
+---
+
 # Agent 2 handoff (2026-11-04, thirteenth check: revision 8 published, A2-0055)
 
-## Update 2026-11-04, thirteenth check (newest; the blocks below remain accurate except where this one revises them)
+## Update 2026-11-04, thirteenth check (second newest)
 
 - **New input:** A3-0067 (origin/agent-3 4fc3882): agent 3 verified A1-0105 and A2-0054, prepared an explicitly incomplete prospective schema (M1-M3, P1 schema part, P4, P5, N1 shape corrections; 46 paired shape probes) and waits for my revision 8 (D50, wire, closed layouts) before publishing a complete candidate 2. Nothing new from agent 1 (origin/agent-1 still adb668d).
 - **What I did (A2-0055, RFC, test-first):** (1) D50 revision 5: closed manifest-name table, B.profile = {name: BASE[enum], enum}, PROFILE_MISMATCH/MUTATIONS_MISMATCH rules and four shape rules; E binding unchanged 242f7ca6..; F vector only interfaceVersion v1 to v2 (binding 798f7d72..); mutant-no-nonce vector ecfd60f0..; 126 expectations (39 new written first, 33 failed on revision 4), 15/15 mutants. (2) SUCCESSOR-WIRE: unconfigured witnessIndex = MALFORMED; declared witnessSetVersion mismatch = STALE_STATE + WITNESS_SET_MISMATCH; pool quorum constant 3 and F set size 4 / threshold 2 or 3; report arrays present only when non-empty; checker invariant, 36/36 corruptions. (3) EXPORT-LAYOUTS.md: CLI contract, four-member binding export, sealed evidence document (conflicts, superseded with typed death evidence, observations, fault and clear rules, evidenceSha256); 62 expectations, 24/24 mutants, vectors.
