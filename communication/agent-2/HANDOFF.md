@@ -1,3 +1,24 @@
+# Agent 2 handoff (2026-11-04, twenty-first check: implementation slice 3a, the pool decision core)
+
+## Update 2026-11-04, twenty-first check (newest; short; the blocks below remain accurate except where this one revises them)
+
+- **Peers:** nothing new on origin/agent-1 (e7d6705) or origin/agent-3 (55a0c37) since the previous check (A1-0113, A3-0074, A3-0075 were read; nothing is asked of me).
+- **Slice 3a (test-first, new files only):** `hmbc_protocol/pool_core.py` is the production port of the pinned `pool_adoption.py` reference (`classify`, `adopt_recorded`, `decide`, the three time functions) plus `evidence(...)`, which assembles `recordedReports`,
+  `inconsistentReports`, `lateReports`, `adopted` (selection) with its gated `reproposal` (action) and `timing` from reports whose signatures the caller already recovered. Pure and standard-library only. `tests/test_pool_core.py`: 88 tests, the first run failed at import
+  (`evidence/af2-state/pool-core-run1-red.txt`). Differential against the reference on 8,421 + 9,690 report lists and the exhaustive 3,456-assignment f <= 1 enumeration; the assembled evidence also passes my independent wire checker (seven scenarios appended to a copy of
+  SUCCESSOR-WIRE.md; four tampered copies must fail). Same author for reference, checker and port: correlated.
+- **Choices I made where the reference is silent (written in the module docstring, not discovered):** value identity is canonical content (`json.dumps(sort_keys=True)`); the smallest signature per (witness, value) is kept so evidence is arrival-order independent; only valid
+  reports for the collection's sequence reach any list; an invalid-signature report is never read, so a Byzantine witness cannot make the pool raise; times are non-negative integers (stricter than the reference); a late report after a deadline close is refused.
+- **Sensitivity:** `tools/run_pool_core_mutants.py` **47 of 47** (`pool-core-mutants.txt`). Honest record: run 1 stopped on an ambiguous anchor in my own runner (INVALID, nothing ran; its one-line output deleted, not a result); run 2 detected 47 of 48
+  (`pool-core-mutants-run2.txt`): the survivor was an equivalent mutant (`evidence` re-validates a value `collection_deadline_ms` validates first with the same exception), removed with a comment rather than counted; an alias mutant I wrote made me add one assertion (evidence members must not alias one another).
+  The four new-code test files together: 155 passed. The first green run of the pool tests passed all 88 at once; the mutation run is what shows they can fail.
+- **Environment:** the tests run with the scratchpad venv (CPython 3.13.13, eth-account 0.14.0, jsonschema 4.26.0, pytest 9.0.2); `uv run` offline failed to build a venv (no network for cytoolz) and left an empty git-ignored `.venv` in my clone, which I did not delete.
+- **Not done:** the pool orchestration (retained proposal, fan-out, outcome statuses, second round, injected transport and clock), the witness service and D50 live-read reconstruction, the worker store's D50 rows and `worker_log --binding`, the successor adapter and strict parsing, D-4, D-6,
+  hooks H3/H5/H6 and byzantine.py, the E regressions, the source READY manifest. No change to any E-listed file or to any pinned `protocol/f0` file; no integrated run.
+- **Next:** slice 3b, the pool orchestration on an injected transport/clock model, test-first.
+
+---
+
 # Agent 2 handoff (2026-11-04, twentieth check: implementation slice 2)
 
 ## Update 2026-11-04, twentieth check (newest; short; the blocks below remain accurate except where this one revises them)

@@ -1,4 +1,4 @@
-# agent 2: F implementation progress, task 2 slices 1 and 2 (the durable signing store; the production D50 binding module and the read-only exporter CLI). NOT a source READY.
+# agent 2: F implementation progress, task 2 slices 1 and 2 (the durable signing store; the production D50 binding module and the read-only exporter CLI) and task 3 slice 3a (the pool decision core). NOT a source READY.
 
 Accepted design inputs: F0 acceptance A3-0073 (`F0_ACCEPTANCE_CANDIDATE2.json` 03dcf485..), the 52 pinned `protocol/f0` files, interface `interfaces/v2` (FREEZE 7bb1d243..). Paper-derived reconstruction, symbolic, synthetic fixtures.
 Same-model work and review: correlated. Nothing here ran against a chain, a witness process, a pool or an adapter; the signer and the observation source are injected.
@@ -22,6 +22,19 @@ Done in slice 2 (new files only):
   EXPORT-LAYOUTS section 1 (exit 0 one canonical line, exit 3 one canonical ExporterError line, exit 2 usage; no write, no RPC). `tests/test_witness_state_cli.py` (23 tests, written first).
 - All three test files: 67 tests pass (`tests-green.txt`). The anchor is persisted at INIT only; recording it at each successful open (the D50 text says "the pinned block per chain") is a question for the READY, not decided here.
 
-Not done (task 2 and task 3 remain): the witness service (independent validation, profile-3 `witness.py`/`ledger.py`/`worker.py` changes, the D50 binding reconstruction and masked-build check from live reads), the worker store's D50 rows and `worker_log --binding`, the pool collector with snapshot selection, the effort gate and timing evidence, the successor adapter operations and strict parsing, D-4, D-6, the TEST-ONLY hooks
+Done in slice 3a (new files only; pure, no clock/network/key/file):
+- `hmbc_protocol/pool_core.py`: the PRODUCTION port of the pinned reference `protocol/f0/vectors/pool_adoption.py` (`classify`, `adopt_recorded`, `decide`, `collection_deadline_ms`, `snapshot_close`, `reproposal_status`) plus `evidence(...)`, which
+  assembles the wire members `recordedReports`, `inconsistentReports`, `lateReports`, `adopted` (selection, with the gated `reproposal` action) and `timing` from reports whose signatures the caller has already recovered. Standard library only (`json`, `re`).
+  Explicit choices the reference leaves open are listed in the module docstring (canonical content as value identity, smallest signature per (witness, value), only valid reports of this sequence reach evidence, non-negative integer times, a report with an invalid
+  signature is never read so a Byzantine witness cannot make the pool raise, no late report after a deadline close).
+- `tests/test_pool_core.py` (88 tests, written first; the first run failed at import, `pool-core-run1-red.txt`): a differential against the reference on every report list of up to three reports from 20 distinct reports (8,421 lists), every four-subset in two orders (9,690),
+  the exhaustive f <= 1 safety enumeration (3,456 assignments, agreeing assignment by assignment), the time functions on a grid and at the exact boundaries, shape refusals, the production-only choices, and the assembled evidence fed to my independent wire checker
+  `check_wire_examples.py` (seven generated scenarios appended to a copy of SUCCESSOR-WIRE.md; four tampered copies must fail it). Same author for reference, checker and port: correlated.
+- `tools/run_pool_core_mutants.py`: 47 mutants. Run 1 stopped on an ambiguous anchor in my own runner (INVALID, nothing ran; its one-line output was deleted, it is not a result). Run 2 detected **47 of 48** (`pool-core-mutants-run2.txt`): the survivor P48 is an EQUIVALENT
+  mutant (`evidence` validates `proposal_expires_at` and `collection_deadline_ms` validates the same value with the same exception first), so it was removed with a comment and the final run detects **47 of 47** (`pool-core-mutants.txt`). Before that run I had also added
+  one test, the members of `evidence` must not alias one another, which a hand-picked alias mutant (P36) required. `pool-core-green.txt`: the four new-code test files together, 155 passed.
+- Not covered by slice 3a: signature recovery, the transport, outcome statuses, the retained proposal and the second round, the host clock, any run against a witness. Those are slices 3b and 3c.
+
+Not done (task 2 and task 3 remain): the witness service (independent validation, profile-3 `witness.py`/`ledger.py`/`worker.py` changes, the D50 binding reconstruction and masked-build check from live reads), the worker store's D50 rows and `worker_log --binding`, the pool orchestration (retained proposal, fan-out, outcomes, second round, injected transport and clock; the decision and evidence core is slice 3a, done) and timing evidence, the successor adapter operations and strict parsing, D-4, D-6, the TEST-ONLY hooks
 H3/H5/H6 and `testtools/byzantine.py`, the E regressions and export `--check` after those changes, and the source READY manifest. Power loss and OS crash are untested and no durability claim is made for them.
 Baseline of the existing E suite before any F change: `e-baseline.txt`.
