@@ -265,6 +265,7 @@ def validate_evidence(doc):
     if not needed <= set(last):
         _fail("observations: missing the last observation of a target chain of a recorded type")
     seen_k, seen_dig = {}, set()
+    sup_keys = []
     for i, r in enumerate(conflicts):
         k = _record(r, f"conflicts[{i}]")
         if i and _sort_key(conflicts[i - 1]) > _sort_key(r):
@@ -284,12 +285,12 @@ def validate_evidence(doc):
             if d["digest"] in seen_dig:
                 _fail("digest occurs more than once in the store")
             seen_dig.add(d["digest"])
-        live = seen_k.get(k)
-        if live is not None and live["vHash"] == s["vHash"]:
-            _fail(f"superseded[{i}]: not a supersession, its effect equals the live effect for the same K")
+        sup_keys.append(k)
         dth = s["death"]
         if not isinstance(dth, dict) or dth.get("kind") not in DEATH or s["type"] not in DEATH[dth["kind"]][0]:
             _fail(f"superseded[{i}].death.kind is unknown or does not apply to {s['type']}")
+        if dth["kind"] == "overtaken-decision-grant" and s["effect"]["result"] != "1":
+            _fail(f"superseded[{i}]: overtaken-decision-grant applies to ALLOW decisions only (effect.result must be 1; a DENY is never dead by grant)")
         has_obs = DEATH[dth["kind"]][1]
         _closed(dth, ["kind", "observation"] + (["observed"] if has_obs else []), f"superseded[{i}].death members (observed is present exactly for the numeric kinds)")
         _obs(dth["observation"], f"superseded[{i}].death.observation")
@@ -303,6 +304,17 @@ def validate_evidence(doc):
             _fail(f"superseded[{i}]: overtaken needs observed >= the key")
         if dth["kind"] == "overtaken-decision-sequence" and int(dth["observed"]) <= int(s["effect"]["stateSequence"]):
             _fail(f"superseded[{i}]: overtaken needs observed > effect.stateSequence")
+    # successive GENERATIONS of one K (the superseded rows of K in append order, then the live record) must differ pairwise: A -> B -> A is legal, A -> A is a no-op
+    gens = {}
+    for k, s in zip(sup_keys, superseded):
+        gens.setdefault(k, []).append(s)
+    pairs = []
+    for k, rows in gens.items():
+        chain_ = rows + ([seen_k[k]] if k in seen_k else [])
+        for a, b in zip(chain_, chain_[1:]):
+            if a["vHash"] == b["vHash"]:
+                _fail("not a supersession: successive generations of one K must have different effects (supersession)")
+            pairs.append((a, b))
     for r in conflicts:     # every digest observation is of the target ledger of its type
         for d in r["digests"]:
             if d["observation"]["chainId"] != chains[TARGET[r["type"]]]:
@@ -337,6 +349,12 @@ def validate_evidence(doc):
             lo = last[o["chainId"]]
             if int(o["blockNumber"]) > int(lo["blockNumber"]) or int(o["timestamp"]) > int(lo["timestamp"]) or (o["blockNumber"] == lo["blockNumber"] and o["blockHash"] != lo["blockHash"]):
                 _fail("a recorded observation exceeds the stored last observation or disagrees with its hash (monotonicity)")
+        for a, b in pairs:      # a later generation is signed only after the earlier one was observed dead
+            dobs = a["death"]["observation"]
+            for d in b["digests"]:
+                o = d["observation"]
+                if int(o["blockNumber"]) < int(dobs["blockNumber"]) or int(o["timestamp"]) < int(dobs["timestamp"]):
+                    _fail("generation order: a digest of a later generation was observed before the death evidence of the generation it replaced")
     _rx(_SHA, doc["evidenceSha256"], "evidenceSha256")
     if doc["evidenceSha256"] != evidence_sha256(doc):
         _fail("evidenceSha256 is not the sha256 of the canonical JSON of the document without that member")
@@ -411,6 +429,21 @@ def synthetic_evidence(variant="history") -> dict:
         base = obs(dbc, 158, 1791521605)
         doc["faultLog"] = [{"seq": "1", "fault": fault, "clearedAgainst": base, "note": "operator clear after a test restart of the DBC"}]
         doc["observations"] = [dict(base) if o["chainId"] == dbc else o for o in doc["observations"]]       # a copy: no shared object between the two members
+    elif variant == "generations":
+        gp = rec("GovernanceAction", "HMBCGovernance", "5", {"action": "1", "root": _a("root-5"), "admins": sorted([_a("admin-3"), _a("admin-4")]), "witnessSetVersion": "2"},
+                 [dig("gov5-A2", obs(pbc, 138, 1791521552), 1791521612)])
+        ea = gp["effect"]
+        eb = {**ea, "admins": sorted([_a("admin-3"), _a("admin-5")])}
+        doc["conflicts"].append(gp)                                                      # the live generation: the same effect A again (A -> B -> A)
+        doc["superseded"] += [
+            rec("GovernanceAction", "HMBCGovernance", "5", ea, [dig("gov5-A1", obs(pbc, 128, 1791521420), 1791521480)], seq="3", death={"kind": "expiry", "observation": obs(pbc, 132, 1791521485)}),
+            rec("GovernanceAction", "HMBCGovernance", "5", eb, [dig("gov5-B", obs(pbc, 133, 1791521486), 1791521546)], seq="4", death={"kind": "expiry", "observation": obs(pbc, 137, 1791521550)}),
+            # an ALLOW decision dead because a grant exists for its request, then a DENY for the same request (accepted by the ledger while unexpired and current)
+            rec("AccessDecision", "HMBCDecision", _h("request:3"), ad(6), [dig("decision-r3-allow", obs(dbc, 155, 1791521540), 1791521600)], seq="5",
+                death={"kind": "overtaken-decision-grant", "observation": obs(dbc, 159, 1791521590)}),
+        ]
+        doc["conflicts"].append(rec("AccessDecision", "HMBCDecision", _h("request:3"), {**ad(6), "result": "0"}, [dig("decision-r3-deny", obs(dbc, 160, 1791521600), 1791521660)]))
+        doc["conflicts"].sort(key=_sort_key)
     elif variant != "history":
         raise ValueError(variant)
     return seal(doc)
@@ -423,7 +456,7 @@ def emit() -> dict:
            "outputContract": {"stdoutOnSuccess": "one line: canonical JSON (sorted keys, compact separators, ensure_ascii) followed by exactly one LF; stderr empty; exit 0",
                               "stderrOnRefusal": "one line: canonical JSON {code, message, reason} followed by one LF; stdout empty; exit 3", "usage": "exit 2 (argparse)"},
            "bindingExports": {"worker-repaired-e": binding_export("worker", be, anchor), "witness-repaired-f": binding_export("witness:" + _a("witness-1"), bf, anchor)},
-           "evidence": {v: synthetic_evidence(v) for v in ("history", "faulted", "cleared")},
+           "evidence": {v: synthetic_evidence(v) for v in ("history", "faulted", "cleared", "generations")},
            "refusalLines": {r: error_line(r, "illustrative message") for r in sorted(ERROR_REASONS)}}
     out["lines"] = {"bindingExports": {k: render(v) for k, v in out["bindingExports"].items()}}
     for v in out["bindingExports"].values():

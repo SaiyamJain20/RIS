@@ -206,10 +206,81 @@ check("E7 a cleared fault is a fault-log row with a note, appended in order, and
 older = {"chainId": cid, "blockNumber": "155", "blockHash": L._h("block:%s:155" % cid), "timestamp": "1791521550"}      # an earlier clear, at or before the stored last observation
 check("E7 a store that is faulted again after an earlier clear is accepted (the log row's baseline is not later than the stored last observation)",
       ok_ev(L.seal({**copy.deepcopy(FA), "faultLog": [{**copy.deepcopy(CL["faultLog"][0]), "clearedAgainst": older}]})) is None)
+# ============================================================================================================================================
+# REVISION 9 (A3-0069 L1, L2; A1-0107). Written BEFORE the reference changes.
+# L1: successive GENERATIONS of one key must differ pairwise (A -> B -> A is legal); the rule "every superseded effect differs from the live one" was too strict.
+# L2: overtaken-decision-grant applies to ALLOW decisions only: a DENY is never dead by grant (ACSC.sol:185-187, KSSC.sol:179-180), so effect.result must be "1".
+# ============================================================================================================================================
+def safe_gen():
+    try:
+        return L.synthetic_evidence("generations")
+    except Exception:  # noqa: BLE001
+        return None
+
+
+G = safe_gen()
+HAVE = G is not None
+if not HAVE:
+    G = H          # the dependent expectations below then FAIL on the missing variant instead of being skipped
+gov = [i for i, r in enumerate(G["superseded"]) if r["type"] == "GovernanceAction"]
+live_gov = [i for i, c in enumerate(G["conflicts"]) if c["type"] == "GovernanceAction" and gov and c["keyField"] == G["superseded"][gov[0]]["keyField"]]
+HAVE_GOV = HAVE and len(gov) == 2 and len(live_gov) == 1
+g0, g1 = (gov + [0, 0])[:2]
+li = (live_gov + [0])[0]
+check("G0 the 'generations' variant exists and validates: a governance nonce history A -> B -> A, and an ALLOW decision dead by grant followed by a DENY", HAVE and ok_ev(G) is None)
+check("G1 the history A -> B -> A is in the vector: two superseded generations and a live one for one nonce, first and last effect equal, the middle one different",
+      HAVE_GOV and G["superseded"][g0]["vHash"] == G["conflicts"][li]["vHash"] != G["superseded"][g1]["vHash"])
+check("G1 the legal recurrence A -> B -> A is ACCEPTED (the revision-8 checker refused it)", HAVE_GOV and ok_ev(G) is None)
+
+
+def set_effect(doc, where, idx, effect):
+    d = copy.deepcopy(doc)
+    d[where][idx]["effect"] = copy.deepcopy(effect)
+    d[where][idx]["vHash"] = hashlib.sha256(L.canonical_json(effect).encode("ascii")).hexdigest()
+    return L.seal(d)
+
+
+A_eff = G["superseded"][g0]["effect"]
+C_eff = {**A_eff, "admins": sorted(list(A_eff.get("admins", [])) + ["0x" + "77" * 20])}      # .get: against the missing variant this fails an expectation instead of crashing
+check("G2 A -> B -> C (the live generation has a distinct third effect) is accepted", HAVE_GOV and ok_ev(set_effect(G, "conflicts", li, C_eff)) is None)
+check("G3 an adjacent same-effect supersession is still refused: generation 2 equal to generation 1", HAVE_GOV and refuses(lambda: L.validate_evidence(set_effect(G, "superseded", g1, A_eff)), "supersession"))
+check("G3 ... and the last superseded generation equal to the live one", HAVE_GOV and refuses(lambda: L.validate_evidence(set_effect(G, "superseded", g1, G["conflicts"][li]["effect"])), "supersession"))
+
+
+def earlier(doc, where, idx, back):
+    """The first digest of a row observed `back` blocks (and seconds) EARLIER than it was."""
+    d = copy.deepcopy(doc)
+    o = d[where][idx]["digests"][0]["observation"]
+    n = int(o["blockNumber"]) - back
+    d[where][idx]["digests"][0]["observation"] = {**o, "blockNumber": str(n), "blockHash": L._h("block:%s:%d" % (o["chainId"], n)), "timestamp": str(int(o["timestamp"]) - back)}
+    return L.seal(d)
+
+
+check("G4 generation order: a later generation observed BEFORE the death evidence of the one it replaced is refused (re-signed before death was observed)",
+      HAVE_GOV and refuses(lambda: L.validate_evidence(earlier(G, "superseded", g1, 3)), "generation") and refuses(lambda: L.validate_evidence(earlier(G, "conflicts", li, 6)), "generation"))
+check("G4 ... and a digest observed exactly at the death observation of the previous generation is accepted",
+      HAVE_GOV and ok_ev(mut(G, ["superseded", g1, "digests", 0, "observation"], G["superseded"][g0]["death"]["observation"])) is None)
+check("G4 the same early re-sign inside a store that has a fault log is accepted (explicitly outside the safe-ledger assumption for the interval)",
+      HAVE_GOV and ok_ev(L.seal({**copy.deepcopy(earlier(G, "superseded", g1, 3)), "faultLog": [{**copy.deepcopy(CL["faultLog"][0]), "clearedAgainst": older}]})) is None)
+# L2
+dec_grant = [i for i, r in enumerate(G["superseded"]) if r["death"]["kind"] == "overtaken-decision-grant"]
+check("L2-1 the ALLOW positive: an ALLOW decision (result 1) dead by grant is accepted", len(dec_grant) == 1 and G["superseded"][dec_grant[0]]["effect"]["result"] == "1" and ok_ev(G) is None)
+def deny(doc, srow):
+    d = copy.deepcopy(doc)
+    e = d["superseded"][srow]["effect"]; e["result"] = "0"
+    d["superseded"][srow]["vHash"] = hashlib.sha256(L.canonical_json(e).encode("ascii")).hexdigest()
+    return L.seal(d)            # vHash and evidenceSha256 are recomputed: only the ALLOW rule can refuse
+check("L2-2 the exact negative: a DENY decision (result 0) under overtaken-decision-grant is refused even with vHash and evidenceSha256 recomputed",
+      len(dec_grant) == 1 and refuses(lambda: L.validate_evidence(deny(G, dec_grant[0])), "ALLOW"))
+so_idx = [i for i, r in enumerate(G["superseded"]) if r["death"]["kind"] == "overtaken-decision-sequence"]
+check("L2-3 a DENY under overtaken-decision-sequence is accepted (a DENY is dead by the checkpoint sequence)", len(so_idx) == 1 and ok_ev(deny(G, so_idx[0])) is None)
+check("L2-3 a DENY under expiry is accepted (death by expiry applies to a decision of either result)", len(so_idx) == 1 and ok_ev(L.seal(mut(deny(G, so_idx[0]), ["superseded", so_idx[0], "death"], {"kind": "expiry", "observation": {**G["superseded"][so_idx[0]]["death"]["observation"], "timestamp": str(max(int(d["expiresAt"]) for d in G["superseded"][so_idx[0]]["digests"]))}}))) is None)
+
 # refusal line and the emitted vector
 EM = safe_emit()
 check("E8 the vector can be emitted (the emitter validates every document it lists)", bool(EM))
-check("E8 the emitted vector holds the binding exports, the three evidence documents and the refusal lines, and every one validates",
+check("E8 the emitted vector holds four evidence variants (history, faulted, cleared, generations)", set(EM.get("evidence", {})) == {"history", "faulted", "cleared", "generations"})
+check("E8 the emitted vector holds the binding exports, the evidence documents and the refusal lines, and every one validates",
       all(k in EM for k in ("bindingExports", "evidence", "refusalLines")) and all(ok_bx(x) is None for x in EM.get("bindingExports", {}).values())
       and all(ok_ev(x) is None for x in EM.get("evidence", {}).values()))
 check("E8 the emitted vector is deterministic", json.dumps(EM, sort_keys=True) == json.dumps(safe_emit(), sort_keys=True))
