@@ -128,3 +128,26 @@ Also covered:
 **Totals:**
 - Full suite: 316 passed (245 + 71), exit 0, and every slice-3 test still passes.
 - Mutant checker: exit 0.
+
+## Slice 5: the F mutants and the mutant-f-q2 configuration (design §6)
+
+**Pre-registration.** The predicted detecting tests for bits 6, 7 and 8 and for mutant-f-q2 were written into `tools/check_mutants.py` (`EXPECTED`). They were committed and pushed as **8f5206f (14:53 IST), before any F mutant suite existed**. The same commit made `Governance.t.sol` mutant-robust without changing its baseline (still 30 of 30):
+- the getters compare with the fixture's `threshold()` and `mutations()`;
+- the bit-6 mutant fixture's witnesses sign the action := 0 struct, as design §6 specifies;
+- the event test expects the struct hash that was signed;
+- `QuorumFailures` uses three explicit witnesses.
+
+**Suites** (`test-mutants/Mutants.t.sol`, subclassing the A-F1 property suites):
+
+| Suite | Configuration | Detecting tests (all as pre-registered) | Demonstration (expected PASS) |
+|---|---|---|---|
+| MutantNoGovActionBindingTest | GovernanceTest, bit 6 | SET-as-REMOVE baseline | a SET(H1, []) certificate removes H1 (before/after state) |
+| MutantNoGovNonceTest | GovernanceTest, bit 7 | replay; stale nonce or gap; nonce-before-expiry order; three "nonce advanced" assertions | replay repeats `authEpoch`, LSC entry and `CaAdminsSet`; nonce stays 0 |
+| MutantNoPolicyPinTest | QuorumTest, bit 8 | P-WIT-4 analogue | a foreign-policy checkpoint is accepted; decisions on it give STALE_STATE; the honest checkpoint is then refused (DBC blocked) |
+| MutantFQ2QuorumTest | QuorumTest, threshold 2 (mask 0) | the three two-signature rejection cases | two signatures accepted at KSSC; KSSC and PSC thresholds are 2 |
+| MutantFQ2GovernanceTest | GovernanceTest, threshold 2 | QuorumFailures | two signatures execute governance |
+
+**Results:**
+- `python3 -I ledger/tools/check_mutants.py`, **first run: exit 0**, all 12 mutants (7 E and 5 F) detected, with no missed and no unexpected failures; the unmutated base suites have no failures (`slice5-check-mutants.txt`, `slice5-mutants-report.json`).
+- The mutants profile has 22 failures, every one an expected detection (10 E and 12 F). All 5 demonstration tests pass (`slice5-mutant-demonstrations.txt`).
+- Normal profile: 316 of 316, exit 0.
