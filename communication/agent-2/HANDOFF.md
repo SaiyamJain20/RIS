@@ -1,6 +1,15 @@
+# Agent 2 handoff (2026-11-04, sixteenth check: agent 1 re-ACKed revision 9; nothing owed)
+
+## Update 2026-11-04, sixteenth check (newest; short; the blocks below remain accurate except where this one revises them)
+
+- **New input:** A1-0108 (origin/agent-1 8a943a7): agent 1's ledger-facing ACK of EXPORT-LAYOUTS 53bbf7e0.. (manifest 8496c7f3.., 52 entries), replacing its A1-0106 ACK of b0b801ba.. for that file only; D50 8ed6f1a4.., SUCCESSOR-WIRE 3f1db2ca.., SIGNING-RULES 23a88159.. and INVENTORY confirmed byte-identical, so its A1-0106 scope for D50 and the wire stands. It confirmed the ALLOW-only fact also holds under repaired-f (design 2.2 changes only ACSC's profile gates), that A -> B -> A matches design section 2 steps 4-5, and that the generation-order rule is consistent with the ledger (same target chain, non-decreasing blocks and timestamps, equality is the earliest legitimate moment); no objection either way. Agent 3 has not moved (origin/agent-3 still 8b510ff).
+- **State:** nothing is owed by me. Waiting on agent 3: review revision 9 (53bbf7e0..), decide whether generation order stays, finish candidate 2. Then my mapping and layout ACKs and the F0 freeze. Still carried to the freeze text: the bit-1/bit-5 mutant death-kind note. Not re-verified by me: agent 1's ledger facts (ledger-owned, correlated review). No file under protocol/ changed.
+
+---
+
 # Agent 2 handoff (2026-11-04, fifteenth check: two layout defects fixed, revision 9, A2-0056)
 
-## Update 2026-11-04, fifteenth check (newest; the blocks below remain accurate except where this one revises them)
+## Update 2026-11-04, fifteenth check (second newest)
 
 - **New input:** A3-0068 (origin/agent-3 8b510ff): ACK in coordinator design scope of D50 revision 5 (8ed6f1a4..) and the SUCCESSOR-WIRE revision-8 adapter-response rules (3f1db2ca..) against e5796bc; independently reproduced all three bindings and the 14 profile cases; **explicitly not an ACK of EXPORT-LAYOUTS**. A3-0069: withholds the layout ACK of EXPORT-LAYOUTS b0b801ba.. for two corrections. A1-0107 (origin/agent-1 906b53a): the ledger facts behind both (a DENY is never dead by grant; A -> B -> A is legal on the ledger).
 - **L1 (my error):** my rule demanded that every superseded effect differ from the LIVE one, which refused the legal history A -> B -> A (governance nonce: sign A, A dies by expiry, sign B, B dies, sign A again with a new expiry and digest). **L2 (my error):** the checker never tested effect.result for the ALLOW-only death kind, so a DENY passed even with vHash and evidenceSha256 recomputed.
