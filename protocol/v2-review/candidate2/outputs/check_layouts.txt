@@ -1,0 +1,31 @@
+candidate manifest 0d1a2be44666164d verified (14 files); 6 owner pins equal my working-tree files
+PASS binding export witness-repaired-f validates against BindingExport
+PASS binding export worker-repaired-e validates against BindingExport
+PASS evidence variant cleared validates against WitnessEvidence
+PASS evidence variant faulted validates against WitnessEvidence
+PASS evidence variant generations validates against WitnessEvidence
+PASS evidence variant history validates against WitnessEvidence
+PASS refusal line LEGACY_STATE validates against ExporterError
+PASS refusal line STORE_CORRUPT validates against ExporterError
+PASS refusal line STORE_MISSING validates against ExporterError
+PASS ExporterError refuses a reason with the wrong code and reasons an exporter cannot raise
+PROBE generations variant (A -> B -> A, ALLOW dead by grant then DENY)                                schema:ACCEPTS  my checker:ACCEPTS
+PASS the legal A -> B -> A history is accepted by the schema and by my checker
+PROBE L2: DENY (result 0) under overtaken-decision-grant, vHash and evidenceSha256 recomputed         schema:REJECTS  my checker:REJECTS
+PASS a DENY under the ALLOW-only death kind is refused by the SCHEMA and by my checker
+PROBE orphan history: superseded rows of a key whose live record is absent                            schema:ACCEPTS  my checker:ACCEPTS
+INFO orphan history: schema ACCEPTS, my checker ACCEPTS (BOUNDARY declares it a runner completeness check; my checker does not enforce it either)
+INFO layout differential: 3977 corrupted/base documents: {'both accept': 7, 'both reject': 3923, 'SCHEMA LOOSER': 47}
+INFO   base         {'both accept': 4}
+INFO   cross-field  {'SCHEMA LOOSER': 9, 'both reject': 1}
+INFO   death        {'both reject': 8, 'SCHEMA LOOSER': 4}
+INFO   format       {'both reject': 2883, 'both accept': 1}
+INFO   hash         {'SCHEMA LOOSER': 12}
+INFO   monotonicity {'both accept': 2, 'SCHEMA LOOSER': 2}
+INFO   order        {'SCHEMA LOOSER': 16}
+INFO   shape        {'both reject': 1031}
+INFO   uniqueness   {'SCHEMA LOOSER': 4}
+PASS the schema is never stricter than my layout checker (no document my checker accepts is refused by WitnessEvidence)
+PASS shape and format corruptions: the schema refuses everything my checker refuses (no looser verdicts)
+
+failures: 0

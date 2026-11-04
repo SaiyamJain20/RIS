@@ -1,0 +1,55 @@
+candidate manifest 0d1a2be44666164d verified (14 files); 6 owner pins equal my working-tree files
+PASS schema is a valid draft 2020-12 schema; 136 definitions
+PASS wire example 1 validates against AdapterResponse
+PASS wire example 2 validates against AdapterResponse
+PASS wire example 3 validates against AdapterResponse
+PASS wire example 4 validates against AdapterResponse
+PASS wire example 5 validates against AdapterResponse
+PASS wire example 6 validates against AdapterResponse
+PASS wire example 7 validates against AdapterResponse
+PASS wire example 8 validates against AdapterResponse
+PASS wire example 9 validates against AdapterResponse
+PASS wire example 10 validates against AdapterResponse
+PASS wire example 11 validates against AdapterResponse
+PASS wire example 12 validates against AdapterResponse
+PASS success vector 1 (collect_checkpoint) validates against AdapterResponse
+PASS success vector 2 (collect_decision) validates against AdapterResponse
+PASS success vector 3 (attest_grant) validates against AdapterResponse
+PASS success vector 4 (collect_governance) validates against AdapterResponse
+INFO wire.json sourceSha256 = 065c46db8f3308e5; pinned SUCCESSOR-WIRE = 3f1db2ca0ec2c9aa; equal: False
+PASS my revision-8 check_wire_examples.py on the candidate's 12 examples: exit 0
+PASS reason-codes.json equals the 19-row table of SUCCESSOR-WIRE section 1
+PASS d50-owner-vectors.json equals my revision-5 d50_binding_vector.json
+PASS export-layout-owner-vectors.json equals my export_layouts_vectors.json
+PASS `recorded` error rejected by CollectDecisionResponse
+PASS `recorded` error rejected by AttestGrantResponse
+PASS `recorded` error rejected by ReleaseResponse
+PASS `recorded` error rejected by PrepareRequestResponse
+PASS `recorded` error rejected by CollectGovernanceResponse
+PASS `recorded` error accepted by CollectCheckpointResponse
+PASS pool `collection` failure rejected by ReleaseResponse
+PASS pool `collection` failure rejected by PrepareRequestResponse
+PASS pool `collection` failure rejected by EncryptRecordResponse
+PASS P5 adopted.reporters accepts all 11 ascending subsets of size 2 to 4
+PASS P5 adopted.reporters refuses non-ascending, duplicate, too short and empty lists
+PASS P4 an empty lateReports array is refused
+PASS P4 an empty recordedReports array is refused
+PASS P4 an empty inconsistentReports array is refused
+INFO D50 B-shape differential: 1442 cases: {'both accept': 15, 'both reject': 1413, 'SCHEMA LOOSER': 14}
+BOUNDARY-ONLY SCHEMA LOOSER | repaired-e | kssc threshold above the count
+BOUNDARY-ONLY SCHEMA LOOSER | repaired-e | kssc threshold 0
+BOUNDARY-ONLY SCHEMA LOOSER | repaired-e | psc threshold above the count
+BOUNDARY-ONLY SCHEMA LOOSER | repaired-e | psc threshold 0
+BOUNDARY-ONLY SCHEMA LOOSER | repaired-e-mutant-no-nonce | kssc threshold above the count
+BOUNDARY-ONLY SCHEMA LOOSER | repaired-e-mutant-no-nonce | kssc threshold 0
+BOUNDARY-ONLY SCHEMA LOOSER | repaired-e-mutant-no-nonce | psc threshold above the count
+BOUNDARY-ONLY SCHEMA LOOSER | repaired-e-mutant-no-nonce | psc threshold 0
+BOUNDARY-ONLY SCHEMA LOOSER | repaired-f | governance threshold above the count
+BOUNDARY-ONLY SCHEMA LOOSER | repaired-f | governance threshold 0
+BOUNDARY-ONLY SCHEMA LOOSER | repaired-f | kssc threshold above the count
+BOUNDARY-ONLY SCHEMA LOOSER | repaired-f | kssc threshold 0
+BOUNDARY-ONLY SCHEMA LOOSER | repaired-f | psc threshold above the count
+BOUNDARY-ONLY SCHEMA LOOSER | repaired-f | psc threshold 0
+PASS D50 B-shape: the schema and my revision-5 reference agree on every case except the threshold bound, which BOUNDARY carries as a mandatory semantic rule; the schema is never stricter
+
+failures: 0
