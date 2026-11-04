@@ -1,5 +1,5 @@
-"""Mutation check of the witness service, StateCheckpoint, AccessDecision and GrantReceipt paths (agent 2, F task 2 slices 4a, 4b and 4c). Standard library only. Same method as the other runners: one text replacement per mutant (it must match exactly once
-and change the file), run the UNCHANGED tests/test_witness_service.py tests/test_witness_service_decision.py and tests/test_witness_service_receipt.py in a temporary copy that keeps the repository layout, count a mutant DETECTED only when the tests ran and failed; a crash or
+"""Mutation check of the witness service, StateCheckpoint, AccessDecision, GrantReceipt and GovernanceAction paths (agent 2, F task 2 slices 4a to 4d). Standard library only. Same method as the other runners: one text replacement per mutant (it must match exactly once
+and change the file), run the UNCHANGED tests/test_witness_service.py tests/test_witness_service_decision.py and tests/test_witness_service_receipt.py and tests/test_witness_service_governance.py in a temporary copy that keeps the repository layout, count a mutant DETECTED only when the tests ran and failed; a crash or
 timeout is NOT detection; the unmutated copy runs first as a control. witness_state.py is NOT mutated here (run_state_mutants.py does that).
 
 Usage (repository root):   python3 -B -I protocol/tools/run_service_mutants.py        (needs pytest and the E dependencies: protocol/requirements.txt)
@@ -32,7 +32,7 @@ M = [
     ("V13 the epochs at the witness's own head are not compared (no stale-view refusal)", [("            if cp[f] != head_reads[f]:", "            if False:")]),
     ("V14 the epochs are read at the head instead of at the proposal's block", [("        reads = view.reads_at(n)", '        reads = view.reads_at(int(head["blockNumber"]))')]),
     ("V15 the freshness read repeats the block read", [('head_reads = view.reads_at(int(head["blockNumber"]))', "head_reads = reads")]),
-    ("V16 an expiry equal to the observation is accepted", [("        if e <= ts:", "        if e < ts:")]),
+    ("V16 an expiry equal to the observation is accepted", [("        if e <= ts:\n            raise WitnessRefusal(\"EXPIRED\", None, \"expiresAt is not after the DBC", "        if e < ts:\n            raise WitnessRefusal(\"EXPIRED\", None, \"expiresAt is not after the DBC")]),
     ("V17 an expiry exactly at the window edge is refused", [("        if e > ts + self._max_ttl:", "        if e >= ts + self._max_ttl:")]),
     ("V18 the window has no upper bound", [("        if e > ts + self._max_ttl:", "        if False:")]),
     ("V19 the window observes the PBC instead of the DBC", [('ts = int(view.observe("dbc")["timestamp"])', 'ts = int(view.observe("pbc")["timestamp"])')]),
@@ -119,6 +119,41 @@ M = [
     ("R25 the proposal's shape is validated with the E validator", [("prop = dict(_receipt_shape(proposal))", "prop = dict(wire.grant_receipt(proposal))")]),
     ("D42 a decision value out of range escapes as a raw exception", [('    except wire.WireError:\n        raise _refusal("WRONG_SUBJECT", "the ledger state does not form a canonical AccessDecision (a value is out of range)") from None', '    except KeyError:\n        raise _refusal("WRONG_SUBJECT", "the ledger state does not form a canonical AccessDecision (a value is out of range)") from None')]),
     ("R26 a receipt value out of range escapes as a raw exception", [('    except wire.WireError:\n        raise _refusal("WRONG_SUBJECT", "the ledger state does not form a canonical GrantReceipt (a value is out of range)") from None', '    except KeyError:\n        raise _refusal("WRONG_SUBJECT", "the ledger state does not form a canonical GrantReceipt (a value is out of range)") from None')]),
+    ("G1 a deployment without Governance is not refused", [("        if self._governance_sep is None:\n            raise _refusal(\"WRONG_PROFILE\"", "        if False:\n            raise _refusal(\"WRONG_PROFILE\"")]),
+    ("G2 any action number is accepted", [('v["action"] not in ("1", "2", "3") or v["root"] == ZERO_ADDRESS or', 'v["root"] == ZERO_ADDRESS or')]),
+    ("G3 a zero root is accepted", [(' or v["root"] == ZERO_ADDRESS or not isinstance(admins, list)', ' or not isinstance(admins, list)')]),
+    ("G4 admins need not be a list", [(" or not isinstance(admins, list) or len(admins) > MAX_ADMINS:", " or len(admins) > MAX_ADMINS:")]),
+    ("G5 nine admins are accepted", [("len(admins) > MAX_ADMINS:", "len(admins) > MAX_ADMINS + 1:")]),
+    ("G6 duplicate admins are accepted", [("any(x >= y for x, y in zip(admins, admins[1:]))", "any(x > y for x, y in zip(admins, admins[1:]))")]),
+    ("G7 a zero admin is accepted", [("any(a == ZERO_ADDRESS for a in admins) or ", "")]),
+    ("G8 ADD with no admins is accepted", [('(v["action"] == "1" and not admins) or ', "")]),
+    ("G9 REMOVE with admins is accepted", [(' or (v["action"] == "2" and admins):', ":")]),
+    ("G10 a future governance nonce is accepted", [('if int(g["nonce"]) != current + 1:', 'if int(g["nonce"]) < current + 1:')]),
+    ("G11 a past governance nonce is accepted", [('if int(g["nonce"]) != current + 1:', 'if int(g["nonce"]) > current + 1:')]),
+    ("G12 the witnessSetVersion is not compared", [('        if g["witnessSetVersion"] != self._wsv:\n            raise WitnessRefusal("STALE_STATE", "WITNESS_SET_MISMATCH", "witnessSetVersion differs from this witness\'s own")', '        if False:\n            raise WitnessRefusal("STALE_STATE", "WITNESS_SET_MISMATCH", "witnessSetVersion differs from this witness\'s own")')]),
+    ("G13 ADD of an existing authority is accepted", [("            if view.is_authority(root):", "            if False:")]),
+    ("G14 ADD of a tombstoned root is accepted", [("            if view.removed_authority(root):", "            if False:")]),
+    ("G15 REMOVE or SET of a non-authority is accepted", [("        elif not view.is_authority(root):", "        elif False:")]),
+    ("G16 the local allow-list is ignored", [('if self._allow is None or (g["action"], root, tuple(g["admins"])) not in self._allow:', "if False:")]),
+    ("G17 a missing allow-list escapes as a raw exception", [('if self._allow is None or (g["action"], root, tuple(g["admins"])) not in self._allow:', 'if (g["action"], root, tuple(g["admins"])) not in self._allow:')]),
+    ("G18 the allow-list ignores the admins", [('(g["action"], root, tuple(g["admins"])) not in self._allow:', '(g["action"], root, ()) not in {(a, r, ()) for a, r, _ in self._allow}:')]),
+    ("G19 the allow-list aliases the caller's list", [("frozenset((a, r, tuple(ad)) for a, r, ad in allowed_governance)", "allowed_governance")]),
+    ("G20 an expiry equal to the observation is accepted", [("        if e <= ts:\n            raise _refusal(\"EXPIRED\", \"expiresAt is not after the PBC's", "        if e < ts:\n            raise _refusal(\"EXPIRED\", \"expiresAt is not after the PBC's")]),
+    ("G21 an expiry exactly at the window edge is refused", [("        if e > ts + self._max_gov_ttl:", "        if e >= ts + self._max_gov_ttl:")]),
+    ("G22 the governance window has no upper bound", [("        if e > ts + self._max_gov_ttl:", "        if False:")]),
+    ("G23 the governance window observes the DBC", [('ts = int(view.observe("pbc")["timestamp"])\n        e = int(g["expiresAt"])', 'ts = int(view.observe("dbc")["timestamp"])\n        e = int(g["expiresAt"])')]),
+    ("G24 the action is recorded under the checkpoint domain", [("domain=self._governance_sep,", "domain=self._domain,")]),
+    ("G25 the action is recorded under its root, not its nonce", [('key=g["nonce"], effect={k: g[k] for k in EFFECT_GOV}', 'key=g["root"], effect={k: g[k] for k in EFFECT_GOV}')]),
+    ("G26 the store observes the DBC for governance", [('observe=lambda: self._view.observe("pbc"), overtaken=("overtaken-governance"', 'observe=lambda: self._view.observe("dbc"), overtaken=("overtaken-governance"')]),
+    ("G27 the overtaken evidence claims a future nonce", [('overtaken=("overtaken-governance", str(current))', 'overtaken=("overtaken-governance", str(current + 5))')]),
+    ("G28 the effect lacks the admins", [('EFFECT_GOV = ("action", "root", "admins", "witnessSetVersion")', 'EFFECT_GOV = ("action", "root", "witnessSetVersion")')]),
+    ("G29 the admins array is typed bytes32[]", [('{"name": "admins", "type": "address[]"}', '{"name": "admins", "type": "bytes32[]"}')]),
+    ("G30 the governance domain name is wrong", [('"name": "HMBCGovernance"', '"name": "HMBCGovernanceX"')]),
+    ("G31 the nonce's integer form is not checked", [('    wire.uint(v["nonce"], 64)\n', "")]),
+    ("G32 the expiry's integer form is not checked", [('    wire.uint(v["expiresAt"], 64)\n', "")]),
+    ("G33 the witnessSetVersion's integer form is not checked", [('    wire.uint(v["witnessSetVersion"], 64)\n', "")]),
+    ("G34 the root's address form is not checked", [('    wire.address(v["root"])\n', "")]),
+    ("G35 the governance window argument is not validated", [("or max_governance_ttl < 1:", "or False:")]),
 ]
 
 
@@ -132,13 +167,13 @@ def run_in_copy(text):
         for name in os.listdir(pkg):
             if name.endswith(".py") and name != "witness_service.py":
                 shutil.copy(os.path.join(pkg, name), os.path.join(p, "hmbc_protocol", name))
-        for rel in ("pytest.ini", os.path.join("tests", "test_witness_service.py"), os.path.join("tests", "test_witness_service_decision.py"), os.path.join("tests", "test_witness_service_receipt.py"), os.path.join("tests", "fixtures", "deployment-agent1-91add8c-v1-repaired-e.json"), os.path.join("f0", "vectors", "d50_reference.py")):
+        for rel in ("pytest.ini", os.path.join("tests", "test_witness_service.py"), os.path.join("tests", "test_witness_service_decision.py"), os.path.join("tests", "test_witness_service_receipt.py"), os.path.join("tests", "test_witness_service_governance.py"), os.path.join("tests", "fixtures", "agent3-v2-signing-governance-vectors.json"), os.path.join("tests", "fixtures", "deployment-agent1-91add8c-v1-repaired-e.json"), os.path.join("f0", "vectors", "d50_reference.py")):
             shutil.copy(os.path.join(PROTO, rel), os.path.join(p, rel))
         with open(os.path.join(p, "hmbc_protocol", "witness_service.py"), "w") as f:
             f.write(text)
         env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
         try:
-            r = subprocess.run([sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests/test_witness_service.py", "tests/test_witness_service_decision.py", "tests/test_witness_service_receipt.py"], cwd=p, capture_output=True, text=True, timeout=300, env=env)
+            r = subprocess.run([sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests/test_witness_service.py", "tests/test_witness_service_decision.py", "tests/test_witness_service_receipt.py", "tests/test_witness_service_governance.py"], cwd=p, capture_output=True, text=True, timeout=300, env=env)
         except subprocess.TimeoutExpired:
             return "timeout", None
         m = re.search(r"(\d+) failed", r.stdout)

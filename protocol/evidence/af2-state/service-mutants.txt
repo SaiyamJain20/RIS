@@ -21,7 +21,7 @@ DETECTED V19 the window observes the PBC instead of the DBC | failed tests: 12
 DETECTED V20 the store is told no expiry | failed tests: 11
 DETECTED V21 the store observes the PBC (checkpoint) | failed tests: 11
 DETECTED V22 the store gets another domain | failed tests: 1
-DETECTED V23 an unreadable ledger escapes as a raw exception | failed tests: 3
+DETECTED V23 an unreadable ledger escapes as a raw exception | failed tests: 4
 DETECTED V24 the recorded value is dropped from a pinned refusal | failed tests: 1
 DETECTED V25 the proposal's shape is not validated | failed tests: 15
 DETECTED V26 the proposer's sequence is current plus two | failed tests: 2
@@ -101,4 +101,39 @@ DETECTED R24 the receipt digest uses the decision domain | failed tests: 1
 DETECTED R25 the proposal's shape is validated with the E validator | failed tests: 22
 DETECTED D42 a decision value out of range escapes as a raw exception | failed tests: 1
 DETECTED R26 a receipt value out of range escapes as a raw exception | failed tests: 1
-detected 102 of 102
+DETECTED G1 a deployment without Governance is not refused | failed tests: 1
+DETECTED G2 any action number is accepted | failed tests: 2
+DETECTED G3 a zero root is accepted | failed tests: 1
+DETECTED G4 admins need not be a list | failed tests: 1
+DETECTED G5 nine admins are accepted | failed tests: 1
+DETECTED G6 duplicate admins are accepted | failed tests: 1
+DETECTED G7 a zero admin is accepted | failed tests: 1
+DETECTED G8 ADD with no admins is accepted | failed tests: 1
+DETECTED G9 REMOVE with admins is accepted | failed tests: 1
+DETECTED G10 a future governance nonce is accepted | failed tests: 2
+DETECTED G11 a past governance nonce is accepted | failed tests: 2
+DETECTED G12 the witnessSetVersion is not compared | failed tests: 2
+DETECTED G13 ADD of an existing authority is accepted | failed tests: 2
+DETECTED G14 ADD of a tombstoned root is accepted | failed tests: 2
+DETECTED G15 REMOVE or SET of a non-authority is accepted | failed tests: 2
+DETECTED G16 the local allow-list is ignored | failed tests: 2
+DETECTED G17 a missing allow-list escapes as a raw exception | failed tests: 1
+DETECTED G18 the allow-list ignores the admins | failed tests: 2
+DETECTED G19 the allow-list aliases the caller's list | failed tests: 1
+DETECTED G20 an expiry equal to the observation is accepted | failed tests: 2
+DETECTED G21 an expiry exactly at the window edge is refused | failed tests: 2
+DETECTED G22 the governance window has no upper bound | failed tests: 2
+DETECTED G23 the governance window observes the DBC | failed tests: 12
+DETECTED G24 the action is recorded under the checkpoint domain | failed tests: 1
+DETECTED G25 the action is recorded under its root, not its nonce | failed tests: 12
+DETECTED G26 the store observes the DBC for governance | failed tests: 12
+DETECTED G27 the overtaken evidence claims a future nonce | failed tests: 1
+DETECTED G28 the effect lacks the admins | failed tests: 12
+DETECTED G29 the admins array is typed bytes32[] | failed tests: 11
+DETECTED G30 the governance domain name is wrong | failed tests: 1
+DETECTED G31 the nonce's integer form is not checked | failed tests: 3
+DETECTED G32 the expiry's integer form is not checked | failed tests: 1
+DETECTED G33 the witnessSetVersion's integer form is not checked | failed tests: 2
+DETECTED G34 the root's address form is not checked | failed tests: 2
+DETECTED G35 the governance window argument is not validated | failed tests: 2
+detected 137 of 137

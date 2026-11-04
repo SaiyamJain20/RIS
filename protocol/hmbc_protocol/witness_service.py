@@ -1,16 +1,19 @@
-"""F-profile honest witness, StateCheckpoint (4a), AccessDecision (4b) and GrantReceipt (4c) paths (HMBC2020 successor, F task 2).
+"""F-profile honest witness, StateCheckpoint (4a), AccessDecision (4b), GrantReceipt (4c) and GovernanceAction (4d) paths (HMBC2020 successor, F task 2).
 
 PAPER-DERIVED RECONSTRUCTION of SIGNING-RULES sections 2, 3 (StateCheckpoint row) and 4. `WitnessService.sign_checkpoint(proposal)` treats the proposal only as a candidate: it recomputes every field
 from the witness's OWN view of the ledgers (an injected `view`), refuses on the first failing row, and only then asks the durable store (`witness_state`) to record the choice and return the
 signature, which exists only after the store committed. `derive_checkpoint` is the PROPOSER side (the pool derives the proposal once from its own reads and keeps it).
 
-Scope: StateCheckpoint, AccessDecision and GrantReceipt. Governance is a later slice; the D50 live-read reconstruction is another.
+Scope: all four signed types. The D50 live-read reconstruction is a later slice.
 AccessDecision is a PURE FUNCTION of the request and the DBC's current checkpoint, so `derive_decision` DERIVES the decision from the witness's own view (the E `witness.decide` logic with the F changes:
 `expiresAt = min(request.expiresAt, checkpoint.expiresAt)`, no host-clock term) and `sign_decision` signs only when the proposal EQUALS that derivation field by field (rows (c) to (e) of the decision row).
 The grant-existence death of an ALLOW decision is a store capability this service never needs: a request whose nonce is consumed is refused REPLAY before anything is recorded.
 GrantReceipt is also a PURE FUNCTION of ledger state (SIGNING-RULES section 5): `dbcBlockNumber/Hash` is the block that CONTAINS the unique `GrantIssued` log, not "the DBC head when asked", so every honest
 witness derives byte-identical receipt bytes. `derive_receipt` / `sign_receipt` follow the decision pattern (derive, compare field by field, sign). The receipt has no liveness field, so a conflicting effect for
-the same request digest stays pinned; the store's `executed-receipt` death evidence is not used by this service (once the PSC records the outcome the derivation refuses anyway). The carried E `witness.py` is NOT changed (the successor adapter picks the
+the same request digest stays pinned; the store's `executed-receipt` death evidence is not used by this service (once the PSC records the outcome the derivation refuses anyway).
+GovernanceAction comes from an operator decision, not from ledger state, so the witness validates a WHOLE proposed action (typed-field rules, nonce == governanceNonce + 1, its own witnessSetVersion, the TMSC
+preconditions NOW, its LOCAL APPROVAL, and an expiry inside the PBC window `obs < e <= obs + 120`). The local approval is a TEST-ONLY allow-list of (action, root, admins) tuples injected by the runner;
+a witness without one signs nothing (fail closed). That is a reconstruction choice for a specification gap (SIGNING-RULES section 3), not a discovered behaviour. The carried E `witness.py` is NOT changed (the successor adapter picks the
 F service for F profiles), so E behaviour cannot move because of this module. No host clock, no randomness, no network: the only time is the observed block timestamp of the target ledger.
 
 The injected view (what the witness reads from its own RPC):
@@ -21,6 +24,7 @@ The injected view (what the witness reads from its own RPC):
 Decision path only: pbc_block(n) also carries "timestamp"; now(chain) -> int (max of latest and pending, as E: conservative for REFUSING); psc_request(digest) -> {"status", "gid", "dataId",
   "destinationChainId", "kssc", "expiresAt"}; forwarded_logs(digest) -> [{"txHash", "block"}]; forwarding_call(txHash) -> None or {"to", "method", "request", "signature", "bundle"};
   nonce_consumed(gid, nonce) -> bool; credentials(gid, bundle, at_timestamp, block) -> (code, records); policy_satisfied(dataId, records) -> bool.
+Governance path only: governance_nonce() -> int; is_authority(address) -> bool; removed_authority(address) -> bool (the TMSC's tombstone); observe("pbc") is the target ledger.
 Receipt path only: grant(grantId) -> {"digest", "dataId", "gid", "keyEpoch", "expiresAt", "allowed"}; grant_issued_logs(grantId) -> [{"block", "hash"}] of the KSSC's GrantIssued logs for that grant id.
 Any of them may raise `LedgerUnreachable`; the service maps that to ADAPTER_UNAVAILABLE / LEDGER_UNREACHABLE and writes nothing.
 
@@ -40,6 +44,13 @@ EFFECT_RECEIPT = ("grantId", "gid", "dataId", "keyEpoch", "grantExpiresAt", "wit
 RECEIPT_FIELDS = ("requestDigest",) + EFFECT_RECEIPT
 DECISION_FIELDS = ("requestDigest", "result", "credentialDigest", "stateSequence", "witnessSetVersion", "sourceBlockNumber", "sourceBlockHash", "expiresAt")
 EFFECT = ("authEpoch", "policyVersion", "keyEpoch", "witnessSetVersion", "sourceChainId", "psc", "sourceBlockNumber", "sourceBlockHash")
+GOV_FIELDS = ("action", "root", "admins", "nonce", "witnessSetVersion", "expiresAt")
+EFFECT_GOV = ("action", "root", "admins", "witnessSetVersion")
+MAX_ADMINS = 8
+DEFAULT_MAX_GOV_TTL = 120
+ZERO_ADDRESS = "0x" + "00" * 20
+_GOV_TYPE = [{"name": "action", "type": "uint8"}, {"name": "root", "type": "address"}, {"name": "admins", "type": "address[]"}, {"name": "nonce", "type": "uint64"},
+             {"name": "witnessSetVersion", "type": "uint64"}, {"name": "expiresAt", "type": "uint64"}]
 DEFAULT_PROPOSER_TTL = 30
 DEFAULT_MAX_TTL = 60
 
@@ -210,10 +221,49 @@ def _derive_receipt(view, deployment, grant_id, wsv):
     return receipt
 
 
+def _governance_domain(deployment):
+    """HMBCGovernance / 1 / PBC chainId / Governance address, or None when the deployment has no Governance contract (an E profile)."""
+    pbc = deployment["chains"]["pbc"]
+    gov = pbc["contracts"].get("Governance")
+    return None if gov is None else {"name": "HMBCGovernance", "version": "1", "chainId": pbc["chainId"], "verifyingContract": gov}
+
+
+def _governance_digest(message, deployment):
+    typed = {"types": {"EIP712Domain": eip712.DOMAIN_TYPE, "GovernanceAction": _GOV_TYPE}, "primaryType": "GovernanceAction", "domain": _governance_domain(deployment), "message": message}
+    return eip712.digest(typed)
+
+
+def _governance_shape(v):
+    """The typed-field rules (A1 section 2): action in {1,2,3}; root non-zero; admins a list of non-zero lowercase addresses, strictly ascending, at most MAX_ADMINS; ADD needs 1..MAX_ADMINS admins, REMOVE
+    none, SET 0..MAX_ADMINS; integers canonical decimal strings within their widths."""
+    if not isinstance(v, dict) or set(v) != set(GOV_FIELDS):
+        raise wire.WireError("GovernanceAction: fields differ")
+    wire.uint(v["action"], 8)
+    wire.address(v["root"])
+    wire.uint(v["nonce"], 64)
+    wire.uint(v["witnessSetVersion"], 64)
+    wire.uint(v["expiresAt"], 64)
+    admins = v["admins"]
+    if v["action"] not in ("1", "2", "3") or v["root"] == ZERO_ADDRESS or not isinstance(admins, list) or len(admins) > MAX_ADMINS:
+        raise wire.WireError("GovernanceAction: action, root or admins out of range")
+    for a in admins:
+        wire.address(a)
+    if any(a == ZERO_ADDRESS for a in admins) or any(x >= y for x, y in zip(admins, admins[1:])):
+        raise wire.WireError("GovernanceAction: admins must be non-zero and strictly ascending")
+    if (v["action"] == "1" and not admins) or (v["action"] == "2" and admins):
+        raise wire.WireError("GovernanceAction: ADD needs admins, REMOVE allows none")
+    return v
+
+
 class WitnessService:
-    def __init__(self, *, store, key, view, deployment, witness_set_version, max_checkpoint_ttl=DEFAULT_MAX_TTL):
+    def __init__(self, *, store, key, view, deployment, witness_set_version, max_checkpoint_ttl=DEFAULT_MAX_TTL, max_governance_ttl=DEFAULT_MAX_GOV_TTL, allowed_governance=None):
         if not isinstance(max_checkpoint_ttl, int) or isinstance(max_checkpoint_ttl, bool) or max_checkpoint_ttl < 1:
             raise ValueError("max_checkpoint_ttl must be a positive integer")
+        if not isinstance(max_governance_ttl, int) or isinstance(max_governance_ttl, bool) or max_governance_ttl < 1:
+            raise ValueError("max_governance_ttl must be a positive integer")
+        self._max_gov_ttl = max_governance_ttl
+        # TEST-ONLY local approval: a snapshot of (action, root, admins) tuples; None signs nothing
+        self._allow = None if allowed_governance is None else frozenset((a, r, tuple(ad)) for a, r, ad in allowed_governance)
         self._store, self._key, self._view, self._max_ttl = store, key, view, max_checkpoint_ttl
         self.address = Account.from_key(key).address.lower()
         self._wsv = witness_set_version
@@ -222,6 +272,8 @@ class WitnessService:
         self._domain = "0x" + eip712.domain_separator(messages.domain_for("StateCheckpoint", {}, deployment)).hex()
         self._decision_domain = "0x" + eip712.domain_separator(messages.domain_for("AccessDecision", {}, deployment)).hex()
         self._receipt_domain = "0x" + eip712.domain_separator(messages.domain_for("GrantReceipt", {}, deployment)).hex()
+        gdom = _governance_domain(deployment)
+        self._governance_sep = None if gdom is None else "0x" + eip712.domain_separator(gdom).hex()
         self._deployment = deployment
 
     # ---- the F signing rule for a checkpoint ------------------------------------------------------------------------------------------------------------------------
@@ -233,6 +285,9 @@ class WitnessService:
 
     def sign_receipt(self, proposal):
         return self._guarded(lambda: self._sign_receipt(proposal))
+
+    def sign_governance(self, proposal):
+        return self._guarded(lambda: self._sign_governance(proposal))
 
     @staticmethod
     def _guarded(fn):
@@ -274,6 +329,39 @@ class WitnessService:
         digest = _receipt_digest(own, self._deployment)
         return self._store.sign(type="GrantReceipt", domain=self._receipt_domain, wsv=own["witnessSetVersion"], key=own["requestDigest"], effect={k: own[k] for k in EFFECT_RECEIPT},
                                 expires_at=None, digest="0x" + digest.hex(), signer=self._signer, observe=lambda: self._view.observe("pbc"))
+
+    def _sign_governance(self, proposal):
+        if self._governance_sep is None:
+            raise _refusal("WRONG_PROFILE", "this deployment has no Governance contract (governance exists only in repaired-f)")
+        try:
+            g = dict(_governance_shape(proposal))
+        except (wire.WireError, TypeError):
+            raise _refusal("MALFORMED", "the proposal is not a canonical GovernanceAction") from None
+        view = self._view
+        current = int(view.governance_nonce())
+        if int(g["nonce"]) != current + 1:
+            raise _mismatch("nonce", f"the next governance nonce is {current + 1}")
+        if g["witnessSetVersion"] != self._wsv:
+            raise WitnessRefusal("STALE_STATE", "WITNESS_SET_MISMATCH", "witnessSetVersion differs from this witness's own")
+        root = g["root"]
+        if g["action"] == "1":
+            if view.is_authority(root):
+                raise _refusal("ALREADY_REGISTERED", "ADD of a root that is already an authority would revert at the TMSC")
+            if view.removed_authority(root):
+                raise _refusal("REVOKED", "ADD of a tombstoned root would revert at the TMSC")
+        elif not view.is_authority(root):
+            raise _refusal("NOT_REGISTERED", "REMOVE or SET of a root that is not an authority would revert at the TMSC")
+        if self._allow is None or (g["action"], root, tuple(g["admins"])) not in self._allow:
+            raise _refusal("POLICY_DENIED", "this witness's local allow-list does not approve this action")
+        ts = int(view.observe("pbc")["timestamp"])
+        e = int(g["expiresAt"])
+        if e <= ts:
+            raise _refusal("EXPIRED", "expiresAt is not after the PBC's latest block timestamp")
+        if e > ts + self._max_gov_ttl:
+            raise _mismatch("expiresAt", f"is more than {self._max_gov_ttl} s after the PBC's latest block timestamp")
+        digest = _governance_digest(g, self._deployment)
+        return self._store.sign(type="GovernanceAction", domain=self._governance_sep, wsv=g["witnessSetVersion"], key=g["nonce"], effect={k: g[k] for k in EFFECT_GOV}, expires_at=g["expiresAt"],
+                                digest="0x" + digest.hex(), signer=self._signer, observe=lambda: self._view.observe("pbc"), overtaken=("overtaken-governance", str(current)))
 
     @staticmethod
     def _shape(proposal):

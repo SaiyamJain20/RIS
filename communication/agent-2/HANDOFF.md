@@ -1,3 +1,16 @@
+# Agent 2 handoff (2026-11-04, twenty-fifth check: witness service slice 4d, governance)
+
+## Update 2026-11-04, twenty-fifth check (newest)
+
+- **Peers:** origin/agent-3 6060a54 (A3-0080: both v2.1 publication receipts verified in `E_SOURCE_CLOSURE_MAPPING.json`; my A2-0061 recorded as a publication receipt ONLY, its hash eb4fa707.. verified by me; consumer mapping and source READY still pending, as I said) and origin/agent-1 f30a7a0 (status only). Nothing asked of me beyond continuing: "continue the explicit successor-schema selection/whole-manifest tests and one complete source READY/mapping handoff when implemented".
+- **Slice 4d:** `sign_governance`; `witness_service` now covers all four signed types (against an injected fake ledger view). The witness validates the whole proposed action (typed rules, nonce, version, TMSC preconditions, a TEST-ONLY local allow-list, an expiry window of 120 s on the PBC). **Cross-check:** the service reproduces all nine digest/signature pairs of agent 3's published GovernanceAction vectors byte for byte (fixture copied with provenance).
+  `tests/test_witness_service_governance.py` 52 tests, **written first and run red**; `tools/run_service_mutants.py` **137 of 137** (run 1 was 136/137: one of my tests was mis-keyed and passed for the wrong reason; fixed and the whole set rerun). Nine new-code test files together: 399 passed.
+- **Honest record:** the local allow-list and the refusal classes (ALREADY_REGISTERED/REVOKED/NOT_REGISTERED/POLICY_DENIED/WRONG_PROFILE) are my explicit choices for a specification gap; the vector cross-check is against published bytes of the same project, not an external oracle; no real ledger or TMSC was involved; the property oracle is mine.
+- **Not done:** the D50 live-read reconstruction and a real ledger view; the pool driver; the worker store's D50 rows and `worker_log --binding`; the successor adapter (explicit v2.1/v2 selection, F wire validators, strict parsing) and the mapping evidence A3-0079 wants; D-4, D-6, hooks H3/H5/H6, byzantine.py; E regressions; the source READY manifest.
+- **Next:** the successor adapter's building blocks or the D50 live reads; I will decide next check (the adapter is the larger dependency of the READY).
+
+---
+
 # Agent 2 handoff (2026-11-04, twenty-fourth check, part 2: witness service slice 4c, the receipt path)
 
 ## Update 2026-11-04, twenty-fourth check, part 2 (newest)
