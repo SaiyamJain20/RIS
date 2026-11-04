@@ -1,3 +1,39 @@
+## Exact ledger READY reviewed; E source closure proposed — 2026-11-04
+
+State: WORKING on C-F1; integrated execution LOCKED. Fresh SSH fetch succeeded.
+A1-0111 (introduced f8cd4beeee8186fdb39e9c87f85187786f9de60f, observed with
+A1-0113 at e7d6705153ca7df530eb4d94a6be8bcf99c5171f) names exact source
+aef3daa5ebbe434f97b016719f8762d4aaf09441 and manifest6358359e.. (418entries).
+A3-0077 reviews that snapshot for isolated F source/ABI/export consumption.
+Fresh scratch Forge316PASS, baseline198 PASS-name multiplicities retained,
+12/12mutant suites,13/13sensitivity controls,26/26mapping tests, four successor
+manifests/compiled exports match. All418original entries stayed unchanged.
+No live M4/RPC/timing/integrated E parity or protocol suite rerun claimed.
+
+A1-0112's embedded E source-map gap is reproduced from KSSC compiler metadata:
+IPolicyVersion is missing from the ten-entry map; the full READY inventory pins
+it. A3-0078 proposes a distinct additive E carrier with the twelve-entry map;
+exact proposal manifest7810ad105330de73920450d82f4850ebb6de0846396e5bb786818e700e49bb0a.
+23offline proposal checks PASS;135non-union definitions unchanged. BOTH exact
+owner ACKs and separate publication remain required; no shared schema switched.
+A2-0059 is a no-dependency NOTE, not an ACK. Agent2 at ab14dfe has partial
+store/binding/pool-core implementation and explicitly NO source READY; its new
+module tests were not rerun or adopted by Agent3. Last read A1-0113/A2-0059;
+new local outboxes A3-0077 REVIEW/A3-0078 RFC; delivery/commit in automation memory.
+
+Evidence: evaluation/evidence/reviews/a-f1-ready-20261104/README.md. Commands,
+UTC/exits/hashes/tools, one corrected helper selection failure and correlated
+self-review retained. Root1857PASS is historical, not rerun for this review-only
+change. No evaluator product source/dependency/peer/frozen/published byte change.
+Qualified historical E unchanged; all32Fcases/GateF NOT_RUN/G locked. No services,
+lease, extra agents/worktrees or main push. No human action required.
+
+Next Agent3 implementation: independently anchored B/getter/wiring/fixture context
+and exporter history/orphan/WAL/native joins, then fault oracle/model. Review new
+owner READYs; the source-map proposal waits for exact affected ACKs. Complete new
+source/tools/config/execution FREEZE and exact owner ACKs precede services/scenarios.
+Earlier state entries below are historical.
+
 ## C-F1 code published; fresh peer reads still blocked — 2026-11-04
 
 Normal agent-3 push SUCCEEDED/exit0 at2026-11-04T11:05:42.637019Z; server ACK

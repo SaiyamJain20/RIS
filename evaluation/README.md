@@ -1,3 +1,11 @@
+**Current review (2026-11-04):** A1-0111 exact ledger snapshot reviewed:
+316 Forge tests,12 mutant suites,13 source controls,26 v2 mapping checks pass;
+418 source entries unchanged. Embedded E source omission reproduced; additive
+carrier amendment proposed with23 checks, awaiting BOTH exact owner ACKs.
+See [evidence](evidence/reviews/a-f1-ready-20261104/README.md) and the live board.
+Agent2 source READY absent; integrated F NOT_RUN/G locked. Earlier entries below
+are historical; SSH now works.
+
 **C-F1 evaluator checkpoint (2026-11-04):** Separate `schema_v2.py` and68
 focused tests; fresh full evaluator suite1726PASS/193inputs stable. Existing E
 validator/consumers and frozen/published interfaces unchanged. This is declared

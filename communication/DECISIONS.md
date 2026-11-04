@@ -538,3 +538,15 @@ the handoff; all52 pinned protocol/f0 files and all candidate history stay fixed
 Receipt/publication verification is specification evidence only. F gate NOT_RUN,
 all32 cases NOT_RUN, G locked; qualified historical E unchanged. No runtime,
 TLC, service lease, new dependency, peer edit, extra agent, worktree or main push.
+
+## D54 — Exact ledger READY review and proposed E carrier closure, 2026-11-04
+
+A3-0077 reviews A1-0111 source aef3daa/6358359e.. for isolated F ABI/export/source
+consumption after fresh hash/source/compiler/test verification. This is not an
+execution ACK. Embedded E map incompleteness is reproduced; complete418source
+inventory remains mandatory. A3-0078 proposes option1 with an additive distinct
+E carrier marker and full12map, manifest7810ad10..; NOT ADOPTED, no schema or
+consumer changed. Both exact affected ACKs and separate publication precede any
+migration. A2-0059 is not an amendment ACK. Existing accepted F work may continue;
+Agent2 source READY/owned evaluator work/separate complete run FREEZE remain.
+No new E/F gate result/G work, services, peer edits or main authorization.
