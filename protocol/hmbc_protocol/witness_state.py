@@ -127,6 +127,25 @@ def _classify(directory: str):
     return "open", meta
 
 
+def _check_anchor(a) -> None:
+    ok = isinstance(a, dict) and set(a) == {"pbc", "dbc"}
+    for side in ("pbc", "dbc") if ok else ():
+        r = a[side]
+        ok = ok and isinstance(r, dict) and set(r) == {"number", "hash"} and isinstance(r["number"], str) and bool(_DEC.fullmatch(r["number"])) and isinstance(r["hash"], str) and bool(_H32.fullmatch(r["hash"]))
+    if not ok:
+        raise ValueError("anchor must be {pbc: {number, hash}, dbc: {number, hash}} with a decimal number and a 0x block hash")
+
+
+def view_for_export(directory: str) -> "StoreView":
+    """The read-only entry of the exporters: only a missing, corrupt or legacy store is refused (SUCCESSOR-WIRE section 1); identity is not compared, nothing is written."""
+    if not os.path.isdir(directory):
+        raise StoreError("STORE_MISSING", "no store directory")
+    state, meta = _classify(directory)
+    if state != "open":
+        raise StoreError("STORE_MISSING", "the store was never initialised (no INITIALIZED marker)")
+    return StoreView(directory, meta)
+
+
 def _identity(meta: dict, binding_v2: str, owner: str) -> None:
     if meta["binding_v2"] != binding_v2:
         raise StoreError("BINDING_MISMATCH", "the store is bound to another deployment")
@@ -146,12 +165,14 @@ def _write_marker(directory: str, binding_v2: str, owner: str, hook) -> None:
     hook("after_rename")
 
 
-def init_store(directory: str, binding_v2: str, document: dict, owner: str, *, crash_hook=None) -> "WitnessStore":
+def init_store(directory: str, binding_v2: str, document: dict, owner: str, *, anchor: dict | None = None, crash_hook=None) -> "WitnessStore":
     """Initialise a fresh (or an interrupted) store, or OPEN an existing one whose identity matches; never initialise over a store (SUCCESSOR-WIRE section 5). The caller has already
     verified the deployment and computed `binding_v2` (D50); signing is allowed only after the marker exists and the directory was fsynced."""
     hook = crash_hook or (lambda p: None)
     if not isinstance(binding_v2, str) or not _SHA.fullmatch(binding_v2) or not isinstance(owner, str) or not _OWNER.fullmatch(owner) or not isinstance(document, dict):
         raise ValueError("binding_v2, owner or document is malformed")
+    if anchor is not None:
+        _check_anchor(anchor)
     if os.path.isdir(directory):
         state, meta = _classify(directory)
     else:
@@ -179,7 +200,10 @@ def init_store(directory: str, binding_v2: str, document: dict, owner: str, *, c
                 con.execute("BEGIN")
                 for sql in _SCHEMA_SQL:
                     con.execute(sql)
-                for k, v in (("schema", SCHEMA), ("binding_v2", binding_v2), ("binding_v2_doc", canonical_json(document)), ("owner", owner)):
+                rows = [("schema", SCHEMA), ("binding_v2", binding_v2), ("binding_v2_doc", canonical_json(document)), ("owner", owner)]
+                if anchor is not None:
+                    rows.append(("anchor", canonical_json(anchor)))          # the pinned block per chain at which the live fields were read (EXPORT-LAYOUTS section 2)
+                for k, v in rows:
                     con.execute("INSERT INTO meta (key, value) VALUES (?, ?)", (k, v))
                 con.execute("COMMIT")
             finally:
@@ -208,10 +232,61 @@ def open_store(directory: str, binding_v2: str, owner: str, *, signing: bool = T
     return st
 
 
-class WitnessStore:
-    def __init__(self, directory: str, meta: dict, crash_hook=None):
+class StoreView:
+    """A READ-ONLY view of an initialised store: no write connection, no identity check, no lock. The exporters use it (they make no RPC, so they have nothing to compare the identity with):
+    every read goes through one WAL-aware `mode=ro` transaction. `WitnessStore` extends it with the signing connection."""
+
+    def __init__(self, directory: str, meta: dict):
         self.directory, self.owner, self.binding_v2 = directory, meta["owner"], meta["binding_v2"]
         self.document = json.loads(meta["binding_v2_doc"])
+        self.anchor = json.loads(meta["anchor"]) if "anchor" in meta else None
+
+    def evidence(self) -> dict:
+        """The `witness_state --evidence` document (EXPORT-LAYOUTS section 3), read in ONE read transaction through a WAL-aware read-only connection."""
+        con = _ro(_paths(self.directory)[0])
+        try:
+            con.execute("BEGIN")
+            obs = sorted((json.loads(r[0]) for r in con.execute("SELECT observation FROM observed")), key=lambda o: int(o["chainId"]))
+            fr = con.execute("SELECT body FROM fault WHERE id = 1").fetchone()
+            log = [{"seq": str(s), "fault": json.loads(f), "clearedAgainst": json.loads(c), "note": n} for s, f, c, n in con.execute("SELECT seq, fault, cleared_against, note FROM fault_log ORDER BY seq")]
+
+            def digests(k, live):
+                out = []
+                for dg, e, sg, ob in con.execute("SELECT digest, expires_at, signature, observation FROM digests WHERE type=? AND domain=? AND wsv=? AND key=? AND "
+                                                 + ("sup_seq IS NULL" if live is None else "sup_seq = ?"), (*k,) if live is None else (*k, live)):
+                    d = {"digest": dg, "signature": sg, "observation": json.loads(ob)}
+                    if e is not None:
+                        d["expiresAt"] = e
+                    out.append(d)
+                return sorted(out, key=lambda d: (int(d["expiresAt"]) if "expiresAt" in d else -1, d["digest"]))
+
+            def record(k, effect, vhash, live):
+                return {"type": k[0], "domainSeparator": k[1], "witnessSetVersion": k[2], "keyField": k[3], "effect": json.loads(effect), "vHash": vhash, "digests": digests(k, live)}
+
+            conflicts = [record((t, d, w, ky), e, vh, None) for t, d, w, ky, e, vh in con.execute("SELECT type, domain, wsv, key, effect, vhash FROM conflict")]
+            conflicts.sort(key=lambda r: (_RANK[r["type"]], r["domainSeparator"], int(r["witnessSetVersion"]), int(r["keyField"]) if _DEC.fullmatch(r["keyField"]) else 0, r["keyField"]))
+            sup = []
+            for s, t, d, w, ky, e, vh, death in con.execute("SELECT seq, type, domain, wsv, key, effect, vhash, death FROM superseded ORDER BY seq"):
+                r = record((t, d, w, ky), e, vh, s)
+                r["seq"], r["death"] = str(s), json.loads(death)
+                sup.append(r)
+            con.execute("COMMIT")
+        finally:
+            con.close()
+        doc = {"schemaVersion": "hmbc-witness-evidence/v2", "owner": self.owner, "binding": {"binding_v2": self.binding_v2, "document": self.document},
+               "marker": json.loads(open(_paths(self.directory)[1]).read()), "observations": obs, "faulted": json.loads(fr[0]) if fr else None, "faultLog": log,
+               "conflicts": conflicts, "superseded": sup}
+        doc["evidenceSha256"] = hashlib.sha256(canonical_json(doc).encode("ascii")).hexdigest()
+        return doc
+
+    def binding_export(self, anchor: dict) -> dict:
+        """The `--binding` export (EXPORT-LAYOUTS section 2): {owner, binding_v2, document, anchor}, nothing else."""
+        return {"owner": self.owner, "binding_v2": self.binding_v2, "document": self.document, "anchor": anchor}
+
+
+class WitnessStore(StoreView):
+    def __init__(self, directory: str, meta: dict, crash_hook=None):
+        super().__init__(directory, meta)
         self._chains = {side: self.document["chains"][side]["chainId"] for side in ("pbc", "dbc")}
         self._hook = crash_hook or (lambda p: None)
         db = _paths(directory)[0]
@@ -385,49 +460,6 @@ class WitnessStore:
                     self._con.execute("ROLLBACK")
                 raise
 
-    # ---------------------------------------------------------------- read-only exports ----------------------------------------------------------
-    def evidence(self) -> dict:
-        """The `witness_state --evidence` document (EXPORT-LAYOUTS section 3), read in ONE read transaction through a WAL-aware read-only connection."""
-        con = _ro(_paths(self.directory)[0])
-        try:
-            con.execute("BEGIN")
-            obs = sorted((json.loads(r[0]) for r in con.execute("SELECT observation FROM observed")), key=lambda o: int(o["chainId"]))
-            fr = con.execute("SELECT body FROM fault WHERE id = 1").fetchone()
-            log = [{"seq": str(s), "fault": json.loads(f), "clearedAgainst": json.loads(c), "note": n} for s, f, c, n in con.execute("SELECT seq, fault, cleared_against, note FROM fault_log ORDER BY seq")]
-
-            def digests(k, live):
-                out = []
-                for dg, e, sg, ob in con.execute("SELECT digest, expires_at, signature, observation FROM digests WHERE type=? AND domain=? AND wsv=? AND key=? AND "
-                                                 + ("sup_seq IS NULL" if live is None else "sup_seq = ?"), (*k,) if live is None else (*k, live)):
-                    d = {"digest": dg, "signature": sg, "observation": json.loads(ob)}
-                    if e is not None:
-                        d["expiresAt"] = e
-                    out.append(d)
-                return sorted(out, key=lambda d: (int(d["expiresAt"]) if "expiresAt" in d else -1, d["digest"]))
-
-            def record(k, effect, vhash, live):
-                return {"type": k[0], "domainSeparator": k[1], "witnessSetVersion": k[2], "keyField": k[3], "effect": json.loads(effect), "vHash": vhash, "digests": digests(k, live)}
-
-            conflicts = [record((t, d, w, ky), e, vh, None) for t, d, w, ky, e, vh in con.execute("SELECT type, domain, wsv, key, effect, vhash FROM conflict")]
-            conflicts.sort(key=lambda r: (_RANK[r["type"]], r["domainSeparator"], int(r["witnessSetVersion"]), int(r["keyField"]) if _DEC.fullmatch(r["keyField"]) else 0, r["keyField"]))
-            sup = []
-            for s, t, d, w, ky, e, vh, death in con.execute("SELECT seq, type, domain, wsv, key, effect, vhash, death FROM superseded ORDER BY seq"):
-                r = record((t, d, w, ky), e, vh, s)
-                r["seq"], r["death"] = str(s), json.loads(death)
-                sup.append(r)
-            con.execute("COMMIT")
-        finally:
-            con.close()
-        doc = {"schemaVersion": "hmbc-witness-evidence/v2", "owner": self.owner, "binding": {"binding_v2": self.binding_v2, "document": self.document},
-               "marker": json.loads(open(_paths(self.directory)[1]).read()), "observations": obs, "faulted": json.loads(fr[0]) if fr else None, "faultLog": log,
-               "conflicts": conflicts, "superseded": sup}
-        doc["evidenceSha256"] = hashlib.sha256(canonical_json(doc).encode("ascii")).hexdigest()
-        return doc
-
-    def binding_export(self, anchor: dict) -> dict:
-        """The `--binding` export (EXPORT-LAYOUTS section 2): {owner, binding_v2, document, anchor}, nothing else."""
-        return {"owner": self.owner, "binding_v2": self.binding_v2, "document": self.document, "anchor": anchor}
-
 
 class _FaultSet(Exception):
     """Internal: a regression was recorded inside the transaction; the fault row must be COMMITTED before the refusal is raised."""
@@ -435,3 +467,50 @@ class _FaultSet(Exception):
     def __init__(self, error: StoreError):
         super().__init__(str(error))
         self.error = error
+
+
+# ---------------------------------------------------------------- the read-only exporter CLI ----------------------------------------------------------
+def _witness_index(v: str) -> int:
+    import argparse
+    try:
+        i = int(v)
+    except ValueError:
+        raise argparse.ArgumentTypeError("--witness-index must be an integer 0..3") from None
+    if not 0 <= i <= 3:
+        raise argparse.ArgumentTypeError("--witness-index must be 0..3")
+    return i
+
+
+def main(argv=None) -> int:
+    """`python -m hmbc_protocol.witness_state --state-dir D --witness-index I (--binding | --evidence)` (EXPORT-LAYOUTS section 1). Success: exit 0, stdout ONE canonical JSON line plus one LF,
+    stderr empty. Refusal: exit 3, stdout empty, stderr one canonical {code, message, reason} line. Usage errors: exit 2 (argparse). Read-only, no RPC, no key material."""
+    import argparse
+    import sys
+    ap = argparse.ArgumentParser(prog="hmbc_protocol.witness_state", description=main.__doc__)
+    ap.add_argument("--state-dir", required=True)
+    ap.add_argument("--witness-index", required=True, type=_witness_index)
+    g = ap.add_mutually_exclusive_group(required=True)
+    g.add_argument("--evidence", action="store_true")
+    g.add_argument("--binding", action="store_true")
+    ns = ap.parse_args(argv)
+    try:
+        try:
+            view = view_for_export(os.path.join(ns.state_dir, f"witness-{ns.witness_index}"))
+            if ns.binding:
+                if view.anchor is None:
+                    raise StoreError("STORE_CORRUPT", "the binding rows carry no anchor")
+                doc = view.binding_export(view.anchor)
+            else:
+                doc = view.evidence()
+        except sqlite3.DatabaseError as e:
+            raise StoreError("STORE_CORRUPT", f"the database cannot be read: {e}") from None
+    except StoreError as e:
+        sys.stderr.write(canonical_json({"code": e.code, "message": e.message, "reason": e.reason}) + "\n")
+        return 3
+    sys.stdout.write(canonical_json(doc) + "\n")
+    return 0
+
+
+if __name__ == "__main__":
+    import sys
+    sys.exit(main())

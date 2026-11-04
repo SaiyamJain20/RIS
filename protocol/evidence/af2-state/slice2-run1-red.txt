@@ -1,0 +1,9 @@
+First run of tests/test_binding.py and tests/test_witness_state_cli.py, BEFORE hmbc_protocol/binding.py and the CLI existed. Verbatim terminal output (the relevant lines), CPython 3.13.13, pytest 9.0.2:
+
+    from hmbc_protocol import binding as bd
+E   ImportError: cannot import name 'binding' from 'hmbc_protocol' (/home/karma/Documents/RIS-agent-2/protocol/hmbc_protocol/__init__.py)
+=========================== short test summary info ============================
+ERROR tests/test_binding.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.09s
+(the CLI tests were written in the same step and collected after the import error was fixed; they failed on the missing `--witness-index` entry point until main() existed.)

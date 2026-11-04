@@ -41,6 +41,14 @@ M = [
     ("S22 the effect fields of V are not enforced", [('        if not isinstance(effect, dict) or set(effect) != EFFECT_FIELDS[type]:\n            raise ValueError("effect must carry exactly the fields of V for this type")\n', "")]),
     ("S23 a regression of the hash at the same number is not a fault", [('                      else "hash-changed" if obs["blockNumber"] == last["blockNumber"] and obs["blockHash"] != last["blockHash"] else None)', "                      else None)")]),
     ("S24 the directory is not made private", [("    os.chmod(directory, 0o700)\n", "")]),
+    ("C1 the exporter refusal exits 1 instead of 3", [("        return 3\n    sys.stdout.write", "        return 1\n    sys.stdout.write")]),
+    ("C2 the exporter success prints two newlines", [('    sys.stdout.write(canonical_json(doc) + "\\n")\n    return 0', '    sys.stdout.write(canonical_json(doc) + "\\n\\n")\n    return 0')]),
+    ("C3 the exporter refusal line is not canonical JSON", [('sys.stderr.write(canonical_json({"code": e.code, "message": e.message, "reason": e.reason}) + "\\n")', 'sys.stderr.write(json.dumps({"code": e.code, "message": e.message, "reason": e.reason}, indent=1) + "\\n")')]),
+    ("C4 a binding export without an anchor is printed anyway", [('                if view.anchor is None:\n                    raise StoreError("STORE_CORRUPT", "the binding rows carry no anchor")\n', "")]),
+    ("C5 init does not persist the anchor", [('                    rows.append(("anchor", canonical_json(anchor)))', "                    pass")]),
+    ("C6 the anchor shape is not checked", [("    if not ok:\n        raise ValueError(\"anchor must be", "    if False:\n        raise ValueError(\"anchor must be")]),
+    ("C7 the witness index range is not enforced", [("    if not 0 <= i <= 3:\n        raise argparse.ArgumentTypeError(\"--witness-index must be 0..3\")", "    if False:\n        raise argparse.ArgumentTypeError(\"--witness-index must be 0..3\")")]),
+    ("C8 the exporter always reads witness-0", [('os.path.join(ns.state_dir, f"witness-{ns.witness_index}")', 'os.path.join(ns.state_dir, "witness-0")')]),
 ]
 
 
@@ -50,7 +58,7 @@ def run_in_copy(text):
         p = os.path.join(d, "protocol")
         for sub in ("hmbc_protocol", "tests", "testtools", os.path.join("f0", "vectors"), os.path.join("tests", "fixtures")):
             os.makedirs(os.path.join(p, sub), exist_ok=True)
-        for rel in ("pytest.ini", os.path.join("hmbc_protocol", "__init__.py"), os.path.join("tests", "test_witness_state.py"), os.path.join("tests", "state_child.py"),
+        for rel in ("pytest.ini", os.path.join("hmbc_protocol", "__init__.py"), os.path.join("tests", "test_witness_state.py"), os.path.join("tests", "test_witness_state_cli.py"), os.path.join("tests", "state_child.py"),
                     os.path.join("testtools", "__init__.py"), os.path.join("testtools", "state_oracle.py"), os.path.join("f0", "vectors", "d50_reference.py"),
                     os.path.join("f0", "vectors", "export_layouts_reference.py"), os.path.join("tests", "fixtures", "deployment-agent1-91add8c-v1-repaired-e.json")):
             shutil.copy(os.path.join(PROTO, rel), os.path.join(p, rel))
@@ -58,7 +66,7 @@ def run_in_copy(text):
             f.write(text)
         env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
         try:
-            r = subprocess.run([sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests/test_witness_state.py"], cwd=p, capture_output=True, text=True, timeout=300, env=env)
+            r = subprocess.run([sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests/test_witness_state.py", "tests/test_witness_state_cli.py"], cwd=p, capture_output=True, text=True, timeout=300, env=env)
         except subprocess.TimeoutExpired:
             return "timeout", None
         m = re.search(r"(\d+) failed", r.stdout)
