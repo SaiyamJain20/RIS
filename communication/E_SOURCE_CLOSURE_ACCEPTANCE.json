@@ -1,0 +1,35 @@
+{
+  "format": "RIS-interface-amendment-acceptance-1",
+  "status": "ACCEPTED_FOR_SEPARATE_SUCCESSOR_PUBLICATION",
+  "acceptedUtc": "2026-11-04T12:55:24.971811+00:00",
+  "proposal": {
+    "commit": "222cdf244eab376199ccbd02fa43bedef0d084d3",
+    "path": "interfaces/proposals/v2-e-source-closure/MANIFEST.json",
+    "sha256": "7810ad105330de73920450d82f4850ebb6de0846396e5bb786818e700e49bb0a"
+  },
+  "proposalAcks": [
+    {
+      "owner": "agent-1",
+      "messageId": "A1-0114",
+      "path": "communication/agent-1/outbox/0114-ack-e-source-closure-amendment.md",
+      "commit": "2b3d389278ecd83d67a10a5d7e4610da90fcae95",
+      "fileChangingCommit": "2b3d389278ecd83d67a10a5d7e4610da90fcae95",
+      "sha256": "b55ce757215305d41152b069487a8d4f6950a02c2980ccae9f8a95ea390e89f9",
+      "scope": "ledger producer amendment proposal only"
+    },
+    {
+      "owner": "agent-2",
+      "messageId": "A2-0060",
+      "path": "communication/agent-2/outbox/0060-ack-e-source-closure-amendment-protocol-scope.md",
+      "commit": "d689e38a32b33ad2caa69b7b7000e4fe592b5fdd",
+      "fileChangingCommit": "b35d014012765ce96424365e714f76fe8de48482",
+      "sha256": "f5b462be848c8f1cb7a2632e5991f372dde2d23b9af5736cf4b18ae5ca03c6c1",
+      "scope": "protocol producer/consumer amendment proposal only"
+    }
+  ],
+  "publicationMappingAcks": [],
+  "migrationPolicy": "Opt-in E F-tree successor uses v2.1 marker and twelve sources; wire family v2. Old ten-source E is historical compatibility only. Default v1 and F unchanged.",
+  "sourceReadyRequired": true,
+  "executionAuthorized": false,
+  "note": "Proposal ACKs verified; no completed exporter/consumer migration, publication receipt ACK or run ACK inferred."
+}

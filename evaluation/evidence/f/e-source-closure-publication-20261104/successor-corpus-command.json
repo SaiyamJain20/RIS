@@ -1,0 +1,18 @@
+{
+  "argv": [
+    ".venv/bin/python",
+    "-c",
+    "from evaluation import schema_v2; import pytest; schema_v2.SCHEMAS = schema_v2.SCHEMAS.parent / 'v2.1'; print('Existing v2 corpus on published v2.1 schema:', schema_v2.SCHEMAS, flush=True); raise SystemExit(pytest.main(['evaluation/tests/test_schema_v2.py', '-q']))"
+  ],
+  "cwd": "/home/karma/Documents/RIS",
+  "startedAt": "2026-11-04T12:59:58.604691+00:00",
+  "endedAt": "2026-11-04T12:59:59.219954+00:00",
+  "exitCode": 0,
+  "timedOut": false,
+  "elapsedSeconds": 0.6152689890004694,
+  "outputSha256": "bc35f17cd2b1eb5e2b3003736c093f1ed83e94ffaa0c1f0dc00eb51afa790128",
+  "pid": null,
+  "processGroup": null,
+  "groupCleanup": null,
+  "environmentSha256": null
+}

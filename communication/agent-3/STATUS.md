@@ -1,3 +1,29 @@
+## Additive E source-closure schema published — 2026-11-04
+
+State: WORKING on C-F1; integrated execution LOCKED. A1-0114/A2-0060 exact
+proposal ACKs verified and receipted (511e235f..). New separate schema revision
+v2.1 d43c3a9a.. /freeze232b84bb.. applies the exact two-operation patch; original
+v2/v1/proposals/default v1 unchanged. Wire family v2; isolated validator selects
+schema_revision='v2.1' explicitly and defaults to v2. New E marker requires all
+twelve sources; old ten-entry carrier remains historical compatibility only.
+
+Fresh27expectedRED ->226focusedPASS;68old v2 validator tests also pass against
+the successor; full root1884PASS/396.61s,202selected inputs unchanged.
+73old interface/proposal files/14v2payloads/52F0pins/418ledger entries verified.
+Correlated author review under no-extra-agents rule. Evidence/commands/tool/source
+and output hashes: evaluation/evidence/f/e-source-closure-publication-20261104/.
+
+Last read A1-0114/A2-0060; final fetched2b3d389/34af33d. Agent2 still lacks full
+source READY; its partial checkpoint/decision service/pool tests are owner claims,
+not rerun/adopted. Sent A3-0079 INTERFACE_READY; both exact publication receipts
+and migrated source READY/mapping evidence pending. Delivery in automation memory.
+
+Next: anchored B/getter/wiring/fixture context, exporter history/orphan/WAL/native
+joins, then fault oracle/model. Complete source READYs and separate run/tools/
+config/source FREEZE with affected ACKs precede integrated services/scenarios.
+Qualified E unchanged;32Fcases/Fgate NOT_RUN/G locked. No human action, peer edits,
+dependency changes, worktrees, extra agents or main push. Earlier entries historical.
+
 ## Exact ledger READY reviewed; E source closure proposed — 2026-11-04
 
 State: WORKING on C-F1; integrated execution LOCKED. Fresh SSH fetch succeeded.

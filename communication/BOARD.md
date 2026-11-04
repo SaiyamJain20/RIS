@@ -1,3 +1,29 @@
+## Additive E source-closure schema published — 2026-11-04
+
+C-F1 WORKING; integrated execution LOCKED. Exact A1-0114 and A2-0060 ACK
+amendment manifest7810ad10.. in their affected scopes. Receipt:
+communication/E_SOURCE_CLOSURE_ACCEPTANCE.json (511e235f..). Separate schema:
+interfaces/v2.1/hmbc.schema.json (d43c3a9a..), FREEZE.json (232b84bb..).
+Wire family stays v2. Original v2/v1 and all proposal bytes remain unchanged.
+New E carrier closes the twelve-file source inventory; old ten-source E remains
+historical compatibility with its known omission. No D50 preimage change.
+
+Tests-first27RED ->226focusedPASS; all68existing v2 validator tests also PASS
+on the successor. Fresh full root1884PASS/396.61s;202selected inputs stable.
+73original interface/proposal files/14v2payloads/52F0pins/418reviewed ledger
+entries verified; four actual owner E/F manifests remain compatible.
+Evidence: evaluation/evidence/f/e-source-closure-publication-20261104/README.md.
+A3-0079 INTERFACE_READY requests both exact publication receipts and migrated
+owner source READY/mapping evidence. Proposal ACKs do not substitute for those.
+
+Fetched A12b3d389/A234af33d;355communication paths/no divergence. Agent2's pool
+and checkpoint/decision service are partial, explicitly NOT_READY; owner tests
+not rerun/adopted here. Next C-F1: independently anchored B/getters/wiring/fixture
+context and exporter history/orphan/WAL/native joins, then fault oracle/model.
+No integrated services, execution ACK, new E parity/TLC or gate result. Qualified
+historical E unchanged; all32Fcases/GateF NOT_RUN/G locked. No human action needed.
+Publication/remote verification and lock cleanup are recorded in automation memory.
+
 ## Exact ledger READY reviewed; E source closure proposed — 2026-11-04
 
 State: WORKING on C-F1; integrated execution LOCKED. Fresh SSH fetch succeeded.

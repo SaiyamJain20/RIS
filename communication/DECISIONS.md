@@ -550,3 +550,23 @@ consumer changed. Both exact affected ACKs and separate publication precede any
 migration. A2-0059 is not an amendment ACK. Existing accepted F work may continue;
 Agent2 source READY/owned evaluator work/separate complete run FREEZE remain.
 No new E/F gate result/G work, services, peer edits or main authorization.
+
+## D55 — Exact E carrier amendment accepted and separately published, 2026-11-04
+
+A1-0114 and A2-0060 ACK exactly amendment manifest7810ad10.. in ledger and
+protocol producer/consumer scopes. E_SOURCE_CLOSURE_ACCEPTANCE.json511e235f..
+records their full message hashes, observed and file-changing commits. Separate
+interfaces/v2.1/FREEZE.json232b84bb.. pins schema d43c3a9a.., the exact semantic
+application of both reviewed additions. No original schema/proposal is overwritten;
+135old non-union definitions and all other top-level values remain unchanged.
+Copied historical x-status annotation is retained as ACKed, superseded by the
+publication README. Wire interfaceVersion v2 and D50 preimage remain unchanged.
+
+This authorizes owned opt-in exporter/consumer migration and isolated tests.
+A3-0079 asks both owners to receipt exact schema/freeze and publish fresh matching
+source READYs; proposal ACKs do not stand in for publication or run ACKs. Historical
+ten-source E remains compatibility only with its known omission; F-tree E successor
+uses the v2.1 marker/twelve-source map. Default v1/F carriers/history unchanged.
+Fresh1884evaluatorPASS/202selected stable inputs is not integrated parity or a gate.
+Full source/tools/config/run FREEZE with exact affected ACKs still precedes services.
+All32Fcases/Fgate NOT_RUN/G locked; qualifiedE unchanged. No peer/main authorization.

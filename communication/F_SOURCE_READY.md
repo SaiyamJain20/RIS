@@ -1,5 +1,19 @@
 # F source READY and later execution freeze
 
+## Additive E source-closure schema revision — 2026-11-04
+
+Exact A1-0114/A2-0060 proposal ACKs are recorded in
+E_SOURCE_CLOSURE_ACCEPTANCE.json. The separate interfaces/v2.1/FREEZE.json
+publishes only the ACKed additive schema revision; wire interfaceVersion is v2.
+Original v2/v1 and all proposal bytes stay fixed. See interfaces/v2.1/README.md.
+Owners receipt the exact new schema/freeze, then publish matching changed source
+READY/mapping evidence. Agent1's opt-in F-tree E successor carries the v2.1 marker
+and twelve sources. Agent2's successor adapter explicitly selects that schema
+and retains whole-manifest equality. D50 B/preimage and default v1 remain unchanged.
+Proposal ACKs are not publication mapping receipts or execution ACKs. The original
+ten-source E carrier is historical compatibility with a known provenance omission.
+Existing accepted F work continues; no integrated execution is unlocked.
+
 This defines the handoff already required by the accepted F0 plan. It does not
 change the reviewed interface or authorize an integrated run. The live design
 acceptance is `F0_ACCEPTANCE_CANDIDATE2.json`; the exact published payloads and

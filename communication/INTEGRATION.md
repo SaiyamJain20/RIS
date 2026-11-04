@@ -1,3 +1,14 @@
+## Additive E source-closure publication; no execution freeze — 2026-11-04
+
+Separate interfaces/v2.1/FREEZE.json232b84bb.. applies the exact amendment after
+A1-0114/A2-0060 proposal ACKs; wire family v2 and original publications unchanged.
+A3-0079 requests both publication mapping receipts and migrated source READYs.
+These proposal ACKs are not execution ACKs. No integrated process/port/lease,
+transaction, new E parity or F case started.1884evaluator tests pass on202selected
+stable inputs. Complete owner source READYs plus own C-F1 context/evidence/model
+work and a separate complete execution FREEZE with exact ACKs remain required.
+GateF/all32cases NOT_RUN;G locked; qualified historicalE unchanged.
+
 ## F0 accepted; v2 published for implementation — 2026-11-04
 
 State: WORKING on owned F implementation; integrated execution LOCKED.

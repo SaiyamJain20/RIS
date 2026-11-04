@@ -179,10 +179,13 @@ def _walk(rule, value, validator, seen, definitions):
             _walk(child_rule, child, validator, seen, definitions)
 
 
-def validate(name, value):
-    """Check v2 shape and the documented subset of declared semantic rules."""
+def validate(name, value, *, schema_revision='v2'):
+    """Check an explicit published schema revision; wire family stays v2."""
+    if schema_revision not in ('v2', 'v2.1'):
+        raise ValueError('Unknown v2 schema revision')
     legacy.finite_json(value)
-    document = json.loads((SCHEMAS / 'hmbc.schema.json').read_text())
+    directory = SCHEMAS if schema_revision == 'v2' else SCHEMAS.parent / 'v2.1'
+    document = json.loads((directory / 'hmbc.schema.json').read_text())
     if not isinstance(name, str) or not re.fullmatch(r'[A-Za-z0-9]+', name) or name not in document['$defs']:
         raise ValueError('Unknown v2 schema name')
     document['$ref'] = '#/$defs/' + name
@@ -191,13 +194,13 @@ def validate(name, value):
     _walk({'$ref': document['$ref']}, value, validator, set(), document['$defs'])
 
 
-def validate_response(operation, value):
+def validate_response(operation, value, *, schema_revision='v2'):
     if operation not in OPERATIONS:
         raise ValueError('MALFORMED: unknown operation')
-    validate(OPERATIONS[operation] + 'Response', value)
+    validate(OPERATIONS[operation] + 'Response', value, schema_revision=schema_revision)
 
 
-def validate_json_line(name, line):
+def validate_json_line(name, line, *, schema_revision='v2'):
     if not isinstance(line, str) or len(line.encode('utf-8')) > 1048576:
         raise ValueError('MALFORMED: request line exceeds 1 MiB')
 
@@ -216,7 +219,7 @@ def validate_json_line(name, line):
         value = json.loads(line, object_pairs_hook=pairs, parse_constant=constant)
     except (json.JSONDecodeError, RecursionError) as error:
         raise ValueError('MALFORMED: invalid JSON') from error
-    validate(name, value)
+    validate(name, value, schema_revision=schema_revision)
     return value
 
 
@@ -225,6 +228,6 @@ def _binding_digest(document):
     return hashlib.sha256(preimage).hexdigest()
 
 
-def binding_hash(document):
-    validate('DeploymentBindingDocument', document)
+def binding_hash(document, *, schema_revision='v2'):
+    validate('DeploymentBindingDocument', document, schema_revision=schema_revision)
     return _binding_digest(document)

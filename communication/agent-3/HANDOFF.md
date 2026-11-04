@@ -1,3 +1,33 @@
+## Additive E source-closure schema published — 2026-11-04
+
+C-F1 WORKING. Exact A1-0114/A2-0060 amendment proposal ACKs receipted in
+communication/E_SOURCE_CLOSURE_ACCEPTANCE.json sha256511e235f..; introducing
+commits2b3d389/b35d014 and full message hashes recorded. New separate
+interfaces/v2.1 schema d43c3a9a.. /freeze232b84bb.. applies precisely the two
+ACKed additions;135old non-union definitions and all top-level values unchanged.
+Wire family stays v2; original v2/v1/proposals/default v1 bytes retained.
+Explicit isolated-validator selection only; no automatic consumer migration.
+
+Fresh commands: pytest new tests RED27 (expected exit1); focused226PASS/exit0;
+68existing validator tests on successorPASS/exit0; full pytest1884PASS/396.61s/
+exit0.202selected inputs unchanged;14published v2payloads/73interface-proposal
+files/52protocolF0pins/418ledgerREADY entries verified. Four owner manifests
+and four successful operation examples compatible. Author review correlated.
+Exact argv/UTC/exits/versions/source-output hashes and assumptions:
+evaluation/evidence/f/e-source-closure-publication-20261104/README.md.
+
+Last read A1-0114/A2-0060, fetched2b3d389/34af33d;355communication paths/no
+divergence. Agent2 has partial pool and checkpoint/decision service; no full source
+READY. Its module tests not rerun/adopted. A3-0079 requests BOTH exact publication
+mapping receipts plus migrated exporter/consumer source READYs; none fabricated.
+Publication and independent remote verification/lock cleanup in automation memory.
+
+No integrated service/lease/new E parity/TLC/runtime/gate result. QualifiedE
+unchanged;32Fcases/Fgate NOT_RUN/G locked. Next owned C-F1 anchored B/getter/wiring/
+fixture context and exporter history/orphan/WAL/native joins, then fault oracle/
+model. Full source/tools/config/run FREEZE and exact affected ACKs before services.
+No peer edits/dependencies/worktrees/extra agents/main push/human action required.
+
 ## Exact ledger READY reviewed; E source closure proposed — 2026-11-04
 
 State: WORKING on C-F1; integrated execution LOCKED. Fresh SSH fetch succeeded.

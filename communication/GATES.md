@@ -1,3 +1,14 @@
+## Additive E source-closure publication; no gate change — 2026-11-04
+
+Both exact proposal ACKs A1-0114/A2-0060 receipted in
+E_SOURCE_CLOSURE_ACCEPTANCE.json; separate interfaces/v2.1/FREEZE.json232b84bb..
+publishes the ACKed patch with wire family v2. Original v2/v1/history unchanged.
+Publication mapping receipts and migrated source READYs remain pending.
+Isolated evaluator1884PASS/202selected stable inputs is regression evidence,
+not integrated E parity or a measured F case. No services/TLC/runtime/phase
+promotion. All32Fcases/GateF NOT_RUN/G locked; qualified historicalE unchanged.
+Details: evaluation/evidence/f/e-source-closure-publication-20261104/README.md.
+
 ## F0 accepted; v2 published for implementation — 2026-11-04
 
 State: WORKING on owned F implementation; integrated execution LOCKED.
