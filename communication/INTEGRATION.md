@@ -1,3 +1,13 @@
+## Independent D50 context checks; No execution freeze — 2026-11-04
+
+Fresh isolated checker98new/324focused/1982root tests PASS;226inputs stable.
+Six deliberate join-removal controls detected. No RPC collector or source/chain
+attestation, integrated service/lease/deployment, new E parity/TLC/timing or Fcase.
+Agent2 at051cf67 remains NOT_READY. Owner source READYs plus separate full exact
+execution FREEZE ACKs still required. Historical qualifiedE unchanged;32Fcases/
+GateF NOT_RUN/G locked. A3-0081 and evaluation/evidence/f/v2-binding-context-20261104/
+contain exact proof and remaining work.
+
 ## Publication receipts reviewed; no execution freeze — 2026-11-04
 
 Both v2.1 publication receipts A1-0115/A2-0061 verified; exact scopes and ledger

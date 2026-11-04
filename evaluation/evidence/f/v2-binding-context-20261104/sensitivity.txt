@@ -1,0 +1,54 @@
+{
+  "classification": "deliberate in-memory mutations; synthetic extension tests",
+  "controls": [
+    {
+      "name": "configured",
+      "realChecker": "REFUSED",
+      "joinRemoval": "ADMITTED",
+      "removedJoins": [
+        "LSC.configured"
+      ]
+    },
+    {
+      "name": "immutable-wiring",
+      "realChecker": "REFUSED",
+      "joinRemoval": "ADMITTED",
+      "removedJoins": [
+        "PSC.rsc"
+      ]
+    },
+    {
+      "name": "governance-ttl",
+      "realChecker": "REFUSED",
+      "joinRemoval": "ADMITTED",
+      "removedJoins": [
+        "Governance.maxGovernanceTtl"
+      ]
+    },
+    {
+      "name": "masked-runtime",
+      "realChecker": "REFUSED",
+      "joinRemoval": "ADMITTED",
+      "removedJoins": [
+        "masked build"
+      ]
+    },
+    {
+      "name": "read-anchor",
+      "realChecker": "REFUSED",
+      "joinRemoval": "ADMITTED",
+      "removedJoins": [
+        "LSC code block"
+      ]
+    },
+    {
+      "name": "self-selected-export",
+      "realChecker": "REFUSED",
+      "joinRemoval": "ADMITTED",
+      "removedJoins": [
+        "export digest",
+        "export document"
+      ]
+    }
+  ]
+}

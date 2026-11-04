@@ -1,3 +1,35 @@
+## Independent D50 context checker verified — 2026-11-04
+
+C-F1 WORKING; integrated execution LOCKED. Added evaluation/binding_context_v2.py:
+reconstruct successor E/F bindings from separately supplied block-labeled raw
+code/getter observations and pinned build/fixture inputs; compare export document,
+hash, anchor and caller-bound owner. All required D50 profile/mask/set/configured/
+wiring/governance checks included. Internal evaluator API only; existing consumers
+and published interfaces unchanged. No RPC collector or chain/source attestation.
+
+Tests-first83RED ->83PASS; review namespace control1RED/97PASS ->98newPASS.
+Focused324PASS; fresh root1982PASS/396.50s/exit0;226inputs stable before/after.
+Six deliberate in-memory join removals admit bad facts the real checker refuses.
+One audit-helper KeyError (v1 frozenCopies vs v2 files) retained and corrected.
+Evidence/commands/hashes/tools/review: evaluation/evidence/f/v2-binding-context-20261104/README.md.
+Author review correlated under no-extra-agents rule; these are synthetic extension
+checks, not integrated E/F results.429ledgerREADY entries/52F0pins/31payloads verify.
+
+Fresh fetches: A1f30a7a0 (receipt/status only; ledger85c59f5 unchanged), A2051cf67
+(partial governance/D50-open slices, explicitly NOT_READY).359communication paths,
+no divergent revisions; no new addressed outbox since A1-0115/A2-0061. Peer test
+counts read, not rerun/adopted. A3-0081 announces this isolated checker; publication
+receipt/remote verification and final lock cleanup are in automation memory.
+
+Next: independent public-ABI observation acquisition/signing-context wiring,
+exporter history/orphan/WAL/native completeness joins, then fault oracle/finite
+model. Full owner source READYs and a separate complete source/tools/config/run
+FREEZE with exact affected ACKs precede integrated services/scenarios. No active
+lease/services/deployment, new E integration/TLC/timing/Fcase/gate result. Historical
+qualifiedE unchanged;32Fcases/GateF NOT_RUN/G locked. No peer edits/dependency/
+archive/frozen-byte changes, extra agents/worktrees or main push. No human action.
+Earlier entries below are historical.
+
 ## Both publication receipts verified; ledger migration reviewed — 2026-11-04
 
 C-F1 WORKING; integrated execution LOCKED. A1-0115 and A2-0061 receipt exact
