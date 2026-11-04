@@ -2,9 +2,10 @@
 pragma solidity 0.8.37;
 
 import {
-    ErrorCode, Rejected, Profile, HMBCHash, StateCheckpoint, MUT_NO_NONCE, mutationsAllowed, isRepaired
+    ErrorCode, Rejected, Profile, HMBCHash, StateCheckpoint, MUT_NO_NONCE, MUT_NO_POLICY_PIN, mutationsAllowed, isRepaired
 } from "./types/ProtocolTypes.sol";
 import {QuorumLib} from "./lib/SigLib.sol";
+import {IPolicyVersion} from "./interfaces/IPolicyVersion.sol";
 import {Bootstrapped} from "./lib/Bootstrapped.sol";
 
 /// Key Store Smart Contract on the Hospital DBC (HMBC2020 III-E2, Fig. 5, Table 3 requestData).
@@ -148,6 +149,12 @@ contract KSSC is Bootstrapped {
         if (block.timestamp >= c.expiresAt) revert Rejected(ErrorCode.EXPIRED);
         if (c.expiresAt > block.timestamp + maxCheckpointTtl) revert Rejected(ErrorCode.MALFORMED);
         if (c.keyEpoch != 0) revert Rejected(ErrorCode.WRONG_EPOCH);
+        // A-F1 design 2.2 section 4 (D-e e1): pin the checkpoint to the DBC's policy version, so a
+        // quorum-signed checkpoint carrying another version cannot block later decisions.
+        if (
+            profile == Profile.REPAIRED_F && mutations & MUT_NO_POLICY_PIN == 0
+                && c.policyVersion != IPolicyVersion(acsc).policyVersion()
+        ) revert Rejected(ErrorCode.STALE_STATE);
         if (hasCheckpoint) {
             StateCheckpoint storage cur = _checkpoint;
             if (c.sequence <= cur.sequence) revert Rejected(ErrorCode.STALE_STATE);

@@ -83,3 +83,23 @@ What this slice does **not** do: no Governance, no TMSC hooks, no policy pin, no
 - **Mutant checker:** exit 0.
 
 Limits: the bit 6 and 7 **mutant** runs (as opposed to their baselines) are not written yet. There is no policy pin yet (slice 3) and no F reruns of the E suites yet (slice 4).
+
+## Slice 3: the KSSC policy pin and q-of-4 on every signed path (design §§4 and 7)
+
+**Change:** `KSSC.acceptState`. After the keyEpoch check and before the monotonicity block, a REPAIRED_F checkpoint whose `policyVersion` differs from `IPolicyVersion(acsc).policyVersion()` is refused STALE_STATE, unless bit 8 (`MUT_NO_POLICY_PIN`) is set. There is no constructor or ABI change. E profiles are unaffected: `test_F0_PoisonCheckpointPolicyVersionBlocksTheDbc` still characterizes the E gap.
+
+**Tests:** `test/Quorum.t.sol`, 9 tests. With q = 3 of 4 on all three witness-signed paths (checkpoint at KSSC, decision at ACSC, receipt at PSC), each path:
+- accepts any three of the four witnesses;
+- rejects two (INSUFFICIENT_QUORUM), a duplicate (DUPLICATE_SIGNER), an outsider among three valid signatures (BAD_SIGNATURE) and an unsorted list (MALFORMED).
+
+Also covered:
+- four of four accepted;
+- a single witness cannot poison;
+- the E witness-set version gives STALE_STATE;
+- the P-WIT-4 analogue: a foreign policy version, higher or lower, gives STALE_STATE, with the DBC's own version as the positive control.
+
+**Runs:**
+- **Red:** `slice3-red.txt`, 8 passed and 1 failed (the pin test). The quorum cases are characterization of the reused QuorumLib and passed on their first run; they are not presented as red-green.
+- **Green:** `slice3-green.txt`, 9 of 9.
+- **Full suite:** 245 passed, exit 0, and every baseline test still passes.
+- **Mutant checker:** exit 0.
