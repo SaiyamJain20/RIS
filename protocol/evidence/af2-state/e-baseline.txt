@@ -1,0 +1,5 @@
+Baseline of the EXISTING E protocol suite before any F change (agent 2, 2026-11-04, origin/agent-2 5639e8f plus uncommitted new files only):
+  command : cd protocol && PYTHONDONTWRITEBYTECODE=1 <venv>/bin/python -B -m pytest -q -p no:cacheprovider -x -q   (CPython 3.13.13, pytest 9.0.2, eth-account 0.14.0, Foundry found by the tests)
+  exit    : 0 (about 20 minutes, it runs real forge builds and Anvil processes: an isolated owner test on my own machine)
+  counted from the progress output (the doubled -q suppressed the summary line): 1584 tests, 1383 passed, 201 skipped, 0 failed, 0 errors
+  NOT examined: why 201 tests were skipped; the live subprocesses also left git-ignored __pycache__ directories under protocol/hmbc_protocol and protocol/testtools.
