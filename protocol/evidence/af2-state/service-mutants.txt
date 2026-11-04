@@ -21,7 +21,7 @@ DETECTED V19 the window observes the PBC instead of the DBC | failed tests: 12
 DETECTED V20 the store is told no expiry | failed tests: 11
 DETECTED V21 the store observes the PBC (checkpoint) | failed tests: 11
 DETECTED V22 the store gets another domain | failed tests: 1
-DETECTED V23 an unreadable ledger escapes as a raw exception | failed tests: 2
+DETECTED V23 an unreadable ledger escapes as a raw exception | failed tests: 3
 DETECTED V24 the recorded value is dropped from a pinned refusal | failed tests: 1
 DETECTED V25 the proposal's shape is not validated | failed tests: 15
 DETECTED V26 the proposer's sequence is current plus two | failed tests: 2
@@ -74,4 +74,31 @@ DETECTED D38 the decision proposal's shape is not checked | failed tests: 4
 DETECTED D39 the proposer-side derivation does not map an unreadable view | failed tests: 1
 DETECTED D40 the PBC clock is not read | failed tests: 2
 DETECTED D41 the decision store observes the PBC | failed tests: 7
-detected 75 of 75
+DETECTED R1 a grant that is not allowed gives a receipt | failed tests: 1
+DETECTED R2 the grant id is not recomputed from the grant | failed tests: 2
+DETECTED R3 a GrantIssued log after the witness's head counts | failed tests: 1
+DETECTED R4 no GrantIssued log escapes as a raw exception | failed tests: 2
+DETECTED R5 two GrantIssued logs are accepted | failed tests: 1
+DETECTED R6 the PSC record's status is not checked | failed tests: 2
+DETECTED R7 the PSC record's gid and dataId are not compared with the grant's | failed tests: 2
+DETECTED R8 the receipt names the DBC head, not the GrantIssued block (E behaviour) | failed tests: 5
+DETECTED R9 the receipt's block hash is the head's | failed tests: 3
+DETECTED R10 the receipt's witnessSetVersion is fixed to 1 | failed tests: 2
+DETECTED R11 the receipt's DBC chain id is wrong | failed tests: 2
+DETECTED R12 the receipt's grantExpiresAt is not the grant's | failed tests: 28
+DETECTED R13 the receipt's keyEpoch is fixed to 0 | failed tests: 1
+DETECTED R14 the receipt's kssc is wrong | failed tests: 1
+DETECTED R15 the last effect field is not compared with the proposal | failed tests: 28
+DETECTED R16 the receipt is recorded under the grant id | failed tests: 1
+DETECTED R17 the store is given an expiry for a receipt | failed tests: 4
+DETECTED R18 the store observes the DBC for a receipt | failed tests: 4
+DETECTED R19 the receipt is recorded under the decision domain | failed tests: 1
+DETECTED R20 the grant id's shape is not checked | failed tests: 1
+DETECTED R21 the proposer-side receipt derivation does not map an unreadable view | failed tests: 1
+DETECTED R22 the receipt proposal's field set is not checked | failed tests: 2
+DETECTED R23 a zero grantExpiresAt is accepted | failed tests: 1
+DETECTED R24 the receipt digest uses the decision domain | failed tests: 1
+DETECTED R25 the proposal's shape is validated with the E validator | failed tests: 22
+DETECTED D42 a decision value out of range escapes as a raw exception | failed tests: 1
+DETECTED R26 a receipt value out of range escapes as a raw exception | failed tests: 1
+detected 102 of 102

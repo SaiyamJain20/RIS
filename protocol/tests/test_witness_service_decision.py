@@ -255,6 +255,12 @@ def test_a_request_that_does_not_hash_to_the_requested_digest_is_wrong_subject(s
     assert (r.code, r.reason) == ("WRONG_SUBJECT", None)
 
 
+def test_a_checkpoint_value_out_of_range_gives_a_refusal_not_a_raw_exception(view):
+    view.cp = view.current = dict(view.cp, sequence="18446744073709551616")                      # 2**64: not a uint64
+    r = refusal(lambda: svc.derive_decision(view, DEPLOY, view.digest(), witness_set_version="2"))
+    assert (r.code, r.reason) == ("WRONG_SUBJECT", None) and "canonical AccessDecision" in r.message
+
+
 def test_a_malformed_request_digest_is_malformed(view):
     for bad in ("0x12", "0X" + "AB" * 32, 5, None, "0x" + "AB" * 32):
         r = refusal(lambda: svc.derive_decision(view, DEPLOY, bad, witness_set_version="2"))

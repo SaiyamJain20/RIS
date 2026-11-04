@@ -1,5 +1,5 @@
-"""Mutation check of the witness service, StateCheckpoint and AccessDecision paths (agent 2, F task 2 slices 4a and 4b). Standard library only. Same method as the other runners: one text replacement per mutant (it must match exactly once
-and change the file), run the UNCHANGED tests/test_witness_service.py and tests/test_witness_service_decision.py in a temporary copy that keeps the repository layout, count a mutant DETECTED only when the tests ran and failed; a crash or
+"""Mutation check of the witness service, StateCheckpoint, AccessDecision and GrantReceipt paths (agent 2, F task 2 slices 4a, 4b and 4c). Standard library only. Same method as the other runners: one text replacement per mutant (it must match exactly once
+and change the file), run the UNCHANGED tests/test_witness_service.py tests/test_witness_service_decision.py and tests/test_witness_service_receipt.py in a temporary copy that keeps the repository layout, count a mutant DETECTED only when the tests ran and failed; a crash or
 timeout is NOT detection; the unmutated copy runs first as a control. witness_state.py is NOT mutated here (run_state_mutants.py does that).
 
 Usage (repository root):   python3 -B -I protocol/tools/run_service_mutants.py        (needs pytest and the E dependencies: protocol/requirements.txt)
@@ -53,8 +53,8 @@ M = [
     ("V34 a non-positive max ttl is accepted", [("or max_checkpoint_ttl < 1:", "or False:")]),
     ("D1 an outcome already recorded (status 2) is not refused", [('    if rec["status"] == "2":', "    if False:")]),
     ("D2 a request the PSC has not forwarded is not refused", [('    if rec["status"] != "1":', "    if False:")]),
-    ("D3 two forwarding logs are accepted", [("    if len(logs) != 1:", "    if len(logs) < 1:")]),
-    ("D4 no forwarding log escapes as a raw exception", [("    if len(logs) != 1:", "    if len(logs) > 1:")]),
+    ("D3 two forwarding logs are accepted", [("    if len(logs) != 1:\n        raise _refusal(\"WRONG_SUBJECT\", \"expected exactly one AccessForwarded", "    if len(logs) < 1:\n        raise _refusal(\"WRONG_SUBJECT\", \"expected exactly one AccessForwarded")]),
+    ("D4 no forwarding log escapes as a raw exception", [("    if len(logs) != 1:\n        raise _refusal(\"WRONG_SUBJECT\", \"expected exactly one AccessForwarded", "    if len(logs) > 1:\n        raise _refusal(\"WRONG_SUBJECT\", \"expected exactly one AccessForwarded")]),
     ("D5 the forwarding transaction need not go to the PSC", [('call is None or call["to"] != psc or call["method"] != "requestAccess":', 'call is None or call["method"] != "requestAccess":')]),
     ("D6 the forwarding call need not be requestAccess", [('call is None or call["to"] != psc or call["method"] != "requestAccess":', 'call is None or call["to"] != psc:')]),
     ("D7 the recovered request need not hash to the digest", [("    if recomputed != digest:", "    if False:")]),
@@ -84,7 +84,7 @@ M = [
     ("D31 the stateSequence is not compared with the proposal", [('DECISION_FIELDS = ("requestDigest", "result", "credentialDigest", "stateSequence",', 'DECISION_FIELDS = ("requestDigest", "result", "credentialDigest",')]),
     ("D32 the credentialDigest is not compared with the proposal", [('DECISION_FIELDS = ("requestDigest", "result", "credentialDigest",', 'DECISION_FIELDS = ("requestDigest", "result",')]),
     ("D33 the decision is recorded under the checkpoint domain", [("domain=self._decision_domain,", "domain=self._domain,")]),
-    ("D34 the decision's key is the state sequence", [('key=own["requestDigest"],', 'key=own["stateSequence"],')]),
+    ("D34 the decision's key is the state sequence", [('key=own["requestDigest"], effect={k: own[k] for k in EFFECT_DECISION},', 'key=own["stateSequence"], effect={k: own[k] for k in EFFECT_DECISION},')]),
     ("D35 the overtaken evidence is always zero", [('overtaken=("overtaken-decision-sequence", own["stateSequence"])', 'overtaken=("overtaken-decision-sequence", "0")')]),
     ("D36 the decision effect lacks a field", [('EFFECT_DECISION = ("result", "credentialDigest",', 'EFFECT_DECISION = ("result", "result",')]),
     ("D37 the request digest's shape is not checked", [("        wire.hash32(digest)\n", "        str(digest)\n")]),
@@ -92,6 +92,33 @@ M = [
     ("D39 the proposer-side derivation does not map an unreadable view", [("    except LedgerUnreachable as e:\n        raise _unreachable(e) from None\n\n\ndef _derive_decision", "    except KeyError as e:\n        raise _unreachable(e) from None\n\n\ndef _derive_decision")]),
     ("D40 the PBC clock is not read", [('dbc_now, pbc_now = view.now("dbc"), view.now("pbc")', 'dbc_now, pbc_now = view.now("dbc"), view.now("dbc")')]),
     ("D41 the decision store observes the PBC", [('observe=lambda: self._view.observe("dbc"),\n                                overtaken=("overtaken-decision-sequence"', 'observe=lambda: self._view.observe("pbc"),\n                                overtaken=("overtaken-decision-sequence"')]),
+    ("R1 a grant that is not allowed gives a receipt", [('    if not g["allowed"] or "0x" + eip712.grant_id(', '    if "0x" + eip712.grant_id(')]),
+    ("R2 the grant id is not recomputed from the grant", [(' or "0x" + eip712.grant_id(bytes.fromhex(g["digest"][2:]), kssc, int(dbc["chainId"])).hex() != grant_id:', ":")]),
+    ("R3 a GrantIssued log after the witness's head counts", [('[x for x in view.grant_issued_logs(grant_id) if int(x["block"]) <= int(head["blockNumber"])]', "list(view.grant_issued_logs(grant_id))")]),
+    ("R4 no GrantIssued log escapes as a raw exception", [("    if not logs:\n", "    if False:\n")]),
+    ("R5 two GrantIssued logs are accepted", [("    if len(logs) != 1:\n        raise _refusal(\"WRONG_SUBJECT\", \"expected exactly one GrantIssued", "    if len(logs) < 1:\n        raise _refusal(\"WRONG_SUBJECT\", \"expected exactly one GrantIssued")]),
+    ("R6 the PSC record's status is not checked", [('    if rec["status"] != "1" or (rec["gid"], rec["dataId"]) != (g["gid"], g["dataId"]):', '    if (rec["gid"], rec["dataId"]) != (g["gid"], g["dataId"]):')]),
+    ("R7 the PSC record's gid and dataId are not compared with the grant's", [('    if rec["status"] != "1" or (rec["gid"], rec["dataId"]) != (g["gid"], g["dataId"]):', '    if rec["status"] != "1":')]),
+    ("R8 the receipt names the DBC head, not the GrantIssued block (E behaviour)", [('"dbcBlockNumber": str(int(logs[0]["block"])), "dbcBlockHash": logs[0]["hash"]}', '"dbcBlockNumber": head["blockNumber"], "dbcBlockHash": logs[0]["hash"]}')]),
+    ("R9 the receipt's block hash is the head's", [('"dbcBlockHash": logs[0]["hash"]}', '"dbcBlockHash": head["blockHash"]}')]),
+    ("R10 the receipt's witnessSetVersion is fixed to 1", [('"witnessSetVersion": wsv,\n               "dbcChainId"', '"witnessSetVersion": "1",\n               "dbcChainId"')]),
+    ("R11 the receipt's DBC chain id is wrong", [('"dbcChainId": dbc["chainId"], "kssc": kssc,', '"dbcChainId": "1", "kssc": kssc,')]),
+    ("R12 the receipt's grantExpiresAt is not the grant's", [('"grantExpiresAt": g["expiresAt"],', '"grantExpiresAt": g["keyEpoch"],')]),
+    ("R13 the receipt's keyEpoch is fixed to 0", [('"keyEpoch": g["keyEpoch"],', '"keyEpoch": "0",')]),
+    ("R14 the receipt's kssc is wrong", [('"dbcChainId": dbc["chainId"], "kssc": kssc,', '"dbcChainId": dbc["chainId"], "kssc": "0x" + "00" * 20,')]),
+    ("R15 the last effect field is not compared with the proposal", [('RECEIPT_FIELDS = ("requestDigest",) + EFFECT_RECEIPT', 'RECEIPT_FIELDS = ("requestDigest",) + EFFECT_RECEIPT[:-1]')]),
+    ("R16 the receipt is recorded under the grant id", [('key=own["requestDigest"], effect={k: own[k] for k in EFFECT_RECEIPT},', 'key=own["grantId"], effect={k: own[k] for k in EFFECT_RECEIPT},')]),
+    ("R17 the store is given an expiry for a receipt", [("expires_at=None, digest=", 'expires_at=own["grantExpiresAt"], digest=')]),
+    ("R18 the store observes the DBC for a receipt", [('signer=self._signer, observe=lambda: self._view.observe("pbc"))', 'signer=self._signer, observe=lambda: self._view.observe("dbc"))')]),
+    ("R19 the receipt is recorded under the decision domain", [("domain=self._receipt_domain,", "domain=self._decision_domain,")]),
+    ("R20 the grant id's shape is not checked", [("        wire.hash32(grant_id)\n", "        str(grant_id)\n")]),
+    ("R21 the proposer-side receipt derivation does not map an unreadable view", [("    except LedgerUnreachable as e:\n        raise _unreachable(e) from None\n\n\ndef _derive_receipt", "    except KeyError as e:\n        raise _unreachable(e) from None\n\n\ndef _derive_receipt")]),
+    ("R22 the receipt proposal's field set is not checked", [("if not isinstance(v, dict) or set(v) != set(RECEIPT_FIELDS):", "if not isinstance(v, dict):")]),
+    ("R23 a zero grantExpiresAt is accepted", [('    if int(v["grantExpiresAt"]) == 0:', "    if False:")]),
+    ("R24 the receipt digest uses the decision domain", [('"domain": messages.domain_for("GrantReceipt", receipt, deployment),', '"domain": messages.domain_for("AccessDecision", receipt, deployment),')]),
+    ("R25 the proposal's shape is validated with the E validator", [("prop = dict(_receipt_shape(proposal))", "prop = dict(wire.grant_receipt(proposal))")]),
+    ("D42 a decision value out of range escapes as a raw exception", [('    except wire.WireError:\n        raise _refusal("WRONG_SUBJECT", "the ledger state does not form a canonical AccessDecision (a value is out of range)") from None', '    except KeyError:\n        raise _refusal("WRONG_SUBJECT", "the ledger state does not form a canonical AccessDecision (a value is out of range)") from None')]),
+    ("R26 a receipt value out of range escapes as a raw exception", [('    except wire.WireError:\n        raise _refusal("WRONG_SUBJECT", "the ledger state does not form a canonical GrantReceipt (a value is out of range)") from None', '    except KeyError:\n        raise _refusal("WRONG_SUBJECT", "the ledger state does not form a canonical GrantReceipt (a value is out of range)") from None')]),
 ]
 
 
@@ -105,13 +132,13 @@ def run_in_copy(text):
         for name in os.listdir(pkg):
             if name.endswith(".py") and name != "witness_service.py":
                 shutil.copy(os.path.join(pkg, name), os.path.join(p, "hmbc_protocol", name))
-        for rel in ("pytest.ini", os.path.join("tests", "test_witness_service.py"), os.path.join("tests", "test_witness_service_decision.py"), os.path.join("tests", "fixtures", "deployment-agent1-91add8c-v1-repaired-e.json"), os.path.join("f0", "vectors", "d50_reference.py")):
+        for rel in ("pytest.ini", os.path.join("tests", "test_witness_service.py"), os.path.join("tests", "test_witness_service_decision.py"), os.path.join("tests", "test_witness_service_receipt.py"), os.path.join("tests", "fixtures", "deployment-agent1-91add8c-v1-repaired-e.json"), os.path.join("f0", "vectors", "d50_reference.py")):
             shutil.copy(os.path.join(PROTO, rel), os.path.join(p, rel))
         with open(os.path.join(p, "hmbc_protocol", "witness_service.py"), "w") as f:
             f.write(text)
         env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
         try:
-            r = subprocess.run([sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests/test_witness_service.py", "tests/test_witness_service_decision.py"], cwd=p, capture_output=True, text=True, timeout=300, env=env)
+            r = subprocess.run([sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests/test_witness_service.py", "tests/test_witness_service_decision.py", "tests/test_witness_service_receipt.py"], cwd=p, capture_output=True, text=True, timeout=300, env=env)
         except subprocess.TimeoutExpired:
             return "timeout", None
         m = re.search(r"(\d+) failed", r.stdout)

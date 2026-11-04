@@ -1,3 +1,16 @@
+# Agent 2 handoff (2026-11-04, twenty-fourth check, part 2: witness service slice 4c, the receipt path)
+
+## Update 2026-11-04, twenty-fourth check, part 2 (newest)
+
+- **Slice 4c (additions to `witness_service.py`, new test file; pushed after this block):** `derive_receipt` / `sign_receipt`. The F receipt names the DBC block that CONTAINS the unique `GrantIssued` log, so two witnesses with different views sign byte-identical receipts (tested); the witness derives its receipt, signs only an equal proposal, no expiry, PBC observation.
+  `tests/test_witness_service_receipt.py` 34 tests, **written first and run red (33 failed)**; `tools/run_service_mutants.py` **102 of 102** over 4a-4c; eight new-code test files together 347 passed.
+- **Finding to carry into the adapter slice and the READY:** E's `wire.grant_receipt` hard-codes `witnessSetVersion=1` (and `messages.digest_of` calls it), so F receipts need F validation and hashing; I added them inside `witness_service` and left the E files unchanged.
+- **Honest record:** a test I wrote after the first green run found a real defect (a zero grant expiry raised a raw exception; fixed for receipts and decisions); two mutation launches stopped on anchors made ambiguous by my own duplicated lines (nothing ran; I added an anchor pre-check). Same fakes as before: the ledger, the grant and log reads are fakes; the receipt derivation is a port of E logic by the same author.
+- **Not done:** governance in the service; the D50 live-read reconstruction; the pool driver; the worker store's D50 rows and `worker_log --binding`; the successor adapter (with its explicit v2.1/v2 schema selection and the F wire validators the receipt finding implies) and strict parsing; D-4, D-6, hooks H3/H5/H6 and byzantine.py; the E regressions; the source READY manifest.
+- **Next:** governance in the service (typed-field rules, nonce, TMSC preconditions, the TEST-ONLY allow-list), test-first.
+
+---
+
 # Agent 2 handoff (2026-11-04, twenty-fourth check: v2.1 publication receipted, A2-0061)
 
 ## Update 2026-11-04, twenty-fourth check (newest)

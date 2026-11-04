@@ -1,13 +1,16 @@
-"""F-profile honest witness, StateCheckpoint (slice 4a) and AccessDecision (slice 4b) paths (HMBC2020 successor, F task 2).
+"""F-profile honest witness, StateCheckpoint (4a), AccessDecision (4b) and GrantReceipt (4c) paths (HMBC2020 successor, F task 2).
 
 PAPER-DERIVED RECONSTRUCTION of SIGNING-RULES sections 2, 3 (StateCheckpoint row) and 4. `WitnessService.sign_checkpoint(proposal)` treats the proposal only as a candidate: it recomputes every field
 from the witness's OWN view of the ledgers (an injected `view`), refuses on the first failing row, and only then asks the durable store (`witness_state`) to record the choice and return the
 signature, which exists only after the store committed. `derive_checkpoint` is the PROPOSER side (the pool derives the proposal once from its own reads and keeps it).
 
-Scope: StateCheckpoint and AccessDecision. Receipt and governance are later slices; the D50 live-read reconstruction is another.
+Scope: StateCheckpoint, AccessDecision and GrantReceipt. Governance is a later slice; the D50 live-read reconstruction is another.
 AccessDecision is a PURE FUNCTION of the request and the DBC's current checkpoint, so `derive_decision` DERIVES the decision from the witness's own view (the E `witness.decide` logic with the F changes:
 `expiresAt = min(request.expiresAt, checkpoint.expiresAt)`, no host-clock term) and `sign_decision` signs only when the proposal EQUALS that derivation field by field (rows (c) to (e) of the decision row).
-The grant-existence death of an ALLOW decision is a store capability this service never needs: a request whose nonce is consumed is refused REPLAY before anything is recorded. The carried E `witness.py` is NOT changed (the successor adapter picks the
+The grant-existence death of an ALLOW decision is a store capability this service never needs: a request whose nonce is consumed is refused REPLAY before anything is recorded.
+GrantReceipt is also a PURE FUNCTION of ledger state (SIGNING-RULES section 5): `dbcBlockNumber/Hash` is the block that CONTAINS the unique `GrantIssued` log, not "the DBC head when asked", so every honest
+witness derives byte-identical receipt bytes. `derive_receipt` / `sign_receipt` follow the decision pattern (derive, compare field by field, sign). The receipt has no liveness field, so a conflicting effect for
+the same request digest stays pinned; the store's `executed-receipt` death evidence is not used by this service (once the PSC records the outcome the derivation refuses anyway). The carried E `witness.py` is NOT changed (the successor adapter picks the
 F service for F profiles), so E behaviour cannot move because of this module. No host clock, no randomness, no network: the only time is the observed block timestamp of the target ledger.
 
 The injected view (what the witness reads from its own RPC):
@@ -18,6 +21,7 @@ The injected view (what the witness reads from its own RPC):
 Decision path only: pbc_block(n) also carries "timestamp"; now(chain) -> int (max of latest and pending, as E: conservative for REFUSING); psc_request(digest) -> {"status", "gid", "dataId",
   "destinationChainId", "kssc", "expiresAt"}; forwarded_logs(digest) -> [{"txHash", "block"}]; forwarding_call(txHash) -> None or {"to", "method", "request", "signature", "bundle"};
   nonce_consumed(gid, nonce) -> bool; credentials(gid, bundle, at_timestamp, block) -> (code, records); policy_satisfied(dataId, records) -> bool.
+Receipt path only: grant(grantId) -> {"digest", "dataId", "gid", "keyEpoch", "expiresAt", "allowed"}; grant_issued_logs(grantId) -> [{"block", "hash"}] of the KSSC's GrantIssued logs for that grant id.
 Any of them may raise `LedgerUnreachable`; the service maps that to ADAPTER_UNAVAILABLE / LEDGER_UNREACHABLE and writes nothing.
 
 Refusal classes where F0 does not fix one (explicit choices): shape MALFORMED; chain or psc WRONG_DESTINATION; a wrong sequence, an unconfirmable block, a snapshot that disagrees with the witness's reads,
@@ -32,6 +36,8 @@ from . import eip712, messages, wire
 from . import witness_state as ws
 
 EFFECT_DECISION = ("result", "credentialDigest", "stateSequence", "witnessSetVersion", "sourceBlockNumber", "sourceBlockHash")
+EFFECT_RECEIPT = ("grantId", "gid", "dataId", "keyEpoch", "grantExpiresAt", "witnessSetVersion", "dbcChainId", "kssc", "dbcBlockNumber", "dbcBlockHash")
+RECEIPT_FIELDS = ("requestDigest",) + EFFECT_RECEIPT
 DECISION_FIELDS = ("requestDigest", "result", "credentialDigest", "stateSequence", "witnessSetVersion", "sourceBlockNumber", "sourceBlockHash", "expiresAt")
 EFFECT = ("authEpoch", "policyVersion", "keyEpoch", "witnessSetVersion", "sourceChainId", "psc", "sourceBlockNumber", "sourceBlockHash")
 DEFAULT_PROPOSER_TTL = 30
@@ -137,8 +143,71 @@ def _derive_decision(view, deployment, digest, wsv):
     decision = {"requestDigest": digest, "result": "1" if satisfied else "0", "credentialDigest": "0x" + eip712.credential_digest(records).hex(), "stateSequence": cp["sequence"],
                 "witnessSetVersion": cp["witnessSetVersion"], "sourceBlockNumber": cp["sourceBlockNumber"], "sourceBlockHash": cp["sourceBlockHash"],
                 "expiresAt": str(min(int(request["expiresAt"]), int(cp["expiresAt"])))}
-    wire.access_decision(decision)
+    try:
+        wire.access_decision(decision)
+    except wire.WireError:
+        raise _refusal("WRONG_SUBJECT", "the ledger state does not form a canonical AccessDecision (a value is out of range)") from None
     return decision, records
+
+
+_RECEIPT_VALIDATORS = {"requestDigest": wire.hash32, "grantId": wire.hash32, "gid": wire.address, "dataId": wire.hash32, "keyEpoch": lambda v: wire.uint(v, 64), "grantExpiresAt": lambda v: wire.uint(v, 64),
+                       "witnessSetVersion": lambda v: wire.uint(v, 64), "dbcChainId": lambda v: wire.uint(v, 256), "kssc": wire.address, "dbcBlockNumber": lambda v: wire.uint(v, 256),
+                       "dbcBlockHash": wire.hash32}
+
+
+def _receipt_shape(v):
+    """The F receipt shape. `wire.grant_receipt` is the E validator and hard-codes keyEpoch=0 and witnessSetVersion=1, so an F receipt (version 2) cannot go through it and the carried E file is not
+    changed; the field types are the same. A receipt of a ledger that grants nothing (grantExpiresAt 0) is refused as in E."""
+    if not isinstance(v, dict) or set(v) != set(RECEIPT_FIELDS):
+        raise wire.WireError("GrantReceipt: fields differ")
+    for k, check in _RECEIPT_VALIDATORS.items():
+        check(v[k])
+    if int(v["grantExpiresAt"]) == 0:
+        raise wire.WireError("grantExpiresAt must be positive")
+    return v
+
+
+def _receipt_digest(receipt, deployment):
+    """The EIP-712 digest of a receipt under the HMBCReceipt domain, built from the shared type table (the E `messages.digest_of` would run the E-only validator first)."""
+    typed = {"types": {"EIP712Domain": eip712.DOMAIN_TYPE, "GrantReceipt": messages.TYPES["GrantReceipt"]}, "primaryType": "GrantReceipt",
+             "domain": messages.domain_for("GrantReceipt", receipt, deployment), "message": receipt}
+    return eip712.digest(typed)
+
+
+def derive_receipt(view, deployment, grant_id, *, witness_set_version):
+    """The receipt this witness would sign for `grant_id`, derived from its own reads. Raises WitnessRefusal with the E classes."""
+    try:
+        return _derive_receipt(view, deployment, grant_id, witness_set_version)
+    except LedgerUnreachable as e:
+        raise _unreachable(e) from None
+
+
+def _derive_receipt(view, deployment, grant_id, wsv):
+    try:
+        wire.hash32(grant_id)
+    except (wire.WireError, TypeError):
+        raise _refusal("MALFORMED", "the grant id is not a canonical 32-byte hash") from None
+    dbc = deployment["chains"]["dbc"]
+    kssc = dbc["contracts"]["KSSC"]
+    head = view.observe("dbc")
+    g = view.grant(grant_id)
+    if not g["allowed"] or "0x" + eip712.grant_id(bytes.fromhex(g["digest"][2:]), kssc, int(dbc["chainId"])).hex() != grant_id:
+        raise _refusal("NOT_COMMITTED", "no allowed grant with this id exists on the DBC")
+    logs = [x for x in view.grant_issued_logs(grant_id) if int(x["block"]) <= int(head["blockNumber"])]
+    if not logs:
+        raise _refusal("NOT_COMMITTED", "this witness has not seen the block that contains the GrantIssued log")
+    if len(logs) != 1:
+        raise _refusal("WRONG_SUBJECT", "expected exactly one GrantIssued log for this grant id")
+    rec = view.psc_request(g["digest"])
+    if rec["status"] != "1" or (rec["gid"], rec["dataId"]) != (g["gid"], g["dataId"]):
+        raise _refusal("WRONG_SUBJECT", "the PBC record does not match the DBC grant")
+    receipt = {"requestDigest": g["digest"], "grantId": grant_id, "gid": g["gid"], "dataId": g["dataId"], "keyEpoch": g["keyEpoch"], "grantExpiresAt": g["expiresAt"], "witnessSetVersion": wsv,
+               "dbcChainId": dbc["chainId"], "kssc": kssc, "dbcBlockNumber": str(int(logs[0]["block"])), "dbcBlockHash": logs[0]["hash"]}
+    try:
+        _receipt_shape(receipt)
+    except wire.WireError:
+        raise _refusal("WRONG_SUBJECT", "the ledger state does not form a canonical GrantReceipt (a value is out of range)") from None
+    return receipt
 
 
 class WitnessService:
@@ -152,6 +221,7 @@ class WitnessService:
         self._pbc_id, self._psc = pbc["chainId"], pbc["contracts"]["PSC"]
         self._domain = "0x" + eip712.domain_separator(messages.domain_for("StateCheckpoint", {}, deployment)).hex()
         self._decision_domain = "0x" + eip712.domain_separator(messages.domain_for("AccessDecision", {}, deployment)).hex()
+        self._receipt_domain = "0x" + eip712.domain_separator(messages.domain_for("GrantReceipt", {}, deployment)).hex()
         self._deployment = deployment
 
     # ---- the F signing rule for a checkpoint ------------------------------------------------------------------------------------------------------------------------
@@ -160,6 +230,9 @@ class WitnessService:
 
     def sign_decision(self, proposal):
         return self._guarded(lambda: self._sign_decision(proposal))
+
+    def sign_receipt(self, proposal):
+        return self._guarded(lambda: self._sign_receipt(proposal))
 
     @staticmethod
     def _guarded(fn):
@@ -188,6 +261,19 @@ class WitnessService:
         return self._store.sign(type="AccessDecision", domain=self._decision_domain, wsv=own["witnessSetVersion"], key=own["requestDigest"], effect={k: own[k] for k in EFFECT_DECISION},
                                 expires_at=own["expiresAt"], digest="0x" + digest.hex(), signer=self._signer, observe=lambda: self._view.observe("dbc"),
                                 overtaken=("overtaken-decision-sequence", own["stateSequence"]))
+
+    def _sign_receipt(self, proposal):
+        try:
+            prop = dict(_receipt_shape(proposal))
+        except (wire.WireError, TypeError):
+            raise _refusal("MALFORMED", "the proposal is not a canonical GrantReceipt") from None
+        own = _derive_receipt(self._view, self._deployment, prop["grantId"], self._wsv)
+        for f in RECEIPT_FIELDS:
+            if prop[f] != own[f]:
+                raise _mismatch(f, "differs from this witness's own derivation")
+        digest = _receipt_digest(own, self._deployment)
+        return self._store.sign(type="GrantReceipt", domain=self._receipt_domain, wsv=own["witnessSetVersion"], key=own["requestDigest"], effect={k: own[k] for k in EFFECT_RECEIPT},
+                                expires_at=None, digest="0x" + digest.hex(), signer=self._signer, observe=lambda: self._view.observe("pbc"))
 
     @staticmethod
     def _shape(proposal):
