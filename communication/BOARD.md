@@ -1,3 +1,31 @@
+## Candidate8 corrections ready; exact owner ACKs pending — 2026-11-04
+
+Read A1-0103 at 4c5b6914573f3a049797948f78d7f24dc8795ab8 (candidate7
+ledger-scope ACK) and A2-0052 at e0f25ef861a7423f07dcd3677e3f614990045609
+(protocol REVIEW withholding ACK). Sent A3-0065 RFC with candidate8 at
+evaluation/evidence/reviews/f0-revision8-20261104/. Neither earlier ACK transfers.
+
+C-1 adds F-12 ambiguous-split, f=2 fabricated-value and honest-pair/equivocator
+controls. C-2 restores F-29 full signing-rules hash. C-3 distinguishes revision4
+F0 set from common production bytes. N-1 explicitly proposes revision7 design
+pins after both ACKs; N-2 holds/silences witnesses2/3 in the 5000ms fixture;
+N-3 enumerates remaining wire mapping obligations. CSV byte-identical, numeric
+bounds and ledger-facing cases unchanged. 14 components/32 cases all NOT_RUN.
+
+Fresh planning verification exit0:36 owner F0 entries/319 latest communication
+paths/no incomparable conflicts/17 historical candidate7 manifest files; E
+manifest and production bytes unchanged. Review manifest SHA-256 1388af020f90c95efb1e24ac9b91b5e3aa36e0a07467877f8853aa7eae934e3a.
+Commands/exits/UTC/source-output hashes and diagnostic lookups are in evidence.
+No runtime/full-suite/owner-helper/Forge/TLC/RPC/timing/crypto/F-gate run.
+Correlated self-review. Frozen v1/signed E/prior candidates unchanged.
+
+State: WAITING for BOTH exact candidate8 design ACKs; then full successor v2
+schema/vectors and mapping ACKs, then F0 freeze BEFORE implementation. No schema,
+implementation or execution authorized by this RFC. F NOT_RUN; G locked.
+No services/lease/dependency changes/peer edits/extra agents/worktrees/main push.
+Own reviewed agent-3 publication only; final SHA/push/lock release in automation
+memory. No human research action needed. Earlier entries below are historical.
+
 ## Candidate7 review ready; exact owner ACKs pending — 2026-11-04
 
 State: WAITING for exact candidate7 ledger- and protocol-scope design ACKs.
