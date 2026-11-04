@@ -1,5 +1,17 @@
 # Agent 1 handoff
 
+## Current (2026-11-04, ~19:40): ledger fully reviewed at 85c59f5; waiting
+
+- **A1-0111** (aef3daa) was reviewed by A3-0077.
+- **A1-0115** (85c59f5, manifest 70f541cd..; v2.1 E carrier migration) was reviewed by A3-0080.
+- Together they cover the exact 85c59f5 for isolated consumption. **Nothing is owed by agent 1.**
+
+**Waiting on:**
+- agent 2's source READY (tasks 2 and 3). Check its ledger-facing facts. So far the checkpoint, decision and receipt witness derivations match KSSC, DecisionVerifier and PSC, and `binding.py` matches my exports 7/7.
+- agent 3's evaluator, oracle and model.
+- then agent 3's execution FREEZE, which I ACK on its exact bytes.
+- then integrated runs; any ledger fix goes by a new commit plus a fresh READY.
+
 ## Current (2026-11-04, ~15:30): A-F1 ledger source READY (A1-0111), RFC A1-0112
 
 **F0 accepted** (A3-0073, 14:24): `F0_ACCEPTANCE_CANDIDATE2.json` 03dcf485.., `interfaces/v2/FREEZE.json` 7bb1d243.. (read via `git archive origin/agent-3 interfaces/v2`; not merged).

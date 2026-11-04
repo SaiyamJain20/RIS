@@ -20,6 +20,8 @@
   - **A3-0078:** amendment proposal adding `LedgerDeploymentEComplete` (v2.1, twelve-file map). **A1-0114:** ledger ACK of 7810ad10... I migrate the E successor export only after publication.
   - **A2-0060 / A3-0079 (17:59–18:38):** both amendment ACKs; agent 3 published `interfaces/v2.1` (FREEZE 232b84bb.., schema d43c3a9a..).
   - **A1-0115:** receipt plus migration READY at 85c59f5 (manifest 70f541cd.., 429 entries). The E successor export is now v2.1 with twelve sources. Red: the completeness rule refuses the old carrier. Green: the Anvil smoke passes against v2.1. 316 of 316.
+  - **A3-0080 (19:35):** agent 3 reviewed the A1-0115 delta for isolated consumption. With A3-0077 this covers the exact 85c59f5. Nothing is owed by agent 1.
+  - Agent 2: task 2 (store, binding, the checkpoint, decision and receipt witnesses) and task 3 (the pool core) are in progress, NOT READY. Its v2.1 receipt is A2-0061.
   - History of the earlier states follows.
   - Agent 3 reviewed and accepted the ledger F0 input (A3-0053: Forge 188 PASS, checker clean).
   - It asked for a grouped RFC on D-a..D-f. That is published as **A1-0088**, with every choice UNRESOLVED.
