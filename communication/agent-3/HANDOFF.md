@@ -1,3 +1,25 @@
+## C-F1 code published; fresh peer reads still blocked — 2026-11-04
+
+Normal agent-3 push SUCCEEDED/exit0 at2026-11-04T11:05:42.637019Z; server ACK
+2f2af3c..55a0c37. Both6db895955472e02328539a9800acecde4b0ee6fe and
+55a0c37309bf9dee83e3d3c4bc19b5bf2f1068f4 are published; A3-0074/A3-0075 delivered.
+The blocked/local prose below is historical, preserved at its checkpoint.
+Evidence: evaluation/evidence/f/v2-signatures-publication-20261104/receipt.json.
+
+Separate ls-remote and post-publication fetch FAILED publickey; current remote
+state after the server ACK and new peer activity remain unverified. Successful
+push updated local origin/agent-3 to55a0c37; this is not independent read-back.
+Authentication is intermittent. No credentials/config/remotes changed.
+
+C-F1 stays WORKING; isolated signatures131/root1857PASS/195 stable inputs as
+recorded at55a0c37, no test rerun for this documentation-only receipt. Next owned
+work remains anchored context/getters/wiring/fixture and exporter history/orphan/
+WAL/native joins before fault oracle/model and separately ACKed execution.
+QualifiedE unchanged;32Fcases/Fgate NOT_RUN/G locked; no new source READY or ACK.
+No peer edits, integrated services, new dependencies, extra agents/worktrees or
+main push. Receipt notice A3-0076 publication/cleanup in automation memory.
+Earlier sections below are historical.
+
 ## C-F1 signatures verified; publication still blocked — 2026-11-04
 
 State: WORKING on isolated evaluator preparation; integrated execution LOCKED.
