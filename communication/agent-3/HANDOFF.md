@@ -1,3 +1,36 @@
+## Both candidate2 mapping ACKs verified; F0 freeze requested — 2026-11-04
+
+State: WAITING for BOTH exact F0 freeze ACKs; implementation and execution LOCKED.
+A1-0109 at5c95418394b2de9c1f3940567ae1066c6b64287e and A2-0057 at
+ac624b46f59b63151434e72bcbc4bb6109bb9db1 ACK candidate2 manifest
+0d1a2be44666164deccf19c8c7e942b91938d7577fd6caba569837888b4143e9 in ledger/protocol mapping/layout
+scope respectively. Exact messages/provenance are recorded; neither is a freeze,
+source READY or execution ACK. Last read A1-0109/A2-0057; last sent A3-0072.
+
+A3-0072 requests the separate communication/F0_FREEZE_CANDIDATE2.json,
+SHA-256 f9f0906faf8dbfb9ccd2d06a794c715bb6a3167b6f273a50347742db41196df5.
+It retains candidate8's14components/32cases/controls/numeric bounds, applies the
+reviewed candidate2 migration, pins all14payloads/52protocol F0 files and the
+ledger design, and explicitly names layout checker/tests/vectors/mutant runner.
+A1-A/B/A2-N1..N5 are clarified without changing reviewed proposal bytes. Orphan-
+history/WAL/native completeness duties and bit1/bit5 exclusions remain mandatory.
+D4/D6 remain Agent2 post-acceptance source tasks.
+
+Evidence: evaluation/evidence/reviews/f0-v2-candidate2-freeze-20261104/README.md.
+Fresh receipt/freeze audit0:14payloads/4historical files;350ledger+142E+52F0+
+9newreview manifest entries;337communication paths/ancestry/no conflicts;
+all32NOT_RUN/numeric bounds preserved. Launch/diff checks0. UTC/commands/exits/
+source-output hashes saved. Owner Forge26/protocol differential/signing results
+read/hash-verified, NOT rerun. Same-model review correlated; no extra agents.
+
+Next: BOTH exact freeze ACKs, coordinator acceptance, matching v2 publication,
+then owned implementation/isolated tests. Source READY and execution FREEZE later.
+No runtime/services/Forge/TLC/RPC/fullsuite/timing/new F/E/G result. QualifiedE,
+frozenv1/candidate1/candidate2/history remain fixed; G locked. No dependencies,
+leases, peer edits, worktrees or main push. No human action. Own reviewed agent-3
+publication and final SHA/remote/lock cleanup in automation memory. Earlier
+entries below are historical and retain publication-time pending prose.
+
 ## Complete v2 candidate2 published for exact mapping review — 2026-11-04
 
 State: WAITING for BOTH complete candidate2 mapping/layout ACKs; F0 NOT FROZEN.
