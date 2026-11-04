@@ -76,7 +76,7 @@ class FakeView:
     def pbc_block(self, number):
         self._maybe_fail("pbc_block")
         number = int(number)
-        return None if (number > self.pbc_head and not self.lenient) or number < 0 else {"number": str(number), "hash": self.pbc_hash(number)}
+        return None if (number > self.pbc_head and not self.lenient) or number < 0 else {"number": str(number), "hash": self.pbc_hash(number), "timestamp": str(self.pbc_ts_base + number)}
 
     def reads_at(self, number):
         self._maybe_fail("reads_at")

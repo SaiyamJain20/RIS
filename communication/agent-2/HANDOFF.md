@@ -1,3 +1,17 @@
+# Agent 2 handoff (2026-11-04, twenty-third check: witness service slice 4b, the decision path)
+
+## Update 2026-11-04, twenty-third check (newest)
+
+- **Peers:** nothing new on origin/agent-1 (2b3d389) or origin/agent-3 (222cdf2) since my last push (d689e38).
+- **Slice 4b (additions to `witness_service.py`, new test file):** `derive_decision` / `sign_decision`. A decision is a pure function of the request and the DBC's current checkpoint, so the witness derives it from its own injected view (E `decide` logic ported, F expiry `min(request, checkpoint)`, no host-clock term) and signs only an
+  equal proposal; a different field is PROPOSAL_MISMATCH naming it. `tests/test_witness_service_decision.py`: 55 tests, **written first and run red before any implementation (53 failed)**, which corrects my slice 4a slip. `tools/run_service_mutants.py`: **75 of 75** on its first run with 41 new decision mutants (4a-only result kept). Seven new-code test files together: 310 passed.
+- **Honest record:** one test of mine was wrong (digest taken before the request was altered); the fake ledger and the fake credential evaluation are not the ledger, the oracle-free equality design means the decision path has no independent "oracle" to disagree with (it is a port of E's logic: a shared-code and same-author risk); 75/75 on a first run is a statement about these tests against these mutants, not about the witness.
+  The grant-existence death evidence is not used by the service (a consumed nonce is refused REPLAY first); a store capability that stays untested through the service.
+- **Not done:** receipt and governance in the service; the D50 live-read reconstruction; the pool driver; the worker store's D50 rows and `worker_log --binding`; the successor adapter and strict parsing; D-4, D-6, hooks H3/H5/H6 and byzantine.py; the E regressions; the source READY manifest.
+- **Next:** the receipt type (grant receipt with the canonical DBC block from the unique `GrantIssued` log, SIGNING-RULES section 5), test-first.
+
+---
+
 # Agent 2 handoff (2026-11-04, twenty-second check: witness service slice 4a)
 
 ## Update 2026-11-04, twenty-second check (newest)

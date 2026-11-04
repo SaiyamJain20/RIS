@@ -1,5 +1,5 @@
-"""Mutation check of the witness service, StateCheckpoint path (agent 2, F task 2 slice 4a). Standard library only. Same method as the other runners: one text replacement per mutant (it must match exactly once
-and change the file), run the UNCHANGED tests/test_witness_service.py in a temporary copy that keeps the repository layout, count a mutant DETECTED only when the tests ran and failed; a crash or
+"""Mutation check of the witness service, StateCheckpoint and AccessDecision paths (agent 2, F task 2 slices 4a and 4b). Standard library only. Same method as the other runners: one text replacement per mutant (it must match exactly once
+and change the file), run the UNCHANGED tests/test_witness_service.py and tests/test_witness_service_decision.py in a temporary copy that keeps the repository layout, count a mutant DETECTED only when the tests ran and failed; a crash or
 timeout is NOT detection; the unmutated copy runs first as a control. witness_state.py is NOT mutated here (run_state_mutants.py does that).
 
 Usage (repository root):   python3 -B -I protocol/tools/run_service_mutants.py        (needs pytest and the E dependencies: protocol/requirements.txt)
@@ -37,9 +37,9 @@ M = [
     ("V18 the window has no upper bound", [("        if e > ts + self._max_ttl:", "        if False:")]),
     ("V19 the window observes the PBC instead of the DBC", [('ts = int(view.observe("dbc")["timestamp"])', 'ts = int(view.observe("pbc")["timestamp"])')]),
     ("V20 the store is told no expiry", [("expires_at=cp[\"expiresAt\"],", "expires_at=None,")]),
-    ("V21 the store observes the PBC", [('observe=lambda: self._view.observe("dbc"),', 'observe=lambda: self._view.observe("pbc"),')]),
+    ("V21 the store observes the PBC (checkpoint)", [('observe=lambda: self._view.observe("dbc"),\n                                overtaken=("overtaken-checkpoint"', 'observe=lambda: self._view.observe("pbc"),\n                                overtaken=("overtaken-checkpoint"')]),
     ("V22 the store gets another domain", [('domain=self._domain,', 'domain="0x" + "00" * 32,')]),
-    ("V23 an unreadable ledger escapes as a raw exception", [("        except LedgerUnreachable as e:\n            raise WitnessRefusal(\"ADAPTER_UNAVAILABLE\", \"LEDGER_UNREACHABLE\", f\"the ledger could not be read: {e}\") from None\n", "")]),
+    ("V23 an unreadable ledger escapes as a raw exception", [("        except LedgerUnreachable as e:\n            raise _unreachable(e) from None\n        except ws.StoreError as e:", "        except ws.StoreError as e:")]),
     ("V24 the recorded value is dropped from a pinned refusal", [("raise WitnessRefusal(e.code, e.reason, e.message, e.recorded) from None", "raise WitnessRefusal(e.code, e.reason, e.message, None) from None")]),
     ("V25 the proposal's shape is not validated", [("return dict(wire.state_checkpoint(proposal))", "return dict(proposal)")]),
     ("V26 the proposer's sequence is current plus two", [('str(int(cur["sequence"]) + 1)', 'str(int(cur["sequence"]) + 2)')]),
@@ -51,6 +51,47 @@ M = [
     ("V32 the conflict key is the block number instead of the sequence", [('key=cp["sequence"],', 'key=cp["sourceBlockNumber"],')]),
     ("V33 the proposer reads the epochs at block 0", [('reads = view.reads_at(int(head["blockNumber"]))\n    dbc = view.observe("dbc")', 'reads = view.reads_at(0)\n    dbc = view.observe("dbc")')]),
     ("V34 a non-positive max ttl is accepted", [("or max_checkpoint_ttl < 1:", "or False:")]),
+    ("D1 an outcome already recorded (status 2) is not refused", [('    if rec["status"] == "2":', "    if False:")]),
+    ("D2 a request the PSC has not forwarded is not refused", [('    if rec["status"] != "1":', "    if False:")]),
+    ("D3 two forwarding logs are accepted", [("    if len(logs) != 1:", "    if len(logs) < 1:")]),
+    ("D4 no forwarding log escapes as a raw exception", [("    if len(logs) != 1:", "    if len(logs) > 1:")]),
+    ("D5 the forwarding transaction need not go to the PSC", [('call is None or call["to"] != psc or call["method"] != "requestAccess":', 'call is None or call["method"] != "requestAccess":')]),
+    ("D6 the forwarding call need not be requestAccess", [('call is None or call["to"] != psc or call["method"] != "requestAccess":', 'call is None or call["to"] != psc:')]),
+    ("D7 the recovered request need not hash to the digest", [("    if recomputed != digest:", "    if False:")]),
+    ("D8 the PSC record is not compared with the request", [('    if tuple(request[k] for k in ("gid", "dataId", "destinationChainId", "kssc", "expiresAt")) != tuple(rec[k] for k in ("gid", "dataId", "destinationChainId", "kssc", "expiresAt")):', "    if False:")]),
+    ("D9 a checkpoint expiring exactly now is fresh", [('dbc_now >= int(cp["expiresAt"]):', 'dbc_now > int(cp["expiresAt"]):')]),
+    ("D10 a missing checkpoint escapes as a raw exception", [('    if cp is None or dbc_now >= int(cp["expiresAt"]):', '    if dbc_now >= int(cp["expiresAt"]):')]),
+    ("D11 the checkpoint's block hash is not compared", [('block is None or block["hash"] != cp["sourceBlockHash"] or view.reads_at(src)["authEpoch"] != cp["authEpoch"]:', 'block is None or view.reads_at(src)["authEpoch"] != cp["authEpoch"]:')]),
+    ("D12 the checkpoint's authEpoch is not compared with the block's", [('block is None or block["hash"] != cp["sourceBlockHash"] or view.reads_at(src)["authEpoch"] != cp["authEpoch"]:', 'block is None or block["hash"] != cp["sourceBlockHash"]:')]),
+    ("D13 the checkpoint's witnessSetVersion is not compared", [('    if cp["witnessSetVersion"] != wsv:', "    if False:")]),
+    ("D14 a request forwarded in the checkpoint's own block is refused", [('    if int(logs[0]["block"]) > src:', '    if int(logs[0]["block"]) >= src:')]),
+    ("D15 a request forwarded after the checkpoint's block is accepted", [('    if int(logs[0]["block"]) > src:', "    if False:")]),
+    ("D16 the request's authEpoch is not compared with the checkpoint's", [('if request["authEpoch"] != cp["authEpoch"] or request["policyVersion"] != cp["policyVersion"]:', 'if request["policyVersion"] != cp["policyVersion"]:')]),
+    ("D17 the request's policyVersion is not compared", [('if request["authEpoch"] != cp["authEpoch"] or request["policyVersion"] != cp["policyVersion"]:', 'if request["authEpoch"] != cp["authEpoch"]:')]),
+    ("D18 the request's keyEpoch is not compared", [('    if request["keyEpoch"] != cp["keyEpoch"]:', "    if False:")]),
+    ("D19 the destination chain is not compared", [('if request["destinationChainId"] != dbc["chainId"] or request["kssc"] != dbc["contracts"]["KSSC"]:', 'if request["kssc"] != dbc["contracts"]["KSSC"]:')]),
+    ("D20 the KSSC is not compared", [('if request["destinationChainId"] != dbc["chainId"] or request["kssc"] != dbc["contracts"]["KSSC"]:', 'if request["destinationChainId"] != dbc["chainId"]:')]),
+    ("D21 a consumed nonce is not refused", [('view.nonce_consumed(request["gid"], request["nonce"]) is True:', 'view.nonce_consumed(request["gid"], request["nonce"]) is None:')]),
+    ("D22 only the DBC clock decides request expiry", [('if max(dbc_now, pbc_now) >= int(request["expiresAt"]):', 'if dbc_now >= int(request["expiresAt"]):')]),
+    ("D23 a request expiring exactly now is live", [('if max(dbc_now, pbc_now) >= int(request["expiresAt"]):', 'if max(dbc_now, pbc_now) > int(request["expiresAt"]):')]),
+    ("D24 a credential valid until exactly now is not lapsed", [('int(r["validUntil"]) <= dbc_now', 'int(r["validUntil"]) < dbc_now')]),
+    ("D25 the policy is evaluated even when the credentials failed", [('satisfied = code == "0" and view.policy_satisfied(request["dataId"], records) is True', 'satisfied = view.policy_satisfied(request["dataId"], records) is True')]),
+    ("D26 the decision expiry is the later of request and checkpoint", [('str(min(int(request["expiresAt"]), int(cp["expiresAt"])))', 'str(max(int(request["expiresAt"]), int(cp["expiresAt"])))')]),
+    ("D27 the decision expiry ignores the request's", [('str(min(int(request["expiresAt"]), int(cp["expiresAt"])))', 'str(int(cp["expiresAt"]))')]),
+    ("D28 lapsed records are still attested", [('code, records = "REVOKED-BY-TIME", []', 'code, records = "REVOKED-BY-TIME", records')]),
+    ("D29 the credentials are evaluated at the witness's own now", [('view.credentials(request["gid"], call["bundle"], block["timestamp"], src)', 'view.credentials(request["gid"], call["bundle"], str(dbc_now), src)')]),
+    ("D30 the expiry is not compared with the proposal", [('DECISION_FIELDS = ("requestDigest", "result", "credentialDigest", "stateSequence", "witnessSetVersion", "sourceBlockNumber", "sourceBlockHash", "expiresAt")', 'DECISION_FIELDS = ("requestDigest", "result", "credentialDigest", "stateSequence", "witnessSetVersion", "sourceBlockNumber", "sourceBlockHash")')]),
+    ("D31 the stateSequence is not compared with the proposal", [('DECISION_FIELDS = ("requestDigest", "result", "credentialDigest", "stateSequence",', 'DECISION_FIELDS = ("requestDigest", "result", "credentialDigest",')]),
+    ("D32 the credentialDigest is not compared with the proposal", [('DECISION_FIELDS = ("requestDigest", "result", "credentialDigest",', 'DECISION_FIELDS = ("requestDigest", "result",')]),
+    ("D33 the decision is recorded under the checkpoint domain", [("domain=self._decision_domain,", "domain=self._domain,")]),
+    ("D34 the decision's key is the state sequence", [('key=own["requestDigest"],', 'key=own["stateSequence"],')]),
+    ("D35 the overtaken evidence is always zero", [('overtaken=("overtaken-decision-sequence", own["stateSequence"])', 'overtaken=("overtaken-decision-sequence", "0")')]),
+    ("D36 the decision effect lacks a field", [('EFFECT_DECISION = ("result", "credentialDigest",', 'EFFECT_DECISION = ("result", "result",')]),
+    ("D37 the request digest's shape is not checked", [("        wire.hash32(digest)\n", "        str(digest)\n")]),
+    ("D38 the decision proposal's shape is not checked", [("prop = dict(wire.access_decision(proposal))", "prop = dict(proposal)")]),
+    ("D39 the proposer-side derivation does not map an unreadable view", [("    except LedgerUnreachable as e:\n        raise _unreachable(e) from None\n\n\ndef _derive_decision", "    except KeyError as e:\n        raise _unreachable(e) from None\n\n\ndef _derive_decision")]),
+    ("D40 the PBC clock is not read", [('dbc_now, pbc_now = view.now("dbc"), view.now("pbc")', 'dbc_now, pbc_now = view.now("dbc"), view.now("dbc")')]),
+    ("D41 the decision store observes the PBC", [('observe=lambda: self._view.observe("dbc"),\n                                overtaken=("overtaken-decision-sequence"', 'observe=lambda: self._view.observe("pbc"),\n                                overtaken=("overtaken-decision-sequence"')]),
 ]
 
 
@@ -64,13 +105,13 @@ def run_in_copy(text):
         for name in os.listdir(pkg):
             if name.endswith(".py") and name != "witness_service.py":
                 shutil.copy(os.path.join(pkg, name), os.path.join(p, "hmbc_protocol", name))
-        for rel in ("pytest.ini", os.path.join("tests", "test_witness_service.py"), os.path.join("tests", "fixtures", "deployment-agent1-91add8c-v1-repaired-e.json"), os.path.join("f0", "vectors", "d50_reference.py")):
+        for rel in ("pytest.ini", os.path.join("tests", "test_witness_service.py"), os.path.join("tests", "test_witness_service_decision.py"), os.path.join("tests", "fixtures", "deployment-agent1-91add8c-v1-repaired-e.json"), os.path.join("f0", "vectors", "d50_reference.py")):
             shutil.copy(os.path.join(PROTO, rel), os.path.join(p, rel))
         with open(os.path.join(p, "hmbc_protocol", "witness_service.py"), "w") as f:
             f.write(text)
         env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
         try:
-            r = subprocess.run([sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests/test_witness_service.py"], cwd=p, capture_output=True, text=True, timeout=300, env=env)
+            r = subprocess.run([sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests/test_witness_service.py", "tests/test_witness_service_decision.py"], cwd=p, capture_output=True, text=True, timeout=300, env=env)
         except subprocess.TimeoutExpired:
             return "timeout", None
         m = re.search(r"(\d+) failed", r.stdout)
