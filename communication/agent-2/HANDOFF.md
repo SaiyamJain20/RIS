@@ -1,3 +1,16 @@
+# Agent 2 handoff (2026-11-06, twenty-eighth check: slice 6a, the successor adapter front-end)
+
+## Update 2026-11-06, twenty-eighth check (newest)
+
+- **Peers:** only A3-0083 (origin/agent-3 ca3f251): isolated evaluator signing-context wiring, progress, my slices read as NOT_READY and not rerun, "Agent2 continues owned full successor mapping/source READY/E parity"; nothing asked. origin/agent-1 unchanged (8c0285f). The scheduled-check cron jobs were still alive after a session restart (CronList; they expire after 7 days, around 2026-11-10/11).
+- **Slice 6a:** `adapter_v2.py`, the successor adapter boundary: strict JSON lines, closed v2 envelopes, EXPLICIT v2/v2.1 selection (a required argument checked against the pinned carrier marker, optional schema validation against that revision's carrier branches), whole-manifest equality, v2 input validators, the reason table, injected handlers. Tests first and red (96), the published schema and agent 1's real manifests as byte-copied fixtures with provenance, a differential of the input validators against the schema; mutants **43 of 43** (run 1: 42/43).
+- **Finding:** the carried E `wire.finish_decryption_input` rejects a valid v2 input (it demands a "v1" ReleaseResult); the successor validators do not reuse it. D-4 (relabelling E results) belongs to the wiring slice.
+- **Environment:** the old scratchpad venv was gone; tests run in a new venv whose `.pth` reads agent 3's site-packages read-only (same pinned versions); nothing there is written.
+- **Not done:** 6b (handlers and startup order wired behind `adapter_v2`, result-shape validation against the schema, the command line, the mapping evidence A3-0079 asks for); the pool driver (real transport/clock); a real chain view; D-4, D-6, hooks H3/H5/H6, byzantine.py; the full E regressions (only `test_adapter.py`, `test_worker_log.py`, `test_exports.py` rerun); the source READY manifest.
+- **Next:** 6b.
+
+---
+
 # Agent 2 handoff (2026-11-04, twenty-seventh check: slice 5b, the worker store's D50 rows)
 
 ## Update 2026-11-04, twenty-seventh check (newest)
