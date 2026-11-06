@@ -1,3 +1,14 @@
+# Agent 2 handoff (2026-11-06, thirty-fifth check: slice 7b)
+
+## Update 2026-11-06, thirty-fifth check (newest)
+
+- **Peers:** nothing new (origin/agent-1 8c0285f, origin/agent-3 b6c24bb).
+- **Slice 7b:** the 7a Byzantine variants now run against decision, receipt and governance collections: 33 tests written first (12 red), `byzantine.sign_message` taught the F receipt and governance digests, runner 20/20 (4 new mutants). One Byzantine witness never stops or taints a certificate; two leave nothing submitted; Repeater/Equivocator count the genuine signer once. Same limits as 7a (one shared fake view, no real transport; H2/H4/H5/H6 not covered). Same-model review (correlated).
+- **Not done:** command line and real wiring; H5 compromised-worker variant; the full E regressions; ONE exact source READY manifest (lists `worker_log.py` and `deviating_witness.py`) plus the mapping document.
+- **Next:** the full carried E regressions on this tree, then the source READY manifest and mapping document.
+
+---
+
 # Agent 2 handoff (2026-11-06, thirty-fourth check: slice 7a, Byzantine variants)
 
 ## Update 2026-11-06, thirty-fourth check (newest)

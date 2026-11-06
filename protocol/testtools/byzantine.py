@@ -22,9 +22,20 @@ import contextlib
 from hmbc_protocol import eip712, messages
 
 
+def _digest(name, message, deployment):
+    """The digest of `message` for the signed type `name`. The F receipt (witnessSetVersion 2) and the GovernanceAction are not types of the carried E message table, so they use the witness service's own
+    encoders; the other types go through the carried E table."""
+    from hmbc_protocol import witness_service as svc
+    if name == "GrantReceipt":
+        return svc._receipt_digest(message, deployment)
+    if name == "GovernanceAction":
+        return svc._governance_digest(message, deployment)
+    return messages.digest_of(name, message, messages.domain_for(name, message, deployment))
+
+
 def sign_message(key, name, message, deployment):
     """A raw signature over the digest of `message` under the deployment's domain for `name`, with no store and no validation (what a Byzantine key holder can always do)."""
-    return eip712.sign_digest(key, messages.digest_of(name, message, messages.domain_for(name, message, deployment)))
+    return eip712.sign_digest(key, _digest(name, message, deployment))
 
 
 class _Endpoint:

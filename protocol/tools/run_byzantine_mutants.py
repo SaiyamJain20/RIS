@@ -1,5 +1,5 @@
 """Mutation check of the successor adapter handlers the TEST-ONLY Byzantine variants (agent 2, F task 3 slice 7a). Standard library only. Same method as the other runners: one text replacement per mutant (it must match exactly once
-and change the file), run the UNCHANGED tests/test_byzantine.py in a temporary copy that keeps the repository layout, count a mutant DETECTED only when the tests ran and failed; a crash or
+and change the file), run the UNCHANGED tests/test_byzantine.py and tests/test_byzantine_types.py in a temporary copy that keeps the repository layout, count a mutant DETECTED only when the tests ran and failed; a crash or
 timeout is NOT detection; the unmutated copy runs first as a control. the carried adapter.py, wire.py, witness_service.py, witness_pool.py and witness_pool_driver.py are NOT mutated here (their own runners do that).
 
 Usage (repository root):   python3 -B -I protocol/tools/run_byzantine_mutants.py        (needs pytest and the E dependencies: protocol/requirements.txt)
@@ -32,6 +32,10 @@ M = [
     ("Z13 a wrapper loses the delivery hold", [("        return self.inner.send_delay(round_no)", "        return 0")]),
     ("Z14 the default reply delay is 200 ms", [("def __init__(self, reply_delay=100):", "def __init__(self, reply_delay=200):")]),
     ("Z15 a delayed wrapper does not record the delivery", [("        self.deliveries.append((round_no, dict(message)))\n        return [(d + self.ms, r)", "        return [(d + self.ms, r)")]),
+    ("Z17 a receipt is digested with the carried E table", [('    if name == "GrantReceipt":', "    if False:")]),
+    ("Z18 a governance action is digested with the carried E table", [('    if name == "GovernanceAction":', "    if False:")]),
+    ("Z19 a receipt is digested as a governance action", [("return svc._receipt_digest(message, deployment)", "return svc._governance_digest(message, deployment)")]),
+    ("Z20 a governance action is digested as a receipt", [("return svc._governance_digest(message, deployment)\n    return messages", "return svc._receipt_digest(message, deployment)\n    return messages")]),
     ("Z16 a repeater does not record the delivery", [("        self.deliveries.append((round_no, dict(message)))\n        return [(d, dict(r)) for d, r in", "        return [(d, dict(r)) for d, r in")]),
 ]
 
@@ -54,14 +58,14 @@ def run_in_copy(text):
         shutil.copytree(os.path.join(PROTO, "abi"), os.path.join(p, "abi"))                  # the carried code reads the ABI manifest at import time
         shutil.copytree(os.path.join(PROTO, "hmbc_protocol"), os.path.join(p, "hmbc_protocol"), ignore=shutil.ignore_patterns("__pycache__"))
         for rel in ("pytest.ini",) + tuple(os.path.join("tests", n) for n in ("conftest.py", "support.py", "test_witness_service.py", "test_witness_service_decision.py", "test_witness_service_governance.py",
-                                                                              "test_witness_service_receipt.py", "test_witness_pool_driver.py", "test_byzantine.py")):
+                                                                              "test_witness_service_receipt.py", "test_witness_pool_driver.py", "test_adapter_v2_witness.py", "test_byzantine.py", "test_byzantine_types.py")):
             os.makedirs(os.path.dirname(os.path.join(p, rel)) or p, exist_ok=True)
             shutil.copy(os.path.join(PROTO, rel), os.path.join(p, rel))
         with open(os.path.join(p, "testtools", "byzantine.py"), "w") as f:
             f.write(text)
         env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
         try:
-            r = subprocess.run([sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests/test_byzantine.py"], cwd=p, capture_output=True, text=True, timeout=300, env=env)
+            r = subprocess.run([sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests/test_byzantine.py", "tests/test_byzantine_types.py"], cwd=p, capture_output=True, text=True, timeout=300, env=env)
         except subprocess.TimeoutExpired:
             return "timeout", None
         m = re.search(r"(\d+) failed", r.stdout)
