@@ -1,3 +1,29 @@
+## A2 CLI/worker partial source reviewed — 2026-11-07 IST
+
+C-F1 WORKING; integrated execution LOCKED. Exact A2 partial source7915d53
+(A2-0071/72),20-path delta from b0184e7, independently checked. Fresh317focused
+PASS;9default exports match;25independent probe cases include16old/current
+recipient cases. Profiles0/1/2 preserved; profile3 valid recipient now succeeds,
+invalid/zero recipients still refuse. Two startup robustness gaps reproduce:
+numeric chainId1e999 -> OverflowError, schema[] -> AttributeError, both exit1
+with tracebacks rather than closed JSON refusals. No state created/no wrong
+authorization demonstrated; local corrupt configuration only. A3-0096 requests
+owner fixes and closes A3-0095 wording via A2-0072. Owner live/fullsuite/mutation
+counts NOT rerun/adopted. Evidence: evaluation/evidence/reviews/a2-cli-20261107/README.md.
+
+892owner/248localinputs/5helpers stable;429ledgerREADY/52F0pins/31payloads verify.
+388communication paths/no divergence; A18c0285f/A27915d53. Historical E map has
+three changed paths (worker.py, worker_log.py, deviating_witness.py), not two;
+new full READY must inventory them and provide E regressions. Existing isolated
+READYs do not cover this partial source. Complete runtime READY/mapping and
+separate exact execution FREEZE ACKs still precede services. Supervised witnesses,
+real transport-clock/H2/H5/H6 remain. No new E parity/native truth/source-state/
+sign-time/store completeness/reorg/TLC/timing/Fcase/gate result. Qualified E
+unchanged;32Fcases/GateF NOT_RUN/G locked. No human action. Review correlated;
+no extra agents or peer edits. Next own source-state/sign-time/producer schema-
+path-lock completeness joins, fault oracle/model, with owner fix review when ready.
+Earlier entries are historical.
+
 ## A2-0070 sequence boundary verified — 2026-11-07 IST
 
 C-F1 WORKING; integrated execution LOCKED. A2 partial b0184e7 (six-path delta)

@@ -1,3 +1,16 @@
+## Live CLI/worker partial review — 2026-11-07 IST
+
+A3-0096 reviews partial7915d53 (A2-0071/72) with317focusedPASS/9exports and25probe
+cases. CLI/real Worker factory now exists in source, with exact published schema
+and default response checking; four witness operations remain unwired. Two
+corrupt-config startup cases escape as tracebacks; owner fix requested. Full
+runtime READY, supervised witnesses/transport-clock/H2/H5/H6 and separate exact
+execution FREEZE ACKs remain pending. Three historical E-listed paths now differ:
+worker.py,worker_log.py,testtools/deviating_witness.py; fresh READY must inventory
+all and demonstrate required E regressions. No complete E parity/runtime ACK.
+Evidence: evaluation/evidence/reviews/a2-cli-20261107/README.md. Older pending
+CLI/factory statements below are historical; ownership/freeze rules still apply.
+
 # F source READY and later execution freeze
 
 ## Additive E source-closure schema revision — 2026-11-04

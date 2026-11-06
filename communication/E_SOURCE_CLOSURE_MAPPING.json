@@ -70,7 +70,7 @@
       "d50PreimageUnchanged": true
     },
     "completeRuntimeReady": false,
-    "explanation": "A2-0064 remains the last isolated API source READY. A3-0094 reviews A2-0069 partial source5c8e418 and closes the A3-0093 transaction/error-prose request: four old AttributeErrors now become LedgerUnreachable;245focusedPASS/45mutation controls. Five carried permissive parsing observations are documented, not canonicality proof. Owner live results not independently adopted. Worker factory, supervised witnesses, CLI with exact published schema/default response checking, real transport-clock and H2/H5/H6 remain pending. Consumer mapping ACK remains null; no complete runtime READY or execution authority inferred.",
+    "explanation": "A2-0064 remains the last isolated API source READY. A3-0096 reviews partial7915d53 (A2-0071/72):317focusedPASS/9default exports/25probe cases. CLI/Worker factory now exists with supplied published schema/default response check, but four witness operations are unwired. Numeric chainId1e999 and schema[] escape as startup tracebacks under corrupt local configuration; fix requested. Supervised witnesses/real transport-clock/H2/H5/H6/full runtime READY remain pending. Three historical E paths now differ; no full E parity, consumer mapping ACK, complete runtime READY or execution authority inferred.",
     "requiredRecipeChecks": [
       "pass exact published schema; schema=None checks only structural minimum",
       "keep check_responses=True and use behavior-validating handlers; output schema checking does not establish native truth",
@@ -162,7 +162,28 @@
         "quantitySeparatorRefusalPending": true,
         "canonicalAbiClaimNeedsClarification": true
       }
-    ]
+    ],
+    "cliWorkerPartialReview": {
+      "messageId": "A3-0096",
+      "ownerNotes": [
+        "A2-0071",
+        "A2-0072"
+      ],
+      "sourceCommit": "7915d532ff17c9e782bd23d4887374c01601154f",
+      "ownerRuntimeReady": false,
+      "review": "evaluation/evidence/reviews/a2-cli-20261107/README.md",
+      "verificationSha256": "5ef839b00da47764ba2fe553e13e1dfab436973b1274c8de269168a58a838a53",
+      "independentLiveRun": false,
+      "focusedPass": 317,
+      "defaultExports": 9,
+      "probeCases": 25,
+      "startupRobustnessGaps": 2,
+      "historicalEChanged": [
+        "protocol/hmbc_protocol/worker.py",
+        "protocol/hmbc_protocol/worker_log.py",
+        "protocol/testtools/deviating_witness.py"
+      ]
+    }
   },
   "historicalAcceptanceUnchanged": {
     "path": "communication/E_SOURCE_CLOSURE_ACCEPTANCE.json",

@@ -1,0 +1,396 @@
+{
+  "classification": "tested reconstruction synthetic review",
+  "count": 25,
+  "controls": [
+    {
+      "control": "recipient",
+      "profile": "0",
+      "grant": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "registered": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "before": {
+        "accepted": true,
+        "recipient": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "after": {
+        "accepted": true,
+        "recipient": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "control": "recipient",
+      "profile": "0",
+      "grant": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "registered": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "before": {
+        "accepted": false,
+        "code": "WRONG_SUBJECT",
+        "message": "a paper-profile grant is expected to carry no recipient commitment"
+      },
+      "after": {
+        "accepted": false,
+        "code": "WRONG_SUBJECT",
+        "message": "a paper-profile grant is expected to carry no recipient commitment"
+      }
+    },
+    {
+      "control": "recipient",
+      "profile": "0",
+      "grant": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "registered": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "before": {
+        "accepted": false,
+        "code": "WRONG_SUBJECT",
+        "message": "a paper-profile grant is expected to carry no recipient commitment"
+      },
+      "after": {
+        "accepted": false,
+        "code": "WRONG_SUBJECT",
+        "message": "a paper-profile grant is expected to carry no recipient commitment"
+      }
+    },
+    {
+      "control": "recipient",
+      "profile": "0",
+      "grant": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "registered": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "before": {
+        "accepted": false,
+        "code": "WRONG_SUBJECT",
+        "message": "the grant's GID has no registered recipient key, so a paper-mode response has no recipient to bind to"
+      },
+      "after": {
+        "accepted": false,
+        "code": "WRONG_SUBJECT",
+        "message": "the grant's GID has no registered recipient key, so a paper-mode response has no recipient to bind to"
+      }
+    },
+    {
+      "control": "recipient",
+      "profile": "1",
+      "grant": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "registered": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "before": {
+        "accepted": true,
+        "recipient": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "after": {
+        "accepted": true,
+        "recipient": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "control": "recipient",
+      "profile": "1",
+      "grant": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "registered": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "before": {
+        "accepted": false,
+        "code": "WRONG_SUBJECT",
+        "message": "a paper-profile grant is expected to carry no recipient commitment"
+      },
+      "after": {
+        "accepted": false,
+        "code": "WRONG_SUBJECT",
+        "message": "a paper-profile grant is expected to carry no recipient commitment"
+      }
+    },
+    {
+      "control": "recipient",
+      "profile": "1",
+      "grant": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "registered": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "before": {
+        "accepted": false,
+        "code": "WRONG_SUBJECT",
+        "message": "a paper-profile grant is expected to carry no recipient commitment"
+      },
+      "after": {
+        "accepted": false,
+        "code": "WRONG_SUBJECT",
+        "message": "a paper-profile grant is expected to carry no recipient commitment"
+      }
+    },
+    {
+      "control": "recipient",
+      "profile": "1",
+      "grant": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "registered": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "before": {
+        "accepted": false,
+        "code": "WRONG_SUBJECT",
+        "message": "the grant's GID has no registered recipient key, so a paper-mode response has no recipient to bind to"
+      },
+      "after": {
+        "accepted": false,
+        "code": "WRONG_SUBJECT",
+        "message": "the grant's GID has no registered recipient key, so a paper-mode response has no recipient to bind to"
+      }
+    },
+    {
+      "control": "recipient",
+      "profile": "2",
+      "grant": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "registered": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "before": {
+        "accepted": false,
+        "code": "WRONG_SUBJECT",
+        "message": "the grant's recipient key is unbound or differs from the registered one"
+      },
+      "after": {
+        "accepted": false,
+        "code": "WRONG_SUBJECT",
+        "message": "the grant's recipient key is unbound or differs from the registered one"
+      }
+    },
+    {
+      "control": "recipient",
+      "profile": "2",
+      "grant": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "registered": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "before": {
+        "accepted": true,
+        "recipient": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "after": {
+        "accepted": true,
+        "recipient": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "control": "recipient",
+      "profile": "2",
+      "grant": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "registered": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "before": {
+        "accepted": false,
+        "code": "WRONG_SUBJECT",
+        "message": "the grant's recipient key is unbound or differs from the registered one"
+      },
+      "after": {
+        "accepted": false,
+        "code": "WRONG_SUBJECT",
+        "message": "the grant's recipient key is unbound or differs from the registered one"
+      }
+    },
+    {
+      "control": "recipient",
+      "profile": "2",
+      "grant": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "registered": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "before": {
+        "accepted": false,
+        "code": "WRONG_SUBJECT",
+        "message": "the grant's recipient key is unbound or differs from the registered one"
+      },
+      "after": {
+        "accepted": false,
+        "code": "WRONG_SUBJECT",
+        "message": "the grant's recipient key is unbound or differs from the registered one"
+      }
+    },
+    {
+      "control": "recipient",
+      "profile": "3",
+      "grant": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "registered": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "before": {
+        "accepted": true,
+        "recipient": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "after": {
+        "accepted": false,
+        "code": "WRONG_SUBJECT",
+        "message": "the grant's recipient key is unbound or differs from the registered one"
+      }
+    },
+    {
+      "control": "recipient",
+      "profile": "3",
+      "grant": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "registered": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "before": {
+        "accepted": false,
+        "code": "WRONG_SUBJECT",
+        "message": "a paper-profile grant is expected to carry no recipient commitment"
+      },
+      "after": {
+        "accepted": true,
+        "recipient": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "control": "recipient",
+      "profile": "3",
+      "grant": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "registered": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "before": {
+        "accepted": false,
+        "code": "WRONG_SUBJECT",
+        "message": "a paper-profile grant is expected to carry no recipient commitment"
+      },
+      "after": {
+        "accepted": false,
+        "code": "WRONG_SUBJECT",
+        "message": "the grant's recipient key is unbound or differs from the registered one"
+      }
+    },
+    {
+      "control": "recipient",
+      "profile": "3",
+      "grant": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "registered": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "before": {
+        "accepted": false,
+        "code": "WRONG_SUBJECT",
+        "message": "the grant's GID has no registered recipient key, so a paper-mode response has no recipient to bind to"
+      },
+      "after": {
+        "accepted": false,
+        "code": "WRONG_SUBJECT",
+        "message": "the grant's recipient key is unbound or differs from the registered one"
+      }
+    },
+    {
+      "control": "ABI exact hashes",
+      "contracts": [
+        "ACSC",
+        "Governance",
+        "KSSC",
+        "LSC",
+        "PSC",
+        "RSC",
+        "TMSC"
+      ]
+    },
+    {
+      "control": "one-byte ABI change",
+      "refused": true
+    },
+    {
+      "control": "CLI wiring without startup",
+      "schemaRevision": "v2",
+      "defaultResponsesEnabled": true,
+      "stateCreated": false
+    },
+    {
+      "control": "CLI wiring without startup",
+      "schemaRevision": "v2.1",
+      "defaultResponsesEnabled": true,
+      "stateCreated": false
+    },
+    {
+      "control": "nonobject deployment",
+      "argv": [
+        "/home/karma/Documents/RIS/.venv/bin/python",
+        "-B",
+        "-m",
+        "hmbc_protocol.adapter_v2_main",
+        "--deployment",
+        "/home/karma/Documents/RIS/evaluation/runs/a2-cli-20261107/a3-cli-review-p40scuel/0.json",
+        "--abi-dir",
+        "/home/karma/Documents/RIS/evaluation/runs/a2-cli-20261107/snapshot/protocol/tests/fixtures/agent1-85c59f5-abi",
+        "--schema",
+        "/home/karma/Documents/RIS/interfaces/v2.1/hmbc.schema.json",
+        "--schema-sha256",
+        "d43c3a9a4cbb10214135afb767a2adc109da462f88bd11a81a8c8955d44fd1f3",
+        "--schema-revision",
+        "v2",
+        "--state-dir",
+        "/home/karma/Documents/RIS/evaluation/runs/a2-cli-20261107/a3-cli-review-p40scuel/state-0"
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"MALFORMED\",\"message\":\"the deployment file is not a JSON object\"}}\n",
+      "stateCreated": false,
+      "cleanRefusal": true
+    },
+    {
+      "control": "overflowing numeric chainId",
+      "argv": [
+        "/home/karma/Documents/RIS/.venv/bin/python",
+        "-B",
+        "-m",
+        "hmbc_protocol.adapter_v2_main",
+        "--deployment",
+        "/home/karma/Documents/RIS/evaluation/runs/a2-cli-20261107/a3-cli-review-p40scuel/1.json",
+        "--abi-dir",
+        "/home/karma/Documents/RIS/evaluation/runs/a2-cli-20261107/snapshot/protocol/tests/fixtures/agent1-85c59f5-abi",
+        "--schema",
+        "/home/karma/Documents/RIS/interfaces/v2.1/hmbc.schema.json",
+        "--schema-sha256",
+        "d43c3a9a4cbb10214135afb767a2adc109da462f88bd11a81a8c8955d44fd1f3",
+        "--schema-revision",
+        "v2",
+        "--state-dir",
+        "/home/karma/Documents/RIS/evaluation/runs/a2-cli-20261107/a3-cli-review-p40scuel/state-1"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/home/karma/Documents/RIS/evaluation/runs/a2-cli-20261107/snapshot/protocol/hmbc_protocol/adapter_v2_main.py\", line 143, in <module>\n    sys.exit(main())\n             ~~~~^^\n  File \"/home/karma/Documents/RIS/evaluation/runs/a2-cli-20261107/snapshot/protocol/hmbc_protocol/adapter_v2_main.py\", line 132, in main\n    ctx = build_context(args)\n  File \"/home/karma/Documents/RIS/evaluation/runs/a2-cli-20261107/snapshot/protocol/hmbc_protocol/adapter_v2_main.py\", line 108, in build_context\n    chains = {s: Chain(manifest[\"chains\"][s][\"rpcUrl\"], int(manifest[\"chains\"][s][\"chainId\"])) for s in (\"pbc\", \"dbc\")}\n                                                        ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nOverflowError: cannot convert float infinity to integer\n",
+      "stateCreated": false,
+      "cleanRefusal": false
+    },
+    {
+      "control": "schema JSON array",
+      "argv": [
+        "/home/karma/Documents/RIS/.venv/bin/python",
+        "-B",
+        "-m",
+        "hmbc_protocol.adapter_v2_main",
+        "--deployment",
+        "/home/karma/Documents/RIS/evaluation/runs/a2-cli-20261107/snapshot/protocol/tests/fixtures/agent1-85c59f5-f-base-deployment.json",
+        "--abi-dir",
+        "/home/karma/Documents/RIS/evaluation/runs/a2-cli-20261107/snapshot/protocol/tests/fixtures/agent1-85c59f5-abi",
+        "--schema",
+        "/home/karma/Documents/RIS/evaluation/runs/a2-cli-20261107/a3-cli-review-p40scuel/2.json",
+        "--schema-sha256",
+        "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "--schema-revision",
+        "v2",
+        "--state-dir",
+        "/home/karma/Documents/RIS/evaluation/runs/a2-cli-20261107/a3-cli-review-p40scuel/state-2"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/home/karma/Documents/RIS/evaluation/runs/a2-cli-20261107/snapshot/protocol/hmbc_protocol/adapter_v2_main.py\", line 143, in <module>\n    sys.exit(main())\n             ~~~~^^\n  File \"/home/karma/Documents/RIS/evaluation/runs/a2-cli-20261107/snapshot/protocol/hmbc_protocol/adapter_v2_main.py\", line 132, in main\n    ctx = build_context(args)\n  File \"/home/karma/Documents/RIS/evaluation/runs/a2-cli-20261107/snapshot/protocol/hmbc_protocol/adapter_v2_main.py\", line 117, in build_context\n    return start(manifest=manifest, schema_revision=args.schema_revision, chain_view=view, state_dir=state,\n                    worker_factory=lambda ctx: Worker(ledger, worker_dir, clock=ledger.dbc.now), schema=schema)\n  File \"/home/karma/Documents/RIS/evaluation/runs/a2-cli-20261107/snapshot/protocol/hmbc_protocol/adapter_v2_start.py\", line 30, in start\n    av2.Context(manifest=manifest, schema_revision=schema_revision, handlers={}, schema=schema)          # step 0: the revision and the manifest marker agree (no I/O)\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/karma/Documents/RIS/evaluation/runs/a2-cli-20261107/snapshot/protocol/hmbc_protocol/adapter_v2.py\", line 199, in __init__\n    self._validate_against(schema, manifest, schema_revision)\n    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/karma/Documents/RIS/evaluation/runs/a2-cli-20261107/snapshot/protocol/hmbc_protocol/adapter_v2.py\", line 234, in _validate_against\n    defs = schema.get(\"$defs\", {})\n           ^^^^^^^^^^\nAttributeError: 'list' object has no attribute 'get'\n",
+      "stateCreated": false,
+      "cleanRefusal": false
+    },
+    {
+      "control": "schema JSON null",
+      "argv": [
+        "/home/karma/Documents/RIS/.venv/bin/python",
+        "-B",
+        "-m",
+        "hmbc_protocol.adapter_v2_main",
+        "--deployment",
+        "/home/karma/Documents/RIS/evaluation/runs/a2-cli-20261107/snapshot/protocol/tests/fixtures/agent1-85c59f5-f-base-deployment.json",
+        "--abi-dir",
+        "/home/karma/Documents/RIS/evaluation/runs/a2-cli-20261107/snapshot/protocol/tests/fixtures/agent1-85c59f5-abi",
+        "--schema",
+        "/home/karma/Documents/RIS/evaluation/runs/a2-cli-20261107/a3-cli-review-p40scuel/3.json",
+        "--schema-sha256",
+        "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+        "--schema-revision",
+        "v2",
+        "--state-dir",
+        "/home/karma/Documents/RIS/evaluation/runs/a2-cli-20261107/a3-cli-review-p40scuel/state-3"
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "{\"error\":{\"code\":\"ADAPTER_UNAVAILABLE\",\"message\":\"LEDGER_UNREACHABLE: the chain could not be read: pbc eth_chainId: eth_chainId: transport failure (URLError)\",\"reason\":\"LEDGER_UNREACHABLE\"}}\n",
+      "stateCreated": false,
+      "cleanRefusal": true
+    },
+    {
+      "control": "default response width check",
+      "validAccepted": true,
+      "overflowRefused": true
+    }
+  ],
+  "startupDiagnosticGaps": [
+    "overflowing numeric chainId",
+    "schema JSON array"
+  ],
+  "limits": "No native startup/grant, source-state, sign-time, store completeness, runtime READY or gate result. Arbitrary supplied schema hashes are operator configuration, not attacker control."
+}
