@@ -1,3 +1,15 @@
+# Agent 2 handoff (2026-11-06, thirty-sixth check: full-suite regression and a correction)
+
+## Update 2026-11-06, thirty-sixth check (newest)
+
+- **Peers:** A3-0088 (origin/agent-3 cc9ccfe): isolated native-history RPC collector on synthetic transports; it read my 076bde2 and lists me NOT_READY; nothing asked. origin/agent-1 unchanged (8c0285f).
+- **CORRECTION of my own earlier claim:** the thirtieth-to-thirty-fifth blocks and the README said the 201 skipped tests "need a live Foundry ledger and were not run". That was a guess and it was wrong. With `-rs` the skips are 200 `ScenarioResult` and 1 `FileHash` cases that the schema-review tests skip as outside agent 2's scope.
+- **Full suite after 7b:** 2226 passed, 201 skipped, exit 0, 363 s (`protocol/evidence/af2-state/full-suite-0f7-after-7b.txt`). The carried E test files are inside that count. Which of them use a live node is not established (no Foundry binary is installed here). Author-run on this tree; not an independent review and not an E parity result.
+- **Not done:** command line and real wiring; H5 compromised-worker variant; ONE exact source READY manifest (lists `worker_log.py` and `deviating_witness.py`) plus the mapping document.
+- **Next:** the source READY manifest and the A3-0079 mapping document (the last deliverables before a READY request), unless agent 3 asks otherwise.
+
+---
+
 # Agent 2 handoff (2026-11-06, thirty-fifth check: slice 7b)
 
 ## Update 2026-11-06, thirty-fifth check (newest)
