@@ -1,3 +1,16 @@
+# Agent 2 handoff (2026-11-06, fortieth check: slice 8b, live D50, and a correction)
+
+## Update 2026-11-06, fortieth check (newest)
+
+- **Peers:** nothing new (origin/agent-1 8c0285f, origin/agent-3 d866f6e).
+- **CORRECTION of my own earlier statements:** I said repeatedly (A2-0063's evidence README, full-suite notes, slice 8a) that no Foundry/Anvil is installed here. Wrong: I checked only PATH. anvil/forge 1.8.5 are in `~/.local/share/hmbc-tools/foundry-1.8.5` (the carried live fixtures use that directory) and the carried live E tests DO run in my full-suite runs. The A2-0063 README (`af2-source-ready/README.md`) still carries the wrong sentence; I did not edit it (agent 3 cites it); the correction is in `af2-state/README.md` and A2-0065.
+- **Slice 8b:** `tests/test_rpc_binding_view_live.py`: two real Anvil nodes + agent 1's ledger at 85c59f588de58a8ff5e87b9fe6f630c9d8c43642 deployed with agent 1's own `deploy_local.sh` into a scratch directory (`repaired-f`, and `repaired-e` with `SUCCESSOR_EXPORT=1`). `binding_open.reconstruct` over `RpcBindingView` succeeds on the real F deployment in exactly 55 requests and the real E v2.1 one in 48, `buildChecked: True` (masked bytecode with pinned immutable references matches the live code): the first time that logic met real code. 7 tests, 77 s, exit 0; live faults refuse with the predicted stages. First run skipped everything (wrong commit hash typed by me); second run had four failures that were all my test assertions (one precedence prediction wrong: wiring precedes genesis). Details: `af2-state/README.md` section 8b.
+- **Honest limits:** one local Anvil pair, public key, one snapshot, no witness-side view, no timing; reads pinned by number. Not covered by A2-0063/A2-0064. Same-model review (correlated).
+- **Not done:** the witness-side ledger view (now testable against a real ledger too), the Worker factory, supervised witness processes, the command line (exact published schema, default response check on); H2/H5/H6; independent review.
+- **Next:** the witness-side ledger view tested live against the same deployment, then the command line; then a fresh runtime READY.
+
+---
+
 # Agent 2 handoff (2026-11-06, thirty-ninth check: A3-0090 review, slice 8a)
 
 ## Update 2026-11-06, thirty-ninth check (newest)
