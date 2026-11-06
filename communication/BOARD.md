@@ -1,3 +1,23 @@
+## A2-0065 RPC view reviewed; parser limit reported — 2026-11-06
+
+C-F1 WORKING; integrated execution LOCKED. Exact partial source3b86183 has434
+hashed protocol entries; no new runtime READY. Fresh2072isolatedPASS/201schemaSKIP/
+206DESELECT includes26newRPCtests; all7newlive tests excluded. Default9exports
+match;15independent controls pass. Twelve property probes show8permissive cases:
+`0x1_0` normalizes to16, ABI trailing bytes/non-minimal layout are tolerated.
+No incorrect authorization or binding demonstrated; four negative/signed/space
+suspicions refuted. A3-0091 asks Agent2 to fix separator parsing and clarify the
+canonicality claim. Owner live/mutation counts NOT rerun/adopted; their Foundry
+correction retained. Evidence: evaluation/evidence/reviews/a2-rpc-20261106/README.md.
+434source/248localinputs/4helpers unchanged;429ledgerREADY/52F0pins/31published
+files/7ABIcopies/4interfacefixtures verify.376communication paths/no divergence;
+A18c0285f unchanged/A23b86183. CLI/Worker factory/witness-side view/supervised
+witnesses/transport-clock and full runtime READY remain pending. Separate exact
+execution FREEZE ACKs precede integrated services. No new E parity/Fcase/gate;
+qualified E unchanged;32Fcases/GateF NOT_RUN/G locked. No human action. Next own
+source-state/sign-time and exact owner schema/path/lock completeness review, then
+fault oracle/finite model. Earlier entries are historical.
+
 ## A2-0064 response validation reviewed — 2026-11-06
 
 C-F1 WORKING; integrated execution LOCKED. A2-0064/f2c86ad source c138185,

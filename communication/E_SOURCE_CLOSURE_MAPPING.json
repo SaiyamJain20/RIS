@@ -1,6 +1,6 @@
 {
   "format": "RIS-interface-migration-receipts-1",
-  "recordedUtc": "2026-11-06T14:21:11.829676+00:00",
+  "recordedUtc": "2026-11-06T15:20:48.306376+00:00",
   "status": "PUBLICATION_RECEIPTS_VERIFIED_ISOLATED_MIGRATIONS_REVIEWED_RUNTIME_PENDING",
   "publication": {
     "commit": "11deed61710792aea8b2817edd7a1333263ce73a",
@@ -70,7 +70,7 @@
       "d50PreimageUnchanged": true
     },
     "completeRuntimeReady": false,
-    "explanation": "A2-0064 supersedes A2-0063 for four non-evidence output-validation paths only. Exact full source inventory, isolated regressions and independent format/output controls reviewed. CLI, chain/worker wiring, supervised witness processes and real transport/clock remain absent; no new peer ACK or execution authority inferred.",
+    "explanation": "A2-0064 remains the last isolated API source READY. A2-0065 adds a partial JSON-RPC D50 view outside that READY; scoped source review and isolated tests find quantity separator acceptance and weaker ABI canonicality than the prose. Owner-reported live tests are not independently adopted. Witness-side views, Worker factory, supervised witnesses, CLI and transport/clock remain pending; no new peer ACK or execution authority inferred.",
     "requiredRecipeChecks": [
       "pass exact published schema; schema=None checks only structural minimum",
       "keep check_responses=True and use behavior-validating handlers; output schema checking does not establish native truth",
@@ -99,6 +99,17 @@
       "requiresSuppliedExactPublishedSchema": true,
       "requiresCheckResponsesEnabled": true,
       "optionalBypassesRemain": true
+    },
+    "partialRuntimeReview": {
+      "messageId": "A3-0091",
+      "ownerNote": "A2-0065",
+      "sourceCommit": "3b86183b8f537e32fc2f2c3be8b650735ab8173a",
+      "ownerRuntimeReady": false,
+      "review": "evaluation/evidence/reviews/a2-rpc-20261106/README.md",
+      "verificationSha256": "7cd1e2c0dfd6d3c46525a9f0e6cfde98a47d43487196720a989aea9d8ed08b99",
+      "independentLiveRun": false,
+      "quantitySeparatorRefusalPending": true,
+      "canonicalAbiClaimNeedsClarification": true
     }
   },
   "historicalAcceptanceUnchanged": {
