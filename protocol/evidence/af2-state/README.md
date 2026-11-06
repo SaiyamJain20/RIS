@@ -258,3 +258,29 @@ Agent 3's review (A3-0093, partial source 0e58f1d) found that a non-object trans
 - Fix: the transaction reply must be a JSON object (else LedgerUnreachable); the guard also catches AttributeError as defence in depth.
 - Docstrings aligned with behaviour: a missing transaction, a transport failure and a non-object reply are LedgerUnreachable (the carried `Chain.get_transaction` raises for a missing one); the stale "untested for decision and receipt" sentence now says honest path only on a real ledger (slice 9b) and no denial/stale/expired/adversarial case. I chose to DOCUMENT rather than enforce the carried parsing limits for this view: `chain.Chain` parses quantities with `int(v, 16)` (separators, leading zeros, upper case accepted) and `abi.Contract.decode_output` is the lenient `eth_abi` decoder; `RpcBindingView` enforces minimal quantities and exact canonical ABI replies, `RpcWitnessView` makes no canonical-bytes claim.
 - Mutants: 3 new (W45-W47); run 1 44 of 46 (`rpc-witness-view-mutants-a3-0093-run1-44-of-46.txt`): W47 (non-object classified as a quiet None) exposed that my test allowed None, tightened; W46 (AttributeError not caught) is equivalent after the validation (recorded). Final **45 of 45**. Live plus unit modules still pass: 61 tests, 81 s (`rpc-witness-view-green-after-a3-0093.txt`).
+
+## Slice 9c: messages certified by a COMPROMISED quorum against the real F contracts (`test_rpc_binding_view_live.py`, `test_a_compromised_quorum_cannot_make_the_real_contracts_accept_a_doomed_message`)
+
+The runner holds all four synthetic witness keys, so it can craft three valid EIP-712 signatures over anything (`testtools.byzantine.sign_message`, no store, no validation). On a SECOND, fresh deployment of agent 1's `repaired-f` ledger (85c59f588de5...; own fixture, so the DBC has no checkpoint and the governance nonce is 0) thirteen doomed messages were submitted to the real KSSC and Governance contracts. The predicted codes were written into the test BEFORE the first run (`PREDICTED`); the observed codes are pinned in the test.
+
+| Case | Predicted | Observed |
+|---|---|---|
+| first checkpoint with sequence 5 on a fresh DBC | STALE_STATE | **ACCEPTED** (current becomes 5) |
+| sequence 7 when current is 5 (certified, skips 6) | STALE_STATE | **ACCEPTED** (current becomes 7) |
+| sequence 3 when current is 7 | STALE_STATE | STALE_STATE |
+| already expired checkpoint | EXPIRED | EXPIRED |
+| another source chain id | WRONG_DESTINATION | WRONG_DESTINATION |
+| keyEpoch 1 | WRONG_EPOCH | WRONG_EPOCH |
+| duplicated signer | DUPLICATE_SIGNER | DUPLICATE_SIGNER |
+| the accepted checkpoint submitted again | STALE_STATE | STALE_STATE |
+| governance ADD of an existing authority | ALREADY_REGISTERED | **MALFORMED** |
+| governance with a skipped nonce | STALE_STATE | **MALFORMED** |
+| governance with witnessSetVersion 3 | STALE_STATE | STALE_STATE |
+| governance already expired | EXPIRED | EXPIRED |
+| governance REMOVE of an unknown root | NOT_REGISTERED | **UNKNOWN_AUTHORITY** |
+
+Five of thirteen predictions were wrong. After every rejected message the DBC checkpoint, the governance nonce and the authority set were unchanged (INVENTORY F-30: a certified doomed governance action reverts as a whole and the nonce stays: HELD).
+- **Finding, tested reconstruction result on agent 1's ledger (not a paper claim):** the real KSSC accepts a certified checkpoint whose sequence is strictly greater than the current one even when it skips ahead (observed twice, including the first checkpoint), where the witness rule (F0 R6) is exactly current + 1. A compromised quorum can therefore burn sequence numbers; honest witnesses then derive the next sequence from the new current and are not blocked. I did not analyse further consequences. Whether the contract rule is intended is agent 1's to say.
+- **Observation:** the Governance contract answers MALFORMED for an ADD of an existing authority and for a skipped nonce, and UNKNOWN_AUTHORITY for a REMOVE of an unknown root: its closed codes for these are coarser than my witness refusal classes (ALREADY_REGISTERED, STALE_STATE/PROPOSAL_MISMATCH, NOT_REGISTERED). The witness refusals stay as in the signing rules; this only shows what the ledger says if they are bypassed.
+- Process record: first run failed with an unclassified "DID NOT RAISE" (a doomed message was accepted); I then changed the helper to record ACCEPTED instead of failing, moved the test to its own fresh deployment, and pinned the table. Two of the five wrong predictions were found one at a time (the second only after I reworked the sequence cases around the first).
+- NOT shown: that honest witnesses refuse these (their own tests do); Byzantine variants against the real ledger beyond crafted signatures; independent hosts, timing; one local Anvil pair. Same-model review (correlated). Whole live plus unit modules: 62 passed in 125 s (`rpc-live-adversarial-green.txt`). Not covered by A2-0063/A2-0064.

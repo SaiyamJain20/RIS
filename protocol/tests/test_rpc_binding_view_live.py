@@ -106,6 +106,12 @@ def live_f(tmp_path_factory):
 
 
 @pytest.fixture(scope="module")
+def live_f_fresh(tmp_path_factory):
+    """A SECOND deployment of the F ledger, untouched by the other tests: the compromised-quorum test needs a DBC with no checkpoint and a PBC with governance nonce 0."""
+    yield from _deploy(tmp_path_factory, "repaired-f", False)
+
+
+@pytest.fixture(scope="module")
 def live_e(tmp_path_factory):
     yield from _deploy(tmp_path_factory, "repaired-e", True)
 
@@ -377,3 +383,102 @@ def test_decision_and_receipt_signed_by_three_real_witnesses_are_accepted_by_the
     with pytest.raises(svc.WitnessRefusal) as e:                           # the witnesses now refuse to decide this request again
         witnesses[0].sign_decision(decision)
     assert e.value.code == "REPLAY"
+
+
+# ========================================================================================================================================================
+# Slice 9c: what the REAL contracts do with messages a COMPROMISED quorum certifies but an honest witness would never sign. The runner holds all four synthetic witness keys here, so it can craft
+# three valid EIP-712 signatures over anything (testtools.byzantine.sign_message: no store, no validation). The contracts' own checks are the last line: each doomed message must be rejected with a
+# closed code and leave the state unchanged. PREDICTIONS were written into PREDICTED before the first run; the observed code of each case is asserted against it, and a case whose observed code
+# differs from the prediction is recorded in the evidence README as a wrong prediction, not silently adjusted. The tests do NOT show that honest witnesses refuse these (the witness-service tests do).
+# ========================================================================================================================================================
+PREDICTED = {
+    "first checkpoint with a skipped sequence": "STALE_STATE", "checkpoint sequence skipped": "STALE_STATE", "checkpoint with a lower sequence": "STALE_STATE", "checkpoint already expired": "EXPIRED", "checkpoint for another source chain": "WRONG_DESTINATION", "checkpoint with keyEpoch 1": "WRONG_EPOCH",
+    "checkpoint accepted twice": "STALE_STATE", "duplicate signer": "DUPLICATE_SIGNER", "governance ADD of an existing authority": "ALREADY_REGISTERED", "governance nonce skipped": "STALE_STATE",
+    "governance with another witness set version": "STALE_STATE", "governance already expired": "EXPIRED", "governance REMOVE of an unknown root": "NOT_REGISTERED",
+}
+
+
+def crafted(live, name, msg, n=3, repeat_first=False):
+    from testtools import byzantine as bz
+    sigs = [bz.sign_message(keys.synthetic_private_key("witness-%d" % (i + 1)), name, msg, live.dep) for i in range(n)]
+    by = {eip712.recover(svc._governance_digest(msg, live.dep) if name == "GovernanceAction" else messages.digest_of(name, msg, messages.domain_for(name, msg, live.dep)), s): s for s in sigs}
+    ordered = [by[a] for a in sorted(by)]
+    return [ordered[0]] + ordered if repeat_first else ordered
+
+
+def test_a_compromised_quorum_cannot_make_the_real_contracts_accept_a_doomed_message(live_f_fresh, tmp_path):
+    live_f = live_f_fresh
+    witnesses, wview = real_witnesses(live_f, tmp_path)
+    led = f_ledger(live_f)
+    observed, wrong = {}, {}
+
+    def attempt(label, contract, chain, fn, *args):
+        try:
+            chain.send(ANVIL_KEY0, contract, fn, *args)
+            code = "ACCEPTED"                                           # a doomed message the contract took: recorded, not hidden (and later cases may then be affected)
+        except Rejected as e:
+            code = e.code
+        observed[label] = code
+        if code != PREDICTED[label]:
+            wrong[label] = (PREDICTED[label], code)
+
+    mine(live_f, "dbc")
+    first = svc.derive_checkpoint(wview, live_f.dep)
+    assert first["sequence"] == "1" and wview.dbc_current_checkpoint() is None          # a fresh DBC
+    # FINDING (observed, my prediction STALE_STATE was wrong): the real KSSC accepts a certified FIRST checkpoint whose sequence is 5, not 1. The witnesses' rule is exactly current + 1 (F0 R6),
+    # the contract's rule evidently is not, at least for the first checkpoint.
+    attempt("first checkpoint with a skipped sequence", led.KSSC, led.dbc, "acceptState", dict(first, sequence="5"), crafted(live_f, "StateCheckpoint", dict(first, sequence="5")))
+    assert (wview.dbc_current_checkpoint() or {}).get("sequence") == "5"
+    mine(live_f, "dbc")
+    second = svc.derive_checkpoint(wview, live_f.dep)                    # the honest proposer now derives sequence 6
+    assert second["sequence"] == "6"
+    # FINDING, second observation (my prediction STALE_STATE was wrong again): with a checkpoint present the real KSSC still accepts a certified sequence ABOVE current + 1 (7 after 5): its rule is
+    # strictly increasing, not current + 1.
+    attempt("checkpoint sequence skipped", led.KSSC, led.dbc, "acceptState", dict(second, sequence="7"), crafted(live_f, "StateCheckpoint", dict(second, sequence="7")))
+    assert wview.dbc_current_checkpoint()["sequence"] == "7"
+    mine(live_f, "dbc")
+    good = svc.derive_checkpoint(wview, live_f.dep)
+    assert good["sequence"] == "8"
+    before = wview.dbc_current_checkpoint()
+    attempt("checkpoint with a lower sequence", led.KSSC, led.dbc, "acceptState", dict(good, sequence="3"), crafted(live_f, "StateCheckpoint", dict(good, sequence="3")))
+    attempt("checkpoint already expired", led.KSSC, led.dbc, "acceptState", dict(good, expiresAt="1"), crafted(live_f, "StateCheckpoint", dict(good, expiresAt="1")))
+    attempt("checkpoint for another source chain", led.KSSC, led.dbc, "acceptState", dict(good, sourceChainId="1"), crafted(live_f, "StateCheckpoint", dict(good, sourceChainId="1")))
+    attempt("checkpoint with keyEpoch 1", led.KSSC, led.dbc, "acceptState", dict(good, keyEpoch="1"), crafted(live_f, "StateCheckpoint", dict(good, keyEpoch="1")))
+    attempt("duplicate signer", led.KSSC, led.dbc, "acceptState", good, crafted(live_f, "StateCheckpoint", good, n=2, repeat_first=True))
+    assert wview.dbc_current_checkpoint() == before                      # every rejection left the DBC checkpoint as it was
+    led.dbc.send(ANVIL_KEY0, led.KSSC, "acceptState", good, crafted(live_f, "StateCheckpoint", good))
+    attempt("checkpoint accepted twice", led.KSSC, led.dbc, "acceptState", good, crafted(live_f, "StateCheckpoint", good))
+
+    mine(live_f, "pbc")
+    nonce = int(wview.governance_nonce())
+    ts = int(wview.observe("pbc")["timestamp"])
+    existing = "0x" + "ce" * 20
+    admin = "0x" + "d6" * 20
+    add_it = {"action": "1", "root": existing, "admins": [admin], "nonce": str(nonce + 1), "witnessSetVersion": "2", "expiresAt": str(ts + 60)}
+    led.pbc.send(ANVIL_KEY0, led.Governance, "execute", add_it, crafted(live_f, "GovernanceAction", add_it))          # an honestly certified ADD makes `existing` an authority
+    nonce += 1
+    assert wview.is_authority(existing) is True and int(wview.governance_nonce()) == nonce
+    ts = int(wview.observe("pbc")["timestamp"])
+    doomed = {
+        "governance ADD of an existing authority": dict(add_it, nonce=str(nonce + 1), expiresAt=str(ts + 60)),
+        "governance nonce skipped": dict(add_it, root="0x" + "cf" * 20, nonce=str(nonce + 2), expiresAt=str(ts + 60)),
+        "governance with another witness set version": dict(add_it, root="0x" + "cf" * 20, nonce=str(nonce + 1), witnessSetVersion="3", expiresAt=str(ts + 60)),
+        "governance already expired": dict(add_it, root="0x" + "cf" * 20, nonce=str(nonce + 1), expiresAt="1"),
+        "governance REMOVE of an unknown root": {"action": "2", "root": "0x" + "d0" * 20, "admins": [], "nonce": str(nonce + 1), "witnessSetVersion": "2", "expiresAt": str(ts + 60)},
+    }
+    for label, action in doomed.items():
+        attempt(label, led.Governance, led.pbc, "execute", action, crafted(live_f, "GovernanceAction", action))
+    assert int(wview.governance_nonce()) == nonce                         # no doomed action moved the nonce (INVENTORY F-30: the whole transaction reverts and the nonce stays)
+    assert wview.is_authority("0x" + "cf" * 20) is False and wview.is_authority("0x" + "d0" * 20) is False
+    # What the real contracts DID (observed on agent 1's ledger at 85c59f58..): pinned so a different ledger build or a regression shows. Five of my eleven pre-registered predictions were wrong:
+    # the KSSC accepts a certified checkpoint whose sequence is strictly higher than the current one even when it skips (twice observed: first checkpoint 5, then 7 after 5); the Governance contract
+    # answers MALFORMED (not ALREADY_REGISTERED) for an ADD of an existing authority and (not STALE_STATE) for a skipped nonce, and UNKNOWN_AUTHORITY (not NOT_REGISTERED) for a REMOVE of an unknown root.
+    # Every doomed GOVERNANCE action reverted with the nonce and the authority set unchanged (INVENTORY F-30 held).
+    assert observed == {"first checkpoint with a skipped sequence": "ACCEPTED", "checkpoint sequence skipped": "ACCEPTED", "checkpoint with a lower sequence": "STALE_STATE",
+                        "checkpoint already expired": "EXPIRED", "checkpoint for another source chain": "WRONG_DESTINATION", "checkpoint with keyEpoch 1": "WRONG_EPOCH", "duplicate signer": "DUPLICATE_SIGNER",
+                        "checkpoint accepted twice": "STALE_STATE", "governance ADD of an existing authority": "MALFORMED", "governance nonce skipped": "MALFORMED",
+                        "governance with another witness set version": "STALE_STATE", "governance already expired": "EXPIRED", "governance REMOVE of an unknown root": "UNKNOWN_AUTHORITY"}
+    assert wrong == {"first checkpoint with a skipped sequence": ("STALE_STATE", "ACCEPTED"), "checkpoint sequence skipped": ("STALE_STATE", "ACCEPTED"),
+                     "governance ADD of an existing authority": ("ALREADY_REGISTERED", "MALFORMED"), "governance nonce skipped": ("STALE_STATE", "MALFORMED"),
+                     "governance REMOVE of an unknown root": ("NOT_REGISTERED", "UNKNOWN_AUTHORITY")}, wrong
+    assert set(observed) == set(PREDICTED)
