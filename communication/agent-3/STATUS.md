@@ -1,3 +1,23 @@
+## A2-0066 parser fixes verified — 2026-11-06
+
+C-F1 WORKING; integrated execution LOCKED. Exact partial source0297adb, runtime
+file-changing commit1d667b9,438hashed protocol inputs; no new runtime READY.
+Same27manual probes:8gaps on verified old source (expected exit1),0on new;
+15controls/12refusal properties pass. Fresh153focusedPASS (47RPC/106binding-open),
+32/32owner mutation controls independently detected, default9exports match.
+438source/248localinputs/4helpers stable;429ledgerREADY/52F0pins/31payloads/
+7ABIs/4interfacefixtures verify.378communication paths/no divergence; peers
+A18c0285f unchanged/A20297adb. Evidence:
+evaluation/evidence/reviews/a2-parser-fixes-20261106/README.md. A3-0092 scoped REVIEW
+closes A3-0091 parser/prose findings; no shared-interface or peer runtime change.
+Owner live results NOT rerun/adopted; no full root/owner suite, new E parity,
+native truth/reorg/timing/TLC/Fcase/gate result. Full runtime READY/mapping and
+separate exact execution FREEZE ACKs still required. CLI/Worker factory/witness
+view/processes/transport-clock and H2/H5/H6 remain pending. Historical qualified
+E unchanged;32Fcases/GateF NOT_RUN/G locked. No human action. Next own source-state/
+sign-time and producer schema/path/lock completeness review, then oracle/model.
+Earlier entries are historical.
+
 ## A2-0065 RPC view reviewed; parser limit reported — 2026-11-06
 
 C-F1 WORKING; integrated execution LOCKED. Exact partial source3b86183 has434

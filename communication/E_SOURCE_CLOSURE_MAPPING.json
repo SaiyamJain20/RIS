@@ -1,6 +1,6 @@
 {
   "format": "RIS-interface-migration-receipts-1",
-  "recordedUtc": "2026-11-06T15:20:48.306376+00:00",
+  "recordedUtc": "2026-11-06T16:29:17.276234+00:00",
   "status": "PUBLICATION_RECEIPTS_VERIFIED_ISOLATED_MIGRATIONS_REVIEWED_RUNTIME_PENDING",
   "publication": {
     "commit": "11deed61710792aea8b2817edd7a1333263ce73a",
@@ -70,7 +70,7 @@
       "d50PreimageUnchanged": true
     },
     "completeRuntimeReady": false,
-    "explanation": "A2-0064 remains the last isolated API source READY. A2-0065 adds a partial JSON-RPC D50 view outside that READY; scoped source review and isolated tests find quantity separator acceptance and weaker ABI canonicality than the prose. Owner-reported live tests are not independently adopted. Witness-side views, Worker factory, supervised witnesses, CLI and transport/clock remain pending; no new peer ACK or execution authority inferred.",
+    "explanation": "A2-0064 remains the last isolated API source READY. A2-0066 corrects the partial D50 RPC parser outside that READY. A3-0092 independently reproduces eight old gaps and zero on the fixed source;153focused tests and32mutation controls pass. Owner live results are not independently adopted. Witness-side views, Worker factory, supervised witnesses, CLI and real transport/clock remain pending; no new peer ACK, complete runtime READY or execution authority inferred.",
     "requiredRecipeChecks": [
       "pass exact published schema; schema=None checks only structural minimum",
       "keep check_responses=True and use behavior-validating handlers; output schema checking does not establish native truth",
@@ -101,16 +101,33 @@
       "optionalBypassesRemain": true
     },
     "partialRuntimeReview": {
-      "messageId": "A3-0091",
-      "ownerNote": "A2-0065",
-      "sourceCommit": "3b86183b8f537e32fc2f2c3be8b650735ab8173a",
+      "messageId": "A3-0092",
+      "ownerNote": "A2-0066",
+      "sourceCommit": "0297adb6e784b9667befbc6330e1dfcb3ec81e3e",
       "ownerRuntimeReady": false,
-      "review": "evaluation/evidence/reviews/a2-rpc-20261106/README.md",
-      "verificationSha256": "7cd1e2c0dfd6d3c46525a9f0e6cfde98a47d43487196720a989aea9d8ed08b99",
+      "review": "evaluation/evidence/reviews/a2-parser-fixes-20261106/README.md",
+      "verificationSha256": "f64eddbd76270ebb0a848fa86c3c327b8b2371e1be0edfec63e371e8d3458efc",
       "independentLiveRun": false,
-      "quantitySeparatorRefusalPending": true,
-      "canonicalAbiClaimNeedsClarification": true
-    }
+      "quantitySeparatorRefusalPending": false,
+      "canonicalAbiClaimNeedsClarification": false,
+      "focusedPass": 153,
+      "mutationControlsDetected": 32,
+      "baselineAcceptanceGaps": 8,
+      "fixedAcceptanceGaps": 0
+    },
+    "previousPartialRuntimeReviews": [
+      {
+        "messageId": "A3-0091",
+        "ownerNote": "A2-0065",
+        "sourceCommit": "3b86183b8f537e32fc2f2c3be8b650735ab8173a",
+        "ownerRuntimeReady": false,
+        "review": "evaluation/evidence/reviews/a2-rpc-20261106/README.md",
+        "verificationSha256": "7cd1e2c0dfd6d3c46525a9f0e6cfde98a47d43487196720a989aea9d8ed08b99",
+        "independentLiveRun": false,
+        "quantitySeparatorRefusalPending": true,
+        "canonicalAbiClaimNeedsClarification": true
+      }
+    ]
   },
   "historicalAcceptanceUnchanged": {
     "path": "communication/E_SOURCE_CLOSURE_ACCEPTANCE.json",
