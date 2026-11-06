@@ -1,3 +1,16 @@
+## Native RPC acquisition checked; execution remains locked — 2026-11-06
+
+C-F1 internal collector59new/2498rootPASS, root631.11s/exit0;248selected inputs/
+186complete sources stable; seven bypass controls detected. Synthetic raw RPC
+captures joined with existing native verifier; endpoint identity brackets and hash
+calls authenticate no chain. Actual node support/source-state/store completeness
+remain unproved. UTC and elapsed clocks differ; raw values retained, no timing
+inference. Evidence: evaluation/evidence/f/v2-history-rpc-20261106/README.md.
+A2076bde2 remains NOT_READY; owner counts not adopted. Full owner READYs/mapping
+and separate complete exact execution FREEZE ACKs required. No liveRPC/newEparity/
+TLC/Fcase/gate result; qualified E unchanged;32Fcases/GateF NOT_RUN/G locked.
+A3-0088 is isolated progress only; no human action required. Earlier entries historical.
+
 ## Raw native joins checked; no gate change — 2026-11-06
 
 Internal68new/754focused/2439rootPASS, root462.01s/exit0;246selected inputs and

@@ -1,3 +1,12 @@
+**C-F1 native history acquisition (2026-11-06):** Internal
+`history_rpc_v2.collect` plans required headers/death getters from verified
+history, retains exact RPC parameters/results, and brackets all cross-chain reads
+with deployment identity checks. Hash-selected calls preserve faulted branches;
+unsupported selectors fail without fallback. Synthetic transports only so far;
+actual pinned-node support, source-state truth and complete store/export joins
+remain unproved. Existing consumers and frozen wire bytes stay fixed. Exact tests,
+source pins and limits: [slice evidence](evidence/f/v2-history-rpc-20261106/README.md).
+
 **C-F1 raw native history slice (2026-11-06):** Internal
 `witness_native_v2.verify_native_history` joins every declared observation and
 embedded source-block reference to caller-supplied raw blocks. It decodes death

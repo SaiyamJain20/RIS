@@ -1,0 +1,64 @@
+{
+  "agent1": "8c0285ffa6986858caeb0140b930bf5db759fdc0",
+  "agent2": "cde584e3c83c714cafdc6eec2cb99ad89bb74866",
+  "previousAgent2": "9184e3bbd961f5cf461320a9ef3edaceeea76af7",
+  "verifiedFixtureCopies": 4,
+  "protocolPaths": {
+    "protocol/evidence/af2-state/README.md": {
+      "sha256": "de334ae34d011e2ba03cf7754b9a623fe9786cc0399da5b507ce89fe7435bf8b",
+      "fileChangingCommit": "cde584e3c83c714cafdc6eec2cb99ad89bb74866"
+    },
+    "protocol/evidence/af2-state/byzantine-green.txt": {
+      "sha256": "01dd2a51bd04c5310fe194f20a179f8aa6a86132977e05efcc7e6bafb4a68a23",
+      "fileChangingCommit": "cde584e3c83c714cafdc6eec2cb99ad89bb74866"
+    },
+    "protocol/evidence/af2-state/byzantine-mutants-run1-15-of-16.txt": {
+      "sha256": "a21157613013c9080b08b2d72e7313d6c7920cf5ec8221a56f09090bcba10dcd",
+      "fileChangingCommit": "cde584e3c83c714cafdc6eec2cb99ad89bb74866"
+    },
+    "protocol/evidence/af2-state/byzantine-mutants.txt": {
+      "sha256": "4f05266b501e2ad784610b770af8c7f9aa902129af6c58cd8570623badee2002",
+      "fileChangingCommit": "cde584e3c83c714cafdc6eec2cb99ad89bb74866"
+    },
+    "protocol/evidence/af2-state/byzantine-run1-red.txt": {
+      "sha256": "ed88dfa2dc1b51932bae4a2f2612a7c301bce2f6cdb004c48a6c31f2e73f2af5",
+      "fileChangingCommit": "cde584e3c83c714cafdc6eec2cb99ad89bb74866"
+    },
+    "protocol/evidence/af2-state/d6-mutants.txt": {
+      "sha256": "084630af3e0dbef3ba8b36b83e751a04937e0f642945e42c4babd7735b3b04a8",
+      "fileChangingCommit": "0ec5422d88df6ba55a8809bf3d024c01a8dfcf09"
+    },
+    "protocol/evidence/af2-state/d6-run1-red.txt": {
+      "sha256": "83167f17a7937c57afe8c5d02f7f91ff39e42cefc688103ebf1150c0420f7f14",
+      "fileChangingCommit": "0ec5422d88df6ba55a8809bf3d024c01a8dfcf09"
+    },
+    "protocol/tests/test_byzantine.py": {
+      "sha256": "4e5fc85c91f80419a2b2f7fde5ab7abad58d09604d209b011bfc9c37e5d5b9b5",
+      "fileChangingCommit": "cde584e3c83c714cafdc6eec2cb99ad89bb74866"
+    },
+    "protocol/tests/test_deviating_witness_strict.py": {
+      "sha256": "f1fc94b358d592153454fa1ffd68aa8e6d4d269d9e2babbef3cc99e03eeb9b6c",
+      "fileChangingCommit": "0ec5422d88df6ba55a8809bf3d024c01a8dfcf09"
+    },
+    "protocol/testtools/byzantine.py": {
+      "sha256": "f50d81580846466f824927c928587f9c38416812b0f7a332bcea1ccd248778ff",
+      "fileChangingCommit": "cde584e3c83c714cafdc6eec2cb99ad89bb74866"
+    },
+    "protocol/testtools/deviating_witness.py": {
+      "sha256": "8862f28c969e32778e8801e307fdf4ea59bfd35aa570017427af0770de430bff",
+      "fileChangingCommit": "0ec5422d88df6ba55a8809bf3d024c01a8dfcf09"
+    },
+    "protocol/tools/run_byzantine_mutants.py": {
+      "sha256": "f06685118d3ace61ccccd1131b5b3d3015a5ffc61aa9820707d04010a76f6388",
+      "fileChangingCommit": "cde584e3c83c714cafdc6eec2cb99ad89bb74866"
+    }
+  },
+  "newestOutboxes": {
+    "agent-1": "communication/agent-1/outbox/0116-note-governance-getters-and-d50-open.md",
+    "agent-2": "communication/agent-2/outbox/0062-note-d50-differential-against-a3-0081.md"
+  },
+  "review": "Read complete Byzantine endpoint module, checkpoint variant tests and mutation definitions, D6 strict-loader delta/tests and latest owner state. Real services/stores/pool with one fake ledger and virtual transport; checkpoint only. Repeater/equivocator valid first reply can count once; other invalid replies excluded. View override explicitly breaks safe-ledger assumption. Explicit NOT_READY.",
+  "ownerReportedOnly": "D6 seven tests (six RED), four handcrafted mutants. Byzantine22 tests,15/16 then16/16 mutants; survivor test gap fixed. Counts NOT rerun or adopted as evaluator results. Full E regressions not run.",
+  "remaining": "CLI/real wiring, actual transport/processes/chain view, H5 worker variant, other three signed message types, full E regressions, A3-0079 complete mapping and ONE complete source READY listing worker_log.py and deviating_witness.py",
+  "noExecutionAuthority": true
+}

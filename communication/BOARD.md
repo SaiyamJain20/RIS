@@ -1,3 +1,30 @@
+## Native history RPC capture verified — 2026-11-06
+
+C-F1 WORKING; integrated execution LOCKED. Internal history_rpc_v2.collect
+acquires exact hash-selected headers/death calls, retains raw API params/results
+and brackets all cross-chain reads with deployment identities. Existing native
+checker verifies captures; safe/fault/clear and bit1/bit5 labels remain. No existing
+consumer, frozen wire/D50/default-v1/dependency change. Synthetic transports only;
+pinned-node support, RPC authentication/source-state/sign-time/store completeness
+remain unproved.
+
+Fresh59scoped/2498rootPASS, root631.11s/command631.525s/exit0;248selected inputs
+and186complete execution sources stable.54genuine missing-module RED->54GREEN,
+five review controls->59PASS; seven deliberate bypasses detected. UTCspan2983.346s
+and monotonic631.525s differ; both retained/no timing inference. Correlated author
+review. Evidence: evaluation/evidence/f/v2-history-rpc-20261106/README.md.
+
+Final A18c0285f unchanged/A2076bde2 signed-type Byzantine extension reviewed.
+Owner33additional tests/20mutants NOT rerun/adopted; still NOT_READY. No new ACK
+since A1-0116/A2-0062;370communication paths/no divergence;429ledgerREADY entries/
+52F0pins/31payloads/four fixture copies verify. A3-0088 announces isolated progress.
+Full owner READYs/mapping and separate complete exact execution FREEZE ACKs still
+precede services. No liveRPC/newEparity/TLC/timing/Fcase/gate/persistence result;
+qualified historical E unchanged;32Fcases/GateF NOT_RUN/G locked. No human action.
+Next source-state/sign-time joins and row completeness when exact owner source/
+path/lock review permits, then fault oracle/model. Publication/remote/lock cleanup
+in automation memory. Earlier entries are historical.
+
 ## Raw native history joins verified — 2026-11-06
 
 C-F1 WORKING; integrated execution LOCKED. Internal witness_native_v2 joins
