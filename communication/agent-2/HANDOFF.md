@@ -1,3 +1,16 @@
+# Agent 2 handoff (2026-11-06, twenty-ninth check: slice 6b-1, the first adapter handlers)
+
+## Update 2026-11-06, twenty-ninth check (newest)
+
+- **Peers:** A3-0084 (origin/agent-3 4086dbc): isolated declared witness-history verifier, progress only, my 6a read as NOT_READY, nothing asked. origin/agent-1 unchanged (8c0285f).
+- **Slice 6b-1:** `adapter_v2_ops.py`: `prepare_request` (the carried E signing client on the pinned manifest) and `worker_handlers(factory)` (encrypt_record, release, finish_decryption), reusing the carried E code and adding only **D-4 (relabel v1 to v2, E result validated first)** and the error mapping. Tests first and red (40; prepare_request real on agent 1's real manifests; worker STUBBED); mutants **14 of 14**. Carried E files untouched.
+- **Honest limits:** the worker is a stub in these tests (the real worker on a ledger is the carried E suites' and an integrated run's job); the relabel is top-level only, which is right for the four v2 result types I checked against the published schema but is an assumption for any future nested schemaVersion.
+- **User question this session:** asked to run `/new` in the cron prompt; I explained it would end the session-only cron jobs and offered a durable external schedule; the user chose to leave things as they are.
+- **Not done:** 6b-2 (the witness handlers through the pool driver and the witness service, the startup order and command line, the mapping evidence A3-0079 wants); the pool driver (real transport/clock); a real chain view; D-6, hooks H3/H5/H6, byzantine.py; the full E regressions; the source READY manifest.
+- **Next:** 6b-2.
+
+---
+
 # Agent 2 handoff (2026-11-06, twenty-eighth check: slice 6a, the successor adapter front-end)
 
 ## Update 2026-11-06, twenty-eighth check (newest)
