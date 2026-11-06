@@ -1,3 +1,28 @@
+## WAL-aware store snapshots verified — 2026-11-06
+
+C-F1 WORKING; integrated execution LOCKED. New internal store_snapshot_v2
+captures schema/all tables in one mode=ro transaction under an existing exclusive
+lock, plus exact INITIALIZED bytes. Synthetic WAL-only row changes are detected
+when the main hash misses them; checkpoints preserve logical state. Marker
+replacement is refused. No actual owner store/export completeness established.
+
+Fresh40new/622focused/2307root PASS; root423.39s/exit0.242selected inputs and
+169complete execution sources stable; six deliberate bypasses detected. Initial
+30ERROR, fixture2FAIL/28PASS and marker-race1FAIL/39PASS retained. Correlated
+author review: evaluation/evidence/f/v2-store-snapshot-20261106/README.md.
+
+Fresh A18c0285f unchanged/A2b8d57cd first adapter handlers, explicitly NOT_READY.
+No new ACK/source READY; owner40tests/14mutants not rerun/adopted. Exact fetched
+file-changing commits/hashes retained;429ledgerREADY entries/52F0pins/
+31publicationpayloads/four copied fixtures verify. A3-0085 announces isolated
+progress only. Next exporter/store completeness and native observation/death
+joins, then fault oracle/finite model. Review owner path/locking choreography
+before actual use. Full owner READYs/mapping and separate complete exact source/
+tools/config/run FREEZE ACKs precede services. No liveRPC/newEparity/TLC/timing/
+integratedFcase/gate/power-loss claim. Qualified historicalE unchanged;
+32Fcases/GateF NOT_RUN/G locked. No human action. Publication/remote/lock cleanup
+in automation memory. Earlier entries are historical.
+
 ## Declared witness history verified — 2026-11-06
 
 C-F1 WORKING; integrated execution LOCKED. New internal witness_history_v2

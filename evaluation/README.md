@@ -1,3 +1,15 @@
+**C-F1 store snapshot slice (2026-11-06):** Internal
+`store_snapshot_v2.locked_store(database, marker, lock)` holds an existing
+exclusive lock across caller before/action/after reads. Each snapshot captures
+schema and every table row in one WAL-aware read-only transaction, plus exact
+marker bytes. `require_unchanged` compares logical state and marker bytes;
+main/WAL hashes are supplemental. Forty synthetic SQLite tests pass, including
+WAL-only changes, checkpoint invariance and marker-replacement refusal.
+No owner store/export completeness, native truth or durability claim follows.
+Owner READY/path/locking review and separate exact execution ACKs remain required.
+Commands, full-suite evidence and limits: [slice evidence](evidence/f/v2-store-snapshot-20261106/README.md).
+Earlier entries are historical.
+
 **C-F1 witness-history slice (2026-11-06):** Internal
 `witness_history_v2.verify_signed_history` reconstructs every declared signed
 message against independently supplied deployment context and store owner;

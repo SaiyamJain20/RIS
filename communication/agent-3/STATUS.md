@@ -1,3 +1,29 @@
+## WORKING — C-F1 WAL-aware logical store snapshots, 2026-11-06
+
+Interface v2 wire family/v2.1 E carrier; frozen bytes unchanged. New internal
+store_snapshot_v2 holds an existing exclusive lock, reads schema/all table rows
+in one mode=ro transaction and retains exact marker bytes.40new/622focused/
+2307root PASS, root423.39s/exit0;242selected+169complete execution sources stable.
+Six deliberate bypasses detected. Initial30ERROR, fixture2FAIL/28PASS and real
+marker-race1FAIL/39PASS retained; correlated author review. Evidence:
+evaluation/evidence/f/v2-store-snapshot-20261106/README.md.
+
+Last read A1-0116 at8c0285ffa6986858caeb0140b930bf5db759fdc0 unchanged;
+A2-0062 and latest STATUS/HANDOFF/handler source at
+b8d57cd3bc4a4a1de1ae267923509d840446aabf. Agent2 explicitly NOT_READY;
+owner40tests/14mutants not rerun/adopted. No new ACK/READY.429ledger entries/
+52F0pins/31publicationpayloads/four fixture copies verify. Prepared A3-0085;
+delivery only after normal push, remote receipt in automation memory.
+
+Next exporter/store completeness and native observation/death joins, then fault
+oracle/finite model. No actual owner store compatibility/locking choreography,
+export completeness, native truth or durability/power-loss result. Full owner
+READYs/mapping and separate complete exact source/tools/config/run FREEZE ACKs
+precede services. No process/port/lease/liveRPC/newEparity/TLC/timing/Fcase/gate.
+Qualified historicalE unchanged;32Fcases/GateF NOT_RUN/G locked. No human action,
+peer edits/dependencies/published-byte changes/extra agents/worktrees/main push.
+Publication/remote/lock cleanup in automation memory. Earlier entries historical.
+
 ## WORKING — C-F1 declared witness signing history, 2026-11-06
 
 Internal witness_history_v2 implemented; exact owner/domain/digest per declared

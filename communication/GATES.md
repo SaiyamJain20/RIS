@@ -1,3 +1,16 @@
+## WAL-aware snapshots checked; no gate change — 2026-11-06
+
+C-F1 internal reader40new/622focused/2307root PASS; root423.39s/exit0;
+242selected+169complete sources stable; six deliberate bypasses detected.
+Synthetic WAL-only changes, checkpoint invariance and marker-replacement refusal
+verified; no owner store/export completeness or native ledger truth established.
+Retained RED/fixture failures/real marker-race regression and correlated review:
+evaluation/evidence/f/v2-store-snapshot-20261106/README.md. A2b8d57cd remains
+NOT_READY; no owner count/ACK adopted. Full owner READYs/mapping and separate
+complete exact execution FREEZE ACKs precede services. No newEparity/TLC/timing/
+integratedFcase/gate/power-loss claim. QualifiedE unchanged;32Fcases/GateF NOT_RUN/
+G locked. A3-0085 is isolated progress only.
+
 ## Declared signing history checked; no gate change — 2026-11-06
 
 C-F1 isolated139new/609wide/582core/2267root PASS, root441.15s/exit0;

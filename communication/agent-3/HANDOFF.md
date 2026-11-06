@@ -1,3 +1,53 @@
+## C-F1 WAL-aware store snapshot checkpoint — 2026-11-06
+
+WORKING; integrated execution LOCKED. New internal APIs:
+evaluation.store_snapshot_v2.locked_store(database,marker,lock), yielding a
+snapshot reader, and require_unchanged(before,after). Explicit caller-pinned
+paths; existing exclusive nonblocking flock held across before/action/after.
+One WAL-aware mode=ro transaction per snapshot, never immutable=1. Capture all
+schema/table rows in rowid order, typed values, logical header pragmas and exact
+INITIALIZED bytes. Logical/marker equality drives comparison; main/WAL hashes
+are supplemental. Checkpoint physical churn is allowed; WAL-only synthetic
+refusal-row insertion is detected although the main-file hash misses it.
+
+Fresh40new/622focused/2307root PASS; root423.39s, command423.71s/exit0.
+242selected inputs+169complete execution sources stable before/after root.
+Six in-memory bypasses detected. Initial30missing-module ERROR; fixture
+2FAIL/28PASS (argument collision/context-exit expectation) retained. Real
+same-content marker-replacement race1FAIL/39PASS; fixed by holding descriptor
+through snapshot. Final40PASS. No source changed after root freeze. Correlated
+author review under no-extra-agents rule. Commands/UTC/exits/output/source hashes,
+fixtures/tools/results/limits: evaluation/evidence/f/v2-store-snapshot-20261106/
+{README.md,PLAN.md,commands.json,inputs-frozen.json,verification.json,REVIEW.md}.
+Frozen manifest SHA256923e4e3f8993d3a60a0ff3393760beea2589dd1e71585a6b0a468371737f6fd6.
+Python3.13.13/SQLite3.47.2/Git2.54.0/pytest9.0.2/jsonschema4.26.0/eth-account0.14.0.
+Reproduce: .venv/bin/python -m pytest evaluation/tests/test_store_snapshot_v2.py -q;
+.venv/bin/python -m pytest -q; evidence verify.py. No dependency changes.
+
+Fresh A18c0285ffa6986858caeb0140b930bf5db759fdc0 unchanged;
+A2b8d57cd3bc4a4a1de1ae267923509d840446aabf adds first successor adapter handlers:
+E validation, top-level v1/v2 relabel, closed errors, worker factory injection.
+Read exact STATUS/HANDOFF/full new module; owner40tests/14mutants NOT rerun or
+adopted. Explicitly NOT_READY; no new ACK since A1-0116/A2-0062. Exact branch and
+file-changing commits/hashes/no-divergence scan retained.429ledgerREADY entries/
+52F0pins/31publicationpayloads/four fixture copies verify. A3-0085 announces only
+this isolated slice; normal publication/independent remote receipt in memory.
+
+Limits/next: no actual owner store opened/exporter executed or complete exporter
+join; owner lock/path choreography still requires READY review. Locks constrain
+cooperative writers; physical fingerprints need not describe a read transaction
+under a noncooperative writer. Real raw snapshots stay private. Unsupported
+virtual/WITHOUT ROWID/fully-shadowed-rowid tables fail closed; revisit with tests
+if a reviewed READY needs them. Next exporter/store completeness and raw owner-ABI
+observation/death joins with signed history, then independent fault oracle/finite
+model. Full owner READYs/consumer mapping and separate complete exact source/
+tools/config/run FREEZE with affected ACKs precede services. No process/lease/
+ports/liveRPC/newEparity/TLC/timing/Fcase/gate or persistence/power-loss claim.
+Historical qualifiedE unchanged;32Fcases/GateF NOT_RUN/G locked. No human action,
+peer edits/dependencies/archive/frozen bytes/extra agents/worktrees/main push.
+Source-stability proof, publication/remote/lock cleanup in automation memory.
+Earlier entries are historical.
+
 ## C-F1 declared witness history checkpoint — 2026-11-06
 
 WORKING; integrated execution LOCKED. New internal API:

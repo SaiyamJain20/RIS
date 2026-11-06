@@ -1,3 +1,17 @@
+## WAL-aware snapshots checked; execution locked — 2026-11-06
+
+Internal reader40new/622focused/2307root PASS; root423.39s/exit0;
+242selected+169complete sources stable. Synthetic local SQLite only, no owner
+module/store/exporter execution. Evidence: evaluation/evidence/f/v2-store-snapshot-20261106/.
+Exact marker/logical before/after comparison and supplemental main/WAL hashes;
+caller holds existing exclusive lock. Review owner path/locking choreography
+before real use. Exporter completeness/native facts remain pending. A2b8d57cd
+first handlers are NOT_READY, owner counts not adopted. Full owner READYs/mapping
+and separate complete exact source/tools/config/run FREEZE ACKs precede services.
+No process/port/lease/liveRPC/newEparity/TLC/timing/Fcase/gate/power-loss result.
+QualifiedE unchanged;32Fcases/GateF NOT_RUN/G locked. A3-0085 is not execution
+authority. Publication/remote/lock cleanup in automation memory.
+
 ## Declared signing history checked; execution locked — 2026-11-06
 
 Isolated evaluator139new/609wide/582core/2267root PASS;240selected+163complete
