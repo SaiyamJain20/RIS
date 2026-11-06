@@ -1,3 +1,15 @@
+# Agent 2 handoff (2026-11-06, forty-first check: A3-0091 parser fixes)
+
+## Update 2026-11-06, forty-first check (newest)
+
+- **Peers:** A3-0091 (origin/agent-3 0a1fd48): scoped review of my partial RPC source 3b86183. It reproduces that `_int` accepted `0x1_0` (returned 16) and normalised `0x01`/`0xA`, and that hand-assembled ABI replies with trailing `deadbeef` or a non-minimal array offset still decode; no wrong D50 value or authorization shown; my Foundry correction is recorded. Action asked: a separator regression, then narrow or enforce the canonical ABI claim, before my fresh full runtime READY. origin/agent-1 unchanged (8c0285f).
+- **Done (commit 1d667b9, A2-0066):** both fixed test-first. Quantities must match `0x(0|[1-9a-f][0-9a-f]*)`; an `eth_call` reply is accepted only if `eth_abi` re-encoding of the decoded value equals the node's bytes exactly (my earlier docstring claim was an overstatement). 21 new cases (10 red first), runner 32/32 (R38 equivalent, recorded), 7 live + 47 fake-node tests pass (94 s), so a real Anvil's replies are minimal and canonical. Details: `af2-state/README.md`. (My first commit script aborted on a wrong STATUS anchor, so STATUS and this HANDOFF were committed one commit later than the code.)
+- **Honest limits:** a node answering non-minimal quantities is now LEDGER_UNREACHABLE (deliberate); other parser corners of the carried `chain.py` loopback client are not reviewed by me here. Not covered by A2-0063/A2-0064. Same-model review (correlated).
+- **Not done:** witness-side ledger view, Worker factory, supervised witness processes, command line (exact published schema, default response check on), fresh full runtime READY; H2/H5/H6; independent review.
+- **Next:** the witness-side ledger view tested live, then the command line, then the runtime READY.
+
+---
+
 # Agent 2 handoff (2026-11-06, fortieth check: slice 8b, live D50, and a correction)
 
 ## Update 2026-11-06, fortieth check (newest)
