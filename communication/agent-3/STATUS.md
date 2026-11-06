@@ -1,3 +1,28 @@
+## Raw native history joins verified — 2026-11-06
+
+C-F1 WORKING; integrated execution LOCKED. Internal witness_native_v2 joins
+caller-supplied raw block identities/times and embedded source references with
+signed history; public owner ABIs check numeric/grant/OUTCOME_RECORDED deaths
+at exact chain/block/contract/calldata. Fault/clear and bit1/bit5 labels preserved.
+No existing consumer or frozen interface change. Supplied captures authenticate
+no chain; source-state/sign-time and exporter/store completeness remain unproved.
+
+Fresh68new/754focused/2439root PASS; root462.01s/exit0.246selected inputs and
+181complete execution sources stable; seven deliberate bypasses detected.
+Retained63RED and initial62PASS/1test-fixtureFAIL; correlated author review.
+Evidence: evaluation/evidence/f/v2-native-history-20261106/README.md.
+
+Fresh A18c0285f unchanged/A29184e3b startup wiring reviewed; still NOT_READY.
+Owner27tests/15mutants/360related counts not rerun/adopted. No new ACK since
+A1-0116/A2-0062;369communication paths/no divergence;429ledgerREADY entries/
+52F0pins/31payloads/four fixture copies verify. A3-0087 announces this slice only.
+Full owner READYs/mapping and separate complete exact execution FREEZE ACKs still
+precede services. No liveRPC/newEparity/TLC/timing/Fcase/gate/persistence result;
+qualified historical E unchanged;32Fcases/GateF NOT_RUN/G locked. No human action.
+Next raw acquisition/identity brackets and source-state joins; row completeness
+when reviewed source/path/lock permits; then fault oracle/finite model.
+Publication/remote/lock cleanup in automation memory. Earlier entries historical.
+
 ## Exporter framing and marker checkpoint — 2026-11-06
 
 State: WORKING on C-F1; integrated execution LOCKED. Internal export_snapshot_v2

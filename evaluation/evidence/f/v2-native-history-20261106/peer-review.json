@@ -1,0 +1,52 @@
+{
+  "agent1": "8c0285ffa6986858caeb0140b930bf5db759fdc0",
+  "agent2": "9184e3bbd961f5cf461320a9ef3edaceeea76af7",
+  "previousAgent2": "254faacdb2344aabed6bb9f66957fc5101487dd6",
+  "verifiedFixtureCopies": 4,
+  "protocolPaths": {
+    "protocol/evidence/af2-state/README.md": {
+      "sha256": "2a0c520163c40ddfbe0353bbf0d5317dcbf09ae86068422f8b52a1a97e461052",
+      "fileChangingCommit": "9184e3bbd961f5cf461320a9ef3edaceeea76af7"
+    },
+    "protocol/evidence/af2-state/adapter-v2-start-green.txt": {
+      "sha256": "e0423e9996426035e61752e054c717378014b89a84d2ed29d4c4637947f5ced9",
+      "fileChangingCommit": "9184e3bbd961f5cf461320a9ef3edaceeea76af7"
+    },
+    "protocol/evidence/af2-state/adapter-v2-start-mutants-run1-15-of-16.txt": {
+      "sha256": "f1ff28d345c24056b61278e975bcba8a051ffb114c077d21bfa177879df16f4b",
+      "fileChangingCommit": "9184e3bbd961f5cf461320a9ef3edaceeea76af7"
+    },
+    "protocol/evidence/af2-state/adapter-v2-start-mutants-run1.txt": {
+      "sha256": "f1ff28d345c24056b61278e975bcba8a051ffb114c077d21bfa177879df16f4b",
+      "fileChangingCommit": "9184e3bbd961f5cf461320a9ef3edaceeea76af7"
+    },
+    "protocol/evidence/af2-state/adapter-v2-start-mutants.txt": {
+      "sha256": "88200d8961dc8904915a686d025ddd0b9238138ccdd22ff1f0115aec0ab06f68",
+      "fileChangingCommit": "9184e3bbd961f5cf461320a9ef3edaceeea76af7"
+    },
+    "protocol/evidence/af2-state/adapter-v2-start-run1-red.txt": {
+      "sha256": "d1b39c6c0d1536660141a7880cda113b024dd269255f56602440e945563dea4f",
+      "fileChangingCommit": "9184e3bbd961f5cf461320a9ef3edaceeea76af7"
+    },
+    "protocol/hmbc_protocol/adapter_v2_start.py": {
+      "sha256": "291441922c2240c8ea97c5a5fb4673ec92775aa170685dca6211ead16ea1c1c1",
+      "fileChangingCommit": "9184e3bbd961f5cf461320a9ef3edaceeea76af7"
+    },
+    "protocol/tests/test_adapter_v2_start.py": {
+      "sha256": "c2c25ca858567963c7b6ccf24969128816e17bc08149202e10b2630773d57e00",
+      "fileChangingCommit": "9184e3bbd961f5cf461320a9ef3edaceeea76af7"
+    },
+    "protocol/tools/run_adapter_v2_start_mutants.py": {
+      "sha256": "9f95be2ee8e12047b8d383e932110ccc84926904fe6fdb38394566ca3efe0ba9",
+      "fileChangingCommit": "9184e3bbd961f5cf461320a9ef3edaceeea76af7"
+    }
+  },
+  "newestOutboxes": {
+    "agent-1": "communication/agent-1/outbox/0116-note-governance-getters-and-d50-open.md",
+    "agent-2": "communication/agent-2/outbox/0062-note-d50-differential-against-a3-0081.md"
+  },
+  "review": "Read newest STATUS/HANDOFF, whole adapter_v2_start.py and tests and mutation definitions. Startup composes explicit carrier selection, D50 reconstruction, worker binding and lazy factories. Chain/view/worker/witness transport injected; full manifest not exercised. Explicit NOT_READY.",
+  "ownerReportedOnly": "27 startup tests;15/15 mutants after15/16 with equivalent T16 removed;360 related tests. Full suite NOT rerun. Counts not rerun or adopted as evaluator evidence.",
+  "remaining": "CLI and actual wiring, real chain view/worker factory/transport/processes, A3-0079 full consumer mapping, D6/hooks/byzantine, full E regressions and ONE complete exact source READY",
+  "noExecutionAuthority": true
+}

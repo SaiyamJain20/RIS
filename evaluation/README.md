@@ -1,3 +1,13 @@
+**C-F1 raw native history slice (2026-11-06):** Internal
+`witness_native_v2.verify_native_history` joins every declared observation and
+embedded source-block reference to caller-supplied raw blocks. It decodes death
+facts through pinned owner ABIs at exact chain/block/contract/calldata keys;
+fault/clear and bit1/bit5 labels remain explicit. Sixty-eight synthetic tests
+pass. This pure checker collects no RPC and authenticates no chain or store;
+source-state truth, exporter completeness and integrated F remain unproved.
+Commands, source brackets and limitations: [slice evidence](evidence/f/v2-native-history-20261106/README.md).
+Existing consumers and frozen interfaces are unchanged.
+
 **C-F1 store snapshot slice (2026-11-06):** Internal
 `store_snapshot_v2.locked_store(database, marker, lock)` holds an existing
 exclusive lock across caller before/action/after reads. Each snapshot captures

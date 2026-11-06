@@ -1,3 +1,15 @@
+## Raw native joins checked; no gate change — 2026-11-06
+
+Internal68new/754focused/2439rootPASS, root462.01s/exit0;246selected inputs and
+181complete sources stable. Seven deliberate bypasses detected. Synthetic supplied
+block/owner-ABI bytes joined with signed history; no actual ledger/source-state/
+store completeness result. Evidence: evaluation/evidence/f/v2-native-history-20261106/.
+Fault/clear and bit1/bit5 labels preserved. A29184e3b remains NOT_READY; owner
+counts not adopted. Full owner READYs/mapping and separate complete exact execution
+FREEZE ACKs required. No services/liveRPC/newEparity/TLC/timing/Fcase/gate result;
+qualified historical E unchanged;32Fcases/GateF NOT_RUN/G locked. A3-0087 is isolated
+progress only. Earlier entries are historical.
+
 ## Exporter marker joins checked; execution locked — 2026-11-06
 
 Internal evaluator64new/686focused/2371root PASS;244selected+175complete sources

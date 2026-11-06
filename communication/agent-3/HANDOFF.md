@@ -1,3 +1,49 @@
+## Raw native history joins verified — 2026-11-06
+
+C-F1 WORKING; integrated execution LOCKED. Internal witness_native_v2 joins
+caller-supplied raw block identities/times and embedded source references with
+signed history; public owner ABIs check numeric/grant/OUTCOME_RECORDED deaths
+at exact chain/block/contract/calldata. Fault/clear and bit1/bit5 labels preserved.
+No existing consumer or frozen interface change. Supplied captures authenticate
+no chain; source-state/sign-time and exporter/store completeness remain unproved.
+
+Fresh68new/754focused/2439root PASS; root462.01s/exit0.246selected inputs and
+181complete execution sources stable; seven deliberate bypasses detected.
+Retained63RED and initial62PASS/1test-fixtureFAIL; correlated author review.
+Evidence: evaluation/evidence/f/v2-native-history-20261106/README.md.
+
+Fresh A18c0285f unchanged/A29184e3b startup wiring reviewed; still NOT_READY.
+Owner27tests/15mutants/360related counts not rerun/adopted. No new ACK since
+A1-0116/A2-0062;369communication paths/no divergence;429ledgerREADY entries/
+52F0pins/31payloads/four fixture copies verify. A3-0087 announces this slice only.
+Full owner READYs/mapping and separate complete exact execution FREEZE ACKs still
+precede services. No liveRPC/newEparity/TLC/timing/Fcase/gate/persistence result;
+qualified historical E unchanged;32Fcases/GateF NOT_RUN/G locked. No human action.
+Next raw acquisition/identity brackets and source-state joins; row completeness
+when reviewed source/path/lock permits; then fault oracle/finite model.
+Publication/remote/lock cleanup in automation memory. Earlier entries historical.
+
+Internal API: evaluation.witness_native_v2.verify_native_history(evidence, *,
+manifest, observations, expected_owner, abi_paths, blocks, calls,
+compiled_max_admins=None). blocks=[{chainId,raw}], raw RPC number/hash/timestamp;
+calls=[{chainId,blockHash,to,data,result}]. Duplicate/unused captures refuse;
+identical required calls can share one capture. Embedded source timestamps are
+not in the signed layout and are not inferred. OUTCOME_RECORDED status is not
+delivery. Actual RPC parameters/origin and chain-identity bracketing remain a
+future collector obligation. No owner runtime/store/exporter executed/imported.
+
+Frozen manifest a0d03a3452739c62317825d9d5c5d31832f64904e494562087d88ccaae66bb28.
+Reproduce .venv/bin/python -m pytest evaluation/tests/test_witness_native_v2.py -q;
+combined/root/sensitivity/proof commands and UTC/output hashes in commands.json.
+Python3.13.13/SQLite3.47.2/Git2.54.0/pytest9.0.2/jsonschema4.26.0/eth-account0.14.0.
+Root command462.340s. Full source snapshots and tools in inputs-frozen.json;
+exact peers in communication-provenance.json/peer-review.json. Ledger source
+85c59f588de58a8ff5e87b9fe6f630c9d8c43642/429entries/70f541cd.. unchanged.
+No dependencies, peer edits, services/ports/lease, extra agents/worktrees or main
+push. Scheduled file flock acquired before all context reads; coordinator before
+Git writes; both held through normal publication. Final receipt in automation
+memory/external runs/native-history-20261106/. Earlier checkpoints follow.
+
 ## C-F1 exporter framing and marker checkpoint — 2026-11-06
 
 WORKING; integrated execution LOCKED. Internal API:
