@@ -43,6 +43,9 @@ REASON_CODE = {"CONFLICT_PINNED": "STALE_STATE", "PROPOSAL_MISMATCH": "STALE_STA
 MARKER = {"v2": "hmbc-ledger-deployment/v2", "v2.1": "hmbc-ledger-deployment/v2.1"}
 BRANCHES = {"v2": ("LedgerDeploymentE", "LedgerDeploymentF"), "v2.1": ("LedgerDeploymentE", "LedgerDeploymentF", "LedgerDeploymentEComplete")}
 GENERIC_FAILURE = ("ADAPTER_UNAVAILABLE", "internal adapter failure")
+RESPONSE_TYPE = {"prepare_request": "PrepareRequestResponse", "collect_decision": "CollectDecisionResponse", "collect_checkpoint": "CollectCheckpointResponse", "attest_grant": "AttestGrantResponse",
+                 "collect_governance": "CollectGovernanceResponse", "release": "ReleaseResponse", "encrypt_record": "EncryptRecordResponse", "finish_decryption": "FinishDecryptionResponse",
+                 "rotate_epoch": "RotateEpochResponse"}
 
 
 class OperationError(Exception):
@@ -139,11 +142,46 @@ def validate_input(op, inp):
 
 
 # ---- the pinned context ---------------------------------------------------------------------------------------------------------------------------------------------
+def published_format_checker():
+    """A jsonschema FormatChecker that KNOWS the published custom formats. Without this a `format` keyword the checker does not know is silently ignored (an annotation), and a value such as 2**64 passes the
+    pattern and the length of `Uint64`. Registered, with the carried wire validators as the single source of the rule: uint8, uint32, uint64, uint256 (canonical decimal within the width) and
+    canonical-signature (lowercase 0x + 130 hex, 0 < r < n, 0 < s <= n/2, v in 27/28). NOT registered (still annotations, stated limit): user-key-ref, evidence-path, uri and date-time handled by the
+    library's own checkers only when their optional packages exist."""
+    import jsonschema
+    formats = jsonschema.FormatChecker()
+
+    def width(bits):
+        def check(v):
+            if not isinstance(v, str):
+                return True                                   # `type` decides non-strings, not the format
+            try:
+                wire.uint(v, bits)
+            except wire.WireError:
+                return False
+            return True
+        return check
+
+    for name, bits in (("uint8", 8), ("uint32", 32), ("uint64", 64), ("uint256", 256)):
+        formats.checks(name)(width(bits))
+
+    @formats.checks("canonical-signature")
+    def _signature(v):
+        if not isinstance(v, str):
+            return True
+        try:
+            wire.signature(v)
+        except wire.WireError:
+            return False
+        return True
+    return formats
+
+
 class Context:
     """The pinned deployment manifest, the EXPLICITLY selected schema revision and the injected handlers. `schema` (the parsed published schema, optional) lets the pinned manifest be validated against the
-    carrier branches of the selected revision; without it only the marker rule and the structural minimum apply."""
+    carrier branches of the selected revision; without it only the marker rule and the structural minimum apply. With `schema` every response is also checked against the published response type of its
+    operation (`checked`), unless `check_responses=False` (TEST use only: a stub handler that returns a deliberately small dict); without `schema` nothing is checked."""
 
-    def __init__(self, *, manifest, schema_revision, handlers, schema=None):
+    def __init__(self, *, manifest, schema_revision, handlers, schema=None, check_responses=True):
         if schema_revision not in MARKER or not isinstance(schema_revision, str):
             raise ValueError("schema_revision must be 'v2' or 'v2.1'")
         if not isinstance(manifest, dict):
@@ -159,9 +197,36 @@ class Context:
             raise ValueError("the pinned manifest lacks what binds a request: " + e.message) from None
         if schema is not None:
             self._validate_against(schema, manifest, schema_revision)
+        if not isinstance(check_responses, bool):
+            raise ValueError("check_responses must be a boolean")
+        self._response_validators = self._build_response_validators(schema) if schema is not None and check_responses else None
         if not isinstance(handlers, dict) or not set(handlers) <= set(OPERATIONS) or not all(callable(h) for h in handlers.values()):
             raise ValueError("handlers must map known operation names to callables")
         self.manifest, self.schema_revision, self.handlers = copy.deepcopy(manifest), schema_revision, dict(handlers)
+
+    @staticmethod
+    def _build_response_validators(schema):
+        """One validator per published response type, built ONCE: `AdapterResponse` (any operation, also for a line that fails before its operation is known) and the nine `<Op>Response` types."""
+        import jsonschema
+        defs = schema.get("$defs", {})
+        names = ("AdapterResponse",) + tuple(RESPONSE_TYPE.values())
+        missing = [n for n in names if n not in defs]
+        if missing:
+            raise ValueError(f"the supplied schema does not define {missing}: it cannot validate responses")
+        formats = published_format_checker()
+        return {n: jsonschema.Draft202012Validator({"$schema": "https://json-schema.org/draft/2020-12/schema", "$ref": "#/$defs/" + n, "$defs": defs}, format_checker=formats) for n in names}
+
+    def checked(self, op, response):
+        """With the published schema supplied: the response if it is valid for the operation's published response type, else the generic internal failure (nothing of the invalid value leaks). Without the
+        schema (an explicit, tested limit) the response is returned unchecked."""
+        if self._response_validators is None:
+            return response
+        try:
+            if self._response_validators[RESPONSE_TYPE.get(op, "AdapterResponse")].is_valid(response):
+                return response
+        except Exception:  # noqa: BLE001 - a validator that cannot decide (for example a pathological value) is a refusal to emit
+            pass
+        return _generic()
 
     @staticmethod
     def _validate_against(schema, manifest, revision):
@@ -201,7 +266,9 @@ def _strict_loads(line):
 
 
 def handle_line(line: str, ctx: Context) -> dict:
-    """Total function: every input line yields one well-formed response, never an exception."""
+    """Total function: every input line yields one well-formed response, never an exception. With the published schema in the Context, each response is checked against its operation's published response
+    type before it is returned (`Context.checked`)."""
+    known = None                                   # the operation once the envelope names a known one
     try:
         if len(line.encode("utf-8", "replace")) > MAX_LINE_BYTES:
             raise _malformed("request line exceeds 1 MiB")
@@ -213,6 +280,7 @@ def handle_line(line: str, ctx: Context) -> dict:
         op = obj["operation"]
         if not isinstance(op, str) or op not in OPERATIONS:
             raise _malformed("unknown operation")
+        known = op
         try:
             _e._deployment(obj["deploymentManifest"])
         except _e.AdapterError as e:
@@ -228,9 +296,9 @@ def handle_line(line: str, ctx: Context) -> dict:
         result = handler(copy.deepcopy(obj["input"]), ctx)
         if not isinstance(result, dict):
             return _generic()
-        return _response(result=result)
+        return ctx.checked(known, _response(result=result))
     except OperationError as e:
-        return _response(error=e)
+        return ctx.checked(known, _response(error=e))
     except Exception:  # noqa: BLE001 - the boundary must not leak internals (key material, paths) through a traceback or a message
         return _generic()
 

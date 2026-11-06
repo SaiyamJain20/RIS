@@ -1,5 +1,5 @@
 """Mutation check of the successor adapter front-end (agent 2, F task 2 slice 6a). Standard library only. Same method as the other runners: one text replacement per mutant (it must match exactly once
-and change the file), run the UNCHANGED tests/test_adapter_v2.py in a temporary copy that keeps the repository layout, count a mutant DETECTED only when the tests ran and failed; a crash or
+and change the file), run the UNCHANGED tests/test_adapter_v2.py and tests/test_adapter_v2_output.py in a temporary copy that keeps the repository layout, count a mutant DETECTED only when the tests ran and failed; a crash or
 timeout is NOT detection; the unmutated copy runs first as a control. the carried adapter.py, wire.py and witness_service.py are NOT mutated here.
 
 Usage (repository root):   python3 -B -I protocol/tools/run_adapter_v2_mutants.py        (needs pytest and the E dependencies: protocol/requirements.txt)
@@ -16,6 +16,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 PROTO = os.path.abspath(os.path.join(HERE, ".."))
 SRC = open(os.path.join(PROTO, "hmbc_protocol", "adapter_v2.py")).read()
 
+# EQUIVALENT MUTANT dropped (run 2: 58 of 59): A59, a non-string judged by the format instead of the type. wire.uint and wire.signature already refuse a non-string, and every published type that carries
+# one of these formats also has `type: string`, so the guard and the type keyword refuse the same values.
 M = [
     ("A1 the line limit is 2 MiB", [("MAX_LINE_BYTES = 1 << 20", "MAX_LINE_BYTES = 1 << 21")]),
     ("A2 extra request members are accepted", [("or set(obj) != REQUEST_FIELDS:", "or not REQUEST_FIELDS <= set(obj):")]),
@@ -26,7 +28,7 @@ M = [
     ("A7 rotate_epoch may be enabled by a handler", [('        if op == "rotate_epoch":\n            raise OperationError("NOT_IMPLEMENTED_IN_PHASE"', '        if False:\n            raise OperationError("NOT_IMPLEMENTED_IN_PHASE"')]),
     ("A8 a non-object handler result is passed through", [("        if not isinstance(result, dict):\n            return _generic()", "        if False:\n            return _generic()")]),
     ("A9 the generic failure message differs", [('GENERIC_FAILURE = ("ADAPTER_UNAVAILABLE", "internal adapter failure")', 'GENERIC_FAILURE = ("ADAPTER_UNAVAILABLE", "internal adapter failure!")')]),
-    ("A10 an operation error becomes a generic failure", [("    except OperationError as e:\n        return _response(error=e)\n", "")]),
+    ("A10 an operation error becomes a generic failure", [("    except OperationError as e:\n        return ctx.checked(known, _response(error=e))\n", "")]),
     ("A11 the reason is not put into the response", [('    if error.reason is not None:\n        err["reason"] = error.reason\n', "")]),
     ("A12 the collection is not put into the response", [('    if error.collection is not None:\n        err["collection"] = error.collection\n', "")]),
     ("A13 the recorded value is not put into the response", [('    if error.recorded is not None:\n        err["recorded"] = error.recorded\n', "")]),
@@ -43,7 +45,7 @@ M = [
     ("A24 the v2.1 marker is allowed under revision v2", [('        if marker == MARKER["v2.1"] and schema_revision != "v2.1":', "        if False:")]),
     ("A25 the pinned manifest need not bind a request", [("            _e._deployment(manifest)\n        except _e.AdapterError as e:\n            raise ValueError", "            pass\n        except _e.AdapterError as e:\n            raise ValueError")]),
     ("A26 the supplied schema is not used", [("        if schema is not None:\n            self._validate_against", "        if False:\n            self._validate_against")]),
-    ("A27 a schema without the revision's carrier branch is accepted", [("        if missing:\n            raise ValueError", "        if False:\n            raise ValueError")]),
+    ("A27 a schema without the revision's carrier branch is accepted", [("        if missing:\n            raise ValueError(f\"the supplied schema does not define {missing}: it cannot serve revision", "        if False:\n            raise ValueError(f\"the supplied schema does not define {missing}: it cannot serve revision")]),
     ("A28 the handlers are not validated", [('        if not isinstance(handlers, dict) or not set(handlers) <= set(OPERATIONS) or not all(callable(h) for h in handlers.values()):', "        if False:")]),
     ("A29 the pinned manifest is aliased, not copied", [("self.manifest, self.schema_revision, self.handlers = copy.deepcopy(manifest),", "self.manifest, self.schema_revision, self.handlers = manifest,")]),
     ("A30 the output is not compact", [('stdout.write(json.dumps(resp, separators=(",", ":")) + "\\n")', 'stdout.write(json.dumps(resp) + "\\n")')]),
@@ -59,6 +61,21 @@ M = [
     ("A40 a witnessIndex is accepted on governance without being checked", [('    if "witnessIndex" in v:\n        _selector(v["witnessIndex"])\n', "")]),
     ("A41 collect_checkpoint requires a request digest", [('return _with_optionals(v, {}, dict(witnessSetVersion=_version, witnessIndex=_selector), "CollectCheckpointInput")', 'return _with_optionals(v, dict(requestDigest=wire.hash32), dict(witnessSetVersion=_version, witnessIndex=_selector), "CollectCheckpointInput")')]),
     ("A42 the attest_grant input accepts a witnessSetVersion", [('dict(witnessIndex=_selector), "AttestGrantInput")', 'dict(witnessIndex=_selector, witnessSetVersion=_version), "AttestGrantInput")')]),
+    ("A44 a response is never checked", [("        if self._response_validators is None:\n            return response\n        try:", "        if True:\n            return response\n        try:")]),
+    ("A45 an invalid response is emitted anyway", [("            pass\n        return _generic()\n\n    @staticmethod\n    def _validate_against", "            pass\n        return response\n\n    @staticmethod\n    def _validate_against")]),
+    ("A46 a validator that cannot decide lets the response through", [("        except Exception:  # noqa: BLE001 - a validator that cannot decide (for example a pathological value) is a refusal to emit\n            pass", "        except Exception:  # noqa: BLE001\n            return response")]),
+    ("A47 every response is checked against the generic type only", [('RESPONSE_TYPE.get(op, "AdapterResponse")', '"AdapterResponse"')]),
+    ("A48 the operation is never recorded for the check", [("        known = op\n", "")]),
+    ("A49 the published formats are not enforced", [("format_checker=formats)", "format_checker=None)")]),
+    ("A50 a schema without response types is accepted", [("        if missing:\n            raise ValueError(f\"the supplied schema does not define {missing}: it cannot validate responses\")", "        if False:\n            pass")]),
+    ("A51 the check_responses flag is ignored", [("if schema is not None and check_responses else None", "if schema is not None else None")]),
+    ("A52 check_responses may be any value", [("        if not isinstance(check_responses, bool):\n            raise ValueError(\"check_responses must be a boolean\")\n", "")]),
+    ("A53 the generic type is not built", [('names = ("AdapterResponse",) + tuple(RESPONSE_TYPE.values())', "names = tuple(RESPONSE_TYPE.values())")]),
+    ("A54 the response of a rotate_epoch refusal is not checked against its own type", [('"rotate_epoch": "RotateEpochResponse"}', '"rotate_epoch": "AdapterResponse"}')]),
+    ("A55 the published custom formats are not registered", [("        formats = published_format_checker()\n", "        formats = jsonschema.FormatChecker()\n")]),
+    ("A56 uint64 is checked at 256 bits", [('("uint64", 64)', '("uint64", 256)')]),
+    ("A57 the width check accepts anything", [("                wire.uint(v, bits)\n", "                pass\n")]),
+    ("A58 canonical-signature is not enforced", [("            wire.signature(v)\n", "            pass\n")]),
     ("A43 a bare TypeError from a validator escapes", [("    except (wire.WireError, TypeError, KeyError, ValueError, AttributeError) as e:", "    except wire.WireError as e:")]),
 ]
 
@@ -90,13 +107,13 @@ def run_in_copy(text):
         for name in os.listdir(fx):
             if name.startswith(("agent1-85c59f5", "agent3-")):
                 shutil.copy(os.path.join(fx, name), os.path.join(p, "tests", "fixtures", name))
-        for rel in ("pytest.ini", os.path.join("tests", "test_adapter_v2.py")):
+        for rel in ("pytest.ini", os.path.join("tests", "test_adapter_v2.py"), os.path.join("tests", "test_adapter_v2_output.py"), os.path.join("tests", "test_adapter_v2_ops.py")):
             shutil.copy(os.path.join(PROTO, rel), os.path.join(p, rel))
         with open(os.path.join(p, "hmbc_protocol", "adapter_v2.py"), "w") as f:
             f.write(text)
         env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
         try:
-            r = subprocess.run([sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests/test_adapter_v2.py"], cwd=p, capture_output=True, text=True, timeout=300, env=env)
+            r = subprocess.run([sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests/test_adapter_v2.py", "tests/test_adapter_v2_output.py"], cwd=p, capture_output=True, text=True, timeout=300, env=env)
         except subprocess.TimeoutExpired:
             return "timeout", None
         m = re.search(r"(\d+) failed", r.stdout)

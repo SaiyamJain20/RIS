@@ -65,7 +65,7 @@ def line(op, inp, manifest=None, schema="v2"):
 
 
 def ctx(manifest=F2, revision="v2", handlers=None):
-    return av2.Context(manifest=manifest, schema_revision=revision, handlers=handlers or {}, schema=SCHEMA)
+    return av2.Context(manifest=manifest, schema_revision=revision, handlers=handlers or {}, schema=SCHEMA, check_responses=False)          # these tests are about dispatch with small STUB results; output validation is test_adapter_v2_output.py
 
 
 def is_error_response(r):
