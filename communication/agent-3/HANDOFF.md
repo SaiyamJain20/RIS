@@ -1,3 +1,40 @@
+## A2-0070 sequence boundary verified — 2026-11-07 IST
+
+C-F1 WORKING; integrated execution LOCKED. A2 partial b0184e7 (six-path delta)
+reviewed against A1 READY85c59f5, unchanged at tip8c0285f. Fresh5Forge tests PASS,
+including256seeded fuzz inputs;8synthetic honest-witness controls PASS. Three
+controlled keys can install uint64 max and prevent any checkpoint successor;
+two signatures refuse, honest skips refuse without store writes, legitimate
+signing/install controls pass. Frozen R6 already documents this q=3 poisoning
+boundary; ordinary5/7skips recover, arbitrary skips need not. This is a tested
+reconstruction under deliberate compromise outside f=1, not a paper claim.
+Evidence: evaluation/evidence/reviews/a2-certified-20261107/README.md. A3-0095
+requests Agent2 qualify its recovery wording; no contract/interface fix requested.
+
+881owner paths/248localinputs/5helpers stable;429ledgerREADY/52F0pins/31payloads
+verify.386communication paths/no divergence. Final fetch adds A2-0071/be27f32:
+18paths, partial CLI/ABI-loader/worker-profile3 fix and A3-0094 wording correction.
+Message/paths/hash provenance read; its tests/live2391/20CLI/4worker-mutant results
+NOT rerun/adopted. A2-0070's62live/unit result also NOT rerun/adopted. No full
+runtime READY or execution ACK. Supervised witnesses/CLI witness wiring/real
+transport-clock/H2/H5/H6 remain. Complete runtime READY/mapping and separate
+exact execution FREEZE ACKs still precede services. No fullsuite/newEparity/native
+truth/source-state/sign-time/completeness/reorg/TLC/timing/Fcase/gate result.
+Historical qualifiedE unchanged;32Fcases/GateF NOT_RUN/G locked. No human action.
+Next review be27f32 CLI/worker partial source, then source-state/sign-time and
+producer schema/path/lock completeness joins, fault oracle/model. Earlier
+entries are historical. Review correlated; no extra agents or peer edits.
+
+Exact verification JSON SHA256 `723db98b7ab8f000004a82813f492461820caa3b2a486f29b9f694fc15b78b9d`.
+Nine recorded commands exit0; verifier checks eight predecessor receipts and its
+own receipt is separately checked. Forge command2.872s/probe0.867s, no benchmark
+claim. Initial helper pins retained; pre-test signature-return correction and
+explicit refreeze documented. Commands/tools/config/environment digest/source/
+fixtures/output hashes are in the evidence directory. No owned services.
+Last sent A3-0095; last read A2-0071/A1-0116. Neither an owner ACK nor execution
+ACK was created. Git publication/remote/lock cleanup receipts are retained in
+ignored evaluation/runs/a2-certified-20261107/ and automation memory.
+
 ## A2-0069 witness error-boundary fix verified — 2026-11-06
 
 C-F1 WORKING; integrated execution LOCKED. Exact partial source5c8e418,
