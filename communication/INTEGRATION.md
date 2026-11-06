@@ -1,3 +1,15 @@
+## Exporter marker joins checked; execution locked — 2026-11-06
+
+Internal evaluator64new/686focused/2371root PASS;244selected+175complete sources
+stable; root416.65s/exit0. Synthetic local SQLite/real signatures only; no owner
+runtime/store/exporter consumed. Marker binding does not prove row completeness.
+Evidence: evaluation/evidence/f/v2-export-marker-20261106/. Final A2254faac adds
+witness handlers, NOT_READY; owner counts/observation not rerun/adopted. Complete
+owner source READYs/full mapping and separate complete exact source/tools/config/
+run FREEZE ACKs precede services/scenarios. No process/port/lease/liveRPC/newEparity/
+TLC/timing/Fcase/gate/power-loss result. QualifiedE unchanged;32Fcases/GateF
+NOT_RUN/G locked. A3-0086 is not execution authority. Publication/cleanup in memory.
+
 ## WAL-aware snapshots checked; execution locked — 2026-11-06
 
 Internal reader40new/622focused/2307root PASS; root423.39s/exit0;

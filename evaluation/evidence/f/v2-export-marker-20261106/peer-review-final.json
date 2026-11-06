@@ -1,0 +1,63 @@
+{
+  "agent2": "254faacdb2344aabed6bb9f66957fc5101487dd6",
+  "previousAgent2": "42435367cad02063cd8573333ad12a59c38bed92",
+  "protocolPaths": {
+    "protocol/evidence/af2-state/README.md": {
+      "sha256": "1a4bec66e3076900324983d7e2655e6ebb910e80759f7739ddceec2b4825db6b",
+      "fileChangingCommit": "254faacdb2344aabed6bb9f66957fc5101487dd6"
+    },
+    "protocol/evidence/af2-state/adapter-v2-witness-green.txt": {
+      "sha256": "486fdfa15dbb653b5504f35eb4e2df360f89a79e9f1f628261b05806a193486f",
+      "fileChangingCommit": "254faacdb2344aabed6bb9f66957fc5101487dd6"
+    },
+    "protocol/evidence/af2-state/adapter-v2-witness-mutants-run1-52-of-64.txt": {
+      "sha256": "a46ebc5106023ae77a9a6dbcf00559c286e1390c5a5a7f29dfda047b8b48b7dc",
+      "fileChangingCommit": "254faacdb2344aabed6bb9f66957fc5101487dd6"
+    },
+    "protocol/evidence/af2-state/adapter-v2-witness-mutants-run1.txt": {
+      "sha256": "a46ebc5106023ae77a9a6dbcf00559c286e1390c5a5a7f29dfda047b8b48b7dc",
+      "fileChangingCommit": "254faacdb2344aabed6bb9f66957fc5101487dd6"
+    },
+    "protocol/evidence/af2-state/adapter-v2-witness-mutants.txt": {
+      "sha256": "284b988f4f54c248d41bb20a81f84d8f35e7d5b075279c4fe53ebf61b49bf062",
+      "fileChangingCommit": "254faacdb2344aabed6bb9f66957fc5101487dd6"
+    },
+    "protocol/evidence/af2-state/adapter-v2-witness-run1-red.txt": {
+      "sha256": "5c97b42c150b49bb6556032ac070d15474591415be177a9720e188840c77df01",
+      "fileChangingCommit": "254faacdb2344aabed6bb9f66957fc5101487dd6"
+    },
+    "protocol/evidence/af2-state/pool-mutants-v2.txt": {
+      "sha256": "b4c9aa4a77d853bcd8bd1a9c253b9ae708af3c520ebd08ca7f4c48a3410e16e1",
+      "fileChangingCommit": "b607bc7b7749d3f9238fac93d2422b1c663167a3"
+    },
+    "protocol/hmbc_protocol/adapter_v2_witness.py": {
+      "sha256": "573e29613bb08d0c092e49b925bf394a8d634d8f79498780df602fc8eb7625d3",
+      "fileChangingCommit": "254faacdb2344aabed6bb9f66957fc5101487dd6"
+    },
+    "protocol/hmbc_protocol/witness_pool.py": {
+      "sha256": "98f54755761adcd0d130e832256bf0ab51f2773993dc5671cfffb2220f83feb6",
+      "fileChangingCommit": "b607bc7b7749d3f9238fac93d2422b1c663167a3"
+    },
+    "protocol/tests/test_adapter_v2_witness.py": {
+      "sha256": "85f963f8179b3ac1bf83df7f1ed19bb034612e530c0ba01dcb186740e5838bdf",
+      "fileChangingCommit": "254faacdb2344aabed6bb9f66957fc5101487dd6"
+    },
+    "protocol/tests/test_witness_pool.py": {
+      "sha256": "03aa5c034aa3330cc0efba3c36571dd7e6395dee412198e3ca47adef65179797",
+      "fileChangingCommit": "b607bc7b7749d3f9238fac93d2422b1c663167a3"
+    },
+    "protocol/tools/run_adapter_v2_witness_mutants.py": {
+      "sha256": "3e5fc0eb99356b26fb0c2caf14b8e32fd0ff4f87e7ebeece21746243f4042b78",
+      "fileChangingCommit": "254faacdb2344aabed6bb9f66957fc5101487dd6"
+    },
+    "protocol/tools/run_pool_mutants.py": {
+      "sha256": "30cdd186ac341f28b668eb4b205b566e95475b255c079cc95c3a61314b6b4c95",
+      "fileChangingCommit": "b607bc7b7749d3f9238fac93d2422b1c663167a3"
+    }
+  },
+  "review": "Read latest owner HANDOFF/STATUS, entire adapter_v2_witness.py, witness_pool delta and relevant tests. Four operations compose injected proposer view, witness services and transport. Governance list fields supported; adopting/recorded checkpoint messages stay flat. Explicit NOT_READY.",
+  "ownerReportedOnly": "49 handler tests/57 mutants; pool52/58 mutants; full2137PASS/201SKIP. Not rerun or adopted. One shared fake ledger view/virtual transport; initial52of64 then seven equivalent removals.",
+  "ownerClaimNotVerified": "Witness validating a changed view before consulting its stored pin can prevent joining adoption of an earlier signed value. Owner labels tested reconstruction result; evaluator has not reproduced or adopted it.",
+  "remaining": "startup/CLI, real transport/processes/clock/chain view, A3-0079 full consumer mapping, D6/hooks/byzantine, full live E parity and ONE complete exact source READY",
+  "noExecutionAuthority": true
+}

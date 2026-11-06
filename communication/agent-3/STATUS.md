@@ -1,3 +1,31 @@
+## Exporter framing and marker checkpoint — 2026-11-06
+
+State: WORKING on C-F1; integrated execution LOCKED. Internal export_snapshot_v2
+composes canonical exporter success framing, anchored binding/owner or full
+signed-history checks with captured INITIALIZED content. Exact marker/stdout/
+logical fingerprints are distinct; marker whitespace permitted, duplicate keys
+refused. WAL omission control explicitly proves this is NOT row completeness.
+
+Fresh64new/686focused/2371root PASS; root416.65s/exit0;244selected inputs and
+175complete execution sources stable. Seven deliberate in-memory bypasses detected.
+Genuine57RED ->57GREEN, review61 ->64PASS. Correlated author review; evidence:
+evaluation/evidence/f/v2-export-marker-20261106/README.md.
+
+Read exact A18c0285f unchanged/A2254faac final, including driver/virtual transport
+and four witness handlers/governance-list delta. Latest owner HANDOFF/STATUS and
+file-changing hashes retained; owner tests and changed-view/adoption observation
+NOT rerun/adopted. No full READY/ACK since A1-0116/A2-0062;368communication paths/
+no divergence;429ledgerREADY entries/52F0pins/31payloads/four fixtures verify.
+Sent A3-0086; publication/remote/lock receipt in automation memory.
+
+Next: producer row completeness when full READY/schema/path/locking review permits,
+raw ABI native observation/death joins, independent fault oracle/finite model.
+Full owner READYs/mapping plus separate complete exact source/tools/config/run
+FREEZE ACKs precede services. No runtime/liveRPC/newEparity/TLC/timing/Fcase/gate/
+power-loss result. Historical qualifiedE unchanged;32Fcases/GateF NOT_RUN/G locked.
+No human action, peer edit/dependency/interface/archive/main push or extra agents/
+worktrees. Earlier entries are historical.
+
 ## WORKING — C-F1 WAL-aware logical store snapshots, 2026-11-06
 
 Interface v2 wire family/v2.1 E carrier; frozen bytes unchanged. New internal

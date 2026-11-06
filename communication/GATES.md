@@ -1,3 +1,16 @@
+## Exporter marker joins checked; no gate change — 2026-11-06
+
+C-F1 internal64new/686focused/2371root PASS; root416.65s/exit0;244selected+
+175complete sources stable. Seven bypass controls detected. Exact captured
+marker content is joined with canonical exporter framing and anchored binding/
+declared signed history; WAL omission control preserves the explicit absence
+of row-completeness proof. Synthetic reconstruction/extension, correlated review:
+evaluation/evidence/f/v2-export-marker-20261106/README.md. A2254faac is partial
+NOT_READY; owner tests/observation not adopted. Full owner READYs/mapping and
+separate complete exact execution FREEZE ACKs still required. No newEparity/
+TLC/timing/integratedFcase/gate/power-loss claim; qualifiedE unchanged;
+32Fcases/GateF NOT_RUN/G locked. A3-0086 is isolated progress only.
+
 ## WAL-aware snapshots checked; no gate change — 2026-11-06
 
 C-F1 internal reader40new/622focused/2307root PASS; root423.39s/exit0;

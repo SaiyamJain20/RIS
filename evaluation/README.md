@@ -216,3 +216,10 @@ and fresh synchronous shell/Forge command groups are stopped; command timeout
 and cancellation clean their group while the direct child is unreaped.
 Real9 controls remain unrun; all catalog/RQ gates NOT_RUN; E2/E3/F/G stay gated.
 Earlier bootstrap/collector paragraphs above retain historical verification counts.
+**Exporter/marker join (2026-11-06):** internal `export_snapshot_v2.py` checks
+successful exporter framing, anchored binding, exact captured INITIALIZED content
+and declared signed witness history. Synthetic WAL controls preserve the explicit
+limit: matching exports/markers do not prove row completeness. Real owner schema,
+paths and lock choreography still require full READY review. See
+[commands, controls and source brackets](evidence/f/v2-export-marker-20261106/README.md).
+No existing consumer switches or new integrated E/F result; G remains locked.

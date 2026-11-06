@@ -1,3 +1,28 @@
+## Exporter marker joins verified — 2026-11-06
+
+C-F1 WORKING; integrated execution LOCKED. New internal export_snapshot_v2 joins
+canonical exporter success bytes and anchored binding/declared signed history
+with exact captured INITIALIZED content. Marker/logical/stdout hashes stay
+separate. WAL omission control explicitly shows row completeness is NOT proved.
+
+Fresh64new/686focused/2371root PASS; root416.65s/exit0.244selected inputs and
+175complete execution sources stable; seven deliberate bypasses detected.
+Evidence/review: evaluation/evidence/f/v2-export-marker-20261106/README.md.
+Synthetic tested reconstruction/extension; correlated author review.
+
+Final A18c0285f unchanged/A2254faac adds four witness operation handlers and
+governance list support; still NOT_READY. Exact file-changing commits/hashes
+retained; owner tests/changed-view adoption observation NOT rerun/adopted.
+No new ACK since A1-0116/A2-0062;368communication paths/no divergence.
+429ledgerREADY entries/52F0pins/31payloads/four fixture copies verify.
+A3-0086 announces this isolated slice only. Full owner READYs/mapping and
+separate complete exact source/tools/config/run FREEZE ACKs precede services.
+Next: row completeness with reviewed source, raw native observation/death joins,
+then independent fault oracle/finite model. No liveRPC/newEparity/TLC/timing/
+Fcase/gate/power-loss result. Qualified historicalE unchanged;32Fcases/GateF
+NOT_RUN/G locked. No human action. Publication/remote/cleanup in automation memory.
+Earlier entries are historical.
+
 ## WAL-aware store snapshots verified — 2026-11-06
 
 C-F1 WORKING; integrated execution LOCKED. New internal store_snapshot_v2

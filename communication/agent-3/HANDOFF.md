@@ -1,3 +1,51 @@
+## C-F1 exporter framing and marker checkpoint — 2026-11-06
+
+WORKING; integrated execution LOCKED. Internal API:
+evaluation.export_snapshot_v2.verify_export_snapshot(stdout, *, stderr, exit_code,
+kind, snapshot, manifest, observations, expected_owner, compiled_max_admins=None).
+BindingExport uses anchored context; WitnessEvidence uses full declared signed
+history. Exact canonical success stdout/empty stderr/exit0 required. Captured
+physical marker's closed schema2/owner/binding matches export; raw marker bytes,
+logical rows and stdout get distinct SHA256. Marker whitespace permitted; strict
+JSON duplicate/nonfinite parsing refuses. No existing consumer/defaultv1 switch.
+
+Fresh64new/686focused/2371root PASS; root416.65s/command416.977s/exit0.
+244selected inputs and175complete execution sources stable before/after and again
+before publication; seven narrow in-memory bypasses detected. Genuine57 missing-
+module RED ->57PASS; review61 ->64PASS. Real synthetic SQLite WAL-only omitted-row
+control passes marker/export checks while logical state changes: row completeness
+is explicitly unproved. Review correlated under no-extra-agents rule.
+
+Evidence: evaluation/evidence/f/v2-export-marker-20261106/{README.md,PLAN.md,
+commands.json,inputs-frozen.json,verification.json,REVIEW.md,peer-review*.json}.
+Frozen manifest2d4e5ca326d3c67270283f80e6eda2ad81c4040324d76349bebd26cbfef7effb.
+Python3.13.13/SQLite3.47.2/Git2.54.0/pytest9.0.2/jsonschema4.26.0/eth-account0.14.0.
+Reproduce .venv/bin/python -m pytest evaluation/tests/test_export_snapshot_v2.py -q;
+root .venv/bin/python -m pytest -q; evidence sensitivity.py and verify.py.
+No dependency changes. Raw snapshots remain private.
+
+Final exact peers A18c0285ffa6986858caeb0140b930bf5db759fdc0 unchanged;
+A2254faacdb2344aabed6bb9f66957fc5101487dd6 advanced via4243536 pool driver to
+four witness handlers and governance list-field pool support. Read whole new
+modules/relevant tests/latest STATUS/HANDOFF; exact file-changing commits/hashes
+retained. Owner49tests/57mutants,pool52/58,full2137PASS/201SKIP and changed-view/
+adoption claim NOT rerun/adopted. Still NOT_READY; startup/CLI/live transport/
+chain view/mapping/D6/hooks/full E parity/full exact source READY remain. No new
+outbox/ACK since A1-0116/A2-0062.368communication paths/no divergence;429ledgerREADY
+entries/52F0pins/31published payloads/four copied fixtures verify. A3-0086 publishes
+isolated progress only; normal push/independent remote/lock cleanup in memory.
+
+Next: producer-specific row completeness with full reviewed source/path/lock
+choreography, raw native owner-ABI observation/death joins, fault oracle/model.
+Full owner READYs/mapping and separate complete exact source/tools/config/run
+FREEZE ACKs precede services/scenarios. No process/ports/lease/liveRPC/newEparity/
+TLC/timing/Fcase/gate/persistence result. Historical qualifiedE unchanged;
+32Fcases/GateF NOT_RUN/G locked. No human action or peer/dependency/frozen/archive/
+main edits/extra agents/worktrees. Initial mkdir lock-path mistake/context read
+preceded actual flock; no inode change or project fetch/edit before flock.
+Speculative metadata correction assertion failed without mutation; original JSON
+valid, log retained. Earlier checkpoints are historical.
+
 ## C-F1 WAL-aware store snapshot checkpoint — 2026-11-06
 
 WORKING; integrated execution LOCKED. New internal APIs:
