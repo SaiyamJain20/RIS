@@ -240,7 +240,12 @@ def mine(live, side):
 def sorted_signatures(m, name, sigs, deployment):
     by = {}
     for sg in sigs:
-        digest = svc._governance_digest(m, deployment) if name == "GovernanceAction" else messages.digest_of(name, m, messages.domain_for(name, m, deployment))
+        if name == "GovernanceAction":
+            digest = svc._governance_digest(m, deployment)
+        elif name == "GrantReceipt":                                     # the carried E validator hard-codes witnessSetVersion=1: the F receipt has its own digest helper
+            digest = svc._receipt_digest(m, deployment)
+        else:
+            digest = messages.digest_of(name, m, messages.domain_for(name, m, deployment))
         by[eip712.recover(digest, sg)] = sg
     return [by[a] for a in sorted(by)]
 
@@ -308,3 +313,67 @@ def test_real_witness_signatures_over_a_governance_action_are_executed_by_the_re
     with pytest.raises(svc.WitnessRefusal) as e:                           # the witnesses now refuse ADD of an existing authority before signing
         witnesses[0].sign_governance(again)
     assert e.value.code == "ALREADY_REGISTERED"
+
+
+# ========================================================================================================================================================
+# Slice 9b: the decision and receipt paths against a REAL forwarded request on the real F ledger. Written BEFORE it was known whether the carried E client/relay/bootstrap helpers work with the F
+# ABIs (they do for the names used here); the F ledger is wrapped in the carried `Ledger` class through its public constructor with the F contracts. Alice is registered and entitled by the carried
+# `ledger_setup.setup_pbc`; she signs a request, the carried relay forwards it to the PBC; four real WitnessServices derive the decision from the REAL ledger through RpcWitnessView and three of them
+# sign it; the real ACSC.consumeDecision verifies the certificate and issues the grant; the same witnesses derive and sign the GrantReceipt, which the real PSC.reportAttestedOutcome accepts.
+# ========================================================================================================================================================
+def f_ledger(live):
+    from hmbc_protocol.ledger import Ledger
+    chains = {s: Chain(live.urls[i], int(live.dep["chains"][s]["chainId"])) for i, s in enumerate(("pbc", "dbc"))}
+    contracts = {}
+    for name, side in (("PSC", "pbc"), ("RSC", "pbc"), ("TMSC", "pbc"), ("LSC", "pbc"), ("Governance", "pbc"), ("ACSC", "dbc"), ("KSSC", "dbc")):
+        contracts[name] = Contract(json.load(open(os.path.join(live.abi_dir, name + ".json"))), live.dep["chains"][side]["contracts"][name])
+    return Ledger(chains["pbc"], chains["dbc"], contracts, live.dep)
+
+
+def accept_checkpoint(live, witnesses, wview, led, n=3):
+    mine(live, "dbc")
+    cp = svc.derive_checkpoint(wview, live.dep)
+    ordered = sorted_signatures(cp, "StateCheckpoint", [w.sign_checkpoint(cp) for w in witnesses[:n]], live.dep)
+    led.dbc.send(ANVIL_KEY0, led.KSSC, "acceptState", cp, ordered)
+    return cp
+
+
+def test_decision_and_receipt_signed_by_three_real_witnesses_are_accepted_by_the_real_acsc_and_psc(live_f, tmp_path):
+    import ledger_setup as setup
+    from hmbc_protocol.client import UserClient
+    from hmbc_protocol.relay import Relay
+    led = f_ledger(live_f)
+    witnesses, wview = real_witnesses(live_f, tmp_path)
+    ctx = setup.setup_pbc(led)
+    client, relay = UserClient("alice", live_f.dep), Relay(led, "relay")
+    signed = client.sign_request(setup.make_request(led, ctx, client, nonce="1", ttl=30))
+    fwd = relay.forward(signed, ctx.bundle)
+    assert fwd.code == "NONE"                                              # the real PSC allowed and forwarded the request
+    accept_checkpoint(live_f, witnesses, wview, led)
+    digest = signed["requestDigest"]
+    decision, records = svc.derive_decision(wview, live_f.dep, digest, witness_set_version="2")
+    assert decision["result"] == "1" and records                          # real credentials, real policy: ALLOW
+    sigs = [w.sign_decision(decision) for w in witnesses[:3]]
+    cert = {"decision": decision, "signatures": sorted_signatures(decision, "AccessDecision", sigs, live_f.dep)}
+    with pytest.raises(Rejected) as r2:                                    # two of three is below the real threshold
+        led.dbc.send(setup.key("relay"), led.ACSC, "consumeDecision", signed["request"], dict(cert, signatures=cert["signatures"][:2]), records)
+    assert r2.value.code == "INSUFFICIENT_QUORUM"                         # predicted
+    with pytest.raises(Rejected) as rf:                                    # a decision whose result a signer did not sign is rejected: flip the result after signing
+        led.dbc.send(setup.key("relay"), led.ACSC, "consumeDecision", signed["request"], {"decision": dict(decision, result="0"), "signatures": cert["signatures"]}, records)
+    assert rf.value.code == "BAD_SIGNATURE"                              # OBSERVED (not predicted): the signatures recover to non-members of the changed digest
+    led.dbc.send(setup.key("relay"), led.ACSC, "consumeDecision", signed["request"], cert, records)          # the real ACSC verifies the certificate
+    grant_id = "0x" + eip712.grant_id(bytes.fromhex(digest[2:]), led.KSSC.address, led.dbc.chain_id).hex()
+    assert led.dbc.call(led.KSSC, "getGrant", grant_id)[5] is True        # allowed grant on the real DBC
+    mine(live_f, "dbc")
+    receipt = svc.derive_receipt(wview, live_f.dep, grant_id, witness_set_version="2")
+    assert receipt["requestDigest"] == digest and receipt["grantId"] == grant_id
+    rsigs = sorted_signatures(receipt, "GrantReceipt", [w.sign_receipt(receipt) for w in witnesses[:3]], live_f.dep)
+    outcome = "0x" + "5e" * 32
+    with pytest.raises(Rejected) as rr:
+        led.pbc.send(setup.key("relay"), led.PSC, "reportAttestedOutcome", digest, outcome, receipt, rsigs[:2])
+    assert rr.value.code == "INSUFFICIENT_QUORUM"                         # predicted
+    led.pbc.send(setup.key("relay"), led.PSC, "reportAttestedOutcome", digest, outcome, receipt, rsigs)      # the real PSC verifies the receipt certificate
+    assert led.pbc.call(led.PSC, "getRequest", digest)["status"] == "2"      # an outcome is recorded
+    with pytest.raises(svc.WitnessRefusal) as e:                           # the witnesses now refuse to decide this request again
+        witnesses[0].sign_decision(decision)
+    assert e.value.code == "REPLAY"
