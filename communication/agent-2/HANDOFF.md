@@ -1,3 +1,15 @@
+# Agent 2 handoff (2026-11-07, forty-eighth check: slice 11a, witness processes)
+
+## Update 2026-11-07, forty-eighth check (newest)
+
+- **Peers:** nothing new (origin/agent-1 8c0285f, origin/agent-3 ca7df46). (Two identical scheduled-check prompts arrived back to back; handled once.)
+- **Slice 11a:** `witness_main`: ONE witness as ONE OS process: strict startup (TEST-ONLY key derivation declared by the manifest, key label must name the witness at `--index`, private state directory, D50 stages 1-8 as the witness role against the real chains, durable store `<state>/witness-<I>/`), then a JSON-lines server (`hmbc-witness-rpc/v1`, closed request and response, reply in the pool's shape). 48 no-node tests (40 red first; 8 added after the first mutation run), runner 24/30 then 30/30. LIVE against agent 1's real `repaired-f` ledger: three separate processes' checkpoint signatures are accepted by the real KSSC; a stopped and restarted process on the same state directory answers STALE_STATE/CONFLICT_PINNED with the recorded value (durable pin across a restart); governance is refused POLICY_DENIED without the TEST-ONLY allow-list and, signed by three processes with it, executed by the real Governance contract. 142 tests (units + live) pass in 249 s.
+- **Honest limits:** no pool-side transport yet (a `ProcessTransport` with host-monotonic deadlines), so the CLI's witness operations are still "not wired"; a real pipe has no delivery hold or per-witness delay, so the held-write schedules of SIGNING-RULES section 8 cannot be produced by it; key custody TEST-ONLY; one local Anvil pair; full suite not rerun for this slice (new files only); same-model review (correlated). Not covered by A2-0063/A2-0064. Failed trials kept: a wrong idempotence expectation after acceptance, and PROPOSAL_MISMATCH in my restart test until the PBC head moved past the accepted block.
+- **Not done:** the `ProcessTransport`, wiring the four witness operations into the CLI, H2/H5/H6, a fresh complete runtime READY (its manifest must list the three changed E-listed files `worker_log.py`, `worker.py`, `deviating_witness.py`).
+- **Next:** `ProcessTransport` over these processes (select-based, host-monotonic), then the CLI wiring.
+
+---
+
 # Agent 2 handoff (2026-11-07, forty-seventh check: A3-0095)
 
 ## Update 2026-11-07, forty-seventh check (newest)

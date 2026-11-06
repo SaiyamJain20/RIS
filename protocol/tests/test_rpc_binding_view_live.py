@@ -588,3 +588,108 @@ def test_the_cli_refuses_a_bound_directory_of_another_deployment_with_wrong_dest
     q = cli(live_f_fresh, tmp_path, [])                                     # the same state directory, another real deployment
     err = json.loads(q.stderr)["error"]
     assert q.returncode == 2 and q.stdout == "" and err["code"] == "WRONG_DESTINATION" and err.get("reason") == "BINDING_MISMATCH"
+
+
+# ========================================================================================================================================================
+# Slice 11a: witnesses as separate OS PROCESSES (hmbc_protocol.witness_main) against the real F ledger: each process has its own durable store, key and RPC view; the test talks to them over their
+# stdin/stdout JSON lines. Written BEFORE witness_main.py existed (the 40 no-node tests were red first). KEY CUSTODY IS TEST-ONLY (synthetic key labels).
+# ========================================================================================================================================================
+class WitnessProc:
+    def __init__(self, live, tmp_path, index, allow=None, state="wstate"):
+        import subprocess
+        import sys as _sys
+        dep_file = tmp_path / "dep.json"
+        dep_file.write_text(json.dumps(live.dep))
+        proto = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+        args = ["--deployment", str(dep_file), "--abi-dir", live.abi_dir, "--index", str(index), "--key-label", "witness-%d" % (index + 1), "--state-dir", str(tmp_path / state)]
+        if allow is not None:
+            allow_file = tmp_path / ("allow-%d.json" % index)
+            allow_file.write_text(json.dumps(allow))
+            args += ["--allow-governance", str(allow_file)]
+        self.p = subprocess.Popen([_sys.executable, "-B", "-m", "hmbc_protocol.witness_main", *args], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, cwd=proto,
+                                  env={"PYTHONPATH": proto, "PATH": "/usr/bin:/bin"})
+        self.n = 0
+
+    def ask(self, kind, message, round_no=1):
+        self.n += 1
+        self.p.stdin.write(json.dumps({"schemaVersion": "hmbc-witness-rpc/v1", "id": self.n, "round": round_no, "kind": kind, "message": message}) + "\n")
+        self.p.stdin.flush()
+        line = self.p.stdout.readline()
+        assert line, "the witness process died: " + self.p.stderr.read()
+        out = json.loads(line)
+        assert out["id"] == self.n and out["schemaVersion"] == "hmbc-witness-rpc/v1"
+        return out["reply"]
+
+    def close(self):
+        self.p.stdin.close()
+        rc = self.p.wait(timeout=30)
+        err = self.p.stderr.read()
+        self.p.stdout.close()
+        self.p.stderr.close()
+        return rc, err
+
+
+def test_three_witness_processes_sign_a_checkpoint_the_real_kssc_accepts_and_a_restarted_process_keeps_its_pin(live_f, tmp_path):
+    led = f_ledger(live_f)
+    wview, chains = witness_view(live_f)
+    procs = [WitnessProc(live_f, tmp_path, i) for i in range(3)]
+    try:
+        mine(live_f, "dbc")
+        cp = svc.derive_checkpoint(wview, live_f.dep)
+        replies = [p.ask("checkpoint", cp) for p in procs]
+        assert all(r["type"] == "signature" and r["message"] == cp for r in replies), replies
+        ordered = sorted_signatures(cp, "StateCheckpoint", [r["signature"] for r in replies], live_f.dep)
+        assert len(set(eip712.recover(messages.digest_of("StateCheckpoint", cp, messages.domain_for("StateCheckpoint", cp, live_f.dep)), s) for s in ordered)) == 3
+        assert procs[0].ask("checkpoint", cp)["signature"] == replies[0]["signature"]      # idempotent while the sequence is still the next one: the same value signs again to the same bytes
+        led.dbc.send(ANVIL_KEY0, led.KSSC, "acceptState", cp, ordered)                   # three separate processes, three real signatures, accepted by the real contract
+        assert wview.dbc_current_checkpoint()["sequence"] == cp["sequence"]
+        late = procs[0].ask("checkpoint", cp)                                            # after acceptance the sequence is no longer the next one: refused (my first version of this test wrongly expected a signature)
+        assert late["type"] == "error" and late["code"] == "STALE_STATE"
+    finally:
+        codes = [p.close() for p in procs]
+    assert all(rc == 0 and err == "" for rc, err in codes), codes
+
+    # durability across a process restart: witness 3 (never asked before) signs value A, the process is stopped, a NEW process on the same state directory is asked a DIFFERENT valid value for the
+    # same sequence and must answer CONFLICT_PINNED with the recorded value A
+    mine(live_f, "pbc")                                                                  # the PBC head must move past the accepted checkpoint's block, or the older block B would be below it (my first run: PROPOSAL_MISMATCH)
+    mine(live_f, "pbc")
+    mine(live_f, "dbc")
+    a = svc.derive_checkpoint(wview, live_f.dep)
+    n = int(a["sourceBlockNumber"])
+    b = dict(a, sourceBlockNumber=str(n - 1), sourceBlockHash=chains["pbc"].get_block(n - 1)["hash"])
+    first = WitnessProc(live_f, tmp_path, 3)
+    sig_a = first.ask("checkpoint", a)
+    assert sig_a["type"] == "signature" and first.close()[0] == 0
+    second = WitnessProc(live_f, tmp_path, 3)                                             # a restarted process, the same state directory
+    try:
+        r = second.ask("checkpoint", b)
+        assert r["type"] == "error" and r["code"] == "STALE_STATE" and r["reason"] == "CONFLICT_PINNED", r
+        assert r["recorded"] == {"message": a, "signature": sig_a["signature"]}
+        assert second.ask("checkpoint", a)["signature"] == sig_a["signature"]
+    finally:
+        assert second.close() == (0, "")
+
+
+def test_witness_processes_sign_a_governance_action_only_with_a_local_approval_and_the_real_contract_executes_it(live_f, tmp_path):
+    root, admin = "0x" + "e1" * 20, "0x" + "f2" * 20
+    wview, chains = witness_view(live_f)
+    led = f_ledger(live_f)
+    unapproved = WitnessProc(live_f, tmp_path, 0, state="no-allow")
+    mine(live_f, "pbc")
+    ts = int(wview.observe("pbc")["timestamp"])
+    action = {"action": "1", "root": root, "admins": [admin], "nonce": str(int(wview.governance_nonce()) + 1), "witnessSetVersion": "2", "expiresAt": str(ts + 60)}
+    try:
+        denied = unapproved.ask("governance", action)
+        assert denied["type"] == "error" and denied["code"] == "POLICY_DENIED"          # fail closed without an allow-list
+    finally:
+        assert unapproved.close() == (0, "")
+    procs = [WitnessProc(live_f, tmp_path, i, allow=[["1", root, [admin]]], state="allow") for i in range(3)]
+    try:
+        replies = [p.ask("governance", action) for p in procs]
+        assert all(r["type"] == "signature" and r["message"] == action for r in replies), replies
+    finally:
+        assert all(p.close() == (0, "") for p in procs)
+    sigs = sorted_signatures(action, "GovernanceAction", [r["signature"] for r in replies], live_f.dep)
+    assert wview.is_authority(root) is False
+    led.pbc.send(ANVIL_KEY0, led.Governance, "execute", action, sigs)
+    assert wview.is_authority(root) is True
