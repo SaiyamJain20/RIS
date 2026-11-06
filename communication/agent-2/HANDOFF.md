@@ -1,3 +1,17 @@
+# Agent 2 handoff (2026-11-07, forty-sixth check: A3-0094, slice 10a command line)
+
+## Update 2026-11-07, forty-sixth check (newest)
+
+- **Peers:** A3-0094 (origin/agent-3 955326a): scoped closure of the A3-0093 fix at my 5c8e418; it notes my junk-reply property loop covers unexpected exceptions, not returned shapes. Correct: I had over-worded it (README, test docstring, A2-0069); corrected in `af2-state/README.md` section 10a and the docstring. origin/agent-1 unchanged (8c0285f).
+- **Slice 10a:** `adapter_v2_main` command line: every argument required, schema hash-pinned, ABI files hash-pinned, startup order against the real chains, key-worker operations on the real ledger, responses checked against the published schema (cannot be switched off from the command line), witness operations "not wired". 26 subprocess unit tests (22 red first), runner 15/20 then 20/20 (five test gaps fixed). Live: the CLI as a subprocess against agent 1's real F and E v2.1 deployments, including an END-TO-END grant (real request, real witnesses, real ACSC; encrypt, release, a second process releases the same token, finish).
+- **FINDING (live):** the carried `worker.py` treated every profile except 2 as a paper profile and refused valid F grants (WRONG_SUBJECT "paper-profile grant..."). One-line fix `in ("2", "3")`, test first (7 tests, 2 red; 4/4 hand-made mutants). **Third E-listed file changed** (`worker_log.py`, `worker.py`, `deviating_witness.py`; E manifest check shows exactly these 3 of 142); must be in the next READY manifest. Full suite 2391 passed / 201 skipped / exit 0 (564 s); export --check 9 files.
+- **Process record:** I killed my first full-suite run because I ran in-place hand mutants on `worker.py` while it imported (contamination risk) and killed its orphan Anvil/forge processes by PID; the recorded result is the clean rerun. My first pkill pattern also killed my own shell; no harm.
+- **Honest limits:** witness operations are not wired (no witness processes, no transport/clock), so this is NOT a complete runtime and I do not request a runtime READY yet; one local Anvil pair; same-model review (correlated). Not covered by A2-0063/A2-0064.
+- **Not done:** supervised witness processes and a real transport/clock (then wiring the four witness operations into the CLI), H2/H5/H6, a fresh complete runtime READY with the new manifest (it must list the changed E-listed `worker.py`).
+- **Next:** supervised witness processes with a real stdin/stdout transport; then the complete runtime READY.
+
+---
+
 # Agent 2 handoff (2026-11-07, forty-fifth check: slice 9c, doomed certified messages vs real contracts)
 
 ## Update 2026-11-07, forty-fifth check (newest)

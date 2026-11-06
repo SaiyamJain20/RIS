@@ -482,3 +482,109 @@ def test_a_compromised_quorum_cannot_make_the_real_contracts_accept_a_doomed_mes
                      "governance ADD of an existing authority": ("ALREADY_REGISTERED", "MALFORMED"), "governance nonce skipped": ("STALE_STATE", "MALFORMED"),
                      "governance REMOVE of an unknown root": ("NOT_REGISTERED", "UNKNOWN_AUTHORITY")}, wrong
     assert set(observed) == set(PREDICTED)
+
+
+# ========================================================================================================================================================
+# Slice 10a: the command line as a REAL SUBPROCESS against the REAL F ledger. `python -m hmbc_protocol.adapter_v2_main` is started with the live manifest, the real ABI files, the published schema and
+# its pinned hash; JSON lines go in on stdin and every response is validated against the PUBLISHED schema by the test as well as by the process (check_responses stays on). The worker operations run
+# on the real ledger; the witness operations answer "not wired". Written BEFORE adapter_v2_main.py existed (the no-node tests of test_adapter_v2_main.py were red first).
+# ========================================================================================================================================================
+def cli(live, tmp_path, lines, dep=None, revision="v2", state="state"):
+    import subprocess
+    import sys as _sys
+    dep_file = tmp_path / "dep.json"
+    dep_file.write_text(json.dumps(dep or live.dep))
+    FXD = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fixtures")
+    args = ["--deployment", str(dep_file), "--abi-dir", live.abi_dir, "--schema", os.path.join(FXD, "agent3-v2.1-hmbc.schema.json"),
+            "--schema-sha256", "d43c3a9a4cbb10214135afb767a2adc109da462f88bd11a81a8c8955d44fd1f3", "--schema-revision", revision, "--state-dir", str(tmp_path / state)]
+    proto = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    p = subprocess.run([_sys.executable, "-B", "-m", "hmbc_protocol.adapter_v2_main", *args], input="".join(l + "\n" for l in lines), capture_output=True, text=True, cwd=proto,
+                       env={"PYTHONPATH": proto, "PATH": "/usr/bin:/bin"}, timeout=120)
+    return p
+
+
+def v2_line(op, inp, dep):
+    return json.dumps({"schemaVersion": "v2", "operation": op, "input": inp, "deploymentManifest": dep})
+
+
+def schema_validator():
+    import jsonschema
+    schema = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "fixtures", "agent3-v2.1-hmbc.schema.json")))
+    return jsonschema.Draft202012Validator({"$schema": "https://json-schema.org/draft/2020-12/schema", "$ref": "#/$defs/AdapterResponse", "$defs": schema["$defs"]}, format_checker=jsonschema.FormatChecker())
+
+
+def test_the_cli_serves_the_worker_operations_on_the_real_ledger_and_says_not_wired_for_the_witness_ones(live_f, tmp_path):
+    from test_adapter_v2_ops import KEYREF, request_for
+    dep, ok = live_f.dep, schema_validator()
+    other = copy.deepcopy(dep)
+    other["chains"]["pbc"]["chainId"] = "18546"
+    lines = [v2_line("prepare_request", {"request": request_for(dep), "signingKeyRef": KEYREF}, dep),
+             v2_line("collect_checkpoint", {}, dep),
+             v2_line("release", {"grantId": "0x" + "ab" * 32}, dep),
+             "this is not json",
+             v2_line("prepare_request", {"request": request_for(dep), "signingKeyRef": KEYREF}, other),
+             v2_line("rotate_epoch", {"targetEpoch": "1"}, dep)]
+    p = cli(live_f, tmp_path, lines)
+    assert p.returncode == 0 and p.stderr == "" and "Traceback" not in p.stderr
+    out = [json.loads(l) for l in p.stdout.splitlines()]
+    assert len(out) == len(lines) and all(ok.is_valid(r) for r in out)
+    prep, ckpt, rel, junk, wrong, rot = out
+    assert prep["ok"] is True and prep["result"]["schemaVersion"] == "v2"
+    assert ckpt["ok"] is False and ckpt["error"]["code"] == "ADAPTER_UNAVAILABLE" and "not wired" in ckpt["error"]["message"]
+    assert rel["ok"] is False and rel["error"]["code"] == "NOT_COMMITTED"        # the REAL ledger has no grant with this id
+    assert junk["error"]["code"] == "MALFORMED" and wrong["error"]["code"] == "WRONG_DESTINATION" and rot["error"]["code"] == "NOT_IMPLEMENTED_IN_PHASE"
+    state = tmp_path / "state"
+    assert (state / "worker" / "INITIALIZED").is_file() and oct(state.stat().st_mode & 0o777) == "0o700"
+
+
+def test_the_cli_serves_a_real_grant_end_to_end_encrypt_release_finish_on_the_real_ledger(live_f_fresh, tmp_path):
+    import ledger_setup as setup
+    from hmbc_protocol.client import UserClient
+    from hmbc_protocol.relay import Relay
+    live = live_f_fresh
+    led = f_ledger(live)
+    witnesses, wview = real_witnesses(live, tmp_path)
+    ctx = setup.setup_pbc(led)
+    client, relay = UserClient("alice", live.dep), Relay(led, "relay")
+    signed = client.sign_request(setup.make_request(led, ctx, client, nonce="1", ttl=30))      # ttl 60 exceeds PSC.maxRequestTtl: the real PSC answered MALFORMED to my first try
+    assert relay.forward(signed, ctx.bundle).code == "NONE"
+    accept_checkpoint(live, witnesses, wview, led)
+    decision, records = svc.derive_decision(wview, live.dep, signed["requestDigest"], witness_set_version="2")
+    assert decision["result"] == "1"
+    cert = {"decision": decision, "signatures": sorted_signatures(decision, "AccessDecision", [w.sign_decision(decision) for w in witnesses[:3]], live.dep)}
+    led.dbc.send(setup.key("relay"), led.ACSC, "consumeDecision", signed["request"], cert, records)
+    grant_id = "0x" + eip712.grant_id(bytes.fromhex(signed["requestDigest"][2:]), led.KSSC.address, led.dbc.chain_id).hex()
+    record = {"dataId": setup.DATA_P1, "owner": setup.addr("H2-root"), "payloadDigest": "0x" + __import__("eth_utils").keccak(text="synthetic payload P1").hex()}
+    policy = {"clauses": [[{"role": setup.ROLE_DOCTOR, "kind": "1", "issuerMode": "0"}, {"role": setup.ROLE_ON_DUTY, "kind": "2", "issuerMode": "2"}]]}
+    ok = schema_validator()
+    # the worker is lazy and stateful: encrypt, release and finish run in ONE process, in order
+    p = cli(live, tmp_path, [v2_line("encrypt_record", {"record": record, "policy": policy, "keyEpoch": "0"}, live.dep), v2_line("release", {"grantId": grant_id}, live.dep)])
+    assert p.returncode == 0 and p.stderr == "", p.stderr
+    enc, rel = [json.loads(l) for l in p.stdout.splitlines()]
+    assert all(ok.is_valid(r) for r in (enc, rel)) and enc["ok"] is True and rel["ok"] is True, (enc, rel)
+    assert rel["result"]["grantId"] == grant_id and rel["result"]["recipientKeyHash"] == keys.recipient_key_hash("keyref:user:alice")
+    # a second process on the same state directory reopens the bound store and releases the SAME token (idempotent, durable)
+    p2 = cli(live, tmp_path, [v2_line("release", {"grantId": grant_id}, live.dep), v2_line("finish_decryption", {"response": rel["result"], "userKeyRef": "keyref:user:alice"}, live.dep)])
+    assert p2.returncode == 0 and p2.stderr == "", p2.stderr
+    rel2, fin = [json.loads(l) for l in p2.stdout.splitlines()]
+    assert ok.is_valid(rel2) and ok.is_valid(fin) and rel2["ok"] is True and fin["ok"] is True, (rel2, fin)
+    assert rel2["result"]["responseEnvelope"]["token"] == rel["result"]["responseEnvelope"]["token"]
+
+
+def test_the_cli_starts_on_the_real_e_successor_v2_1_deployment(live_e, tmp_path):
+    from test_adapter_v2_ops import KEYREF, request_for
+    dep, ok = live_e.dep, schema_validator()
+    p = cli(live_e, tmp_path, [v2_line("prepare_request", {"request": request_for(dep), "signingKeyRef": KEYREF}, dep)], revision="v2.1")
+    assert p.returncode == 0 and p.stderr == "", p.stderr
+    (r,) = [json.loads(l) for l in p.stdout.splitlines()]
+    assert ok.is_valid(r) and r["ok"] is True
+    q = cli(live_e, tmp_path, [], revision="v2", state="state2")           # the v2.1 marker with revision v2 is refused at startup
+    assert q.returncode == 2 and json.loads(q.stderr)["error"]["code"] == "MALFORMED" and not (tmp_path / "state2").exists()
+
+
+def test_the_cli_refuses_a_bound_directory_of_another_deployment_with_wrong_destination(live_f, live_f_fresh, tmp_path):
+    p = cli(live_f, tmp_path, [])
+    assert p.returncode == 0
+    q = cli(live_f_fresh, tmp_path, [])                                     # the same state directory, another real deployment
+    err = json.loads(q.stderr)["error"]
+    assert q.returncode == 2 and q.stdout == "" and err["code"] == "WRONG_DESTINATION" and err.get("reason") == "BINDING_MISMATCH"

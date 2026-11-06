@@ -367,7 +367,7 @@ def test_a_malformed_transaction_reply_is_ledger_unreachable_or_a_classified_non
 @pytest.mark.parametrize("junk", [None, 5, "x", [], {}, [1], {"a": 1}, True])
 def test_no_view_method_lets_a_malformed_raw_reply_escape_as_another_exception(junk):
     """Every raw reply the fake client can hand back (a log list, a block object, a decoded call result, a transaction) is replaced by junk; whatever a method does with it, it either returns a value of
-    its documented shape or raises LedgerUnreachable: never AttributeError, TypeError, KeyError or IndexError."""
+    its (unchecked) value or raises LedgerUnreachable: never AttributeError, TypeError, KeyError or IndexError. The test checks the exception type only; it does NOT check the returned shape (A3-0094)."""
     for name, fn in CALLS:
         v, pbc, dbc, cs = make()
         pbc.logs = dbc.logs = junk

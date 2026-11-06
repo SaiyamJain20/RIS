@@ -53,6 +53,32 @@ def _supported_input(t):
     return t in ("bool", "address") or _UINT.fullmatch(t) is not None
 
 
+def load_pinned_abis(manifest, abi_dir):
+    """{contract name: ABI list} for every contract the manifest names, each file `<abi_dir>/<name>.json` hashing to the manifest's `abi.<name>.abiSha256`; ValueError otherwise."""
+    try:
+        names = sorted({n for side in SIDES for n in manifest["chains"][side]["contracts"]})
+    except (KeyError, TypeError, AttributeError):
+        raise ValueError("the manifest names no contracts") from None
+    abis = {}
+    for name in names:
+        try:
+            pinned = manifest["abi"][name]["abiSha256"]
+        except (KeyError, TypeError):
+            raise ValueError(f"the manifest pins no ABI hash for {name}") from None
+        try:
+            with open(os.path.join(abi_dir, name + ".json"), "rb") as f:
+                raw = f.read()
+        except OSError:
+            raise ValueError(f"the ABI file for {name} cannot be read") from None
+        if hashlib.sha256(raw).hexdigest() != pinned:
+            raise ValueError(f"the ABI file for {name} does not hash to the manifest's abiSha256")
+        try:
+            abis[name] = json.loads(raw)
+        except ValueError:
+            raise ValueError(f"the ABI file for {name} is not JSON") from None
+    return abis
+
+
 class RpcBindingView:
     def __init__(self, *, chains, contracts, abis):
         if not isinstance(chains, dict) or set(chains) != set(SIDES):
@@ -78,7 +104,7 @@ class RpcBindingView:
         """The view for a pinned deployment manifest: the chain clients must be for the manifest's chain ids and every ABI file must hash to the manifest's `abiSha256`."""
         if not isinstance(manifest, dict) or not isinstance(chains, dict) or set(chains) != set(SIDES):
             raise ValueError("a manifest and chain clients for pbc and dbc are required")
-        contracts, abis = {}, {}
+        contracts = {}
         for side in SIDES:
             try:
                 if int(manifest["chains"][side]["chainId"]) != chains[side].chain_id:
@@ -86,24 +112,7 @@ class RpcBindingView:
                 contracts[side] = dict(manifest["chains"][side]["contracts"])
             except (KeyError, TypeError, ValueError, AttributeError) as e:
                 raise ValueError(f"the manifest or the {side} client is malformed: {type(e).__name__}") from None
-        for name in {n for side in SIDES for n in contracts[side]}:
-            try:
-                pinned = manifest["abi"][name]["abiSha256"]
-            except (KeyError, TypeError):
-                raise ValueError(f"the manifest pins no ABI hash for {name}") from None
-            path = os.path.join(abi_dir, name + ".json")
-            try:
-                with open(path, "rb") as f:
-                    raw = f.read()
-            except OSError:
-                raise ValueError(f"the ABI file for {name} cannot be read") from None
-            if hashlib.sha256(raw).hexdigest() != pinned:
-                raise ValueError(f"the ABI file for {name} does not hash to the manifest's abiSha256")
-            try:
-                abis[name] = json.loads(raw)
-            except ValueError:
-                raise ValueError(f"the ABI file for {name} is not JSON") from None
-        return cls(chains=chains, contracts=contracts, abis=abis)
+        return cls(chains=chains, contracts=contracts, abis=load_pinned_abis(manifest, abi_dir))
 
     # ---- transport ---------------------------------------------------------------------------------------------------------------------------------------------
     def _rpc(self, side, method, params):
