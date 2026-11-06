@@ -70,7 +70,7 @@
       "d50PreimageUnchanged": true
     },
     "completeRuntimeReady": false,
-    "explanation": "A2-0064 remains the last isolated API source READY. A2-0066 corrects the partial D50 RPC parser outside that READY. A3-0092 independently reproduces eight old gaps and zero on the fixed source;153focused tests and32mutation controls pass. Owner live results are not independently adopted. Witness-side views, Worker factory, supervised witnesses, CLI and real transport/clock remain pending; no new peer ACK, complete runtime READY or execution authority inferred.",
+    "explanation": "A2-0064 remains the last isolated API source READY. A2-0067/0068 add a partial witness RPC view and owner live evidence outside that READY. A3-0093 independently passes222focused tests/43mutation controls and reproduces four uncaught transaction-shape errors plus five permissive parsing cases; no wrong authorization shown. Owner live results are not independently adopted. Worker factory, supervised witnesses, CLI, real transport/clock and H2/H5/H6 remain pending. No new peer ACK, complete runtime READY or execution authority inferred. A3-0092 closure for RpcBindingView stays unchanged.",
     "requiredRecipeChecks": [
       "pass exact published schema; schema=None checks only structural minimum",
       "keep check_responses=True and use behavior-validating handlers; output schema checking does not establish native truth",
@@ -101,21 +101,39 @@
       "optionalBypassesRemain": true
     },
     "partialRuntimeReview": {
-      "messageId": "A3-0092",
-      "ownerNote": "A2-0066",
-      "sourceCommit": "0297adb6e784b9667befbc6330e1dfcb3ec81e3e",
+      "messageId": "A3-0093",
+      "ownerNotes": [
+        "A2-0067",
+        "A2-0068"
+      ],
+      "sourceCommit": "0e58f1da659f48ffd39b6af138acf194b0ae111f",
       "ownerRuntimeReady": false,
-      "review": "evaluation/evidence/reviews/a2-parser-fixes-20261106/README.md",
-      "verificationSha256": "f64eddbd76270ebb0a848fa86c3c327b8b2371e1be0edfec63e371e8d3458efc",
+      "review": "evaluation/evidence/reviews/a2-witness-rpc-20261106/README.md",
+      "verificationSha256": "74f2e5c04f07de3f7ef5023cc7e8830fea0faf1b0e1f2d651bcc1bf2983eb629",
       "independentLiveRun": false,
-      "quantitySeparatorRefusalPending": false,
-      "canonicalAbiClaimNeedsClarification": false,
-      "focusedPass": 153,
-      "mutationControlsDetected": 32,
-      "baselineAcceptanceGaps": 8,
-      "fixedAcceptanceGaps": 0
+      "focusedPass": 222,
+      "mutationControlsDetected": 43,
+      "manualControls": 14,
+      "diagnosticGaps": 9,
+      "transactionObjectRefusalPending": true,
+      "canonicalWitnessRpcBytesEstablished": false
     },
     "previousPartialRuntimeReviews": [
+      {
+        "messageId": "A3-0092",
+        "ownerNote": "A2-0066",
+        "sourceCommit": "0297adb6e784b9667befbc6330e1dfcb3ec81e3e",
+        "ownerRuntimeReady": false,
+        "review": "evaluation/evidence/reviews/a2-parser-fixes-20261106/README.md",
+        "verificationSha256": "f64eddbd76270ebb0a848fa86c3c327b8b2371e1be0edfec63e371e8d3458efc",
+        "independentLiveRun": false,
+        "quantitySeparatorRefusalPending": false,
+        "canonicalAbiClaimNeedsClarification": false,
+        "focusedPass": 153,
+        "mutationControlsDetected": 32,
+        "baselineAcceptanceGaps": 8,
+        "fixedAcceptanceGaps": 0
+      },
       {
         "messageId": "A3-0091",
         "ownerNote": "A2-0065",

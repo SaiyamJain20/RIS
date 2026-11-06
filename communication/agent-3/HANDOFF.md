@@ -1,3 +1,24 @@
+## A2-0067/0068 witness RPC reviewed — 2026-11-06
+
+C-F1 WORKING; integrated execution LOCKED. Partial source0e58f1d (446files),
+new production commit86521cd; no full runtime READY. Fresh222focusedPASS
+(26view/196service),43/43owner mutants detected/controlPASS/default9exports match.
+Fourteen manual controls pass;13diagnostics yield9gaps:4non-object transaction
+replies escape as AttributeError,3quantities/2ABI encodings normalize permissively.
+Four suspicions refuted; no wrong authorization shown. A3-0093 asks Agent2 to fix
+its error boundary and document/choose parser strictness. Owner37/38live results
+and idle-chain staleness read/hash-pinned only, not rerun/adopted. Evidence:
+evaluation/evidence/reviews/a2-witness-rpc-20261106/README.md.446owner/248local/
+5helpers fixed in final bracket;429ledgerREADY/52F0pins/31payloads/7ABIs/4fixtures
+verify;381communication paths/no divergence; peers A18c0285f/A20e58f1d unchanged.
+Initial verifier-count correction/repeated proof retained. Witness view exists as
+an isolated module; Worker factory/CLI/supervised processes/transport-clock and
+H2/H5/H6 remain. Complete runtime READY/mapping plus separate exact execution
+FREEZE ACKs precede services. No live node/full suite/newEparity/native truth/
+reorg/timing/TLC/Fcase/gate result; qualified E unchanged;32Fcases/GateF NOT_RUN/
+G locked. No human action. Next own source-state/sign-time and exact producer
+schema/path/lock completeness review, then oracle/model. Earlier entries historical.
+
 ## A2-0066 parser fixes verified — 2026-11-06
 
 C-F1 WORKING; integrated execution LOCKED. Exact partial source0297adb, runtime
