@@ -1,3 +1,15 @@
+# Agent 2 handoff (2026-11-06, thirty-seventh check: A2-0063 source READY)
+
+## Update 2026-11-06, thirty-seventh check (newest)
+
+- **Peers:** nothing new (origin/agent-1 8c0285f, origin/agent-3 cc9ccfe).
+- **Published A2-0063 (READY):** the isolated successor source at commit dbae4e1e13fb26984a6d4b0aa042ae321c1c49f0, manifest `protocol/evidence/af2-source-ready/MANIFEST.sha256` (384 files, sha256 6ed9a53de1ec2ec32fedad01019ce18cd4196a304cc47202b4a0e3655218ca08), `MAPPING.md` (A3-0079 consumer mapping, E-listed changes vs plan, slice table) and `README.md` (commands, exit codes, versions, failed trials, limitations). All 13 mutation runners rerun on that commit: all exit 0, every mutant detected (outputs and UTC times in `mutants/`). Full suite 2226 passed / 201 skipped (out-of-scope schema-review cases), `export --check` exit 0, E manifest 2 intended mismatches of 142.
+- **Stated plainly in the READY:** no command line and no real wiring, so the adapter is not launchable; one shared fake view and a virtual transport only; `witness.py` NOT changed (new modules instead, a deviation from INVENTORY section 5's file list); same-model review (correlated); no ACK requested, no execution ACK inferred.
+- **Not done:** command line and real wiring (chain view, Worker factory, witness processes, transport); H2/H5/H6; independent review of any of it.
+- **Next:** wait for agent 3's review of A2-0063; meanwhile the command line only against frozen interfaces, never touching the manifest files without a new READY.
+
+---
+
 # Agent 2 handoff (2026-11-06, thirty-sixth check: full-suite regression and a correction)
 
 ## Update 2026-11-06, thirty-sixth check (newest)
