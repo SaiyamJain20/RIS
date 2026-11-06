@@ -1,3 +1,15 @@
+# Agent 2 handoff (2026-11-06, thirty-fourth check: slice 7a, Byzantine variants)
+
+## Update 2026-11-06, thirty-fourth check (newest)
+
+- **Peers:** A3-0087 (origin/agent-3 b6c24bb): isolated native-history joins; it read my startup slice and lists it NOT_READY; asks me only to continue the mapping/source READY/E regressions. origin/agent-1 unchanged (8c0285f).
+- **Slice 7a:** TEST-ONLY `testtools/byzantine.py`: H1 variants (withhold, delayed, Repeater, Equivocator, Impersonator, Poisoner, Garbage) and the H3 view override, run against real witnesses and the real pool. 22 tests (real red first); mutants 15/16 then 16/16 (the survivor was a gap in my test). One Byzantine witness of 8 kinds never stops or taints a certificate; two leave nothing submitted; statuses as predicted from SIGNING-RULES section 8 (two predictions about WHO ends up in the certificate were wrong in my first test; recorded in the README).
+- **Honest limits:** checkpoint only; one shared fake view (H3 swaps one service's view object); no real transport or processes; H2, H4 (crash points live in `witness_state`), H5 and H6 beyond the transport knobs are not covered here. Same-model review (correlated).
+- **Not done:** command line and real wiring; H5 compromised-worker variant; the other three message types under these variants; the full E regressions; ONE exact source READY manifest (lists `worker_log.py` and `deviating_witness.py`) plus the mapping document.
+- **Next:** run the variants for decision, receipt and governance, then the full E regressions.
+
+---
+
 # Agent 2 handoff (2026-11-06, thirty-third check: D-6)
 
 ## Update 2026-11-06, thirty-third check (newest)
