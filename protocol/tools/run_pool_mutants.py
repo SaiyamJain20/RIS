@@ -69,6 +69,12 @@ M = [
     ("W50 a witness set of another size is accepted", [("len(witnesses) == core.WITNESS_COUNT and", "len(witnesses) >= 1 and")]),
     ("W51 the witness-set version is not checked", [('if not isinstance(witness_set_version, str) or _DEC.fullmatch(witness_set_version) is None:', "if False:")]),
     ("W52 a decision collection may adopt without a sequence", [('if _DEC.fullmatch(self._P.get("sequence", "")) is None:', "if False:")]),
+    ("W53 a list element is not checked to be a string", [("(isinstance(v, list) and all(isinstance(x, str) for x in v))", "isinstance(v, list)")]),
+    ("W54 any value is accepted in a proposal or signature reply", [("(isinstance(v, str) or (isinstance(v, list) and all(isinstance(x, str) for x in v)))", "True")]),
+    ("W55 a recorded report may carry a list (the adoption core sees it)", [('and _flat_message(recorded["message"])', 'and _plain_message(recorded["message"])')]),
+    ("W56 an adopting collection accepts a list-valued proposal", [("        if adoption and not _flat_message(proposal):", "        if False:")]),
+    ("W57 a list value is refused in a non-adopting collection", [("        if not _plain_message(proposal):", "        if not _flat_message(proposal):")]),
+    ("W58 a signature reply with a list value is refused", [('not _plain_message(reply["message"]) or not isinstance(reply["signature"], str)', 'not _flat_message(reply["message"]) or not isinstance(reply["signature"], str)')]),
 ]
 
 

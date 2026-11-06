@@ -67,8 +67,14 @@ def _canon(message):
     return core.canonical_message(message)
 
 
-def _plain_message(m):
+def _flat_message(m):
+    """A dict of strings: the shape of a checkpoint and the only shape the adoption core accepts (a recorded report that carried anything else would make the core raise on hostile input)."""
     return isinstance(m, dict) and all(isinstance(k, str) and isinstance(v, str) for k, v in m.items())
+
+
+def _plain_message(m):
+    """A dict of strings and lists of strings (a GovernanceAction has `admins`). Used for the retained proposal and for signature replies; adoption never sees such a message."""
+    return isinstance(m, dict) and all(isinstance(k, str) and (isinstance(v, str) or (isinstance(v, list) and all(isinstance(x, str) for x in v))) for k, v in m.items())
 
 
 class Collection:
@@ -81,6 +87,8 @@ class Collection:
             raise CollectionError("the proposal must be a dict of strings")
         if not isinstance(adoption, bool):
             raise CollectionError("adoption must be a boolean")
+        if adoption and not _flat_message(proposal):
+            raise CollectionError("an adopting collection needs a proposal that is a dict of strings")
         if not isinstance(witness_set_version, str) or _DEC.fullmatch(witness_set_version) is None:
             raise CollectionError("witness_set_version must be a decimal string")
         deadline = core.collection_deadline_ms(ledger_now_at_start, proposal_expires_at)
@@ -239,7 +247,7 @@ class Collection:
         if recorded is not None:
             if not (self._adoption and code == "STALE_STATE" and reason == "CONFLICT_PINNED"):
                 return self._invalid(w, "a recorded value is only valid with a CONFLICT_PINNED refusal of a checkpoint")
-            if not (isinstance(recorded, dict) and set(recorded) == {"message", "signature"} and _plain_message(recorded["message"]) and isinstance(recorded["signature"], str)):
+            if not (isinstance(recorded, dict) and set(recorded) == {"message", "signature"} and _flat_message(recorded["message"]) and isinstance(recorded["signature"], str)):
                 return self._invalid(w, "malformed recorded value")
             if recorded["message"].get("sequence") != self._P["sequence"]:
                 return self._invalid(w, "the recorded value is for another sequence")

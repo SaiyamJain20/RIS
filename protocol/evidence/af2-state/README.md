@@ -142,3 +142,12 @@ Done in slice 3c (new `witness_pool_driver.py`, TEST-ONLY `testtools/virtual_tra
 Not done (task 2 and task 3 remain): a real chain view behind the service and the D50 reads (all four signed types are slices 4a to 4d, the S0 reconstruction is slice 5a and the worker store's D50 rows are slice 5b, all against fake views), the profile-3 `ledger.py`/`worker.py` changes, the D50 binding reconstruction and masked-build check from live reads, the worker store's D50 rows and `worker_log --binding`, the pool driver (real transport and clock around `Collection`; slices 3a and 3b are done) and timing evidence, the successor adapter operations and strict parsing, D-4, D-6, the TEST-ONLY hooks
 H3/H5/H6 and `testtools/byzantine.py`, the E regressions and export `--check` after those changes, and the source READY manifest. Power loss and OS crash are untested and no durability claim is made for them.
 Baseline of the existing E suite before any F change: `e-baseline.txt`.
+
+## Slice 6b-2 prerequisite: list-valued pooled messages (witness_pool)
+
+A GovernanceAction carries `admins` (a list of strings). `witness_pool.Collection` accepted only dicts of strings, so pool-mode governance could not be built. Change: a proposal or signature-reply message may now hold strings and lists of strings (`_plain_message`); a recorded report (checkpoint adoption) and any adopting collection stay flat (`_flat_message`), because the adoption core is defined over flat messages. List order is significant: the same elements in another order is a dissent.
+
+- Process: tests first (1 red: list proposal refused; then 1 red: adopting collection accepted a list). `test_witness_pool.py` 52 passed.
+- `tools/run_pool_mutants.py`: 58 of 58 detected on the first run (6 new mutants W53–W58 cover element type, any-value, recorded-with-list, adopting-with-list, list refused in non-adopting, list refused in a signature reply). Output: `pool-mutants-v2.txt`.
+- Also run: `test_witness_pool_driver.py`, `test_witness_service.py` (116 passed in total with the pool tests).
+- Classification: tested reconstruction choice. F0 does not say how a governance action is pooled; this is an explicit choice, not a finding.

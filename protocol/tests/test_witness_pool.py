@@ -670,3 +670,44 @@ def test_every_collection_result_passes_my_wire_checker_and_a_tampered_one_does_
         e = copy.deepcopy(ok_ex)
         tamper(e["result"]["collection"])
         assert run_wire_checker([e])[0] != 0
+
+
+# ---- governance actions carry a list (`admins`): the pool must carry them too (found by the witness-handler slice 6b-2) ---------------------------------------------------------------------------
+def test_a_message_with_a_list_of_strings_can_be_pooled_when_nothing_is_adopted():
+    """A GovernanceAction has `admins: [address, ...]`. The pool never adopts for it (`recorded` is a checkpoint-only notion), so list values only need to travel, be compared by canonical content and be recovered."""
+    action = {"action": "1", "root": "0x" + "88" * 20, "admins": ["0x" + "11" * 20, "0x" + "22" * 20], "nonce": "1", "witnessSetVersion": "2", "expiresAt": str(T0 + 60)}
+    sig_by = {i: "0x" + ("%02x" % (i + 1)) * 65 for i in range(4)}
+
+    def recover(m, s):
+        return next((ADDR[i] for i, x in sig_by.items() if x == s and m == action), None)
+    c = wp.Collection(witnesses=ADDR, recover=recover, proposal=action, ledger_now_at_start=T0, proposal_expires_at=T0 + 60, adoption=False, witness_set_version="2")
+    c.start()
+    for i in range(3):
+        c.on_reply(100 * (i + 1), i, {"type": "signature", "message": dict(action), "signature": sig_by[i]})
+    assert c.done and c.result["ok"] is True and c.result["message"] == action and len(c.result["signatures"]) == 3
+    other = dict(action, admins=["0x" + "22" * 20, "0x" + "11" * 20])                                       # the same elements in another order are another value
+    c2 = wp.Collection(witnesses=ADDR, recover=recover, proposal=action, ledger_now_at_start=T0, proposal_expires_at=T0 + 60, adoption=False, witness_set_version="2")
+    c2.start()
+    c2.on_reply(100, 0, {"type": "signature", "message": other, "signature": sig_by[0]})
+    assert c2.result is None and c2._events[0][0][0] == "dissent"
+
+
+def test_a_message_with_a_non_string_list_element_or_a_nested_value_is_still_refused():
+    for bad in ({"sequence": "1", "x": [1]}, {"sequence": "1", "x": [["a"]]}, {"sequence": "1", "x": {"a": "b"}}, {"sequence": "1", "x": [None]}):
+        with pytest.raises(wp.CollectionError):
+            wp.Collection(witnesses=ADDR, recover=lambda m, s: None, proposal=bad, ledger_now_at_start=T0, proposal_expires_at=T0 + 60, adoption=False, witness_set_version="2")
+
+
+def test_a_recorded_report_carrying_a_list_is_an_invalid_reply_and_never_crashes_the_collection():
+    c = make()
+    c.start()
+    hostile = dict(A, tag=["x"])
+    c.on_reply(100, 2, {"type": "error", "code": "STALE_STATE", "reason": "CONFLICT_PINNED", "recorded": {"message": hostile, "signature": sign(2, A)}})
+    for w in (0, 1, 3):
+        c.on_reply(200 + w, w, {"type": "error", "code": "STALE_STATE", "reason": "CONFLICT_PINNED", "recorded": {"message": A, "signature": sign(w, A)}})
+    assert c._events[2][0][0] == "invalid" and "recorded value" in c._events[2][0][1]
+
+
+def test_adoption_mode_refuses_a_list_valued_proposal_because_the_adoption_core_is_defined_over_flat_messages():
+    with pytest.raises(wp.CollectionError):
+        wp.Collection(witnesses=ADDR, recover=lambda m, s: None, proposal={"sequence": "1", "x": ["a"]}, ledger_now_at_start=T0, proposal_expires_at=T0 + 60, adoption=True, witness_set_version="2")
