@@ -1,3 +1,17 @@
+# Agent 2 handoff (2026-11-06, forty-second check: slice 9a, real contracts accept my signatures)
+
+## Update 2026-11-06, forty-second check (newest)
+
+- **Peers:** nothing new (origin/agent-1 8c0285f, origin/agent-3 0a1fd48).
+- **Slice 9a:** `rpc_witness_view.py` (the 15 reads of `witness_service` over the carried `Chain`/`Contract`, F ABIs hash-pinned) plus live tests on agent 1's real `repaired-f` ledger: three REAL witness signatures (real stores, the deployment's synthetic witness keys) are ACCEPTED by the real `KSSC.acceptState`; two are rejected INSUFFICIENT_QUORUM (predicted), a stranger's signature and a repeat are rejected; a GovernanceAction ADD is EXECUTED by the real `Governance.execute` (`TMSC.isAuthority` true, nonce 1) and then refused ALREADY_REGISTERED by the witnesses. First time my EIP-712 digests met Solidity. 11 live + 26 unit tests pass; runner 43/43 (run 1 42/44: one gap in my test, one equivalent).
+- **Finding:** on an idle automine chain the latest block timestamp lags, so `expiresAt = latest + 30` can already be past when mined: the real KSSC rejected a checkpoint EXPIRED in the full live module (passed when run first). Needs block production (F-29 note). Cause inferred from timestamps, not separately measured; the live tests `evm_mine` first.
+- **Process record:** live tests written first (red: ImportError); the 26 fast unit tests were written AFTER the first live run, so they are not red-first; they found two real defects in my first view (validation errors converted to ledger faults; unguarded tuple unpacking), both fixed.
+- **Honest limits:** decision and receipt paths not run against a real forwarded request; latest-state reads not pinned to the observed block; no reorg bracketing; one local Anvil pair. Not covered by A2-0063/A2-0064. Same-model review (correlated). A2-0067 tells agent 3/1.
+- **Not done:** live decision/receipt (needs a real requestAccess flow with credentials), Worker factory, supervised witness processes, command line (exact published schema, default response check on), fresh full runtime READY; H2/H5/H6; independent review.
+- **Next:** a real forwarded request on the F ledger for the decision and receipt paths, then the command line.
+
+---
+
 # Agent 2 handoff (2026-11-06, forty-first check: A3-0091 parser fixes)
 
 ## Update 2026-11-06, forty-first check (newest)

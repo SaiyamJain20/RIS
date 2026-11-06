@@ -1,4 +1,7 @@
-"""LIVE test of the D50 chain view and the open-time reconstruction against REAL nodes and a REAL deployment (agent 2, F task 2 slice 8b).
+"""LIVE tests against REAL nodes and a REAL deployment: the D50 chain view and open-time reconstruction (slice 8b) and the witness-side ledger view with real witness signatures accepted by the real
+contracts (slice 9a, the second half of this file).
+
+D50 part (slice 8b, agent 2, F task 2).
 
 Two Anvil nodes (Foundry 1.8.5 in the tool directory the carried live fixtures use) and agent 1's ledger snapshot at commit 85c59f5, deployed by agent 1's own `ledger/tools/deploy_local.sh` into a scratch
 directory (`git archive`, nothing of any peer checkout is touched), once as `repaired-f` and once as `repaired-e` with `SUCCESSOR_EXPORT=1` (the v2.1 carrier). `RpcBindingView.from_manifest` loads the
@@ -19,6 +22,12 @@ from types import SimpleNamespace
 import pytest
 
 from hmbc_protocol import adapter_v2_start as st
+from eth_account import Account
+
+from hmbc_protocol import eip712, keys, messages, rpc_witness_view as rwv
+from hmbc_protocol.abi import Contract
+from hmbc_protocol.chain import Rejected
+from hmbc_protocol import witness_service as svc, witness_state as ws
 from hmbc_protocol import binding as bd
 from hmbc_protocol import binding_open as bo
 from hmbc_protocol import rpc_binding_view as rv
@@ -192,3 +201,110 @@ def test_the_startup_order_binds_the_worker_directory_against_the_real_deploymen
     assert (tmp_path / "state" / "worker" / "INITIALIZED").is_file()
     ctx2 = st.start(manifest=live_f.dep, schema_revision="v2", chain_view=view_for(live_f)[0], state_dir=str(tmp_path / "state"), worker_factory=lambda c: None)      # the same deployment reopens
     assert ctx2.manifest == live_f.dep
+
+
+# ========================================================================================================================================================
+# Slice 9a: the witness-side ledger view over the same real nodes, and REAL witness signatures accepted by the REAL contracts.
+# Written BEFORE hmbc_protocol/rpc_witness_view.py existed. Four real WitnessService objects (real durable stores, the synthetic witness keys the deployment names) read the real ledger through
+# `RpcWitnessView`; a three-signature checkpoint certificate and a GovernanceAction certificate are submitted to the real KSSC and Governance contracts, which verify the EIP-712 signatures themselves.
+# This is the first time my signing digests meet Solidity. NOT shown: the decision and receipt paths (they need a forwarded request with credentials on the real ledger), independent hosts, timing.
+# ========================================================================================================================================================
+def witness_view(live, manifest=None):
+    m = manifest or live.dep
+    chains = {s: Chain(live.urls[i], int(m["chains"][s]["chainId"])) for i, s in enumerate(("pbc", "dbc"))}
+    return rwv.RpcWitnessView.from_manifest(m, chains, live.abi_dir), chains
+
+
+def real_witnesses(live, tmp_path, allowed=None):
+    wview, _ = witness_view(live)
+    out = []
+    for i in range(4):
+        key = keys.synthetic_private_key("witness-%d" % (i + 1))
+        addr = live.dep["fixture"]["witnessSet"]["witnesses"][i]
+        assert Account.from_key(key).address.lower() == addr                    # the deployment's witness set IS the synthetic witness-N keys
+        r = bo.reconstruct(live.dep, view_for(live)[0], role="witness", key_address=addr)
+        store = ws.init_store(str(tmp_path / ("w%d" % i)), r["binding_v2"], r["document"], "witness:" + addr, anchor=r["anchor"])
+        out.append(svc.WitnessService(store=store, key=key, view=wview, deployment=live.dep, witness_set_version="2", allowed_governance=allowed))
+    assert [w.address for w in out] == live.dep["fixture"]["witnessSet"]["witnesses"]
+    return out, wview
+
+
+def mine(live, side):
+    """One new block on that chain (Anvil `evm_mine`), so the LATEST block carries the current time. FINDING (observed): on an idle automine chain the latest block's timestamp is that of the last
+    transaction; a checkpoint proposed with `expiresAt = latest + 30` can already be in the past when the next block is mined, and the real KSSC then rejects it EXPIRED. The witness rules read the
+    latest block (F0), so liveness needs block production (a heartbeat), which is the F-29 note in INVENTORY made concrete. The tests mine before deriving, as an operator's block producer would."""
+    from support import rpc
+    rpc(live.urls[0 if side == "pbc" else 1], "evm_mine")
+
+
+def sorted_signatures(m, name, sigs, deployment):
+    by = {}
+    for sg in sigs:
+        digest = svc._governance_digest(m, deployment) if name == "GovernanceAction" else messages.digest_of(name, m, messages.domain_for(name, m, deployment))
+        by[eip712.recover(digest, sg)] = sg
+    return [by[a] for a in sorted(by)]
+
+
+def test_the_witness_view_returns_the_shapes_the_service_expects_from_the_real_ledger(live_f):
+    wview, chains = witness_view(live_f)
+    head = chains["dbc"].get_block("latest")
+    o = wview.observe("dbc")
+    assert o["chainId"] == "28545" and int(o["blockNumber"]) >= head["number"] and len(o["blockHash"]) == 66 and int(o["timestamp"]) >= head["timestamp"]
+    n = int(wview.observe("pbc")["blockNumber"])
+    b = wview.pbc_block(n)
+    assert b == {"number": str(n), "hash": chains["pbc"].get_block(n)["hash"], "timestamp": str(chains["pbc"].get_block(n)["timestamp"])}
+    assert wview.pbc_block(n + 1000) is None
+    assert wview.reads_at(n) == {"authEpoch": "0", "policyVersion": "1", "witnessSetVersion": "2"}
+    assert wview.dbc_current_checkpoint() is None                      # nothing accepted yet on a fresh deployment
+    assert wview.governance_nonce() in (0, "0") and wview.is_authority("0x" + "ab" * 20) is False and wview.removed_authority("0x" + "ab" * 20) is False
+    assert wview.nonce_consumed("0x" + "ab" * 20, "1") is False
+    assert wview.now("dbc") >= int(o["timestamp"])
+    assert wview.forwarded_logs("0x" + "00" * 32) == [] and wview.grant_issued_logs("0x" + "00" * 32) == []
+    assert wview.psc_request("0x" + "00" * 32)["status"] == "0"
+
+
+def test_a_proposer_derives_a_valid_checkpoint_from_the_real_ledger(live_f):
+    wview, chains = witness_view(live_f)
+    cp = svc.derive_checkpoint(wview, live_f.dep)
+    assert cp["sequence"] == "1" and cp["keyEpoch"] == "0" and cp["witnessSetVersion"] == "2" and cp["sourceChainId"] == "18545"
+    assert cp["psc"] == live_f.dep["chains"]["pbc"]["contracts"]["PSC"] and cp["sourceBlockHash"] == chains["pbc"].get_block(int(cp["sourceBlockNumber"]))["hash"]
+
+
+def test_three_real_witness_signatures_are_accepted_by_the_real_kssc_and_two_or_a_stranger_are_not(live_f, tmp_path):
+    witnesses, wview = real_witnesses(live_f, tmp_path)
+    _, chains = witness_view(live_f)
+    kssc = Contract(json.load(open(os.path.join(live_f.abi_dir, "KSSC.json"))), live_f.dep["chains"]["dbc"]["contracts"]["KSSC"])
+    mine(live_f, "dbc")
+    cp = svc.derive_checkpoint(wview, live_f.dep)
+    sigs = [w.sign_checkpoint(cp) for w in witnesses[:3]]
+    ordered = sorted_signatures(cp, "StateCheckpoint", sigs, live_f.dep)
+    with pytest.raises(Rejected) as e2:                                   # two of four is below the threshold of three: PREDICTED INSUFFICIENT_QUORUM
+        chains["dbc"].send(ANVIL_KEY0, kssc, "acceptState", cp, ordered[:2])
+    assert e2.value.code == "INSUFFICIENT_QUORUM"
+    stranger = eip712.sign_digest(keys.synthetic_private_key("outsider"), messages.digest_of("StateCheckpoint", cp, messages.domain_for("StateCheckpoint", cp, live_f.dep)))
+    with pytest.raises(Rejected):                                         # a signature by a non-member in place of the third
+        chains["dbc"].send(ANVIL_KEY0, kssc, "acceptState", cp, sorted_signatures(cp, "StateCheckpoint", sigs[:2] + [stranger], live_f.dep))
+    chains["dbc"].send(ANVIL_KEY0, kssc, "acceptState", cp, ordered)       # the real contract verifies the three EIP-712 signatures
+    cur = wview.dbc_current_checkpoint()
+    assert cur is not None and cur["sequence"] == "1" and cur["sourceBlockHash"] == cp["sourceBlockHash"]
+    assert svc.derive_checkpoint(wview, live_f.dep)["sequence"] == "2"
+    with pytest.raises(Rejected):                                         # the same sequence cannot be accepted twice
+        chains["dbc"].send(ANVIL_KEY0, kssc, "acceptState", cp, ordered)
+
+
+def test_real_witness_signatures_over_a_governance_action_are_executed_by_the_real_governance_contract(live_f, tmp_path):
+    root, admin = "0x" + "c4" * 20, "0x" + "d5" * 20
+    witnesses, wview = real_witnesses(live_f, tmp_path, allowed=[("1", root, (admin,))])
+    _, chains = witness_view(live_f)
+    gov = Contract(json.load(open(os.path.join(live_f.abi_dir, "Governance.json"))), live_f.dep["chains"]["pbc"]["contracts"]["Governance"])
+    mine(live_f, "pbc")
+    ts = int(wview.observe("pbc")["timestamp"])
+    action = {"action": "1", "root": root, "admins": [admin], "nonce": "1", "witnessSetVersion": "2", "expiresAt": str(ts + 60)}
+    sigs = sorted_signatures(action, "GovernanceAction", [w.sign_governance(action) for w in witnesses[:3]], live_f.dep)
+    assert wview.is_authority(root) is False
+    chains["pbc"].send(ANVIL_KEY0, gov, "execute", action, sigs)           # the real contract verifies the signatures and applies the action to the real TMSC
+    assert wview.is_authority(root) is True and int(wview.governance_nonce()) == 1
+    again = dict(action, nonce="2")
+    with pytest.raises(svc.WitnessRefusal) as e:                           # the witnesses now refuse ADD of an existing authority before signing
+        witnesses[0].sign_governance(again)
+    assert e.value.code == "ALREADY_REGISTERED"
