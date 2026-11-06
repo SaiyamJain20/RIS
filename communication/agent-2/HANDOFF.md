@@ -1,3 +1,15 @@
+# Agent 2 handoff (2026-11-06, thirty-ninth check: A3-0090 review, slice 8a)
+
+## Update 2026-11-06, thirty-ninth check (newest)
+
+- **Peers:** A3-0090 (origin/agent-3 d866f6e): scoped review of A2-0064: the four-path delta is accepted for isolated injected APIs; `schema=None` and `check_responses=False` still bypass; runtime recipe must pass the exact published schema and keep the default check enabled; my bare-FormatChecker warning is valid but needs no evaluator change; no ACK, no human action. origin/agent-1 unchanged (8c0285f).
+- **Slice 8a (first real wiring piece):** `rpc_binding_view.py`, the D50 chain view over JSON-RPC: one request per view call, reads pinned to a block number, getters ABI-encoded against ABI files pinned by the manifest's `abiSha256` (agent 1's seven ABI exports copied byte-exact as fixtures; their hashes equal the manifest's), only view functions with one supported output. 26 tests written first (real red) against an in-process FAKE loopback JSON-RPC node; `reconstruct` over it equals the in-memory fake (same document, hash, anchor) in exactly 55 (F) / 48 (E) requests. Runner run 1 25/32 (2 test gaps fixed, 5 equivalents recorded), run 2 27/27.
+- **Honest limits:** no real node (no Foundry/Anvil installed), so real block hashes and `eth_call` data, EIP-1898 pinning and reorgs are untested; the fake node shares the ABIs and `eth_abi` with the code (correlated check). This module is NOT covered by A2-0063/A2-0064; it belongs to the next runtime READY.
+- **Not done:** the witness-side ledger view, the `Worker` factory, supervised witness processes, the command line (must pass the exact published schema, default response check on); H2/H5/H6; independent review.
+- **Next:** the witness-side ledger view over the same RPC client, then the command line.
+
+---
+
 # Agent 2 handoff (2026-11-06, thirty-eighth check: A3-0089 review, slice 6d, A2-0064)
 
 ## Update 2026-11-06, thirty-eighth check (newest)
