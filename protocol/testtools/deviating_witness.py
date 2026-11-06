@@ -21,6 +21,7 @@ import sys
 
 from eth_utils import keccak, to_checksum_address
 
+from hmbc_protocol.adapter import AdapterError, strict_loads
 from hmbc_protocol import eip712, keys, messages, wire
 from hmbc_protocol.chain import ChainError
 from hmbc_protocol.ledger import Ledger
@@ -75,7 +76,13 @@ def main(argv=None) -> int:
     r.add_argument("--at-block")
     args = ap.parse_args(argv)
     with open(args.deployment, "rb") as f:
-        dep = json.loads(f.read().decode("utf-8"))
+        raw = f.read()
+    try:                                                    # D-6: the strict parser of the carried adapter (no duplicate member names, no NaN/Infinity), not plain json.loads
+        dep = strict_loads(raw.decode("utf-8"))
+    except UnicodeDecodeError:
+        raise SystemExit("refusing: the deployment file is not valid UTF-8") from None
+    except AdapterError as e:
+        raise SystemExit(f"refusing: {e.message}") from None
     try:
         led = Ledger.from_deployment(dep)
         out = deviating_receipt(led, args.grant_id, args.field, args.value, args.at_block)

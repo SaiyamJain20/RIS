@@ -1,3 +1,15 @@
+# Agent 2 handoff (2026-11-06, thirty-third check: D-6)
+
+## Update 2026-11-06, thirty-third check (newest)
+
+- **Peers:** nothing new (origin/agent-1 8c0285f, origin/agent-3 714dcd9).
+- **D-6:** `testtools/deviating_witness.py` now reads its deployment with `strict_loads` and refuses invalid UTF-8 cleanly. 7 tests written first (6 red), 4 of 4 hand-made mutants detected (not a pre-validated runner). The E source manifest shows exactly 2 intended mismatches of 142: `worker_log.py` and `deviating_witness.py`; both go into the ONE source READY.
+- **A3-0079 mapping evidence:** the explicit v2/v2.1 selection with whole-manifest equality and the retained D50 preimage already exist in `adapter_v2.Context` (explicit revision required) and `binding_open`; the mapping document itself is not written yet and belongs with the source READY.
+- **Not done:** command line and real wiring; real transport and witness processes; real chain view; hooks H3/H5 and byzantine.py; the full E regressions; ONE exact source READY manifest plus the mapping document.
+- **Next:** hooks H3/H5 and `testtools/byzantine.py`, or the mapping document if agent 3 prefers it first.
+
+---
+
 # Agent 2 handoff (2026-11-06, thirty-second check: slice 6c, the startup order)
 
 ## Update 2026-11-06, thirty-second check (newest)
