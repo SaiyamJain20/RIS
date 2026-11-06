@@ -1,3 +1,56 @@
+## A2-0063 isolated source and mapping reviewed — 2026-11-06
+
+C-F1 WORKING; integrated execution LOCKED. Exact source
+dbae4e1e13fb26984a6d4b0aa042ae321c1c49f0; READY publication
+9467ba170a0dff514d0457c8dbddc82510d177ca; manifest
+protocol/evidence/af2-source-ready/MANIFEST.sha256 SHA256
+6ed9a53de1ec2ec32fedad01019ce18cd4196a304cc47202b4a0e3655218ca08 (384 entries).
+All entries equal complete tracked source, publication and scratch bytes. Reviewed
+for isolated injected APIs with published schema supplied; not a launchable runtime.
+
+Evidence/commands/UTC/exits/hashes/tools/fixtures/provenance:
+evaluation/evidence/reviews/a2-ready-20261106/{README.md,REVIEW.md,PLAN.md,
+commands.json,inputs-before.json,source-after.json,verification.json,
+communication-provenance*.json}. Fresh843focused PASS (included in2027isolated
+PASS);201schema-review SKIP/199live/build/completeness DESELECT; root .venv Python
+-B -m pytest -q -c protocol/pytest.ini --rootdir protocol -p no:cacheprovider
+-p no_live protocol/tests -rs in recorded scratch cwd. Exact selection IDs/reasons
+retained.16coordinator API controls; default9exports match; selected owner mutation
+runners43adapter/15startup/32worker-binding all detected, unmutated controls pass.
+384owner source entries/248local inputs unchanged;429ledgerREADY entries/52F0pins/
+31payloads/four copied fixture bytes verify. Python3.13.13/pytest9.0.2/
+jsonschema4.26.0/eth-account0.14.0/Git2.54.0; versions in inputs-before.json.
+
+First broader selection23FAIL/2027PASS/201SKIP/170DESELECT/6ERROR retained:
+Agent3 static-fixture selector missed dynamic getfixturevalue/peer build setup,
+which failed on nested Git archive before chains; catalog completeness required
+excluded cases. Corrected only Agent3 plugin; guard refuses missed live setup.
+Initial selector source reconstructed from exact patch after failure, disclosed;
+probe field-label correction and both runs also retained. No owner test weakened.
+Inherited environment selections are documented, not a complete environment hash.
+
+A3-0089 REVIEW accepts new modules instead of carried witness.py as internal
+organization, with frozen behavior/process duties unchanged. Consumer mapping
+now exists; E_SOURCE_CLOSURE_MAPPING.json records scoped source READY/review and
+preserves null peer mapping ACK/executionAuthorized=false. Context schema=None
+can accept incomplete carriers; frontend accepts arbitrary injected dict results.
+Future recipe must pass exact published schema and use result-validating handlers.
+CLI, real chain/worker wiring, supervised witnesses, real transport/clock still
+absent. Existing tested fake shared view/transport and correlated owner controls
+prove no source-state/sign-time/completeness/native-truth/timing/consensus property.
+
+Final fetch A18c0285f unchanged/A29467ba1;372communication paths/no divergence.
+A1 owes no new isolated READY at unchanged source. All owner-reported thirteen
+runner/full2226PASS counts remain distinct from this review's selections.
+No root evaluator/full owner suite rerun, service/port/lease/newEparity/TLC/timing/
+Fcase/gate. Qualified historical E unchanged;32Fcases/GateF NOT_RUN/G locked.
+Next own source-state/sign-time joins and exact reviewed store schema/path/lock
+analysis for completeness, then independent oracle/model. Complete runtime READYs
+and separate exact source/tools/config/run FREEZE ACKs precede services/scenarios.
+No human action. No peer/module/default-v1/frozen/dependency/archive changes,
+extra agents/worktrees/main push. Locks held through publication; normal owned
+commit/push/independent remote/cleanup receipts in automation memory.
+
 ## Native history RPC capture verified — 2026-11-06
 
 C-F1 WORKING; integrated execution LOCKED. Internal history_rpc_v2.collect

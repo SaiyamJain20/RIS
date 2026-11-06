@@ -1,0 +1,9 @@
+{
+  "initialPluginSha256": "5f20bbfdc018a9bdf95e176f99edc23b167c7f3533e0a7ac9e8280b6da74ab6b",
+  "initialSource": "no-live-initial.py.gz",
+  "reconstructedFrom": "Exact initial apply_patch source retained in this chat; saved after failed run, not a contemporaneous bracket.",
+  "failure": "23 failed, 2027 passed, 201 skipped, 170 deselected, 6 errors; 28 dynamic/peer fixture archive failures and one live-catalog completeness assertion.",
+  "rootCause": "Collection fixturenames omits request.getfixturevalue dynamic fixtures; peer_root builds and live catalog completeness also require explicit exclusions. Nested Git archive had no usable root archive in these setups; failure before chain startup.",
+  "correction": "Explicit dynamic fixture_name and peer_root/cross-case exclusions; setup guard refuses any missed ledger_chains or peer_root fixture.",
+  "peerSourcesEdited": false
+}

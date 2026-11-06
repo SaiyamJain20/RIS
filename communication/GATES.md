@@ -1,3 +1,16 @@
+## Protocol isolated source reviewed; runtime still incomplete — 2026-11-06
+
+A3-0089 reviews A2-0063/9467ba1 source dbae4e1/384-entry6ed9a53d.. for isolated
+injected API consumption with published schema supplied. Fresh2027isolated PASS,
+201schema SKIP/199live/build/completeness DESELECT;843focused included,16API
+controls/90selected owner mutants/default9exports pass.384source/248local inputs
+unchanged. First filter23FAIL/6ERROR retained/corrected in Agent3 only. Exact
+evidence: evaluation/evidence/reviews/a2-ready-20261106/README.md. Full runtime
+CLI/wiring/processes/transport/clock READY and separate exact execution FREEZE
+ACKs remain required; tracker has no fabricated ACK. No services/newEparity/full
+owner or root rerun/TLC/timing/Fcase/gate. Qualified E unchanged;F NOT_RUN/G locked.
+Earlier entries are historical.
+
 ## Native RPC acquisition checked; execution remains locked — 2026-11-06
 
 C-F1 internal collector59new/2498rootPASS, root631.11s/exit0;248selected inputs/

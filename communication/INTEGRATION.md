@@ -1,3 +1,17 @@
+## A2 source inventory reviewed; no runtime execution unlocked — 2026-11-06
+
+A2-0063/9467ba1 source dbae4e1/manifest6ed9a53d.. reviewed for isolated injected
+APIs with supplied published schema.384source/248local inputs unchanged;
+2027isolated PASS/201SKIP/199live/build/completeness DESELECT,843focused included,
+16API controls/90selected mutants/default9exports pass. First selector failure
+retained/corrected; no chain started or peer edit. Evidence:
+evaluation/evidence/reviews/a2-ready-20261106/README.md. CLI, real chain/worker
+wiring, supervised witnesses and real transport/clock are absent. No lease/port/
+service/newEparity/full owner or root rerun/TLC/timing/Fcase/gate result. Complete
+runtime READYs and separate exact source/tools/config/run FREEZE ACKs precede
+services. A3-0089 is a scoped REVIEW; mapping tracker keeps peer ACK null.
+Qualified E unchanged;32Fcases/GateF NOT_RUN/G locked. No human action.
+
 ## Native RPC acquisition checked; execution remains locked — 2026-11-06
 
 C-F1 internal collector59new/2498rootPASS, root631.11s/exit0;248selected inputs/

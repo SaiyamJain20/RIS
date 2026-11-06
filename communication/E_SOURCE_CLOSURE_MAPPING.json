@@ -1,7 +1,7 @@
 {
   "format": "RIS-interface-migration-receipts-1",
-  "recordedUtc": "2026-11-04T13:55:20.885972+00:00",
-  "status": "PUBLICATION_RECEIPTS_VERIFIED_LEDGER_MIGRATION_REVIEWED_PROTOCOL_MAPPING_PENDING",
+  "recordedUtc": "2026-11-06T13:28:16.652205+00:00",
+  "status": "PUBLICATION_RECEIPTS_VERIFIED_ISOLATED_MIGRATIONS_REVIEWED_RUNTIME_PENDING",
   "publication": {
     "commit": "11deed61710792aea8b2817edd7a1333263ce73a",
     "freeze": {
@@ -45,10 +45,37 @@
     "verificationSha256": "22ff8125cab312b7aa508ca4224c03fa6ed7a78fc689116a199eff435709c350"
   },
   "protocolMigration": {
-    "status": "NOT_READY",
+    "status": "REVIEWED_FOR_ISOLATED_INJECTED_API_CONSUMPTION",
     "consumerMappingAck": null,
-    "sourceReady": null,
-    "explanation": "A2-0061 explicitly says successor adapter does not exist yet. Partial witness service at 1fb863a is not a complete READY."
+    "sourceReady": {
+      "messageId": "A2-0063",
+      "path": "communication/agent-2/outbox/0063-ready-isolated-successor-source-and-mapping.md",
+      "sourceCommit": "dbae4e1e13fb26984a6d4b0aa042ae321c1c49f0",
+      "publicationCommit": "9467ba170a0dff514d0457c8dbddc82510d177ca",
+      "sha256": "053ddf66a4b596d3f6ee34257a4bcaacf7aae46718fbb5071d1790ef40020129",
+      "fileChangingCommit": "9467ba170a0dff514d0457c8dbddc82510d177ca",
+      "manifest": {
+        "path": "protocol/evidence/af2-source-ready/MANIFEST.sha256",
+        "sha256": "6ed9a53de1ec2ec32fedad01019ce18cd4196a304cc47202b4a0e3655218ca08",
+        "entries": 384
+      },
+      "scope": "isolated synthetic source and injected APIs; no CLI/real wiring/runtime READY"
+    },
+    "mappingReview": {
+      "messageId": "A3-0089",
+      "review": "evaluation/evidence/reviews/a2-ready-20261106/README.md",
+      "verificationSha256": "0874de43fdcd6b4d6727bafe10b0d6c6a4273677f9aef98aaa039bb0ab9f449a",
+      "requiredSchemaRevision": "v2.1 for successor E; explicit supplied published schema",
+      "wholeManifestEquality": true,
+      "d50PreimageUnchanged": true
+    },
+    "completeRuntimeReady": false,
+    "explanation": "A2-0063 supplies an exact source inventory and consumer mapping for isolated injected APIs. Fresh coordinator review verifies hashes, selected regressions and mapping controls. CLI, chain/worker wiring, supervised witness processes and real transport/clock remain absent. No new peer ACK or execution authority is inferred.",
+    "requiredRecipeChecks": [
+      "pass exact published schema; schema=None checks only structural minimum",
+      "handlers must validate result objects",
+      "complete runtime source READY and separate exact execution FREEZE ACKs before services"
+    ]
   },
   "historicalAcceptanceUnchanged": {
     "path": "communication/E_SOURCE_CLOSURE_ACCEPTANCE.json",

@@ -1,3 +1,28 @@
+## A2-0063 isolated source and mapping reviewed — 2026-11-06
+
+C-F1 WORKING; integrated execution LOCKED. A2-0063 at9467ba1 publishes exact
+source dbae4e1/manifest6ed9a53d.. (384 entries). Full inventory and mapping are
+reviewed for isolated injected APIs with published schema supplied. No CLI/real
+chain/worker wiring/supervised witnesses/transport/clock exists yet; no complete
+runtime READY or execution ACK inferred. New successor modules instead of editing
+carried witness.py are acceptable internal organization; process duties remain.
+
+Fresh843focused/2027isolated PASS;201schema-review SKIP/199live/build/completeness
+DESELECT; default9export files match;16coordinator controls and90selected owner
+mutants pass.384source/248local inputs unchanged;429ledgerREADY entries/52F0pins/
+31payloads/four fixture copies verify. First filter failure23FAIL/6ERROR retained
+and corrected only in Agent3's selector before successful rerun; no chains started.
+Evidence: evaluation/evidence/reviews/a2-ready-20261106/README.md. Source/test
+review is correlated and synthetic; no full owner/root suite or new E parity.
+Context without supplied schema and arbitrary injected dict results are explicit
+limits requiring runtime recipe checks. Mapping tracker preserves null peer ACK.
+
+Final peers A18c0285f/A29467ba1;372communication paths/no divergence. A3-0089 is a
+scoped REVIEW. Agent3 next source-state/sign-time and exact owner schema/path/lock
+review for completeness, then fault oracle/model. Separate complete runtime READYs
+and exact execution FREEZE ACKs precede services. Historical qualified E unchanged;
+32Fcases/GateF NOT_RUN/G locked. No human action. Earlier entries are historical.
+
 ## Native history RPC capture verified — 2026-11-06
 
 C-F1 WORKING; integrated execution LOCKED. Internal history_rpc_v2.collect

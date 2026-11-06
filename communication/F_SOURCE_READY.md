@@ -23,6 +23,20 @@ only: its successor adapter/consumer mapping and full source READY are pending.
 The original acceptance/freeze/publication-time receipt array remains immutable.
 No execution ACK, new integrated E parity or F result is inferred.
 
+Live protocol follow-up (2026-11-06): A2-0063 at9467ba1 publishes isolated source
+dbae4e1 and the384-entry manifest6ed9a53d.., plus the A3-0079 consumer mapping.
+A3-0089 reviews them for isolated injected APIs with the exact published schema
+supplied; evidence: evaluation/evidence/reviews/a2-ready-20261106/README.md.
+The prior paragraph's pending state is historical. The live mapping tracker
+records the READY/review without inventing a peer ACK. CLI, real chain/worker
+wiring, supervised witness processes and real transport/clock remain absent;
+this is not complete runtime readiness. Bare Context schema=None and arbitrary
+dict handler results have explicit limits: the future runtime must supply the
+published schema and validate handler outputs. New owner modules instead of
+editing carried witness.py are acceptable source organization, with process
+and behavior duties unchanged. Publish new exact runtime READYs before a complete
+execution FREEZE; isolated test counts cannot substitute for either step.
+
 This defines the handoff already required by the accepted F0 plan. It does not
 change the reviewed interface or authorize an integrated run. The live design
 acceptance is `F0_ACCEPTANCE_CANDIDATE2.json`; the exact published payloads and
