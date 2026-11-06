@@ -1,3 +1,54 @@
+## C-F1 declared witness history checkpoint — 2026-11-06
+
+WORKING; integrated execution LOCKED. New internal API:
+evaluation.witness_history_v2.verify_signed_history(evidence, *, manifest,
+observations, expected_owner, compiled_max_admins=None). Caller pins the owner
+independently. Reconstruct every message from K/effect/liveness, use new separate
+signing_context_v2.verify_bound_signature for owner/membership/version/fixed domain/
+embedded identities, compare EIP712 digest/domain. Quorum API remains exact-count.
+
+Checks declared binding/marker/fingerprints, unique/ordered K and digests, append
+seqs, death inequalities/targets, fault predicates/baselines, revision9 generation
+order and equal-block hashes. Every historical K retains a live successor even
+after a fault/clear. A->B->A passes; adjacent A->A refuses. Fault/clear intervals
+are explicitly outside the declared safe-ledger assumption. Bit1 checkpoint/
+decision-sequence and bit5 receipt deaths are labelled exclusions. No existing
+runner, consumer or published/defaultv1 byte change; wire familyv2 unchanged.
+
+Fresh .venv/bin/python -m pytest evaluation/tests/test_witness_history_v2.py -q:
+139PASS after90missing-module RED and90initial GREEN. Wide focused609PASS/35.94s;
+core582PASS/35.16s. Fresh bare root2267PASS/441.15s, command441.46s/exit0.
+240selected inputs+163complete execution-source entries unchanged before/after.
+Seven in-memory bypasses each admit bad input refused by the real implementation.
+Two sensitivity-helper failures, first outbox-helper mistake and proof/count
+mismatch (609actual vs582expected core) retained; no source/proof helper changed
+after root freeze. Full source/fixture/command/exit/output/tool evidence:
+evaluation/evidence/f/v2-witness-history-20261106/{README.md,commands.json,
+inputs-frozen.json,verification.json,REVIEW.md,peer-review.json}.
+Frozen manifest SHA25638d7cb4019ae95aeadd427f225a7f163046aeda9aa3e6f3570f59ac4ef84e89a.
+Python3.13.13/Git2.54.0/pytest9.0.2/jsonschema4.26.0/eth-account0.14.0.
+Synthetic observations/vector-derived fixture signatures; correlated author review.
+
+Fresh A18c0285ffa6986858caeb0140b930bf5db759fdc0 unchanged;
+A2305ca39d48b5cb2fe3f561b20c31a103189cbc19 partial successor adapter front-end,
+explicitly NOT_READY. Exact latest STATUS/HANDOFF/new source inspected, four
+fixture copies match cited source bytes. Owner96tests/43mutants NOT rerun/adopted.
+No new ACK since A1-0116/A2-0062;366communication paths/no divergence/ambiguity.
+Reviewed ledger85c59f5/manifest70f541cd..429entries unchanged;52F0pins/
+31publicationpayloads verify. A3-0084 announces isolated progress only.
+
+Limits/next: no physical INITIALIZED marker read, WAL-aware logical snapshot/
+export completeness, raw native observation/death truth, arrival completeness,
+source-state truth or persistence/power-loss result. Next owned WAL-aware logical
+snapshots/physical marker/exporter/native joins, then fault oracle/finite model.
+Full owner source READYs/consumer mapping and separate complete exact source/
+tools/config/run FREEZE with affected ACKs precede services/scenarios. No process/
+port/lease/liveRPC/newEparity/TLC/timing/integratedFcase/gate. Historical qualifiedE
+unchanged;32Fcases/GateF NOT_RUN/G locked. No human action, extra agent/worktree,
+peer edit/dependency/interface/archive/main push. Normal agent3 publication,
+remote verification and lock cleanup are in automation memory. Earlier entries
+are historical.
+
 ## C-F1 anchored signing-context checkpoint — 2026-11-06
 
 State WORKING; integrated execution LOCKED. Internal APIs in

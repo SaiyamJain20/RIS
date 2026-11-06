@@ -1,3 +1,18 @@
+## Declared signing history checked; execution locked — 2026-11-06
+
+Isolated evaluator139new/609wide/582core/2267root PASS;240selected+163complete
+sources stable; root441.15s/exit0. New internal witness_history_v2 checks declared
+record relationships and every bound owner signature, plus live successors;
+A->B->A allowed, faults/clears and mutant deaths labelled. Embedded marker is
+only a declared object. No physical marker/WAL completeness or native ledger
+truth established. Evidence: evaluation/evidence/f/v2-witness-history-20261106/.
+A2305ca39 adapter front-end remains NOT_READY; owner counts not rerun/adopted.
+Next own WAL-aware logical snapshots/physical marker/exporter/native joins, then
+oracle/model. Full owner READYs/mapping and separate complete source/tools/config/
+run FREEZE ACKs precede services/scenarios. No process/port/deployment/liveRPC/
+lease/newEparity/TLC/timing/Fcase/gate; qualified historicalE unchanged;
+32Fcases/GateF NOT_RUN/G locked. A3-0084 is not execution authority.
+
 ## Anchored signing context checked; execution remains locked — 2026-11-06
 
 Isolated evaluator92new/443focused/2128root PASS;238selected+157complete sources

@@ -1,3 +1,14 @@
+**C-F1 witness-history slice (2026-11-06):** Internal
+`witness_history_v2.verify_signed_history` reconstructs every declared signed
+message against independently supplied deployment context and store owner;
+checks record/hash/death/generation consistency; and requires a live successor
+for each historical key.139 synthetic tests PASS, including legal A->B->A.
+Fault/clear intervals and bit1/bit5 death exclusions are explicit. This does not
+prove native ledger truth or completeness against WAL-aware store/marker bytes.
+Root verification and exact provenance: [slice evidence](evidence/f/v2-witness-history-20261106/README.md).
+Existing consumers and published wire bytes stay fixed; integrated F NOT_RUN/G
+locked. Earlier entries below are historical.
+
 **Current review (2026-11-04):** A1-0111 exact ledger snapshot reviewed:
 316 Forge tests,12 mutant suites,13 source controls,26 v2 mapping checks pass;
 418 source entries unchanged. Embedded E source omission reproduced; additive

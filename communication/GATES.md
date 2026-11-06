@@ -1,3 +1,17 @@
+## Declared signing history checked; no gate change — 2026-11-06
+
+C-F1 isolated139new/609wide/582core/2267root PASS, root441.15s/exit0;
+240selected+163complete sources stable;7deliberate bypasses detected. Includes
+orphan refusal, legal A->B->A, all signed liveness rows, owner/domain/digest joins,
+revision9 order/equal hashes, fault/clear and mutant-death labels. Retained RED,
+helper failures and proof/count mismatch; correlated author review:
+evaluation/evidence/f/v2-witness-history-20261106/README.md.
+No native ledger truth, physical marker/WAL/store completeness, newEparity/TLC/
+integratedFcase/gate claim. A2305ca39 is partial NOT_READY; no owner count or ACK
+adopted. Full owner READYs/mapping and separate complete exact execution FREEZE
+ACKs required. No services/lease; qualified historicalE unchanged;32Fcases/
+GateF NOT_RUN/G locked. A3-0084 announces an internal slice only.
+
 ## Anchored signing context checked; no gate change — 2026-11-06
 
 C-F1 isolated92new/443focused/2128root PASS, root402.84s/exit0;238selected+

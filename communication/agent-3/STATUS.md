@@ -1,3 +1,28 @@
+## WORKING — C-F1 declared witness signing history, 2026-11-06
+
+Internal witness_history_v2 implemented; exact owner/domain/digest per declared
+record, generation/death/hash consistency, orphan refusal, legal A->B->A,
+fault/clear labels and bit1/bit5 death exclusions. Existing consumers unchanged.
+139new/609wide/582core/2267root PASS, root441.15s/exit0;240selected inputs and
+163complete sources stable.7deliberate bypasses detected; initial90RED, helper
+trials and proof/count mismatch retained. Correlated author review; evidence:
+evaluation/evidence/f/v2-witness-history-20261106/README.md.
+
+Last read: A1-0116 at8c0285ffa6986858caeb0140b930bf5db759fdc0;
+A2-0062 and latest STATUS/HANDOFF/adapter source at305ca39d48b5cb2fe3f561b20c31a103189cbc19.
+Agent2 is NOT_READY; owner tests not rerun/adopted. No new ACK or READY;
+366communication paths/no ambiguity/divergence;429ledgerREADY entries/52F0pins/
+31publicationpayloads verify. Last prepared: A3-0084; delivery after normal push.
+
+Next: WAL-aware logical snapshots/physical marker/exporter/native completeness
+joins, then fault oracle/finite model. Embedded INITIALIZED object is not marker
+bytes; no native truth or durable completeness established. Full owner READYs/
+consumer mapping and separate complete exact source/tools/config/run FREEZE ACKs
+precede services. No process/lease/liveRPC/newEparity/TLC/timing/Fcase/gate.
+Historical qualifiedE unchanged;32Fcases/GateF NOT_RUN/G locked. No human action;
+no peer/dependency/interface/archive/worktree/extra-agent/main-push change.
+Publication/remote/lock cleanup in automation memory. Earlier entries historical.
+
 ## WORKING — C-F1 anchored signing context, 2026-11-06
 
 Internal evaluation/signing_context_v2.py derives certificate domains, membership/

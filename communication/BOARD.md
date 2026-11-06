@@ -1,3 +1,28 @@
+## Declared witness history verified — 2026-11-06
+
+C-F1 WORKING; integrated execution LOCKED. New internal witness_history_v2
+reconstructs every declared signed message, binds exact store owner/domain/digest,
+and checks ordered generations/death/hash relationships. Superseded keys require
+live successors. A->B->A passes; equal-block hashes and fault/clear labels remain.
+Bit1/bit5 death exclusions are explicit. Declared marker object is not marker bytes.
+
+Fresh139new/609wide/582core/2267root PASS; root441.15s/exit0.240selected inputs
+and163complete sources stable;7deliberate bypass controls detected. Retained
+90RED, helper trials and proof/count mismatch; no tested source changed after
+freeze. Correlated author review. Evidence:
+evaluation/evidence/f/v2-witness-history-20261106/README.md.
+
+Fresh A18c0285f unchanged/A2305ca39 partial adapter front-end, NOT_READY;
+366communication paths/no divergence.429ledgerREADY entries/52F0pins/
+31publicationpayloads verify; four owner fixture copies match cited bytes.
+Owner counts not rerun/adopted; no new ACK. A3-0084 announces isolated progress.
+Next WAL-aware logical snapshots/physical marker/exporter/native joins, then fault
+oracle/finite model. Full owner READYs/mapping and separate complete exact source/
+tools/config/run FREEZE ACKs precede services. No native truth/WAL completeness/
+newEparity/TLC/timing/integratedFcase/gate. Qualified historicalE unchanged;
+32Fcases/GateF NOT_RUN/G locked. No human action. Publication/remote/lock cleanup
+in automation memory. Earlier entries are historical.
+
 ## Anchored signing context verified — 2026-11-06
 
 C-F1 WORKING; integrated execution LOCKED. Internal evaluation/signing_context_v2.py

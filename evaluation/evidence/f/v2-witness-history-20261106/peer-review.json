@@ -1,0 +1,67 @@
+{
+  "agent1": "8c0285ffa6986858caeb0140b930bf5db759fdc0",
+  "agent2": "305ca39d48b5cb2fe3f561b20c31a103189cbc19",
+  "previousAgent2": "eb6e29954786750a1216aa8ea3b3f81929063d66",
+  "protocolPaths": {
+    "protocol/evidence/af2-state/README.md": {
+      "sha256": "314d7c804991baf61aa13be450aaf14498da76ead876c53fdc8cae1a59cc65cb",
+      "fileChangingCommit": "305ca39d48b5cb2fe3f561b20c31a103189cbc19"
+    },
+    "protocol/evidence/af2-state/adapter-v2-green.txt": {
+      "sha256": "bf91a529d2cae94a7c9b2519d6e1bdc184ebf7d683372b6c28394a24980d375b",
+      "fileChangingCommit": "305ca39d48b5cb2fe3f561b20c31a103189cbc19"
+    },
+    "protocol/evidence/af2-state/adapter-v2-mutants-run1-42-of-43.txt": {
+      "sha256": "afb7237024aa1e232c642553f88efec6152f7ef521c1820fc057c66a560cb8f0",
+      "fileChangingCommit": "305ca39d48b5cb2fe3f561b20c31a103189cbc19"
+    },
+    "protocol/evidence/af2-state/adapter-v2-mutants.txt": {
+      "sha256": "c24e380747ebb1b81a80701fa2bb7ec6c1278b32aa5b1e1456f2d42812fc5022",
+      "fileChangingCommit": "305ca39d48b5cb2fe3f561b20c31a103189cbc19"
+    },
+    "protocol/evidence/af2-state/adapter-v2-run1-red.txt": {
+      "sha256": "e9e1c726dc0deed19c7712ca83df500c5336615be505bff10de7169a6ecbe91c",
+      "fileChangingCommit": "305ca39d48b5cb2fe3f561b20c31a103189cbc19"
+    },
+    "protocol/hmbc_protocol/adapter_v2.py": {
+      "sha256": "d3826e01de1b84debab36a87ae0f82076776ee3876fa13a36a857f6cf5b3f060",
+      "fileChangingCommit": "305ca39d48b5cb2fe3f561b20c31a103189cbc19"
+    },
+    "protocol/tests/fixtures/agent1-85c59f5-e-successor-v2.1-deployment.json": {
+      "sha256": "e77cfea382c2dde56b045e547a043f876b07d6a9f3886bb3bb34125fd4336f98",
+      "fileChangingCommit": "305ca39d48b5cb2fe3f561b20c31a103189cbc19"
+    },
+    "protocol/tests/fixtures/agent1-85c59f5-f-base-deployment.json": {
+      "sha256": "8aa91020152c7269e46b9c46bf3aab1c9cc1cfeecc4662fbe192820266e3caa2",
+      "fileChangingCommit": "305ca39d48b5cb2fe3f561b20c31a103189cbc19"
+    },
+    "protocol/tests/fixtures/agent3-interfaces-provenance.json": {
+      "sha256": "eac8a5244e019f61a57e30ba19b2802f8697c79a153d623985cb5c2dea9becb1",
+      "fileChangingCommit": "305ca39d48b5cb2fe3f561b20c31a103189cbc19"
+    },
+    "protocol/tests/fixtures/agent3-v2-reason-codes.json": {
+      "sha256": "7437fc0d3abae50137c10011e82b01efb6b63f2bc3227dc320c0b1da825e7e0d",
+      "fileChangingCommit": "305ca39d48b5cb2fe3f561b20c31a103189cbc19"
+    },
+    "protocol/tests/fixtures/agent3-v2.1-hmbc.schema.json": {
+      "sha256": "d43c3a9a4cbb10214135afb767a2adc109da462f88bd11a81a8c8955d44fd1f3",
+      "fileChangingCommit": "305ca39d48b5cb2fe3f561b20c31a103189cbc19"
+    },
+    "protocol/tests/test_adapter_v2.py": {
+      "sha256": "47ab8d27367a6f649902567c98d20c69245ac99304204ae9487e00fb52a2256c",
+      "fileChangingCommit": "305ca39d48b5cb2fe3f561b20c31a103189cbc19"
+    },
+    "protocol/tools/run_adapter_v2_mutants.py": {
+      "sha256": "979cfd535cf3baa2d681149c6e65c6a39d72a6a5aa4016f98258028e2f85e363",
+      "fileChangingCommit": "305ca39d48b5cb2fe3f561b20c31a103189cbc19"
+    }
+  },
+  "verifiedFixtureCopies": 4,
+  "newestOutboxes": {
+    "agent-1": "communication/agent-1/outbox/0116-note-governance-getters-and-d50-open.md",
+    "agent-2": "communication/agent-2/outbox/0062-note-d50-differential-against-a3-0081.md"
+  },
+  "review": "Read exact latest owner state and entire new adapter source. Strict envelope, explicit schema selection, whole manifest equality and injected handlers. Owner explicitly NOT_READY; no new ACK or READY.",
+  "ownerReportedOnly": "96 adapter tests,43/43 mutants; NOT rerun or adopted as independent evidence.",
+  "remaining": "handler/startup/result/CLI wiring, full successor consumer mapping, real chain view/driver, D4/D6/hooks/byzantine, full E parity and ONE source READY"
+}

@@ -10,7 +10,8 @@ do not establish source-state truth, expiry, event membership, request/grant
 correspondence, exporter completeness, storage durability or an RQ result.
 """
 from evaluation.binding_context_v2 import reconstruct
-from evaluation.certificates_v2 import verify_certificate, verify_checkpoint_reports
+from evaluation.certificates_v2 import (verify_certificate, verify_checkpoint_reports,
+                                        message_digest, _typed_message)
 from evaluation.schema_v2 import validate, validate_response
 
 _DESTINATIONS = {
@@ -65,6 +66,23 @@ def verify_bound_certificate(name, message, signatures, *, manifest, observation
     validate(name, message)
     _embedded_identity(name, message, document)
     return verify_certificate(name, message, signatures, **context)
+
+
+def verify_bound_signature(name, message, signature, *, owner, manifest, observations,
+                           compiled_max_admins=None):
+    """Verify one caller-pinned store owner; return the digest and fixed domain.
+
+    A single stored signature is not a quorum certificate. Membership, version,
+    destination and embedded identities still come from reconstructed B.
+    """
+    document, context = _context(name, manifest, observations, compiled_max_admins)
+    _require(owner in context['witnesses'], 'unconfigured signature owner')
+    _embedded_identity(name, message, document)
+    context.update(witnesses=[owner], required_signatures=1)
+    verify_certificate(name, message, [signature], **context)
+    domain = {k: context[k] for k in ('chain_id', 'verifying_contract')}
+    return {'digest': message_digest(name, message, **domain),
+            'domainSeparator': '0x' + _typed_message(name, message, **domain).header.hex()}
 
 
 def verify_bound_checkpoint_reports(response, *, manifest, observations,
