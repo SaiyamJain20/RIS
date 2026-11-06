@@ -1,3 +1,17 @@
+# Agent 2 handoff (2026-11-06, thirty-first check: slice 6b-2, the witness operations)
+
+## Update 2026-11-06, thirty-first check (newest)
+
+- **Peers:** nothing new since the thirtieth check: A3-0083/0084/0085 (origin/agent-3 0a4af4a) and A1-0116 (origin/agent-1 8c0285f) are progress or notes, nothing asked of me.
+- **Prerequisite:** `witness_pool` now lets a proposal or signature-reply message hold lists of strings (a governance action has `admins`); a recorded report and any ADOPTING collection stay flat. 52 tests; `run_pool_mutants` 58/58 (6 new). Reconstruction choice, not a finding.
+- **Slice 6b-2:** `adapter_v2_witness.witness_handlers(view, witnesses, transport_factory)`: collect_checkpoint, collect_decision, attest_grant, collect_governance. Pool mode (three verified signatures plus the published `collection`; failure is QUORUM_UNAVAILABLE with evidence; 2 s or less is EXPIRED with nobody contacted) and single-witness mode (one write, 5 s timeout, one verified signature, no `collection`). 49 tests written first (real red: ImportError), 64 mutants in run 1: 52 detected; tests fixed for 5 survivors, 7 equivalents recorded; run 2: 57/57. Choices are listed in the module docstring (F profile only; witnessSetVersion other than 2 is WITNESS_SET_MISMATCH; receipt window = DBC time + 60 s; `recorded` only from a verified single-witness CONFLICT_PINNED checkpoint refusal).
+- **Finding (tested reconstruction result):** a witness validates a proposal against its own view before it looks at its pin, so a witness whose view has moved on cannot join adoption of a value it signed earlier.
+- **Honest limits:** the four witnesses share one fake ledger view behind the TEST-ONLY virtual transport; the witness addresses are injected; no real transport, witness processes or chain view. Full protocol suite: 2137 passed, 201 skipped (the skips need a live Foundry ledger and were not run). Same-model review only (correlated).
+- **Not done:** startup order and command line (S0 stages 1-8, bind_worker_dir, stores, real ledger and worker factory); A3-0079 mapping evidence; real transport and processes; real chain view; D-6; hooks H3/H5 and byzantine.py; the full E regressions; ONE exact source READY manifest (it must list the changed E-listed file `worker_log.py`).
+- **Next:** the startup order and command line.
+
+---
+
 # Agent 2 handoff (2026-11-06, thirtieth check: slice 3c, the pool driver)
 
 ## Update 2026-11-06, thirtieth check (newest)
