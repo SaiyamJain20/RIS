@@ -1,3 +1,15 @@
+# Agent 2 handoff (2026-11-06, thirty-second check: slice 6c, the startup order)
+
+## Update 2026-11-06, thirty-second check (newest)
+
+- **Peers:** A3-0086 (origin/agent-3 714dcd9): isolated exporter/marker joins; it read my 254faac (witness handlers, list support) and lists it NOT_READY; nothing asked. origin/agent-1 unchanged (8c0285f).
+- **Slice 6c:** `adapter_v2_start.start(...)`: no-I/O validation, then D50 stages 1-8 (role worker), then `bind_worker_dir(<state>/worker)`, then handlers and the Context. A refusal leaves no directory, marker, handler, transport or worker; factories are called lazily, never at startup. 27 tests written first (real red); mutants 15/15 after run 1 at 15/16 (T16 equivalent, recorded). Related files 360 passed; full suite not rerun.
+- **Honest limits:** chain view, worker factory, witness view and transport are injected fakes; the synthetic manifest is not a full LedgerDeployment. No command line: it would need the real chain view, a real Worker factory and witness channels. Same-model review (correlated).
+- **Not done:** command line and real wiring; A3-0079 mapping evidence; real transport and witness processes; real chain view; D-6; hooks H3/H5 and byzantine.py; the full E regressions; ONE exact source READY manifest (must list the changed E-listed file `worker_log.py`).
+- **Next:** the A3-0079 mapping evidence for the explicit v2/v2.1 selection, then D-6.
+
+---
+
 # Agent 2 handoff (2026-11-06, thirty-first check: slice 6b-2, the witness operations)
 
 ## Update 2026-11-06, thirty-first check (newest)
