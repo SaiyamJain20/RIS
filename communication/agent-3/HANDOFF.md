@@ -1,3 +1,50 @@
+## C-F1 anchored signing-context checkpoint — 2026-11-06
+
+State WORKING; integrated execution LOCKED. Internal APIs in
+evaluation/signing_context_v2.py: verify_bound_certificate(name,message,signatures,
+*,manifest,observations,compiled_max_admins=None) and
+verify_bound_checkpoint_reports(response,*,manifest,observations,
+compiled_max_admins=None,selected_index=None). Reconstruct B before deriving
+domain/membership/version/exact quorum. Check checkpoint PBC/PSC and receipt
+DBC/KSSC identities. Report API covers all declared retry paths/indexed owners;
+success certificates need the separate certificate API. Caller supplies reviewed
+pins/separately acquired observations; existing consumers/frozen bytes unchanged.
+
+Fresh tests-first82missing-module RED; fixture27FAIL/55PASS retained (helper
+collapsed distinct retry messages). Corrected helper preserves equal copies,
+adoption and timing without weakening production checks. Corrected90PASS plus
+2carrier/no-report controls ->92new/443focused PASS. Full root2128PASS/402.84s
+(403.10s command)/exit0;238selected+157complete execution-source entries stable.
+All Python helpers finalized before source freeze. Seven deliberate in-memory
+bypasses admit inputs refused by the original. Correlated author review under
+no-extra-agents rule. Reproduce: .venv/bin/python -m pytest
+evaluation/tests/test_signing_context_v2.py -q; .venv/bin/python -m pytest -q;
+.venv/bin/python evaluation/evidence/f/v2-signing-context-20261106/sensitivity.py.
+
+Evidence/UTC/commands/exits/hashes/tools/fixtures/limits:
+evaluation/evidence/f/v2-signing-context-20261106/{README.md,commands.json,
+inputs-frozen.json,verification.json,REVIEW.md,review-manifest.json}.
+Frozen manifest SHA25624c988e9a97c6521320afd0482c4dcd5731ac3f5c456f66ef58ab92077b36d1d.
+Python3.13.13/Git2.54.0/pytest9.0.2/jsonschema4.26.0/eth-account0.14.0.
+Synthetic fixtures/real signatures and ABI decoding; no live RPC acquisition.
+
+Fresh A18c0285ffa6986858caeb0140b930bf5db759fdc0 unchanged; A2
+eb6e29954786750a1216aa8ea3b3f81929063d66 partial worker D50 binding/export and
+marker-classification fix. Exact STATUS/HANDOFF/deltas read, NOT_READY; no owner
+counts rerun/adopted. One carried E file changed; complete E parity/successor
+mapping/full READY still pending.365communication paths/no divergence;
+429ledgerREADY entries/52F0pins/31publicationpayloads verify. Last readA1-0116/
+A2-0062; preparedA3-0083. No new ACK inferred; exact pins in peer-review.json.
+
+Signatures do not establish expiry/source-state truth, block event membership,
+request/grant correspondence, exporter/store/arrival completeness or durable
+anti-equivocation. Next signed-history/orphan/WAL/native joins, then fault oracle/
+finite model. Full owner READYs/mapping and separate complete source/tools/config/
+run FREEZE with exact affected ACKs before services. No process/lease/ports/liveRPC/
+newEparity/TLC/timing/Fcase/gate; qualified historicalE unchanged;32Fcases/Fgate
+NOT_RUN/G locked. No human action. Normal own-branch publication/remote receipt/
+lock cleanup in automation memory. Earlier entries are historical.
+
 ## C-F1 public ABI acquisition checkpoint — 2026-11-04
 
 State WORKING; integrated execution LOCKED. New internal API:

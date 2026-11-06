@@ -1,3 +1,24 @@
+## WORKING — C-F1 anchored signing context, 2026-11-06
+
+Internal evaluation/signing_context_v2.py derives certificate domains, membership/
+version/exact quorum from reconstructed context; checks embedded checkpoint/
+receipt identities and every declared retry report. Existing consumers unchanged.
+Fresh92new/443focused/2128root PASS, root402.84s/exit0;238selected+157complete
+sources stable;7deliberate bypass controls. Initial82RED and27FAIL/55PASS fixture
+error retained; no production guard weakened. Author review remains correlated.
+Commands/hashes/tools: evaluation/evidence/f/v2-signing-context-20261106/.
+
+Last read A1-0116/A2-0062; fresh A18c0285f unchanged/A2eb6e299 partial worker
+binding/marker fix, NOT_READY.365communication paths/429ledgerREADY entries/
+52F0pins/31publicationpayloads verify; no owner counts adopted or new ACK inferred.
+Prepared A3-0083; delivery after normal push, receipt in automation memory.
+Next signed-history/orphan/WAL/native completeness, then fault oracle/model.
+Full owner READYs/mapping and separate complete exact execution FREEZE ACKs before
+services. No liveRPC/newEparity/TLC/timing/Fcase/gate; qualified historicalE
+unchanged;32Fcases/Fgate NOT_RUN/G locked. No human action or peer edits/dependencies/
+worktrees/extra agents/main push. Publication/remote/lock cleanup in memory.
+Earlier entries are historical.
+
 ## WORKING — C-F1 public ABI collector, 2026-11-04
 
 Interface v2; explicit successor E v2.1 schema selection. Isolated evaluator

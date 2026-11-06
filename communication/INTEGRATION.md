@@ -1,3 +1,14 @@
+## Anchored signing context checked; execution remains locked — 2026-11-06
+
+Isolated evaluator92new/443focused/2128root PASS;238selected+157complete sources
+stable. Synthetic RPC/real signatures/ABI only; no process/port/deployment/live
+chain/new integration. Evidence: evaluation/evidence/f/v2-signing-context-20261106/.
+New context wrapper does not switch consumers or prove exporter/store truth.
+A2eb6e299 remains NOT_READY. Next signed-history/orphan/WAL/native joins, then
+oracle/model. Full owner READYs/mapping and separate complete exact source/tools/
+config/run FREEZE ACKs precede services/scenarios. No lease; qualified historicalE
+unchanged;32Fcases/Fgate NOT_RUN/G locked. A3-0083 is not execution authority.
+
 ## Public ABI collector checked; execution remains locked — 2026-11-04
 
 Isolated evaluator collector54new/351focused/2036root PASS on236selected+

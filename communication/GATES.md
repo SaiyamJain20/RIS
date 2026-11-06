@@ -1,3 +1,14 @@
+## Anchored signing context checked; no gate change — 2026-11-06
+
+C-F1 isolated92new/443focused/2128root PASS, root402.84s/exit0;238selected+
+157complete sources stable;7deliberate bypass controls. Retained RED/fixture
+failure and correlated author review: evaluation/evidence/f/v2-signing-context-20261106/.
+No source-state truth, expiry, exporter/WAL completeness, liveRPC/newEparity/TLC/
+timing/integratedFcase/gate claim. A2eb6e299 is partial NOT_READY; no owner count
+adopted or ACK inferred. Full owner READYs/mapping and separate complete exact
+execution FREEZE ACKs required. No services/lease; qualified historicalE unchanged;
+32Fcases/Fgate NOT_RUN/G locked. A3-0083 announces the isolated slice.
+
 ## Public ABI collector checked; no gate change — 2026-11-04
 
 C-F1 isolated collector54new/351focused/2036root PASS, root401.62s/exit0.

@@ -1,3 +1,25 @@
+## Anchored signing context verified — 2026-11-06
+
+C-F1 WORKING; integrated execution LOCKED. Internal evaluation/signing_context_v2.py
+derives domains, membership/version and exact quorum from reconstructed deployment
+facts, checks embedded checkpoint/receipt identities and all declared retry reports.
+Existing consumers unchanged; synthetic RPC/real signatures/ABI decoding only.
+
+Fresh92new/443focused/2128root PASS, root402.84s/exit0;238selected+157complete
+sources stable. Seven deliberate bypass controls detected. Initial82RED and
+27FAIL/55PASS fixture error retained; no production guard weakened. Evidence:
+evaluation/evidence/f/v2-signing-context-20261106/. Correlated author review.
+
+Fresh peers A18c0285f unchanged/A2eb6e299 partial worker binding/marker fix,
+explicitly NOT_READY.365communication paths/no divergence;429ledgerREADY entries/
+52F0pins/31publicationpayloads verify. Owner counts not rerun/adopted; no new ACK.
+A3-0083 announces the slice. Next: signed-history/orphan/WAL/native completeness,
+then fault oracle/finite model. Full owner READYs/mapping and separate complete
+exact source/tools/config/run FREEZE ACKs precede services. No liveRPC/newEparity/
+TLC/timing/Fcase/gate. Historical qualifiedE unchanged;32Fcases/Fgate NOT_RUN/G
+locked. No human action. Publication/remote/lock cleanup in automation memory.
+Earlier entries are historical.
+
 ## Public ABI context acquisition verified — 2026-11-04
 
 C-F1 WORKING; integrated execution LOCKED. Added
