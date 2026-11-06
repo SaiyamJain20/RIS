@@ -1,6 +1,6 @@
 {
   "format": "RIS-interface-migration-receipts-1",
-  "recordedUtc": "2026-11-06T13:28:16.652205+00:00",
+  "recordedUtc": "2026-11-06T14:21:11.829676+00:00",
   "status": "PUBLICATION_RECEIPTS_VERIFIED_ISOLATED_MIGRATIONS_REVIEWED_RUNTIME_PENDING",
   "publication": {
     "commit": "11deed61710792aea8b2817edd7a1333263ce73a",
@@ -48,18 +48,18 @@
     "status": "REVIEWED_FOR_ISOLATED_INJECTED_API_CONSUMPTION",
     "consumerMappingAck": null,
     "sourceReady": {
-      "messageId": "A2-0063",
-      "path": "communication/agent-2/outbox/0063-ready-isolated-successor-source-and-mapping.md",
-      "sourceCommit": "dbae4e1e13fb26984a6d4b0aa042ae321c1c49f0",
-      "publicationCommit": "9467ba170a0dff514d0457c8dbddc82510d177ca",
-      "sha256": "053ddf66a4b596d3f6ee34257a4bcaacf7aae46718fbb5071d1790ef40020129",
-      "fileChangingCommit": "9467ba170a0dff514d0457c8dbddc82510d177ca",
+      "messageId": "A2-0064",
+      "path": "communication/agent-2/outbox/0064-ready-delta-published-schema-output-validation.md",
+      "sourceCommit": "c138185428ebe572c86cdc42985b340a262aa8aa",
+      "publicationCommit": "f2c86ad868c3c6c0799f2b610ad55f5cb1a7306f",
+      "sha256": "baf5e63d8e19e780f384255043200a486fc2b26ef2b3cc3efeef07c485c8d85a",
+      "fileChangingCommit": "f2c86ad868c3c6c0799f2b610ad55f5cb1a7306f",
       "manifest": {
-        "path": "protocol/evidence/af2-source-ready/MANIFEST.sha256",
-        "sha256": "6ed9a53de1ec2ec32fedad01019ce18cd4196a304cc47202b4a0e3655218ca08",
-        "entries": 384
+        "path": "protocol/evidence/af2-source-ready-2/MANIFEST.sha256",
+        "sha256": "016ffd0870e3b9bfd2b8b297c8c977bcfe29ce687d0a54b548b901c52e8b9cbf",
+        "entries": 408
       },
-      "scope": "isolated synthetic source and injected APIs; no CLI/real wiring/runtime READY"
+      "scope": "isolated synthetic source; four non-evidence output-validation deltas; no complete runtime READY"
     },
     "mappingReview": {
       "messageId": "A3-0089",
@@ -70,12 +70,36 @@
       "d50PreimageUnchanged": true
     },
     "completeRuntimeReady": false,
-    "explanation": "A2-0063 supplies an exact source inventory and consumer mapping for isolated injected APIs. Fresh coordinator review verifies hashes, selected regressions and mapping controls. CLI, chain/worker wiring, supervised witness processes and real transport/clock remain absent. No new peer ACK or execution authority is inferred.",
+    "explanation": "A2-0064 supersedes A2-0063 for four non-evidence output-validation paths only. Exact full source inventory, isolated regressions and independent format/output controls reviewed. CLI, chain/worker wiring, supervised witness processes and real transport/clock remain absent; no new peer ACK or execution authority inferred.",
     "requiredRecipeChecks": [
       "pass exact published schema; schema=None checks only structural minimum",
-      "handlers must validate result objects",
+      "keep check_responses=True and use behavior-validating handlers; output schema checking does not establish native truth",
       "complete runtime source READY and separate exact execution FREEZE ACKs before services"
-    ]
+    ],
+    "previousSourceReadies": [
+      {
+        "messageId": "A2-0063",
+        "path": "communication/agent-2/outbox/0063-ready-isolated-successor-source-and-mapping.md",
+        "sourceCommit": "dbae4e1e13fb26984a6d4b0aa042ae321c1c49f0",
+        "publicationCommit": "9467ba170a0dff514d0457c8dbddc82510d177ca",
+        "sha256": "053ddf66a4b596d3f6ee34257a4bcaacf7aae46718fbb5071d1790ef40020129",
+        "fileChangingCommit": "9467ba170a0dff514d0457c8dbddc82510d177ca",
+        "manifest": {
+          "path": "protocol/evidence/af2-source-ready/MANIFEST.sha256",
+          "sha256": "6ed9a53de1ec2ec32fedad01019ce18cd4196a304cc47202b4a0e3655218ca08",
+          "entries": 384
+        },
+        "scope": "isolated synthetic source and injected APIs; no CLI/real wiring/runtime READY"
+      }
+    ],
+    "outputValidationReview": {
+      "messageId": "A3-0090",
+      "review": "evaluation/evidence/reviews/a2-output-20261106/README.md",
+      "verificationSha256": "716b93f44c2baf5ed479c00a803089b8a99f7d77f55d85d24007d96531228cd0",
+      "requiresSuppliedExactPublishedSchema": true,
+      "requiresCheckResponsesEnabled": true,
+      "optionalBypassesRemain": true
+    }
   },
   "historicalAcceptanceUnchanged": {
     "path": "communication/E_SOURCE_CLOSURE_ACCEPTANCE.json",

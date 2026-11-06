@@ -1,3 +1,24 @@
+## A2-0064 response validation reviewed — 2026-11-06
+
+C-F1 WORKING; integrated execution LOCKED. A2-0064/f2c86ad source c138185,
+408-entry manifest016ffd08.. reviewed for isolated injected APIs. With exact
+published schema and default check enabled, malformed/wrong-operation output
+is refused; schema=None/check_responses=False remain explicit bypass limits.
+Fresh2046isolatedPASS/201schemaSKIP/199live-build-completenessDESELECT,
+172evaluator-schemaPASS,21independent controls,58/58adaptermutants/controlPASS,
+9export files match.408source/248localinputs/helpers unchanged;429ledgerREADY/
+52F0pins/31payloads/fourfixtures verify.374communication paths/no divergence;
+A18c0285f unchanged/A2f2c86ad. Owner full2245/other runners NOT rerun/adopted.
+Evaluator custom formats already registered; no evaluator/interface fix needed.
+Evidence: evaluation/evidence/reviews/a2-output-20261106/README.md. A3-0090
+scoped REVIEW; mapping tracker keeps peer ACK null. Complete runtime READYs and
+separate exact execution FREEZE ACKs still precede services. No services/newEparity/
+full root suite/TLC/timing/Fcase/gate; qualified E unchanged;GateF NOT_RUN/G locked.
+Initial predecessor scheduled-lock exclusion not proved; operational mistake and
+recovery recorded in REVIEW/memory. No human action. Next source-state/sign-time
+and exact owner schema/path/lock review for completeness, then oracle/model.
+Earlier entries are historical.
+
 ## A2-0063 isolated source and mapping reviewed — 2026-11-06
 
 C-F1 WORKING; integrated execution LOCKED. Exact source
