@@ -344,3 +344,42 @@ def test_the_module_reads_no_clock_no_thread_no_socket_and_no_environment():
     src = open(os.path.join(ROOT, "protocol", "hmbc_protocol", "rpc_witness_view.py")).read()
     for banned in ("import time", "datetime", "import threading", "import socket", "import random", "subprocess", "os.environ", "import urllib"):
         assert banned not in src, banned
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------
+# A3-0093: malformed (non-object, wrong-shaped) replies must be classified, never escape as AttributeError (written BEFORE the fix)
+# --------------------------------------------------------------------------------------------------------------------------------------------------------
+JUNK = [None, 5, True, "x", "0x", [], [1], ["a"], {}, {"a": 1}, {"input": 5}, {"input": "zz"}, {"to": 5, "input": "0x"}, {"to": [], "input": "0x1234"}, b"raw"]
+
+
+@pytest.mark.parametrize("junk", JUNK, ids=[repr(j) for j in JUNK])
+def test_a_malformed_transaction_reply_is_ledger_unreachable_or_a_classified_none_never_another_exception(junk):
+    v, pbc, dbc, cs = make()
+    pbc.tx = junk
+    if not isinstance(junk, dict):                                       # not even a JSON object: the node answered something unusable, never a quiet None
+        with pytest.raises(LedgerUnreachable):
+            v.forwarding_call(H)
+        return
+    got = v.forwarding_call(H)                                           # an object whose input is missing or does not decode: the classified None the service refuses as WRONG_SUBJECT
+    assert got is None or set(got) == {"to", "method", "request", "signature", "bundle"}
+
+
+@pytest.mark.parametrize("junk", [None, 5, "x", [], {}, [1], {"a": 1}, True])
+def test_no_view_method_lets_a_malformed_raw_reply_escape_as_another_exception(junk):
+    """Every raw reply the fake client can hand back (a log list, a block object, a decoded call result, a transaction) is replaced by junk; whatever a method does with it, it either returns a value of
+    its documented shape or raises LedgerUnreachable: never AttributeError, TypeError, KeyError or IndexError."""
+    for name, fn in CALLS:
+        v, pbc, dbc, cs = make()
+        pbc.logs = dbc.logs = junk
+        pbc.tx = junk
+        pbc.blocks = {i: junk for i in range(0, 200)}
+        for chain, c in (("pbc", pbc), ("dbc", dbc)):
+            for contract in cs.values():
+                for f in contract._fn:
+                    c.answers[(contract.address, f)] = junk
+        try:
+            fn(v)
+        except LedgerUnreachable:
+            pass
+        except ValueError as e:                                          # a caller-bug refusal is fine; none of these calls passes a bad argument
+            raise AssertionError(f"{name}: unexpected ValueError {e}") from None

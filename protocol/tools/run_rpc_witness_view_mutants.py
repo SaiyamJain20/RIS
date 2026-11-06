@@ -16,6 +16,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 PROTO = os.path.abspath(os.path.join(HERE, ".."))
 SRC = open(os.path.join(PROTO, "hmbc_protocol", "rpc_witness_view.py")).read()
 
+# EQUIVALENT MUTANT W46 (added for A3-0093, an AttributeError not caught by the guard): since the transaction reply is validated as an object, the junk-reply property test (every raw reply of every method
+# replaced by junk) finds no remaining path that raises AttributeError, so the clause is defence in depth and no input distinguishes it.
 # EQUIVALENT MUTANT dropped (run 1: 42 of 44, the other survivor W21 was a gap in my test: the fake contract addresses had no hex letters, so upper-casing them changed nothing): W34, an AbiError is not
 # caught by the first `except`: abi.AbiError is a ValueError, and the second `except` clause catches ValueError, so the same LedgerUnreachable results.
 M = [
@@ -52,7 +54,7 @@ M = [
     ("W31 a boolean block number is accepted", [("        if isinstance(n, bool) or not isinstance(n, int) or n < 0:", "        if not isinstance(n, int) or n < 0:")]),
     ("W32 a negative block number is accepted", [("not isinstance(n, int) or n < 0:", "not isinstance(n, int):")]),
     ("W33 any chain name is accepted", [("        if side not in SIDES:\n            raise ValueError(\"chain must be 'pbc' or 'dbc'\")\n", "")]),
-    ("W35 an unusable answer is not a ledger fault", [("        except (KeyError, TypeError, ValueError, IndexError) as e:", "        except KeyError as e:")]),
+    ("W35 an unusable answer is not a ledger fault", [("        except (KeyError, TypeError, ValueError, IndexError, AttributeError) as e:", "        except KeyError as e:")]),
     ("W36 a missing contract is a KeyError", [('            raise ValueError(f"this view has no {name} contract") from None', "            raise")]),
     ("W37 the pbc block timestamp is parsed as decimal", [('str(int(b["timestamp"], 16))', 'str(int(b["timestamp"]))')]),
     ("W38 the ABI file hash is not checked", [("                if hashlib.sha256(raw).hexdigest() != pinned:", "                if False:")]),
@@ -60,6 +62,8 @@ M = [
     ("W40 the required contracts are not checked", [("not set(REQUIRED) <= set(contracts) <= set(CONTRACT_SIDE)", "False")]),
     ("W41 a contract address of any shape is accepted", [("or _ADDR.fullmatch(c.address) is None:", ":")]),
     ("W42 chain clients for one chain only are accepted", [("if not isinstance(chains, dict) or set(chains) != set(SIDES):\n            raise ValueError(\"chains must be exactly", "if False:\n            raise ValueError(\"chains must be exactly")]),
+    ("W45 a non-object transaction reply is not validated", [("        if not isinstance(tx, dict):", "        if False:")]),
+    ("W47 a non-object transaction reply is classified as a missing call", [('            raise _unreachable(f"the node answered {type(tx).__name__} where a transaction object was expected")', "            return None")]),
     ("W43 the logs hash is validated after the guard (a caller bug looks like a ledger fault)", [("        topic = self._hash32(topic_value, \"topic\")                       # validated BEFORE the guard: a caller bug must not look like a ledger fault\n        return self._guard(lambda: c.get_logs(contract.address, [topic0, topic]))", "        return self._guard(lambda: c.get_logs(contract.address, [topic0, self._hash32(topic_value, \"topic\")]))")]),
     ("W44 the transaction hash is validated inside the guard", [("        tx_hash = self._hash32(tx_hash, \"tx hash\")\n        tx = self._guard(lambda: c.get_transaction(tx_hash))", "        tx = self._guard(lambda: c.get_transaction(self._hash32(tx_hash, \"tx hash\")))")]),
 ]

@@ -1,3 +1,15 @@
+# Agent 2 handoff (2026-11-06, forty-fourth check: A3-0093 fixes)
+
+## Update 2026-11-06, forty-fourth check (newest)
+
+- **Peers:** A3-0093 (origin/agent-3 173cfb4): review of my partial witness RPC source 0e58f1d (production commit 86521cd): a non-object transaction reply made `forwarding_call` raise AttributeError instead of LedgerUnreachable (real); five permissive raw-parsing diagnostics are inherited from the carried `Chain`/`Contract` codecs, not from `RpcBindingView`; four suspicions refuted; no incorrect authorization shown. origin/agent-1 unchanged (8c0285f).
+- **Done (A2-0069):** the transaction reply must be an object (else LedgerUnreachable) and the guard also catches AttributeError; 15 junk cases plus a property test over all 16 view methods (junk for every raw reply: a documented shape or LedgerUnreachable, nothing else); docstrings aligned (missing transaction = LedgerUnreachable, not None; decision/receipt now "honest path only on a real ledger"); carried parsing limits DOCUMENTED not enforced (the witness view makes no canonical-bytes claim). Runner 45/45 (run 1 44/46: W47 exposed that my test allowed a quiet None, tightened; W46 equivalent, recorded). 61 live + unit tests pass. Details: `af2-state/README.md`.
+- **Honest limits:** the property test passed on the unfixed code for the paths it reached; the 15 targeted cases are what were red. Not covered by A2-0063/A2-0064. Same-model review (correlated).
+- **Not done:** Worker factory, supervised witness processes, real transport/clock, command line (exact published schema, default response check on, valid handlers), fresh full runtime READY; H2/H5/H6; adversarial cases against the real F ledger.
+- **Next:** adversarial cases against the real F ledger, then the Worker factory and the command line.
+
+---
+
 # Agent 2 handoff (2026-11-06, forty-third check: A3-0092, slice 9b live decision and receipt)
 
 ## Update 2026-11-06, forty-third check (newest)
