@@ -418,3 +418,62 @@ def test_an_unknown_chain_name_is_a_value_error_on_every_view_method():
         assert r.requests() == 0
     finally:
         r.close()
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------
+# A3-0091: quantity parsing and canonical ABI replies (written BEFORE the fix)
+# --------------------------------------------------------------------------------------------------------------------------------------------------------
+QUANTITY_BAD = ["0x1_0", "0x_1", "0x1_", "0x01", "0x00", "0x0a_", "0xA", "0xAB", "0X1", "0x 1", "0x1 ", "0x+1", "0x-1", "0x1.0", "0x0x1", "0x", "1", "", "0x" + "0" * 3]
+QUANTITY_GOOD = {"0x0": 0, "0x1": 1, "0xa": 10, "0x10": 16, "0x4871": 18545, "0xff": 255, "0x1" + "0" * 63: 16 ** 63}
+
+
+@pytest.mark.parametrize("bad", QUANTITY_BAD)
+def test_a_hex_quantity_with_a_separator_a_leading_zero_upper_case_or_any_other_non_minimal_form_is_refused(bad):
+    v = canned_view(bad)
+    with pytest.raises(bo.LedgerUnreachable):
+        v.chain_id("pbc")
+    with pytest.raises(bo.LedgerUnreachable):
+        canned_view({"number": bad, "hash": "0x" + "ab" * 32}).latest("pbc")
+
+
+def test_minimal_lowercase_hex_quantities_are_accepted():
+    for text, n in QUANTITY_GOOD.items():
+        assert canned_view(text).chain_id("pbc") == str(n)
+    assert canned_view({"number": "0x5", "hash": "0x" + "ab" * 32}).block("pbc", 5)["number"] == "5"
+
+
+def word(n):
+    return n.to_bytes(32, "big")
+
+
+def call_reply(t, raw_hex):
+    fn = {"uint256": "threshold", "uint64": "witnessSetVersion", "address[]": "witnesses", "bool": "configured"}[t]
+    return canned_view("0x" + raw_hex).call("pbc", A11, fn, [], 1)
+
+
+OWNER = "11" * 20
+CANONICAL_ARRAY = word(32).hex() + word(2).hex() + ("00" * 12 + OWNER) + ("00" * 12 + "22" * 20)
+
+
+def test_canonical_replies_decode_and_every_non_canonical_encoding_is_ledger_unreachable():
+    assert call_reply("uint256", word(3).hex()) == "3"
+    assert call_reply("uint64", word(2).hex()) == "2"
+    assert call_reply("bool", word(1).hex()) is True and call_reply("bool", word(0).hex()) is False
+    assert call_reply("address[]", CANONICAL_ARRAY) == ["0x" + OWNER, "0x" + "22" * 20]
+    assert call_reply("address[]", word(32).hex() + word(0).hex()) == []
+    bad = {
+        ("uint256", "trailing bytes"): word(3).hex() + "deadbeef",
+        ("uint256", "a whole extra word"): word(3).hex() + word(0).hex(),
+        ("bool", "trailing bytes"): word(1).hex() + "deadbeef",
+        ("bool", "not 0 or 1"): word(2).hex(),
+        ("uint64", "above the width"): word(1 << 64).hex(),
+        ("address[]", "trailing bytes"): CANONICAL_ARRAY + "deadbeef",
+        ("address[]", "a non-minimal offset (0x40 with padding)"): word(64).hex() + word(0).hex() + word(2).hex() + ("00" * 12 + OWNER) + ("00" * 12 + "22" * 20),
+        ("address[]", "dirty address padding"): word(32).hex() + word(1).hex() + ("ff" * 12 + OWNER),
+        ("address[]", "a length that overruns the data"): word(32).hex() + word(3).hex() + ("00" * 12 + OWNER),
+        ("uint256", "short"): word(3).hex()[:-2],
+        ("uint256", "empty"): "",
+    }
+    for (t, why), raw in bad.items():
+        with pytest.raises(bo.LedgerUnreachable):
+            call_reply(t, raw)

@@ -1,7 +1,7 @@
 control: unmutated module passes all tests
 DETECTED R1 a transport failure is not a ledger fault | failed tests: 4
 DETECTED R2 any chain name is accepted | failed tests: 1
-DETECTED R3 any reply is a hex quantity | failed tests: 2
+DETECTED R3 any reply is a hex quantity | failed tests: 22
 DETECTED R4 a block at another height than asked is accepted | failed tests: 1
 DETECTED R5 a block hash of any shape is accepted | failed tests: 2
 DETECTED R6 a missing block is a ledger fault | failed tests: 2
@@ -11,8 +11,8 @@ DETECTED R9 a call is not pinned to the block | failed tests: 1
 DETECTED R10 the selector ignores the argument types | failed tests: 6
 DETECTED R11 a uint argument may exceed its width | failed tests: 1
 DETECTED R12 an address argument may be of any shape | failed tests: 1
-DETECTED R13 a decoding failure escapes as another exception | failed tests: 2
-DETECTED R14 a uint comes back as an int | failed tests: 5
+DETECTED R13 a decoding failure escapes as another exception | failed tests: 3
+DETECTED R14 a uint comes back as an int | failed tests: 6
 DETECTED R17 an ambiguous overload is accepted | failed tests: 1
 DETECTED R18 a state-changing function is callable | failed tests: 1
 DETECTED R19 a function with several outputs is callable | failed tests: 1
@@ -25,5 +25,10 @@ DETECTED R27 the chain client's id is not checked against the manifest | failed 
 DETECTED R29 chain clients for one chain only are accepted | failed tests: 1
 DETECTED R30 a contract address of any shape is accepted | failed tests: 1
 DETECTED R31 a contract without an ABI is accepted | failed tests: 1
-DETECTED R32 the chain id is read through the checked client path | failed tests: 8
-detected 27 of 27
+DETECTED R33 a hex quantity may contain separators or leading zeros | failed tests: 17
+DETECTED R34 a hex quantity may be upper case | failed tests: 2
+DETECTED R35 a hex quantity may have leading zeros | failed tests: 3
+DETECTED R36 an ABI reply need not be exactly canonical | failed tests: 1
+DETECTED R37 the canonical check compares the wrong encoding | failed tests: 1
+DETECTED R32 the chain id is read through the checked client path | failed tests: 28
+detected 32 of 32

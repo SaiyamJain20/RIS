@@ -14,7 +14,8 @@ The ABI files are pinned: `from_manifest` loads `<abi_dir>/<Contract>.json` and 
 `view` or `pure` function with exactly ONE output of type bool, uintN, address or address[] and its name and argument count select exactly one ABI entry; inputs may be uintN, address or bool. Anything else
 is a ValueError (a caller or ABI problem), never sent to the node.
 
-FAULT MODEL. A transport failure, a JSON-RPC error, a revert, a malformed or short or non-canonical reply (not lowercase hex, wrong block number, bad hash) is `binding_open.LedgerUnreachable`, stage 1: the
+FAULT MODEL. A transport failure, a JSON-RPC error, a revert, a malformed or short or non-canonical reply (not lowercase hex, a quantity that is not minimal lowercase hex, wrong block number, bad hash, an ABI
+reply that is not EXACTLY the canonical encoding of the value it decodes to: trailing bytes, a non-minimal array offset, dirty padding) is `binding_open.LedgerUnreachable`, stage 1: the
 view never turns a node's garbage into a value. A caller bug (unknown chain, address that is not a contract of that chain, unknown or ambiguous function, bad argument, negative block) is a ValueError.
 The same address on the two chains is two different contracts (the key is chain and address). No clock, thread, socket or environment here: the injected `Chain` clients own the transport.
 """
@@ -36,6 +37,7 @@ _HASH = re.compile(r"0x[0-9a-f]{64}")
 _HEX = re.compile(r"0x([0-9a-f]{2})*")
 _DEC = re.compile(r"(0|[1-9][0-9]*)")
 _UINT = re.compile(r"uint(8|16|32|64|128|256)")
+_QTY = re.compile(r"0x(0|[1-9a-f][0-9a-f]*)")             # a JSON-RPC quantity: lowercase, no leading zeros; `int(v, 16)` alone also accepts separators (0x1_0), spaces and upper case
 SIDES = ("pbc", "dbc")
 
 
@@ -114,12 +116,9 @@ class RpcBindingView:
 
     @staticmethod
     def _int(v, what):
-        if not isinstance(v, str) or not v.startswith("0x") or len(v) < 3:
-            raise _unreachable(f"{what}: not a hex quantity")
-        try:
-            return int(v, 16)
-        except ValueError:
-            raise _unreachable(f"{what}: not a hex quantity") from None
+        if not isinstance(v, str) or _QTY.fullmatch(v) is None:
+            raise _unreachable(f"{what}: not a minimal lowercase hex quantity")
+        return int(v, 16)
 
     @staticmethod
     def _at(at):
@@ -199,10 +198,14 @@ class RpcBindingView:
         if not isinstance(out, str) or _HEX.fullmatch(out) is None:
             raise _unreachable(f"{chain}: eth_call did not return lowercase hex")
         t = f["outputs"][0]["type"]
+        raw = bytes.fromhex(out[2:])
         try:
-            (v,) = decode([t], bytes.fromhex(out[2:]))
+            (v,) = decode([t], raw)
+            canonical = encode([t], [list(v) if t == "address[]" else v]) == raw
         except Exception:  # noqa: BLE001 - eth_abi raises several types for short, padded or out-of-range data; all mean the node did not answer this getter
             raise _unreachable(f"{chain}: {fn} returned data that does not decode as {t}") from None
+        if not canonical:                       # the decoder is lenient (trailing bytes, a non-minimal array offset): only the exact canonical encoding of the value is an answer
+            raise _unreachable(f"{chain}: {fn} returned a non-canonical encoding of its {t}")
         if t == "bool":
             return bool(v)
         if t == "address":

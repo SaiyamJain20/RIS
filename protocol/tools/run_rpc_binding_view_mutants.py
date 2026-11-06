@@ -21,11 +21,12 @@ SRC = open(os.path.join(PROTO, "hmbc_protocol", "rpc_binding_view.py")).read()
 #           library version distinguishes them.
 #   R21 an unsupported INPUT type is callable: `_arg` itself refuses a value for any type it does not know (a bytes32 argument fails the decimal rule), so the early refusal and `_arg` refuse the same calls.
 #   R25 a call reply of any shape is accepted: a non-string or non-hex reply fails inside the decode `try` and is the same LedgerUnreachable.
+#   R38 (added for A3-0091) the address array re-encoded from the decoded tuple instead of a list: eth_abi encodes a tuple and a list identically.
 #   R28 an unreadable ABI file is not refused: the substituted bytes cannot hash to the manifest's abiSha256, so the hash check refuses the same call.
 M = [
     ("R1 a transport failure is not a ledger fault", [("        except ChainError as e:\n            raise _unreachable(f\"{side} {method}: {e}\") from None", "        except ChainError:\n            raise")]),
     ("R2 any chain name is accepted", [("        if side not in SIDES:\n            raise ValueError(\"chain must be 'pbc' or 'dbc'\")\n", "")]),
-    ("R3 any reply is a hex quantity", [('if not isinstance(v, str) or not v.startswith("0x") or len(v) < 3:', "if False:")]),
+    ("R3 any reply is a hex quantity", [('if not isinstance(v, str) or _QTY.fullmatch(v) is None:', "if False:")]),
     ("R4 a block at another height than asked is accepted", [("        if expect is not None and number != expect:", "        if False:")]),
     ("R5 a block hash of any shape is accepted", [('or not isinstance(b.get("hash"), str) or _HASH.fullmatch(b["hash"]) is None', "")]),
     ("R6 a missing block is a ledger fault", [("        if b is None:\n            return None\n        if not isinstance(b, dict)", "        if b is None:\n            raise _unreachable('missing')\n        if not isinstance(b, dict)")]),
@@ -49,6 +50,11 @@ M = [
     ("R29 chain clients for one chain only are accepted", [("if not isinstance(chains, dict) or set(chains) != set(SIDES):\n            raise ValueError(\"chains must be exactly", "if False:\n            raise ValueError(\"chains must be exactly")]),
     ("R30 a contract address of any shape is accepted", [("if not isinstance(address, str) or _ADDR.fullmatch(address) is None:", "if False:")]),
     ("R31 a contract without an ABI is accepted", [("                if not isinstance(abis.get(name), list):", "                if False:")]),
+    ("R33 a hex quantity may contain separators or leading zeros", [('if not isinstance(v, str) or _QTY.fullmatch(v) is None:', 'if not isinstance(v, str) or not v.startswith("0x") or len(v) < 3:')]),
+    ("R34 a hex quantity may be upper case", [('_QTY = re.compile(r"0x(0|[1-9a-f][0-9a-f]*)")', '_QTY = re.compile(r"0x(0|[1-9a-fA-F][0-9a-fA-F]*)")')]),
+    ("R35 a hex quantity may have leading zeros", [('_QTY = re.compile(r"0x(0|[1-9a-f][0-9a-f]*)")', '_QTY = re.compile(r"0x[0-9a-f]+")')]),
+    ("R36 an ABI reply need not be exactly canonical", [("        if not canonical:", "        if False:")]),
+    ("R37 the canonical check compares the wrong encoding", [("canonical = encode([t], [list(v) if t == \"address[]\" else v]) == raw", "canonical = True")]),
     ("R32 the chain id is read through the checked client path", [('return str(self._int(self._rpc(chain, "eth_chainId", []), f"{chain} chain id"))', 'return str(self._int(self._chains[chain]._check_chain() or self._rpc(chain, "eth_chainId", []), f"{chain} chain id"))')]),
 ]
 
