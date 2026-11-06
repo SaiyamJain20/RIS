@@ -1,0 +1,799 @@
+{
+  "controls": 14,
+  "diagnostics": 13,
+  "gaps": [
+    "transaction shape list",
+    "transaction shape str",
+    "transaction shape int",
+    "transaction shape bool",
+    "noncanonical observed number 0x1_0",
+    "noncanonical observed number 0x01",
+    "noncanonical observed number 0xA",
+    "ABI trailing word",
+    "ABI nonhex prefix"
+  ],
+  "rows": [
+    {
+      "label": "canonical observe",
+      "replies": {
+        "eth_getBlockByNumber": {
+          "number": "0x1",
+          "hash": "0xabababababababababababababababababababababababababababababababab",
+          "timestamp": "0x10"
+        }
+      },
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "returned": {
+        "chainId": "1",
+        "blockNumber": "1",
+        "blockHash": "0xabababababababababababababababababababababababababababababababab",
+        "timestamp": "16"
+      },
+      "diagnostic": false,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_getBlockByNumber",
+            [
+              "latest",
+              false
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "canonical numbered block",
+      "replies": {
+        "eth_getBlockByNumber": {
+          "number": "0x1",
+          "hash": "0xabababababababababababababababababababababababababababababababab",
+          "timestamp": "0x10"
+        }
+      },
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "returned": {
+        "number": "1",
+        "hash": "0xabababababababababababababababababababababababababababababababab",
+        "timestamp": "16"
+      },
+      "diagnostic": false,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_getBlockByNumber",
+            [
+              "0x1",
+              false
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "canonical governance nonce",
+      "replies": {
+        "eth_call": "0x0000000000000000000000000000000000000000000000000000000000000007"
+      },
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "returned": "7",
+      "diagnostic": false,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_call",
+            [
+              {
+                "to": "0x1111111111111111111111111111111111111111",
+                "data": "0xd9be832c"
+              },
+              "latest"
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "canonical authority true",
+      "replies": {
+        "eth_call": "0x0000000000000000000000000000000000000000000000000000000000000001"
+      },
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "returned": true,
+      "diagnostic": false,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_call",
+            [
+              {
+                "to": "0x1111111111111111111111111111111111111111",
+                "data": "0x2330f2470000000000000000000000001111111111111111111111111111111111111111"
+              },
+              "latest"
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "canonical authority false",
+      "replies": {
+        "eth_call": "0x0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "returned": false,
+      "diagnostic": false,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_call",
+            [
+              {
+                "to": "0x1111111111111111111111111111111111111111",
+                "data": "0x2330f2470000000000000000000000001111111111111111111111111111111111111111"
+              },
+              "latest"
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "missing numbered block",
+      "replies": {},
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "returned": null,
+      "diagnostic": false,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_getBlockByNumber",
+            [
+              "0x1",
+              false
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "missing transaction",
+      "replies": {},
+      "expected": "LEDGER_UNREACHABLE",
+      "actual": "LEDGER_UNREACHABLE",
+      "returned": null,
+      "diagnostic": false,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_getTransactionByHash",
+            [
+              "0xabababababababababababababababababababababababababababababababab"
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "undecodable transaction",
+      "replies": {
+        "eth_getTransactionByHash": {
+          "to": "0x1111111111111111111111111111111111111111",
+          "input": "0x1234"
+        }
+      },
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "returned": null,
+      "diagnostic": false,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_getTransactionByHash",
+            [
+              "0xabababababababababababababababababababababababababababababababab"
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "transport failure",
+      "replies": {
+        "eth_getBlockByNumber": "ChainError"
+      },
+      "expected": "LEDGER_UNREACHABLE",
+      "actual": "LEDGER_UNREACHABLE",
+      "returned": null,
+      "diagnostic": false,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_getBlockByNumber",
+            [
+              "latest",
+              false
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "wrong chain",
+      "replies": {
+        "eth_chainId": "0x2"
+      },
+      "expected": "LEDGER_UNREACHABLE",
+      "actual": "LEDGER_UNREACHABLE",
+      "returned": null,
+      "diagnostic": false,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "malformed block quantity",
+      "replies": {
+        "eth_getBlockByNumber": {
+          "number": "0xzz",
+          "hash": "0xabababababababababababababababababababababababababababababababab",
+          "timestamp": "0x10"
+        }
+      },
+      "expected": "LEDGER_UNREACHABLE",
+      "actual": "LEDGER_UNREACHABLE",
+      "returned": null,
+      "diagnostic": false,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_getBlockByNumber",
+            [
+              "latest",
+              false
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "short ABI",
+      "replies": {
+        "eth_call": "0x12"
+      },
+      "expected": "LEDGER_UNREACHABLE",
+      "actual": "LEDGER_UNREACHABLE",
+      "returned": null,
+      "diagnostic": false,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_call",
+            [
+              {
+                "to": "0x1111111111111111111111111111111111111111",
+                "data": "0xd9be832c"
+              },
+              "latest"
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "missing log fields",
+      "replies": {
+        "eth_getLogs": [
+          {}
+        ]
+      },
+      "expected": "LEDGER_UNREACHABLE",
+      "actual": "LEDGER_UNREACHABLE",
+      "returned": null,
+      "diagnostic": false,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_getLogs",
+            [
+              {
+                "address": "0x1111111111111111111111111111111111111111",
+                "topics": [
+                  "0x39e85e6eb0326d05ad194fac6d173f01e618328fd5171916ea0b4fee2d71bd4c",
+                  "0xabababababababababababababababababababababababababababababababab"
+                ],
+                "fromBlock": "0x0",
+                "toBlock": "latest"
+              }
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "transaction shape list",
+      "replies": {
+        "eth_getTransactionByHash": []
+      },
+      "expected": "LEDGER_UNREACHABLE",
+      "actual": "AttributeError",
+      "returned": null,
+      "diagnostic": true,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_getTransactionByHash",
+            [
+              "0xabababababababababababababababababababababababababababababababab"
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "transaction shape str",
+      "replies": {
+        "eth_getTransactionByHash": "bad"
+      },
+      "expected": "LEDGER_UNREACHABLE",
+      "actual": "AttributeError",
+      "returned": null,
+      "diagnostic": true,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_getTransactionByHash",
+            [
+              "0xabababababababababababababababababababababababababababababababab"
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "transaction shape int",
+      "replies": {
+        "eth_getTransactionByHash": 4
+      },
+      "expected": "LEDGER_UNREACHABLE",
+      "actual": "AttributeError",
+      "returned": null,
+      "diagnostic": true,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_getTransactionByHash",
+            [
+              "0xabababababababababababababababababababababababababababababababab"
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "transaction shape bool",
+      "replies": {
+        "eth_getTransactionByHash": true
+      },
+      "expected": "LEDGER_UNREACHABLE",
+      "actual": "AttributeError",
+      "returned": null,
+      "diagnostic": true,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_getTransactionByHash",
+            [
+              "0xabababababababababababababababababababababababababababababababab"
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "noncanonical observed number 0x1_0",
+      "replies": {
+        "eth_getBlockByNumber": {
+          "number": "0x1_0",
+          "hash": "0xabababababababababababababababababababababababababababababababab",
+          "timestamp": "0x10"
+        }
+      },
+      "expected": "LEDGER_UNREACHABLE",
+      "actual": "ACCEPT",
+      "returned": {
+        "chainId": "1",
+        "blockNumber": "16",
+        "blockHash": "0xabababababababababababababababababababababababababababababababab",
+        "timestamp": "16"
+      },
+      "diagnostic": true,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_getBlockByNumber",
+            [
+              "latest",
+              false
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "noncanonical observed number 0x01",
+      "replies": {
+        "eth_getBlockByNumber": {
+          "number": "0x01",
+          "hash": "0xabababababababababababababababababababababababababababababababab",
+          "timestamp": "0x10"
+        }
+      },
+      "expected": "LEDGER_UNREACHABLE",
+      "actual": "ACCEPT",
+      "returned": {
+        "chainId": "1",
+        "blockNumber": "1",
+        "blockHash": "0xabababababababababababababababababababababababababababababababab",
+        "timestamp": "16"
+      },
+      "diagnostic": true,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_getBlockByNumber",
+            [
+              "latest",
+              false
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "noncanonical observed number 0xA",
+      "replies": {
+        "eth_getBlockByNumber": {
+          "number": "0xA",
+          "hash": "0xabababababababababababababababababababababababababababababababab",
+          "timestamp": "0x10"
+        }
+      },
+      "expected": "LEDGER_UNREACHABLE",
+      "actual": "ACCEPT",
+      "returned": {
+        "chainId": "1",
+        "blockNumber": "10",
+        "blockHash": "0xabababababababababababababababababababababababababababababababab",
+        "timestamp": "16"
+      },
+      "diagnostic": true,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_getBlockByNumber",
+            [
+              "latest",
+              false
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "noncanonical observed number 0x-1",
+      "replies": {
+        "eth_getBlockByNumber": {
+          "number": "0x-1",
+          "hash": "0xabababababababababababababababababababababababababababababababab",
+          "timestamp": "0x10"
+        }
+      },
+      "expected": "LEDGER_UNREACHABLE",
+      "actual": "LEDGER_UNREACHABLE",
+      "returned": null,
+      "diagnostic": true,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_getBlockByNumber",
+            [
+              "latest",
+              false
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "noncanonical observed number 0x+1",
+      "replies": {
+        "eth_getBlockByNumber": {
+          "number": "0x+1",
+          "hash": "0xabababababababababababababababababababababababababababababababab",
+          "timestamp": "0x10"
+        }
+      },
+      "expected": "LEDGER_UNREACHABLE",
+      "actual": "LEDGER_UNREACHABLE",
+      "returned": null,
+      "diagnostic": true,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_getBlockByNumber",
+            [
+              "latest",
+              false
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "noncanonical observed number 0x 1",
+      "replies": {
+        "eth_getBlockByNumber": {
+          "number": "0x 1",
+          "hash": "0xabababababababababababababababababababababababababababababababab",
+          "timestamp": "0x10"
+        }
+      },
+      "expected": "LEDGER_UNREACHABLE",
+      "actual": "LEDGER_UNREACHABLE",
+      "returned": null,
+      "diagnostic": true,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_getBlockByNumber",
+            [
+              "latest",
+              false
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "ABI trailing word",
+      "replies": {
+        "eth_call": "0x00000000000000000000000000000000000000000000000000000000000000070000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "expected": "LEDGER_UNREACHABLE",
+      "actual": "ACCEPT",
+      "returned": "7",
+      "diagnostic": true,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_call",
+            [
+              {
+                "to": "0x1111111111111111111111111111111111111111",
+                "data": "0xd9be832c"
+              },
+              "latest"
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "ABI nonhex prefix",
+      "replies": {
+        "eth_call": "zz0000000000000000000000000000000000000000000000000000000000000007"
+      },
+      "expected": "LEDGER_UNREACHABLE",
+      "actual": "ACCEPT",
+      "returned": "7",
+      "diagnostic": true,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_call",
+            [
+              {
+                "to": "0x1111111111111111111111111111111111111111",
+                "data": "0xd9be832c"
+              },
+              "latest"
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "ABI result wrong shape",
+      "replies": {
+        "eth_call": 7
+      },
+      "expected": "LEDGER_UNREACHABLE",
+      "actual": "LEDGER_UNREACHABLE",
+      "returned": null,
+      "diagnostic": true,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_call",
+            [
+              {
+                "to": "0x1111111111111111111111111111111111111111",
+                "data": "0xd9be832c"
+              },
+              "latest"
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    },
+    {
+      "label": "numbered block missing hash",
+      "replies": {
+        "eth_getBlockByNumber": {
+          "timestamp": "0x10"
+        }
+      },
+      "expected": "LEDGER_UNREACHABLE",
+      "actual": "LEDGER_UNREACHABLE",
+      "returned": null,
+      "diagnostic": false,
+      "requests": {
+        "pbc": [
+          [
+            "eth_chainId",
+            null
+          ],
+          [
+            "eth_getBlockByNumber",
+            [
+              "0x1",
+              false
+            ]
+          ]
+        ],
+        "dbc": []
+      }
+    }
+  ],
+  "classification": "tested reconstruction result; no authorization failure demonstrated",
+  "liveNode": false
+}

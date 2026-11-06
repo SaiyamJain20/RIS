@@ -1,3 +1,24 @@
+## A2-0069 witness error-boundary fix verified — 2026-11-06
+
+C-F1 WORKING; integrated execution LOCKED. Exact partial source5c8e418,
+12-path delta from0e58f1d; no full runtime READY. Same27raw-RPC probes reproduce
+four AttributeErrors on old source and four LedgerUnreachable refusals on new.
+Fourteen controls unchanged; five permissive codec observations now documented;
+four other suspicions remain refuted. Fresh245focusedPASS (49view/196service),
+45/45owner mutants detected/controlPASS/default9exports match.450successor/
+446baseline/248localinputs/5helpers stable;429ledgerREADY/52F0pins/31payloads/
+7ABIs/4fixtures verify.383communication paths/no divergence; A18c0285f unchanged/
+A25c8e418. Evidence: evaluation/evidence/reviews/a2-witness-fix-20261106/README.md.
+A3-0094 closes A3-0093's transaction/error-prose request. Owner61combined/live
+result NOT rerun/adopted; property loop checks exception boundaries, not all
+return shapes. Review correlated. Worker factory/CLI/supervised witnesses/real
+transport-clock and H2/H5/H6 remain. Full runtime READY/mapping and separate
+exact execution FREEZE ACKs precede services. No fullsuite/newEparity/native truth/
+source-state/sign-time/completeness/reorg/timing/TLC/Fcase/gate result; historical
+qualifiedE unchanged;32Fcases/GateF NOT_RUN/G locked. No human action. Next own
+source-state/sign-time and exact producer schema/path/lock completeness review,
+then fault oracle/finite model. Earlier entries are historical.
+
 ## A2-0067/0068 witness RPC reviewed — 2026-11-06
 
 C-F1 WORKING; integrated execution LOCKED. Partial source0e58f1d (446files),
