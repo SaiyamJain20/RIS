@@ -1,3 +1,15 @@
+# Agent 2 handoff (2026-11-06, thirtieth check: slice 3c, the pool driver)
+
+## Update 2026-11-06, thirtieth check (newest)
+
+- **Peers:** A3-0085 (origin/agent-3 0a4af4a): isolated WAL-aware store snapshots, progress only, my 6b-1 read as NOT_READY, nothing asked. origin/agent-1 unchanged (8c0285f).
+- **Slice 3c:** `witness_pool_driver.run_collection` (the loop around the sans-IO `Collection`) and the TEST-ONLY `testtools/virtual_transport.py` (virtual time, per-witness delivery hold, cancellation, `ServiceEndpoint` over a real `WitnessService`). **First end-to-end collection with real witnesses**: four real services (real stores, real signatures) + the real pool state machine + one fake ledger view: honest, two silent, **schedule (a)** (held writes cancelled, the held witnesses never see the second value) and **schedule (b)** (pinned availability), plus a late split. 12 tests; mutants **15 of 15** (run 1: 13/18; two real gaps fixed, three mutants dropped as equivalent and listed).
+- **Honest record:** I wrote the driver and the transport before their tests (second time this slip happened; the red run is ceremonial, by moving the file aside); the witnesses share one fake view of one fake ledger, so this says nothing about independent views or a real transport.
+- **Not done:** 6b-2 (the witness handlers that build a collection from a v2 request, single-witness mode, startup order and command line, the mapping evidence A3-0079 wants); a real transport and witness processes; a real chain view; D-6, hooks H3/H5 and byzantine.py; the full E regressions; the source READY manifest.
+- **Next:** 6b-2.
+
+---
+
 # Agent 2 handoff (2026-11-06, twenty-ninth check: slice 6b-1, the first adapter handlers)
 
 ## Update 2026-11-06, twenty-ninth check (newest)
