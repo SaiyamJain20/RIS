@@ -1,3 +1,27 @@
+## Retrospective checkpoint RPC capture verified — 2026-11-07
+
+C-F1 WORKING; integrated execution LOCKED. New internal checkpoint_rpc_v2
+acquires exact raw state for every declared checkpoint digest, with explicit
+caller-selected PBC and unsigned exporter DBC observation provenance. Both chain
+identities/header rechecks bracket reads; safe canonicality and fault/clear/bit1/
+bit5 scope retained. No actual signing time/latest-head/native truth inferred.
+Fresh67new/510focused/2650rootPASS; root572.53s/command572.850s/exit0. Six narrow
+bypasses detected with valid controls. Existing consumers/frozen wire unchanged.
+
+899owner/254selectedlocal runtime inputs stable;8443carried tracked blobs match
+initial clean HEAD. Three evidence-helper corrections and failed trial retained;
+no false helper-stability claim.52F0pins/frozen payloads verify.391communication
+paths/no divergence; A18c0285f/A267111f5 unchanged. No new owner READY/ACK or owner
+runtime result adopted. A3-0096/97 startup requests remain open; complete runtime
+READY/mapping and separate exact execution FREEZE ACKs still precede services.
+Historical qualifiedE unchanged;32Fcases/GateF NOT_RUN/G locked. No human action.
+Evidence: evaluation/evidence/f/v2-checkpoint-rpc-20261107/README.md. Next remaining
+signed-type source-state duties/producer schema-path-lock completeness, then
+fault oracle/finite model. Correlated author review; no extra agents/peer edits.
+Earlier entries are historical.
+
+Last sent A3-0099; last read A2-0072/A1-0116. No owned chain/services.
+
 ## Checkpoint-history state coverage verified — 2026-11-07
 
 C-F1 WORKING; integrated execution LOCKED. New internal checkpoint_history_v2

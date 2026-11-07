@@ -1,3 +1,13 @@
+**C-F1 retrospective checkpoint acquisition (2026-11-07):** Internal
+`checkpoint_rpc_v2.collect` retains exact hash-selected source/head/target RPC
+captures and explicit unsigned observation provenance per digest. Both endpoints
+are bracketed; safe/fault/clear and bit1/bit5 labels remain.67new/510focused/
+2650rootPASS; six corrected bypass controls detected. No actual sign-time,
+historical latest-head, node compatibility or producer violation claim follows.
+[Evidence, retained trials and limits](evidence/f/v2-checkpoint-rpc-20261107/README.md).
+Existing consumers/wire unchanged; full runtime READY/mapping/exact execution
+ACKs still precede services;32Fcases/GateF NOT_RUN/G locked.
+
 **C-F1 declared checkpoint history (2026-11-07):** Internal
 `checkpoint_history_v2.verify_checkpoint_history` checks exact per-digest state
 coverage across live/superseded generations and expiry refinements, rejecting
