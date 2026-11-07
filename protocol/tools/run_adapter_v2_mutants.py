@@ -45,7 +45,6 @@ M = [
     ("A24 the v2.1 marker is allowed under revision v2", [('        if marker == MARKER["v2.1"] and schema_revision != "v2.1":', "        if False:")]),
     ("A25 the pinned manifest need not bind a request", [("            _e._deployment(manifest)\n        except _e.AdapterError as e:\n            raise ValueError", "            pass\n        except _e.AdapterError as e:\n            raise ValueError")]),
     ("A26 the supplied schema is not used", [("            self._validate_against(schema, manifest, schema_revision)\n", "            pass\n")]),
-    ("A27 a schema without the revision's carrier branch is accepted", [("        if missing:\n            raise ValueError(f\"the supplied schema does not define {missing}: it cannot serve revision", "        if False:\n            raise ValueError(f\"the supplied schema does not define {missing}: it cannot serve revision")]),
     ("A28 the handlers are not validated", [('        if not isinstance(handlers, dict) or not set(handlers) <= set(OPERATIONS) or not all(callable(h) for h in handlers.values()):', "        if False:")]),
     ("A29 the pinned manifest is aliased, not copied", [("self.manifest, self.schema_revision, self.handlers = copy.deepcopy(manifest),", "self.manifest, self.schema_revision, self.handlers = manifest,")]),
     ("A30 the output is not compact", [('stdout.write(json.dumps(resp, separators=(",", ":")) + "\\n")', 'stdout.write(json.dumps(resp) + "\\n")')]),
@@ -67,7 +66,6 @@ M = [
     ("A47 every response is checked against the generic type only", [('RESPONSE_TYPE.get(op, "AdapterResponse")', '"AdapterResponse"')]),
     ("A48 the operation is never recorded for the check", [("        known = op\n", "")]),
     ("A49 the published formats are not enforced", [("format_checker=formats)", "format_checker=None)")]),
-    ("A50 a schema without response types is accepted", [("        if missing:\n            raise ValueError(f\"the supplied schema does not define {missing}: it cannot validate responses\")", "        if False:\n            pass")]),
     ("A51 the check_responses flag is ignored", [("if schema is not None and check_responses else None", "if schema is not None else None")]),
     ("A52 check_responses may be any value", [("        if not isinstance(check_responses, bool):\n            raise ValueError(\"check_responses must be a boolean\")\n", "")]),
     ("A53 the generic type is not built", [('names = ("AdapterResponse",) + tuple(RESPONSE_TYPE.values())', "names = tuple(RESPONSE_TYPE.values())")]),
@@ -80,8 +78,15 @@ M = [
 ]
 
 
+# Equivalent mutants: each is RUN and must SURVIVE; if a test starts to notice one, the claim below is false and the runner exits 1.
+E = [
+    ("A27 a schema without the revision's carrier branch is accepted", "Context.__init__ asks schema_problem() first, which already refuses a schema without the revision's carrier branches; _validate_against is called ONLY from there, so its own missing-branch check is an unreachable duplicate kept as defence in depth (made equivalent by the schema_problem refactor, A2-0073 follow-up)", [("        if missing:\n            raise ValueError(f\"the supplied schema does not define {missing}: it cannot serve revision", "        if False:\n            raise ValueError(f\"the supplied schema does not define {missing}: it cannot serve revision")]),
+    ("A50 a schema without response types is accepted", 'Context.__init__ asks schema_problem(responses=check_responses) first, which already refuses a schema without the response types; _build_response_validators is called only from there under the same condition, so its own missing-definition check is an unreachable duplicate kept as defence in depth', [("        if missing:\n            raise ValueError(f\"the supplied schema does not define {missing}: it cannot validate responses\")", "        if False:\n            pass")]),
+]
+
 def validate_anchors():
     bad = [(name, SRC.count(old)) for name, edits in M for old, _ in edits if SRC.count(old) != 1]
+    bad += [(name, SRC.count(old)) for name, _why, edits in E for old, _ in edits if SRC.count(old) != 1]
     if bad:
         print("INVALID anchors (nothing was run):", bad)
         return False
@@ -151,8 +156,19 @@ def main():
             print("DETECTED %s | failed tests: %d" % (name, n))
         else:
             print("NOT-DETECTED(%s) %s" % (status, name))
-    print("detected %d of %d" % (detected, len(M)))
-    return 0 if detected == len(M) else 1
+    false_claims = 0
+    for name, why, edits in E:
+        text = SRC
+        for old, new in edits:
+            text = text.replace(old, new)
+        status, n = run_in_copy(text)
+        if status == "pass":
+            print("SURVIVED-EQUIVALENT %s | %s" % (name, why))
+        else:
+            false_claims += 1
+            print("FALSE-EQUIVALENT-CLAIM (%s) %s: the tests notice it, so it is not equivalent" % (status, name))
+    print("detected %d of %d; equivalent survivors %d (claims checked by running them)" % (detected, len(M), len(E) - false_claims))
+    return 0 if detected == len(M) and false_claims == 0 else 1
 
 
 if __name__ == "__main__":

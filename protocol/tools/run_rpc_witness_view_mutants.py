@@ -58,7 +58,7 @@ M = [
     ("W36 a missing contract is a KeyError", [('            raise ValueError(f"this view has no {name} contract") from None', "            raise")]),
     ("W37 the pbc block timestamp is parsed as decimal", [('str(int(b["timestamp"], 16))', 'str(int(b["timestamp"]))')]),
     ("W38 the ABI file hash is not checked", [("                if hashlib.sha256(raw).hexdigest() != pinned:", "                if False:")]),
-    ("W39 the chain id of the clients is not checked", [("                if int(manifest[\"chains\"][side][\"chainId\"]) != chains[side].chain_id:", "                if False:")]),
+    ("W39 the chain id of the clients is not checked", [("                if sc.uint_text(manifest[\"chains\"][side][\"chainId\"], 256, f\"{side} chainId\") != chains[side].chain_id:", "                if False:")]),
     ("W40 the required contracts are not checked", [("not set(REQUIRED) <= set(contracts) <= set(CONTRACT_SIDE)", "False")]),
     ("W41 a contract address of any shape is accepted", [("or _ADDR.fullmatch(c.address) is None:", ":")]),
     ("W42 chain clients for one chain only are accepted", [("if not isinstance(chains, dict) or set(chains) != set(SIDES):\n            raise ValueError(\"chains must be exactly", "if False:\n            raise ValueError(\"chains must be exactly")]),
