@@ -515,7 +515,9 @@ def schema_validator():
     return jsonschema.Draft202012Validator({"$schema": "https://json-schema.org/draft/2020-12/schema", "$ref": "#/$defs/AdapterResponse", "$defs": schema["$defs"]}, format_checker=jsonschema.FormatChecker())
 
 
-def test_the_cli_serves_the_worker_operations_on_the_real_ledger_and_says_not_wired_for_the_witness_ones(live_f, tmp_path):
+def test_the_cli_serves_the_worker_operations_on_the_real_ledger_and_the_witness_ones_through_four_supervised_witness_processes(live_f, tmp_path):
+    """Was `..._says_not_wired_for_the_witness_ones` until the witness wiring (A2-0074 P1): for a repaired-f deployment the adapter now spawns four witness_main children after startup validation, so a real
+    collect_checkpoint is collected from them. The old assertion (ADAPTER_UNAVAILABLE 'not wired') described the unwired command line and is replaced, not deleted, because the behaviour changed on purpose."""
     from test_adapter_v2_ops import KEYREF, request_for
     dep, ok = live_f.dep, schema_validator()
     other = copy.deepcopy(dep)
@@ -532,7 +534,12 @@ def test_the_cli_serves_the_worker_operations_on_the_real_ledger_and_says_not_wi
     assert len(out) == len(lines) and all(ok.is_valid(r) for r in out)
     prep, ckpt, rel, junk, wrong, rot = out
     assert prep["ok"] is True and prep["result"]["schemaVersion"] == "v2"
-    assert ckpt["ok"] is False and ckpt["error"]["code"] == "ADAPTER_UNAVAILABLE" and "not wired" in ckpt["error"]["message"]
+    assert ckpt["ok"] is True and len(ckpt["result"]["signatures"]) == 3 and len(set(ckpt["result"]["signatures"])) == 3         # three distinct signatures from real witness processes
+    coll = ckpt["result"]["collection"]
+    assert coll["quorum"] == "3" and len(coll["submittedSigners"]) == 3 and [o["witnessIndex"] for o in coll["outcomes"]] == ["0", "1", "2", "3"]
+    for i in range(4):                                                                                                       # the supervisor left its pid and stderr files beside the stores
+        pid = (tmp_path / "state" / f"witness-{i}.pid").read_text()
+        assert pid.endswith("\n") and pid[:-1].isdigit() and oct((tmp_path / "state" / f"witness-{i}.pid").stat().st_mode & 0o777) == "0o600"
     assert rel["ok"] is False and rel["error"]["code"] == "NOT_COMMITTED"        # the REAL ledger has no grant with this id
     assert junk["error"]["code"] == "MALFORMED" and wrong["error"]["code"] == "WRONG_DESTINATION" and rot["error"]["code"] == "NOT_IMPLEMENTED_IN_PHASE"
     state = tmp_path / "state"

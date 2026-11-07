@@ -7,7 +7,9 @@ schema file with its pinned SHA-256 (a different file is refused before anything
 without touching the network, (2) opens the loopback JSON-RPC clients named by the manifest (non-loopback URLs are refused by the carried client), (3) runs the startup order of `adapter_v2_start` against the
 REAL chains through `RpcBindingView` (D50 stages 1 to 8, then the worker directory binding), and (4) serves JSON lines on stdin/stdout. The key-worker operations (`prepare_request`, `encrypt_record`,
 `release`, `finish_decryption`) are backed by the carried `Worker` on the real ledger (chain clock `dbc.now`); EVERY response is checked against the published schema (`check_responses` stays on). The four
-witness operations are NOT wired (no witness processes or transport exist yet) and answer ADAPTER_UNAVAILABLE "not wired in this process".
+witness operations are wired for a `repaired-f` deployment by `build_runtime` (A2-0074 proposals P1/P2): the proposer's own `RpcWitnessView`, the four witness addresses of the pinned manifest and the supervisor's
+`transport_factory`; four `witness_main` children are spawned by `main` ONLY after every startup validation has passed and are closed when it returns. For any other profile (the carried E successor) they stay
+ADAPTER_UNAVAILABLE "not wired for this deployment profile". `--allow-governance FILE` is the optional TEST-ONLY local approval list handed to every witness unchanged.
 A startup failure prints ONE JSON object `{"error": {"code", "message", "reason"?}}` on stderr, nothing on stdout, exits 2 and leaves no state behind (files are created with umask 077; an existing state
 directory reachable by group or other is refused). No traceback, no secret and no node text reaches the output. This module reads no environment variable and has no clock, thread or socket of its own.
 """
@@ -23,11 +25,14 @@ import sys
 
 from . import adapter as _e
 from . import adapter_v2 as av2
+from . import adapter_v2_witness as aw
 from . import adapter_v2_start as st
 from . import binding as bd
 from . import binding_open as bo
 from . import rpc_binding_view as rv
+from . import rpc_witness_view as rwv
 from . import startup_config as sc
+from . import witness_process_transport as wpt
 from . import witness_state as ws
 from .abi import Contract
 from .chain import Chain, ChainError
@@ -57,6 +62,7 @@ def _parser():
     ap.add_argument("--schema-sha256", required=True, type=_sha_arg, help="the pinned SHA-256 of that schema file")
     ap.add_argument("--schema-revision", required=True, choices=("v2", "v2.1"), help="the explicitly selected schema revision")
     ap.add_argument("--state-dir", required=True, help="private directory (mode 0700) for durable state")
+    ap.add_argument("--allow-governance", help="TEST-ONLY, optional: local approval list (JSON array of [action, root, [admins]]) handed to every witness; repaired-f only")
     return ap
 
 
@@ -132,12 +138,40 @@ def build_context(args, *, start=st.start):
         raise Refusal("MALFORMED", f"startup refused: {e}") from None
 
 
+def build_runtime(args, *, start=st.start, supervisor_factory=wpt.WitnessSupervisor.for_deployment):
+    """`(context, supervisor_or_None)`. For a `repaired-f` deployment `start` also receives the witness wiring and the supervisor (UNSTARTED) is returned: `main` spawns it only after every startup validation passed, so a
+    refused startup spawns nothing and writes no pid file. Any other profile gets no wiring and no supervisor. `--allow-governance` is validated before the supervisor, any state or any chain is touched."""
+    holder = []
+
+    def wired_start(**kw):
+        manifest, allow = kw["manifest"], getattr(args, "allow_governance", None)
+        if manifest.get("profile") != aw.PROFILE:
+            if allow is not None:
+                raise Refusal("MALFORMED", "--allow-governance needs a repaired-f deployment")
+            return start(**kw)
+        if allow is not None:
+            from . import witness_main as _wm                              # the allow-list's own validator; imported here because witness_main imports this module
+            _wm._allow(allow)                                              # Refusal(MALFORMED) before the supervisor, any state or any chain
+        numbers = sc.manifest_numbers(manifest)
+        chains = {s: Chain(manifest["chains"][s]["rpcUrl"], numbers[s]["chainId"]) for s in ("pbc", "dbc")}
+        view = rwv.RpcWitnessView.from_manifest(manifest, chains, args.abi_dir)
+        try:
+            supervisor = supervisor_factory(manifest=manifest, deployment_path=args.deployment, abi_dir=args.abi_dir, state_dir=kw["state_dir"], allow_governance=allow)
+        except wpt.SupervisorError as e:                                   # a RuntimeError, not a ValueError: corrupt witness-set configuration is MALFORMED, not "internal"
+            raise Refusal("MALFORMED", f"the deployment's witness set cannot be supervised: {e}") from None
+        holder.append(supervisor)
+        return start(**kw, witness_view=view, witnesses=list(manifest["fixture"]["witnessSet"]["witnesses"]), transport_factory=supervisor.transport_factory)
+
+    ctx = build_context(args, start=wired_start)
+    return ctx, (holder[0] if holder else None)
+
+
 def main(argv=None, stdin=None, stdout=None, stderr=None):
     stdin, stdout, stderr = stdin or sys.stdin.buffer, stdout or sys.stdout, stderr or sys.stderr
     args = _parser().parse_args(argv)
     os.umask(0o077)                                                   # every file and directory this process creates is private
     try:
-        ctx = build_context(args)
+        ctx, supervisor = build_runtime(args)
     except Refusal as e:
         err = {"code": e.code, "message": e.message}
         if e.reason:
@@ -147,7 +181,17 @@ def main(argv=None, stdin=None, stdout=None, stderr=None):
     except Exception:  # noqa: BLE001 - the last resort: a startup defect nobody anticipated is still ONE closed refusal, never a traceback, a path or a node text (the specific refusals above stay tested)
         stderr.write(json.dumps({"error": {"code": "ADAPTER_UNAVAILABLE", "message": "internal startup failure"}}, separators=(",", ":")) + "\n")
         return 2
-    return av2.serve(stdin, stdout, ctx)
+    try:
+        if supervisor is not None:
+            try:
+                supervisor.start()                                          # only now, after every startup validation: four witness_main children, pid and stderr files
+            except Exception:  # noqa: BLE001 - one closed refusal; the message names no path
+                stderr.write(json.dumps({"error": {"code": "ADAPTER_UNAVAILABLE", "message": "the witness supervisor failed to start"}}, separators=(",", ":")) + "\n")
+                return 2
+        return av2.serve(stdin, stdout, ctx)
+    finally:
+        if supervisor is not None:
+            supervisor.close()                                              # idempotent; closes the children's stdin, waits a bounded grace, kills what is left; the pid files stay
 
 
 if __name__ == "__main__":

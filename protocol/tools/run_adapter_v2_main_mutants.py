@@ -28,7 +28,7 @@ M = [
     ("C9 a URL or ABI problem escapes as a traceback", [("    except (KeyError, TypeError, ValueError, AttributeError, ChainError) as e:", "    except (KeyError, TypeError, ValueError, AttributeError) as e:")]),
     ("C10 a stage refusal maps to MALFORMED", [('bo.OPEN_REASON_CODE.get(e.reason, "ADAPTER_UNAVAILABLE")', '"MALFORMED"')]),
     ("C11 the stage reason is dropped", [("        if e.reason:\n            err[\"reason\"] = e.reason", "        if False:\n            err[\"reason\"] = e.reason")]),
-    ("C12 a LAST-RESORT startup failure exits 1 (its anchor moved when the guard was added; C31 covers the refusal branch)", [("        return 2\n    return av2.serve", "        return 1\n    return av2.serve")]),
+    ("C12 a LAST-RESORT startup failure exits 1 (its anchor moved when the guard was added; C31 covers the refusal branch)", [('"message": "internal startup failure"}}, separators=(",", ":")) + "\\n")\n        return 2\n    try:', '"message": "internal startup failure"}}, separators=(",", ":")) + "\\n")\n        return 1\n    try:')]),
     ("C13 the refusal goes to stdout", [("        stderr.write(json.dumps({\"error\": err}", "        stdout.write(json.dumps({\"error\": err}")]),
     ("C14 a startup ValueError escapes", [("    except ValueError as e:\n        raise Refusal(\"MALFORMED\", f\"startup refused: {e}\") from None", "    except TypeError as e:\n        raise Refusal(\"MALFORMED\", f\"startup refused: {e}\") from None")]),
     ("C15 the schema file is read before it is hashed, from the wrong path", [("    raw = _read(path, \"schema\")", "    raw = _read(path + \"x\", \"schema\")")]),
@@ -45,15 +45,27 @@ M = [
     ("C27 the schema shape check is made against the wrong revision", [("av2.schema_problem(schema, args.schema_revision)", 'av2.schema_problem(schema, "v2")')]),
     ("C28 the last-resort guard is gone", [("    except Exception:  # noqa: BLE001 - the last resort", "    except KeyboardInterrupt:  # noqa: BLE001 - the last resort")]),
     ("C29 the last-resort refusal has the wrong code", [('{"code": "ADAPTER_UNAVAILABLE", "message": "internal startup failure"}', '{"code": "MALFORMED", "message": "internal startup failure"}')]),
-    ("C30 the last-resort refusal goes to stdout", [('        stderr.write(json.dumps({"error": {"code": "ADAPTER_UNAVAILABLE"', '        stdout.write(json.dumps({"error": {"code": "ADAPTER_UNAVAILABLE"')]),
+    ("C30 the last-resort refusal goes to stdout", [('        stderr.write(json.dumps({"error": {"code": "ADAPTER_UNAVAILABLE", "message": "internal startup failure"', '        stdout.write(json.dumps({"error": {"code": "ADAPTER_UNAVAILABLE", "message": "internal startup failure"')]),
     ("C31 a refused startup exits 1 (the refusal branch)", [(r'separators=(",", ":")) + "\n")' + "\n        return 2\n    except Exception:", r'separators=(",", ":")) + "\n")' + "\n        return 1\n    except Exception:")]),
     ("C32 the last-resort leaks the exception text", [('"message": "internal startup failure"}}', '"message": "internal startup failure: " + repr(sys.exc_info()[1])}}')]),
+    ("W1 the profile gate is inverted: the E profile gets the witness wiring", [('        if manifest.get("profile") != aw.PROFILE:', '        if manifest.get("profile") == aw.PROFILE:')]),
+    ("W2 the allow-list is not validated before the supervisor", [("            _wm._allow(allow)", "            pass")]),
+    ("W3 --allow-governance is silently ignored on a non-F deployment", [('                raise Refusal("MALFORMED", "--allow-governance needs a repaired-f deployment")', "                pass")]),
+    ("W4 the witness addresses are taken in the wrong order", [('witnesses=list(manifest["fixture"]["witnessSet"]["witnesses"])', 'witnesses=list(reversed(manifest["fixture"]["witnessSet"]["witnesses"]))')]),
+    ("W5 the transport factory is not the supervisor's", [("transport_factory=supervisor.transport_factory", "transport_factory=lambda kind: None")]),
+    ("W6 a SupervisorError escapes the wiring unmapped", [("        except wpt.SupervisorError as e:", "        except KeyError as e:")]),
+    ("W7 the allow-list path is not handed to the supervisor", [("state_dir=kw[\"state_dir\"], allow_governance=allow)", "state_dir=kw[\"state_dir\"], allow_governance=None)")]),
+    ("W8 the supervisor is never closed", [("        if supervisor is not None:\n            supervisor.close()", "        if supervisor is not None:\n            pass")]),
+    ("W9 a supervisor that failed to start still lets the adapter serve", [('"the witness supervisor failed to start"}}, separators=(",", ":")) + "\\n")\n                return 2', '"the witness supervisor failed to start"}}, separators=(",", ":")) + "\\n")\n                pass')]),
+    ("W10 the supervisor start failure exits 1", [('"the witness supervisor failed to start"}}, separators=(",", ":")) + "\\n")\n                return 2', '"the witness supervisor failed to start"}}, separators=(",", ":")) + "\\n")\n                return 1')]),
+    ("W11 the supervisor is never started", [("                supervisor.start()  ", "                pass  ")]),
+    ("W12 the supervisor is built for every profile", [('        if manifest.get("profile") != aw.PROFILE:\n            if allow is not None:', '        if False:\n            if allow is not None:')]),
 ]
 
 # EQUIVALENT mutants: they change the file but cannot change what the tests can observe; each runs (it must SURVIVE, otherwise the claim is false) and is reported, never counted as detected.
 E = [
     ("C25 the chain id is re-read with int() after the number check", "manifest_numbers has already refused every non-canonical chainId, and int() of a canonical decimal string is the same value, so no input distinguishes the two",
-     [('Chain(manifest["chains"][s]["rpcUrl"], numbers[s]["chainId"])', 'Chain(manifest["chains"][s]["rpcUrl"], int(manifest["chains"][s]["chainId"]))')]),
+     [('    state = _state_dir(args.state_dir)\n    try:\n        chains = {s: Chain(manifest["chains"][s]["rpcUrl"], numbers[s]["chainId"])', '    state = _state_dir(args.state_dir)\n    try:\n        chains = {s: Chain(manifest["chains"][s]["rpcUrl"], int(manifest["chains"][s]["chainId"]))')]),
 ]
 
 
@@ -75,14 +87,14 @@ def run_in_copy(text):
         shutil.copytree(os.path.join(PROTO, "abi"), os.path.join(p, "abi"))                  # the carried code reads the ABI manifest at import time
         shutil.copytree(os.path.join(PROTO, "hmbc_protocol"), os.path.join(p, "hmbc_protocol"), ignore=shutil.ignore_patterns("__pycache__", "adapter_v2_main.py"))
         for rel in ("pytest.ini",) + tuple(os.path.join("tests", n) for n in ("conftest.py", "support.py", "test_witness_service.py", "test_witness_service_decision.py", "test_witness_service_governance.py",
-                                                                              "test_witness_service_receipt.py", "test_adapter_v2_main.py", "test_startup_refusals.py")):
+                                                                              "test_witness_service_receipt.py", "test_adapter_v2_main.py", "test_startup_refusals.py", "test_adapter_v2_main_wiring.py")):
             os.makedirs(os.path.dirname(os.path.join(p, rel)) or p, exist_ok=True)
             shutil.copy(os.path.join(PROTO, rel), os.path.join(p, rel))
         with open(os.path.join(p, "hmbc_protocol", "adapter_v2_main.py"), "w") as f:
             f.write(text)
         env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
         try:
-            r = subprocess.run([sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests/test_adapter_v2_main.py", "tests/test_startup_refusals.py"], cwd=p, capture_output=True, text=True, timeout=300, env=env)
+            r = subprocess.run([sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests/test_adapter_v2_main.py", "tests/test_startup_refusals.py", "tests/test_adapter_v2_main_wiring.py"], cwd=p, capture_output=True, text=True, timeout=300, env=env)
         except subprocess.TimeoutExpired:
             return "timeout", None
         m = re.search(r"(\d+) failed", r.stdout)
