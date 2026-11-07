@@ -32,10 +32,12 @@ from hmbc_protocol import binding as bd
 from hmbc_protocol import binding_open as bo
 from hmbc_protocol import rpc_binding_view as rv
 from hmbc_protocol.chain import Chain
+from support import foundry
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
 LEDGER_COMMIT = "85c59f588de58a8ff5e87b9fe6f630c9d8c43642"
-FOUNDRY = pathlib.Path.home() / ".local/share/hmbc-tools/foundry-1.8.5"
+# Foundry is located by support.foundry(): $HMBC_FOUNDRY_DIR, then ~/.local/share/hmbc-tools/foundry-1.8.5, then PATH. This file used to hard-code the second and ignore the first, so on a host that set only
+# HMBC_FOUNDRY_DIR every live test here SKIPPED silently and the run still printed green (found 2026-11-07).
 ANVIL_KEY0 = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"        # Anvil's public default account
 ALT_KEY_ADDR = "0x" + "ee" * 20
 
@@ -65,9 +67,9 @@ def _wait(url):
 
 
 def _deploy(tmp_path_factory, profile, successor):
-    anvil, forge = FOUNDRY / "anvil", FOUNDRY / "forge"
-    if not anvil.is_file() or not forge.is_file():
-        pytest.skip("Foundry (anvil/forge) not installed in the hmbc-tools directory")
+    anvil, forge = foundry("anvil"), foundry("forge")
+    if not anvil or not forge:
+        pytest.skip("Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH")
     if subprocess.run(["git", "cat-file", "-e", LEDGER_COMMIT], cwd=REPO, capture_output=True).returncode != 0:
         pytest.skip(f"ledger commit {LEDGER_COMMIT} not available locally (git fetch origin)")
     root = tmp_path_factory.mktemp("live-" + profile)
@@ -82,7 +84,7 @@ def _deploy(tmp_path_factory, profile, successor):
         urls = [f"http://127.0.0.1:{p}" for p in ports]
         for u in urls:
             _wait(u)
-        env = {**os.environ, "PATH": f"{FOUNDRY}:{os.environ['PATH']}", "DEPLOYER_PK": ANVIL_KEY0}
+        env = {**os.environ, "PATH": f"{pathlib.Path(forge).parent}:{os.environ['PATH']}", "DEPLOYER_PK": ANVIL_KEY0}
         if successor:
             env["SUCCESSOR_EXPORT"] = "1"
         run = subprocess.run(["bash", "ledger/tools/deploy_local.sh", urls[0], urls[1], profile, "complete-details", "live-d50"], cwd=src, env=env, capture_output=True, text=True, timeout=900)
