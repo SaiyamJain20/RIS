@@ -1,3 +1,16 @@
+# Agent 2 handoff (2026-11-08): complete runtime READY published (A2-0076). Older blocks below are history, kept verbatim.
+
+## Current state (read this block first)
+- **Published on origin/agent-2 (tip 8b0a0b4):** A2-0073 startup-refusal delta (3ca33b0), A2-0074 start-contract RFC (awaiting agent 3's exact ACK), A2-0075 errata NOTE, **A2-0076 complete runtime source READY**. Commit of record 7d97b902a7fa4d02c32c7cc95ef75a10b69694a9; source bytes under test 8751cf8 (differ only in four runner tool files and docs/evidence); manifest `protocol/evidence/af2-source-ready-3/MANIFEST.sha256` 7de8f334.. (549 entries).
+- **What I verified myself (not adopted from sub-agents):** full suite on a clone of 8751cf8 2946 passed / 201 skipped / 0 failed; all 22 mutation runners clean; the 34 historical E test files 1383 passed / 201 skipped; `export --check` exit 0; E-listed paths exactly 3 of 142; the 52 pinned F0 files verify. Outputs: `protocol/evidence/af2-source-ready-3/outputs/`, README, MAPPING.md.
+- **Waiting on agent 3:** review of A2-0076; exact ACK or amendments of A2-0074 (O1..O6); then its execution FREEZE, which I ACK in protocol scope (verify hashes; drive its runner's calls against my adapter, hooks and alternate entry as in E). F gate NOT_RUN; G locked.
+- **Environment to reproduce (this clone, branch agent-2):** CPython 3.13 from the frozen root uv.lock (`uv sync --frozen --no-install-project` from a copy of pyproject.toml + uv.lock), Foundry 1.8.5 + solc 0.8.37 hash-verified against `interfaces/v1/toolchain.json`, `HMBC_FOUNDRY_DIR` set and HOME redirected so forge's ~/.svm cache stays out of the home directory. Pinned ledger commits must be in the local object store: 91add8c (E) and 85c59f5 (F). Commands: `python -m pytest protocol/tests -c protocol/pytest.ini --rootdir protocol -p no:cacheprovider -rs -q`; runners `python -B -I protocol/tools/run_<name>_mutants.py` (`--live` for hooks). **Read the skip count: the only expected skips are 200 ScenarioResult + 1 FileHash.**
+- **Traps found this session:** (1) `tests/test_rpc_binding_view_live.py` used to ignore HMBC_FOUNDRY_DIR and skip silently (fixed); (2) five older mutation runners could not run (directory fixture `agent1-85c59f5-abi/`, stale anchors) and were repaired; (3) `silent` in a pool success means "not heard before quorum", not "stopped"; (4) a class defined in a module run as `__main__` is a different class from its package-name copy (found live; `Refusal` now lives in `startup_config`).
+- **Process disclosure:** on the human's instruction (2026-11-07) forked sub-agents wrote parts of the transport, hooks, wiring live tests, the alternate entry, the E pins and the startup-fix mutation evidence (the repository rule is three persistent agents). Two forks died on transient network errors. Every claim in the READY was re-executed by me.
+- **Not done / not claimed:** any F case or the F gate; real-process H1/H3 (virtual transport only); power-loss durability; consensus; ABE. Open facts I own: `binding_open` converts deployBlock with `int()` after the network step; the stale E0/E1 labels in pinned `exports/adapter.json`; the H5 worker variant is reachable only through the alternate entry.
+
+---
+
 # Agent 2 handoff (2026-11-07, forty-eighth check: slice 11a, witness processes)
 
 ## Update 2026-11-07, forty-eighth check (newest)
