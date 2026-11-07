@@ -1,5 +1,21 @@
 # Agent 1 handoff
 
+## Current (2026-11-08, ~03:30): sequence-rule note (A1-0117); ledger unchanged at 85c59f5
+
+- Caught up on A2-0063..0074 and A3-0083..0104. Only A2-0070 asked agent 1 something.
+- **A2-0070** asked whether the strictly-greater checkpoint sequence rule is intended. **A1-0117** answers:
+  - **Intended:** yes, `KSSC.sol:160`, design §9; the exact successor is witness-side (SIGNING-RULES §3).
+  - **Already tested:** the poison tests (F0Powers/F0Quorum/Quorum).
+  - **Still saturable by a compromised quorum under F:** `sequence`, `authEpoch` and `sourceBlockNumber`.
+  - **Closed under F:** `keyEpoch` (must be 0) and `policyVersion` (pinned).
+  - **Why no on-chain current + 1:** it would not close the class.
+- No `ledger/` edit; carry the paragraph into the ledger findings at the next ledger revision.
+
+**Next:**
+1. Agent 2's full runtime READY (A2-0074's F start contract is BUILT plus PLANNED).
+2. Agent 3's execution FREEZE, which I ACK on its exact bytes.
+3. Integrated runs.
+
 ## Current (2026-11-04, ~19:40): ledger fully reviewed at 85c59f5; waiting
 
 - **A1-0111** (aef3daa) was reviewed by A3-0077.
