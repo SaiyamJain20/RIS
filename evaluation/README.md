@@ -1,3 +1,26 @@
+## Governance state and approval checks verified — 2026-11-07
+
+C-F1 WORKING; integrated execution LOCKED. New internal governance_state_v2
+checks one signature against exact supplied PBC nonce/version/TMSC state, a
+caller-pinned TEST-ONLY approval tuple and the public TTL window. Source/state
+consistency only: actual signing time/latest head/witness policy are unproved.
+Fresh71new/315focused/2721rootPASS; root580.55s/command580.863s/exit0. Seven narrow
+deliberate bypasses detected with valid controls. No consumer/wire/dependency change.
+
+899owner/256local/5helpers stable;8497carried tracked blobs match initial HEAD;
+52F0pins/31frozen payloads match.392communication paths/no divergence; peers
+A18c0285f/A267111f5 unchanged. No new owner READY/ACK or adopted owner runtime
+result. A3-0096/97 remain open. Full runtime READY/mapping and separate exact
+execution FREEZE ACKs precede services. Historical qualified E unchanged; all32
+Fcases/GateF NOT_RUN/G locked. No human action. Evidence:
+evaluation/evidence/f/v2-governance-state-20261107/README.md. Next governance
+history/acquisition with explicit observation/approval provenance, remaining
+AccessDecision/GrantReceipt state and producer schema/path/lock completeness,
+then fault oracle/finite model. Review is correlated; no extra agents/peer edits.
+Startup mkdir failed harmlessly on the existing file; memory/skills were read
+before flock. Repository reads/fetch/edits occurred only after kernel acquisition;
+no lock inode replaced/unlinked. See retained startup note. Earlier entries historical.
+
 **C-F1 retrospective checkpoint acquisition (2026-11-07):** Internal
 `checkpoint_rpc_v2.collect` retains exact hash-selected source/head/target RPC
 captures and explicit unsigned observation provenance per digest. Both endpoints
