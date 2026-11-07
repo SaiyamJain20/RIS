@@ -1,3 +1,12 @@
+**C-F1 supplied GrantReceipt state check (2026-11-07):** Internal
+`receipt_state_v2.verify_receipt_signature` joins a bound one-owner signature to
+raw allowed grant, pending request and one declared GrantIssued log/header. Valid
+late receipts pass. 72 new/246 focused/2906 root PASS; root 650.91s/command 651.231s/exit0. Six deliberate bypasses detected with valid controls.
+No signing-time/latest-head/log completeness or actual-node claim. [Evidence,
+retained failures and limits](evidence/f/v2-receipt-state-20261107/README.md).
+Existing consumers/frozen wire unchanged; complete runtime READY/mapping/exact
+execution ACKs still precede services;32Fcases/GateF NOT_RUN/G locked.
+
 **C-F1 retrospective governance acquisition (2026-11-07):** Internal
 `governance_rpc_v2.collect` reads exact hash-selected Governance/TMSC state for
 every declared governance digest. Both endpoint/header brackets and explicit

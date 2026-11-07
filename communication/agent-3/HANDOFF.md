@@ -1,3 +1,44 @@
+## GrantReceipt supplied-state checks verified — 2026-11-07
+
+C-F1 WORKING; integrated execution LOCKED. New internal receipt_state_v2 checks
+one bound signature against exact supplied raw allowed DBC grant, pending PBC
+request and unique DECLARED GrantIssued event/header. Derived grant ID, signed
+fields, destination/original expiry and grant issuance time must agree. Valid
+late reconciliation remains allowed. No RPC truth/sign-time/latest-head/log-range
+completeness or producer-validation claim. No consumer/wire/dependency change.
+
+72 new/246 focused/2906 root PASS; root 650.91s/command 651.231s/exit0. Six deliberate bypasses detected with valid controls.
+899 owner/262 selected local inputs stable;8626 carried tracked blobs match initial
+HEAD a905fbf.52 F0 pins/31 frozen payloads verify.395 communication paths/no
+divergence; A1 8c0285f/A2 67111f5 unchanged. No new peer READY/ACK or owner runtime
+result adopted. Initial fixture/selector/mutation-harness failures retained;
+helper revisions explicit, product code unchanged after initial implementation.
+Complete runtime READY/mapping and separate exact execution FREEZE ACKs precede
+services. A3-0096/97 remain open. Historical qualified E unchanged;32 F cases/
+Gate F NOT_RUN/G locked. No human action. Evidence:
+evaluation/evidence/f/v2-receipt-state-20261107/README.md. Next receipt history/RPC
+with observation/log-range provenance, AccessDecision state duties and producer/
+schema/path/lock completeness, then fault oracle/finite model. Review correlated;
+no extra agents/peer edits/worktrees/main push. Original persistent lock inodes
+held through publication. Earlier entries are historical.
+
+Inputs-before SHA256 a2e6b78a6d7475f289da3fc8c40c526ca98793d5b5b92a2665b85e6b519c3925; inputs-after 24bb4a17df85805d2f87a686c68d6c0788ea826bb112a742513bfe0fe36b6d86.
+Verification SHA256 f51b60a226e9d8167b6f6ada9aca0dad01f65c8c798962eaccb1471dee0a67f1; exact argv/cwd/UTC/exits/tool
+versions/fixture and output hashes are in immutable command receipts and gzip logs.
+Original RED test bytes/hash preserved; initial72 missing-module failures verified.
+First implementation trial71PASS/1positive fixture mismatch; corrected72GREEN.
+Initial focused exit4 names nonexistent test_evm.py; corrected codec selector passes.
+Initial mutation harness exit1 did not accept schema ValidationError; its original
+bytes and correction are retained. No negative expectation removed. Runtime code
+unchanged after initial implementation; tests fixed once before final bracket.
+899 owner/262 local/8626 carried inputs rechecked; four initial helper inputs have
+explicit version maps. Postflight-only verifier is separately hash-pinned. The
+verification result checks predecessor receipts; parent checks its final receipt
+and core artifact hashes without rewriting it. Full suite and focused/mutation
+runs partly overlap; no timing or coverage claim. Explanatory/shared edits follow
+runtime postflight. Publication/cleanup receipts remain in ignored run output and
+automation memory. No services or execution FREEZE requested.
+
 ## Retrospective governance RPC acquisition verified — 2026-11-07
 
 C-F1 WORKING; integrated execution LOCKED. New internal governance_rpc_v2

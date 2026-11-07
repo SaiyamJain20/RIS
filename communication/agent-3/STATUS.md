@@ -1,3 +1,29 @@
+## GrantReceipt supplied-state checks verified — 2026-11-07
+
+C-F1 WORKING; integrated execution LOCKED. New internal receipt_state_v2 checks
+one bound signature against exact supplied raw allowed DBC grant, pending PBC
+request and unique DECLARED GrantIssued event/header. Derived grant ID, signed
+fields, destination/original expiry and grant issuance time must agree. Valid
+late reconciliation remains allowed. No RPC truth/sign-time/latest-head/log-range
+completeness or producer-validation claim. No consumer/wire/dependency change.
+
+72 new/246 focused/2906 root PASS; root 650.91s/command 651.231s/exit0. Six deliberate bypasses detected with valid controls.
+899 owner/262 selected local inputs stable;8626 carried tracked blobs match initial
+HEAD a905fbf.52 F0 pins/31 frozen payloads verify.395 communication paths/no
+divergence; A1 8c0285f/A2 67111f5 unchanged. No new peer READY/ACK or owner runtime
+result adopted. Initial fixture/selector/mutation-harness failures retained;
+helper revisions explicit, product code unchanged after initial implementation.
+Complete runtime READY/mapping and separate exact execution FREEZE ACKs precede
+services. A3-0096/97 remain open. Historical qualified E unchanged;32 F cases/
+Gate F NOT_RUN/G locked. No human action. Evidence:
+evaluation/evidence/f/v2-receipt-state-20261107/README.md. Next receipt history/RPC
+with observation/log-range provenance, AccessDecision state duties and producer/
+schema/path/lock completeness, then fault oracle/finite model. Review correlated;
+no extra agents/peer edits/worktrees/main push. Original persistent lock inodes
+held through publication. Earlier entries are historical.
+
+Last sent A3-0103; last read A1-0116/A2-0072. No owned chain/services.
+
 ## Retrospective governance RPC acquisition verified — 2026-11-07
 
 C-F1 WORKING; integrated execution LOCKED. New internal governance_rpc_v2
