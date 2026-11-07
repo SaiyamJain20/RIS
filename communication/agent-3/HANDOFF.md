@@ -1,3 +1,43 @@
+## Checkpoint source-state checks verified — 2026-11-07
+
+C-F1 WORKING; integrated execution LOCKED. New internal checkpoint_state_v2
+checks one bound checkpoint signature against exact supplied PBC source/head
+getters and DBC current/maxTTL/time. Fresh51new/409focused/2549rootPASS;
+root541.29s/command541.606s/exit0. Seven deliberate in-memory bypasses detected;
+valid controls preserved. No existing consumer or frozen interface changed.
+Supplied observations do not establish actual signing time/latest head, RPC
+truth/ancestry, history/store completeness, consensus or a gate.
+
+Exact A2 partial67111f5 (11-path delta) reviewed: witness process entry point
+exists;48no-node tests independentlyPASS. Numeric chainId1e999 escapes as an
+OverflowError traceback for either chain, no state; A3-0097 extends the open
+A3-0096 owner request. Local corrupt config only, no authorization bypass.
+Empty object/string approval lists grant nothing. Owner142combined/live/30mutant
+claims NOT rerun/adopted. No full runtime READY or execution ACK; real pool
+transport-clock/CLI witness wiring/H2/H5/H6 and full source/mapping remain.
+
+899owner/250selectedlocalinputs/5helpers stable;429ledgerREADY/52F0pins/31payloads
+verify.389communication paths/no divergence; A18c0285f/A267111f5 unchanged at final
+fetch. Three historical E path mismatches remain; no new E parity. Evidence:
+evaluation/evidence/f/v2-checkpoint-state-20261107/README.md. Historical qualified
+E unchanged;32Fcases/GateF NOT_RUN/G locked. No human action. Review correlated;
+no extra agents/peer edits. Next checkpoint acquisition/history joins, remaining
+source-state duties/producer schema-path-lock completeness, fault oracle/model.
+Earlier entries are historical.
+
+Verification SHA256 `7dbf6d80aee74895baa187f9fedf2de660698395a64f5436c532a24ccae0f61b`; inputs SHA256 `8433164ce25aed3f7c17289cc39756e5fe64c3c056c1f3c88fb51c1975c1344c`.
+Verifier checks13predecessor command receipts; its own14th receipt separately
+verified without rewriting verification.json. Retained failures:44missing-module
+RED,20FAIL/24PASS schema-name/test-exception correction, coverage sentinel helper
+exit1 after51PASS. Corrected trace reports79/80lines98.75%(line0 sentinel), not
+branch coverage. Full argv/cwd/UTC/exits/log/source/helper/tools/env limits are
+in the evidence. Default record_command subprocess mode: no per-command process-
+group/STOPPED receipt is claimed. All bounded commands ended; no owned services.
+Last sent A3-0097; last read A2-0072/A1-0116. completeRuntimeReady=false,
+consumerMappingAck=null/executionAuthorized=false. Separate exact complete source/
+tools/config/run FREEZE ACKs still precede services. Publication/remote/lock
+cleanup receipts belong to ignored run output and automation memory.
+
 ## A2 CLI/worker partial source reviewed — 2026-11-07 IST
 
 C-F1 WORKING; integrated execution LOCKED. Exact A2 partial source7915d53

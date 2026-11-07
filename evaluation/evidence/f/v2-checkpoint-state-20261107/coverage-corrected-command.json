@@ -1,0 +1,23 @@
+{
+  "argv": [
+    "/home/karma/Documents/RIS/.venv/bin/python",
+    "-B",
+    "-c",
+    "\nimport json,sys,trace\nfrom pathlib import Path\nimport pytest\nroot=Path.cwd(); target=str((root/'evaluation/checkpoint_state_v2.py').resolve())\ntracer=trace.Trace(count=True,trace=False,ignoredirs=[sys.base_prefix,str(root/'.venv')])\nrc=tracer.runfunc(pytest.main,['evaluation/tests/test_checkpoint_state_v2.py','-q','-p','no:cacheprovider'])\nexecutable={n for n in trace._find_executable_linenos(target) if type(n) is int}; hit={line for (name,line),count in tracer.results().counts.items() if name==target and count}\nresult=dict(tool='Python 3.13 stdlib trace; executable line coverage, not branch coverage',executableLines=len(executable),coveredLines=len(executable&hit),missingLines=sorted(executable-hit),percent=100*len(executable&hit)/len(executable),testExit=rc)\nprint(json.dumps(result,indent=2))\nassert rc==0 and result['percent']>=80,result\n"
+  ],
+  "cwd": "/home/karma/Documents/RIS",
+  "startedAt": "2026-11-07T07:38:40.150913+00:00",
+  "endedAt": "2026-11-07T07:38:48.432613+00:00",
+  "exitCode": 0,
+  "timedOut": false,
+  "elapsedSeconds": 8.28170595499978,
+  "outputSha256": "19391b173a2bb6a05b15f97df3a787abdbdfa266298c6d4d1b460234504a8db5",
+  "pid": null,
+  "processGroup": null,
+  "groupCleanup": null,
+  "environmentSha256": null,
+  "log": "evaluation/evidence/f/v2-checkpoint-state-20261107/coverage-corrected.txt.gz",
+  "contentEncoding": "gzip",
+  "compressedSha256": "856d9bbd21e63f89069faf6b48c146d673f077406350db8ff67d53b9dd05a8a9",
+  "probeSourceSha256": "a4c434d5675e530e51d7ce95dd6fef8e5c0b0650da11dce1f1afcae2401aa434"
+}

@@ -1,3 +1,13 @@
+**C-F1 checkpoint source-state slice (2026-11-07):** Internal
+`checkpoint_state_v2.verify_checkpoint_signature` joins a bound signature to exact
+supplied source/head epochs and target current-checkpoint/maxTTL/time captures.
+51new/409focused/2549rootPASS; seven deliberate bypasses detected. This checks
+supplied state/window consistency, not actual sign-time provenance, RPC truth,
+ancestry, history/store completeness or a gate. Existing consumers/frozen wire
+unchanged. [Evidence and exact peer review](evidence/f/v2-checkpoint-state-20261107/README.md).
+Full runtime READY/mapping and separate exact execution ACKs still precede
+services; historical qualifiedE unchanged;32Fcases/GateF NOT_RUN/G locked.
+
 **C-F1 native history acquisition (2026-11-06):** Internal
 `history_rpc_v2.collect` plans required headers/death getters from verified
 history, retains exact RPC parameters/results, and brackets all cross-chain reads

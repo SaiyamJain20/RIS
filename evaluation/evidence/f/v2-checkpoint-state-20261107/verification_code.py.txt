@@ -1,0 +1,37 @@
+import gzip,hashlib,json
+from pathlib import Path
+from evaluation.manifests import now
+root=Path.cwd();out=root/'evaluation/evidence/f/v2-checkpoint-state-20261107'
+rows=json.loads((out/'commands.json').read_text())
+for name in ('peer-probes','coverage','coverage-corrected'):
+ rows.append(json.loads((out/(name+'-command.json')).read_text()))
+seen=set();verified=[]
+for row in rows:
+ if 'log' in row: p=root/row['log']
+ else: raise AssertionError('missing exact log')
+ assert p not in seen,p
+ seen.add(p);compressed=p.read_bytes();raw=gzip.decompress(compressed)
+ assert hashlib.sha256(compressed).hexdigest()==row['compressedSha256'],p
+ assert hashlib.sha256(raw).hexdigest()==row['outputSha256'],p
+ assert not row['timedOut'],p
+ expected=1 if p.name in ('red.txt.gz','green.txt.gz','coverage.txt.gz') else 0
+ assert row['exitCode']==expected,(p,row['exitCode'],expected)
+ verified.append(dict(log=str(p.relative_to(root)),exitCode=row['exitCode'],outputSha256=row['outputSha256']))
+before=json.loads((out/'inputs-before.json').read_text());after=json.loads((out/'inputs-after.json').read_text())
+assert after['unchangedSourceEntries']==len(before['sourcePins'])
+assert after['unchangedLocalInputs']==len(before['localInputs'])
+assert after['unchangedHelpers']==len(before['helperPins'])
+for p,digest in before['helperPins'].items():assert hashlib.sha256((out/p).read_bytes()).hexdigest()==digest,p
+for p in ('evaluation/checkpoint_state_v2.py','evaluation/tests/test_checkpoint_state_v2.py'):
+ assert hashlib.sha256((root/p).read_bytes()).hexdigest()==before['localInputs'][p],p
+peers=json.loads((out/'communication-final.json').read_text())
+assert not peers['missingBranches']
+assert not any(r['ambiguous'] or r['divergentRevisions'] for r in peers['files'].values())
+for name in ('root','focused','owner-unit'):
+ text=gzip.decompress((out/(name+'.txt.gz')).read_bytes()).decode()
+ assert ' passed' in text and ' failed' not in text,text[-2000:]
+summary=dict(recordedAt=now(),commandsChecked=len(verified),commands=verified,sourceEntries=len(before['sourcePins']),selectedLocalInputs=len(before['localInputs']),helpers=len(before['helperPins']),immutable=after['immutable'],communicationPaths=len(peers['files']),branches=peers['branches'],completeRuntimeReady=False,executionAuthorized=False)
+target=out/'verification.json'
+assert not target.exists(),'immutable result already exists'
+target.write_text(json.dumps(summary,indent=2)+'\n')
+print(json.dumps(summary,indent=2))

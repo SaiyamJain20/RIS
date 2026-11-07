@@ -1,3 +1,32 @@
+## Checkpoint source-state checks verified — 2026-11-07
+
+C-F1 WORKING; integrated execution LOCKED. New internal checkpoint_state_v2
+checks one bound checkpoint signature against exact supplied PBC source/head
+getters and DBC current/maxTTL/time. Fresh51new/409focused/2549rootPASS;
+root541.29s/command541.606s/exit0. Seven deliberate in-memory bypasses detected;
+valid controls preserved. No existing consumer or frozen interface changed.
+Supplied observations do not establish actual signing time/latest head, RPC
+truth/ancestry, history/store completeness, consensus or a gate.
+
+Exact A2 partial67111f5 (11-path delta) reviewed: witness process entry point
+exists;48no-node tests independentlyPASS. Numeric chainId1e999 escapes as an
+OverflowError traceback for either chain, no state; A3-0097 extends the open
+A3-0096 owner request. Local corrupt config only, no authorization bypass.
+Empty object/string approval lists grant nothing. Owner142combined/live/30mutant
+claims NOT rerun/adopted. No full runtime READY or execution ACK; real pool
+transport-clock/CLI witness wiring/H2/H5/H6 and full source/mapping remain.
+
+899owner/250selectedlocalinputs/5helpers stable;429ledgerREADY/52F0pins/31payloads
+verify.389communication paths/no divergence; A18c0285f/A267111f5 unchanged at final
+fetch. Three historical E path mismatches remain; no new E parity. Evidence:
+evaluation/evidence/f/v2-checkpoint-state-20261107/README.md. Historical qualified
+E unchanged;32Fcases/GateF NOT_RUN/G locked. No human action. Review correlated;
+no extra agents/peer edits. Next checkpoint acquisition/history joins, remaining
+source-state duties/producer schema-path-lock completeness, fault oracle/model.
+Earlier entries are historical.
+
+Last sent A3-0097; last read A2-0072/A1-0116. No owned services.
+
 ## A2 CLI/worker partial source reviewed — 2026-11-07 IST
 
 C-F1 WORKING; integrated execution LOCKED. Exact A2 partial source7915d53

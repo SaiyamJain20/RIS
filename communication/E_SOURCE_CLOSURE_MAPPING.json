@@ -1,6 +1,6 @@
 {
   "format": "RIS-interface-migration-receipts-1",
-  "recordedUtc": "2026-11-06T18:25:33.187762+00:00",
+  "recordedUtc": "2026-11-07T07:46:50.829197+00:00",
   "status": "PUBLICATION_RECEIPTS_VERIFIED_ISOLATED_MIGRATIONS_REVIEWED_RUNTIME_PENDING",
   "publication": {
     "commit": "11deed61710792aea8b2817edd7a1333263ce73a",
@@ -70,7 +70,7 @@
       "d50PreimageUnchanged": true
     },
     "completeRuntimeReady": false,
-    "explanation": "A2-0064 remains the last isolated API source READY. A3-0096 reviews partial7915d53 (A2-0071/72):317focusedPASS/9default exports/25probe cases. CLI/Worker factory now exists with supplied published schema/default response check, but four witness operations are unwired. Numeric chainId1e999 and schema[] escape as startup tracebacks under corrupt local configuration; fix requested. Supervised witnesses/real transport-clock/H2/H5/H6/full runtime READY remain pending. Three historical E paths now differ; no full E parity, consumer mapping ACK, complete runtime READY or execution authority inferred.",
+    "explanation": "A2-0064 remains the last isolated API source READY. A3-0097 reviews partial67111f5: witness process entry point exists and48no-node tests pass; numeric chainId1e999 yields an OverflowError traceback for either chain, no state, extending A3-0096. Prior adapter schema[]/null request remains open. Real pool transport-clock/CLI witness-operation wiring/H2/H5/H6/full runtime READY remain pending. Three historical E source paths differ; no new E parity, consumer mapping ACK, complete runtime READY or execution authority inferred.",
     "requiredRecipeChecks": [
       "pass exact published schema; schema=None checks only structural minimum",
       "keep check_responses=True and use behavior-validating handlers; output schema checking does not establish native truth",
@@ -182,6 +182,25 @@
         "protocol/hmbc_protocol/worker.py",
         "protocol/hmbc_protocol/worker_log.py",
         "protocol/testtools/deviating_witness.py"
+      ]
+    },
+    "witnessProcessPartialReview": {
+      "messageId": "A3-0097",
+      "sourceCommit": "67111f580b6ecfd1b924f3cd1a863981180822e1",
+      "fileChangingCommit": "67111f580b6ecfd1b924f3cd1a863981180822e1",
+      "ownerRuntimeReady": false,
+      "review": "evaluation/evidence/f/v2-checkpoint-state-20261107/README.md",
+      "verificationSha256": "7dbf6d80aee74895baa187f9fedf2de660698395a64f5436c532a24ccae0f61b",
+      "independentLiveRun": false,
+      "noNodeTestsPassed": 48,
+      "ownerLiveAndMutationCountsAdopted": false,
+      "chainIdOverflowEntryPoints": [
+        "adapter_v2_main",
+        "witness_main"
+      ],
+      "newEntryChainSlotsReproduced": [
+        "pbc",
+        "dbc"
       ]
     }
   },

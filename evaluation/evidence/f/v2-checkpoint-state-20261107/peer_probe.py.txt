@@ -1,0 +1,25 @@
+
+import json,os,socket,subprocess,sys,tempfile
+from pathlib import Path
+from hmbc_protocol import witness_main as wm
+root=Path.cwd(); fixture=root/'tests/fixtures/agent1-85c59f5-f-base-deployment.json';abi=root/'tests/fixtures/agent1-85c59f5-abi'
+rows=[]
+with tempfile.TemporaryDirectory() as td:
+ p=Path(td)
+ for shape in ([],{},'',None):
+  f=p/'allow.json';f.write_text(json.dumps(shape))
+  try:r=wm._allow(str(f));rows.append(dict(case='approval-shape',value=shape,result=r,grantsProved=False))
+  except Exception as e:rows.append(dict(case='approval-shape',value=shape,exception=type(e).__name__,code=getattr(e,'code',None)))
+ for chain in ('pbc','dbc'):
+  m=json.loads(fixture.read_text())
+  with socket.socket() as s:s.bind(('127.0.0.1',0));port=s.getsockname()[1]
+  for ch in m['chains'].values():ch['rpcUrl']=f'http://127.0.0.1:{port}'
+  m['chains'][chain]['chainId']='REPLACE_NUMERIC_INFINITY'
+  f=p/'deployment.json';f.write_text(json.dumps(m).replace('"REPLACE_NUMERIC_INFINITY"','1e999'))
+  state=p/('state-'+chain)
+  argv=[sys.executable,'-B','-m','hmbc_protocol.witness_main','--deployment',str(f),'--abi-dir',str(abi),'--index','0','--key-label','witness-1','--state-dir',str(state)]
+  r=subprocess.run(argv,input='',capture_output=True,text=True,timeout=15,env={'PYTHONPATH':str(root),'PATH':'/usr/bin:/bin','PYTHONDONTWRITEBYTECODE':'1'})
+  row=dict(case='numeric-chainId-1e999',chain=chain,exitCode=r.returncode,stdout=r.stdout,stderr=r.stderr,stateCreated=state.exists())
+  assert r.returncode==1 and 'OverflowError' in r.stderr and not state.exists(),row
+  rows.append(row)
+print(json.dumps(dict(sourceCommit='67111f580b6ecfd1b924f3cd1a863981180822e1',classification='tested reconstruction robustness diagnostics; corrupt local config, no remote control or authorization bypass',rows=rows),indent=2))
