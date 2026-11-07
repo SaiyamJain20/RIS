@@ -9,7 +9,7 @@ REAL chains through `RpcBindingView` (D50 stages 1 to 8, then the worker directo
 `release`, `finish_decryption`) are backed by the carried `Worker` on the real ledger (chain clock `dbc.now`); EVERY response is checked against the published schema (`check_responses` stays on). The four
 witness operations are wired for a `repaired-f` deployment by `build_runtime` (A2-0074 proposals P1/P2): the proposer's own `RpcWitnessView`, the four witness addresses of the pinned manifest and the supervisor's
 `transport_factory`; four `witness_main` children are spawned by `main` ONLY after every startup validation has passed and are closed when it returns. For any other profile (the carried E successor) they stay
-ADAPTER_UNAVAILABLE "not wired for this deployment profile". `--allow-governance FILE` is the optional TEST-ONLY local approval list handed to every witness unchanged.
+ADAPTER_UNAVAILABLE "<operation> is not wired in this process" (no witness handler is installed for them; the "not wired for this deployment profile" text belongs to the F handlers when they meet a non-F manifest). `--allow-governance FILE` is the optional TEST-ONLY local approval list handed to every witness unchanged.
 A startup failure prints ONE JSON object `{"error": {"code", "message", "reason"?}}` on stderr, nothing on stdout, exits 2 and leaves no state behind (files are created with umask 077; an existing state
 directory reachable by group or other is refused). No traceback, no secret and no node text reaches the output. This module reads no environment variable and has no clock, thread or socket of its own.
 """
@@ -42,10 +42,7 @@ from .worker import Worker
 _SHA = re.compile(r"[0-9a-f]{64}")
 
 
-class Refusal(Exception):
-    def __init__(self, code, message, reason=None):
-        super().__init__(message)
-        self.code, self.message, self.reason = code, message, reason
+Refusal = sc.Refusal                                              # ONE class for every copy of this module (see startup_config.Refusal)
 
 
 def _sha_arg(v):

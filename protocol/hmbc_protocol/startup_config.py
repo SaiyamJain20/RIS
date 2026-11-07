@@ -18,6 +18,15 @@ class ConfigError(ValueError):
     """A local configuration input is not what the startup contract allows."""
 
 
+class Refusal(Exception):
+    """A startup refusal with its closed code. It lives HERE, in a module that is never run as `__main__`, on purpose: run as `python -m hmbc_protocol.adapter_v2_main`, that module is `__main__` and a lazy import of
+    `witness_main` (which imports it by its package name) creates a SECOND copy of it, so a Refusal class defined there would be two different classes and `main()` would miss the one `_allow` raises (found live, A2-0075)."""
+
+    def __init__(self, code, message, reason=None):
+        super().__init__(message)
+        self.code, self.message, self.reason = code, message, reason
+
+
 def loads(raw, what):
     """Parse `raw` (bytes or str) as JSON; any failure, RecursionError included, is a ConfigError naming `what`."""
     try:

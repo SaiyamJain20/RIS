@@ -234,3 +234,27 @@ def test_main_without_a_supervisor_serves_exactly_as_before(tmp_path, monkeypatc
     am, _, _ = mods()
     rc, out, err, events = run_main(am, monkeypatch, tmp_path, None)
     assert rc == 0 and err == "" and events == ["serve"]
+
+
+# ---- found by the LIVE tests (fork G, F1): the refusal class must survive `python -m` --------------------------------------------------------------------------
+# Run as `python -m hmbc_protocol.adapter_v2_main` the module is `__main__`; the lazy `from . import witness_main` imports a SECOND copy of it as `hmbc_protocol.adapter_v2_main`, whose `Refusal` is a different
+# class from the one `main()` catches. An in-process test (which imports the module normally) cannot see that, so this one is a real subprocess.
+
+def test_a_corrupt_allow_governance_file_is_malformed_when_the_command_runs_as_main_not_the_last_resort_code(tmp_path):
+    import subprocess
+    f = tmp_path / "allow.json"
+    f.write_bytes(b"{}")
+    p = subprocess.run([sys.executable, "-B", "-m", "hmbc_protocol.adapter_v2_main", "--deployment", F2, "--abi-dir", ABI_DIR, "--schema", SCHEMA, "--schema-sha256", SCHEMA_SHA,
+                        "--schema-revision", "v2", "--state-dir", str(tmp_path / "state"), "--allow-governance", str(f)],
+                       capture_output=True, text=True, cwd=PROTO, env={"PYTHONPATH": PROTO, "PATH": "/usr/bin:/bin", "PYTHONDONTWRITEBYTECODE": "1"}, timeout=60)
+    assert p.returncode == 2 and p.stdout == "" and "Traceback" not in p.stderr, (p.returncode, p.stdout, p.stderr)
+    err = json.loads(p.stderr.strip().splitlines()[-1])["error"]
+    assert err["code"] == "MALFORMED" and "allow-governance" in err["message"], err                 # NOT ADAPTER_UNAVAILABLE "internal startup failure"
+    assert not os.path.exists(tmp_path / "state")
+
+
+def test_there_is_exactly_one_refusal_class_whichever_module_copy_raises_it():
+    am, _, _ = mods()
+    from hmbc_protocol import startup_config as sc
+    from hmbc_protocol import witness_main as wm
+    assert am.Refusal is sc.Refusal and wm.am.Refusal is sc.Refusal
