@@ -1,5 +1,5 @@
 """Mutation check of the successor adapter handlers the witness process (agent 2, F task 3 slice 11a). Standard library only. Same method as the other runners: one text replacement per mutant (it must match exactly once
-and change the file), run the UNCHANGED tests/test_witness_main.py in a temporary copy that keeps the repository layout, count a mutant DETECTED only when the tests ran and failed; a crash or
+and change the file), run the UNCHANGED tests/test_witness_main.py and tests/test_startup_refusals.py in a temporary copy that keeps the repository layout, count a mutant DETECTED only when the tests ran and failed; a crash or
 timeout is NOT detection; the unmutated copy runs first as a control. the carried adapter.py, wire.py, witness_service.py, witness_pool.py and witness_pool_driver.py are NOT mutated here (their own runners do that).
 
 Usage (repository root):   python3 -B -I protocol/tools/run_witness_main_mutants.py        (needs pytest and the E dependencies: protocol/requirements.txt)
@@ -44,9 +44,24 @@ M = [
     ("H25 the allow-list admins are not checked", [(" or not isinstance(admins, list) or not all(isinstance(a, str) and _ADDR.fullmatch(a) for a in admins)", "")]),
     ("H26 a malformed allow-list escapes", [("    except (ValueError, TypeError):\n        raise am.Refusal(\"MALFORMED\", \"the allow-governance", "    except KeyError:\n        raise am.Refusal(\"MALFORMED\", \"the allow-governance")]),
     ("H27 a stage refusal maps to MALFORMED", [('bo.OPEN_REASON_CODE.get(e.reason, "ADAPTER_UNAVAILABLE")', '"MALFORMED"')]),
-    ("H28 a refused startup exits 1", [("        return 2\n    return serve", "        return 1\n    return serve")]),
+    ("H28 a LAST-RESORT startup failure exits 1 (its anchor moved when the guard was added; H39 covers the refusal branch)", [("        return 2\n    return serve", "        return 1\n    return serve")]),
     ("H29 the refusal goes to stdout", [("        stderr.write(json.dumps({\"error\": err}", "        stdout.write(json.dumps({\"error\": err}")]),
     ("H30 a missing deployment fixture escapes", [("    except (KeyError, TypeError):\n        raise am.Refusal(\"MALFORMED\", \"the deployment declares no key derivation", "    except KeyError:\n        raise am.Refusal(\"MALFORMED\", \"the deployment declares no key derivation")]),
+    ("H31 the allow-list may be a non-array", [("        if not isinstance(data, list): ", "        if False: ")]),
+    ("H32 the allow-list is parsed with plain json.loads (nesting escapes)", [('        data = sc.loads(raw, "allow-governance file")', "        data = json.loads(raw)")]),
+    ("H33 the manifest numbers are read with plain int()", [("        numbers = sc.manifest_numbers(manifest) ", "        numbers = {s: {\"chainId\": int(manifest[\"chains\"][s][\"chainId\"])} for s in (\"pbc\", \"dbc\")} ")]),
+    ("H34 a rejected manifest number escapes as a ConfigError", [("    except sc.ConfigError as e:\n        raise am.Refusal(\"MALFORMED\", f\"the deployment file: {e}\") from None", "    except KeyError as e:\n        raise am.Refusal(\"MALFORMED\", f\"the deployment file: {e}\") from None")]),
+    ("H36 the last-resort guard is gone", [("    except Exception:  # noqa: BLE001 - the last resort", "    except KeyboardInterrupt:  # noqa: BLE001 - the last resort")]),
+    ("H37 the last-resort refusal has the wrong code", [('{"code": "ADAPTER_UNAVAILABLE", "message": "internal startup failure"}', '{"code": "MALFORMED", "message": "internal startup failure"}')]),
+    ("H38 the last-resort refusal goes to stdout", [('        stderr.write(json.dumps({"error": {"code": "ADAPTER_UNAVAILABLE"', '        stdout.write(json.dumps({"error": {"code": "ADAPTER_UNAVAILABLE"')]),
+    ("H39 a refused startup exits 1 (the refusal branch)", [(r'separators=(",", ":")) + "\n")' + "\n        return 2\n    except Exception:", r'separators=(",", ":")) + "\n")' + "\n        return 1\n    except Exception:")]),
+    ("H40 the last-resort leaks the exception text", [('"message": "internal startup failure"}}', '"message": "internal startup failure: " + repr(sys.exc_info()[1])}}')]),
+]
+
+# EQUIVALENT mutants: they change the file but cannot change what the tests can observe; each runs (it must SURVIVE, otherwise the claim is false) and is reported, never counted as detected.
+E = [
+    ("H35 the chain id is re-read with int() after the number check", "manifest_numbers has already refused every non-canonical chainId, and int() of a canonical decimal string is the same value, so no input distinguishes the two",
+     [('Chain(manifest["chains"][s]["rpcUrl"], numbers[s]["chainId"])', 'Chain(manifest["chains"][s]["rpcUrl"], int(manifest["chains"][s]["chainId"]))')]),
 ]
 
 
@@ -68,14 +83,14 @@ def run_in_copy(text):
         shutil.copytree(os.path.join(PROTO, "abi"), os.path.join(p, "abi"))                  # the carried code reads the ABI manifest at import time
         shutil.copytree(os.path.join(PROTO, "hmbc_protocol"), os.path.join(p, "hmbc_protocol"), ignore=shutil.ignore_patterns("__pycache__", "witness_main.py"))
         for rel in ("pytest.ini",) + tuple(os.path.join("tests", n) for n in ("conftest.py", "support.py", "test_witness_service.py", "test_witness_service_decision.py", "test_witness_service_governance.py",
-                                                                              "test_witness_service_receipt.py", "test_witness_main.py")):
+                                                                              "test_witness_service_receipt.py", "test_witness_main.py", "test_startup_refusals.py")):
             os.makedirs(os.path.dirname(os.path.join(p, rel)) or p, exist_ok=True)
             shutil.copy(os.path.join(PROTO, rel), os.path.join(p, rel))
         with open(os.path.join(p, "hmbc_protocol", "witness_main.py"), "w") as f:
             f.write(text)
         env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
         try:
-            r = subprocess.run([sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests/test_witness_main.py"], cwd=p, capture_output=True, text=True, timeout=300, env=env)
+            r = subprocess.run([sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests/test_witness_main.py", "tests/test_startup_refusals.py"], cwd=p, capture_output=True, text=True, timeout=300, env=env)
         except subprocess.TimeoutExpired:
             return "timeout", None
         m = re.search(r"(\d+) failed", r.stdout)
@@ -113,8 +128,22 @@ def main():
             print("DETECTED %s | failed tests: %d" % (name, n))
         else:
             print("NOT-DETECTED(%s) %s" % (status, name))
-    print("detected %d of %d" % (detected, len(M)))
-    return 0 if detected == len(M) else 1
+    false_claims = 0
+    for name, why, edits in E:
+        text = SRC
+        for old, new in edits:
+            if text.count(old) != 1:
+                print("INVALID %s | anchor matches %d times: %r" % (name, text.count(old), old[:70]))
+                return 2
+            text = text.replace(old, new)
+        status, n = run_in_copy(text)
+        if status == "pass":
+            print("SURVIVED-EQUIVALENT %s | %s" % (name, why))
+        else:
+            false_claims += 1
+            print("EQUIVALENCE CLAIM FALSE (%s) %s: the tests DO see this change" % (status, name))
+    print("detected %d of %d; equivalent survivors %d (claims checked by running them)" % (detected, len(M), len(E) - false_claims))
+    return 0 if detected == len(M) and false_claims == 0 else 1
 
 
 if __name__ == "__main__":

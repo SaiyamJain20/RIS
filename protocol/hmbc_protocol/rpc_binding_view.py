@@ -22,13 +22,13 @@ The same address on the two chains is two different contracts (the key is chain 
 from __future__ import annotations
 
 import hashlib
-import json
 import os
 import re
 
 from eth_abi import decode, encode
 from eth_utils import function_signature_to_4byte_selector
 
+from . import startup_config as sc
 from .binding_open import LedgerUnreachable
 from .chain import ChainError
 
@@ -73,8 +73,8 @@ def load_pinned_abis(manifest, abi_dir):
         if hashlib.sha256(raw).hexdigest() != pinned:
             raise ValueError(f"the ABI file for {name} does not hash to the manifest's abiSha256")
         try:
-            abis[name] = json.loads(raw)
-        except ValueError:
+            abis[name] = sc.loads(raw, f"ABI file for {name}")
+        except sc.ConfigError:
             raise ValueError(f"the ABI file for {name} is not JSON") from None
     return abis
 
@@ -107,7 +107,7 @@ class RpcBindingView:
         contracts = {}
         for side in SIDES:
             try:
-                if int(manifest["chains"][side]["chainId"]) != chains[side].chain_id:
+                if sc.uint_text(manifest["chains"][side]["chainId"], 256, f"{side} chainId") != chains[side].chain_id:
                     raise ValueError(f"the {side} client is for another chain id than the manifest's")
                 contracts[side] = dict(manifest["chains"][side]["contracts"])
             except (KeyError, TypeError, ValueError, AttributeError) as e:

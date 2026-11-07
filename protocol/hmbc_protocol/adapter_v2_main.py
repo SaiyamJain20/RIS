@@ -27,6 +27,7 @@ from . import adapter_v2_start as st
 from . import binding as bd
 from . import binding_open as bo
 from . import rpc_binding_view as rv
+from . import startup_config as sc
 from . import witness_state as ws
 from .abi import Contract
 from .chain import Chain, ChainError
@@ -72,8 +73,8 @@ def _schema(path, pinned):
     if hashlib.sha256(raw).hexdigest() != pinned:
         raise Refusal("MALFORMED", "the schema file does not hash to --schema-sha256")
     try:
-        return json.loads(raw)
-    except ValueError:
+        return sc.loads(raw, "schema file")
+    except sc.ConfigError:
         raise Refusal("MALFORMED", "the schema file is not JSON") from None
 
 
@@ -102,10 +103,17 @@ def _state_dir(path):
 def build_context(args, *, start=st.start):
     """Everything up to the Context, raising `Refusal` for every startup failure. The only I/O before the chains are opened is reading the three named files."""
     schema = _schema(args.schema, args.schema_sha256)
+    problem = av2.schema_problem(schema, args.schema_revision)                 # before anything else: a wrong-shaped schema must never reach the startup order or switch response checking off
+    if problem is not None:
+        raise Refusal("MALFORMED", f"the schema file is unusable: {problem}")
     manifest = _manifest(args.deployment)
+    try:
+        numbers = sc.manifest_numbers(manifest)                                 # canonical decimal strings only: no OverflowError, no int("1_0")
+    except sc.ConfigError as e:
+        raise Refusal("MALFORMED", f"the deployment file: {e}") from None
     state = _state_dir(args.state_dir)
     try:
-        chains = {s: Chain(manifest["chains"][s]["rpcUrl"], int(manifest["chains"][s]["chainId"])) for s in ("pbc", "dbc")}
+        chains = {s: Chain(manifest["chains"][s]["rpcUrl"], numbers[s]["chainId"]) for s in ("pbc", "dbc")}
         abis = rv.load_pinned_abis(manifest, args.abi_dir)
         contracts = {s: manifest["chains"][s]["contracts"] for s in ("pbc", "dbc")}
         view = rv.RpcBindingView(chains=chains, contracts=contracts, abis=abis)
@@ -135,6 +143,9 @@ def main(argv=None, stdin=None, stdout=None, stderr=None):
         if e.reason:
             err["reason"] = e.reason
         stderr.write(json.dumps({"error": err}, separators=(",", ":")) + "\n")
+        return 2
+    except Exception:  # noqa: BLE001 - the last resort: a startup defect nobody anticipated is still ONE closed refusal, never a traceback, a path or a node text (the specific refusals above stay tested)
+        stderr.write(json.dumps({"error": {"code": "ADAPTER_UNAVAILABLE", "message": "internal startup failure"}}, separators=(",", ":")) + "\n")
         return 2
     return av2.serve(stdin, stdout, ctx)
 

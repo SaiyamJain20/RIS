@@ -176,6 +176,17 @@ def published_format_checker():
     return formats
 
 
+def schema_problem(schema, revision, responses=True):
+    """None if `schema` can serve `revision`, else the reason: an object with an object `$defs` that defines every carrier branch of the revision and, with `responses`, every published response type. The ONE
+    place that knows what a usable published schema must contain: `Context` and the command line both ask it, so a schema of the wrong shape (null, an array, a number) is refused up front and can never silently
+    switch response checking off (A3-0096)."""
+    if not isinstance(schema, dict) or not isinstance(schema.get("$defs"), dict):
+        return "the schema is not a JSON object with an object $defs"
+    names = BRANCHES[revision] + (("AdapterResponse",) + tuple(RESPONSE_TYPE.values()) if responses else ())
+    missing = [n for n in names if n not in schema["$defs"]]
+    return f"the schema does not define {missing}" if missing else None
+
+
 class Context:
     """The pinned deployment manifest, the EXPLICITLY selected schema revision and the injected handlers. `schema` (the parsed published schema, optional) lets the pinned manifest be validated against the
     carrier branches of the selected revision; without it only the marker rule and the structural minimum apply. With `schema` every response is also checked against the published response type of its
@@ -195,10 +206,13 @@ class Context:
             _e._deployment(manifest)
         except _e.AdapterError as e:
             raise ValueError("the pinned manifest lacks what binds a request: " + e.message) from None
-        if schema is not None:
-            self._validate_against(schema, manifest, schema_revision)
         if not isinstance(check_responses, bool):
             raise ValueError("check_responses must be a boolean")
+        if schema is not None:
+            problem = schema_problem(schema, schema_revision, responses=check_responses)
+            if problem is not None:
+                raise ValueError(problem)
+            self._validate_against(schema, manifest, schema_revision)
         self._response_validators = self._build_response_validators(schema) if schema is not None and check_responses else None
         if not isinstance(handlers, dict) or not set(handlers) <= set(OPERATIONS) or not all(callable(h) for h in handlers.values()):
             raise ValueError("handlers must map known operation names to callables")

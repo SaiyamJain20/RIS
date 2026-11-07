@@ -1,0 +1,43 @@
+control: unmutated module passes all tests
+DETECTED H1 a request is parsed with plain json.loads | failed tests: 1
+DETECTED H2 a request may carry extra members | failed tests: 1
+DETECTED H3 the schema version is not checked | failed tests: 1
+DETECTED H4 a boolean id is accepted | failed tests: 1
+DETECTED H5 a negative id is accepted | failed tests: 1
+DETECTED H6 any round is accepted | failed tests: 3
+DETECTED H7 any kind is accepted | failed tests: 2
+DETECTED H8 a message that is not an object is accepted | failed tests: 2
+DETECTED H9 a refusal is not mapped | failed tests: 1
+DETECTED H10 the recorded value is dropped | failed tests: 1
+DETECTED H11 the reason is dropped | failed tests: 1
+DETECTED H12 every refusal is MALFORMED | failed tests: 1
+DETECTED H13 an unexpected exception escapes | failed tests: 1
+DETECTED H14 the signed message is not echoed | failed tests: 1
+DETECTED H15 decision requests go to the receipt signer | failed tests: 1
+DETECTED H16 the id of a refused well-formed envelope is lost | failed tests: 10
+DETECTED H17 an oversized line is not skipped | failed tests: 1
+DETECTED H18 invalid UTF-8 kills the server | failed tests: 1
+DETECTED H19 a key derivation that is not TEST-ONLY is accepted | failed tests: 1
+DETECTED H20 the key address is not compared with the witness set | failed tests: 2
+DETECTED H21 an index beyond the witness set is accepted | failed tests: 1
+DETECTED H22 an index may have a leading zero or sign | failed tests: 1
+DETECTED H23 the allow-list action is not checked | failed tests: 2
+DETECTED H24 the allow-list root is not checked | failed tests: 4
+DETECTED H25 the allow-list admins are not checked | failed tests: 2
+DETECTED H26 a malformed allow-list escapes | failed tests: 16
+DETECTED H27 a stage refusal maps to MALFORMED | failed tests: 1
+DETECTED H28 a LAST-RESORT startup failure exits 1 (its anchor moved when the guard was added; H39 covers the refusal branch) | failed tests: 1
+DETECTED H29 the refusal goes to stdout | failed tests: 20
+DETECTED H30 a missing deployment fixture escapes | failed tests: 1
+DETECTED H31 the allow-list may be a non-array | failed tests: 2
+DETECTED H32 the allow-list is parsed with plain json.loads (nesting escapes) | failed tests: 1
+DETECTED H33 the manifest numbers are read with plain int() | failed tests: 52
+DETECTED H34 a rejected manifest number escapes as a ConfigError | failed tests: 72
+DETECTED H36 the last-resort guard is gone | failed tests: 1
+DETECTED H37 the last-resort refusal has the wrong code | failed tests: 1
+DETECTED H38 the last-resort refusal goes to stdout | failed tests: 1
+DETECTED H39 a refused startup exits 1 (the refusal branch) | failed tests: 20
+DETECTED H40 the last-resort leaks the exception text | failed tests: 1
+SURVIVED-EQUIVALENT H35 the chain id is re-read with int() after the number check | manifest_numbers has already refused every non-canonical chainId, and int() of a canonical decimal string is the same value, so no input distinguishes the two
+detected 39 of 39; equivalent survivors 1 (claims checked by running them)
+EXIT=0 START=2026-11-07T16:17:05Z END=2026-11-07T16:27:14Z HEAD=67111f5

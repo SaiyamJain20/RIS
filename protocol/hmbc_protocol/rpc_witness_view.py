@@ -26,6 +26,7 @@ import re
 
 from eth_utils import keccak
 
+from . import startup_config as sc
 from .abi import AbiError, Contract
 from .chain import Chain, ChainError
 from .witness_service import LedgerUnreachable
@@ -61,7 +62,7 @@ class RpcWitnessView:
         contracts = {}
         try:
             for side in SIDES:
-                if int(manifest["chains"][side]["chainId"]) != chains[side].chain_id:
+                if sc.uint_text(manifest["chains"][side]["chainId"], 256, f"{side} chainId") != chains[side].chain_id:
                     raise ValueError(f"the {side} client is for another chain id than the manifest's")
             for name, side in CONTRACT_SIDE.items():
                 address = manifest["chains"][side]["contracts"].get(name)
@@ -72,7 +73,7 @@ class RpcWitnessView:
                     raw = f.read()
                 if hashlib.sha256(raw).hexdigest() != pinned:
                     raise ValueError(f"the ABI file for {name} does not hash to the manifest's abiSha256")
-                contracts[name] = Contract(json.loads(raw), address)
+                contracts[name] = Contract(sc.loads(raw, f"ABI file for {name}"), address)
         except (KeyError, TypeError, AttributeError, OSError, AbiError, json.JSONDecodeError) as e:
             raise ValueError(f"the manifest, the clients or the ABI files are unusable: {type(e).__name__}") from None
         return cls(chains=chains, contracts=contracts)

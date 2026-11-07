@@ -27,6 +27,7 @@ from . import binding_open as bo
 from . import keys
 from . import rpc_binding_view as rv
 from . import rpc_witness_view as rwv
+from . import startup_config as sc
 from . import witness_service as svc
 from . import witness_state as ws
 from .chain import Chain, ChainError
@@ -118,7 +119,9 @@ def _allow(path):
         return None
     raw = am._read(path, "allow-governance")
     try:
-        data = json.loads(raw)
+        data = sc.loads(raw, "allow-governance file")
+        if not isinstance(data, list):                                       # `{}` and `""` used to iterate as empty and silently mean "no approvals"
+            raise ValueError
         out = []
         for action, root, admins in data:
             if action not in ("1", "2", "3") or not isinstance(root, str) or _ADDR.fullmatch(root) is None or not isinstance(admins, list) or not all(isinstance(a, str) and _ADDR.fullmatch(a) for a in admins):
@@ -146,7 +149,11 @@ def build_service(args):
         raise am.Refusal("UNKNOWN_AUTHORITY", "the key label does not name the witness at this index of the deployment's witness set")
     allowed = _allow(args.allow_governance)
     try:
-        chains = {s: Chain(manifest["chains"][s]["rpcUrl"], int(manifest["chains"][s]["chainId"])) for s in ("pbc", "dbc")}
+        numbers = sc.manifest_numbers(manifest)                               # canonical decimal strings only: no OverflowError, no int("1_0")
+    except sc.ConfigError as e:
+        raise am.Refusal("MALFORMED", f"the deployment file: {e}") from None
+    try:
+        chains = {s: Chain(manifest["chains"][s]["rpcUrl"], numbers[s]["chainId"]) for s in ("pbc", "dbc")}
         abis = rv.load_pinned_abis(manifest, args.abi_dir)
         binding_view = rv.RpcBindingView(chains=chains, contracts={s: manifest["chains"][s]["contracts"] for s in ("pbc", "dbc")}, abis=abis)
         witness_view = rwv.RpcWitnessView.from_manifest(manifest, chains, args.abi_dir)
@@ -174,6 +181,9 @@ def main(argv=None, stdin=None, stdout=None, stderr=None):
         if e.reason:
             err["reason"] = e.reason
         stderr.write(json.dumps({"error": err}, separators=(",", ":")) + "\n")
+        return 2
+    except Exception:  # noqa: BLE001 - the last resort: a startup defect nobody anticipated is still ONE closed refusal, never a traceback, a path or a node text (the specific refusals above stay tested)
+        stderr.write(json.dumps({"error": {"code": "ADAPTER_UNAVAILABLE", "message": "internal startup failure"}}, separators=(",", ":")) + "\n")
         return 2
     return serve(stdin, stdout, service)
 
