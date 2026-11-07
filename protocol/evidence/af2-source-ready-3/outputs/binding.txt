@@ -1,0 +1,26 @@
+control: unmutated module passes all tests
+DETECTED B1 the table mask of mutant-no-nonce is wrong (16) | failed tests: 2
+DETECTED B2 repaired-f admits masks up to 1023 | failed tests: 2
+DETECTED B3 the manifest mask is not compared with the table mask | failed tests: 1
+DETECTED B4 the live profile() is not compared | failed tests: 2
+DETECTED B5 B.profile.name is copied from the manifest instead of BASE[enum] | failed tests: 2
+DETECTED B6 the name/enum agreement of B.profile is not checked | failed tests: 1
+DETECTED B7 repaired-f no longer requires interfaceVersion v2 | failed tests: 1
+DETECTED B8 a duplicate witness is accepted | failed tests: 1
+DETECTED B9 the threshold bound is not checked | failed tests: 1
+DETECTED B10 the canonical JSON does not sort keys | failed tests: 1
+DETECTED B11 the hash prefix has no line feed | failed tests: 3
+DETECTED B12 a range of another length than 32 is accepted | failed tests: 2
+DETECTED B13 overlapping or unsorted ranges are accepted | failed tests: 1
+DETECTED B14 a range past the runtime is accepted | failed tests: 2
+DETECTED B15 a live runtime of another length than the pin is accepted | failed tests: 1
+DETECTED B16 the object list may carry extra keys | failed tests: 1
+DETECTED B17 an unknown key in B is ignored | failed tests: 1
+DETECTED B18 immutableRefsSha256 may be present on some contracts only | failed tests: 1
+DETECTED B19 repaired-f does not require immutableRefsSha256 | failed tests: 1
+DETECTED B20 decimal strings may have leading zeros | failed tests: 3
+DETECTED B21 the owner of the mask check order is swapped: mutations before the profile enum | failed tests: 1
+DETECTED B22 Governance is not required under repaired-f | failed tests: 3
+DETECTED B23 the E mutant name accepted into B.profile.name | failed tests: 1
+detected 23 of 23
+EXIT=0 START=2026-11-07T22:34:29Z END=2026-11-07T22:34:41Z HEAD=8751cf8
