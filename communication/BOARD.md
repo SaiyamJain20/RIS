@@ -1,3 +1,29 @@
+## Retrospective governance RPC acquisition verified — 2026-11-07
+
+C-F1 WORKING; integrated execution LOCKED. New internal governance_rpc_v2
+captures every declared live/superseded/refined governance digest at its recorded
+PBC hash and checks raw getters through governance_history_v2. Both endpoint
+identities and selected headers are bracketed. Unsigned exporter observations
+and separate caller TEST-ONLY approval hash/reason stay explicit; signing time,
+latest head and producer approval policy remain unproved. No consumer/wire/
+dependency change. Fresh71new/449focused/2834rootPASS; root617.31s/command617.650s/
+exit0. Six deliberate bypasses detected with valid controls.
+
+899owner/260local/5helpers stable during the runtime bracket;8577carried tracked
+blobs match initial HEADc715b5e.52F0pins/31frozen payloads match.394communication
+paths/no divergence; A18c0285f/A267111f5 unchanged. No new owner READY/ACK or
+adopted owner runtime result. Evidence assembly failures/correction are retained;
+one verifier correction follows postflight, with original bytes/hashes preserved.
+Complete runtime READY/mapping and exact separate execution FREEZE ACKs still
+precede services. A3-0096/97 remain open. Historical qualified E unchanged;
+all32Fcases/GateF NOT_RUN/G locked. No human action. Evidence:
+evaluation/evidence/f/v2-governance-rpc-20261107/README.md. Next AccessDecision/GrantReceipt
+state duties and producer/schema/path/lock completeness, then fault oracle/finite
+model. Review correlated; no extra agents/peer edits/worktrees/main push.
+Scheduled lock acquired before context; coordinator before fetch/Git writes.
+Both original inodes held through publication.
+Earlier entries are historical.
+
 ## Governance history coverage verified — 2026-11-07
 
 C-F1 WORKING; integrated execution LOCKED. New internal governance_history_v2

@@ -1,0 +1,61 @@
+from pathlib import Path
+import json
+out=Path('evaluation/evidence/f/v2-governance-rpc-20261107');run=Path('evaluation/runs/v2-governance-rpc-20261107')
+before=json.loads((out/'inputs-before.json').read_text())
+a,b=(json.loads((out/p).read_text()) for p in ('communication-before.json','communication-final.json'))
+assert a['branches']==b['branches'] and a['files']==b['files']
+assert [k for k in a if a[k]!=b[k]]==['capturedAt']
+for p in run.glob('*.log.process.json'):
+ d=json.loads(p.read_text());assert d['status']=='STOPPED',p
+(out/'assembly-note.json').write_text(json.dumps(dict(
+ originalExitCode=1,originalFailure='AssertionError comparing entire communication scans',
+ changedFields=['capturedAt'],correctedCheck='Exact branches and files match; scan timestamp may differ',
+ productOrTestSourceChanged=False,recordedRegressionResultsChanged=False),indent=2)+'\n')
+readme=(run/'README.draft.md').read_text()
+readme+='''
+## Final verified results
+
+| Command | Result | Exit |
+| --- | --- | --- |
+| red | 71 expected missing-module failures, exact reasons verified | 1 expected |
+| green | 71 passed in 23.50s | 0 |
+| focused | 449 passed in 110.57s | 0 |
+| mutants-trial / mutants | 6 bypasses detected, 6 valid controls, each run | 0 |
+| root | 2834 passed in 617.31s (command 617.650s) | 0 |
+| preflight / postflight | Owner/local/helper/all carried input equality | 0 |
+| peers-before / peers-final | 394 paths; exact tips/revisions unchanged, no divergence | 0 |
+| fetch-final | Success | 0 |
+
+899 owner blobs, 260 selected local runtime inputs and 5 helpers stayed fixed.
+All 8577 carried tracked blobs match initial clean HEAD
+c715b5e4da53de6e1a9781225b9b26ec3dab536f; canonical carried path/SHA256 map
+13673f1caf185cae04064341df1e26eb3da9e6481c7ff57994bbdd1dc95ca241.
+52 accepted F0 source pins and 31 frozen payloads match. Final peer tips:
+A1 8c0285ffa6986858caeb0140b930bf5db759fdc0;
+A2 67111f580b6ecfd1b924f3cd1a863981180822e1. No new owner READY/ACK.
+
+Python 3.13.13, Git 2.54.0, pytest 9.0.2, eth-account 0.14.0,
+eth-abi 6.0.0 and jsonschema 4.26.0; exact strings/paths are in inputs-before.
+verification.json pins immutable evidence/predecessor receipts; its own receipt
+and output are independently checked afterward, without rewriting the verifier.
+
+An unrecorded initial evidence-assembly command exited 1 by comparing the entire
+communication scans, including capturedAt. Diagnosis found capturedAt was the
+only changed field; the corrected check compares exact branches/files, matching
+the retained verifier. assembly-note.json preserves the failure and correction.
+No product/test/helper source or regression result changed; the corrected
+assembly command is recorded separately. All recorded direct children STOPPED.
+'''
+(out/'README.md').write_text(readme)
+review=(run/'REVIEW.draft.md').read_text()+'''
+Final fresh results: 71 new / 449 focused / 2834 root tests PASS; six bypass/valid
+pairs PASS. All recorded direct-child process receipts are STOPPED. The final
+bracket verifies 899 owner / 260 local / 5 helpers / 8577 carried inputs and
+52 F0 pins / 31 frozen payloads. 394 communication paths have no divergence;
+peer tips/revisions are unchanged. No product edit after the first GREEN.
+An initial evidence-assembly assertion mistakenly required capturedAt equality;
+only that timestamp differed. Corrected branch/file comparison passes and the
+failure is retained in assembly-note.json. No product/runtime/helper was changed.
+'''
+(out/'REVIEW.md').write_text(review)
+print('Exact branches/files match; only capture timestamps differ. Evidence assembled.')

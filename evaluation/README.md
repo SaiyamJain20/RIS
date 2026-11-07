@@ -1,3 +1,12 @@
+**C-F1 retrospective governance acquisition (2026-11-07):** Internal
+`governance_rpc_v2.collect` reads exact hash-selected Governance/TMSC state for
+every declared governance digest. Both endpoint/header brackets and explicit
+unsigned observation/caller approval provenance are retained.71new/449focused/
+2834rootPASS; six bypass/valid control pairs. No sign-time/latest-head/producer
+policy or actual-node claim. [Evidence, assembly corrections and limits](evidence/f/v2-governance-rpc-20261107/README.md).
+Existing consumers/frozen wire unchanged; full runtime READY/mapping/exact
+execution ACKs still precede services;32Fcases/GateF NOT_RUN/G locked.
+
 ## Governance history coverage verified — 2026-11-07
 
 C-F1 WORKING; integrated execution LOCKED. New internal governance_history_v2

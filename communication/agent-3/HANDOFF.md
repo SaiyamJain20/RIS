@@ -1,3 +1,59 @@
+## Retrospective governance RPC acquisition verified — 2026-11-07
+
+C-F1 WORKING; integrated execution LOCKED. New internal governance_rpc_v2
+captures every declared live/superseded/refined governance digest at its recorded
+PBC hash and checks raw getters through governance_history_v2. Both endpoint
+identities and selected headers are bracketed. Unsigned exporter observations
+and separate caller TEST-ONLY approval hash/reason stay explicit; signing time,
+latest head and producer approval policy remain unproved. No consumer/wire/
+dependency change. Fresh71new/449focused/2834rootPASS; root617.31s/command617.650s/
+exit0. Six deliberate bypasses detected with valid controls.
+
+899owner/260local/5helpers stable during the runtime bracket;8577carried tracked
+blobs match initial HEADc715b5e.52F0pins/31frozen payloads match.394communication
+paths/no divergence; A18c0285f/A267111f5 unchanged. No new owner READY/ACK or
+adopted owner runtime result. Evidence assembly failures/correction are retained;
+one verifier correction follows postflight, with original bytes/hashes preserved.
+Complete runtime READY/mapping and exact separate execution FREEZE ACKs still
+precede services. A3-0096/97 remain open. Historical qualified E unchanged;
+all32Fcases/GateF NOT_RUN/G locked. No human action. Evidence:
+evaluation/evidence/f/v2-governance-rpc-20261107/README.md. Next AccessDecision/GrantReceipt
+state duties and producer/schema/path/lock completeness, then fault oracle/finite
+model. Review correlated; no extra agents/peer edits/worktrees/main push.
+Scheduled lock acquired before context; coordinator before fetch/Git writes.
+Both original inodes held through publication.
+Earlier entries are historical.
+
+Current source inputs: evaluation/evidence/f/v2-governance-rpc-20261107/inputs-before.json
+SHA256 ecff7d87d52e806dae3ef1440de8a618a928f808d250316c8c083072d1eb8b1e; inputs-after.json
+SHA256 a8dd64af0b67e5e05ef9b9d5b68acd232f0602ef5d6b18f41045cb35a08bbd88. Verification JSON SHA256 d82661988df61ecae8098fe98340ec256d493cc0ed2a617f2f691a239cddb58b
+checks13 predecessor receipts; own14th receipt/log and43 core artifacts independently
+checked without rewriting. All current recorded direct-child receipts STOPPED.
+
+Commands: exact argv/cwd/UTC/exits/output SHA256 in *-command.json and gzip logs.
+RED71 expected missing-module failures -> GREEN71PASS (23.50s); focused449PASS
+(110.57s); mutants6pairsPASS; root `.venv/bin/python -m pytest -q`2834PASS
+(617.31s/command617.650s/exit0). Focused/mutant/root partly overlapped, no benchmark.
+Initial RED/GREEN/mutant trial precede the complete bracket; test bytes/HEAD pinned.
+No product/test source edit after first GREEN. Assembly initially compared capturedAt,
+then its own RUNNING receipt; both failures are retained. Corrected assembly passes;
+verifier modified only after postflight to explicitly accept the retained exit1,
+with its original source/hashes recorded. All selected runtime inputs still matched
+before explanatory edits (only evaluation/README.md changes afterward).
+
+Python3.13.13/Git2.54.0/pytest9.0.2/eth-account0.14.0/eth-abi6.0.0/jsonschema4.26.0;
+exact strings/paths/environment digest only in inputs-before.8577carried blobs at
+c715b5e4da53de6e1a9781225b9b26ec3dab536f match; canonical mapSHA256
+13673f1caf185cae04064341df1e26eb3da9e6481c7ff57994bbdd1dc95ca241.
+Original lock inodes scheduled9878121/coordinator7431826 independently refuse
+concurrent acquisition75; release/independent reacquisition follows publication.
+No integration FREEZE or services. LastsentA3-0102/lastreadA2-0072/A1-0116.
+No actual-node compatibility, signing time/latest head/ancestry, producer approval
+policy/misconduct, complete store/history/export, native deaths, persistence,
+quorum/consensus, crypto performance, E parity, TLC, F scenario or gate inferred.
+Reviewed exact owned checkpoint publication on agent-3 follows; receipt in ignored
+run directory and automation memory. No main push/peer module/mailbox edits.
+
 ## Governance history coverage verified — 2026-11-07
 
 C-F1 WORKING; integrated execution LOCKED. New internal governance_history_v2
