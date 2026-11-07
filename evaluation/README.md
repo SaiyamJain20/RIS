@@ -1,3 +1,13 @@
+**C-F1 declared checkpoint history (2026-11-07):** Internal
+`checkpoint_history_v2.verify_checkpoint_history` checks exact per-digest state
+coverage across live/superseded generations and expiry refinements, rejecting
+contradictory reused raw facts. Fault/clear labels and bit1/bit5 exclusions remain.
+34new/384focused/2583rootPASS; eight deliberate bypasses detected. Supplied
+observations establish no actual signing time/native truth/store completeness.
+[Evidence and limits](evidence/f/v2-checkpoint-history-20261107/README.md).
+Existing consumers/frozen wire unchanged; full runtime READY/mapping/exact
+execution ACKs still precede services;32Fcases/GateF NOT_RUN/G locked.
+
 **C-F1 checkpoint source-state slice (2026-11-07):** Internal
 `checkpoint_state_v2.verify_checkpoint_signature` joins a bound signature to exact
 supplied source/head epochs and target current-checkpoint/maxTTL/time captures.

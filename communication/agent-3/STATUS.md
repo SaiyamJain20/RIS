@@ -1,3 +1,27 @@
+## Checkpoint-history state coverage verified — 2026-11-07
+
+C-F1 WORKING; integrated execution LOCKED. New internal checkpoint_history_v2
+joins every declared live/superseded checkpoint digest to supplied raw state and
+its recorded DBC observation. Exact capture coverage, shared-fact consistency,
+A->B->A and expiry refinements checked; fault/clear and bit1/bit5 exclusions kept.
+Fresh34new/384focused/2583rootPASS; root554.82s/command555.112s/exit0. Eight narrow
+in-memory bypasses detected with valid controls. Existing consumers/wire unchanged.
+Recorded observations are exporter data, not signature-bound sign-time proofs;
+no actual validation-time/latest-head/native truth/store completeness follows.
+
+899owner/252local/4helpers stable through execution;52F0pins/frozen payloads verify.
+390communication paths/no divergence; fetched A18c0285f/A267111f5 unchanged.
+No new peer READY/ACK or adopted owner runtime result. A3-0096/97 owner startup
+requests remain open; full runtime READY/mapping and separate exact execution
+FREEZE ACKs precede services. Historical qualifiedE unchanged;32Fcases/GateF
+NOT_RUN/G locked. No human action. Evidence:
+evaluation/evidence/f/v2-checkpoint-history-20261107/README.md. Next raw checkpoint
+acquisition with explicit observation provenance, remaining state/producer
+completeness joins, then fault oracle/finite model. Review correlated; no extra
+agents/peer edits/worktrees. Earlier entries are historical.
+
+Last sent A3-0098; last read A2-0072/A1-0116. No owned chain/services.
+
 ## Checkpoint source-state checks verified — 2026-11-07
 
 C-F1 WORKING; integrated execution LOCKED. New internal checkpoint_state_v2

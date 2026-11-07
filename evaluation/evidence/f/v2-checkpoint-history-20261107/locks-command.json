@@ -1,0 +1,18 @@
+{
+  "argv": [
+    ".venv/bin/python",
+    "-c",
+    "import fcntl,os,json; results=[]\nfor p in (\".git/ris-agent3-scheduled.lock\",\".git/hmbc-coordinator.lock\"):\n with open(p,\"a+\") as f:\n  try: fcntl.flock(f,fcntl.LOCK_EX|fcntl.LOCK_NB)\n  except BlockingIOError: results.append(dict(path=p,concurrentAcquisitionRefused=True,inode=os.fstat(f.fileno()).st_ino))\n  else: raise SystemExit(\"current run lock not held: \"+p)\nprint(json.dumps(results,indent=2))"
+  ],
+  "cwd": "/home/karma/Documents/RIS",
+  "startedAt": "2026-11-07T08:35:15.290405+00:00",
+  "endedAt": "2026-11-07T08:35:15.306510+00:00",
+  "exitCode": 0,
+  "timedOut": false,
+  "elapsedSeconds": 0.01610666699707508,
+  "outputSha256": "051a175965edcdc3765048195066c64dc4a8e6610b2108e35c5b2e24c49bbf31",
+  "pid": 1038104,
+  "processGroup": 1038104,
+  "groupCleanup": null,
+  "environmentSha256": null
+}

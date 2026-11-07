@@ -1,3 +1,36 @@
+## Checkpoint-history state coverage verified — 2026-11-07
+
+C-F1 WORKING; integrated execution LOCKED. New internal checkpoint_history_v2
+joins every declared live/superseded checkpoint digest to supplied raw state and
+its recorded DBC observation. Exact capture coverage, shared-fact consistency,
+A->B->A and expiry refinements checked; fault/clear and bit1/bit5 exclusions kept.
+Fresh34new/384focused/2583rootPASS; root554.82s/command555.112s/exit0. Eight narrow
+in-memory bypasses detected with valid controls. Existing consumers/wire unchanged.
+Recorded observations are exporter data, not signature-bound sign-time proofs;
+no actual validation-time/latest-head/native truth/store completeness follows.
+
+899owner/252local/4helpers stable through execution;52F0pins/frozen payloads verify.
+390communication paths/no divergence; fetched A18c0285f/A267111f5 unchanged.
+No new peer READY/ACK or adopted owner runtime result. A3-0096/97 owner startup
+requests remain open; full runtime READY/mapping and separate exact execution
+FREEZE ACKs precede services. Historical qualifiedE unchanged;32Fcases/GateF
+NOT_RUN/G locked. No human action. Evidence:
+evaluation/evidence/f/v2-checkpoint-history-20261107/README.md. Next raw checkpoint
+acquisition with explicit observation provenance, remaining state/producer
+completeness joins, then fault oracle/finite model. Review correlated; no extra
+agents/peer edits/worktrees. Earlier entries are historical.
+
+Last sent A3-0098; last read A2-0072/A1-0116. No owned chain/services.
+Verification SHA256 `9daf055921f26d5b44c983c8d4b368c7ab6d512674d953a4777f538d4a1f1177`; inputs SHA256 `cbeeedb0fbf0b1e42854ae3f1a73f414ac47a242fbeb0fc4e2432d27263de476`.
+14 predecessor receipts plus independently checked verifier receipt15; exact
+argv/cwd/UTC/exits/log hashes/tools and STOPPED child receipts retained. Early
+author trials were unbracketed and retained; final passing claims use the stable
+252-input tree. Initial mutation-helper adjustment occurred before its execution
+and was explicitly refrozen. No E parity/native acquisition/sign-time/completeness/
+TLC/timing/Fcase/gate claim. Separate complete exact source/tools/config/run
+execution ACKs remain required. Git publication/lock cleanup receipts in ignored
+run output and automation memory. Observation26 records shared-fact consistency.
+
 ## Checkpoint source-state checks verified — 2026-11-07
 
 C-F1 WORKING; integrated execution LOCKED. New internal checkpoint_state_v2

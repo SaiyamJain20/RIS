@@ -1,0 +1,18 @@
+{
+  "argv": [
+    ".venv/bin/python",
+    "-c",
+    "import gzip,hashlib,json,re\nfrom pathlib import Path\nfrom evaluation.manifests import now\nout=Path(\"evaluation/evidence/f/v2-checkpoint-history-20261107\")\nrun=Path(\"evaluation/runs/v2-checkpoint-history-20261107\")\ndef sha(b):return hashlib.sha256(b).hexdigest()\nreceipts={}\nfor path in sorted(out.glob(\"*-command.json\")):\n label=path.name.removesuffix(\"-command.json\")\n r=json.loads(path.read_text());raw=gzip.decompress((out/(label+\".log.gz\")).read_bytes())\n assert sha(raw)==r[\"outputSha256\"] and not r[\"timedOut\"],label\n assert r[\"exitCode\"]==(1 if label in (\"red\",\"red-corrected\",\"green\") else 0),label\n state=json.loads((run/(label+\".log.process.json\")).read_text())\n assert state[\"status\"]==\"STOPPED\" and state[\"pid\"]==r[\"pid\"],label\n receipts[label]=dict(receiptSha256=sha(path.read_bytes()),outputSha256=sha(raw),exitCode=r[\"exitCode\"])\nbefore=json.loads((out/\"inputs-before.json\").read_text());after=json.loads((out/\"inputs-after.json\").read_text())\nassert (len(before[\"sourcePins\"]),len(before[\"localInputs\"]),len(before[\"helpers\"]))==(899,252,4)\nassert after[\"unchangedOwnerPaths\"]==899 and after[\"unchangedLocalInputs\"]==252 and after[\"unchangedHelpers\"]==4\ninitial=json.loads((out/\"inputs-initial.json\").read_text())\nassert sha((out/\"mutants-initial.py.txt\").read_bytes())==initial[\"helpers\"][\"mutants.py\"]\nfor p,d in before[\"localInputs\"].items():assert sha(Path(p).read_bytes())==d,p\nfor p,d in before[\"helpers\"].items():assert sha((out/p).read_bytes())==d,p\npeers=json.loads((out/\"communication-final.json\").read_text())\nassert not peers[\"missingBranches\"] and len(peers[\"files\"])==390\nassert not any(v[\"ambiguous\"] or v[\"divergentRevisions\"] for v in peers[\"files\"].values())\nassert peers[\"branches\"]==json.loads((out/\"communication-before.json\").read_text())[\"branches\"]\nresults={}\nfor label,count in ((\"green-corrected\",34),(\"focused\",384),(\"root\",2583)):\n raw=gzip.decompress((out/(label+\".log.gz\")).read_bytes()).decode()\n match=re.search(r\"(\\d+) passed in ([\\d.]+)s\",raw)\n assert match and int(match[1])==count,label\n results[label]=dict(passed=count,pytestSeconds=float(match[2]))\nmutants=json.loads(gzip.decompress((out/\"mutants.log.gz\").read_bytes()))\nassert len(mutants)==8 and all(v[\"validControlPassed\"] and v[\"deliberateBypassDetected\"] for v in mutants)\nresult=dict(recordedAt=now(),commandsVerified=len(receipts),receipts=receipts,results=results,\n deliberateBypassesDetected=8,inputsSha256=sha((out/\"inputs-before.json\").read_bytes()),\n coreSha256=sha(Path(\"evaluation/checkpoint_history_v2.py\").read_bytes()),unchangedOwnerPaths=899,\n unchangedLocalInputs=252,unchangedHelpers=4,communicationPaths=390,consumerMappingAck=None,\n completeRuntimeReady=False,executionAuthorized=False,fCases=\"NOT_RUN\",fGate=\"NOT_RUN\",gGate=\"LOCKED\")\nassert not (out/\"verification.json\").exists()\n(out/\"verification.json\").write_text(json.dumps(result,indent=2)+\"\\n\")\nprint(json.dumps(result,indent=2))\n"
+  ],
+  "cwd": "/home/karma/Documents/RIS",
+  "startedAt": "2026-11-07T08:44:30.441292+00:00",
+  "endedAt": "2026-11-07T08:44:30.505996+00:00",
+  "exitCode": 0,
+  "timedOut": false,
+  "elapsedSeconds": 0.06472322199988412,
+  "outputSha256": "9daf055921f26d5b44c983c8d4b368c7ab6d512674d953a4777f538d4a1f1177",
+  "pid": 1104331,
+  "processGroup": 1104331,
+  "groupCleanup": null,
+  "environmentSha256": null
+}
