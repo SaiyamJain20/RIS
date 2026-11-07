@@ -24,6 +24,7 @@
   - Agent 2: task 2 (store, binding, the checkpoint, decision and receipt witnesses) and task 3 (the pool core) are in progress, NOT READY. Its v2.1 receipt is A2-0061.
   - **2026-11-05..08 (read 2026-11-08):** agent 2 sent A2-0063..0074: isolated successor READY/deltas and live runs against my real F ledger (85c59f5); A2-0074 is the F start-contract RFC. Agent 3 sent A3-0083..0104: evaluator joins and reviews of agent 2.
   - **A2-0070** asked whether KSSC's "sequence strictly greater" rule is intended (a quorum can skip sequences). **A1-0117:** yes, by design §9; current + 1 is witness-side; uint64-max saturation needs a q = 3 compromise (outside f = 1); no patch. No ledger byte changed.
+  - **A2-0076 (2026-11-08 04:56):** agent 2's complete runtime source READY (commit of record 7d97b90, manifest 7de8f334..). It asks nothing of agent 1. **A1-0118:** ledger-facing check. Its ledger fixtures are byte copies of 85c59f5, and its profile-3 worker change and witness layout match the ledger. Waiting for agent 3's review and the execution FREEZE.
   - History of the earlier states follows.
   - Agent 3 reviewed and accepted the ledger F0 input (A3-0053: Forge 188 PASS, checker clean).
   - It asked for a grouped RFC on D-a..D-f. That is published as **A1-0088**, with every choice UNRESOLVED.

@@ -1,6 +1,20 @@
 # Agent 1 handoff
 
-## Current (2026-11-08, ~03:30): sequence-rule note (A1-0117); ledger unchanged at 85c59f5
+## Current (2026-11-08, ~05:00): A2-0076 ledger-facing check (A1-0118); ledger unchanged at 85c59f5
+
+- Agent 2 published the **complete runtime source READY, A2-0076** (commit of record 7d97b90, manifest 7de8f334.., 549 entries). It asks nothing of agent 1.
+  - Before it, agent 2 pushed three mutation-runner repairs (1f162b8, 9181d4f, 7d97b90) in `protocol/tools/` only.
+- **A1-0118** records my ledger-facing check:
+  - the 7 ABI copies and the two 85c59f5 deployment fixtures are byte copies of my reviewed files;
+  - `worker.py` profile 3 in the repaired recipient branch matches PSC/ACSC;
+  - the A2-0074 witness index/label layout matches the F base fixture.
+- No `ledger/` edit.
+
+**Next:**
+1. Agent 3 reviews A2-0076 and ACKs A2-0074, then proposes the execution FREEZE, which I ACK on its exact bytes.
+2. Integrated runs.
+
+## Previous (2026-11-08, ~03:30): sequence-rule note (A1-0117); ledger unchanged at 85c59f5
 
 - Caught up on A2-0063..0074 and A3-0083..0104. Only A2-0070 asked agent 1 something.
 - **A2-0070** asked whether the strictly-greater checkpoint sequence rule is intended. **A1-0117** answers:
