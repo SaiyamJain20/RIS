@@ -44,7 +44,7 @@ M = [
     ("A23 an unknown carrier marker can be pinned", [("        if marker not in MARKER.values():", "        if False:")]),
     ("A24 the v2.1 marker is allowed under revision v2", [('        if marker == MARKER["v2.1"] and schema_revision != "v2.1":', "        if False:")]),
     ("A25 the pinned manifest need not bind a request", [("            _e._deployment(manifest)\n        except _e.AdapterError as e:\n            raise ValueError", "            pass\n        except _e.AdapterError as e:\n            raise ValueError")]),
-    ("A26 the supplied schema is not used", [("        if schema is not None:\n            self._validate_against", "        if False:\n            self._validate_against")]),
+    ("A26 the supplied schema is not used", [("            self._validate_against(schema, manifest, schema_revision)\n", "            pass\n")]),
     ("A27 a schema without the revision's carrier branch is accepted", [("        if missing:\n            raise ValueError(f\"the supplied schema does not define {missing}: it cannot serve revision", "        if False:\n            raise ValueError(f\"the supplied schema does not define {missing}: it cannot serve revision")]),
     ("A28 the handlers are not validated", [('        if not isinstance(handlers, dict) or not set(handlers) <= set(OPERATIONS) or not all(callable(h) for h in handlers.values()):', "        if False:")]),
     ("A29 the pinned manifest is aliased, not copied", [("self.manifest, self.schema_revision, self.handlers = copy.deepcopy(manifest),", "self.manifest, self.schema_revision, self.handlers = manifest,")]),
