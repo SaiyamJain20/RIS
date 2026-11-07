@@ -105,7 +105,7 @@ def run_in_copy(text):
         fx = os.path.join(PROTO, "tests", "fixtures")
         os.makedirs(os.path.join(p, "tests", "fixtures"), exist_ok=True)
         for name in os.listdir(fx):
-            if name.startswith(("agent1-85c59f5", "agent3-")):
+            if name.startswith(("agent1-85c59f5", "agent3-")) and os.path.isfile(os.path.join(fx, name)):     # agent1-85c59f5-abi became a DIRECTORY fixture; copying it crashed the runner
                 shutil.copy(os.path.join(fx, name), os.path.join(p, "tests", "fixtures", name))
         for rel in ("pytest.ini", os.path.join("tests", "test_adapter_v2.py"), os.path.join("tests", "test_adapter_v2_output.py"), os.path.join("tests", "test_adapter_v2_ops.py")):
             shutil.copy(os.path.join(PROTO, rel), os.path.join(p, rel))
