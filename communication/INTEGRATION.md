@@ -1,3 +1,27 @@
+## Governance history coverage verified — 2026-11-07
+
+C-F1 WORKING; integrated execution LOCKED. New internal governance_history_v2
+joins every declared live/superseded governance digest and expiry refinement to
+its recorded PBC observation, exact supplied state and separate caller approval
+fixture. Missing captures and contradictory number/timestamp/getter facts refuse;
+A-B-A, fault/clear scope and bit1/bit5 exclusions remain. Signing time, latest
+head and producer approval policy remain unproved; explicit result flags false.
+Fresh42new/286focused/2763rootPASS; root615.14s/command615.459s/exit0. Eight narrow
+in-memory bypasses detected with valid controls. No consumer/wire/dependency change.
+
+899owner/258local/5helpers stable;8536carried tracked blobs match initial HEAD;
+52F0pins/31frozen payloads match.393communication paths/no divergence; peers
+A18c0285f/A267111f5 unchanged. No new owner READY/ACK or owner runtime result
+adopted. A3-0096/97 remain open. Complete runtime READY/mapping and separate exact
+execution FREEZE ACKs precede services. Historical qualified E unchanged; all32
+Fcases/GateF NOT_RUN/G locked. No human action. Evidence:
+evaluation/evidence/f/v2-governance-history-20261107/README.md. Next raw governance
+acquisition with explicit observation/approval provenance, remaining AccessDecision/
+GrantReceipt state duties and producer schema/path/lock completeness, then fault
+oracle/finite model. Review correlated; no extra agents/peer edits/main push.
+Original persistent locks acquired before context reads; held through publication.
+Earlier entries are historical.
+
 ## Retrospective checkpoint RPC capture verified — 2026-11-07
 
 C-F1 WORKING; integrated execution LOCKED. New internal checkpoint_rpc_v2
