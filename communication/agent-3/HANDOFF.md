@@ -1,3 +1,50 @@
+## GrantReceipt history state coverage verified — 2026-11-07
+
+C-F1 WORKING; integrated execution LOCKED. New internal receipt_history_v2 joins
+every declared live/superseded receipt digest to raw state/event captures. PBC
+observation comes from its history record; DBC observation is separately pinned.
+Exact capture coverage and shared block/call/event facts must agree; a declared
+safe interval retains one canonical event per grant. Late reconciliation stays
+valid; fault/clear labels and bit1/bit5 death exclusions remain explicit.
+No native transition/death, signing-time/latest-head or log completeness proof.
+
+Fresh38new/417focused/2944rootPASS; seven deliberate bypasses detected with valid
+controls. First root run was INVALIDATED and interrupted (exit2;1failed/1275pass):
+the coordinator added an ignored verifier script while the E2 source guard was
+running. Exact one-file delta retained; guard left intact, no product/test edit.
+The affected test then passes alone; full rerun pins all1242discovered runtime
+inputs.899owner/264selectedlocal/4helpers/8676carried inputs stable;52F0pins and
+31frozen payloads verify.396communication paths/no divergence; peers unchanged
+A18c0285f/A267111f5. No new peer READY/ACK or owner runtime result adopted.
+Complete runtime READY/mapping and separate exact execution FREEZE ACKs precede
+services. A3-0096/97 remain open. Qualified historicalE unchanged;32Fcases/GateF
+NOT_RUN/G locked. Evidence: evaluation/evidence/f/v2-receipt-history-20261107/README.md.
+Next retrospective receipt RPC acquisition with observation/log-range provenance,
+AccessDecision duties and producer/schema/path/lock completeness, then oracle/model.
+No human action. Author review correlated; no extra agents/peer edits/worktrees/
+main push. Initial lock-protocol misstep is retained in PLAN; original persistent
+inodes held through repository work/publication. Earlier entries are historical.
+
+Inputs-before SHA256 4cc4450107b5d624ac0439dd661e1eaf7004916034aad243f8e3060d32cecf69; inputs-after
+76b37a530818e32134f7e7961cee27865f189e0139027227f48e043b5852cec1. Verification 10c0ad48ed69292498b6999add5a711c357f1c6fdf1d41c7d7e27cd171fcd4b2.
+All commands, UTC, exits, tools, synthetic fixtures, input/output hashes and the
+failed E2 plan/manifest/source delta are retained in the evidence directory.
+Original product/test source remains unchanged from first GREEN/RED respectively.
+Initial root result is incomplete and invalidated, not a regression PASS. Root
+rerun pytest 916.09s/command 916.844s/exit0.
+Focused/mutation/initial-root runs overlapped; no timing/performance claim.
+Final full rerun has its own exact1242path runtime inventory before/after.
+All current recorded direct children stopped; no integration FREEZE or services.
+Postflight verifier input is pinned separately. Its own receipt/log is checked
+from its parent without rewriting verification.json. Both verifier receipts and
+the initial missing-import-path verifier failure are retained. The corrected
+invocation sets explicit PYTHONPATH; no source edit. Parent checks all17 receipts.
+Explanatory/live documentation follows runtime postflight; full suite is not
+rerun after documentation-only edits. Publication receipts and
+cleanup follow in ignored run output/automation memory. No actual-node, native
+death/transition, producer misconduct, completeness/persistence, quorum/consensus,
+E parity, TLC, F scenario or gate result. Native transitions explicitly false.
+
 ## GrantReceipt supplied-state checks verified — 2026-11-07
 
 C-F1 WORKING; integrated execution LOCKED. New internal receipt_state_v2 checks

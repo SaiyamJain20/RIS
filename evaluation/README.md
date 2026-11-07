@@ -1,3 +1,12 @@
+**C-F1 receipt history state coverage (2026-11-07):** Internal
+`receipt_history_v2.verify_receipt_history` checks every declared live/superseded
+receipt against raw state/events, with exact digest selection and shared-fact
+consistency.38new/417focused/2944rootPASS; seven deliberate bypass pairs detected.
+An initial full regression was invalidated by a coordinator-created run script;
+the full rerun freezes all1242discovered runtime inputs and passes. No product/
+test changes between trials. Native transitions, log completeness and sign-time
+remain unproved; F execution/G stay locked. [Evidence and limits](evidence/f/v2-receipt-history-20261107/README.md).
+
 **C-F1 supplied GrantReceipt state check (2026-11-07):** Internal
 `receipt_state_v2.verify_receipt_signature` joins a bound one-owner signature to
 raw allowed grant, pending request and one declared GrantIssued log/header. Valid

@@ -1,0 +1,68 @@
+"""Postflight-only verifier; parent independently checks this command's receipt."""
+import gzip
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import subprocess
+
+ROOT=Path('/home/karma/Documents/RIS')
+OUT=ROOT/'evaluation/evidence/f/v2-receipt-history-20261107'
+RUN=ROOT/'evaluation/runs/v2-receipt-history-20261107'
+def sha(data):return hashlib.sha256(data).hexdigest()
+def read(name):return json.loads((OUT/name).read_text())
+before,after=read('inputs-before.json'),read('inputs-after.json')
+assert after['carried']==before['carried']
+assert after['ownerPaths']==len(before['sourcePins'])==899
+assert after['localInputs']==len(before['localInputs'])==264
+assert after['helpers']==len(before['helpers'])==4
+for path,digest in before['localInputs'].items():assert sha((ROOT/path).read_bytes())==digest,path
+for name,digest in before['helpers'].items():assert sha((OUT/name).read_bytes())==digest,name
+assert sha((ROOT/'evaluation/tests/test_receipt_history_v2.py').read_bytes())==read('red-inputs.json')['testSha256']
+assert (ROOT/'evaluation/tests/test_receipt_history_v2.py').read_bytes()==(OUT/'red-test.py.txt').read_bytes()
+expected=['peers-before','red','green','preflight','root','focused','mutants','collect','failure-repro','runtime-before','root-fixed','fetch-final','peers-final','postflight','runtime-after']
+receipts={}
+for label in expected:
+    row=read(label+'-command.json')
+    raw=gzip.decompress((OUT/(label+'.log.gz')).read_bytes())
+    assert sha(raw)==row['outputSha256']==sha((RUN/(label+'.log')).read_bytes()),label
+    assert row['exitCode']==({'red':1,'root':2}.get(label,0)),label
+    assert row['timedOut'] is False and row['cwd']==str(ROOT),label
+    process=json.loads((RUN/(label+'.log.process.json')).read_text())
+    assert process['status']=='STOPPED' and process['pid']==row['pid'],label
+    receipts[label]=dict(exitCode=row['exitCode'],outputSha256=row['outputSha256'])
+red=(RUN/'red.log').read_text()
+assert red.count("ModuleNotFoundError: No module named 'evaluation.receipt_history_v2'")==38
+counts={}
+for label,count in [('green',38),('focused',417),('root-fixed',2944)]:
+    matches=re.findall(r'(\d+) passed in ([\d.]+)s',(RUN/(label+'.log')).read_text())
+    assert matches and int(matches[-1][0])==count,(label,matches)
+    counts[label]=dict(passed=count,pytestSeconds=float(matches[-1][1]))
+mutants=json.loads((RUN/'mutants.log').read_text())
+assert len(mutants['pairs'])==7 and all(r['negativeDetected'] and r['validControl'] for r in mutants['pairs'])
+assert mutants['sourceSha256']==sha((ROOT/'evaluation/receipt_history_v2.py').read_bytes())
+runtime_before,runtime_after=read('runtime-before.json'),read('runtime-after.json')
+assert runtime_before==runtime_after
+from evaluation.e2 import _sources
+assert _sources()==runtime_before
+assert '1 failed, 1275 passed' in (RUN/'root.log').read_text()
+a,b=read('communication-before.json'),read('communication-final.json')
+assert a['branches']==b['branches']
+assert {p:r['sha256'] for p,r in a['files'].items()}=={p:r['sha256'] for p,r in b['files'].items()}
+assert not b['missingBranches'] and all(not r['ambiguous'] and not r['divergentRevisions'] for r in b['files'].values())
+locks={}
+for name,row in before['locks'].items():
+    path=ROOT/'.git'/name
+    assert path.stat().st_ino==row['inode']
+    assert subprocess.run(['flock','-n','-E','75',str(path),'true']).returncode==75
+    locks[name]=row
+for p in RUN.glob('*.log.process.json'):
+    row=json.loads(p.read_text())
+    assert row['status']=='STOPPED' or row['pid']==os.getpid(),p
+result=dict(commandsChecked=len(receipts),receipts=receipts,counts=counts,
+    mutationPairsChecked=7,ownerPaths=899,localInputs=264,helpers=4,
+    carried=before['carried'],runtimeInventoryPaths=len(runtime_before),communicationPaths=len(b['files']),locks=locks,
+    completeRuntimeReady=False,executionAuthorized=False,gateF='NOT_RUN',gateG='LOCKED')
+p=OUT/'verification.json';assert not p.exists();p.write_text(json.dumps(result,indent=2)+'\n')
+print(json.dumps(result,indent=2))

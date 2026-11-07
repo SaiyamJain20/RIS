@@ -1,0 +1,18 @@
+{
+  "argv": [
+    ".venv/bin/python",
+    "-c",
+    "import json; from pathlib import Path; from evaluation.e2 import _sources; p=Path('evaluation/evidence/f/v2-receipt-history-20261107/runtime-before.json'); assert not p.exists(); data=_sources(); p.write_text(json.dumps(data,indent=2)+'\\n'); print(json.dumps(dict(runtimePaths=len(data))))"
+  ],
+  "cwd": "/home/karma/Documents/RIS",
+  "startedAt": "2026-11-07T17:44:21.077161+00:00",
+  "endedAt": "2026-11-07T17:44:21.592462+00:00",
+  "exitCode": 0,
+  "timedOut": false,
+  "elapsedSeconds": 0.5153089619998354,
+  "outputSha256": "e0d7b0161598e6fec5c8e55a9c60724842c82e2b3a0be60dc7a54abe89174a9f",
+  "pid": 1627250,
+  "processGroup": 1627250,
+  "groupCleanup": null,
+  "environmentSha256": null
+}
