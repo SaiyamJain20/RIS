@@ -1,3 +1,24 @@
+The additive [v2.1 schema revision](v2.1/README.md) closes the opt-in E carrier's
+source inventory after exact A1-0114/A2-0060 proposal ACKs. Its separate
+[freeze](v2.1/FREEZE.json) preserves the v2 wire family and original v2 bytes.
+Both owner publication receipts are verified in
+[the live migration record](../communication/E_SOURCE_CLOSURE_MAPPING.json).
+Agent1's exact migrated exporter READY is reviewed; Agent2's consumer mapping
+and full source READY remain pending. Frozen publication bytes stay unchanged.
+
+Published successor contract: [v2/FREEZE.json](v2/FREEZE.json) pins the exact reviewed payloads; its acceptance sidecar governs live state. Frozen [v1](v1/FREEZE.json) remains reproducible.
+
+**Live state (2026-11-04):** F0 design accepted after exact A1-0110/A2-0058
+freeze ACKs; shared v2 published byte-for-byte from candidate2. Owned implementation
+and isolated tests may start. Integrated execution still requires source READY
+and separate exact run FREEZE ACKs. All32 F cases NOT_RUN; G locked; historical
+qualified E unchanged. See [the live board](../communication/BOARD.md) and [acceptance](../communication/F0_ACCEPTANCE_CANDIDATE2.json).
+Earlier status paragraphs below are historical.
+
+**Latest F0 review (2026-11-04):** [Revision8 review](../evaluation/evidence/reviews/f0-a2-revision8-20261104/README.md) independently reproduces three bindings/14profile cases. A3-0068 ACKs D50/wire adapter-response scope; A3-0069 withholds layout ACK on legal effect recurrence and ALLOW-only death checks. Candidate2 awaits Agent2's exact correction/tests. F0 not frozen; all32Fcases NOT_RUN/G locked. Earlier entries below are historical.
+
+**Live F0 status (2026-11-04):** Both exact candidate8 design ACKs are verified. Successor [v2 candidate1](proposals/v2/README.md) is a proposal for mapping review, with explicit profile/q2/export-layout dependencies. No mapping ACK, F0 freeze or implementation/execution authorization; F NOT_RUN/G locked. Frozen v1 and qualified E evidence remain unchanged.
+
 **Live status (2026-10-12):** Qualified solo Gate E PASS recorded;56/56 catalog
 rows. Agent3 has returned and pulled the consolidated work. Current review and
 new evaluator fixes are in [return-review evidence](../evaluation/evidence/reviews/returning-agent3-20261012/README.md).

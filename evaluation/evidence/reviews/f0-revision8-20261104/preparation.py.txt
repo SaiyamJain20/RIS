@@ -1,0 +1,128 @@
+from pathlib import Path
+import subprocess,json,hashlib,datetime,csv,io
+root=Path.cwd(); old=root/'evaluation/evidence/reviews/f0-revision7-20261104'; new=root/'evaluation/evidence/reviews/f0-revision8-20261104'; new.mkdir(exist_ok=False)
+sha=lambda b:hashlib.sha256(b).hexdigest()
+git=lambda *a:subprocess.check_output(['git',*a])
+now=datetime.datetime.now(datetime.timezone.utc).isoformat()
+refs={r:git('rev-parse',r).decode().strip() for r in ['HEAD','origin/agent-1','origin/agent-2','origin/agent-3']}
+assert refs['HEAD']==refs['origin/agent-3']=='90ed51baa5b77505a8f1b7f1c66cfb9c1efeee04'
+review_paths={'A1-0103':('origin/agent-1','communication/agent-1/outbox/0103-ack-f0-candidate7-ledger-scope.md'),'A2-0052':('origin/agent-2','communication/agent-2/outbox/0052-review-f0-candidate7-protocol-scope.md')}
+reviews=[]
+for mid,(ref,path) in review_paths.items():
+ blob=git('show',refs[ref]+':'+path)
+ reviews.append(dict(messageId=mid,commit=refs[ref],fileChangingCommit=git('log','-1','--format=%H',refs[ref],'--',path).decode().strip(),path=path,sha256=sha(blob),scope='candidate7 ledger-scope ACK only' if mid.startswith('A1') else 'candidate7 protocol REVIEW withholding ACK; C-1..C-3',candidate8Ack=False))
+ for name in ['SOURCE-INTERFACE-PLAN.md','f_matrix.json','fault-model.csv','review-manifest.json']:
+  assert sha((old/name).read_bytes()) in blob.decode()
+# Audit latest communication by ancestry, not branch timestamps.
+paths=set(); trees={}
+for ref,commit in refs.items():
+ trees[ref]={}
+ for line in git('ls-tree','-r',commit,'communication').decode().splitlines():
+  meta,path=line.split('\t'); trees[ref][path]=meta.split()[2]; paths.add(path)
+latest=[]; conflicts=[]
+for path in sorted(paths):
+ versions={}
+ for ref,tree in trees.items():
+  if path not in tree:continue
+  change=git('log','-1','--format=%H',refs[ref],'--',path).decode().strip()
+  versions[change]=(tree[path],ref)
+ maximal=[]
+ for c,(blob,ref) in versions.items():
+  if not any(c!=other and subprocess.run(['git','merge-base','--is-ancestor',c,other],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode==0 for other in versions):maximal.append(c)
+ if len({versions[c][0] for c in maximal})>1:conflicts.append(path)
+ latest.append(dict(path=path,versions=[dict(commit=c,blob=versions[c][0],ref=versions[c][1]) for c in maximal]))
+assert not conflicts,conflicts
+pins={}
+for path in ['protocol/f0/SIGNING-RULES.md','protocol/f0/SUCCESSOR-WIRE.md','protocol/f0/MANIFEST.sha256','protocol/MANIFEST.sha256']:
+ try:pins[path]=sha(git('show',refs['origin/agent-2']+':'+path))
+ except subprocess.CalledProcessError:
+  if path!='protocol/MANIFEST.sha256':raise
+assert pins['protocol/f0/SIGNING-RULES.md']=='23a88159c869e767d4305236c089c6682a5a6be070afa43756e24b5f3f7919fb'
+assert pins['protocol/f0/SUCCESSOR-WIRE.md']=='065c46db8f3308e531b6b83db4bbf23cbe26f861a983a0af39ac3e86d505aa58'
+# Production comparison excludes proposed F0 material.
+production_diffs={}
+for base in ['376347d','f746098c78bff2e1d0abcf8600934469a3f9a03a','0b81ee46c487488022585c99335c0e3fa0fa10c4']:
+ changed=git('diff','--name-only',base,refs['origin/agent-2'],'--','protocol',':(exclude)protocol/f0').decode().splitlines(); assert not changed,changed; production_diffs[base]=changed
+assert not git('diff','--name-only','ead566fc5d4e103256708eaac726a7c3bde9f7fb',refs['origin/agent-1'],'--','ledger')
+# Verify owner manifest against immutable Git blobs without executing owner code.
+manifest=git('show',refs['origin/agent-2']+':protocol/f0/MANIFEST.sha256').decode(); entries=[]
+for line in manifest.splitlines():
+ if not line.strip():continue
+ expected,path=line.split(maxsplit=1);path=path.lstrip('*');path=path if path.startswith('protocol/') else 'protocol/'+path
+ assert sha(git('show',refs['origin/agent-2']+':'+path))==expected,path
+ entries.append(path)
+plan=(old/'SOURCE-INTERFACE-PLAN.md').read_text()
+plan=plan.replace('candidate 7,','candidate 8,',1)
+a=plan.index('Spec: SPEC.md');b=plan.index('\n## Proposed scope',a)
+plan=plan[:a]+'''Spec: SPEC.md section 5, PLAN.md section 6. Candidate7 is preserved at
+90ed51baa5b77505a8f1b7f1c66cfb9c1efeee04. Agent1 A1-0103 at
+4c5b6914573f3a049797948f78d7f24dc8795ab8 ACKs candidate7 in ledger scope only;
+Agent2 A2-0052 at e0f25ef861a7423f07dcd3677e3f614990045609 is a REVIEW
+withholding ACK pending C-1..C-3. Neither transfers to candidate8.
+Revision-4 F0 set: f746098c78bff2e1d0abcf8600934469a3f9a03a (A2-0046).
+Production protocol bytes equal common baseline 376347d (E manifest unchanged).
+The intended F0 amendment is revision7 at 0b81ee46c487488022585c99335c0e3fa0fa10c4,
+whose exact signing/wire/manifest hashes below become design pins only after both
+owners ACK candidate8. No implementation pin or execution authorization follows.
+Frozen interface-v1 and signed E bytes stay immutable. No package, root lock,
+cryptography change, extra agents, worktrees, main push or peer edits.
+''' +plan[b:]
+plan=plan.replace('Pin SUCCESSOR-WIRE revision4\'s 19 reason mappings and precedence.','Pin SUCCESSOR-WIRE revision7 (sections outside pool retry unchanged from revision4),\n  including its 19 reason mappings and precedence.')
+a=plan.index('A2-0044 resolves R1–R3');b=plan.index('\nSelf-review scope:',a)
+plan=plan[:a]+'''A2-0044 resolved R1–R3 at design level. The historical revision4 pins and
+candidate6 ACKs remain historical and are not the intended candidate8 freeze pins.
+Intended revision7 design pins, conditional on both exact candidate8 design ACKs:
+- D50 b178e0a8942dc1d4c99165a4b526c30813efc17dbbeb216492b9be6940247a18;
+- SIGNING-RULES 23a88159c869e767d4305236c089c6682a5a6be070afa43756e24b5f3f7919fb;
+- SUCCESSOR-WIRE 065c46db8f3308e531b6b83db4bbf23cbe26f861a983a0af39ac3e86d505aa58;
+- protocol/f0/MANIFEST.sha256 097d8ed8a8d4e094195f620f53b9c7839a2426210538c75ed06ad16c5f9fa6a0.
+Obtain both owners' exact ACKs of this plan, the WHOLE revised matrix/CSV, and
+numeric/source choices. Then publish full candidate v2 schema/vectors and obtain
+exact mapping ACKs before consumption. Final F0 freeze records all hashes;
+fresh source READY/execution ACKs remain a later gate. No module implementation
+is authorized by this candidate. A1-0103 covers candidate7 ledger scope only;
+A2-0052 withholds candidate7 protocol ACK. Neither is a candidate8 ACK.
+''' +plan[b:]
+plan=plan.replace('Candidate7 has no exact owner ACK yet.','Candidate7 subsequently received A1-0103 in ledger scope; A2-0052 withholds protocol ACK. Neither transfers to candidate8.')
+plan=plan.replace('The proposed successor v2 mapping includes `collection.timing`','The proposed successor v2 mapping includes `collection.timing`')
+plan=plan.replace('Frozen v1 bytes remain unchanged. These fields and their mapping still require both exact design ACKs', '''It must also carry single-witness `error.recorded={message, signature}` only for StateCheckpoint `CONFLICT_PINNED`, `collection.adopted.{message, reporters}`, and the rule that `collection.timing` is present iff any pool-retry member is present, per SUCCESSOR-WIRE revision7. This enumerates obligations, not a schema or mapping ACK. Frozen v1 bytes remain unchanged. These fields and their mapping still require both exact design ACKs''')
+plan=plan.replace('Next: obtain exact candidate7 ACKs','Next: obtain exact candidate8 ACKs')
+plan+='''
+
+## Candidate8 mechanical corrections after A2-0052
+
+C-1: F-12 now explicitly carries the 2-2 ambiguous split, the f=2 fabricated-value
+positive boundary control, and the honest-pair selection despite an excluded
+equivocator. These are prospective extension controls, not observed results.
+C-2: F-29 pins the complete revision7 SIGNING-RULES SHA-256 in its dependency.
+C-3/N-1: distinguish revision4 F0 set from common production bytes; the intended
+conditional design pins are revision7, enumerated above. Matrix protocolCommit
+retains the historical revision4 commit and is explicitly labelled as that set.
+N-2: the 5000ms F-12 snapshot fixture holds or silences witnesses 2 and 3, so it
+cannot close early through all-replied. N-3: enumerate the remaining wire mapping
+obligations above. No numeric bound, ledger-facing case, ownership or gate changes.
+CSV is byte-identical to candidate7; its candidate7 labels describe that historical
+proposal. All 14 components/32 cases remain NOT_RUN; no candidate8 owner ACK exists.
+'''
+(new/'SOURCE-INTERFACE-PLAN.md').write_text(plan)
+d=json.loads((old/'f_matrix.json').read_text());d['revision']=8
+for k in ['faultModel','design']:d[k]=d[k].replace('revision7-','revision8-')
+d['numericPlan']['plan']=d['numericPlan']['plan'].replace('revision7-','revision8-')
+d['protocolCommitMeaning']='revision-4 F0 set at A2-0046; not the origin of production protocol bytes'
+d['productionProtocolBaselineCommit']=git('rev-parse','376347d').decode().strip()
+d['protocolAmendmentStatus']='REVISION7_DESIGN_PINS_PROPOSED_FOR_CANDIDATE8_ACKS_PENDING'
+d['respondsTo']=['A3-0064','A1-0103','A2-0052']
+for row in d['cases']:
+ if row['id']=='F-12':
+  row['dependencies']=[s.replace('candidate7','candidate8') for s in row['dependencies']]
+  row['controls']=[s.replace('snapshot closes at 5000ms;', 'witnesses 2 and 3 are silent or held so no early all-replied close occurs; snapshot closes at 5000ms;') for s in row['controls']]
+  row['controls'] += [
+   'Ambiguous split: witnesses 0 and 1 recorded V1 and witnesses 2 and 3 recorded V2 for sequence s; nothing is selected (no adopted member), no re-proposal runs, no certificate is submitted, the collection returns ADAPTER_UNAVAILABLE with reason QUORUM_UNAVAILABLE and all four recordedReports; sequence reuse requires every earlier digest observed dead on the target ledger',
+   'Outside the bound (positive control at f=2): two Byzantine witnesses report the same fabricated checkpoint with valid signatures; the pool selects it and, if the gate permits, re-proposes it verbatim; each honest witness refuses on independent validation (expected reason PROPOSAL_MISMATCH, to be confirmed at execution), no certificate forms; availability loss only, not a safety finding',
+   'Equivocator: one witness returns two different valid recorded values; exclude it and keep both reports in inconsistentReports; an honest agreeing pair among the other witnesses still selects its value']
+ if row['id']=='F-29':row['dependencies'][0]=row['dependencies'][0].replace('SIGNING-RULES section 6','SIGNING-RULES sha256 '+pins['protocol/f0/SIGNING-RULES.md']+' section 6').replace('candidate7','candidate8')
+(new/'f_matrix.json').write_text(json.dumps(d,indent=2)+'\n');(new/'fault-model.csv').write_bytes((old/'fault-model.csv').read_bytes())
+provenance=dict(capturedAt=now,refs=refs,reviews=reviews,pins=pins,ownerF0ManifestEntries=len(entries),productionProtocolDiffs=production_diffs,latestCommunication=latest,incomparableConflicts=conflicts)
+(new/'input-provenance.json').write_text(json.dumps(provenance,indent=2)+'\n')
+(new/'received-reviews.json').write_text(json.dumps(dict(reviews=reviews,exactCandidate7LedgerAck='A1-0103',candidate7ProtocolAck=None,exactCandidate8Acks=[],noAckTransfer=True),indent=2)+'\n')
+print(json.dumps(dict(directory=str(new),refs=refs,communicationPaths=len(paths),manifestEntries=len(entries),conflicts=conflicts,pins=pins),indent=2))

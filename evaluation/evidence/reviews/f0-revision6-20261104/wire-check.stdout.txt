@@ -1,0 +1,43 @@
+ok   the frozen v1 enum has 21 codes
+ok   the reason table parsed and names the four internal reasons
+ok   every reason named in the precedence list is in the table
+ok   every reason in the table is named in the precedence list or is an operation-time reason
+ok   every mapped code is a frozen v1 code
+ok   QUORUM_UNAVAILABLE maps to ADAPTER_UNAVAILABLE and not to INSUFFICIENT_QUORUM
+ok   no reason maps to POLICY_DENIED or INSUFFICIENT_QUORUM
+ok   examples found (>= 4)
+ok   example 1: envelope has schemaVersion v2 and ok/result/error
+ok   example 1: exactly one of result/error is non-null
+ok   example 1: collection success invariants
+ok   example 2: envelope has schemaVersion v2 and ok/result/error
+ok   example 2: exactly one of result/error is non-null
+ok   example 2: error code is a frozen v1 code
+ok   example 2: error reason (if any) is mapped to this code
+ok   example 2: collection failure invariants
+ok   example 3: envelope has schemaVersion v2 and ok/result/error
+ok   example 3: exactly one of result/error is non-null
+ok   example 3: error code is a frozen v1 code
+ok   example 3: error reason (if any) is mapped to this code
+ok   example 4: envelope has schemaVersion v2 and ok/result/error
+ok   example 4: exactly one of result/error is non-null
+ok   example 4: error code is a frozen v1 code
+ok   example 4: error reason (if any) is mapped to this code
+ok   example 5: envelope has schemaVersion v2 and ok/result/error
+ok   example 5: exactly one of result/error is non-null
+ok   example 5: collection success invariants
+ok   example 6: envelope has schemaVersion v2 and ok/result/error
+ok   example 6: exactly one of result/error is non-null
+ok   example 6: error code is a frozen v1 code
+ok   example 6: error reason (if any) is mapped to this code
+ok   example 6: collection failure invariants
+ok   example 7: envelope has schemaVersion v2 and ok/result/error
+ok   example 7: exactly one of result/error is non-null
+ok   example 7: error code is a frozen v1 code
+ok   example 7: error reason (if any) is mapped to this code
+ok   example 7: single-witness `recorded` only with CONFLICT_PINNED, closed shape {message, signature}
+ok   revision 5: the document carries a collection example with recordedReports (>= 1)
+ok   revision 5: the document carries an adoption example (>= 1)
+ok   revision 5: the document carries a single-witness refusal with a recorded value (>= 1)
+ok   revision 5: the document states the adoption rule (exactly one value with two distinct reporters)
+
+all wire-document checks hold

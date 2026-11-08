@@ -1,0 +1,78 @@
+{
+  "capturedAt": "2026-11-04T01:52:29Z",
+  "sourceCommit": "0b81ee46c487488022585c99335c0e3fa0fa10c4",
+  "pythonVersion": "CPython 3.13.13",
+  "gitVersion": "Git 2.54.0",
+  "commands": [
+    {
+      "argv": [
+        "sha256sum",
+        "-c",
+        "protocol/f0/MANIFEST.sha256"
+      ],
+      "workingDirectory": "exact extracted A2 archive",
+      "exitCode": 0,
+      "output": "evaluation/evidence/reviews/f0-a2-revision7-20261104/owner-manifest-check.stdout.txt",
+      "outputSha256": "0c4227090a76c6b308ba299266dad6ba80992d48528cadc67f9aa08dc8cf88f3"
+    },
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "-I",
+        "protocol/f0/vectors/test_pool_adoption.py"
+      ],
+      "workingDirectory": "exact extracted A2 archive",
+      "exitCode": 0,
+      "output": "evaluation/evidence/reviews/f0-a2-revision7-20261104/adoption.stdout.txt",
+      "outputSha256": "f7cf9f5d5555ecf93f425f9d9b3f583e3318c359991cfb301ac80191a90488db"
+    },
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "-I",
+        "protocol/f0/vectors/check_wire_examples.py"
+      ],
+      "workingDirectory": "exact extracted A2 archive",
+      "exitCode": 0,
+      "output": "evaluation/evidence/reviews/f0-a2-revision7-20261104/wire-check.stdout.txt",
+      "outputSha256": "adcfbde2fcc0589840162bd60aa567ec6cfbb0f459abe22272fe2849f0c89005"
+    },
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "-I",
+        "protocol/f0/vectors/run_pool_adoption_mutants.py"
+      ],
+      "workingDirectory": "exact extracted A2 archive",
+      "exitCode": 0,
+      "output": "evaluation/evidence/reviews/f0-a2-revision7-20261104/pool-mutants.stdout.txt",
+      "outputSha256": "27f8216328a9ad01d3619bbc1ca79052aebd731ead421d92c17b857391dc1d43"
+    },
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "-I",
+        "protocol/f0/vectors/run_wire_corruptions.py"
+      ],
+      "workingDirectory": "exact extracted A2 archive",
+      "exitCode": 0,
+      "output": "evaluation/evidence/reviews/f0-a2-revision7-20261104/wire-corruptions.stdout.txt",
+      "outputSha256": "6e8b9c3150e4dd9fe46d934d42095ecb7bf79c312b7a923d1e9b373eb87197d1"
+    },
+    {
+      "argv": [
+        "python3",
+        "evaluation/evidence/reviews/f0-a2-revision7-20261104/review-probes.py.txt"
+      ],
+      "workingDirectory": "/home/karma/Documents/RIS",
+      "exitCode": 0,
+      "output": "evaluation/evidence/reviews/f0-a2-revision7-20261104/review-probes.stdout.txt",
+      "outputSha256": "622e6d2abcf7692cd91b2955e473bab723a951f2c27a541180f39d6d36cf086d"
+    }
+  ],
+  "diagnostics": "evaluation/evidence/reviews/f0-a2-revision7-20261104/diagnostics.txt"
+}

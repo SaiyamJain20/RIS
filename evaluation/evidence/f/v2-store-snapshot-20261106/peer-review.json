@@ -1,0 +1,43 @@
+{
+  "agent1": "8c0285ffa6986858caeb0140b930bf5db759fdc0",
+  "agent2": "b8d57cd3bc4a4a1de1ae267923509d840446aabf",
+  "previousAgent2": "305ca39d48b5cb2fe3f561b20c31a103189cbc19",
+  "protocolPaths": {
+    "protocol/evidence/af2-state/README.md": {
+      "sha256": "a1dd7727a035f98c372ad054a4727efa27d691c4a8cf48aa3d0b96090bcf0118",
+      "fileChangingCommit": "b8d57cd3bc4a4a1de1ae267923509d840446aabf"
+    },
+    "protocol/evidence/af2-state/adapter-v2-ops-green.txt": {
+      "sha256": "24e6148633f810d7545ceb54836fa22d4ae9ad5260e926e5c9e6a99726ded12c",
+      "fileChangingCommit": "b8d57cd3bc4a4a1de1ae267923509d840446aabf"
+    },
+    "protocol/evidence/af2-state/adapter-v2-ops-mutants.txt": {
+      "sha256": "236a864886e9c5eeb32631f21424b0b4156b3c8bd3a719f312a59e4b859c2e79",
+      "fileChangingCommit": "b8d57cd3bc4a4a1de1ae267923509d840446aabf"
+    },
+    "protocol/evidence/af2-state/adapter-v2-ops-run1-red.txt": {
+      "sha256": "f20a2d575d1ea2cae60c597c8971e1503c80924e477f1eb0b2644ff6d4d8afc1",
+      "fileChangingCommit": "b8d57cd3bc4a4a1de1ae267923509d840446aabf"
+    },
+    "protocol/hmbc_protocol/adapter_v2_ops.py": {
+      "sha256": "a704aa821f2310fcdf7f40782f15732ead6d1e956cde4b11abb0196c4158958b",
+      "fileChangingCommit": "b8d57cd3bc4a4a1de1ae267923509d840446aabf"
+    },
+    "protocol/tests/test_adapter_v2_ops.py": {
+      "sha256": "99301db828ce65cc48c20231f1405f2ab957e8f12119c33b207a729c0236f3dd",
+      "fileChangingCommit": "b8d57cd3bc4a4a1de1ae267923509d840446aabf"
+    },
+    "protocol/tools/run_adapter_v2_ops_mutants.py": {
+      "sha256": "d19a89321da96b42277f1df56df3e638482c818deba8dd5bd2cbf8924d59d7a7",
+      "fileChangingCommit": "b8d57cd3bc4a4a1de1ae267923509d840446aabf"
+    }
+  },
+  "verifiedFixtureCopies": 4,
+  "newestOutboxes": {
+    "agent-1": "communication/agent-1/outbox/0116-note-governance-getters-and-d50-open.md",
+    "agent-2": "communication/agent-2/outbox/0062-note-d50-differential-against-a3-0081.md"
+  },
+  "review": "Read exact owner STATUS/HANDOFF and entire new adapter_v2_ops.py. Carried E operations first validate E results, relabel top-level v1 to v2 and map closed errors. Worker factory injected. Owner explicitly NOT_READY; no new ACK or READY.",
+  "ownerReportedOnly": "40 handler tests,14/14 mutants; NOT rerun or adopted as independent evidence.",
+  "remaining": "witness handlers/startup/CLI wiring, full successor consumer mapping, real chain view/driver, D6/hooks/byzantine, full E parity and ONE source READY"
+}

@@ -1,0 +1,63 @@
+"""Independent R6 arithmetic oracle for the exact Agent 2 revision-7 snapshot.
+
+This checks deadline, close-reason and re-proposal status arithmetic only. It
+uses no service, signatures or runtime timing and does not prove that recorded
+wire observations came from raw events.
+"""
+import importlib.util
+import sys
+
+source = sys.argv[1]
+spec = importlib.util.spec_from_file_location("owner_pool", source)
+owner = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(owner)
+
+
+def deadline_oracle(now, proposal_expiry):
+    remaining = proposal_expiry - now
+    return None if remaining <= 2 else min(10_000, (remaining - 2) * 1_000)
+
+
+def close_oracle(deadline, all_reply):
+    limit = min(5_000, deadline)
+    if all_reply is not None and all_reply < limit:
+        return all_reply, "all-replied"
+    if deadline <= 5_000:
+        return deadline, "deadline"
+    return 5_000, "reply-timeout"
+
+
+def action_oracle(now, selected_expiry, close, deadline):
+    if close >= deadline:
+        return "skipped_deadline"
+    validity_left = selected_expiry * 1_000 - (now * 1_000 + close)
+    return "skipped_validity" if validity_left <= 2_000 else "sent"
+
+
+comparisons = 0
+for now in range(1_000, 1_004):
+    for proposal in range(now - 1, now + 16):
+        deadline = deadline_oracle(now, proposal)
+        assert owner.collection_deadline_ms(now, proposal) == deadline
+        comparisons += 1
+        if deadline is None:
+            continue
+        reply_times = {None, 0, 1, 1_999, 2_000, 4_999, 5_000,
+                       deadline - 1, deadline, deadline + 1, 7_000}
+        for all_reply in reply_times:
+            close, reason = close_oracle(deadline, all_reply)
+            assert owner.snapshot_close(deadline, all_reply) == (close, reason), (
+                now, proposal, deadline, all_reply)
+            comparisons += 1
+            for selected_expiry in range(now - 1, proposal + 2):
+                got = owner.reproposal_status(now, selected_expiry, close, deadline)
+                expected = action_oracle(now, selected_expiry, close, deadline)
+                assert got == expected, (
+                    now, proposal, selected_expiry, close, deadline, got, expected)
+                comparisons += 1
+
+assert owner.reproposal_status(1_000, 1_007, 4_999, 10_000) == "sent"
+assert owner.reproposal_status(1_000, 1_007, 5_000, 10_000) == "skipped_validity"
+assert owner.reproposal_status(1_000, 1_030, 2_000, 2_000) == "skipped_deadline"
+print(f"independent R6 oracle: {comparisons} comparisons pass")
+print("boundaries: 2001 ms sent; 2000 ms skipped_validity; close at deadline skipped_deadline")

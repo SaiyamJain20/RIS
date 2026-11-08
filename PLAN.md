@@ -1,3 +1,10 @@
+**Live state (2026-11-04):** F0 design accepted after exact A1-0110/A2-0058
+freeze ACKs; shared v2 published byte-for-byte from candidate2. Owned implementation
+and isolated tests may start. Integrated execution still requires source READY
+and separate exact run FREEZE ACKs. All32 F cases NOT_RUN; G locked; historical
+qualified E unchanged. See [the live board](communication/BOARD.md) and [acceptance](communication/F0_ACCEPTANCE_CANDIDATE2.json).
+Earlier status paragraphs below are historical.
+
 # HMBC E → F → G implementation plan
 
 **Live phase (2026-10-12):** E retains its qualified recorded PASS. The human

@@ -1,0 +1,31 @@
+{
+  "recordedAt": "2026-11-04T16:09:41.333953+00:00",
+  "failedTest": "evaluation/tests/test_e2_audit_plan.py::test_audit_execution_requires_each_complete_row_proof[complete]",
+  "failure": {
+    "rq": "E",
+    "executionMode": "two-chain-e2-audit-stress-slice",
+    "adapterMode": "symbolic",
+    "status": "FAILED",
+    "startedAt": "2026-11-04T16:06:12.677612+00:00",
+    "endedAt": "2026-11-04T16:06:13.820334+00:00",
+    "cases": {},
+    "servicesStarted": [],
+    "acks": {
+      "TEST_ONLY": "not peer evidence"
+    },
+    "failure": {
+      "type": "ValueError",
+      "message": "Public access exact current E2 plan/source/config failed"
+    },
+    "sourceStable": false,
+    "limitation": "Six E03 audit-stress comparisons only; no complete catalog or RQ gate.",
+    "planSha256": "d8df1438d746a843d8f82d5038a596ca5ff0f788e1c8a8b17121add41d5e7fd4",
+    "reviewMode": "solo-correlated",
+    "reviewDisclosure": "Solo phase under the human directive A1-0059: agent 1 and the agent-2/agent-3 proxies are the same model, so every review and ACK is correlated self-review, not independent review."
+  },
+  "addedDuringInitialSuite": [
+    "evaluation/evidence/f/v2-public-observations-20261104/sensitivity.py",
+    "evaluation/evidence/f/v2-public-observations-20261104/review_peers.py"
+  ],
+  "disposition": "Stopped only owned pytest PID794357/parent794354 using SIGINT after exact cwd/argv check. Initial exit2 preserved. Finish complete source inventory before fresh full suite; no product guard weakened."
+}

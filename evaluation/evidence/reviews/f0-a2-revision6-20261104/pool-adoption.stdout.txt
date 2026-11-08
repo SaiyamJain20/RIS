@@ -1,0 +1,30 @@
+ok   A1 exhaustive f<=1 (3456 assignments, 1984 adoptions): an adopted value was recorded by at least one honest witness
+ok   A1 is not vacuous: some assignments adopt and some do not
+ok   A2 positive: two honest witnesses recorded A, the others nothing, so A is adopted
+ok   A2 positive with a Byzantine third reporter of B: A still adopted (B has one report)
+ok   A3 ambiguity: A and B each reported twice adopts nothing
+ok   a single report adopts nothing
+ok   no reports adopts nothing
+ok   A4 control outside the bound: two Byzantine witnesses reporting FAKE get FAKE adopted
+ok   A5 one witness repeating a value counts once
+ok   A8 (reverses revision 5) a witness reporting two different values is inconsistent and excluded: [(3,FAKE),(3,A),(0,A)] adopts nothing
+ok   A5 the same witness reporting FAKE twice and A once, with nobody else, adopts nothing
+ok   A6 other-sequence reports are ignored
+ok   A6 invalid-signature reports are ignored
+ok   A6 one valid plus one invalid report is not two reports
+ok   A7 order independent
+ok   witness index outside 0..3 is refused
+ok   a non-boolean validSignature is refused
+ok   A8 order independent with an equivocator
+ok   A8 an equivocator does not block two honest agreeing reporters
+ok   A8 identical repeats are NOT equivocation: the witness counts once and still helps
+ok   A9 exhaustive: removing every inconsistent witness's reports never changes the adoption
+ok   A10 classify: consistent witnesses one value each; inconsistent witnesses their distinct values (canonical order); wrong-sequence reports dropped
+ok   A10 classify ignores invalid signatures
+ok   A11 prefix (0,A),(1,A) adopts A; the late split (2,B),(3,B) does not cancel it
+ok   A11 reversed order: snapshot (2,B),(3,B) adopts B although (0,A),(1,A) arrive late
+ok   A11 a snapshot without adoption stays so even if late reports would complete a pair
+ok   A11 late reports never create an adoption on an ambiguous snapshot
+ok   A12 the two arrival orders adopt different values and both were recorded by an honest witness
+
+all expectations hold

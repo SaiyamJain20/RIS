@@ -1,0 +1,135 @@
+{
+  "capturedAt": "2026-11-03T21:34:56.969353+00:00",
+  "refs": {
+    "origin/agent-1": "ce860fd9fc5ed0195e27b69d4bb1090698d8db6a",
+    "origin/agent-2": "f746098c78bff2e1d0abcf8600934469a3f9a03a",
+    "origin/agent-3": "096a9f391a5f43e472dafb5ed97a7af8634512e9",
+    "origin/main": "376347d9b0979d1e46824a30197b935ffe91e4fb"
+  },
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "communication/build_prompts.py",
+        "--check"
+      ],
+      "startedAt": "2026-11-03T21:34:56.938003+00:00",
+      "endedAt": "2026-11-03T21:34:56.959928+00:00",
+      "exitCode": 0,
+      "outputSha256": "8f29a69f6b3463b624687ea89c034e86c0217602a093168e78b810d5ef4ac781"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "startedAt": "2026-11-03T21:34:56.959963+00:00",
+      "endedAt": "2026-11-03T21:34:56.966846+00:00",
+      "exitCode": 0,
+      "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "--version"
+      ],
+      "startedAt": "2026-11-03T21:34:56.966868+00:00",
+      "endedAt": "2026-11-03T21:34:56.968186+00:00",
+      "exitCode": 0,
+      "outputSha256": "6b64edf0fc8f22e798fb64873acba6b4106df290f0bf458b507e8cb409b63e49"
+    },
+    {
+      "argv": [
+        "git",
+        "--version"
+      ],
+      "startedAt": "2026-11-03T21:34:56.968227+00:00",
+      "endedAt": "2026-11-03T21:34:56.969320+00:00",
+      "exitCode": 0,
+      "outputSha256": "fff575d3fa43a92d932e4eb8bc03394140ce40699f9c8a97c3126016a244dfb8"
+    }
+  ],
+  "auditCommand": [
+    "/usr/bin/python3",
+    "/home/karma/Documents/RIS/evaluation/evidence/reviews/f0-revision5-20261104/audit-owner.py.txt"
+  ],
+  "auditExitCode": 0,
+  "verificationCommand": [
+    "/usr/bin/python3",
+    "/home/karma/Documents/RIS/evaluation/evidence/reviews/f0-revision5-20261104/verify.py.txt"
+  ],
+  "verificationExitCode": 0,
+  "components": 14,
+  "cases": 32,
+  "allNotRun": true,
+  "mutationMappings": {
+    "M1": [
+      "F-12"
+    ],
+    "M2": [
+      "F-12",
+      "F-13"
+    ],
+    "M3": [
+      "F-29"
+    ],
+    "M4": [
+      "FL-7",
+      "F-24"
+    ],
+    "M5": [
+      "FL-5",
+      "F-22"
+    ],
+    "M6": [
+      "FL-1"
+    ],
+    "M7": [
+      "FL-1"
+    ]
+  },
+  "changedOldCases": [
+    "FL-1",
+    "FL-5",
+    "FL-7",
+    "FL-10",
+    "F-12",
+    "F-13",
+    "F-14",
+    "F-16",
+    "F-17",
+    "F-18",
+    "F-19",
+    "F-20",
+    "F-22",
+    "F-24",
+    "F-27",
+    "F-28",
+    "F-29"
+  ],
+  "protectedPathsUnchanged": [
+    "ledger",
+    "protocol",
+    "interfaces",
+    "archive",
+    "evaluation/reports/RQ1-E.md",
+    "evaluation/evidence/e3/gate-run-20261012",
+    "evaluation/evidence/fault-model.csv",
+    "evaluation/scenarios/f_matrix.json",
+    "evaluation/evidence/reviews/f0-a1-0090-20261103",
+    "evaluation/evidence/reviews/f0-a1-0092-20261103",
+    "evaluation/evidence/reviews/f0-revision3-20261104",
+    "evaluation/evidence/reviews/f0-revision4-20261104"
+  ],
+  "ownerModuleBlobsUnchanged": 537,
+  "communicationPaths": 306,
+  "executionAuthorized": false,
+  "freshRuntimeTests": false,
+  "classification": "planning and provenance checks; no implemented F/model/runtime or gate result",
+  "diagnostics": [
+    "Initial mkdir lock attempt exited1 because the existing lock is a file; verified available via flock and acquired persistent TTY flock before repository work.",
+    "Initial draft generator exited1 KeyError scenarios: CSV has no scenarios column; corrected to existing open_dependency field before verification.",
+    "Two guessed evidence/message paths were absent (git show/cat diagnostics); corrected by tracked-path discovery, no content inferred."
+  ]
+}

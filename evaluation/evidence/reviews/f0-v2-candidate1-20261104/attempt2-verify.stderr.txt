@@ -1,0 +1,80 @@
+Traceback (most recent call last):
+  File "/home/karma/Documents/RIS/evaluation/evidence/reviews/f0-v2-candidate1-20261104/verify.py", line 72, in <module>
+    yes('AdapterResponse',x)
+    ~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/home/karma/Documents/RIS/evaluation/evidence/reviews/f0-v2-candidate1-20261104/verify.py", line 30, in yes
+    validate(name,value)
+    ~~~~~~~~^^^^^^^^^^^^
+  File "/home/karma/Documents/RIS/evaluation/evidence/reviews/f0-v2-candidate1-20261104/verify.py", line 25, in validate
+    Draft202012Validator(doc,format_checker=FORMATS).validate(value)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/home/karma/Documents/RIS/.venv/lib64/python3.13/site-packages/jsonschema/validators.py", line 450, in validate
+    raise error
+jsonschema.exceptions.ValidationError: {'schemaVersion': 'v2', 'ok': True, 'result': {'schemaVersion': 'v2', 'adapterMode': 'symbolic', 'checkpoint': {'sequence': '4', 'authEpoch': '3', 'policyVersion': '1', 'keyEpoch': '0', 'witnessSetVersion': '2', 'sourceChainId': '18545', 'psc': '0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8', 'sourceBlockNumber': '250', 'sourceBlockHash': '0x5555555555555555555555555555555555555555555555555555555555555555', 'expiresAt': '1791521500'}, 'signatures': ['0x82f2962709e85b5e0b18fb9686e96c870bed7942bf8c0ced4bd5c858c280d977045417729b56e22aab8c3a1cd045a6a139be8c1a5523ce375e597b24316e95af1c', '0xe183b21ad1de551f9de1827d4319b0fcd32554971fccfd5861855a747b1364635424a10500ee17c9a5fc34e261febfd65852295319f2360e6751a54a092b75c01b', '0x5a202eabd8634aeb4fa91a8addcbe4caf54d87274b249df3f5d92796ac0440b111ce3f69cf24a7842562629928af6992ba73d692d19d5b2a158a5f10acbdf0441c'], 'collection': {'quorum': '3', 'witnessSetVersion': '2', 'outcomes': [{'witnessIndex': '0', 'witness': '0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42', 'status': 'signed', 'replies': '1'}, {'witnessIndex': '1', 'witness': '0xe34919a7f4135eb28547717aba85a2b7619cd85a', 'status': 'silent', 'replies': '0'}, {'witnessIndex': '2', 'witness': '0x6ae8de0489163ba82609d6358c85b3b47c24cb45', 'status': 'signed', 'replies': '1', 'detail': 'signature does not recover to the replying witness'}, {'witnessIndex': '3', 'witness': '0x1e054b33476173deeffaea9124f293eecb6de4d0', 'status': 'signed', 'replies': '1'}], 'submittedSigners': ['0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42', '0x1e054b33476173deeffaea9124f293eecb6de4d0', '0x6ae8de0489163ba82609d6358c85b3b47c24cb45']}}, 'error': None} is not valid under any of the given schemas
+
+Failed validating 'oneOf' in schema:
+    {'oneOf': [{'type': 'object',
+                'properties': {'schemaVersion': {'const': 'v2'},
+                               'ok': {'const': True},
+                               'result': {'oneOf': [{'$ref': '#/$defs/PrepareRequestResult'},
+                                                    {'$ref': '#/$defs/CollectDecisionResult'},
+                                                    {'$ref': '#/$defs/CollectCheckpointResult'},
+                                                    {'$ref': '#/$defs/AttestGrantResult'},
+                                                    {'$ref': '#/$defs/ReleaseResult'},
+                                                    {'$ref': '#/$defs/EncryptRecordResult'},
+                                                    {'$ref': '#/$defs/FinishDecryptionResult'},
+                                                    {'$ref': '#/$defs/CollectGovernanceResult'}]},
+                               'error': {'type': 'null'}},
+                'required': ['schemaVersion', 'ok', 'result', 'error'],
+                'additionalProperties': False},
+               {'type': 'object',
+                'properties': {'schemaVersion': {'const': 'v2'},
+                               'ok': {'const': False},
+                               'result': {'type': 'null'},
+                               'error': {'$ref': '#/$defs/Error'}},
+                'required': ['schemaVersion', 'ok', 'result', 'error'],
+                'additionalProperties': False}]}
+
+On instance:
+    {'schemaVersion': 'v2',
+     'ok': True,
+     'result': {'schemaVersion': 'v2',
+                'adapterMode': 'symbolic',
+                'checkpoint': {'sequence': '4',
+                               'authEpoch': '3',
+                               'policyVersion': '1',
+                               'keyEpoch': '0',
+                               'witnessSetVersion': '2',
+                               'sourceChainId': '18545',
+                               'psc': '0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8',
+                               'sourceBlockNumber': '250',
+                               'sourceBlockHash': '0x5555555555555555555555555555555555555555555555555555555555555555',
+                               'expiresAt': '1791521500'},
+                'signatures': ['0x82f2962709e85b5e0b18fb9686e96c870bed7942bf8c0ced4bd5c858c280d977045417729b56e22aab8c3a1cd045a6a139be8c1a5523ce375e597b24316e95af1c',
+                               '0xe183b21ad1de551f9de1827d4319b0fcd32554971fccfd5861855a747b1364635424a10500ee17c9a5fc34e261febfd65852295319f2360e6751a54a092b75c01b',
+                               '0x5a202eabd8634aeb4fa91a8addcbe4caf54d87274b249df3f5d92796ac0440b111ce3f69cf24a7842562629928af6992ba73d692d19d5b2a158a5f10acbdf0441c'],
+                'collection': {'quorum': '3',
+                               'witnessSetVersion': '2',
+                               'outcomes': [{'witnessIndex': '0',
+                                             'witness': '0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42',
+                                             'status': 'signed',
+                                             'replies': '1'},
+                                            {'witnessIndex': '1',
+                                             'witness': '0xe34919a7f4135eb28547717aba85a2b7619cd85a',
+                                             'status': 'silent',
+                                             'replies': '0'},
+                                            {'witnessIndex': '2',
+                                             'witness': '0x6ae8de0489163ba82609d6358c85b3b47c24cb45',
+                                             'status': 'signed',
+                                             'replies': '1',
+                                             'detail': 'signature does not '
+                                                       'recover to the '
+                                                       'replying witness'},
+                                            {'witnessIndex': '3',
+                                             'witness': '0x1e054b33476173deeffaea9124f293eecb6de4d0',
+                                             'status': 'signed',
+                                             'replies': '1'}],
+                               'submittedSigners': ['0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42',
+                                                    '0x1e054b33476173deeffaea9124f293eecb6de4d0',
+                                                    '0x6ae8de0489163ba82609d6358c85b3b47c24cb45']}},
+     'error': None}

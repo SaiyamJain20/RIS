@@ -1,0 +1,1225 @@
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF [ 54%]
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF              [100%]
+=================================== FAILURES ===================================
+__________________ test_frozen_digests_and_sorted_signers[0] ___________________
+evaluation/tests/test_certificates_v2.py:41: in test_frozen_digests_and_sorted_signers
+    assert subject.message_digest(row['name'], row['typedData']['message'], **context(row)) == row['digest']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:5: in message_digest
+    raise NotImplementedError
+E   NotImplementedError
+__________________ test_frozen_digests_and_sorted_signers[1] ___________________
+evaluation/tests/test_certificates_v2.py:41: in test_frozen_digests_and_sorted_signers
+    assert subject.message_digest(row['name'], row['typedData']['message'], **context(row)) == row['digest']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:5: in message_digest
+    raise NotImplementedError
+E   NotImplementedError
+__________________ test_frozen_digests_and_sorted_signers[2] ___________________
+evaluation/tests/test_certificates_v2.py:41: in test_frozen_digests_and_sorted_signers
+    assert subject.message_digest(row['name'], row['typedData']['message'], **context(row)) == row['digest']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:5: in message_digest
+    raise NotImplementedError
+E   NotImplementedError
+__________________ test_frozen_digests_and_sorted_signers[3] ___________________
+evaluation/tests/test_certificates_v2.py:41: in test_frozen_digests_and_sorted_signers
+    assert subject.message_digest(row['name'], row['typedData']['message'], **context(row)) == row['digest']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:5: in message_digest
+    raise NotImplementedError
+E   NotImplementedError
+__________________ test_frozen_digests_and_sorted_signers[4] ___________________
+evaluation/tests/test_certificates_v2.py:41: in test_frozen_digests_and_sorted_signers
+    assert subject.message_digest(row['name'], row['typedData']['message'], **context(row)) == row['digest']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:5: in message_digest
+    raise NotImplementedError
+E   NotImplementedError
+__________________ test_frozen_digests_and_sorted_signers[5] ___________________
+evaluation/tests/test_certificates_v2.py:41: in test_frozen_digests_and_sorted_signers
+    assert subject.message_digest(row['name'], row['typedData']['message'], **context(row)) == row['digest']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:5: in message_digest
+    raise NotImplementedError
+E   NotImplementedError
+_____________ test_every_signed_field_is_bound[0-sequence-uint64] ______________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_____________ test_every_signed_field_is_bound[0-authEpoch-uint64] _____________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+___________ test_every_signed_field_is_bound[0-policyVersion-uint64] ___________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_____________ test_every_signed_field_is_bound[0-keyEpoch-uint64] ______________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_every_signed_field_is_bound[0-witnessSetVersion-uint64] _________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+__________ test_every_signed_field_is_bound[0-sourceChainId-uint256] ___________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_______________ test_every_signed_field_is_bound[0-psc-address] ________________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+________ test_every_signed_field_is_bound[0-sourceBlockNumber-uint256] _________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_every_signed_field_is_bound[0-sourceBlockHash-bytes32] __________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_____________ test_every_signed_field_is_bound[0-expiresAt-uint64] _____________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+__________ test_every_signed_field_is_bound[1-requestDigest-bytes32] ___________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_______________ test_every_signed_field_is_bound[1-result-uint8] _______________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_every_signed_field_is_bound[1-credentialDigest-bytes32] _________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+___________ test_every_signed_field_is_bound[1-stateSequence-uint64] ___________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_every_signed_field_is_bound[1-witnessSetVersion-uint64] _________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+________ test_every_signed_field_is_bound[1-sourceBlockNumber-uint256] _________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_every_signed_field_is_bound[1-sourceBlockHash-bytes32] __________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_____________ test_every_signed_field_is_bound[1-expiresAt-uint64] _____________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+__________ test_every_signed_field_is_bound[2-requestDigest-bytes32] ___________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_____________ test_every_signed_field_is_bound[2-grantId-bytes32] ______________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_______________ test_every_signed_field_is_bound[2-gid-address] ________________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+______________ test_every_signed_field_is_bound[2-dataId-bytes32] ______________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_____________ test_every_signed_field_is_bound[2-keyEpoch-uint64] ______________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+__________ test_every_signed_field_is_bound[2-grantExpiresAt-uint64] ___________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_every_signed_field_is_bound[2-witnessSetVersion-uint64] _________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+____________ test_every_signed_field_is_bound[2-dbcChainId-uint256] ____________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_______________ test_every_signed_field_is_bound[2-kssc-address] _______________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+__________ test_every_signed_field_is_bound[2-dbcBlockNumber-uint256] __________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+___________ test_every_signed_field_is_bound[2-dbcBlockHash-bytes32] ___________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_______________ test_every_signed_field_is_bound[3-action-uint8] _______________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_______________ test_every_signed_field_is_bound[3-root-address] _______________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_____________ test_every_signed_field_is_bound[3-admins-address[]] _____________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_______________ test_every_signed_field_is_bound[3-nonce-uint64] _______________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_every_signed_field_is_bound[3-witnessSetVersion-uint64] _________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_____________ test_every_signed_field_is_bound[3-expiresAt-uint64] _____________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_______________ test_every_signed_field_is_bound[4-action-uint8] _______________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_______________ test_every_signed_field_is_bound[4-root-address] _______________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_____________ test_every_signed_field_is_bound[4-admins-address[]] _____________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_______________ test_every_signed_field_is_bound[4-nonce-uint64] _______________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_every_signed_field_is_bound[4-witnessSetVersion-uint64] _________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_____________ test_every_signed_field_is_bound[4-expiresAt-uint64] _____________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_______________ test_every_signed_field_is_bound[5-action-uint8] _______________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_______________ test_every_signed_field_is_bound[5-root-address] _______________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_____________ test_every_signed_field_is_bound[5-admins-address[]] _____________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_______________ test_every_signed_field_is_bound[5-nonce-uint64] _______________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_every_signed_field_is_bound[5-witnessSetVersion-uint64] _________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_____________ test_every_signed_field_is_bound[5-expiresAt-uint64] _____________
+evaluation/tests/test_certificates_v2.py:58: in test_every_signed_field_is_bound
+    verify(subject, row, message=message)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+__________ test_domain_chain_and_contract_are_bound[chain_id-28546-0] __________
+evaluation/tests/test_certificates_v2.py:65: in test_domain_chain_and_contract_are_bound
+    verify(subject, VECTORS[i], **{field: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+__________ test_domain_chain_and_contract_are_bound[chain_id-28546-1] __________
+evaluation/tests/test_certificates_v2.py:65: in test_domain_chain_and_contract_are_bound
+    verify(subject, VECTORS[i], **{field: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+__________ test_domain_chain_and_contract_are_bound[chain_id-28546-2] __________
+evaluation/tests/test_certificates_v2.py:65: in test_domain_chain_and_contract_are_bound
+    verify(subject, VECTORS[i], **{field: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+__________ test_domain_chain_and_contract_are_bound[chain_id-28546-3] __________
+evaluation/tests/test_certificates_v2.py:65: in test_domain_chain_and_contract_are_bound
+    verify(subject, VECTORS[i], **{field: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+__________ test_domain_chain_and_contract_are_bound[chain_id-28546-4] __________
+evaluation/tests/test_certificates_v2.py:65: in test_domain_chain_and_contract_are_bound
+    verify(subject, VECTORS[i], **{field: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+__________ test_domain_chain_and_contract_are_bound[chain_id-28546-5] __________
+evaluation/tests/test_certificates_v2.py:65: in test_domain_chain_and_contract_are_bound
+    verify(subject, VECTORS[i], **{field: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_ test_domain_chain_and_contract_are_bound[verifying_contract-0x9999999999999999999999999999999999999999-0] _
+evaluation/tests/test_certificates_v2.py:65: in test_domain_chain_and_contract_are_bound
+    verify(subject, VECTORS[i], **{field: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_ test_domain_chain_and_contract_are_bound[verifying_contract-0x9999999999999999999999999999999999999999-1] _
+evaluation/tests/test_certificates_v2.py:65: in test_domain_chain_and_contract_are_bound
+    verify(subject, VECTORS[i], **{field: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_ test_domain_chain_and_contract_are_bound[verifying_contract-0x9999999999999999999999999999999999999999-2] _
+evaluation/tests/test_certificates_v2.py:65: in test_domain_chain_and_contract_are_bound
+    verify(subject, VECTORS[i], **{field: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_ test_domain_chain_and_contract_are_bound[verifying_contract-0x9999999999999999999999999999999999999999-3] _
+evaluation/tests/test_certificates_v2.py:65: in test_domain_chain_and_contract_are_bound
+    verify(subject, VECTORS[i], **{field: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_ test_domain_chain_and_contract_are_bound[verifying_contract-0x9999999999999999999999999999999999999999-4] _
+evaluation/tests/test_certificates_v2.py:65: in test_domain_chain_and_contract_are_bound
+    verify(subject, VECTORS[i], **{field: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_ test_domain_chain_and_contract_are_bound[verifying_contract-0x9999999999999999999999999999999999999999-5] _
+evaluation/tests/test_certificates_v2.py:65: in test_domain_chain_and_contract_are_bound
+    verify(subject, VECTORS[i], **{field: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+__ test_domain_name_and_version_cannot_come_from_artifact[name-HMBCDecision] ___
+evaluation/tests/test_certificates_v2.py:77: in test_domain_name_and_version_cannot_come_from_artifact
+    verify(subject, row, signatures=[signature], required_signatures=1)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+______ test_domain_name_and_version_cannot_come_from_artifact[version-2] _______
+evaluation/tests/test_certificates_v2.py:77: in test_domain_name_and_version_cannot_come_from_artifact
+    verify(subject, row, signatures=[signature], required_signatures=1)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_____________________ test_certificate_controls[duplicate] _____________________
+evaluation/tests/test_certificates_v2.py:97: in test_certificate_controls
+    verify(subject, row, signatures=signatures, witnesses=witnesses)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_____________________ test_certificate_controls[reversed] ______________________
+evaluation/tests/test_certificates_v2.py:97: in test_certificate_controls
+    verify(subject, row, signatures=signatures, witnesses=witnesses)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+______________________ test_certificate_controls[unknown] ______________________
+evaluation/tests/test_certificates_v2.py:97: in test_certificate_controls
+    verify(subject, row, signatures=signatures, witnesses=witnesses)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_______________________ test_certificate_controls[short] _______________________
+evaluation/tests/test_certificates_v2.py:97: in test_certificate_controls
+    verify(subject, row, signatures=signatures, witnesses=witnesses)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_______________________ test_certificate_controls[long] ________________________
+evaluation/tests/test_certificates_v2.py:97: in test_certificate_controls
+    verify(subject, row, signatures=signatures, witnesses=witnesses)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_______________________ test_certificate_controls[bad-v] _______________________
+evaluation/tests/test_certificates_v2.py:97: in test_certificate_controls
+    verify(subject, row, signatures=signatures, witnesses=witnesses)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+______________________ test_certificate_controls[high-s] _______________________
+evaluation/tests/test_certificates_v2.py:97: in test_certificate_controls
+    verify(subject, row, signatures=signatures, witnesses=witnesses)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+______________________ test_certificate_controls[r-zero] _______________________
+evaluation/tests/test_certificates_v2.py:97: in test_certificate_controls
+    verify(subject, row, signatures=signatures, witnesses=witnesses)
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+____________ test_bad_or_mismatched_context_refuses[chain_id-28545] ____________
+evaluation/tests/test_certificates_v2.py:110: in test_bad_or_mismatched_context_refuses
+    verify(subject, VECTORS[0], **{option: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+____________ test_bad_or_mismatched_context_refuses[chain_id-True] _____________
+evaluation/tests/test_certificates_v2.py:110: in test_bad_or_mismatched_context_refuses
+    verify(subject, VECTORS[0], **{option: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_____________ test_bad_or_mismatched_context_refuses[chain_id-01] ______________
+evaluation/tests/test_certificates_v2.py:110: in test_bad_or_mismatched_context_refuses
+    verify(subject, VECTORS[0], **{option: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_ test_bad_or_mismatched_context_refuses[chain_id-115792089237316195423570985008] _
+evaluation/tests/test_certificates_v2.py:110: in test_bad_or_mismatched_context_refuses
+    verify(subject, VECTORS[0], **{option: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_ test_bad_or_mismatched_context_refuses[verifying_contract-0x0000000000000000000000000000] _
+evaluation/tests/test_certificates_v2.py:110: in test_bad_or_mismatched_context_refuses
+    verify(subject, VECTORS[0], **{option: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+__ test_bad_or_mismatched_context_refuses[verifying_contract-not-an-address] ___
+evaluation/tests/test_certificates_v2.py:110: in test_bad_or_mismatched_context_refuses
+    verify(subject, VECTORS[0], **{option: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+________ test_bad_or_mismatched_context_refuses[witness_set_version-1] _________
+evaluation/tests/test_certificates_v2.py:110: in test_bad_or_mismatched_context_refuses
+    verify(subject, VECTORS[0], **{option: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+________ test_bad_or_mismatched_context_refuses[witness_set_version-02] ________
+evaluation/tests/test_certificates_v2.py:110: in test_bad_or_mismatched_context_refuses
+    verify(subject, VECTORS[0], **{option: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+________ test_bad_or_mismatched_context_refuses[witness_set_version-2] _________
+evaluation/tests/test_certificates_v2.py:110: in test_bad_or_mismatched_context_refuses
+    verify(subject, VECTORS[0], **{option: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_______ test_bad_or_mismatched_context_refuses[required_signatures-True] _______
+evaluation/tests/test_certificates_v2.py:110: in test_bad_or_mismatched_context_refuses
+    verify(subject, VECTORS[0], **{option: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+________ test_bad_or_mismatched_context_refuses[required_signatures-0] _________
+evaluation/tests/test_certificates_v2.py:110: in test_bad_or_mismatched_context_refuses
+    verify(subject, VECTORS[0], **{option: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+________ test_bad_or_mismatched_context_refuses[required_signatures-5] _________
+evaluation/tests/test_certificates_v2.py:110: in test_bad_or_mismatched_context_refuses
+    verify(subject, VECTORS[0], **{option: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+________ test_bad_or_mismatched_context_refuses[required_signatures-3] _________
+evaluation/tests/test_certificates_v2.py:110: in test_bad_or_mismatched_context_refuses
+    verify(subject, VECTORS[0], **{option: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_____________ test_bad_or_mismatched_context_refuses[witnesses-[]] _____________
+evaluation/tests/test_certificates_v2.py:110: in test_bad_or_mismatched_context_refuses
+    verify(subject, VECTORS[0], **{option: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_ test_bad_or_mismatched_context_refuses[witnesses-['0x0bc496f1d8b2e553fa9288de2f] _
+evaluation/tests/test_certificates_v2.py:110: in test_bad_or_mismatched_context_refuses
+    verify(subject, VECTORS[0], **{option: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_ test_bad_or_mismatched_context_refuses[witnesses-['0x00000000000000000000000000] _
+evaluation/tests/test_certificates_v2.py:110: in test_bad_or_mismatched_context_refuses
+    verify(subject, VECTORS[0], **{option: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+__________ test_bad_or_mismatched_context_refuses[witnesses-invalid] ___________
+evaluation/tests/test_certificates_v2.py:110: in test_bad_or_mismatched_context_refuses
+    verify(subject, VECTORS[0], **{option: value})
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+_______________ test_explicit_q2_and_single_controls_are_not_q3 ________________
+evaluation/tests/test_certificates_v2.py:116: in test_explicit_q2_and_single_controls_are_not_q3
+    assert verify(subject, row, signatures=signatures[:2], required_signatures=2) == [r['signer'] for r in row['signatures'][:2]]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+____________________ test_unsupported_message_type_refuses _____________________
+evaluation/tests/test_certificates_v2.py:124: in test_unsupported_message_type_refuses
+    subject.message_digest('EIP712Domain', {}, **context(VECTORS[0]))
+evaluation/certificates_v2.py:5: in message_digest
+    raise NotImplementedError
+E   NotImplementedError
+_______________________ test_all_frozen_report_paths[0] ________________________
+evaluation/tests/test_certificates_v2.py:150: in test_all_frozen_report_paths
+    assert check_reports(subject, response) == len(reports(response))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_______________________ test_all_frozen_report_paths[1] ________________________
+evaluation/tests/test_certificates_v2.py:150: in test_all_frozen_report_paths
+    assert check_reports(subject, response) == len(reports(response))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_______________________ test_all_frozen_report_paths[2] ________________________
+evaluation/tests/test_certificates_v2.py:150: in test_all_frozen_report_paths
+    assert check_reports(subject, response) == len(reports(response))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_______________________ test_all_frozen_report_paths[3] ________________________
+evaluation/tests/test_certificates_v2.py:150: in test_all_frozen_report_paths
+    assert check_reports(subject, response) == len(reports(response))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_______________________ test_all_frozen_report_paths[4] ________________________
+evaluation/tests/test_certificates_v2.py:150: in test_all_frozen_report_paths
+    assert check_reports(subject, response) == len(reports(response))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_______________________ test_all_frozen_report_paths[5] ________________________
+evaluation/tests/test_certificates_v2.py:150: in test_all_frozen_report_paths
+    assert check_reports(subject, response) == len(reports(response))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_______________________ test_all_frozen_report_paths[6] ________________________
+evaluation/tests/test_certificates_v2.py:150: in test_all_frozen_report_paths
+    assert check_reports(subject, response) == len(reports(response))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_______________________ test_all_frozen_report_paths[7] ________________________
+evaluation/tests/test_certificates_v2.py:150: in test_all_frozen_report_paths
+    assert check_reports(subject, response) == len(reports(response))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_______________________ test_all_frozen_report_paths[8] ________________________
+evaluation/tests/test_certificates_v2.py:150: in test_all_frozen_report_paths
+    assert check_reports(subject, response) == len(reports(response))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_______________________ test_all_frozen_report_paths[9] ________________________
+evaluation/tests/test_certificates_v2.py:150: in test_all_frozen_report_paths
+    assert check_reports(subject, response) == len(reports(response))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_______________________ test_all_frozen_report_paths[10] _______________________
+evaluation/tests/test_certificates_v2.py:150: in test_all_frozen_report_paths
+    assert check_reports(subject, response) == len(reports(response))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_______________________ test_all_frozen_report_paths[11] _______________________
+evaluation/tests/test_certificates_v2.py:150: in test_all_frozen_report_paths
+    assert check_reports(subject, response) == len(reports(response))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_each_report_path_binds_owner_signature_and_message[4-0] _________
+evaluation/tests/test_certificates_v2.py:163: in test_each_report_path_binds_owner_signature_and_message
+    check_reports(subject, response)
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_each_report_path_binds_owner_signature_and_message[4-1] _________
+evaluation/tests/test_certificates_v2.py:163: in test_each_report_path_binds_owner_signature_and_message
+    check_reports(subject, response)
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_each_report_path_binds_owner_signature_and_message[5-0] _________
+evaluation/tests/test_certificates_v2.py:163: in test_each_report_path_binds_owner_signature_and_message
+    check_reports(subject, response)
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_each_report_path_binds_owner_signature_and_message[5-1] _________
+evaluation/tests/test_certificates_v2.py:163: in test_each_report_path_binds_owner_signature_and_message
+    check_reports(subject, response)
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_each_report_path_binds_owner_signature_and_message[5-2] _________
+evaluation/tests/test_certificates_v2.py:163: in test_each_report_path_binds_owner_signature_and_message
+    check_reports(subject, response)
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_each_report_path_binds_owner_signature_and_message[5-3] _________
+evaluation/tests/test_certificates_v2.py:163: in test_each_report_path_binds_owner_signature_and_message
+    check_reports(subject, response)
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_each_report_path_binds_owner_signature_and_message[6-0] _________
+evaluation/tests/test_certificates_v2.py:163: in test_each_report_path_binds_owner_signature_and_message
+    check_reports(subject, response)
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_each_report_path_binds_owner_signature_and_message[7-0] _________
+evaluation/tests/test_certificates_v2.py:163: in test_each_report_path_binds_owner_signature_and_message
+    check_reports(subject, response)
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_each_report_path_binds_owner_signature_and_message[7-1] _________
+evaluation/tests/test_certificates_v2.py:163: in test_each_report_path_binds_owner_signature_and_message
+    check_reports(subject, response)
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_each_report_path_binds_owner_signature_and_message[7-2] _________
+evaluation/tests/test_certificates_v2.py:163: in test_each_report_path_binds_owner_signature_and_message
+    check_reports(subject, response)
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_each_report_path_binds_owner_signature_and_message[7-3] _________
+evaluation/tests/test_certificates_v2.py:163: in test_each_report_path_binds_owner_signature_and_message
+    check_reports(subject, response)
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_each_report_path_binds_owner_signature_and_message[8-0] _________
+evaluation/tests/test_certificates_v2.py:163: in test_each_report_path_binds_owner_signature_and_message
+    check_reports(subject, response)
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_each_report_path_binds_owner_signature_and_message[8-1] _________
+evaluation/tests/test_certificates_v2.py:163: in test_each_report_path_binds_owner_signature_and_message
+    check_reports(subject, response)
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_each_report_path_binds_owner_signature_and_message[8-2] _________
+evaluation/tests/test_certificates_v2.py:163: in test_each_report_path_binds_owner_signature_and_message
+    check_reports(subject, response)
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_each_report_path_binds_owner_signature_and_message[8-3] _________
+evaluation/tests/test_certificates_v2.py:163: in test_each_report_path_binds_owner_signature_and_message
+    check_reports(subject, response)
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_each_report_path_binds_owner_signature_and_message[9-0] _________
+evaluation/tests/test_certificates_v2.py:163: in test_each_report_path_binds_owner_signature_and_message
+    check_reports(subject, response)
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_each_report_path_binds_owner_signature_and_message[9-1] _________
+evaluation/tests/test_certificates_v2.py:163: in test_each_report_path_binds_owner_signature_and_message
+    check_reports(subject, response)
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_________ test_each_report_path_binds_owner_signature_and_message[9-2] _________
+evaluation/tests/test_certificates_v2.py:163: in test_each_report_path_binds_owner_signature_and_message
+    check_reports(subject, response)
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+________ test_each_report_path_binds_owner_signature_and_message[10-0] _________
+evaluation/tests/test_certificates_v2.py:163: in test_each_report_path_binds_owner_signature_and_message
+    check_reports(subject, response)
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+________ test_each_report_path_binds_owner_signature_and_message[10-1] _________
+evaluation/tests/test_certificates_v2.py:163: in test_each_report_path_binds_owner_signature_and_message
+    check_reports(subject, response)
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+________ test_each_report_path_binds_owner_signature_and_message[11-0] _________
+evaluation/tests/test_certificates_v2.py:163: in test_each_report_path_binds_owner_signature_and_message
+    check_reports(subject, response)
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+________ test_each_report_path_binds_owner_signature_and_message[11-1] _________
+evaluation/tests/test_certificates_v2.py:163: in test_each_report_path_binds_owner_signature_and_message
+    check_reports(subject, response)
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+_____________ test_pinned_report_requires_explicit_selected_index ______________
+evaluation/tests/test_certificates_v2.py:170: in test_pinned_report_requires_explicit_selected_index
+    check_reports(subject, response, selected_index=selected)
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+___________ test_report_index_cannot_substitute_for_recovered_owner ____________
+evaluation/tests/test_certificates_v2.py:179: in test_report_index_cannot_substitute_for_recovered_owner
+    check_reports(subject, response, witnesses=swapped)
+evaluation/tests/test_certificates_v2.py:144: in check_reports
+    return subject.verify_checkpoint_reports(response, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+evaluation/certificates_v2.py:15: in verify_checkpoint_reports
+    raise NotImplementedError
+E   NotImplementedError
+____________________ test_carried_e_version_one_certificate ____________________
+evaluation/tests/test_certificates_v2.py:187: in test_carried_e_version_one_certificate
+    assert verify(subject, row, signatures=[signature], witnesses=WITNESSES[:1],
+evaluation/tests/test_certificates_v2.py:33: in verify
+    return subject.verify_certificate(vector['name'], vector['typedData']['message'] if message is None else message,
+evaluation/certificates_v2.py:10: in verify_certificate
+    raise NotImplementedError
+E   NotImplementedError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_certificates_v2.py::test_frozen_digests_and_sorted_signers[0]
+FAILED evaluation/tests/test_certificates_v2.py::test_frozen_digests_and_sorted_signers[1]
+FAILED evaluation/tests/test_certificates_v2.py::test_frozen_digests_and_sorted_signers[2]
+FAILED evaluation/tests/test_certificates_v2.py::test_frozen_digests_and_sorted_signers[3]
+FAILED evaluation/tests/test_certificates_v2.py::test_frozen_digests_and_sorted_signers[4]
+FAILED evaluation/tests/test_certificates_v2.py::test_frozen_digests_and_sorted_signers[5]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[0-sequence-uint64]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[0-authEpoch-uint64]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[0-policyVersion-uint64]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[0-keyEpoch-uint64]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[0-witnessSetVersion-uint64]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[0-sourceChainId-uint256]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[0-psc-address]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[0-sourceBlockNumber-uint256]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[0-sourceBlockHash-bytes32]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[0-expiresAt-uint64]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[1-requestDigest-bytes32]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[1-result-uint8]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[1-credentialDigest-bytes32]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[1-stateSequence-uint64]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[1-witnessSetVersion-uint64]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[1-sourceBlockNumber-uint256]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[1-sourceBlockHash-bytes32]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[1-expiresAt-uint64]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[2-requestDigest-bytes32]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[2-grantId-bytes32]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[2-gid-address]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[2-dataId-bytes32]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[2-keyEpoch-uint64]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[2-grantExpiresAt-uint64]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[2-witnessSetVersion-uint64]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[2-dbcChainId-uint256]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[2-kssc-address]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[2-dbcBlockNumber-uint256]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[2-dbcBlockHash-bytes32]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[3-action-uint8]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[3-root-address]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[3-admins-address[]]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[3-nonce-uint64]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[3-witnessSetVersion-uint64]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[3-expiresAt-uint64]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[4-action-uint8]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[4-root-address]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[4-admins-address[]]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[4-nonce-uint64]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[4-witnessSetVersion-uint64]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[4-expiresAt-uint64]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[5-action-uint8]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[5-root-address]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[5-admins-address[]]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[5-nonce-uint64]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[5-witnessSetVersion-uint64]
+FAILED evaluation/tests/test_certificates_v2.py::test_every_signed_field_is_bound[5-expiresAt-uint64]
+FAILED evaluation/tests/test_certificates_v2.py::test_domain_chain_and_contract_are_bound[chain_id-28546-0]
+FAILED evaluation/tests/test_certificates_v2.py::test_domain_chain_and_contract_are_bound[chain_id-28546-1]
+FAILED evaluation/tests/test_certificates_v2.py::test_domain_chain_and_contract_are_bound[chain_id-28546-2]
+FAILED evaluation/tests/test_certificates_v2.py::test_domain_chain_and_contract_are_bound[chain_id-28546-3]
+FAILED evaluation/tests/test_certificates_v2.py::test_domain_chain_and_contract_are_bound[chain_id-28546-4]
+FAILED evaluation/tests/test_certificates_v2.py::test_domain_chain_and_contract_are_bound[chain_id-28546-5]
+FAILED evaluation/tests/test_certificates_v2.py::test_domain_chain_and_contract_are_bound[verifying_contract-0x9999999999999999999999999999999999999999-0]
+FAILED evaluation/tests/test_certificates_v2.py::test_domain_chain_and_contract_are_bound[verifying_contract-0x9999999999999999999999999999999999999999-1]
+FAILED evaluation/tests/test_certificates_v2.py::test_domain_chain_and_contract_are_bound[verifying_contract-0x9999999999999999999999999999999999999999-2]
+FAILED evaluation/tests/test_certificates_v2.py::test_domain_chain_and_contract_are_bound[verifying_contract-0x9999999999999999999999999999999999999999-3]
+FAILED evaluation/tests/test_certificates_v2.py::test_domain_chain_and_contract_are_bound[verifying_contract-0x9999999999999999999999999999999999999999-4]
+FAILED evaluation/tests/test_certificates_v2.py::test_domain_chain_and_contract_are_bound[verifying_contract-0x9999999999999999999999999999999999999999-5]
+FAILED evaluation/tests/test_certificates_v2.py::test_domain_name_and_version_cannot_come_from_artifact[name-HMBCDecision]
+FAILED evaluation/tests/test_certificates_v2.py::test_domain_name_and_version_cannot_come_from_artifact[version-2]
+FAILED evaluation/tests/test_certificates_v2.py::test_certificate_controls[duplicate]
+FAILED evaluation/tests/test_certificates_v2.py::test_certificate_controls[reversed]
+FAILED evaluation/tests/test_certificates_v2.py::test_certificate_controls[unknown]
+FAILED evaluation/tests/test_certificates_v2.py::test_certificate_controls[short]
+FAILED evaluation/tests/test_certificates_v2.py::test_certificate_controls[long]
+FAILED evaluation/tests/test_certificates_v2.py::test_certificate_controls[bad-v]
+FAILED evaluation/tests/test_certificates_v2.py::test_certificate_controls[high-s]
+FAILED evaluation/tests/test_certificates_v2.py::test_certificate_controls[r-zero]
+FAILED evaluation/tests/test_certificates_v2.py::test_bad_or_mismatched_context_refuses[chain_id-28545]
+FAILED evaluation/tests/test_certificates_v2.py::test_bad_or_mismatched_context_refuses[chain_id-True]
+FAILED evaluation/tests/test_certificates_v2.py::test_bad_or_mismatched_context_refuses[chain_id-01]
+FAILED evaluation/tests/test_certificates_v2.py::test_bad_or_mismatched_context_refuses[chain_id-115792089237316195423570985008]
+FAILED evaluation/tests/test_certificates_v2.py::test_bad_or_mismatched_context_refuses[verifying_contract-0x0000000000000000000000000000]
+FAILED evaluation/tests/test_certificates_v2.py::test_bad_or_mismatched_context_refuses[verifying_contract-not-an-address]
+FAILED evaluation/tests/test_certificates_v2.py::test_bad_or_mismatched_context_refuses[witness_set_version-1]
+FAILED evaluation/tests/test_certificates_v2.py::test_bad_or_mismatched_context_refuses[witness_set_version-02]
+FAILED evaluation/tests/test_certificates_v2.py::test_bad_or_mismatched_context_refuses[witness_set_version-2]
+FAILED evaluation/tests/test_certificates_v2.py::test_bad_or_mismatched_context_refuses[required_signatures-True]
+FAILED evaluation/tests/test_certificates_v2.py::test_bad_or_mismatched_context_refuses[required_signatures-0]
+FAILED evaluation/tests/test_certificates_v2.py::test_bad_or_mismatched_context_refuses[required_signatures-5]
+FAILED evaluation/tests/test_certificates_v2.py::test_bad_or_mismatched_context_refuses[required_signatures-3]
+FAILED evaluation/tests/test_certificates_v2.py::test_bad_or_mismatched_context_refuses[witnesses-[]]
+FAILED evaluation/tests/test_certificates_v2.py::test_bad_or_mismatched_context_refuses[witnesses-['0x0bc496f1d8b2e553fa9288de2f]
+FAILED evaluation/tests/test_certificates_v2.py::test_bad_or_mismatched_context_refuses[witnesses-['0x00000000000000000000000000]
+FAILED evaluation/tests/test_certificates_v2.py::test_bad_or_mismatched_context_refuses[witnesses-invalid]
+FAILED evaluation/tests/test_certificates_v2.py::test_explicit_q2_and_single_controls_are_not_q3
+FAILED evaluation/tests/test_certificates_v2.py::test_unsupported_message_type_refuses
+FAILED evaluation/tests/test_certificates_v2.py::test_all_frozen_report_paths[0]
+FAILED evaluation/tests/test_certificates_v2.py::test_all_frozen_report_paths[1]
+FAILED evaluation/tests/test_certificates_v2.py::test_all_frozen_report_paths[2]
+FAILED evaluation/tests/test_certificates_v2.py::test_all_frozen_report_paths[3]
+FAILED evaluation/tests/test_certificates_v2.py::test_all_frozen_report_paths[4]
+FAILED evaluation/tests/test_certificates_v2.py::test_all_frozen_report_paths[5]
+FAILED evaluation/tests/test_certificates_v2.py::test_all_frozen_report_paths[6]
+FAILED evaluation/tests/test_certificates_v2.py::test_all_frozen_report_paths[7]
+FAILED evaluation/tests/test_certificates_v2.py::test_all_frozen_report_paths[8]
+FAILED evaluation/tests/test_certificates_v2.py::test_all_frozen_report_paths[9]
+FAILED evaluation/tests/test_certificates_v2.py::test_all_frozen_report_paths[10]
+FAILED evaluation/tests/test_certificates_v2.py::test_all_frozen_report_paths[11]
+FAILED evaluation/tests/test_certificates_v2.py::test_each_report_path_binds_owner_signature_and_message[4-0]
+FAILED evaluation/tests/test_certificates_v2.py::test_each_report_path_binds_owner_signature_and_message[4-1]
+FAILED evaluation/tests/test_certificates_v2.py::test_each_report_path_binds_owner_signature_and_message[5-0]
+FAILED evaluation/tests/test_certificates_v2.py::test_each_report_path_binds_owner_signature_and_message[5-1]
+FAILED evaluation/tests/test_certificates_v2.py::test_each_report_path_binds_owner_signature_and_message[5-2]
+FAILED evaluation/tests/test_certificates_v2.py::test_each_report_path_binds_owner_signature_and_message[5-3]
+FAILED evaluation/tests/test_certificates_v2.py::test_each_report_path_binds_owner_signature_and_message[6-0]
+FAILED evaluation/tests/test_certificates_v2.py::test_each_report_path_binds_owner_signature_and_message[7-0]
+FAILED evaluation/tests/test_certificates_v2.py::test_each_report_path_binds_owner_signature_and_message[7-1]
+FAILED evaluation/tests/test_certificates_v2.py::test_each_report_path_binds_owner_signature_and_message[7-2]
+FAILED evaluation/tests/test_certificates_v2.py::test_each_report_path_binds_owner_signature_and_message[7-3]
+FAILED evaluation/tests/test_certificates_v2.py::test_each_report_path_binds_owner_signature_and_message[8-0]
+FAILED evaluation/tests/test_certificates_v2.py::test_each_report_path_binds_owner_signature_and_message[8-1]
+FAILED evaluation/tests/test_certificates_v2.py::test_each_report_path_binds_owner_signature_and_message[8-2]
+FAILED evaluation/tests/test_certificates_v2.py::test_each_report_path_binds_owner_signature_and_message[8-3]
+FAILED evaluation/tests/test_certificates_v2.py::test_each_report_path_binds_owner_signature_and_message[9-0]
+FAILED evaluation/tests/test_certificates_v2.py::test_each_report_path_binds_owner_signature_and_message[9-1]
+FAILED evaluation/tests/test_certificates_v2.py::test_each_report_path_binds_owner_signature_and_message[9-2]
+FAILED evaluation/tests/test_certificates_v2.py::test_each_report_path_binds_owner_signature_and_message[10-0]
+FAILED evaluation/tests/test_certificates_v2.py::test_each_report_path_binds_owner_signature_and_message[10-1]
+FAILED evaluation/tests/test_certificates_v2.py::test_each_report_path_binds_owner_signature_and_message[11-0]
+FAILED evaluation/tests/test_certificates_v2.py::test_each_report_path_binds_owner_signature_and_message[11-1]
+FAILED evaluation/tests/test_certificates_v2.py::test_pinned_report_requires_explicit_selected_index
+FAILED evaluation/tests/test_certificates_v2.py::test_report_index_cannot_substitute_for_recovered_owner
+FAILED evaluation/tests/test_certificates_v2.py::test_carried_e_version_one_certificate
+131 failed in 0.95s

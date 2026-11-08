@@ -1,0 +1,29 @@
+import csv,datetime,hashlib,json,pathlib,subprocess
+R=pathlib.Path('/home/karma/Documents/RIS')
+O=R/'evaluation/evidence/reviews/f0-a1-0093-20261103'
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def git(*args):return subprocess.check_output(['git',*args],cwd=R)
+start=datetime.datetime.now(datetime.timezone.utc).isoformat()
+a=json.loads((O/'owner-review.json').read_text())
+assert all(git('rev-parse',r).decode().strip()==t for r,t in a['refs'].items())
+s=json.loads((R/'evaluation/evidence/reviews/f0-a1-0092-20261103/scoped-ack.json').read_text())
+assert sha(R/s['draftManifest'])==s['draftManifestSha256']
+assert all(sha(R/p)==h for p,h in s['reviewedFiles'].items())
+ack=s['ack'];assert hashlib.sha256(git('show',ack['commit']+':'+ack['path'])).hexdigest()==ack['sha256']
+assert ack['messageId']=='A1-0091' and s['agent2Ack'] is None and not s['executionAuthorized']
+m=json.loads((R/'evaluation/scenarios/f_matrix.json').read_text())
+rows=list(csv.DictReader((R/'evaluation/evidence/fault-model.csv').open()))
+assert len(rows)==14 and len(m['cases'])==29
+assert all(x['executionStatus']=='NOT_RUN' for x in m['cases'])
+assert not m['executionAuthorized'] and not m['actualFResults']
+protected=['ledger','protocol','interfaces','archive','evaluation/reports/RQ1-E.md','evaluation/evidence/e3/gate-run-20261012','evaluation/evidence/fault-model.csv','evaluation/scenarios/f_matrix.json','evaluation/evidence/reviews/f0-a1-0090-20261103','evaluation/evidence/reviews/f0-a1-0092-20261103']
+assert not git('diff','HEAD','--',*protected).strip()
+commands=[]
+for name,argv in [('launch-prompts',['python3','communication/build_prompts.py','--check']),('diff-check',['git','diff','--check']),('python-version',['python3','--version']),('git-version',['git','--version'])]:
+ t=datetime.datetime.now(datetime.timezone.utc).isoformat();p=subprocess.run(argv,cwd=R,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+ out=O/(name+'.stdout.txt');out.write_bytes(p.stdout)
+ commands.append({'argv':argv,'cwd':str(R),'startedAt':t,'endedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'exitCode':p.returncode,'outputSha256':sha(out)})
+ assert p.returncode==0,(name,p.stdout.decode())
+result={'startedAt':start,'endedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'components':14,'scenarios':29,'allNotRun':True,'scopedAck':'A1-0091 ledger review only','matrixBytesUnchanged':True,'agent2Ack':None,'executionAuthorized':False,'protectedPathsUnchanged':protected,'refs':a['refs'],'commands':commands,'auditCommand':['python3','.git/ris-a1-0093-review.py'],'auditExitCode':0,'auditToolSha256':sha(O/'audit-owner.py.txt'),'verificationToolSha256':sha(pathlib.Path(__file__)),'classification':'read-only proposed extension/design review; no fresh runtime/gate test'}
+(O/'verification.json').write_text(json.dumps(result,indent=2)+'\n')
+print(json.dumps({'checks':'PASS','components':14,'scenarios':29,'scopedAck':result['scopedAck'],'executionAuthorized':False}))

@@ -1,0 +1,42 @@
+import csv, datetime, hashlib, json, pathlib, subprocess, sys
+R=pathlib.Path('/home/karma/Documents/RIS')
+O=R/'evaluation/evidence/reviews/f0-protocol-input-20261103'
+def now():return datetime.datetime.now(datetime.timezone.utc).isoformat()
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def git(*args):return subprocess.check_output(['git',*args],cwd=R)
+started=now()
+a=json.loads((O/'revision2/owner-review.json').read_text())
+assert all(git('rev-parse',r).decode().strip()==t for r,t in a['refs'].items())
+scoped=json.loads((O/'revision2/scoped-ack.json').read_text())
+assert scoped['messageId']=='A1-0095' and not scoped['executionAuthorized']
+assert all(hashlib.sha256(git('show',scoped['reviewedProtocolCommit']+':'+p)).hexdigest()==h for p,h in scoped['reviewedFiles'].items())
+assert hashlib.sha256(git('show',scoped['commit']+':'+scoped['path'])).hexdigest()==scoped['sha256']
+assert git('branch','--show-current').decode().strip()=='agent-3'
+assert git('remote','get-url','origin').decode().strip().endswith(('SaiyamJain20/RIS.git','SaiyamJain20/RIS'))
+assert not git('diff','--cached','--name-only').strip()
+s=json.loads((R/'evaluation/evidence/reviews/f0-a1-0092-20261103/scoped-ack.json').read_text())
+assert sha(R/s['draftManifest'])==s['draftManifestSha256']
+assert all(sha(R/p)==h for p,h in s['reviewedFiles'].items())
+ack=s['ack'];assert hashlib.sha256(git('show',ack['commit']+':'+ack['path'])).hexdigest()==ack['sha256']
+m=json.loads((R/'evaluation/scenarios/f_matrix.json').read_text())
+assert len(m['cases'])==29 and all(x['executionStatus']=='NOT_RUN' for x in m['cases'])
+assert not m['executionAuthorized'] and not m['actualFResults'] and not m['exactOwnerAcks']
+assert len(list(csv.DictReader((R/'evaluation/evidence/fault-model.csv').open())))==14
+protected=['ledger','protocol','interfaces','archive','evaluation/reports/RQ1-E.md','evaluation/evidence/e3/gate-run-20261012','evaluation/evidence/fault-model.csv','evaluation/scenarios/f_matrix.json','evaluation/evidence/reviews/f0-a1-0090-20261103','evaluation/evidence/reviews/f0-a1-0092-20261103']
+assert not git('diff','HEAD','--',*protected).strip()
+rerun=json.loads((O/'model-rerun.json').read_text())
+assert rerun['exitCode']==0 and rerun['ownerOutputSemanticEqual']
+assert sha(O/'model-rerun.stdout.json')==rerun['stdoutSha256']
+assert sha(O/'model-rerun.stderr.txt')==rerun['stderrSha256']
+assert len(json.loads((O/'model-rerun.stdout.json').read_text()))==10
+commands=[]
+for name,argv in [('launch-prompts',[sys.executable,'communication/build_prompts.py','--check']),('diff-check',['git','diff','--check']),('python-version',[sys.executable,'--version']),('git-version',['git','--version'])]:
+    begin=now();p=subprocess.run(argv,cwd=R,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+    out=O/(name+'.stdout.txt');out.write_bytes(p.stdout)
+    commands.append({'argv':argv,'cwd':str(R),'startedAt':begin,'endedAt':now(),'exitCode':p.returncode,'outputSha256':sha(out)})
+    assert p.returncode==0,(name,p.stdout.decode())
+result={'startedAt':started,'endedAt':now(),'refs':a['refs'],'commands':commands,'auditCommand':[sys.executable,'.git/ris-f0-input-review.py'],'auditExitCode':0,'revision2AuditCommand':[sys.executable,'.git/ris-f0-input-revision2.py'],'revision2AuditExitCode':0,'initialPrepublicationCheck':'REFUSED because peer ref advanced; revision2 then read and audited','auditToolSha256':sha(O/'audit-owner.py.txt'),'verificationToolSha256':sha(pathlib.Path(__file__)),'components':14,'cases':29,'matrixUnchanged':True,'allNotRun':True,'exactOwnerAcks':[],'executionAuthorized':False,'protectedPathsUnchanged':protected,'modelRerun':rerun,'scope':'planning/provenance and design-model reproduction; no full suite/TLC/RPC/gate'}
+(O/'verification.json').write_text(json.dumps(result,indent=2)+'\n')
+files={str(p.relative_to(R)):sha(p) for p in sorted(O.rglob('*')) if p.is_file() and p.name!='review-manifest.json'}
+(O/'review-manifest.json').write_text(json.dumps({'format':'RIS-F0-review-1','createdAt':now(),'status':'REVIEW_NOT_ACK_NOT_FROZEN','executionAuthorized':False,'files':files},indent=2)+'\n')
+print(json.dumps({'verification':'PASS','cases':29,'allNotRun':True,'reviewFiles':len(files),'executionAuthorized':False}))

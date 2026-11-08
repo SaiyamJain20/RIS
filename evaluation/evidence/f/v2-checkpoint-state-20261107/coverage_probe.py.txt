@@ -1,0 +1,11 @@
+
+import json,sys,trace
+from pathlib import Path
+import pytest
+root=Path.cwd(); target=str((root/'evaluation/checkpoint_state_v2.py').resolve())
+tracer=trace.Trace(count=True,trace=False,ignoredirs=[sys.base_prefix,str(root/'.venv')])
+rc=tracer.runfunc(pytest.main,['evaluation/tests/test_checkpoint_state_v2.py','-q','-p','no:cacheprovider'])
+executable=set(trace._find_executable_linenos(target)); hit={line for (name,line),count in tracer.results().counts.items() if name==target and count}
+result=dict(tool='Python 3.13 stdlib trace; executable line coverage, not branch coverage',executableLines=len(executable),coveredLines=len(executable&hit),missingLines=sorted(executable-hit),percent=100*len(executable&hit)/len(executable),testExit=rc)
+print(json.dumps(result,indent=2))
+assert rc==0 and result['percent']>=80,result

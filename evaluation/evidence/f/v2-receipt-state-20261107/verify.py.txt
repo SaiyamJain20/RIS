@@ -1,0 +1,39 @@
+import gzip,hashlib,json,re,subprocess
+from pathlib import Path
+ROOT=Path('/home/karma/Documents/RIS')
+OUT=ROOT/'evaluation/evidence/f/v2-receipt-state-20261107'
+RUN=ROOT/'evaluation/runs/v2-receipt-state-20261107'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def read(p):return json.loads(p.read_text())
+expected={'red':1,'green':1,'focused':4,'mutants':1}
+receipts={}
+for p in OUT.glob('*-command.json'):
+ label=p.name.removesuffix('-command.json');r=read(p)
+ assert r['exitCode']==expected.get(label,0),(label,r['exitCode'])
+ assert not r['timedOut'],label
+ assert sha(gzip.decompress((OUT/(label+'.log.gz')).read_bytes()))==r['outputSha256'],label
+ process=read(RUN/(label+'.log.process.json'))
+ assert process['status']=='STOPPED',label
+ receipts[label]=dict(exitCode=r['exitCode'],receiptSha256=sha(p.read_bytes()),outputSha256=r['outputSha256'])
+before=read(OUT/'inputs-before.json');after=read(OUT/'inputs-after.json')
+assert before['carried']==after['carried']
+for p,h in before['localInputs'].items():assert sha((ROOT/p).read_bytes())==h,p
+first=read(OUT/'communication-before.json');final=read(OUT/'communication-final.json')
+assert first['branches']==final['branches'] and first['files']==final['files']
+for p,r in read(OUT/'owner-provenance.json').items():
+ assert sha(subprocess.check_output(['git','show',r['branchTip']+':'+p],cwd=ROOT))==r['sha256']
+red=read(OUT/'red-inputs.json')
+assert sha((OUT/'red-test.py.txt').read_bytes())==red['testSha256']
+assert gzip.decompress((OUT/'red.log.gz').read_bytes()).decode().count("ModuleNotFoundError: No module named 'evaluation.receipt_state_v2'")==72
+assert '72 passed' in gzip.decompress((OUT/'green-corrected-fixture.log.gz').read_bytes()).decode()
+assert '246 passed' in gzip.decompress((OUT/'focused-corrected.log.gz').read_bytes()).decode()
+root=gzip.decompress((OUT/'root.log.gz').read_bytes()).decode()
+match=re.search(r'(\d+) passed in ([0-9.]+)s',root);assert match,root[-1000:]
+assert int(match[1])==2906,match[1]
+helpers=read(OUT/'helper-revision.json')
+assert helpers['before']==before['helpers']
+for p,h in helpers['after'].items():assert sha((OUT/p).read_bytes())==h,p
+for p in ('mutants.py','audit.py'):assert sha((OUT/(p+'.pre-correction.txt')).read_bytes())==helpers['before'][p]
+result=dict(verified=True,commands=receipts,commandCount=len(receipts),rootTests=int(match[1]),rootPytestSeconds=float(match[2]),focusedTests=246,newTests=72,deliberateBypasses=6,validMutationControls=6,ownerPaths=len(before['sourcePins']),selectedLocalInputs=len(before['localInputs']),carried=before['carried'],communicationPaths=len(final['files']),runtimeInputStability=True,helperCorrectionExplicit=True,review='correlated author review; no extra agents',limits='isolated synthetic supplied-state/event consistency only; no signing time/latest head/log completeness/gate')
+path=OUT/'verification.json';assert not path.exists();path.write_text(json.dumps(result,indent=2)+'\n')
+print(json.dumps(result,indent=2))

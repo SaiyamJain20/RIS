@@ -1,0 +1,287 @@
+"""Retrospective raw checkpoint capture; synthetic RPCs, real signatures/ABIs.
+
+Controls target missing coverage/state checks, wrong RPC identity, lost failures,
+hash-selector downgrades and falsely attributed signing time. No live node.
+"""
+import copy
+import importlib
+import json
+
+import pytest
+from eth_abi import encode
+from jsonschema import ValidationError
+
+from evaluation.tests.test_checkpoint_history_v2 import history, forked_heads
+from evaluation.tests.test_history_rpc_v2 import Rpc
+from evaluation.tests.test_witness_history_v2 import fingerprint
+
+BAD = (ValueError, ValidationError)
+
+
+def case(generations=1, refinements=1, q='3', args=None):
+    args = history(generations, refinements, q) if args is None else args
+    caps = args.pop('captures')
+    blocks = {(r['chainId'], r['raw']['hash']): r for c in caps for r in c['blocks']}
+    calls = {tuple(r[k] for k in ('chainId','blockHash','to','data')): r for c in caps for r in c['calls']}
+    args['selections'] = [dict(digest=c['digest'], pbcHead=c['pbcHead'],
+                               reason='synthetic retrospective observation fixture') for c in caps]
+    args['rpcs'] = {c: Rpc(args['manifest'], args['observations'], blocks.values(), calls.values(), c)
+                    for c in ('pbc','dbc')}
+    return args
+
+
+def collect(tmp_path, args, **over):
+    return importlib.import_module('evaluation.checkpoint_rpc_v2').collect(
+        **(args | dict(output=tmp_path/'capture') | over))
+
+
+def report(tmp_path):
+    return json.loads((tmp_path/'capture/transcript.json').read_text())
+
+
+@pytest.mark.parametrize('generations,refinements,q', [(1,1,'3'),(3,2,'3'),(1,2,'2')])
+def test_all_digest_captures_include_explicit_retrospective_provenance(tmp_path,generations,refinements,q):
+    args=case(generations,refinements,q); original=copy.deepcopy({k:v for k,v in args.items() if k!='rpcs'})
+    result=collect(tmp_path,args)
+    assert {k:v for k,v in args.items() if k!='rpcs'}==original
+    assert result['verification']['checkpointStateSignaturesChecked']==generations*refinements
+    assert result['verification']['declaredSafeLedgerInterval'] is True
+    assert result['signTimeEstablished'] is False and result['latestHeadEstablished'] is False
+    assert {c['digest'] for c in result['captures']}=={s['digest'] for s in args['selections']}
+    for p in result['provenance']:
+        collection,index,digest_index=p['historyLocation']
+        signed=args['evidence'][collection][index]['digests'][digest_index]
+        assert signed['digest']==p['digest'] and signed['observation']==p['dbcObservation']
+        assert p['dbcObservationBasis']=='unsigned-exporter-observation'
+        assert p['pbcHeadBasis']=='caller-selected-historical-observation'
+        assert p['signatureBindsPbcHeadOrDbcObservation'] is False
+        assert p['reason']==args['selections'][next(i for i,s in enumerate(args['selections']) if s['digest']==p['digest'])]['reason']
+    saved=report(tmp_path)
+    assert saved['status']=='complete' and saved['selectionsSha256']
+    assert json.loads((tmp_path/'capture/result.json').read_text())==result
+    rows=saved['calls']; headers=[i for i,r in enumerate(rows) if r['method']=='eth_getBlockByHash']
+    for chain,client in args['rpcs'].items():
+        ids=[i for i,r in enumerate(rows) if r['chain']==chain and r['method']=='eth_chainId']
+        assert len(ids)==2 and ids[0]<min(headers)<max(headers)<ids[1]
+        assert client.checkpoints==['checkpoint-read-before','checkpoint-read-after']
+        assert all(p[0]!='latest' for m,p in client.requests if m=='eth_getBlockByNumber')
+    assert all(r['params'][1]['requireCanonical'] is True for r in rows if r['method']=='eth_call')
+
+
+@pytest.mark.parametrize('change', ['missing','extra','duplicate','not-list','nonobject','empty-reason',
+    'bad-head','target-override','wrong-owner','bad-signature','ABI','RPC','origin','timeout','budget'])
+def test_bad_selections_and_pins_refuse_before_output_or_rpc(tmp_path,change):
+    args=case(); over={}; selections=args['selections']
+    if change=='missing':selections.clear()
+    elif change=='extra':selections.append(selections[0]|{'digest':'0x'+'ef'*32})
+    elif change=='duplicate':selections.append(copy.deepcopy(selections[0]))
+    elif change=='not-list':args['selections']={}
+    elif change=='nonobject':selections[0]=None
+    elif change=='empty-reason':selections[0]['reason']='  '
+    elif change=='bad-head':selections[0]['pbcHead']['chainId']=args['manifest']['chains']['dbc']['chainId']
+    elif change=='target-override':selections[0]['dbcObservation']={}
+    elif change=='wrong-owner':args['expected_owner']='worker'
+    elif change=='bad-signature':args['evidence']['conflicts'][0]['digests'][0]['signature']='0x'+'00'*65;fingerprint(args['evidence'])
+    elif change=='ABI':args['abi_paths']={}
+    elif change=='RPC':args['rpcs'].pop('dbc')
+    elif change=='origin':args['rpcs']['pbc'].url='http://127.0.0.1:19999'
+    elif change=='timeout':over['timeout']=float('inf')
+    else:over['max_calls']=True
+    with pytest.raises(BAD):collect(tmp_path,args,**over)
+    assert not (tmp_path/'capture').exists()
+    assert all(not c.requests for c in args['rpcs'].values())
+
+
+@pytest.mark.parametrize('chain',['pbc','dbc'])
+@pytest.mark.parametrize('field',['chainId','genesis','deploy','anchor'])
+@pytest.mark.parametrize('when',[1,2])
+def test_deployment_identities_on_both_boundaries(tmp_path,chain,field,when):
+    args=case(); client=args['rpcs'][chain];hits=0
+    target={'genesis':'0x0','deploy':hex(int(client.pin['deployBlock'])),
+            'anchor':hex(int(client.observed['anchor']['number']))}.get(field)
+    def change(m,p,r):
+        nonlocal hits
+        if (m=='eth_chainId') if field=='chainId' else (m=='eth_getBlockByNumber' and p[0]==target):
+            hits+=1
+            if hits==when:return '0x999' if field=='chainId' else r|{'hash':'0x'+'ef'*32}
+        return r
+    client.rewrite=change
+    with pytest.raises(ValueError):collect(tmp_path,args)
+    assert report(tmp_path)['status']=='failed' and not (tmp_path/'capture/result.json').exists()
+
+
+@pytest.mark.parametrize('chain',['pbc','dbc'])
+def test_false_state_result_refuses_without_completed_artifact(tmp_path,chain):
+    args=case()
+    args['rpcs'][chain].rewrite=lambda m,p,r:'0x'+encode(['uint64'],[999]).hex() if m=='eth_call' else r
+    with pytest.raises(ValueError):collect(tmp_path,args)
+    assert report(tmp_path)['status']=='failed' and not (tmp_path/'capture/result.json').exists()
+
+
+@pytest.mark.parametrize('method',['eth_chainId','eth_getBlockByNumber','eth_getBlockByHash','eth_call'])
+def test_transport_exceptions_keep_partial_failure(tmp_path,method):
+    args=case()
+    def fail(m,p,r):
+        if m==method:raise RuntimeError('synthetic RPC refusal')
+        return r
+    for c in args['rpcs'].values():c.rewrite=fail
+    with pytest.raises(RuntimeError):collect(tmp_path,args)
+    saved=report(tmp_path)
+    assert saved['status']=='failed' and saved['calls'][-1]['status']=='failed'
+    assert saved['calls'][-1]['method']==method and not (tmp_path/'capture/result.json').exists()
+
+
+@pytest.mark.parametrize('change',['manifest','observations','evidence','selections','ABI','RPC-inventory','ABI-paths'])
+def test_capture_refuses_changed_inputs(tmp_path,change):
+    args=case(); changed=False
+    if change=='ABI':
+        path=tmp_path/'KSSC.json';path.write_bytes(args['abi_paths']['KSSC'].read_bytes());args['abi_paths']['KSSC']=path
+    def mutate(m,p,r):
+        nonlocal changed
+        if not changed:
+            changed=True
+            if change=='manifest':args['manifest']['mutantNote']='changed'
+            elif change=='observations':args['observations']['pbc']['genesisHash']='0x'+'ef'*32
+            elif change=='evidence':args['evidence']['marker']['schema']='1'
+            elif change=='selections':args['selections'][0]['reason']='replaced'
+            elif change=='ABI':args['abi_paths']['KSSC'].write_text('[]')
+            elif change=='ABI-paths':args['abi_paths'].clear()
+            else:args['rpcs']['dbc']=args['rpcs']['pbc']
+        return r
+    args['rpcs']['pbc'].rewrite=mutate
+    with pytest.raises(ValueError):collect(tmp_path,args)
+    assert report(tmp_path)['status']=='failed' and not (tmp_path/'capture/result.json').exists()
+
+
+@pytest.mark.parametrize('field',['number','hash','timestamp','null','quantity'])
+def test_bad_raw_header_is_refused(tmp_path,field):
+    args=case()
+    def corrupt(m,p,r):
+        if m!='eth_getBlockByHash':return r
+        if field=='null':return None
+        if field=='quantity':return r|{'number':'0x00'}
+        return r|{field:'0x'+'ef'*32 if field=='hash' else hex(int(r[field],16)+1)}
+    for c in args['rpcs'].values():c.rewrite=corrupt
+    with pytest.raises(ValueError):collect(tmp_path,args)
+    assert not (tmp_path/'capture/result.json').exists()
+
+
+def test_safe_capture_requires_canonical_hash(tmp_path):
+    args=case();rpc=args['rpcs']['pbc']
+    rpc.rewrite=lambda m,p,r:r|{'hash':'0x'+'ef'*32} if m=='eth_getBlockByNumber' and p[0] not in rpc.identities else r
+    with pytest.raises(ValueError,match='canonical'):collect(tmp_path,args)
+
+
+@pytest.mark.parametrize('clear',[False,True])
+def test_fault_forks_preserve_unsigned_observations_and_false_safe_label(tmp_path,clear):
+    h=forked_heads(True)
+    if clear:
+        e=h['evidence'];e['faultLog']=[dict(seq='1',fault=e['faulted'],clearedAgainst=e['faulted']['previous'],note='synthetic clear')]
+        e['faulted']=None;fingerprint(e)
+    result=collect(tmp_path,case(args=h))
+    assert result['verification']['declaredSafeLedgerInterval'] is False
+    assert len(result['captures'])==2
+    assert all(r['params'][1]['requireCanonical'] is False for r in report(tmp_path)['calls'] if r['method']=='eth_call')
+
+
+def test_empty_checkpoint_subset_still_verifies_history_and_both_identities(tmp_path):
+    args=case();args['evidence']['conflicts'].pop(1);args['selections']=[];fingerprint(args['evidence'])
+    result=collect(tmp_path,args)
+    assert result['captures']==[] and result['provenance']==[]
+    assert result['verification']['checkpointStateSignaturesChecked']==0
+    assert result['verification']['signaturesChecked']==3
+    assert all(sum(m=='eth_chainId' for m,p in c.requests)==2 for c in args['rpcs'].values())
+
+
+def test_call_budget_and_deadline_retain_failure(tmp_path,monkeypatch):
+    with pytest.raises(ValueError,match='budget'):collect(tmp_path,case(),max_calls=1)
+    assert len(report(tmp_path)['calls'])==1 and report(tmp_path)['status']=='failed'
+    mod=importlib.import_module('evaluation.checkpoint_rpc_v2');ticks=iter([0,0,0,2,2,2,2])
+    monkeypatch.setattr(mod.time,'monotonic',lambda:next(ticks))
+    other=tmp_path/'timeout';other.mkdir()
+    with pytest.raises(TimeoutError):collect(other,case(),timeout=1)
+    assert report(other)['status']=='failed'
+
+
+def test_existing_output_is_preserved(tmp_path):
+    (tmp_path/'capture').mkdir();(tmp_path/'capture/retained').write_text('original')
+    with pytest.raises(FileExistsError):collect(tmp_path,case())
+    assert (tmp_path/'capture/retained').read_text()=='original'
+
+
+def test_cross_chain_identity_change_is_not_hidden(tmp_path):
+    args=case()
+    def alter(m,p,r):
+        args['rpcs']['pbc'].identities['0x0']['hash']='0x'+'ef'*32
+        return r
+    args['rpcs']['dbc'].rewrite=alter
+    with pytest.raises(ValueError,match='identity'):collect(tmp_path,args)
+
+
+def test_block_change_after_state_reads_refuses_even_if_canonical_reply_agrees(tmp_path):
+    args=case();rpc=args['rpcs']['pbc'];hits={}
+    def alter(m,p,r):
+        if m=='eth_getBlockByHash':
+            hits[p[0]]=hits.get(p[0],0)+1
+            if hits[p[0]]==2:
+                r['timestamp']=hex(int(r['timestamp'],16)+1);rpc.headers[p[0]]=copy.deepcopy(r)
+        return r
+    rpc.rewrite=alter
+    with pytest.raises(ValueError,match='changed after capture'):collect(tmp_path,args)
+
+
+def test_unsupported_hash_call_has_no_numeric_fallback(tmp_path):
+    args=case()
+    def refuse(m,p,r):
+        if m=='eth_call':raise RuntimeError('hash selector unsupported')
+        return r
+    args['rpcs']['pbc'].rewrite=refuse
+    with pytest.raises(RuntimeError):collect(tmp_path,args)
+    rows=[r for r in report(tmp_path)['calls'] if r['method']=='eth_call']
+    assert len(rows)==1 and set(rows[0]['params'][1])=={'blockHash','requireCanonical'}
+
+
+def test_transport_argument_mutation_does_not_rewrite_receipt(tmp_path):
+    args=case()
+    def mutate(m,p,r):
+        if m=='eth_call':p[1]['blockHash']='0x'+'ef'*32
+        return r
+    args['rpcs']['pbc'].rewrite=mutate
+    result=collect(tmp_path,args)
+    row=next(r for r in report(tmp_path)['calls'] if r['method']=='eth_call')
+    assert row['params'][1]['blockHash'] in {c['blockHash'] for cap in result['captures'] for c in cap['calls']}
+
+
+@pytest.mark.parametrize('field',['blockNumber','timestamp'])
+def test_contradictory_selected_headers_refuse_before_io(tmp_path,field):
+    args=case(1,2)
+    args['selections'][1]['pbcHead'][field]=str(int(args['selections'][1]['pbcHead'][field])+1)
+    with pytest.raises(ValueError,match='contradictory planned'):collect(tmp_path,args)
+    assert not (tmp_path/'capture').exists() and all(not c.requests for c in args['rpcs'].values())
+
+
+def test_selection_order_does_not_drop_or_reassign_provenance(tmp_path):
+    args=case(3,2);args['selections'].reverse()
+    for i,s in enumerate(args['selections']):s['reason']='caller historical selection '+str(i)
+    result=collect(tmp_path,args)
+    reasons={s['digest']:s['reason'] for s in args['selections']}
+    assert len(result['captures'])==6
+    assert all(p['reason']==reasons[p['digest']] for p in result['provenance'])
+
+
+@pytest.mark.parametrize('bit',[1,5])
+def test_deliberate_death_exclusions_remain_visible(tmp_path,bit):
+    from evaluation.binding_context_v2 import reconstruct
+    from evaluation.schema_v2 import _binding_digest
+    from evaluation.tests.test_witness_history_v2 import supersede
+    args=case(2);m,o,e=(args[k] for k in ('manifest','observations','evidence'))
+    m['mutations']=str(1<<bit)
+    for chain in o.values():
+        for views in chain['views'].values():
+            if 'mutations' in views:views['mutations']['value']=m['mutations']
+    doc=reconstruct(m,o,compiled_max_admins='8')
+    e['binding']=dict(document=doc,binding_v2=_binding_digest(doc));e['marker']['binding_v2']=e['binding']['binding_v2']
+    if bit==1:e['superseded'][0]['death'].update(kind='overtaken-checkpoint',observed='8')
+    else:supersede(m,e,'GrantReceipt',kind='executed-receipt')
+    fingerprint(e)
+    assert collect(tmp_path,args)['verification']['excludedDeathSeqs']==['1' if bit==1 else '2']

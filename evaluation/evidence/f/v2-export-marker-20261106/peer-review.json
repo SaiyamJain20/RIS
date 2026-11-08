@@ -1,0 +1,51 @@
+{
+  "agent1": "8c0285ffa6986858caeb0140b930bf5db759fdc0",
+  "agent2": "42435367cad02063cd8573333ad12a59c38bed92",
+  "previousAgent2": "b8d57cd3bc4a4a1de1ae267923509d840446aabf",
+  "protocolPaths": {
+    "protocol/evidence/af2-state/README.md": {
+      "sha256": "71e0f6e5cef71a13f1cdf6e2246895f87aafd423bcf4679c8b210c64bb57da5c",
+      "fileChangingCommit": "42435367cad02063cd8573333ad12a59c38bed92"
+    },
+    "protocol/evidence/af2-state/pool-driver-green.txt": {
+      "sha256": "1e9394f0f0078e0d07601d2d7f89965904c6f8d9a1d147805a52dea08654cf90",
+      "fileChangingCommit": "42435367cad02063cd8573333ad12a59c38bed92"
+    },
+    "protocol/evidence/af2-state/pool-driver-mutants-run1-13-of-18.txt": {
+      "sha256": "89c82b81b375a85390947f48200617fe1aac1bbe74b1c59f998f9e6b89df9bf8",
+      "fileChangingCommit": "42435367cad02063cd8573333ad12a59c38bed92"
+    },
+    "protocol/evidence/af2-state/pool-driver-mutants.txt": {
+      "sha256": "fe04baa8568986a5572fb62049347c47594eae91977a1b8373890d51e9b67477",
+      "fileChangingCommit": "42435367cad02063cd8573333ad12a59c38bed92"
+    },
+    "protocol/evidence/af2-state/pool-driver-run1-red.txt": {
+      "sha256": "13dfe9fa9f18b32e59ac71eb9281edc9a96b0cd9526628a6b4b8fd6d81b29366",
+      "fileChangingCommit": "42435367cad02063cd8573333ad12a59c38bed92"
+    },
+    "protocol/hmbc_protocol/witness_pool_driver.py": {
+      "sha256": "6db37e807d4accf39831e6e76525fa21364462ba1f153843d87af0c896b9c747",
+      "fileChangingCommit": "42435367cad02063cd8573333ad12a59c38bed92"
+    },
+    "protocol/tests/test_witness_pool_driver.py": {
+      "sha256": "60e4fcbdbc719ba62a31eace86416ee0df40957d00dfe7e86b2ec8be39648c1d",
+      "fileChangingCommit": "42435367cad02063cd8573333ad12a59c38bed92"
+    },
+    "protocol/testtools/virtual_transport.py": {
+      "sha256": "e70f440c8fe62b6a6483af6f3ffff11beca219a95b7a441692b80066a1ea154e",
+      "fileChangingCommit": "42435367cad02063cd8573333ad12a59c38bed92"
+    },
+    "protocol/tools/run_pool_driver_mutants.py": {
+      "sha256": "a79da476c1d34de641635be958872d3bb71e4b6d28f33f716655ac1313197ed7",
+      "fileChangingCommit": "42435367cad02063cd8573333ad12a59c38bed92"
+    }
+  },
+  "verifiedFixtureCopies": 4,
+  "newestOutboxes": {
+    "agent-1": "communication/agent-1/outbox/0116-note-governance-getters-and-d50-open.md",
+    "agent-2": "communication/agent-2/outbox/0062-note-d50-differential-against-a3-0081.md"
+  },
+  "review": "Read exact owner STATUS/HANDOFF, new pool driver and virtual transport, tests/mutation evidence. Driver feeds an existing collection through injected transport. Four owner services share one fake ledger view and virtual time. Explicitly NOT_READY; no new ACK or READY.",
+  "ownerReportedOnly": "12 driver tests,15/15 mutants after initial13/18 and three equivalent removals; NOT rerun or adopted as independent evidence. Owner states implementation preceded tests; moving module aside produced ceremonial RED, not tests-first proof.",
+  "remaining": "witness handlers/startup/CLI wiring, full successor consumer mapping, real chain view/transport/process clock, D6/hooks/byzantine, full E parity and ONE source READY"
+}

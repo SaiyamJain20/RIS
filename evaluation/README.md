@@ -1,3 +1,178 @@
+**C-F1 receipt history state coverage (2026-11-07):** Internal
+`receipt_history_v2.verify_receipt_history` checks every declared live/superseded
+receipt against raw state/events, with exact digest selection and shared-fact
+consistency.38new/417focused/2944rootPASS; seven deliberate bypass pairs detected.
+An initial full regression was invalidated by a coordinator-created run script;
+the full rerun freezes all1242discovered runtime inputs and passes. No product/
+test changes between trials. Native transitions, log completeness and sign-time
+remain unproved; F execution/G stay locked. [Evidence and limits](evidence/f/v2-receipt-history-20261107/README.md).
+
+**C-F1 supplied GrantReceipt state check (2026-11-07):** Internal
+`receipt_state_v2.verify_receipt_signature` joins a bound one-owner signature to
+raw allowed grant, pending request and one declared GrantIssued log/header. Valid
+late receipts pass. 72 new/246 focused/2906 root PASS; root 650.91s/command 651.231s/exit0. Six deliberate bypasses detected with valid controls.
+No signing-time/latest-head/log completeness or actual-node claim. [Evidence,
+retained failures and limits](evidence/f/v2-receipt-state-20261107/README.md).
+Existing consumers/frozen wire unchanged; complete runtime READY/mapping/exact
+execution ACKs still precede services;32Fcases/GateF NOT_RUN/G locked.
+
+**C-F1 retrospective governance acquisition (2026-11-07):** Internal
+`governance_rpc_v2.collect` reads exact hash-selected Governance/TMSC state for
+every declared governance digest. Both endpoint/header brackets and explicit
+unsigned observation/caller approval provenance are retained.71new/449focused/
+2834rootPASS; six bypass/valid control pairs. No sign-time/latest-head/producer
+policy or actual-node claim. [Evidence, assembly corrections and limits](evidence/f/v2-governance-rpc-20261107/README.md).
+Existing consumers/frozen wire unchanged; full runtime READY/mapping/exact
+execution ACKs still precede services;32Fcases/GateF NOT_RUN/G locked.
+
+## Governance history coverage verified — 2026-11-07
+
+C-F1 WORKING; integrated execution LOCKED. New internal governance_history_v2
+joins every declared live/superseded governance digest and expiry refinement to
+its recorded PBC observation, exact supplied state and separate caller approval
+fixture. Missing captures and contradictory number/timestamp/getter facts refuse;
+A-B-A, fault/clear scope and bit1/bit5 exclusions remain. Signing time, latest
+head and producer approval policy remain unproved; explicit result flags false.
+Fresh42new/286focused/2763rootPASS; root615.14s/command615.459s/exit0. Eight narrow
+in-memory bypasses detected with valid controls. No consumer/wire/dependency change.
+
+899owner/258local/5helpers stable;8536carried tracked blobs match initial HEAD;
+52F0pins/31frozen payloads match.393communication paths/no divergence; peers
+A18c0285f/A267111f5 unchanged. No new owner READY/ACK or owner runtime result
+adopted. A3-0096/97 remain open. Complete runtime READY/mapping and separate exact
+execution FREEZE ACKs precede services. Historical qualified E unchanged; all32
+Fcases/GateF NOT_RUN/G locked. No human action. Evidence:
+evaluation/evidence/f/v2-governance-history-20261107/README.md. Next raw governance
+acquisition with explicit observation/approval provenance, remaining AccessDecision/
+GrantReceipt state duties and producer schema/path/lock completeness, then fault
+oracle/finite model. Review correlated; no extra agents/peer edits/main push.
+Original persistent locks acquired before context reads; held through publication.
+Earlier entries are historical.
+
+## Governance state and approval checks verified — 2026-11-07
+
+C-F1 WORKING; integrated execution LOCKED. New internal governance_state_v2
+checks one signature against exact supplied PBC nonce/version/TMSC state, a
+caller-pinned TEST-ONLY approval tuple and the public TTL window. Source/state
+consistency only: actual signing time/latest head/witness policy are unproved.
+Fresh71new/315focused/2721rootPASS; root580.55s/command580.863s/exit0. Seven narrow
+deliberate bypasses detected with valid controls. No consumer/wire/dependency change.
+
+899owner/256local/5helpers stable;8497carried tracked blobs match initial HEAD;
+52F0pins/31frozen payloads match.392communication paths/no divergence; peers
+A18c0285f/A267111f5 unchanged. No new owner READY/ACK or adopted owner runtime
+result. A3-0096/97 remain open. Full runtime READY/mapping and separate exact
+execution FREEZE ACKs precede services. Historical qualified E unchanged; all32
+Fcases/GateF NOT_RUN/G locked. No human action. Evidence:
+evaluation/evidence/f/v2-governance-state-20261107/README.md. Next governance
+history/acquisition with explicit observation/approval provenance, remaining
+AccessDecision/GrantReceipt state and producer schema/path/lock completeness,
+then fault oracle/finite model. Review is correlated; no extra agents/peer edits.
+Startup mkdir failed harmlessly on the existing file; memory/skills were read
+before flock. Repository reads/fetch/edits occurred only after kernel acquisition;
+no lock inode replaced/unlinked. See retained startup note. Earlier entries historical.
+
+**C-F1 retrospective checkpoint acquisition (2026-11-07):** Internal
+`checkpoint_rpc_v2.collect` retains exact hash-selected source/head/target RPC
+captures and explicit unsigned observation provenance per digest. Both endpoints
+are bracketed; safe/fault/clear and bit1/bit5 labels remain.67new/510focused/
+2650rootPASS; six corrected bypass controls detected. No actual sign-time,
+historical latest-head, node compatibility or producer violation claim follows.
+[Evidence, retained trials and limits](evidence/f/v2-checkpoint-rpc-20261107/README.md).
+Existing consumers/wire unchanged; full runtime READY/mapping/exact execution
+ACKs still precede services;32Fcases/GateF NOT_RUN/G locked.
+
+**C-F1 declared checkpoint history (2026-11-07):** Internal
+`checkpoint_history_v2.verify_checkpoint_history` checks exact per-digest state
+coverage across live/superseded generations and expiry refinements, rejecting
+contradictory reused raw facts. Fault/clear labels and bit1/bit5 exclusions remain.
+34new/384focused/2583rootPASS; eight deliberate bypasses detected. Supplied
+observations establish no actual signing time/native truth/store completeness.
+[Evidence and limits](evidence/f/v2-checkpoint-history-20261107/README.md).
+Existing consumers/frozen wire unchanged; full runtime READY/mapping/exact
+execution ACKs still precede services;32Fcases/GateF NOT_RUN/G locked.
+
+**C-F1 checkpoint source-state slice (2026-11-07):** Internal
+`checkpoint_state_v2.verify_checkpoint_signature` joins a bound signature to exact
+supplied source/head epochs and target current-checkpoint/maxTTL/time captures.
+51new/409focused/2549rootPASS; seven deliberate bypasses detected. This checks
+supplied state/window consistency, not actual sign-time provenance, RPC truth,
+ancestry, history/store completeness or a gate. Existing consumers/frozen wire
+unchanged. [Evidence and exact peer review](evidence/f/v2-checkpoint-state-20261107/README.md).
+Full runtime READY/mapping and separate exact execution ACKs still precede
+services; historical qualifiedE unchanged;32Fcases/GateF NOT_RUN/G locked.
+
+**C-F1 native history acquisition (2026-11-06):** Internal
+`history_rpc_v2.collect` plans required headers/death getters from verified
+history, retains exact RPC parameters/results, and brackets all cross-chain reads
+with deployment identity checks. Hash-selected calls preserve faulted branches;
+unsupported selectors fail without fallback. Synthetic transports only so far;
+actual pinned-node support, source-state truth and complete store/export joins
+remain unproved. Existing consumers and frozen wire bytes stay fixed. Exact tests,
+source pins and limits: [slice evidence](evidence/f/v2-history-rpc-20261106/README.md).
+
+**C-F1 raw native history slice (2026-11-06):** Internal
+`witness_native_v2.verify_native_history` joins every declared observation and
+embedded source-block reference to caller-supplied raw blocks. It decodes death
+facts through pinned owner ABIs at exact chain/block/contract/calldata keys;
+fault/clear and bit1/bit5 labels remain explicit. Sixty-eight synthetic tests
+pass. This pure checker collects no RPC and authenticates no chain or store;
+source-state truth, exporter completeness and integrated F remain unproved.
+Commands, source brackets and limitations: [slice evidence](evidence/f/v2-native-history-20261106/README.md).
+Existing consumers and frozen interfaces are unchanged.
+
+**C-F1 store snapshot slice (2026-11-06):** Internal
+`store_snapshot_v2.locked_store(database, marker, lock)` holds an existing
+exclusive lock across caller before/action/after reads. Each snapshot captures
+schema and every table row in one WAL-aware read-only transaction, plus exact
+marker bytes. `require_unchanged` compares logical state and marker bytes;
+main/WAL hashes are supplemental. Forty synthetic SQLite tests pass, including
+WAL-only changes, checkpoint invariance and marker-replacement refusal.
+No owner store/export completeness, native truth or durability claim follows.
+Owner READY/path/locking review and separate exact execution ACKs remain required.
+Commands, full-suite evidence and limits: [slice evidence](evidence/f/v2-store-snapshot-20261106/README.md).
+Earlier entries are historical.
+
+**C-F1 witness-history slice (2026-11-06):** Internal
+`witness_history_v2.verify_signed_history` reconstructs every declared signed
+message against independently supplied deployment context and store owner;
+checks record/hash/death/generation consistency; and requires a live successor
+for each historical key.139 synthetic tests PASS, including legal A->B->A.
+Fault/clear intervals and bit1/bit5 death exclusions are explicit. This does not
+prove native ledger truth or completeness against WAL-aware store/marker bytes.
+Root verification and exact provenance: [slice evidence](evidence/f/v2-witness-history-20261106/README.md).
+Existing consumers and published wire bytes stay fixed; integrated F NOT_RUN/G
+locked. Earlier entries below are historical.
+
+**Current review (2026-11-04):** A1-0111 exact ledger snapshot reviewed:
+316 Forge tests,12 mutant suites,13 source controls,26 v2 mapping checks pass;
+418 source entries unchanged. Embedded E source omission reproduced; additive
+carrier amendment proposed with23 checks, awaiting BOTH exact owner ACKs.
+See [evidence](evidence/reviews/a-f1-ready-20261104/README.md) and the live board.
+Agent2 source READY absent; integrated F NOT_RUN/G locked. Earlier entries below
+are historical; SSH now works.
+
+**C-F1 evaluator checkpoint (2026-11-04):** Separate `schema_v2.py` and68
+focused tests; fresh full evaluator suite1726PASS/193inputs stable. Existing E
+validator/consumers and frozen/published interfaces unchanged. This is declared
+artifact consistency only; signature/source/history/WAL/native joins and the
+fault oracle/model remain. Integrated F NOT_RUN/G locked. Publication is blocked
+by SSH authentication; A3-0074 remains local. See [evidence](evidence/f/v2-validator-20261104/README.md)
+and the [live board](../communication/BOARD.md).
+
+**Live state (2026-11-04):** F0 design accepted after exact A1-0110/A2-0058
+freeze ACKs; shared v2 published byte-for-byte from candidate2. Owned implementation
+and isolated tests may start. Integrated execution still requires source READY
+and separate exact run FREEZE ACKs. All32 F cases NOT_RUN; G locked; historical
+qualified E unchanged. See [the live board](../communication/BOARD.md) and [acceptance](../communication/F0_ACCEPTANCE_CANDIDATE2.json).
+Earlier status paragraphs below are historical.
+
+**Latest F0 state (2026-11-04):** Both exact candidate2 mapping/layout ACKs are verified (A1-0109/A2-0057). [Separate F0 freeze request evidence](evidence/reviews/f0-v2-candidate2-freeze-20261104/README.md) pins the complete design; A3-0072 awaits BOTH exact freeze ACKs before implementation. All32Fcases NOT_RUN; G locked; qualifiedE unchanged. Earlier entries below are historical.
+
+**Latest F0 review (2026-11-04):** [Revision8 review](evidence/reviews/f0-a2-revision8-20261104/README.md) independently reproduces three bindings/14profile cases. A3-0068 ACKs D50/wire adapter-response scope; A3-0069 withholds layout ACK on legal effect recurrence and ALLOW-only death checks. Candidate2 awaits Agent2's exact correction/tests. F0 not frozen; all32Fcases NOT_RUN/G locked. Earlier entries below are historical.
+
+**Live F0 status (2026-11-04):** Both exact candidate8 design ACKs are verified. Successor [v2 candidate1](../interfaces/proposals/v2/README.md) is a proposal for mapping review, with explicit profile/q2/export-layout dependencies. No mapping ACK, F0 freeze or implementation/execution authorization; F NOT_RUN/G locked. Frozen v1 and qualified E evidence remain unchanged.
+
 **Live status (2026-10-12):** Qualified solo Gate E PASS recorded;56/56 catalog
 rows. Agent3 has returned and pulled the consolidated work. Current review and
 new evaluator fixes are in [return-review evidence](evidence/reviews/returning-agent3-20261012/README.md).
@@ -164,3 +339,10 @@ and fresh synchronous shell/Forge command groups are stopped; command timeout
 and cancellation clean their group while the direct child is unreaped.
 Real9 controls remain unrun; all catalog/RQ gates NOT_RUN; E2/E3/F/G stay gated.
 Earlier bootstrap/collector paragraphs above retain historical verification counts.
+**Exporter/marker join (2026-11-06):** internal `export_snapshot_v2.py` checks
+successful exporter framing, anchored binding, exact captured INITIALIZED content
+and declared signed witness history. Synthetic WAL controls preserve the explicit
+limit: matching exports/markers do not prove row completeness. Real owner schema,
+paths and lock choreography still require full READY review. See
+[commands, controls and source brackets](evidence/f/v2-export-marker-20261106/README.md).
+No existing consumer switches or new integrated E/F result; G remains locked.

@@ -1,0 +1,47 @@
+import csv, hashlib, json, pathlib, subprocess
+R=pathlib.Path('/home/karma/Documents/RIS');O=R/'evaluation/evidence/reviews/f0-revision6-20261104';OLD=R/'evaluation/evidence/reviews/f0-revision5-20261104'
+def git(*a):return subprocess.check_output(['git',*a],cwd=R)
+def sha(b):return hashlib.sha256(b).hexdigest()
+a=json.loads((O/'owner-review.json').read_text())
+assert git('branch','--show-current').decode().strip()=='agent-3'
+assert not git('diff','--cached','--name-only').strip()
+assert all(git('rev-parse',k).decode().strip()==v for k,v in a['refs'].items())
+protected=['ledger','protocol','interfaces','archive','evaluation/reports/RQ1-E.md','evaluation/evidence/e3/gate-run-20261012','evaluation/evidence/fault-model.csv','evaluation/scenarios/f_matrix.json','evaluation/evidence/reviews/f0-a1-0090-20261103','evaluation/evidence/reviews/f0-a1-0092-20261103','evaluation/evidence/reviews/f0-revision3-20261104','evaluation/evidence/reviews/f0-revision4-20261104','evaluation/evidence/reviews/f0-revision5-20261104']
+assert not git('diff','HEAD','--',*protected).strip()
+manifest=json.loads((OLD/'review-manifest.json').read_text())
+assert all(sha((R/p).read_bytes())==h for p,h in manifest['files'].items())
+ack=json.loads((O/'candidate5-scoped-ack.json').read_text())
+assert all(sha((R/p).read_bytes())==h for p,h in ack['reviewedFiles'].items())
+assert sha(git('show',ack['commit']+':'+ack['path']))==ack['messageSha256']
+received=json.loads((O/'received-reviews.json').read_text())
+assert not received['exactCandidate6Acks'] and received['noAckTransfer']
+for r in received['reviews']:assert sha(git('show',r['commit']+':'+r['path']))==r['sha256']
+prov=json.loads((O/'communication-provenance.json').read_text())
+assert len(prov['files'])==310 and not prov['incomparableContentConflicts']
+d=json.loads((O/'f_matrix.json').read_text());b=json.loads((OLD/'f_matrix.json').read_text())
+c={x['id']:x for x in d['cases']};before={x['id']:x for x in b['cases']}
+assert len(c)==len(d['cases'])==32 and c.keys()==before.keys() and d['revision']==6
+assert not d['executionAuthorized'] and not d['actualFResults'] and not d['exactOwnerAcks']
+assert d['protocolCommit']==b['protocolCommit'] and d['protocolAmendmentStatus']=='NOT_ADOPTED_R4_R5_PENDING'
+assert all(x['executionStatus']=='NOT_RUN' and x['ownerAckStatus']=='PENDING_BOTH' for x in c.values())
+changed=[k for k in c if c[k]!=before[k]]
+assert set(changed)=={'FL-1','F-12','F-29','F-32'}
+for k in c:
+ assert all(v in c[k]['controls'] or any(v in w for w in c[k]['controls']) for v in before[k]['controls'])
+ assert all(v in c[k]['requiredEvidence'] for v in before[k]['requiredEvidence'])
+rows=list(csv.DictReader((O/'fault-model.csv').open()));oldrows=list(csv.DictReader((OLD/'fault-model.csv').open()))
+assert len(rows)==14
+for x,y in zip(rows,oldrows):assert all(x[k]==y[k] for k in x if k not in ('source','open_dependency'))
+plan=(O/'SOURCE-INTERFACE-PLAN.md').read_text()
+assert 'reuse the existing QuorumLib library in src/lib/SigLib.sol (with SigLib signature recovery)' in plan
+assert 'src/lib/QuorumLib.sol' not in plan
+assert b'library QuorumLib' in git('show',a['refs']['origin/agent-1']+':ledger/src/lib/SigLib.sol')
+assert subprocess.run(['git','cat-file','-e',a['refs']['origin/agent-1']+':ledger/src/lib/QuorumLib.sol'],cwd=R,stderr=subprocess.DEVNULL).returncode!=0
+oldsign=sha(git('show',b['protocolCommit']+':protocol/f0/SIGNING-RULES.md'))
+assert oldsign in plan and oldsign in c['F-29']['dependencies'][0]
+for f in ('D50-DEPLOYMENT-BINDING.md','SUCCESSOR-WIRE.md','MANIFEST.sha256'):
+ assert sha(git('show',b['protocolCommit']+':protocol/f0/'+f)) in plan
+assert 'R4/R5' in plan and 'NOT adopted' in plan
+assert 'Forward-only' in c['FL-1']['sensitivityFixture']['M7']['clockPolicy']
+assert 'concurrently' in ' '.join(c['F-32']['controls'])
+print(json.dumps({'verification':'PASS','components':14,'cases':32,'allNotRun':True,'changedCases':changed,'communicationPaths':310,'noAckTransfer':True,'historicalEvidenceUnchanged':True,'revision5NotAdopted':True}))

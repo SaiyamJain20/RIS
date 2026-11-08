@@ -1,0 +1,239 @@
+{
+  "format": "RIS-interface-migration-receipts-1",
+  "recordedUtc": "2026-11-07T11:51:14.782276+00:00",
+  "status": "PUBLICATION_RECEIPTS_VERIFIED_ISOLATED_MIGRATIONS_REVIEWED_RUNTIME_PENDING",
+  "publication": {
+    "commit": "11deed61710792aea8b2817edd7a1333263ce73a",
+    "freeze": {
+      "path": "interfaces/v2.1/FREEZE.json",
+      "sha256": "232b84bb7f997b687a5dc671d79ab6ecdd592d17cd38e531d8460d33ed81660a"
+    },
+    "schema": {
+      "path": "interfaces/v2.1/hmbc.schema.json",
+      "sha256": "d43c3a9a4cbb10214135afb767a2adc109da462f88bd11a81a8c8955d44fd1f3"
+    }
+  },
+  "publicationReceipts": [
+    {
+      "owner": "agent-1",
+      "messageId": "A1-0115",
+      "path": "communication/agent-1/outbox/0115-ready-v21-e-carrier-migration.md",
+      "commit": "4615617c2cc82b79d1c53435bafe794115c644d2",
+      "fileChangingCommit": "4615617c2cc82b79d1c53435bafe794115c644d2",
+      "sha256": "8aff183e5162f5ef09cb9e0ef4a8b5f7a134e1cca55b40648aaeff600dc11772",
+      "scope": "ledger publication receipt and producer migration READY"
+    },
+    {
+      "owner": "agent-2",
+      "messageId": "A2-0061",
+      "path": "communication/agent-2/outbox/0061-receipt-v2.1-publication-protocol-scope.md",
+      "commit": "1fb863af4810bfd1b4a83ef9c22ec8da29bc926b",
+      "fileChangingCommit": "7e478f2d51773b242ef19994f285c2ee8b4a14cd",
+      "sha256": "eb4fa7075c86854a960a2966d1c7f675aa49f41b4e9da418f47208c0900088c2",
+      "scope": "protocol publication receipt only; consumer mapping and source READY explicitly excluded"
+    }
+  ],
+  "ledgerMigration": {
+    "status": "REVIEWED_FOR_ISOLATED_CONSUMPTION",
+    "sourceCommit": "85c59f588de58a8ff5e87b9fe6f630c9d8c43642",
+    "manifest": {
+      "path": "ledger/evidence/source-manifest.sha256",
+      "sha256": "70f541cd63bb8e8c4c0c1202dda0e5611ab15fde6d1ab4b8a0451497b6fb08dd",
+      "entries": 429
+    },
+    "review": "evaluation/evidence/reviews/v21-migration-20261104/README.md",
+    "verificationSha256": "22ff8125cab312b7aa508ca4224c03fa6ed7a78fc689116a199eff435709c350"
+  },
+  "protocolMigration": {
+    "status": "REVIEWED_FOR_ISOLATED_INJECTED_API_CONSUMPTION",
+    "consumerMappingAck": null,
+    "sourceReady": {
+      "messageId": "A2-0064",
+      "path": "communication/agent-2/outbox/0064-ready-delta-published-schema-output-validation.md",
+      "sourceCommit": "c138185428ebe572c86cdc42985b340a262aa8aa",
+      "publicationCommit": "f2c86ad868c3c6c0799f2b610ad55f5cb1a7306f",
+      "sha256": "baf5e63d8e19e780f384255043200a486fc2b26ef2b3cc3efeef07c485c8d85a",
+      "fileChangingCommit": "f2c86ad868c3c6c0799f2b610ad55f5cb1a7306f",
+      "manifest": {
+        "path": "protocol/evidence/af2-source-ready-2/MANIFEST.sha256",
+        "sha256": "016ffd0870e3b9bfd2b8b297c8c977bcfe29ce687d0a54b548b901c52e8b9cbf",
+        "entries": 408
+      },
+      "scope": "isolated synthetic source; four non-evidence output-validation deltas; no complete runtime READY"
+    },
+    "mappingReview": {
+      "messageId": "A3-0089",
+      "review": "evaluation/evidence/reviews/a2-ready-20261106/README.md",
+      "verificationSha256": "0874de43fdcd6b4d6727bafe10b0d6c6a4273677f9aef98aaa039bb0ab9f449a",
+      "requiredSchemaRevision": "v2.1 for successor E; explicit supplied published schema",
+      "wholeManifestEquality": true,
+      "d50PreimageUnchanged": true
+    },
+    "completeRuntimeReady": false,
+    "explanation": "A2-0064 remains the last isolated API source READY. A3-0097 reviews partial67111f5: witness process entry point exists and48no-node tests pass; numeric chainId1e999 yields an OverflowError traceback for either chain, no state, extending A3-0096. Prior adapter schema[]/null request remains open. Real pool transport-clock/CLI witness-operation wiring/H2/H5/H6/full runtime READY remain pending. Three historical E source paths differ; no new E parity, consumer mapping ACK, complete runtime READY or execution authority inferred.",
+    "requiredRecipeChecks": [
+      "pass exact published schema; schema=None checks only structural minimum",
+      "keep check_responses=True and use behavior-validating handlers; output schema checking does not establish native truth",
+      "complete runtime source READY and separate exact execution FREEZE ACKs before services"
+    ],
+    "previousSourceReadies": [
+      {
+        "messageId": "A2-0063",
+        "path": "communication/agent-2/outbox/0063-ready-isolated-successor-source-and-mapping.md",
+        "sourceCommit": "dbae4e1e13fb26984a6d4b0aa042ae321c1c49f0",
+        "publicationCommit": "9467ba170a0dff514d0457c8dbddc82510d177ca",
+        "sha256": "053ddf66a4b596d3f6ee34257a4bcaacf7aae46718fbb5071d1790ef40020129",
+        "fileChangingCommit": "9467ba170a0dff514d0457c8dbddc82510d177ca",
+        "manifest": {
+          "path": "protocol/evidence/af2-source-ready/MANIFEST.sha256",
+          "sha256": "6ed9a53de1ec2ec32fedad01019ce18cd4196a304cc47202b4a0e3655218ca08",
+          "entries": 384
+        },
+        "scope": "isolated synthetic source and injected APIs; no CLI/real wiring/runtime READY"
+      }
+    ],
+    "outputValidationReview": {
+      "messageId": "A3-0090",
+      "review": "evaluation/evidence/reviews/a2-output-20261106/README.md",
+      "verificationSha256": "716b93f44c2baf5ed479c00a803089b8a99f7d77f55d85d24007d96531228cd0",
+      "requiresSuppliedExactPublishedSchema": true,
+      "requiresCheckResponsesEnabled": true,
+      "optionalBypassesRemain": true
+    },
+    "partialRuntimeReview": {
+      "messageId": "A3-0094",
+      "ownerNote": "A2-0069",
+      "sourceCommit": "5c8e41884c1c28d26913df7be50a358a20327c09",
+      "ownerRuntimeReady": false,
+      "review": "evaluation/evidence/reviews/a2-witness-fix-20261106/README.md",
+      "verificationSha256": "d2213787c514b9a5dc1aaa7b52f058ec4897c8cfbcfb81c374fea5d1d829119c",
+      "independentLiveRun": false,
+      "focusedPass": 245,
+      "mutationControlsDetected": 45,
+      "manualControls": 14,
+      "baselineDiagnosticGaps": 9,
+      "documentedPermissiveObservations": 5,
+      "uncaughtTransactionErrors": 0,
+      "transactionObjectRefusalPending": false,
+      "canonicalWitnessRpcBytesEstablished": false
+    },
+    "previousPartialRuntimeReviews": [
+      {
+        "messageId": "A3-0093",
+        "ownerNotes": [
+          "A2-0067",
+          "A2-0068"
+        ],
+        "sourceCommit": "0e58f1da659f48ffd39b6af138acf194b0ae111f",
+        "ownerRuntimeReady": false,
+        "review": "evaluation/evidence/reviews/a2-witness-rpc-20261106/README.md",
+        "verificationSha256": "74f2e5c04f07de3f7ef5023cc7e8830fea0faf1b0e1f2d651bcc1bf2983eb629",
+        "independentLiveRun": false,
+        "focusedPass": 222,
+        "mutationControlsDetected": 43,
+        "manualControls": 14,
+        "diagnosticGaps": 9,
+        "transactionObjectRefusalPending": true,
+        "canonicalWitnessRpcBytesEstablished": false
+      },
+      {
+        "messageId": "A3-0092",
+        "ownerNote": "A2-0066",
+        "sourceCommit": "0297adb6e784b9667befbc6330e1dfcb3ec81e3e",
+        "ownerRuntimeReady": false,
+        "review": "evaluation/evidence/reviews/a2-parser-fixes-20261106/README.md",
+        "verificationSha256": "f64eddbd76270ebb0a848fa86c3c327b8b2371e1be0edfec63e371e8d3458efc",
+        "independentLiveRun": false,
+        "quantitySeparatorRefusalPending": false,
+        "canonicalAbiClaimNeedsClarification": false,
+        "focusedPass": 153,
+        "mutationControlsDetected": 32,
+        "baselineAcceptanceGaps": 8,
+        "fixedAcceptanceGaps": 0
+      },
+      {
+        "messageId": "A3-0091",
+        "ownerNote": "A2-0065",
+        "sourceCommit": "3b86183b8f537e32fc2f2c3be8b650735ab8173a",
+        "ownerRuntimeReady": false,
+        "review": "evaluation/evidence/reviews/a2-rpc-20261106/README.md",
+        "verificationSha256": "7cd1e2c0dfd6d3c46525a9f0e6cfde98a47d43487196720a989aea9d8ed08b99",
+        "independentLiveRun": false,
+        "quantitySeparatorRefusalPending": true,
+        "canonicalAbiClaimNeedsClarification": true
+      }
+    ],
+    "cliWorkerPartialReview": {
+      "messageId": "A3-0096",
+      "ownerNotes": [
+        "A2-0071",
+        "A2-0072"
+      ],
+      "sourceCommit": "7915d532ff17c9e782bd23d4887374c01601154f",
+      "ownerRuntimeReady": false,
+      "review": "evaluation/evidence/reviews/a2-cli-20261107/README.md",
+      "verificationSha256": "5ef839b00da47764ba2fe553e13e1dfab436973b1274c8de269168a58a838a53",
+      "independentLiveRun": false,
+      "focusedPass": 317,
+      "defaultExports": 9,
+      "probeCases": 25,
+      "startupRobustnessGaps": 2,
+      "historicalEChanged": [
+        "protocol/hmbc_protocol/worker.py",
+        "protocol/hmbc_protocol/worker_log.py",
+        "protocol/testtools/deviating_witness.py"
+      ]
+    },
+    "witnessProcessPartialReview": {
+      "messageId": "A3-0097",
+      "sourceCommit": "67111f580b6ecfd1b924f3cd1a863981180822e1",
+      "fileChangingCommit": "67111f580b6ecfd1b924f3cd1a863981180822e1",
+      "ownerRuntimeReady": false,
+      "review": "evaluation/evidence/f/v2-checkpoint-state-20261107/README.md",
+      "verificationSha256": "7dbf6d80aee74895baa187f9fedf2de660698395a64f5436c532a24ccae0f61b",
+      "independentLiveRun": false,
+      "noNodeTestsPassed": 48,
+      "ownerLiveAndMutationCountsAdopted": false,
+      "chainIdOverflowEntryPoints": [
+        "adapter_v2_main",
+        "witness_main"
+      ],
+      "newEntryChainSlotsReproduced": [
+        "pbc",
+        "dbc"
+      ]
+    }
+  },
+  "historicalAcceptanceUnchanged": {
+    "path": "communication/E_SOURCE_CLOSURE_ACCEPTANCE.json",
+    "sha256": "511e235f3aff86a57822e26136282f97bcb9550e84c95263b14ed1bbab8e9fb6"
+  },
+  "executionAuthorized": false,
+  "sourceReadyRequired": true,
+  "fGate": "NOT_RUN",
+  "gGate": "LOCKED",
+  "evaluatorCheckpointHistoryLocal": {
+    "messageId": "A3-0098",
+    "review": "evaluation/evidence/f/v2-checkpoint-history-20261107/README.md",
+    "verificationSha256": "9daf055921f26d5b44c983c8d4b368c7ab6d512674d953a4777f538d4a1f1177",
+    "newTestsPassed": 34,
+    "focusedTestsPassed": 384,
+    "rootTestsPassed": 2583,
+    "deliberateBypassesDetected": 8,
+    "scope": "supplied per-digest checkpoint state consistency only; no actual sign-time or store completeness",
+    "consumerMappingAck": null,
+    "executionAuthorized": false
+  },
+  "evaluatorGovernanceHistoryLocal": {
+    "messageId": "A3-0101",
+    "review": "evaluation/evidence/f/v2-governance-history-20261107/README.md",
+    "verificationSha256": "5f18aeaaaa1f9f4b190df25080486f7efb899d947d5d2536ed2521095d0dbab5",
+    "newTestsPassed": 42,
+    "focusedTestsPassed": 286,
+    "rootTestsPassed": 2763,
+    "deliberateBypassesDetected": 8,
+    "scope": "declared per-digest supplied governance state/approval consistency only; no actual sign-time, producer approval policy or store completeness",
+    "consumerMappingAck": null,
+    "executionAuthorized": false
+  }
+}

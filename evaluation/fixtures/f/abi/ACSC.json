@@ -1,0 +1,774 @@
+[
+  {
+    "type": "constructor",
+    "inputs": [
+      {
+        "name": "profile_",
+        "type": "uint8",
+        "internalType": "enum Profile"
+      },
+      {
+        "name": "mutations_",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "dbcChainId_",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "sourceChainId_",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "sourcePsc_",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "policyVersion_",
+        "type": "uint64",
+        "internalType": "uint64"
+      },
+      {
+        "name": "grantTtl_",
+        "type": "uint64",
+        "internalType": "uint64"
+      }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "accessLogCount",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "addPolicy",
+    "inputs": [
+      {
+        "name": "clauses",
+        "type": "tuple[][]",
+        "internalType": "struct ACSC.Requirement[][]",
+        "components": [
+          {
+            "name": "role",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "kind",
+            "type": "uint8",
+            "internalType": "uint8"
+          },
+          {
+            "name": "issuerMode",
+            "type": "uint8",
+            "internalType": "enum ACSC.IssuerMode"
+          }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "policyId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "configured",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "consumeDecision",
+    "inputs": [
+      {
+        "name": "request",
+        "type": "tuple",
+        "internalType": "struct AccessRequest",
+        "components": [
+          {
+            "name": "sourceChainId",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "destinationChainId",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "psc",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "kssc",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "gid",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "dataId",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "action",
+            "type": "uint8",
+            "internalType": "uint8"
+          },
+          {
+            "name": "policyVersion",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "authEpoch",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "keyEpoch",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "nonce",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "expiresAt",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "recipientKeyHash",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          }
+        ]
+      },
+      {
+        "name": "certificate",
+        "type": "tuple",
+        "internalType": "struct DecisionCertificate",
+        "components": [
+          {
+            "name": "decision",
+            "type": "tuple",
+            "internalType": "struct AccessDecision",
+            "components": [
+              {
+                "name": "requestDigest",
+                "type": "bytes32",
+                "internalType": "bytes32"
+              },
+              {
+                "name": "result",
+                "type": "uint8",
+                "internalType": "uint8"
+              },
+              {
+                "name": "credentialDigest",
+                "type": "bytes32",
+                "internalType": "bytes32"
+              },
+              {
+                "name": "stateSequence",
+                "type": "uint64",
+                "internalType": "uint64"
+              },
+              {
+                "name": "witnessSetVersion",
+                "type": "uint64",
+                "internalType": "uint64"
+              },
+              {
+                "name": "sourceBlockNumber",
+                "type": "uint256",
+                "internalType": "uint256"
+              },
+              {
+                "name": "sourceBlockHash",
+                "type": "bytes32",
+                "internalType": "bytes32"
+              },
+              {
+                "name": "expiresAt",
+                "type": "uint64",
+                "internalType": "uint64"
+              }
+            ]
+          },
+          {
+            "name": "signatures",
+            "type": "bytes[]",
+            "internalType": "bytes[]"
+          }
+        ]
+      },
+      {
+        "name": "records",
+        "type": "tuple[]",
+        "internalType": "struct CredentialRecord[]",
+        "components": [
+          {
+            "name": "issuer",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "role",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "kind",
+            "type": "uint8",
+            "internalType": "uint8"
+          },
+          {
+            "name": "serial",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "anchorVersion",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "validUntil",
+            "type": "uint64",
+            "internalType": "uint64"
+          }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "grantId",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "dataEntry",
+    "inputs": [
+      {
+        "name": "dataId",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple",
+        "internalType": "struct ACSC.DataEntry",
+        "components": [
+          {
+            "name": "exists",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "owner",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "policyId",
+            "type": "uint256",
+            "internalType": "uint256"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "dbcChainId",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "deployer",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "evaluate",
+    "inputs": [
+      {
+        "name": "dataId",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      },
+      {
+        "name": "attrs",
+        "type": "tuple[]",
+        "internalType": "struct CredentialRecord[]",
+        "components": [
+          {
+            "name": "issuer",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "role",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "kind",
+            "type": "uint8",
+            "internalType": "uint8"
+          },
+          {
+            "name": "serial",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "anchorVersion",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "validUntil",
+            "type": "uint64",
+            "internalType": "uint64"
+          }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "grantTtl",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint64",
+        "internalType": "uint64"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "kssc",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "contract KSSC"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "mutations",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "policy",
+    "inputs": [
+      {
+        "name": "policyId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple[][]",
+        "internalType": "struct ACSC.Requirement[][]",
+        "components": [
+          {
+            "name": "role",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "kind",
+            "type": "uint8",
+            "internalType": "uint8"
+          },
+          {
+            "name": "issuerMode",
+            "type": "uint8",
+            "internalType": "enum ACSC.IssuerMode"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "policyCount",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "policyEnf",
+    "inputs": [
+      {
+        "name": "fwd",
+        "type": "tuple",
+        "internalType": "struct ForwardedRequest",
+        "components": [
+          {
+            "name": "pbcRequestId",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "gid",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "dataId",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "action",
+            "type": "uint8",
+            "internalType": "uint8"
+          }
+        ]
+      },
+      {
+        "name": "verifiedAttributes",
+        "type": "tuple[]",
+        "internalType": "struct CredentialRecord[]",
+        "components": [
+          {
+            "name": "issuer",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "role",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "kind",
+            "type": "uint8",
+            "internalType": "uint8"
+          },
+          {
+            "name": "serial",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "anchorVersion",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "validUntil",
+            "type": "uint64",
+            "internalType": "uint64"
+          }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "allowed",
+        "type": "bool",
+        "internalType": "bool"
+      },
+      {
+        "name": "grantId",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "policyVersion",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint64",
+        "internalType": "uint64"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "profile",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint8",
+        "internalType": "enum Profile"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "pscRelay",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "registerData",
+    "inputs": [
+      {
+        "name": "dataId",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      },
+      {
+        "name": "owner",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "policyId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "seal",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "sourceChainId",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "sourcePsc",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "wire",
+    "inputs": [
+      {
+        "name": "kssc_",
+        "type": "address",
+        "internalType": "contract KSSC"
+      },
+      {
+        "name": "pscRelay_",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "event",
+    "name": "AccessLog",
+    "inputs": [
+      {
+        "name": "accessLogId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "requestRef",
+        "type": "bytes32",
+        "indexed": true,
+        "internalType": "bytes32"
+      },
+      {
+        "name": "gid",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "dataId",
+        "type": "bytes32",
+        "indexed": false,
+        "internalType": "bytes32"
+      },
+      {
+        "name": "allowed",
+        "type": "bool",
+        "indexed": false,
+        "internalType": "bool"
+      },
+      {
+        "name": "code",
+        "type": "uint8",
+        "indexed": false,
+        "internalType": "enum ErrorCode"
+      },
+      {
+        "name": "credentialDigest",
+        "type": "bytes32",
+        "indexed": false,
+        "internalType": "bytes32"
+      },
+      {
+        "name": "grantId",
+        "type": "bytes32",
+        "indexed": false,
+        "internalType": "bytes32"
+      },
+      {
+        "name": "submitter",
+        "type": "address",
+        "indexed": false,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "Sealed",
+    "inputs": [
+      {
+        "name": "by",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "error",
+    "name": "Rejected",
+    "inputs": [
+      {
+        "name": "code",
+        "type": "uint8",
+        "internalType": "enum ErrorCode"
+      }
+    ]
+  }
+]

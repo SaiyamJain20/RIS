@@ -1,3 +1,596 @@
+## Governance history coverage verified — 2026-11-07
+
+C-F1 WORKING; integrated execution LOCKED. New internal governance_history_v2
+joins every declared live/superseded governance digest and expiry refinement to
+its recorded PBC observation, exact supplied state and separate caller approval
+fixture. Missing captures and contradictory number/timestamp/getter facts refuse;
+A-B-A, fault/clear scope and bit1/bit5 exclusions remain. Signing time, latest
+head and producer approval policy remain unproved; explicit result flags false.
+Fresh42new/286focused/2763rootPASS; root615.14s/command615.459s/exit0. Eight narrow
+in-memory bypasses detected with valid controls. No consumer/wire/dependency change.
+
+899owner/258local/5helpers stable;8536carried tracked blobs match initial HEAD;
+52F0pins/31frozen payloads match.393communication paths/no divergence; peers
+A18c0285f/A267111f5 unchanged. No new owner READY/ACK or owner runtime result
+adopted. A3-0096/97 remain open. Complete runtime READY/mapping and separate exact
+execution FREEZE ACKs precede services. Historical qualified E unchanged; all32
+Fcases/GateF NOT_RUN/G locked. No human action. Evidence:
+evaluation/evidence/f/v2-governance-history-20261107/README.md. Next raw governance
+acquisition with explicit observation/approval provenance, remaining AccessDecision/
+GrantReceipt state duties and producer schema/path/lock completeness, then fault
+oracle/finite model. Review correlated; no extra agents/peer edits/main push.
+Original persistent locks acquired before context reads; held through publication.
+Earlier entries are historical.
+
+## Retrospective checkpoint RPC capture verified — 2026-11-07
+
+C-F1 WORKING; integrated execution LOCKED. New internal checkpoint_rpc_v2
+acquires exact raw state for every declared checkpoint digest, with explicit
+caller-selected PBC and unsigned exporter DBC observation provenance. Both chain
+identities/header rechecks bracket reads; safe canonicality and fault/clear/bit1/
+bit5 scope retained. No actual signing time/latest-head/native truth inferred.
+Fresh67new/510focused/2650rootPASS; root572.53s/command572.850s/exit0. Six narrow
+bypasses detected with valid controls. Existing consumers/frozen wire unchanged.
+
+899owner/254selectedlocal runtime inputs stable;8443carried tracked blobs match
+initial clean HEAD. Three evidence-helper corrections and failed trial retained;
+no false helper-stability claim.52F0pins/frozen payloads verify.391communication
+paths/no divergence; A18c0285f/A267111f5 unchanged. No new owner READY/ACK or owner
+runtime result adopted. A3-0096/97 startup requests remain open; complete runtime
+READY/mapping and separate exact execution FREEZE ACKs still precede services.
+Historical qualifiedE unchanged;32Fcases/GateF NOT_RUN/G locked. No human action.
+Evidence: evaluation/evidence/f/v2-checkpoint-rpc-20261107/README.md. Next remaining
+signed-type source-state duties/producer schema-path-lock completeness, then
+fault oracle/finite model. Correlated author review; no extra agents/peer edits.
+Earlier entries are historical.
+
+## Checkpoint-history state coverage verified — 2026-11-07
+
+C-F1 WORKING; integrated execution LOCKED. New internal checkpoint_history_v2
+joins every declared live/superseded checkpoint digest to supplied raw state and
+its recorded DBC observation. Exact capture coverage, shared-fact consistency,
+A->B->A and expiry refinements checked; fault/clear and bit1/bit5 exclusions kept.
+Fresh34new/384focused/2583rootPASS; root554.82s/command555.112s/exit0. Eight narrow
+in-memory bypasses detected with valid controls. Existing consumers/wire unchanged.
+Recorded observations are exporter data, not signature-bound sign-time proofs;
+no actual validation-time/latest-head/native truth/store completeness follows.
+
+899owner/252local/4helpers stable through execution;52F0pins/frozen payloads verify.
+390communication paths/no divergence; fetched A18c0285f/A267111f5 unchanged.
+No new peer READY/ACK or adopted owner runtime result. A3-0096/97 owner startup
+requests remain open; full runtime READY/mapping and separate exact execution
+FREEZE ACKs precede services. Historical qualifiedE unchanged;32Fcases/GateF
+NOT_RUN/G locked. No human action. Evidence:
+evaluation/evidence/f/v2-checkpoint-history-20261107/README.md. Next raw checkpoint
+acquisition with explicit observation provenance, remaining state/producer
+completeness joins, then fault oracle/finite model. Review correlated; no extra
+agents/peer edits/worktrees. Earlier entries are historical.
+
+## Checkpoint source-state checks verified — 2026-11-07
+
+C-F1 WORKING; integrated execution LOCKED. New internal checkpoint_state_v2
+checks one bound checkpoint signature against exact supplied PBC source/head
+getters and DBC current/maxTTL/time. Fresh51new/409focused/2549rootPASS;
+root541.29s/command541.606s/exit0. Seven deliberate in-memory bypasses detected;
+valid controls preserved. No existing consumer or frozen interface changed.
+Supplied observations do not establish actual signing time/latest head, RPC
+truth/ancestry, history/store completeness, consensus or a gate.
+
+Exact A2 partial67111f5 (11-path delta) reviewed: witness process entry point
+exists;48no-node tests independentlyPASS. Numeric chainId1e999 escapes as an
+OverflowError traceback for either chain, no state; A3-0097 extends the open
+A3-0096 owner request. Local corrupt config only, no authorization bypass.
+Empty object/string approval lists grant nothing. Owner142combined/live/30mutant
+claims NOT rerun/adopted. No full runtime READY or execution ACK; real pool
+transport-clock/CLI witness wiring/H2/H5/H6 and full source/mapping remain.
+
+899owner/250selectedlocalinputs/5helpers stable;429ledgerREADY/52F0pins/31payloads
+verify.389communication paths/no divergence; A18c0285f/A267111f5 unchanged at final
+fetch. Three historical E path mismatches remain; no new E parity. Evidence:
+evaluation/evidence/f/v2-checkpoint-state-20261107/README.md. Historical qualified
+E unchanged;32Fcases/GateF NOT_RUN/G locked. No human action. Review correlated;
+no extra agents/peer edits. Next checkpoint acquisition/history joins, remaining
+source-state duties/producer schema-path-lock completeness, fault oracle/model.
+Earlier entries are historical.
+
+## A2 CLI/worker partial source reviewed — 2026-11-07 IST
+
+C-F1 WORKING; integrated execution LOCKED. Exact A2 partial source7915d53
+(A2-0071/72),20-path delta from b0184e7, independently checked. Fresh317focused
+PASS;9default exports match;25independent probe cases include16old/current
+recipient cases. Profiles0/1/2 preserved; profile3 valid recipient now succeeds,
+invalid/zero recipients still refuse. Two startup robustness gaps reproduce:
+numeric chainId1e999 -> OverflowError, schema[] -> AttributeError, both exit1
+with tracebacks rather than closed JSON refusals. No state created/no wrong
+authorization demonstrated; local corrupt configuration only. A3-0096 requests
+owner fixes and closes A3-0095 wording via A2-0072. Owner live/fullsuite/mutation
+counts NOT rerun/adopted. Evidence: evaluation/evidence/reviews/a2-cli-20261107/README.md.
+
+892owner/248localinputs/5helpers stable;429ledgerREADY/52F0pins/31payloads verify.
+388communication paths/no divergence; A18c0285f/A27915d53. Historical E map has
+three changed paths (worker.py, worker_log.py, deviating_witness.py), not two;
+new full READY must inventory them and provide E regressions. Existing isolated
+READYs do not cover this partial source. Complete runtime READY/mapping and
+separate exact execution FREEZE ACKs still precede services. Supervised witnesses,
+real transport-clock/H2/H5/H6 remain. No new E parity/native truth/source-state/
+sign-time/store completeness/reorg/TLC/timing/Fcase/gate result. Qualified E
+unchanged;32Fcases/GateF NOT_RUN/G locked. No human action. Review correlated;
+no extra agents or peer edits. Next own source-state/sign-time/producer schema-
+path-lock completeness joins, fault oracle/model, with owner fix review when ready.
+Earlier entries are historical.
+
+## A2-0070 sequence boundary verified — 2026-11-07 IST
+
+C-F1 WORKING; integrated execution LOCKED. A2 partial b0184e7 (six-path delta)
+reviewed against A1 READY85c59f5, unchanged at tip8c0285f. Fresh5Forge tests PASS,
+including256seeded fuzz inputs;8synthetic honest-witness controls PASS. Three
+controlled keys can install uint64 max and prevent any checkpoint successor;
+two signatures refuse, honest skips refuse without store writes, legitimate
+signing/install controls pass. Frozen R6 already documents this q=3 poisoning
+boundary; ordinary5/7skips recover, arbitrary skips need not. This is a tested
+reconstruction under deliberate compromise outside f=1, not a paper claim.
+Evidence: evaluation/evidence/reviews/a2-certified-20261107/README.md. A3-0095
+requests Agent2 qualify its recovery wording; no contract/interface fix requested.
+
+881owner paths/248localinputs/5helpers stable;429ledgerREADY/52F0pins/31payloads
+verify.386communication paths/no divergence. Final fetch adds A2-0071/be27f32:
+18paths, partial CLI/ABI-loader/worker-profile3 fix and A3-0094 wording correction.
+Message/paths/hash provenance read; its tests/live2391/20CLI/4worker-mutant results
+NOT rerun/adopted. A2-0070's62live/unit result also NOT rerun/adopted. No full
+runtime READY or execution ACK. Supervised witnesses/CLI witness wiring/real
+transport-clock/H2/H5/H6 remain. Complete runtime READY/mapping and separate
+exact execution FREEZE ACKs still precede services. No fullsuite/newEparity/native
+truth/source-state/sign-time/completeness/reorg/TLC/timing/Fcase/gate result.
+Historical qualifiedE unchanged;32Fcases/GateF NOT_RUN/G locked. No human action.
+Next review be27f32 CLI/worker partial source, then source-state/sign-time and
+producer schema/path/lock completeness joins, fault oracle/model. Earlier
+entries are historical. Review correlated; no extra agents or peer edits.
+
+## A2-0069 witness error-boundary fix verified — 2026-11-06
+
+C-F1 WORKING; integrated execution LOCKED. Exact partial source5c8e418,
+12-path delta from0e58f1d; no full runtime READY. Same27raw-RPC probes reproduce
+four AttributeErrors on old source and four LedgerUnreachable refusals on new.
+Fourteen controls unchanged; five permissive codec observations now documented;
+four other suspicions remain refuted. Fresh245focusedPASS (49view/196service),
+45/45owner mutants detected/controlPASS/default9exports match.450successor/
+446baseline/248localinputs/5helpers stable;429ledgerREADY/52F0pins/31payloads/
+7ABIs/4fixtures verify.383communication paths/no divergence; A18c0285f unchanged/
+A25c8e418. Evidence: evaluation/evidence/reviews/a2-witness-fix-20261106/README.md.
+A3-0094 closes A3-0093's transaction/error-prose request. Owner61combined/live
+result NOT rerun/adopted; property loop checks exception boundaries, not all
+return shapes. Review correlated. Worker factory/CLI/supervised witnesses/real
+transport-clock and H2/H5/H6 remain. Full runtime READY/mapping and separate
+exact execution FREEZE ACKs precede services. No fullsuite/newEparity/native truth/
+source-state/sign-time/completeness/reorg/timing/TLC/Fcase/gate result; historical
+qualifiedE unchanged;32Fcases/GateF NOT_RUN/G locked. No human action. Next own
+source-state/sign-time and exact producer schema/path/lock completeness review,
+then fault oracle/finite model. Earlier entries are historical.
+
+## A2-0067/0068 witness RPC reviewed — 2026-11-06
+
+C-F1 WORKING; integrated execution LOCKED. Partial source0e58f1d (446files),
+new production commit86521cd; no full runtime READY. Fresh222focusedPASS
+(26view/196service),43/43owner mutants detected/controlPASS/default9exports match.
+Fourteen manual controls pass;13diagnostics yield9gaps:4non-object transaction
+replies escape as AttributeError,3quantities/2ABI encodings normalize permissively.
+Four suspicions refuted; no wrong authorization shown. A3-0093 asks Agent2 to fix
+its error boundary and document/choose parser strictness. Owner37/38live results
+and idle-chain staleness read/hash-pinned only, not rerun/adopted. Evidence:
+evaluation/evidence/reviews/a2-witness-rpc-20261106/README.md.446owner/248local/
+5helpers fixed in final bracket;429ledgerREADY/52F0pins/31payloads/7ABIs/4fixtures
+verify;381communication paths/no divergence; peers A18c0285f/A20e58f1d unchanged.
+Initial verifier-count correction/repeated proof retained. Witness view exists as
+an isolated module; Worker factory/CLI/supervised processes/transport-clock and
+H2/H5/H6 remain. Complete runtime READY/mapping plus separate exact execution
+FREEZE ACKs precede services. No live node/full suite/newEparity/native truth/
+reorg/timing/TLC/Fcase/gate result; qualified E unchanged;32Fcases/GateF NOT_RUN/
+G locked. No human action. Next own source-state/sign-time and exact producer
+schema/path/lock completeness review, then oracle/model. Earlier entries historical.
+
+## A2-0066 parser fixes verified — 2026-11-06
+
+C-F1 WORKING; integrated execution LOCKED. Exact partial source0297adb, runtime
+file-changing commit1d667b9,438hashed protocol inputs; no new runtime READY.
+Same27manual probes:8gaps on verified old source (expected exit1),0on new;
+15controls/12refusal properties pass. Fresh153focusedPASS (47RPC/106binding-open),
+32/32owner mutation controls independently detected, default9exports match.
+438source/248localinputs/4helpers stable;429ledgerREADY/52F0pins/31payloads/
+7ABIs/4interfacefixtures verify.378communication paths/no divergence; peers
+A18c0285f unchanged/A20297adb. Evidence:
+evaluation/evidence/reviews/a2-parser-fixes-20261106/README.md. A3-0092 scoped REVIEW
+closes A3-0091 parser/prose findings; no shared-interface or peer runtime change.
+Owner live results NOT rerun/adopted; no full root/owner suite, new E parity,
+native truth/reorg/timing/TLC/Fcase/gate result. Full runtime READY/mapping and
+separate exact execution FREEZE ACKs still required. CLI/Worker factory/witness
+view/processes/transport-clock and H2/H5/H6 remain pending. Historical qualified
+E unchanged;32Fcases/GateF NOT_RUN/G locked. No human action. Next own source-state/
+sign-time and producer schema/path/lock completeness review, then oracle/model.
+Earlier entries are historical.
+
+## A2-0065 RPC view reviewed; parser limit reported — 2026-11-06
+
+C-F1 WORKING; integrated execution LOCKED. Exact partial source3b86183 has434
+hashed protocol entries; no new runtime READY. Fresh2072isolatedPASS/201schemaSKIP/
+206DESELECT includes26newRPCtests; all7newlive tests excluded. Default9exports
+match;15independent controls pass. Twelve property probes show8permissive cases:
+`0x1_0` normalizes to16, ABI trailing bytes/non-minimal layout are tolerated.
+No incorrect authorization or binding demonstrated; four negative/signed/space
+suspicions refuted. A3-0091 asks Agent2 to fix separator parsing and clarify the
+canonicality claim. Owner live/mutation counts NOT rerun/adopted; their Foundry
+correction retained. Evidence: evaluation/evidence/reviews/a2-rpc-20261106/README.md.
+434source/248localinputs/4helpers unchanged;429ledgerREADY/52F0pins/31published
+files/7ABIcopies/4interfacefixtures verify.376communication paths/no divergence;
+A18c0285f unchanged/A23b86183. CLI/Worker factory/witness-side view/supervised
+witnesses/transport-clock and full runtime READY remain pending. Separate exact
+execution FREEZE ACKs precede integrated services. No new E parity/Fcase/gate;
+qualified E unchanged;32Fcases/GateF NOT_RUN/G locked. No human action. Next own
+source-state/sign-time and exact owner schema/path/lock completeness review, then
+fault oracle/finite model. Earlier entries are historical.
+
+## A2-0064 response validation reviewed — 2026-11-06
+
+C-F1 WORKING; integrated execution LOCKED. A2-0064/f2c86ad source c138185,
+408-entry manifest016ffd08.. reviewed for isolated injected APIs. With exact
+published schema and default check enabled, malformed/wrong-operation output
+is refused; schema=None/check_responses=False remain explicit bypass limits.
+Fresh2046isolatedPASS/201schemaSKIP/199live-build-completenessDESELECT,
+172evaluator-schemaPASS,21independent controls,58/58adaptermutants/controlPASS,
+9export files match.408source/248localinputs/helpers unchanged;429ledgerREADY/
+52F0pins/31payloads/fourfixtures verify.374communication paths/no divergence;
+A18c0285f unchanged/A2f2c86ad. Owner full2245/other runners NOT rerun/adopted.
+Evaluator custom formats already registered; no evaluator/interface fix needed.
+Evidence: evaluation/evidence/reviews/a2-output-20261106/README.md. A3-0090
+scoped REVIEW; mapping tracker keeps peer ACK null. Complete runtime READYs and
+separate exact execution FREEZE ACKs still precede services. No services/newEparity/
+full root suite/TLC/timing/Fcase/gate; qualified E unchanged;GateF NOT_RUN/G locked.
+Initial predecessor scheduled-lock exclusion not proved; operational mistake and
+recovery recorded in REVIEW/memory. No human action. Next source-state/sign-time
+and exact owner schema/path/lock review for completeness, then oracle/model.
+Earlier entries are historical.
+
+## Protocol isolated source reviewed; runtime still incomplete — 2026-11-06
+
+A3-0089 reviews A2-0063/9467ba1 source dbae4e1/384-entry6ed9a53d.. for isolated
+injected API consumption with published schema supplied. Fresh2027isolated PASS,
+201schema SKIP/199live/build/completeness DESELECT;843focused included,16API
+controls/90selected owner mutants/default9exports pass.384source/248local inputs
+unchanged. First filter23FAIL/6ERROR retained/corrected in Agent3 only. Exact
+evidence: evaluation/evidence/reviews/a2-ready-20261106/README.md. Full runtime
+CLI/wiring/processes/transport/clock READY and separate exact execution FREEZE
+ACKs remain required; tracker has no fabricated ACK. No services/newEparity/full
+owner or root rerun/TLC/timing/Fcase/gate. Qualified E unchanged;F NOT_RUN/G locked.
+Earlier entries are historical.
+
+## Native RPC acquisition checked; execution remains locked — 2026-11-06
+
+C-F1 internal collector59new/2498rootPASS, root631.11s/exit0;248selected inputs/
+186complete sources stable; seven bypass controls detected. Synthetic raw RPC
+captures joined with existing native verifier; endpoint identity brackets and hash
+calls authenticate no chain. Actual node support/source-state/store completeness
+remain unproved. UTC and elapsed clocks differ; raw values retained, no timing
+inference. Evidence: evaluation/evidence/f/v2-history-rpc-20261106/README.md.
+A2076bde2 remains NOT_READY; owner counts not adopted. Full owner READYs/mapping
+and separate complete exact execution FREEZE ACKs required. No liveRPC/newEparity/
+TLC/Fcase/gate result; qualified E unchanged;32Fcases/GateF NOT_RUN/G locked.
+A3-0088 is isolated progress only; no human action required. Earlier entries historical.
+
+## Raw native joins checked; no gate change — 2026-11-06
+
+Internal68new/754focused/2439rootPASS, root462.01s/exit0;246selected inputs and
+181complete sources stable. Seven deliberate bypasses detected. Synthetic supplied
+block/owner-ABI bytes joined with signed history; no actual ledger/source-state/
+store completeness result. Evidence: evaluation/evidence/f/v2-native-history-20261106/.
+Fault/clear and bit1/bit5 labels preserved. A29184e3b remains NOT_READY; owner
+counts not adopted. Full owner READYs/mapping and separate complete exact execution
+FREEZE ACKs required. No services/liveRPC/newEparity/TLC/timing/Fcase/gate result;
+qualified historical E unchanged;32Fcases/GateF NOT_RUN/G locked. A3-0087 is isolated
+progress only. Earlier entries are historical.
+
+## Exporter marker joins checked; no gate change — 2026-11-06
+
+C-F1 internal64new/686focused/2371root PASS; root416.65s/exit0;244selected+
+175complete sources stable. Seven bypass controls detected. Exact captured
+marker content is joined with canonical exporter framing and anchored binding/
+declared signed history; WAL omission control preserves the explicit absence
+of row-completeness proof. Synthetic reconstruction/extension, correlated review:
+evaluation/evidence/f/v2-export-marker-20261106/README.md. A2254faac is partial
+NOT_READY; owner tests/observation not adopted. Full owner READYs/mapping and
+separate complete exact execution FREEZE ACKs still required. No newEparity/
+TLC/timing/integratedFcase/gate/power-loss claim; qualifiedE unchanged;
+32Fcases/GateF NOT_RUN/G locked. A3-0086 is isolated progress only.
+
+## WAL-aware snapshots checked; no gate change — 2026-11-06
+
+C-F1 internal reader40new/622focused/2307root PASS; root423.39s/exit0;
+242selected+169complete sources stable; six deliberate bypasses detected.
+Synthetic WAL-only changes, checkpoint invariance and marker-replacement refusal
+verified; no owner store/export completeness or native ledger truth established.
+Retained RED/fixture failures/real marker-race regression and correlated review:
+evaluation/evidence/f/v2-store-snapshot-20261106/README.md. A2b8d57cd remains
+NOT_READY; no owner count/ACK adopted. Full owner READYs/mapping and separate
+complete exact execution FREEZE ACKs precede services. No newEparity/TLC/timing/
+integratedFcase/gate/power-loss claim. QualifiedE unchanged;32Fcases/GateF NOT_RUN/
+G locked. A3-0085 is isolated progress only.
+
+## Declared signing history checked; no gate change — 2026-11-06
+
+C-F1 isolated139new/609wide/582core/2267root PASS, root441.15s/exit0;
+240selected+163complete sources stable;7deliberate bypasses detected. Includes
+orphan refusal, legal A->B->A, all signed liveness rows, owner/domain/digest joins,
+revision9 order/equal hashes, fault/clear and mutant-death labels. Retained RED,
+helper failures and proof/count mismatch; correlated author review:
+evaluation/evidence/f/v2-witness-history-20261106/README.md.
+No native ledger truth, physical marker/WAL/store completeness, newEparity/TLC/
+integratedFcase/gate claim. A2305ca39 is partial NOT_READY; no owner count or ACK
+adopted. Full owner READYs/mapping and separate complete exact execution FREEZE
+ACKs required. No services/lease; qualified historicalE unchanged;32Fcases/
+GateF NOT_RUN/G locked. A3-0084 announces an internal slice only.
+
+## Anchored signing context checked; no gate change — 2026-11-06
+
+C-F1 isolated92new/443focused/2128root PASS, root402.84s/exit0;238selected+
+157complete sources stable;7deliberate bypass controls. Retained RED/fixture
+failure and correlated author review: evaluation/evidence/f/v2-signing-context-20261106/.
+No source-state truth, expiry, exporter/WAL completeness, liveRPC/newEparity/TLC/
+timing/integratedFcase/gate claim. A2eb6e299 is partial NOT_READY; no owner count
+adopted or ACK inferred. Full owner READYs/mapping and separate complete exact
+execution FREEZE ACKs required. No services/lease; qualified historicalE unchanged;
+32Fcases/Fgate NOT_RUN/G locked. A3-0083 announces the isolated slice.
+
+## Public ABI collector checked; no gate change — 2026-11-04
+
+C-F1 isolated collector54new/351focused/2036root PASS, root401.62s/exit0.
+236selected+153complete execution sources stable; six check-removal controls
+refused. Initial source-drift failure/interruption and atomic-write failure are
+retained in evaluation/evidence/f/v2-public-observations-20261104/.
+No liveRPC/newEparity/TLC/integratedFcase/timing/gate result. A1-0116/A2-0062 are
+notes, not ACKs/sourceREADYs. D56 keeps D50 S0 unchanged. Full owner sourceREADYs
+and separate complete exact execution FREEZE ACKs still required. Historical
+qualifiedE unchanged; all32Fcases/GateF NOT_RUN/G locked. No services or lease.
+
+## Independent D50 context checks; No gate change — 2026-11-04
+
+Fresh isolated checker98new/324focused/1982root tests PASS;226inputs stable.
+Six deliberate join-removal controls detected. No RPC collector or source/chain
+attestation, integrated service/lease/deployment, new E parity/TLC/timing or Fcase.
+Agent2 at051cf67 remains NOT_READY. Owner source READYs plus separate full exact
+execution FREEZE ACKs still required. Historical qualifiedE unchanged;32Fcases/
+GateF NOT_RUN/G locked. A3-0081 and evaluation/evidence/f/v2-binding-context-20261104/
+contain exact proof and remaining work.
+
+## Publication receipts and ledger migration reviewed; no gate change — 2026-11-04
+
+E_SOURCE_CLOSURE_MAPPING.json verifies A1-0115/A2-0061 exact v2.1 publication
+receipts with distinct scopes. Ledger migration85c59f5/429-entry70f541cd.. is
+reviewed for isolated consumption: fresh four compiled-carrier checks,28synthetic
+producer comparisons and95schema tests pass. A2 successor consumer mapping/full
+READY remains absent. These are neither execution ACKs nor integrated E/F tests.
+No services/TLC/timing/gate progression; all32Fcases/GateF NOT_RUN/G locked.
+Historical qualifiedE and frozen publication bytes unchanged. See A3-0080 and
+evaluation/evidence/reviews/v21-migration-20261104/README.md.
+
+## Additive E source-closure publication; no gate change — 2026-11-04
+
+Both exact proposal ACKs A1-0114/A2-0060 receipted in
+E_SOURCE_CLOSURE_ACCEPTANCE.json; separate interfaces/v2.1/FREEZE.json232b84bb..
+publishes the ACKed patch with wire family v2. Original v2/v1/history unchanged.
+Publication mapping receipts and migrated source READYs remain pending.
+Isolated evaluator1884PASS/202selected stable inputs is regression evidence,
+not integrated E parity or a measured F case. No services/TLC/runtime/phase
+promotion. All32Fcases/GateF NOT_RUN/G locked; qualified historicalE unchanged.
+Details: evaluation/evidence/f/e-source-closure-publication-20261104/README.md.
+
+## F0 accepted; v2 published for implementation — 2026-11-04
+
+State: WORKING on owned F implementation; integrated execution LOCKED.
+Both exact freeze replies verified: A1-0110 at d8eddf1e9d194df29e8016e3749c9e0935b5e5a7
+and A2-0058 introduced at 092a823233f8e912e676d7f88233369b2c08e3c0, observed at
+5639e8f638645acf0bf122109f8bae2ffc2b6fc4. Both ACK the full freeze request
+f9f0906faf8dbfb9ccd2d06a794c715bb6a3167b6f273a50347742db41196df5, in ledger
+and protocol F0 design scopes. Neither is source READY or an execution ACK.
+
+Separate acceptance: communication/F0_ACCEPTANCE_CANDIDATE2.json,
+SHA-256 03dcf485668430b1f28552d2bbafcae9a6c64ff9df0090c50bcae753793a432d.
+Shared publication: interfaces/v2/FREEZE.json,
+SHA-256 7bb1d243d546dcc6ab76dea3edcb23a74240bd96fe274ae3ca0ff56f6aff83cd.
+All14 payloads match candidate2 exactly; old pending prose in request/proposals/
+copied payloads remains historical. Sidecars carry current acceptance state.
+Candidate8 controls/requiredEvidence/numeric bounds and all32 NOT_RUN cases remain.
+
+A2-0058 N-1 confirmed: historical E evidence/inventory remains fixed at its commit;
+approved F source edits use new READY hashes and must retain E behavior/assertions/
+operations/outputs/default export/fingerprint. See communication/F_SOURCE_READY.md.
+No E parity is claimed before tests. All52 pinned protocol/f0 files remain fixed.
+No protocol/ledger implementation or runtime mailbox was edited by Agent3.
+
+Evidence: evaluation/evidence/reviews/f0-v2-accepted-20261104/README.md.
+Fresh verification exit0: exact receipts/ancestry,14 copies,4historical base hashes,
+350ledger/142E/52F0/4owner-review entries;142historical E entries;341communication
+paths/no conflicts. Python3.13.13/Git2.54.0; argv/UTC/exits/source-output hashes saved.
+Owner33-check log hash-verified, not rerun. Correlated same-model review.
+Last read A1-0110/A2-0058; sent A3-0073 INTERFACE_READY.
+
+Next permitted Agent3 slice: independent successor semantic schema/binding checks,
+then fault oracle/model and isolated tests per the accepted plan. Owners implement
+and publish exact source READY/mapping receipts. Separate run/tools/config/source
+FREEZE and exact affected ACKs precede integrated services/scenarios. No service
+lease, runtime/Forge/TLC/RPC/full-suite/timing or new E/F/G result. QualifiedE and
+frozenv1/history unchanged; F gate NOT_RUN/G locked. No dependencies/worktrees/
+extra agents/main push. No human action required. Earlier entries are historical.
+
+## Both candidate2 mapping ACKs verified; F0 freeze requested — 2026-11-04
+
+State: WAITING for BOTH exact F0 freeze ACKs; implementation and execution LOCKED.
+A1-0109 at5c95418394b2de9c1f3940567ae1066c6b64287e and A2-0057 at
+ac624b46f59b63151434e72bcbc4bb6109bb9db1 ACK candidate2 manifest
+0d1a2be44666164deccf19c8c7e942b91938d7577fd6caba569837888b4143e9 in ledger/protocol mapping/layout
+scope respectively. Exact messages/provenance are recorded; neither is a freeze,
+source READY or execution ACK. Last read A1-0109/A2-0057; last sent A3-0072.
+
+A3-0072 requests the separate communication/F0_FREEZE_CANDIDATE2.json,
+SHA-256 f9f0906faf8dbfb9ccd2d06a794c715bb6a3167b6f273a50347742db41196df5.
+It retains candidate8's14components/32cases/controls/numeric bounds, applies the
+reviewed candidate2 migration, pins all14payloads/52protocol F0 files and the
+ledger design, and explicitly names layout checker/tests/vectors/mutant runner.
+A1-A/B/A2-N1..N5 are clarified without changing reviewed proposal bytes. Orphan-
+history/WAL/native completeness duties and bit1/bit5 exclusions remain mandatory.
+D4/D6 remain Agent2 post-acceptance source tasks.
+
+Evidence: evaluation/evidence/reviews/f0-v2-candidate2-freeze-20261104/README.md.
+Fresh receipt/freeze audit0:14payloads/4historical files;350ledger+142E+52F0+
+9newreview manifest entries;337communication paths/ancestry/no conflicts;
+all32NOT_RUN/numeric bounds preserved. Launch/diff checks0. UTC/commands/exits/
+source-output hashes saved. Owner Forge26/protocol differential/signing results
+read/hash-verified, NOT rerun. Same-model review correlated; no extra agents.
+
+Next: BOTH exact freeze ACKs, coordinator acceptance, matching v2 publication,
+then owned implementation/isolated tests. Source READY and execution FREEZE later.
+No runtime/services/Forge/TLC/RPC/fullsuite/timing/new F/E/G result. QualifiedE,
+frozenv1/candidate1/candidate2/history remain fixed; G locked. No dependencies,
+leases, peer edits, worktrees or main push. No human action. Own reviewed agent-3
+publication and final SHA/remote/lock cleanup in automation memory. Earlier
+entries below are historical and retain publication-time pending prose.
+
+## Complete v2 candidate2 published for exact mapping review — 2026-11-04
+
+State: WAITING for BOTH complete candidate2 mapping/layout ACKs; F0 NOT FROZEN.
+Read A2-0056 introduced at52f39437771b0d5615b29015725c9f91d469d976, observed
+atdcad9745a594770654810ca366ed78c6e559539f (only later STATUS/HANDOFF changes),
+and A1-0107/0108 at8a943a7c64e881ac0686587f01a9ebfaf2368706. A1-0108 is a
+ledger-facing revision9 layout ACK only. A3-0070 accepts the exact layout design
+in coordinator scope, retaining generation order; L1/L2 corrected at checker level.
+
+A3-0071 RFC: interfaces/proposals/v2-candidate2/ complete separate review unit,
+manifest0d1a2be44666164deccf19c8c7e942b91938d7577fd6caba569837888b4143e9.
+136definitions, closed read-only exports, all M1-M4/P1-P7/N1-N4, V2 ABI containers,
+mutant death exclusions and source migration addendum. No live consumer switched.
+Prior candidate1/preparation/candidate8/frozenv1/qualifiedE remain unchanged.
+
+Evidence: evaluation/evidence/reviews/f0-v2-candidate2-20261104/README.md and
+f0-a2-revision9-20261104/README.md. Fresh385offline checks/46synthetic signature
+recoveries;14payload bytes reproduced.76layout expectations/29mutants/15independent
+probes;350ledger+142E+52F0manifest entries/333communication paths verified;
+233scratch inputs stable. Historical manifests/launch/diff checks pass. Commands,
+UTC/exits/source/output hashes and initial verifier diagnostic preserved. Same-model
+review correlated; owner layout signatures are placeholders, separate from recovery.
+
+Next: BOTH exact COMPLETE mapping/layout ACKs, separate F0 freeze BEFORE code,
+then source READY and execution FREEZE. No F implementation, runtime service,
+Forge/TLC/RPC/fullsuite/store/pool/exporter/timing or new E/F/G gate result.
+All32Fcases NOT_RUN; G locked. No human research action. No peer edits, dependency,
+lease, extra agents, worktrees or main push. Own reviewed agent-3 publication only;
+final SHA/push/lock cleanup in automation memory. Earlier entries are historical.
+
+## Revision8 reviewed; export-layout corrections pending — 2026-11-04
+
+State: WAITING for Agent2's exact L1/L2 layout amendment; F0 NOT FROZEN.
+Read A2-0055 introduced at64ec86a, observed ate5796bc80da7683d48a96b500360d666bcec522d;
+A1-0106 at8f34694c8f423841148372e5672fde35e3b2659c is ledger-facing ACK only.
+A3-0068 ACKs D50r5/wirer8 adapter-response scope, excluding exporter semantics.
+A3-0069 withholds layout ACK: the global history-vs-current inequality rejects
+legal Governance A→B→A recurrence; the checker accepts ALLOW-only grant death
+on DENY. These are specification/checker results, not runtime vulnerabilities.
+
+Evidence: evaluation/evidence/reviews/f0-a2-revision8-20261104/README.md.
+Three binding hashes/14profile cases independently reproduced;350ledger+142E+
+50F0manifest entries/328communication paths verified. Six owner helper commands
+exit0:126D50checks/15mutants,77wirechecks/36corruptions,62layoutchecks/24mutants.
+Seven coordinator probes reproduce the gaps with positive/negative controls;
+231scratch inputs stable. Python3.13.13/Git2.54.0; commands/exits/UTC/hashes saved.
+Correlated specification review, placeholder owner signatures; no runtime,
+Forge/TLC/RPC/fullsuite/storage/timing/crypto-recovery or new E/F/G gate result.
+
+Next: exact owner layout amendment/tests/manifest and affected review, COMPLETE
+candidate2 with all prior corrections plus V2 ABI-container naming and mutant
+death exclusions, BOTH complete mapping/layout ACKs, separate F0 freeze BEFORE
+implementation. No final pins adopted, source READY or execution FREEZE.
+All32Fcases NOT_RUN; G locked; qualifiedE/frozenv1/candidate1 unchanged.
+No services/leases/dependencies/peer edits/extra agents/worktrees/main push.
+Own reviewed agent-3 publication only; final SHA/push/lock cleanup in automation
+memory. No human research action needed. Earlier entries are historical.
+
+## Candidate1 reviews received; correction preparation complete — 2026-11-04
+
+State: WAITING for Agent2 revision8 D50/wire/export layouts. F0 NOT FROZEN.
+Read A1-0105 at adb668dfa643a77732c6b3093c5b4053b798aa12 and A2-0054
+at 9ced19af68bec8348d696f4db510fd9cfca497f4; both are REVIEW, not mapping ACK.
+A3-0067 responds with evidence and the correction plan in
+`evaluation/evidence/reviews/f0-v2-owner-review-20261104/README.md`.
+
+Prepared an explicitly incomplete prospective schema in the evidence directory,
+not a replacement interface: M1–M3/P1/P4/P5/N1 shape corrections. Boundary-only
+M4/P2/P3/P6/N2/N4 obligations and P7's owner vector dependency are enumerated.
+Candidate1/frozenv1/qualified E evidence unchanged. 46 paired shape probes pass,
+including preserved12wire/4success examples;350ledger/142E/36F0/11review blobs
+and325communication paths verified by hash/ancestry. Owner logs are pinned,
+not rerun. No runtime/Forge/TLC/full-suite/timing/F-gate result is claimed.
+
+Next: Agent2 publishes revision8; review changed D50/wire/layouts and reproduce
+new vectors, renew affected design ACKs, then publish COMPLETE candidate2 and
+obtain BOTH exact mapping/layout ACKs, then separate F0 freeze BEFORE code.
+No F implementation, execution/source READY ACK or new gate PASS. All32Fcases
+NOT_RUN; G locked. No services, dependencies, peer edits, extra agents,
+worktrees or main push. No human research action. Prior entries are historical.
+
+## Candidate8 design ACK receipt and v2 mapping proposal — 2026-11-04
+
+A1-0104/A2-0053 exact candidate8 design ACKs are verified in their scopes.
+Receipt/provenance: evaluation/evidence/reviews/f0-v2-candidate1-20261104/.
+A3-0066 publishes interfaces/proposals/v2 candidate1 for exact owner review;
+profile/q2 mapping and exact CLI evidence layouts remain dependencies. No schema
+mapping ACK, F0 freeze, source READY or execution ACK follows. Offline209checks/
+46synthetic recoveries are vector consistency only. No E/F/G gate or criterion
+is newly passed. All32Fcases NOT_RUN; G locked; historical qualified E unchanged.
+Earlier entries below are historical.
+
+## Candidate8 corrections ready; exact owner ACKs pending — 2026-11-04
+
+Read A1-0103 at 4c5b6914573f3a049797948f78d7f24dc8795ab8 (candidate7
+ledger-scope ACK) and A2-0052 at e0f25ef861a7423f07dcd3677e3f614990045609
+(protocol REVIEW withholding ACK). Sent A3-0065 RFC with candidate8 at
+evaluation/evidence/reviews/f0-revision8-20261104/. Neither earlier ACK transfers.
+
+C-1 adds F-12 ambiguous-split, f=2 fabricated-value and honest-pair/equivocator
+controls. C-2 restores F-29 full signing-rules hash. C-3 distinguishes revision4
+F0 set from common production bytes. N-1 explicitly proposes revision7 design
+pins after both ACKs; N-2 holds/silences witnesses2/3 in the 5000ms fixture;
+N-3 enumerates remaining wire mapping obligations. CSV byte-identical, numeric
+bounds and ledger-facing cases unchanged. 14 components/32 cases all NOT_RUN.
+
+Fresh planning verification exit0:36 owner F0 entries/319 latest communication
+paths/no incomparable conflicts/17 historical candidate7 manifest files; E
+manifest and production bytes unchanged. Review manifest SHA-256 1388af020f90c95efb1e24ac9b91b5e3aa36e0a07467877f8853aa7eae934e3a.
+Commands/exits/UTC/source-output hashes and diagnostic lookups are in evidence.
+No runtime/full-suite/owner-helper/Forge/TLC/RPC/timing/crypto/F-gate run.
+Correlated self-review. Frozen v1/signed E/prior candidates unchanged.
+
+State: WAITING for BOTH exact candidate8 design ACKs; then full successor v2
+schema/vectors and mapping ACKs, then F0 freeze BEFORE implementation. No schema,
+implementation or execution authorized by this RFC. F NOT_RUN; G locked.
+No services/lease/dependency changes/peer edits/extra agents/worktrees/main push.
+Own reviewed agent-3 publication only; final SHA/push/lock release in automation
+memory. No human research action needed. Earlier entries below are historical.
+
+## Candidate7 design review — 2026-11-04
+
+A3-0064 reviews A2-0051 at 0b81ee46c487488022585c99335c0e3fa0fa10c4 and
+publishes candidate7 at evaluation/evidence/reviews/f0-revision7-20261104/.
+Revision7 R6 selection/action and original-deadline hard-stop rules are accepted
+as design input. Both exact candidate7 owner ACKs remain pending; candidate6
+ACKs do not transfer. No v2 schema, F0 freeze, implementation, or execution is
+authorized. The 14-component/32-case matrix remains all NOT_RUN. Gate F remains
+NOT RUN; G remains locked. No E/F/G gate result or checkbox changes here.
+
+## Candidate6 scoped design ACK receipt — 2026-11-04
+
+A3-0063 records A1-0102/A2-0050 for exact candidate6 hashes against revision4
+pins only. Sidecar/evidence: evaluation/evidence/reviews/f0-a2-revision6-20261104/.
+Protocol revision6 R4/R5 abstract rules reviewed; R6 expiry/deadline evidence
+semantics remain open. Revision6 NOT_ADOPTED. No schema/mapping/F0 freeze or
+implementation/execution ACK. F's32cases remain NOT_RUN; G locked; historical
+qualified E gate and signed bytes unchanged. No gate checkbox is newly passed.
+
 ## F0 baseline authorization — 2026-10-12
 
 D51/A3-0052 record the human's branch convergence instruction and F0 planning

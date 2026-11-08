@@ -1,0 +1,93 @@
+{
+  "status": "OWNER_D6_PARSER_TEST_INPUTS_NOT_EXECUTED_HERE",
+  "cases": [
+    {
+      "line": "{\"witnessIndex\":\"0\",\"witnessIndex\":\"1\"}",
+      "expected": "MALFORMED",
+      "reason": "duplicate key",
+      "targets": [
+        "adapter",
+        "TEST-ONLY deviating_witness"
+      ]
+    },
+    {
+      "line": "{\"witnessIndex\":NaN}",
+      "expected": "MALFORMED",
+      "reason": "non-finite constant",
+      "targets": [
+        "adapter",
+        "TEST-ONLY deviating_witness"
+      ]
+    },
+    {
+      "line": "{\"witnessIndex\":Infinity}",
+      "expected": "MALFORMED",
+      "reason": "non-finite constant",
+      "targets": [
+        "adapter",
+        "TEST-ONLY deviating_witness"
+      ]
+    },
+    {
+      "line": "{\"witnessIndex\":0}",
+      "expected": "MALFORMED",
+      "reason": "JSON number rather than decimal string",
+      "targets": [
+        "adapter",
+        "TEST-ONLY deviating_witness"
+      ]
+    },
+    {
+      "line": "{\"operation\":\"collect_checkpoint\",\"input\":{},\"unexpected\":true}",
+      "expected": "MALFORMED",
+      "reason": "unknown envelope field",
+      "targets": [
+        "adapter"
+      ]
+    },
+    {
+      "line": "{\"signature\":\"0x00\"}",
+      "expected": "MALFORMED",
+      "reason": "truncated signature",
+      "targets": [
+        "adapter",
+        "TEST-ONLY deviating_witness"
+      ]
+    },
+    {
+      "line": "{\"expiresAt\":\"01\"}",
+      "expected": "MALFORMED",
+      "reason": "noncanonical decimal string",
+      "targets": [
+        "adapter",
+        "TEST-ONLY deviating_witness"
+      ]
+    },
+    {
+      "line": "{\"witnessIndex\":\"4\"}",
+      "expected": "MALFORMED",
+      "reason": "out-of-range witness selector",
+      "targets": [
+        "adapter"
+      ]
+    },
+    {
+      "line": "{\"witnessIndex\":-Infinity}",
+      "expected": "MALFORMED",
+      "reason": "non-finite constant",
+      "targets": [
+        "adapter",
+        "TEST-ONLY deviating_witness"
+      ]
+    },
+    {
+      "construction": "UTF-8 encoded line of 1048577 bytes (1MiB+1), using a repeated ASCII space after a JSON object",
+      "expected": "MALFORMED",
+      "reason": "request exceeds byte bound; check before JSON parsing",
+      "targets": [
+        "adapter",
+        "TEST-ONLY deviating_witness"
+      ]
+    }
+  ]
+}

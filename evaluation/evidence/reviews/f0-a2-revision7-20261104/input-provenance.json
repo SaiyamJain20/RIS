@@ -1,0 +1,92 @@
+{
+  "capturedAt": "2026-11-04T01:49:04Z",
+  "agent2Commit": "0b81ee46c487488022585c99335c0e3fa0fa10c4",
+  "agent2Parent": "aec008ea41546887e28c74f37daa6e01120216fd",
+  "agent2Tree": "8077ec446ac32f39c28de74f46c1ce269b1feb75",
+  "protocolF0Tree": "f1794e9f0a5b4282ebbbb720abfd2b898bafc9ea",
+  "branchHeads": {
+    "origin/agent-1": "ead566fc5d4e103256708eaac726a7c3bde9f7fb",
+    "origin/agent-2": "0b81ee46c487488022585c99335c0e3fa0fa10c4",
+    "origin/agent-3": "d765f0c0b6e75cecc4ccbea3475b769b02b004b9"
+  },
+  "respondingMessage": {
+    "messageId": "A2-0051",
+    "path": "communication/agent-2/outbox/0051-rfc-f0-revision7-r6-selection-vs-action.md",
+    "sha256": "9329080b48caf136d80588d412ae9715c2553d8bfe750fd7ca5a9eb4d9684614",
+    "ownerManifestSha256": "097d8ed8a8d4e094195f620f53b9c7839a2426210538c75ed06ad16c5f9fa6a0"
+  },
+  "reviewedSourceHashes": {
+    "protocol/f0/MANIFEST.sha256": "097d8ed8a8d4e094195f620f53b9c7839a2426210538c75ed06ad16c5f9fa6a0",
+    "protocol/f0/README.md": "e5939baa915301bb41e43335236a2fca957f938db03b8d4230aa53390ada764b",
+    "protocol/f0/SIGNING-RULES.md": "23a88159c869e767d4305236c089c6682a5a6be070afa43756e24b5f3f7919fb",
+    "protocol/f0/SUCCESSOR-WIRE.md": "065c46db8f3308e531b6b83db4bbf23cbe26f861a983a0af39ac3e86d505aa58",
+    "protocol/f0/vectors/pool_adoption.py": "08da1e29b609c6734365bef8abb3b931f9e95927da4349039919416072058ac4",
+    "protocol/f0/vectors/test_pool_adoption.py": "b21e86560ab3dc581417217856a2a5ea5076de3491d5f05fa4081241391c7aeb",
+    "protocol/f0/vectors/check_wire_examples.py": "8ce600dc5620adac11cc887dfa090c23a87c18b1e639e6229f851eb3e0b40539"
+  },
+  "commitChangedPaths": [
+    "communication/agent-2/HANDOFF.md",
+    "communication/agent-2/STATUS.md",
+    "communication/agent-2/outbox/0051-rfc-f0-revision7-r6-selection-vs-action.md",
+    "protocol/f0/MANIFEST.sha256",
+    "protocol/f0/README.md",
+    "protocol/f0/SIGNING-RULES.md",
+    "protocol/f0/SUCCESSOR-WIRE.md",
+    "protocol/f0/evidence/pool-adoption-mutants.txt",
+    "protocol/f0/evidence/pool-adoption-run4-revision7.txt",
+    "protocol/f0/evidence/wire-check-run.txt",
+    "protocol/f0/evidence/wire-mutants.txt",
+    "protocol/f0/vectors/check_wire_examples.py",
+    "protocol/f0/vectors/pool_adoption.py",
+    "protocol/f0/vectors/run_pool_adoption_mutants.py",
+    "protocol/f0/vectors/run_wire_corruptions.py",
+    "protocol/f0/vectors/test_pool_adoption.py"
+  ],
+  "nonF0ProtocolChangedPaths": [],
+  "priorCandidate6Acks": [
+    {
+      "messageId": "A1-0102",
+      "commit": "ead566fc5d4e103256708eaac726a7c3bde9f7fb",
+      "scope": "candidate6 ledger scope against revision4 pins only"
+    },
+    {
+      "messageId": "A2-0050",
+      "commit": "aec008ea41546887e28c74f37daa6e01120216fd",
+      "scope": "candidate6 protocol scope against revision4 pins only"
+    }
+  ],
+  "reviewClassification": "A2-0051 RFC; accepted by Agent3 as design input for candidate7, not a peer ACK or freeze",
+  "latestPeerCommunication": {
+    "origin/agent-1": "ead566fc5d4e103256708eaac726a7c3bde9f7fb",
+    "agent1Status": {
+      "path": "communication/agent-1/STATUS.md",
+      "sha256": "cf7d6064a7c1b60e5941bbc6ccbccb4694f0d2643b3d1dd7c919f3b4c48af45e",
+      "state": "WAITING for F0 coordination; latest exact ACK A1-0102 covers candidate6 ledger scope only"
+    },
+    "agent1Handoff": {
+      "path": "communication/agent-1/HANDOFF.md",
+      "sha256": "2af54e8dc68b3bcfb26ac4a3cbdce54cd8b3d667f2fb58196fa2c8ad3935e4f4",
+      "state": "candidate6 ACK; asks to review any candidate7 and later v2 mapping"
+    },
+    "agent1Ack": {
+      "path": "communication/agent-1/outbox/0102-ack-f0-candidate6-ledger-scope.md",
+      "sha256": "4d05400a942aa11b7ea9915d03984dd0d87a67f8ae8937ccdf86dd1ba7d041b7"
+    },
+    "origin/agent-2": "0b81ee46c487488022585c99335c0e3fa0fa10c4",
+    "agent2Status": {
+      "path": "communication/agent-2/STATUS.md",
+      "sha256": "831b4a3b53907f6e3ec6b4ef201ab6d2ebb4cd0ed0056a49bd76a005928c79bd",
+      "state": "WORKING; A2-0051 published and awaiting Agent3 review; no implementation before exact ACKs and F0 freeze"
+    },
+    "agent2Handoff": {
+      "path": "communication/agent-2/HANDOFF.md",
+      "sha256": "db159a34412989723d6130eeed914db3e12babe59a1eef9a2628808c409c1a4f",
+      "state": "waiting for Agent3 review of revision7 and candidate7 if adopted"
+    },
+    "agent2Rfc": {
+      "path": "communication/agent-2/outbox/0051-rfc-f0-revision7-r6-selection-vs-action.md",
+      "sha256": "9329080b48caf136d80588d412ae9715c2553d8bfe750fd7ca5a9eb4d9684614"
+    }
+  },
+  "latestPeerCommunicationCapturedAt": "2026-11-04T01:56:36Z"
+}

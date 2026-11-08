@@ -1,0 +1,993 @@
+{
+  "status": "OWNER_ILLUSTRATIONS_REENCODED_WITH_REAL_SYNTHETIC_SIGNATURES_NOT_EXECUTION",
+  "sourceSha256": "065c46db8f3308e531b6b83db4bbf23cbe26f861a983a0af39ac3e86d505aa58",
+  "responses": [
+    {
+      "schemaVersion": "v2",
+      "ok": true,
+      "result": {
+        "schemaVersion": "v2",
+        "adapterMode": "symbolic",
+        "checkpoint": {
+          "sequence": "4",
+          "authEpoch": "3",
+          "policyVersion": "1",
+          "keyEpoch": "0",
+          "witnessSetVersion": "2",
+          "sourceChainId": "18545",
+          "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+          "sourceBlockNumber": "250",
+          "sourceBlockHash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+          "expiresAt": "1791521500"
+        },
+        "signatures": [
+          "0x82f2962709e85b5e0b18fb9686e96c870bed7942bf8c0ced4bd5c858c280d977045417729b56e22aab8c3a1cd045a6a139be8c1a5523ce375e597b24316e95af1c",
+          "0xe183b21ad1de551f9de1827d4319b0fcd32554971fccfd5861855a747b1364635424a10500ee17c9a5fc34e261febfd65852295319f2360e6751a54a092b75c01b",
+          "0x6617f068fcff2975a05fc27357e79213a8dcbf11afa0897eaacdc5a7ac55e2eb17cf246c734b1b3299dc5c1b8a8b11da2a4d44962493139563c8d13c222bf1cb1c"
+        ],
+        "collection": {
+          "quorum": "3",
+          "witnessSetVersion": "2",
+          "outcomes": [
+            {
+              "witnessIndex": "0",
+              "witness": "0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42",
+              "status": "signed",
+              "replies": "1"
+            },
+            {
+              "witnessIndex": "1",
+              "witness": "0xe34919a7f4135eb28547717aba85a2b7619cd85a",
+              "status": "signed",
+              "replies": "1"
+            },
+            {
+              "witnessIndex": "2",
+              "witness": "0x6ae8de0489163ba82609d6358c85b3b47c24cb45",
+              "status": "invalid",
+              "replies": "1",
+              "detail": "signature does not recover to the replying witness"
+            },
+            {
+              "witnessIndex": "3",
+              "witness": "0x1e054b33476173deeffaea9124f293eecb6de4d0",
+              "status": "signed",
+              "replies": "2"
+            }
+          ],
+          "submittedSigners": [
+            "0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42",
+            "0x1e054b33476173deeffaea9124f293eecb6de4d0",
+            "0xe34919a7f4135eb28547717aba85a2b7619cd85a"
+          ]
+        }
+      },
+      "error": null
+    },
+    {
+      "schemaVersion": "v2",
+      "ok": false,
+      "result": null,
+      "error": {
+        "code": "ADAPTER_UNAVAILABLE",
+        "reason": "QUORUM_UNAVAILABLE",
+        "message": "2 of 3 required distinct valid signatures before the deadline",
+        "collection": {
+          "quorum": "3",
+          "witnessSetVersion": "2",
+          "outcomes": [
+            {
+              "witnessIndex": "0",
+              "witness": "0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42",
+              "status": "signed",
+              "replies": "1"
+            },
+            {
+              "witnessIndex": "1",
+              "witness": "0xe34919a7f4135eb28547717aba85a2b7619cd85a",
+              "status": "refused",
+              "replies": "1",
+              "code": "STALE_STATE",
+              "reason": "CONFLICT_PINNED"
+            },
+            {
+              "witnessIndex": "2",
+              "witness": "0x6ae8de0489163ba82609d6358c85b3b47c24cb45",
+              "status": "signed",
+              "replies": "1"
+            },
+            {
+              "witnessIndex": "3",
+              "witness": "0x1e054b33476173deeffaea9124f293eecb6de4d0",
+              "status": "silent",
+              "replies": "0"
+            }
+          ],
+          "submittedSigners": []
+        }
+      }
+    },
+    {
+      "schemaVersion": "v2",
+      "ok": false,
+      "result": null,
+      "error": {
+        "code": "ADAPTER_UNAVAILABLE",
+        "reason": "WITNESS_FAULTED",
+        "message": "witness 1 refuses to sign: ledger clock regression observed"
+      }
+    },
+    {
+      "schemaVersion": "v2",
+      "ok": false,
+      "result": null,
+      "error": {
+        "code": "WRONG_DESTINATION",
+        "reason": "BINDING_MISMATCH",
+        "message": "this store was bound to a different deployment"
+      }
+    },
+    {
+      "schemaVersion": "v2",
+      "ok": true,
+      "result": {
+        "schemaVersion": "v2",
+        "adapterMode": "symbolic",
+        "checkpoint": {
+          "sequence": "4",
+          "authEpoch": "3",
+          "policyVersion": "1",
+          "keyEpoch": "0",
+          "witnessSetVersion": "2",
+          "sourceChainId": "18545",
+          "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+          "sourceBlockNumber": "250",
+          "sourceBlockHash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+          "expiresAt": "1791521500"
+        },
+        "signatures": [
+          "0x82f2962709e85b5e0b18fb9686e96c870bed7942bf8c0ced4bd5c858c280d977045417729b56e22aab8c3a1cd045a6a139be8c1a5523ce375e597b24316e95af1c",
+          "0x5a202eabd8634aeb4fa91a8addcbe4caf54d87274b249df3f5d92796ac0440b111ce3f69cf24a7842562629928af6992ba73d692d19d5b2a158a5f10acbdf0441c",
+          "0x6617f068fcff2975a05fc27357e79213a8dcbf11afa0897eaacdc5a7ac55e2eb17cf246c734b1b3299dc5c1b8a8b11da2a4d44962493139563c8d13c222bf1cb1c"
+        ],
+        "collection": {
+          "quorum": "3",
+          "witnessSetVersion": "2",
+          "outcomes": [
+            {
+              "witnessIndex": "0",
+              "witness": "0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42",
+              "status": "signed",
+              "replies": "2"
+            },
+            {
+              "witnessIndex": "1",
+              "witness": "0xe34919a7f4135eb28547717aba85a2b7619cd85a",
+              "status": "signed",
+              "replies": "2"
+            },
+            {
+              "witnessIndex": "2",
+              "witness": "0x6ae8de0489163ba82609d6358c85b3b47c24cb45",
+              "status": "signed",
+              "replies": "1"
+            },
+            {
+              "witnessIndex": "3",
+              "witness": "0x1e054b33476173deeffaea9124f293eecb6de4d0",
+              "status": "silent",
+              "replies": "0"
+            }
+          ],
+          "recordedReports": [
+            {
+              "witnessIndex": "0",
+              "message": {
+                "sequence": "4",
+                "authEpoch": "3",
+                "policyVersion": "1",
+                "keyEpoch": "0",
+                "witnessSetVersion": "2",
+                "sourceChainId": "18545",
+                "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+                "sourceBlockNumber": "250",
+                "sourceBlockHash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+                "expiresAt": "1791521500"
+              },
+              "signature": "0x82f2962709e85b5e0b18fb9686e96c870bed7942bf8c0ced4bd5c858c280d977045417729b56e22aab8c3a1cd045a6a139be8c1a5523ce375e597b24316e95af1c"
+            },
+            {
+              "witnessIndex": "1",
+              "message": {
+                "sequence": "4",
+                "authEpoch": "3",
+                "policyVersion": "1",
+                "keyEpoch": "0",
+                "witnessSetVersion": "2",
+                "sourceChainId": "18545",
+                "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+                "sourceBlockNumber": "250",
+                "sourceBlockHash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+                "expiresAt": "1791521500"
+              },
+              "signature": "0x6617f068fcff2975a05fc27357e79213a8dcbf11afa0897eaacdc5a7ac55e2eb17cf246c734b1b3299dc5c1b8a8b11da2a4d44962493139563c8d13c222bf1cb1c"
+            }
+          ],
+          "adopted": {
+            "message": {
+              "sequence": "4",
+              "authEpoch": "3",
+              "policyVersion": "1",
+              "keyEpoch": "0",
+              "witnessSetVersion": "2",
+              "sourceChainId": "18545",
+              "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+              "sourceBlockNumber": "250",
+              "sourceBlockHash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+              "expiresAt": "1791521500"
+            },
+            "reporters": [
+              "0",
+              "1"
+            ],
+            "reproposal": "sent"
+          },
+          "timing": {
+            "ledgerNowAtStart": "1791521470",
+            "proposalExpiresAt": "1791521500",
+            "collectionDeadlineMs": "10000",
+            "snapshotClosedAtMs": "5000",
+            "snapshotClosedBy": "reply-timeout"
+          },
+          "submittedSigners": [
+            "0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42",
+            "0x6ae8de0489163ba82609d6358c85b3b47c24cb45",
+            "0xe34919a7f4135eb28547717aba85a2b7619cd85a"
+          ]
+        }
+      },
+      "error": null
+    },
+    {
+      "schemaVersion": "v2",
+      "ok": false,
+      "result": null,
+      "error": {
+        "code": "ADAPTER_UNAVAILABLE",
+        "reason": "QUORUM_UNAVAILABLE",
+        "message": "honest witnesses recorded two different values; nothing adopted",
+        "collection": {
+          "quorum": "3",
+          "witnessSetVersion": "2",
+          "outcomes": [
+            {
+              "witnessIndex": "0",
+              "witness": "0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42",
+              "status": "refused",
+              "replies": "1",
+              "code": "STALE_STATE",
+              "reason": "CONFLICT_PINNED"
+            },
+            {
+              "witnessIndex": "1",
+              "witness": "0xe34919a7f4135eb28547717aba85a2b7619cd85a",
+              "status": "refused",
+              "replies": "1",
+              "code": "STALE_STATE",
+              "reason": "CONFLICT_PINNED"
+            },
+            {
+              "witnessIndex": "2",
+              "witness": "0x6ae8de0489163ba82609d6358c85b3b47c24cb45",
+              "status": "refused",
+              "replies": "1",
+              "code": "STALE_STATE",
+              "reason": "CONFLICT_PINNED"
+            },
+            {
+              "witnessIndex": "3",
+              "witness": "0x1e054b33476173deeffaea9124f293eecb6de4d0",
+              "status": "refused",
+              "replies": "1",
+              "code": "STALE_STATE",
+              "reason": "CONFLICT_PINNED"
+            }
+          ],
+          "recordedReports": [
+            {
+              "witnessIndex": "0",
+              "message": {
+                "sequence": "4",
+                "authEpoch": "3",
+                "policyVersion": "1",
+                "keyEpoch": "0",
+                "witnessSetVersion": "2",
+                "sourceChainId": "18545",
+                "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+                "sourceBlockNumber": "250",
+                "sourceBlockHash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+                "expiresAt": "1791521500"
+              },
+              "signature": "0x82f2962709e85b5e0b18fb9686e96c870bed7942bf8c0ced4bd5c858c280d977045417729b56e22aab8c3a1cd045a6a139be8c1a5523ce375e597b24316e95af1c"
+            },
+            {
+              "witnessIndex": "1",
+              "message": {
+                "sequence": "4",
+                "authEpoch": "3",
+                "policyVersion": "1",
+                "keyEpoch": "0",
+                "witnessSetVersion": "2",
+                "sourceChainId": "18545",
+                "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+                "sourceBlockNumber": "250",
+                "sourceBlockHash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+                "expiresAt": "1791521500"
+              },
+              "signature": "0x6617f068fcff2975a05fc27357e79213a8dcbf11afa0897eaacdc5a7ac55e2eb17cf246c734b1b3299dc5c1b8a8b11da2a4d44962493139563c8d13c222bf1cb1c"
+            },
+            {
+              "witnessIndex": "2",
+              "message": {
+                "sequence": "4",
+                "authEpoch": "3",
+                "policyVersion": "1",
+                "keyEpoch": "0",
+                "witnessSetVersion": "2",
+                "sourceChainId": "18545",
+                "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+                "sourceBlockNumber": "251",
+                "sourceBlockHash": "0x6666666666666666666666666666666666666666666666666666666666666666",
+                "expiresAt": "1791521500"
+              },
+              "signature": "0x6168b5bf3504d714f8b7f469cd9390bdcee67db965fab045fb0c7e3b193dafff4cbdbef31735a4fb9c07fe12dd833d44eb75b897c03c6942b664c39a3b37f3b01b"
+            },
+            {
+              "witnessIndex": "3",
+              "message": {
+                "sequence": "4",
+                "authEpoch": "3",
+                "policyVersion": "1",
+                "keyEpoch": "0",
+                "witnessSetVersion": "2",
+                "sourceChainId": "18545",
+                "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+                "sourceBlockNumber": "251",
+                "sourceBlockHash": "0x6666666666666666666666666666666666666666666666666666666666666666",
+                "expiresAt": "1791521500"
+              },
+              "signature": "0xdbb91790667651b0318b4702d00fcfc23e04e85f877cbbdb214fdb9640b7032020ab0d4495b28a12393e99755f14c74b448ed82341502e08d782c8deb61de1f11b"
+            }
+          ],
+          "timing": {
+            "ledgerNowAtStart": "1791521470",
+            "proposalExpiresAt": "1791521500",
+            "collectionDeadlineMs": "10000",
+            "snapshotClosedAtMs": "1200",
+            "snapshotClosedBy": "all-replied"
+          },
+          "submittedSigners": []
+        }
+      }
+    },
+    {
+      "schemaVersion": "v2",
+      "ok": false,
+      "result": null,
+      "error": {
+        "code": "STALE_STATE",
+        "reason": "CONFLICT_PINNED",
+        "message": "witness 1 already signed another value for sequence 4",
+        "recorded": {
+          "message": {
+            "sequence": "4",
+            "authEpoch": "3",
+            "policyVersion": "1",
+            "keyEpoch": "0",
+            "witnessSetVersion": "2",
+            "sourceChainId": "18545",
+            "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+            "sourceBlockNumber": "250",
+            "sourceBlockHash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+            "expiresAt": "1791521500"
+          },
+          "signature": "0x82f2962709e85b5e0b18fb9686e96c870bed7942bf8c0ced4bd5c858c280d977045417729b56e22aab8c3a1cd045a6a139be8c1a5523ce375e597b24316e95af1c"
+        }
+      }
+    },
+    {
+      "schemaVersion": "v2",
+      "ok": false,
+      "result": null,
+      "error": {
+        "code": "ADAPTER_UNAVAILABLE",
+        "reason": "QUORUM_UNAVAILABLE",
+        "message": "prefix adopted A, the late reports show two witnesses pinned to B; only two signatures exist",
+        "collection": {
+          "quorum": "3",
+          "witnessSetVersion": "2",
+          "outcomes": [
+            {
+              "witnessIndex": "0",
+              "witness": "0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42",
+              "status": "signed",
+              "replies": "2"
+            },
+            {
+              "witnessIndex": "1",
+              "witness": "0xe34919a7f4135eb28547717aba85a2b7619cd85a",
+              "status": "signed",
+              "replies": "2"
+            },
+            {
+              "witnessIndex": "2",
+              "witness": "0x6ae8de0489163ba82609d6358c85b3b47c24cb45",
+              "status": "refused",
+              "replies": "1",
+              "code": "STALE_STATE",
+              "reason": "CONFLICT_PINNED"
+            },
+            {
+              "witnessIndex": "3",
+              "witness": "0x1e054b33476173deeffaea9124f293eecb6de4d0",
+              "status": "refused",
+              "replies": "1",
+              "code": "STALE_STATE",
+              "reason": "CONFLICT_PINNED"
+            }
+          ],
+          "recordedReports": [
+            {
+              "witnessIndex": "0",
+              "message": {
+                "sequence": "4",
+                "authEpoch": "3",
+                "policyVersion": "1",
+                "keyEpoch": "0",
+                "witnessSetVersion": "2",
+                "sourceChainId": "18545",
+                "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+                "sourceBlockNumber": "250",
+                "sourceBlockHash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+                "expiresAt": "1791521500"
+              },
+              "signature": "0x82f2962709e85b5e0b18fb9686e96c870bed7942bf8c0ced4bd5c858c280d977045417729b56e22aab8c3a1cd045a6a139be8c1a5523ce375e597b24316e95af1c"
+            },
+            {
+              "witnessIndex": "1",
+              "message": {
+                "sequence": "4",
+                "authEpoch": "3",
+                "policyVersion": "1",
+                "keyEpoch": "0",
+                "witnessSetVersion": "2",
+                "sourceChainId": "18545",
+                "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+                "sourceBlockNumber": "250",
+                "sourceBlockHash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+                "expiresAt": "1791521500"
+              },
+              "signature": "0x6617f068fcff2975a05fc27357e79213a8dcbf11afa0897eaacdc5a7ac55e2eb17cf246c734b1b3299dc5c1b8a8b11da2a4d44962493139563c8d13c222bf1cb1c"
+            }
+          ],
+          "adopted": {
+            "message": {
+              "sequence": "4",
+              "authEpoch": "3",
+              "policyVersion": "1",
+              "keyEpoch": "0",
+              "witnessSetVersion": "2",
+              "sourceChainId": "18545",
+              "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+              "sourceBlockNumber": "250",
+              "sourceBlockHash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+              "expiresAt": "1791521500"
+            },
+            "reporters": [
+              "0",
+              "1"
+            ],
+            "reproposal": "sent"
+          },
+          "lateReports": [
+            {
+              "witnessIndex": "2",
+              "message": {
+                "sequence": "4",
+                "authEpoch": "3",
+                "policyVersion": "1",
+                "keyEpoch": "0",
+                "witnessSetVersion": "2",
+                "sourceChainId": "18545",
+                "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+                "sourceBlockNumber": "251",
+                "sourceBlockHash": "0x6666666666666666666666666666666666666666666666666666666666666666",
+                "expiresAt": "1791521500"
+              },
+              "signature": "0x6168b5bf3504d714f8b7f469cd9390bdcee67db965fab045fb0c7e3b193dafff4cbdbef31735a4fb9c07fe12dd833d44eb75b897c03c6942b664c39a3b37f3b01b"
+            },
+            {
+              "witnessIndex": "3",
+              "message": {
+                "sequence": "4",
+                "authEpoch": "3",
+                "policyVersion": "1",
+                "keyEpoch": "0",
+                "witnessSetVersion": "2",
+                "sourceChainId": "18545",
+                "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+                "sourceBlockNumber": "251",
+                "sourceBlockHash": "0x6666666666666666666666666666666666666666666666666666666666666666",
+                "expiresAt": "1791521500"
+              },
+              "signature": "0xdbb91790667651b0318b4702d00fcfc23e04e85f877cbbdb214fdb9640b7032020ab0d4495b28a12393e99755f14c74b448ed82341502e08d782c8deb61de1f11b"
+            }
+          ],
+          "timing": {
+            "ledgerNowAtStart": "1791521470",
+            "proposalExpiresAt": "1791521500",
+            "collectionDeadlineMs": "10000",
+            "snapshotClosedAtMs": "5000",
+            "snapshotClosedBy": "reply-timeout"
+          },
+          "submittedSigners": []
+        }
+      }
+    },
+    {
+      "schemaVersion": "v2",
+      "ok": false,
+      "result": null,
+      "error": {
+        "code": "ADAPTER_UNAVAILABLE",
+        "reason": "QUORUM_UNAVAILABLE",
+        "message": "prefix adopted B, the late reports show two witnesses pinned to A; only two signatures exist",
+        "collection": {
+          "quorum": "3",
+          "witnessSetVersion": "2",
+          "outcomes": [
+            {
+              "witnessIndex": "0",
+              "witness": "0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42",
+              "status": "refused",
+              "replies": "1",
+              "code": "STALE_STATE",
+              "reason": "CONFLICT_PINNED"
+            },
+            {
+              "witnessIndex": "1",
+              "witness": "0xe34919a7f4135eb28547717aba85a2b7619cd85a",
+              "status": "refused",
+              "replies": "1",
+              "code": "STALE_STATE",
+              "reason": "CONFLICT_PINNED"
+            },
+            {
+              "witnessIndex": "2",
+              "witness": "0x6ae8de0489163ba82609d6358c85b3b47c24cb45",
+              "status": "signed",
+              "replies": "2"
+            },
+            {
+              "witnessIndex": "3",
+              "witness": "0x1e054b33476173deeffaea9124f293eecb6de4d0",
+              "status": "signed",
+              "replies": "2"
+            }
+          ],
+          "recordedReports": [
+            {
+              "witnessIndex": "2",
+              "message": {
+                "sequence": "4",
+                "authEpoch": "3",
+                "policyVersion": "1",
+                "keyEpoch": "0",
+                "witnessSetVersion": "2",
+                "sourceChainId": "18545",
+                "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+                "sourceBlockNumber": "251",
+                "sourceBlockHash": "0x6666666666666666666666666666666666666666666666666666666666666666",
+                "expiresAt": "1791521500"
+              },
+              "signature": "0x6168b5bf3504d714f8b7f469cd9390bdcee67db965fab045fb0c7e3b193dafff4cbdbef31735a4fb9c07fe12dd833d44eb75b897c03c6942b664c39a3b37f3b01b"
+            },
+            {
+              "witnessIndex": "3",
+              "message": {
+                "sequence": "4",
+                "authEpoch": "3",
+                "policyVersion": "1",
+                "keyEpoch": "0",
+                "witnessSetVersion": "2",
+                "sourceChainId": "18545",
+                "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+                "sourceBlockNumber": "251",
+                "sourceBlockHash": "0x6666666666666666666666666666666666666666666666666666666666666666",
+                "expiresAt": "1791521500"
+              },
+              "signature": "0xdbb91790667651b0318b4702d00fcfc23e04e85f877cbbdb214fdb9640b7032020ab0d4495b28a12393e99755f14c74b448ed82341502e08d782c8deb61de1f11b"
+            }
+          ],
+          "adopted": {
+            "message": {
+              "sequence": "4",
+              "authEpoch": "3",
+              "policyVersion": "1",
+              "keyEpoch": "0",
+              "witnessSetVersion": "2",
+              "sourceChainId": "18545",
+              "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+              "sourceBlockNumber": "251",
+              "sourceBlockHash": "0x6666666666666666666666666666666666666666666666666666666666666666",
+              "expiresAt": "1791521500"
+            },
+            "reporters": [
+              "2",
+              "3"
+            ],
+            "reproposal": "sent"
+          },
+          "lateReports": [
+            {
+              "witnessIndex": "0",
+              "message": {
+                "sequence": "4",
+                "authEpoch": "3",
+                "policyVersion": "1",
+                "keyEpoch": "0",
+                "witnessSetVersion": "2",
+                "sourceChainId": "18545",
+                "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+                "sourceBlockNumber": "250",
+                "sourceBlockHash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+                "expiresAt": "1791521500"
+              },
+              "signature": "0x82f2962709e85b5e0b18fb9686e96c870bed7942bf8c0ced4bd5c858c280d977045417729b56e22aab8c3a1cd045a6a139be8c1a5523ce375e597b24316e95af1c"
+            },
+            {
+              "witnessIndex": "1",
+              "message": {
+                "sequence": "4",
+                "authEpoch": "3",
+                "policyVersion": "1",
+                "keyEpoch": "0",
+                "witnessSetVersion": "2",
+                "sourceChainId": "18545",
+                "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+                "sourceBlockNumber": "250",
+                "sourceBlockHash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+                "expiresAt": "1791521500"
+              },
+              "signature": "0x6617f068fcff2975a05fc27357e79213a8dcbf11afa0897eaacdc5a7ac55e2eb17cf246c734b1b3299dc5c1b8a8b11da2a4d44962493139563c8d13c222bf1cb1c"
+            }
+          ],
+          "timing": {
+            "ledgerNowAtStart": "1791521470",
+            "proposalExpiresAt": "1791521500",
+            "collectionDeadlineMs": "10000",
+            "snapshotClosedAtMs": "5000",
+            "snapshotClosedBy": "reply-timeout"
+          },
+          "submittedSigners": []
+        }
+      }
+    },
+    {
+      "schemaVersion": "v2",
+      "ok": false,
+      "result": null,
+      "error": {
+        "code": "ADAPTER_UNAVAILABLE",
+        "reason": "QUORUM_UNAVAILABLE",
+        "message": "witness 3 returned two different recorded values and is excluded; one consistent reporter is not enough",
+        "collection": {
+          "quorum": "3",
+          "witnessSetVersion": "2",
+          "outcomes": [
+            {
+              "witnessIndex": "0",
+              "witness": "0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42",
+              "status": "refused",
+              "replies": "1",
+              "code": "STALE_STATE",
+              "reason": "CONFLICT_PINNED"
+            },
+            {
+              "witnessIndex": "1",
+              "witness": "0xe34919a7f4135eb28547717aba85a2b7619cd85a",
+              "status": "silent",
+              "replies": "0"
+            },
+            {
+              "witnessIndex": "2",
+              "witness": "0x6ae8de0489163ba82609d6358c85b3b47c24cb45",
+              "status": "silent",
+              "replies": "0"
+            },
+            {
+              "witnessIndex": "3",
+              "witness": "0x1e054b33476173deeffaea9124f293eecb6de4d0",
+              "status": "invalid",
+              "replies": "2",
+              "detail": "returned two different recorded values; excluded from adoption"
+            }
+          ],
+          "recordedReports": [
+            {
+              "witnessIndex": "0",
+              "message": {
+                "sequence": "4",
+                "authEpoch": "3",
+                "policyVersion": "1",
+                "keyEpoch": "0",
+                "witnessSetVersion": "2",
+                "sourceChainId": "18545",
+                "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+                "sourceBlockNumber": "250",
+                "sourceBlockHash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+                "expiresAt": "1791521500"
+              },
+              "signature": "0x82f2962709e85b5e0b18fb9686e96c870bed7942bf8c0ced4bd5c858c280d977045417729b56e22aab8c3a1cd045a6a139be8c1a5523ce375e597b24316e95af1c"
+            }
+          ],
+          "inconsistentReports": [
+            {
+              "witnessIndex": "3",
+              "reports": [
+                {
+                  "message": {
+                    "sequence": "4",
+                    "authEpoch": "3",
+                    "policyVersion": "1",
+                    "keyEpoch": "0",
+                    "witnessSetVersion": "2",
+                    "sourceChainId": "18545",
+                    "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+                    "sourceBlockNumber": "250",
+                    "sourceBlockHash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+                    "expiresAt": "1791521500"
+                  },
+                  "signature": "0xe183b21ad1de551f9de1827d4319b0fcd32554971fccfd5861855a747b1364635424a10500ee17c9a5fc34e261febfd65852295319f2360e6751a54a092b75c01b"
+                },
+                {
+                  "message": {
+                    "sequence": "4",
+                    "authEpoch": "3",
+                    "policyVersion": "1",
+                    "keyEpoch": "0",
+                    "witnessSetVersion": "2",
+                    "sourceChainId": "18545",
+                    "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+                    "sourceBlockNumber": "999",
+                    "sourceBlockHash": "0x7777777777777777777777777777777777777777777777777777777777777777",
+                    "expiresAt": "1791521500"
+                  },
+                  "signature": "0x2585c1c297ecaad5590c680dc917d9a9cde645fc740f6d44a5756b9a2b73935e2a0df96e2dc7a20f4bd1cf794b3b5dd4cccb6c5fc9219a6ec502660b368d57b81c"
+                }
+              ]
+            }
+          ],
+          "timing": {
+            "ledgerNowAtStart": "1791521470",
+            "proposalExpiresAt": "1791521500",
+            "collectionDeadlineMs": "10000",
+            "snapshotClosedAtMs": "5000",
+            "snapshotClosedBy": "reply-timeout"
+          },
+          "submittedSigners": []
+        }
+      }
+    },
+    {
+      "schemaVersion": "v2",
+      "ok": false,
+      "result": null,
+      "error": {
+        "code": "ADAPTER_UNAVAILABLE",
+        "reason": "QUORUM_UNAVAILABLE",
+        "message": "the adopted value had 1 s of validity left at the snapshot close (below the 2 s reserve); no re-proposal was sent",
+        "collection": {
+          "quorum": "3",
+          "witnessSetVersion": "2",
+          "outcomes": [
+            {
+              "witnessIndex": "0",
+              "witness": "0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42",
+              "status": "refused",
+              "replies": "1",
+              "code": "STALE_STATE",
+              "reason": "CONFLICT_PINNED"
+            },
+            {
+              "witnessIndex": "1",
+              "witness": "0xe34919a7f4135eb28547717aba85a2b7619cd85a",
+              "status": "refused",
+              "replies": "1",
+              "code": "STALE_STATE",
+              "reason": "CONFLICT_PINNED"
+            },
+            {
+              "witnessIndex": "2",
+              "witness": "0x6ae8de0489163ba82609d6358c85b3b47c24cb45",
+              "status": "silent",
+              "replies": "0"
+            },
+            {
+              "witnessIndex": "3",
+              "witness": "0x1e054b33476173deeffaea9124f293eecb6de4d0",
+              "status": "silent",
+              "replies": "0"
+            }
+          ],
+          "recordedReports": [
+            {
+              "witnessIndex": "0",
+              "message": {
+                "sequence": "4",
+                "authEpoch": "3",
+                "policyVersion": "1",
+                "keyEpoch": "0",
+                "witnessSetVersion": "2",
+                "sourceChainId": "18545",
+                "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+                "sourceBlockNumber": "250",
+                "sourceBlockHash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+                "expiresAt": "1791521476"
+              },
+              "signature": "0x0c28863d2157e80b3435756b3add1ce08d00353dd2a07a882345ff60dc4d66140f41f4332dea175e4b5ceb960cf641dee9876e2ba6d0877413577ff00cba8b3a1c"
+            },
+            {
+              "witnessIndex": "1",
+              "message": {
+                "sequence": "4",
+                "authEpoch": "3",
+                "policyVersion": "1",
+                "keyEpoch": "0",
+                "witnessSetVersion": "2",
+                "sourceChainId": "18545",
+                "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+                "sourceBlockNumber": "250",
+                "sourceBlockHash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+                "expiresAt": "1791521476"
+              },
+              "signature": "0x88fa8751171c22db5809ed45b1980cfbe802a67eab3fa55ea3b8d9c6ba7b9fe469d4ac56f18c45547bd81466ca9425c8275d8481cc9310b49d043c9f3b54068b1b"
+            }
+          ],
+          "adopted": {
+            "message": {
+              "sequence": "4",
+              "authEpoch": "3",
+              "policyVersion": "1",
+              "keyEpoch": "0",
+              "witnessSetVersion": "2",
+              "sourceChainId": "18545",
+              "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+              "sourceBlockNumber": "250",
+              "sourceBlockHash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+              "expiresAt": "1791521476"
+            },
+            "reporters": [
+              "0",
+              "1"
+            ],
+            "reproposal": "skipped_validity"
+          },
+          "timing": {
+            "ledgerNowAtStart": "1791521470",
+            "proposalExpiresAt": "1791521500",
+            "collectionDeadlineMs": "10000",
+            "snapshotClosedAtMs": "5000",
+            "snapshotClosedBy": "reply-timeout"
+          },
+          "submittedSigners": []
+        }
+      }
+    },
+    {
+      "schemaVersion": "v2",
+      "ok": false,
+      "result": null,
+      "error": {
+        "code": "ADAPTER_UNAVAILABLE",
+        "reason": "QUORUM_UNAVAILABLE",
+        "message": "the original collection deadline (2 s) was reached at the snapshot close; no second round runs and nothing is extended",
+        "collection": {
+          "quorum": "3",
+          "witnessSetVersion": "2",
+          "outcomes": [
+            {
+              "witnessIndex": "0",
+              "witness": "0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42",
+              "status": "refused",
+              "replies": "1",
+              "code": "STALE_STATE",
+              "reason": "CONFLICT_PINNED"
+            },
+            {
+              "witnessIndex": "1",
+              "witness": "0xe34919a7f4135eb28547717aba85a2b7619cd85a",
+              "status": "refused",
+              "replies": "1",
+              "code": "STALE_STATE",
+              "reason": "CONFLICT_PINNED"
+            },
+            {
+              "witnessIndex": "2",
+              "witness": "0x6ae8de0489163ba82609d6358c85b3b47c24cb45",
+              "status": "silent",
+              "replies": "0"
+            },
+            {
+              "witnessIndex": "3",
+              "witness": "0x1e054b33476173deeffaea9124f293eecb6de4d0",
+              "status": "silent",
+              "replies": "0"
+            }
+          ],
+          "recordedReports": [
+            {
+              "witnessIndex": "0",
+              "message": {
+                "sequence": "4",
+                "authEpoch": "3",
+                "policyVersion": "1",
+                "keyEpoch": "0",
+                "witnessSetVersion": "2",
+                "sourceChainId": "18545",
+                "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+                "sourceBlockNumber": "250",
+                "sourceBlockHash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+                "expiresAt": "1791521500"
+              },
+              "signature": "0x82f2962709e85b5e0b18fb9686e96c870bed7942bf8c0ced4bd5c858c280d977045417729b56e22aab8c3a1cd045a6a139be8c1a5523ce375e597b24316e95af1c"
+            },
+            {
+              "witnessIndex": "1",
+              "message": {
+                "sequence": "4",
+                "authEpoch": "3",
+                "policyVersion": "1",
+                "keyEpoch": "0",
+                "witnessSetVersion": "2",
+                "sourceChainId": "18545",
+                "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+                "sourceBlockNumber": "250",
+                "sourceBlockHash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+                "expiresAt": "1791521500"
+              },
+              "signature": "0x6617f068fcff2975a05fc27357e79213a8dcbf11afa0897eaacdc5a7ac55e2eb17cf246c734b1b3299dc5c1b8a8b11da2a4d44962493139563c8d13c222bf1cb1c"
+            }
+          ],
+          "adopted": {
+            "message": {
+              "sequence": "4",
+              "authEpoch": "3",
+              "policyVersion": "1",
+              "keyEpoch": "0",
+              "witnessSetVersion": "2",
+              "sourceChainId": "18545",
+              "psc": "0x1613beb3b2c4f22ee086b2b38c1476a3ce7f78e8",
+              "sourceBlockNumber": "250",
+              "sourceBlockHash": "0x5555555555555555555555555555555555555555555555555555555555555555",
+              "expiresAt": "1791521500"
+            },
+            "reporters": [
+              "0",
+              "1"
+            ],
+            "reproposal": "skipped_deadline"
+          },
+          "timing": {
+            "ledgerNowAtStart": "1791521470",
+            "proposalExpiresAt": "1791521474",
+            "collectionDeadlineMs": "2000",
+            "snapshotClosedAtMs": "2000",
+            "snapshotClosedBy": "deadline"
+          },
+          "submittedSigners": []
+        }
+      }
+    }
+  ]
+}

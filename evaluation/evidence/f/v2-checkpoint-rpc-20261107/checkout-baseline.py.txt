@@ -1,0 +1,19 @@
+"""Verify all carried tracked bytes against the initial clean Git baseline."""
+import hashlib,json,os,subprocess
+from pathlib import Path
+root=Path('/home/karma/Documents/RIS');out=root/'evaluation/evidence/f/v2-checkpoint-rpc-20261107'
+before=json.loads((out/'inputs-before.json').read_text());base=before['tips']['3']
+assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()==base
+raw=subprocess.check_output(['git','ls-tree','-rz',base],cwd=root)
+rows={}
+for entry in raw.split(b'\0'):
+ if not entry:continue
+ meta,path=entry.split(b'\t',1);mode,kind,oid=meta.decode().split();path=path.decode()
+ assert kind=='blob',path
+ p=root/path;data=os.readlink(p).encode() if mode=='120000' else p.read_bytes()
+ assert hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest()==oid,path
+ rows[path]=hashlib.sha256(data).hexdigest()
+result=dict(baselineCommit=base,baselineTree=subprocess.check_output(['git','rev-parse',base+'^{tree}'],cwd=root,text=True).strip(),
+ trackedPathsChecked=len(rows),canonicalPathSha256MapSha256=hashlib.sha256(json.dumps(rows,sort_keys=True,separators=(',',':')).encode()).hexdigest(),
+ note='Carried inputs derived from initial clean HEAD, final byte equality checked for every tracked blob. New product/test inputs are separately bracketed in inputs-before/after. Evidence helpers changed explicitly; no claim of intermediate file-write detection.')
+p=out/'checkout-baseline.json';assert not p.exists();p.write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))

@@ -1,0 +1,43 @@
+import csv, hashlib, io, json, pathlib, subprocess, datetime, re
+R = pathlib.Path('/home/karma/Documents/RIS')
+O = R / 'evaluation/evidence/reviews/f0-a1-0090-20261103'
+O.mkdir(parents=True, exist_ok=True)
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=R)
+def sha(b): return hashlib.sha256(b).hexdigest()
+def dump(name, obj): (O/name).write_text(json.dumps(obj, indent=2)+'\n')
+refs = {r:git('rev-parse',r).decode().strip() for r in ['origin/agent-1','origin/agent-2','origin/agent-3','origin/main']}
+tip=refs['origin/agent-1']
+paths=git('ls-tree','-r','--name-only',tip,'--','ledger').decode().splitlines()
+blobs={p:git('show',f'{tip}:{p}') for p in paths}
+manifest='ledger/evidence/source-manifest.sha256'
+entries={}
+for line in blobs[manifest].decode().splitlines():
+    digest,p=line.split(None,1); p=p.lstrip('*')
+    assert sha(blobs[p])==digest, p
+    entries[p]=digest
+prod=[p for p in paths if p.startswith(('ledger/src/','ledger/script/')) or p=='ledger/foundry.toml']
+assert all(blobs[p]==git('show',f'933d2a7:{p}') for p in prod)
+delta=git('diff','--name-only','39893536c1a4d5f3c27b789dcedc935b2ad8b88d',tip,'--','ledger').decode().splitlines()
+assert delta==['ledger/evidence/source-manifest.sha256','ledger/f0/A-F1-DESIGN.md'],delta
+tests={}
+names=['test_E01_DecisionExpiryBoundary','test_E01_RequestExpiryAtDbc','test_E02_DecisionMayNotOutliveCheckpoint','test_E02_CheckpointMonotonicityAndFreshness','test_E02_StaleSignedCrlReplay','test_E02_StaleSignedTempAclReplay','test_E02_EqualVersionDifferentContent','test_E02_RevocationBarrierBlocksOlderDecision','test_E02_DelayedDeliveryAcrossPbcRevocationBeforeBarrier','test_E01_RequestFieldSubstitution','test_E01_DecisionFieldSubstitution','test_E01_RecordSubstitution','test_E01_RelaySubjectSubstitution','test_E01_RelayFabricatedRequest','test_F0_SingleWitnessAttestsFabricatedRecords']
+for n in names:
+    tests[n]=[{'path':p,'line':i+1} for p,b in blobs.items() if p.startswith('ledger/test/') and p.endswith('.sol') for i,l in enumerate(b.decode().splitlines()) if re.search(r'function\s+'+n+r'\s*\(',l)]
+    assert tests[n],n
+dump('owner-review.json',{'capturedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'refs':refs,'ledgerFiles':len(blobs),'manifestEntries':len(entries),'manifestSha256':sha(blobs[manifest]),'productionFilesMatching933d2a7':len(prod),'ledgerDeltaSincePriorReview':delta,'designSha256':sha(blobs['ledger/f0/A-F1-DESIGN.md']),'ownerBlobs':{p:sha(b) for p,b in blobs.items()},'testCitations':tests,'classification':'read-only reconstruction/design review; no fresh ledger execution'})
+# Compare exact file-changing revisions, rather than branch-tip dates.
+allpaths=sorted(set(p for t in refs.values() for p in git('ls-tree','-r','--name-only',t,'--','communication').decode().splitlines()))
+records={}; conflicts=[]
+for p in allpaths:
+    candidates=[]
+    for ref,t in refs.items():
+        if subprocess.run(['git','cat-file','-e',f'{t}:{p}'],cwd=R,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode: continue
+        c=git('log','-1','--format=%H',t,'--',p).decode().strip()
+        candidates.append({'ref':ref,'tip':t,'changeCommit':c,'sha256':sha(git('show',f'{t}:{p}'))})
+    maximal=[x for x in candidates if not any(x['changeCommit']!=y['changeCommit'] and subprocess.run(['git','merge-base','--is-ancestor',x['changeCommit'],y['changeCommit']],cwd=R).returncode==0 for y in candidates)]
+    if len(set(x['sha256'] for x in maximal))>1: conflicts.append(p)
+    records[p]={'candidates':candidates,'latest':maximal}
+dump('communication-provenance.json',{'capturedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'refs':refs,'files':records,'incomparableContentConflicts':conflicts})
+assert not conflicts,conflicts
+print(json.dumps({'ledgerFiles':len(blobs),'manifestEntries':len(entries),'productionUnchanged':len(prod),'citedTestNames':len(tests),'communicationPaths':len(records),'conflicts':conflicts,'designSha256':sha(blobs['ledger/f0/A-F1-DESIGN.md'])}))

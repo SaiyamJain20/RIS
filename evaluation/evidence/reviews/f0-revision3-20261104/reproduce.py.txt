@@ -1,0 +1,104 @@
+"""Offline design review. No production imports, services, or F gate results."""
+import datetime
+import hashlib
+import json
+import pathlib
+import sqlite3
+import subprocess
+import sys
+import tempfile
+
+ROOT = pathlib.Path('/home/karma/Documents/RIS')
+OUT = ROOT / 'evaluation/evidence/reviews/f0-revision3-20261104'
+SNAP = ROOT / '.git/ris-f0-revision3-snapshot'
+def sha(b): return hashlib.sha256(b).hexdigest()
+def now(): return datetime.datetime.now(datetime.timezone.utc).isoformat()
+def save(p, x): (OUT/p).write_text(json.dumps(x, indent=2)+'\n')
+
+# A separate serializer: the published documents contain ASCII strings, lists,
+# and objects only. Reject other types instead of delegating to the owner encoder.
+def encode(x):
+    if type(x) is str:
+        assert all(32 <= ord(c) < 127 and c not in '\\"' for c in x)
+        return '"'+x+'"'
+    if type(x) is list: return '['+','.join(encode(i) for i in x)+']'
+    assert type(x) is dict
+    return '{'+','.join(encode(k)+':'+encode(x[k]) for k in sorted(x))+'}'
+
+def mask(code, ranges, n):
+    assert len(code) == n
+    previous = 0
+    covered = set()
+    for start, length in ranges:
+        assert length == 32 and start >= previous and start + length <= n
+        covered.update(range(start, start+length))
+        previous = start+length
+    # Per-byte construction independently avoids slice/segment implementations.
+    return bytes(0 if i in covered else v for i, v in enumerate(code))
+
+before = json.loads((OUT/'snapshot.json').read_text())['files']
+assert all(sha((SNAP/p).read_bytes()) == h for p,h in before.items())
+vector = json.loads((SNAP/'protocol/f0/vectors/d50_binding_vector.json').read_text())
+bindings = {}
+for name, row in vector['documents'].items():
+    encoded = encode(row['document'])
+    assert encoded == row['canonicalJson']
+    observed = sha(b'hmbc-deployment-binding/v2\n'+encoded.encode('ascii'))
+    assert observed == row['bindingV2']
+    assert sha(b'hmbc-deployment-binding/v2'+encoded.encode()) != observed
+    bindings[name] = observed
+m = vector['maskedBuild']
+assert sha(mask(bytes.fromhex(m['liveRuntimeHex'][2:]), [(int(a),int(b)) for a,b in m['ranges']], int(m['runtimeBytes']))) == m['maskedSha256']
+replays = []
+for report in sorted((SNAP/'ledger/evidence/f0-d50-masked/replay').glob('online-check-*.json')):
+    for result in json.loads(report.read_text())['results']:
+        deployment = pathlib.Path(result['deployment']).parent.name
+        for c in result['contracts']:
+            p = SNAP/'ledger/evidence/f0-d50-masked/replay'/deployment/(c['contract']+'.hex')
+            code = bytes.fromhex(p.read_text().strip())  # published files omit 0x
+            ranges = [(x['start'],x['length']) for x in c['immutableRanges']]
+            masked = mask(code,ranges,c['compiledBytes'])
+            assert sha(masked) == c['manifestRuntimeSha256'] == c['maskedLiveSha256'] == c['compiledSha256']
+            assert sha(code) == c['rawLiveSha256']
+            covered = {i for start,length in ranges for i in range(start,start+length)}
+            outside = next(i for i in range(len(code)) if i not in covered)
+            changed = bytes(v ^ (1 if i == outside else 0) for i,v in enumerate(code))
+            assert sha(mask(changed,ranges,len(code))) != sha(masked)
+            if covered:
+                inside = min(covered)
+                changed = bytes(v ^ (1 if i == inside else 0) for i,v in enumerate(code))
+                assert sha(mask(changed,ranges,len(code))) == sha(masked)
+            replays.append({'path':str(p.relative_to(SNAP)), 'rawSha256':sha(code), 'maskedSha256':sha(masked), 'insideOutsideControls':True})
+assert len(replays) == 18
+
+# Negative control for the proposed refusal oracle, NOT a protocol failure:
+# keep a WAL connection live so closing it cannot checkpoint the main DB.
+with tempfile.TemporaryDirectory(prefix='ris-wal-',dir=ROOT/'.git') as d:
+    db = pathlib.Path(d)/'state.sqlite'
+    marker = pathlib.Path(d)/'INITIALIZED'; marker.write_text('synthetic marker')
+    conn = sqlite3.connect(db)
+    assert conn.execute('PRAGMA journal_mode=WAL').fetchone()[0] == 'wal'
+    conn.execute('CREATE TABLE choices(value TEXT)'); conn.commit()
+    conn.execute('PRAGMA wal_checkpoint(TRUNCATE)')
+    prior = sha(db.read_bytes()), sha(marker.read_bytes())
+    conn.execute("INSERT INTO choices VALUES ('deliberate write')"); conn.commit()
+    after = sha(db.read_bytes()), sha(marker.read_bytes())
+    assert prior == after
+    reader = sqlite3.connect('file:'+str(db)+'?mode=ro',uri=True)
+    rows = reader.execute('SELECT value FROM choices').fetchall()
+    assert rows == [('deliberate write',)]
+    wal = {'sqliteVersion':sqlite3.sqlite_version,'databaseAndMarkerHashesUnchanged':True,'logicalStateChanged':True,'walBytes':pathlib.Path(str(db)+'-wal').stat().st_size,'scope':'synthetic negative control for proposed oracle only; not a measured protocol defect'}
+    reader.close();conn.close()
+
+commands = []
+for script in ['test_d50_reference.py','check_wire_examples.py']:
+    argv = [sys.executable,'-B','-I',script]
+    start = now()
+    run = subprocess.run(argv,cwd=SNAP/'protocol/f0/vectors',capture_output=True)
+    (OUT/(script+'.stdout.txt')).write_bytes(run.stdout)
+    (OUT/(script+'.stderr.txt')).write_bytes(run.stderr)
+    commands.append({'argv':argv,'cwd':str(SNAP/'protocol/f0/vectors'),'startedAt':start,'endedAt':now(),'exitCode':run.returncode,'stdoutSha256':sha(run.stdout),'stderrSha256':sha(run.stderr)})
+    assert run.returncode == 0
+assert all(sha((SNAP/p).read_bytes()) == h for p,h in before.items())
+save('reproduction.json',{'capturedAt':now(),'python':sys.version,'scriptSha256':sha(pathlib.Path(__file__).read_bytes()),'bindings':bindings,'syntheticMaskedHash':m['maskedSha256'],'replays':replays,'walNegativeControl':wal,'ownerCheckCommands':commands,'snapshotInputsStable':len(before),'modelRerun':False,'limits':'offline published bytes and design helpers; correlated same-model review; no Governance runtime, deployment, timing, TLC, consensus, or gate result'})
+print(json.dumps({'bindings':bindings,'replays':len(replays),'walOracleBlindSpot':wal,'ownerChecks':[x['exitCode'] for x in commands],'stableInputs':len(before)}))

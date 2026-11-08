@@ -1,0 +1,69 @@
+"""Final hash/ownership audit. Does not execute an F scenario."""
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+
+ROOT = Path(__file__).resolve().parents[4]
+OUT = Path(__file__).resolve().parent
+
+
+def sha(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=ROOT)
+
+
+def main():
+    manifests = [
+        'interfaces/proposals/v2-candidate2/MANIFEST.json',
+        'interfaces/proposals/v2/MANIFEST.json',
+        'evaluation/evidence/reviews/f0-v2-candidate1-20261104/review-manifest.json',
+        'evaluation/evidence/reviews/f0-v2-owner-review-20261104/review-manifest.json',
+        'evaluation/evidence/reviews/f0-a2-revision8-20261104/review-manifest.json']
+    counts = {}
+    for path in manifests:
+        data = json.loads((ROOT / path).read_text())
+        for name, digest in data['files'].items():
+            assert sha((ROOT / name).read_bytes()) == digest, name
+        counts[path] = len(data['files'])
+        for name, digest in data.get('historicalBase', {}).items():
+            assert sha((ROOT / name).read_bytes()) == digest, name
+    pins = json.loads((ROOT / 'interfaces/proposals/v2-candidate2/OWNER-PINS.json').read_text())
+    for path, digest in pins['files'].items():
+        assert sha(git('show', pins['ownerCommit'] + ':' + path)) == digest, path
+    assert sha(git('show', pins['ledgerCommit'] + ':ledger/f0/A-F1-DESIGN.md')) == pins['ledgerDesignSha256']
+    s = json.loads((ROOT / 'interfaces/proposals/v2-candidate2/hmbc.schema.json').read_text())
+    refs = []
+
+    def walk(v):
+        if isinstance(v, dict):
+            if '$ref' in v:
+                refs.append(v['$ref'])
+                assert v['$ref'].startswith('#/$defs/') and v['$ref'].split('/')[-1] in s['$defs']
+            for x in v.values():
+                walk(x)
+        elif isinstance(v, list):
+            for x in v:
+                walk(x)
+    walk(s)
+    # Exact historical/peer paths, including dirty tracked bytes, stay unchanged.
+    unchanged = ['interfaces/v1', 'interfaces/proposals/v2', 'archive', 'ledger', 'protocol',
+                 'communication/agent-1/STATUS.md', 'communication/agent-1/HANDOFF.md',
+                 'communication/agent-1/outbox', 'communication/agent-2/STATUS.md',
+                 'communication/agent-2/HANDOFF.md', 'communication/agent-2/outbox']
+    assert not git('diff', 'HEAD', '--', *unchanged)
+    matrix = json.loads((ROOT / 'evaluation/evidence/reviews/f0-revision8-20261104/f_matrix.json').read_text())
+    # No runtime result is created by this audit; exact matrix bytes already verified.
+    result = {'status': 'HASH_OWNERSHIP_AND_REFERENCE_AUDIT_PASS', 'manifests': counts,
+              'schemaRefsResolved': len(refs), 'schemaDefinitions': len(s['$defs']),
+              'historicalMatrixSha256': sha(json.dumps(matrix, sort_keys=True).encode()),
+              'executionAuthorized': False, 'mappingAcks': [], 'freezeAck': None}
+    (OUT / 'audit.json').write_text(json.dumps(result, indent=2) + '\n')
+    print(json.dumps(result, indent=2))
+
+
+if __name__ == '__main__':
+    main()

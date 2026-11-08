@@ -1,0 +1,55 @@
+ok   A1 exhaustive f<=1 (3456 assignments, 1984 adoptions): an adopted value was recorded by at least one honest witness
+ok   A1 is not vacuous: some assignments adopt and some do not
+ok   A2 positive: two honest witnesses recorded A, the others nothing, so A is adopted
+ok   A2 positive with a Byzantine third reporter of B: A still adopted (B has one report)
+ok   A3 ambiguity: A and B each reported twice adopts nothing
+ok   a single report adopts nothing
+ok   no reports adopts nothing
+ok   A4 control outside the bound: two Byzantine witnesses reporting FAKE get FAKE adopted
+ok   A5 one witness repeating a value counts once
+ok   A8 (reverses revision 5) a witness reporting two different values is inconsistent and excluded: [(3,FAKE),(3,A),(0,A)] adopts nothing
+ok   A5 the same witness reporting FAKE twice and A once, with nobody else, adopts nothing
+ok   A6 other-sequence reports are ignored
+ok   A6 invalid-signature reports are ignored
+ok   A6 one valid plus one invalid report is not two reports
+ok   A7 order independent
+ok   witness index outside 0..3 is refused
+ok   a non-boolean validSignature is refused
+ok   A8 order independent with an equivocator
+ok   A8 an equivocator does not block two honest agreeing reporters
+ok   A8 identical repeats are NOT equivocation: the witness counts once and still helps
+ok   A9 exhaustive: removing every inconsistent witness's reports never changes the adoption
+ok   A10 classify: consistent witnesses one value each; inconsistent witnesses their distinct values (canonical order); wrong-sequence reports dropped
+ok   A10 classify ignores invalid signatures
+ok   A11 prefix (0,A),(1,A) adopts A; the late split (2,B),(3,B) does not cancel it
+ok   A11 reversed order: snapshot (2,B),(3,B) adopts B although (0,A),(1,A) arrive late
+ok   A11 a snapshot without adoption stays so even if late reports would complete a pair
+ok   A11 late reports never create an adoption on an ambiguous snapshot
+ok   A12 the two arrival orders adopt different values and both were recorded by an honest witness
+ok   B1 original: start 1000, expiry 1030 -> 10 s
+ok   B1 remaining 12 s -> still capped at 10 s
+ok   B1 remaining 11 s -> 9 s
+ok   B1 agent 3's earlier hard stop: remaining 4 s -> 2 s, before the 5 s reply timeout
+ok   B1 remaining 3 s -> 1 s
+ok   B1 remaining exactly 2 s -> refuse before contacting any witness
+ok   B1 remaining below 2 s and an expired proposal -> refuse
+ok   B2 all four replied at 1200 ms -> all-replied
+ok   B2 a witness silent -> the 5 s reply timeout closes it
+ok   B2 all replied exactly at 5000 is not 'before' the limit -> reply-timeout
+ok   B2 deadline 2 s, nobody completes -> the deadline closes it
+ok   B2 deadline exactly 5 s is a tie and is the deadline
+ok   B2 deadline 6 s -> the reply timeout still closes first
+ok   B2 deadline 2 s but all replied at 1500 -> all-replied
+ok   B3 agent 3's observation: value expiring 1006, close 5 s -> skipped_validity
+ok   B3 exactly 2 s left (expiry 1007, close 5 s) -> skipped_validity
+ok   B3 2001 ms left (expiry 1007, close 4999 ms) -> sent
+ok   B3 below 2 s (expiry 1005) -> skipped_validity
+ok   B3 already expired at the close (expiry 1004) -> skipped_validity
+ok   B3 eligible (expiry 1030, close 5 s) -> sent
+ok   B3 earlier hard stop: deadline 2 s, close at 2 s, plenty of validity -> skipped_deadline
+ok   B3 close exactly at the deadline -> skipped_deadline even with plenty of validity
+ok   B3 the deadline is checked before validity (both fail -> skipped_deadline)
+ok   B4 exhaustive (104 schedule shapes x 41 expiries): close bounded, deadline iff, sent implies eligible, monotone in the expiry
+ok   B3 refuses non-integer inputs
+
+all expectations hold

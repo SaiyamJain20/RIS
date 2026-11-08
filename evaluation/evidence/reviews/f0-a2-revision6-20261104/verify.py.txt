@@ -1,0 +1,45 @@
+import hashlib
+import json
+import pathlib
+import subprocess
+
+R = pathlib.Path('/home/karma/Documents/RIS')
+O = R / 'evaluation/evidence/reviews/f0-a2-revision6-20261104'
+def git(*args): return subprocess.check_output(['git', *args], cwd=R)
+def sha(b): return hashlib.sha256(b).hexdigest()
+assert git('branch', '--show-current').decode().strip() == 'agent-3'
+owner = json.loads((O / 'owner-review.json').read_text())
+assert all(git('rev-parse', ref).decode().strip() == tip for ref, tip in owner['refs'].items())
+received = json.loads((O / 'received-reviews.json').read_text())
+assert received['exactCandidate6Acks'] == ['A1-0102', 'A2-0050']
+assert received['noAckTransfer']
+for r in received['reviews']:
+    assert sha(git('show', r['commit'] + ':' + r['path'])) == r['sha256']
+acks = json.loads((O / 'candidate6-scoped-acks.json').read_text())
+assert acks['noTransfer'] and not acks['revision6Adopted']
+for a in acks['acks']:
+    b = git('show', a['commit'] + ':' + a['path'])
+    assert sha(b) == a['sha256']
+    assert all(h in b.decode() for h in acks['reviewedFiles'].values())
+for p, h in acks['reviewedFiles'].items(): assert sha((R / p).read_bytes()) == h
+protected = ['ledger', 'protocol', 'interfaces', 'archive', 'SPEC.md', 'PLAN.md',
+             'evaluation/reports/RQ1-E.md', 'evaluation/evidence/e3/gate-run-20261012',
+             'evaluation/evidence/fault-model.csv', 'evaluation/scenarios/f_matrix.json']
+assert not git('diff', 'HEAD', '--', *protected).strip()
+assert not git('diff', '--cached', '--name-only').strip()
+for n in (3, 4, 5, 6):
+    c = R / f'evaluation/evidence/reviews/f0-revision{n}-20261104'
+    assert not git('diff', 'HEAD', '--', str(c.relative_to(R))).strip()
+    manifest = json.loads((c / 'review-manifest.json').read_text())
+    assert all(sha((R / p).read_bytes()) == h for p, h in manifest['files'].items())
+matrix = json.loads((R / 'evaluation/evidence/reviews/f0-revision6-20261104/f_matrix.json').read_text())
+assert len(matrix['cases']) == 32 and not matrix['executionAuthorized'] and not matrix['actualFResults']
+assert all(c['executionStatus'] == 'NOT_RUN' for c in matrix['cases'])
+prov = json.loads((O / 'communication-provenance.json').read_text())
+assert len(prov['files']) == 314 and not prov['incomparableContentConflicts']
+assert not (R / 'evaluation/evidence/reviews/f0-revision7-20261104').exists()
+assert not (R / 'interfaces/v2').exists()
+print(json.dumps({'status': 'PASS', 'communicationPaths': 314,
+                  'exactCandidate6Acks': ['A1-0102', 'A2-0050'],
+                  'revision6Adopted': False, 'candidate7Published': False,
+                  'cases': 32, 'allNotRun': True, 'protectedBytesUnchanged': True}))

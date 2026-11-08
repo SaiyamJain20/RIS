@@ -2,6 +2,14 @@
 
 Writer: agent 3. Status values: USER-DECIDED, PLAN-CHOICE, IMPLEMENTED-PENDING-FREEZE, FROZEN, OPEN, SUPERSEDED. A plan choice is explicitly proposed for this project; it is not a paper fact or an instructor's requirement.
 
+Candidate2 note (2026-11-04, PROPOSED; no F0 freeze): A3-0070 accepts revision9
+export-layout DESIGN in coordinator scope, including mined generation order;
+A3-0071 publishes the separate complete mapping/layout unit at
+interfaces/proposals/v2-candidate2/MANIFEST.json (0d1a2be4..). The old candidate8
+plan/matrix and accepted design history stay immutable. SOURCE-MIGRATION.md
+lists proposed superseding pins/mappings. Both owners' COMPLETE mapping ACKs
+and separate F0 freeze are still pending. No runtime or RQ gate follows.
+
 | ID | Status | Decision / evidence |
 |---|---|---|
 | D01 | USER-DECIDED | Use E/F/G; finish one RQ before the next. User instruction, 2026-10-06. |
@@ -486,3 +494,103 @@ F gate PASS is created by Git synchronization. G remains locked.
 Local synchronization: inspect/preserve uncommitted work; git fetch origin and
 git merge --ff-only origin/agent-N on the assigned branch. A divergence or refusal
 is a blocker to report, not permission to reset/rebase/stash/clean/force-push.
+
+## D52 — Candidate8 design ACK receipt; successor mapping remains proposed, 2026-11-04
+
+A3-0066 records exact A1-0104 and A2-0053 hashes/scopes for candidate8. Its intended
+revision7 protocol design pins and ledger design sha2567eed1b29.. now apply as
+design input, not implementation or execution pins. See input-provenance.json in
+evaluation/evidence/reviews/f0-v2-candidate1-20261104/ for full hashes/commits.
+Candidate8 files and historical signed/frozen artifacts remain unchanged.
+
+interfaces/proposals/v2 candidate1 is proposed for owner review. Its README lists
+new mapping choices (base repaired-f manifest with mutation bits/q2 experiment
+label; q2 certificates assembled from single-witness replies), and the E mutant
+profile/D50 vocabulary ambiguity. These choices are NOT ADOPTED by this record;
+exact affected owner review/ACKs and final complete schema/vector mapping ACKs
+are still needed. Agent2's exact binding/evidence exporter shapes also precede
+consumption. D-4/D-6 remain owner tasks. No F0 freeze, F implementation, runtime
+result, new gate PASS or main publication is authorized. Source READY and
+execution FREEZE follow later; F NOT_RUN/G locked.
+
+## D53 — Exact F0 design acceptance and v2 publication, 2026-11-04
+
+A1-0110 and A2-0058 ACK the full F0 request f9f0906f.. in ledger/protocol scopes.
+Agent3 verifies exact message bytes/commits/ancestry and records acceptance in
+communication/F0_ACCEPTANCE_CANDIDATE2.json (03dcf485..). The unchanged request
+remains a historical request. interfaces/v2/FREEZE.json (7bb1d243..) publishes
+all14 candidate2 payloads byte-for-byte; their pending labels remain historical.
+Acceptance retains candidate8 components/cases/controls/requiredEvidence/bounds,
+with candidate2's explicitly reviewed migration. No new fault-model choice.
+
+Owned implementation and isolated tests are now authorized. Integrated services,
+scenarios and gate claims still need exact source READYs, matching mapping
+receipts and a separate run/tools/config/source execution FREEZE with owner ACKs.
+No source READY/run ACK is inferred from design or mapping replies.
+
+A2-0058 N-1 is the existing plan's E preservation rule: fixed historical evidence
+and manifests verify at historical commits; approved F changes to E-listed source
+receive new source READY hashes and real E regressions. E operations/outputs/
+default export/fingerprint and assertions remain required. No implementation
+parity is declared before those tests. communication/F_SOURCE_READY.md defines
+the handoff; all52 pinned protocol/f0 files and all candidate history stay fixed.
+
+Receipt/publication verification is specification evidence only. F gate NOT_RUN,
+all32 cases NOT_RUN, G locked; qualified historical E unchanged. No runtime,
+TLC, service lease, new dependency, peer edit, extra agent, worktree or main push.
+
+## D54 — Exact ledger READY review and proposed E carrier closure, 2026-11-04
+
+A3-0077 reviews A1-0111 source aef3daa/6358359e.. for isolated F ABI/export/source
+consumption after fresh hash/source/compiler/test verification. This is not an
+execution ACK. Embedded E map incompleteness is reproduced; complete418source
+inventory remains mandatory. A3-0078 proposes option1 with an additive distinct
+E carrier marker and full12map, manifest7810ad10..; NOT ADOPTED, no schema or
+consumer changed. Both exact affected ACKs and separate publication precede any
+migration. A2-0059 is not an amendment ACK. Existing accepted F work may continue;
+Agent2 source READY/owned evaluator work/separate complete run FREEZE remain.
+No new E/F gate result/G work, services, peer edits or main authorization.
+
+## D55 — Exact E carrier amendment accepted and separately published, 2026-11-04
+
+A1-0114 and A2-0060 ACK exactly amendment manifest7810ad10.. in ledger and
+protocol producer/consumer scopes. E_SOURCE_CLOSURE_ACCEPTANCE.json511e235f..
+records their full message hashes, observed and file-changing commits. Separate
+interfaces/v2.1/FREEZE.json232b84bb.. pins schema d43c3a9a.., the exact semantic
+application of both reviewed additions. No original schema/proposal is overwritten;
+135old non-union definitions and all other top-level values remain unchanged.
+Copied historical x-status annotation is retained as ACKed, superseded by the
+publication README. Wire interfaceVersion v2 and D50 preimage remain unchanged.
+
+This authorizes owned opt-in exporter/consumer migration and isolated tests.
+A3-0079 asks both owners to receipt exact schema/freeze and publish fresh matching
+source READYs; proposal ACKs do not stand in for publication or run ACKs. Historical
+ten-source E remains compatibility only with its known omission; F-tree E successor
+uses the v2.1 marker/twelve-source map. Default v1/F carriers/history unchanged.
+Fresh1884evaluatorPASS/202selected stable inputs is not integrated parity or a gate.
+Full source/tools/config/run FREEZE with exact affected ACKs still precedes services.
+All32Fcases/Fgate NOT_RUN/G locked; qualifiedE unchanged. No peer/main authorization.
+
+## D56 — Evaluator Governance reads remain separate from D50 S0, 2026-11-04
+
+Reviewed A1-0116 at8c0285ffa6986858caeb0140b930bf5db759fdc0 and A2-0062
+atbeab2d1e9545ae5df3b0867503c47750f42446c8, with exact note hashes and owner
+artifact pins in evaluation/evidence/f/v2-public-observations-20261104/peer-review.json.
+Both are notes, not source READYs or ACKs. Agent2's differential is correlated
+synthetic cross-implementation evidence; its fake facts use Agent3's expected
+views and substituted synthetic runtime hashes. It is not an independent oracle
+or live-chain result; no rerun or adoption of its owner test totals is claimed.
+
+Keep the published D50 open schedule and its S0 request count unchanged. The
+already accepted BOUNDARY separately requires evaluator checks of Governance
+governanceChainId/maxGovernanceTtl and the compiled MAX_ADMINS attestation.
+The evaluator's public ABI collector acquires both getters before reporting any
+F evidence. A mismatching first binding therefore cannot pass those checks.
+This implements existing evidence requirements, without a new shared schema,
+open-stage rule or implied safety proof. A future change to S0 requires its own
+exact RFC/affected ACKs; this record neither requests nor authorizes one.
+
+No source READY, full consumer mapping, execution freeze or gate follows from
+these notes or isolated tests. Full reviewed owner handoffs and a separate exact
+source/tools/config/run FREEZE with affected ACKs still precede services. All32
+Fcases/GateF NOT_RUN; G locked; qualified historical E unchanged.

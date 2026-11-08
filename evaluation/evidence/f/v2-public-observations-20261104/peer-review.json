@@ -1,0 +1,27 @@
+{
+  "notes": [
+    {
+      "owner": "agent-1",
+      "commit": "8c0285ffa6986858caeb0140b930bf5db759fdc0",
+      "path": "communication/agent-1/outbox/0116-note-governance-getters-and-d50-open.md",
+      "sha256": "d1970df57f0cfd2bd665a38531849e977017f715fb1800c40784c88596c9c5cb",
+      "classification": "owner NOTE, not an ACK or source READY"
+    },
+    {
+      "owner": "agent-2",
+      "commit": "beab2d1e9545ae5df3b0867503c47750f42446c8",
+      "path": "communication/agent-2/outbox/0062-note-d50-differential-against-a3-0081.md",
+      "sha256": "2813d2fac0e0263fe14a3ba2c74a19ebd833a494d416e947b01b885a8ae1640a",
+      "classification": "owner NOTE, not an ACK or source READY"
+    }
+  ],
+  "differentialManifestSha256": "60d534d7cd650ed5b6304e69b7caae3833404a97ac44b7fa4545a6a593d52ad3",
+  "differentialFiles": {
+    "run_differential.py": "8ea34a6aef9b8a32843ef89cd2d759f70a11cf79bbb56813aa2b302d0b70107c",
+    "run_differential.out.txt": "f7e6e4a4ffa1f14075d448bb78d288f9bcff825b113456e7142b169277c916c5"
+  },
+  "differentialRerun": false,
+  "differentialScope": "owner-reported equal B/hash on 3 synthetic carriers and 178 fault verdicts; normalized facts depend on Agent3 expected-view builder; not an independent oracle",
+  "exactOwnerAbiFiles": 7,
+  "ruling": "Keep frozen D50 S0 unchanged; evaluator separately acquires and checks both required Governance getters. No new ACK inferred."
+}

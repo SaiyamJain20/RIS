@@ -1,0 +1,49 @@
+{
+  "capturedAt": "2026-11-04T02:42:00.493867+00:00",
+  "pythonVersion": "Python 3.13.13",
+  "gitVersion": "git version 2.54.0",
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "fetch",
+        "origin",
+        "refs/heads/agent-1:refs/remotes/origin/agent-1",
+        "refs/heads/agent-2:refs/remotes/origin/agent-2",
+        "refs/heads/agent-3:refs/remotes/origin/agent-3"
+      ],
+      "exitCode": 0
+    },
+    {
+      "argv": [
+        "python3",
+        ".git/ris-candidate8-prepare.py"
+      ],
+      "source": "evaluation/evidence/reviews/f0-revision8-20261104/preparation.py.txt",
+      "sourceSha256": "191abcd5ed2bb61bddc6917bcb9e1b59c967320f71a2de52960fd1ed7116218b",
+      "exitCode": 0,
+      "checks": "owner message target hashes, manifest blobs, ancestry communication provenance, unchanged owner production files; diagnostic missing optional manifest path caught"
+    },
+    {
+      "argv": [
+        "python3",
+        "evaluation/evidence/reviews/f0-revision8-20261104/review-check.py.txt"
+      ],
+      "sourceSha256": "9e036911e19c3a863968e0ee9265c8db5a7447ad23e46dde335b29809cc1058b",
+      "exitCode": 0,
+      "output": "evaluation/evidence/reviews/f0-revision8-20261104/verification.stdout.txt",
+      "outputSha256": "e048886e284e2bcc994f80cbf32595dbb4bad09a081df1ef043095a53be92cf7"
+    }
+  ],
+  "diagnostics": "evaluation/evidence/reviews/f0-revision8-20261104/diagnostics.txt",
+  "notRun": [
+    "full suites",
+    "runtime tests",
+    "owner helpers",
+    "Forge",
+    "TLC",
+    "RPC",
+    "cryptographic recovery",
+    "live F gate"
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "startedAt": "2026-11-03T13:29:37.801541+00:00",
+  "endedAt": "2026-11-03T13:29:37.902953+00:00",
+  "components": 14,
+  "scenarios": 29,
+  "allNotRun": true,
+  "allOwnerAcksPending": true,
+  "historicalTestNamesVerified": 27,
+  "manifestSha256": "aded280a102132a57b1e13514f3b669394a0c41914c236f1fceab1e5280bd408",
+  "protectedPathsUnchanged": [
+    "ledger",
+    "protocol",
+    "interfaces/v1",
+    "archive",
+    "evaluation/reports/RQ1-E.md",
+    "evaluation/evidence/e3/gate-run-20261012"
+  ],
+  "refsUnchanged": {
+    "origin/agent-1": "5992a0af38485ecb817b10d025145f81d51ee348",
+    "origin/agent-2": "376347d9b0979d1e46824a30197b935ffe91e4fb",
+    "origin/agent-3": "91062fd32ca2ff159dc78432a85d7e6a296af0ad",
+    "origin/main": "376347d9b0979d1e46824a30197b935ffe91e4fb"
+  },
+  "commands": [
+    {
+      "name": "launch-prompts",
+      "argv": [
+        "python3",
+        "communication/build_prompts.py",
+        "--check"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-11-03T13:29:37.835933+00:00",
+      "endedAt": "2026-11-03T13:29:37.866705+00:00",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "outputSha256": "8f29a69f6b3463b624687ea89c034e86c0217602a093168e78b810d5ef4ac781"
+    },
+    {
+      "name": "diff-check",
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-11-03T13:29:37.866739+00:00",
+      "endedAt": "2026-11-03T13:29:37.873305+00:00",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "outputSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "f-execution-refusal",
+      "argv": [
+        "/home/karma/Documents/RIS/.venv/bin/python",
+        "-m",
+        "evaluation.run",
+        "--rq",
+        "F",
+        "--profile",
+        "repaired-e",
+        "--output",
+        "/home/karma/Documents/RIS/.git/ris-a1-0090-f-refusal"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-11-03T13:29:37.873333+00:00",
+      "endedAt": "2026-11-03T13:29:37.900185+00:00",
+      "exitCode": 2,
+      "expectedExit": 2,
+      "outputSha256": "4967bf37afadd1015db6c47adc864f182216340dafa0fa6a7d787f6588585529"
+    },
+    {
+      "name": "python-version",
+      "argv": [
+        "python3",
+        "--version"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-11-03T13:29:37.900220+00:00",
+      "endedAt": "2026-11-03T13:29:37.901726+00:00",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "outputSha256": "6b64edf0fc8f22e798fb64873acba6b4106df290f0bf458b507e8cb409b63e49"
+    },
+    {
+      "name": "git-version",
+      "argv": [
+        "git",
+        "--version"
+      ],
+      "cwd": "/home/karma/Documents/RIS",
+      "startedAt": "2026-11-03T13:29:37.901762+00:00",
+      "endedAt": "2026-11-03T13:29:37.902877+00:00",
+      "exitCode": 0,
+      "expectedExit": 0,
+      "outputSha256": "fff575d3fa43a92d932e4eb8bc03394140ce40699f9c8a97c3126016a244dfb8"
+    }
+  ],
+  "auditCommand": [
+    "python3",
+    ".git/ris-a1-0090-review.py"
+  ],
+  "auditExitCode": 0,
+  "auditToolSha256": "c6dd63b7d71400368d745a6e0ee011f9ae9d797a5920f8ddd68f8ae56a0d04f8",
+  "verificationToolSha256": "251866abb4688208d142e0791c3183dd49b5eb8d1a436da566606e8d3715ae0f"
+}

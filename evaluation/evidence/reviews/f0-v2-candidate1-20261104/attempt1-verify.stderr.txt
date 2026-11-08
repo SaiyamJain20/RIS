@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/home/karma/Documents/RIS/evaluation/evidence/reviews/f0-v2-candidate1-20261104/verify.py", line 19, in <module>
+    Draft202012Validator.check_schema(schema)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/home/karma/Documents/RIS/.venv/lib64/python3.13/site-packages/jsonschema/validators.py", line 316, in check_schema
+    raise exceptions.SchemaError.create_from(error)
+jsonschema.exceptions.SchemaError: [] should be non-empty
+
+Failed validating 'minItems' in metaschema['allOf'][0]['properties']['$defs']['additionalProperties']['$dynamicRef']['allOf'][1]['properties']['allOf']:
+    {'type': 'array', 'minItems': 1, 'items': {'$dynamicRef': '#meta'}}
+
+On schema['$defs']['LedgerDeploymentF']['allOf']:
+    []

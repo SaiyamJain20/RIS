@@ -1,0 +1,67 @@
+import datetime
+import hashlib
+import json
+import pathlib
+import subprocess
+import sys
+
+R = pathlib.Path('/home/karma/Documents/RIS')
+O = R / 'evaluation/evidence/reviews/f0-a2-revision6-20261104'
+S = R / '.git/ris-f0-a2-revision6-snapshot'
+def sha(b): return hashlib.sha256(b).hexdigest()
+def now(): return datetime.datetime.now(datetime.timezone.utc).isoformat()
+def inputs(): return {str(p.relative_to(S)): sha(p.read_bytes()) for p in sorted(S.rglob('*')) if p.is_file()}
+pre = inputs()
+owner = json.loads((O / 'owner-review.json').read_text())['owners']['protocol']['blobs']
+assert pre == owner
+commands = []
+for label, argv in [
+    ('owner-audit', [sys.executable, '-B', str(O / 'audit-owner.py.txt')]),
+    ('pool-adoption', [sys.executable, '-B', '-I', str(S / 'protocol/f0/vectors/test_pool_adoption.py')]),
+    ('wire-check', [sys.executable, '-B', '-I', str(S / 'protocol/f0/vectors/check_wire_examples.py')]),
+    ('review-probes', [sys.executable, '-B', str(O / 'review-probes.py.txt')]),
+    ('planning-check', [sys.executable, '-B', str(O / 'verify.py.txt')]),
+    ('launch-prompts', [sys.executable, 'communication/build_prompts.py', '--check']),
+    ('diff-check', ['git', 'diff', '--check']),
+    ('python-version', [sys.executable, '--version']),
+    ('git-version', ['git', '--version'])
+]:
+    started = now()
+    p = subprocess.run(argv, cwd=R, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    path = O / (label + '.stdout.txt')
+    path.write_bytes(p.stdout)
+    commands.append({'argv': argv, 'startedAt': started, 'endedAt': now(),
+                     'exitCode': p.returncode, 'output': str(path.relative_to(R)),
+                     'outputSha256': sha(p.stdout)})
+    assert p.returncode == 0, (label, p.stdout.decode())
+post = inputs()
+assert pre == post
+(O / 'commands.json').write_text(json.dumps({
+    'capturedAt': now(), 'commands': commands,
+    'snapshotCommit': 'aec008ea41546887e28c74f37daa6e01120216fd',
+    'snapshotPre': pre, 'snapshotPost': post,
+    'stableFiles': len(pre), 'executable': str(pathlib.Path(sys.executable).resolve()),
+    'executableSha256': sha(pathlib.Path(sys.executable).read_bytes()),
+    'classification': 'fresh specification-helper and planning checks only',
+    'retentionRerun': 'Initial helpers/probes passed interactively; this batch retains exact outputs under a complete source bracket. No full suites repeated.',
+    'diagnostics': ['Initial mkdir lock attempt exit1; existing flock file. Persistent file lock then acquired before repository work.',
+                    'First guessed using-superpowers path absent; catalog path read successfully.']
+}, indent=2) + '\n')
+(O / 'verification.json').write_text(json.dumps({
+    'capturedAt': now(), 'checksExit0': True, 'stableSnapshotFiles': len(pre),
+    'candidate6Acks': ['A1-0102', 'A2-0050'], 'noAckTransfer': True,
+    'r4r5': 'resolved in abstract snapshot decision; no runtime result',
+    'open': ['R6 expiry-reserve versus adopted iff selection; original deadline before snapshot timeout'],
+    'revision6Adopted': False, 'schemaPublished': False,
+    'executionAuthorized': False, 'fCasesNotRun': 32,
+    'freshMutationCampaign': False, 'freshFullSuite': False,
+    'freshRuntimeTimingCryptoOrModel': False
+}, indent=2) + '\n')
+files = {str(p.relative_to(R)): sha(p.read_bytes()) for p in sorted(O.iterdir()) if p.is_file() and p.name != 'review-manifest.json'}
+(O / 'review-manifest.json').write_text(json.dumps({
+    'format': 'RIS-F0-review-1', 'capturedAt': now(),
+    'status': 'REVISION6_REVIEW_R6_OPEN_NOT_ADOPTED', 'executionAuthorized': False,
+    'files': files
+}, indent=2) + '\n')
+print(json.dumps({'checks': 'PASS', 'snapshotStable': len(pre), 'files': len(files),
+                  'manifestSha256': sha((O / 'review-manifest.json').read_bytes())}))

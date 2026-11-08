@@ -1,0 +1,39 @@
+from pathlib import Path
+import json,hashlib,subprocess,datetime,csv,io
+old=Path('evaluation/evidence/reviews/f0-revision7-20261104');new=Path('evaluation/evidence/reviews/f0-revision8-20261104')
+sha=lambda b:hashlib.sha256(b).hexdigest()
+git=lambda *a:subprocess.check_output(['git',*a])
+a=json.loads((old/'f_matrix.json').read_text());b=json.loads((new/'f_matrix.json').read_text())
+assert len(b['cases'])==32 and len({r['id'] for r in b['cases']})==32
+assert all(r['executionStatus']=='NOT_RUN' and r['ownerAckStatus']=='PENDING_BOTH' for r in b['cases'])
+assert b['executionAuthorized'] is False and b['status']=='DRAFT_NOT_FROZEN' and not b['exactOwnerAcks'] and not b['actualFResults']
+changed={}
+for before,after in zip(a['cases'],b['cases']):
+ assert before['id']==after['id']
+ fields=[k for k in set(before)|set(after) if before.get(k)!=after.get(k)]
+ if fields:changed[before['id']]=sorted(fields)
+assert changed=={'F-12':['controls','dependencies'],'F-29':['dependencies']},changed
+assert len(next(r for r in b['cases'] if r['id']=='F-12')['controls'])==17
+f12=next(r for r in b['cases'] if r['id']=='F-12'); controls='\n'.join(f12['controls'])
+for term in ['Ambiguous split','positive control at f=2','PROPOSAL_MISMATCH','honest agreeing pair','silent or held','M8 mutant','M9 mutant','Unpinned positive branch','Pinned branch']:assert term in controls,term
+assert a['numericPlan']|{'plan':b['numericPlan']['plan']}==b['numericPlan']
+assert (old/'fault-model.csv').read_bytes()==(new/'fault-model.csv').read_bytes()
+assert len(list(csv.DictReader(io.StringIO((new/'fault-model.csv').read_text()))))==14
+manifest=json.loads((old/'review-manifest.json').read_text())
+for path,expected in manifest['files'].items():assert sha(Path(path).read_bytes())==expected,path
+provenance=json.loads((new/'input-provenance.json').read_text())
+pin=provenance['pins']['protocol/f0/SIGNING-RULES.md'];assert pin in next(r for r in b['cases'] if r['id']=='F-29')['dependencies'][0]
+base=git('rev-parse','376347d').decode().strip();em='protocol/evidence/source-manifest.sha256'
+e_hashes={ref:sha(git('show',ref+':'+em)) for ref in [base,'f746098c78bff2e1d0abcf8600934469a3f9a03a',provenance['refs']['origin/agent-2']]}
+assert len(set(e_hashes.values()))==1
+for ref,expected in [('origin/agent-1',provenance['refs']['origin/agent-1']),('origin/agent-2',provenance['refs']['origin/agent-2'])]:assert git('rev-parse',ref).decode().strip()==expected
+# Verify both lock files are held by this run without changing their contents.
+import fcntl
+for path in ['.git/ris-agent3-scheduled.lock','.git/hmbc-coordinator.lock']:
+ with open(path,'a+') as f:
+  try:fcntl.flock(f,fcntl.LOCK_EX|fcntl.LOCK_NB)
+  except BlockingIOError:pass
+  else:raise AssertionError('lock unexpectedly free: '+path)
+result=dict(capturedAt=datetime.datetime.now(datetime.timezone.utc).isoformat(),classification='planning artifact verification; prospective extension controls; no runtime result',cases=32,components=14,changedCaseFields=changed,csvByteIdentical=True,priorCandidate7ManifestFilesVerified=len(manifest['files']),candidate8ExactAcks=[],candidate7LedgerAck='A1-0103',candidate7ProtocolReview='A2-0052 NOT_ACK',ownerManifestEntries=36,communicationPaths=len(provenance['latestCommunication']),incomparableCommunicationConflicts=[],productionProtocolBaseline=base,eManifestHashes=e_hashes,numericBoundsUnchanged=True,executionAuthorized=False,allCasesNotRun=True,realSignaturesVerified=False,timingMeasured=False,runtimeTestsRun=False,fullSuitesRun=False,forgeOrTLCRun=False,locksHeld=True)
+(new/'verification.json').write_text(json.dumps(result,indent=2)+'\n')
+print(json.dumps(result,indent=2))

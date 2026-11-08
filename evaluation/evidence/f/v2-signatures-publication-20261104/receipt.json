@@ -1,0 +1,36 @@
+{
+  "recordedUtc": "2026-11-04T11:07:29.266915+00:00",
+  "publication": {
+    "argv": [
+      "git",
+      "push",
+      "origin",
+      "agent-3"
+    ],
+    "start": "2026-11-04T11:05:35.394094+00:00",
+    "end": "2026-11-04T11:05:42.637019+00:00",
+    "exit_code": 0,
+    "local_head": "55a0c37309bf9dee83e3d3c4bc19b5bf2f1068f4",
+    "status": "## agent-3...origin/agent-3\n",
+    "remoteVerified": false
+  },
+  "pushServerOutput": "To github.com:SaiyamJain20/RIS\n   2f2af3c..55a0c37  agent-3 -> agent-3\n",
+  "subsequentRemoteVerification": {
+    "lsRemote": "git@github.com: Permission denied (publickey).\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists.\n",
+    "fetch": {
+      "argv": [
+        "git",
+        "fetch",
+        "origin"
+      ],
+      "start": "2026-11-04T11:06:12.777700+00:00",
+      "end": "2026-11-04T11:06:29.999456+00:00",
+      "exit_code": 128,
+      "refs": "refs/remotes/origin/agent-1 aef3daa5ebbe434f97b016719f8762d4aaf09441\nrefs/remotes/origin/agent-2 5639e8f638645acf0bf122109f8bae2ffc2b6fc4\nrefs/remotes/origin/agent-3 55a0c37309bf9dee83e3d3c4bc19b5bf2f1068f4\n"
+    },
+    "fetchOutput": "git@github.com: Permission denied (publickey).\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists.\n"
+  },
+  "conclusion": "Normal push acknowledged both6db8959 and55a0c37 on agent-3; subsequent remote read-back/fresh peer review failed publickey. Current remote state after push is unverified.",
+  "originalEvidence": "evaluation/evidence/f/v2-signatures-20261104/review-manifest.json",
+  "originalEvidenceCommit": "55a0c37309bf9dee83e3d3c4bc19b5bf2f1068f4"
+}

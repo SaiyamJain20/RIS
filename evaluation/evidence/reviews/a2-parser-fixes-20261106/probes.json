@@ -1,0 +1,467 @@
+{
+  "scope": "synthetic public API reply parsing; no services or chain truth",
+  "controlCount": 15,
+  "propertyProbeCount": 12,
+  "acceptanceGaps": [],
+  "rows": [
+    {
+      "label": "canonical quantity 0x0",
+      "rawReply": "0x0",
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "returned": "0",
+      "classification": "control",
+      "requests": [
+        [
+          "eth_chainId",
+          []
+        ]
+      ]
+    },
+    {
+      "label": "canonical quantity 0x1",
+      "rawReply": "0x1",
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "returned": "1",
+      "classification": "control",
+      "requests": [
+        [
+          "eth_chainId",
+          []
+        ]
+      ]
+    },
+    {
+      "label": "canonical quantity 0xff",
+      "rawReply": "0xff",
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "returned": "255",
+      "classification": "control",
+      "requests": [
+        [
+          "eth_chainId",
+          []
+        ]
+      ]
+    },
+    {
+      "label": "malformed quantity None",
+      "rawReply": null,
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "returned": null,
+      "classification": "control",
+      "requests": [
+        [
+          "eth_chainId",
+          []
+        ]
+      ]
+    },
+    {
+      "label": "malformed quantity True",
+      "rawReply": true,
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "returned": null,
+      "classification": "control",
+      "requests": [
+        [
+          "eth_chainId",
+          []
+        ]
+      ]
+    },
+    {
+      "label": "malformed quantity '0x'",
+      "rawReply": "0x",
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "returned": null,
+      "classification": "control",
+      "requests": [
+        [
+          "eth_chainId",
+          []
+        ]
+      ]
+    },
+    {
+      "label": "malformed quantity '0xzz'",
+      "rawReply": "0xzz",
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "returned": null,
+      "classification": "control",
+      "requests": [
+        [
+          "eth_chainId",
+          []
+        ]
+      ]
+    },
+    {
+      "label": "malformed quantity '12'",
+      "rawReply": "12",
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "returned": null,
+      "classification": "control",
+      "requests": [
+        [
+          "eth_chainId",
+          []
+        ]
+      ]
+    },
+    {
+      "label": "quantity normalization gap 0x-1",
+      "rawReply": "0x-1",
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "returned": null,
+      "classification": "tested reconstruction result: permissive reply parsing",
+      "requests": [
+        [
+          "eth_chainId",
+          []
+        ]
+      ]
+    },
+    {
+      "label": "quantity normalization gap 0x+1",
+      "rawReply": "0x+1",
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "returned": null,
+      "classification": "tested reconstruction result: permissive reply parsing",
+      "requests": [
+        [
+          "eth_chainId",
+          []
+        ]
+      ]
+    },
+    {
+      "label": "quantity normalization gap 0x1_0",
+      "rawReply": "0x1_0",
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "returned": null,
+      "classification": "tested reconstruction result: permissive reply parsing",
+      "requests": [
+        [
+          "eth_chainId",
+          []
+        ]
+      ]
+    },
+    {
+      "label": "quantity normalization gap 0x 1",
+      "rawReply": "0x 1",
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "returned": null,
+      "classification": "tested reconstruction result: permissive reply parsing",
+      "requests": [
+        [
+          "eth_chainId",
+          []
+        ]
+      ]
+    },
+    {
+      "label": "quantity normalization gap 0x01",
+      "rawReply": "0x01",
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "returned": null,
+      "classification": "tested reconstruction result: permissive reply parsing",
+      "requests": [
+        [
+          "eth_chainId",
+          []
+        ]
+      ]
+    },
+    {
+      "label": "quantity normalization gap 0xA",
+      "rawReply": "0xA",
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "returned": null,
+      "classification": "tested reconstruction result: permissive reply parsing",
+      "requests": [
+        [
+          "eth_chainId",
+          []
+        ]
+      ]
+    },
+    {
+      "label": "negative latest block",
+      "rawReply": {
+        "number": "0x-1",
+        "hash": "0xabababababababababababababababababababababababababababababababab"
+      },
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "returned": null,
+      "classification": "tested reconstruction result: permissive reply parsing",
+      "requests": [
+        [
+          "eth_getBlockByNumber",
+          [
+            "latest",
+            false
+          ]
+        ]
+      ]
+    },
+    {
+      "label": "canonical ABI threshold",
+      "rawReply": "0x0000000000000000000000000000000000000000000000000000000000000003",
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "returned": "3",
+      "classification": "control",
+      "requests": [
+        [
+          "eth_call",
+          [
+            {
+              "to": "0x1111111111111111111111111111111111111111",
+              "data": "0x42cde4e8"
+            },
+            "0x7"
+          ]
+        ]
+      ]
+    },
+    {
+      "label": "trailing ABI bytes threshold",
+      "rawReply": "0x0000000000000000000000000000000000000000000000000000000000000003deadbeef",
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "returned": null,
+      "classification": "tested reconstruction result: trailing bytes tolerated; no altered value shown",
+      "requests": [
+        [
+          "eth_call",
+          [
+            {
+              "to": "0x1111111111111111111111111111111111111111",
+              "data": "0x42cde4e8"
+            },
+            "0x7"
+          ]
+        ]
+      ]
+    },
+    {
+      "label": "canonical ABI configured",
+      "rawReply": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "returned": true,
+      "classification": "control",
+      "requests": [
+        [
+          "eth_call",
+          [
+            {
+              "to": "0x1111111111111111111111111111111111111111",
+              "data": "0x8772a23a"
+            },
+            "0x7"
+          ]
+        ]
+      ]
+    },
+    {
+      "label": "trailing ABI bytes configured",
+      "rawReply": "0x0000000000000000000000000000000000000000000000000000000000000001deadbeef",
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "returned": null,
+      "classification": "tested reconstruction result: trailing bytes tolerated; no altered value shown",
+      "requests": [
+        [
+          "eth_call",
+          [
+            {
+              "to": "0x1111111111111111111111111111111111111111",
+              "data": "0x8772a23a"
+            },
+            "0x7"
+          ]
+        ]
+      ]
+    },
+    {
+      "label": "canonical ABI rsc",
+      "rawReply": "0x0000000000000000000000002222222222222222222222222222222222222222",
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "returned": "0x2222222222222222222222222222222222222222",
+      "classification": "control",
+      "requests": [
+        [
+          "eth_call",
+          [
+            {
+              "to": "0x1111111111111111111111111111111111111111",
+              "data": "0x9f27bf08"
+            },
+            "0x7"
+          ]
+        ]
+      ]
+    },
+    {
+      "label": "trailing ABI bytes rsc",
+      "rawReply": "0x0000000000000000000000002222222222222222222222222222222222222222deadbeef",
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "returned": null,
+      "classification": "tested reconstruction result: trailing bytes tolerated; no altered value shown",
+      "requests": [
+        [
+          "eth_call",
+          [
+            {
+              "to": "0x1111111111111111111111111111111111111111",
+              "data": "0x9f27bf08"
+            },
+            "0x7"
+          ]
+        ]
+      ]
+    },
+    {
+      "label": "canonical ABI witnesses",
+      "rawReply": "0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000200000000000000000000000011111111111111111111111111111111111111110000000000000000000000002222222222222222222222222222222222222222",
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "returned": [
+        "0x1111111111111111111111111111111111111111",
+        "0x2222222222222222222222222222222222222222"
+      ],
+      "classification": "control",
+      "requests": [
+        [
+          "eth_call",
+          [
+            {
+              "to": "0x1111111111111111111111111111111111111111",
+              "data": "0x53176195"
+            },
+            "0x7"
+          ]
+        ]
+      ]
+    },
+    {
+      "label": "trailing ABI bytes witnesses",
+      "rawReply": "0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000200000000000000000000000011111111111111111111111111111111111111110000000000000000000000002222222222222222222222222222222222222222deadbeef",
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "returned": null,
+      "classification": "tested reconstruction result: trailing bytes tolerated; no altered value shown",
+      "requests": [
+        [
+          "eth_call",
+          [
+            {
+              "to": "0x1111111111111111111111111111111111111111",
+              "data": "0x53176195"
+            },
+            "0x7"
+          ]
+        ]
+      ]
+    },
+    {
+      "label": "short uint",
+      "rawReply": "0x00000000000000000000000000000000000000000000000000000000000000",
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "returned": null,
+      "classification": "control",
+      "requests": [
+        [
+          "eth_call",
+          [
+            {
+              "to": "0x1111111111111111111111111111111111111111",
+              "data": "0x42cde4e8"
+            },
+            "0x7"
+          ]
+        ]
+      ]
+    },
+    {
+      "label": "invalid bool",
+      "rawReply": "0x0000000000000000000000000000000000000000000000000000000000000002",
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "returned": null,
+      "classification": "control",
+      "requests": [
+        [
+          "eth_call",
+          [
+            {
+              "to": "0x1111111111111111111111111111111111111111",
+              "data": "0x8772a23a"
+            },
+            "0x7"
+          ]
+        ]
+      ]
+    },
+    {
+      "label": "bad address padding",
+      "rawReply": "0xffffffffffffffffffffffff2222222222222222222222222222222222222222",
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "returned": null,
+      "classification": "control",
+      "requests": [
+        [
+          "eth_call",
+          [
+            {
+              "to": "0x1111111111111111111111111111111111111111",
+              "data": "0x9f27bf08"
+            },
+            "0x7"
+          ]
+        ]
+      ]
+    },
+    {
+      "label": "ABI dynamic offset gap",
+      "rawReply": "0x00000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000200000000000000000000000011111111111111111111111111111111111111110000000000000000000000002222222222222222222222222222222222222222",
+      "expected": "REFUSE",
+      "actual": "REFUSE",
+      "returned": null,
+      "classification": "tested reconstruction result: non-minimal dynamic layout tolerated",
+      "requests": [
+        [
+          "eth_call",
+          [
+            {
+              "to": "0x1111111111111111111111111111111111111111",
+              "data": "0x53176195"
+            },
+            "0x7"
+          ]
+        ]
+      ]
+    }
+  ]
+}

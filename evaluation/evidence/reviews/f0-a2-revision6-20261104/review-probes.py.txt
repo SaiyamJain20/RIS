@@ -1,0 +1,110 @@
+"""Offline review of a pinned specification helper. No real signatures or time.
+
+The R6 example supplies explicit synthetic observations outside the wire: the
+current wire has no observation fields with which to resolve this distinction.
+"""
+import ast
+import contextlib
+import copy
+import importlib.util
+import io
+import itertools
+import json
+import pathlib
+import re
+import sys
+
+R = pathlib.Path('/home/karma/Documents/RIS')
+S = R / '.git/ris-f0-a2-revision6-snapshot/protocol/f0'
+spec = importlib.util.spec_from_file_location('adoption_review', S / 'vectors/pool_adoption.py')
+pa = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(pa)
+A, B, FAKE = ('7', 'A'), ('7', 'B'), ('7', 'FAKE')
+def rep(w, m): return {'witness': w, 'message': m, 'validSignature': True}
+
+# Independent small-domain set specification: count only singleton reporter sets.
+def expected(rs):
+    by = {w: {r['message'] for r in rs if r['witness'] == w} for w in range(4)}
+    candidates = [m for m in (A, B, FAKE) if sum(ms == {m} for ms in by.values()) >= 2]
+    return candidates[0] if len(candidates) == 1 else None
+assignments = adoptions = 0
+for byz in range(4):
+    honest = [w for w in range(4) if w != byz]
+    for hv in itertools.product([None, A, B], repeat=3):
+        for mask in range(8):
+            rs = [rep(w, m) for w, m in zip(honest, hv) if m is not None]
+            rs += [rep(byz, m) for i, m in enumerate((A, B, FAKE)) if mask & (1 << i)]
+            got = pa.adopt_recorded(rs, 7)
+            assert got == expected(rs)
+            if got is not None:
+                adoptions += 1
+                assert got in hv
+            assignments += 1
+assert 0 < adoptions < assignments
+assert pa.adopt_recorded([rep(3, FAKE), rep(3, A), rep(0, A)], 7) is None
+assert pa.adopt_recorded([rep(3, FAKE), rep(3, B), rep(0, A), rep(1, A)], 7) == A
+assert pa.decide([rep(0, A), rep(1, A)], [rep(2, B), rep(3, B)], 7) == A
+assert pa.decide([rep(2, B), rep(3, B)], [rep(0, A), rep(1, A)], 7) == B
+assert pa.decide([rep(0, A)], [rep(1, A)], 7) is None
+
+# Load the owner's documentation checker without importing any production API.
+saved = sys.argv[:]
+sys.argv = [str(S / 'vectors/check_wire_examples.py')]
+with contextlib.redirect_stdout(io.StringIO()):
+    # Preserve every check; remove only the final process exit to inspect the
+    # documented checker functions after its own example checks have completed.
+    tree = ast.parse((S / 'vectors/check_wire_examples.py').read_text())
+    assert ast.unparse(tree.body[-1]) == 'sys.exit(1 if fails else 0)'
+    tree.body.pop()
+    ns = {'__file__': str(S / 'vectors/check_wire_examples.py')}
+    exec(compile(tree, str(S / 'vectors/check_wire_examples.py'), 'exec'), ns)
+sys.argv = saved
+assert not ns['fails']
+examples = [json.loads(x) for x in re.findall(r'```json\n(.*?)\n```', (S / 'SUCCESSOR-WIRE.md').read_text(), re.S)]
+collection = next(copy.deepcopy(x['error']['collection']) for x in examples if x.get('error') and 'collection' in x['error'] and x['error']['collection'].get('adopted'))
+# The signatures remain illustrative; retime every message identically so the
+# checker probe and the external synthetic clock observation use the same TTL.
+def retime(value):
+    if isinstance(value, dict):
+        if 'expiresAt' in value: value['expiresAt'] = '1006'
+        for child in value.values(): retime(child)
+    elif isinstance(value, list):
+        for child in value: retime(child)
+retime(collection)
+assert ns['reports_ok'](collection)
+del collection['adopted']
+assert not ns['reports_ok'](collection)
+
+# R6: a reported checkpoint can be valid at reply and have <=2s left at the
+# one-time snapshot decision. It need not share the newly derived proposal TTL.
+start = 1000
+original_proposal_expiry = 1030
+adopted_candidate_expiry = 1006
+snapshot_time = start + 5
+deadline_duration = min(10, original_proposal_expiry - start - 2)
+assert snapshot_time < start + deadline_duration
+assert adopted_candidate_expiry - snapshot_time == 1
+eligible_pair = [rep(0, ('7', 'A', adopted_candidate_expiry)), rep(1, ('7', 'A', adopted_candidate_expiry))]
+assert pa.adopt_recorded(eligible_pair, 7) == ('7', 'A', adopted_candidate_expiry)
+
+# Short budget: collection expiry is an earlier stop than the advertised 5s
+# snapshot timeout. This is arithmetic, not a measured schedule.
+short_duration = min(10, 4 - 2)
+assert short_duration == 2 < 5
+
+print(json.dumps({
+    'classification': 'specification helper and synthetic boundary probes only',
+    'independentDomainAssignments': assignments, 'adoptions': adoptions,
+    'r4': 'exclusion and honest pair controls agree',
+    'r5': 'snapshot-only adoption, reversed order and no late-created adoption agree',
+    'r6': {'originalProposalExpiry': original_proposal_expiry,
+           'reportedValueExpiry': adopted_candidate_expiry,
+           'startTime': start, 'snapshotTime': snapshot_time,
+           'remainingAtDecision': 1,
+           'pairRuleSelects': True, 'wireWithoutAdoptedAccepted': False,
+           'wireWithAdoptedAccepted': True,
+           'question': 'skip adoption versus skip re-proposal; exact evidence meaning unresolved'},
+    'shortBudget': {'remainingAtStart': 4, 'collectionDuration': short_duration,
+                    'snapshotTimeout': 5, 'question': 'define close and response when original collection expires first'},
+    'noRealClockSignatureOrRuntime': True
+}, indent=2))

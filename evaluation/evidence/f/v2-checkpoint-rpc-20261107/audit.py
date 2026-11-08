@@ -1,0 +1,88 @@
+"""Fresh unchanged-owner provenance and local source brackets, no peer execution."""
+import hashlib
+import importlib.metadata
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+
+ROOT = Path(__file__).resolve().parents[4]
+OUT = Path(__file__).resolve().parent
+PRIOR = ROOT / 'evaluation/evidence/f/v2-checkpoint-history-20261107/inputs-before.json'
+sys.path.insert(0, str(ROOT))
+from evaluation.manifests import now
+from evaluation.peers import scan
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=ROOT)
+
+def sha(data):
+    return hashlib.sha256(data).hexdigest()
+
+def write(name, data):
+    p = OUT / name
+    assert not p.exists(), 'immutable evidence; choose a new invocation name'
+    p.write_text(json.dumps(data, indent=2) + '\n')
+
+def inputs():
+    paths = git('ls-files','--cached','--others','--exclude-standard','evaluation','interfaces',
+                'pyproject.toml','uv.lock','SPEC.md','PLAN.md','AGENTS.md').decode().splitlines()
+    return {p:sha((ROOT/p).read_bytes()) for p in paths if '/evidence/' not in p}
+
+def helpers():
+    return {p.name:sha(p.read_bytes()) for p in OUT.iterdir() if p.suffix=='.py' or p.name=='PLAN.md'}
+
+def owner_pins():
+    prior = json.loads(PRIOR.read_text())
+    tips = {n:git('rev-parse','origin/agent-'+n).decode().strip() for n in ('1','2','3')}
+    assert tips['1']==prior['tips']['1'] and tips['2']==prior['tips']['2'], 'review new peer deltas first'
+    for p,digest in prior['sourcePins'].items():
+        commit = tips['1'] if p.startswith('ledger/') else tips['2']
+        assert sha(git('show',commit+':'+p))==digest, p
+    for version in ('v1','v2','v2.1'):
+        freeze=json.loads((ROOT/f'interfaces/{version}/FREEZE.json').read_text())
+        for p,row in freeze.get('frozenCopies',freeze.get('files',{})).items():
+            assert sha((ROOT/p).read_bytes())==row['sha256'], p
+    acceptance=json.loads((ROOT/'communication/F0_ACCEPTANCE_CANDIDATE2.json').read_text())
+    assert acceptance['implementationAuthorized'] and not acceptance['executionAuthorized']
+    for p,digest in acceptance['protocolF0Files'].items():
+        assert sha(git('show',tips['2']+':'+p))==digest,p
+    return dict(tips=tips,sourcePins=prior['sourcePins'],priorInputsSha256=sha(PRIOR.read_bytes()),
+                completeRuntimeReady=False,executionAuthorized=False)
+
+mode=sys.argv[1]
+if mode=='before':
+    assert git('branch','--show-current').decode().strip()=='agent-3'
+    state=owner_pins()
+    state.update(recordedAt=now(),localInputs=inputs(),helpers=helpers(),
+        environmentSha256=sha(json.dumps(dict(os.environ),sort_keys=True).encode()),
+        tools=dict(python=sys.version,executable=sys.executable,git=git('--version').decode().strip(),
+                   **{p:importlib.metadata.version(p) for p in ('pytest','eth-account','eth-abi','jsonschema')}),
+        lockInodes={p:os.stat(ROOT/'.git'/p).st_ino for p in ('ris-agent3-scheduled.lock','hmbc-coordinator.lock')})
+    write('inputs-before.json',state)
+    print(json.dumps(dict(ownerPaths=len(state['sourcePins']),localInputs=len(state['localInputs']),helpers=len(state['helpers']),tools=state['tools']),indent=2))
+elif mode=='after':
+    before=json.loads((OUT/'inputs-before.json').read_text())
+    assert before['localInputs']==inputs()
+    assert before['sourcePins']==owner_pins()['sourcePins']
+    current_helpers=helpers()
+    changed={p:dict(before=d,after=current_helpers.get(p)) for p,d in before['helpers'].items()
+             if current_helpers.get(p)!=d}
+    # Evidence helpers are not root-pytest runtime inputs. Retain every change
+    # explicitly rather than describing the corrected mutation probe as stable.
+    assert not (set(current_helpers)-set(before['helpers'])), 'unexpected new helper'
+    for p,row in changed.items():
+        initial=OUT/(p.removesuffix('.py')+'-initial.py.txt')
+        assert sha(initial.read_bytes())==row['before'],p
+    write('inputs-after.json',dict(recordedAt=now(),unchangedOwnerPaths=len(before['sourcePins']),
+        unchangedLocalInputs=len(before['localInputs']),unchangedHelpers=len(before['helpers'])-len(changed),
+        changedHelpers=changed,finalHelpers=current_helpers))
+    print((OUT/'inputs-after.json').read_text())
+elif mode=='peers':
+    result=scan(ROOT)
+    assert not result['missingBranches']
+    assert not any(v['ambiguous'] or v['divergentRevisions'] for v in result['files'].values())
+    write(sys.argv[2],result)
+    print(json.dumps(dict(branches=result['branches'],communicationPaths=len(result['files'])),indent=2))
+else:raise SystemExit('before/after/peers output-name')

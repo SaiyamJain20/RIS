@@ -1,0 +1,88 @@
+[
+  {
+    "label": "verify",
+    "command": [
+      "python3",
+      "-B",
+      "-I",
+      "evaluation/evidence/reviews/f0-v2-candidate2-freeze-20261104/verify.py"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedUtc": "2026-11-04T07:52:27.835477+00:00",
+    "endedUtc": "2026-11-04T07:52:34.291892+00:00",
+    "exitCode": 0,
+    "stdoutSha256": "2cb68bb560491e2076cbbde86cab3ecd3707328bd5834cce708787ecb5b092f6",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "sourceSha256": "8f96116cf049cfd1b5fbcaedc2d866083bb5f25b6877e7738e9ea643c2b8dc66"
+  },
+  {
+    "label": "prompts",
+    "command": [
+      "python3",
+      "communication/build_prompts.py",
+      "--check"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedUtc": "2026-11-04T07:52:34.292120+00:00",
+    "endedUtc": "2026-11-04T07:52:34.348874+00:00",
+    "exitCode": 0,
+    "stdoutSha256": "8f29a69f6b3463b624687ea89c034e86c0217602a093168e78b810d5ef4ac781",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "diff",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedUtc": "2026-11-04T07:52:34.349048+00:00",
+    "endedUtc": "2026-11-04T07:52:34.355724+00:00",
+    "exitCode": 0,
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "python-version",
+    "command": [
+      "python3",
+      "--version"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedUtc": "2026-11-04T07:52:34.355923+00:00",
+    "endedUtc": "2026-11-04T07:52:34.357801+00:00",
+    "exitCode": 0,
+    "stdoutSha256": "6b64edf0fc8f22e798fb64873acba6b4106df290f0bf458b507e8cb409b63e49",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "git-version",
+    "command": [
+      "git",
+      "--version"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedUtc": "2026-11-04T07:52:34.357878+00:00",
+    "endedUtc": "2026-11-04T07:52:34.359136+00:00",
+    "exitCode": 0,
+    "stdoutSha256": "fff575d3fa43a92d932e4eb8bc03394140ce40699f9c8a97c3126016a244dfb8",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "final-audit",
+    "command": [
+      "python3",
+      "-B",
+      "-I",
+      "evaluation/evidence/reviews/f0-v2-candidate2-freeze-20261104/final_audit.py"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "startedUtc": "2026-11-04T07:54:57.667772+00:00",
+    "endedUtc": "2026-11-04T07:54:57.733929+00:00",
+    "exitCode": 0,
+    "sourceSha256": "e0df01a89628601378dcbae55002975a665db72458c2e8c30dd428b5301df9bf",
+    "stdoutSha256": "efc86af4109ee1f9f25741f12a27c6f3069a179aa6bf8296ab1e483f5ab42e90",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

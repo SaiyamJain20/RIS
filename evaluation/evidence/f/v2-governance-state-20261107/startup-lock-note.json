@@ -1,0 +1,23 @@
+{
+  "initialAttempt": {
+    "command": "mkdir /home/karma/Documents/RIS/.git/ris-agent3-scheduled.lock",
+    "exitCode": 1,
+    "effect": "existing file unchanged; this was not a lock acquisition"
+  },
+  "preAcquisitionReads": [
+    "automation memory",
+    "skill-router SKILL.md",
+    "using-superpowers SKILL.md"
+  ],
+  "scheduled": {
+    "protocol": "nonblocking persistent-file flock",
+    "session": 43706,
+    "inode": 9878121
+  },
+  "coordinator": {
+    "protocol": "nonblocking persistent-file flock",
+    "session": 57715,
+    "inode": 7431826
+  },
+  "limits": "Startup ordering was imperfect: memory/skills were read before successful flock. No repository content read, fetch or edit occurred before acquisition. Independent exclusion checks are retained in inputs-before.json. No inode replaced/unlinked."
+}

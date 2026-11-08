@@ -1,0 +1,404 @@
+{
+  "format": "RIS-interface-amendment-proposal-1",
+  "status": "PROPOSED_NO_ACK",
+  "basePath": "interfaces/v2/hmbc.schema.json",
+  "baseSha256": "79e34dbb8f9b11b310decf416d27a57aa8c1f249e0c5a6d3985e52740376c093",
+  "ownerSourceCommit": "aef3daa5ebbe434f97b016719f8762d4aaf09441",
+  "operations": [
+    {
+      "op": "add",
+      "path": "/$defs/LedgerDeploymentEComplete",
+      "value": {
+        "type": "object",
+        "properties": {
+          "schemaVersion": {
+            "const": "hmbc-ledger-deployment/v2.1"
+          },
+          "interfaceVersion": {
+            "const": "v2"
+          },
+          "producer": {
+            "type": "string",
+            "minLength": 1
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "profile": {
+            "enum": [
+              "paper-strict",
+              "paper-minimal",
+              "repaired-e",
+              "mutant-no-destination-binding",
+              "mutant-no-state-barrier",
+              "mutant-no-record-freshness",
+              "mutant-no-nonce",
+              "mutant-no-version-monotone",
+              "mutant-no-receipt-binding"
+            ]
+          },
+          "profileEnum": {
+            "enum": [
+              "0",
+              "1",
+              "2"
+            ]
+          },
+          "mutations": {
+            "$ref": "#/$defs/Uint256"
+          },
+          "mutantNote": {
+            "type": "string",
+            "minLength": 1
+          },
+          "logDetailMode": {
+            "enum": [
+              "hash-only",
+              "complete-details"
+            ]
+          },
+          "chains": {
+            "type": "object",
+            "properties": {
+              "pbc": {
+                "$ref": "#/$defs/LedgerPbcChain"
+              },
+              "dbc": {
+                "$ref": "#/$defs/LedgerDbcChain"
+              }
+            },
+            "required": [
+              "pbc",
+              "dbc"
+            ],
+            "additionalProperties": false
+          },
+          "fixture": {
+            "$ref": "#/$defs/LedgerFixture"
+          },
+          "abi": {
+            "$ref": "#/$defs/LedgerAbiContractsV2"
+          },
+          "compiler": {
+            "$ref": "#/$defs/LedgerCompiler"
+          },
+          "foundryTomlSha256": {
+            "$ref": "#/$defs/FileHash"
+          },
+          "sources": {
+            "$ref": "#/$defs/LedgerSourceHashesF"
+          },
+          "errorCodes": {
+            "type": "object",
+            "properties": {
+              "0": {
+                "const": "NONE"
+              },
+              "1": {
+                "const": "BAD_SIGNATURE"
+              },
+              "2": {
+                "const": "WRONG_SUBJECT"
+              },
+              "3": {
+                "const": "WRONG_DESTINATION"
+              },
+              "4": {
+                "const": "UNKNOWN_AUTHORITY"
+              },
+              "5": {
+                "const": "STALE_ANCHOR"
+              },
+              "6": {
+                "const": "STALE_STATE"
+              },
+              "7": {
+                "const": "EXPIRED"
+              },
+              "8": {
+                "const": "REPLAY"
+              },
+              "9": {
+                "const": "POLICY_DENIED"
+              },
+              "10": {
+                "const": "INSUFFICIENT_QUORUM"
+              },
+              "11": {
+                "const": "DUPLICATE_SIGNER"
+              },
+              "12": {
+                "const": "WRONG_EPOCH"
+              },
+              "13": {
+                "const": "NOT_COMMITTED"
+              },
+              "14": {
+                "const": "ADAPTER_UNAVAILABLE"
+              },
+              "15": {
+                "const": "NOT_IMPLEMENTED_IN_PHASE"
+              },
+              "16": {
+                "const": "UNAUTHORIZED_CALLER"
+              },
+              "17": {
+                "const": "NOT_REGISTERED"
+              },
+              "18": {
+                "const": "ALREADY_REGISTERED"
+              },
+              "19": {
+                "const": "REVOKED"
+              },
+              "20": {
+                "const": "MALFORMED"
+              },
+              "21": {
+                "const": "WRONG_PROFILE"
+              }
+            },
+            "required": [
+              "0",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9",
+              "10",
+              "11",
+              "12",
+              "13",
+              "14",
+              "15",
+              "16",
+              "17",
+              "18",
+              "19",
+              "20",
+              "21"
+            ],
+            "additionalProperties": false
+          },
+          "errorEncoding": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "interfaceVersion",
+          "producer",
+          "createdAt",
+          "profile",
+          "profileEnum",
+          "mutations",
+          "mutantNote",
+          "logDetailMode",
+          "chains",
+          "fixture",
+          "abi",
+          "compiler",
+          "foundryTomlSha256",
+          "sources",
+          "errorCodes",
+          "errorEncoding"
+        ],
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "profile": {
+                  "const": "paper-strict"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "profileEnum": {
+                  "const": "0"
+                },
+                "mutations": {
+                  "const": "0"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "profile": {
+                  "const": "paper-minimal"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "profileEnum": {
+                  "const": "1"
+                },
+                "mutations": {
+                  "const": "0"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "profile": {
+                  "const": "repaired-e"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "profileEnum": {
+                  "const": "2"
+                },
+                "mutations": {
+                  "const": "0"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "profile": {
+                  "const": "mutant-no-destination-binding"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "profileEnum": {
+                  "const": "2"
+                },
+                "mutations": {
+                  "const": "1"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "profile": {
+                  "const": "mutant-no-state-barrier"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "profileEnum": {
+                  "const": "2"
+                },
+                "mutations": {
+                  "const": "2"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "profile": {
+                  "const": "mutant-no-record-freshness"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "profileEnum": {
+                  "const": "2"
+                },
+                "mutations": {
+                  "const": "4"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "profile": {
+                  "const": "mutant-no-nonce"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "profileEnum": {
+                  "const": "2"
+                },
+                "mutations": {
+                  "const": "8"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "profile": {
+                  "const": "mutant-no-version-monotone"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "profileEnum": {
+                  "const": "2"
+                },
+                "mutations": {
+                  "const": "16"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "profile": {
+                  "const": "mutant-no-receipt-binding"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "profileEnum": {
+                  "const": "2"
+                },
+                "mutations": {
+                  "const": "32"
+                }
+              }
+            }
+          }
+        ],
+        "x-status": "Candidate successor E carrier; historical E continues to use frozen v1"
+      }
+    },
+    {
+      "op": "add",
+      "path": "/$defs/LedgerDeployment/oneOf/-",
+      "value": {
+        "$ref": "#/$defs/LedgerDeploymentEComplete"
+      }
+    }
+  ],
+  "publicationRequires": [
+    "exact Agent1 ACK",
+    "exact Agent2 ACK",
+    "separate successor freeze"
+  ],
+  "defaultV1ChangeAuthorized": false,
+  "executionAuthorized": false
+}

@@ -1,0 +1,44 @@
+[
+  {
+    "control": "fresh-store skip refused without writes",
+    "sequence": "5",
+    "code": "STALE_STATE",
+    "reason": "PROPOSAL_MISMATCH"
+  },
+  {
+    "control": "fresh-store skip refused without writes",
+    "sequence": "7",
+    "code": "STALE_STATE",
+    "reason": "PROPOSAL_MISMATCH"
+  },
+  {
+    "control": "fresh-store skip refused without writes",
+    "sequence": "18446744073709551615",
+    "code": "STALE_STATE",
+    "reason": "PROPOSAL_MISMATCH"
+  },
+  {
+    "control": "legitimate sequence 1 signed and persisted",
+    "signer": "0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42"
+  },
+  {
+    "control": "ordinary advancement",
+    "current": "5",
+    "successor": "6"
+  },
+  {
+    "control": "ordinary advancement",
+    "current": "7",
+    "successor": "8"
+  },
+  {
+    "control": "ordinary advancement",
+    "current": "18446744073709551614",
+    "successor": "18446744073709551615"
+  },
+  {
+    "control": "max+1 cannot encode uint64",
+    "exception": "WireError",
+    "message": "MALFORMED: uint64: out of range"
+  }
+]

@@ -1,0 +1,21 @@
+control: unmutated reference passes all expectations
+DETECTED Q1 first-report projection: an equivocator counts with its smallest value (revision-5-like) | failed expectations: 4
+DETECTED Q2 adopt on a single report | failed expectations: 8
+DETECTED Q3 threshold three instead of two (liveness mutant) | failed expectations: 8
+DETECTED Q4 no ambiguity check: take the first candidate | failed expectations: 2
+DETECTED Q5 ignore the sequence filter | failed expectations: 2
+DETECTED Q6 count reports whose signature did not verify | failed expectations: 3
+DETECTED Q7 accept any witness index | failed expectations: 1
+DETECTED Q8 decide() counts late reports in the decision | failed expectations: 4
+DETECTED Q9 decide() cancels an adoption when late reports make the union ambiguous | failed expectations: 3
+DETECTED Q10 identical repeats treated as equivocation | failed expectations: 2
+DETECTED R1 refuse only when strictly less than 2 s remain (boundary) | failed expectations: 1
+DETECTED R2 reproposal ignores the original deadline | failed expectations: 4
+DETECTED R3 collection cap of 10 s dropped | failed expectations: 1
+DETECTED R4 validity reserve 1 s instead of 2 s in the re-proposal gate | failed expectations: 2
+DETECTED R5 snapshot close ignores the deadline | failed expectations: 3
+DETECTED R6 a tie between the deadline and the reply timeout is called reply-timeout | failed expectations: 1
+DETECTED R7 validity is checked before the deadline | failed expectations: 2
+DETECTED R8 exactly 2000 ms left is treated as eligible | failed expectations: 2
+DETECTED R9 all-replied accepted at the limit itself | failed expectations: 1
+detected 19 of 19
