@@ -1,0 +1,25 @@
+[
+ {
+  "case": "witness alive, store open, NEVER signed",
+  "result": "SNAPSHOT TAKEN",
+  "markerBytes": 155,
+  "logicalSha256": "dc56a2a237663dd7"
+ },
+ {
+  "case": "witness alive, STOPPED (process exited)",
+  "result": "SNAPSHOT TAKEN",
+  "markerBytes": 155,
+  "logicalSha256": "dc56a2a237663dd7"
+ },
+ {
+  "case": "witness alive, store open, HAS signed once",
+  "result": "REFUSED",
+  "error": "ValueError: Store lock is busy"
+ },
+ {
+  "case": "witness alive, STOPPED (process exited)",
+  "result": "SNAPSHOT TAKEN",
+  "markerBytes": 155,
+  "logicalSha256": "b648fc3dc43702e1"
+ }
+]

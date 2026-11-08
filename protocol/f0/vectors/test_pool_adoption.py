@@ -1,0 +1,187 @@
+"""Expectations for the pool's recorded-value adoption rule (agent 2, F0 revision 6; answers A3-0062 R4 and R5). Revision 5 expectations were written before that reference existed;
+the revision-6 changes below were written BEFORE the reference was changed.
+
+Rule under test (SIGNING-RULES section 8, items 7-9): after a StateCheckpoint collection round in which witnesses refused CONFLICT_PINNED and returned the value they
+recorded, the pool adopts a value M* iff EXACTLY ONE value has at least two distinct witnesses reporting it (valid signature, right sequence). Otherwise it adopts nothing.
+
+PREDICTIONS (written first):
+  A1  safety of adoption at f <= 1: over ALL assignments of three honest witnesses' recorded values (none, A, B) and ANY SUBSET of reports from the one Byzantine witness (A, B, FAKE,
+      wrong-sequence value, invalid-signature FAKE), whenever a value is adopted at least one HONEST witness recorded it. (Exhaustive; the four witnesses are indices 0-3, the Byzantine one is
+      each index in turn.)
+  A2  positive: if two honest witnesses recorded the same value and no other value reaches two reports, that value is adopted.
+  A3  ambiguity: two different values with two reports each adopt nothing.
+  A4  control, outside the bound: with TWO Byzantine witnesses reporting the same FAKE value, FAKE is adopted (A1 is violated at f = 2; the check can fail).
+  A5  one witness reporting the same value several times counts once.
+  A6  reports for another sequence, and reports whose signature does not verify, are ignored.
+  A7  adoption is a pure function of the reports: the order of reports does not matter.
+  --- revision 6 (R4: equivocation) ---
+  A8  a witness that reports two DIFFERENT valid values in one snapshot is INCONSISTENT and contributes nothing to adoption; this REVERSES the revision-5 expectation for
+      [(3,FAKE),(3,A),(0,A)] (revision 5 adopted A, which the one-report-per-witness wire could not serialize). Order independent, unlike a first-report projection.
+  A9  an inconsistent witness never helps: adoption of any report set equals adoption of the same set with that witness's reports removed.
+  A10 classify() partitions the valid reports exactly as the wire carries them: one entry per consistent witness, and the list of distinct values per inconsistent witness.
+  A1' the exhaustive f <= 1 safety property (A1) still holds with the exclusion (the Byzantine witness may send any subset, which includes equivocation).
+  --- revision 6 (R5: decision snapshot and late reports) ---
+  A11 the decision is a function of the SNAPSHOT only: prefix [(0,A),(1,A)] adopts A even if late reports (2,B),(3,B) follow; a snapshot [(2,B),(3,B)] adopts B even if (0,A),(1,A)
+      are late; a snapshot with no adoption stays without adoption even if late reports would complete a pair. Late reports never cancel or create an adoption.
+  A12 two different arrival orders may adopt different values (A vs B); each adopted value was recorded by an honest witness (f <= 1), so both are safe.
+  --- revision 7 (R6: selection versus action, and the original deadline) --- written BEFORE the functions exist ---
+  B1  collection_deadline_ms(now0, proposal_expires_at) = min(10000, (remaining - 2) * 1000) ms, and None (refuse before contacting any witness) when remaining <= 2 s.
+  B2  snapshot_close(deadline_ms, all_replied_at_ms) -> (ms, by): "all-replied" iff every witness replied strictly before min(5000, deadline); otherwise "deadline" when the
+      deadline is at most the 5 s reply timeout (a tie is the deadline), else "reply-timeout". The close time never exceeds min(5000, deadline).
+  B3  reproposal_status(now0, adopted_expires_at, snapshot_closed_at_ms, deadline_ms) is "skipped_deadline" when the snapshot closed at or after the deadline (checked first),
+      "skipped_validity" when the adopted value has 2000 ms or less of validity left at the close, and "sent" otherwise. The exact boundary is 2000 ms (skipped) versus 2001 ms (sent).
+      Agent 3's synthetic observation (start 1000, new proposal expiry 1030, original deadline 10 s, value expiring 1006, snapshot closing at 5 s) is skipped_validity although the
+      pair rule selects the value (the selection is `adopted`, the action is `reproposal`; they are different facts).
+  B4  the status is deterministic, monotone in the value's expiry (a later expiry never turns "sent" into a skip), and "sent" implies close < deadline and > 2000 ms left.
+
+    python3 -B -I protocol/f0/vectors/test_pool_adoption.py   (standard library only; exit 0 = all expectations hold)
+"""
+import importlib.util
+import itertools
+import os
+import sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+spec = importlib.util.spec_from_file_location("pool_adoption", os.path.join(HERE, "pool_adoption.py"))
+pa = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(pa)
+
+FAILS = []
+
+
+def check(name, cond):
+    if not cond:
+        FAILS.append(name)
+    print(("ok   " if cond else "FAIL ") + name)
+
+
+SEQ = 7
+A, B, FAKE = ("7", "A"), ("7", "B"), ("7", "FAKE")
+WRONG = ("8", "A")
+
+
+def rep(w, value, valid=True):
+    return {"witness": w, "message": value, "validSignature": valid}
+
+
+# A1 exhaustive: 3 honest + 1 Byzantine, every position of the Byzantine witness
+honest_choices = [None, A, B]
+byz_pool = [A, B, FAKE, WRONG, ("7", "FAKE", "invalid")]          # what one Byzantine witness may send, in any combination
+violations, cases, adopted_cases = [], 0, 0
+for byz in range(4):
+    honest = [i for i in range(4) if i != byz]
+    for hv in itertools.product(honest_choices, repeat=3):
+        for mask in range(1 << len(byz_pool)):
+            reports = [rep(w, v) for w, v in zip(honest, hv) if v is not None]
+            for j, bz in enumerate(byz_pool):
+                if mask >> j & 1:
+                    reports.append(rep(byz, bz[:2], valid=False) if len(bz) == 3 else rep(byz, bz))
+            got = pa.adopt_recorded(reports, SEQ)
+            cases += 1
+            if got is not None:
+                adopted_cases += 1
+                if got not in [v for v in hv if v is not None]:
+                    violations.append((byz, hv, mask, got))
+check(f"A1 exhaustive f<=1 ({cases} assignments, {adopted_cases} adoptions): an adopted value was recorded by at least one honest witness", not violations)
+check("A1 is not vacuous: some assignments adopt and some do not", 0 < adopted_cases < cases)
+
+check("A2 positive: two honest witnesses recorded A, the others nothing, so A is adopted", pa.adopt_recorded([rep(0, A), rep(1, A)], SEQ) == A)
+check("A2 positive with a Byzantine third reporter of B: A still adopted (B has one report)", pa.adopt_recorded([rep(0, A), rep(1, A), rep(3, B)], SEQ) == A)
+check("A3 ambiguity: A and B each reported twice adopts nothing", pa.adopt_recorded([rep(0, A), rep(1, A), rep(2, B), rep(3, B)], SEQ) is None)
+check("a single report adopts nothing", pa.adopt_recorded([rep(0, A)], SEQ) is None)
+check("no reports adopts nothing", pa.adopt_recorded([], SEQ) is None)
+check("A4 control outside the bound: two Byzantine witnesses reporting FAKE get FAKE adopted", pa.adopt_recorded([rep(0, FAKE), rep(1, FAKE)], SEQ) == FAKE)
+check("A5 one witness repeating a value counts once", pa.adopt_recorded([rep(3, FAKE), rep(3, FAKE), rep(3, FAKE)], SEQ) is None)
+check("A8 (reverses revision 5) a witness reporting two different values is inconsistent and excluded: [(3,FAKE),(3,A),(0,A)] adopts nothing", pa.adopt_recorded([rep(3, FAKE), rep(3, A), rep(0, A)], SEQ) is None)
+check("A5 the same witness reporting FAKE twice and A once, with nobody else, adopts nothing", pa.adopt_recorded([rep(3, FAKE), rep(3, FAKE), rep(3, A)], SEQ) is None)
+check("A6 other-sequence reports are ignored", pa.adopt_recorded([rep(0, WRONG), rep(1, WRONG)], SEQ) is None)
+check("A6 invalid-signature reports are ignored", pa.adopt_recorded([rep(0, A, valid=False), rep(1, A, valid=False)], SEQ) is None)
+check("A6 one valid plus one invalid report is not two reports", pa.adopt_recorded([rep(0, A), rep(1, A, valid=False)], SEQ) is None)
+reports = [rep(0, A), rep(1, A), rep(2, B), rep(3, FAKE)]
+check("A7 order independent", all(pa.adopt_recorded(list(p), SEQ) == pa.adopt_recorded(reports, SEQ) for p in itertools.permutations(reports)))
+check("witness index outside 0..3 is refused", pa.refuses(lambda: pa.adopt_recorded([rep(4, A), rep(1, A)], SEQ)))
+check("a non-boolean validSignature is refused", pa.refuses(lambda: pa.adopt_recorded([{"witness": 0, "message": A, "validSignature": "yes"}], SEQ)))
+
+
+# --- A8-A10: equivocation --------------------------------------------------------------------------------------------------
+check("A8 order independent with an equivocator", all(pa.adopt_recorded(list(p), SEQ) is None for p in itertools.permutations([rep(3, FAKE), rep(3, A), rep(0, A)])))
+check("A8 an equivocator does not block two honest agreeing reporters", pa.adopt_recorded([rep(3, FAKE), rep(3, B), rep(0, A), rep(1, A)], SEQ) == A)
+check("A8 identical repeats are NOT equivocation: the witness counts once and still helps", pa.adopt_recorded([rep(0, A), rep(0, A), rep(1, A)], SEQ) == A)
+bad = []
+for byz in range(4):
+    honest = [i for i in range(4) if i != byz]
+    for hv in itertools.product([None, A, B], repeat=3):
+        for mask in range(1 << 5):
+            reports = [rep(w, v) for w, v in zip(honest, hv) if v is not None]
+            extra = [rep(byz, x) for j, x in enumerate([A, B, FAKE, WRONG, ("7", "Z")]) if mask >> j & 1]
+            full = reports + extra
+            kinds = {w: {r["message"] for r in full if r["witness"] == w and r["message"][0] == "7"} for w in range(4)}
+            inconsistent = {w for w, ks in kinds.items() if len(ks) >= 2}
+            without = [r for r in full if r["witness"] not in inconsistent]
+            if pa.adopt_recorded(full, SEQ) != pa.adopt_recorded(without, SEQ):
+                bad.append((byz, hv, mask))
+check("A9 exhaustive: removing every inconsistent witness's reports never changes the adoption", not bad)
+cons, incons = pa.classify([rep(3, FAKE), rep(3, A), rep(0, A), rep(1, A), rep(1, A), rep(2, WRONG)], SEQ)
+check("A10 classify: consistent witnesses one value each; inconsistent witnesses their distinct values (canonical order); wrong-sequence reports dropped",
+      cons == {0: A, 1: A} and incons == {3: sorted([A, FAKE])})
+check("A10 classify ignores invalid signatures", pa.classify([rep(0, A, valid=False)], SEQ) == ({}, {}))
+
+# --- A11-A12: decision snapshot and late reports ---------------------------------------------------------------------------
+late_split = [rep(2, B), rep(3, B)]
+check("A11 prefix (0,A),(1,A) adopts A; the late split (2,B),(3,B) does not cancel it", pa.decide([rep(0, A), rep(1, A)], late_split, SEQ) == A)
+check("A11 reversed order: snapshot (2,B),(3,B) adopts B although (0,A),(1,A) arrive late", pa.decide(late_split, [rep(0, A), rep(1, A)], SEQ) == B)
+check("A11 a snapshot without adoption stays so even if late reports would complete a pair", pa.decide([rep(0, A)], [rep(1, A)], SEQ) is None)
+check("A11 late reports never create an adoption on an ambiguous snapshot", pa.decide([rep(0, A), rep(1, A), rep(2, B), rep(3, B)], [rep(1, A)], SEQ) is None)
+check("A12 the two arrival orders adopt different values and both were recorded by an honest witness", {pa.decide([rep(0, A), rep(1, A)], late_split, SEQ), pa.decide(late_split, [rep(0, A), rep(1, A)], SEQ)} == {A, B})
+
+
+# --- B1-B4: R6 -------------------------------------------------------------------------------------------------------------
+cd, sc, rs = pa.collection_deadline_ms, pa.snapshot_close, pa.reproposal_status
+check("B1 original: start 1000, expiry 1030 -> 10 s", cd(1000, 1030) == 10000)
+check("B1 remaining 12 s -> still capped at 10 s", cd(1000, 1012) == 10000)
+check("B1 remaining 11 s -> 9 s", cd(1000, 1011) == 9000)
+check("B1 agent 3's earlier hard stop: remaining 4 s -> 2 s, before the 5 s reply timeout", cd(1000, 1004) == 2000)
+check("B1 remaining 3 s -> 1 s", cd(1000, 1003) == 1000)
+check("B1 remaining exactly 2 s -> refuse before contacting any witness", cd(1000, 1002) is None)
+check("B1 remaining below 2 s and an expired proposal -> refuse", cd(1000, 1001) is None and cd(1000, 1000) is None and cd(1000, 999) is None)
+check("B2 all four replied at 1200 ms -> all-replied", sc(10000, 1200) == (1200, "all-replied"))
+check("B2 a witness silent -> the 5 s reply timeout closes it", sc(10000, None) == (5000, "reply-timeout"))
+check("B2 all replied exactly at 5000 is not 'before' the limit -> reply-timeout", sc(10000, 5000) == (5000, "reply-timeout"))
+check("B2 deadline 2 s, nobody completes -> the deadline closes it", sc(2000, None) == (2000, "deadline"))
+check("B2 deadline exactly 5 s is a tie and is the deadline", sc(5000, None) == (5000, "deadline"))
+check("B2 deadline 6 s -> the reply timeout still closes first", sc(6000, None) == (5000, "reply-timeout"))
+check("B2 deadline 2 s but all replied at 1500 -> all-replied", sc(2000, 1500) == (1500, "all-replied"))
+check("B3 agent 3's observation: value expiring 1006, close 5 s -> skipped_validity", rs(1000, 1006, 5000, 10000) == "skipped_validity")
+check("B3 exactly 2 s left (expiry 1007, close 5 s) -> skipped_validity", rs(1000, 1007, 5000, 10000) == "skipped_validity")
+check("B3 2001 ms left (expiry 1007, close 4999 ms) -> sent", rs(1000, 1007, 4999, 10000) == "sent")
+check("B3 below 2 s (expiry 1005) -> skipped_validity", rs(1000, 1005, 5000, 10000) == "skipped_validity")
+check("B3 already expired at the close (expiry 1004) -> skipped_validity", rs(1000, 1004, 5000, 10000) == "skipped_validity")
+check("B3 eligible (expiry 1030, close 5 s) -> sent", rs(1000, 1030, 5000, 10000) == "sent")
+check("B3 earlier hard stop: deadline 2 s, close at 2 s, plenty of validity -> skipped_deadline", rs(1000, 1030, 2000, 2000) == "skipped_deadline")
+check("B3 close exactly at the deadline -> skipped_deadline even with plenty of validity", rs(1000, 1030, 5000, 5000) == "skipped_deadline")
+check("B3 the deadline is checked before validity (both fail -> skipped_deadline)", rs(1000, 1001, 2000, 2000) == "skipped_deadline")
+bad, n = [], 0
+for prop in range(1000, 1016):
+    d = cd(1000, prop)
+    if d is None:
+        continue
+    for t_all in [None, 0, 500, 1999, 2000, 4999, 5000, 7000]:
+        close, by = sc(d, t_all)
+        n += 1
+        if not 0 <= close <= min(5000, d) or by not in ("all-replied", "reply-timeout", "deadline"):
+            bad.append(("close", prop, t_all, close, by))
+        prev = None
+        for exp in range(1000, 1041):
+            st = rs(1000, exp, close, d)
+            if st == "sent" and not (close < d and exp * 1000 - (1000 * 1000 + close) > 2000):
+                bad.append(("sent-eligibility", prop, t_all, exp))
+            if (close >= d) != (st == "skipped_deadline"):
+                bad.append(("deadline-iff", prop, t_all, exp))
+            if prev == "sent" and st != "sent":
+                bad.append(("monotone", prop, t_all, exp))
+            prev = st
+check(f"B4 exhaustive ({n} schedule shapes x 41 expiries): close bounded, deadline iff, sent implies eligible, monotone in the expiry", not bad)
+check("B3 refuses non-integer inputs", pa.refuses(lambda: rs(1000.5, 1006, 5000, 10000)) and pa.refuses(lambda: rs(1000, True, 5000, 10000)) and pa.refuses(lambda: cd("1000", 1030)))
+
+print("\nFAILED: %d" % len(FAILS) if FAILS else "\nall expectations hold")
+sys.exit(1 if FAILS else 0)

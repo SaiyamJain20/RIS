@@ -1,0 +1,478 @@
+"""Cross-run agent 3's independent checkers on REAL outputs of agent 2's real witnesses against a live F ledger (agent 2, read-only toward everything of agent 3's).
+
+  python -I crossrun.py SCR REPO OUTDIR            (HOME and HMBC_FOUNDRY_DIR set by the caller; run under `flock -x $SCR/live.lock`)
+
+Roles, as in a real run: two real Anvil nodes with agent 1's real F ledger; four REAL `witness_main` processes (agent 2's) kept ALIVE; agent 3's REAL `store_snapshot_v2.locked_store`,
+`export_snapshot_v2.verify_export_snapshot`, `public_observations_v2.collect`, `history_rpc_v2.collect`, `checkpoint_rpc_v2.collect` (unmodified, imported from an extracted copy of origin/agent-3).
+Nothing of agent 3's is edited; nothing in the repository except OUTDIR is written. Every stage is recorded in OUTDIR/results.json whether it passed or not."""
+import hashlib
+import json
+import os
+import pathlib
+import subprocess
+import sys
+import threading
+import time
+import traceback
+
+SCR, REPO, OUT = (pathlib.Path(a).resolve() for a in sys.argv[1:4])
+PROTO, A3 = REPO / "protocol", SCR / "a3tree"
+WORK = SCR / "crossrun" / "work"
+sys.dont_write_bytecode = True
+sys.path[:0] = [str(A3), str(PROTO), str(PROTO / "tests")]
+
+import evaluation.checkpoint_rpc_v2 as cr          # noqa: E402
+import evaluation.export_snapshot_v2 as es         # noqa: E402
+import evaluation.history_rpc_v2 as hr             # noqa: E402
+import evaluation.public_observations_v2 as po     # noqa: E402
+import evaluation.rpc as rpcmod                    # noqa: E402
+import evaluation.store_snapshot_v2 as ss          # noqa: E402
+import test_rpc_binding_view_live as L             # noqa: E402  (agent 2's fixtures: _deploy, WitnessProc, real chains)
+
+OUT.mkdir(parents=True, exist_ok=True)
+RAW = OUT / "outputs"
+RAW.mkdir(exist_ok=True)
+RESULTS = []
+CAST = pathlib.Path(os.environ["HMBC_FOUNDRY_DIR"]) / "cast"
+CAST_SHA = hashlib.sha256(CAST.read_bytes()).hexdigest()
+
+
+def stage(name):
+    def deco(fn):
+        t0 = time.monotonic()
+        try:
+            result = fn()
+            row = {"stage": name, "ok": True, "seconds": round(time.monotonic() - t0, 2), "result": result}
+        except BaseException as e:  # noqa: BLE001 - a measurement: record whatever happened
+            row = {"stage": name, "ok": False, "seconds": round(time.monotonic() - t0, 2), "error": type(e).__name__ + ": " + str(e)[:600], "traceback": traceback.format_exc()[-1800:]}
+        RESULTS.append(row)
+        (OUT / "results.json").write_text(json.dumps(RESULTS, indent=1, default=str) + "\n")
+        print(("PASS " if row["ok"] else "FAIL ") + name + ("" if row["ok"] else "  -> " + row["error"][:200]), flush=True)
+        return fn
+    return deco
+
+
+class Factory:
+    def __init__(self, root):
+        self.root, self.n = root, 0
+
+    def mktemp(self, name):
+        self.n += 1
+        p = self.root / f"{name}-{self.n}"
+        p.mkdir(parents=True)
+        return p
+
+
+def sh(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+S = {}          # shared state between stages
+counter = [0]
+
+
+def rpc_client(url):
+    counter[0] += 1
+    return rpcmod.RpcClient(url, cast=CAST, cast_sha256=CAST_SHA, cwd=WORK, output=RAW / f"rpc-{counter[0]:02d}", timeout=10.0, hash_policy="checkpoint")
+
+
+class Pinned:
+    """A transport shim, NOT agent 3 code: it answers `eth_getBlockByNumber latest` with the block of the export's own anchor. Used only for the control that shows what the anchor mismatch needs."""
+    def __init__(self, inner, number):
+        self.inner, self.n, self.url = inner, number, inner.url
+
+    def call(self, method, params=None):
+        params = list(params or [])
+        if method == "eth_getBlockByNumber" and params and params[0] == "latest":
+            params = [hex(self.n), False]
+        return self.inner.call(method, params)
+
+    def checkpoint(self, label):
+        return self.inner.checkpoint(label)
+
+
+def store_paths(d):
+    return d / "signing.sqlite", d / "INITIALIZED", d / ".lock"
+
+
+def snap(d):
+    db, marker, lock = store_paths(d)
+    with ss.locked_store(db, marker, lock) as r:
+        s = r.snapshot()
+    return s
+
+
+def brief(s):
+    return {"markerBytes": len(s.marker), "markerSha256": s.marker_sha256[:16], "logicalSha256": s.logical_sha256[:16], "walPresent": s.wal_sha256 is not None}
+
+
+def run_exporter(index, flag):
+    p = subprocess.run([sys.executable, "-B", "-m", "hmbc_protocol.witness_state", "--state-dir", str(S["tmp"] / "wstate"), "--witness-index", str(index), flag],
+                       cwd=PROTO, env={"PATH": "/usr/bin:/bin"}, capture_output=True, timeout=60)
+    return p.stdout, p.stderr, p.returncode
+
+
+gen = L._deploy(Factory(WORK), "repaired-f", False)
+
+
+@stage("S0 deploy the real F ledger on two real Anvil nodes")
+def _():
+    live = S["live"] = next(gen)
+    dep = live.dep
+    (RAW / "deployment.json").write_text(json.dumps(dep, indent=1, sort_keys=True) + "\n")
+    S["abi"] = {n: pathlib.Path(live.abi_dir) / f"{n}.json" for n in dep["abi"]}
+    return {"schemaVersion": dep.get("schemaVersion"), "profile": dep["profile"], "profileEnum": dep["profileEnum"], "chainKeys": sorted(dep["chains"]["pbc"]), "rpcUrlInManifest": [dep["chains"][c].get("rpcUrl") for c in ("pbc", "dbc")],
+            "urls": live.urls, "abiNames": sorted(dep["abi"])}
+
+
+@stage("S1 start four real witness_main processes (kept alive) and wait for INITIALIZED")
+def _():
+    live = S["live"]
+    S["tmp"] = tmp = WORK / "w"
+    tmp.mkdir()
+    S["procs"] = [L.WitnessProc(live, tmp, i) for i in range(4)]
+    S["dirs"] = [tmp / "wstate" / f"witness-{i}" for i in range(4)]
+    deadline = time.monotonic() + 90
+    while not all((d / "INITIALIZED").exists() for d in S["dirs"]):
+        if time.monotonic() > deadline:
+            raise RuntimeError("stores not initialised in 90 s")
+        for p in S["procs"]:
+            if p.p.poll() is not None:
+                raise RuntimeError("a witness died: " + p.p.stderr.read()[-500:])
+        time.sleep(0.3)
+    return {"files": sorted(os.listdir(S["dirs"][0])), "markerBytes": (S["dirs"][0] / "INITIALIZED").read_bytes().decode()[:200]}
+
+
+@stage("S2 agent 3 locked_store + snapshot on four LIVE witness stores that have NEVER signed")
+def _():
+    out = []
+    for i, d in enumerate(S["dirs"]):
+        s = snap(d)
+        S.setdefault("snap0", {})[i] = s
+        out.append({"witness": i, **brief(s)})
+    return out
+
+
+@stage("S3 three live witnesses sign a checkpoint the real KSSC accepts")
+def _():
+    live = S["live"]
+    wview, chains = L.witness_view(live)
+    led = S["led"] = L.f_ledger(live)
+    L.mine(live, "dbc")
+    cp = S["cp"] = L.svc.derive_checkpoint(wview, live.dep)
+    replies = [S["procs"][i].ask("checkpoint", cp) for i in range(3)]
+    assert all(r["type"] == "signature" for r in replies), replies
+    ordered = L.sorted_signatures(cp, "StateCheckpoint", [r["signature"] for r in replies], live.dep)
+    led.dbc.send(L.ANVIL_KEY0, led.KSSC, "acceptState", cp, ordered)
+    assert wview.dbc_current_checkpoint()["sequence"] == cp["sequence"]
+    return {"sequence": cp["sequence"], "signers": 3}
+
+
+@stage("S4 agent 3 locked_store + snapshot on the same stores while the processes are ALIVE and three have signed (the A2 lock finding, re-measured with agent 3's real code)")
+def _():
+    out = []
+    for i, d in enumerate(S["dirs"]):
+        s = snap(d)
+        S.setdefault("snap1", {})[i] = s
+        out.append({"witness": i, **brief(s), "logicalChangedSinceS2": s.logical != S["snap0"][i].logical})
+    return out
+
+
+def collect_latest():
+    live = S["live"]
+    rp = {c: rpc_client(live.urls[i]) for i, c in enumerate(("pbc", "dbc"))}
+    res = po.collect(live.dep, rp, S["abi"], output=RAW / f"observations-{counter[0]:02d}", compiled_max_admins="8")
+    return res, rp
+
+
+@stage("S5 agent 3 public_observations_v2.collect against the live ledger (latest anchor), then the exporter choreography under locked_store for each witness")
+def _():
+    res, rp = collect_latest()
+    S["obs_latest"] = res["observations"]
+    S["rp"] = rp
+    live = S["live"]
+    out = []
+    for i, d in enumerate(S["dirs"]):
+        db, marker, lock = store_paths(d)
+        owner = "witness:" + live.dep["fixture"]["witnessSet"]["witnesses"][i]
+        with ss.locked_store(db, marker, lock) as r:
+            before = r.snapshot()
+            b_out, b_err, b_rc = run_exporter(i, "--binding")
+            e_out, e_err, e_rc = run_exporter(i, "--evidence")
+            after = r.snapshot()
+            ss.require_unchanged(before, after)
+        (RAW / f"w{i}-binding.stdout").write_bytes(b_out)
+        (RAW / f"w{i}-evidence.stdout").write_bytes(e_out)
+        S.setdefault("exports", {})[i] = dict(binding=(b_out, b_err, b_rc), evidence=(e_out, e_err, e_rc), snapshot=before, owner=owner)
+        out.append({"witness": i, "bindingExit": b_rc, "bindingStderrBytes": len(b_err), "bindingStdoutBytes": len(b_out), "evidenceExit": e_rc, "evidenceStderrBytes": len(e_err), "evidenceStdoutBytes": len(e_out)})
+    return {"observationAnchors": {c: S["obs_latest"][c]["anchor"] for c in ("pbc", "dbc")}, "exports": out}
+
+
+@stage("S6a verify_export_snapshot, WitnessEvidence, latest-anchor observations, all four witnesses")
+def _():
+    out = []
+    for i in range(4):
+        x = S["exports"][i]
+        o, e, rc = x["evidence"]
+        try:
+            r = es.verify_export_snapshot(o, stderr=e, exit_code=rc, kind="WitnessEvidence", snapshot=x["snapshot"], manifest=S["live"].dep, observations=S["obs_latest"], expected_owner=x["owner"], compiled_max_admins="8")
+            out.append({"witness": i, "verdict": "ACCEPTED", "history": r["history"]})
+        except Exception as ex:  # noqa: BLE001
+            out.append({"witness": i, "verdict": "REFUSED", "error": type(ex).__name__ + ": " + str(ex)[:300]})
+    S["s6a"] = out
+    assert all(r["verdict"] == "ACCEPTED" for r in out), out
+    return out
+
+
+@stage("S6b verify_export_snapshot, BindingExport, latest-anchor observations, all four witnesses")
+def _():
+    out = []
+    for i in range(4):
+        x = S["exports"][i]
+        o, e, rc = x["binding"]
+        exp_anchor = json.loads(o)["anchor"]
+        try:
+            es.verify_export_snapshot(o, stderr=e, exit_code=rc, kind="BindingExport", snapshot=x["snapshot"], manifest=S["live"].dep, observations=S["obs_latest"], expected_owner=x["owner"], compiled_max_admins="8")
+            out.append({"witness": i, "verdict": "ACCEPTED", "exportAnchor": exp_anchor})
+        except Exception as ex:  # noqa: BLE001
+            out.append({"witness": i, "verdict": "REFUSED", "error": type(ex).__name__ + ": " + str(ex)[:300], "exportAnchor": exp_anchor, "observationAnchor": {c: S["obs_latest"][c]["anchor"] for c in ("pbc", "dbc")}})
+    S["s6b"] = out
+    assert all(r["verdict"] == "ACCEPTED" for r in out), out
+    return out
+
+
+@stage("S6c CONTROL: observations collected at the export's OWN anchor (transport shim answers `latest` with the anchor block), then BindingExport")
+def _():
+    live = S["live"]
+    anchor = json.loads(S["exports"][0]["binding"][0])["anchor"]
+    rp = {c: Pinned(rpc_client(live.urls[i]), int(anchor[c]["number"])) for i, c in enumerate(("pbc", "dbc"))}
+    res = po.collect(live.dep, rp, S["abi"], output=RAW / f"observations-pinned-{counter[0]:02d}", compiled_max_admins="8")
+    S["obs_pinned"] = res["observations"]
+    out = []
+    for i in range(4):
+        x = S["exports"][i]
+        o, e, rc = x["binding"]
+        try:
+            es.verify_export_snapshot(o, stderr=e, exit_code=rc, kind="BindingExport", snapshot=x["snapshot"], manifest=live.dep, observations=S["obs_pinned"], expected_owner=x["owner"], compiled_max_admins="8")
+            out.append({"witness": i, "verdict": "ACCEPTED"})
+        except Exception as ex:  # noqa: BLE001
+            out.append({"witness": i, "verdict": "REFUSED", "error": type(ex).__name__ + ": " + str(ex)[:300]})
+    assert all(r["verdict"] == "ACCEPTED" for r in out), out
+    return {"anchorUsed": anchor, "pinnedObservationAnchors": {c: S["obs_pinned"][c]["anchor"] for c in ("pbc", "dbc")}, "verdicts": out}
+
+
+@stage("S7 history_rpc_v2.collect (declared witness history through the real RpcClient, hash-selected calls) for every witness's real evidence")
+def _():
+    live = S["live"]
+    out = []
+    for i in range(4):
+        x = S["exports"][i]
+        evidence = json.loads(x["evidence"][0])
+        rp = {c: rpc_client(live.urls[k]) for k, c in enumerate(("pbc", "dbc"))}
+        try:
+            res = hr.collect(evidence, manifest=live.dep, observations=S["obs_latest"], expected_owner=x["owner"], abi_paths=S["abi"], rpcs=rp, output=RAW / f"history-w{i}", compiled_max_admins="8")
+            out.append({"witness": i, "verdict": "ACCEPTED", "blocks": len(res["blocks"]), "calls": len(res["calls"]), "verification": res["verification"]})
+        except Exception as ex:  # noqa: BLE001
+            out.append({"witness": i, "verdict": "REFUSED", "error": type(ex).__name__ + ": " + str(ex)[:400]})
+    S["s7"] = out
+    assert all(r["verdict"] == "ACCEPTED" for r in out), out
+    return out
+
+
+@stage("S8 checkpoint_rpc_v2.collect (state behind every declared checkpoint) for the signing witnesses")
+def _():
+    live = S["live"]
+    out = []
+    for i in range(3):
+        x = S["exports"][i]
+        evidence = json.loads(x["evidence"][0])
+        pbc_id = live.dep["chains"]["pbc"]["chainId"]
+        head = [o for o in evidence["observations"] if o["chainId"] == pbc_id][-1]
+        digests = [s["digest"] for coll in ("superseded", "conflicts") for r in evidence[coll] if r["type"] == "StateCheckpoint" for s in r["digests"]]
+        selections = [{"digest": d, "pbcHead": head, "reason": "agent 2 cross-run: the witness's own last PBC observation, a caller assertion"} for d in digests]
+        rp = {c: rpc_client(live.urls[k]) for k, c in enumerate(("pbc", "dbc"))}
+        try:
+            res = cr.collect(evidence, manifest=live.dep, observations=S["obs_latest"], expected_owner=x["owner"], abi_paths=S["abi"], selections=selections, rpcs=rp, output=RAW / f"checkpoint-w{i}", compiled_max_admins="8")
+            out.append({"witness": i, "verdict": "ACCEPTED", "digests": len(digests), "keys": sorted(res)})
+        except Exception as ex:  # noqa: BLE001
+            out.append({"witness": i, "verdict": "REFUSED", "digests": len(digests), "error": type(ex).__name__ + ": " + str(ex)[:400]})
+    S["s8"] = out
+    assert all(r["verdict"] == "ACCEPTED" for r in out), out
+    return out
+
+
+@stage("S9 a signing request that arrives while agent 3 holds the exclusive snapshot lock: does the live witness wait (cooperative), refuse, or sign?")
+def _():
+    live = S["live"]
+    wview, _chains = L.witness_view(live)
+    L.mine(live, "dbc")
+    cp2 = L.svc.derive_checkpoint(wview, live.dep)
+    d = S["dirs"][3]
+    db, marker, lock = store_paths(d)
+    hold = 4.0
+    state = {}
+
+    def holder():
+        with ss.locked_store(db, marker, lock):
+            state["locked"] = time.monotonic()
+            time.sleep(hold)
+        state["released"] = time.monotonic()
+    t = threading.Thread(target=holder)
+    t.start()
+    while "locked" not in state:
+        time.sleep(0.02)
+    t0 = time.monotonic()
+    reply = S["procs"][3].ask("checkpoint", cp2)
+    t1 = time.monotonic()
+    t.join()
+    return {"holdSeconds": hold, "replyType": reply["type"], "askReturnedAfterSeconds": round(t1 - t0, 2), "askReturnedAfterRelease": t1 >= state["released"] - 0.05}
+
+
+def stop_witnesses():
+    rows = []
+    for i, p in enumerate(S.get("procs", [])):
+        try:
+            rows.append({"witness": i, "exit": p.close()[0]})
+        except Exception as e:  # noqa: BLE001
+            rows.append({"witness": i, "error": str(e)[:100]})
+    return rows
+
+
+@stage("S10 worker side: a real adapter-startup worker directory, then `worker_log --binding` real output into agent 3's checkers")
+def _():
+    live = S["live"]
+    wdir = WORK / "adapter-state"
+    ctx = L.st.start(manifest=live.dep, schema_revision="v2", chain_view=L.view_for(live)[0], state_dir=str(wdir), worker_factory=lambda c: None)
+    del ctx
+    w = wdir / "worker"
+    p = subprocess.run([sys.executable, "-B", "-m", "hmbc_protocol.worker_log", "--state-dir", str(wdir), "--binding"], cwd=PROTO, env={"PATH": "/usr/bin:/bin"}, capture_output=True, timeout=60)
+    (RAW / "worker-binding.stdout").write_bytes(p.stdout)
+    files = sorted(os.listdir(w))
+    res = {"files": files, "exit": p.returncode, "stderrBytes": len(p.stderr)}
+    # agent 3's locked_store needs an EXISTING lock file: the worker directory has only `.init.lock` (taken at Worker construction), no `.lock`
+    try:
+        with ss.locked_store(w / "worker.sqlite", w / "INITIALIZED", w / ".lock"):
+            res["locked_store_with_.lock"] = "TAKEN"
+    except Exception as ex:  # noqa: BLE001
+        res["locked_store_with_.lock"] = "REFUSED " + type(ex).__name__ + ": " + str(ex)[:160]
+    anchor = json.loads(p.stdout)["anchor"]
+    rp = {c: Pinned(rpc_client(live.urls[k]), int(anchor[c]["number"])) for k, c in enumerate(("pbc", "dbc"))}
+    obs_w = po.collect(live.dep, rp, S["abi"], output=RAW / f"observations-worker-{counter[0]:02d}", compiled_max_admins="8")["observations"]
+    try:
+        with ss.locked_store(w / "worker.sqlite", w / "INITIALIZED", w / ".init.lock") as r:
+            before = r.snapshot()
+            after = r.snapshot()
+            ss.require_unchanged(before, after)
+        res["locked_store_with_.init.lock"] = {"verdict": "TAKEN", **brief(before)}
+        try:
+            v = es.verify_export_snapshot(p.stdout, stderr=p.stderr, exit_code=p.returncode, kind="BindingExport", snapshot=before, manifest=live.dep, observations=obs_w, expected_owner="worker", compiled_max_admins="8")
+            res["verify_export_snapshot"] = {"verdict": "ACCEPTED", "markerSha256": v["markerSha256"][:16]}
+        except Exception as ex:  # noqa: BLE001
+            res["verify_export_snapshot"] = {"verdict": "REFUSED", "error": type(ex).__name__ + ": " + str(ex)[:300]}
+    except Exception as ex:  # noqa: BLE001
+        res["locked_store_with_.init.lock"] = "REFUSED " + type(ex).__name__ + ": " + str(ex)[:200]
+    res["markerBytes"] = (w / "INITIALIZED").read_bytes().decode()[:160]
+    S["worker_dir"] = w
+    return res
+
+
+@stage("S9b stop the four witness processes: clean exit and empty stderr")
+def _():
+    rows = []
+    for i, p in enumerate(S["procs"]):
+        rc, err = p.close()
+        rows.append({"witness": i, "exit": rc, "stderrBytes": len(err), "stderrTail": err[-200:]})
+    return rows
+
+
+PROBE = r'''
+import json, sys, time, types
+sys.dont_write_bytecode = True
+sys.path[:0] = [sys.argv[1]]
+from hmbc_protocol.worker import Worker
+led = types.SimpleNamespace(deployment=json.load(open(sys.argv[3])))
+mode = sys.argv[4]
+t0 = time.monotonic()
+w = Worker(led, sys.argv[2], lambda: 1)
+print("CONSTRUCTED %.2f" % (time.monotonic() - t0), flush=True)
+if mode == "write-on-go":
+    sys.stdin.readline()
+    t0 = time.monotonic()
+    w.db.execute("begin immediate")
+    w.db.execute("insert into events(type, request_digest, grant_id, gid, data_id, timestamp) values('probe','x','x','x','x',1)")
+    w.db.execute("commit")
+    print("WROTE %.2f" % (time.monotonic() - t0), flush=True)
+'''
+
+
+def probe(w, mode):
+    dep_file = WORK / "dep-for-probe.json"
+    dep_file.write_text(json.dumps(S["live"].dep))
+    return subprocess.Popen([sys.executable, "-B", "-c", PROBE, str(PROTO), str(w), str(dep_file), mode], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+
+def line_within(p, seconds):
+    box = {}
+
+    def rd():
+        box["line"] = p.stdout.readline().strip()
+    t = threading.Thread(target=rd, daemon=True)
+    t.start()
+    t.join(seconds)
+    return box.get("line")
+
+
+@stage("S11 worker lock honouring: with agent 3 holding `.init.lock` exclusively, (a) a Worker being constructed, (b) an already running Worker's record write")
+def _():
+    w = S["worker_dir"]
+    db, marker, lock = w / "worker.sqlite", w / "INITIALIZED", w / ".init.lock"
+    res = {}
+    # (b) a worker constructed BEFORE the snapshot lock is taken (how a running adapter looks), then writes while the lock is held
+    pre = probe(w, "write-on-go")
+    res["preConstructed"] = line_within(pre, 20)
+    outcome = {}
+    with ss.locked_store(db, marker, lock) as r:
+        before = r.snapshot()
+        pre.stdin.write("go\n")
+        pre.stdin.flush()
+        outcome["writeWhileLocked"] = line_within(pre, 5)
+        after = r.snapshot()
+        try:
+            ss.require_unchanged(before, after)
+            outcome["beforeAfterCheck"] = "UNCHANGED (the write was not visible or did not happen)"
+        except ValueError as ex:
+            outcome["beforeAfterCheck"] = "agent 3 detects it: " + str(ex)
+    res["runningWorker"] = outcome
+    pre.stdin.close()
+    pre.wait(timeout=20)
+    # (a) a Worker constructed while the lock is held
+    state = {}
+
+    def holder():
+        with ss.locked_store(db, marker, lock):
+            state["held"] = time.monotonic()
+            time.sleep(3.0)
+        state["released"] = time.monotonic()
+    t = threading.Thread(target=holder)
+    t.start()
+    while "held" not in state:
+        time.sleep(0.02)
+    p = probe(w, "construct-only")
+    t0 = time.monotonic()
+    line = line_within(p, 20)
+    res["constructWhileLocked"] = {"line": line, "returnedAfterSeconds": round(time.monotonic() - t0, 2), "lockHeldSeconds": 3.0, "waitedForRelease": time.monotonic() - state["held"] >= 2.9}
+    t.join()
+    p.stdin.close()
+    p.wait(timeout=20)
+    return res
+
+
+@stage("S12 teardown: stop the Anvil nodes")
+def _():
+    gen.close()
+    return "closed"
+
+
+import shutil  # noqa: E402
+shutil.rmtree(WORK, ignore_errors=True)
+print("DONE", sum(1 for r in RESULTS if r["ok"]), "passed,", sum(1 for r in RESULTS if not r["ok"]), "failed", flush=True)

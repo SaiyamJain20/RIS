@@ -58,7 +58,12 @@ def export(state_dir: str) -> dict:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--state-dir", required=True)
-    print(json.dumps(export(ap.parse_args(argv).state_dir), indent=1))
+    ap.add_argument("--binding", action="store_true", help="opt-in (F successor): print the D50 binding export of <state-dir>/worker instead of the log; read-only, no RPC")
+    ns = ap.parse_args(argv)
+    if ns.binding:
+        from . import worker_binding
+        return worker_binding.binding_main(ns.state_dir)
+    print(json.dumps(export(ns.state_dir), indent=1))
     return 0
 
 

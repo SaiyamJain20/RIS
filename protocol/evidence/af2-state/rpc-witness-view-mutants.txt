@@ -1,0 +1,47 @@
+control: unmutated module passes all tests
+DETECTED W1 observe reports another chain id | failed tests: 2
+DETECTED W2 observe reports the block number as the timestamp | failed tests: 1
+DETECTED W3 a missing block is an empty dict | failed tests: 1
+DETECTED W4 the chain id is not checked for a block read | failed tests: 1
+DETECTED W5 now is the latest block timestamp | failed tests: 2
+DETECTED W6 the auth epoch is not read at the block | failed tests: 1
+DETECTED W7 the policy version is read from the TMSC | failed tests: 1
+DETECTED W8 the witness set version is read from the TMSC | failed tests: 1
+DETECTED W9 the governance nonce is another getter | failed tests: 1
+DETECTED W10 is_authority reads the removed flag | failed tests: 1
+DETECTED W11 removed_authority reads the authority flag | failed tests: 1
+DETECTED W12 the request record is another getter | failed tests: 1
+DETECTED W13 the credential timestamp is not a decimal string | failed tests: 1
+DETECTED W14 credentials are not read at the block | failed tests: 2
+DETECTED W15 the credential result order is swapped | failed tests: 1
+DETECTED W16 a multi-value answer of another size is accepted | failed tests: 3
+DETECTED W17 the forwarded block is parsed as decimal | failed tests: 1
+DETECTED W18 forwarded logs filter another event | failed tests: 1
+DETECTED W19 grant logs filter another event | failed tests: 1
+DETECTED W20 the grant log hash is the transaction hash | failed tests: 1
+DETECTED W21 the transaction target is not lowercased | failed tests: 1
+DETECTED W22 an undecodable transaction is a ledger fault | failed tests: 7
+DETECTED W23 the request and signature of a call are swapped | failed tests: 1
+DETECTED W24 another method still carries a request | failed tests: 1
+DETECTED W25 a missing checkpoint is reported as present | failed tests: 2
+DETECTED W26 the checkpoint dict is not copied | failed tests: 1
+DETECTED W27 the nonce is passed as an int | failed tests: 1
+DETECTED W28 the policy is another getter | failed tests: 1
+DETECTED W29 the grant digest and data id are swapped | failed tests: 1
+DETECTED W30 a hash argument of any shape is accepted | failed tests: 1
+DETECTED W31 a boolean block number is accepted | failed tests: 1
+DETECTED W32 a negative block number is accepted | failed tests: 1
+DETECTED W33 any chain name is accepted | failed tests: 1
+DETECTED W35 an unusable answer is not a ledger fault | failed tests: 8
+DETECTED W36 a missing contract is a KeyError | failed tests: 1
+DETECTED W37 the pbc block timestamp is parsed as decimal | failed tests: 1
+DETECTED W38 the ABI file hash is not checked | failed tests: 1
+DETECTED W39 the chain id of the clients is not checked | failed tests: 1
+DETECTED W40 the required contracts are not checked | failed tests: 1
+DETECTED W41 a contract address of any shape is accepted | failed tests: 1
+DETECTED W42 chain clients for one chain only are accepted | failed tests: 1
+DETECTED W45 a non-object transaction reply is not validated | failed tests: 15
+DETECTED W47 a non-object transaction reply is classified as a missing call | failed tests: 9
+DETECTED W43 the logs hash is validated after the guard (a caller bug looks like a ledger fault) | failed tests: 1
+DETECTED W44 the transaction hash is validated inside the guard | failed tests: 1
+detected 45 of 45

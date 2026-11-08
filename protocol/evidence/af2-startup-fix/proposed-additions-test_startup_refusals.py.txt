@@ -1,0 +1,80 @@
+"""PROPOSED additions to protocol/tests/test_startup_refusals.py (fork D of the Step 1 evidence; NOT part of the suite until the owner of that test file appends them).
+
+Each test kills one test-gap survivor of the mutation runners and was validated by `validate_proposed_additions.py.txt` (same directory): GREEN on the real code, RED on its mutant.
+  C27 (adapter runner) and A8 (new runner): the shape check must use the SELECTED revision
+  A3: the response types are required before startup begins (shape check with `responses=True`)
+  A7: Context requires the response types only when it checks responses
+  S5 / S6: the chainId is 256 bits wide and the deployBlock 64 bits wide
+  S10: `chains` (or a chain) that is not an object is one closed refusal, not a TypeError
+Needs the helpers of test_startup_refusals.py (it is imported by name, as the other test files import their siblings).
+"""
+import hashlib
+import json
+
+import pytest
+
+from test_startup_refusals import ENTRIES, F2, SCHEMA, adapter_args, assert_closed_malformed, build, make_args, sys_path
+
+
+def schema_without(tmp_path, *dropped):
+    """The published schema with the named $defs removed, as a file, with its SHA-256 (corrupt local config: the pinned hash matches the corrupt file)."""
+    schema = json.load(open(SCHEMA))
+    for name in dropped:
+        del schema["$defs"][name]
+    raw = json.dumps(schema).encode()
+    f = tmp_path / "schema.json"
+    f.write_bytes(raw)
+    return str(f), hashlib.sha256(raw).hexdigest()
+
+
+def test_the_schema_shape_check_uses_the_selected_revision(tmp_path, monkeypatch):
+    """v2.1 needs LedgerDeploymentEComplete, v2 does not: the same file is refused for one revision and not for the other (C27, A8)."""
+    f, h = schema_without(tmp_path, "LedgerDeploymentEComplete")
+    assert_closed_malformed("adapter_v2_main", adapter_args(tmp_path, schema=f, schema_sha256=h, schema_revision="v2.1"), monkeypatch, tmp_path)
+    with pytest.raises(AssertionError, match="went on to ask the chain"):                 # control: it serves revision v2, so startup goes on to the (stubbed) chain step
+        build("adapter_v2_main", adapter_args(tmp_path / "ok", schema=f, schema_sha256=h, schema_revision="v2"), monkeypatch)
+
+
+def test_a_schema_that_lacks_a_response_type_is_refused_before_startup_begins(tmp_path, monkeypatch):
+    """A3: every carrier branch is present, one published response type is not."""
+    f, h = schema_without(tmp_path, "CollectDecisionResponse")
+    assert_closed_malformed("adapter_v2_main", adapter_args(tmp_path, schema=f, schema_sha256=h), monkeypatch, tmp_path)
+
+
+def test_context_requires_the_response_types_only_when_it_checks_responses(tmp_path):
+    """A7: with response checking on, a schema that cannot validate a response is refused; with it off no response validator is built, so only the carrier branches are needed."""
+    sys_path()
+    from hmbc_protocol import adapter_v2 as av2
+    schema = json.load(open(SCHEMA))
+    del schema["$defs"]["CollectDecisionResponse"]
+    manifest = json.load(open(F2))
+    with pytest.raises(ValueError):
+        av2.Context(manifest=manifest, schema_revision="v2", handlers={}, schema=schema)
+    av2.Context(manifest=manifest, schema_revision="v2", handlers={}, schema=schema, check_responses=False)
+
+
+def test_the_manifest_number_widths_are_256_bits_for_chain_ids_and_64_bits_for_deploy_blocks():
+    """S5, S6: the boundaries, not only the far-out-of-range 79-digit string."""
+    sys_path()
+    from hmbc_protocol import startup_config as sc
+
+    def numbers(chain_id, deploy_block):
+        m = json.load(open(F2))
+        m["chains"]["pbc"]["chainId"], m["chains"]["pbc"]["deployBlock"] = chain_id, deploy_block
+        return sc.manifest_numbers(m)["pbc"]
+    assert numbers(str(2 ** 255), str(2 ** 64 - 1)) == {"chainId": 2 ** 255, "deployBlock": 2 ** 64 - 1}
+    with pytest.raises(sc.ConfigError):
+        numbers(str(2 ** 256), "1")
+    with pytest.raises(sc.ConfigError):
+        numbers("1", str(2 ** 64))
+
+
+@pytest.mark.parametrize("entry", ENTRIES)
+@pytest.mark.parametrize("chains", [None, [], "x", 1, {"pbc": None, "dbc": {}}, {"pbc": [], "dbc": {}}, {"pbc": {"chainId": "1", "deployBlock": "1"}, "dbc": 7}], ids=["null", "array", "string", "number", "pbc-null", "pbc-array", "dbc-number"])
+def test_chains_that_are_not_objects_are_one_closed_refusal(tmp_path, monkeypatch, entry, chains):
+    """S10: TypeError is the failure of a `chains` or chain value that cannot be subscripted by name."""
+    m = json.load(open(F2))
+    m["chains"] = chains
+    f = tmp_path / "dep.json"
+    f.write_text(json.dumps(m))
+    assert_closed_malformed(entry, make_args(entry, tmp_path, deployment=str(f)), monkeypatch, tmp_path)

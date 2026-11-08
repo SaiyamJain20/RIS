@@ -1,0 +1,740 @@
+[
+ {
+  "stage": "S0 deploy the real F ledger on two real Anvil nodes",
+  "ok": true,
+  "seconds": 34.84,
+  "result": {
+   "profile": "repaired-f",
+   "profileEnum": "3",
+   "urls": [
+    "http://127.0.0.1:52347",
+    "http://127.0.0.1:43191"
+   ]
+  }
+ },
+ {
+  "stage": "S1 fixtures (users, credentials, CRLs) and the REAL adapter with four supervised witnesses and --allow-governance",
+  "ok": true,
+  "seconds": 1.37,
+  "result": {
+   "pids": {
+    "0": 747806,
+    "1": 747807,
+    "2": 747808,
+    "3": 747809
+   },
+   "stateDir": "adapter state",
+   "files": [
+    "witness-0",
+    "witness-0.pid",
+    "witness-0.stderr",
+    "witness-1",
+    "witness-1.pid",
+    "witness-1.stderr",
+    "witness-2",
+    "witness-2.pid",
+    "witness-2.stderr",
+    "witness-3",
+    "witness-3.pid",
+    "witness-3.stderr",
+    "worker"
+   ]
+  }
+ },
+ {
+  "stage": "S2 two real user requests forwarded by the real relay, then a pool checkpoint (sequence 1) accepted by the real KSSC",
+  "ok": true,
+  "seconds": 0.43,
+  "result": {
+   "sequence": "1",
+   "requests": [
+    "0xf2246c9853458d1f3e2f53ce4968ba70893f52ac4101530f55c95f1d0d0e9407",
+    "0xeecc977f5caea112f8f869c48ad561a5150938a0b08147960fa775b1753a899f"
+   ],
+   "reply": {
+    "ok": true,
+    "outcomes": [
+     [
+      "0",
+      "silent",
+      "0"
+     ],
+     [
+      "1",
+      "signed",
+      "1"
+     ],
+     [
+      "2",
+      "signed",
+      "1"
+     ],
+     [
+      "3",
+      "signed",
+      "1"
+     ]
+    ],
+    "keys": [
+     "adapterMode",
+     "checkpoint",
+     "collection",
+     "schemaVersion",
+     "signatures"
+    ]
+   },
+   "requestTtl": {
+    "maxRequestTtl": 30,
+    "used": 10
+   }
+  }
+ },
+ {
+  "stage": "S3 decision D1 through the adapter, consumed by the real ACSC; receipt through the adapter, reported to the real PSC",
+  "ok": true,
+  "seconds": 0.4,
+  "result": {
+   "decisionReply": {
+    "ok": true,
+    "outcomes": [
+     [
+      "0",
+      "signed",
+      "1"
+     ],
+     [
+      "1",
+      "signed",
+      "1"
+     ],
+     [
+      "2",
+      "silent",
+      "0"
+     ],
+     [
+      "3",
+      "signed",
+      "1"
+     ]
+    ],
+    "keys": [
+     "adapterMode",
+     "collection",
+     "credentialRecords",
+     "decision",
+     "schemaVersion",
+     "signatures"
+    ]
+   },
+   "decision": {
+    "requestDigest": "0xf2246c9853458d1f3e2f53ce4968ba70893f52ac4101530f55c95f1d0d0e9407",
+    "result": "1",
+    "credentialDigest": "0x959a187ad98b92a3e059e78d308ab9efe34061c4892b643d2998097e02817d66",
+    "stateSequence": "1",
+    "witnessSetVersion": "2",
+    "sourceBlockNumber": "26",
+    "sourceBlockHash": "0x105c71f9ceb9f7e9148a6e0d352d47d4430423046483c79f2080f338fb4ed414",
+    "expiresAt": "1794122574"
+   },
+   "receiptReply": {
+    "ok": true,
+    "outcomes": [
+     [
+      "0",
+      "silent",
+      "0"
+     ],
+     [
+      "1",
+      "signed",
+      "1"
+     ],
+     [
+      "2",
+      "signed",
+      "1"
+     ],
+     [
+      "3",
+      "signed",
+      "1"
+     ]
+    ],
+    "keys": [
+     "adapterMode",
+     "collection",
+     "receipt",
+     "schemaVersion",
+     "signatures"
+    ]
+   },
+   "receipt": {
+    "requestDigest": "0xf2246c9853458d1f3e2f53ce4968ba70893f52ac4101530f55c95f1d0d0e9407",
+    "grantId": "0x0005c1fd2ece2ac7be2f559db65f642bc950620ff44ebf4f759714e03a11d41a",
+    "gid": "0xc4ff0022e776c3471e39abf6c69ce679440c956d",
+    "dataId": "0x53ff15331656b9b303d95970634a992ed32268c5d9723c90ddc94ceeb397061e",
+    "keyEpoch": "0",
+    "grantExpiresAt": "1794122574",
+    "witnessSetVersion": "2",
+    "dbcChainId": "28545",
+    "kssc": "0x5fbdb2315678afecb367f032d93f642f64180aa3",
+    "dbcBlockNumber": "12",
+    "dbcBlockHash": "0x9f9b663a7de104340ad956aebb45ead8fbd577e787529e1b5c82c3e015395312"
+   },
+   "grantId": "0x0005c1fd2ece2ac7be2f559db65f642bc950620ff44ebf4f759714e03a11d41a"
+  }
+ },
+ {
+  "stage": "S4 decision D2 at sequence 1 (signed, NOT consumed), and the executed-receipt attempt: the same receipt requested again after the real PSC executed it",
+  "ok": true,
+  "seconds": 0.06,
+  "result": {
+   "D2first": {
+    "requestDigest": "0xeecc977f5caea112f8f869c48ad561a5150938a0b08147960fa775b1753a899f",
+    "result": "1",
+    "credentialDigest": "0x959a187ad98b92a3e059e78d308ab9efe34061c4892b643d2998097e02817d66",
+    "stateSequence": "1",
+    "witnessSetVersion": "2",
+    "sourceBlockNumber": "26",
+    "sourceBlockHash": "0x105c71f9ceb9f7e9148a6e0d352d47d4430423046483c79f2080f338fb4ed414",
+    "expiresAt": "1794122575"
+   },
+   "receiptAgainAfterExecution": {
+    "ok": false,
+    "code": "WRONG_SUBJECT",
+    "reason": null,
+    "message": "the PBC record does not match the DBC grant"
+   },
+   "receiptAgainSameMessage": null
+  }
+ },
+ {
+  "stage": "S5 governance through the adapter (allow-listed root) executed by the real Governance; then the stale-nonce attempt",
+  "ok": true,
+  "seconds": 0.17,
+  "result": {
+   "executed": {
+    "action": "1",
+    "root": "0xe5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5",
+    "admins": [
+     "0xf6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6"
+    ],
+    "nonce": "1",
+    "witnessSetVersion": "2",
+    "expiresAt": "1794122625"
+   },
+   "reply": {
+    "ok": true,
+    "outcomes": [
+     [
+      "0",
+      "signed",
+      "1"
+     ],
+     [
+      "1",
+      "signed",
+      "1"
+     ],
+     [
+      "2",
+      "signed",
+      "1"
+     ],
+     [
+      "3",
+      "silent",
+      "0"
+     ]
+    ],
+    "keys": [
+     "adapterMode",
+     "collection",
+     "governanceAction",
+     "schemaVersion",
+     "signatures"
+    ]
+   },
+   "staleNonceDifferentEffect": {
+    "ok": false,
+    "code": "ADAPTER_UNAVAILABLE",
+    "reason": "QUORUM_UNAVAILABLE",
+    "message": "0 of 3 required distinct valid signatures before the deadline",
+    "outcomes": [
+     [
+      "0",
+      "refused",
+      "STALE_STATE"
+     ],
+     [
+      "1",
+      "refused",
+      "STALE_STATE"
+     ],
+     [
+      "2",
+      "refused",
+      "STALE_STATE"
+     ],
+     [
+      "3",
+      "refused",
+      "STALE_STATE"
+     ]
+    ]
+   },
+   "staleNonceSameEffectAfterExecution": {
+    "ok": false,
+    "code": "ADAPTER_UNAVAILABLE",
+    "reason": "QUORUM_UNAVAILABLE",
+    "message": "0 of 3 required distinct valid signatures before the deadline",
+    "outcomes": [
+     [
+      "0",
+      "refused",
+      "STALE_STATE"
+     ],
+     [
+      "1",
+      "refused",
+      "STALE_STATE"
+     ],
+     [
+      "2",
+      "refused",
+      "STALE_STATE"
+     ],
+     [
+      "3",
+      "refused",
+      "STALE_STATE"
+     ]
+    ]
+   }
+  }
+ },
+ {
+  "stage": "S6 a second checkpoint (sequence 2) accepted, then D2 requested AGAIN: the old decision is bound to sequence 1 (the numeric death overtaken-decision-sequence)",
+  "ok": true,
+  "seconds": 0.19,
+  "result": {
+   "cp2": "2",
+   "D2again": {
+    "ok": false,
+    "code": "STALE_STATE",
+    "reason": null,
+    "message": "request authEpoch/policyVersion differ from the DBC checkpoint"
+   }
+  }
+ },
+ {
+  "stage": "S7 the real exporters under agent 3's locked_store for all four witnesses; verify_export_snapshot(WitnessEvidence) for every record type",
+  "ok": true,
+  "seconds": 4.64,
+  "result": [
+   {
+    "witness": 0,
+    "exit": 0,
+    "stderrBytes": 0,
+    "stdoutBytes": 11608,
+    "conflicts": [
+     [
+      "AccessDecision",
+      1
+     ],
+     [
+      "AccessDecision",
+      1
+     ],
+     [
+      "GovernanceAction",
+      1
+     ],
+     [
+      "GrantReceipt",
+      1
+     ],
+     [
+      "StateCheckpoint",
+      1
+     ],
+     [
+      "StateCheckpoint",
+      1
+     ]
+    ],
+    "superseded": [],
+    "faulted": false,
+    "verify_export_snapshot": {
+     "verdict": "ACCEPTED",
+     "history": {
+      "recordsChecked": 6,
+      "signaturesChecked": 6,
+      "declaredSafeLedgerInterval": true,
+      "excludedDeathSeqs": []
+     }
+    }
+   },
+   {
+    "witness": 1,
+    "exit": 0,
+    "stderrBytes": 0,
+    "stdoutBytes": 11608,
+    "conflicts": [
+     [
+      "AccessDecision",
+      1
+     ],
+     [
+      "AccessDecision",
+      1
+     ],
+     [
+      "GovernanceAction",
+      1
+     ],
+     [
+      "GrantReceipt",
+      1
+     ],
+     [
+      "StateCheckpoint",
+      1
+     ],
+     [
+      "StateCheckpoint",
+      1
+     ]
+    ],
+    "superseded": [],
+    "faulted": false,
+    "verify_export_snapshot": {
+     "verdict": "ACCEPTED",
+     "history": {
+      "recordsChecked": 6,
+      "signaturesChecked": 6,
+      "declaredSafeLedgerInterval": true,
+      "excludedDeathSeqs": []
+     }
+    }
+   },
+   {
+    "witness": 2,
+    "exit": 0,
+    "stderrBytes": 0,
+    "stdoutBytes": 11608,
+    "conflicts": [
+     [
+      "AccessDecision",
+      1
+     ],
+     [
+      "AccessDecision",
+      1
+     ],
+     [
+      "GovernanceAction",
+      1
+     ],
+     [
+      "GrantReceipt",
+      1
+     ],
+     [
+      "StateCheckpoint",
+      1
+     ],
+     [
+      "StateCheckpoint",
+      1
+     ]
+    ],
+    "superseded": [],
+    "faulted": false,
+    "verify_export_snapshot": {
+     "verdict": "ACCEPTED",
+     "history": {
+      "recordsChecked": 6,
+      "signaturesChecked": 6,
+      "declaredSafeLedgerInterval": true,
+      "excludedDeathSeqs": []
+     }
+    }
+   },
+   {
+    "witness": 3,
+    "exit": 0,
+    "stderrBytes": 0,
+    "stdoutBytes": 11608,
+    "conflicts": [
+     [
+      "AccessDecision",
+      1
+     ],
+     [
+      "AccessDecision",
+      1
+     ],
+     [
+      "GovernanceAction",
+      1
+     ],
+     [
+      "GrantReceipt",
+      1
+     ],
+     [
+      "StateCheckpoint",
+      1
+     ],
+     [
+      "StateCheckpoint",
+      1
+     ]
+    ],
+    "superseded": [],
+    "faulted": false,
+    "verify_export_snapshot": {
+     "verdict": "ACCEPTED",
+     "history": {
+      "recordsChecked": 6,
+      "signaturesChecked": 6,
+      "declaredSafeLedgerInterval": true,
+      "excludedDeathSeqs": []
+     }
+    }
+   }
+  ]
+ },
+ {
+  "stage": "S8 history_rpc_v2.collect on the real evidence of every witness (native death getters via eth_call, EIP-1898)",
+  "ok": true,
+  "seconds": 8.47,
+  "result": [
+   {
+    "witness": 0,
+    "verdict": "ACCEPTED",
+    "blocks": 8,
+    "calls": 0,
+    "verification": {
+     "recordsChecked": 6,
+     "signaturesChecked": 6,
+     "declaredSafeLedgerInterval": true,
+     "excludedDeathSeqs": [],
+     "nativeBlocksChecked": 8,
+     "nativeCallsChecked": 0,
+     "nativeDeathsChecked": 0
+    }
+   },
+   {
+    "witness": 1,
+    "verdict": "ACCEPTED",
+    "blocks": 8,
+    "calls": 0,
+    "verification": {
+     "recordsChecked": 6,
+     "signaturesChecked": 6,
+     "declaredSafeLedgerInterval": true,
+     "excludedDeathSeqs": [],
+     "nativeBlocksChecked": 8,
+     "nativeCallsChecked": 0,
+     "nativeDeathsChecked": 0
+    }
+   },
+   {
+    "witness": 2,
+    "verdict": "ACCEPTED",
+    "blocks": 8,
+    "calls": 0,
+    "verification": {
+     "recordsChecked": 6,
+     "signaturesChecked": 6,
+     "declaredSafeLedgerInterval": true,
+     "excludedDeathSeqs": [],
+     "nativeBlocksChecked": 8,
+     "nativeCallsChecked": 0,
+     "nativeDeathsChecked": 0
+    }
+   },
+   {
+    "witness": 3,
+    "verdict": "ACCEPTED",
+    "blocks": 8,
+    "calls": 0,
+    "verification": {
+     "recordsChecked": 6,
+     "signaturesChecked": 6,
+     "declaredSafeLedgerInterval": true,
+     "excludedDeathSeqs": [],
+     "nativeBlocksChecked": 8,
+     "nativeCallsChecked": 0,
+     "nativeDeathsChecked": 0
+    }
+   }
+  ]
+ },
+ {
+  "stage": "S9 checkpoint_rpc_v2.collect on the real checkpoint digests (sequences 1 and 2)",
+  "ok": true,
+  "seconds": 7.82,
+  "result": [
+   {
+    "witness": 0,
+    "verdict": "REFUSED",
+    "digests": 2,
+    "error": "ValueError: Invalid checkpoint state: semantic freshness authEpoch"
+   },
+   {
+    "witness": 1,
+    "verdict": "REFUSED",
+    "digests": 2,
+    "error": "ValueError: Invalid checkpoint state: semantic freshness authEpoch"
+   },
+   {
+    "witness": 2,
+    "verdict": "REFUSED",
+    "digests": 2,
+    "error": "ValueError: Invalid checkpoint state: semantic freshness authEpoch"
+   },
+   {
+    "witness": 3,
+    "verdict": "REFUSED",
+    "digests": 2,
+    "error": "ValueError: Invalid checkpoint state: semantic freshness authEpoch"
+   }
+  ]
+ },
+ {
+  "stage": "S10 governance_rpc_v2.collect on the real governance evidence (caller TEST-ONLY approvals = the --allow-governance tuple)",
+  "ok": true,
+  "seconds": 6.4,
+  "result": [
+   {
+    "witness": 0,
+    "verdict": "ACCEPTED",
+    "captures": 1,
+    "verification": {
+     "recordsChecked": 6,
+     "signaturesChecked": 6,
+     "declaredSafeLedgerInterval": true,
+     "excludedDeathSeqs": [],
+     "governanceStateSignaturesChecked": 1,
+     "signTimeEstablished": false,
+     "latestHeadEstablished": false,
+     "approvalPolicyEstablished": false
+    }
+   },
+   {
+    "witness": 1,
+    "verdict": "ACCEPTED",
+    "captures": 1,
+    "verification": {
+     "recordsChecked": 6,
+     "signaturesChecked": 6,
+     "declaredSafeLedgerInterval": true,
+     "excludedDeathSeqs": [],
+     "governanceStateSignaturesChecked": 1,
+     "signTimeEstablished": false,
+     "latestHeadEstablished": false,
+     "approvalPolicyEstablished": false
+    }
+   },
+   {
+    "witness": 2,
+    "verdict": "ACCEPTED",
+    "captures": 1,
+    "verification": {
+     "recordsChecked": 6,
+     "signaturesChecked": 6,
+     "declaredSafeLedgerInterval": true,
+     "excludedDeathSeqs": [],
+     "governanceStateSignaturesChecked": 1,
+     "signTimeEstablished": false,
+     "latestHeadEstablished": false,
+     "approvalPolicyEstablished": false
+    }
+   },
+   {
+    "witness": 3,
+    "verdict": "ACCEPTED",
+    "captures": 1,
+    "verification": {
+     "recordsChecked": 6,
+     "signaturesChecked": 6,
+     "declaredSafeLedgerInterval": true,
+     "excludedDeathSeqs": [],
+     "governanceStateSignaturesChecked": 1,
+     "signTimeEstablished": false,
+     "latestHeadEstablished": false,
+     "approvalPolicyEstablished": false
+    }
+   }
+  ]
+ },
+ {
+  "stage": "S11 receipt_history_v2.verify_receipt_history on the real receipt evidence (no receipt RPC collector exists: captures built by the DRIVER from raw RPC)",
+  "ok": true,
+  "seconds": 1.68,
+  "result": [
+   {
+    "witness": 0,
+    "verdict": "ACCEPTED",
+    "captures": 1,
+    "receiptStateSignaturesChecked": 1
+   },
+   {
+    "witness": 1,
+    "verdict": "ACCEPTED",
+    "captures": 1,
+    "receiptStateSignaturesChecked": 1
+   },
+   {
+    "witness": 2,
+    "verdict": "ACCEPTED",
+    "captures": 1,
+    "receiptStateSignaturesChecked": 1
+   },
+   {
+    "witness": 3,
+    "verdict": "ACCEPTED",
+    "captures": 1,
+    "receiptStateSignaturesChecked": 1
+   }
+  ]
+ },
+ {
+  "stage": "S12 stop the adapter: exit code and stderr; every witness child must be gone",
+  "ok": true,
+  "seconds": 0.17,
+  "result": {
+   "exit": 0,
+   "stderr": "",
+   "witnessProcsLeft": []
+  }
+ },
+ {
+  "stage": "S13 overtaken-checkpoint attempt on REAL witness processes: a proposal for a sequence the ledger has already accepted",
+  "ok": true,
+  "seconds": 0.68,
+  "result": {
+   "acceptedSequence": "3",
+   "staleDifferentEffect": {
+    "type": "error",
+    "code": "STALE_STATE",
+    "reason": "PROPOSAL_MISMATCH"
+   },
+   "sameProposalAgain": {
+    "type": "error",
+    "code": "STALE_STATE",
+    "reason": "PROPOSAL_MISMATCH"
+   }
+  }
+ },
+ {
+  "stage": "S14 teardown: stop the Anvil nodes",
+  "ok": true,
+  "seconds": 0.0,
+  "result": "closed"
+ }
+]

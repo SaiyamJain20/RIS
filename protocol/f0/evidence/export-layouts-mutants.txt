@@ -1,0 +1,31 @@
+control: unmutated reference passes all expectations
+DETECTED L1 binding_v2 is not recomputed in the --binding export | failed expectations: 2
+DETECTED L2 the evidence owner may be the worker | failed expectations: 1
+DETECTED L3 conflicts need not be sorted | failed expectations: 1
+DETECTED L4 a duplicate K among live conflicts is accepted | failed expectations: 1
+DETECTED L5 a digest may occur in a live record twice | failed expectations: 1
+DETECTED L6 a digest may repeat between a superseded row and the store | failed expectations: 1
+DETECTED L7 death by expiry does not compare the timestamp | failed expectations: 1
+DETECTED L8 overtaken-decision-sequence accepts observed equal to stateSequence | failed expectations: 1
+DETECTED L9 the revision-8 rule: every superseded generation is compared with the LIVE one (A -> B -> A is refused) | failed expectations: 10
+DETECTED L9b adjacent generations may have the same effect (a no-op supersession is accepted) | failed expectations: 3
+DETECTED L9c the live record is left out of the generation chain | failed expectations: 2
+DETECTED L25 generation order is not checked (a later generation may be signed before the death of the one it replaced) | failed expectations: 1
+DETECTED L26 overtaken-decision-grant does not require ALLOW (a DENY is accepted) | failed expectations: 1
+DETECTED L27 the ALLOW guard is inverted (only a DENY is accepted under overtaken-decision-grant) | failed expectations: 15
+DETECTED L10 the monotonicity of recorded observations is not checked | failed expectations: 2
+DETECTED L11 a store with a fault log is still held to monotonicity only when faulted (log ignored) | failed expectations: 6
+DETECTED L12 a fault reason need not match the observations | failed expectations: 1
+DETECTED L13 evidenceSha256 is not verified | failed expectations: 1
+DETECTED L14 vHash is not verified | failed expectations: 1
+DETECTED L15 observed is never carried (numeric kinds lose it) | failed expectations: 29
+DETECTED L16 a digest observation may be of the wrong ledger | failed expectations: 1
+DETECTED L17 superseded rows need not be numbered 1..n | failed expectations: 1
+DETECTED L18 the clear baseline is not checked | failed expectations: 1
+DETECTED L19 an exporter may refuse any reason | failed expectations: 1
+DETECTED L20 a receipt digest may carry expiresAt | failed expectations: 1
+DETECTED L21 the key field format is not checked | failed expectations: 1
+DETECTED L22 effect.witnessSetVersion need not equal the key's version | failed expectations: 1
+DETECTED L23 the marker need not equal the binding | failed expectations: 1
+DETECTED L24 observations may omit a target chain of a recorded type | failed expectations: 1
+detected 29 of 29

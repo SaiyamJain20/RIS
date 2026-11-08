@@ -1,0 +1,95 @@
+control: the unmutated module passes all tests
+DETECTED P1 the pid file is world-readable | failed tests: 1
+DETECTED P2 the pid file has no newline | failed tests: 1
+DETECTED P3 the pid files are deleted at close | failed tests: 1
+DETECTED P4 the pid file is linked, never replaced (a stale one blocks, the temp file stays) | failed tests: 1
+DETECTED P5 the pid file is never moved into place | failed tests: 1
+DETECTED P6 the pid file lives inside the witness directory | failed tests: 1
+DETECTED G1 the child environment is inherited | failed tests: 1
+DETECTED A1 -B is dropped from the command | failed tests: 1
+DETECTED A2 the allow-list option is not passed | failed tests: 1
+DETECTED A3 a boolean index is accepted | failed tests: 1
+DETECTED A4 index 4 is accepted | failed tests: 1
+DETECTED A5 a key label is not pattern-checked in the command | failed tests: 1
+DETECTED L1 the key labels are used in reverse order | failed tests: 1
+DETECTED L2 the number of key labels is not checked | failed tests: 1
+DETECTED L3 duplicate key labels are accepted | failed tests: 1
+DETECTED L4 the key label pattern is not checked | failed tests: 1
+DETECTED C1 fewer than four commands are accepted | failed tests: 1
+DETECTED C2 an empty command is accepted | failed tests: 1
+DETECTED S1 the state directory mode is not checked | failed tests: 1
+DETECTED S2 a state path that is not a directory is accepted | failed tests: 1
+DETECTED S3 a supervisor may start twice | failed tests: 1
+DETECTED S4 a transport is handed out before start | failed tests: 1
+DETECTED S5 a transport is handed out after close | failed tests: 1
+DETECTED S6 an unknown collection kind is accepted | failed tests: 1
+DETECTED S7 an old transport is not superseded | failed tests: 1
+DETECTED S8 a superseded transport still works | failed tests: 1
+DETECTED T1 a reply at the deadline is returned before the timer | failed tests: 1
+DETECTED T2 the time is a float | failed tests: 1
+DETECTED T3 every send resets the time origin | failed tests: 1
+DETECTED T4 nothing is read at the deadline | failed tests: 1
+DETECTED V1 a negative deadline is accepted | failed tests: 1
+DETECTED V2 a boolean deadline is accepted | failed tests: 1
+DETECTED V3 a boolean witness is accepted | failed tests: 1
+DETECTED V4 witness 4 is accepted | failed tests: 1
+DETECTED V5 a boolean round is accepted | failed tests: 1
+DETECTED V6 round 3 is accepted | failed tests: 1
+DETECTED V7 a message that is not an object is accepted | failed tests: 1
+DETECTED V8 NaN is written | failed tests: 1
+DETECTED V9 an oversized request is written | failed tests: 1
+DETECTED W1 the collection kind is not sent | failed tests: 1
+DETECTED W2 the round is not sent | failed tests: 1
+DETECTED W3 ids are reused | failed tests: 1
+DETECTED W4 the request carries another schema version | failed tests: 1
+DETECTED R1 the reply schema version is not checked | failed tests: 1
+DETECTED R2 an envelope with an extra member is accepted | failed tests: 1
+DETECTED R3 a JSON value that is not an object is not refused as an envelope | failed tests: 1
+DETECTED R4 a reply body that is not an object is accepted | failed tests: 1
+DETECTED R5 a boolean id is accepted | failed tests: 1
+DETECTED R6 invalid UTF-8 is replaced instead of refused | failed tests: 1
+DETECTED R7 plain json.loads replaces the strict parser | failed tests: 1
+DETECTED R8 the line buffer is not bounded | failed tests: 1
+DETECTED R9 the rest of an oversized line is parsed | failed tests: 1
+DETECTED R10 a complete oversized line is accepted | failed tests: 1
+DETECTED R11 a malformed reply is charged to round 1 | failed tests: 1
+DETECTED R12 a late reply of an earlier collection is delivered as malformed | failed tests: 1
+DETECTED R13 an id that was never issued is dropped | failed tests: 1
+DETECTED R14 a reply with another witness's id is accepted | failed tests: 1
+DETECTED R15 a duplicate reply is dropped | failed tests: 1
+DETECTED R16 every reply is reported as a round-1 reply | failed tests: 1
+DETECTED R17 a line nobody asked for is delivered | failed tests: 1
+DETECTED R18 the buffered start of a line is lost | failed tests: 1
+DETECTED X1 cancel drops a started write | failed tests: 1
+DETECTED X2 cancel drops nothing | failed tests: 1
+DETECTED X3 cancel drops the writes of every round | failed tests: 1
+DETECTED N1 the pipes are blocking | failed tests: 1
+DETECTED N2 a partial write is never continued | failed tests: 1
+DETECTED N3 a written item stays queued | failed tests: 1
+DETECTED N4 the write offset does not advance | failed tests: 1
+DETECTED D1 a dead reader raises from send | failed tests: 1
+DETECTED D2 stderr is not drained | failed tests: 1
+DETECTED D3 all of stderr is kept and written (the file grows past 4096 bytes) | failed tests: 1
+DETECTED D4 more than the first stderr line is reported | failed tests: 1
+DETECTED D5 stdout is not read | failed tests: 1
+DETECTED D6 a command that cannot be executed raises | failed tests: 1
+DETECTED Q1 status does not drain the pipes | failed tests: 1
+DETECTED Q2 a dead child is reported alive | failed tests: 1
+DETECTED K1 close does not close stdin | failed tests: 1
+DETECTED K2 close does not kill a child that ignores EOF | failed tests: 1
+DETECTED K3 close gives no grace | failed tests: 1
+DETECTED K4 close is not idempotent | failed tests: 1
+DETECTED Z1 the stderr file is world-readable | failed tests: 1
+DETECTED Z2 a stale stderr file is appended to, not replaced | failed tests: 1
+DETECTED Z3 stderr is never written to its file | failed tests: 1
+DETECTED Z4 the stderr file is never created | failed tests: 1
+DETECTED Z5 the stderr file lives inside the witness directory | failed tests: 1
+DETECTED Z6 command_for is ignored | failed tests: 1
+DETECTED Z7 command_for gets the live default list, not a copy | failed tests: 1
+DETECTED Z8 a command_for answer is not validated | failed tests: 1
+DETECTED Z9 a command_for exception escapes unwrapped | failed tests: 1
+DETECTED Z10 command_for is not checked for being callable | failed tests: 1
+DETECTED Z11 for_deployment drops command_for | failed tests: 1
+DETECTED K5 a closed supervisor still sends | failed tests: 1
+detected 92 of 92
+EXIT=0 START=2026-11-07T21:56:24Z END=2026-11-07T22:13:24Z HEAD=8751cf8

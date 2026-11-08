@@ -1,0 +1,23 @@
+origin/agent-3 11deed61710792aea8b2817edd7a1333263ce73a | agent-1 migration commit 85c59f588de58a8ff5e87b9fe6f630c9d8c43642 | agent-1 head 4615617c2cc82b79d1c53435bafe794115c644d2
+ok   interfaces/v2.1/FREEZE.json sha256 is 232b84bb7f997b687a5dc671d79ab6ecdd592d17cd38e531d8460d33ed81660a
+ok   the freeze states implementationAuthorized true and executionAuthorized false, wire family v2, schema revision v2.1
+ok   the published v2.1 schema hashes to d43c3a9a4cbb10214135afb767a2adc109da462f88bd11a81a8c8955d44fd1f3 and equals the freeze's pin
+ok   the README hashes as the freeze says
+ok   the acceptance receipt hashes to 511e235f3aff86a57822e26136282f97bcb9550e84c95263b14ed1bbab8e9fb6 and equals the freeze's pin
+ok   the base freeze, base schema and amendment manifest pins equal the blobs (7bb1d243.., 79e34dbb.., 7810ad10..)
+ok   the original v2 publication is byte-identical at 2f2af3c and now (schema, FREEZE, and all thirteen inherited payloads equal their pins)
+ok   the published v2.1 schema, parsed, EQUALS the published v2 schema with the two ACKed operations applied (the ACKed patch, nothing else)
+ok   exactly one existing definition differs from v2 (LedgerDeployment) and one is added (LedgerDeploymentEComplete)
+ok   the receipt's hash of my A2-0060 equals the blob at b35d014 and at the current head of my branch, and b35d014 is the commit that introduced it
+ok   the receipt records my ACK scope as an amendment PROPOSAL only, and lists no publication mapping ACK yet
+   (agent 1's E successor marker 'hmbc-ledger-deployment/v2.1' with 12 sources; the old one 'hmbc-ledger-deployment/v2' with 10)
+ok   agent 1's migrated E carrier (85c59f5) carries marker hmbc-ledger-deployment/v2.1, interfaceVersion v2 and twelve sources
+ok   it is valid under the published v2.1 schema and refused by the original v2 schema (so the schema must be SELECTED, never guessed)
+ok   the old ten-source E carrier and the F carrier are valid under both schemas; the old carrier with the new marker is refused by v2.1
+ok   my adapter's structural minimum accepts the owner's v2.1 carrier (it reads only chains, contracts and fixture)
+ok   D50's profile mapping (binding.profile_from_manifest) accepts it and gives the base name and enum, exactly as for the ten-source carrier
+ok   whole-manifest equality distinguishes the carriers (a manifest pinned at v2 is never the v2.1 one): the two E carriers are different manifests
+ok   the D50 preimage is unchanged: pinned vector hashes equal (repaired-e 242f7ca6.., repaired-f 798f7d72..) and B still refuses a `sources` member
+ok   my F0 pins still verify (protocol/f0/MANIFEST.sha256 from the repository root)
+
+all checks hold

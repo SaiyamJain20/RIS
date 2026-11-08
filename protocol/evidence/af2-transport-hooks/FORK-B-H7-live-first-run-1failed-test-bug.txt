@@ -1,0 +1,21 @@
+.......F                                                                 [100%]
+=================================== FAILURES ===================================
+_ test_live_f27_a_consistent_copy_keeps_the_pin_but_a_main_file_only_copy_is_an_undetected_rollback _
+protocol/tests/test_witness_process_state_refusals.py:169: in test_live_f27_a_consistent_copy_keeps_the_pin_but_a_main_file_only_copy_is_an_undetected_rollback
+    r = consistent.ask("checkpoint", b)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+protocol/tests/test_rpc_binding_view_live.py:618: in ask
+    assert line, "the witness process died: " + self.p.stderr.read()
+E   AssertionError: the witness process died: {"error":{"code":"MALFORMED","message":"the state directory must not be accessible to group or other (chmod 700)"}}
+E     
+E   assert ''
+
+During handling of the above exception, another exception occurred:
+protocol/tests/test_witness_process_state_refusals.py:172: in test_live_f27_a_consistent_copy_keeps_the_pin_but_a_main_file_only_copy_is_an_undetected_rollback
+    assert consistent.close() == (0, "")
+E   AssertionError: assert (2, '') == (0, '')
+E     
+E     At index 0 diff: 2 != 0
+E     Use -v to get more diff
+1 failed, 7 passed in 87.31s (0:01:27)
+EXIT=1 START=2026-11-07T15:40:11Z END=2026-11-07T15:41:39Z HEAD=67111f5

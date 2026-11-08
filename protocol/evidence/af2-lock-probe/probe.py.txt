@@ -1,0 +1,83 @@
+"""Measure whether agent 3's store_snapshot_v2.locked_store can take its exclusive lock on a REAL agent-2 witness store while the witness process is alive.
+
+Roles (separate processes, as in a real run):
+  W  = a long-lived process holding agent 2's real WitnessStore open (init, optionally one signing, then wait on stdin)
+  S  = this script's main: tries agent 3's real `locked_store(database, marker, lock)` against W's directory
+The lock path given to locked_store is the one agent 2's store actually locks: <dir>/.lock.
+Run with the venv python; PROTO and A3 paths are passed as arguments. Nothing under the repository is written."""
+import hashlib
+import importlib.util
+import json
+import os
+import subprocess
+import sys
+import tempfile
+
+PROTO, A3, WORK = sys.argv[1], sys.argv[2], sys.argv[3]
+
+
+def worker_source():
+    return r'''
+import hashlib, importlib.util, os, sys
+sys.dont_write_bytecode = True
+PROTO, d, sign = sys.argv[1], sys.argv[2], sys.argv[3] == "sign"
+sys.path.insert(0, PROTO)
+from hmbc_protocol import witness_state as ws
+V = os.path.join(PROTO, "f0", "vectors")
+spec = importlib.util.spec_from_file_location("d50_reference", os.path.join(V, "d50_reference.py")); d50 = importlib.util.module_from_spec(spec); spec.loader.exec_module(d50)
+B = d50.synthetic_binding_document("repaired-f"); BIND = d50.binding_v2(B)
+h = lambda l: "0x" + hashlib.sha256(l.encode()).hexdigest()
+signer = lambda dg: "0x" + (hashlib.sha256(dg.encode()).hexdigest() * 3)[:130]
+PBC, DBC = B["chains"]["pbc"]["chainId"], B["chains"]["dbc"]["chainId"]
+st = ws.init_store(d, BIND, B, "witness:0x" + "11" * 20)
+if sign:
+    eff = {"authEpoch": "3", "policyVersion": "1", "keyEpoch": "0", "witnessSetVersion": "2", "sourceChainId": PBC, "psc": "0x" + "bb" * 20, "sourceBlockNumber": "158", "sourceBlockHash": h("block:%s:158" % PBC)}
+    st.sign(type="StateCheckpoint", domain="0x" + "a1" * 32, wsv="2", key="1", effect=eff, expires_at="2000000000", digest=h("probe"), signer=signer,
+            observe=lambda: {"chainId": DBC, "blockNumber": "10", "blockHash": h("b10"), "timestamp": "1000"})
+print("READY", flush=True)
+sys.stdin.readline()      # stay alive with the store open until told to stop
+st.close()
+'''
+
+
+def start_worker(d, sign):
+    p = subprocess.Popen([sys.executable, "-I", "-c", worker_source(), PROTO, d, "sign" if sign else "nosign"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    line = p.stdout.readline().strip()
+    if line != "READY":
+        raise SystemExit("worker failed: " + p.stderr.read()[-600:])
+    return p
+
+
+def stop_worker(p):
+    p.stdin.write("\n")
+    p.stdin.flush()
+    p.wait(timeout=20)
+
+
+sys.path.insert(0, os.path.join(A3, "evaluation", ".."))
+spec = importlib.util.spec_from_file_location("store_snapshot_v2", os.path.join(A3, "evaluation", "store_snapshot_v2.py"))
+ss = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(ss)
+
+
+def try_snapshot(d, label):
+    db, marker, lock = os.path.join(d, "signing.sqlite"), os.path.join(d, "INITIALIZED"), os.path.join(d, ".lock")
+    try:
+        with ss.locked_store(db, marker, lock) as reader:
+            snap = reader.snapshot()
+        return {"case": label, "result": "SNAPSHOT TAKEN", "markerBytes": len(snap.marker), "logicalSha256": snap.logical_sha256[:16] if hasattr(snap, "logical_sha256") and not callable(snap.logical_sha256) else "n/a"}
+    except Exception as e:  # noqa: BLE001 - measurement: report what happened
+        return {"case": label, "result": "REFUSED", "error": type(e).__name__ + ": " + str(e)[:160]}
+
+
+results = []
+base = tempfile.mkdtemp(prefix="lockprobe-", dir=WORK)
+for sign, label in ((False, "witness alive, store open, NEVER signed"), (True, "witness alive, store open, HAS signed once")):
+    d = os.path.join(base, "w-sign" if sign else "w-nosign")
+    w = start_worker(d, sign)
+    try:
+        results.append(try_snapshot(d, label))
+    finally:
+        stop_worker(w)
+    results.append(try_snapshot(d, label.split(",")[0] + ", STOPPED (process exited)"))
+print(json.dumps(results, indent=1))

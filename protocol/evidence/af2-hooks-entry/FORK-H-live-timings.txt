@@ -1,0 +1,11 @@
+.MEASURED F-20 pool collection with witness 2 held 6000 ms: 0.84 s
+MEASURED F-20 single-witness call to the held witness: 5.01 s then ADAPTER_UNAVAILABLE
+..
+============================= slowest 5 durations ==============================
+40.47s setup    tests/test_faulty_adapter_v2_live.py::test_row_f13_a_witness_killed_after_its_commit_is_silent_and_pinned_and_the_restart_replies_with_the_recorded_value
+8.94s call     tests/test_faulty_adapter_v2_live.py::test_row_f20_a_witness_held_for_six_seconds_misses_the_five_second_timeout_and_the_others_still_certify
+2.08s call     tests/test_faulty_adapter_v2_live.py::test_row_f13_a_witness_killed_after_its_commit_is_silent_and_pinned_and_the_restart_replies_with_the_recorded_value
+1.80s call     tests/test_faulty_adapter_v2_live.py::test_row_f19_a_compromised_worker_releases_a_claimed_request_with_no_ledger_grant_where_the_production_entry_refuses
+0.01s teardown tests/test_faulty_adapter_v2_live.py::test_row_f19_a_compromised_worker_releases_a_claimed_request_with_no_ledger_grant_where_the_production_entry_refuses
+3 passed in 53.66s
+EXIT=0 START=2026-11-07T21:41:16Z END=2026-11-07T21:42:10Z HEAD=9332ff5

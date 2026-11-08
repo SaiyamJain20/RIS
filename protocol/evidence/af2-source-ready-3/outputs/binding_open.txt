@@ -1,0 +1,55 @@
+control: unmutated module passes all tests
+DETECTED O1 the configured() reads are not made | failed tests: 9
+DETECTED O2 the view calls are not pinned to the anchor | failed tests: 2
+DETECTED O3 the code reads are not pinned to the anchor | failed tests: 2
+DETECTED O4 the genesis is read from block 1 | failed tests: 9
+DETECTED O5 the deploy block is read one block late | failed tests: 9
+DETECTED O6 eth_chainId is requested twice | failed tests: 2
+DETECTED O7 an unreachable chain escapes as a raw exception | failed tests: 5
+DETECTED O8 the profile is not compared | failed tests: 11
+DETECTED O9 only one holder's live profile is compared | failed tests: 11
+DETECTED O10 the pin pair rule is not checked | failed tests: 1
+DETECTED O11 the pinned hash is not compared with the object list | failed tests: 2
+DETECTED O12 repaired-f does not require the pins everywhere | failed tests: 1
+DETECTED O13 E pins on only some contracts are accepted | failed tests: 1
+DETECTED O14 an unsealed deployment is accepted | failed tests: 5
+DETECTED O15 the governance wiring is not compared | failed tests: 3
+DETECTED O16 the relay is not compared | failed tests: 1
+DETECTED O17 the last immutable cross-check is not compared | failed tests: 1
+DETECTED O18 the first immutable cross-check is not compared | failed tests: 1
+DETECTED O19 the chain id is not compared | failed tests: 2
+DETECTED O20 a missing genesis block is accepted | failed tests: 2
+DETECTED O21 a missing deploy block is accepted | failed tests: 5
+DETECTED O22 a deploy block after the anchor is accepted | failed tests: 2
+DETECTED O23 empty code is not recognised | failed tests: 6
+DETECTED O24 the live mutations are not compared | failed tests: 15
+DETECTED O25 the live code length is not checked | failed tests: 1
+DETECTED O26 the masked hash is not compared | failed tests: 6
+DETECTED O27 the masked check never runs | failed tests: 6
+DETECTED O28 the masked check masks nothing | failed tests: 41
+DETECTED O29 the code hash is over a truncated code | failed tests: 2
+DETECTED O30 the F set size and threshold rule is not applied | failed tests: 1
+DETECTED O31 the live threshold is not compared | failed tests: 7
+DETECTED O32 the live version is not compared | failed tests: 7
+DETECTED O33 the live members are not compared | failed tests: 7
+DETECTED O34 the KSSC set is not read | failed tests: 32
+DETECTED O35 the witness key need not be a member | failed tests: 4
+DETECTED O36 a witness may open without a key address | failed tests: 2
+DETECTED O37 any role is accepted | failed tests: 2
+DETECTED O38 the pin hash is put into B even when there is no pin | failed tests: 1
+DETECTED O39 B names the deploy block's hash as the genesis hash | failed tests: 5
+DETECTED O40 B names the genesis hash as the deploy block's hash | failed tests: 2
+DETECTED O41 the anchor carries the genesis hash | failed tests: 2
+DETECTED O42 buildChecked is always true | failed tests: 1
+DETECTED O43 the store owner is the worker | failed tests: 3
+DETECTED O44 the anchor is not persisted at init | failed tests: 1
+DETECTED O45 a missing store is created on open | failed tests: 1
+DETECTED O46 PROFILE_MISMATCH maps to WRONG_DESTINATION | failed tests: 1
+DETECTED O47 every manifest is read as an E manifest | failed tests: 60
+DETECTED O48 the contract set of a chain is not checked | failed tests: 1
+DETECTED O49 the manifest chain id need not be a decimal string | failed tests: 1
+DETECTED O50 the sealed check runs before the profile check | failed tests: 2
+DETECTED O51 the wiring check runs before the sealed check | failed tests: 2
+DETECTED O52 the sets are judged before the genesis | failed tests: 2
+detected 52 of 52
+EXIT=0 START=2026-11-07T22:34:41Z END=2026-11-07T22:35:21Z HEAD=8751cf8

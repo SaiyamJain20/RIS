@@ -1,0 +1,35 @@
+PASS the freeze JSON has sha256 f9f0906faf8dbfb9
+PASS freezeAcks empty, implementation and execution NOT authorized, status REQUESTED
+PASS protocolF0Files (52) equals my protocol/f0/MANIFEST.sha256 at 52f3943 entry for entry
+PASS every protocolF0Files hash equals the blob at the owner commit
+PASS every protocolF0Files hash equals my CURRENT working-tree file (nothing under protocol/f0 moved since)
+PASS the pinned F0 manifest hash is 8496c7f3.. at the owner commit
+PASS ownerInputs.files (6 of my files) equal the blobs at the owner commit
+PASS explicitLayoutPins names the layout document, reference checker, vectors, mutant runner and tests, each equal to its protocolF0Files hash (my note N-4)
+PASS ledgerDesignSha256 equals ledger/f0/A-F1-DESIGN.md at the ledger commit
+PASS candidateManifest hash is 0d1a2be4.. at its commit
+PASS candidateFiles (14) equal the candidate manifest's files and the blobs
+PASS historicalBase (candidate-8 plan, matrix, CSV, review manifest) equals the blobs: the exact hashes I ACKed in A2-0053
+PASS ACK record A1-0109 (ledger producer/consumer mapping/layout only) hashes correctly at its commit and fileChangingCommit
+PASS ACK record A2-0057 (protocol producer/consumer mapping/layout only) hashes correctly at its commit and fileChangingCommit
+PASS ACK record A1-0104 (ledger) hashes correctly at its commit and fileChangingCommit
+PASS ACK record A2-0053 (protocol) hashes correctly at its commit and fileChangingCommit
+PASS A2-0057 is recorded with its exact scope (mapping/layout only) and not as a freeze ACK
+PASS caseIds are the 32 candidate-8 matrix cases, in order, all NOT_RUN
+PASS componentCount 14 equals the 14 rows of the candidate-8 fault model
+PASS numericPlan equals the candidate-8 matrix numericPlan on every listed bound
+PASS reply 5 s, collection 10 s and the 2 s reserve are the numbers my SUCCESSOR-WIRE and SIGNING-RULES state (min(10 s, remaining - 2 s), 5 s per-witness reply timeout)
+PASS checkpoint 30/60 s, governance 60/120 s, depth 0 and 1 s cadence match SIGNING-RULES section 6 and the plan
+PASS A2-N1 names both wire hashes correctly (revision-7 provenance versus the active revision-8 pin)
+PASS clarification A2-N1 is present
+PASS clarification A2-N2 is present
+PASS clarification A2-N3 is present
+PASS clarification A2-N4 is present
+PASS clarification A2-N5 is present
+PASS D50 126 expectations and 15 of 15 mutants (A2-N5 says 126 / 15)
+PASS wire 36 of 36 corruptions (A2-N5 says 36)
+PASS layouts 76 expectations and 29 of 29 mutants (A2-N5 says 76 / 29)
+PASS pool adoption 53 expectations and 19 of 19 mutants (A2-N5 says 53 / 19)
+PASS the freeze states that the reviews are correlated and that G stays locked
+
+failures: 0

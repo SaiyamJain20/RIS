@@ -1,0 +1,64 @@
+control: unmodified document passes the checker
+DETECTED W1 timeout uses INSUFFICIENT_QUORUM
+    checker said: FAIL example 2: error reason (if any) is mapped to this code
+DETECTED W2 failure submits a signer
+    checker said: FAIL example 2: collection failure invariants
+DETECTED W3 outcome order swapped (first example)
+    checker said: FAIL example 1: collection success invariants
+DETECTED W4 invalid code in table
+    checker said: FAIL every mapped code is a frozen v1 code | FAIL example 3: error reason (if any) is mapped to this code
+DETECTED W5 success with 2 submitted signers
+    checker said: FAIL example 1: collection success invariants
+DETECTED W6 adopted.reporters names a witness whose report differs
+    checker said: FAIL example 5: collection success invariants
+DETECTED W7 ambiguous split example claims an adoption
+    checker said: FAIL example 6: collection failure invariants
+DETECTED W8 single-witness recorded with the wrong reason
+    checker said: FAIL example 7: single-witness `recorded` only with CONFLICT_PINNED, closed shape {message, signature}
+DETECTED W9 recorded signature has the wrong length
+    checker said: FAIL example 5: collection success invariants
+DETECTED W10 recordedReports not in ascending order
+    checker said: FAIL example 5: collection success invariants
+DETECTED W11 success certificate over a different checkpoint than adopted.message
+    checker said: FAIL example 5: collection success invariants
+DETECTED W12 late split kept INSIDE recordedReports while adopted is retained (the R5 failure)
+    checker said: FAIL example 8: collection failure invariants | FAIL revision 6: the document carries a reversed-arrival-order example: same reports, a different adopted value (>= 1 pair)
+DETECTED W13 a witness listed both as consistent and inconsistent
+    checker said: FAIL example 10: collection failure invariants
+DETECTED W14 inconsistent entry with two IDENTICAL messages
+    checker said: FAIL example 10: collection failure invariants
+DETECTED W15 lateReports out of canonical order
+    checker said: FAIL example 8: collection failure invariants
+DETECTED W16 adoption omitted although the snapshot adopts (prefix example)
+    checker said: FAIL example 8: collection failure invariants | FAIL revision 6: the document carries a reversed-arrival-order example: same reports, a different adopted value (>= 1 pair)
+DETECTED W17 adoption claimed on the equivocator snapshot (rule yields none)
+    checker said: FAIL example 10: collection failure invariants
+DETECTED W18 reversed example names the LATE value as adopted
+    checker said: FAIL example 9: collection failure invariants | FAIL revision 6: the document carries a reversed-arrival-order example: same reports, a different adopted value (>= 1 pair)
+DETECTED W19 reproposal says sent although only 1 s of validity was left (the R6 case)
+    checker said: FAIL example 11: collection failure invariants | FAIL revision 7: the document carries examples of each re-proposal status (sent, skipped_validity, skipped_deadline)
+DETECTED W20 reproposal says skipped_validity although 25 s of validity were left
+    checker said: FAIL example 5: collection success invariants
+DETECTED W21 reproposal says sent on the earlier hard stop
+    checker said: FAIL example 12: collection failure invariants | FAIL revision 7: the document carries examples of each re-proposal status (sent, skipped_validity, skipped_deadline)
+DETECTED W22 timing missing on a pool-retry example
+    checker said: FAIL example 8: collection failure invariants
+DETECTED W23 timing present on an example without pool-retry evidence
+    checker said: FAIL example 1: collection success invariants
+DETECTED W24 collectionDeadlineMs is not min(10 s, remaining - 2 s)
+    checker said: FAIL example 5: collection success invariants
+DETECTED W25 hard stop claims it closed by the reply-timeout
+    checker said: FAIL example 12: collection failure invariants | FAIL revision 7: the document carries an earlier-hard-stop example (snapshot closed by the deadline) (>= 1)
+DETECTED W26 a late report on the hard-stop example (nothing after the deadline is collected)
+    checker said: FAIL example 12: collection failure invariants
+DETECTED W27 adopted omitted on the skipped_validity example (the OTHER reading of R6)
+    checker said: FAIL example 11: collection failure invariants | FAIL revision 7: the document carries examples of each re-proposal status (sent, skipped_validity, skipped_deadline)
+DETECTED W28 all-replied claimed while a witness was silent
+    checker said: FAIL example 5: collection success invariants
+DETECTED W29 snapshot closed after the original deadline
+    checker said: FAIL example 12: collection failure invariants
+DETECTED W30 adopted.reproposal missing
+    checker said: FAIL example 8: collection failure invariants
+SURVIVED W31 empty lateReports on an adopted success (timing present: two encodings of 'no late reports')
+SURVIVED W32 empty inconsistentReports on an adopted success
+detected 30 of 32 (skipped 0)

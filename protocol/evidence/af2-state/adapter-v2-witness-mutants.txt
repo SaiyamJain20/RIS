@@ -1,0 +1,59 @@
+control: unmutated module passes all tests
+DETECTED V1 any profile is wired | failed tests: 1
+DETECTED V2 the wired profile is repaired-e | failed tests: 43
+DETECTED V3 a declared witness set version is never checked | failed tests: 2
+DETECTED V4 an absent witness set version is a mismatch | failed tests: 33
+DETECTED V5 the mismatch carries no reason | failed tests: 2
+DETECTED V6 the governance proposal keeps the witness selector | failed tests: 3
+DETECTED V7 the governance window is read from the DBC | failed tests: 2
+DETECTED V8 the checkpoint window is read from the PBC | failed tests: 6
+DETECTED V9 the decision window is read from the PBC | failed tests: 5
+DETECTED V10 the decision result drops the credential records | failed tests: 5
+DETECTED V11 the receipt window is one second | failed tests: 2
+DETECTED V14 the proposer's checkpoint lifetime is the maximum, not the default | failed tests: 1
+DETECTED V15 a derivation refusal loses its code | failed tests: 2
+DETECTED V16 a derivation refusal loses its reason | failed tests: 4
+DETECTED V17 an unreadable ledger on the proposer's side is not caught | failed tests: 3
+DETECTED V18 the single exchange waits six seconds | failed tests: 2
+DETECTED V19 the single exchange waits four seconds | failed tests: 2
+DETECTED V20 a timed-out write is not cancelled | failed tests: 2
+DETECTED V21 the reply's witness is not compared | failed tests: 1
+DETECTED V22 the reply's round is not compared | failed tests: 1
+DETECTED V23 a reply that is not an object is not refused | failed tests: 1
+DETECTED V24 a signature reply may carry extra keys | failed tests: 1
+DETECTED V27 the replied message need not be the one sent | failed tests: 1
+DETECTED V28 the signer is not compared with the chosen witness | failed tests: 5
+DETECTED V29 an error reply may carry extra keys | failed tests: 1
+DETECTED V30 an unknown error code is passed through | failed tests: 1
+DETECTED V31 a reason of another code is accepted | failed tests: 1
+DETECTED V32 a recorded value is accepted for any message type | failed tests: 1
+DETECTED V33 a recorded value is accepted with any code or reason | failed tests: 1
+DETECTED V34 a recorded value may have other keys | failed tests: 1
+DETECTED V36 a recorded message need not be an object | failed tests: 1
+DETECTED V38 a recorded signature is not verified as the witness's | failed tests: 1
+DETECTED V39 a witness refusal loses its recorded value | failed tests: 2
+DETECTED V40 a witness refusal loses its reason | failed tests: 3
+DETECTED V41 a refusal reply with an unknown type is a refusal | failed tests: 1
+DETECTED V42 a collection adopts for every message type | failed tests: 10
+DETECTED V43 a checkpoint collection does not adopt | failed tests: 1
+DETECTED V44 the pool returns the proposal, not the collected message | failed tests: 1
+DETECTED V45 a failed pool is returned as a success | failed tests: 4
+DETECTED V46 a pool failure carries no evidence | failed tests: 4
+DETECTED V47 a pool failure carries no reason | failed tests: 4
+DETECTED V48 a refused pool is not translated | failed tests: 1
+DETECTED V49 the selector is ignored | failed tests: 24
+DETECTED V50 the selector is read as zero | failed tests: 11
+DETECTED V51 a single result has the collection too | failed tests: 12
+DETECTED V52 a witness list of another size is accepted | failed tests: 1
+DETECTED V53 witnesses need not be distinct | failed tests: 1
+DETECTED V54 an address need not be lowercase hex | failed tests: 1
+DETECTED V55 any transport factory is accepted | failed tests: 1
+DETECTED V56 a failing signature recovery of a receipt or governance message crashes | failed tests: 2
+DETECTED V57 the decision signature is verified under the checkpoint domain | failed tests: 5
+DETECTED V58 a receipt signature is verified under the governance domain | failed tests: 3
+DETECTED V59 the governance signature is verified under the receipt domain | failed tests: 4
+DETECTED V61 the result schema version is v1 | failed tests: 22
+DETECTED V62 the receipt is returned under the wrong member | failed tests: 3
+DETECTED V63 the pool is built for set version 1 | failed tests: 14
+DETECTED V64 the proposal reaches the transport aliased with the caller's | failed tests: 1
+detected 57 of 57

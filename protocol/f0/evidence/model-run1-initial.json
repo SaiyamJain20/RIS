@@ -1,0 +1,467 @@
+[
+ {
+  "config": {
+   "expiries": [
+    2,
+    4
+   ],
+   "f": 1,
+   "horizon": 5,
+   "n": 4,
+   "name": "N0 f=1",
+   "q": 3,
+   "regress": false,
+   "rollback": false,
+   "rule": "N0",
+   "skew": 0
+  },
+  "digests": [
+   [
+    "A",
+    2
+   ],
+   [
+    "A",
+    4
+   ],
+   [
+    "B",
+    2
+   ],
+   [
+    "B",
+    4
+   ]
+  ],
+  "id": "P1",
+  "states": 9973,
+  "violated": true,
+  "witnessState": {
+   "masks": [
+    5,
+    5,
+    0
+   ],
+   "obs": [
+    0,
+    0,
+    0
+   ],
+   "t": 0
+  }
+ },
+ {
+  "config": {
+   "expiries": [
+    2,
+    4
+   ],
+   "f": 1,
+   "horizon": 5,
+   "n": 4,
+   "name": "N1 f=1",
+   "q": 3,
+   "regress": false,
+   "rollback": false,
+   "rule": "N1",
+   "skew": 0
+  },
+  "digests": [
+   [
+    "A",
+    2
+   ],
+   [
+    "A",
+    4
+   ],
+   [
+    "B",
+    2
+   ],
+   [
+    "B",
+    4
+   ]
+  ],
+  "id": "P2",
+  "recovery": {
+   "prefixStates": 25024,
+   "recoverable": 7204,
+   "stallExample": {
+    "masks": [
+     1,
+     4,
+     0
+    ],
+    "obs": [
+     0,
+     0,
+     0
+    ],
+    "t": 0
+   }
+  },
+  "states": 105468,
+  "violated": false
+ },
+ {
+  "config": {
+   "expiries": [
+    2,
+    4
+   ],
+   "f": 1,
+   "horizon": 5,
+   "n": 4,
+   "name": "N2 skew=0 f=1",
+   "q": 3,
+   "regress": false,
+   "rollback": false,
+   "rule": "N2",
+   "skew": 0
+  },
+  "digests": [
+   [
+    "A",
+    2
+   ],
+   [
+    "A",
+    4
+   ],
+   [
+    "B",
+    2
+   ],
+   [
+    "B",
+    4
+   ]
+  ],
+  "id": "P3",
+  "states": 56274,
+  "violated": false
+ },
+ {
+  "config": {
+   "expiries": [
+    2,
+    4
+   ],
+   "f": 1,
+   "horizon": 5,
+   "n": 4,
+   "name": "N2 skew=1 f=1",
+   "q": 3,
+   "regress": false,
+   "rollback": false,
+   "rule": "N2",
+   "skew": 1
+  },
+  "digests": [
+   [
+    "A",
+    2
+   ],
+   [
+    "A",
+    4
+   ],
+   [
+    "B",
+    2
+   ],
+   [
+    "B",
+    4
+   ]
+  ],
+  "id": "P4",
+  "states": 19422,
+  "violated": true,
+  "witnessState": {
+   "masks": [
+    9,
+    9,
+    0
+   ],
+   "obs": [
+    2,
+    2,
+    0
+   ],
+   "t": 1
+  }
+ },
+ {
+  "config": {
+   "expiries": [
+    2,
+    4
+   ],
+   "f": 1,
+   "horizon": 5,
+   "n": 4,
+   "name": "R-new f=1",
+   "q": 3,
+   "regress": false,
+   "rollback": false,
+   "rule": "R-new",
+   "skew": 0
+  },
+  "digests": [
+   [
+    "A",
+    2
+   ],
+   [
+    "A",
+    4
+   ],
+   [
+    "B",
+    2
+   ],
+   [
+    "B",
+    4
+   ]
+  ],
+  "id": "P5",
+  "recovery": {
+   "prefixStates": 25024,
+   "recoverable": 25024,
+   "stallExample": null
+  },
+  "states": 56274,
+  "violated": false
+ },
+ {
+  "config": {
+   "expiries": [
+    2,
+    4
+   ],
+   "f": 0,
+   "horizon": 4,
+   "n": 4,
+   "name": "R-new f=0",
+   "q": 3,
+   "regress": false,
+   "rollback": false,
+   "rule": "R-new",
+   "skew": 0
+  },
+  "digests": [
+   [
+    "A",
+    2
+   ],
+   [
+    "A",
+    4
+   ],
+   [
+    "B",
+    2
+   ],
+   [
+    "B",
+    4
+   ]
+  ],
+  "id": "P6",
+  "states": 942533,
+  "violated": false
+ },
+ {
+  "config": {
+   "expiries": [
+    2,
+    4
+   ],
+   "f": 2,
+   "horizon": 5,
+   "n": 4,
+   "name": "R-new f=2",
+   "q": 3,
+   "regress": false,
+   "rollback": false,
+   "rule": "R-new",
+   "skew": 0
+  },
+  "digests": [
+   [
+    "A",
+    2
+   ],
+   [
+    "A",
+    4
+   ],
+   [
+    "B",
+    2
+   ],
+   [
+    "B",
+    4
+   ]
+  ],
+  "id": "P7",
+  "states": 145,
+  "violated": true,
+  "witnessState": {
+   "masks": [
+    1,
+    4
+   ],
+   "obs": [
+    0,
+    0
+   ],
+   "t": 0
+  }
+ },
+ {
+  "config": {
+   "expiries": [
+    2,
+    4
+   ],
+   "f": 1,
+   "horizon": 5,
+   "n": 4,
+   "name": "R-new q=2 f=1 (mutant-f-q2)",
+   "q": 2,
+   "regress": false,
+   "rollback": false,
+   "rule": "R-new",
+   "skew": 0
+  },
+  "digests": [
+   [
+    "A",
+    2
+   ],
+   [
+    "A",
+    4
+   ],
+   [
+    "B",
+    2
+   ],
+   [
+    "B",
+    4
+   ]
+  ],
+  "id": "P8",
+  "states": 345,
+  "violated": true,
+  "witnessState": {
+   "masks": [
+    1,
+    4,
+    0
+   ],
+   "obs": [
+    0,
+    0,
+    0
+   ],
+   "t": 0
+  }
+ },
+ {
+  "config": {
+   "expiries": [
+    2,
+    4
+   ],
+   "f": 1,
+   "horizon": 5,
+   "n": 4,
+   "name": "R-new f=1 + durable rollback",
+   "q": 3,
+   "regress": false,
+   "rollback": true,
+   "rule": "R-new",
+   "skew": 0
+  },
+  "digests": [
+   [
+    "A",
+    2
+   ],
+   [
+    "A",
+    4
+   ],
+   [
+    "B",
+    2
+   ],
+   [
+    "B",
+    4
+   ]
+  ],
+  "id": "P9",
+  "states": 112548,
+  "violated": false
+ },
+ {
+  "config": {
+   "expiries": [
+    2,
+    4
+   ],
+   "f": 1,
+   "horizon": 5,
+   "n": 4,
+   "name": "R-new f=1 + ledger clock regression",
+   "q": 3,
+   "regress": true,
+   "rollback": false,
+   "rule": "R-new",
+   "skew": 0
+  },
+  "digests": [
+   [
+    "A",
+    2
+   ],
+   [
+    "A",
+    4
+   ],
+   [
+    "B",
+    2
+   ],
+   [
+    "B",
+    4
+   ]
+  ],
+  "id": "P10",
+  "states": 66042,
+  "violated": true,
+  "witnessState": {
+   "masks": [
+    9,
+    1,
+    8
+   ],
+   "obs": [
+    2,
+    0,
+    0
+   ],
+   "t": 0
+  }
+ }
+]

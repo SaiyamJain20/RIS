@@ -1,0 +1,50 @@
+control: unmutated module passes all tests
+DETECTED P1 an inconsistent witness is kept as a consistent reporter | failed tests: 7
+DETECTED P2 two distinct values are not enough to be inconsistent (three needed) | failed tests: 4
+DETECTED P3 one reporter is enough to adopt | failed tests: 12
+DETECTED P4 three reporters are needed to adopt | failed tests: 23
+DETECTED P5 an ambiguous split adopts the first candidate | failed tests: 5
+DETECTED P6 an invalid-signature report is not ignored | failed tests: 12
+DETECTED P7 a report for another sequence is not ignored | failed tests: 7
+DETECTED P8 witness index 4 is accepted | failed tests: 1
+DETECTED P9 a boolean witness index is accepted | failed tests: 1
+DETECTED P10 a non-boolean validSignature is accepted | failed tests: 3
+DETECTED P11 the largest signature is kept | failed tests: 2
+DETECTED P12 the first-arrived signature is kept | failed tests: 2
+DETECTED P13 the canonical form does not sort keys | failed tests: 1
+DETECTED P14 the decision uses the late reports | failed tests: 1
+DETECTED P15 the shape of late reports is not checked by decide | failed tests: 21
+DETECTED P16 the collection cap is 20 s | failed tests: 4
+DETECTED P17 exactly 2 s remaining still starts a collection | failed tests: 2
+DETECTED P18 the 2 s reserve is not subtracted from the deadline | failed tests: 3
+DETECTED P19 all-replied accepts a reply exactly at the limit | failed tests: 2
+DETECTED P20 a deadline tie with the reply timeout is the reply timeout | failed tests: 1
+DETECTED P21 a snapshot closing exactly at the deadline is not skipped | failed tests: 3
+DETECTED P22 exactly 2000 ms of validity is sent | failed tests: 2
+DETECTED P23 a boolean time input is accepted | failed tests: 5
+DETECTED P24 a negative time input is accepted | failed tests: 7
+DETECTED P25 a late report is accepted after a snapshot closed at the deadline | failed tests: 1
+DETECTED P26 recordedReports is emitted even when empty | failed tests: 1
+DETECTED P27 timing is emitted even when no member is | failed tests: 1
+DETECTED P28 lateReports is not sorted by witness index | failed tests: 1
+DETECTED P29 lateReports is not sorted by canonical message | failed tests: 1
+DETECTED P30 recordedReports follow arrival order, not the witness index | failed tests: 1
+DETECTED P31 an equivocator's values are not in canonical order | failed tests: 5
+DETECTED P32 the gate is evaluated on the proposal's expiry, not the adopted value's | failed tests: 2
+DETECTED P33 the gate gets the close and the deadline swapped | failed tests: 3
+DETECTED P34 the snapshot never closes by all-replied | failed tests: 3
+DETECTED P35 late reports are mixed with the snapshot for the selection | failed tests: 3
+DETECTED P36 the adopted message aliases the recorded report | failed tests: 1
+DETECTED P37 evidence members alias the input messages | failed tests: 3
+DETECTED P38 timing values are integers, not decimal strings | failed tests: 3
+DETECTED P39 the adopted expiry is not checked for a decimal string | failed tests: 1
+DETECTED P40 the witness count constant is 5 | failed tests: 2
+DETECTED P41 the pool quorum constant is 2 | failed tests: 1
+DETECTED P42 a valid report without a sequence is not refused | failed tests: 1
+DETECTED P43 the report list type is not checked | failed tests: 3
+DETECTED P44 extra keys in a report are accepted | failed tests: 1
+DETECTED P45 reporters are not restricted to consistent witnesses reporting the value | failed tests: 3
+DETECTED P46 a valid report's signature type is not checked | failed tests: 2
+DETECTED P47 the sequence may be a boolean | failed tests: 2
+NOT-DETECTED(pass) P48 the deadline is read before the proposal expiry is validated (a refusal is lost)
+detected 47 of 48

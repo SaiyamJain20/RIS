@@ -1,0 +1,26 @@
+control: the unmutated tree passes all pins
+DETECTED F1 the fingerprint drops the PBC RSC address | failed tests: 3
+DETECTED F2 the fingerprint drops the DBC ACSC address | failed tests: 3
+DETECTED F3 the fingerprint JSON is not key-sorted | failed tests: 3
+DETECTED F4 the DBC slot carries the PBC chain id | failed tests: 3
+DETECTED F5 a field is ADDED to the legacy fingerprint (the D-2 hardening done in place) | failed tests: 3
+DETECTED F6 the fingerprint hash is SHA-1 | failed tests: 3
+DETECTED L1 the default export renames its schema version | failed tests: 2
+DETECTED L2 the default export gains a member | failed tests: 2
+DETECTED L3 the default export is indented by 2 | failed tests: 2
+DETECTED L4 --binding is ON by default | failed tests: 2
+DETECTED L5 events are ordered by timestamp descending | failed tests: 2
+DETECTED L6 the raw token replaces its digest | failed tests: 2
+DETECTED L7 releases are ordered by grant id only | failed tests: 2
+DETECTED R1 the profile-3 recipient fix is lost (back to the historical test) | failed tests: 2
+DETECTED R2 the profile test also accepts 4 | failed tests: 1
+DETECTED R3 a SECOND change inside the allowed function: an unregistered recipient no longer refuses | failed tests: 1
+DETECTED R4 a change in a definition the plan does NOT allow (the grant expiry boundary) | failed tests: 1
+DETECTED D1 deviating_witness parses the deployment with plain json.loads again | failed tests: 1
+DETECTED D2 deviating_witness no longer refuses a non-UTF-8 deployment | failed tests: 1
+DETECTED D3 the TEST-ONLY guard of deviating_witness is gone (a definition the plan does not allow) | failed tests: 1
+DETECTED A1 an operation status of the E-listed adapter changes (the default export no longer matches) | failed tests: 2
+DETECTED A2 an E-listed adapter constant changes (a fourth inventory mismatch) | failed tests: 2
+DETECTED X1 the committed default adapter export is edited | failed tests: 2
+detected 23 of 23; equivalent survivors 0 of 0
+EXIT=0 START=2026-11-07T22:29:58Z END=2026-11-07T22:30:59Z HEAD=8751cf8

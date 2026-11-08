@@ -1,0 +1,35 @@
+"""Scratch diagnosis: kill an initialising child at random moments; for each death record the directory listing and whether init_store accepts the leftovers (no repository file is written)."""
+import json, os, random, shutil, signal, subprocess, sys, time
+P = "/home/th4kur/Desktop/sem5/RIS/RIS/protocol"
+sys.path[:0] = [P + "/tests", P]
+sys.dont_write_bytecode = True
+import state_kill_child as kc
+from hmbc_protocol import witness_state as ws
+from test_witness_state import B, BIND, OWNER, h
+ANCHOR = {"pbc": {"number": "18", "hash": h("anchor:pbc")}, "dbc": {"number": "9", "hash": h("anchor:dbc")}}
+base = sys.argv[1]
+rng = random.Random(int(sys.argv[2]))
+res = []
+for t in range(int(sys.argv[3])):
+    d = os.path.join(base, "i%d" % t)
+    p = subprocess.Popen([sys.executable, "-B", P + "/tests/state_kill_child.py", d, "init", str(t), json.dumps({"anchor": ANCHOR})], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    assert p.stdout.readline().strip() == "READY"
+    delay = rng.uniform(0.0, float(sys.argv[4]) if len(sys.argv) > 4 else 0.05)
+    time.sleep(delay)
+    p.send_signal(signal.SIGKILL)
+    out = p.stdout.read(); p.wait()
+    listing = sorted((n, os.path.getsize(os.path.join(d, n))) for n in os.listdir(d)) if os.path.isdir(d) else None
+    keep = os.path.join(base, "keep%d" % t)
+    if os.path.isdir(d):
+        shutil.copytree(d, keep)
+    try:
+        ws.init_store(d, BIND, B, OWNER, anchor=ANCHOR).close()
+        verdict = "ok"
+    except Exception as e:
+        verdict = "%s: %s" % (type(e).__name__, str(e)[:110])
+    res.append((t, round(delay * 1000, 1), "DONE" in out, listing, verdict))
+    if verdict == "ok":
+        shutil.rmtree(keep, ignore_errors=True)
+for r in [r for r in res if r[4] != "ok"]:
+    print(r)
+print("refused:", sum(1 for r in res if r[4] != "ok"), "of", len(res), "; finished-before-kill:", sum(1 for r in res if r[2]))

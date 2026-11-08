@@ -1,0 +1,61 @@
+control: unmutated module passes all tests
+DETECTED W1 four signatures are needed | failed tests: 12
+DETECTED W2 two signatures are enough | failed tests: 15
+DETECTED W3 the signer is not compared with the replying witness's address | failed tests: 2
+DETECTED W4 a dissent is not recognised | failed tests: 2
+DETECTED W5 repeated replies add signers | failed tests: 15
+DETECTED W6 a reply exactly at the reply timeout is still in the snapshot | failed tests: 12
+DETECTED W7 a reply exactly at the deadline is collected | failed tests: 7
+DETECTED W8 the second round has no timeout of its own | failed tests: 1
+DETECTED W9 the second-round timeout is not capped by the deadline or the close | failed tests: 1
+DETECTED W10 three replies are enough for all-replied | failed tests: 3
+DETECTED W11 undelivered round-1 sends are not cancelled | failed tests: 2
+DETECTED W12 every witness gets a cancel, repliers included | failed tests: 2
+DETECTED W13 the second round skips the witnesses that reported | failed tests: 5
+DETECTED W14 the second round re-proposes the retained proposal, not the adopted value | failed tests: 6
+DETECTED W15 the effort gate is ignored | failed tests: 2
+DETECTED W16 the final reference message is always the retained proposal | failed tests: 3
+DETECTED W17 an equivocator or invalid reply is not classified invalid | failed tests: 5
+DETECTED W18 a refusal always carries a reason key | failed tests: 1
+DETECTED W19 a refusal reports the first error, not the latest | failed tests: 1
+DETECTED W20 the collection does not end early when all four replied and nothing can change | failed tests: 1
+DETECTED W21 the collection does not end when all four replied in round 2 | failed tests: 1
+DETECTED W22 the certificate is in arrival order, not address order | failed tests: 5
+DETECTED W23 a failure submits the signers it has | failed tests: 4
+DETECTED W24 time may go backwards | failed tests: 1
+DETECTED W25 a boolean witness index is accepted | failed tests: 1
+DETECTED W26 witness index 4 passes the range check | failed tests: 1
+DETECTED W27 a recorded value is accepted with any code | failed tests: 1
+DETECTED W28 a recorded value is accepted outside a checkpoint collection | failed tests: 1
+DETECTED W29 the recorded value's sequence is not compared with the proposal's | failed tests: 1
+DETECTED W30 the recorded signature may come from another witness | failed tests: 1
+DETECTED W31 late reports are put into the snapshot | failed tests: 4
+DETECTED W32 evidence is serialized before the snapshot closes | failed tests: 1
+DETECTED W33 the failure text confuses the deadline with the validity reserve | failed tests: 1
+DETECTED W34 the retained proposal aliases the caller's dict | failed tests: 1
+DETECTED W35 a proposal with 2 s or less is not refused | failed tests: 4
+DETECTED W36 the quorum string is 2 | failed tests: 2
+DETECTED W37 the certificate message is the retained proposal | failed tests: 4
+DETECTED W38 a non-dict reply crashes the pool | failed tests: 1
+DETECTED W39 an error reply may carry extra keys | failed tests: 1
+DETECTED W40 a signature reply may carry extra keys | failed tests: 1
+DETECTED W41 a message with non-string values is accepted | failed tests: 2
+DETECTED W42 a non-string refusal reason is accepted | failed tests: 1
+DETECTED W43 an empty refusal code is accepted | failed tests: 1
+DETECTED W44 the snapshot timer ignores the original deadline | failed tests: 1
+DETECTED W45 a float round number is accepted | failed tests: 1
+DETECTED W46 a round-2 reply is accepted before round 2 started | failed tests: 1
+DETECTED W47 start may be called twice | failed tests: 1
+DETECTED W48 the collection need not be started before replies arrive | failed tests: 1
+DETECTED W49 witnesses need not be distinct | failed tests: 1
+DETECTED W50 a witness set of another size is accepted | failed tests: 1
+DETECTED W51 the witness-set version is not checked | failed tests: 2
+DETECTED W52 a decision collection may adopt without a sequence | failed tests: 1
+DETECTED W53 a list element is not checked to be a string | failed tests: 1
+DETECTED W54 any value is accepted in a proposal or signature reply | failed tests: 2
+DETECTED W55 a recorded report may carry a list (the adoption core sees it) | failed tests: 1
+DETECTED W56 an adopting collection accepts a list-valued proposal | failed tests: 1
+DETECTED W57 a list value is refused in a non-adopting collection | failed tests: 1
+DETECTED W58 a signature reply with a list value is refused | failed tests: 1
+detected 58 of 58
+EXIT=0 START=2026-11-07T22:44:58Z END=2026-11-07T22:47:55Z HEAD=8751cf8

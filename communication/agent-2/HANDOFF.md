@@ -1,3 +1,702 @@
+# Agent 2 handoff (2026-11-08): complete runtime READY (A2-0076) plus the lock-fix delta READY (A2-0078) and the cross-run NOTE (A2-0077). Older blocks below are history, kept verbatim.
+
+## Current state (read this block first)
+- **Newest (2026-11-08, later): A2-0079 and A2-0080.** (a) Random-SIGKILL durability tests of the witness store (`tests/test_witness_state_kill.py`, child `tests/state_kill_child.py`) found a REAL defect: a witness killed inside `init_store` left a hot rollback journal that every later start refused as STORE_CORRUPT (16 of 300 early kills before the fix); fixed in ca7766a (`_classify` recovers once, only without the marker; an initialised store is never repaired by the inspection). Tests: hot-journal file RED 1 failed / 2 passed, GREEN 76 passed; kill tests 300 trials 6 passed; full suite on a clean clone of ca7766a 2962 passed / 201 skipped / 0 failed; state runner 42/42; kill runner K1 and K2 detected, E1 (`synchronous=OFF`) survives by design (SIGKILL is not power loss). K1 first SURVIVED because the harness lacked two invariants; added in f026a50. Evidence `protocol/evidence/af2-kill-durability/`. A2-0079 = the delta READY; the cumulative non-evidence delta against A2-0076 is seven files. (b) A2-0080 NOTE with the second cross-run (decision, receipt, governance through the real adapter; Fork J wrote the driver, I re-ran it: 15/15, same verdicts): `checkpoint_rpc_v2` refuses real checkpoints for a `pbcHead` later than a governance `authEpoch` change (agent 3's contract; each checkpoint's own source block is accepted 8/8); only `expiry` and `overtaken-decision-sequence` can be produced by real evidence; a governance ADD makes earlier requests stale. Evidence `protocol/evidence/af2-a3-crossrun-2/`. (c) Scratch hygiene: the disk is 99% full; I delete my own clones after each verification; a stopped runner can leave a spinning mutant pytest, check `ps`.
+- **Earlier (2026-11-08, after A2-0076):** (a) **A2-0078 delta READY**, source bytes d375dda: `witness_state.WitnessStore` is a cooperative writer (`_writing()` takes `LOCK_SH` only while a signing or `clear_fault` runs and always releases it; `exclusive()` ends with `LOCK_UN`). Found by cross-running agent 3's real `locked_store` against my real store (`protocol/evidence/af2-lock-probe/`): before the fix a witness that had signed once refused every snapshot ("Store lock is busy"). Delta against A2-0076 = three files (`witness_state.py`, new `tests/test_witness_state_lock.py`, `tools/run_state_mutants.py`); the A2-0076 manifest gives 547 OK / 2 FAILED against the tip. Verified by me on a clone of d375dda: full suite 2956 passed / 201 skipped / 0 failed; 12 of 22 runners re-run, all clean; lock tests RED 7 failed / 2 passed, GREEN 10. (b) **A2-0077 NOTE** with the cross-run of agent 3's checkers (evidence c649181, `protocol/evidence/af2-a3-crossrun/`; I re-ran the fork's driver myself: 19 of 19 stages, same verdicts): F1 a BindingExport is refused once the chain has moved since init (agent 3's `collect` reads only `latest`, `verify_export` requires equal anchors; both lines read by me), F2 the worker store has no `.lock` and is not cooperative (fixing it would change the E-listed `worker.py`: needs agent 3's agreement), F3 a live witness waits, not refuses, while the snapshot lock is held. (c) A mutant `pytest` orphaned by a stopped runner spun at 100% CPU for 14 hours; I killed it. After stopping a runner, check `ps`.
+- **Process rule from the human (2026-11-08): run long jobs in the background** (`run_in_background`), wait for the completion notice, do not sit in foreground sleeps.
+- **Published on origin/agent-2 before that (tip 8b0a0b4):** A2-0073 startup-refusal delta (3ca33b0), A2-0074 start-contract RFC (awaiting agent 3's exact ACK), A2-0075 errata NOTE, **A2-0076 complete runtime source READY**. Commit of record 7d97b902a7fa4d02c32c7cc95ef75a10b69694a9; source bytes under test 8751cf8 (differ only in four runner tool files and docs/evidence); manifest `protocol/evidence/af2-source-ready-3/MANIFEST.sha256` 7de8f334.. (549 entries).
+- **What I verified myself (not adopted from sub-agents):** full suite on a clone of 8751cf8 2946 passed / 201 skipped / 0 failed; all 22 mutation runners clean; the 34 historical E test files 1383 passed / 201 skipped; `export --check` exit 0; E-listed paths exactly 3 of 142; the 52 pinned F0 files verify. Outputs: `protocol/evidence/af2-source-ready-3/outputs/`, README, MAPPING.md.
+- **Waiting on agent 3:** review of A2-0076 and A2-0078; its decisions on A2-0077 F1 (anchor selection in `collect`) and F2 (worker snapshot lock); exact ACK or amendments of A2-0074 (O1..O6); then its execution FREEZE, which I ACK in protocol scope (verify hashes; drive its runner's calls against my adapter, hooks and alternate entry as in E). F gate NOT_RUN; G locked.
+- **Environment to reproduce (this clone, branch agent-2):** CPython 3.13 from the frozen root uv.lock (`uv sync --frozen --no-install-project` from a copy of pyproject.toml + uv.lock), Foundry 1.8.5 + solc 0.8.37 hash-verified against `interfaces/v1/toolchain.json`, `HMBC_FOUNDRY_DIR` set and HOME redirected so forge's ~/.svm cache stays out of the home directory. Pinned ledger commits must be in the local object store: 91add8c (E) and 85c59f5 (F). Commands: `python -m pytest protocol/tests -c protocol/pytest.ini --rootdir protocol -p no:cacheprovider -rs -q`; runners `python -B -I protocol/tools/run_<name>_mutants.py` (`--live` for hooks). **Read the skip count: the only expected skips are 200 ScenarioResult + 1 FileHash.**
+- **Traps found this session:** (1) `tests/test_rpc_binding_view_live.py` used to ignore HMBC_FOUNDRY_DIR and skip silently (fixed); (2) five older mutation runners could not run (directory fixture `agent1-85c59f5-abi/`, stale anchors) and were repaired; (3) `silent` in a pool success means "not heard before quorum", not "stopped"; (4) a class defined in a module run as `__main__` is a different class from its package-name copy (found live; `Refusal` now lives in `startup_config`).
+- **Process disclosure:** on the human's instruction (2026-11-07) forked sub-agents wrote parts of the transport, hooks, wiring live tests, the alternate entry, the E pins and the startup-fix mutation evidence (the repository rule is three persistent agents). Two forks died on transient network errors. Every claim in the READY was re-executed by me.
+- **Not done / not claimed:** any F case or the F gate; real-process H1/H3 (virtual transport only); power-loss durability; consensus; ABE. Open facts I own: `binding_open` converts deployBlock with `int()` after the network step; the stale E0/E1 labels in pinned `exports/adapter.json`; the H5 worker variant is reachable only through the alternate entry.
+
+---
+
+# Agent 2 handoff (2026-11-07, forty-eighth check: slice 11a, witness processes)
+
+## Update 2026-11-07, forty-eighth check (newest)
+
+- **Peers:** nothing new (origin/agent-1 8c0285f, origin/agent-3 ca7df46). (Two identical scheduled-check prompts arrived back to back; handled once.)
+- **Slice 11a:** `witness_main`: ONE witness as ONE OS process: strict startup (TEST-ONLY key derivation declared by the manifest, key label must name the witness at `--index`, private state directory, D50 stages 1-8 as the witness role against the real chains, durable store `<state>/witness-<I>/`), then a JSON-lines server (`hmbc-witness-rpc/v1`, closed request and response, reply in the pool's shape). 48 no-node tests (40 red first; 8 added after the first mutation run), runner 24/30 then 30/30. LIVE against agent 1's real `repaired-f` ledger: three separate processes' checkpoint signatures are accepted by the real KSSC; a stopped and restarted process on the same state directory answers STALE_STATE/CONFLICT_PINNED with the recorded value (durable pin across a restart); governance is refused POLICY_DENIED without the TEST-ONLY allow-list and, signed by three processes with it, executed by the real Governance contract. 142 tests (units + live) pass in 249 s.
+- **Honest limits:** no pool-side transport yet (a `ProcessTransport` with host-monotonic deadlines), so the CLI's witness operations are still "not wired"; a real pipe has no delivery hold or per-witness delay, so the held-write schedules of SIGNING-RULES section 8 cannot be produced by it; key custody TEST-ONLY; one local Anvil pair; full suite not rerun for this slice (new files only); same-model review (correlated). Not covered by A2-0063/A2-0064. Failed trials kept: a wrong idempotence expectation after acceptance, and PROPOSAL_MISMATCH in my restart test until the PBC head moved past the accepted block.
+- **Not done:** the `ProcessTransport`, wiring the four witness operations into the CLI, H2/H5/H6, a fresh complete runtime READY (its manifest must list the three changed E-listed files `worker_log.py`, `worker.py`, `deviating_witness.py`).
+- **Next:** `ProcessTransport` over these processes (select-based, host-monotonic), then the CLI wiring.
+
+---
+
+# Agent 2 handoff (2026-11-07, forty-seventh check: A3-0095)
+
+## Update 2026-11-07, forty-seventh check (newest)
+
+- **Peers:** A3-0095 (origin/agent-3 ca7df46): agent 3 reproduced my certified-skipped-sequence finding on the real ledger with its own Forge harness and found that three controlled keys can install uint64 max, after which no checkpoint successor is representable. It asks me to qualify my conclusion; no code repair; agent 1 gets a scoped out-of-bound exhaustion note. It read my be27f32 CLI/worker slice read-only and will review it next. origin/agent-1 unchanged (8c0285f).
+- **Done:** qualified my words in `af2-state/README.md` (section on A3-0095), STATUS and A2-0072: "honest witnesses are not blocked" holds for ordinary non-saturating skips only; a burn to uint64 max has no witness-side recovery. I did not test max myself; I rely on agent 3's reproduction. Pinned my side with 6 CHARACTERIZATION tests (`test_witness_service_sequence_bounds.py`, passed first run, not red-first): the proposer refuses to derive past max (WireError), witnesses refuse skips, repeat, lower, 0 and max+1 and sign nothing on a saturated ledger.
+- **Honest limits:** unchanged: crafted signatures, one local Anvil pair, same-model review (correlated). Not covered by A2-0063/A2-0064.
+- **Not done:** supervised witness processes and a real transport/clock (then wiring the four witness operations into the CLI), H2/H5/H6, the complete runtime READY with a manifest listing the three changed E-listed files.
+- **Next:** supervised witness processes with a real stdin/stdout transport.
+
+---
+
+# Agent 2 handoff (2026-11-07, forty-sixth check: A3-0094, slice 10a command line)
+
+## Update 2026-11-07, forty-sixth check (newest)
+
+- **Peers:** A3-0094 (origin/agent-3 955326a): scoped closure of the A3-0093 fix at my 5c8e418; it notes my junk-reply property loop covers unexpected exceptions, not returned shapes. Correct: I had over-worded it (README, test docstring, A2-0069); corrected in `af2-state/README.md` section 10a and the docstring. origin/agent-1 unchanged (8c0285f).
+- **Slice 10a:** `adapter_v2_main` command line: every argument required, schema hash-pinned, ABI files hash-pinned, startup order against the real chains, key-worker operations on the real ledger, responses checked against the published schema (cannot be switched off from the command line), witness operations "not wired". 26 subprocess unit tests (22 red first), runner 15/20 then 20/20 (five test gaps fixed). Live: the CLI as a subprocess against agent 1's real F and E v2.1 deployments, including an END-TO-END grant (real request, real witnesses, real ACSC; encrypt, release, a second process releases the same token, finish).
+- **FINDING (live):** the carried `worker.py` treated every profile except 2 as a paper profile and refused valid F grants (WRONG_SUBJECT "paper-profile grant..."). One-line fix `in ("2", "3")`, test first (7 tests, 2 red; 4/4 hand-made mutants). **Third E-listed file changed** (`worker_log.py`, `worker.py`, `deviating_witness.py`; E manifest check shows exactly these 3 of 142); must be in the next READY manifest. Full suite 2391 passed / 201 skipped / exit 0 (564 s); export --check 9 files.
+- **Process record:** I killed my first full-suite run because I ran in-place hand mutants on `worker.py` while it imported (contamination risk) and killed its orphan Anvil/forge processes by PID; the recorded result is the clean rerun. My first pkill pattern also killed my own shell; no harm.
+- **Honest limits:** witness operations are not wired (no witness processes, no transport/clock), so this is NOT a complete runtime and I do not request a runtime READY yet; one local Anvil pair; same-model review (correlated). Not covered by A2-0063/A2-0064.
+- **Not done:** supervised witness processes and a real transport/clock (then wiring the four witness operations into the CLI), H2/H5/H6, a fresh complete runtime READY with the new manifest (it must list the changed E-listed `worker.py`).
+- **Next:** supervised witness processes with a real stdin/stdout transport; then the complete runtime READY.
+
+---
+
+# Agent 2 handoff (2026-11-07, forty-fifth check: slice 9c, doomed certified messages vs real contracts)
+
+## Update 2026-11-07, forty-fifth check (newest)
+
+- **Peers:** nothing new (origin/agent-1 8c0285f, origin/agent-3 173cfb4).
+- **Slice 9c:** thirteen doomed messages certified by crafted signatures of all four synthetic witness keys, submitted to the REAL KSSC and Governance on a second fresh deployment of agent 1's `repaired-f` ledger. Predictions were pre-registered in the test; 5 of 13 were wrong. **Finding:** the real KSSC ACCEPTS a certified checkpoint whose sequence is strictly higher than current even when it skips (first checkpoint 5; 7 after 5), where the witness rule is exactly current+1; I did not analyse the consequences beyond "honest witnesses derive from the new current". Governance answers MALFORMED (ADD of an existing authority; skipped nonce) and UNKNOWN_AUTHORITY (REMOVE of an unknown root), coarser than my witness classes. After every rejection the checkpoint, nonce and authority set were unchanged (INVENTORY F-30 held). Table and process record: `af2-state/README.md` section 9c. 62 live+unit tests pass in 125 s. A2-0070 tells agent 1 and agent 3.
+- **Honest limits:** crafted signatures, not Byzantine witness processes; honest refusals not re-shown here; one local Anvil pair; same-model review (correlated). Not covered by A2-0063/A2-0064.
+- **Not done:** Worker factory, supervised witness processes, real transport/clock, command line (exact published schema, default response check on, valid handlers), fresh full runtime READY; H2/H5/H6.
+- **Next:** the Worker factory and the command line; then the complete runtime READY.
+
+---
+
+# Agent 2 handoff (2026-11-06, forty-fourth check: A3-0093 fixes)
+
+## Update 2026-11-06, forty-fourth check (newest)
+
+- **Peers:** A3-0093 (origin/agent-3 173cfb4): review of my partial witness RPC source 0e58f1d (production commit 86521cd): a non-object transaction reply made `forwarding_call` raise AttributeError instead of LedgerUnreachable (real); five permissive raw-parsing diagnostics are inherited from the carried `Chain`/`Contract` codecs, not from `RpcBindingView`; four suspicions refuted; no incorrect authorization shown. origin/agent-1 unchanged (8c0285f).
+- **Done (A2-0069):** the transaction reply must be an object (else LedgerUnreachable) and the guard also catches AttributeError; 15 junk cases plus a property test over all 16 view methods (junk for every raw reply: a documented shape or LedgerUnreachable, nothing else); docstrings aligned (missing transaction = LedgerUnreachable, not None; decision/receipt now "honest path only on a real ledger"); carried parsing limits DOCUMENTED not enforced (the witness view makes no canonical-bytes claim). Runner 45/45 (run 1 44/46: W47 exposed that my test allowed a quiet None, tightened; W46 equivalent, recorded). 61 live + unit tests pass. Details: `af2-state/README.md`.
+- **Honest limits:** the property test passed on the unfixed code for the paths it reached; the 15 targeted cases are what were red. Not covered by A2-0063/A2-0064. Same-model review (correlated).
+- **Not done:** Worker factory, supervised witness processes, real transport/clock, command line (exact published schema, default response check on, valid handlers), fresh full runtime READY; H2/H5/H6; adversarial cases against the real F ledger.
+- **Next:** adversarial cases against the real F ledger, then the Worker factory and the command line.
+
+---
+
+# Agent 2 handoff (2026-11-06, forty-third check: A3-0092, slice 9b live decision and receipt)
+
+## Update 2026-11-06, forty-third check (newest)
+
+- **Peers:** A3-0092 (origin/agent-3 d801b92): closes the A3-0091 parser findings at my 1d667b9 (27 raw-reply controls reproduce 8 old gaps, 0 on the new source; canonical replies still valid); no further parser fix asked; I continue witness-side view, Worker factory, CLI, supervised witnesses, real transport/clock and H2/H5/H6, then a complete exact runtime READY. origin/agent-1 unchanged (8c0285f).
+- **Slice 9b:** the decision and receipt paths run LIVE against a real forwarded request on agent 1's real `repaired-f` ledger: the carried E helpers (`ledger_setup.setup_pbc`, `UserClient`, `Relay`) drive the F ledger when it is wrapped in `Ledger(pbc, dbc, F contracts, dep)`; the real PSC forwards Alice's request; three real witnesses' decision (ALLOW, real credentials and policy) is accepted by the real `ACSC.consumeDecision` (allowed grant); their receipt is accepted by the real `PSC.reportAttestedOutcome` (status 2); a second decision is refused REPLAY by the witnesses. Controls: two signatures INSUFFICIENT_QUORUM twice (predicted), a flipped `result` BAD_SIGNATURE (observed, not predicted). Full live + unit run 38 passed in 80 s.
+- **Process record:** the test was written before I knew the carried helpers would work with F ABIs; it failed once on my own helper (E receipt validator hard-codes witnessSetVersion=1; use `_receipt_digest`), then passed: not a TDD red. Details: `af2-state/README.md` section 9b.
+- **Honest limits:** honest path only (no DENY, stale, expired or revoked cases against the real ledger; no Byzantine variants against real contracts); signatures collected by direct calls, not a pooled collection over a transport; latest-state reads unpinned; one local Anvil pair; `evm_mine` first (idle-chain staleness). Not covered by A2-0063/A2-0064. Same-model review (correlated).
+- **Not done:** Worker factory, supervised witness processes, real transport/clock, command line (exact published schema, default response check on), fresh full runtime READY; H2/H5/H6; independent review.
+- **Next:** the Byzantine and adversarial cases against the real F ledger (cheap now), then the Worker factory and the command line.
+
+---
+
+# Agent 2 handoff (2026-11-06, forty-second check: slice 9a, real contracts accept my signatures)
+
+## Update 2026-11-06, forty-second check (newest)
+
+- **Peers:** nothing new (origin/agent-1 8c0285f, origin/agent-3 0a1fd48).
+- **Slice 9a:** `rpc_witness_view.py` (the 15 reads of `witness_service` over the carried `Chain`/`Contract`, F ABIs hash-pinned) plus live tests on agent 1's real `repaired-f` ledger: three REAL witness signatures (real stores, the deployment's synthetic witness keys) are ACCEPTED by the real `KSSC.acceptState`; two are rejected INSUFFICIENT_QUORUM (predicted), a stranger's signature and a repeat are rejected; a GovernanceAction ADD is EXECUTED by the real `Governance.execute` (`TMSC.isAuthority` true, nonce 1) and then refused ALREADY_REGISTERED by the witnesses. First time my EIP-712 digests met Solidity. 11 live + 26 unit tests pass; runner 43/43 (run 1 42/44: one gap in my test, one equivalent).
+- **Finding:** on an idle automine chain the latest block timestamp lags, so `expiresAt = latest + 30` can already be past when mined: the real KSSC rejected a checkpoint EXPIRED in the full live module (passed when run first). Needs block production (F-29 note). Cause inferred from timestamps, not separately measured; the live tests `evm_mine` first.
+- **Process record:** live tests written first (red: ImportError); the 26 fast unit tests were written AFTER the first live run, so they are not red-first; they found two real defects in my first view (validation errors converted to ledger faults; unguarded tuple unpacking), both fixed.
+- **Honest limits:** decision and receipt paths not run against a real forwarded request; latest-state reads not pinned to the observed block; no reorg bracketing; one local Anvil pair. Not covered by A2-0063/A2-0064. Same-model review (correlated). A2-0067 tells agent 3/1.
+- **Not done:** live decision/receipt (needs a real requestAccess flow with credentials), Worker factory, supervised witness processes, command line (exact published schema, default response check on), fresh full runtime READY; H2/H5/H6; independent review.
+- **Next:** a real forwarded request on the F ledger for the decision and receipt paths, then the command line.
+
+---
+
+# Agent 2 handoff (2026-11-06, forty-first check: A3-0091 parser fixes)
+
+## Update 2026-11-06, forty-first check (newest)
+
+- **Peers:** A3-0091 (origin/agent-3 0a1fd48): scoped review of my partial RPC source 3b86183. It reproduces that `_int` accepted `0x1_0` (returned 16) and normalised `0x01`/`0xA`, and that hand-assembled ABI replies with trailing `deadbeef` or a non-minimal array offset still decode; no wrong D50 value or authorization shown; my Foundry correction is recorded. Action asked: a separator regression, then narrow or enforce the canonical ABI claim, before my fresh full runtime READY. origin/agent-1 unchanged (8c0285f).
+- **Done (commit 1d667b9, A2-0066):** both fixed test-first. Quantities must match `0x(0|[1-9a-f][0-9a-f]*)`; an `eth_call` reply is accepted only if `eth_abi` re-encoding of the decoded value equals the node's bytes exactly (my earlier docstring claim was an overstatement). 21 new cases (10 red first), runner 32/32 (R38 equivalent, recorded), 7 live + 47 fake-node tests pass (94 s), so a real Anvil's replies are minimal and canonical. Details: `af2-state/README.md`. (My first commit script aborted on a wrong STATUS anchor, so STATUS and this HANDOFF were committed one commit later than the code.)
+- **Honest limits:** a node answering non-minimal quantities is now LEDGER_UNREACHABLE (deliberate); other parser corners of the carried `chain.py` loopback client are not reviewed by me here. Not covered by A2-0063/A2-0064. Same-model review (correlated).
+- **Not done:** witness-side ledger view, Worker factory, supervised witness processes, command line (exact published schema, default response check on), fresh full runtime READY; H2/H5/H6; independent review.
+- **Next:** the witness-side ledger view tested live, then the command line, then the runtime READY.
+
+---
+
+# Agent 2 handoff (2026-11-06, fortieth check: slice 8b, live D50, and a correction)
+
+## Update 2026-11-06, fortieth check (newest)
+
+- **Peers:** nothing new (origin/agent-1 8c0285f, origin/agent-3 d866f6e).
+- **CORRECTION of my own earlier statements:** I said repeatedly (A2-0063's evidence README, full-suite notes, slice 8a) that no Foundry/Anvil is installed here. Wrong: I checked only PATH. anvil/forge 1.8.5 are in `~/.local/share/hmbc-tools/foundry-1.8.5` (the carried live fixtures use that directory) and the carried live E tests DO run in my full-suite runs. The A2-0063 README (`af2-source-ready/README.md`) still carries the wrong sentence; I did not edit it (agent 3 cites it); the correction is in `af2-state/README.md` and A2-0065.
+- **Slice 8b:** `tests/test_rpc_binding_view_live.py`: two real Anvil nodes + agent 1's ledger at 85c59f588de58a8ff5e87b9fe6f630c9d8c43642 deployed with agent 1's own `deploy_local.sh` into a scratch directory (`repaired-f`, and `repaired-e` with `SUCCESSOR_EXPORT=1`). `binding_open.reconstruct` over `RpcBindingView` succeeds on the real F deployment in exactly 55 requests and the real E v2.1 one in 48, `buildChecked: True` (masked bytecode with pinned immutable references matches the live code): the first time that logic met real code. 7 tests, 77 s, exit 0; live faults refuse with the predicted stages. First run skipped everything (wrong commit hash typed by me); second run had four failures that were all my test assertions (one precedence prediction wrong: wiring precedes genesis). Details: `af2-state/README.md` section 8b.
+- **Honest limits:** one local Anvil pair, public key, one snapshot, no witness-side view, no timing; reads pinned by number. Not covered by A2-0063/A2-0064. Same-model review (correlated).
+- **Not done:** the witness-side ledger view (now testable against a real ledger too), the Worker factory, supervised witness processes, the command line (exact published schema, default response check on); H2/H5/H6; independent review.
+- **Next:** the witness-side ledger view tested live against the same deployment, then the command line; then a fresh runtime READY.
+
+---
+
+# Agent 2 handoff (2026-11-06, thirty-ninth check: A3-0090 review, slice 8a)
+
+## Update 2026-11-06, thirty-ninth check (newest)
+
+- **Peers:** A3-0090 (origin/agent-3 d866f6e): scoped review of A2-0064: the four-path delta is accepted for isolated injected APIs; `schema=None` and `check_responses=False` still bypass; runtime recipe must pass the exact published schema and keep the default check enabled; my bare-FormatChecker warning is valid but needs no evaluator change; no ACK, no human action. origin/agent-1 unchanged (8c0285f).
+- **Slice 8a (first real wiring piece):** `rpc_binding_view.py`, the D50 chain view over JSON-RPC: one request per view call, reads pinned to a block number, getters ABI-encoded against ABI files pinned by the manifest's `abiSha256` (agent 1's seven ABI exports copied byte-exact as fixtures; their hashes equal the manifest's), only view functions with one supported output. 26 tests written first (real red) against an in-process FAKE loopback JSON-RPC node; `reconstruct` over it equals the in-memory fake (same document, hash, anchor) in exactly 55 (F) / 48 (E) requests. Runner run 1 25/32 (2 test gaps fixed, 5 equivalents recorded), run 2 27/27.
+- **Honest limits:** no real node (no Foundry/Anvil installed), so real block hashes and `eth_call` data, EIP-1898 pinning and reorgs are untested; the fake node shares the ABIs and `eth_abi` with the code (correlated check). This module is NOT covered by A2-0063/A2-0064; it belongs to the next runtime READY.
+- **Not done:** the witness-side ledger view, the `Worker` factory, supervised witness processes, the command line (must pass the exact published schema, default response check on); H2/H5/H6; independent review.
+- **Next:** the witness-side ledger view over the same RPC client, then the command line.
+
+---
+
+# Agent 2 handoff (2026-11-06, thirty-eighth check: A3-0089 review, slice 6d, A2-0064)
+
+## Update 2026-11-06, thirty-eighth check (newest)
+
+- **Peers:** A3-0089 (origin/agent-3 a345c16): review of A2-0063, accepted for isolated injected-API consumption with the exact published schema supplied; `witness.py` unchanged is fine; names two API limits (schema=None, arbitrary handler results); asks for the CLI and real wiring with schema and handler-result validation, then a new exact runtime READY. No ACK asked. Their first selection had 23 FAIL / 6 ERROR from dynamic live fixtures; they corrected only their own selector (their disclosure, not my failure; I did not rerun it). origin/agent-1 unchanged (8c0285f).
+- **Slice 6d (closes the second limit):** with `schema=` supplied, every response is checked against its operation's published response type; invalid means the generic internal failure. 19 tests written first (10 red); runner 58/58 (run 1 51/54, one equivalent recorded); full suite 2245 passed / 201 skipped / exit 0; `export --check` exit 0. **Finding:** the default jsonschema `FormatChecker` ignores the published `uint*`/`canonical-signature` formats; now registered via `wire`; `user-key-ref`/`evidence-path` stay annotations. All 230 adapter tests with REAL handlers pass with the check on.
+- **A2-0064 (READY delta):** I changed manifest files (adapter_v2.py, test_adapter_v2.py, run_adapter_v2_mutants.py, new test_adapter_v2_output.py) after promising in A2-0063 not to without a new READY, so I published one (source c138185428ebe572c86cdc42985b340a262aa8aa, manifest sha256 016ffd0870e3b9bfd2b8b297c8c977bcfe29ce687d0a54b548b901c52e8b9cbf, 408 files). Five affected runners rerun, all detected; the other eight were NOT rerun for the delta.
+- **Not done:** command line and real wiring (it must pass the exact published schema and keep handler validation); H2/H5/H6; independent review.
+- **Next:** the command line and real wiring against frozen interfaces, as a new exact runtime READY (A3-0089's action).
+
+---
+
+# Agent 2 handoff (2026-11-06, thirty-seventh check: A2-0063 source READY)
+
+## Update 2026-11-06, thirty-seventh check (newest)
+
+- **Peers:** nothing new (origin/agent-1 8c0285f, origin/agent-3 cc9ccfe).
+- **Published A2-0063 (READY):** the isolated successor source at commit dbae4e1e13fb26984a6d4b0aa042ae321c1c49f0, manifest `protocol/evidence/af2-source-ready/MANIFEST.sha256` (384 files, sha256 6ed9a53de1ec2ec32fedad01019ce18cd4196a304cc47202b4a0e3655218ca08), `MAPPING.md` (A3-0079 consumer mapping, E-listed changes vs plan, slice table) and `README.md` (commands, exit codes, versions, failed trials, limitations). All 13 mutation runners rerun on that commit: all exit 0, every mutant detected (outputs and UTC times in `mutants/`). Full suite 2226 passed / 201 skipped (out-of-scope schema-review cases), `export --check` exit 0, E manifest 2 intended mismatches of 142.
+- **Stated plainly in the READY:** no command line and no real wiring, so the adapter is not launchable; one shared fake view and a virtual transport only; `witness.py` NOT changed (new modules instead, a deviation from INVENTORY section 5's file list); same-model review (correlated); no ACK requested, no execution ACK inferred.
+- **Not done:** command line and real wiring (chain view, Worker factory, witness processes, transport); H2/H5/H6; independent review of any of it.
+- **Next:** wait for agent 3's review of A2-0063; meanwhile the command line only against frozen interfaces, never touching the manifest files without a new READY.
+
+---
+
+# Agent 2 handoff (2026-11-06, thirty-sixth check: full-suite regression and a correction)
+
+## Update 2026-11-06, thirty-sixth check (newest)
+
+- **Peers:** A3-0088 (origin/agent-3 cc9ccfe): isolated native-history RPC collector on synthetic transports; it read my 076bde2 and lists me NOT_READY; nothing asked. origin/agent-1 unchanged (8c0285f).
+- **CORRECTION of my own earlier claim:** the thirtieth-to-thirty-fifth blocks and the README said the 201 skipped tests "need a live Foundry ledger and were not run". That was a guess and it was wrong. With `-rs` the skips are 200 `ScenarioResult` and 1 `FileHash` cases that the schema-review tests skip as outside agent 2's scope.
+- **Full suite after 7b:** 2226 passed, 201 skipped, exit 0, 363 s (`protocol/evidence/af2-state/full-suite-0f7-after-7b.txt`). The carried E test files are inside that count. Which of them use a live node is not established (no Foundry binary is installed here). Author-run on this tree; not an independent review and not an E parity result.
+- **Not done:** command line and real wiring; H5 compromised-worker variant; ONE exact source READY manifest (lists `worker_log.py` and `deviating_witness.py`) plus the mapping document.
+- **Next:** the source READY manifest and the A3-0079 mapping document (the last deliverables before a READY request), unless agent 3 asks otherwise.
+
+---
+
+# Agent 2 handoff (2026-11-06, thirty-fifth check: slice 7b)
+
+## Update 2026-11-06, thirty-fifth check (newest)
+
+- **Peers:** nothing new (origin/agent-1 8c0285f, origin/agent-3 b6c24bb).
+- **Slice 7b:** the 7a Byzantine variants now run against decision, receipt and governance collections: 33 tests written first (12 red), `byzantine.sign_message` taught the F receipt and governance digests, runner 20/20 (4 new mutants). One Byzantine witness never stops or taints a certificate; two leave nothing submitted; Repeater/Equivocator count the genuine signer once. Same limits as 7a (one shared fake view, no real transport; H2/H4/H5/H6 not covered). Same-model review (correlated).
+- **Not done:** command line and real wiring; H5 compromised-worker variant; the full E regressions; ONE exact source READY manifest (lists `worker_log.py` and `deviating_witness.py`) plus the mapping document.
+- **Next:** the full carried E regressions on this tree, then the source READY manifest and mapping document.
+
+---
+
+# Agent 2 handoff (2026-11-06, thirty-fourth check: slice 7a, Byzantine variants)
+
+## Update 2026-11-06, thirty-fourth check (newest)
+
+- **Peers:** A3-0087 (origin/agent-3 b6c24bb): isolated native-history joins; it read my startup slice and lists it NOT_READY; asks me only to continue the mapping/source READY/E regressions. origin/agent-1 unchanged (8c0285f).
+- **Slice 7a:** TEST-ONLY `testtools/byzantine.py`: H1 variants (withhold, delayed, Repeater, Equivocator, Impersonator, Poisoner, Garbage) and the H3 view override, run against real witnesses and the real pool. 22 tests (real red first); mutants 15/16 then 16/16 (the survivor was a gap in my test). One Byzantine witness of 8 kinds never stops or taints a certificate; two leave nothing submitted; statuses as predicted from SIGNING-RULES section 8 (two predictions about WHO ends up in the certificate were wrong in my first test; recorded in the README).
+- **Honest limits:** checkpoint only; one shared fake view (H3 swaps one service's view object); no real transport or processes; H2, H4 (crash points live in `witness_state`), H5 and H6 beyond the transport knobs are not covered here. Same-model review (correlated).
+- **Not done:** command line and real wiring; H5 compromised-worker variant; the other three message types under these variants; the full E regressions; ONE exact source READY manifest (lists `worker_log.py` and `deviating_witness.py`) plus the mapping document.
+- **Next:** run the variants for decision, receipt and governance, then the full E regressions.
+
+---
+
+# Agent 2 handoff (2026-11-06, thirty-third check: D-6)
+
+## Update 2026-11-06, thirty-third check (newest)
+
+- **Peers:** nothing new (origin/agent-1 8c0285f, origin/agent-3 714dcd9).
+- **D-6:** `testtools/deviating_witness.py` now reads its deployment with `strict_loads` and refuses invalid UTF-8 cleanly. 7 tests written first (6 red), 4 of 4 hand-made mutants detected (not a pre-validated runner). The E source manifest shows exactly 2 intended mismatches of 142: `worker_log.py` and `deviating_witness.py`; both go into the ONE source READY.
+- **A3-0079 mapping evidence:** the explicit v2/v2.1 selection with whole-manifest equality and the retained D50 preimage already exist in `adapter_v2.Context` (explicit revision required) and `binding_open`; the mapping document itself is not written yet and belongs with the source READY.
+- **Not done:** command line and real wiring; real transport and witness processes; real chain view; hooks H3/H5 and byzantine.py; the full E regressions; ONE exact source READY manifest plus the mapping document.
+- **Next:** hooks H3/H5 and `testtools/byzantine.py`, or the mapping document if agent 3 prefers it first.
+
+---
+
+# Agent 2 handoff (2026-11-06, thirty-second check: slice 6c, the startup order)
+
+## Update 2026-11-06, thirty-second check (newest)
+
+- **Peers:** A3-0086 (origin/agent-3 714dcd9): isolated exporter/marker joins; it read my 254faac (witness handlers, list support) and lists it NOT_READY; nothing asked. origin/agent-1 unchanged (8c0285f).
+- **Slice 6c:** `adapter_v2_start.start(...)`: no-I/O validation, then D50 stages 1-8 (role worker), then `bind_worker_dir(<state>/worker)`, then handlers and the Context. A refusal leaves no directory, marker, handler, transport or worker; factories are called lazily, never at startup. 27 tests written first (real red); mutants 15/15 after run 1 at 15/16 (T16 equivalent, recorded). Related files 360 passed; full suite not rerun.
+- **Honest limits:** chain view, worker factory, witness view and transport are injected fakes; the synthetic manifest is not a full LedgerDeployment. No command line: it would need the real chain view, a real Worker factory and witness channels. Same-model review (correlated).
+- **Not done:** command line and real wiring; A3-0079 mapping evidence; real transport and witness processes; real chain view; D-6; hooks H3/H5 and byzantine.py; the full E regressions; ONE exact source READY manifest (must list the changed E-listed file `worker_log.py`).
+- **Next:** the A3-0079 mapping evidence for the explicit v2/v2.1 selection, then D-6.
+
+---
+
+# Agent 2 handoff (2026-11-06, thirty-first check: slice 6b-2, the witness operations)
+
+## Update 2026-11-06, thirty-first check (newest)
+
+- **Peers:** nothing new since the thirtieth check: A3-0083/0084/0085 (origin/agent-3 0a4af4a) and A1-0116 (origin/agent-1 8c0285f) are progress or notes, nothing asked of me.
+- **Prerequisite:** `witness_pool` now lets a proposal or signature-reply message hold lists of strings (a governance action has `admins`); a recorded report and any ADOPTING collection stay flat. 52 tests; `run_pool_mutants` 58/58 (6 new). Reconstruction choice, not a finding.
+- **Slice 6b-2:** `adapter_v2_witness.witness_handlers(view, witnesses, transport_factory)`: collect_checkpoint, collect_decision, attest_grant, collect_governance. Pool mode (three verified signatures plus the published `collection`; failure is QUORUM_UNAVAILABLE with evidence; 2 s or less is EXPIRED with nobody contacted) and single-witness mode (one write, 5 s timeout, one verified signature, no `collection`). 49 tests written first (real red: ImportError), 64 mutants in run 1: 52 detected; tests fixed for 5 survivors, 7 equivalents recorded; run 2: 57/57. Choices are listed in the module docstring (F profile only; witnessSetVersion other than 2 is WITNESS_SET_MISMATCH; receipt window = DBC time + 60 s; `recorded` only from a verified single-witness CONFLICT_PINNED checkpoint refusal).
+- **Finding (tested reconstruction result):** a witness validates a proposal against its own view before it looks at its pin, so a witness whose view has moved on cannot join adoption of a value it signed earlier.
+- **Honest limits:** the four witnesses share one fake ledger view behind the TEST-ONLY virtual transport; the witness addresses are injected; no real transport, witness processes or chain view. Full protocol suite: 2137 passed, 201 skipped (the skips need a live Foundry ledger and were not run). Same-model review only (correlated).
+- **Not done:** startup order and command line (S0 stages 1-8, bind_worker_dir, stores, real ledger and worker factory); A3-0079 mapping evidence; real transport and processes; real chain view; D-6; hooks H3/H5 and byzantine.py; the full E regressions; ONE exact source READY manifest (it must list the changed E-listed file `worker_log.py`).
+- **Next:** the startup order and command line.
+
+---
+
+# Agent 2 handoff (2026-11-06, thirtieth check: slice 3c, the pool driver)
+
+## Update 2026-11-06, thirtieth check (newest)
+
+- **Peers:** A3-0085 (origin/agent-3 0a4af4a): isolated WAL-aware store snapshots, progress only, my 6b-1 read as NOT_READY, nothing asked. origin/agent-1 unchanged (8c0285f).
+- **Slice 3c:** `witness_pool_driver.run_collection` (the loop around the sans-IO `Collection`) and the TEST-ONLY `testtools/virtual_transport.py` (virtual time, per-witness delivery hold, cancellation, `ServiceEndpoint` over a real `WitnessService`). **First end-to-end collection with real witnesses**: four real services (real stores, real signatures) + the real pool state machine + one fake ledger view: honest, two silent, **schedule (a)** (held writes cancelled, the held witnesses never see the second value) and **schedule (b)** (pinned availability), plus a late split. 12 tests; mutants **15 of 15** (run 1: 13/18; two real gaps fixed, three mutants dropped as equivalent and listed).
+- **Honest record:** I wrote the driver and the transport before their tests (second time this slip happened; the red run is ceremonial, by moving the file aside); the witnesses share one fake view of one fake ledger, so this says nothing about independent views or a real transport.
+- **Not done:** 6b-2 (the witness handlers that build a collection from a v2 request, single-witness mode, startup order and command line, the mapping evidence A3-0079 wants); a real transport and witness processes; a real chain view; D-6, hooks H3/H5 and byzantine.py; the full E regressions; the source READY manifest.
+- **Next:** 6b-2.
+
+---
+
+# Agent 2 handoff (2026-11-06, twenty-ninth check: slice 6b-1, the first adapter handlers)
+
+## Update 2026-11-06, twenty-ninth check (newest)
+
+- **Peers:** A3-0084 (origin/agent-3 4086dbc): isolated declared witness-history verifier, progress only, my 6a read as NOT_READY, nothing asked. origin/agent-1 unchanged (8c0285f).
+- **Slice 6b-1:** `adapter_v2_ops.py`: `prepare_request` (the carried E signing client on the pinned manifest) and `worker_handlers(factory)` (encrypt_record, release, finish_decryption), reusing the carried E code and adding only **D-4 (relabel v1 to v2, E result validated first)** and the error mapping. Tests first and red (40; prepare_request real on agent 1's real manifests; worker STUBBED); mutants **14 of 14**. Carried E files untouched.
+- **Honest limits:** the worker is a stub in these tests (the real worker on a ledger is the carried E suites' and an integrated run's job); the relabel is top-level only, which is right for the four v2 result types I checked against the published schema but is an assumption for any future nested schemaVersion.
+- **User question this session:** asked to run `/new` in the cron prompt; I explained it would end the session-only cron jobs and offered a durable external schedule; the user chose to leave things as they are.
+- **Not done:** 6b-2 (the witness handlers through the pool driver and the witness service, the startup order and command line, the mapping evidence A3-0079 wants); the pool driver (real transport/clock); a real chain view; D-6, hooks H3/H5/H6, byzantine.py; the full E regressions; the source READY manifest.
+- **Next:** 6b-2.
+
+---
+
+# Agent 2 handoff (2026-11-06, twenty-eighth check: slice 6a, the successor adapter front-end)
+
+## Update 2026-11-06, twenty-eighth check (newest)
+
+- **Peers:** only A3-0083 (origin/agent-3 ca3f251): isolated evaluator signing-context wiring, progress, my slices read as NOT_READY and not rerun, "Agent2 continues owned full successor mapping/source READY/E parity"; nothing asked. origin/agent-1 unchanged (8c0285f). The scheduled-check cron jobs were still alive after a session restart (CronList; they expire after 7 days, around 2026-11-10/11).
+- **Slice 6a:** `adapter_v2.py`, the successor adapter boundary: strict JSON lines, closed v2 envelopes, EXPLICIT v2/v2.1 selection (a required argument checked against the pinned carrier marker, optional schema validation against that revision's carrier branches), whole-manifest equality, v2 input validators, the reason table, injected handlers. Tests first and red (96), the published schema and agent 1's real manifests as byte-copied fixtures with provenance, a differential of the input validators against the schema; mutants **43 of 43** (run 1: 42/43).
+- **Finding:** the carried E `wire.finish_decryption_input` rejects a valid v2 input (it demands a "v1" ReleaseResult); the successor validators do not reuse it. D-4 (relabelling E results) belongs to the wiring slice.
+- **Environment:** the old scratchpad venv was gone; tests run in a new venv whose `.pth` reads agent 3's site-packages read-only (same pinned versions); nothing there is written.
+- **Not done:** 6b (handlers and startup order wired behind `adapter_v2`, result-shape validation against the schema, the command line, the mapping evidence A3-0079 asks for); the pool driver (real transport/clock); a real chain view; D-4, D-6, hooks H3/H5/H6, byzantine.py; the full E regressions (only `test_adapter.py`, `test_worker_log.py`, `test_exports.py` rerun); the source READY manifest.
+- **Next:** 6b.
+
+---
+
+# Agent 2 handoff (2026-11-04, twenty-seventh check: slice 5b, the worker store's D50 rows)
+
+## Update 2026-11-04, twenty-seventh check (newest)
+
+- **Peers:** A3-0082 (origin/agent-3 d106cb3): D56 keeps the frozen D50 S0 (no RFC, so my 55 stays); the evaluator separately collects both Governance getters; my A2-0062 differential reviewed, "correlated cross-implementation observation, not an independent oracle". A1-0116 (origin/agent-1 8c0285f): ledger facts, no D50 revision needed for safety. Nothing asked of me; I still owe the consumer mapping and ONE source READY.
+- **Slice 5b:** `worker_binding.py` (the key worker's D50 identity: meta rows, marker, crash points, refusals, `bind_worker_dir`) and the opt-in `worker_log --state-dir D --binding` (one canonical line / one canonical error line, reads `<D>/worker/` only). Tests first and red (`tests/test_worker_binding.py`, 42); `tools/run_worker_binding_mutants.py` **32 of 32** (run 1: 30/32, two test gaps); the E `Worker` runs unchanged on a bound directory (tested).
+- **ONE carried E file changed: `protocol/hmbc_protocol/worker_log.py`** (the `--binding` flag; default output compared byte-for-byte with the E-era file when git can show it). `sha256sum -c` of the E source manifest now shows exactly 1 mismatch of 142; `test_worker_log.py` and `test_exports.py` (23, live Anvils) pass; the FULL E suite has not been rerun since slice 1. Listed for the READY.
+- **Own defect found and fixed (slice 1):** my witness `_classify` called a marker next to missing binding rows LEGACY_STATE / STORE_MISSING and `init_store` crashed with a raw sqlite error; EXPORT-LAYOUTS says STORE_CORRUPT. Six tests first (red), fix, `run_state_mutants.py` S25: 33 of 33. This is a real gap in an earlier "tested" slice: the mutation run had not covered that case.
+- **Limits:** process death modelled by an exception at the hook point for the worker (real process death only for the witness store); no adapter wires `bind_worker_dir` yet; the E parity of everything else is unrerun; power loss untested.
+- **Not done:** the successor adapter (explicit v2.1/v2 selection, F wire validators, strict parsing, the mapping evidence A3-0079 wants); the pool driver; a real chain view; D-4, D-6, hooks H3/H5/H6, byzantine.py; the full E regressions; the source READY manifest.
+- **Next:** the successor adapter.
+
+---
+
+# Agent 2 handoff (2026-11-04, twenty-sixth check: D50 differential, A2-0062)
+
+## Update 2026-11-04, twenty-sixth check (newest)
+
+- **Peers:** origin/agent-3 49fdb51 (A3-0081: an isolated independent D50 context checker `evaluation/binding_context_v2.py`; my governance/D50-open slices are recorded NOT_READY and not rerun; "owners continue"). origin/agent-1 unchanged (f30a7a0).
+- **Done:** `protocol/v2-review/d50-differential/run_differential.py` (exit 0): my `binding_open.reconstruct` against agent 3's reconstruction on agent 1's three real v2.1 manifests (runtimeSha256 replaced by the masked hash of synthetic runtimes) over one fake chain: **documents and hashes identical** (F base e0a13afc.., F q2 0c616c95.., E v2.1 aa00f7d6..) and **178 of 178 faults refused by both**. Published **A2-0062 (NOTE, no ACK)**.
+- **One real difference found and reported, not smoothed over:** agent 3's checker also reads/compares `Governance.maxGovernanceTtl` and `Governance.governanceChainId`; my open (following D50) does not. If they belong in the open schedule, the F S0 count in the pinned D50 text goes from 55 to 57: a new RFC from me with exact ACKs, not proposed now. Own mistake caught: my fake keyed contracts by address alone and crashed on agent 1's habit of one address on both chains.
+- **Limits:** same-project/same-model code paths (correlated), a fake chain, reasons not compared, anchors trivially consistent, synthetic bytes in the masked check.
+- **Not done (unchanged):** the worker store's D50 rows and `worker_log --binding`; the successor adapter with explicit v2.1/v2 selection and the mapping evidence A3-0079 wants; the pool driver; a real chain view; D-4, D-6, hooks, byzantine.py; E regressions; the source READY manifest.
+- **Next:** the worker store's D50 rows, then the successor adapter.
+
+---
+
+# Agent 2 handoff (2026-11-04, twenty-fifth check, part 2: slice 5a, the D50 live-read reconstruction)
+
+## Update 2026-11-04, twenty-fifth check, part 2 (newest)
+
+- **Peers:** nothing new since the first part of this check (origin/agent-1 f30a7a0, origin/agent-3 6060a54).
+- **Slice 5a (new files):** `hmbc_protocol/binding_open.py` = D50 S0 and the open-time checks, stages 1-8, against an injected chain view; `open_witness_store` composes it with the store's stage 9. **Tests first and red** (`tests/test_binding_open.py`, 106). S0 makes exactly **48 (E) / 55 (F) requests**, all reads pinned to one anchor per chain (the numbers D50 section 3 derives). Every fault alone gives its reason; **the precedence is checked on all 55 pairs of
+  simultaneous faults for E and F**; stage 1-8 refusals leave the store directory byte-identical; the real F/E manifests' shape is read by `read_manifest`. `tools/run_binding_open_mutants.py`: **52 of 52** (run 1: 46/52, six test gaps incl. one `pytest.raises(ValueError)` that an `OpenRefusal` also satisfies; fixed, whole set rerun). Ten new-code test files: 505 passed.
+- **Honest limits:** the chain is a FAKE built from the manifest with synthetic runtime bytes (the masked-build check is meaningful but not run on compiled contracts); 48/55 is a request count, not a timing (F-13 cold start and the per-op deltas stay unmeasured); the independent document in the test is mine (correlated); choices where D50 is silent (GENESIS_MISMATCH for chain id and block facts, BUILD_PIN_INVALID for pin defects, the F set size/threshold rule) are in the module docstring.
+- **Not done:** the worker store's D50 rows and `worker_log --binding`; the successor adapter (explicit v2.1/v2 schema selection, F wire validators, strict parsing, the mapping evidence A3-0079 wants); the pool driver; a real chain view; D-4, D-6, hooks H3/H5/H6, byzantine.py; E regressions; the source READY manifest.
+- **Next:** the worker store's D50 rows and `worker_log --binding`, then the successor adapter.
+
+---
+
+# Agent 2 handoff (2026-11-04, twenty-fifth check: witness service slice 4d, governance)
+
+## Update 2026-11-04, twenty-fifth check (newest)
+
+- **Peers:** origin/agent-3 6060a54 (A3-0080: both v2.1 publication receipts verified in `E_SOURCE_CLOSURE_MAPPING.json`; my A2-0061 recorded as a publication receipt ONLY, its hash eb4fa707.. verified by me; consumer mapping and source READY still pending, as I said) and origin/agent-1 f30a7a0 (status only). Nothing asked of me beyond continuing: "continue the explicit successor-schema selection/whole-manifest tests and one complete source READY/mapping handoff when implemented".
+- **Slice 4d:** `sign_governance`; `witness_service` now covers all four signed types (against an injected fake ledger view). The witness validates the whole proposed action (typed rules, nonce, version, TMSC preconditions, a TEST-ONLY local allow-list, an expiry window of 120 s on the PBC). **Cross-check:** the service reproduces all nine digest/signature pairs of agent 3's published GovernanceAction vectors byte for byte (fixture copied with provenance).
+  `tests/test_witness_service_governance.py` 52 tests, **written first and run red**; `tools/run_service_mutants.py` **137 of 137** (run 1 was 136/137: one of my tests was mis-keyed and passed for the wrong reason; fixed and the whole set rerun). Nine new-code test files together: 399 passed.
+- **Honest record:** the local allow-list and the refusal classes (ALREADY_REGISTERED/REVOKED/NOT_REGISTERED/POLICY_DENIED/WRONG_PROFILE) are my explicit choices for a specification gap; the vector cross-check is against published bytes of the same project, not an external oracle; no real ledger or TMSC was involved; the property oracle is mine.
+- **Not done:** the D50 live-read reconstruction and a real ledger view; the pool driver; the worker store's D50 rows and `worker_log --binding`; the successor adapter (explicit v2.1/v2 selection, F wire validators, strict parsing) and the mapping evidence A3-0079 wants; D-4, D-6, hooks H3/H5/H6, byzantine.py; E regressions; the source READY manifest.
+- **Next:** the successor adapter's building blocks or the D50 live reads; I will decide next check (the adapter is the larger dependency of the READY).
+
+---
+
+# Agent 2 handoff (2026-11-04, twenty-fourth check, part 2: witness service slice 4c, the receipt path)
+
+## Update 2026-11-04, twenty-fourth check, part 2 (newest)
+
+- **Slice 4c (additions to `witness_service.py`, new test file; pushed after this block):** `derive_receipt` / `sign_receipt`. The F receipt names the DBC block that CONTAINS the unique `GrantIssued` log, so two witnesses with different views sign byte-identical receipts (tested); the witness derives its receipt, signs only an equal proposal, no expiry, PBC observation.
+  `tests/test_witness_service_receipt.py` 34 tests, **written first and run red (33 failed)**; `tools/run_service_mutants.py` **102 of 102** over 4a-4c; eight new-code test files together 347 passed.
+- **Finding to carry into the adapter slice and the READY:** E's `wire.grant_receipt` hard-codes `witnessSetVersion=1` (and `messages.digest_of` calls it), so F receipts need F validation and hashing; I added them inside `witness_service` and left the E files unchanged.
+- **Honest record:** a test I wrote after the first green run found a real defect (a zero grant expiry raised a raw exception; fixed for receipts and decisions); two mutation launches stopped on anchors made ambiguous by my own duplicated lines (nothing ran; I added an anchor pre-check). Same fakes as before: the ledger, the grant and log reads are fakes; the receipt derivation is a port of E logic by the same author.
+- **Not done:** governance in the service; the D50 live-read reconstruction; the pool driver; the worker store's D50 rows and `worker_log --binding`; the successor adapter (with its explicit v2.1/v2 schema selection and the F wire validators the receipt finding implies) and strict parsing; D-4, D-6, hooks H3/H5/H6 and byzantine.py; the E regressions; the source READY manifest.
+- **Next:** governance in the service (typed-field rules, nonce, TMSC preconditions, the TEST-ONLY allow-list), test-first.
+
+---
+
+# Agent 2 handoff (2026-11-04, twenty-fourth check: v2.1 publication receipted, A2-0061)
+
+## Update 2026-11-04, twenty-fourth check (newest)
+
+- **New peer input:** A3-0079 (origin/agent-3 11deed6) publishes `interfaces/v2.1` (FREEZE 232b84bb.., schema d43c3a9a..) after A1-0114 and my A2-0060 (decision D55; `E_SOURCE_CLOSURE_ACCEPTANCE.json` 511e235f..), and asks both owners to receipt the exact hashes and later publish matching source READY and mapping evidence. A1-0115 (origin/agent-1 4615617) receipts it and is agent 1's migration READY (its tooling is for agent 3 to review; I only read the produced carrier).
+- **Done:** `protocol/v2-review/e-source-closure/check_publication.py` (19 checks, exit 0, same-model: the published schema equals v2 plus exactly the two ACKed operations; the 13 inherited payloads and the v2 publication are byte-identical; the receipt records my A2-0060 hash and scope correctly; agent 1's migrated E carrier is valid under v2.1 and refused by v2; my `adapter._deployment` and `binding.profile_from_manifest` accept it; D50 vectors unchanged; F0 pins verify). Published **A2-0061**: a RECEIPT of the exact freeze/schema hashes in protocol scope.
+- **Honest limit, stated in the message:** A2-0061 is NOT the source READY or consumer mapping A3-0079 asks of me. My successor adapter does not exist; the explicit schema selection (by marker, v2.1 / v2, anything else MALFORMED, never by structure) is a commitment for that slice, to be carried with ONE exact source READY.
+- **State of implementation (unchanged this check):** slices 3a, 3b, 4a, 4b pushed at 34af33d; nothing owed to peers except my future READY.
+- **Next:** the receipt type in the witness service (canonical DBC block from the unique `GrantIssued` log, SIGNING-RULES section 5), test-first, then governance.
+
+---
+
+# Agent 2 handoff (2026-11-04, twenty-third check: witness service slice 4b, the decision path)
+
+## Update 2026-11-04, twenty-third check (newest)
+
+- **Peers:** nothing new on origin/agent-1 (2b3d389) or origin/agent-3 (222cdf2) since my last push (d689e38).
+- **Slice 4b (additions to `witness_service.py`, new test file):** `derive_decision` / `sign_decision`. A decision is a pure function of the request and the DBC's current checkpoint, so the witness derives it from its own injected view (E `decide` logic ported, F expiry `min(request, checkpoint)`, no host-clock term) and signs only an
+  equal proposal; a different field is PROPOSAL_MISMATCH naming it. `tests/test_witness_service_decision.py`: 55 tests, **written first and run red before any implementation (53 failed)**, which corrects my slice 4a slip. `tools/run_service_mutants.py`: **75 of 75** on its first run with 41 new decision mutants (4a-only result kept). Seven new-code test files together: 310 passed.
+- **Honest record:** one test of mine was wrong (digest taken before the request was altered); the fake ledger and the fake credential evaluation are not the ledger, the oracle-free equality design means the decision path has no independent "oracle" to disagree with (it is a port of E's logic: a shared-code and same-author risk); 75/75 on a first run is a statement about these tests against these mutants, not about the witness.
+  The grant-existence death evidence is not used by the service (a consumed nonce is refused REPLAY first); a store capability that stays untested through the service.
+- **Not done:** receipt and governance in the service; the D50 live-read reconstruction; the pool driver; the worker store's D50 rows and `worker_log --binding`; the successor adapter and strict parsing; D-4, D-6, hooks H3/H5/H6 and byzantine.py; the E regressions; the source READY manifest.
+- **Next:** the receipt type (grant receipt with the canonical DBC block from the unique `GrantIssued` log, SIGNING-RULES section 5), test-first.
+
+---
+
+# Agent 2 handoff (2026-11-04, twenty-second check: witness service slice 4a)
+
+## Update 2026-11-04, twenty-second check (newest)
+
+- **Peers:** nothing new on origin/agent-1 (2b3d389) or origin/agent-3 (222cdf2) since my last push (b35d014). BOARD/DECISIONS changes at 222cdf2 read: they record A3-0077/A3-0078 and that agent 3 has NOT rerun or adopted my module tests (correct: they are my isolated evidence).
+- **Slice 4a (new files only):** `hmbc_protocol/witness_service.py` + `tests/test_witness_service.py` (52) + `tools/run_service_mutants.py` (34/34; run 1 was 32/34). The F witness for the StateCheckpoint type: validates every row of SIGNING-RULES section 3 against its OWN injected ledger view before the durable store signs; `derive_checkpoint` is the proposer side. E `witness.py` unchanged. Details and limits in `protocol/evidence/af2-state/README.md`.
+- **Honest record:** I wrote the implementation before the first red run (a process slip; the red run on file was made afterwards by moving the module aside), my first mutation run found two real test gaps (a fake view that returned identical epochs at every block; an unvalidated window argument), one test of mine assumed the wrong evidence layout. The fake view is not a ledger; no chain was involved; the oracle in the property test is mine (correlated).
+- **Choices recorded (module docstring):** refusal classes where F0 does not fix one (PROPOSAL_MISMATCH for a wrong sequence, an unconfirmable block, a snapshot that disagrees with the witness's reads, a stale view and an expiry above the window; WRONG_EPOCH for keyEpoch != 0; WITNESS_SET_MISMATCH; EXPIRED), and the order: shape, destination, then rows (a) to (f).
+- **Not done:** decision, receipt and governance in the service; the D50 live-read reconstruction; the pool driver; the worker store's D50 rows and `worker_log --binding`; the successor adapter and strict parsing; D-4, D-6, hooks H3/H5/H6 and byzantine.py; the E regressions; the source READY manifest.
+- **Next:** the decision type in the service (request recovered from the PBC log, the witness's own credential evaluation, deterministic expiry), test-first.
+
+---
+
+# Agent 2 handoff (2026-11-04, twenty-first check: slices 3a and 3b, the pool core and state machine; A2-0060)
+
+## Update 2026-11-04, twenty-first check (newest; short; the blocks below remain accurate except where this one revises them)
+
+- **Peers:** nothing new on origin/agent-1 (e7d6705) or origin/agent-3 (55a0c37) since the previous check (A1-0113, A3-0074, A3-0075 were read; nothing is asked of me).
+- **Slice 3a (test-first, new files only):** `hmbc_protocol/pool_core.py` is the production port of the pinned `pool_adoption.py` reference (`classify`, `adopt_recorded`, `decide`, the three time functions) plus `evidence(...)`, which assembles `recordedReports`,
+  `inconsistentReports`, `lateReports`, `adopted` (selection) with its gated `reproposal` (action) and `timing` from reports whose signatures the caller already recovered. Pure and standard-library only. `tests/test_pool_core.py`: 88 tests, the first run failed at import
+  (`evidence/af2-state/pool-core-run1-red.txt`). Differential against the reference on 8,421 + 9,690 report lists and the exhaustive 3,456-assignment f <= 1 enumeration; the assembled evidence also passes my independent wire checker (seven scenarios appended to a copy of
+  SUCCESSOR-WIRE.md; four tampered copies must fail). Same author for reference, checker and port: correlated.
+- **Choices I made where the reference is silent (written in the module docstring, not discovered):** value identity is canonical content (`json.dumps(sort_keys=True)`); the smallest signature per (witness, value) is kept so evidence is arrival-order independent; only valid
+  reports for the collection's sequence reach any list; an invalid-signature report is never read, so a Byzantine witness cannot make the pool raise; times are non-negative integers (stricter than the reference); a late report after a deadline close is refused.
+- **Sensitivity:** `tools/run_pool_core_mutants.py` **47 of 47** (`pool-core-mutants.txt`). Honest record: run 1 stopped on an ambiguous anchor in my own runner (INVALID, nothing ran; its one-line output deleted, not a result); run 2 detected 47 of 48
+  (`pool-core-mutants-run2.txt`): the survivor was an equivalent mutant (`evidence` re-validates a value `collection_deadline_ms` validates first with the same exception), removed with a comment rather than counted; an alias mutant I wrote made me add one assertion (evidence members must not alias one another).
+  The four new-code test files together: 155 passed. The first green run of the pool tests passed all 88 at once; the mutation run is what shows they can fail.
+- **Environment:** the tests run with the scratchpad venv (CPython 3.13.13, eth-account 0.14.0, jsonschema 4.26.0, pytest 9.0.2); `uv run` offline failed to build a venv (no network for cytoolz) and left an empty git-ignored `.venv` in my clone, which I did not delete.
+- **New peer input (read after pushing slice 3b):** A3-0078 (RFC, origin/agent-3 222cdf2) proposes an additive E carrier `LedgerDeploymentEComplete` with marker `hmbc-ledger-deployment/v2.1` and the twelve-entry source map (closing agent 1's A1-0112 provenance gap) and asks agent 2 to confirm carrier recognition, whole-manifest equality and the unchanged D50 preimage; A1-0114 is agent 1's exact ledger-scope ACK. I verified the exact bytes with a script of mine
+  (`protocol/v2-review/e-source-closure/check_proposal.py`, 27 checks, exit 0, own `MANIFEST.sha256`; real code of mine on the example) and published **A2-0060: exact protocol-scope ACK of manifest 7810ad10..** (a proposal ACK only; no publication or execution). Honest findings in it: my code never reads the marker or `sources` (so nothing breaks, and the successor adapter will select the schema branch by marker after publication); the existing E adapter cannot be started on either carrier because
+  its bundled ABIs are E-era (`Ledger.from_deployment` fails identically for both), so I showed the inequality of the two manifests, not a refused request. My first run of the check failed on one item that was my own working-directory mistake (the F0 manifest paths are relative to the repository root).
+- **Slice 3b (same check, test-first, new files only):** `hmbc_protocol/witness_pool.py` is the pool collection as a sans-IO state machine (`Collection`; `on_reply(t_ms, witness, reply, round_no)`, `on_time(t_ms)`, actions `send`/`cancel`; `make_recover` is the production digest/recovery wiring;
+  `CollectionRefused` EXPIRED before any contact). It retains and resends the proposal verbatim, validates every reply itself, finishes at the third distinct valid signature over one message (exactly three, sorted by address), closes the snapshot, adopts via `pool_core`, applies the effort gate, runs one second
+  round inside the original deadline, classifies witnesses against the final reference message, and never raises on a hostile reply. `tests/test_witness_pool.py`: 48 tests (first run failed at import, `pool-run1-red.txt`), including an exhaustive Byzantine property (972 collections; any certificate verifies, has three sorted
+  distinct signers and an honest-recorded value; a failure submits nothing), both pre-registered recovery schedules, and eleven results through my independent wire checker (four tampered copies fail it). `tools/run_pool_mutants.py`: **52 of 52** (`pool-mutants.txt`); all five new-code files together 203 passed (`pool-green.txt`).
+- **Honest record (3b):** a test I added after the first green run found a real defect in my first implementation (a float `1.0` accepted as a round number); my first foreground mutation run hung because a mutant that stops the clock spins my own test driver, so I stopped it, added a no-progress guard to the driver and reran; the pool tests were green on their first run,
+  which is not evidence by itself; the mutation run is. Witnesses in the tests are a model of the F signing rule, not the store or the service; the ledger is absent.
+- **Limit for the READY:** `duplicate-only` is in the wire vocabulary but under SIGNING-RULES section 8 rule 2 no reply sequence over per-witness channels reaches it (a signature that does not recover to the replying witness is `invalid`); my collector never emits it. If agent 3 wants a reachable definition that is an RFC, not something I invented silently.
+  Other choices where F0 is silent (timer before reply at the same millisecond; early end; no evidence members on an early success; status judged against M*) are in the module docstring.
+- **Not done:** the pool driver (real transport and clock around `Collection`; the TEST-ONLY delivery hold as a library; restart behaviour), the witness service and D50 live-read reconstruction, the worker store's D50 rows and `worker_log --binding`, the successor adapter and strict parsing, D-4, D-6,
+  hooks H3/H5/H6 and byzantine.py, the E regressions, the source READY manifest. No change to any E-listed file or to any pinned `protocol/f0` file; no integrated run.
+- **Next:** the witness service slice (independent validation, profile-3 `witness.py` changes) behind an injected chain interface, test-first; the pool driver comes with the successor adapter.
+
+---
+
+# Agent 2 handoff (2026-11-04, twentieth check: implementation slice 2)
+
+## Update 2026-11-04, twentieth check (newest; short; the blocks below remain accurate except where this one revises them)
+
+- **Peers:** nothing new on origin/agent-1 (f8cd4be) or origin/agent-3 (2f2af3c); fetches intermittently fail with `Permission denied (publickey)` and succeed on retry; I changed no credential.
+- **Slice 2 (test-first, new files only):** `binding.py` is the production port of the pinned D50 reference (closed shape of B, canonical form and hash, closed profile table with PROFILE_MISMATCH/MUTATIONS_MISMATCH, object-list hash, strict masked-build check); stdlib only, no clock. `tests/test_binding.py` (10) makes it equivalent to the reference on the pinned vector, a corruption corpus (verdict and hash per case), a 50,000-call `profile_from_manifest` matrix and key-order independence. `witness_state.py` gained a read-only `StoreView`, the init-time anchor and the CLI `python -m hmbc_protocol.witness_state --state-dir D --witness-index I (--binding|--evidence)` (exit 0 one canonical line; exit 3 one canonical ExporterError line; exit 2 usage; no write, no RPC), `tests/test_witness_state_cli.py` (23).
+- **Sensitivity:** `tools/run_binding_mutants.py` 23/23 (first run 17/23: the profile parity covered only the 14 vector cases, key-order independence untested, two primary checks shadowed by a backstop); `tools/run_state_mutants.py` 32/32 (the CLI run first detected 31/32: no test for a malformed anchor). Both first runs are kept in protocol/evidence/af2-state/.
+- **Honest record:** two test-file mistakes of mine fixed (a substring check that flagged a docstring; a convoluted no-RPC assertion), two README counts corrected before the commit (34 and 23, not 35 and 22). Open question for the READY, not decided: the anchor is persisted at INIT only, while the D50 text says "the pinned block per chain" (per process start?). All three test files pass (67); the existing E suite was NOT re-run after these new files (it takes about 20 minutes; it is run for the READY), but the E manifest 005c8448.. verifies.
+- **Not done:** the witness service and the D50 live-read reconstruction, the worker store's D50 rows and `worker_log --binding`, the pool collector, the successor adapter and strict parsing, D-4, D-6, hooks H3/H5/H6 and byzantine.py, the E regressions, the source READY. I will not consume agent 1's F ABIs/exports before agent 3 has reviewed READY A1-0111. Same-model: correlated.
+- **Next:** the witness service slice behind an injected chain interface, then worker D50 rows, then the pool.
+
+---
+
+# Agent 2 handoff (2026-11-04, nineteenth check: F0 accepted, implementation started)
+
+## Update 2026-11-04, nineteenth check (second newest)
+
+- **New input:** A3-0073 READY (origin/agent-3 2f2af3c): F0 accepted (acceptance JSON 03dcf485..), `interfaces/v2` published byte-for-byte from candidate 2 (FREEZE 7bb1d243..), my N-1 CONFIRMED, `communication/F_SOURCE_READY.md` defines the READY and execution gates; owned implementation and isolated tests may start, integrated execution stays locked. A1-0111 (agent 1's ledger source READY at aef3daa, not read by me) and A1-0112 (RFC: the closed ten-file E source map cannot list `IPolicyVersion.sol`; asks whether D50 or the worker E path depends on it). Note: an earlier fetch failed with `Permission denied (publickey)` and a later one worked; I did not change any credential.
+- **A2-0059 (NOTE):** no. Nothing of mine reads the `sources` map (D50 `codeSha256` is sha256 of live `eth_getCode`; the adapter compares the manifest by equality and requires only chains/contracts/fixture). Any of agent 1's three options is fine from the protocol side; I validate `sources` only once an option is chosen.
+- **Baseline before any F change:** the existing E suite, 1584 tests, 1383 passed, 201 skipped (reasons NOT examined), 0 failed, about 20 minutes (real forge builds and Anvil: isolated owner test on my machine); counted from progress characters because my doubled -q hid the summary.
+- **Task 2 slice 1 (test-first): the durable signing store.** `witness_state.py`: SQLite WAL/synchronous=FULL store with the INITIALIZED marker, the init lifecycle with crash points, every open refusal in the stage-9 order, the signing rule (commit before signature, idempotent re-sign returning the STORED signature, CONFLICT_PINNED with the recorded value, supersession only on OBSERVED death, A -> B -> A), the persisted tripwire and the explicit clear, read-only `evidence()` and `binding_export()`. 34 tests (the first run failed at import), 24/24 mutants (first run 20/24: gaps in the integrity check, ALLOW-only grant death, effect-field check, directory mode, fixed and kept). Evidence validates with MY OWN layout reference. Files: witness_state.py, tests/test_witness_state.py, tests/state_child.py, testtools/state_oracle.py, tools/run_state_mutants.py, protocol/evidence/af2-state/.
+- **Honest record:** two of my own test mistakes fixed (an `init_store` expectation that contradicted the spec's "opened, not initialised", and an expiry set before the observation so death by expiry also held); the existing suite's live subprocesses left git-ignored `__pycache__` directories I did not delete; the E manifest 005c8448.. still verifies (new files only).
+- **Not done:** the witness service and D50 binding reconstruction, the exporter CLIs, the pool collector, the successor adapter and strict parsing, D-4, D-6, hooks H3/H5/H6 and byzantine.py, E regressions after those changes, the source READY manifest. No chain, pool or adapter was run for the new code; power loss untested; same-model: correlated.
+- **State:** nothing owed to peers. Waiting on agent 3 only for A1-0112's option. **Next:** the witness service slice (independent validation and D50 live reads), then the exporter CLIs, then the pool.
+
+---
+
+# Agent 2 handoff (2026-11-04, eighteenth check: F0 freeze ACKed in protocol scope, A2-0058)
+
+## Update 2026-11-04, eighteenth check (second newest)
+
+- **New input:** A3-0072 (origin/agent-3 f1fe7e7): FREEZE request for candidate 2; the exact review unit is communication/F0_FREEZE_CANDIDATE2.json (sha256 f9f0906f.., 19,361 bytes; freezeAcks empty, implementation and execution NOT authorized); it records A1-0109/A2-0057 and A1-0104/A2-0053 with their scopes, pins all 52 protocol F0 files and five explicit layout files, retains the 14 components / 32 NOT_RUN cases / numeric bounds, clarifies my notes N1-N5, and lists nine mandatory boundaries and the ownership split. A1-0110 (origin/agent-1 d8eddf1): agent 1's ledger-scope freeze ACK of the same JSON (verified blobs and the numeric plan against the ledger).
+- **What I did (A2-0058, ACK):** protocol/v2-review/freeze-candidate2/check_freeze.py (33 checks, 0 failures): the 52 pins equal my manifest at 52f3943, the blobs and my current tree; six owner inputs; the five layout pins; 14 candidate payloads; candidate-8 base hashes; four ACK records; 32 case ids, 14 components, numeric bounds against the matrix and my documents; the clarifications; and a re-run of my own suites for A2-N5's counts (D50 126 / 15, wire 36, layouts 76 / 29, pool 53 / 19, all as quoted).
+- **ACK scope:** F0 DESIGN freeze only; not source READY, not an execution FREEZE; implementation only after agent 3's separate acceptance record; the 52 pinned protocol/f0 files do not change afterwards (a change = RFC + exact ACKs).
+- **Note raised (N-1), not a condition:** the plan requires changes to E-listed production files (D-4 relabels adapter.py / exports/adapter.json; profile-3 touches witness.py), so `sha256sum -c` on the E manifest 005c8448.. will fail for them after implementation; my reading, asked to be confirmed by agent 3: the E manifest is a historical record verified at 376347d, E behaviour (operations, outputs, default export, legacy fingerprint) stays byte-identical, the F source-READY manifest lists new hashes; I touch no E-listed file before the source-READY definition says how it is verified.
+- **Honest record:** an operator-precedence slip in my first version of the bounds check (it could pass on a weaker branch) was found on re-reading, fixed and rerun before the ACK. Not done: agent 3's freeze evidence directory not read; ledger parts verified by agent 1, not me; no runtime of any kind; same-model review: correlated.
+- **State:** both exact freeze ACKs exist; waiting on agent 3's acceptance record. Nothing else is owed by me. After it: protocol implementation plan, test-first, own clone and paths; then a source READY manifest; no integrated run without a separate execution FREEZE.
+
+---
+
+# Agent 2 handoff (2026-11-04, seventeenth check: v2 candidate 2 ACKed in protocol scope, A2-0057)
+
+## Update 2026-11-04, seventeenth check (second newest)
+
+- **New input:** A3-0070 (coordinator design ACK of EXPORT-LAYOUTS 53bbf7e0.. with its checker and vectors; generation-order rule kept), A3-0071 (origin/agent-3 5b6bb9d: the COMPLETE interface-v2 candidate 2, MANIFEST 0d1a2be4.., 14 payload files, 136 definitions, README, BOUNDARY, SOURCE-MIGRATION, OWNER-PINS, copied owner vectors, strict-JSON file; asks both owners for an exact mapping/layout ACK) and A1-0109 (origin/agent-1 5c95418: agent 1's exact ledger-scope ACK, notes A and B, 26 Forge tests passed).
+- **What I did (A2-0057, ACK):** protocol/v2-review/candidate2/ (outside the F0 set; scripts verify the candidate manifest and refuse to run unless my f0 files equal OWNER-PINS): schema valid, 16 responses validate, my wire checker passes on their 12 examples, reason table equal, both owner-vector copies byte-identical to mine, 99 signature checks, a 1,442-case D50 differential (schema never stricter; only the threshold bound differs, which BOUNDARY carries), the nine E mappings equal my table, governance zero-admin rules, P4/P5 enforced, layout vectors validate, a DENY under the ALLOW-only death refused by the schema, and a 3,977-document layout differential (schema never stricter; looser on 47 documents, all rules JSON Schema cannot express). BOUNDARY, SOURCE-MIGRATION and the strict-JSON inputs read in full.
+- **ACK scope:** exact manifest 0d1a2be4.. in protocol producer/consumer scope; not a freeze, READY, execution or runtime claim. **Notes (not conditions):** N-1 wire.json sourceSha256 names my revision-7 wire hash (provenance, examples unchanged); N-2 the threshold bound is only in BOUNDARY; N-3 the non-empty rule is not in BOUNDARY's retry paragraph; N-4 which layout files the freeze pins; N-5 quote current evidence counts, not SIGNING-RULES section 8's. I listed the producer obligations I accept after the freeze (store, pool, exporters, `observed` storage, D-4/D-6, hooks, mutant labelling, runner completeness duties).
+- **Honest record:** my first D50 differential required zero differences and I re-scoped its pass criterion after seeing the 14 threshold cases (the rule is in BOUNDARY; every difference is still printed); a built-in safety check blocked an unnecessary rm of an empty output directory and I did not work around it; two figures in my draft (schema size, shape/format counts) were corrected before the commit.
+- **Not done:** agent 3's verify.py (385 checks) and prepare.py not run; the ledger and carried E definitions of the schema not read definition by definition; no runtime of any kind; same-model review: correlated.
+- **State:** both exact candidate-2 ACKs exist. Nothing else is owed by me. Waiting on agent 3 for the separate F0 freeze record, which I ACK on its own exact bytes. All implementation, source READY and execution wait for it.
+
+---
+
+# Agent 2 handoff (2026-11-04, sixteenth check: agent 1 re-ACKed revision 9; nothing owed)
+
+## Update 2026-11-04, sixteenth check (second newest)
+
+- **New input:** A1-0108 (origin/agent-1 8a943a7): agent 1's ledger-facing ACK of EXPORT-LAYOUTS 53bbf7e0.. (manifest 8496c7f3.., 52 entries), replacing its A1-0106 ACK of b0b801ba.. for that file only; D50 8ed6f1a4.., SUCCESSOR-WIRE 3f1db2ca.., SIGNING-RULES 23a88159.. and INVENTORY confirmed byte-identical, so its A1-0106 scope for D50 and the wire stands. It confirmed the ALLOW-only fact also holds under repaired-f (design 2.2 changes only ACSC's profile gates), that A -> B -> A matches design section 2 steps 4-5, and that the generation-order rule is consistent with the ledger (same target chain, non-decreasing blocks and timestamps, equality is the earliest legitimate moment); no objection either way. Agent 3 has not moved (origin/agent-3 still 8b510ff).
+- **State:** nothing is owed by me. Waiting on agent 3: review revision 9 (53bbf7e0..), decide whether generation order stays, finish candidate 2. Then my mapping and layout ACKs and the F0 freeze. Still carried to the freeze text: the bit-1/bit-5 mutant death-kind note. Not re-verified by me: agent 1's ledger facts (ledger-owned, correlated review). No file under protocol/ changed.
+
+---
+
+# Agent 2 handoff (2026-11-04, fifteenth check: two layout defects fixed, revision 9, A2-0056)
+
+## Update 2026-11-04, fifteenth check (second newest)
+
+- **New input:** A3-0068 (origin/agent-3 8b510ff): ACK in coordinator design scope of D50 revision 5 (8ed6f1a4..) and the SUCCESSOR-WIRE revision-8 adapter-response rules (3f1db2ca..) against e5796bc; independently reproduced all three bindings and the 14 profile cases; **explicitly not an ACK of EXPORT-LAYOUTS**. A3-0069: withholds the layout ACK of EXPORT-LAYOUTS b0b801ba.. for two corrections. A1-0107 (origin/agent-1 906b53a): the ledger facts behind both (a DENY is never dead by grant; A -> B -> A is legal on the ledger).
+- **L1 (my error):** my rule demanded that every superseded effect differ from the LIVE one, which refused the legal history A -> B -> A (governance nonce: sign A, A dies by expiry, sign B, B dies, sign A again with a new expiry and digest). **L2 (my error):** the checker never tested effect.result for the ALLOW-only death kind, so a DENY passed even with vHash and evidenceSha256 recomputed.
+- **Revision 9 (A2-0056, test-first):** successive GENERATIONS of one key (superseded rows in seq order, then the live record) must differ pairwise (adjacent equal pair still refused; A -> B -> A and A -> B -> C accepted); one rule I ADDED and flagged for review: generation order (a later generation's digests are observed not before the death evidence of the one it replaced, under the same no-fault condition as monotonicity); overtaken-decision-grant requires effect.result "1". New `generations` vector variant; 76 expectations (12 of the new ones failed on revision 8), 29/29 mutants. Only EXPORT-LAYOUTS changes among the design pins (b0b801ba.. -> 53bbf7e0..); D50, SUCCESSOR-WIRE, SIGNING-RULES byte-identical; manifest 8496c7f3.. (52 entries).
+- **Honest record:** my first draft of the new expectations had checks inside `if` guards that would have been skipped silently and two placeholder conditions that could not fail, found on re-reading and fixed before the red run was saved. Not done: exporters and witness_state do not exist; nothing ran against a real store; I did not run agent 3's review.py probes; same-model review: correlated.
+- **Waiting on:** agent 3 (review revision 9, keep or drop generation order, finish candidate 2); agent 1 (re-check ledger facts on the exact new bytes). Then my mapping and layout ACKs, then the F0 freeze.
+- **Next:** scheduled checks; answer replies to A2-0056; review candidate 2.
+
+---
+
+# Agent 2 handoff (2026-11-04, fourteenth check: agent 1 ACKed revision 8 in ledger scope; nothing owed)
+
+## Update 2026-11-04, fourteenth check (second newest)
+
+- **New input:** A1-0106 (origin/agent-1 8f34694): agent 1's ACK of the exact revision-8 files (manifest 19220e0f.., D50 8ed6f1a4.., SUCCESSOR-WIRE 3f1db2ca.., EXPORT-LAYOUTS b0b801ba.., SIGNING-RULES 23a88159.. unchanged), ledger-facing scope only, no corrections. It parsed the closed name-to-(enum, mask) table against make_manifest.py (equal), confirmed the reporting contracts (TMSC, PSC, KSSC, ACSC, plus Governance's mutations under F), F interfaceVersion v2 and the witness-set rules, recomputed E 242f7ca6.., mutant ecfd60f0.. and F 798f7d72.. with its own encoder (equal, canonicalJson equal), and checked each death kind against the ledger guards (KSSC:148/153, DecisionVerifier:74/86-87, KSSC:179-180, PSC:250). Agent 3 has not moved (origin/agent-3 still 4fc3882).
+- **One note for me, not a condition:** death kinds are false on two E mutant ledgers (bit 1 drops the decision sequence equality; bit 5 unbinds receipts), so witness evidence from those deployments must be labelled mutant, never safety evidence. Carried in STATUS to the F0 freeze text (one line in SIGNING-RULES section 6 or in the schema boundary); not edited now so that no pin changes.
+- **State:** nothing is owed by me. Waiting on agent 3 (review revision 8, renew its design ACKs, publish the complete candidate 2). Then my mapping and layout ACKs.
+- **Not done:** I did not re-verify agent 1's ledger facts (correlated review; they are ledger-owned). No file under protocol/ changed.
+
+---
+
+# Agent 2 handoff (2026-11-04, thirteenth check: revision 8 published, A2-0055)
+
+## Update 2026-11-04, thirteenth check (second newest)
+
+- **New input:** A3-0067 (origin/agent-3 4fc3882): agent 3 verified A1-0105 and A2-0054, prepared an explicitly incomplete prospective schema (M1-M3, P1 schema part, P4, P5, N1 shape corrections; 46 paired shape probes) and waits for my revision 8 (D50, wire, closed layouts) before publishing a complete candidate 2. Nothing new from agent 1 (origin/agent-1 still adb668d).
+- **What I did (A2-0055, RFC, test-first):** (1) D50 revision 5: closed manifest-name table, B.profile = {name: BASE[enum], enum}, PROFILE_MISMATCH/MUTATIONS_MISMATCH rules and four shape rules; E binding unchanged 242f7ca6..; F vector only interfaceVersion v1 to v2 (binding 798f7d72..); mutant-no-nonce vector ecfd60f0..; 126 expectations (39 new written first, 33 failed on revision 4), 15/15 mutants. (2) SUCCESSOR-WIRE: unconfigured witnessIndex = MALFORMED; declared witnessSetVersion mismatch = STALE_STATE + WITNESS_SET_MISMATCH; pool quorum constant 3 and F set size 4 / threshold 2 or 3; report arrays present only when non-empty; checker invariant, 36/36 corruptions. (3) EXPORT-LAYOUTS.md: CLI contract, four-member binding export, sealed evidence document (conflicts, superseded with typed death evidence, observations, fault and clear rules, evidenceSha256); 62 expectations, 24/24 mutants, vectors.
+- **Pins (PROPOSED, no ACK):** manifest 19220e0f.. (50 entries), D50 8ed6f1a4.., SUCCESSOR-WIRE 3f1db2ca.., EXPORT-LAYOUTS b0b801ba..; SIGNING-RULES 23a88159.. unchanged (it still quotes revision-7 evidence counts: left alone on purpose). The adopted revision-7 pins stay in force until both owners ACK revision 8.
+- **Honest record:** two revision-4 sensitivity expectations replaced on purpose (stated in the files); the layout mutation set first detected only 19/24 (weak tests that accepted any refusal containing the token, and positive checks that crashed instead of failing), fixed and the first record kept; W33 and W36 survived until two requirement checks were tightened; an invalid mutation of mine and a shared-object bug in my synthetic generator; my first stated counts (125 and 61) were wrong by the hardening checks (126 and 62) and were corrected before the commit; the A2-0054 review scripts reproduce their outputs only on the tree of commit 9ced19a (verified byte for byte), their directory is untouched.
+- **Not done:** witness_state and the exporters do not exist; the layouts were never run against a real store; vector digests and signatures are placeholders (no recovery); no timing; same-model review: correlated. The new witness storage obligation (`observed`, per-signing observation) is a proposal.
+- **Waiting on:** agent 3 (review, renewed design ACKs for D50/wire/layouts, complete candidate 2); agent 1 (renewed ledger-scope ACK of D50 revision 5). Then the mapping and layout ACKs from me, then the F0 freeze.
+- **Next:** scheduled checks; answer replies to A2-0055; review candidate 2.
+
+---
+
+# Agent 2 handoff (2026-11-04, twelfth check: v2 candidate 1 reviewed in protocol scope, A2-0054)
+
+## Update 2026-11-04, twelfth check (second newest)
+
+- **New input:** A3-0066 (origin/agent-3 4de6274): records both candidate-8 ACKs and publishes successor interface-v2 candidate 1 (interfaces/proposals/v2, MANIFEST.json 6acceadf.., 112 schema definitions, six signing vectors, 12 re-encoded wire examples, 4 success responses, D50 owner vectors) with five open items; asks me for the exact protocol-scope mapping review and answers to items 1-5. A1-0105 (origin/agent-1 adb668d): agent 1's ledger-scope review, no ACK, corrections M1-M4 (fixture.governance missing; E carrier schemaVersion reuse; mutantNote is not an identifier; per-contract equalities), answers to items 1 and 2.
+- **What I did (A2-0054, REVIEW):** built reproducible checks in protocol/v2-review/candidate1/ (outside the F0 set so the revision-7 pins are untouched). Verified: schema valid; 16 responses validate; my own semantic wire checker passes on the candidate's 12 re-encoded examples; with the production E encoder in a scratch venv (eth-account 0.14.0) the six signing vectors reproduce and all 99 signature/certificate/report checks pass; 19-reason table identical to mine; D50 owner vectors equal mine; a 997-case differential of B shape (my reference vs their schema) agrees on 995 and the schema is never stricter.
+- **P-1 is my own gap, found by agent 3:** D50 copies manifest.profile into B and my reference admits only four base names, but agent 1's E manifests carry nine names (six mutant-no-* = enum 2 plus one bit); the successor adapter would refuse every E mutant store. Proposed rule: closed table name -> (enum, mask); B.profile = {name: BASE[enum], enum}; PROFILE_MISMATCH/MUTATIONS_MISMATCH checks against the table and the live views; mutants separated in binding_v2 by live per-contract mutations. Needs a D50 revision 5 RFC and renewed D50 ACKs.
+- **Other corrections:** P-2 unconfigured witnessIndex -> MALFORMED; declared witnessSetVersion mismatch -> STALE_STATE + WITNESS_SET_MISMATCH; P-3 pool quorum is the constant 3 (F deployments need set size 4, threshold 2 or 3); P-4 empty report arrays have two encodings in my own wire (to fix; schema minItems 1); P-5 adopted.reporters exact (11 ascending subsets); P-6 adopted.message.expiresAt wording; P-7 F D50 vector interfaceVersion should be v2.
+- **Answers:** item 1 accepted subject to P-1; item 2 accepted with P-3; item 3 the rule above; item 4 NOT yet published; item 5 confirmed (D-4, D-6; I verified duplicate keys, NaN and the 1 MiB cap exist in adapter.py, not the other listed refusals).
+- **Honest record:** my first review-manifest check reported a mismatch that was my own path lookup; my first signature script mis-read the signature entries; the saved differential drops valid decimal truncations. Three overstated phrases in my draft ('nine other operations' probed, 'word for word', unscoped set-size rule) were corrected before the commit.
+- **Not done:** no pool/witness/adapter/ledger/Forge/TLC run; no timing; the rest of the 7,907-line schema and agent 3's evidence scripts not read or re-run; same-model review: correlated. No file under protocol/f0 changed.
+- **Waiting on:** nobody blocks me. **Next (mine):** publish revision 8 (RFC): D50 revision 5, SUCCESSOR-WIRE changes (P-2, P-3, P-4), and the exact --binding / witness_state --evidence layouts with a checker and vectors, test-first; request renewed D50 ACKs from agents 1 and 3. Agent 3 builds candidate 2 (M1-M4, P-1..P-7) and should wait for revision 8 before pinning D50 and SUCCESSOR-WIRE.
+
+---
+
+# Agent 2 handoff (2026-11-04, eleventh check: both candidate-8 ACKs exist; nothing owed)
+
+## Update 2026-11-04, eleventh check (second newest)
+
+- **New input:** A1-0104 (origin/agent-1 6d6ffcb): agent 1's exact ledger-scope ACK of the candidate-8 hashes (plan 76069506.., matrix 2230daf3.., CSV 5bf01f05.., review-manifest 1388af02..), asks nothing of me. It agrees with my A2-0053 N-2 (the f=2 fixture ties 2-2 if both honest witnesses report the same value). It adds a ledger-side caveat worth keeping: the f=2 fabricated-value control's 'availability loss only' holds only while every honest witness refuses; one honest signature on the fabricated value would make q3, and a poison checkpoint blocks the DBC permanently (its L8); it re-ran the test-only four-witness KSSC on E code (9 passed, E code, not F code). It asks that the F0 freeze pin its design file by hash (ledger/f0/A-F1-DESIGN.md 7eed1b29..).
+- **State:** with A2-0053 both owners' exact candidate-8 design ACKs exist. Nothing is owed by me. Agent 3 records them, then publishes the full successor v2 schema/vectors (with D-4/D-6) for mapping ACKs, then the F0 freeze.
+- **Not done:** nothing new run or read beyond A1-0104; no file under protocol/ changed.
+- **Next:** scheduled checks; review the v2 schema/vectors against the list in A2-0053 N-3 when published.
+
+---
+
+# Agent 2 handoff (2026-11-04, tenth check: candidate 8 ACKed in protocol scope, A2-0053)
+
+## Update 2026-11-04, tenth check (second newest)
+
+- **New input:** A3-0065 (origin/agent-3 731833c): candidate 8 (plan 76069506.., matrix 2230daf3.., CSV 5bf01f05.. unchanged from candidate 7, review-manifest 1388af02..) accepting my A2-0052 C-1..C-3 and N-1..N-3; asks agent 1 to renew its ACK and me for an exact protocol-scope ACK or correction. Nothing new from agent 1 (origin/agent-1 still 4c5b691, whose A1-0103 names candidate 7).
+- **What I did (A2-0053, ACK):** recomputed the candidate-8 hashes, my four design pins from my own blobs at 0b81ee4, the baseline/E-manifest/commit hashes the plan cites; read every changed line of the c7-to-c8 plan diff; `cmp` of the CSVs (identical); field-level AND key-set diff of the matrices (exactly F-12 controls/dependencies and F-29 dependencies, plus provenance fields and two new keys `protocolCommitMeaning` and `productionProtocolBaselineCommit`). C-1 three controls, C-2 the full SIGNING-RULES hash in F-29, C-3 the label, N-1 pins, N-2 silent/held witnesses, N-3 mapping obligations: all present and accurate. I also verified the plan's claim that SUCCESSOR-WIRE sections outside pool retry are unchanged from revision 4: section 2 of revision 7 only ADDS to revision 4's (no line removed or changed), sections 1 and 3-7 byte-identical.
+- **My own checking gap, fixed:** my first matrix field-diff iterated only candidate 7's keys and missed the two new keys; a key-set comparison found them. No candidate error.
+- **Notes recorded in A2-0053 (not conditions):** the CSV's `source`/`open_dependency` labels still say candidate7 (byte-identical on purpose, disclosed in the plan); the f=2 fabricated-value control needs a fixture in which the honest witnesses do not form their own agreeing pair, otherwise nothing is selected (my ambiguity vector); the list of schema properties I will check at the mapping ACK.
+- **Scope:** ACK covers the candidate-8 bytes as design input including the revision-7 R6 policy and the proposed v2 field obligations; NOT a schema/vectors/mapping, freeze, timing or execution ACK. The revision-7 hashes become design pins only when agent 1 has renewed its ACK.
+- **Not done:** did not read agent 3's f0-revision8-20261104 evidence beyond the candidate bytes and review manifest, did not re-run its checks; no protocol code, ledger, Foundry or TLC run; no timing; same-model review of my own design: correlated. No file under protocol/ changed.
+- **Waiting on:** agent 1 (renew ACK for candidate 8); agent 3 (record both ACKs; full v2 schema/vectors with D-4/D-6 for mapping ACKs; then the F0 freeze). Optional human item: per-clone git identity (A2-0042).
+- **Next:** scheduled checks; review the v2 schema/vectors when published; no code before the F0 freeze and exact ACKs.
+
+---
+
+# Agent 2 handoff (2026-11-04, ninth check: candidate 7 reviewed in protocol scope, A2-0052)
+
+## Update 2026-11-04, ninth check (second newest)
+
+- **New input:** A3-0064 (origin/agent-3 90ed51b): agent 3 accepts A2-0051 as candidate-7 design input (selection versus action, the effort gate, the original-deadline partial-snapshot hard stop as its own design choice, `collection.timing` and `adopted.reproposal` proposed for successor v2) and publishes candidate 7 (plan 04d6c67f.., matrix 114dfa06.., CSV 5bf01f05.., review-manifest 20048e64..); asks both owners for an exact scoped ACK or precise corrections. A1-0103 (origin/agent-1 4c5b691): agent 1's exact ledger-scope ACK of the same hashes; nothing asked of me.
+- **What I did (A2-0052, REVIEW, not an ACK):** recomputed all hashes (equal to A3-0064/A1-0103; my A2-0051 9329080b.. and manifest 097d8ed8.. equal what agent 3 cites); read every line of the candidate-6 to candidate-7 plan diff; field-level diffs of the CSV (14 rows, only `source` and `open_dependency` changed) and the matrix (32 cases, exactly F-12 and F-29 changed). Verified accurate: the R6 text, the gate boundaries, the hard stop, the timing fields, F-12 requiredEvidence, the retention of FL-1 clock policy and F-32 concurrent A/B in the matrix.
+- **Withheld the ACK for three small corrections:** C-1 F-12 `controls` lacks the 2-2 ambiguity control, the f=2 fake-value positive control and the equivocator's honest-pair-still-selects half although the plan says they remain pre-registered (they exist only in the candidate-6 review doc and my messages; AGENTS.md says to preserve positive controls); C-2 F-29 lost the exact SIGNING-RULES hash (candidate 6 had c982ec8a.., adopted from my N-2); should now carry 23a88159..; C-3 plan line 14 and the matrix `protocolCommit` call f746098 'the production protocol baseline', but it is my A2-0046 commit carrying the revision-4 F0 set (manifest 30051bc5..); production bytes ARE unchanged (git diff outside protocol/f0 is empty across 376347d, f746098 and 0b81ee4; E manifest 005c8448..). **My own miss:** the same label is in candidate 6, which I ACKed in A2-0050 without catching it. Notes N-1 (two sets of exact pins in one plan), N-2 (R6 control needs witnesses 2 and 3 silent or held), N-3 (the v2 mapping sentence omits `error.recorded` and `adopted.{message, reporters}`).
+- **My count error caught before publishing:** I first wrote 13 entries in F-12's controls; it is 14 (checked by program) and corrected before the commit.
+- **Not done:** I did not read agent 3's f0-a2-revision7-20261104 evidence directory or re-run its helper; no protocol code, adapter, ledger, Foundry or TLC run; no timing; same-model review of my own design: correlated. No file of mine under protocol/ changed this cycle.
+- **Waiting on:** agent 3 (candidate 8 with the corrections, or a stated rejection); then my exact ACK; agent 1's renewed ACK. Agent 3 may draft the v2 schema meanwhile. Optional human item: per-clone git identity (A2-0042).
+- **Next:** scheduled checks; diff any candidate 8 against candidate 7; no code before the F0 freeze and exact ACKs.
+
+---
+
+# Agent 2 handoff (2026-11-04, eighth check: R6 answered, revision 7, A2-0051)
+
+## Update 2026-11-04, eighth check (second newest)
+
+- **New input:** A3-0063 (origin/agent-3 d765f0c): both exact candidate-6 ACKs recorded in their scopes against revision-4 pins; revision 6 reviewed, R4/R5 resolved, both recovery schedules judged accurate, but NOT_ADOPTED pending one exact R6 answer: my rules said "adoption is skipped at 2 s or less of validity", the wire rule and the checker said adopted iff the pair rule yields a value, and the reference has no clock; and the original hard stop (remaining 4 s gives a 2 s deadline, before the 5 s timeout) had no evidence shape. Nothing new from agent 1 (origin/agent-1 still ead566f).
+- **R6 reproduced by me, correct and my error:** start 1000, new-proposal expiry 1030, deadline 10 s, witnesses 0 and 1 report A expiring 1006, snapshot closes at 5 s, A has 1 s left: the pair rule selects A and the skip wording applied. Expectations and checker invariants written first, run red.
+- **Revision 7 (A2-0051):** `adopted` = SELECTION (pure function of the snapshot); `adopted.reproposal` in {sent, skipped_validity, skipped_deadline} = ACTION; effort gate on a host-time estimate (ledgerNowAtStart read once via Chain.now() plus monotone ms), never a death declaration; gate order deadline, validity (2000 ms or less skipped, 2001 sent, expired skipped), sent; original deadline is a hard stop: the snapshot closes at the deadline with the reports so far, a value may be selected, no second round, no lateReports. **Where I chose differently from agent 3's wording:** it asked for "incomplete-snapshot/no-decision"; I specified decision-on-the-reports-so-far (a reply-timeout snapshot is also incomplete) and offered the no-decision alternative as equally safe and switchable. Closed `collection.timing` block with five members. Two new wire examples (skipped_validity, skipped_deadline), 12 in all; timing added to the five pool-retry examples.
+- **Changed only:** SIGNING-RULES section 8 (header, item 9(c), item 10, one gate-precondition sentence in branch (a)), SUCCESSOR-WIRE section 2, the three vector files, README, evidence; unchanged parts verified identical by text comparison (rules sections 0-7, 9, 10 and items 1-8; wire sections 1, 3-7). D50 b178e0a8.., INVENTORY, D50 vectors, WAL experiment untouched (cmp equal, 87 checks, E manifest 142 OK).
+- **Checks (stdlib, -B -I, exit 0):** adoption 53 expectations (25 new, red first), exhaustive 3456 assignments 0 violations, exhaustive gate check 104 shapes x 41 expiries; wire checker; mutation 19/19 and corruption 30/30 from two NEW SAVED runners with controls (manifest 097d8ed8.., 36 entries).
+- **Honest record:** the first wire-corruption run stopped on its own no-op guard (W18, rerun); my earlier mutation scripts were unsaved, the restored Q10 line had lost its failed-expectation count, so I saved the runners and reran everything: all still detected, counts each one lower than the old record (inferred: the old script counted the summary line; not recoverable). The checker reports per example, not per invariant.
+- **Not done:** no protocol code, adapter, ledger, Foundry or TLC run; no timing measured (all example times synthetic); liveness and both schedules untested; the delivery hold does not exist; same-model review: correlated. No production byte changed.
+- **Waiting on:** agent 3 (review of revision 7; candidate 7 if adopted with the control text in A2-0051 and a decision on hard-stop semantics). Nothing outstanding from agent 1. Optional human item: per-clone git identity (A2-0042).
+- **Next:** scheduled checks; no code before the F0 freeze and exact ACKs.
+
+---
+
+# Agent 2 handoff (2026-11-04, seventh check: R4/R5 answered and candidate 6 ACKed, A2-0049/A2-0050)
+
+## Update 2026-11-04, seventh check (second newest)
+
+- **New input:** A3-0062 (origin/agent-3 6fd26d3): candidate 6 (plan df510108.., matrix 5c917c2d.., CSV e3cf2a1e.., review-manifest 82da3758..) implementing my N-1..N-4; POOL-RETRY-REVIEW.md reviewing my revision 5 and NOT adopting it pending two exact questions R4 and R5, plus a recovery-scheduling point. A1-0102 (origin/agent-1 ead566f): agent 1's ledger-scope ACK of candidate 6 (asks nothing of me; observation that same-address deployments share EIP-712 domains).
+- **R4 and R5 reproduced by me, both correct (not safety counterexamples):** R4 my revision-5 reference counted a witness once per value, adopting A on [(3,FAKE),(3,A),(0,A)], while the wire allows one report per witness; R5 prefix [(0,A),(1,A)] adopts A, the whole array adopts nothing, the reversed prefix adopts B, and my checker rejected a retained adoption with late reports inside recordedReports.
+- **Revision 6 (A2-0049):** R4 exclude inconsistent reporters (order-independent), evidence in inconsistentReports, checker recomputes the reference's classify from the examples; R5 one decision on a snapshot (all four replied or the 5 s reply timeout), lateReports evidence only, never cancels or creates adoption, arrival-order dependence stated; deadlines unchanged (second round inside min(10 s, remaining - 2 s)). Recovery: adoption cannot erase a live signature; branches (a) unpinned positive (TEST-ONLY delivery hold and cancellation) and (b) pinned availability pre-registered with stored vs new signatures; probe-first offered, not specified. Only SIGNING-RULES section 8 and SUCCESSOR-WIRE section 2 changed (other sections byte-identical, checked); D50 and the D50 vectors unchanged.
+- **Checks (stdlib, -B -I, exit 0):** adoption 28 expectations (revision-6 changes red first), exhaustive 3456 assignments 0 violations (1984 adoptions), 10/10 mutants; wire checker 18/18 corruptions, none skipped (3 stale anchors fixed and the whole set rerun; I had first reported them skipped). Honest record: my own revision-5 A5 expectation is reversed on purpose.
+- **A2-0050 (ACK):** candidate 6 exact hashes in protocol scope against revision-4 pins; verified by my own field diffs (4 cases changed: FL-1, F-12, F-29, F-32; CSV labels only). Not an ACK of revisions 5/6.
+- **Not done:** no protocol code, adapter, ledger, Foundry or TLC run; no timing; liveness and both recovery schedules untested; the delivery hold does not exist; same-model review: correlated. No production byte changed; E manifest 005c8448.. unchanged.
+- **Waiting on:** agent 3 (review of revision 6; candidate 7 if adopted with the pre-registered controls and the delivery-hold hook). Nothing outstanding from agent 1. Optional human item: per-clone git identity (A2-0042).
+- **Next:** scheduled checks; no code before the F0 freeze and exact ACKs.
+
+---
+
+# Agent 2 handoff (2026-11-04, sixth check: candidate 5 ACK and revision 5, A2-0047/A2-0048)
+
+## Update 2026-11-04, sixth check (A2-0047/48, candidate 5 ACK and revision 5; second newest)
+
+- **New input:** A3-0061 (origin/agent-3 00588a7): candidate 5 (plan cd174284.., matrix 582f8739.., CSV fed0d757.., README 176c6384.., review-manifest 61ff9545..) adopting K2/K3 and my A2-K1..K3; 32 cases, 14 components; asks me for the whole protocol-scope review/ACK plus the exact pool-retry amendment. A1-0101 (origin/agent-1 e4e992f) arrived while I was writing and I read it before publishing: agent 1's ledger-scope review of the same candidate 5 hashes, NOT an ACK, one correction K4 (the nonexistent `src/lib/QuorumLib.sol` path in plan task 1, the same item as my N-1), M7 fixture independently checked as ledger-feasible given a PBC clock lead of at least 20 s; K2/K3 adopted accurately; it will ACK the exact revision that fixes K4 and asked nothing of agent 2.
+- **Done:** (1) verified candidate 5 myself: hashes, field-level diffs of matrix and CSV against candidate 4, whole plan via its diff, all changed cases in full; (2) A2-0047 (RFC revision 5): the pool-retry amendment, answered question by question (two agreeing distinct reports, identity by supervised channel plus signature recovery to the witness address, independent validation unchanged, original deadlines kept, refusal exports the recorded checkpoint plus the stored signature, closed shape recordedReports/adopted/recorded); changed only SIGNING-RULES section 8, SUCCESSOR-WIRE section 2 and new vector files (other sections byte-identical, checked); (3) A2-0048 (ACK): candidate 5 exact hashes in protocol scope against my revision-4 pins.
+- **Check results:** pool adoption 17 expectations red-then-green; **my first run had a wrong expectation of my own** (kept in evidence), A1 strengthened to the Byzantine witness sending any subset; exhaustive 3456 assignments, 0 violations at f<=1; f=2 control adopts a fake value as intended; 7/7 mutants. Wire checker 11/11 corruptions (two of my first anchors had not matched and were reported as skipped, fixed, whole set rerun; I also restored a dropped corruption). D50/vector/INVENTORY unchanged byte for byte.
+- **Found and recorded (A2-0048):** N-1 `src/lib/QuorumLib.sol` does not exist (QuorumLib is at SigLib.sol:36) in candidate 5's task 1, a ledger-scope error introduced by its 'correction'; N-2 label; N-3 F-32 needs A's chain pair alive; N-4 M7 fixture arithmetic checked and coherent (T+31/T+32 vs T+50), needs a forward-only PBC clock lead of at least 20 s (agent 1's figure, corrected from my loose 19-20 s before publication) and a TEST-ONLY 60 s pool window. Proposed pool-retry controls M8 (re-derive on retry) and M9 (adopt on one report) for candidate 6.
+- **Not done:** no protocol code, adapter, ledger, Foundry or TLC run; no timing; the adoption check abstracts the decision only; liveness untested; signatures in examples are illustrative; same-model review: correlated. No production byte changed; E manifest 005c8448.. unchanged.
+- **Waiting on:** agent 3 (review of revision 5, candidate 6 if adopted, fix K4/N-1 and N-2), agent 1 (will ACK the exact revision that fixes K4). Optional human item: per-clone git identity (A2-0042).
+- **Next:** scheduled checks; no code before the F0 freeze and exact ACKs.
+
+---
+
+# Agent 2 handoff (2026-11-04, fifth check: candidate 4 whole-document review, A2-0046)
+
+## Update 2026-11-04, fifth check (A2-0046, candidate 4 review; second newest)
+
+- **New input:** A3-0060 (origin/agent-3 096a9f3): candidate 4 (plan 7852b7a0.., matrix 673ef239.., CSV e06280c1.., README 6d81973e.., review-manifest a7513056..), asks BOTH owners for a whole untruncated read of plan, CSV and matrix. A1-0100 (origin/agent-1 ce860fd): agent 1's whole-document ledger review, not an ACK, K2 (FL-10 controls) and K3 (F-28 controls), asks nothing of agent 2.
+- **What I did:** read the whole plan, all 14 CSV rows and all 30 cases with every `controls`/`requiredEvidence` array; diffed candidate 3 vs 4 myself (only F-21 prospectiveSafety changed among cases, plus provenance fields); verified all five hashes against the blobs and that the plan's D50/SUCCESSOR-WIRE/manifest pins equal my files; confirmed E-1..E-5 and K1 are all present.
+- **Result, A2-0046 (REVIEW, not an ACK):** A2-K1 none of M1..M7 appears in any case (only F-18's q2 config mutant and F-24's bit 8 do), so protocol mutants are not pre-registered; exact control text proposed for F-12, F-13, FL-5/F-22, FL-7, F-29, FL-1 and F-27 (incl. a WAL-only-commit refusal mutant). A2-K2 the plan never mentions F-16..F-20 and assigns no task for hooks H3 (per-witness RPC override), H5 (compromised worker), H6 (delay injection), contradicting its own 'each obligation maps to tasks' self-review. A2-K3 the FAULTED tripwire and D50 refusals have no integrated row (propose F-31, F-32, or declare module-test-only).
+- **Design point found while checking F-12 (not yet in any file; will go into SIGNING-RULES section 8 as revision 5 unless objected):** two valid checkpoint values for one sequence exist inside the assumptions (any PBC block mined between proposals changes sourceBlockNumber/Hash with identical epochs). A pool that restarts a collection by deriving a newer head pins itself (CONFLICT_PINNED until the earlier digest expires): availability cost only. Fix: reuse the already-proposed value on retry; a refusing witness returns its recorded effect value; re-propose it with a later expiry once at least two distinct witnesses report it and the others validate it independently. I did not touch protocol/f0 now so the ACKed manifest 30051bc5.. stays exact.
+- **Not done:** no protocol code, ledger, Foundry or TLC run; no timing; no file under protocol/f0 changed; one search pattern of mine ('regression') matched falsely and was not relied on; same-model review: correlated.
+- **Waiting on:** agent 3 to decide A2-K1..K3 and agent 1's K2/K3 in candidate 5; then exact ACKs from both owners; then v2 schema/vectors for mapping ACKs. Optional human item: per-clone git identity (A2-0042).
+- **Next:** scheduled checks; no code before the F0 freeze and exact ACKs.
+
+---
+
+# Agent 2 handoff (2026-11-04, fourth check: A1-0098/A1-0099 read; no new message needed)
+
+## Update 2026-11-04, fourth check (A1-0098/99 read, no message; second newest)
+
+- **New input:** A1-0099 (origin/agent-1 f460ca7): ledger-scope ACK of my **revision 4** deltas (hashes recomputed by agent 1 and equal A2-0044): five immutable getters as `eth_call`s, object-list `immutableRefsSha256`, Governance contract-set rule. Excludes R1 accounting, R2, R3 and E-1..E-5. A1-0098 (7ad066d): ledger review of candidate 3, not an ACK; one exactness item K1 for agent 3 (state decimal strings for the hashed number form, which my docs already pin); explicitly asks nothing of agent 2.
+- **My own check (no repo file added, so the ACKed `protocol/f0` manifest 30051bc5.. stays exact):** I recomputed agent 1's six published `immutableRefsSha256` values from its published range lists with my `immutable_refs_sha256`: 6/6 equal; strict validation (sorted, disjoint, length 32, in bounds) accepted all six real lists; the integer-form digests agent 1 lists also reproduce and differ from the decimal-string form, so the number form matters (decimal strings are the pinned choice). A first attempt failed because the file has a trailing `exit=0` line after the JSON (my parsing, fixed with `raw_decode`). Same-model; it checks my implementation against agent 1's published data, not agent 1's Forge build.
+- **Feasibility note from A1-0098 (arithmetic, not a measurement):** worst case about 1 + 10 + 2 + 10 + 2 = 25 s of the 30 s request TTL with agent 3's proposed bounds, margin about 4-5 s versus E's tightest 3.44 s. It agrees with my A2-0045, which vouches for no timing. The pre-FREEZE measurements decide it.
+- **State:** nothing outstanding from agent 1. Waiting on agent 3 only: E-1..E-5 and K1 in the next plan revision, review of A2-0044, then candidate v2 schema/vectors for exact mapping ACKs. origin/agent-3 still at 05c239e (no commit since A3-0059). No new owned design work remains that does not depend on those decisions.
+- **Not done:** no protocol code, adapter, ledger, Foundry or TLC run; no timing; power loss untested; same-model review: correlated. No production byte changed; E manifest 005c8448.. unchanged.
+- **Next:** scheduled checks; no code before the F0 freeze and exact ACKs.
+
+---
+
+# Agent 2 handoff (2026-11-04, A2-0044/A2-0045: F0 revision 4 and candidate-3 ACK)
+
+## Update 2026-11-04, third check (A2-0044/45; second newest)
+
+- **New input:** A1-0097 (origin/agent-1 3b5c414): real scoped ACK of my revision 3 hashes, ledger scope only; agent 1 hardened its masked-check tool by concatenation after my point. A3-0059 (origin/agent-3 05c239e): candidate-3 source/interface/numeric plan and 30-case matrix (RFC, not an ACK) with three amendments for me (R1-R3); its independent serializer reproduces my two binding hashes and the masked vector.
+- **R1-R3 all confirmed, two were my own errors (A2-0044, revision 4):** R1 S0 was 43/50, correct 48/55 per process (the five immutable-wiring cross-checks in D50 section 2 were not counted), 5 x 55 = 275 at F startup. R2 SUCCESSOR-WIRE rev 3 called the SQLite `-wal` 'not state': wrong. My own experiment `vectors/wal_state_experiment.py` (predictions first, SQLite 3.47.2) 8/8: committed state = main file + `-wal` + marker, `-shm` is an index; refusal oracle = logical snapshot; main-only copy = rollback (F-27); crash guarantee = process death only. R3 wording fixed (lock/directory metadata vs state; crash table split at the directory fsync). Also adopted: `immutableRefsSha256` = sha256 of canonical OBJECT LIST, required on every contract under repaired-f.
+- **Scoped ACK of candidate 3 (A2-0045):** hashes verified against origin/agent-3 blobs. Conditional on E-1 (binding_v2 applies to E profiles at store level, new protocol pin for any E re-run), E-2 (collection deadline: ledger time read once, host monotonic duration, <=2 s remaining -> existing code EXPIRED), E-3 (cite revision 4), E-4 (F-21 'signature' wording: my witness relies on the PSC's acceptance and does not re-verify the user signature; I will not add scope unasked), E-5 (R2/R3 resolved at design level). Not a feasibility, freeze, mapping or execution ACK; numeric parameters (5 s/10 s/2 s/1 s) unmeasured.
+- **Checks (stdlib, CPython 3.13.13, -B -I, exit 0):** `test_d50_reference.py` 87 checks (18 new were red first); 15 mutants 13 detected + 2 equivalent; `wal_state_experiment.py` 8/8 and byte-identical rerun; replay of agent 1's published bytes still 18/18 with the revised reference; wire checker passes; vector values unchanged. SIGNING-RULES, the model files and both model run records are byte-identical to revision 3. A `__pycache__` risk: always run with `-B`.
+- **Not done:** no protocol code, adapter, ledger, Foundry, TLC run; no timing; the WAL experiment tests SQLite, not my (unwritten) store; power loss untested; object-list vector not yet independently reproduced; same-model review: correlated.
+- **Waiting on:** agent 3 (E-1..E-5 in the next plan revision, review of A2-0044, v2 schema/vectors for mapping ACKs); agent 1 (small ledger-facing delta of revision 4). Optional human item: per-clone git identity (A2-0042).
+- **Next:** scheduled checks; no code before the F0 freeze and exact ACKs.
+
+---
+
+## Update 2026-11-04, second check (A2-0043: revision 3 after A3-0058; second newest)
+
+- **New input:** A1-0095 (origin/agent-1 1dd897c): real **scoped** ACK of revision 2's ledger-facing items only (hashes verified; protocol internals, O1-O6, error mapping and any freeze excluded). A3-0058 (origin/agent-3 0ed33c5): review, **not an ACK**; accepts C1-C4 as addressed; asks for an amended RFC on five items, plus a D50 vector.
+- **Done (revision 3, A2-0043):** `protocol/f0/SUCCESSOR-WIRE.md` (new: reasons on existing v1 codes with `QUORUM_UNAVAILABLE` on `ADAPTER_UNAVAILABLE`, not `INSUFFICIENT_QUORUM`; pool/single-witness shapes; `collect_governance`; four examples; FAULTED persistence and history-preserving clear; store lifecycle with crash table); D50 rev 3 (worker is keyless, witness membership checks, masked-build contract, exact read schedule 43/50 requests at startup with the earlier 'zero extra reads' claim **withdrawn**, closed encoding, six-vs-seven rules); SIGNING-RULES rev 3 (reasons, renewal never extends request/grant, what the bounded check does not check, O1-O6 recommendations); `protocol/f0/vectors/` (reference, expectations, vector, wire checker). Manifest 22e88c23.., 25 entries.
+- **A1-0096 arrived while I was writing and is adopted:** agent 1's export rule (`{start, length}` sorted, non-overlapping, every length 32, in bounds) is now the pin rule (my draft allowed any positive length: looser than the owner's rule); added test-first (3 expectations red, then green). `vectors/replay_a1_masked.py` runs my strict masked check on agent 1's published raw bytes (scratch copy of origin/agent-1 3de2ee6, not copied into the repo): 18/18 masked and raw hashes, controls 18/18 each, two broken maskers 0/18 (predictions written in the script header first). Tests my implementation against agent 1's bytes, not agent 1's measurement.
+- **Corrections to my own record:** the F0 manifest had 13 entries, not 12 (A2-0040/41/42 said 12; I miscounted). The 'no extra read per operation' claim was unproved (tripwire reads latest/last-observed, not block 0 or the deploy block).
+- **Checks run (stdlib, CPython 3.13.13, `-B -I`, all exit 0):** `python3 -B -I protocol/f0/vectors/test_d50_reference.py` (69 checks, written first, red then green; 11 mutants: 9 detected, 2 equivalent defence-in-depth; an earlier version had 3 survivors because it only asserted that something refused, now fixed), `check_wire_examples.py` (5/5 corruptions detected; one wrong threshold of mine replaced by a property check), `d50_reference.py --emit | cmp` (deterministic). Records in `protocol/f0/evidence/`. A `__pycache__` created by the first import was removed (my own generated file); use `-B`.
+- **Not done:** no run of protocol code, adapter, ledger, Foundry, TLC or the suite; no timing of RPC/startup; agent 1's masked check not re-run; no independent reproduction of the vector. Same-model review: correlated. No production byte changed (E manifest 005c8448.. unchanged).
+- **Waiting on:** agent 1 (review of revision 3 hashes; old ACK does not transfer), agent 3 (review, E1/E2, `witnessIndex` placement, deadline numbers, schema, independent vector reproduction, matrix revision). Optional human item: per-clone git identity (A2-0042).
+- **Next:** scheduled checks; no code before the F0 freeze and exact ACKs.
+
+---
+
+## Update 2026-11-04, first check (A2-0042: revision 2 after A1-0094; third newest. The 2026-11-03 block below is still accurate except where newer blocks revise it)
+
+- **New input:** A1-0094 (origin/agent-1 2ba85aa): ledger-facing review of A2-0040/41. Every checked item confirmed; corrections C1-C4; agent 1 measured D50's immutable premise on the E code (18 of 18 masked runtimes equal the compiled hash; raw live hashes separate the profiles via TMSC/PSC/ACSC/KSSC; LSC/RSC identical). **Not an ACK.**
+- **Done:** I verified C1-C4 against the sources, took them into `protocol/f0/SIGNING-RULES.md` (C1 effect-equivalent wording, C2 live-chain scope, DENY note, governance pre-validation note) and `D50-DEPLOYMENT-BINDING.md` (C3 storage wiring incl. TMSC/LSC/Governance both directions, C4 `configured()`, measurement, agreed `immutableReferences` shape), regenerated `protocol/f0/MANIFEST.sha256` (b606a335.., 12 files, `sha256sum -c` all OK) and published A2-0042 with the exact hashes. Revision 1 is commit 39af20f.
+- **Not done:** I did not re-run agent 1's measurement, deploy, run Foundry/TLC/the protocol suite, or measure start-up RPC cost. No production byte changed (E manifest 005c8448.. unchanged). Same-model review: correlated.
+- **Provenance note from agent 1:** commit 39af20f is authored as `karma-skz` (this machine's git identity, shared with the agent-3 checkout); earlier agent-2 commits were `th4kur`/`TH4KUR` on another machine. I did not change any git identity. Authorship of an agent-2 message = its `From:` header. Human may set a per-clone identity.
+- **Waiting on:** agent 1's ACK of the exact revision (and `TMSC.governance()` public in design 2.1); agent 3's review and decisions O1/O2/O5/O6. origin/agent-3 had no new commit since 143619f at this check.
+- **Next:** scheduled 40-minute checks; no code before the F0 freeze and exact ACKs.
+
+---
+
+# Agent 2 handoff (2026-11-03, A2-0040/A2-0041: F0 planning input)
+
+## Current state (read this block first; everything below the rule is the older record, kept verbatim)
+
+- **RQ/task:** F / F0 planning. Published two RFCs: A2-0040 (key/state/correlation inventory, R6 signing rules, protocol-side matrix review, answers to A1-0088) and A2-0041 (D50 deployment-state binding, seven runtimes).
+  Everything is a proposal; no ACK given or inferred; no code, interface, service or lease. Gate E record, F NOT_RUN, G locked: as on the board of origin/agent-3 143619f.
+- **Where I work:** `/home/karma/Documents/RIS-agent-2` (separate clone, branch `agent-2`, origin SaiyamJain20/RIS). The human approved the clone because another local agent works as agent 3 in `/home/karma/Documents/RIS`. No worktree; the agent-3 checkout is not touched.
+- **New files (all under owned paths):** `protocol/f0/{README,INVENTORY,SIGNING-RULES,D50-DEPLOYMENT-BINDING}.md`, `protocol/f0/model/{PREDICTIONS.md,conflict_key_model.py}`, `protocol/f0/evidence/*`, `protocol/f0/MANIFEST.sha256` (2d9395aa.., 12 files, does not list itself); communication/agent-2/outbox/0040 and 0041; this file and STATUS.md.
+  **No production byte changed:** E manifest 005c8448.. (142 entries) verifies, and `git diff 376347d -- protocol` outside `protocol/f0` is empty.
+- **Results to cite carefully:** the bounded conflict-key check is a design check of one key (2 values, 2 expiries, 6 ticks), not TLC and not the implementation. Run 1 held 9/10 predictions; P9 failed because my model erased emitted signatures on rollback (a model bug), run 2 fixed it and holds 10/10;
+  the other nine verdicts and state counts are identical. Both runs are kept (`protocol/f0/evidence/`). Command: `cd protocol/f0/model && python3 -I conflict_key_model.py`; exit 0; CPython 3.13.13.
+- **Source readings behind the design (not executed by me):** E witness stateless and clock-dependent (witness.py:54-67, 100-142, 145-162); `QuorumLib` fails the whole certificate on one bad signature; `DecisionVerifier` compares only `stateSequence`; `KSSC.acceptState` accepts any larger sequence; the PSC ignores the receipt block reference; no data store exists in symbolic mode.
+- **Open decisions (agent 3, with the human where noted):** O1 governance approval policy (specification gap, may need the human), O2 D-e2, O5 numeric defaults (k = 0, 30 s / 60 s windows), O6 one adapter process vs four supervised witness processes (I recommend four processes under one adapter command). Agent 1: `immutableReferences` export; ledger-facing review.
+- **Not done / not claimed:** no TLC, no live q=3 run, no implementation, no measurement of the proposed start-up RPC cost, no independent review (same model), no re-run of the 5-6 minute protocol suite (nothing in it changed).
+- **Next:** scheduled 40-minute checks (session-only jobs; they die with the session and expire after 7 days). Respond to replies. After exact ACKs: failing tests first (conflict store, collector, D50 binding), then the witness rewrite, live q=3 fixture, mutants M1-M7, Byzantine variants.
+- **Messages sent:** A2-0001..A2-0041. Read: see STATUS.md.
+
+---
+
+## Earlier record (2026-10-12, A2-0039), unchanged
 # Agent 2 handoff (2026-10-12, A2-0039: return review after the solo phase)
 
 ## Current state (read this block first; everything below the rule is the older record, kept verbatim)

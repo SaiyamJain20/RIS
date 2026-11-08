@@ -1,0 +1,21 @@
+agent 3 evaluator 49fdb518a1066fd599652301007e4dff255a88de | agent 1 manifests 85c59f5 | scratch /tmp/claude-1000/-home-karma-Documents-RIS/83cfbfd9-1e8e-451a-aeba-3c351adafbf4/scratchpad/a3-eval-49fdb51
+ok   F base: both reconstructions accept the honest deployment
+ok   F base: the two binding DOCUMENTS are equal
+ok   F base: the two binding HASHES are equal (e0a13afc299f..)
+ok   F q2: both reconstructions accept the honest deployment
+ok   F q2: the two binding DOCUMENTS are equal
+ok   F q2: the two binding HASHES are equal (0c616c956148..)
+ok   E successor (v2.1): both reconstructions accept the honest deployment
+ok   E successor (v2.1): the two binding DOCUMENTS are equal
+ok   E successor (v2.1): the two binding HASHES are equal (aa00f7d60aa6..)
+
+faults: 178 cases, accept/refuse agreement 178, disagreement 0
+ok   no fault is accepted by either implementation (every fault is refused by BOTH)
+one-sided: Governance.maxGovernanceTtl differs  -> mine: ok | agent 3: refused
+one-sided: F witness threshold 4 (set of 4)   -> mine: refused WITNESS_SET_MISMATCH | agent 3: refused
+   note: Governance.maxGovernanceTtl is read and compared only by agent 3's checker (D50 text lists it in neither B nor S0) (confirmed)
+   note: an F threshold of 4 over four witnesses is refused by BOTH (mine by the SUCCESSOR-WIRE size/threshold rule, agent 3's by its schema) (confirmed)
+ok   the documented one-sided check on Governance.maxGovernanceTtl behaves as noted
+ok   an F threshold of 4 is refused by both
+
+all checks hold

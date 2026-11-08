@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/clone-final/protocol/tools/run_adapter_v2_ops_mutants.py", line 113, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/clone-final/protocol/tools/run_adapter_v2_ops_mutants.py", line 86, in main
+    status, _ = run_in_copy(SRC)
+                ~~~~~~~~~~~^^^^^
+  File "/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/clone-final/protocol/tools/run_adapter_v2_ops_mutants.py", line 63, in run_in_copy
+    shutil.copy(os.path.join(fx, name), os.path.join(p, "tests", "fixtures", name))
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/th4kur/.local/share/uv/python/cpython-3.13.12-linux-x86_64-gnu/lib/python3.13/shutil.py", line 428, in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/th4kur/.local/share/uv/python/cpython-3.13.12-linux-x86_64-gnu/lib/python3.13/shutil.py", line 260, in copyfile
+    with open(src, 'rb') as fsrc:
+         ~~~~^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: '/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/clone-final/protocol/tests/fixtures/agent1-85c59f5-abi'
+EXIT=1 START=2026-11-07T22:48:13Z END=2026-11-07T22:48:13Z HEAD=8751cf8
