@@ -19,3 +19,11 @@ Consequence for the integrated run: with the code of A2-0076 (commit of record 7
 | `run_state_mutants.py` (33 old + 7 new lock mutants L1..L7) | control passes, **40 / 40 detected**, exit 0 | `runner-state-40of40.txt` |
 | Store-dependent tests (state, state CLI, the five service files, witness_main, worker_binding, lock tests) | 364 passed (before the added `clear_fault` test) | (command) |
 Not claimed: that agent 3's full choreography (EX held across before / action / after) works end to end against a running adapter (the probe measures lock availability only; a real action that makes the witness SIGN while the caller holds EX waits by design until the caller releases); anything outside lock behaviour. Single host, correlated review.
+
+## Broader verification of the fix, on a clone of exactly d375dda (outputs in `outputs-at-d375dda/`; A2-0078)
+| Check | Result | File |
+|---|---|---|
+| Full protocol suite | **2956 passed, 201 skipped, 0 failed**, exit 0, 1014 s (2946 of A2-0076 + the 10 lock tests); the 201 skips are 200 ScenarioResult + 1 FileHash outside agent 2's scope, no Foundry skip | `FULL-SUITE-on-clone-of-d375dda.txt` |
+| Runners of the modules that import or mention `witness_state` (control passes, every mutant detected, argued equivalents run and survive) | state 40/40 (above); service **137/137**; witness_main **39/39** (+1 equivalent); adapter_v2_witness **57/57**; witness_process_transport **92/92**; faulty_adapter_v2 **41/41** (+2 equivalents); witness_hooks `--live` **46/46** (+2 equivalents); adapter_v2_main **43/43** (+1 equivalent); adapter_v2_start **15/15**; binding_open **52/52**; worker_binding **32/32**; pool_driver **15/15**; all exit 0 | `runner-<name>.txt` |
+| Failed trial kept | the first queue script for the last five runners omitted the `.py` suffix; all five exited 2 in under a second without testing anything; re-run correctly | `failed-trials/` |
+Not re-run: the 10 other runners (their modules neither import nor mention `witness_state`; their controls are inside the full suite). A mutant `pytest` orphaned by an earlier stopped runner spun at 100% CPU for 14 hours on this host and was killed before the last runs; the runs were measured with one core busy.
