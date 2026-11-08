@@ -23,7 +23,7 @@ SRC = open(os.path.join(PROTO, "hmbc_protocol", "witness_state.py")).read()
 M = [
     ("K1 the signing transaction is removed: every statement autocommits on its own",
      [('            self._con.execute("BEGIN IMMEDIATE")\n            pending = None', "            pending = None"),
-      ('                self._hook("before_commit")\n                self._con.execute("COMMIT")', '                self._hook("before_commit")'),
+      ('                    return self._stored\n                self._hook("before_commit")\n                self._con.execute("COMMIT")', '                    return self._stored\n                self._hook("before_commit")'),
       ('                    self._con.execute("ROLLBACK")\n                    return self._stored', "                    return self._stored")]),
     ("K2 the INITIALIZED marker is written before the database exists",
      [("        db, marker, tmp = _paths(directory)\n        if state == \"interrupted\":", "        db, marker, tmp = _paths(directory)\n        _write_marker(directory, binding_v2, owner, hook)\n        if state == \"interrupted\":"),
