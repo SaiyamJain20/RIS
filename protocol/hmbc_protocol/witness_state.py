@@ -90,8 +90,20 @@ def _paths(directory: str):
     return os.path.join(directory, "signing.sqlite"), os.path.join(directory, "INITIALIZED"), os.path.join(directory, "INITIALIZED.tmp")
 
 
-def _classify(directory: str):
-    """Read-only inspection of an existing directory. Returns ("fresh", None), ("interrupted", meta) or ("open", meta); raises the stage-9 refusals (SUCCESSOR-WIRE section 1) and writes nothing."""
+def _recover(db: str) -> None:
+    """SQLite's own crash recovery for a database nobody is using: a read-WRITE connection rolls a HOT rollback journal back (a restore of the pre-transaction pages, so no logical content changes) on
+    its first read. Only `_classify` calls it, only for a directory without the INITIALIZED marker, and only after the read-only inspection failed with the READONLY error class."""
+    con = sqlite3.connect(db, timeout=30)
+    try:
+        con.execute("SELECT COUNT(*) FROM sqlite_master").fetchone()
+    finally:
+        con.close()
+
+
+def _classify(directory: str, _recovered: bool = False):
+    """Read-only inspection of an existing directory. Returns ("fresh", None), ("interrupted", meta) or ("open", meta); raises the stage-9 refusals (SUCCESSOR-WIRE section 1) and writes nothing,
+    with ONE exception: an UNINITIALISED directory (no marker, so nothing was ever signed) whose database a `mode=ro` connection cannot read because a killed initialisation left a hot rollback journal
+    (found by killing a process at random: evidence/af2-kill-durability) is recovered by SQLite itself and inspected again, once. An initialised store is never repaired here."""
     db, marker, _tmp = _paths(directory)
     has_db, has_marker = os.path.exists(db), os.path.exists(marker)
     if not has_db and not has_marker:
@@ -115,6 +127,12 @@ def _classify(directory: str):
         finally:
             con.close()
     except sqlite3.DatabaseError as e:
+        if not has_marker and not _recovered and (getattr(e, "sqlite_errorcode", 0) & 0xFF) == sqlite3.SQLITE_READONLY:
+            try:
+                _recover(db)
+            except sqlite3.DatabaseError as e2:
+                raise StoreError("STORE_CORRUPT", f"the database cannot be recovered: {e2}") from None
+            return _classify(directory, True)
         raise StoreError("STORE_CORRUPT", f"the database cannot be read: {e}") from None
     if not has_marker:
         if rows:

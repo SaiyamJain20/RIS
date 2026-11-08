@@ -57,6 +57,8 @@ M = [
     ("L5 signing does not take the cooperative lock", [("        with self._mutex, self._writing():\n            self._con.execute(\"BEGIN IMMEDIATE\")\n            pending = None", "        with self._mutex:\n            self._con.execute(\"BEGIN IMMEDIATE\")\n            pending = None")]),
     ("L6 clear_fault does not take the cooperative lock", [("        with self._mutex, self._writing():\n            self._con.execute(\"BEGIN IMMEDIATE\")\n            try:\n                row = self._con.execute(\"SELECT body FROM fault", "        with self._mutex:\n            self._con.execute(\"BEGIN IMMEDIATE\")\n            try:\n                row = self._con.execute(\"SELECT body FROM fault")]),
     ("L7 exclusive() takes a shared lock instead of an exclusive one", [("            fcntl.flock(self._lockfd, fcntl.LOCK_EX)\n            try:\n                yield", "            fcntl.flock(self._lockfd, fcntl.LOCK_SH)\n            try:\n                yield")]),
+    ("R1 the recovery of a hot rollback journal in an uninitialised directory is never attempted", [('        if not has_marker and not _recovered and (getattr(e, "sqlite_errorcode", 0) & 0xFF) == sqlite3.SQLITE_READONLY:', "        if False:")]),
+    ("R2 an INITIALISED store (marker present) is also repaired by the inspection", [('        if not has_marker and not _recovered and (getattr(e, "sqlite_errorcode", 0) & 0xFF) == sqlite3.SQLITE_READONLY:', '        if not _recovered and (getattr(e, "sqlite_errorcode", 0) & 0xFF) == sqlite3.SQLITE_READONLY:')]),
 ]
 
 
@@ -66,7 +68,7 @@ def run_in_copy(text):
         p = os.path.join(d, "protocol")
         for sub in ("hmbc_protocol", "tests", "testtools", os.path.join("f0", "vectors"), os.path.join("tests", "fixtures")):
             os.makedirs(os.path.join(p, sub), exist_ok=True)
-        for rel in ("pytest.ini", os.path.join("hmbc_protocol", "__init__.py"), os.path.join("tests", "test_witness_state.py"), os.path.join("tests", "test_witness_state_cli.py"), os.path.join("tests", "test_witness_state_lock.py"), os.path.join("tests", "state_child.py"),
+        for rel in ("pytest.ini", os.path.join("hmbc_protocol", "__init__.py"), os.path.join("tests", "test_witness_state.py"), os.path.join("tests", "test_witness_state_cli.py"), os.path.join("tests", "test_witness_state_lock.py"), os.path.join("tests", "test_witness_state_hot_journal.py"), os.path.join("tests", "state_child.py"),
                     os.path.join("testtools", "__init__.py"), os.path.join("testtools", "state_oracle.py"), os.path.join("f0", "vectors", "d50_reference.py"),
                     os.path.join("f0", "vectors", "export_layouts_reference.py"), os.path.join("tests", "fixtures", "deployment-agent1-91add8c-v1-repaired-e.json")):
             shutil.copy(os.path.join(PROTO, rel), os.path.join(p, rel))
@@ -74,7 +76,7 @@ def run_in_copy(text):
             f.write(text)
         env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
         try:
-            r = subprocess.run([sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests/test_witness_state.py", "tests/test_witness_state_cli.py", "tests/test_witness_state_lock.py"], cwd=p, capture_output=True, text=True, timeout=300, env=env)
+            r = subprocess.run([sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests/test_witness_state.py", "tests/test_witness_state_cli.py", "tests/test_witness_state_lock.py", "tests/test_witness_state_hot_journal.py"], cwd=p, capture_output=True, text=True, timeout=300, env=env)
         except subprocess.TimeoutExpired:
             return "timeout", None
         m = re.search(r"(\d+) failed", r.stdout)
