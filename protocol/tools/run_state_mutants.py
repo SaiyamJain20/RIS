@@ -50,6 +50,13 @@ M = [
     ("C6 the anchor shape is not checked", [("    if not ok:\n        raise ValueError(\"anchor must be", "    if False:\n        raise ValueError(\"anchor must be")]),
     ("C7 the witness index range is not enforced", [("    if not 0 <= i <= 3:\n        raise argparse.ArgumentTypeError(\"--witness-index must be 0..3\")", "    if False:\n        raise argparse.ArgumentTypeError(\"--witness-index must be 0..3\")")]),
     ("C8 the exporter always reads witness-0", [('os.path.join(ns.state_dir, f"witness-{ns.witness_index}")', 'os.path.join(ns.state_dir, "witness-0")')]),
+    ("L1 the cooperative-writer lock is never released", [("        finally:\n            fcntl.flock(self._lockfd, fcntl.LOCK_UN)\n\n    @contextmanager\n    def exclusive(self):", "        finally:\n            pass\n\n    @contextmanager\n    def exclusive(self):")]),
+    ("L2 the cooperative-writer lock is never taken", [("        fcntl.flock(self._lockfd, fcntl.LOCK_SH)\n        try:\n            yield", "        try:\n            yield")]),
+    ("L3 the writer takes the lock exclusively instead of shared", [("        fcntl.flock(self._lockfd, fcntl.LOCK_SH)\n        try:\n            yield", "        fcntl.flock(self._lockfd, fcntl.LOCK_EX)\n        try:\n            yield")]),
+    ("L4 exclusive() does not release the lock on exit", [("            finally:\n                fcntl.flock(self._lockfd, fcntl.LOCK_UN)", "            finally:\n                pass")]),
+    ("L5 signing does not take the cooperative lock", [("        with self._mutex, self._writing():\n            self._con.execute(\"BEGIN IMMEDIATE\")\n            pending = None", "        with self._mutex:\n            self._con.execute(\"BEGIN IMMEDIATE\")\n            pending = None")]),
+    ("L6 clear_fault does not take the cooperative lock", [("        with self._mutex, self._writing():\n            self._con.execute(\"BEGIN IMMEDIATE\")\n            try:\n                row = self._con.execute(\"SELECT body FROM fault", "        with self._mutex:\n            self._con.execute(\"BEGIN IMMEDIATE\")\n            try:\n                row = self._con.execute(\"SELECT body FROM fault")]),
+    ("L7 exclusive() takes a shared lock instead of an exclusive one", [("            fcntl.flock(self._lockfd, fcntl.LOCK_EX)\n            try:\n                yield", "            fcntl.flock(self._lockfd, fcntl.LOCK_SH)\n            try:\n                yield")]),
 ]
 
 
@@ -59,7 +66,7 @@ def run_in_copy(text):
         p = os.path.join(d, "protocol")
         for sub in ("hmbc_protocol", "tests", "testtools", os.path.join("f0", "vectors"), os.path.join("tests", "fixtures")):
             os.makedirs(os.path.join(p, sub), exist_ok=True)
-        for rel in ("pytest.ini", os.path.join("hmbc_protocol", "__init__.py"), os.path.join("tests", "test_witness_state.py"), os.path.join("tests", "test_witness_state_cli.py"), os.path.join("tests", "state_child.py"),
+        for rel in ("pytest.ini", os.path.join("hmbc_protocol", "__init__.py"), os.path.join("tests", "test_witness_state.py"), os.path.join("tests", "test_witness_state_cli.py"), os.path.join("tests", "test_witness_state_lock.py"), os.path.join("tests", "state_child.py"),
                     os.path.join("testtools", "__init__.py"), os.path.join("testtools", "state_oracle.py"), os.path.join("f0", "vectors", "d50_reference.py"),
                     os.path.join("f0", "vectors", "export_layouts_reference.py"), os.path.join("tests", "fixtures", "deployment-agent1-91add8c-v1-repaired-e.json")):
             shutil.copy(os.path.join(PROTO, rel), os.path.join(p, rel))
@@ -67,7 +74,7 @@ def run_in_copy(text):
             f.write(text)
         env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
         try:
-            r = subprocess.run([sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests/test_witness_state.py", "tests/test_witness_state_cli.py"], cwd=p, capture_output=True, text=True, timeout=300, env=env)
+            r = subprocess.run([sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests/test_witness_state.py", "tests/test_witness_state_cli.py", "tests/test_witness_state_lock.py"], cwd=p, capture_output=True, text=True, timeout=300, env=env)
         except subprocess.TimeoutExpired:
             return "timeout", None
         m = re.search(r"(\d+) failed", r.stdout)

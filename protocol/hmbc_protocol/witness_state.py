@@ -308,6 +308,17 @@ class WitnessStore(StoreView):
                 self._lockfd = None
 
     @contextmanager
+    def _writing(self):
+        """The cooperative-writer lock: SHARED on `.lock` only while a transaction runs, ALWAYS released afterwards (also when it refuses or raises). A snapshot taker that holds the lock EXCLUSIVELY (agent 3's
+        `store_snapshot_v2.locked_store`) therefore waits for a transaction in progress, and a writer that starts while the snapshot taker holds it waits for it. Holding it for the life of the process (the first
+        version did) made a running witness that had signed once impossible to snapshot until it died (evidence/af2-lock-probe)."""
+        fcntl.flock(self._lockfd, fcntl.LOCK_SH)
+        try:
+            yield
+        finally:
+            fcntl.flock(self._lockfd, fcntl.LOCK_UN)
+
+    @contextmanager
     def exclusive(self):
         """TEST-ONLY support for a stopped/locked state copy (hook H7): no signing runs while this is held."""
         with self._mutex:
@@ -315,7 +326,7 @@ class WitnessStore(StoreView):
             try:
                 yield
             finally:
-                fcntl.flock(self._lockfd, fcntl.LOCK_SH)
+                fcntl.flock(self._lockfd, fcntl.LOCK_UN)
 
     def _faulted(self) -> bool:
         return self._con.execute("SELECT COUNT(*) FROM fault").fetchone()[0] > 0
@@ -332,8 +343,7 @@ class WitnessStore(StoreView):
             raise ValueError("effect must carry exactly the fields of V for this type")
         if HAS_EXPIRY[type] != (expires_at is not None) or (expires_at is not None and not _DEC.fullmatch(str(expires_at))):
             raise ValueError("expiresAt is required for types with a liveness field and absent for GrantReceipt")
-        with self._mutex:
-            fcntl.flock(self._lockfd, fcntl.LOCK_SH)
+        with self._mutex, self._writing():
             self._con.execute("BEGIN IMMEDIATE")
             pending = None
             try:
@@ -439,8 +449,7 @@ class WitnessStore(StoreView):
         """An explicit operator clear: appends one `fault_log` row and adopts the chain's current latest observation as the new baseline. It never deletes or rewrites signing history."""
         if not isinstance(note, str) or not note.strip():
             raise ValueError("a clear needs a non-empty note")
-        with self._mutex:
-            fcntl.flock(self._lockfd, fcntl.LOCK_SH)
+        with self._mutex, self._writing():
             self._con.execute("BEGIN IMMEDIATE")
             try:
                 row = self._con.execute("SELECT body FROM fault WHERE id = 1").fetchone()
