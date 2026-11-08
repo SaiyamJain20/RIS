@@ -1,0 +1,17 @@
+PASS S0 deploy the real F ledger on two real Anvil nodes
+PASS S1 fixtures (users, credentials, CRLs) and the REAL adapter with four supervised witnesses and --allow-governance
+PASS S2 two real user requests forwarded by the real relay, then a pool checkpoint (sequence 1) accepted by the real KSSC
+PASS S3 decision D1 through the adapter, consumed by the real ACSC; receipt through the adapter, reported to the real PSC
+PASS S4 decision D2 at sequence 1 (signed, NOT consumed), and the executed-receipt attempt: the same receipt requested again after the real PSC executed it
+PASS S5 a second checkpoint (sequence 2) accepted, then D2 requested AGAIN: the old decision is bound to sequence 1 (the numeric death overtaken-decision-sequence)
+PASS S6 governance through the adapter (AFTER the D2 re-request: a governance ADD changes authEpoch, which makes every older request stale; run 2 had this order and lost the decision death) (allow-listed root) executed by the real Governance; then the stale-nonce attempt
+PASS S7 the real exporters under agent 3's locked_store for all four witnesses; verify_export_snapshot(WitnessEvidence) for every record type
+PASS S8 history_rpc_v2.collect on the real evidence of every witness (native death getters via eth_call, EIP-1898)
+PASS S9 checkpoint_rpc_v2.collect on the real checkpoint digests (sequences 1 and 2), two caller head selections: (A) the PBC latest block now, (B) each checkpoint's own source block
+PASS S10 governance_rpc_v2.collect on the real governance evidence (caller TEST-ONLY approvals = the --allow-governance tuple)
+PASS S11 receipt_history_v2.verify_receipt_history on the real receipt evidence (no receipt RPC collector exists: captures built by the DRIVER from raw RPC)
+PASS S12 stop the adapter: exit code and stderr; every witness child must be gone
+PASS S13 overtaken-checkpoint attempt on REAL witness processes: a proposal for a sequence the ledger has already accepted
+PASS S14 teardown: stop the Anvil nodes
+DONE 15 passed, 0 failed
+EXIT=0 END=2026-11-08T07:27:25Z

@@ -5,7 +5,8 @@ anywhere: inside the database write, between the commit and the reply, in the mi
 and checks the contract of SIGNING-RULES section 2/6 and SUCCESSOR-WIRE section 5:
   I1 every reply the child had printed (a complete line, printed only after `sign` returned) is in the store with the SAME signature (a reply is never ahead of the commit);
   I2 at most ONE record is committed without its reply (the request in flight when the process died);
-  I3 each key is pinned to ONE effect: its live digests all carry the effect of its single `conflict` row;
+  I3 each key is pinned to ONE effect: its live digests all carry the effect of its single `conflict` row; a pin never exists without a live digest and the observation baseline is that of
+     the newest record (one signing is committed whole: the first version of this file lacked these two checks, and the mutation runner (K1) showed it by letting a removed transaction survive);
   I4 the store reopens (integrity check, identity, no fault) and every stored digest re-signs to the SAME signature (the retry replies the recorded value);
   I5 an interrupted initialisation is either completed or refused with a closed reason by the next `init_store`, and the completed store signs.
 What this does NOT show: power loss or OS crash (SIGKILL leaves the kernel's page cache intact, so `synchronous=FULL` is not exercised: see run_state_kill_mutants.py, K3), disk errors, or
@@ -85,6 +86,14 @@ def violations(d, reps, seed, n_lines):
             req = reqs[dg]
             if row[8] is None and (row[4] not in conflicts or conflicts[row[4]] != kc.cp_effect(138 + req[2])):
                 bad.append("I3 key %s is live under an effect other than its pin (variant %d)" % (row[4], req[2]))
+        orphans = [r[0] for r in con.execute("SELECT c.key FROM conflict c WHERE NOT EXISTS (SELECT 1 FROM digests d WHERE d.type = c.type AND d.domain = c.domain AND d.wsv = c.wsv "
+                                             "AND d.key = c.key AND d.sup_seq IS NULL)")]
+        if orphans:
+            bad.append("I3 a pin without a live digest (a signing was committed in pieces) for key(s) %s" % orphans)
+        row = con.execute("SELECT observation FROM observed WHERE chain = ?", (DBC,)).fetchone()
+        newest = [int(json.loads(r[0])["blockNumber"]) for r in con.execute("SELECT observation FROM digests")]
+        if newest and (row is None or int(json.loads(row[0])["blockNumber"]) != max(newest)):
+            bad.append("I3 the observation baseline is not that of the newest record (a signing was committed in pieces)")
         if con.execute("SELECT COUNT(*) FROM fault").fetchone()[0]:
             bad.append("I4 a fault row appeared")
         if con.execute("PRAGMA integrity_check").fetchone()[0] != "ok":

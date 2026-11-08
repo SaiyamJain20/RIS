@@ -1,0 +1,436 @@
+"""Cross-run 2 (agent 2, Fork J): agent 3's checkers on REAL decision, receipt and governance evidence, plus the death records that the real service can produce.
+
+  python -I crossrun2.py SCR REPO OUTDIR            (HOME and HMBC_FOUNDRY_DIR set by the caller; run under `flock -x $SCR/live.lock`)
+
+Records are produced through the REAL adapter command (`python -m hmbc_protocol.adapter_v2_main`, four supervised `witness_main` children, agent 1's real F ledger on two real Anvil nodes,
+`--allow-governance FILE`). Agent 3's code is the unmodified extracted copy of origin/agent-3 6358f7c in SCR/a3tree. Nothing of agent 3's is edited; nothing in the repository is written
+except OUTDIR. Every stage is recorded in OUTDIR/results.json whether it passed or not; a stage that could not run is recorded as NOT PRODUCED with the reason (never faked)."""
+import copy
+import hashlib
+import json
+import os
+import pathlib
+import shutil
+import subprocess
+import sys
+import time
+import traceback
+
+SCR, REPO, OUT = (pathlib.Path(a).resolve() for a in sys.argv[1:4])
+PROTO, A3 = REPO / "protocol", SCR / "a3tree"
+WORK = SCR / "crossrun2" / "work"
+sys.dont_write_bytecode = True
+sys.path[:0] = [str(A3), str(PROTO), str(PROTO / "tests")]
+
+import evaluation.checkpoint_rpc_v2 as cr          # noqa: E402
+import evaluation.export_snapshot_v2 as es         # noqa: E402
+import evaluation.governance_rpc_v2 as gr          # noqa: E402
+import evaluation.history_rpc_v2 as hr             # noqa: E402
+import evaluation.public_observations_v2 as po     # noqa: E402
+import evaluation.receipt_history_v2 as rh         # noqa: E402
+import evaluation.rpc as rpcmod                    # noqa: E402
+import evaluation.store_snapshot_v2 as ss          # noqa: E402
+from evaluation.evm import AbiContract             # noqa: E402
+import ledger_setup as setup                       # noqa: E402
+import test_adapter_v2_main_wiring_live as W       # noqa: E402  (agent 2's live fixtures: Adapter, check_pool_success, accept, fresh)
+import test_rpc_binding_view_live as L             # noqa: E402
+from hmbc_protocol import eip712                   # noqa: E402
+from hmbc_protocol.client import UserClient        # noqa: E402
+from hmbc_protocol.relay import Relay              # noqa: E402
+from support import rpc as raw_rpc                 # noqa: E402
+
+OUT.mkdir(parents=True, exist_ok=True)
+RAW = OUT / "outputs"
+RAW.mkdir(exist_ok=True)
+RESULTS = []
+CAST = pathlib.Path(os.environ["HMBC_FOUNDRY_DIR"]) / "cast"
+CAST_SHA = hashlib.sha256(CAST.read_bytes()).hexdigest()
+
+
+def stage(name):
+    def deco(fn):
+        t0 = time.monotonic()
+        try:
+            result = fn()
+            row = {"stage": name, "ok": True, "seconds": round(time.monotonic() - t0, 2), "result": result}
+        except BaseException as e:  # noqa: BLE001 - a measurement: record whatever happened
+            row = {"stage": name, "ok": False, "seconds": round(time.monotonic() - t0, 2), "error": type(e).__name__ + ": " + str(e)[:700], "traceback": traceback.format_exc()[-2000:]}
+        RESULTS.append(row)
+        (OUT / "results.json").write_text(json.dumps(RESULTS, indent=1, default=str) + "\n")
+        print(("PASS " if row["ok"] else "FAIL ") + name + ("" if row["ok"] else "  -> " + row["error"][:240]), flush=True)
+        return fn
+    return deco
+
+
+class Factory:
+    def __init__(self, root):
+        self.root, self.n = root, 0
+
+    def mktemp(self, name):
+        self.n += 1
+        p = self.root / f"{name}-{self.n}"
+        p.mkdir(parents=True)
+        return p
+
+
+S = {}
+counter = [0]
+
+
+def rpc_client(url):
+    counter[0] += 1
+    return rpcmod.RpcClient(url, cast=CAST, cast_sha256=CAST_SHA, cwd=WORK, output=RAW / f"rpc-{counter[0]:02d}", timeout=10.0, hash_policy="checkpoint")
+
+
+def store_paths(d):
+    return d / "signing.sqlite", d / "INITIALIZED", d / ".lock"
+
+
+def run_exporter(index, flag):
+    p = subprocess.run([sys.executable, "-B", "-m", "hmbc_protocol.witness_state", "--state-dir", str(S["adapter"].state), "--witness-index", str(index), flag],
+                       cwd=PROTO, env={"PATH": "/usr/bin:/bin"}, capture_output=True, timeout=60)
+    return p.stdout, p.stderr, p.returncode
+
+
+def collect_latest():
+    live = S["live"]
+    rp = {c: rpc_client(live.urls[i]) for i, c in enumerate(("pbc", "dbc"))}
+    res = po.collect(live.dep, rp, S["abi"], output=RAW / f"observations-{counter[0]:02d}", compiled_max_admins="8")
+    return res["observations"]
+
+
+def head(url, chain_id):
+    blk = raw_rpc(url, "eth_getBlockByNumber", ["latest", False])
+    return {"chainId": chain_id, "blockNumber": str(int(blk["number"], 16)), "blockHash": blk["hash"], "timestamp": str(int(blk["timestamp"], 16))}
+
+
+def brief_reply(r):
+    if r.get("ok"):
+        res = r["result"]
+        coll = res.get("collection", {})
+        return {"ok": True, "outcomes": [(o["witnessIndex"], o["status"], o.get("replies")) for o in coll.get("outcomes", [])], "keys": sorted(res)}
+    err = r["error"]
+    out = {"ok": False, "code": err.get("code"), "reason": err.get("reason"), "message": str(err.get("message"))[:200]}
+    if "collection" in err:
+        out["outcomes"] = [(o["witnessIndex"], o["status"], o.get("code")) for o in err["collection"]["outcomes"]]
+    return out
+
+
+gen = L._deploy(Factory(WORK), "repaired-f", False)
+
+
+@stage("S0 deploy the real F ledger on two real Anvil nodes")
+def _():
+    live = S["live"] = next(gen)
+    dep = live.dep
+    S["abi"] = {n: pathlib.Path(live.abi_dir) / f"{n}.json" for n in dep["abi"]}
+    (RAW / "deployment.json").write_text(json.dumps(dep, indent=1, sort_keys=True) + "\n")
+    S["led"] = L.f_ledger(live)
+    S["wview"], _ = L.witness_view(live)
+    return {"profile": dep["profile"], "profileEnum": dep["profileEnum"], "urls": live.urls}
+
+
+@stage("S1 fixtures (users, credentials, CRLs) and the REAL adapter with four supervised witnesses and --allow-governance")
+def _():
+    live, led = S["live"], S["led"]
+    S["ctx"] = setup.setup_pbc(led)
+    S["approved_root"], S["admin"] = "0x" + "e5" * 20, "0x" + "f6" * 20
+    (WORK / "a").mkdir(parents=True, exist_ok=True)
+    a = S["adapter"] = W.Adapter(live, WORK / "a", name="a", state="state", allow=[["1", S["approved_root"], [S["admin"]]]])
+    a.wait_ready()
+    return {"pids": a.pids(), "stateDir": "adapter state", "files": sorted(os.listdir(a.state))}
+
+
+@stage("S2 two real user requests forwarded by the real relay, then a pool checkpoint (sequence 1) accepted by the real KSSC")
+def _():
+    live, led, ctx, a = S["live"], S["led"], S["ctx"], S["adapter"]
+    client, relay = UserClient("alice", live.dep), Relay(led, "relay")
+    S["signed"] = []
+    max_ttl = int(led.pbc.call(led.PSC, "maxRequestTtl"))                 # the PSC refuses expiresAt > block.timestamp + maxRequestTtl as MALFORMED (run 1 used 420 and was refused: driver mistake)
+    ttl = max(10, min(25, max_ttl - 5))
+    S["requestTtl"] = {"maxRequestTtl": max_ttl, "used": ttl}
+    for nonce in ("1", "2"):
+        signed = client.sign_request(setup.make_request(led, ctx, client, nonce=nonce, ttl=ttl))
+        code = relay.forward(signed, ctx.bundle).code
+        assert code == "NONE", code
+        S["signed"].append(signed)
+    W.fresh(live)
+    r = a.ask("collect_checkpoint", {})
+    res = W.check_pool_success(r, "checkpoint", "StateCheckpoint", live.dep)
+    W.accept(live, res)
+    S["cp1"] = res["checkpoint"]
+    return {"sequence": res["checkpoint"]["sequence"], "requests": [s["requestDigest"] for s in S["signed"]], "reply": brief_reply(r), "requestTtl": S["requestTtl"]}
+
+
+@stage("S3 decision D1 through the adapter, consumed by the real ACSC; receipt through the adapter, reported to the real PSC")
+def _():
+    live, led, a = S["live"], S["led"], S["adapter"]
+    signed1 = S["signed"][0]
+    d1 = signed1["requestDigest"]
+    r = a.ask("collect_decision", {"requestDigest": d1})
+    res = W.check_pool_success(r, "decision", "AccessDecision", live.dep)
+    assert res["decision"]["result"] == "1" and res["credentialRecords"]
+    cert = {"decision": res["decision"], "signatures": res["signatures"]}
+    led.dbc.send(setup.key("relay"), led.ACSC, "consumeDecision", signed1["request"], cert, res["credentialRecords"])
+    grant_id = "0x" + eip712.grant_id(bytes.fromhex(d1[2:]), led.KSSC.address, led.dbc.chain_id).hex()
+    S["grant_id"] = grant_id
+    assert led.dbc.call(led.KSSC, "getGrant", grant_id)[5] is True
+    L.mine(live, "dbc")
+    r2 = a.ask("attest_grant", {"grantId": grant_id})
+    rres = W.check_pool_success(r2, "receipt", "GrantReceipt", live.dep)
+    led.pbc.send(setup.key("relay"), led.PSC, "reportAttestedOutcome", d1, "0x" + "5e" * 32, rres["receipt"], rres["signatures"])
+    assert led.pbc.call(led.PSC, "getRequest", d1)["status"] == "2"
+    S["receipt1"] = rres["receipt"]
+    return {"decisionReply": brief_reply(r), "decision": res["decision"], "receiptReply": brief_reply(r2), "receipt": rres["receipt"], "grantId": grant_id}
+
+
+@stage("S4 decision D2 at sequence 1 (signed, NOT consumed), and the executed-receipt attempt: the same receipt requested again after the real PSC executed it")
+def _():
+    live, a = S["live"], S["adapter"]
+    d2 = S["signed"][1]["requestDigest"]
+    r = a.ask("collect_decision", {"requestDigest": d2})
+    res = W.check_pool_success(r, "decision", "AccessDecision", live.dep)
+    S["dec2_first"] = res["decision"]
+    again = a.ask("attest_grant", {"grantId": S["grant_id"]})
+    return {"D2first": res["decision"], "receiptAgainAfterExecution": brief_reply(again),
+            "receiptAgainSameMessage": (again["result"]["receipt"] == S["receipt1"]) if again.get("ok") else None}
+
+
+@stage("S5 a second checkpoint (sequence 2) accepted, then D2 requested AGAIN: the old decision is bound to sequence 1 (the numeric death overtaken-decision-sequence)")
+def _():
+    live, a = S["live"], S["adapter"]
+    W.fresh(live)
+    r = a.ask("collect_checkpoint", {})
+    res = W.check_pool_success(r, "checkpoint", "StateCheckpoint", live.dep)
+    W.accept(live, res)
+    S["cp2"] = res["checkpoint"]
+    d2 = S["signed"][1]["requestDigest"]
+    r2 = a.ask("collect_decision", {"requestDigest": d2})
+    out = {"cp2": res["checkpoint"]["sequence"], "D2again": brief_reply(r2)}
+    if r2.get("ok"):
+        out["D2second"] = r2["result"]["decision"]
+        out["stateSequenceChanged"] = r2["result"]["decision"]["stateSequence"] != S["dec2_first"]["stateSequence"]
+    return out
+
+
+@stage("S6 governance through the adapter (AFTER the D2 re-request: a governance ADD changes authEpoch, which makes every older request stale; run 2 had this order and lost the decision death) (allow-listed root) executed by the real Governance; then the stale-nonce attempt")
+def _():
+    live, led, a, wview = S["live"], S["led"], S["adapter"], S["wview"]
+
+    def action(root):
+        L.mine(live, "pbc")
+        return {"action": "1", "root": root, "admins": [S["admin"]], "nonce": str(int(wview.governance_nonce()) + 1), "witnessSetVersion": "2", "expiresAt": str(int(wview.observe("pbc")["timestamp"]) + 60)}
+    act = action(S["approved_root"])
+    r = a.ask("collect_governance", act)
+    res = W.check_pool_success(r, "governanceAction", "GovernanceAction", live.dep)
+    led.pbc.send(L.ANVIL_KEY0, led.Governance, "execute", act, res["signatures"])
+    assert wview.is_authority(S["approved_root"]) is True
+    S["gov1"] = act
+    # the stale attempt: the SAME nonce again, now that the ledger has consumed it (a numeric overtaken fact), with a DIFFERENT effect (another root, also on the allow-list is not possible: the list has one entry)
+    stale = dict(act)
+    stale["root"] = "0x" + "c7" * 20
+    r2 = a.ask("collect_governance", stale)
+    stale_same_effect = a.ask("collect_governance", act)
+    return {"executed": act, "reply": brief_reply(r), "staleNonceDifferentEffect": brief_reply(r2), "staleNonceSameEffectAfterExecution": brief_reply(stale_same_effect)}
+
+
+@stage("S7 the real exporters under agent 3's locked_store for all four witnesses; verify_export_snapshot(WitnessEvidence) for every record type")
+def _():
+    live, a = S["live"], S["adapter"]
+    time.sleep(1.5)                                          # let a witness that was not among the first three finish its signing before the snapshot
+    obs = S["obs"] = collect_latest()
+    out = []
+    S["exports"] = {}
+    for i in range(4):
+        d = a.state / f"witness-{i}"
+        db, marker, lock = store_paths(d)
+        owner = "witness:" + live.dep["fixture"]["witnessSet"]["witnesses"][i]
+        with ss.locked_store(db, marker, lock) as r:
+            before = r.snapshot()
+            o, e, rc = run_exporter(i, "--evidence")
+            after = r.snapshot()
+            ss.require_unchanged(before, after)
+        (RAW / f"w{i}-evidence.stdout").write_bytes(o)
+        ev = json.loads(o)
+        S["exports"][i] = dict(raw=(o, e, rc), ev=ev, snapshot=before, owner=owner)
+        row = {"witness": i, "exit": rc, "stderrBytes": len(e), "stdoutBytes": len(o),
+               "conflicts": sorted((r_["type"], len(r_["digests"])) for r_ in ev["conflicts"]),
+               "superseded": [(r_["type"], r_["keyField"], r_["death"]["kind"]) for r_ in ev["superseded"]],
+               "faulted": ev["faulted"] is not None}
+        try:
+            v = es.verify_export_snapshot(o, stderr=e, exit_code=rc, kind="WitnessEvidence", snapshot=before, manifest=live.dep, observations=obs, expected_owner=owner, compiled_max_admins="8")
+            row["verify_export_snapshot"] = {"verdict": "ACCEPTED", "history": v["history"]}
+        except Exception as ex:  # noqa: BLE001
+            row["verify_export_snapshot"] = {"verdict": "REFUSED", "error": type(ex).__name__ + ": " + str(ex)[:400]}
+        out.append(row)
+    return out
+
+
+@stage("S8 history_rpc_v2.collect on the real evidence of every witness (native death getters via eth_call, EIP-1898)")
+def _():
+    live = S["live"]
+    out = []
+    for i in range(4):
+        x = S["exports"][i]
+        rp = {c: rpc_client(live.urls[k]) for k, c in enumerate(("pbc", "dbc"))}
+        try:
+            res = hr.collect(x["ev"], manifest=live.dep, observations=S["obs"], expected_owner=x["owner"], abi_paths=S["abi"], rpcs=rp, output=RAW / f"history-w{i}", compiled_max_admins="8")
+            out.append({"witness": i, "verdict": "ACCEPTED", "blocks": len(res["blocks"]), "calls": len(res["calls"]), "verification": res["verification"]})
+        except Exception as ex:  # noqa: BLE001
+            out.append({"witness": i, "verdict": "REFUSED", "error": type(ex).__name__ + ": " + str(ex)[:500]})
+    return out
+
+
+@stage("S9 checkpoint_rpc_v2.collect on the real checkpoint digests (sequences 1 and 2)")
+def _():
+    live = S["live"]
+    out = []
+    for i in range(4):
+        x = S["exports"][i]
+        ev = x["ev"]
+        digests = [s["digest"] for coll in ("superseded", "conflicts") for r in ev[coll] if r["type"] == "StateCheckpoint" for s in r["digests"]]
+        if not digests:
+            out.append({"witness": i, "verdict": "NOT PRODUCED", "reason": "this witness's store holds no StateCheckpoint record"})
+            continue
+        pbc_head = head(live.urls[0], live.dep["chains"]["pbc"]["chainId"])
+        selections = [{"digest": d, "pbcHead": pbc_head, "reason": "agent 2 cross-run 2: the live PBC latest block at selection time, a caller assertion"} for d in digests]
+        rp = {c: rpc_client(live.urls[k]) for k, c in enumerate(("pbc", "dbc"))}
+        try:
+            res = cr.collect(ev, manifest=live.dep, observations=S["obs"], expected_owner=x["owner"], abi_paths=S["abi"], selections=selections, rpcs=rp, output=RAW / f"checkpoint-w{i}", compiled_max_admins="8")
+            out.append({"witness": i, "verdict": "ACCEPTED", "digests": len(digests), "keys": sorted(res)})
+        except Exception as ex:  # noqa: BLE001
+            out.append({"witness": i, "verdict": "REFUSED", "digests": len(digests), "error": type(ex).__name__ + ": " + str(ex)[:500]})
+    return out
+
+
+@stage("S10 governance_rpc_v2.collect on the real governance evidence (caller TEST-ONLY approvals = the --allow-governance tuple)")
+def _():
+    live = S["live"]
+    approvals = [{"action": "1", "root": S["approved_root"], "admins": [S["admin"]]}]
+    out = []
+    for i in range(4):
+        x = S["exports"][i]
+        rows = [r for coll in ("superseded", "conflicts") for r in x["ev"][coll] if r["type"] == "GovernanceAction"]
+        if not rows:
+            out.append({"witness": i, "verdict": "NOT PRODUCED", "reason": "this witness's store holds no GovernanceAction record"})
+            continue
+        rp = {c: rpc_client(live.urls[k]) for k, c in enumerate(("pbc", "dbc"))}
+        try:
+            res = gr.collect(x["ev"], manifest=live.dep, observations=S["obs"], expected_owner=x["owner"], abi_paths=S["abi"], approvals=approvals,
+                             approval_reason="agent 2 cross-run 2: the same tuple the adapter was started with via --allow-governance (TEST-ONLY)", rpcs=rp, output=RAW / f"governance-w{i}", compiled_max_admins="8")
+            out.append({"witness": i, "verdict": "ACCEPTED", "captures": len(res["captures"]), "verification": res["verification"]})
+        except Exception as ex:  # noqa: BLE001
+            out.append({"witness": i, "verdict": "REFUSED", "error": type(ex).__name__ + ": " + str(ex)[:500]})
+    return out
+
+
+def contract(name):
+    dep = S["live"].dep
+    for chain in dep["chains"].values():
+        if name in chain["contracts"]:
+            return AbiContract(S["abi"][name], chain["contracts"][name], dep["abi"][name]["abiSha256"])
+    raise KeyError(name)
+
+
+def build_receipt_captures(ev, dbc_obs):
+    """MY capture builder (NOT agent 3 code): agent 3 has no receipt RPC collector yet, so the closed capture records receipt_history_v2 asks for are built here from raw RPC replies."""
+    live = S["live"]
+    dep = live.dep
+    pbc_id, dbc_id = dep["chains"]["pbc"]["chainId"], dep["chains"]["dbc"]["chainId"]
+    url = {pbc_id: live.urls[0], dbc_id: live.urls[1]}
+    kssc, psc = contract("KSSC"), contract("PSC")
+    caps = []
+    for coll in ("superseded", "conflicts"):
+        for row in ev[coll]:
+            if row["type"] != "GrantReceipt":
+                continue
+            message = row["effect"] | {"requestDigest": row["keyField"]}
+            for signed in row["digests"]:
+                pbc_ob = signed["observation"]
+                blocks = {}
+
+                def blk(chain, h):
+                    if (chain, h) not in blocks:
+                        blocks[(chain, h)] = {"chainId": chain, "raw": raw_rpc(url[chain], "eth_getBlockByHash", [h, False])}
+                blk(pbc_id, pbc_ob["blockHash"])
+                blk(dbc_id, dbc_obs["blockHash"])
+                blk(dbc_id, message["dbcBlockHash"])
+                calls = []
+                for chain, ob, c, getter, arg in ((dbc_id, dbc_obs, kssc, "grantDetails", message["grantId"]), (pbc_id, pbc_ob, psc, "getRequest", message["requestDigest"])):
+                    data = c.calldata(getter, arg)
+                    res = raw_rpc(url[chain], "eth_call", [{"to": c.address, "data": data}, {"blockHash": ob["blockHash"]}])
+                    calls.append({"chainId": chain, "blockHash": ob["blockHash"], "to": c.address, "data": data, "result": res})
+                logs = [lg for lg in raw_rpc(url[dbc_id], "eth_getLogs", [{"blockHash": message["dbcBlockHash"], "address": kssc.address}])
+                        if (kssc.decode_log(lg) or {}).get("name") == "GrantIssued" and kssc.decode_log(lg)["fields"]["grantId"] == message["grantId"]]
+                caps.append({"digest": signed["digest"], "dbcObservation": dbc_obs, "blocks": list(blocks.values()), "calls": calls, "logs": logs})
+    return caps
+
+
+@stage("S11 receipt_history_v2.verify_receipt_history on the real receipt evidence (no receipt RPC collector exists: captures built by the DRIVER from raw RPC)")
+def _():
+    live = S["live"]
+    dbc_obs = head(live.urls[1], live.dep["chains"]["dbc"]["chainId"])
+    out = []
+    for i in range(4):
+        x = S["exports"][i]
+        rows = [r for coll in ("superseded", "conflicts") for r in x["ev"][coll] if r["type"] == "GrantReceipt"]
+        if not rows:
+            out.append({"witness": i, "verdict": "NOT PRODUCED", "reason": "this witness's store holds no GrantReceipt record"})
+            continue
+        try:
+            caps = build_receipt_captures(x["ev"], dbc_obs)
+            (RAW / f"receipt-captures-w{i}.json").write_text(json.dumps(caps, indent=1, sort_keys=True) + "\n")
+            res = rh.verify_receipt_history(x["ev"], manifest=live.dep, observations=S["obs"], expected_owner=x["owner"], abi_paths=S["abi"], captures=caps, compiled_max_admins="8")
+            out.append({"witness": i, "verdict": "ACCEPTED", "captures": len(caps), "receiptStateSignaturesChecked": res["receiptStateSignaturesChecked"]})
+        except Exception as ex:  # noqa: BLE001
+            out.append({"witness": i, "verdict": "REFUSED", "error": type(ex).__name__ + ": " + str(ex)[:500], "trace": traceback.format_exc()[-700:]})
+    return out
+
+
+@stage("S12 stop the adapter: exit code and stderr; every witness child must be gone")
+def _():
+    a = S["adapter"]
+    a.close()
+    left = W.witness_procs(a.state)
+    return {"exit": a.rc, "stderr": a.stderr[-300:], "witnessProcsLeft": left}
+
+
+@stage("S13 overtaken-checkpoint attempt on REAL witness processes: a proposal for a sequence the ledger has already accepted")
+def _():
+    live, led, wview = S["live"], S["led"], S["wview"]
+    (WORK / "raw").mkdir(exist_ok=True)
+    procs = [L.WitnessProc(live, WORK / "raw", i) for i in range(3)]
+    S["rawprocs"] = procs
+    try:
+        L.mine(live, "pbc")
+        L.mine(live, "dbc")
+        cp = L.svc.derive_checkpoint(wview, live.dep)
+        replies = [p.ask("checkpoint", cp) for p in procs]
+        assert all(r["type"] == "signature" for r in replies), replies
+        ordered = L.sorted_signatures(cp, "StateCheckpoint", [r["signature"] for r in replies], live.dep)
+        led.dbc.send(L.ANVIL_KEY0, led.KSSC, "acceptState", cp, ordered)
+        L.mine(live, "pbc")
+        L.mine(live, "dbc")
+        nxt = L.svc.derive_checkpoint(wview, live.dep)                     # sequence = current + 1 (a fresh, valid proposal)
+        stale_diff = dict(nxt)
+        stale_diff["sequence"] = cp["sequence"]                            # the SAME sequence the ledger has accepted, a DIFFERENT effect (later source block)
+        r_diff = procs[0].ask("checkpoint", stale_diff)
+        r_same = procs[0].ask("checkpoint", cp)                            # the exact accepted proposal again
+        return {"acceptedSequence": cp["sequence"], "staleDifferentEffect": {k: v for k, v in r_diff.items() if k in ("type", "code", "reason", "message")},
+                "sameProposalAgain": {k: v for k, v in r_same.items() if k in ("type", "code", "reason", "message")}}
+    finally:
+        for p in procs:
+            try:
+                p.close()
+            except Exception:  # noqa: BLE001
+                pass
+
+
+@stage("S14 teardown: stop the Anvil nodes")
+def _():
+    gen.close()
+    return "closed"
+
+
+shutil.rmtree(WORK, ignore_errors=True)
+print("DONE", sum(1 for r in RESULTS if r["ok"]), "passed,", sum(1 for r in RESULTS if not r["ok"]), "failed", flush=True)
