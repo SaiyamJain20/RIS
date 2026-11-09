@@ -1,0 +1,577 @@
+FFFFFF.............FF..........FFFFFFFFFFFF                              [100%]
+=================================== FAILURES ===================================
+____________ test_a_mutant_variant_parses_to_exactly_its_parts[M1] _____________
+
+mid = 'M1'
+
+    @pytest.mark.parametrize("mid", IDS)
+    def test_a_mutant_variant_parses_to_exactly_its_parts(mid):
+        fa, _, _ = mods()
+>       v = fa.parse_variant("3=mutant:" + mid)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_mutants.py:38: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '3=mutant:M1'
+
+    def parse_variant(text):
+        """`I=crash:POINT` or `I=delay:MS[:kind[:when]]`, exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+>       raise ValueError("variant must be crash or delay")
+E       ValueError: variant must be crash or delay
+
+protocol/testtools/faulty_adapter_v2.py:102: ValueError
+____________ test_a_mutant_variant_parses_to_exactly_its_parts[M2] _____________
+
+mid = 'M2'
+
+    @pytest.mark.parametrize("mid", IDS)
+    def test_a_mutant_variant_parses_to_exactly_its_parts(mid):
+        fa, _, _ = mods()
+>       v = fa.parse_variant("3=mutant:" + mid)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_mutants.py:38: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '3=mutant:M2'
+
+    def parse_variant(text):
+        """`I=crash:POINT` or `I=delay:MS[:kind[:when]]`, exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+>       raise ValueError("variant must be crash or delay")
+E       ValueError: variant must be crash or delay
+
+protocol/testtools/faulty_adapter_v2.py:102: ValueError
+____________ test_a_mutant_variant_parses_to_exactly_its_parts[M3] _____________
+
+mid = 'M3'
+
+    @pytest.mark.parametrize("mid", IDS)
+    def test_a_mutant_variant_parses_to_exactly_its_parts(mid):
+        fa, _, _ = mods()
+>       v = fa.parse_variant("3=mutant:" + mid)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_mutants.py:38: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '3=mutant:M3'
+
+    def parse_variant(text):
+        """`I=crash:POINT` or `I=delay:MS[:kind[:when]]`, exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+>       raise ValueError("variant must be crash or delay")
+E       ValueError: variant must be crash or delay
+
+protocol/testtools/faulty_adapter_v2.py:102: ValueError
+____________ test_a_mutant_variant_parses_to_exactly_its_parts[M4] _____________
+
+mid = 'M4'
+
+    @pytest.mark.parametrize("mid", IDS)
+    def test_a_mutant_variant_parses_to_exactly_its_parts(mid):
+        fa, _, _ = mods()
+>       v = fa.parse_variant("3=mutant:" + mid)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_mutants.py:38: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '3=mutant:M4'
+
+    def parse_variant(text):
+        """`I=crash:POINT` or `I=delay:MS[:kind[:when]]`, exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+>       raise ValueError("variant must be crash or delay")
+E       ValueError: variant must be crash or delay
+
+protocol/testtools/faulty_adapter_v2.py:102: ValueError
+____________ test_a_mutant_variant_parses_to_exactly_its_parts[M6] _____________
+
+mid = 'M6'
+
+    @pytest.mark.parametrize("mid", IDS)
+    def test_a_mutant_variant_parses_to_exactly_its_parts(mid):
+        fa, _, _ = mods()
+>       v = fa.parse_variant("3=mutant:" + mid)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_mutants.py:38: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '3=mutant:M6'
+
+    def parse_variant(text):
+        """`I=crash:POINT` or `I=delay:MS[:kind[:when]]`, exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+>       raise ValueError("variant must be crash or delay")
+E       ValueError: variant must be crash or delay
+
+protocol/testtools/faulty_adapter_v2.py:102: ValueError
+____________ test_a_mutant_variant_parses_to_exactly_its_parts[M7] _____________
+
+mid = 'M7'
+
+    @pytest.mark.parametrize("mid", IDS)
+    def test_a_mutant_variant_parses_to_exactly_its_parts(mid):
+        fa, _, _ = mods()
+>       v = fa.parse_variant("3=mutant:" + mid)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_mutants.py:38: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '3=mutant:M7'
+
+    def parse_variant(text):
+        """`I=crash:POINT` or `I=delay:MS[:kind[:when]]`, exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+>       raise ValueError("variant must be crash or delay")
+E       ValueError: variant must be crash or delay
+
+protocol/testtools/faulty_adapter_v2.py:102: ValueError
+_ test_the_existing_variants_still_parse_with_the_new_field_defaulting_to_none _
+
+    def test_the_existing_variants_still_parse_with_the_new_field_defaulting_to_none():
+        fa, _, _ = mods()
+>       assert fa.parse_variant("1=crash:after_commit").mutant is None and fa.parse_variant("1=delay:5").mutant is None
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Variant' object has no attribute 'mutant'
+
+protocol/tests/test_faulty_adapter_v2_mutants.py:52: AttributeError
+_____ test_split_arguments_collects_the_trees_and_keeps_the_adapter_flags ______
+
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-2379/test_split_arguments_collects_0')
+
+    def test_split_arguments_collects_the_trees_and_keeps_the_adapter_flags(tmp_path):
+        fa, _, _ = mods()
+        base = base_flags(tmp_path)
+>       parsed = fa.split_arguments(["--witness-variant", "3=mutant:M1", "--mutant-tree", "M1=/abs/t1", "--witness-variant", "2=mutant:M2", "--mutant-tree", "M2=/abs/t2"] + base)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_mutants.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+protocol/testtools/faulty_adapter_v2.py:112: in split_arguments
+    variants = [parse_variant(t) for t in ns.witness_variant]
+                ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '3=mutant:M1'
+
+    def parse_variant(text):
+        """`I=crash:POINT` or `I=delay:MS[:kind[:when]]`, exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+>       raise ValueError("variant must be crash or delay")
+E       ValueError: variant must be crash or delay
+
+protocol/testtools/faulty_adapter_v2.py:102: ValueError
+_ test_command_for_starts_a_mutant_witness_through_the_launcher_and_keeps_every_other_command _
+
+    def test_command_for_starts_a_mutant_witness_through_the_launcher_and_keeps_every_other_command():
+        fa, _, wpt = mods()
+>       variants = {1: fa.parse_variant("1=mutant:M2"), 2: fa.parse_variant("2=crash:after_commit"), 3: fa.parse_variant("3=mutant:M6")}
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_mutants.py:83: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '1=mutant:M2'
+
+    def parse_variant(text):
+        """`I=crash:POINT` or `I=delay:MS[:kind[:when]]`, exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+>       raise ValueError("variant must be crash or delay")
+E       ValueError: variant must be crash or delay
+
+protocol/testtools/faulty_adapter_v2.py:102: ValueError
+____ test_command_for_without_a_tree_for_a_mutant_variant_is_a_value_error _____
+
+    def test_command_for_without_a_tree_for_a_mutant_variant_is_a_value_error():
+        fa, _, wpt = mods()
+>       cf = fa.command_for_variants({1: fa.parse_variant("1=mutant:M1")}, {})
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_mutants.py:95: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '1=mutant:M1'
+
+    def parse_variant(text):
+        """`I=crash:POINT` or `I=delay:MS[:kind[:when]]`, exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+>       raise ValueError("variant must be crash or delay")
+E       ValueError: variant must be crash or delay
+
+protocol/testtools/faulty_adapter_v2.py:102: ValueError
+_ test_installed_mutant_variants_reach_the_real_supervisors_effective_commands _
+
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-2379/test_installed_mutant_variants0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7927353fa780>
+
+    def test_installed_mutant_variants_reach_the_real_supervisors_effective_commands(tmp_path, monkeypatch):
+        fa, am, wpt = mods()
+        restoring(monkeypatch, am)
+>       fa.install({3: fa.parse_variant("3=mutant:M1")}, None, {"M1": "/abs/t1"})
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_mutants.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '3=mutant:M1'
+
+    def parse_variant(text):
+        """`I=crash:POINT` or `I=delay:MS[:kind[:when]]`, exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+>       raise ValueError("variant must be crash or delay")
+E       ValueError: variant must be crash or delay
+
+protocol/testtools/faulty_adapter_v2.py:102: ValueError
+_ test_main_with_a_mutant_variant_verifies_the_tree_patches_then_delegates_with_only_the_adapter_flags _
+
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-2379/test_main_with_a_mutant_varian0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7927353fad70>
+
+    def test_main_with_a_mutant_variant_verifies_the_tree_patches_then_delegates_with_only_the_adapter_flags(tmp_path, monkeypatch):
+        fa, am, _ = mods()
+        restoring(monkeypatch, am)
+        runtime = am.build_runtime
+        seen = {}
+        monkeypatch.setattr(am, "main", lambda argv=None, stdin=None, stdout=None, stderr=None: seen.update(argv=argv, patched=am.build_runtime is not runtime) or 0)
+        tree = tree_of(tmp_path, "M2")
+        base = base_flags(tmp_path)
+>       assert fa.main(["--witness-variant", "3=mutant:M2", "--mutant-tree", "M2=" + tree] + base) == 0
+E       AssertionError: assert 2 == 0
+E        +  where 2 = <function main at 0x792735456e80>((['--witness-variant', '3=mutant:M2', '--mutant-tree', 'M2=/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-2379/test_main_with_a_mutant_varian0/tree-M2'] + ['--deployment', '/home/th4kur/Desktop/sem5/RIS/RIS/protocol/tests/fixtures/agent1-85c59f5-f-base-deployment.json', '-...5c59f5-abi', '--schema', '/home/th4kur/Desktop/sem5/RIS/RIS/protocol/tests/fixtures/agent3-v2.1-hmbc.schema.json', ...]))
+E        +    where <function main at 0x792735456e80> = <module 'testtools.faulty_adapter_v2' from '/home/th4kur/Desktop/sem5/RIS/RIS/protocol/testtools/faulty_adapter_v2.py'>.main
+
+protocol/tests/test_faulty_adapter_v2_mutants.py:122: AssertionError
+----------------------------- Captured stderr call -----------------------------
+{"error":{"code":"MALFORMED","message":"refusing: --witness-variant must be I=crash:before_commit|crash:after_commit|delay:MS[:kind[:before|after]] with I in 0..3 and MS in 0..60000"}}
+_ test_a_bad_mutant_request_is_one_closed_refusal_before_anything_is_created_or_spawned[variant-without-tree] _
+
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-2379/test_a_bad_mutant_request_is_o0')
+name = 'variant-without-tree'
+
+    @pytest.mark.parametrize("name", ["variant-without-tree", "tree-without-variant", "tree-of-another-mutant", "tampered-tree", "missing-tree-directory", "relative-tree", "adapter-role-mutant"])
+    def test_a_bad_mutant_request_is_one_closed_refusal_before_anything_is_created_or_spawned(tmp_path, name):
+        fa, _, _ = mods()
+        cases = refusal_cases(tmp_path)
+        p = run(base_flags(tmp_path) + cases[name])
+        msg = one_refusal(p, tmp_path)
+>       assert msg in (fa.MSG_MUTANT, fa.MSG_VARIANT, fa.MSG_FLAGS), msg
+                       ^^^^^^^^^^^^^
+E       AttributeError: module 'testtools.faulty_adapter_v2' has no attribute 'MSG_MUTANT'. Did you mean: 'MSG_VARIANT'?
+
+protocol/tests/test_faulty_adapter_v2_mutants.py:150: AttributeError
+_ test_a_bad_mutant_request_is_one_closed_refusal_before_anything_is_created_or_spawned[tree-without-variant] _
+
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-2379/test_a_bad_mutant_request_is_o1')
+name = 'tree-without-variant'
+
+    @pytest.mark.parametrize("name", ["variant-without-tree", "tree-without-variant", "tree-of-another-mutant", "tampered-tree", "missing-tree-directory", "relative-tree", "adapter-role-mutant"])
+    def test_a_bad_mutant_request_is_one_closed_refusal_before_anything_is_created_or_spawned(tmp_path, name):
+        fa, _, _ = mods()
+        cases = refusal_cases(tmp_path)
+        p = run(base_flags(tmp_path) + cases[name])
+>       msg = one_refusal(p, tmp_path)
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_mutants.py:149: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+p = CompletedProcess(args=['/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratc...55-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-2379/test_a_bad_mutant_request_is_o1/tree-M1\n')
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-2379/test_a_bad_mutant_request_is_o1')
+
+    def one_refusal(p, tmp_path):
+        """Exactly one JSON line on stderr, code MALFORMED, nothing on stdout, exit 2, no traceback, no path and no key in it, nothing created and nothing spawned."""
+        assert p.returncode == 2 and p.stdout == "" and "Traceback" not in p.stderr, (p.returncode, p.stdout, p.stderr[-300:])
+        lines = p.stderr.strip().splitlines()
+>       assert len(lines) == 1, lines
+E       AssertionError: ['usage: hmbc_protocol.adapter_v2_main [-h] --deployment DEPLOYMENT', '                                     --abi-dir ...             --state-dir STATE_DIR', '                                     [--allow-governance ALLOW_GOVERNANCE]', ...]
+E       assert 7 == 1
+E        +  where 7 = len(['usage: hmbc_protocol.adapter_v2_main [-h] --deployment DEPLOYMENT', '                                     --abi-dir ...             --state-dir STATE_DIR', '                                     [--allow-governance ALLOW_GOVERNANCE]', ...])
+
+protocol/tests/test_faulty_adapter_v2.py:55: AssertionError
+_ test_a_bad_mutant_request_is_one_closed_refusal_before_anything_is_created_or_spawned[tree-of-another-mutant] _
+
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-2379/test_a_bad_mutant_request_is_o2')
+name = 'tree-of-another-mutant'
+
+    @pytest.mark.parametrize("name", ["variant-without-tree", "tree-without-variant", "tree-of-another-mutant", "tampered-tree", "missing-tree-directory", "relative-tree", "adapter-role-mutant"])
+    def test_a_bad_mutant_request_is_one_closed_refusal_before_anything_is_created_or_spawned(tmp_path, name):
+        fa, _, _ = mods()
+        cases = refusal_cases(tmp_path)
+        p = run(base_flags(tmp_path) + cases[name])
+        msg = one_refusal(p, tmp_path)
+>       assert msg in (fa.MSG_MUTANT, fa.MSG_VARIANT, fa.MSG_FLAGS), msg
+                       ^^^^^^^^^^^^^
+E       AttributeError: module 'testtools.faulty_adapter_v2' has no attribute 'MSG_MUTANT'. Did you mean: 'MSG_VARIANT'?
+
+protocol/tests/test_faulty_adapter_v2_mutants.py:150: AttributeError
+_ test_a_bad_mutant_request_is_one_closed_refusal_before_anything_is_created_or_spawned[tampered-tree] _
+
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-2379/test_a_bad_mutant_request_is_o3')
+name = 'tampered-tree'
+
+    @pytest.mark.parametrize("name", ["variant-without-tree", "tree-without-variant", "tree-of-another-mutant", "tampered-tree", "missing-tree-directory", "relative-tree", "adapter-role-mutant"])
+    def test_a_bad_mutant_request_is_one_closed_refusal_before_anything_is_created_or_spawned(tmp_path, name):
+        fa, _, _ = mods()
+        cases = refusal_cases(tmp_path)
+        p = run(base_flags(tmp_path) + cases[name])
+        msg = one_refusal(p, tmp_path)
+>       assert msg in (fa.MSG_MUTANT, fa.MSG_VARIANT, fa.MSG_FLAGS), msg
+                       ^^^^^^^^^^^^^
+E       AttributeError: module 'testtools.faulty_adapter_v2' has no attribute 'MSG_MUTANT'. Did you mean: 'MSG_VARIANT'?
+
+protocol/tests/test_faulty_adapter_v2_mutants.py:150: AttributeError
+_ test_a_bad_mutant_request_is_one_closed_refusal_before_anything_is_created_or_spawned[missing-tree-directory] _
+
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-2379/test_a_bad_mutant_request_is_o4')
+name = 'missing-tree-directory'
+
+    @pytest.mark.parametrize("name", ["variant-without-tree", "tree-without-variant", "tree-of-another-mutant", "tampered-tree", "missing-tree-directory", "relative-tree", "adapter-role-mutant"])
+    def test_a_bad_mutant_request_is_one_closed_refusal_before_anything_is_created_or_spawned(tmp_path, name):
+        fa, _, _ = mods()
+        cases = refusal_cases(tmp_path)
+        p = run(base_flags(tmp_path) + cases[name])
+        msg = one_refusal(p, tmp_path)
+>       assert msg in (fa.MSG_MUTANT, fa.MSG_VARIANT, fa.MSG_FLAGS), msg
+                       ^^^^^^^^^^^^^
+E       AttributeError: module 'testtools.faulty_adapter_v2' has no attribute 'MSG_MUTANT'. Did you mean: 'MSG_VARIANT'?
+
+protocol/tests/test_faulty_adapter_v2_mutants.py:150: AttributeError
+_ test_a_bad_mutant_request_is_one_closed_refusal_before_anything_is_created_or_spawned[relative-tree] _
+
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-2379/test_a_bad_mutant_request_is_o5')
+name = 'relative-tree'
+
+    @pytest.mark.parametrize("name", ["variant-without-tree", "tree-without-variant", "tree-of-another-mutant", "tampered-tree", "missing-tree-directory", "relative-tree", "adapter-role-mutant"])
+    def test_a_bad_mutant_request_is_one_closed_refusal_before_anything_is_created_or_spawned(tmp_path, name):
+        fa, _, _ = mods()
+        cases = refusal_cases(tmp_path)
+        p = run(base_flags(tmp_path) + cases[name])
+        msg = one_refusal(p, tmp_path)
+>       assert msg in (fa.MSG_MUTANT, fa.MSG_VARIANT, fa.MSG_FLAGS), msg
+                       ^^^^^^^^^^^^^
+E       AttributeError: module 'testtools.faulty_adapter_v2' has no attribute 'MSG_MUTANT'. Did you mean: 'MSG_VARIANT'?
+
+protocol/tests/test_faulty_adapter_v2_mutants.py:150: AttributeError
+_ test_a_bad_mutant_request_is_one_closed_refusal_before_anything_is_created_or_spawned[adapter-role-mutant] _
+
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-2379/test_a_bad_mutant_request_is_o6')
+name = 'adapter-role-mutant'
+
+    @pytest.mark.parametrize("name", ["variant-without-tree", "tree-without-variant", "tree-of-another-mutant", "tampered-tree", "missing-tree-directory", "relative-tree", "adapter-role-mutant"])
+    def test_a_bad_mutant_request_is_one_closed_refusal_before_anything_is_created_or_spawned(tmp_path, name):
+        fa, _, _ = mods()
+        cases = refusal_cases(tmp_path)
+        p = run(base_flags(tmp_path) + cases[name])
+        msg = one_refusal(p, tmp_path)
+>       assert msg in (fa.MSG_MUTANT, fa.MSG_VARIANT, fa.MSG_FLAGS), msg
+                       ^^^^^^^^^^^^^
+E       AttributeError: module 'testtools.faulty_adapter_v2' has no attribute 'MSG_MUTANT'. Did you mean: 'MSG_VARIANT'?
+
+protocol/tests/test_faulty_adapter_v2_mutants.py:150: AttributeError
+_____________ test_the_documented_syntax_names_the_mutant_variant ______________
+
+    def test_the_documented_syntax_names_the_mutant_variant():
+        fa, _, _ = mods()
+>       assert "mutant:ID" in fa.SYNTAX and "--mutant-tree" in fa.MSG_MUTANT
+E       AssertionError: assert ('mutant:ID' in 'I=crash:before_commit|crash:after_commit|delay:MS[:kind[:before|after]]')
+E        +  where 'I=crash:before_commit|crash:after_commit|delay:MS[:kind[:before|after]]' = <module 'testtools.faulty_adapter_v2' from '/home/th4kur/Desktop/sem5/RIS/RIS/protocol/testtools/faulty_adapter_v2.py'>.SYNTAX
+
+protocol/tests/test_faulty_adapter_v2_mutants.py:156: AssertionError
+20 failed, 23 passed in 2.81s
+EXIT=1 START=2026-11-09T11:14:18Z END=2026-11-09T11:14:21Z HEAD=3e9a801

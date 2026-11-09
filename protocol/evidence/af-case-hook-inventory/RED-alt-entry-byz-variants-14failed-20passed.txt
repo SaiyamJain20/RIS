@@ -1,0 +1,536 @@
+FFFFFFFFF................FFFF....F                                       [100%]
+=================================== FAILURES ===================================
+________ test_a_byzantine_variant_parses_to_exactly_its_parts[withhold] ________
+
+spec = 'withhold'
+
+    @pytest.mark.parametrize("spec", ["withhold", "garbage", "repeat:2", "repeat:8", "equivocate", "impersonate:0", "impersonate:3", "poison:sourceBlockNumber", "poison:expiresAt"])
+    def test_a_byzantine_variant_parses_to_exactly_its_parts(spec):
+        fa, _, _ = mods()
+>       v = fa.parse_variant("2=byz:" + spec)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_byz.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '2=byz:withhold'
+
+    def parse_variant(text):
+        """`I=crash:POINT`, `I=delay:MS[:kind[:when]]` or `I=mutant:ID` (ID a witness-role mutant), exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+        if parts[0] == "mutant":
+            if len(parts) != 2 or parts[1] not in WITNESS_MUTANTS:
+                raise ValueError("mutant needs one of " + ", ".join(WITNESS_MUTANTS))
+            return Variant(int(left), "mutant", None, None, None, None, parts[1])
+>       raise ValueError("variant must be crash, delay or mutant")
+E       ValueError: variant must be crash, delay or mutant
+
+protocol/testtools/faulty_adapter_v2.py:119: ValueError
+________ test_a_byzantine_variant_parses_to_exactly_its_parts[garbage] _________
+
+spec = 'garbage'
+
+    @pytest.mark.parametrize("spec", ["withhold", "garbage", "repeat:2", "repeat:8", "equivocate", "impersonate:0", "impersonate:3", "poison:sourceBlockNumber", "poison:expiresAt"])
+    def test_a_byzantine_variant_parses_to_exactly_its_parts(spec):
+        fa, _, _ = mods()
+>       v = fa.parse_variant("2=byz:" + spec)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_byz.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '2=byz:garbage'
+
+    def parse_variant(text):
+        """`I=crash:POINT`, `I=delay:MS[:kind[:when]]` or `I=mutant:ID` (ID a witness-role mutant), exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+        if parts[0] == "mutant":
+            if len(parts) != 2 or parts[1] not in WITNESS_MUTANTS:
+                raise ValueError("mutant needs one of " + ", ".join(WITNESS_MUTANTS))
+            return Variant(int(left), "mutant", None, None, None, None, parts[1])
+>       raise ValueError("variant must be crash, delay or mutant")
+E       ValueError: variant must be crash, delay or mutant
+
+protocol/testtools/faulty_adapter_v2.py:119: ValueError
+________ test_a_byzantine_variant_parses_to_exactly_its_parts[repeat:2] ________
+
+spec = 'repeat:2'
+
+    @pytest.mark.parametrize("spec", ["withhold", "garbage", "repeat:2", "repeat:8", "equivocate", "impersonate:0", "impersonate:3", "poison:sourceBlockNumber", "poison:expiresAt"])
+    def test_a_byzantine_variant_parses_to_exactly_its_parts(spec):
+        fa, _, _ = mods()
+>       v = fa.parse_variant("2=byz:" + spec)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_byz.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '2=byz:repeat:2'
+
+    def parse_variant(text):
+        """`I=crash:POINT`, `I=delay:MS[:kind[:when]]` or `I=mutant:ID` (ID a witness-role mutant), exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+        if parts[0] == "mutant":
+            if len(parts) != 2 or parts[1] not in WITNESS_MUTANTS:
+                raise ValueError("mutant needs one of " + ", ".join(WITNESS_MUTANTS))
+            return Variant(int(left), "mutant", None, None, None, None, parts[1])
+>       raise ValueError("variant must be crash, delay or mutant")
+E       ValueError: variant must be crash, delay or mutant
+
+protocol/testtools/faulty_adapter_v2.py:119: ValueError
+________ test_a_byzantine_variant_parses_to_exactly_its_parts[repeat:8] ________
+
+spec = 'repeat:8'
+
+    @pytest.mark.parametrize("spec", ["withhold", "garbage", "repeat:2", "repeat:8", "equivocate", "impersonate:0", "impersonate:3", "poison:sourceBlockNumber", "poison:expiresAt"])
+    def test_a_byzantine_variant_parses_to_exactly_its_parts(spec):
+        fa, _, _ = mods()
+>       v = fa.parse_variant("2=byz:" + spec)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_byz.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '2=byz:repeat:8'
+
+    def parse_variant(text):
+        """`I=crash:POINT`, `I=delay:MS[:kind[:when]]` or `I=mutant:ID` (ID a witness-role mutant), exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+        if parts[0] == "mutant":
+            if len(parts) != 2 or parts[1] not in WITNESS_MUTANTS:
+                raise ValueError("mutant needs one of " + ", ".join(WITNESS_MUTANTS))
+            return Variant(int(left), "mutant", None, None, None, None, parts[1])
+>       raise ValueError("variant must be crash, delay or mutant")
+E       ValueError: variant must be crash, delay or mutant
+
+protocol/testtools/faulty_adapter_v2.py:119: ValueError
+_______ test_a_byzantine_variant_parses_to_exactly_its_parts[equivocate] _______
+
+spec = 'equivocate'
+
+    @pytest.mark.parametrize("spec", ["withhold", "garbage", "repeat:2", "repeat:8", "equivocate", "impersonate:0", "impersonate:3", "poison:sourceBlockNumber", "poison:expiresAt"])
+    def test_a_byzantine_variant_parses_to_exactly_its_parts(spec):
+        fa, _, _ = mods()
+>       v = fa.parse_variant("2=byz:" + spec)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_byz.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '2=byz:equivocate'
+
+    def parse_variant(text):
+        """`I=crash:POINT`, `I=delay:MS[:kind[:when]]` or `I=mutant:ID` (ID a witness-role mutant), exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+        if parts[0] == "mutant":
+            if len(parts) != 2 or parts[1] not in WITNESS_MUTANTS:
+                raise ValueError("mutant needs one of " + ", ".join(WITNESS_MUTANTS))
+            return Variant(int(left), "mutant", None, None, None, None, parts[1])
+>       raise ValueError("variant must be crash, delay or mutant")
+E       ValueError: variant must be crash, delay or mutant
+
+protocol/testtools/faulty_adapter_v2.py:119: ValueError
+_____ test_a_byzantine_variant_parses_to_exactly_its_parts[impersonate:0] ______
+
+spec = 'impersonate:0'
+
+    @pytest.mark.parametrize("spec", ["withhold", "garbage", "repeat:2", "repeat:8", "equivocate", "impersonate:0", "impersonate:3", "poison:sourceBlockNumber", "poison:expiresAt"])
+    def test_a_byzantine_variant_parses_to_exactly_its_parts(spec):
+        fa, _, _ = mods()
+>       v = fa.parse_variant("2=byz:" + spec)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_byz.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '2=byz:impersonate:0'
+
+    def parse_variant(text):
+        """`I=crash:POINT`, `I=delay:MS[:kind[:when]]` or `I=mutant:ID` (ID a witness-role mutant), exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+        if parts[0] == "mutant":
+            if len(parts) != 2 or parts[1] not in WITNESS_MUTANTS:
+                raise ValueError("mutant needs one of " + ", ".join(WITNESS_MUTANTS))
+            return Variant(int(left), "mutant", None, None, None, None, parts[1])
+>       raise ValueError("variant must be crash, delay or mutant")
+E       ValueError: variant must be crash, delay or mutant
+
+protocol/testtools/faulty_adapter_v2.py:119: ValueError
+_____ test_a_byzantine_variant_parses_to_exactly_its_parts[impersonate:3] ______
+
+spec = 'impersonate:3'
+
+    @pytest.mark.parametrize("spec", ["withhold", "garbage", "repeat:2", "repeat:8", "equivocate", "impersonate:0", "impersonate:3", "poison:sourceBlockNumber", "poison:expiresAt"])
+    def test_a_byzantine_variant_parses_to_exactly_its_parts(spec):
+        fa, _, _ = mods()
+>       v = fa.parse_variant("2=byz:" + spec)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_byz.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '2=byz:impersonate:3'
+
+    def parse_variant(text):
+        """`I=crash:POINT`, `I=delay:MS[:kind[:when]]` or `I=mutant:ID` (ID a witness-role mutant), exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+        if parts[0] == "mutant":
+            if len(parts) != 2 or parts[1] not in WITNESS_MUTANTS:
+                raise ValueError("mutant needs one of " + ", ".join(WITNESS_MUTANTS))
+            return Variant(int(left), "mutant", None, None, None, None, parts[1])
+>       raise ValueError("variant must be crash, delay or mutant")
+E       ValueError: variant must be crash, delay or mutant
+
+protocol/testtools/faulty_adapter_v2.py:119: ValueError
+_ test_a_byzantine_variant_parses_to_exactly_its_parts[poison:sourceBlockNumber] _
+
+spec = 'poison:sourceBlockNumber'
+
+    @pytest.mark.parametrize("spec", ["withhold", "garbage", "repeat:2", "repeat:8", "equivocate", "impersonate:0", "impersonate:3", "poison:sourceBlockNumber", "poison:expiresAt"])
+    def test_a_byzantine_variant_parses_to_exactly_its_parts(spec):
+        fa, _, _ = mods()
+>       v = fa.parse_variant("2=byz:" + spec)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_byz.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '2=byz:poison:sourceBlockNumber'
+
+    def parse_variant(text):
+        """`I=crash:POINT`, `I=delay:MS[:kind[:when]]` or `I=mutant:ID` (ID a witness-role mutant), exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+        if parts[0] == "mutant":
+            if len(parts) != 2 or parts[1] not in WITNESS_MUTANTS:
+                raise ValueError("mutant needs one of " + ", ".join(WITNESS_MUTANTS))
+            return Variant(int(left), "mutant", None, None, None, None, parts[1])
+>       raise ValueError("variant must be crash, delay or mutant")
+E       ValueError: variant must be crash, delay or mutant
+
+protocol/testtools/faulty_adapter_v2.py:119: ValueError
+____ test_a_byzantine_variant_parses_to_exactly_its_parts[poison:expiresAt] ____
+
+spec = 'poison:expiresAt'
+
+    @pytest.mark.parametrize("spec", ["withhold", "garbage", "repeat:2", "repeat:8", "equivocate", "impersonate:0", "impersonate:3", "poison:sourceBlockNumber", "poison:expiresAt"])
+    def test_a_byzantine_variant_parses_to_exactly_its_parts(spec):
+        fa, _, _ = mods()
+>       v = fa.parse_variant("2=byz:" + spec)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_byz.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '2=byz:poison:expiresAt'
+
+    def parse_variant(text):
+        """`I=crash:POINT`, `I=delay:MS[:kind[:when]]` or `I=mutant:ID` (ID a witness-role mutant), exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+        if parts[0] == "mutant":
+            if len(parts) != 2 or parts[1] not in WITNESS_MUTANTS:
+                raise ValueError("mutant needs one of " + ", ".join(WITNESS_MUTANTS))
+            return Variant(int(left), "mutant", None, None, None, None, parts[1])
+>       raise ValueError("variant must be crash, delay or mutant")
+E       ValueError: variant must be crash, delay or mutant
+
+protocol/testtools/faulty_adapter_v2.py:119: ValueError
+_ test_the_existing_variants_still_parse_with_the_new_field_defaulting_to_none _
+
+    def test_the_existing_variants_still_parse_with_the_new_field_defaulting_to_none():
+        fa, _, _ = mods()
+        for text in ("1=crash:after_commit", "1=delay:5", "1=mutant:M1"):
+>           assert fa.parse_variant(text).behavior is None
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'Variant' object has no attribute 'behavior'
+
+protocol/tests/test_faulty_adapter_v2_byz.py:32: AttributeError
+__ test_command_for_starts_a_byzantine_witness_and_keeps_every_other_command ___
+
+    def test_command_for_starts_a_byzantine_witness_and_keeps_every_other_command():
+        fa, _, wpt = mods()
+>       variants = {0: fa.parse_variant("0=byz:repeat:3"), 2: fa.parse_variant("2=crash:after_commit"), 3: fa.parse_variant("3=byz:poison:authEpoch")}
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_byz.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '0=byz:repeat:3'
+
+    def parse_variant(text):
+        """`I=crash:POINT`, `I=delay:MS[:kind[:when]]` or `I=mutant:ID` (ID a witness-role mutant), exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+        if parts[0] == "mutant":
+            if len(parts) != 2 or parts[1] not in WITNESS_MUTANTS:
+                raise ValueError("mutant needs one of " + ", ".join(WITNESS_MUTANTS))
+            return Variant(int(left), "mutant", None, None, None, None, parts[1])
+>       raise ValueError("variant must be crash, delay or mutant")
+E       ValueError: variant must be crash, delay or mutant
+
+protocol/testtools/faulty_adapter_v2.py:119: ValueError
+_ test_installed_byzantine_variants_reach_the_real_supervisors_effective_commands _
+
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-2424/test_installed_byzantine_varia0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7d62e58eb490>
+
+    def test_installed_byzantine_variants_reach_the_real_supervisors_effective_commands(tmp_path, monkeypatch):
+        fa, am, wpt = mods()
+        restoring(monkeypatch, am)
+>       fa.install({1: fa.parse_variant("1=byz:withhold"), 2: fa.parse_variant("2=byz:impersonate:0")}, None)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_byz.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '1=byz:withhold'
+
+    def parse_variant(text):
+        """`I=crash:POINT`, `I=delay:MS[:kind[:when]]` or `I=mutant:ID` (ID a witness-role mutant), exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+        if parts[0] == "mutant":
+            if len(parts) != 2 or parts[1] not in WITNESS_MUTANTS:
+                raise ValueError("mutant needs one of " + ", ".join(WITNESS_MUTANTS))
+            return Variant(int(left), "mutant", None, None, None, None, parts[1])
+>       raise ValueError("variant must be crash, delay or mutant")
+E       ValueError: variant must be crash, delay or mutant
+
+protocol/testtools/faulty_adapter_v2.py:119: ValueError
+_ test_main_with_a_byzantine_variant_patches_then_delegates_with_only_the_adapter_flags _
+
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-2424/test_main_with_a_byzantine_var0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7d62e58eb820>
+
+    def test_main_with_a_byzantine_variant_patches_then_delegates_with_only_the_adapter_flags(tmp_path, monkeypatch):
+        fa, am, _ = mods()
+        restoring(monkeypatch, am)
+        runtime = am.build_runtime
+        seen = {}
+        monkeypatch.setattr(am, "main", lambda argv=None, stdin=None, stdout=None, stderr=None: seen.update(argv=argv, patched=am.build_runtime is not runtime) or 0)
+        base = base_flags(tmp_path)
+>       assert fa.main(["--witness-variant", "1=byz:garbage"] + base) == 0 and seen["argv"] == base and seen["patched"] is True
+E       AssertionError: assert (2 == 0)
+E        +  where 2 = <function main at 0x7d62e594a980>((['--witness-variant', '1=byz:garbage'] + ['--deployment', '/home/th4kur/Desktop/sem5/RIS/RIS/protocol/tests/fixtures/agent1-85c59f5-f-base-deployment.json', '-...5c59f5-abi', '--schema', '/home/th4kur/Desktop/sem5/RIS/RIS/protocol/tests/fixtures/agent3-v2.1-hmbc.schema.json', ...]))
+E        +    where <function main at 0x7d62e594a980> = <module 'testtools.faulty_adapter_v2' from '/home/th4kur/Desktop/sem5/RIS/RIS/protocol/testtools/faulty_adapter_v2.py'>.main
+
+protocol/tests/test_faulty_adapter_v2_byz.py:67: AssertionError
+----------------------------- Captured stderr call -----------------------------
+{"error":{"code":"MALFORMED","message":"refusing: --witness-variant must be I=crash:before_commit|crash:after_commit|delay:MS[:kind[:before|after]]|mutant:ID with I in 0..3 and MS in 0..60000"}}
+____________ test_the_documented_syntax_names_the_byzantine_variant ____________
+
+    def test_the_documented_syntax_names_the_byzantine_variant():
+        fa, _, _ = mods()
+>       assert "byz:SPEC" in fa.SYNTAX
+E       AssertionError: assert 'byz:SPEC' in 'I=crash:before_commit|crash:after_commit|delay:MS[:kind[:before|after]]|mutant:ID'
+E        +  where 'I=crash:before_commit|crash:after_commit|delay:MS[:kind[:before|after]]|mutant:ID' = <module 'testtools.faulty_adapter_v2' from '/home/th4kur/Desktop/sem5/RIS/RIS/protocol/testtools/faulty_adapter_v2.py'>.SYNTAX
+
+protocol/tests/test_faulty_adapter_v2_byz.py:79: AssertionError
+14 failed, 20 passed in 1.75s
+EXIT=1 START=2026-11-09T11:22:48Z END=2026-11-09T11:22:50Z HEAD=3e9a801
