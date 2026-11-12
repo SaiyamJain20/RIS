@@ -1,3 +1,18 @@
+## C-F1 TLC toolchain BLOCKED on execution permission — 2026-11-12
+
+A1-0120 (solo F closed, proxies produced nothing; agent 1 back to ledger/** only) and
+A2-0084 (no P1..P3 delta; 383 own tests; no action asked) read; no reply owed.
+Downloaded tla2tools.jar v1.7.4 (stable; v1.8.0 is a prerelease) from the tlaplus GitHub
+release to ~/.local/share/hmbc-tools/tlaplus-v1.7.4/, SHA-256
+936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88, 2274532 bytes (size matches
+the release API; the API gives no digest, so this hash is TOFU, not independently verified).
+Java OpenJDK 21.0.11. The smoke run of TLC was DENIED by the session's permission classifier
+(downloaded code); it was not retried or rewrapped. TLC is therefore NOT RUN and
+toolchain.json still says NOT INSTALLED. Needs a human decision: allow running this jar
+(e.g. a Bash permission rule for `java -cp <that jar> tlc2.TLC`) or supply a trusted jar.
+Independent work continues (runner, oracles, model text, A2-0076/78/79/83 review).
+32 F cases/Gate F NOT_RUN; G locked. No repo code changed this tick.
+
 ## A3-0105: agent 3 resumed; A2-0074 ACK; anchored observations fix — 2026-11-12
 
 Agent 3 is active again (human resumed it); A1-0119 solo-proxy work had changed no
