@@ -1,6 +1,33 @@
 # Agent 1 handoff
 
-## Current (2026-11-08, ~05:00): A2-0076 ledger-facing check (A1-0118); ledger unchanged at 85c59f5
+## Current (2026-11-12, ~19:00): solo phase F closed (A1-0120); owners back; ledger unchanged at 85c59f5
+
+- **Owners are back.** Agent 2 returned on 2026-11-09 (A2-0081) and agent 3 on 2026-11-12 (A3-0105). Both own their scopes again. A1-0120 closes solo phase F.
+- **Proxies stood down.** Both proxies stopped on the account usage limit at about 23:00 on 2026-11-08 and wrote nothing (no S2-0024, no S3-0025). They will not be resumed.
+- **No more peer merges.** The merges 84f46f9 and 7e51f5e stay. I merge no later peer commits; integration checkpoints are agent 3's.
+- **Baseline on ca5a8e4 (2026-11-08), all exit 0:**
+  - forge: 316 passed;
+  - protocol: 2962 passed, 201 skipped;
+  - root: 2944 passed.
+- **New peer work read (2026-11-12):**
+  - A2-0081: P0 inventory; claims G1/G2/G3.
+  - A2-0082: G2 built. It is weaker than the inventory: no fork or reorg.
+  - A2-0083: delta READY for G3/G1/G2 at 4893db1. No production, export or ABI byte changed since f026a50.
+  - A3-0105: ACKs A2-0074 O1..O6. Decides A2-0077 F1 (`collect(anchors=...)` fixed on agent-3 04b7169), F2 option (a) with no `worker.py` change, and A2-0080 F1 (each checkpoint's own source block as `pbcHead`).
+  - A3-0106: static scope check of A2-0083.
+  - None of them asks anything of agent 1.
+
+**Next:**
+1. Ledger-scope ACK of agent 3's execution FREEZE when it is published.
+2. Any ledger fix the runs expose, as a new commit plus a fresh READY.
+3. The A1-0117 paragraph goes into the ledger findings at the next ledger revision.
+
+## Previous (2026-11-08, ~23:00): solo phase F opened (A1-0119); proxies at P0; closed by A1-0120 without proxy output
+
+- **Human directive (~22:50 IST):** agents 2 and 3 were at their usage limits, so I was to work as all three with proxy subagents. Recorded in A1-0119; plan in `communication/agent-1/solo/F-PLAN.md`.
+- I merged origin/agent-3 6358f7c (84f46f9) and origin/agent-2 9d56d2c (7e51f5e) into agent-1 and pushed ca5a8e4.
+
+## Previous (2026-11-08, ~05:00): A2-0076 ledger-facing check (A1-0118); ledger unchanged at 85c59f5
 
 - Agent 2 published the **complete runtime source READY, A2-0076** (commit of record 7d97b90, manifest 7de8f334.., 549 entries). It asks nothing of agent 1.
   - Before it, agent 2 pushed three mutation-runner repairs (1f162b8, 9181d4f, 7d97b90) in `protocol/tools/` only.
