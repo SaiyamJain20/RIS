@@ -349,3 +349,63 @@ print(json.dumps(json.loads(Path(__file__).with_name('dataset.json').read_text()
         assert rpc.commands and all(r['exitCode'] == 0 and r['parseFailure'] is None for r in rpc.commands)
         for i, command in enumerate(rpc.commands):
             assert hashlib.sha256((tmp_path / ('rpc-' + chain) / f'{i:04}.txt').read_bytes()).hexdigest() == command['outputSha256']
+
+
+def _moved_chain(case):
+    """Make `latest` answer a newer block than the pinned anchor on both chains."""
+    for chain, rpc in case[4].items():
+        anchor = case[1][chain]['anchor']
+
+        def rewrite(method, params, result, anchor=anchor):
+            if method == 'eth_getBlockByNumber' and params[0] == 'latest':
+                return {'number': hex(int(anchor['number']) + 2), 'hash': '0x' + 'ee' * 32}
+            return result
+        rpc.rewrite = rewrite
+
+
+def _anchors(case):
+    return {c: copy.deepcopy(case[1][c]['anchor']) for c in ('pbc', 'dbc')}
+
+
+@pytest.mark.parametrize('f,mask,q', [(True, '0', '3'), (True, '256', '3')])
+def test_explicit_anchors_read_the_pinned_block_even_after_the_chain_moved(tmp_path, f, mask, q):
+    case = setup(f, mask, q)
+    _moved_chain(case)
+    result = collect(tmp_path, case, anchors=_anchors(case))
+    assert result['observations'] == case[1]
+    assert result['document'] == case[2]
+    report = json.loads((tmp_path / 'collection/transcript.json').read_text())
+    assert not any(r['method'] == 'eth_getBlockByNumber' and r['params'][0] == 'latest' for r in report['calls'])
+
+
+def test_without_anchors_the_moved_latest_block_is_still_the_anchor(tmp_path):
+    case = setup()
+    _moved_chain(case)
+    with pytest.raises(AssertionError):  # synthetic node only serves the pinned block for code/views
+        collect(tmp_path, case)
+
+
+@pytest.mark.parametrize('chain', ['pbc', 'dbc'])
+def test_explicit_anchor_hash_must_match_the_node(tmp_path, chain):
+    case = setup()
+    anchors = _anchors(case)
+    real = anchors[chain]['hash']
+    anchors[chain]['hash'] = '0x' + ('cd' if real[2:4] == 'ab' else 'ab') * 32
+    assert anchors[chain]['hash'] != real
+    with pytest.raises(BAD):
+        collect(tmp_path, case, anchors=anchors)
+    assert not (tmp_path / 'collection/result.json').exists()
+
+
+@pytest.mark.parametrize('mutate', [
+    lambda a: a.pop('dbc'), lambda a: a.update(extra=a['pbc']), lambda a: a['pbc'].pop('hash'),
+    lambda a: a['pbc'].update(number=7), lambda a: a['pbc'].update(number='07'),
+    lambda a: a['dbc'].update(hash='0x12'), lambda a: a.update(pbc=None)])
+def test_anchor_inventory_is_closed_and_refused_before_io(tmp_path, mutate):
+    case = setup()
+    anchors = _anchors(case)
+    mutate(anchors)
+    with pytest.raises(BAD):
+        collect(tmp_path, case, anchors=anchors)
+    assert not (tmp_path / 'collection').exists()
+    assert all(not rpc.calls for rpc in case[4].values())

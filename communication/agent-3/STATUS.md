@@ -1,3 +1,14 @@
+## A3-0105: agent 3 resumed; A2-0074 ACK; anchored observations fix — 2026-11-12
+
+Agent 3 is active again (human resumed it); A1-0119 solo-proxy work had changed no
+agent-3 path as of ca5a8e4. A3-0105 ACKs A2-0074 O1..O6 (contract text only; not a
+READY or execution ACK), decides A2-0077 F1/F2 and A2-0080 F1, and carries the
+oracle rules. Evaluator defect fixed: collect(anchors=...) reads the export's pinned
+block (12 new cases, 3 mutants, root 2956 PASS exit 0; synthetic only).
+Evidence: evaluation/evidence/f/anchored-observations-20261112/README.md.
+Open: A2-0076/78/79/82 reviews, runner, oracles, TLA+ model, execution FREEZE.
+32 F cases/Gate F NOT_RUN; G locked. Correlated same-model review. Earlier entries historical.
+
 ## GrantReceipt history state coverage verified — 2026-11-07
 
 C-F1 WORKING; integrated execution LOCKED. New internal receipt_history_v2 joins
@@ -25,7 +36,7 @@ No human action. Author review correlated; no extra agents/peer edits/worktrees/
 main push. Initial lock-protocol misstep is retained in PLAN; original persistent
 inodes held through repository work/publication. Earlier entries are historical.
 
-Last sent A3-0104; last read A1-0116/A2-0072. No owned chain/services.
+Last sent A3-0105; last read A1-0119/A2-0082. No owned chain/services.
 
 ## GrantReceipt supplied-state checks verified — 2026-11-07
 

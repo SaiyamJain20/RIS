@@ -34,7 +34,7 @@ def _block(raw, number=None):
     return {'number': actual, 'hash': raw['hash']}
 
 
-def collect(manifest, rpcs, abi_paths, *, output, compiled_max_admins=None, timeout=10.0):
+def collect(manifest, rpcs, abi_paths, *, output, compiled_max_admins=None, timeout=10.0, anchors=None):
     """Return {observations, document}, retaining raw calls in a fresh directory.
 
     manifest and compiled_max_admins are caller-selected reviewed pins, not a
@@ -43,6 +43,11 @@ def collect(manifest, rpcs, abi_paths, *, output, compiled_max_admins=None, time
     requests use the selected explicit historical block. A finite whole-call
     deadline is checked around transport calls; the RpcClient has a separate
     per-call subprocess timeout. A blocking custom transport cannot be preempted.
+
+    anchors=None reads at each chain's latest block. Otherwise it is exactly
+    pbc/dbc -> {number (canonical decimal string), hash}: every code/getter read
+    uses that block and its hash must equal the node's. A producer export's
+    anchor is fixed at store initialization, so joining one needs this selection.
 
     The transcript records API-level raw results and call parameters; RpcClient
     separately retains command/output hashes and tool/endpoint provenance. A
@@ -55,6 +60,14 @@ def collect(manifest, rpcs, abi_paths, *, output, compiled_max_admins=None, time
     _require(marker in ('hmbc-ledger-deployment/v2', 'hmbc-ledger-deployment/v2.1'), 'unselected carrier')
     validate('LedgerDeployment', pin, schema_revision='v2.1' if marker.endswith('/v2.1') else 'v2')
     expected = _expected_views(pin)
+    if anchors is not None:
+        _require(isinstance(anchors, dict) and set(anchors) == {'pbc', 'dbc'}, 'anchor inventory')
+        anchors = copy.deepcopy(anchors)
+        for row in anchors.values():
+            _require(isinstance(row, dict) and set(row) == {'number', 'hash'}, 'anchor shape')
+            _require(type(row['number']) is str and row['number'].isascii() and row['number'].isdigit()
+                     and str(int(row['number'])) == row['number'], 'anchor number')
+            _hex(row['hash'], 32)
     _require(isinstance(rpcs, dict) and set(rpcs) == {'pbc', 'dbc'}, 'RPC inventory')
     _require(isinstance(abi_paths, dict) and set(abi_paths) == set(pin['abi']), 'ABI inventory')
     # Snapshot caller containers before any transport can yield or mutate them.
@@ -127,7 +140,11 @@ def collect(manifest, rpcs, abi_paths, *, output, compiled_max_admins=None, time
             observed = {'chainId': chain_id(chain)}
             observed['genesisHash'] = block(chain, '0')['hash']
             observed['deployBlock'] = block(chain, pin['chains'][chain]['deployBlock'])
-            anchor = _block(call(chain, 'eth_getBlockByNumber', ['latest', False]))
+            if anchors is None:
+                anchor = _block(call(chain, 'eth_getBlockByNumber', ['latest', False]))
+            else:
+                anchor = block(chain, anchors[chain]['number'])
+                _require(anchor['hash'] == anchors[chain]['hash'], chain + ' anchor hash mismatch')
             _require(int(anchor['number']) >= int(observed['deployBlock']['number']), 'anchor before deployment')
             observed.update(anchor=anchor, code={}, views={})
             number = hex(int(anchor['number']))
