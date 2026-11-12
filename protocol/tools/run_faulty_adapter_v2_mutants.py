@@ -4,7 +4,7 @@ reported failures (a crash or a timeout is NOT detection); the unmutated copy ru
 they are never counted as detected.
 
 Usage (repository root):   python3 -B -I protocol/tools/run_faulty_adapter_v2_mutants.py
-OFFLINE ONLY: the selection is tests/test_faulty_adapter_v2.py, tests/test_faulty_adapter_v2_mutants.py and tests/test_faulty_adapter_v2_byz.py (parsing, every refusal as a real process, the exact argv, the wiring with the REAL supervisor class, the production equivalence, the static boundary).
+OFFLINE ONLY: the selection is tests/test_faulty_adapter_v2.py, tests/test_faulty_adapter_v2_mutants.py and tests/test_faulty_adapter_v2_byz.py and tests/test_faulty_adapter_v2_view.py (parsing, every refusal as a real process, the exact argv, the wiring with the REAL supervisor class, the production equivalence, the static boundary).
 The live behaviour (rows F-13, F-20, F-19) is tests/test_faulty_adapter_v2_live.py and is NOT mutated here: every wiring defect that reaches it is already visible to the offline tests, and a live mutant run
 would need the shared live lock and several minutes per mutant. Needs pytest and the E dependencies (protocol/requirements.txt). Exit 0 only when every mutant is detected and every equivalent survives.
 """
@@ -18,7 +18,7 @@ import tempfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 PROTO = os.path.abspath(os.path.join(HERE, ".."))
 TARGET = "testtools/faulty_adapter_v2.py"
-TESTS = ["tests/test_faulty_adapter_v2.py", "tests/test_faulty_adapter_v2_mutants.py", "tests/test_faulty_adapter_v2_byz.py"]
+TESTS = ["tests/test_faulty_adapter_v2.py", "tests/test_faulty_adapter_v2_mutants.py", "tests/test_faulty_adapter_v2_byz.py", "tests/test_faulty_adapter_v2_view.py"]
 SRC = open(os.path.join(PROTO, TARGET)).read()
 
 M = [
@@ -31,7 +31,7 @@ M = [
     ("P7 the delay position is not checked", [("if when is not None and when not in dw.WHEN:", "if False:")]),
     ("P8 up to five delay fields are accepted", [("if not 2 <= len(parts) <= 4 or", "if not 2 <= len(parts) <= 5 or")]),
     ("P9 a repeated index is allowed", [("if len({v.index for v in variants}) != len(variants):", "if False:")]),
-    ("P10 an unknown variant name becomes a zero delay", [('    raise ValueError("variant must be crash, delay, mutant or byz")', '    return Variant(int(left), "delay", None, 0, None, None)')]),
+    ("P10 an unknown variant name becomes a zero delay", [('    raise ValueError("variant must be crash, delay, mutant, byz or view")', '    return Variant(int(left), "delay", None, 0, None, None)')]),
     ("S1 abbreviated flags are accepted", [("ap = _Parser(add_help=False, allow_abbrev=False)", "ap = _Parser(add_help=False, allow_abbrev=True)")]),
     ("S2 an argparse error is swallowed", [('        raise FlagError("malformed flag")', "        return None")]),
     ("S3 a flag error is reported as a variant syntax error", [("    except FlagError:\n        return _refuse(stderr, MSG_FLAGS)\n", "")]),
@@ -79,7 +79,13 @@ M = [
     ("Q11 the byz SPEC is not validated", [("bw.parse_behavior(spec))", "spec)")]),
     ("Q12 the byz command omits the behaviour flag", [('return [*head, "testtools.byzantine_witness", "--behavior", v.behavior, *tail]', 'return [*head, "testtools.byzantine_witness", *tail]')]),
     ("Q13 the byz command starts the production witness", [('return [*head, "testtools.byzantine_witness", "--behavior", v.behavior, *tail]', 'return [*head, "hmbc_protocol.witness_main", *tail]')]),
-    ("Q14 the byz SPEC is the whole right-hand side", [('spec = right.partition(":")[2]', "spec = right")]),
+    ("Q14 the byz SPEC is the whole right-hand side", [('    if parts[0] == "byz":\n        spec = right.partition(":")[2]', '    if parts[0] == "byz":\n        spec = right')]),
+    ("V1 the view SPEC is the whole right-hand side", [('    if parts[0] == "view":\n        spec = right.partition(":")[2]', '    if parts[0] == "view":\n        spec = right')]),
+    ("V2 a view SPEC is not validated", [("dvw.parse_spec(spec))      # ValueError for a malformed SPEC", "spec)")]),
+    ("V3 a view variant starts the byzantine witness", [('            return [*head, "testtools.divergent_witness", "--view", v.view, *tail]', '            return [*head, "testtools.byzantine_witness", "--behavior", v.view, *tail]')]),
+    ("V4 a view variant drops the spec flag", [('"testtools.divergent_witness", "--view", v.view, *tail]', '"testtools.divergent_witness", *tail]')]),
+    ("V5 the view variant is not recognised", [('    if parts[0] == "view":', '    if parts[0] == "view_":')]),
+    ("V6 a view variant keeps no view field", [('"view", None, None, None, None, None, None, dvw.parse_spec(spec))', '"view", None, None, None, None, None, None, None)')]),
 ]
 
 E = [
@@ -105,7 +111,7 @@ def build_tree():
         shutil.copytree(os.path.join(PROTO, sub), os.path.join(p, sub), ignore=shutil.ignore_patterns("__pycache__"))
     shutil.copytree(os.path.join(PROTO, "f0", "vectors"), os.path.join(p, "f0", "vectors"), ignore=shutil.ignore_patterns("__pycache__"))
     shutil.copytree(os.path.join(PROTO, "tests", "fixtures"), os.path.join(p, "tests", "fixtures"))
-    for rel in ("pytest.ini",) + tuple(os.path.join("tests", n) for n in ("conftest.py", "support.py", "test_faulty_adapter_v2.py", "test_faulty_adapter_v2_mutants.py", "test_faulty_adapter_v2_byz.py")):
+    for rel in ("pytest.ini",) + tuple(os.path.join("tests", n) for n in ("conftest.py", "support.py", "test_faulty_adapter_v2.py", "test_faulty_adapter_v2_mutants.py", "test_faulty_adapter_v2_byz.py", "test_faulty_adapter_v2_view.py")):
         os.makedirs(os.path.dirname(os.path.join(p, rel)) or p, exist_ok=True)
         shutil.copy(os.path.join(PROTO, rel), os.path.join(p, rel))
     return d, p
