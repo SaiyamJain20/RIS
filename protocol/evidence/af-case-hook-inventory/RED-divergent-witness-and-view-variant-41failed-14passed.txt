@@ -1,0 +1,935 @@
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF...........FFF...F                  [100%]
+=================================== FAILURES ===================================
+________________ test_a_view_spec_parses_to_itself[authEpoch:1] ________________
+
+spec = 'authEpoch:1'
+
+    @pytest.mark.parametrize("spec", ["authEpoch:1", "policyVersion:50", "witnessSetVersion:9", "headLag:7"])
+    def test_a_view_spec_parses_to_itself(spec):
+>       assert dw().parse_spec(spec) == spec
+               ^^^^
+
+protocol/tests/test_divergent_witness.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+_____________ test_a_view_spec_parses_to_itself[policyVersion:50] ______________
+
+spec = 'policyVersion:50'
+
+    @pytest.mark.parametrize("spec", ["authEpoch:1", "policyVersion:50", "witnessSetVersion:9", "headLag:7"])
+    def test_a_view_spec_parses_to_itself(spec):
+>       assert dw().parse_spec(spec) == spec
+               ^^^^
+
+protocol/tests/test_divergent_witness.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+____________ test_a_view_spec_parses_to_itself[witnessSetVersion:9] ____________
+
+spec = 'witnessSetVersion:9'
+
+    @pytest.mark.parametrize("spec", ["authEpoch:1", "policyVersion:50", "witnessSetVersion:9", "headLag:7"])
+    def test_a_view_spec_parses_to_itself(spec):
+>       assert dw().parse_spec(spec) == spec
+               ^^^^
+
+protocol/tests/test_divergent_witness.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+_________________ test_a_view_spec_parses_to_itself[headLag:7] _________________
+
+spec = 'headLag:7'
+
+    @pytest.mark.parametrize("spec", ["authEpoch:1", "policyVersion:50", "witnessSetVersion:9", "headLag:7"])
+    def test_a_view_spec_parses_to_itself(spec):
+>       assert dw().parse_spec(spec) == spec
+               ^^^^
+
+protocol/tests/test_divergent_witness.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+____________________ test_every_malformed_spec_is_refused[] ____________________
+
+spec = ''
+
+    @pytest.mark.parametrize("spec", ["", "authEpoch", "authEpoch:", "authEpoch:0", "authEpoch:51", "authEpoch:01", "authEpoch:-1", "authEpoch:+1", "authEpoch:1:2", "AuthEpoch:1", "authEpoch: 1", "keyEpoch:1",
+                                      "headLag", "headLag:0", "headLag:x", None, 5])
+    def test_every_malformed_spec_is_refused(spec):
+        with pytest.raises(ValueError):
+>           dw().parse_spec(spec)
+            ^^^^
+
+protocol/tests/test_divergent_witness.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+_______________ test_every_malformed_spec_is_refused[authEpoch] ________________
+
+spec = 'authEpoch'
+
+    @pytest.mark.parametrize("spec", ["", "authEpoch", "authEpoch:", "authEpoch:0", "authEpoch:51", "authEpoch:01", "authEpoch:-1", "authEpoch:+1", "authEpoch:1:2", "AuthEpoch:1", "authEpoch: 1", "keyEpoch:1",
+                                      "headLag", "headLag:0", "headLag:x", None, 5])
+    def test_every_malformed_spec_is_refused(spec):
+        with pytest.raises(ValueError):
+>           dw().parse_spec(spec)
+            ^^^^
+
+protocol/tests/test_divergent_witness.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+_______________ test_every_malformed_spec_is_refused[authEpoch:] _______________
+
+spec = 'authEpoch:'
+
+    @pytest.mark.parametrize("spec", ["", "authEpoch", "authEpoch:", "authEpoch:0", "authEpoch:51", "authEpoch:01", "authEpoch:-1", "authEpoch:+1", "authEpoch:1:2", "AuthEpoch:1", "authEpoch: 1", "keyEpoch:1",
+                                      "headLag", "headLag:0", "headLag:x", None, 5])
+    def test_every_malformed_spec_is_refused(spec):
+        with pytest.raises(ValueError):
+>           dw().parse_spec(spec)
+            ^^^^
+
+protocol/tests/test_divergent_witness.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+______________ test_every_malformed_spec_is_refused[authEpoch:0] _______________
+
+spec = 'authEpoch:0'
+
+    @pytest.mark.parametrize("spec", ["", "authEpoch", "authEpoch:", "authEpoch:0", "authEpoch:51", "authEpoch:01", "authEpoch:-1", "authEpoch:+1", "authEpoch:1:2", "AuthEpoch:1", "authEpoch: 1", "keyEpoch:1",
+                                      "headLag", "headLag:0", "headLag:x", None, 5])
+    def test_every_malformed_spec_is_refused(spec):
+        with pytest.raises(ValueError):
+>           dw().parse_spec(spec)
+            ^^^^
+
+protocol/tests/test_divergent_witness.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+______________ test_every_malformed_spec_is_refused[authEpoch:51] ______________
+
+spec = 'authEpoch:51'
+
+    @pytest.mark.parametrize("spec", ["", "authEpoch", "authEpoch:", "authEpoch:0", "authEpoch:51", "authEpoch:01", "authEpoch:-1", "authEpoch:+1", "authEpoch:1:2", "AuthEpoch:1", "authEpoch: 1", "keyEpoch:1",
+                                      "headLag", "headLag:0", "headLag:x", None, 5])
+    def test_every_malformed_spec_is_refused(spec):
+        with pytest.raises(ValueError):
+>           dw().parse_spec(spec)
+            ^^^^
+
+protocol/tests/test_divergent_witness.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+______________ test_every_malformed_spec_is_refused[authEpoch:01] ______________
+
+spec = 'authEpoch:01'
+
+    @pytest.mark.parametrize("spec", ["", "authEpoch", "authEpoch:", "authEpoch:0", "authEpoch:51", "authEpoch:01", "authEpoch:-1", "authEpoch:+1", "authEpoch:1:2", "AuthEpoch:1", "authEpoch: 1", "keyEpoch:1",
+                                      "headLag", "headLag:0", "headLag:x", None, 5])
+    def test_every_malformed_spec_is_refused(spec):
+        with pytest.raises(ValueError):
+>           dw().parse_spec(spec)
+            ^^^^
+
+protocol/tests/test_divergent_witness.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+______________ test_every_malformed_spec_is_refused[authEpoch:-1] ______________
+
+spec = 'authEpoch:-1'
+
+    @pytest.mark.parametrize("spec", ["", "authEpoch", "authEpoch:", "authEpoch:0", "authEpoch:51", "authEpoch:01", "authEpoch:-1", "authEpoch:+1", "authEpoch:1:2", "AuthEpoch:1", "authEpoch: 1", "keyEpoch:1",
+                                      "headLag", "headLag:0", "headLag:x", None, 5])
+    def test_every_malformed_spec_is_refused(spec):
+        with pytest.raises(ValueError):
+>           dw().parse_spec(spec)
+            ^^^^
+
+protocol/tests/test_divergent_witness.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+______________ test_every_malformed_spec_is_refused[authEpoch:+1] ______________
+
+spec = 'authEpoch:+1'
+
+    @pytest.mark.parametrize("spec", ["", "authEpoch", "authEpoch:", "authEpoch:0", "authEpoch:51", "authEpoch:01", "authEpoch:-1", "authEpoch:+1", "authEpoch:1:2", "AuthEpoch:1", "authEpoch: 1", "keyEpoch:1",
+                                      "headLag", "headLag:0", "headLag:x", None, 5])
+    def test_every_malformed_spec_is_refused(spec):
+        with pytest.raises(ValueError):
+>           dw().parse_spec(spec)
+            ^^^^
+
+protocol/tests/test_divergent_witness.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+_____________ test_every_malformed_spec_is_refused[authEpoch:1:2] ______________
+
+spec = 'authEpoch:1:2'
+
+    @pytest.mark.parametrize("spec", ["", "authEpoch", "authEpoch:", "authEpoch:0", "authEpoch:51", "authEpoch:01", "authEpoch:-1", "authEpoch:+1", "authEpoch:1:2", "AuthEpoch:1", "authEpoch: 1", "keyEpoch:1",
+                                      "headLag", "headLag:0", "headLag:x", None, 5])
+    def test_every_malformed_spec_is_refused(spec):
+        with pytest.raises(ValueError):
+>           dw().parse_spec(spec)
+            ^^^^
+
+protocol/tests/test_divergent_witness.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+______________ test_every_malformed_spec_is_refused[AuthEpoch:1] _______________
+
+spec = 'AuthEpoch:1'
+
+    @pytest.mark.parametrize("spec", ["", "authEpoch", "authEpoch:", "authEpoch:0", "authEpoch:51", "authEpoch:01", "authEpoch:-1", "authEpoch:+1", "authEpoch:1:2", "AuthEpoch:1", "authEpoch: 1", "keyEpoch:1",
+                                      "headLag", "headLag:0", "headLag:x", None, 5])
+    def test_every_malformed_spec_is_refused(spec):
+        with pytest.raises(ValueError):
+>           dw().parse_spec(spec)
+            ^^^^
+
+protocol/tests/test_divergent_witness.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+______________ test_every_malformed_spec_is_refused[authEpoch: 1] ______________
+
+spec = 'authEpoch: 1'
+
+    @pytest.mark.parametrize("spec", ["", "authEpoch", "authEpoch:", "authEpoch:0", "authEpoch:51", "authEpoch:01", "authEpoch:-1", "authEpoch:+1", "authEpoch:1:2", "AuthEpoch:1", "authEpoch: 1", "keyEpoch:1",
+                                      "headLag", "headLag:0", "headLag:x", None, 5])
+    def test_every_malformed_spec_is_refused(spec):
+        with pytest.raises(ValueError):
+>           dw().parse_spec(spec)
+            ^^^^
+
+protocol/tests/test_divergent_witness.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+_______________ test_every_malformed_spec_is_refused[keyEpoch:1] _______________
+
+spec = 'keyEpoch:1'
+
+    @pytest.mark.parametrize("spec", ["", "authEpoch", "authEpoch:", "authEpoch:0", "authEpoch:51", "authEpoch:01", "authEpoch:-1", "authEpoch:+1", "authEpoch:1:2", "AuthEpoch:1", "authEpoch: 1", "keyEpoch:1",
+                                      "headLag", "headLag:0", "headLag:x", None, 5])
+    def test_every_malformed_spec_is_refused(spec):
+        with pytest.raises(ValueError):
+>           dw().parse_spec(spec)
+            ^^^^
+
+protocol/tests/test_divergent_witness.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+________________ test_every_malformed_spec_is_refused[headLag] _________________
+
+spec = 'headLag'
+
+    @pytest.mark.parametrize("spec", ["", "authEpoch", "authEpoch:", "authEpoch:0", "authEpoch:51", "authEpoch:01", "authEpoch:-1", "authEpoch:+1", "authEpoch:1:2", "AuthEpoch:1", "authEpoch: 1", "keyEpoch:1",
+                                      "headLag", "headLag:0", "headLag:x", None, 5])
+    def test_every_malformed_spec_is_refused(spec):
+        with pytest.raises(ValueError):
+>           dw().parse_spec(spec)
+            ^^^^
+
+protocol/tests/test_divergent_witness.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+_______________ test_every_malformed_spec_is_refused[headLag:0] ________________
+
+spec = 'headLag:0'
+
+    @pytest.mark.parametrize("spec", ["", "authEpoch", "authEpoch:", "authEpoch:0", "authEpoch:51", "authEpoch:01", "authEpoch:-1", "authEpoch:+1", "authEpoch:1:2", "AuthEpoch:1", "authEpoch: 1", "keyEpoch:1",
+                                      "headLag", "headLag:0", "headLag:x", None, 5])
+    def test_every_malformed_spec_is_refused(spec):
+        with pytest.raises(ValueError):
+>           dw().parse_spec(spec)
+            ^^^^
+
+protocol/tests/test_divergent_witness.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+_______________ test_every_malformed_spec_is_refused[headLag:x] ________________
+
+spec = 'headLag:x'
+
+    @pytest.mark.parametrize("spec", ["", "authEpoch", "authEpoch:", "authEpoch:0", "authEpoch:51", "authEpoch:01", "authEpoch:-1", "authEpoch:+1", "authEpoch:1:2", "AuthEpoch:1", "authEpoch: 1", "keyEpoch:1",
+                                      "headLag", "headLag:0", "headLag:x", None, 5])
+    def test_every_malformed_spec_is_refused(spec):
+        with pytest.raises(ValueError):
+>           dw().parse_spec(spec)
+            ^^^^
+
+protocol/tests/test_divergent_witness.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+__________________ test_every_malformed_spec_is_refused[None] __________________
+
+spec = None
+
+    @pytest.mark.parametrize("spec", ["", "authEpoch", "authEpoch:", "authEpoch:0", "authEpoch:51", "authEpoch:01", "authEpoch:-1", "authEpoch:+1", "authEpoch:1:2", "AuthEpoch:1", "authEpoch: 1", "keyEpoch:1",
+                                      "headLag", "headLag:0", "headLag:x", None, 5])
+    def test_every_malformed_spec_is_refused(spec):
+        with pytest.raises(ValueError):
+>           dw().parse_spec(spec)
+            ^^^^
+
+protocol/tests/test_divergent_witness.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+___________________ test_every_malformed_spec_is_refused[5] ____________________
+
+spec = 5
+
+    @pytest.mark.parametrize("spec", ["", "authEpoch", "authEpoch:", "authEpoch:0", "authEpoch:51", "authEpoch:01", "authEpoch:-1", "authEpoch:+1", "authEpoch:1:2", "AuthEpoch:1", "authEpoch: 1", "keyEpoch:1",
+                                      "headLag", "headLag:0", "headLag:x", None, 5])
+    def test_every_malformed_spec_is_refused(spec):
+        with pytest.raises(ValueError):
+>           dw().parse_spec(spec)
+            ^^^^
+
+protocol/tests/test_divergent_witness.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+________ test_a_read_divergence_adds_n_to_exactly_that_field[authEpoch] ________
+
+field = 'authEpoch'
+
+    @pytest.mark.parametrize("field", ["authEpoch", "policyVersion", "witnessSetVersion"])
+    def test_a_read_divergence_adds_n_to_exactly_that_field(field):
+        inner = Inner()
+>       v = dw().DivergentView(inner, f"{field}:4")
+            ^^^^
+
+protocol/tests/test_divergent_witness.py:70: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+______ test_a_read_divergence_adds_n_to_exactly_that_field[policyVersion] ______
+
+field = 'policyVersion'
+
+    @pytest.mark.parametrize("field", ["authEpoch", "policyVersion", "witnessSetVersion"])
+    def test_a_read_divergence_adds_n_to_exactly_that_field(field):
+        inner = Inner()
+>       v = dw().DivergentView(inner, f"{field}:4")
+            ^^^^
+
+protocol/tests/test_divergent_witness.py:70: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+____ test_a_read_divergence_adds_n_to_exactly_that_field[witnessSetVersion] ____
+
+field = 'witnessSetVersion'
+
+    @pytest.mark.parametrize("field", ["authEpoch", "policyVersion", "witnessSetVersion"])
+    def test_a_read_divergence_adds_n_to_exactly_that_field(field):
+        inner = Inner()
+>       v = dw().DivergentView(inner, f"{field}:4")
+            ^^^^
+
+protocol/tests/test_divergent_witness.py:70: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+_ test_a_head_lag_reports_an_older_pbc_head_and_hides_newer_blocks_but_not_the_dbc _
+
+    def test_a_head_lag_reports_an_older_pbc_head_and_hides_newer_blocks_but_not_the_dbc():
+        inner = Inner()
+>       v = dw().DivergentView(inner, "headLag:3")
+            ^^^^
+
+protocol/tests/test_divergent_witness.py:79: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+___________ test_a_head_lag_larger_than_the_chain_clamps_at_genesis ____________
+
+    def test_a_head_lag_larger_than_the_chain_clamps_at_genesis():
+        inner = Inner()
+        inner.head = 2
+>       v = dw().DivergentView(inner, "headLag:50")
+            ^^^^
+
+protocol/tests/test_divergent_witness.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+_ test_every_other_method_is_delegated_unchanged_and_an_unknown_one_still_raises _
+
+    def test_every_other_method_is_delegated_unchanged_and_an_unknown_one_still_raises():
+>       v = dw().DivergentView(Inner(), "authEpoch:1")
+            ^^^^
+
+protocol/tests/test_divergent_witness.py:94: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+____________ test_a_non_decimal_real_read_is_left_alone_not_guessed ____________
+
+    def test_a_non_decimal_real_read_is_left_alone_not_guessed():
+        class Odd(Inner):
+            def reads_at(self, n):
+                return {"authEpoch": "not a number", "policyVersion": "1", "witnessSetVersion": "2"}
+>       assert dw().DivergentView(Odd(), "authEpoch:1").reads_at(1)["authEpoch"] == "not a number"
+               ^^^^
+
+protocol/tests/test_divergent_witness.py:104: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+_ test_install_wraps_the_view_the_production_witness_builds_and_restores_cleanly _
+
+    def test_install_wraps_the_view_the_production_witness_builds_and_restores_cleanly():
+        from hmbc_protocol import rpc_witness_view as rwv
+        original = rwv.RpcWitnessView.from_manifest
+        try:
+>           dw().install("authEpoch:2")
+            ^^^^
+
+protocol/tests/test_divergent_witness.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def dw():
+>       from testtools import divergent_witness
+E       ImportError: cannot import name 'divergent_witness' from 'testtools' (/home/karma/Documents/RIS-agent-2/protocol/testtools/__init__.py)
+
+protocol/tests/test_divergent_witness.py:29: ImportError
+____ test_a_missing_or_malformed_view_is_refused_before_anything_is_created ____
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-2/test_a_missing_or_malformed_vi0')
+
+    def test_a_missing_or_malformed_view_is_refused_before_anything_is_created(tmp_path):
+        for extra in ([], ["--view", "authEpoch:0"], ["--view", "nonsense"], ["--view", ""]):
+            p = run(extra + witness_args(tmp_path))
+>           assert p.returncode != 0 and p.stdout == "" and "refusing:" in p.stderr and "Traceback" not in p.stderr, (extra, p.stderr)
+E           AssertionError: ([], '/tmp/claude-1000/-home-karma-Documents-RIS/83cfbfd9-1e8e-451a-aeba-3c351adafbf4/scratchpad/venv/bin/python: No module named testtools.divergent_witness
+E             ')
+E           assert (1 != 0 and '' == '' and 'refusing:' in '/tmp/claude-1000/-home-karma-Documents-RIS/83cfbfd9-1e8e-451a-aeba-3c351adafbf4/scratchpad/venv/bin/python: No module named testtools.divergent_witness\n')
+E            +  where 1 = CompletedProcess(args=['/tmp/claude-1000/-home-karma-Documents-RIS/83cfbfd9-1e8e-451a-aeba-3c351adafbf4/scratchpad/ven...ts-RIS/83cfbfd9-1e8e-451a-aeba-3c351adafbf4/scratchpad/venv/bin/python: No module named testtools.divergent_witness\n').returncode
+E            +  and   '' = CompletedProcess(args=['/tmp/claude-1000/-home-karma-Documents-RIS/83cfbfd9-1e8e-451a-aeba-3c351adafbf4/scratchpad/ven...ts-RIS/83cfbfd9-1e8e-451a-aeba-3c351adafbf4/scratchpad/venv/bin/python: No module named testtools.divergent_witness\n').stdout
+E            +  and   '/tmp/claude-1000/-home-karma-Documents-RIS/83cfbfd9-1e8e-451a-aeba-3c351adafbf4/scratchpad/venv/bin/python: No module named testtools.divergent_witness\n' = CompletedProcess(args=['/tmp/claude-1000/-home-karma-Documents-RIS/83cfbfd9-1e8e-451a-aeba-3c351adafbf4/scratchpad/ven...ts-RIS/83cfbfd9-1e8e-451a-aeba-3c351adafbf4/scratchpad/venv/bin/python: No module named testtools.divergent_witness\n').stderr
+
+protocol/tests/test_divergent_witness.py:132: AssertionError
+_______ test_a_deployment_without_a_test_only_key_derivation_is_refused ________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-2/test_a_deployment_without_a_te0')
+
+    def test_a_deployment_without_a_test_only_key_derivation_is_refused(tmp_path):
+        m = json.load(open(F2))
+        m["fixture"]["keyDerivation"] = "production HSM"
+        f = tmp_path / "dep.json"
+        f.write_text(json.dumps(m))
+        p = run(["--view", "headLag:2"] + witness_args(tmp_path, **{"--deployment": str(f)}))
+>       assert p.returncode != 0 and p.stdout == "" and "refusing:" in p.stderr and not os.path.exists(tmp_path / "state")
+E       AssertionError: assert (1 != 0 and '' == '' and 'refusing:' in '/tmp/claude-1000/-home-karma-Documents-RIS/83cfbfd9-1e8e-451a-aeba-3c351adafbf4/scratchpad/venv/bin/python: No module named testtools.divergent_witness\n')
+E        +  where 1 = CompletedProcess(args=['/tmp/claude-1000/-home-karma-Documents-RIS/83cfbfd9-1e8e-451a-aeba-3c351adafbf4/scratchpad/ven...ts-RIS/83cfbfd9-1e8e-451a-aeba-3c351adafbf4/scratchpad/venv/bin/python: No module named testtools.divergent_witness\n').returncode
+E        +  and   '' = CompletedProcess(args=['/tmp/claude-1000/-home-karma-Documents-RIS/83cfbfd9-1e8e-451a-aeba-3c351adafbf4/scratchpad/ven...ts-RIS/83cfbfd9-1e8e-451a-aeba-3c351adafbf4/scratchpad/venv/bin/python: No module named testtools.divergent_witness\n').stdout
+E        +  and   '/tmp/claude-1000/-home-karma-Documents-RIS/83cfbfd9-1e8e-451a-aeba-3c351adafbf4/scratchpad/venv/bin/python: No module named testtools.divergent_witness\n' = CompletedProcess(args=['/tmp/claude-1000/-home-karma-Documents-RIS/83cfbfd9-1e8e-451a-aeba-3c351adafbf4/scratchpad/ven...ts-RIS/83cfbfd9-1e8e-451a-aeba-3c351adafbf4/scratchpad/venv/bin/python: No module named testtools.divergent_witness\n').stderr
+
+protocol/tests/test_divergent_witness.py:142: AssertionError
+_ test_a_valid_request_reaches_the_production_witness_which_then_refuses_an_unreachable_node_cleanly _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-2/test_a_valid_request_reaches_t0')
+
+    def test_a_valid_request_reaches_the_production_witness_which_then_refuses_an_unreachable_node_cleanly(tmp_path):
+        import socket
+        with socket.socket() as s:
+            s.bind(("127.0.0.1", 0))
+            port = s.getsockname()[1]
+        m = json.load(open(F2))
+        m["chains"]["pbc"]["rpcUrl"] = m["chains"]["dbc"]["rpcUrl"] = f"http://127.0.0.1:{port}"
+        f = tmp_path / "dep.json"
+        f.write_text(json.dumps(m))
+        p = run(["--view", "headLag:2"] + witness_args(tmp_path, **{"--deployment": str(f)}))
+>       assert p.returncode == 2 and p.stdout == "" and json.loads(p.stderr.strip().splitlines()[-1])["error"]["reason"] == "LEDGER_UNREACHABLE"      # the production witness's own closed refusal
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: assert (1 == 2)
+E        +  where 1 = CompletedProcess(args=['/tmp/claude-1000/-home-karma-Documents-RIS/83cfbfd9-1e8e-451a-aeba-3c351adafbf4/scratchpad/ven...ts-RIS/83cfbfd9-1e8e-451a-aeba-3c351adafbf4/scratchpad/venv/bin/python: No module named testtools.divergent_witness\n').returncode
+
+protocol/tests/test_divergent_witness.py:155: AssertionError
+_________ test_the_module_reads_no_environment_clock_thread_or_socket __________
+
+    def test_the_module_reads_no_environment_clock_thread_or_socket():
+>       src = open(os.path.join(PROTO, "testtools", "divergent_witness.py")).read()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/home/karma/Documents/RIS-agent-2/protocol/testtools/divergent_witness.py'
+
+protocol/tests/test_divergent_witness.py:159: FileNotFoundError
+_________ test_a_view_variant_parses_to_exactly_its_parts[authEpoch:1] _________
+
+spec = 'authEpoch:1'
+
+    @pytest.mark.parametrize("spec", ["authEpoch:1", "policyVersion:50", "witnessSetVersion:3", "headLag:12"])
+    def test_a_view_variant_parses_to_exactly_its_parts(spec):
+        fa, _, _ = mods()
+>       v = fa.parse_variant("1=view:" + spec)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_view.py:14: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '1=view:authEpoch:1'
+
+    def parse_variant(text):
+        """`I=crash:POINT`, `I=delay:MS[:kind[:when]]`, `I=mutant:ID` (ID a witness-role mutant) or `I=byz:SPEC` (SPEC a byzantine_witness behaviour), exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+        if parts[0] == "mutant":
+            if len(parts) != 2 or parts[1] not in WITNESS_MUTANTS:
+                raise ValueError("mutant needs one of " + ", ".join(WITNESS_MUTANTS))
+            return Variant(int(left), "mutant", None, None, None, None, parts[1])
+        if parts[0] == "byz":
+            spec = right.partition(":")[2]
+            return Variant(int(left), "byz", None, None, None, None, None, bw.parse_behavior(spec))      # ValueError for a malformed SPEC
+>       raise ValueError("variant must be crash, delay, mutant or byz")
+E       ValueError: variant must be crash, delay, mutant or byz
+
+protocol/testtools/faulty_adapter_v2.py:126: ValueError
+______ test_a_view_variant_parses_to_exactly_its_parts[policyVersion:50] _______
+
+spec = 'policyVersion:50'
+
+    @pytest.mark.parametrize("spec", ["authEpoch:1", "policyVersion:50", "witnessSetVersion:3", "headLag:12"])
+    def test_a_view_variant_parses_to_exactly_its_parts(spec):
+        fa, _, _ = mods()
+>       v = fa.parse_variant("1=view:" + spec)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_view.py:14: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '1=view:policyVersion:50'
+
+    def parse_variant(text):
+        """`I=crash:POINT`, `I=delay:MS[:kind[:when]]`, `I=mutant:ID` (ID a witness-role mutant) or `I=byz:SPEC` (SPEC a byzantine_witness behaviour), exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+        if parts[0] == "mutant":
+            if len(parts) != 2 or parts[1] not in WITNESS_MUTANTS:
+                raise ValueError("mutant needs one of " + ", ".join(WITNESS_MUTANTS))
+            return Variant(int(left), "mutant", None, None, None, None, parts[1])
+        if parts[0] == "byz":
+            spec = right.partition(":")[2]
+            return Variant(int(left), "byz", None, None, None, None, None, bw.parse_behavior(spec))      # ValueError for a malformed SPEC
+>       raise ValueError("variant must be crash, delay, mutant or byz")
+E       ValueError: variant must be crash, delay, mutant or byz
+
+protocol/testtools/faulty_adapter_v2.py:126: ValueError
+_____ test_a_view_variant_parses_to_exactly_its_parts[witnessSetVersion:3] _____
+
+spec = 'witnessSetVersion:3'
+
+    @pytest.mark.parametrize("spec", ["authEpoch:1", "policyVersion:50", "witnessSetVersion:3", "headLag:12"])
+    def test_a_view_variant_parses_to_exactly_its_parts(spec):
+        fa, _, _ = mods()
+>       v = fa.parse_variant("1=view:" + spec)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_view.py:14: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '1=view:witnessSetVersion:3'
+
+    def parse_variant(text):
+        """`I=crash:POINT`, `I=delay:MS[:kind[:when]]`, `I=mutant:ID` (ID a witness-role mutant) or `I=byz:SPEC` (SPEC a byzantine_witness behaviour), exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+        if parts[0] == "mutant":
+            if len(parts) != 2 or parts[1] not in WITNESS_MUTANTS:
+                raise ValueError("mutant needs one of " + ", ".join(WITNESS_MUTANTS))
+            return Variant(int(left), "mutant", None, None, None, None, parts[1])
+        if parts[0] == "byz":
+            spec = right.partition(":")[2]
+            return Variant(int(left), "byz", None, None, None, None, None, bw.parse_behavior(spec))      # ValueError for a malformed SPEC
+>       raise ValueError("variant must be crash, delay, mutant or byz")
+E       ValueError: variant must be crash, delay, mutant or byz
+
+protocol/testtools/faulty_adapter_v2.py:126: ValueError
+_________ test_a_view_variant_parses_to_exactly_its_parts[headLag:12] __________
+
+spec = 'headLag:12'
+
+    @pytest.mark.parametrize("spec", ["authEpoch:1", "policyVersion:50", "witnessSetVersion:3", "headLag:12"])
+    def test_a_view_variant_parses_to_exactly_its_parts(spec):
+        fa, _, _ = mods()
+>       v = fa.parse_variant("1=view:" + spec)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_view.py:14: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '1=view:headLag:12'
+
+    def parse_variant(text):
+        """`I=crash:POINT`, `I=delay:MS[:kind[:when]]`, `I=mutant:ID` (ID a witness-role mutant) or `I=byz:SPEC` (SPEC a byzantine_witness behaviour), exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+        if parts[0] == "mutant":
+            if len(parts) != 2 or parts[1] not in WITNESS_MUTANTS:
+                raise ValueError("mutant needs one of " + ", ".join(WITNESS_MUTANTS))
+            return Variant(int(left), "mutant", None, None, None, None, parts[1])
+        if parts[0] == "byz":
+            spec = right.partition(":")[2]
+            return Variant(int(left), "byz", None, None, None, None, None, bw.parse_behavior(spec))      # ValueError for a malformed SPEC
+>       raise ValueError("variant must be crash, delay, mutant or byz")
+E       ValueError: variant must be crash, delay, mutant or byz
+
+protocol/testtools/faulty_adapter_v2.py:126: ValueError
+_ test_the_existing_variants_still_parse_with_the_new_field_defaulting_to_none _
+
+    def test_the_existing_variants_still_parse_with_the_new_field_defaulting_to_none():
+        fa, _, _ = mods()
+        for text in ("1=crash:after_commit", "1=delay:5", "1=mutant:M1", "1=byz:withhold"):
+>           assert fa.parse_variant(text).view is None
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'Variant' object has no attribute 'view'
+
+protocol/tests/test_faulty_adapter_v2_view.py:29: AttributeError
+__ test_command_for_starts_a_divergent_witness_and_keeps_every_other_command ___
+
+    def test_command_for_starts_a_divergent_witness_and_keeps_every_other_command():
+        fa, _, wpt = mods()
+>       variants = {0: fa.parse_variant("0=view:authEpoch:2"), 2: fa.parse_variant("2=byz:withhold"), 3: fa.parse_variant("3=view:headLag:5")}
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_view.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '0=view:authEpoch:2'
+
+    def parse_variant(text):
+        """`I=crash:POINT`, `I=delay:MS[:kind[:when]]`, `I=mutant:ID` (ID a witness-role mutant) or `I=byz:SPEC` (SPEC a byzantine_witness behaviour), exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+        if parts[0] == "mutant":
+            if len(parts) != 2 or parts[1] not in WITNESS_MUTANTS:
+                raise ValueError("mutant needs one of " + ", ".join(WITNESS_MUTANTS))
+            return Variant(int(left), "mutant", None, None, None, None, parts[1])
+        if parts[0] == "byz":
+            spec = right.partition(":")[2]
+            return Variant(int(left), "byz", None, None, None, None, None, bw.parse_behavior(spec))      # ValueError for a malformed SPEC
+>       raise ValueError("variant must be crash, delay, mutant or byz")
+E       ValueError: variant must be crash, delay, mutant or byz
+
+protocol/testtools/faulty_adapter_v2.py:126: ValueError
+__ test_installed_view_variants_reach_the_real_supervisors_effective_commands __
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-2/test_installed_view_variants_r0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7f93da01de00>
+
+    def test_installed_view_variants_reach_the_real_supervisors_effective_commands(tmp_path, monkeypatch):
+        fa, am, _ = mods()
+        restoring(monkeypatch, am)
+>       fa.install({2: fa.parse_variant("2=view:policyVersion:1")}, None)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_faulty_adapter_v2_view.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+text = '2=view:policyVersion:1'
+
+    def parse_variant(text):
+        """`I=crash:POINT`, `I=delay:MS[:kind[:when]]`, `I=mutant:ID` (ID a witness-role mutant) or `I=byz:SPEC` (SPEC a byzantine_witness behaviour), exactly; anything else is a ValueError."""
+        if not isinstance(text, str) or "=" not in text:
+            raise ValueError("not I=variant")
+        left, _, right = text.partition("=")
+        if _INDEX.fullmatch(left) is None:
+            raise ValueError("index must be 0, 1, 2 or 3")
+        parts = right.split(":")
+        if parts[0] == "crash":
+            if len(parts) != 2 or parts[1] not in fw.POINTS:
+                raise ValueError("crash needs one of " + ", ".join(fw.POINTS))
+            return Variant(int(left), "crash", parts[1], None, None, None)
+        if parts[0] == "delay":
+            if not 2 <= len(parts) <= 4 or _DELAY.fullmatch(parts[1]) is None or int(parts[1]) > MAX_DELAY_MS:
+                raise ValueError(f"delay needs MS in 0..{MAX_DELAY_MS}")
+            kind = parts[2] if len(parts) >= 3 else None
+            when = parts[3] if len(parts) == 4 else None
+            if kind is not None and kind not in dw.KINDS:
+                raise ValueError("delay kind must be one of " + ", ".join(dw.KINDS))
+            if when is not None and when not in dw.WHEN:
+                raise ValueError("delay when must be before or after")
+            return Variant(int(left), "delay", None, int(parts[1]), kind, when)
+        if parts[0] == "mutant":
+            if len(parts) != 2 or parts[1] not in WITNESS_MUTANTS:
+                raise ValueError("mutant needs one of " + ", ".join(WITNESS_MUTANTS))
+            return Variant(int(left), "mutant", None, None, None, None, parts[1])
+        if parts[0] == "byz":
+            spec = right.partition(":")[2]
+            return Variant(int(left), "byz", None, None, None, None, None, bw.parse_behavior(spec))      # ValueError for a malformed SPEC
+>       raise ValueError("variant must be crash, delay, mutant or byz")
+E       ValueError: variant must be crash, delay, mutant or byz
+
+protocol/testtools/faulty_adapter_v2.py:126: ValueError
+______________ test_the_documented_syntax_names_the_view_variant _______________
+
+    def test_the_documented_syntax_names_the_view_variant():
+        fa, _, _ = mods()
+>       assert "view:SPEC" in fa.SYNTAX
+E       AssertionError: assert 'view:SPEC' in 'I=crash:before_commit|crash:after_commit|delay:MS[:kind[:before|after]]|mutant:ID|byz:SPEC'
+E        +  where 'I=crash:before_commit|crash:after_commit|delay:MS[:kind[:before|after]]|mutant:ID|byz:SPEC' = <module 'testtools.faulty_adapter_v2' from '/home/karma/Documents/RIS-agent-2/protocol/testtools/faulty_adapter_v2.py'>.SYNTAX
+
+protocol/tests/test_faulty_adapter_v2_view.py:64: AssertionError
+=========================== short test summary info ============================
+FAILED protocol/tests/test_divergent_witness.py::test_a_view_spec_parses_to_itself[authEpoch:1]
+FAILED protocol/tests/test_divergent_witness.py::test_a_view_spec_parses_to_itself[policyVersion:50]
+FAILED protocol/tests/test_divergent_witness.py::test_a_view_spec_parses_to_itself[witnessSetVersion:9]
+FAILED protocol/tests/test_divergent_witness.py::test_a_view_spec_parses_to_itself[headLag:7]
+FAILED protocol/tests/test_divergent_witness.py::test_every_malformed_spec_is_refused[]
+FAILED protocol/tests/test_divergent_witness.py::test_every_malformed_spec_is_refused[authEpoch]
+FAILED protocol/tests/test_divergent_witness.py::test_every_malformed_spec_is_refused[authEpoch:]
+FAILED protocol/tests/test_divergent_witness.py::test_every_malformed_spec_is_refused[authEpoch:0]
+FAILED protocol/tests/test_divergent_witness.py::test_every_malformed_spec_is_refused[authEpoch:51]
+FAILED protocol/tests/test_divergent_witness.py::test_every_malformed_spec_is_refused[authEpoch:01]
+FAILED protocol/tests/test_divergent_witness.py::test_every_malformed_spec_is_refused[authEpoch:-1]
+FAILED protocol/tests/test_divergent_witness.py::test_every_malformed_spec_is_refused[authEpoch:+1]
+FAILED protocol/tests/test_divergent_witness.py::test_every_malformed_spec_is_refused[authEpoch:1:2]
+FAILED protocol/tests/test_divergent_witness.py::test_every_malformed_spec_is_refused[AuthEpoch:1]
+FAILED protocol/tests/test_divergent_witness.py::test_every_malformed_spec_is_refused[authEpoch: 1]
+FAILED protocol/tests/test_divergent_witness.py::test_every_malformed_spec_is_refused[keyEpoch:1]
+FAILED protocol/tests/test_divergent_witness.py::test_every_malformed_spec_is_refused[headLag]
+FAILED protocol/tests/test_divergent_witness.py::test_every_malformed_spec_is_refused[headLag:0]
+FAILED protocol/tests/test_divergent_witness.py::test_every_malformed_spec_is_refused[headLag:x]
+FAILED protocol/tests/test_divergent_witness.py::test_every_malformed_spec_is_refused[None]
+FAILED protocol/tests/test_divergent_witness.py::test_every_malformed_spec_is_refused[5]
+FAILED protocol/tests/test_divergent_witness.py::test_a_read_divergence_adds_n_to_exactly_that_field[authEpoch]
+FAILED protocol/tests/test_divergent_witness.py::test_a_read_divergence_adds_n_to_exactly_that_field[policyVersion]
+FAILED protocol/tests/test_divergent_witness.py::test_a_read_divergence_adds_n_to_exactly_that_field[witnessSetVersion]
+FAILED protocol/tests/test_divergent_witness.py::test_a_head_lag_reports_an_older_pbc_head_and_hides_newer_blocks_but_not_the_dbc
+FAILED protocol/tests/test_divergent_witness.py::test_a_head_lag_larger_than_the_chain_clamps_at_genesis
+FAILED protocol/tests/test_divergent_witness.py::test_every_other_method_is_delegated_unchanged_and_an_unknown_one_still_raises
+FAILED protocol/tests/test_divergent_witness.py::test_a_non_decimal_real_read_is_left_alone_not_guessed
+FAILED protocol/tests/test_divergent_witness.py::test_install_wraps_the_view_the_production_witness_builds_and_restores_cleanly
+FAILED protocol/tests/test_divergent_witness.py::test_a_missing_or_malformed_view_is_refused_before_anything_is_created
+FAILED protocol/tests/test_divergent_witness.py::test_a_deployment_without_a_test_only_key_derivation_is_refused
+FAILED protocol/tests/test_divergent_witness.py::test_a_valid_request_reaches_the_production_witness_which_then_refuses_an_unreachable_node_cleanly
+FAILED protocol/tests/test_divergent_witness.py::test_the_module_reads_no_environment_clock_thread_or_socket
+FAILED protocol/tests/test_faulty_adapter_v2_view.py::test_a_view_variant_parses_to_exactly_its_parts[authEpoch:1]
+FAILED protocol/tests/test_faulty_adapter_v2_view.py::test_a_view_variant_parses_to_exactly_its_parts[policyVersion:50]
+FAILED protocol/tests/test_faulty_adapter_v2_view.py::test_a_view_variant_parses_to_exactly_its_parts[witnessSetVersion:3]
+FAILED protocol/tests/test_faulty_adapter_v2_view.py::test_a_view_variant_parses_to_exactly_its_parts[headLag:12]
+FAILED protocol/tests/test_faulty_adapter_v2_view.py::test_the_existing_variants_still_parse_with_the_new_field_defaulting_to_none
+FAILED protocol/tests/test_faulty_adapter_v2_view.py::test_command_for_starts_a_divergent_witness_and_keeps_every_other_command
+FAILED protocol/tests/test_faulty_adapter_v2_view.py::test_installed_view_variants_reach_the_real_supervisors_effective_commands
+FAILED protocol/tests/test_faulty_adapter_v2_view.py::test_the_documented_syntax_names_the_view_variant
+41 failed, 14 passed in 2.71s

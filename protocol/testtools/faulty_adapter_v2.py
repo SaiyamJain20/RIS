@@ -1,7 +1,7 @@
 """TEST-ONLY alternate successor adapter entry for the F fault schedules (HMBC2020 successor, F task 3; proposal P3 of A2-0074). PAPER-DERIVED RECONSTRUCTION; synthetic TEST-ONLY keys only.
 
     python -m testtools.faulty_adapter_v2 <the six adapter flags> [--allow-governance FILE]
-        [--witness-variant I=crash:before_commit|crash:after_commit|delay:MS[:kind[:before|after]]|mutant:ID|byz:SPEC]...  [--mutant-tree ID=ABSOLUTE_DIR]...  [--worker-variant compromised --claims FILE]
+        [--witness-variant I=crash:before_commit|crash:after_commit|delay:MS[:kind[:before|after]]|mutant:ID|byz:SPEC|view:SPEC]...  [--mutant-tree ID=ABSOLUTE_DIR]...  [--worker-variant compromised --claims FILE]
 
 It serves `hmbc_protocol.adapter_v2_main` (the production module, byte for byte) and changes two things IN THIS PROCESS ONLY:
   * `--witness-variant I=...` (repeatable, once per index 0..3): the supervisor's keyword-only `command_for` seam makes witness I run `testtools.faulty_witness --crash-at POINT` (H4, exit 86 at the named
@@ -10,6 +10,7 @@ It serves `hmbc_protocol.adapter_v2_main` (the production module, byte for byte)
   * `--worker-variant compromised --claims FILE`: the adapter's worker is the TEST-ONLY `CompromisedWorker` (H5) with the claims of FILE (a JSON array of {requestDigest, dataId, gid, recipientKeyRef}); it releases for
     a claimed request digest without a ledger-committed grant and is honest for everything else. Symbolic mode: no secrecy conclusion.
   * `I=byz:SPEC` (SPEC withhold | garbage | repeat:N | equivocate | impersonate:J | poison:FIELD, the grammar of `testtools.byzantine_witness`): witness I is the real-PROCESS Byzantine witness (H1) with the
+  * `I=view:SPEC` (SPEC authEpoch:N | policyVersion:N | witnessSetVersion:N | headLag:N, the grammar of `testtools.divergent_witness`): witness I is the real production witness whose chain view DIVERGES from the real ledger (H3, gap G2); a malformed SPEC is the one closed refusal.
     production witness's own arguments after `--behavior SPEC`; it needs no tree and no state of its own (withhold, garbage, impersonate and poison make no RPC call).
   * `I=mutant:ID` (ID one of the WITNESS-role F-plan source mutants M1 M2 M3 M4 M6 M7 of `testtools.mutant_tree`) with `--mutant-tree ID=DIR` (an absolute directory built by `python -m testtools.mutant_tree build`): witness I starts
     through `testtools.mutant_run` from that tree (exec, same pid) with the production witness's own arguments after `--`. Each such variant needs its tree and each tree its variant; every tree is verified (an untampered
@@ -38,6 +39,7 @@ from hmbc_protocol import witness_process_transport as wpt
 
 from testtools import compromised_worker as cw
 from testtools import delayed_witness as dw
+from testtools import divergent_witness as dvw
 from testtools import byzantine_witness as bw
 from testtools import faulty_witness as fw
 from testtools import mutant_tree as mt
@@ -49,7 +51,7 @@ WORKER_VARIANTS = ("compromised",)
 WITNESS_MUTANTS = tuple(m.id for m in mt.MUTANTS.values() if m.role == "witness")             # M5 runs in the adapter process: not a witness variant
 _INDEX = re.compile(r"[0-3]")
 _DELAY = re.compile(r"0|[1-9][0-9]{0,4}")
-SYNTAX = "I=crash:before_commit|crash:after_commit|delay:MS[:kind[:before|after]]|mutant:ID|byz:SPEC"
+SYNTAX = "I=crash:before_commit|crash:after_commit|delay:MS[:kind[:before|after]]|mutant:ID|byz:SPEC|view:SPEC"
 
 MSG_VARIANT = f"refusing: --witness-variant must be {SYNTAX} with I in 0..3 and MS in 0..{MAX_DELAY_MS}"
 MSG_REPEATED = "refusing: a witness index may carry only one --witness-variant"
@@ -84,6 +86,7 @@ class Variant(NamedTuple):
     when: str | None             # delay: before | after
     mutant: str | None = None    # mutant: M1 M2 M3 M4 M6 M7
     behavior: str | None = None  # byz: the testtools.byzantine_witness behaviour SPEC
+    view: str | None = None      # view: the testtools.divergent_witness view SPEC
 
 
 class Arguments(NamedTuple):
@@ -123,7 +126,10 @@ def parse_variant(text):
     if parts[0] == "byz":
         spec = right.partition(":")[2]
         return Variant(int(left), "byz", None, None, None, None, None, bw.parse_behavior(spec))      # ValueError for a malformed SPEC
-    raise ValueError("variant must be crash, delay, mutant or byz")
+    if parts[0] == "view":
+        spec = right.partition(":")[2]
+        return Variant(int(left), "view", None, None, None, None, None, None, dvw.parse_spec(spec))      # ValueError for a malformed SPEC
+    raise ValueError("variant must be crash, delay, mutant, byz or view")
 
 
 def parse_tree(text):
@@ -164,6 +170,8 @@ def command_for_variants(variants, trees=None):
         head, tail = default_command[:i], default_command[i + 1:]
         if v.name == "byz":
             return [*head, "testtools.byzantine_witness", "--behavior", v.behavior, *tail]
+        if v.name == "view":
+            return [*head, "testtools.divergent_witness", "--view", v.view, *tail]
         if v.name == "mutant":
             if v.mutant not in tree_of:
                 raise ValueError("no tree for the mutant")
