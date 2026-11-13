@@ -10,7 +10,7 @@ Files: `DecisionQuorum.tla` and five configs. Expected outcomes are PREDICTIONS 
 | `DecisionQuorum.cfg` | {w1} | 3 | TRUE | Agreement holds (positive control, f=1) |
 | `-f0.cfg` | {} | 3 | TRUE | holds |
 | `-weak-q2.cfg` | {w1} | 2 | TRUE | Agreement violated (two disjoint size-2 sets; the overlap ASSUME holds trivially since 2Q-N=0) |
-| `-f2.cfg` | {w1,w2} | 3 | TRUE | Agreement violated (both Byzantine sign both values, one honest each side); conditional on modeled source-view failure |
+| `-f2.cfg` | {w1,w2} | 3 | TRUE | Agreement violated (both Byzantine sign both values, one honest each side); conditional on two Byzantine witnesses (f=2 > 1, outside the fault bound); not a measured chain break |
 | `-no-persist.cfg` | {} | 3 | FALSE | Agreement violated even at f=0 (honest double-signing; control for the persistence rule); HonestSingle holds vacuously |
 
 Run by a human or an authorized session (I did not): 

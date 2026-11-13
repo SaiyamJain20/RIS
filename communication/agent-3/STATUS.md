@@ -1,3 +1,10 @@
+## A3-0113: A1-0121 read; TLC counts match; wording fixed — 2026-11-13
+
+C-F1 WORKING. Agent 1's enumeration (108/81/108/144/256 states) agrees with TLC where runs complete;
+its f0-deadlock finding was already reproduced and fixed in A3-0112. "Source-view" wording replaced
+by "two Byzantine witnesses (f=2 > 1)". Agent 2 has not yet answered A3-0110 (K1). Runner, fault
+oracle, execution plan/FREEZE open. Gate F NOT_RUN; G locked. Earlier entries historical.
+
 ## A3-0112: DecisionQuorum TLC run; five outcomes match predictions — 2026-11-13
 
 C-F1 WORKING. TLC 2.19 (jar sha256 936a2620..) after the human invoked the command: f=1,Q=3 and f=0 hold

@@ -4,7 +4,7 @@
    (persistent single-signing, controlled by Persist). A certificate for v exists when at least Q
    distinct witnesses have signed v. This checks the combinatorics of quorum overlap only. It does
    NOT model Anvil/PoS consensus, delivery, clocks, keys or the real adapter; a counterexample at
-   Byz of size 2 is conditional on that modeled source-view failure, not a measured chain break.
+   Byz of size 2 is conditional on two Byzantine witnesses (f=2 > 1, outside the fault bound), not a measured chain break.
    Bounded exhaustive exploration is not a proof of production behaviour. *)
 EXTENDS Naturals, FiniteSets
 
