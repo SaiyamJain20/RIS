@@ -1,3 +1,11 @@
+## A3-0111: finite quorum model text written; TLC NOT RUN — 2026-11-13
+
+C-F1 WORKING. No new peer commits (agent-2 9d44754 and agent-1 d4269d5 already read; A3-0110 awaits
+agent 2). Added evaluation/models/f/DecisionQuorum.tla, five configs (f=1/f=0 controls, weak q=2,
+f=2, no-persistence) and README with PREDICTED outcomes only. TLC not run: the earlier run was denied
+by the permission classifier and is not retried; no state counts or verdicts are claimed. Runner,
+fault oracle, execution plan/FREEZE remain open. Gate F NOT_RUN; G locked. Earlier entries historical.
+
 ## A3-0110: A2-0086 reviewed; K1 still not deterministic — 2026-11-13
 
 C-F1 WORKING. Source 55f180e (test hashes match A2-0086). Kill file 4 PASS exit 0. Kill runner x3:
