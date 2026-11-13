@@ -226,6 +226,40 @@ def test_kill_inside_each_stage_of_a_real_initialisation_leaves_a_recoverable_di
     assert interrupted >= len(INIT_STAGES), "the controlled kills did not interrupt (the harness did not exercise I5: finished before the kill: %d)" % (done - interrupted)
 
 
+def test_kill_inside_the_signing_transaction_leaves_a_whole_record(tmp_path):
+    """A CONTROLLED signing kill (A3-0109: K1 was detected only when the random kill happened to land between statement commits; 1/3 runs). The child prints `STAGE before_commit` from inside an open
+    transaction, so the parent kills exactly there: on a store that commits whole, the record is all-or-nothing; with one committed statement per write (mutant K1) the pin exists without a live digest
+    and the I3 check below fails the test. The assertion is the contract, and the stats line says how many kills landed."""
+    for stage in ("before_commit", "after_commit"):
+        d = str(tmp_path / ("sig-" + stage))
+        ws.init_store(d, BIND, B, OWNER).close()
+        p = spawn(d, "sign-stage", 7)
+        assert p.stdout.readline().strip() == "READY", p.stderr.read()[-800:]
+        out = kill_at_stage(p, stage)                     # SIGKILL inside (or just after) a real signing transaction
+        reps = {ln.split(" ")[2]: ln.split(" ")[3] for ln in out.split("\n")[:-1] if ln.startswith("REPLY ")}
+        st = ws.open_store(d, BIND, OWNER)
+        try:
+            con = sqlite3.connect(os.path.join(d, "signing.sqlite"))
+            stored = con.execute("SELECT COUNT(*) FROM digests").fetchone()[0]
+            orphans = con.execute("SELECT COUNT(*) FROM conflict c WHERE NOT EXISTS (SELECT 1 FROM digests d WHERE d.type = c.type AND d.domain = c.domain AND d.wsv = c.wsv "
+                                  "AND d.key = c.key AND d.sup_seq IS NULL)").fetchone()[0]
+            row = con.execute("SELECT observation FROM observed WHERE chain = ?", (DBC,)).fetchone()
+            newest = [int(json.loads(r[0])["blockNumber"]) for r in con.execute("SELECT observation FROM digests")]
+            con.close()
+            assert orphans == 0, "stage %s: a pin without a live digest (a signing committed in pieces)" % stage
+            assert not newest or (row is not None and int(json.loads(row[0])["blockNumber"]) == max(newest)), "stage %s: the baseline lags the newest record" % stage
+            assert stored - len(reps) <= 1, "stage %s: more than one record committed without its reply" % stage
+            stored_sigs = {r[0]: r[1] for r in sqlite3.connect(os.path.join(d, "signing.sqlite")).execute("SELECT digest, signature FROM digests")}
+            for dg, sig in reps.items():                     # every reply that left the process is in the store with the same signature
+                assert stored_sigs.get(dg) == sig, "stage %s: a replied digest is missing or carries another signature" % stage
+            top = max(newest) if newest else 0
+            st.sign(type="StateCheckpoint", domain=kc.DOM_S, wsv="2", key="99", effect=kc.cp_effect(138), expires_at="1791600000", digest=h("post-" + stage), signer=kc.signer,
+                    observe=lambda: obs(DBC, top + 10, kc.T0 + 10 * 3))       # a block ABOVE every recorded observation: the store's no-regression rule is not the subject here
+        finally:
+            st.close()
+    print("KILL-SIGN-STAGE-STATS stage_kills=2")
+
+
 def test_the_harness_flags_a_reply_that_leaves_before_the_commit(tmp_path):
     """Positive control: a child that replies from inside the transaction (a deliberately broken ordering) must be caught. If this passes without a violation the harness is blind."""
     stats = run_signing_trials(tmp_path, "sign-early-reply", 40, 3)

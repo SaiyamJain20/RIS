@@ -1,0 +1,76 @@
+F
+=================================== FAILURES ===================================
+________ test_kill_inside_the_signing_transaction_leaves_a_whole_record ________
+
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-57/test_kill_inside_the_signing_t0')
+
+    def test_kill_inside_the_signing_transaction_leaves_a_whole_record(tmp_path):
+        """A CONTROLLED signing kill (A3-0109: K1 was detected only when the random kill happened to land between statement commits; 1/3 runs). The child prints `STAGE before_commit` from inside an open
+        transaction, so the parent kills exactly there: on a store that commits whole, the record is all-or-nothing; with one committed statement per write (mutant K1) the pin exists without a live digest
+        and the I3 check below fails the test. The assertion is the contract, and the stats line says how many kills landed."""
+        for stage in ("before_commit", "after_commit"):
+            d = str(tmp_path / ("sig-" + stage))
+            ws.init_store(d, BIND, B, OWNER).close()
+            p = spawn(d, "sign-stage", 7)
+            assert p.stdout.readline().strip() == "READY", p.stderr.read()[-800:]
+            out = kill_at_stage(p, stage)                     # SIGKILL inside (or just after) a real signing transaction
+            reps = {ln.split(" ")[2]: ln.split(" ")[3] for ln in out.split("\n")[:-1] if ln.startswith("REPLY ")}
+            st = ws.open_store(d, BIND, OWNER)
+            try:
+                con = sqlite3.connect(os.path.join(d, "signing.sqlite"))
+                stored = con.execute("SELECT COUNT(*) FROM digests").fetchone()[0]
+                orphans = con.execute("SELECT COUNT(*) FROM conflict c WHERE NOT EXISTS (SELECT 1 FROM digests d WHERE d.type = c.type AND d.domain = c.domain AND d.wsv = c.wsv "
+                                      "AND d.key = c.key AND d.sup_seq IS NULL)").fetchone()[0]
+                row = con.execute("SELECT observation FROM observed WHERE chain = ?", (DBC,)).fetchone()
+                newest = [int(json.loads(r[0])["blockNumber"]) for r in con.execute("SELECT observation FROM digests")]
+                con.close()
+                assert orphans == 0, "stage %s: a pin without a live digest (a signing committed in pieces)" % stage
+                assert not newest or (row is not None and int(json.loads(row[0])["blockNumber"]) == max(newest)), "stage %s: the baseline lags the newest record" % stage
+                assert stored - len(reps) <= 1, "stage %s: more than one record committed without its reply" % stage
+                stored_sigs = {r[0]: r[1] for r in sqlite3.connect(os.path.join(d, "signing.sqlite")).execute("SELECT digest, signature FROM digests")}
+                for dg, sig in reps.items():                     # every reply that left the process is in the store with the same signature
+                    assert stored_sigs.get(dg) == sig, "stage %s: a replied digest is missing or carries another signature" % stage
+>               st.sign(type="StateCheckpoint", domain=kc.DOM_S, wsv="2", key="1", effect=kc.cp_effect(138), expires_at="1791600000", digest=h("post-" + stage), signer=kc.signer,
+                        observe=lambda: obs(DBC, 160, kc.T0))
+
+protocol/tests/test_witness_state_kill.py:255: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <hmbc_protocol.witness_state.WitnessStore object at 0x7c3a87d97820>
+
+    def sign(self, *, type: str, domain: str, wsv: str, key: str, effect: dict, expires_at, digest: str, signer, observe, overtaken=None) -> str:
+        """Record the choice for K and return the signature, or refuse. `observe()` returns the target ledger's latest-block observation taken for this request; `signer(digest)` returns the
+        65-byte hex signature (deterministic, RFC 6979 in production); `overtaken` is ("kind", observed-or-None) evidence of a numeric/ledger death that the store re-checks."""
+        if type not in TYPES or not _H32.fullmatch(str(domain)) or not _DEC.fullmatch(str(wsv)) or not _H32.fullmatch(str(digest)):
+            raise ValueError("type, domain, witnessSetVersion or digest is malformed")
+        if not (isinstance(key, str) and (_DEC.fullmatch(key) if type in _KEY_DEC else _H32.fullmatch(key))):
+            raise ValueError("key field is malformed for this type")
+        if not isinstance(effect, dict) or set(effect) != EFFECT_FIELDS[type]:
+            raise ValueError("effect must carry exactly the fields of V for this type")
+        if HAS_EXPIRY[type] != (expires_at is not None) or (expires_at is not None and not _DEC.fullmatch(str(expires_at))):
+            raise ValueError("expiresAt is required for types with a liveness field and absent for GrantReceipt")
+        with self._mutex, self._writing():
+            self._con.execute("BEGIN IMMEDIATE")
+            pending = None
+            try:
+                try:
+                    out = self._sign_in_txn(type, domain, wsv, key, effect, expires_at, digest, signer, observe, overtaken)
+                except _FaultSet as fs:
+                    pending, out = fs.error, None
+                if out is None and pending is None:          # a pure read (idempotent re-sign): nothing to commit
+                    self._con.execute("ROLLBACK")
+                    return self._stored
+                self._hook("before_commit")
+                self._con.execute("COMMIT")
+            except BaseException:
+                if self._con.in_transaction:
+                    self._con.execute("ROLLBACK")
+                raise
+            self._hook("after_commit")
+            if pending is not None:
+>               raise pending
+E               hmbc_protocol.witness_state.StoreError: WITNESS_FAULTED: the observed chain regressed (number-regression); the store is faulted until an explicit clear
+
+protocol/hmbc_protocol/witness_state.py:383: StoreError
+1 failed, 3 deselected in 0.57s
+EXIT=1 START=2026-11-13T15:33:43Z END=2026-11-13T15:33:45Z HEAD=1037517
