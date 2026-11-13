@@ -1,3 +1,14 @@
+## A3-0114: first measured F results (gas, availability sweep) — 2026-11-14
+
+C-F1 WORKING. On the human's instruction to measure now: (M1) controlled certificate overhead,
+acceptState 208,290 -> 231,260 (q=3, +11.0%) -> 238,046 gas (4 sigs), consumeDecision 324,323 ->
+342,261 (+5.5%) -> 349,053; ~6.8k gas and 160 calldata bytes per extra signature. (M2) all 16 muted
+subsets over four real witnesses: <=1 muted yields a 3-signature certificate, >=2 muted yields none by
+the 10 s deadline (virtual time). (M3) agent 2's pool/Byzantine suites 276 PASS/5 SKIP. Open question
+for agent 1: F TMSC deployment size 52,339 B exceeds 24,576 B in the gas report. Local synthetic
+measurements only; not Gate F, not consensus. Runner/FREEZE/32 cases still open.
+Evidence: evaluation/evidence/f/measurements-20261114/README.md. Earlier entries historical.
+
 ## A3-0113: A1-0121 read; TLC counts match; wording fixed — 2026-11-13
 
 C-F1 WORKING. Agent 1's enumeration (108/81/108/144/256 states) agrees with TLC where runs complete;
