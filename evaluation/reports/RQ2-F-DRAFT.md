@@ -1,0 +1,80 @@
+# RQ2 / F — DRAFT report (agent 3, 2026-11-14)
+
+**Status: DRAFT. Gate F NOT RUN. G locked.** All 32 planned F cases are NOT_RUN; the F runner,
+the fault oracle, the execution FREEZE and its three ACKs do not exist yet. This draft reports
+only what was measured locally on synthetic fixtures, plus the model and the review record.
+Paper-derived reconstruction of HMBC2020, not the authors' implementation. All reviews are
+same-model (correlated). Evidence directories are cited per claim.
+
+## 1. Question and design
+RQ2: can the single key-worker/witness trust point of E be replaced by q-of-n witnesses
+(n=4, q=3, f=1 Byzantine) without losing the E properties? Mechanism: three signed paths
+(checkpoint at KSSC, access decision at ACSC, grant receipt at PSC) carry a sorted list of q
+distinct witness signatures; governance (add/remove authority, set CA admins) needs a witness
+quorum with nonce and expiry; honest witnesses persist a single-signing record durably.
+Components: ledger (agent 1, `85c59f5`), witness runtime and pool (agent 2, `55f180e`),
+evaluation (agent 3).
+
+## 2. Results (all local, synthetic)
+### 2.1 Safety — finite model (TLC 2.19; `evidence/f/decision-quorum-tlc-20261113/`)
+| config | result |
+|---|---|
+| 4 witnesses, f=1, q=3, persistent single-signing | Agreement holds (433 generated / 108 distinct states, complete) |
+| f=0, q=3 | holds (217 / 81) |
+| f=1, weak threshold q=2 | Agreement violated |
+| f=2, q=3 | Agreement violated (conditional on two Byzantine witnesses, outside f=1) |
+| f=0, honest witnesses may double-sign | Agreement violated |
+Two q=3 sets of 4 overlap in >= 2 witnesses, so with f=1 they share an honest one. Bounded
+exploration of one decision slot; not a proof of consensus or of the implementation. Agent 1's
+independent enumeration matches the state counts.
+
+### 2.2 Safety — pool state machine with real signatures (`measurements-20261114/`, M5)
+f=1: 972 cases (4 positions x 9 Byzantine behaviours x 27 honest pin patterns): 180 certificates,
+all with 3 distinct valid sorted signers; 0 agreement-hazard cases. f=2 control: 4,374 cases,
+2,916 agreement-hazard cases (potential double certificates). Honest witnesses there are agent
+2's model of the signing rule, not the durable store.
+
+### 2.3 Availability (M2 virtual time; M6 real processes)
+All 16 muted-witness subsets over four real witnesses (virtual transport): 0 or 1 muted gives a
+3-signature certificate every run; 2, 3 or 4 muted gives none by the 10 s deadline. With real
+processes, a local Anvil and the real KSSC (agent 2's live tests, three runs, exit 0): q=3
+certificate accepted in ~0.7 s, one SIGKILLed witness still accepted (~0.6 s), two stopped
+witnesses give a classified timeout of ~10.5 s, a restarted witness keeps its durable pin.
+No claim about arbitrary-delay liveness: unavailability under two faults is expected and measured.
+
+### 2.4 Cost (M1/M1b/M1c; reproduced exactly by agent 1, A1-0123/0124/0125)
+Same code, REPAIRED_E (1 signature) vs REPAIRED_F, Forge gas of one external call:
+| call | 1 sig | 3 sigs | 4 sigs |
+|---|---|---|---|
+| KSSC.acceptState | 208,290 | 231,260 (+11.0%) | 238,046 |
+| ACSC.consumeDecision | 324,323 | 342,261 (+5.5%) | 349,053 |
+| PSC.reportAttestedOutcome | 533,754 | 553,488 (+3.7%) | 560,290 |
+Calldata grows 548->868, 1,380->1,700, 644->964 bytes (160 B per extra signature, ~6.8k gas each).
+Governance.execute (F only, 3 sigs): AddAuthority 524,214; RemoveAuthority 424,421; SetCaAdmins 446,934.
+All product contracts stay under 24,576 B (TMSC 12,635 -> 16,127 B). Not a fee estimate; single
+deterministic runs; the E column is the F commit's E profile.
+
+### 2.5 Assurance process
+The kill-durability review found and drove fixes for: a hot-journal store refused after a kill in
+init (fixed), a snapshot-lock defect (fixed), the evaluator anchor-selection defect (fixed on my
+side). Open: the signing-kill mutant K1 is detected only probabilistically (2 of 3 and 3 of 5 runs
+at A3-0110; agent 2 has not answered). Mistakes of my own kept in the record: a model deadlock
+(first TLC f=0 run), a parser artifact that reported a false 52,339 B TMSC size.
+
+## 3. Trust matrix (what still requires trust)
+| component | status |
+|---|---|
+| >= 3 of 4 witnesses honest and not sharing a source-view failure | required (f=1 bound) |
+| governance quorum / initial witness set and authorities | required; compromised quorum can change the sets |
+| key custody | TEST-ONLY synthetic keys; custody not evaluated |
+| single local Anvil pair as the chain | assumed correct; consensus not evaluated |
+| durable witness store | SIGKILL-tested only; no power-loss claim |
+| the authors of code and reviews | same model family; reviews are correlated |
+Failures outside f=1: two Byzantine witnesses can break agreement (TLC f=2, sweep f=2); two
+unavailable witnesses stop certificates (availability, not safety).
+
+## 4. Not done / not claimed
+Gate F, the 32 F cases, execution FREEZE and ACKs, the runner and fault oracle, E regression
+reruns against the F system, certificate/latency over a real network, power-loss durability,
+Besu/QBFT consensus, ABE, any G (key lifecycle) work. Deviation from the plan sequence: the
+measurements above were taken before the runner/FREEZE on the human's instruction.

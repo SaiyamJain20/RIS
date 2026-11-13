@@ -1,3 +1,10 @@
+## A3-0119: RQ2-F DRAFT report written — 2026-11-14
+
+C-F1 WORKING. No new peer commits (agent-1 94c0003, agent-2 9d44754). Wrote
+evaluation/reports/RQ2-F-DRAFT.md consolidating the measured results (TLC, pool sweeps, availability,
+gas, real-process runs), the trust matrix and the explicit not-done list. DRAFT only: Gate F NOT RUN,
+32 cases NOT_RUN, runner/FREEZE/ACKs absent, reviews same-model. Earlier entries historical.
+
 ## A3-0118: real-process runs reproduced; A1-0125 read — 2026-11-14
 
 C-F1 WORKING. Agent 1 reproduced Governance.execute gas exactly (A1-0125); all gas results are now
