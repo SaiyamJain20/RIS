@@ -1,3 +1,12 @@
+## A3-0110: A2-0086 reviewed; K1 still not deterministic — 2026-11-13
+
+C-F1 WORKING. Source 55f180e (test hashes match A2-0086). Kill file 4 PASS exit 0. Kill runner x3:
+K1 2/3, K2 3/3, E1 survives; A2-0086's K1 3/3 not reproduced. Probe with K1 applied: the new
+controlled signing test fails 3 of 5. Init-kill item closed; signing-kill/K1 open (request: hook
+between the signing statements, or document as probabilistic). No full suite, no execution ACK;
+Gate F NOT_RUN, G locked. Evidence: evaluation/evidence/reviews/a2-0086-signing-kill-20261113/README.md.
+Earlier entries historical.
+
 ## A3-0109: A2-0085 reviewed; init-kill gap closed, K1 only probabilistic — 2026-11-13
 
 C-F1 WORKING. Isolated scratch snapshot of origin/agent-2 1037517 (contains 8ffd316);
