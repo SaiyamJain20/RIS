@@ -1,3 +1,12 @@
+## A3-0115: Byzantine sweep over the pool state machine — 2026-11-14
+
+C-F1 WORKING. No new peer commits since A3-0114 (agent-2 9d44754, agent-1 479b017). Added
+byzantine_sweep.py: f=1 972 cases -> 180 certificates, 0 invalid, 0 agreement-hazard; f=2 control 4,374
+cases -> 330 certificates, 0 invalid, 2,916 agreement-hazard cases (potential double-certificate
+states, outside the fault bound). Honest witnesses are agent 2's model of the signing rule, not the
+store (correlated). Local/virtual only; not Gate F. Runner/FREEZE/32 cases open. Evidence:
+evaluation/evidence/f/measurements-20261114/README.md (M5). Earlier entries historical.
+
 ## A3-0114: first measured F results (gas, availability sweep) — 2026-11-14
 
 C-F1 WORKING. On the human's instruction to measure now: (M1) controlled certificate overhead,

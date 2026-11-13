@@ -57,3 +57,19 @@ See evaluation/evidence/f/decision-quorum-tlc-20261113/: f=1,f=0 hold; weak q=2,
 - Gas numbers are single deterministic runs of one fixture; no confidence intervals apply.
 - Wall times are in-process CPU timings, not network latency.
 - E vs F comparison in M1 uses the F commit's own E profile, not the historical 91add8c bytecode.
+
+## M5. Byzantine sweep (added 2026-11-14, later; `byzantine_sweep.py`, raw `byzantine.json`, exit 0, 7.6 s)
+Over agent 2's pool state machine and scripted-witness harness at 55f180e (hash-matched snapshot).
+Honest witnesses are agent 2's MODEL of the signing rule, not the durable store (correlated, same-model
+author of both); signatures are real EIP-712. Byzantine behaviours (9): silent, valid signature over
+A/B/C, recorded report over A/B/C, garbage, wrong-key signature.
+- f=1: 972 cases (4 positions x 9 behaviours x 27 honest pin patterns). 180 certificates, 792 no
+  certificate (honest pin splits make many cases unavailable regardless of the Byzantine witness; no
+  certificate is not unsafe). 0 invalid certificates (every one has 3 distinct, sorted, valid signers).
+  0 agreement-hazard cases.
+- f=2 control (outside the fault bound): 4,374 cases (6 position pairs x 81 behaviour pairs x 9 pin
+  patterns). 330 certificates, 0 invalid, **2,916 agreement-hazard cases**.
+Hazard definition (mine): after the run, two different values could each gather >= 3 signers, counting
+honest witnesses whose store holds the value plus all Byzantine witnesses. It is a POTENTIAL, not a
+realized double certificate; it restates the quorum-overlap bound on post-run states of the real pool
+and matches the TLC result (f=1 safe, f=2 not). Same-model, virtual time, one fixture family.
