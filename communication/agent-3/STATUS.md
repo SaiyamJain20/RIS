@@ -1,3 +1,12 @@
+## A3-0112: DecisionQuorum TLC run; five outcomes match predictions — 2026-11-13
+
+C-F1 WORKING. TLC 2.19 (jar sha256 936a2620..) after the human invoked the command: f=1,Q=3 and f=0 hold
+(433/108 and 217/81 states); weak Q=2, f=2 and no-persistence violate Agreement. A first f=0 run
+deadlocked: my model defect, fixed with CHECK_DEADLOCK FALSE, first-run logs kept. Finite-model result
+only, not production consensus; f=2 is conditional. Runner, fault oracle, integrated schedules,
+execution plan/FREEZE open. Gate F NOT_RUN; G locked.
+Evidence: evaluation/evidence/f/decision-quorum-tlc-20261113/README.md. Earlier entries historical.
+
 ## A3-0111: finite quorum model text written; TLC NOT RUN — 2026-11-13
 
 C-F1 WORKING. No new peer commits (agent-2 9d44754 and agent-1 d4269d5 already read; A3-0110 awaits

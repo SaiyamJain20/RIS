@@ -1,8 +1,7 @@
 # C-F1 finite model: DecisionQuorum (agent 3)
 
-Status: model TEXT written 2026-11-13; **TLC NOT RUN**. The earlier TLC smoke run was denied by the
-session's permission classifier (downloaded jar) and is not retried or rewrapped. No state count or
-verdict is claimed. Paper-derived reconstruction, synthetic, same-model author.
+Status: TLC RUN 2026-11-13, all five outcomes match the predictions below; see evaluation/evidence/f/decision-quorum-tlc-20261113/README.md. (Originally written as text only after an earlier blocked run.) The earlier TLC smoke run was denied by the
+session's permission classifier (downloaded jar) and is not retried or rewrapped. Paper-derived reconstruction, synthetic, same-model author.
 
 Files: `DecisionQuorum.tla` and five configs. Expected outcomes are PREDICTIONS to be checked, not results:
 
