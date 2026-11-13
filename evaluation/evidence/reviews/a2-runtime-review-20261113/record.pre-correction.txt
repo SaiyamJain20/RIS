@@ -1,0 +1,19 @@
+import gzip,json,os,sys
+from pathlib import Path
+ROOT=Path('/home/karma/Documents/RIS');OUT=ROOT/'evaluation/evidence/reviews/a2-runtime-review-20261113';RUN=ROOT/'evaluation/runs/a2-runtime-review-20261113'
+sys.path.insert(0,str(ROOT))
+from evaluation.manifests import record_command
+label,mode,*argv=sys.argv[1:]
+receipt=OUT/(label+'-command.json');assert not receipt.exists()
+env=dict(os.environ);env['PYTHONDONTWRITEBYTECODE']='1';env['HMBC_KILL_TRIALS']='100'
+if mode=='protocol':
+ cwd=RUN/'owner/protocol'
+ env['PYTHONPATH']=str(OUT)+os.pathsep+str(cwd)
+ env['RIS_REVIEW_DESELECTION']=str(OUT/(label+'-selection.json'))
+ env['RIS_REVIEW_PROCESS_GUARD']=str(OUT/(label+'-guard.json'))
+else:cwd=ROOT
+result=record_command(argv,cwd,RUN/(label+'.log'),timeout=1800,env=env,owned_process_group=True)
+receipt.write_text(json.dumps(result,indent=2)+'\n')
+(OUT/(label+'.log.gz')).write_bytes(gzip.compress((RUN/(label+'.log')).read_bytes(),mtime=0))
+print(json.dumps(result,indent=2));print((RUN/(label+'.log')).read_text()[-4000:])
+raise SystemExit(result['exitCode'])

@@ -1,0 +1,79 @@
+"""Cross-run owner store with evaluator reader; synthetic store placeholders."""
+from pathlib import Path
+import importlib.util,importlib.machinery,sys,tempfile,threading,json,hashlib,subprocess
+ROOT=Path('/home/karma/Documents/RIS');RUN=ROOT/'evaluation/runs/a2-runtime-review-20261113';OUT=ROOT/'evaluation/evidence/reviews/a2-runtime-review-20261113'
+PROTO=RUN/'owner/protocol'
+sys.path[:0]=[str(PROTO),str(PROTO/'tests'),str(ROOT)]
+from hmbc_protocol import witness_state as current
+from test_witness_state import B,BIND,OWNER,DBC,obs,sign_cp
+from evaluation.store_snapshot_v2 import locked_store,require_unchanged
+
+raw=subprocess.check_output(['git','show','7d97b902a7fa4d02c32c7cc95ef75a10b69694a9:protocol/hmbc_protocol/witness_state.py'],cwd=ROOT)
+old=OUT/'baseline-witness-state.py.txt';assert not old.exists();old.write_bytes(raw)
+name='hmbc_protocol.review_old_witness_state';loader=importlib.machinery.SourceFileLoader(name,str(old))
+spec=importlib.util.spec_from_loader(name,loader);baseline=importlib.util.module_from_spec(spec);sys.modules[name]=baseline;loader.exec_module(baseline)
+
+def reader(d):return locked_store(d/'signing.sqlite',d/'INITIALIZED',d/'.lock')
+def take(d):
+    with reader(d) as r:return r.snapshot()
+
+results={}
+for label,module in [('baseline',baseline),('current',current)]:
+    with tempfile.TemporaryDirectory(prefix='a3-snapshot-',dir=RUN) as tmp:
+        d=Path(tmp)/'witness-0';st=module.init_store(str(d),BIND,B,OWNER)
+        threads=[];release=threading.Event()
+        try:
+            before=take(d)
+            sign_cp(st,4,138,1791521610,'first',obs(DBC,160,1791521600))
+            try:after=take(d)
+            except ValueError as e:
+                assert label=='baseline' and 'busy' in str(e)
+                results[label]=dict(idleBeforeSigningSnapshot=True,idleAfterSigningSnapshot=False,reason=str(e))
+                continue
+            assert label=='current' and before.logical_sha256!=after.logical_sha256
+            # An EX snapshot excludes a cooperative signing transaction.
+            about=threading.Event();entered=threading.Event();done=threading.Event();errors=[]
+            def writer():
+                try:
+                    about.set()
+                    from test_witness_state import DOM_S,cp_effect,h,signer
+                    st.sign(type='StateCheckpoint',domain=DOM_S,wsv='2',key='5',effect=cp_effect(139),
+                        expires_at='1791521620',digest=h('second'),signer=signer,
+                        observe=lambda:(entered.set() or obs(DBC,161,1791521601)))
+                except BaseException as e:errors.append(repr(e))
+                finally:done.set()
+            with reader(d) as r:
+                a=r.snapshot();t=threading.Thread(target=writer);threads.append(t);t.start();assert about.wait(2)
+                assert not entered.wait(.25) and not done.is_set()
+                require_unchanged(a,r.snapshot())
+            assert done.wait(5) and not errors and entered.is_set();t.join(5);assert not t.is_alive()
+            # Conversely, an in-flight signing callback holds SH, excluding EX.
+            inside=threading.Event();release.clear();done.clear()
+            from test_witness_state import DOM_S,cp_effect,h,signer
+            def observing():
+                inside.set();assert release.wait(5);return obs(DBC,162,1791521602)
+            def active_writer():
+                try:st.sign(type='StateCheckpoint',domain=DOM_S,wsv='2',key='6',effect=cp_effect(140),
+                    expires_at='1791521630',digest=h('third'),signer=signer,observe=observing)
+                except BaseException as e:errors.append(repr(e))
+                finally:done.set()
+            t=threading.Thread(target=active_writer);threads.append(t);t.start();assert inside.wait(2)
+            try:
+                try:take(d)
+                except ValueError as e:assert 'busy' in str(e)
+                else:raise AssertionError('snapshot overlapped a signing transaction')
+            finally:release.set()
+            assert done.wait(5) and not errors;t.join(5);assert not t.is_alive()
+            final=take(d);require_unchanged(final,take(d))
+            results[label]=dict(idleBeforeSigningSnapshot=True,idleAfterSigningSnapshot=True,
+                writerWaitedDuringExclusiveSnapshot=True,snapshotRefusedDuringSigning=True,
+                finalLogicalSha256=final.logical_sha256,markerSha256=final.marker_sha256)
+        finally:
+            release.set()
+            for t in threads:t.join(6);assert not t.is_alive()
+            st.close()
+assert set(results)=={'baseline','current'}
+result=dict(classification='tested reconstruction composition',baselineSourceSha256=hashlib.sha256(raw).hexdigest(),
+    currentSourceSha256=hashlib.sha256((PROTO/'hmbc_protocol/witness_state.py').read_bytes()).hexdigest(),
+    fixture='synthetic owner test store with placeholder signatures; no native ledger/signature validation',results=results)
+p=OUT/'snapshot-probe.json';assert not p.exists();p.write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))

@@ -1,0 +1,59 @@
+import gzip,hashlib,json,os,re,subprocess,sys
+from pathlib import Path
+ROOT=Path('/home/karma/Documents/RIS');OUT=ROOT/'evaluation/evidence/reviews/a2-runtime-review-20261113';RUN=ROOT/'evaluation/runs/a2-runtime-review-20261113'
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def read(n):return json.loads((OUT/n).read_text())
+before=read('inputs-before.json');owner=read('owner-source.json');rev=read('helper-revisions.json')
+assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT).decode().strip()==before['head']
+for p,h in before['tracked'].items():assert sha(ROOT/p)==h,p
+for p,h in owner['paths'].items():assert sha(RUN/'owner'/p)==h,p
+assert before['helpers']==rev['before']
+for p,h in rev['after'].items():assert sha(ROOT/p)==h,p
+for p,h in before['frozen'].items():assert sha(ROOT/p)==h,p
+a,b=read('communication-before.json'),read('communication-final.json')
+assert a['branches']==b['branches']
+assert {p:r['sha256'] for p,r in a['files'].items()}=={p:r['sha256'] for p,r in b['files'].items()}
+assert all(not r['ambiguous'] and not r['divergentRevisions'] for r in b['files'].values()) and not b['missingBranches']
+expected={'focused':0,'isolated-suite':1,'state-mutants':0,'startup-mutants':0,'kill-mutants':2,
+          'exports':0,'snapshot-probe':0,'kill-control-details':1,'isolated-suite-corrected':1,
+          'codec-guard-corrected':0,'fetch-final':0,'peers-final':0,'cast-version':0}
+receipts={}
+for label,code in expected.items():
+    row=read(label+'-command.json');raw=gzip.decompress((OUT/(label+'.log.gz')).read_bytes())
+    assert hashlib.sha256(raw).hexdigest()==row['outputSha256']==sha(RUN/(label+'.log'))
+    assert row['exitCode']==code and not row['timedOut'],label
+    child=json.loads((RUN/(label+'.log.process.json')).read_text());assert child['status']=='STOPPED',label
+    receipts[label]=dict(exitCode=code,outputSha256=row['outputSha256'])
+def log(label):return (RUN/(label+'.log')).read_text()
+assert '195 passed' in log('focused')
+assert '6 failed, 2929 passed, 201 skipped, 267 deselected, 2 errors' in log('isolated-suite')
+assert '2 failed, 2935 passed, 201 skipped, 267 deselected' in log('isolated-suite-corrected')
+assert '1 passed' in log('codec-guard-corrected')
+assert '1 failed, 2 passed' in log('kill-control-details')
+assert '100 finished before the kill' in log('kill-control-details')
+assert 'detected 42 of 42' in log('state-mutants') and 'detected 19 of 19' in log('startup-mutants')
+assert 'CONTROL FAILED' in log('kill-mutants') and 'DETECTED ' not in log('kill-mutants')
+sel=read('isolated-suite-corrected-selection.json');assert len(sel['selected'])==3138 and len(sel['excluded'])==267
+assert len(read('isolated-suite-guard.json')['blocked'])==5
+assert len(read('isolated-suite-corrected-guard.json')['blocked'])==1
+assert not read('focused-guard.json')['blocked'] and not read('codec-guard-corrected-guard.json')['blocked']
+probe=read('snapshot-probe.json');assert probe['results']['baseline']['idleAfterSigningSnapshot'] is False
+assert all(probe['results']['current'][k] for k in ['idleAfterSigningSnapshot','writerWaitedDuringExclusiveSnapshot','snapshotRefusedDuringSigning'])
+locks={}
+for name,inode in before['locks'].items():
+    p=ROOT/'.git'/name;assert p.stat().st_ino==inode
+    assert subprocess.run(['flock','-n','-E','75',str(p),'true']).returncode==75
+    locks[name]=inode
+for p in RUN.glob('*.log.process.json'):
+    d=json.loads(p.read_text());assert d['status']=='STOPPED' or d['pid']==os.getpid(),p
+result=dict(commandsChecked=len(receipts),receipts=receipts,trackedInputsChecked=len(before['tracked']),
+    ownerInputsChecked=len(owner['paths']),frozenPayloadsChecked=len(before['frozen']),protocolF0PinsChecked=len(before['protocolF0Pins']),
+    communicationPaths=len(b['files']),initialHelpers=before['helpers'],finalHelperRevision=rev['after'],
+    additionalProbeSha256={p.name:sha(p) for p in [RUN/'snapshot-probe.txt',RUN/'kill-control.txt',RUN/'verify.txt']},
+    focusedPasses=195,correctedBroad=dict(passed=2935,failed=2,skipped=201,deselected=267),
+    codecFailureResolvedByTargetedPass=True,remainingOwnerFinding='Initialization-kill schedule exercised zero interruptions in 100 trials',
+    detectedStateMutants=42,detectedStartupMutants=19,killMutantsEvaluated=False,
+    castSha256=sha(Path('/home/karma/.local/share/hmbc-tools/foundry-1.8.5/cast')),
+    locks=locks,completeRuntimeReviewAccepted=False,executionAuthorized=False,gateF='NOT_RUN',gateG='LOCKED')
+p=OUT/'verification.json';assert not p.exists();p.write_text(json.dumps(result,indent=2)+'\n')
+print(json.dumps(result,indent=2))

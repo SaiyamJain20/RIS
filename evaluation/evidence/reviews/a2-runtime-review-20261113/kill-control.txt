@@ -1,0 +1,19 @@
+"""Expose the unmodified owner kill-runner control's normally hidden output."""
+from pathlib import Path
+import importlib.util,subprocess,sys,gzip,json
+ROOT=Path('/home/karma/Documents/RIS');RUN=ROOT/'evaluation/runs/a2-runtime-review-20261113';OUT=ROOT/'evaluation/evidence/reviews/a2-runtime-review-20261113'
+path=RUN/'owner/protocol/tools/run_state_kill_mutants.py'
+spec=importlib.util.spec_from_file_location('review_kill_control',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+original=subprocess.run
+def captured(*args,**kwargs):
+    result=original(*args,**kwargs)
+    p=OUT/'kill-control-child.log.gz';assert not p.exists()
+    p.write_bytes(gzip.compress((result.stdout+'\nSTDERR:\n'+result.stderr).encode(),mtime=0))
+    print(result.stdout[-8000:]);print(result.stderr[-1000:])
+    return result
+subprocess.run=captured
+try:status,count=module.run_in_copy(module.SRC)
+finally:subprocess.run=original
+p=OUT/'kill-control-result.json';assert not p.exists();p.write_text(json.dumps(dict(status=status,failedTests=count),indent=2)+'\n')
+print(json.dumps(dict(status=status,failedTests=count)))
+raise SystemExit(0 if status=='pass' else 1)
