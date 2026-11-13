@@ -89,3 +89,15 @@ F overhead (scratch variant warming the witness set: 231,261 vs 231,260), and at
 witness-set scan; that split is unmeasured. `forge build --sizes` exits 1 only because of Forge scripts
 (Deploy 83,849 B, ExportGovernanceVectors 45,094 B, ExportVectors 39,827 B), never deployed as product;
 quote product rows only. Receipt-path numbers above are mine alone, not yet reproduced by a peer.
+
+## M1c. Governance execute (2026-11-14, later; `CertBenchGov.t.sol`, log `certbench-governance.log.gz`, exit 0, 6 pass)
+Governance exists only in F, so there is no 1-signature baseline. Gas for Governance.execute by quorum
+(caller holds no role; fresh fixture, nonce 1, single deterministic run):
+| action | 3 sigs gas / calldata | 4 sigs gas / calldata |
+|---|---|---|
+| AddAuthority | 524,214 / 836 B | 530,980 / 996 B |
+| RemoveAuthority | 424,421 / 804 B | 431,185 / 964 B |
+| SetCaAdmins | 446,934 / 836 B | 453,688 / 996 B |
+The signature part is again ~6.8k gas and 160 B per extra signature; the rest is the state change in TMSC,
+the LSC log entry and the authEpoch bump (cost not split here). Not yet peer-reproduced. The whole-suite
+report's Governance.execute max of 931,093 comes from other test shapes, not from these three actions.
