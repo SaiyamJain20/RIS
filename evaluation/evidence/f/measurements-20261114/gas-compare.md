@@ -51,11 +51,4 @@ F-only functions (median gas, max, calls):
 - TMSC.removedAuthority: median 2618, max 2618, calls 7
 - TMSC.wireGovernance: median 46251, max 46251, calls 112
 
-Deployment size (bytes) E -> F:
-- ACSC: 13299 -> 13398
-- Governance: - -> 6511
-- KSSC: 9490 -> 10077
-- LSC: 3965 -> 3965
-- PSC: 14804 -> 15030
-- RSC: 4597 -> 4597
-- TMSC: 14861 -> 52339
+(Deployment sizes intentionally omitted: use `forge build --sizes`; this parser mis-read them.)

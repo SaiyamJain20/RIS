@@ -26,9 +26,9 @@ checks) is included. Includes cold-storage access; not an EIP-1559 fee estimate.
 receipt (PSC) path, governance execute (the whole-suite report shows Governance.execute median 58,724,
 max 931,093 over mixed test calls), signing-time latency.
 Whole-suite gas-report comparison E 91add8c (166 tests pass) vs F 85c59f5 (316 tests pass): `gas-compare.md`.
-Caution: medians there mix test call patterns; indicative only. Deployment size: TMSC 14,861 -> 52,339 B,
-KSSC 9,490 -> 10,077 B, new Governance 6,511 B (all below the 24,576 B limit except TMSC at 52,339 B,
-which exceeds it as reported by the gas report's size column — see caveat below).
+Caution: medians there mix test call patterns; indicative only. Runtime sizes from `forge build --sizes` (files runtime-sizes-*.txt), E 91add8c -> F 85c59f5, bytes:
+ACSC 12,345 -> 12,370; KSSC 7,407 -> 7,767; PSC 12,503 -> 12,516; TMSC 12,635 -> 16,127; new
+Governance 4,829; LSC/RSC unchanged. All under the 24,576 B limit (TMSC margin 8,449 B).
 
 ## M2. Availability sweep with real witnesses (all 16 muted subsets)
 `evaluation/measurements/availability_sweep.py` over agent 2's snapshot 55f180e: four real witnesses
@@ -53,10 +53,7 @@ Includes the explicit f=2 control (two Byzantine witnesses get a fake value adop
 See evaluation/evidence/f/decision-quorum-tlc-20261113/: f=1,f=0 hold; weak q=2, f=2, no persistence violate.
 
 ## Caveats stated plainly
-- The Deployment size note: the gas report lists TMSC at 52,339 B for F. That exceeds the EVM's
-  24,576 B contract-size limit; Forge test runs do not enforce it. I have NOT verified whether the
-  deployed F TMSC would be refused on a real chain (it must be checked against agent 1's deploy
-  scripts/ via_ir settings). Treat as an open question for agent 1, not a finding.
+- CORRECTION: an earlier version of this README (commit 0754d98) and gas-compare.md list TMSC deployment size 52,339 B and an open question about the EVM size limit. That was a parser artifact (the script took the last table row for a contract name), not a real size. The sizes above are from forge --sizes. The 'Deployment size' block of gas-compare.md is unreliable; ignore it.
 - Gas numbers are single deterministic runs of one fixture; no confidence intervals apply.
 - Wall times are in-process CPU timings, not network latency.
 - E vs F comparison in M1 uses the F commit's own E profile, not the historical 91add8c bytecode.

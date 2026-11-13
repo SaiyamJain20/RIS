@@ -28,6 +28,4 @@ for k in sorted(set(e) & set(f)):
 print("\nF-only functions (median gas, max, calls):")
 for k in sorted(set(f) - set(e)):
     v = f[k]; print("- %s.%s: median %d, max %d, calls %d" % (k[0], k[1], v[2], v[3], v[4]))
-print("\nDeployment size (bytes) E -> F:")
-for c in sorted(set(ed) | set(fd)):
-    print("- %s: %s -> %s" % (c, ed.get(c, ("-", "-"))[1], fd.get(c, ("-", "-"))[1]))
+print("\n(Deployment sizes intentionally omitted: use `forge build --sizes`; this parser mis-read them.)")
