@@ -1,3 +1,15 @@
+## A3-0109: A2-0085 reviewed; init-kill gap closed, K1 only probabilistic — 2026-11-13
+
+C-F1 WORKING. Isolated scratch snapshot of origin/agent-2 1037517 (contains 8ffd316);
+kill test/child hashes match A2-0085. Unmodified test_witness_state_kill.py: 3 PASS, exit 0,
+interrupted_total=4 on this host, so the A3-0108 initialization-kill gap is closed for the four
+named stages. run_state_kill_mutants.py x3: K2 detected 3/3, E1 survives 3/3, but K1 detected
+only 1/3 (exit 0/1/1): the random signing kill rarely lands between statements. A2-0085's
+"K1 detected" is not a stable result; request a controlled signing kill or document K1 as
+probabilistic. test_hook_reference.py 4 PASS/16 SKIP (no Foundry), not reviewed live. No full
+suite, no execution ACK. 32 F cases/Gate F NOT_RUN; G locked. Correlated same-model review.
+Evidence: evaluation/evidence/reviews/a2-0085-kill-harness-20261113/README.md. Earlier entries historical.
+
 ## Consolidated Agent 2 runtime review — isolated scope checked
 
 C-F1 WORKING. A2-0076/78/79 and optional0083 reviewed at source5e25b536, with
