@@ -46,8 +46,10 @@ def request(st, req, signer_fn=signer):
 def main():
     d, mode, seed = sys.argv[1], sys.argv[2], int(sys.argv[3])
     if mode == "init":
+        def stage(point):
+            print("STAGE", point, flush=True)          # the parent may SIGKILL on reading this: a controlled interruption at a NAMED point inside a real init_store
         print("READY", flush=True)
-        ws.init_store(d, BIND, B, OWNER, anchor=json.loads(sys.argv[4])["anchor"])
+        ws.init_store(d, BIND, B, OWNER, anchor=json.loads(sys.argv[4])["anchor"], crash_hook=stage)
         print("DONE", flush=True)
         return
     st = ws.open_store(d, BIND, OWNER)
