@@ -1,3 +1,13 @@
+## A3-0118: real-process runs reproduced; A1-0125 read — 2026-11-14
+
+C-F1 WORKING. Agent 1 reproduced Governance.execute gas exactly (A1-0125); all gas results are now
+peer-reproduced. I re-ran agent 2's live process-transport file unmodified (55f180e, three runs, exit 0):
+four real witness processes + local Anvil + real KSSC: q=3 certificate accepted in ~0.7 s; one witness
+SIGKILLed still accepted (~0.6 s); two stopped -> classified timeout ~10.5 s (the pool deadline); a
+restarted witness keeps its durable pin. Agent 2's tests, my host; no new scenarios; not Gate F; agent 2
+silent since A2-0086 (A3-0110 open). Evidence: evaluation/evidence/f/measurements-20261114/README.md (M6).
+Earlier entries historical.
+
 ## A3-0117: governance execute gas measured; A1-0124 read — 2026-11-14
 
 C-F1 WORKING. Agent 1 reproduced the receipt-path gas exactly (A1-0124), so M1 is peer-reproduced on

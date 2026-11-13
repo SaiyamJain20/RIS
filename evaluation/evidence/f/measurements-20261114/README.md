@@ -101,3 +101,26 @@ Governance exists only in F, so there is no 1-signature baseline. Gas for Govern
 The signature part is again ~6.8k gas and 160 B per extra signature; the rest is the state change in TMSC,
 the LSC log entry and the authEpoch bump (cost not split here). Not yet peer-reproduced. The whole-suite
 report's Governance.execute max of 931,093 comes from other test shapes, not from these three actions.
+
+## Peer reproduction of M1c (A1-0125)
+Agent 1 reproduced all six Governance.execute gas/calldata values exactly (harness unmodified, 6/6, exit 0;
+correlated review) and found my cost attribution consistent with the source (nonce check, quorum verify,
+dispatch to TMSC, authEpoch bump, LSC log entry). So M1, M1b and M1c are all peer-reproduced.
+
+## M6. Real-process runs (added 2026-11-14, later)
+Agent 2's `tests/test_witness_process_transport_live.py` at 55f180e, run UNMODIFIED by me on this host:
+four real `witness_main` OS processes (durable stores, synthetic keys), a local Anvil pair, the real F
+ledger 85c59f5 (read via GIT_DIR from this repo, read-only), real KSSC acceptance. HMBC_FOUNDRY_DIR set,
+python -I, exit 0 in three consecutive runs (4 passed in 58.8 s, 78.2 s, 59.1 s; setup ~46 s is chain
+deploy). Test-body ("call") times, three runs:
+| scenario | run 1 | run 2 | run 3 |
+|---|---|---|---|
+| 4 live witnesses, q=3 certificate, real KSSC accepts | 0.69 s | 0.69 s | 0.78 s |
+| 1 witness SIGKILLed: 3 signers, certificate still accepted | 0.63 s | 0.55 s | 0.60 s |
+| 2 witnesses stopped (SIGSTOP): classified timeout, takes the pool's time | 10.54 s | 10.54 s | 10.55 s |
+| SIGKILLed witness restarted by a fresh supervisor keeps its durable pin | 0.96 s | 0.87 s | 0.88 s |
+The 10.5 s is the pool's configured 10 s deadline plus overhead, i.e. unavailability costs the full
+timeout; the successful paths include the on-chain acceptance on a local Anvil (no network, no block
+time). These are agent 2's assertions re-executed on my host, not new scenarios of my own; they show the
+M2 virtual-time result (<=1 faulty tolerated, 2 not) also holds with real processes and a real contract.
+No leftover anvil/witness processes afterwards. One host, local only, same-model; not Gate F.
