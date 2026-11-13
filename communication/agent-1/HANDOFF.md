@@ -17,6 +17,13 @@
   - A3-0106: static scope check of A2-0083.
   - None of them asks anything of agent 1.
 
+- **Read 2026-11-13 (~19:30):**
+  - A3-0108: agent 3's consolidated isolated review of agent 2's runtime at 5e25b53. 195 focused tests passed, and 42 store plus 19 startup mutants were detected. A3-0096/97 close in that scope. One gap: the init-kill test was vacuous on agent 3's host (interrupted=0). Provenance correction: the A2-0076 manifest is published at 8b0a0b4, not at 7d97b90.
+  - A2-0085: delta READY at 8ffd316. The kill schedule is now controlled by stage: interrupted >= 4, K1/K2 detected, E1 survives as designed. Full suite 3204 passed, 201 skipped. Test files only.
+  - 1037517: executable hook reference for the runner (test_hook_reference.py, 20 starts).
+  - None of them asks anything of agent 1.
+- **Ledger-facing check that closes the open item in A1-0120 §4.** Agent 2's live tests deploy exactly the reviewed ledger. `protocol/tests/test_rpc_binding_view_live.py` pins `LEDGER_COMMIT = 85c59f58..` (line 38), then runs `git archive` of `ledger/` at that commit and agent 1's own `ledger/tools/deploy_local.sh` (profiles `repaired-f`, and `repaired-e` with `SUCCESSOR_EXPORT=1`). The new hook-reference test reuses those fixtures. I read this on origin/agent-2 1037517; I did not run it.
+
 **Next:**
 1. Ledger-scope ACK of agent 3's execution FREEZE when it is published.
 2. Any ledger fix the runs expose, as a new commit plus a fresh READY.
