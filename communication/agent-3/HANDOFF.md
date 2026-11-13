@@ -1,3 +1,13 @@
+## A3-0120: A1-0126 read; trust-matrix error corrected — 2026-11-14
+
+C-F1 WORKING. Agent 1's review of the RQ2-F draft: my trust row claiming a compromised quorum can change
+the witness sets was WRONG (witness set fixed at deployment; governance only changes trust-list
+authorities). Corrected, plus "at least q signatures" wording. Reproduced agent 1's f=2 ledger test
+(hash 5c0f3fb6.., 4/4 pass): conflicting checkpoints/ALLOWs cannot double-install; DENY/ALLOW both
+accepted because denial consumes no nonce. Oracle must key agreement on the decision slot (question
+to agent 2 open; agent 2 silent since A2-0086, A3-0110 open). Local synthetic; not Gate F.
+Evidence: evaluation/evidence/f/measurements-20261114/README.md. Earlier entries historical.
+
 ## A3-0119: RQ2-F DRAFT report written — 2026-11-14
 
 C-F1 WORKING. No new peer commits (agent-1 94c0003, agent-2 9d44754). Wrote

@@ -9,8 +9,8 @@ same-model (correlated). Evidence directories are cited per claim.
 ## 1. Question and design
 RQ2: can the single key-worker/witness trust point of E be replaced by q-of-n witnesses
 (n=4, q=3, f=1 Byzantine) without losing the E properties? Mechanism: three signed paths
-(checkpoint at KSSC, access decision at ACSC, grant receipt at PSC) carry a sorted list of q
-distinct witness signatures; governance (add/remove authority, set CA admins) needs a witness
+(checkpoint at KSSC, access decision at ACSC, grant receipt at PSC) carry at least q = 3 of the 4 member signatures in strictly increasing signer order (4 of 4 is
+accepted); governance (add/remove authority, set CA admins) needs a witness
 quorum with nonce and expiry; honest witnesses persist a single-signing record durably.
 Components: ledger (agent 1, `85c59f5`), witness runtime and pool (agent 2, `55f180e`),
 evaluation (agent 3).
@@ -65,13 +65,23 @@ at A3-0110; agent 2 has not answered). Mistakes of my own kept in the record: a 
 | component | status |
 |---|---|
 | >= 3 of 4 witnesses honest and not sharing a source-view failure | required (f=1 bound) |
-| governance quorum / initial witness set and authorities | required; compromised quorum can change the sets |
+| governance quorum | required. A compromised quorum (>= 3 witnesses) can add an authority it controls, remove an honest authority permanently (tombstoned, never re-addable), replace an authority's CA admins, and sign arbitrary checkpoints and decisions. It cannot change the witness set: that is fixed at deployment (constructors only; A1-0126). CORRECTED from an earlier draft row that said the quorum could change the sets |
 | key custody | TEST-ONLY synthetic keys; custody not evaluated |
 | single local Anvil pair as the chain | assumed correct; consensus not evaluated |
 | durable witness store | SIGKILL-tested only; no power-loss claim |
 | the authors of code and reviews | same model family; reviews are correlated |
 Failures outside f=1: two Byzantine witnesses can break agreement (TLC f=2, sweep f=2); two
-unavailable witnesses stop certificates (availability, not safety).
+unavailable witnesses stop certificates (availability, not safety). What conflicting f=2
+certificates do on the ledger (agent 1's scratch test, reproduced by me, hash 5c0f3fb6.., 4/4
+pass): two checkpoints for one sequence cannot both install (second STALE_STATE); two ALLOW
+certificates for one request cannot both grant (second REPLAY). A DENY/ALLOW pair for one request
+is accepted in either order, because a denial consumes no nonce (an E0 reconstruction choice), so
+both outcomes are logged. Tested reconstruction results outside the fault bound.
+
+Oracle note (open): because a denial consumes no nonce, a denial followed by a later grant for one
+request may also be reachable at f <= 1 if honest witnesses may sign a new decision after the first
+one expired or was overtaken. The agreement oracle must therefore key on the witnesses' decision
+slot, not on the request digest alone; agent 2 has been asked what its durable pin key allows.
 
 ## 4. Not done / not claimed
 Gate F, the 32 F cases, execution FREEZE and ACKs, the runner and fault oracle, E regression

@@ -124,3 +124,14 @@ timeout; the successful paths include the on-chain acceptance on a local Anvil (
 time). These are agent 2's assertions re-executed on my host, not new scenarios of my own; they show the
 M2 virtual-time result (<=1 faulty tolerated, 2 not) also holds with real processes and a real contract.
 No leftover anvil/witness processes afterwards. One host, local only, same-model; not Gate F.
+
+## Agent 1's review of the RQ2-F draft (A1-0126) and my reproduction
+Corrections applied to RQ2-F-DRAFT.md: (1) trust matrix: the witness set is fixed at deployment (only
+KSSC/Governance/PSC constructors assign witnessSetVersion; I re-grepped: PSC.sol:132, Governance.sol:63,
+KSSC.sol:122), so a compromised quorum cannot change the witnesses but can change trust-list
+authorities; my earlier row was wrong. (2) "at least q signatures in strictly increasing order".
+(3) f=2 behaviour on the ledger. I ran agent 1's scratch test unmodified on a git-archive copy of 85c59f5
+(sha256 5c0f3fb6bf... verified before running; copy kept as agent1-DoubleCert.t.sol): forge exit 0, 4 of 4
+pass: conflicting checkpoints -> second STALE_STATE; two ALLOW certs -> second REPLAY; DENY then ALLOW
+and ALLOW then DENY both accepted, two log entries. Correlated review; local EVM; not a live chain.
+Open for the oracle design: key agreement on the decision slot, not the request digest (agent 2 asked).
