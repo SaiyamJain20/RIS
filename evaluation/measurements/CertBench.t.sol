@@ -2,7 +2,7 @@
 pragma solidity 0.8.37;
 // MEASUREMENT HARNESS by agent 3 (scratch copy of ledger 85c59f5; not part of the ledger module).
 import {HMBCFixture} from "./utils/Fixture.sol";
-import {Profile, HMBCHash, AccessRequest, CredentialRecord, StateCheckpoint, AccessDecision, DecisionCertificate} from "../src/types/ProtocolTypes.sol";
+import {GrantReceipt, RESULT_ALLOW, Profile, HMBCHash, AccessRequest, CredentialRecord, StateCheckpoint, AccessDecision, DecisionCertificate} from "../src/types/ProtocolTypes.sol";
 
 abstract contract BenchBase is HMBCFixture {
     event Measure(string name, uint256 sigs, uint256 gas, uint256 calldataBytes);
@@ -46,12 +46,28 @@ abstract contract BenchBase is HMBCFixture {
         g -= gasleft();
         emit Measure("consumeDecision", n, g, cd);
     }
+    function benchReceipt(uint256 n) internal {
+        publishTrustLists(one(alice));
+        registerAlice();
+        (AccessRequest memory r, bytes32 d, CredentialRecord[] memory recs) = aliceForwarded(1);
+        bytes32 grantId = deliver(r, recs, d, RESULT_ALLOW);
+        GrantReceipt memory g = receiptFor(grantId);
+        bytes[] memory s = sigsFor(n, HMBCHash.grantReceiptDigest(g, PBC_CHAIN_ID, address(psc)));
+        bytes32 outcome = keccak256("synthetic-outcome");
+        uint256 cd = abi.encodeCall(psc.reportAttestedOutcome, (d, outcome, g, s)).length;
+        vm.prank(relay);
+        uint256 gs = gasleft();
+        psc.reportAttestedOutcome(d, outcome, g, s);
+        gs -= gasleft();
+        emit Measure("reportAttestedOutcome", n, gs, cd);
+    }
 }
 
 contract BenchE is BenchBase {
     function profile() internal pure override returns (Profile) { return Profile.REPAIRED_E; }
     function test_E_checkpoint_1() public { benchCheckpoint(1); }
     function test_E_decision_1() public { benchDecision(1); }
+    function test_E_receipt_1() public { benchReceipt(1); }
 }
 
 contract BenchF is BenchBase {
@@ -60,4 +76,6 @@ contract BenchF is BenchBase {
     function test_F_checkpoint_4() public { benchCheckpoint(4); }
     function test_F_decision_3() public { benchDecision(3); }
     function test_F_decision_4() public { benchDecision(4); }
+    function test_F_receipt_3() public { benchReceipt(3); }
+    function test_F_receipt_4() public { benchReceipt(4); }
 }

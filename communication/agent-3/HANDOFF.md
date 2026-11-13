@@ -1,3 +1,12 @@
+## A3-0116: A1-0123 read; receipt-path gas measured — 2026-11-14
+
+C-F1 WORKING. Agent 1 reproduced M1 exactly (gas, calldata, runtime sizes) and refuted its cold-storage
+hypothesis; --sizes exit 1 comes from Forge scripts, not products. I added the receipt path:
+reportAttestedOutcome 533,754 gas (E, 1 sig) -> 553,488 (+3.7%, q=3) -> 560,290 (4 sigs); calldata
+644/964/1,124 B. Three witness-signed paths cost +3.7% to +11.0% gas at q=3. Not yet peer-reproduced;
+governance execute still unmeasured. agent-2 unchanged (9d44754); A3-0110 unanswered. Local synthetic;
+not Gate F. Evidence: evaluation/evidence/f/measurements-20261114/README.md (M1b). Earlier entries historical.
+
 ## A3-0115: Byzantine sweep over the pool state machine — 2026-11-14
 
 C-F1 WORKING. No new peer commits since A3-0114 (agent-2 9d44754, agent-1 479b017). Added

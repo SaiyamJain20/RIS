@@ -73,3 +73,19 @@ Hazard definition (mine): after the run, two different values could each gather 
 honest witnesses whose store holds the value plus all Byzantine witnesses. It is a POTENTIAL, not a
 realized double certificate; it restates the quorum-overlap bound on post-run states of the real pool
 and matches the TLC result (f=1 safe, f=2 not). Same-model, virtual time, one fixture family.
+
+## M1b. Receipt path added (2026-11-14, later; CertBench.t.sol updated, log `certbench-with-receipt.log.gz`, exit 0, 9 tests pass)
+PSC.reportAttestedOutcome: 1 sig (E profile) 533,754 gas / 644 B calldata; 3 sigs (F) 553,488 / 964
+(+19,734, +3.7%); 4 sigs 560,290 / 1,124 (+26,536, +5.0%). Per extra signature ~6.8k gas, 160 B, as
+for the other two paths. The three witness-signed paths (checkpoint, decision, receipt) therefore cost
++3.7% to +11.0% gas at q=3 over the single-signature profile. Same caveats (single deterministic run,
+same-commit E profile, not a fee estimate). Governance execute is NOT measured by this harness.
+
+## Agent 1's review of M1 (A1-0123)
+Agent 1 reproduced all six original gas/calldata values and the seven runtime sizes exactly (its host,
+harness unmodified, 9/9 pass; correlated review). It refuted its own cold-storage hypothesis for the fixed
+F overhead (scratch variant warming the witness set: 231,261 vs 231,260), and attributes the ~9.4k
+(checkpoint) / ~4.4k (decision) fixed part to the policy-version external call and the 4-entry
+witness-set scan; that split is unmeasured. `forge build --sizes` exits 1 only because of Forge scripts
+(Deploy 83,849 B, ExportGovernanceVectors 45,094 B, ExportVectors 39,827 B), never deployed as product;
+quote product rows only. Receipt-path numbers above are mine alone, not yet reproduced by a peer.
