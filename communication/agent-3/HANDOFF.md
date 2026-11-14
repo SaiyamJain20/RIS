@@ -1,3 +1,12 @@
+## A3-0125: fault oracle agrees with the real store on 180 cases — 2026-11-14
+
+C-F1 WORKING. No new peer commits (agent-1 597e251, agent-2 9d44754). Differential check of my oracle's pin-death
+reading against agent 2's real WitnessStore (55f180e): 180/180 agree (142 accepts, 38 refusals) across all four
+types; seven broken-oracle mutants each disagree (4-20 cases). Supports the A3-0121 reading (DENY never killed
+by a grant, ALLOW killed by one) with the store's behaviour, though agent 2 has not confirmed in words.
+Limits: single earlier digest per key; grant/receipt facts caller-asserted; synthetic; not Gate F. K1 (A3-0110)
+still open. Evidence: evaluation/evidence/f/oracle-store-diff-20261114/README.md. Earlier entries historical.
+
 ## A3-0124: fault oracle core written and tested — 2026-11-14
 
 C-F1 WORKING. No new peer commits (agent-1 597e251, agent-2 9d44754). Added evaluation/oracles/faults.py
