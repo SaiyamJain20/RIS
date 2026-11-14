@@ -1,0 +1,128 @@
+"""Offline reproduction of the report correction; no production code is changed.
+
+Run with the root venv's python -I, giving an exact protocol snapshot and output dir.
+The fake ledger view is owner-authored. This is not a native ledger/F case test.
+"""
+import hashlib
+import gzip
+import importlib.metadata
+import json
+import os
+from pathlib import Path
+import sqlite3
+import sys
+import tempfile
+
+protocol, output = map(lambda p: Path(p).resolve(), sys.argv[1:])
+output.mkdir(parents=True, exist_ok=True)
+sys.dont_write_bytecode = True
+sys.path[:0] = [str(protocol), str(protocol / "tests")]
+os.environ["PYTEST_DISABLE_PLUGIN_AUTOLOAD"] = "1"
+blocked = []
+readonly_commands = []
+
+
+def offline_guard(event, args):
+    if event == "subprocess.Popen":
+        argv = args[1]
+        if (isinstance(argv, (list, tuple)) and len(argv) == 3
+                and argv[:2] == ["file", "-b"]
+                and os.path.realpath(argv[2]) == os.path.realpath(sys.executable)):
+            readonly_commands.append(list(argv))
+            return  # PyCryptodome asks platform.architecture() about this interpreter.
+    if event in {"subprocess.Popen", "os.system", "os.posix_spawn", "socket.connect", "socket.bind"}:
+        blocked.append(event)
+        raise RuntimeError("offline review forbids " + event)
+
+
+sys.addaudithook(offline_guard)
+
+
+def manifest():
+    return {str(p.relative_to(protocol)): hashlib.sha256(p.read_bytes()).hexdigest()
+            for p in sorted(protocol.rglob("*")) if p.is_file()}
+
+
+before = manifest()
+from hmbc_protocol import witness_service as svc, witness_state as ws
+import test_witness_service_decision as fixture
+
+probes = []
+with tempfile.TemporaryDirectory(prefix="report-review-") as tmp:
+    for name, first_result, consumed, advance in [
+        ("allow_then_deny_after_grant", True, True, False),
+        ("allow_then_deny_same_live_sequence", True, False, False),
+        ("allow_then_deny_new_sequence_no_grant", True, False, True),
+        ("deny_then_allow_new_sequence_no_grant", False, False, True),
+    ]:
+        view = fixture.DView()
+        view.satisfied = first_result
+        store = ws.init_store(str(Path(tmp) / name), fixture.BIND, fixture.B, fixture.OWNER)
+        try:
+            service = svc.WitnessService(store=store, key=fixture.KEY, view=view,
+                                         deployment=fixture.DEPLOY, witness_set_version="2")
+            first, _ = fixture.derive(view)
+            assert service.sign_decision(first)
+            earlier = store.evidence()
+            view.satisfied = not first_result
+            view.consumed = consumed
+            if advance:
+                view.cp = view.current = dict(view.cp, sequence="5", sourceBlockNumber="210",
+                                             sourceBlockHash=fixture.h("pbc:210"), expiresAt="1045")
+            expected = "REPLAY" if consumed else "SIGNED" if advance else "CONFLICT_PINNED"
+            try:
+                second, _ = fixture.derive(view)
+            except svc.WitnessRefusal as exc:
+                assert consumed and exc.code == "REPLAY"
+                # Exercise the service with a canonical proposal too: it must refuse before the store.
+                second = dict(first, result="0")
+            try:
+                service.sign_decision(second)
+                actual = "SIGNED"
+            except svc.WitnessRefusal as exc:
+                actual = exc.reason or exc.code
+            assert actual == expected, (name, actual, expected)
+            after = store.evidence()
+            assert first["requestDigest"] == second["requestDigest"]
+            assert first["result"] != second["result"]
+            if advance:
+                assert len(after["superseded"]) == 1
+                assert after["superseded"][0]["death"]["kind"] == "overtaken-decision-sequence"
+            else:
+                assert after == earlier
+            probes.append({"name": name, "expected": expected, "actual": actual,
+                           "firstResult": first["result"], "secondResult": second["result"],
+                           "sameRequestDigest": True, "storeUnchanged": after == earlier,
+                           "supersededCount": len(after["superseded"])})
+        finally:
+            store.close()
+
+import pytest
+pytest_exit = pytest.main([
+    "-c", str(protocol / "pytest.ini"), "--rootdir", str(protocol),
+    "-p", "no:cacheprovider", "-q",
+    str(protocol / "tests/test_witness_service_decision.py"),
+    str(protocol / "tests/test_witness_state.py"),
+    *["--deselect=" + str(protocol / "tests/test_witness_state.py") + "::" + name for name in (
+        "test_crash_during_initialisation_then_restart_completes_it",
+        "test_signing_is_refused_without_the_marker",
+        "test_a_crash_before_the_commit_signs_nothing",
+        "test_a_crash_after_the_commit_and_before_the_reply_keeps_the_record_and_the_retry_is_idempotent",
+    )],  # Seven collected cases require crash-child processes, outside this review.
+])
+after = manifest()
+source_bytes = json.dumps(before, sort_keys=True).encode()
+(output / "owner-source-hashes.json.gz").write_bytes(gzip.compress(source_bytes, mtime=0))
+result = {"classification": "tested reconstruction result; injected ledger view",
+          "pytestExit": int(pytest_exit), "probes": probes,
+          "sourceFileCount": len(before), "sourceManifestSha256": hashlib.sha256(source_bytes).hexdigest(),
+          "sourceUnchanged": before == after,
+          "blockedOperations": blocked, "readonlyCommands": readonly_commands,
+          "servicesStarted": [], "gateF": "NOT_RUN",
+          "python": sys.version, "sqlite": sqlite3.sqlite_version,
+          "packages": {name: importlib.metadata.version(name)
+                       for name in ("pytest", "eth-account", "eth-abi", "jsonschema")}}
+(output / "review.json").write_text(json.dumps(result, indent=2) + "\n")
+print(json.dumps(result, indent=2))
+assert before == after and not blocked
+raise SystemExit(pytest_exit)

@@ -1,0 +1,370 @@
+...........................................................FFFFF........ [ 74%]
+.........FF..............                                                [100%]
+=================================== FAILURES ===================================
+_ test_crash_during_initialisation_then_restart_completes_it[after_dir-False] __
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-608/test_crash_during_initialisati0')
+point = 'after_dir', has_marker = False
+
+    @pytest.mark.parametrize("point,has_marker", [("after_dir", False), ("after_db_commit", False), ("after_tmp_marker", False), ("after_rename", True)])
+    def test_crash_during_initialisation_then_restart_completes_it(tmp_path, point, has_marker):
+        d = str(tmp_path / "w0")
+        cfg = json.dumps({"binding_v2": BIND, "document": B, "owner": OWNER})
+>       r = subprocess.run([sys.executable, "-B", CHILD, d, point, "init", cfg], capture_output=True, text=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/runs/rq2-report-review-20261114/owner/protocol/tests/test_witness_state.py:115: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/subprocess.py:554: in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.13/subprocess.py:1039: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+/usr/lib64/python3.13/subprocess.py:1859: in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+event = 'subprocess.Popen'
+args = ('/home/karma/Documents/RIS/.venv/bin/python', ['/home/karma/Documents/RIS/.venv/bin/python', '-B', '/home/karma/Docum...child.py', '/tmp/pytest-of-karma/pytest-608/test_crash_during_initialisati0/w0', 'after_dir', 'init', ...], None, None)
+
+    def offline_guard(event, args):
+        if event == "subprocess.Popen":
+            argv = args[1]
+            if (isinstance(argv, (list, tuple)) and len(argv) == 3
+                    and argv[:2] == ["file", "-b"]
+                    and os.path.realpath(argv[2]) == os.path.realpath(sys.executable)):
+                readonly_commands.append(list(argv))
+                return  # PyCryptodome asks platform.architecture() about this interpreter.
+        if event in {"subprocess.Popen", "os.system", "os.posix_spawn", "socket.connect", "socket.bind"}:
+            blocked.append(event)
+>           raise RuntimeError("offline review forbids " + event)
+E           RuntimeError: offline review forbids subprocess.Popen
+
+evaluation/evidence/f/report-review-20261114/review.py.txt:35: RuntimeError
+_ test_crash_during_initialisation_then_restart_completes_it[after_db_commit-False] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-608/test_crash_during_initialisati1')
+point = 'after_db_commit', has_marker = False
+
+    @pytest.mark.parametrize("point,has_marker", [("after_dir", False), ("after_db_commit", False), ("after_tmp_marker", False), ("after_rename", True)])
+    def test_crash_during_initialisation_then_restart_completes_it(tmp_path, point, has_marker):
+        d = str(tmp_path / "w0")
+        cfg = json.dumps({"binding_v2": BIND, "document": B, "owner": OWNER})
+>       r = subprocess.run([sys.executable, "-B", CHILD, d, point, "init", cfg], capture_output=True, text=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/runs/rq2-report-review-20261114/owner/protocol/tests/test_witness_state.py:115: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/subprocess.py:554: in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.13/subprocess.py:1039: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+/usr/lib64/python3.13/subprocess.py:1859: in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+event = 'subprocess.Popen'
+args = ('/home/karma/Documents/RIS/.venv/bin/python', ['/home/karma/Documents/RIS/.venv/bin/python', '-B', '/home/karma/Docum...py', '/tmp/pytest-of-karma/pytest-608/test_crash_during_initialisati1/w0', 'after_db_commit', 'init', ...], None, None)
+
+    def offline_guard(event, args):
+        if event == "subprocess.Popen":
+            argv = args[1]
+            if (isinstance(argv, (list, tuple)) and len(argv) == 3
+                    and argv[:2] == ["file", "-b"]
+                    and os.path.realpath(argv[2]) == os.path.realpath(sys.executable)):
+                readonly_commands.append(list(argv))
+                return  # PyCryptodome asks platform.architecture() about this interpreter.
+        if event in {"subprocess.Popen", "os.system", "os.posix_spawn", "socket.connect", "socket.bind"}:
+            blocked.append(event)
+>           raise RuntimeError("offline review forbids " + event)
+E           RuntimeError: offline review forbids subprocess.Popen
+
+evaluation/evidence/f/report-review-20261114/review.py.txt:35: RuntimeError
+_ test_crash_during_initialisation_then_restart_completes_it[after_tmp_marker-False] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-608/test_crash_during_initialisati2')
+point = 'after_tmp_marker', has_marker = False
+
+    @pytest.mark.parametrize("point,has_marker", [("after_dir", False), ("after_db_commit", False), ("after_tmp_marker", False), ("after_rename", True)])
+    def test_crash_during_initialisation_then_restart_completes_it(tmp_path, point, has_marker):
+        d = str(tmp_path / "w0")
+        cfg = json.dumps({"binding_v2": BIND, "document": B, "owner": OWNER})
+>       r = subprocess.run([sys.executable, "-B", CHILD, d, point, "init", cfg], capture_output=True, text=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/runs/rq2-report-review-20261114/owner/protocol/tests/test_witness_state.py:115: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/subprocess.py:554: in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.13/subprocess.py:1039: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+/usr/lib64/python3.13/subprocess.py:1859: in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+event = 'subprocess.Popen'
+args = ('/home/karma/Documents/RIS/.venv/bin/python', ['/home/karma/Documents/RIS/.venv/bin/python', '-B', '/home/karma/Docum...y', '/tmp/pytest-of-karma/pytest-608/test_crash_during_initialisati2/w0', 'after_tmp_marker', 'init', ...], None, None)
+
+    def offline_guard(event, args):
+        if event == "subprocess.Popen":
+            argv = args[1]
+            if (isinstance(argv, (list, tuple)) and len(argv) == 3
+                    and argv[:2] == ["file", "-b"]
+                    and os.path.realpath(argv[2]) == os.path.realpath(sys.executable)):
+                readonly_commands.append(list(argv))
+                return  # PyCryptodome asks platform.architecture() about this interpreter.
+        if event in {"subprocess.Popen", "os.system", "os.posix_spawn", "socket.connect", "socket.bind"}:
+            blocked.append(event)
+>           raise RuntimeError("offline review forbids " + event)
+E           RuntimeError: offline review forbids subprocess.Popen
+
+evaluation/evidence/f/report-review-20261114/review.py.txt:35: RuntimeError
+_ test_crash_during_initialisation_then_restart_completes_it[after_rename-True] _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-608/test_crash_during_initialisati3')
+point = 'after_rename', has_marker = True
+
+    @pytest.mark.parametrize("point,has_marker", [("after_dir", False), ("after_db_commit", False), ("after_tmp_marker", False), ("after_rename", True)])
+    def test_crash_during_initialisation_then_restart_completes_it(tmp_path, point, has_marker):
+        d = str(tmp_path / "w0")
+        cfg = json.dumps({"binding_v2": BIND, "document": B, "owner": OWNER})
+>       r = subprocess.run([sys.executable, "-B", CHILD, d, point, "init", cfg], capture_output=True, text=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/runs/rq2-report-review-20261114/owner/protocol/tests/test_witness_state.py:115: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/subprocess.py:554: in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.13/subprocess.py:1039: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+/usr/lib64/python3.13/subprocess.py:1859: in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+event = 'subprocess.Popen'
+args = ('/home/karma/Documents/RIS/.venv/bin/python', ['/home/karma/Documents/RIS/.venv/bin/python', '-B', '/home/karma/Docum...ld.py', '/tmp/pytest-of-karma/pytest-608/test_crash_during_initialisati3/w0', 'after_rename', 'init', ...], None, None)
+
+    def offline_guard(event, args):
+        if event == "subprocess.Popen":
+            argv = args[1]
+            if (isinstance(argv, (list, tuple)) and len(argv) == 3
+                    and argv[:2] == ["file", "-b"]
+                    and os.path.realpath(argv[2]) == os.path.realpath(sys.executable)):
+                readonly_commands.append(list(argv))
+                return  # PyCryptodome asks platform.architecture() about this interpreter.
+        if event in {"subprocess.Popen", "os.system", "os.posix_spawn", "socket.connect", "socket.bind"}:
+            blocked.append(event)
+>           raise RuntimeError("offline review forbids " + event)
+E           RuntimeError: offline review forbids subprocess.Popen
+
+evaluation/evidence/f/report-review-20261114/review.py.txt:35: RuntimeError
+__________________ test_signing_is_refused_without_the_marker __________________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-608/test_signing_is_refused_withou0')
+
+    def test_signing_is_refused_without_the_marker(tmp_path):
+        d = str(tmp_path / "w0")
+        cfg = json.dumps({"binding_v2": BIND, "document": B, "owner": OWNER})
+>       subprocess.run([sys.executable, "-B", CHILD, d, "after_db_commit", "init", cfg], capture_output=True)
+
+evaluation/runs/rq2-report-review-20261114/owner/protocol/tests/test_witness_state.py:129: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/lib64/python3.13/subprocess.py:554: in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.13/subprocess.py:1039: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+/usr/lib64/python3.13/subprocess.py:1859: in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+event = 'subprocess.Popen'
+args = ('/home/karma/Documents/RIS/.venv/bin/python', ['/home/karma/Documents/RIS/.venv/bin/python', '-B', '/home/karma/Docum...py', '/tmp/pytest-of-karma/pytest-608/test_signing_is_refused_withou0/w0', 'after_db_commit', 'init', ...], None, None)
+
+    def offline_guard(event, args):
+        if event == "subprocess.Popen":
+            argv = args[1]
+            if (isinstance(argv, (list, tuple)) and len(argv) == 3
+                    and argv[:2] == ["file", "-b"]
+                    and os.path.realpath(argv[2]) == os.path.realpath(sys.executable)):
+                readonly_commands.append(list(argv))
+                return  # PyCryptodome asks platform.architecture() about this interpreter.
+        if event in {"subprocess.Popen", "os.system", "os.posix_spawn", "socket.connect", "socket.bind"}:
+            blocked.append(event)
+>           raise RuntimeError("offline review forbids " + event)
+E           RuntimeError: offline review forbids subprocess.Popen
+
+evaluation/evidence/f/report-review-20261114/review.py.txt:35: RuntimeError
+_________________ test_a_crash_before_the_commit_signs_nothing _________________
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-608/test_a_crash_before_the_commit0')
+
+    def test_a_crash_before_the_commit_signs_nothing(tmp_path):
+        d = str(tmp_path / "w0"); ws.init_store(d, BIND, B, OWNER)
+        before = state_oracle.logical_snapshot(d)
+>       r = _child_sign(d, "before_commit")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/runs/rq2-report-review-20261114/owner/protocol/tests/test_witness_state.py:363: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/runs/rq2-report-review-20261114/owner/protocol/tests/test_witness_state.py:357: in _child_sign
+    return subprocess.run([sys.executable, "-B", CHILD, d, point, "sign", cfg], capture_output=True, text=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.13/subprocess.py:554: in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.13/subprocess.py:1039: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+/usr/lib64/python3.13/subprocess.py:1859: in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+event = 'subprocess.Popen'
+args = ('/home/karma/Documents/RIS/.venv/bin/python', ['/home/karma/Documents/RIS/.venv/bin/python', '-B', '/home/karma/Docum...d.py', '/tmp/pytest-of-karma/pytest-608/test_a_crash_before_the_commit0/w0', 'before_commit', 'sign', ...], None, None)
+
+    def offline_guard(event, args):
+        if event == "subprocess.Popen":
+            argv = args[1]
+            if (isinstance(argv, (list, tuple)) and len(argv) == 3
+                    and argv[:2] == ["file", "-b"]
+                    and os.path.realpath(argv[2]) == os.path.realpath(sys.executable)):
+                readonly_commands.append(list(argv))
+                return  # PyCryptodome asks platform.architecture() about this interpreter.
+        if event in {"subprocess.Popen", "os.system", "os.posix_spawn", "socket.connect", "socket.bind"}:
+            blocked.append(event)
+>           raise RuntimeError("offline review forbids " + event)
+E           RuntimeError: offline review forbids subprocess.Popen
+
+evaluation/evidence/f/report-review-20261114/review.py.txt:35: RuntimeError
+_ test_a_crash_after_the_commit_and_before_the_reply_keeps_the_record_and_the_retry_is_idempotent _
+
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-608/test_a_crash_after_the_commit_0')
+
+    def test_a_crash_after_the_commit_and_before_the_reply_keeps_the_record_and_the_retry_is_idempotent(tmp_path):
+        d = str(tmp_path / "w0"); ws.init_store(d, BIND, B, OWNER)
+>       r = _child_sign(d, "after_commit")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+evaluation/runs/rq2-report-review-20261114/owner/protocol/tests/test_witness_state.py:370: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+evaluation/runs/rq2-report-review-20261114/owner/protocol/tests/test_witness_state.py:357: in _child_sign
+    return subprocess.run([sys.executable, "-B", CHILD, d, point, "sign", cfg], capture_output=True, text=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.13/subprocess.py:554: in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib64/python3.13/subprocess.py:1039: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+/usr/lib64/python3.13/subprocess.py:1859: in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+event = 'subprocess.Popen'
+args = ('/home/karma/Documents/RIS/.venv/bin/python', ['/home/karma/Documents/RIS/.venv/bin/python', '-B', '/home/karma/Docum...ld.py', '/tmp/pytest-of-karma/pytest-608/test_a_crash_after_the_commit_0/w0', 'after_commit', 'sign', ...], None, None)
+
+    def offline_guard(event, args):
+        if event == "subprocess.Popen":
+            argv = args[1]
+            if (isinstance(argv, (list, tuple)) and len(argv) == 3
+                    and argv[:2] == ["file", "-b"]
+                    and os.path.realpath(argv[2]) == os.path.realpath(sys.executable)):
+                readonly_commands.append(list(argv))
+                return  # PyCryptodome asks platform.architecture() about this interpreter.
+        if event in {"subprocess.Popen", "os.system", "os.posix_spawn", "socket.connect", "socket.bind"}:
+            blocked.append(event)
+>           raise RuntimeError("offline review forbids " + event)
+E           RuntimeError: offline review forbids subprocess.Popen
+
+evaluation/evidence/f/report-review-20261114/review.py.txt:35: RuntimeError
+=========================== short test summary info ============================
+FAILED evaluation/runs/rq2-report-review-20261114/owner/protocol/tests/test_witness_state.py::test_crash_during_initialisation_then_restart_completes_it[after_dir-False]
+FAILED evaluation/runs/rq2-report-review-20261114/owner/protocol/tests/test_witness_state.py::test_crash_during_initialisation_then_restart_completes_it[after_db_commit-False]
+FAILED evaluation/runs/rq2-report-review-20261114/owner/protocol/tests/test_witness_state.py::test_crash_during_initialisation_then_restart_completes_it[after_tmp_marker-False]
+FAILED evaluation/runs/rq2-report-review-20261114/owner/protocol/tests/test_witness_state.py::test_crash_during_initialisation_then_restart_completes_it[after_rename-True]
+FAILED evaluation/runs/rq2-report-review-20261114/owner/protocol/tests/test_witness_state.py::test_signing_is_refused_without_the_marker
+FAILED evaluation/runs/rq2-report-review-20261114/owner/protocol/tests/test_witness_state.py::test_a_crash_before_the_commit_signs_nothing
+FAILED evaluation/runs/rq2-report-review-20261114/owner/protocol/tests/test_witness_state.py::test_a_crash_after_the_commit_and_before_the_reply_keeps_the_record_and_the_retry_is_idempotent
+7 failed, 90 passed in 0.72s
+{
+  "classification": "tested reconstruction result; injected ledger view",
+  "pytestExit": 1,
+  "probes": [
+    {
+      "name": "allow_then_deny_after_grant",
+      "expected": "REPLAY",
+      "actual": "REPLAY",
+      "firstResult": "1",
+      "secondResult": "0",
+      "sameRequestDigest": true,
+      "storeUnchanged": true,
+      "supersededCount": 0
+    },
+    {
+      "name": "allow_then_deny_same_live_sequence",
+      "expected": "CONFLICT_PINNED",
+      "actual": "CONFLICT_PINNED",
+      "firstResult": "1",
+      "secondResult": "0",
+      "sameRequestDigest": true,
+      "storeUnchanged": true,
+      "supersededCount": 0
+    },
+    {
+      "name": "allow_then_deny_new_sequence_no_grant",
+      "expected": "SIGNED",
+      "actual": "SIGNED",
+      "firstResult": "1",
+      "secondResult": "0",
+      "sameRequestDigest": true,
+      "storeUnchanged": false,
+      "supersededCount": 1
+    },
+    {
+      "name": "deny_then_allow_new_sequence_no_grant",
+      "expected": "SIGNED",
+      "actual": "SIGNED",
+      "firstResult": "0",
+      "secondResult": "1",
+      "sameRequestDigest": true,
+      "storeUnchanged": false,
+      "supersededCount": 1
+    }
+  ],
+  "sourceFileCount": 2262,
+  "sourceManifestSha256": "c0184f164d20212f8aafda218cf77d21442c2257e9ee994444ceeb58e9a8e7e1",
+  "sourceUnchanged": true,
+  "blockedOperations": [
+    "subprocess.Popen",
+    "subprocess.Popen",
+    "subprocess.Popen",
+    "subprocess.Popen",
+    "subprocess.Popen",
+    "subprocess.Popen",
+    "subprocess.Popen"
+  ],
+  "readonlyCommands": [
+    [
+      "file",
+      "-b",
+      "/usr/bin/python3.13"
+    ]
+  ],
+  "servicesStarted": [],
+  "gateF": "NOT_RUN",
+  "python": "3.13.13 (main, Apr  8 2026, 00:00:00) [GCC 15.2.1 20260123 (Red Hat 15.2.1-7)]",
+  "sqlite": "3.47.2",
+  "packages": {
+    "pytest": "9.0.2",
+    "eth-account": "0.14.0",
+    "eth-abi": "6.0.0",
+    "jsonschema": "4.26.0"
+  }
+}
+Traceback (most recent call last):
+  File "/home/karma/Documents/RIS/evaluation/evidence/f/report-review-20261114/review.py.txt", line 127, in <module>
+    assert before == after and not blocked
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

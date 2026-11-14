@@ -1,0 +1,64 @@
+Traceback (most recent call last):
+  File "/home/karma/Documents/RIS/evaluation/evidence/f/report-review-20261114/review.py.txt", line 38, in <module>
+    from hmbc_protocol import witness_service as svc, witness_state as ws
+  File "/home/karma/Documents/RIS/evaluation/runs/rq2-report-review-20261114/owner/protocol/hmbc_protocol/witness_service.py", line 37, in <module>
+    from eth_account import Account
+  File "/home/karma/Documents/RIS/.venv/lib64/python3.13/site-packages/eth_account/__init__.py", line 5, in <module>
+    from eth_account.account import (
+        Account,
+    )
+  File "/home/karma/Documents/RIS/.venv/lib64/python3.13/site-packages/eth_account/account.py", line 15, in <module>
+    from eth_keyfile import (
+    ...<2 lines>...
+    )
+  File "/home/karma/Documents/RIS/.venv/lib64/python3.13/site-packages/eth_keyfile/__init__.py", line 5, in <module>
+    from eth_keyfile.keyfile import (
+    ...<4 lines>...
+    )
+  File "/home/karma/Documents/RIS/.venv/lib64/python3.13/site-packages/eth_keyfile/keyfile.py", line 23, in <module>
+    from Crypto.Cipher import (
+        AES,
+    )
+  File "/home/karma/Documents/RIS/.venv/lib64/python3.13/site-packages/Crypto/Cipher/AES.py", line 30, in <module>
+    from Crypto.Util import _cpu_features
+  File "/home/karma/Documents/RIS/.venv/lib64/python3.13/site-packages/Crypto/Util/_cpu_features.py", line 34, in <module>
+    _raw_cpuid_lib = load_pycryptodome_raw_lib("Crypto.Util._cpuid_c",
+                                               """
+                                               int have_aes_ni(void);
+                                               int have_clmul(void);
+                                               """)
+  File "/home/karma/Documents/RIS/.venv/lib64/python3.13/site-packages/Crypto/Util/_raw_api.py", line 316, in load_pycryptodome_raw_lib
+    return load_lib(full_name, cdecl)
+  File "/home/karma/Documents/RIS/.venv/lib64/python3.13/site-packages/Crypto/Util/_raw_api.py", line 193, in load_lib
+    cached_architecture[:] = platform.architecture()
+                             ~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib64/python3.13/platform.py", line 789, in architecture
+    fileout = _syscmd_file(executable, '')
+  File "/usr/lib64/python3.13/platform.py", line 738, in _syscmd_file
+    output = subprocess.check_output(['file', '-b', target],
+                                     stderr=subprocess.DEVNULL,
+                                     env=env)
+  File "/usr/lib64/python3.13/subprocess.py", line 472, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+               **kwargs).stdout
+               ^^^^^^^^^
+  File "/usr/lib64/python3.13/subprocess.py", line 554, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/subprocess.py", line 1039, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        pass_fds, cwd, env,
+                        ^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+                        gid, gids, uid, umask,
+                        ^^^^^^^^^^^^^^^^^^^^^^
+                        start_new_session, process_group)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib64/python3.13/subprocess.py", line 1859, in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/karma/Documents/RIS/evaluation/evidence/f/report-review-20261114/review.py.txt", line 26, in offline_guard
+    raise RuntimeError("offline review forbids " + event)
+RuntimeError: offline review forbids subprocess.Popen

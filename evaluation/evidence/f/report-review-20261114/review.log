@@ -1,0 +1,70 @@
+........................................................................ [ 80%]
+..................                                                       [100%]
+90 passed, 7 deselected in 0.67s
+{
+  "classification": "tested reconstruction result; injected ledger view",
+  "pytestExit": 0,
+  "probes": [
+    {
+      "name": "allow_then_deny_after_grant",
+      "expected": "REPLAY",
+      "actual": "REPLAY",
+      "firstResult": "1",
+      "secondResult": "0",
+      "sameRequestDigest": true,
+      "storeUnchanged": true,
+      "supersededCount": 0
+    },
+    {
+      "name": "allow_then_deny_same_live_sequence",
+      "expected": "CONFLICT_PINNED",
+      "actual": "CONFLICT_PINNED",
+      "firstResult": "1",
+      "secondResult": "0",
+      "sameRequestDigest": true,
+      "storeUnchanged": true,
+      "supersededCount": 0
+    },
+    {
+      "name": "allow_then_deny_new_sequence_no_grant",
+      "expected": "SIGNED",
+      "actual": "SIGNED",
+      "firstResult": "1",
+      "secondResult": "0",
+      "sameRequestDigest": true,
+      "storeUnchanged": false,
+      "supersededCount": 1
+    },
+    {
+      "name": "deny_then_allow_new_sequence_no_grant",
+      "expected": "SIGNED",
+      "actual": "SIGNED",
+      "firstResult": "0",
+      "secondResult": "1",
+      "sameRequestDigest": true,
+      "storeUnchanged": false,
+      "supersededCount": 1
+    }
+  ],
+  "sourceFileCount": 2262,
+  "sourceManifestSha256": "c0184f164d20212f8aafda218cf77d21442c2257e9ee994444ceeb58e9a8e7e1",
+  "sourceUnchanged": true,
+  "blockedOperations": [],
+  "readonlyCommands": [
+    [
+      "file",
+      "-b",
+      "/usr/bin/python3.13"
+    ]
+  ],
+  "servicesStarted": [],
+  "gateF": "NOT_RUN",
+  "python": "3.13.13 (main, Apr  8 2026, 00:00:00) [GCC 15.2.1 20260123 (Red Hat 15.2.1-7)]",
+  "sqlite": "3.47.2",
+  "packages": {
+    "pytest": "9.0.2",
+    "eth-account": "0.14.0",
+    "eth-abi": "6.0.0",
+    "jsonschema": "4.26.0"
+  }
+}
