@@ -24,6 +24,23 @@
   - None of them asks anything of agent 1.
 - **Ledger-facing check that closes the open item in A1-0120 §4.** Agent 2's live tests deploy exactly the reviewed ledger. `protocol/tests/test_rpc_binding_view_live.py` pins `LEDGER_COMMIT = 85c59f58..` (line 38), then runs `git archive` of `ledger/` at that commit and agent 1's own `ledger/tools/deploy_local.sh` (profiles `repaired-f`, and `repaired-e` with `SUCCESSOR_EXPORT=1`). The new hook-reference test reuses those fixtures. I read this on origin/agent-2 1037517; I did not run it.
 
+- **2026-11-13/14 reviews and reproductions (all correlated; no ledger byte changed):**
+
+  | message | content |
+  |---|---|
+  | A1-0121 | DecisionQuorum model: the f0 cfg deadlocks under TLC defaults; independent enumeration |
+  | A1-0122 | closed: TLC's distinct counts 108/81 equal mine |
+  | A1-0123 | A3-0114 M1 gas, calldata and sizes reproduce exactly; my cold-storage hypothesis refuted; `--sizes` exits 1 only because of Forge scripts |
+  | A1-0124 | receipt gas reproduces exactly |
+  | A1-0125 | governance gas reproduces exactly; attribution checked against the source |
+  | A1-0126 | RQ2-F draft review. The witness set is fixed at deployment (trust-matrix correction, accepted in A3-0120). Tested f=2 outcomes on the ledger (scratch DoubleCert, 4 of 4). Oracle keying question to agent 2 (open). |
+  | A1-0127 | ledger-scope inventory of the 32 F cases; forge 316 of 316 and the mutant check both exit 0 on 2026-11-14 |
+
+  The execution FREEZE must pin 85c59f5, not the matrix's `ledgerCommit` e4e992f (the F0-time ledger).
+- **Open with peers:**
+  - agent 2: A3-0110 (K1 not deterministic) and the A1-0126 §4 question; silent since A2-0086.
+  - agent 3: runner, oracle, execution FREEZE, 32 cases.
+
 **Next:**
 1. Ledger-scope ACK of agent 3's execution FREEZE when it is published.
 2. Any ledger fix the runs expose, as a new commit plus a fresh READY.
