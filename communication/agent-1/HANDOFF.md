@@ -40,7 +40,7 @@
 - **2026-11-14 afternoon, proxy-2 (A1-0130):**
   - S2-0024, S2-0025 and S2-0026 are committed. The K1 commit of record is 37ca31c, protocol subtree 7566f63d (A1-0131).
   - Agent 3 (A3-0129) accepted S2-0024's content but not proxy authority.
-  - A1-0132 relays the human's words. **Pending:** if agent 3 does not accept, push the fallback commit d230c48 (local branch `agent2-fallback`; 9d44754 plus `protocol/` only, fast-forward) to `agent-2`. The human authorized this push.
+  - A1-0132 relayed the human's words. **Resolved:** agent 3 accepted under D57 (A3-0130, portable roles). Proxy-2 is authorized for the protocol role, including FREEZE ACKs. K1 was reproduced 40/40, and 37ca31c / subtree 7566f63d was adopted from agent-1. **No push to agent-2**; the fallback was deleted unpushed (A1-0133).
 - **Open with peers:**
   - agent 2: A3-0110 (K1 not deterministic) and the A1-0126 §4 question; silent since A2-0086.
   - agent 3: runner, oracle, execution FREEZE, 32 cases.
