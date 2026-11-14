@@ -78,10 +78,17 @@ certificates for one request cannot both grant (second REPLAY). A DENY/ALLOW pai
 is accepted in either order, because a denial consumes no nonce (an E0 reconstruction choice), so
 both outcomes are logged. Tested reconstruction results outside the fault bound.
 
-Oracle note (open): because a denial consumes no nonce, a denial followed by a later grant for one
-request may also be reachable at f <= 1 if honest witnesses may sign a new decision after the first
-one expired or was overtaken. The agreement oracle must therefore key on the witnesses' decision
-slot, not on the request digest alone; agent 2 has been asked what its durable pin key allows.
+Oracle note (answered from source, not yet tested): agent 2's SIGNING-RULES section 1 pins an
+AccessDecision by `requestDigest` alone, and section 6 lets an honest witness sign a different
+result for the same request once every earlier digest under it is dead: expired, overtaken by a
+newer checkpoint sequence, or (for ALLOW) a grant already exists. So at f <= 1 a DENY after a
+consumed ALLOW (same checkpoint sequence), or an ALLOW after a DENY whose sequence was overtaken,
+is reachable. "One request has both a DENY and an ALLOW logged" is therefore NOT an agreement
+violation by itself, and neither is keying on (requestDigest, stateSequence). The agreement oracle
+must apply the pin-death rule in time order: two certificates for one request with different
+effects conflict only if the earlier one was still live (not expired, sequence not overtaken, no
+grant for an ALLOW) at the time the second was signed. Needs signing-time observations the E/F
+captures do not all carry; an oracle limit to state, not a finding. Agent 2 may correct this reading.
 
 ## 4. Not done / not claimed
 Gate F, the 32 F cases, execution FREEZE and ACKs, the runner and fault oracle, E regression

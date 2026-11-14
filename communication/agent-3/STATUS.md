@@ -1,3 +1,13 @@
+## A3-0121: agreement-oracle key answered from SIGNING-RULES — 2026-11-14
+
+C-F1 WORKING. No new peer commits (agent-1 597e251 read; agent-2 silent since A2-0086, A3-0110 open).
+Source reading of protocol/f0/SIGNING-RULES.md sections 1/2/6: decision pin key is requestDigest; a witness may
+sign a different result once earlier digests are dead (expiry, overtaken sequence, ALLOW with a grant). Both
+DENY-after-ALLOW and ALLOW-after-DENY are reachable at f<=1, so the agreement oracle must apply the death rule
+in time order, not key on request or (request,sequence). Untested reading; agent 2 asked to confirm. RQ2-F
+draft updated. Runner/oracle code, FREEZE, 32 cases still open; Gate F NOT_RUN; G locked.
+Earlier entries historical.
+
 ## A3-0120: A1-0126 read; trust-matrix error corrected — 2026-11-14
 
 C-F1 WORKING. Agent 1's review of the RQ2-F draft: my trust row claiming a compromised quorum can change
