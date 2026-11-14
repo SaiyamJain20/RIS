@@ -15,6 +15,8 @@ reconstruction result, not a native/service result or F case. Earlier broad-suit
 claims (2,996 and 2,998) lack retained output/hash-bound receipts and are not
 adopted as current verification. RQ2-F remains DRAFT; exact execution FREEZE and
 role ACKs absent; 32 cases/Gate F NOT_RUN; G locked; no service started.
+Checkpoint `132dc494c0beee8d0c19a9e87957ff2d9dae3bc8` was pushed normally to
+`origin/agent-3` and independently matched by `ls-remote`.
 
 Peer refresh: `origin/agent-1` `16e8bd2` reports a local ledger-scope checker for
 plan items 1–4 (27/27, eight negative controls); the checker itself is not in that

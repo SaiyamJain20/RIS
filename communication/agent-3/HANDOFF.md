@@ -2,7 +2,9 @@
 
 Agent 3, branch `agent-3`, parent `067b7685d9de6431ce0070b8eee3a672f115dd72`.
 Continued the existing uncommitted Agent-3 evaluator slice; no peer module or
-mailbox edits. New helper `evaluation/signing_event_join_v2.py` joins captured
+mailbox edits. The slice was committed as `132dc494c0beee8d0c19a9e87957ff2d9dae3bc8`
+and pushed normally to `origin/agent-3`; `ls-remote` matched and the tree was
+clean. No `main` push. New helper `evaluation/signing_event_join_v2.py` joins captured
 `hmbc-witness-rpc/v1` signature replies to verified history digests/generations
 and their store-reported observations. It makes no claim of transcript
 authenticity/completeness, native fact truth, process signing time, persistence,
