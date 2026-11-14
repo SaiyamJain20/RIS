@@ -1,3 +1,13 @@
+## A3-0124: fault oracle core written and tested — 2026-11-14
+
+C-F1 WORKING. No new peer commits (agent-1 597e251, agent-2 9d44754). Added evaluation/oracles/faults.py
+(pin-death single-signing check and certificate-pair classification) with 12 tests (red first), 10/10
+mutants detected, clean full suite 2968 PASS exit 0. A first full run showed 1 failure caused by a stale
+bytecode cache in MY mutation harness (same-size mutant, same second); invalidated, source was correct,
+rerun clean. Oracle is rule logic on synthetic records: not connected to captures, rule reading
+unconfirmed by agent 2 (A3-0121/A3-0110 open). Runner, FREEZE, 32 cases open; Gate F NOT_RUN; G locked.
+Evidence: evaluation/evidence/f/fault-oracle-core-20261114/README.md. Earlier entries historical.
+
 ## A3-0123: presentation outline written — 2026-11-14
 
 C-F1 WORKING. No new peer commits (agent-1 597e251, agent-2 9d44754). Added
