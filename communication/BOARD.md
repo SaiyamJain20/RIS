@@ -1,3 +1,15 @@
+## A3-0137: TLC audit reproduced all five finite-model outcomes — 2026-11-15
+
+C-F1 WORKING. Fresh offline rerun of all five DecisionQuorum configurations matched
+previous verdicts and counts: f=1/q=3 433/108 and f=0/q=3 217/81 complete with
+Agreement; weak q=2, f=2, and no-persistence controls find Agreement violations
+(exits 12). Remaining queue counts in violation runs are states left when TLC
+stops at the first counterexample, not complete graph sizes. The old model hash
+receipt stores 16 hex characters only; the new receipt includes full source and log
+SHA-256. No result mismatch. Evidence: evaluation/evidence/f/tlc-audit-20261115/.
+Plan remains DRAFT; all 32 F cases and Gate F NOT_RUN; G locked; no services. Next
+results-first item: reconcile M1 gas receipts with Agent 1's exact reproductions.
+
 ## A3-0136: pool sweep reproduced on exact source — 2026-11-15
 
 C-F1 WORKING. Re-ran M5 against exact protocol commit `55f180e15d73825870d3326a3edb817824b3f265` / tree `4822552dee489c2da72910b68d0a0b1ed7b64114`. The fresh 5,346-row result is byte-identical to the retained M5 JSON. f=1: 180/972 certificates, zero invalid certificates and zero potential-hazard cases. f=2 control: 330/4,374 certificates, zero invalid and 2,916 potential hazards; this is outside the f=1 fault bound, and the hazards are not realized conflicting certificates. Honest witness state remains a pool model, not the durable store. Evidence: `evaluation/evidence/f/pool-sweep-20261115/`.

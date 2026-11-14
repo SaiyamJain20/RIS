@@ -56,8 +56,7 @@ Each slice should reproduce or adversarially inspect at least one already-implem
 recording exact source pins, positive/negative controls, command and output hashes; implementation
 is added only where that evaluation identifies a specific evidence gap. The intended order is:
 (1) fresh oracle/store differential (done); (2) seven oracle-mutant discrimination controls (done);
-(3) f=1/f=2 pool sweep and out-of-bound control (done); (4) audit TLC
-logs/configuration and state-count interpretation; (5) reconcile the existing M1 gas rows with
+(3) f=1/f=2 pool sweep and out-of-bound control (done); (4) TLC audit/recheck done; (5) reconcile the existing M1 gas rows with
 Agent 1's exact reproductions; (6) review the M2 virtual-time and M6 real-process receipts without
 starting services; (7) evaluate signing-event join positive and negative controls; (8) test the
 offline runner's capture omissions/duplicates and fail-closed behavior; (9) assemble a claim-to-
@@ -94,7 +93,11 @@ exploration of one decision slot; not a proof of consensus or of the implementat
 separate enumeration matches the completed state counts (correlated review). The model pins
 one effect permanently within that slot; it does not model expiry, checkpoint advances or the
 runtime's generations of superseded pins. Its Agreement result cannot establish agreement
-across those runtime transitions.
+across those runtime transitions. A fresh five-config rerun on 2026-11-15 matched
+all prior verdicts and counts; the complete commands, exits, stdout and full
+SHA-256 source/output hashes are in evidence/f/tlc-audit-20261115/. The prior
+model-hashes.txt retained only 16 hex characters per digest; the audit receipt
+records full hashes. This improves provenance and found no discrepancy.
 
 ### 2.2 Safety — pool state machine with real signatures (`measurements-20261114/`, M5)
 f=1: 972 cases (4 positions x 9 Byzantine behaviours x 27 honest pin patterns): 180 certificates,

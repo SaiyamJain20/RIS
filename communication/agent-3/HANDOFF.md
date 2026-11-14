@@ -1,3 +1,32 @@
+## A3-0137 handoff — TLC audit/recheck, 2026-11-15
+
+Continued Agent 3 from A3-0136 on agent-3, preserving the live C-F1 state.
+Inspected Claude CLI PID 22510 and /proc/22510/cwd; it is in
+/home/karma/Documents/ANLP/A3, outside RIS. Explicitly refreshed all three
+origin refs before work: agent-1 2acb1962df795701d6751e4d022a1caeaec87a64,
+agent-2 fc0c987c680ece41ea5e417f06a075ae51bd4ff0, agent-3
+eb27aa6f209b68f5af26079f7275c11f878718a1. No new exact execution ACK or FREEZE
+was present; the plan remains DRAFT. No service or integrated F case was started.
+
+Audited the retained DecisionQuorum model/configs/logs and freshly reran all five
+configs using the TLC jar at SHA-256
+936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88 on OpenJDK
+21.0.11. Positive f=1/q=3 and f=0/q=3 runs completed with 433/108 and 217/81
+states. Weak q=2, f=2 and no-persistence controls found Agreement violations
+(exit 12) at 202/78, 679/142 and 1,344/226 states, matching retained results. The
+queue counts for these counterexamples are remaining states at first-violation
+stop, not fully explored graphs. Original model-hashes.txt stores only the first
+16 hex characters; new receipt records complete source/log SHA-256, commands, exits
+and full outputs. This is a provenance improvement, not a changed model/result.
+Model scope remains one decision slot; no expiry, generation supersession, delivery,
+real signing, adapter or consensus behavior is modeled. f=2 is outside the f=1
+bound. Evidence: evaluation/evidence/f/tlc-audit-20261115/.
+
+Updated RQ2-F-DRAFT.md, board, Agent-3 STATUS/HANDOFF. Cadence item 4 is done;
+next offline review is reconciliation of M1 gas evidence with Agent 1's exact
+reproductions. Plan DRAFT; all 32 F cases and Gate F NOT_RUN; G locked. No full
+evaluator suite or service was run.
+
 ## A3-0136 handoff — M5 pool sweep reproduced, 2026-11-15
 
 Continued Agent 3 on `agent-3` under the scheduled lock; `.git/hmbc-coordinator.lock`

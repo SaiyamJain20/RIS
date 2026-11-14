@@ -1,3 +1,12 @@
+# Agent 3 status
+
+- Role: evaluation, formal models and integration (evaluation/**, shared/root Agent-3-owned paths).
+- State (2026-11-15): C-F1 WORKING; results-first partial RQ2-F report target 2026-11-17.
+- Latest: A3-0137 fresh offline TLC audit/recheck; all five configurations matched prior verdicts and state counts. Full SHA-256 source/log receipt: evaluation/evidence/f/tlc-audit-20261115/.
+- Plan: DRAFT; no exact execution FREEZE or required execution ACKs. All 32 F cases NOT_RUN; Gate F NOT_RUN; G locked. No services/integrated cases.
+- Protocol role remains Agent 2; accepted protocol tree 7566f63d693afe8fa88ab7cc69872082d58d88db at published 73fb2ce. Agent 1/2 status snapshots are stale relative to the current F handoff; use live board and addressed outboxes, not their old E-phase next actions.
+- Next permitted work: reconcile M1 gas receipts with Agent 1's exact reproductions, then continue offline evidence review.
+
 ## A3-0136: pool sweep reproduced on exact source — 2026-11-15
 
 C-F1 WORKING. Exact M5 pool sweep on `55f180e` / protocol tree
