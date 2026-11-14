@@ -1,3 +1,54 @@
+## A3-0133 handoff — results-first continuation, 2026-11-15
+
+Continued Agent 3 on `agent-3`; refreshed `origin/agent-1`, `origin/agent-2`,
+`origin/agent-3` under the coordinator lock. Tips: agent-1
+`16e8bd2ba3156748654080592383dd0a9d108d53`, agent-2
+`9d44754f7db364e4c39150c699b1e38bedded559`, agent-3 before this slice
+`9ea9514056861a3f258d6bbeab1082989f8e79cf`. Read current BOARD, role/common
+context, SPEC/PLAN/interface/protocol guidance and the latest addressed peer
+messages. Neither peer added an execution FREEZE ACK. No peer-owned paths changed.
+
+After the differential, a required peer refresh found agent-1 advanced to
+`248e4e2affa13f23a59db82bdb8577cfd5af949b`; agent-2 remained
+`9d44754f7db364e4c39150c699b1e38bedded559`. Read A1-0134 and its published
+checker/logs. It reports 28/28 ledger-plan checks and 9/9 negative controls for
+items 1–4; item 5 still needs runner calls. A1-0134 corrects the previous 27/27
+claim: the earlier dev-key scan was vacuous because its target directory was
+missing. The corrected result is peer-reported, not independently reproduced here,
+and is not a FREEZE ACK. Agent 2 added no execution ACK.
+
+User direction: evaluation of completed work must proceed alongside implementation;
+target a reviewable partial results packet within roughly 9–10 more scheduled runs.
+This slice did an evaluation first: freshly ran
+`.venv/bin/python -I evaluation/measurements/oracle_store_diff.py <archive>/protocol
+<output.json>` against exact candidate `37ca31c80ab9a81956647428435addb1802cb370`
+(protocol tree `7566f63d693afe8fa88ab7cc69872082d58d88db`). Exit 0; 180/180 decisions
+agree, 142 store accepts, 38 `CONFLICT_PINNED` refusals, zero disagreements. The
+reproduction receipt is `evaluation/evidence/f/oracle-store-diff-20261115/`; script
+SHA-256 `f5898540a49cf6c96d7b2d69c4b6af7969d11a2afc0a8c269fe55ac9a200e5d8`, oracle
+SHA-256 `e6856b703ec2e32b6090b42d49e30fa6ddb28bd3598d2d4a84b877f3763d99c3`, output
+SHA-256 `0db0a2e124f458a23c11754e78215680bab2e2df2645568ea2b53e57ff301c5a`, stdout
+SHA-256 `f26b6b23e80fbb781a3c4a85ab6212e4790b7a8530466410c3d50d114227eba6`.
+Fresh rerun covers the primary 180-case grid only; seven deliberate-mutant controls
+remain from the 2026-11-14 receipt. Limits: synthetic facts; caller-asserted grant/
+receipt deaths; one prior digest per key; same-model source/oracle authorship; no
+native reachability, service transcript, F case or gate result.
+
+Updated `evaluation/reports/RQ2-F-DRAFT.md` with this result and a ten-slice
+results-first target through 2026-11-17. Each slice should reproduce or adversarially
+inspect at least one existing claim before adding runner work for a demonstrated
+evidence gap. This is a target sequence, not a promised pass. Plan stays DRAFT;
+no services/integrated cases; all 32 cases and Gate F NOT_RUN; G locked. Next:
+reproduce the seven oracle-mutant controls. No test suite was run beyond this focused
+differential. No main push.
+
+Lock incident: PID 217779 was the scheduled-lock holder, a live bash wrapper from
+this automation invocation, blocked on an interactive release prompt with no work
+running. Its lock-file PID metadata was stale. User authorized killing only if no
+result-producing run was active; sent TERM after checking `ps` and `wchan`, and it
+exited. This continuation acquired the scheduled lock. Coordinator lock was held
+for peer fetch only and released; scheduled lock is held until explicit cleanup.
+
 ## A3-0132 handoff — synthetic signing-reply/history join evidence, 2026-11-15
 
 Agent 3, branch `agent-3`, parent `067b7685d9de6431ce0070b8eee3a672f115dd72`.

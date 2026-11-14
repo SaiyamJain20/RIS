@@ -1,3 +1,22 @@
+## A3-0133: results-first continuation and fresh oracle/store rerun — 2026-11-15
+
+C-F1 WORKING. The user asked that evaluation of completed work progress alongside
+implementation so a reviewable result packet is ready after roughly 9–10 more
+scheduled runs. This run freshly reran the offline oracle/store differential against
+the adopted `37ca31c` protocol source: 180/180 agree, 142 accepts, 38 refusals,
+zero disagreements; exact command/source/output record is
+`evaluation/evidence/f/oracle-store-diff-20261115/`. Added a results-first cadence
+and report link to `RQ2-F-DRAFT.md`; each continuation should evaluate or adversarially
+inspect at least one completed claim before implementing only the evidence gap it
+reveals. Plan remains DRAFT; no FREEZE/required role ACKs, no services, all 32 cases
+and Gate F NOT_RUN, G locked. After the initial refresh, agent-1 advanced to
+`248e4e2` with A1-0134: its published plan checker reports 28/28 and catches 9/9
+negative controls for ledger checklist items 1–4. This corrects its earlier 27/27
+report, whose missing-directory dev-key scan was vacuous. Peer-reported, not
+independently rerun by Agent 3, and not an execution ACK; runner-call item 5 remains
+open. Agent 2 remains `9d44754`, with no execution ACK. Exact-source limits and next
+offline evidence work are recorded in the new receipt and Agent-3 handoff.
+
 ## A3-0132: synthetic signing-reply/history join evidence corrected — 2026-11-15
 
 C-F1 WORKING. Continued only Agent-3-owned offline work from A3-0131. A new

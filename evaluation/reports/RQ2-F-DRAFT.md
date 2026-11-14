@@ -18,6 +18,38 @@ preservation of E's guarantees in the planned F system: the 32-case integration 
 remain unrun. F is an application-level extension of the paper-derived reconstruction; these
 results are not findings about the HMBC authors' implementation.
 
+**Results-first continuation (2026-11-15):** evaluation is already underway alongside runner
+work. This continuation freshly reproduced the 180-case oracle/store differential against the
+currently adopted protocol source: 180/180 decisions agree (142 accepts, 38 refusals; zero
+disagreements). The exact run is in
+[the 2026-11-15 receipt](../evidence/f/oracle-store-diff-20261115/README.md). This is an
+offline tested reconstruction result, not an F case.
+
+Agent 1 subsequently published its ledger-scope plan checker at
+`origin/agent-1` commit `248e4e2`. Its receipt reports 28/28 plan checks and 9/9
+negative controls caught for items 1–4 of the ledger review checklist. It also
+corrects the earlier 27/27 claim: that run's dev-key scan used a missing directory
+and was vacuous. The new result is peer-reported and reviewed here, not rerun by
+Agent 3, not an execution ACK; item 5 still depends on runner calls. Preserve this
+correction in any presentation.
+
+Across this continuation plus the next nine scheduled continuations (allowing one extra if a
+result fails or needs repair), the working target is a reviewable partial results packet by
+2026-11-17, with evaluation in every slice rather than a runner-first sequence.
+Each slice should reproduce or adversarially inspect at least one already-implemented claim,
+recording exact source pins, positive/negative controls, command and output hashes; implementation
+is added only where that evaluation identifies a specific evidence gap. The intended order is:
+(1) fresh oracle/store differential (done here); (2) rerun the seven oracle-mutant discrimination
+controls; (3) reproduce the f=1/f=2 pool sweep and retain the out-of-bound control; (4) audit TLC
+logs/configuration and state-count interpretation; (5) reconcile the existing M1 gas rows with
+Agent 1's exact reproductions; (6) review the M2 virtual-time and M6 real-process receipts without
+starting services; (7) evaluate signing-event join positive and negative controls; (8) test the
+offline runner's capture omissions/duplicates and fail-closed behavior; (9) assemble a claim-to-
+artifact table with unresolved evidence gaps; (10) issue the reviewable partial packet and record
+peer-review/ACK dependencies. This sequence is a work target, not a promise that a result will
+pass; failures and blocked items stay visible. No service or integrated F case may start before
+the exact authorized FREEZE and role ACKs. Gate F remains NOT_RUN and this plan remains DRAFT.
+
 ## 1. Question and design
 RQ2: which E guarantees survive Byzantine operators with q-of-n application witnesses
 (n=4, q=3, f=1), assuming safe ledgers and a trusted key worker? The witness layer distributes
@@ -184,6 +216,7 @@ These are prior measurements unless marked fresh. No row is an integrated F resu
 | K1 sensitivity; deliberate mutation result | [A3-0122 signing-kill review](../evidence/reviews/a2-0086-signing-kill-20261113/README.md) | 29/40 detections and 40/40 control; does not measure corruption probability |
 | New K1 candidate; deliberate mutation result | [S2-0025 reproduced by agent 3](../evidence/reviews/proxy-k1-20261114/README.md) | new blocking test: 40/40 detections and 40/40 controls; isolated candidate acceptance, not an execution ACK |
 | Store death predicates; tested reconstruction result | [180-case differential and seven oracle mutations](../evidence/f/oracle-store-diff-20261114/README.md) | one earlier digest per key; grant/receipt facts caller-asserted |
+| Fresh oracle/store differential; tested reconstruction result | [2026-11-15 exact-source rerun](../evidence/f/oracle-store-diff-20261115/README.md) | primary 180-case grid rerun only; seven mutation controls are from the earlier receipt |
 | Service/store distinction; fresh tested reconstruction result | [four probes, selected owner tests, exact source/output hashes](../evidence/f/report-review-20261114/README.md) | injected view and synthetic keys; no native grant/sequence transition |
 | Captured signer reply to exact store-history generation; tested reconstruction result | [15 focused join tests and source/command record](../evidence/f/signing-event-join-20261114/README.md) | generated JSON-lines; capture authenticity/completeness, native facts and honest-service validation remain unproved |
 | Draft coverage and source pins; preflight check only | [A3-0128 final preflight](../evidence/f/preflight-20261114-r4/README.md) | 32/32 IDs is coverage of the plan; all case statuses remain NOT_RUN |

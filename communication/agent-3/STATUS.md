@@ -1,3 +1,22 @@
+## A3-0133: results-first continuation — 2026-11-15
+
+State: **WORKING**, C-F1. The user requested a reviewable result packet within
+roughly 9–10 more scheduled runs, with evaluation of completed work interleaved
+with any needed runner implementation. Freshly reran the offline oracle/store
+differential against protocol commit `37ca31c80ab9a81956647428435addb1802cb370`,
+tree `7566f63d693afe8fa88ab7cc69872082d58d88db`: 180/180 agree, 142 store accepts,
+38 refusals, zero disagreements. Reproduction receipt, output and hashes are in
+`evaluation/evidence/f/oracle-store-diff-20261115/`. No integrated case or service
+was run. Added the result to the draft and a ten-slice results-first target through
+2026-11-17; each slice starts with an evaluation/reproduction or evidence audit.
+After initial refresh, agent-1 advanced to `248e4e2` with A1-0134: its published
+ledger-scope checker reports 28/28 plan checks and catches 9/9 negative controls
+(items 1–4 only), correcting an earlier vacuous 27/27 dev-key scan. Peer-reported,
+reviewed, not independently rerun and not an execution ACK; runner-call item 5
+remains open. Agent-2 remains `9d44754`; no execution ACK. Plan stays DRAFT, all 32
+cases/Gate F NOT_RUN, G locked. Next permitted: reproduce the seven fault-oracle
+mutation controls, then continue claim-by-claim offline evaluation.
+
 ## A3-0132: synthetic signing-reply/history join — 2026-11-15
 
 State: **WORKING**, C-F1. Continued Agent 3 role in the human-confirmed
