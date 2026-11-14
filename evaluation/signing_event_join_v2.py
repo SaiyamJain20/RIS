@@ -114,7 +114,7 @@ def join_signing_events(capture, evidence, *, manifest, observations, expected_o
                  "request id")
         _require(type(response["id"]) is int and response["id"] == request_id,
                  "request/response id mismatch")
-        _require(request["round"] in (1, 2) and not isinstance(request["round"], bool), "request round")
+        _require(type(request["round"]) is int and request["round"] in (1, 2), "request round")
         _require(isinstance(request["kind"], str) and request["kind"] in _KINDS
                  and isinstance(request["message"], dict), "request kind/message")
 

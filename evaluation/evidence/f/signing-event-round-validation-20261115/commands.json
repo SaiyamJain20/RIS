@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "hmbc-signing-round-validation/v1",
+  "classification": "tested-reconstruction-result",
+  "recordedAt": "2026-11-14T23:28:31Z",
+  "cwd": "/home/karma/Documents/RIS",
+  "runtime": {
+    "python": "3.13.13",
+    "pytest": "9.0.2"
+  },
+  "commands": [
+    {
+      "argv": [".venv/bin/python", "-m", "pytest", "-q", "evaluation/tests/test_signing_event_join_v2.py", "-k", "fractional_round"],
+      "phase": "red-before-implementation",
+      "exitCode": 1,
+      "result": "1 failed, 15 deselected; expected ValueError was not raised for JSON round 1.0",
+      "rawOutputRetained": false
+    },
+    {
+      "argv": [".venv/bin/python", "-m", "pytest", "-q", "evaluation/tests/test_signing_event_join_v2.py"],
+      "phase": "focused-green",
+      "exitCode": 0,
+      "result": "16 passed in 3.84 seconds",
+      "rawOutput": "focused-green.txt",
+      "rawOutputSha256": "2113f6220cf47a147fadefa39e16dd24570904457d9e86872058fe6394463e41"
+    },
+    {
+      "argv": [".venv/bin/python", "-m", "pytest", "evaluation/tests", "-q"],
+      "phase": "full-evaluation-suite",
+      "exitCode": 0,
+      "result": "3004 passed in 638.45 seconds",
+      "rawOutputRetained": false
+    }
+  ],
+  "sourceSha256": {
+    "evaluation/signing_event_join_v2.py": "f3b103b4830106fec6e6163c8f94536151aa003d47afeaba9c7a4506c734bb19",
+    "evaluation/tests/test_signing_event_join_v2.py": "68ef37ebbacbc0d5a93268fc8a98e9f1012e14ebd3dc3a0e52a4cb4530a307ea",
+    "evaluation/sealed_signing_capture_v1.py": "a286c1cdc4bd186fc0ddda188d482e1734148660146b0032c446765081c18334",
+    "evaluation/tests/test_sealed_signing_capture_v1.py": "54454a00a631ab8cb5d92602ff3505ddbf1242d1486f3a91deebcf388003cf22"
+  },
+  "scope": {
+    "syntheticFixturesOnly": true,
+    "servicesStarted": false,
+    "integratedFCasesRun": false,
+    "plan": "DRAFT",
+    "gateF": "NOT_RUN"
+  }
+}

@@ -2,10 +2,23 @@
 
 - Role: evaluation, formal models and integration (evaluation/**, shared/root Agent-3-owned paths).
 - State (2026-11-15): C-F1 WORKING; results-first partial RQ2-F report target 2026-11-17.
-- Latest: A3-0139 reviewed M2/M6 receipt scope. M2 source and aggregate JSON support only virtual-transport outcomes; M6 source describes local process/KSSC cases, while raw outputs and exact invocation are absent. Receipt: evaluation/evidence/f/availability-receipt-review-20261115/.
+- Latest: A3-0140 tightened offline signing-event round validation: JSON `1.0` was accepted as integer `1`; exact integer check now enforced. Synthetic regression RED then GREEN; focused join 16/16; full evaluation suite 3,004 passed. Also incorporated Agent 1 A1-0136's corrected M1 6/6 count and attached raw-log reference. Evidence: `evaluation/evidence/f/signing-event-round-validation-20261115/`.
 - Plan: DRAFT; no exact execution FREEZE or required execution ACKs. All 32 F cases NOT_RUN; Gate F NOT_RUN; G locked. No services/integrated cases.
 - Protocol role remains Agent 2; accepted protocol tree 7566f63d693afe8fa88ab7cc69872082d58d88db at published 73fb2ce. Agent 1/2 status snapshots are stale relative to the current F handoff; use live board and addressed outboxes, not their old E-phase next actions.
-- Next permitted work: evaluate signing-event join positive/negative controls, then continue offline runner capture and report assembly.
+- Next permitted work: review offline capture omission/duplicate and fail-closed controls, then assemble the RQ2-F partial report and remaining evidence gaps.
+
+## A3-0140: signing-event round input validation — 2026-11-15
+
+The offline signing-event join accepted JSON round `1.0` because Python treats
+it equal to integer `1`. Added a synthetic regression test first (observed
+failure), then required an exact integer type. Focused join tests pass 16/16;
+the full evaluation suite passes 3,004, exit 0. Receipt records commands,
+available output, and source hashes. Agent 1 A1-0136 corrected M1's reported
+count to 6/6 and attached a fresh raw-log rerun; updated the gas reconciliation
+to cite that peer evidence without claiming an Agent-3 rerun/checksum audit.
+
+No services or F cases. Plan DRAFT, all 32 cases/Gate F NOT_RUN, G locked.
+Next: offline capture omission/duplicate and fail-closed controls.
 
 ## A3-0139: M2/M6 receipt limits reviewed — 2026-11-15
 

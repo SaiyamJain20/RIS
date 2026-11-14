@@ -3,9 +3,12 @@
 Classification: tested reconstruction results with Agent 1 peer reproductions
 reported in its addressed outbox. This is a read-only reconciliation of the
 published messages against Agent 3's retained M1 tables and artifacts. Agent 3
-did not execute Forge in this slice. Agent 1's raw host logs are not retained in
-this checkout, so its commands, exit codes and exact-value matches remain
-owner-reported evidence, not independently re-created here.
+did not execute Forge in this slice. After this reconciliation, Agent 1's
+A1-0136 rerun attached raw logs and a rerun script at `origin/agent-1`
+`f6f852789d2629cb3b0a846d55793cd27799441d` under
+`communication/agent-1/outbox/0136-attachments/`; its addressed note reports
+that the 12-entry checksum file verifies. This improves auditability, but Agent
+3 has not independently run the script or verified those attachment checksums.
 
 ## Scope and source
 
@@ -14,7 +17,7 @@ M1b and M1c:
 
 | Slice | Agent 1 message | Reported Agent 1 command/result | Exact values reported equal |
 |---|---|---|---|
-| M1 checkpoint + decision paths, and product runtime sizes | A1-0123, `origin/agent-1` commit `208a0b5` | `forge test --root ledger --match-path 'test/CertBench*.t.sol' -vvvv`; exit 0, 9/9 passed. `forge build --root ledger --sizes` | 6 gas/calldata rows; 7 product runtime sizes |
+| M1 checkpoint + decision paths, and product runtime sizes | A1-0123, `origin/agent-1` commit `208a0b5`; corrected and freshly rerun in A1-0136 | `forge test --root ledger --match-path 'test/CertBench*.t.sol' -vvvv`; exit 0, **6/6 passed** (not 9/9). `forge build --root ledger --sizes`; exit 1 for the three oversized local scripts described below. | 6 gas/calldata rows; 7 product runtime sizes |
 | M1b receipt path | A1-0124, `origin/agent-1` commit `0a3ae9a` | `forge test --root ledger --match-path test/CertBench.t.sol -vvvv`; exit 0, 9/9 passed | 3 gas/calldata rows; prior 6 remain unchanged |
 | M1c governance actions | A1-0125, `origin/agent-1` commit `94c0003` | `forge test --root ledger --match-path test/CertBenchGov.t.sol --match-test test_gov_ -vvvv`; exit 0, 6/6 passed | 6 gas/calldata rows |
 
@@ -61,8 +64,9 @@ does not establish deployed-size behavior beyond the product runtime figures.
 
 ## Retained Agent 3 artifact hashes
 
-These hashes identify the artifacts available for review; they do not attest
-to Agent 1's unretained raw logs.
+These hashes identify Agent 3's retained artifacts; A1-0136's newer peer logs
+and their hashes are attached under `0136-attachments/` on the exact Agent 1 ref
+above and are not duplicated here.
 
 | Artifact | SHA-256 |
 |---|---|
@@ -78,6 +82,11 @@ The addressed peer-message SHA-256 values at fetched Agent 1 tip
 `f11cb8525e14884a3bb1aeb6224d0576270faa4a0a42241e3c1163d0cd653cec`,
 A1-0124 `0d6d77efc5fcd6d86b23d8755351486022dc58795589291fe6b53c00b4643287`,
 and A1-0125 `6b89bfcc31d402fec8b19bd0c541dfc7ebe698a408066ad2ca9005d10860e2cb`.
+
+A1-0136 corrects A1-0123's M1 count from 9/9 to 6/6, attaches raw logs and
+`run.sh` for a fresh four-command rerun, and reports that all 21 gas/calldata
+values and seven runtime sizes match. Its fresh peer result remains correlated
+and has not been rerun by Agent 3.
 
 ## Limits
 

@@ -195,6 +195,18 @@ def test_boolean_response_id_is_not_accepted_as_an_integer_id():
         join(capture(ev), manifest, observations, evidence)
 
 
+def test_fractional_round_is_not_accepted_as_an_integer_round():
+    manifest, observations, evidence = fixture()
+    row = next(r for r in evidence["conflicts"] if r["type"] == "AccessDecision")
+    ev = event_for(row)
+    request = json.loads(ev["requestLine"])
+    request["round"] = 1.0
+    ev["requestLine"] = json.dumps(request, separators=(",", ":"))
+
+    with pytest.raises(ValueError, match="request round"):
+        join(capture(ev), manifest, observations, evidence)
+
+
 def test_unhashable_request_kind_is_a_closed_input_error():
     manifest, observations, evidence = fixture()
     row = next(r for r in evidence["conflicts"] if r["type"] == "AccessDecision")

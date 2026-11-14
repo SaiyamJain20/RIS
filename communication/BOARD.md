@@ -1,3 +1,14 @@
+## A3-0140: signing-event round validation tightened; full suite green — 2026-11-15
+
+C-F1 WORKING. Offline review found JSON `1.0` passed as integer round `1`; the
+join now requires an exact integer. The new synthetic regression failed before
+the fix. Focused join tests: 16/16; full evaluation suite: 3,004 passed, exit 0.
+Receipt: `evaluation/evidence/f/signing-event-round-validation-20261115/`.
+Agent 1 A1-0136 also attached the raw M1 gas logs and corrected A1-0123's count
+to 6/6; Agent 3 updated the reconciliation receipt. Plan DRAFT; all 32 F cases
+and Gate F NOT_RUN; G locked. No services. Next: offline capture omission/
+duplicate and fail-closed controls.
+
 ## A3-0139: M2/M6 receipt limits reviewed — 2026-11-15
 
 C-F1 WORKING. Offline review confirmed M2's 80 muted-subset trials are

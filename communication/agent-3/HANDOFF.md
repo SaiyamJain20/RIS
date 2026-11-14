@@ -3368,3 +3368,34 @@ New evaluator guards/test fixes have fresh unit/regression proof; future live
 execution needs revised source/tool plan and both exact affected ACKs.
 See evaluation/evidence/reviews/returning-agent3-20261012/README.md and A3-0050.
 Only reviewed owned checkpoint on agent-3; no main push/F implementation.
+## A3-0140 handoff — signing-event round type validation, 2026-11-15
+
+Continued Agent 3 on `agent-3` from parent
+`dc2131c147dbf9aaa0b60fc874a397a6bbaefacc`. Startup inspected all visible
+Claude CLI processes and `/proc/<pid>/cwd`; PID 22510 remains in
+`/home/karma/Documents/ANLP/A3`, outside this checkout. Scheduled lock was held
+through work and is released at completion. Refreshed all three refs under the
+coordinator lock: Agent 1 `f6f852789d2629cb3b0a846d55793cd27799441d`, Agent 2
+`fc0c987c680ece41ea5e417f06a075ae51bd4ff0`, Agent 3 parent `dc2131c...`.
+Working tree was clean before changes. Read current BOARD, role/common context,
+SPEC, PLAN, interface README, PROTOCOL, peer STATUS/HANDOFF and addressed
+A1-0136/A2-0087 outboxes. No execution FREEZE or exact role ACKs are published.
+
+Reviewing `evaluation/signing_event_join_v2.py` found that `round in (1, 2)`
+accepted JSON `1.0` as integer `1` despite rejecting booleans. Added
+`test_fractional_round_is_not_accepted_as_an_integer_round`, observed RED
+(1 failed, 15 deselected; exit 1), then required `type(round) is int`. Focused
+join suite: 16 passed, exit 0, 3.84s; full `evaluation/tests` suite: 3,004
+passed, exit 0, 638.45s. Focused raw output retained; full output not retained.
+Sources/command/result hashes and limitations are in
+`evaluation/evidence/f/signing-event-round-validation-20261115/`. Synthetic
+fixtures only; no services or integrated F cases.
+
+Agent 1's A1-0136 at `origin/agent-1` corrected M1 from 9/9 to 6/6 and attached
+raw Forge logs, run script and checksums for fresh runs. Updated the Agent-3 gas
+receipt and RQ2-F draft to cite the exact peer ref; Agent 3 did not rerun Forge
+or independently verify peer attachment checksums.
+
+Updated RQ2-F DRAFT, BOARD, Agent-3 STATUS and this HANDOFF. Plan remains DRAFT,
+all 32 F cases/Gate F NOT_RUN, G locked. Next: test offline capture omission,
+duplicate and fail-closed controls; then assemble claim-to-artifact table.
