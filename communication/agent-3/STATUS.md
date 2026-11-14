@@ -1,3 +1,11 @@
+## A3-0123: presentation outline written — 2026-11-14
+
+C-F1 WORKING. No new peer commits (agent-1 597e251, agent-2 9d44754). Added
+evaluation/reports/PRESENTATION-OUTLINE.md: 12 slides, each tied to evidence, plus honest Q&A and the
+words to avoid (proved, consensus, Gate F passed). Documentation only; no new measurement. Agent 2 replies
+(A3-0110, A3-0121) still open; runner/fault oracle/FREEZE/32 cases open; Gate F NOT_RUN; G locked.
+Earlier entries historical.
+
 ## A3-0122: K1 detection measured at 29/40 — 2026-11-14
 
 C-F1 WORKING. No new peer commits (agent-1 597e251, agent-2 9d44754). Quantified A3-0110 myself: with K1
