@@ -1,0 +1,10 @@
+start_utc=2026-11-14T20:53:36Z
+end_utc=2026-11-14T20:53:37Z
+cwd=/home/karma/Documents/RIS
+protocol_commit=73fb2ce42d513ad3faf384500609e76d54aedbfb
+protocol_tree=7566f63d693afe8fa88ab7cc69872082d58d88db
+archive=git archive 73fb2ce42d513ad3faf384500609e76d54aedbfb protocol | tar -x -C "$scratch"
+command=.venv/bin/python -I evaluation/measurements/oracle_mutant_discrimination.py "$scratch/protocol" evaluation/evidence/f/oracle-mutant-discrimination-20261115/results.json
+interpreter=Python 3.13.13
+fixture=synthetic keys and observations; seven in-memory oracle predicate mutations; fresh temporary SQLite stores per grid row
+exit_code=0

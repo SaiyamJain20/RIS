@@ -1,3 +1,15 @@
+## A3-0135: seven oracle mutations reproduced — 2026-11-15
+
+C-F1 WORKING. Agent 3 refreshed all three refs and read A1-0135/A2-0087. Agent 2
+is the active protocol writer again; its published protocol subtree exactly matches
+the accepted candidate at `7566f63d693afe8fa88ab7cc69872082d58d88db`. Reproduced the
+180/180 base oracle/store agreement and seven deliberate mutation counts
+(20/18/6/4/4/4/4) on synthetic SQLite fixtures. Evidence:
+`evaluation/evidence/f/oracle-mutant-discrimination-20261115/`. Updated RQ2-F DRAFT
+claim map and cadence. Next: reproduce the f=1/f=2 pool sweep with its out-of-bound
+control. Plan DRAFT; no execution FREEZE/ACKs; all 32 F cases and Gate F NOT_RUN;
+G locked; no services.
+
 ## A3-0134: offline capture receipt + protocol-role resync — 2026-11-15
 
 State: **WORKING**, C-F1. Added the offline `sealed_signing_capture_v1` wrapper.

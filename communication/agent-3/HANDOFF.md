@@ -1,3 +1,51 @@
+## A3-0135 handoff — oracle mutation controls reproduced, 2026-11-15
+
+Continued Agent 3 in `/home/karma/Documents/RIS`, branch `agent-3`, from the live
+board. Startup inspected all Claude CLI PIDs and `/proc/<pid>/cwd`; PID 22510 was
+in `/home/karma/Documents/ANLP/A3`, not this checkout. The scheduled lock was
+initially held, so that invocation exited without checkout changes. On this
+resumed run the lock was acquired at the unchanged inode; coordinator lock used
+for explicit peer fetch and Git writes. Current role ownership is Agent 3 for
+evaluation/shared docs; Agent 2 is active writer for `protocol/**`.
+
+Refreshed all peer refs: `origin/agent-1`
+`2acb1962df795701d6751e4d022a1caeaec87a64`, `origin/agent-2`
+`fc0c987c680ece41ea5e417f06a075ae51bd4ff0`, `origin/agent-3` before this slice
+`b210f5a9670a04805dc130201875ef44446946bd`. Read current BOARD, common context,
+Agent-3 role, SPEC, PLAN, interfaces README, PROTOCOL, peer STATUS/HANDOFF, and
+A1-0135/A2-0087. Agent 2's protocol subtree at commit `73fb2ce` is
+`7566f63d693afe8fa88ab7cc69872082d58d88db`, equal to the accepted S2-0025 tree.
+The DRAFT plan already pins `origin/agent-2`; no further pin edit was needed.
+Agent 2's K1 re-verification counts remain owner-reported, not rerun here. No
+execution FREEZE/ACK exists.
+
+Implemented `evaluation/measurements/oracle_mutant_discrimination.py`, an offline
+harness that monkey-patches only the in-memory oracle predicate and reruns the
+existing 180-case oracle/store driver with fresh temporary SQLite stores. Against
+the exact protocol archive from `73fb2ce`, baseline agrees 180/180 (142 accepts,
+38 refusals). All seven mutants were detected with disagreement counts matching
+the 2026-11-14 receipt: expiry boundary 20, executed receipt never dead 18,
+decision inclusive sequence 6, drop grant death 4, grant kills DENY 4,
+checkpoint strict boundary 4, governance strict boundary 4. `faults.py` and the
+protocol tree were not modified. This validates sensitivity to these specific
+mutations only, not oracle completeness or a production implementation.
+
+Evidence, command, source/output hashes and baseline:
+`evaluation/evidence/f/oracle-mutant-discrimination-20261115/`. Harness SHA-256
+`36925c6483ecd81a58b81b015a62233b2956b548c9c9d358c6f761fb2205767c`; oracle
+SHA-256 `e6856b703ec2e32b6090b42d49e30fa6ddb28bd3598d2d4a84b877f3763d99c`;
+result SHA-256 `bb9c8e0528fbc7cabea7a34dc7cd8fe5c1afbdf92dec9f6d28bf48e53934068e`.
+The RQ2-F partial report now cites this as a deliberate mutation result and marks
+cadence items 1–2 done; next is item 3, reproduce the f=1/f=2 pool sweep and retain
+the out-of-bound control.
+
+Plan remains DRAFT; no execution FREEZE or role-scope execution ACK; all 32 cases
+and Gate F NOT_RUN; G locked. No service, integrated case, peer module/mailbox,
+main push, or additional agent/worktree. No full evaluator suite was run; the
+offline harness itself exited 0 on Python 3.13.13. No peer refs changed after the
+refresh during this slice. Continue claim-by-claim offline evaluation, then audit
+the result artifacts for the partial report.
+
 ## A3-0134 handoff — offline capture receipt and protocol source resync, 2026-11-15
 
 Continued Agent 3 in `/home/karma/Documents/RIS`, branch `agent-3`, from live

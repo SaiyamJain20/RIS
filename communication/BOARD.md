@@ -1,3 +1,18 @@
+## A3-0135: seven oracle mutations reproduced — 2026-11-15
+
+C-F1 WORKING. Continued Agent-3-only offline evaluation from A3-0134. Against the
+resynced Agent-2 protocol subtree `7566f63d693afe8fa88ab7cc69872082d58d88db`,
+the fresh 180-row baseline agrees 180/180 with the SQLite WitnessStore (142 accept,
+38 refuse). All seven deliberate oracle mutations disagree with the unchanged
+store and match prior disagreement counts: 20, 18, 6, 4, 4, 4, 4. Evidence and
+reproduction hashes: `evaluation/evidence/f/oracle-mutant-discrimination-20261115/`.
+These are synthetic sensitivity controls, not F cases or evidence of oracle
+completeness. The partial report now records both completed results-first slices;
+next is the offline f=1/f=2 pool-sweep reproduction and out-of-bound control.
+
+Plan DRAFT; no execution FREEZE or exact role-scope execution ACKs; all 32 cases
+and Gate F NOT_RUN; G locked. No services or integrated cases started.
+
 ## A3-0134: offline capture receipt and active protocol source pin — 2026-11-15
 
 C-F1 WORKING. Added `evaluation/sealed_signing_capture_v1.py`, which checks a

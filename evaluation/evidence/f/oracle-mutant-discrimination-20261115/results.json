@@ -1,0 +1,85 @@
+{
+  "classification": "tested reconstruction result on synthetic offline fixtures",
+  "scope": "oracle mutation sensitivity against the existing 180-case SQLite WitnessStore grid; not Gate F",
+  "baseline": {
+    "cases": 180,
+    "agree": 180,
+    "disagree": 0,
+    "store_accepts": 142,
+    "oracle_violations": 38
+  },
+  "controls": [
+    {
+      "mutant": "expiry-strict",
+      "cases": 180,
+      "oracle_store_agree": 160,
+      "disagreements": 20,
+      "expected_disagreements_from_prior_receipt": 20,
+      "matches_prior_count": true
+    },
+    {
+      "mutant": "receipt-never-dead",
+      "cases": 180,
+      "oracle_store_agree": 162,
+      "disagreements": 18,
+      "expected_disagreements_from_prior_receipt": 18,
+      "matches_prior_count": true
+    },
+    {
+      "mutant": "decision-inclusive",
+      "cases": 180,
+      "oracle_store_agree": 174,
+      "disagreements": 6,
+      "expected_disagreements_from_prior_receipt": 6,
+      "matches_prior_count": true
+    },
+    {
+      "mutant": "drop-grant-death",
+      "cases": 180,
+      "oracle_store_agree": 176,
+      "disagreements": 4,
+      "expected_disagreements_from_prior_receipt": 4,
+      "matches_prior_count": true
+    },
+    {
+      "mutant": "grant-kills-deny",
+      "cases": 180,
+      "oracle_store_agree": 176,
+      "disagreements": 4,
+      "expected_disagreements_from_prior_receipt": 4,
+      "matches_prior_count": true
+    },
+    {
+      "mutant": "checkpoint-strict",
+      "cases": 180,
+      "oracle_store_agree": 176,
+      "disagreements": 4,
+      "expected_disagreements_from_prior_receipt": 4,
+      "matches_prior_count": true
+    },
+    {
+      "mutant": "governance-strict",
+      "cases": 180,
+      "oracle_store_agree": 176,
+      "disagreements": 4,
+      "expected_disagreements_from_prior_receipt": 4,
+      "matches_prior_count": true
+    }
+  ],
+  "all_controls_detected": true,
+  "all_prior_counts_reproduced": true,
+  "mutants": [
+    "expiry-strict",
+    "receipt-never-dead",
+    "decision-inclusive",
+    "drop-grant-death",
+    "grant-kills-deny",
+    "checkpoint-strict",
+    "governance-strict"
+  ],
+  "limitations": [
+    "same-model oracle and store; synthetic keys and observations",
+    "one earlier digest per key; grant and executed-receipt facts are caller-asserted",
+    "no native ledger reachability, process transcript, quorum, or integrated F case"
+  ]
+}
