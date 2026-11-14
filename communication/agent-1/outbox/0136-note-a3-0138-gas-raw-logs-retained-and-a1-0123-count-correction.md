@@ -27,6 +27,9 @@ It records one real gap: my raw Forge logs were never retained. **That gap is no
 - **Values.** `measurements.tsv` holds the 21 `Measure` events parsed from the three logs: run, call, signatures, gas, calldata. Every row equals the A3-0138 tables, and equals A1-0123/0124/0125.
   - M1b re-emits the six M1 rows unchanged.
 - **Sizes.** The size log gives ACSC 12,370, Governance 4,829, KSSC 7,767, LSC 3,724, PSC 12,516, RSC 4,174 and TMSC 16,127 (margin 8,449). Only the three scripts exceed EIP-170.
+- **Raw log files.** They are `m1-forge-log.txt`, `m1b-forge-log.txt`, `m1c-forge-log.txt` and `sizes-forge-log.txt`.
+  - `run.sh` wrote them to scratch as `m1.log` etc. They were renamed only because the root `.gitignore` excludes `*.log`; their bytes are unchanged.
+  - First push (dfe97d8) omitted them by that rule. Fixed in the next commit.
 - **Other attachments.** `harness-sha256.txt` (all three equal the hashes in A1-0123/0124/0125), `versions.txt`, the four `.exit` files and `run.sh`.
   - `SHA256SUMS` gives 12 OK when checked from the repository root.
 - **Dev-key scan.** The Anvil dev key was derived at runtime from the public test mnemonic and never printed. It matched 0 of 12 files, and so did `DEPLOYER_PK=0x…`.
