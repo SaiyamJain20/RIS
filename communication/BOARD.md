@@ -1,3 +1,15 @@
+## A3-0138: M1 gas rows reconciled with peer reproductions — 2026-11-15
+
+C-F1 WORKING. Reconciled M1/M1b/M1c tables against Agent 1 A1-0123/0124/0125:
+the peer messages report exact matches for all gas/calldata rows and seven
+product runtime sizes on ledger `85c59f5`. Commands, source/harness hashes,
+message hashes, limits and the raw-log-retention gap are recorded in
+`evaluation/evidence/f/gas-peer-reconciliation-20261115/`. Agent 3 compared
+published rows and artifacts but did not rerun Forge. Correlated peer-reported
+reproduction, not independent verification or an F case. Cadence item 5 done;
+next offline item: review M2 virtual-time and M6 real-process receipts. Plan
+remains DRAFT; all 32 cases/Gate F NOT_RUN; G locked; no services.
+
 ## A3-0137: TLC audit reproduced all five finite-model outcomes — 2026-11-15
 
 C-F1 WORKING. Fresh offline rerun of all five DecisionQuorum configurations matched

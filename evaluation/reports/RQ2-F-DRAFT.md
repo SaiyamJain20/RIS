@@ -57,13 +57,25 @@ recording exact source pins, positive/negative controls, command and output hash
 is added only where that evaluation identifies a specific evidence gap. The intended order is:
 (1) fresh oracle/store differential (done); (2) seven oracle-mutant discrimination controls (done);
 (3) f=1/f=2 pool sweep and out-of-bound control (done); (4) TLC audit/recheck done; (5) reconcile the existing M1 gas rows with
-Agent 1's exact reproductions; (6) review the M2 virtual-time and M6 real-process receipts without
+Agent 1's exact reproductions (done); (6) review the M2 virtual-time and M6 real-process receipts without
 starting services; (7) evaluate signing-event join positive and negative controls; (8) test the
 offline runner's capture omissions/duplicates and fail-closed behavior; (9) assemble a claim-to-
 artifact table with unresolved evidence gaps; (10) issue the reviewable partial packet and record
 peer-review/ACK dependencies. This sequence is a work target, not a promise that a result will
 pass; failures and blocked items stay visible. No service or integrated F case may start before
 the exact authorized FREEZE and role ACKs. Gate F remains NOT_RUN and this plan remains DRAFT.
+
+The fifth slice reconciled the retained M1 tables against Agent 1's addressed
+messages A1-0123/0124/0125. They report exact matches for all six checkpoint and
+decision rows, all three receipt rows, all six governance rows, and seven
+product runtime sizes on ledger `85c59f5`. The messages include exact Forge
+commands, reported exits and harness hashes. Agent 3 checked their tables and
+source pins against its retained report and artifacts, but did not rerun Forge;
+Agent 1's raw host logs are not retained here. This is peer-reported, correlated
+reproduction, not independent verification. The receipt notes preserve the
+refuted cold-storage explanation and distinguish source-consistent cost
+attribution from measured gas splits. Details and hashes are in
+[the gas reconciliation receipt](../evidence/f/gas-peer-reconciliation-20261115/README.md).
 
 ## 1. Question and design
 RQ2: which E guarantees survive Byzantine operators with q-of-n application witnesses
@@ -250,7 +262,7 @@ These are prior measurements unless marked fresh. No row is an integrated F resu
 | Fixed-slot quorum agreement; extension result in a finite model | [TLC logs, counts, controls and model hashes](../evidence/f/decision-quorum-tlc-20261113/README.md) | no runtime pin deaths, ledger consensus or liveness proof |
 | Pool certificate filtering and potential agreement hazards; tested reconstruction result | [M3/M5](../evidence/f/measurements-20261114/README.md), [exact-source M5 rerun](../evidence/f/pool-sweep-20261115/README.md) | M5 honest behaviour is a model; f=2 hazards are potential states, not realized double certificates |
 | One/two unavailable witness boundary; tested reconstruction result | [M2 virtual transport and M6 prior real-process runs](../evidence/f/measurements-20261114/README.md) | M6 has three local repetitions; no real-network latency or general liveness estimate |
-| Signature overhead; tested reconstruction result | [M1/M1b/M1c and peer reproductions](../evidence/f/measurements-20261114/README.md) | single deterministic fixture calls; no production fee or throughput estimate |
+| Signature and governance gas overhead; tested reconstruction result with peer reproduction reported | [M1/M1b/M1c measurements](../evidence/f/measurements-20261114/README.md), [A1-0123/0124/0125 reconciliation](../evidence/f/gas-peer-reconciliation-20261115/README.md) | single deterministic fixture calls; peer raw logs not retained here; no production fee or throughput estimate |
 | K1 sensitivity; deliberate mutation result | [A3-0122 signing-kill review](../evidence/reviews/a2-0086-signing-kill-20261113/README.md) | 29/40 detections and 40/40 control; does not measure corruption probability |
 | New K1 candidate; deliberate mutation result | [S2-0025 reproduced by agent 3](../evidence/reviews/proxy-k1-20261114/README.md) | new blocking test: 40/40 detections and 40/40 controls; isolated candidate acceptance, not an execution ACK |
 | Store death predicates; tested reconstruction result | [180-case differential and seven oracle mutations](../evidence/f/oracle-store-diff-20261114/README.md) | one earlier digest per key; grant/receipt facts caller-asserted |

@@ -1,3 +1,36 @@
+## A3-0138 handoff — M1 gas peer-reproduction reconciliation, 2026-11-15
+
+Continued Agent 3 from A3-0137 on branch `agent-3`. Startup inspected Claude
+CLI `/proc` cwd; PID 22510 is in `/home/karma/Documents/ANLP/A3`, outside RIS.
+Acquired the scheduled lock, refreshed `origin/agent-1` at
+`2acb1962df795701d6751e4d022a1caeaec87a64`, `origin/agent-2` at
+`fc0c987c680ece41ea5e417f06a075ae51bd4ff0`, and `origin/agent-3` at parent
+`fe13ba30135bdc7a8b558d63357ae8649aca239a`. Read the current board, common
+context, Agent-3 role prompt, SPEC, PLAN, interface README, protocol and peer
+STATUS/HANDOFF. No new execution FREEZE/ACK was present. Agent 2 remains the
+protocol writer; the accepted tree remains `7566f63d693afe8fa88ab7cc69872082d58d88db`.
+
+Read addressed Agent 1 messages A1-0123, A1-0124 and A1-0125 directly from the
+fetched `origin/agent-1` branch. They report exact reproduction of M1's six
+checkpoint/decision gas and calldata rows and seven product runtime sizes;
+M1b's three receipt rows; and M1c's six governance rows. Reported commands,
+Forge/solc versions, source and harness hashes, peer-message hashes, and the
+byte-for-byte value comparison against Agent 3's retained measurement tables
+are recorded at
+`evaluation/evidence/f/gas-peer-reconciliation-20261115/README.md`. The
+source is ledger `85c59f5` (tree
+`36a868305d67c8f546e6bde558ceb8e356962819`). Message tables and source pins
+were checked locally; Agent 3 did not run Forge in this slice. Agent 1's raw
+host logs are not present in this checkout, so its outcomes remain
+peer-reported, correlated same-model reproduction, not independent verification.
+The fixed-cost attribution remains partly qualitative; no fee/throughput claim.
+
+Updated the RQ2-F DRAFT, board, STATUS and this handoff; results-first cadence
+item 5 is done. No tests or measurements were run, no services/integrated cases
+started. Plan DRAFT; no exact execution FREEZE/ACK; all 32 cases and Gate F
+NOT_RUN; G locked. Next permitted work: review M2 virtual-time and M6
+real-process receipts offline, then continue evidence-map and packet assembly.
+
 ## A3-0137 handoff — TLC audit/recheck, 2026-11-15
 
 Continued Agent 3 from A3-0136 on agent-3, preserving the live C-F1 state.

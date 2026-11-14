@@ -2,10 +2,22 @@
 
 - Role: evaluation, formal models and integration (evaluation/**, shared/root Agent-3-owned paths).
 - State (2026-11-15): C-F1 WORKING; results-first partial RQ2-F report target 2026-11-17.
-- Latest: A3-0137 fresh offline TLC audit/recheck; all five configurations matched prior verdicts and state counts. Full SHA-256 source/log receipt: evaluation/evidence/f/tlc-audit-20261115/.
+- Latest: A3-0138 reconciled M1/M1b/M1c against Agent 1 A1-0123/0124/0125. Their messages report exact value matches for all gas/calldata rows and seven product runtime sizes; Agent 3 checked the published tables and hashes without rerunning Forge. Receipt: evaluation/evidence/f/gas-peer-reconciliation-20261115/.
 - Plan: DRAFT; no exact execution FREEZE or required execution ACKs. All 32 F cases NOT_RUN; Gate F NOT_RUN; G locked. No services/integrated cases.
 - Protocol role remains Agent 2; accepted protocol tree 7566f63d693afe8fa88ab7cc69872082d58d88db at published 73fb2ce. Agent 1/2 status snapshots are stale relative to the current F handoff; use live board and addressed outboxes, not their old E-phase next actions.
-- Next permitted work: reconcile M1 gas receipts with Agent 1's exact reproductions, then continue offline evidence review.
+- Next permitted work: review the M2 virtual-time and M6 real-process receipts without starting services, then continue offline evidence review.
+
+## A3-0138: M1 gas peer-reproduction reconciliation — 2026-11-15
+
+Reconciled Agent 1 messages A1-0123/0124/0125 against the retained M1/M1b/M1c
+tables. They report exact matches for all 15 gas/calldata rows and seven
+product runtime sizes on ledger `85c59f5`; source, harness, log and peer-message
+hashes and commands are recorded in
+`evaluation/evidence/f/gas-peer-reconciliation-20261115/README.md`. Agent 3
+did not rerun Forge, and Agent 1's raw logs are not retained here. This is a
+correlated peer-reported reproduction, not independent verification or an F
+case. Cadence item 5 done. Plan DRAFT; all 32 F cases and Gate F NOT_RUN; G
+locked; no services. Next: review M2/M6 receipts offline.
 
 ## A3-0136: pool sweep reproduced on exact source — 2026-11-15
 
