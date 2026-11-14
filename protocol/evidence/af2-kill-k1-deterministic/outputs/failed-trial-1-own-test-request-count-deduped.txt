@@ -1,0 +1,40 @@
+F
+=================================== FAILURES ===================================
+________ test_kill_between_the_signing_statements_leaves_a_whole_record ________
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-82/test_kill_between_the_signing_0')
+
+    def test_kill_between_the_signing_statements_leaves_a_whole_record(tmp_path):
+        """S2-0025 (A3-0110, A3-0122: the stage kill above detected K1 in 29 of 40 runs on agent 3's host): the child BLOCKS at a named point between two statements of one signing transaction
+        and is killed there. A store that commits a signing whole loses that request entirely: the replies equal the stored digests, no pin lacks a live digest, the baseline is the newest record's,
+        and a supersede in flight leaves the superseded table as it was. With one autocommit per statement (mutant K1) the pin or the digest survives alone, so every case below fails.
+        Cases: the first `after_pin` (a fresh pin), the first `after_digest` (digest written, baseline not yet), and the first `after_pin` inside a transaction that superseded a dead pin."""
+        cases = [("after_pin", 1, False), ("after_digest", 1, False), ("after_pin", 1, True)]
+        for stage, nth, supersede in cases:
+            name = "%s-%d%s" % (stage, nth, "-supersede" if supersede else "")
+            d = str(tmp_path / ("between-" + name))
+            ws.init_store(d, BIND, B, OWNER).close()
+            p = spawn_pause(d, 7, stage, nth, supersede)
+            assert p.stdout.readline().strip() == "READY", p.stderr.read()[-800:]
+            out, sup_in_txn, sup_before = pause_and_kill(p, stage)
+            reps, refused = replies_of(out)
+            con = sqlite3.connect(os.path.join(d, "signing.sqlite"))
+            stored = {r[0] for r in con.execute("SELECT digest FROM digests")}
+            sup_after = con.execute("SELECT COUNT(*) FROM superseded").fetchone()[0]
+            con.close()
+            assert stored == set(reps), "%s: the request killed inside its transaction left %d record(s) (a signing committed in pieces)" % (name, len(stored - set(reps)))
+            assert sup_after == sup_before, "%s: a supersede of the killed request survived it (%d -> %d)" % (name, sup_before, sup_after)
+            if supersede:
+                assert sup_in_txn == sup_before + 1, "%s: the paused transaction superseded nothing: the case is vacuous" % name
+            bad = violations(d, reps, 7, len(reps) + len(refused) + 1)
+>           assert bad == [], "%s: %s" % (name, bad)
+E           AssertionError: after_pin-1-supersede: ['I3 a stored digest was never requested: 0x5bc8f3c684']
+E           assert ['I3 a stored...0x5bc8f3c684'] == []
+E             
+E             Left contains one more item: 'I3 a stored digest was never requested: 0x5bc8f3c684'
+E             Use -v to get more diff
+
+tests/test_witness_state_kill.py:315: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_witness_state_kill.py::test_kill_between_the_signing_statements_leaves_a_whole_record
+1 failed, 4 deselected in 0.54s

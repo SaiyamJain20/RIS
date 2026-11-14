@@ -1,0 +1,13 @@
+#!/bin/bash
+# proxy-2 S2-0025 step 2: behaviour-neutral proof on the final working-tree bytes (repo root). Each command's exit is recorded.
+R=/home/saiyamjain/Desktop/RIS/Project; T=/home/saiyamjain/.claude/jobs/aed51961/tmp/p2/t2; O=$T/out/neutral; mkdir -p $O
+cd $R
+export PATH="$HOME/.foundry/bin:$PATH" HMBC_FOUNDRY_DIR="$HOME/.foundry/bin" HMBC_TEST_PORT_RANGE=19545-19599 PYTHONDONTWRITEBYTECODE=1 TMPDIR=$T/tmp
+sha256sum protocol/hmbc_protocol/witness_state.py protocol/tests/state_kill_child.py protocol/tests/test_witness_state_kill.py protocol/tools/run_state_kill_mutants.py > $O/hashes-at-start.txt
+.venv/bin/python -m pytest protocol/tests/test_witness_state.py protocol/tests/test_witness_state_cli.py protocol/tests/test_witness_state_lock.py protocol/tests/test_witness_state_hot_journal.py protocol/tests/test_witness_state_kill.py -c protocol/pytest.ini --rootdir protocol -p no:cacheprovider -rs -q > $O/state-tests.txt 2>&1; echo "state-tests exit=$?" >> $O/exits.txt
+.venv/bin/python -m pytest protocol/tests/test_witness_service.py protocol/tests/test_witness_service_decision.py protocol/tests/test_witness_service_governance.py protocol/tests/test_witness_service_receipt.py protocol/tests/test_witness_service_sequence_bounds.py protocol/tests/test_faulty_witness.py protocol/tests/test_witness_main.py protocol/tests/test_mutant_tree.py protocol/tests/test_mutant_tree_live.py protocol/tests/test_witness_pool.py protocol/tests/test_witness_pool_driver.py protocol/tests/test_witness_process_state_refusals.py protocol/tests/test_witness_process_transport.py protocol/tests/test_witness_process_transport_live.py -c protocol/pytest.ini --rootdir protocol -p no:cacheprovider -rs -q > $O/witness-pool-tests.txt 2>&1; echo "witness-pool-tests exit=$?" >> $O/exits.txt
+.venv/bin/python -B -I protocol/tools/run_state_mutants.py > $O/run_state_mutants.txt 2>&1; echo "run_state_mutants exit=$?" >> $O/exits.txt
+.venv/bin/python -B -I protocol/tools/run_state_kill_mutants.py > $O/run_state_kill_mutants.txt 2>&1; echo "run_state_kill_mutants exit=$?" >> $O/exits.txt
+.venv/bin/python -B -I protocol/tools/run_mutant_tree_mutants.py > $O/run_mutant_tree_mutants.txt 2>&1; echo "run_mutant_tree_mutants exit=$?" >> $O/exits.txt
+sha256sum protocol/hmbc_protocol/witness_state.py protocol/tests/state_kill_child.py protocol/tests/test_witness_state_kill.py protocol/tools/run_state_kill_mutants.py > $O/hashes-at-end.txt
+echo NEUTRALDONE >> $O/exits.txt

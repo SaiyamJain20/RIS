@@ -1,0 +1,45 @@
+"""proxy-2 S2-0025 trial driver (scratch; copied into the evidence directory as .py.txt). Runs ONE pytest node id N times in a fresh minimal copy of a protocol tree,
+laid out exactly like tools/run_state_kill_mutants.py does, with witness_state.py either unmutated (control) or with that runner's own K1 edits (k1).
+usage: python -I k1_trials.py <protocol_dir> <control|k1> <n> <nodeid> <out_json>"""
+import importlib.util, json, os, re, shutil, subprocess, sys, tempfile, time
+
+proto, mode, n, nodeid, out = sys.argv[1], sys.argv[2], int(sys.argv[3]), sys.argv[4], sys.argv[5]
+spec = importlib.util.spec_from_file_location("rk", os.path.join(proto, "tools", "run_state_kill_mutants.py"))
+rk = importlib.util.module_from_spec(spec); spec.loader.exec_module(rk)
+assert os.path.samefile(rk.PROTO, proto)
+if mode == "k1":
+    name, edits = rk.M[0]
+    assert name.startswith("K1 "), name
+    text = rk.mutate(name, edits)
+    assert text is not None and text != rk.SRC
+elif mode == "control":
+    text = rk.SRC
+else:
+    sys.exit("mode must be control or k1")
+d = tempfile.mkdtemp(prefix="s2-0025-%s-" % mode)
+runs = []
+try:
+    p = os.path.join(d, "protocol")
+    for sub in ("hmbc_protocol", "tests", "testtools", os.path.join("f0", "vectors"), os.path.join("tests", "fixtures")):
+        os.makedirs(os.path.join(p, sub), exist_ok=True)
+    for rel in rk.FILES:
+        shutil.copy(os.path.join(proto, rel), os.path.join(p, rel))
+    with open(os.path.join(p, "hmbc_protocol", "witness_state.py"), "w") as f:
+        f.write(text)
+    env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
+    for i in range(n):
+        t0 = time.monotonic()
+        r = subprocess.run([sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider", nodeid], cwd=p, capture_output=True, text=True, timeout=600, env=env)
+        last = (r.stdout.strip().splitlines() or [""])[-1]
+        m = re.search(r"(\d+) failed", last)
+        status = "pass" if r.returncode == 0 else ("fail" if r.returncode == 1 and m else "crash")
+        msg = [ln for ln in r.stdout.splitlines() if ln.startswith("E  ")][:2]
+        runs.append({"run": i + 1, "exit": r.returncode, "status": status, "last": last, "first_E_lines": msg, "secs": round(time.monotonic() - t0, 2)})
+        print(i + 1, status, last, flush=True)
+finally:
+    shutil.rmtree(d, ignore_errors=True)
+summary = {"mode": mode, "nodeid": nodeid, "protocol_dir": proto, "witness_state_sha256": __import__("hashlib").sha256(text.encode()).hexdigest(),
+           "n": n, "pass": sum(r["status"] == "pass" for r in runs), "fail": sum(r["status"] == "fail" for r in runs), "crash": sum(r["status"] == "crash" for r in runs),
+           "python": sys.version.split()[0], "runs": runs}
+json.dump(summary, open(out, "w"), indent=1)
+print("SUMMARY", mode, "pass=%d fail=%d crash=%d of %d" % (summary["pass"], summary["fail"], summary["crash"], n))
