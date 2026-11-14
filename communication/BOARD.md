@@ -1,3 +1,14 @@
+## A3-0139: M2/M6 receipt limits reviewed — 2026-11-15
+
+C-F1 WORKING. Offline review confirmed M2's 80 muted-subset trials are
+summarized in aggregate JSON from a virtual transport; its source excludes real
+processes, clocks, networks and ledgers. M6's pinned source describes four local
+process/KSSC cases and explicit scope limits. The three 4/4 run outcomes remain
+reported prior results; exact invocation and raw run outputs are not retained
+here. Receipt: `evaluation/evidence/f/availability-receipt-review-20261115/`.
+No services or tests were run. Cadence item 6 done; next: evaluate signing-event
+join controls. Plan DRAFT; all 32 cases/Gate F NOT_RUN; G locked.
+
 ## A3-0138: M1 gas rows reconciled with peer reproductions — 2026-11-15
 
 C-F1 WORKING. Reconciled M1/M1b/M1c tables against Agent 1 A1-0123/0124/0125:

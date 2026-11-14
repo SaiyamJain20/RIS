@@ -77,6 +77,16 @@ refuted cold-storage explanation and distinguish source-consistent cost
 attribution from measured gas splits. Details and hashes are in
 [the gas reconciliation receipt](../evidence/f/gas-peer-reconciliation-20261115/README.md).
 
+The sixth slice reviewed M2's retained aggregate JSON and sweep source, plus the
+M6 pinned process-test source. M2 summarizes 80 muted-subset trials using a
+virtual transport; its source explicitly excludes real processes, clocks,
+networks and ledgers. M6 source contains four local process/KSSC test cases and
+states limits for host separation, power loss, consensus, startup readiness,
+other message kinds and load. The existing report records three runs with 4/4
+passed each, but their exact invocation and raw output files are not in this
+checkout. Those are prior reported runs, not rerun or independently auditable
+here. See [the M2/M6 receipt review](../evidence/f/availability-receipt-review-20261115/README.md).
+
 ## 1. Question and design
 RQ2: which E guarantees survive Byzantine operators with q-of-n application witnesses
 (n=4, q=3, f=1), assuming safe ledgers and a trusted key worker? The witness layer distributes
@@ -261,7 +271,7 @@ These are prior measurements unless marked fresh. No row is an integrated F resu
 |---|---|---|
 | Fixed-slot quorum agreement; extension result in a finite model | [TLC logs, counts, controls and model hashes](../evidence/f/decision-quorum-tlc-20261113/README.md) | no runtime pin deaths, ledger consensus or liveness proof |
 | Pool certificate filtering and potential agreement hazards; tested reconstruction result | [M3/M5](../evidence/f/measurements-20261114/README.md), [exact-source M5 rerun](../evidence/f/pool-sweep-20261115/README.md) | M5 honest behaviour is a model; f=2 hazards are potential states, not realized double certificates |
-| One/two unavailable witness boundary; tested reconstruction result | [M2 virtual transport and M6 prior real-process runs](../evidence/f/measurements-20261114/README.md) | M6 has three local repetitions; no real-network latency or general liveness estimate |
+| One/two unavailable witness boundary; tested reconstruction result plus prior reported local process runs | [M2/M6 measurements](../evidence/f/measurements-20261114/README.md), [source and receipt review](../evidence/f/availability-receipt-review-20261115/README.md) | M2 stores aggregate rather than per-trial output; M6 run stdout and exact invocation are not retained; no real-network latency or general liveness estimate |
 | Signature and governance gas overhead; tested reconstruction result with peer reproduction reported | [M1/M1b/M1c measurements](../evidence/f/measurements-20261114/README.md), [A1-0123/0124/0125 reconciliation](../evidence/f/gas-peer-reconciliation-20261115/README.md) | single deterministic fixture calls; peer raw logs not retained here; no production fee or throughput estimate |
 | K1 sensitivity; deliberate mutation result | [A3-0122 signing-kill review](../evidence/reviews/a2-0086-signing-kill-20261113/README.md) | 29/40 detections and 40/40 control; does not measure corruption probability |
 | New K1 candidate; deliberate mutation result | [S2-0025 reproduced by agent 3](../evidence/reviews/proxy-k1-20261114/README.md) | new blocking test: 40/40 detections and 40/40 controls; isolated candidate acceptance, not an execution ACK |

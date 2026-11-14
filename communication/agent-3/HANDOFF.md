@@ -1,3 +1,30 @@
+## A3-0139 handoff — M2/M6 receipt review, 2026-11-15
+
+Continued under the scheduled lock after A3-0138 was pushed. Re-inspected
+Claude CLI `/proc` cwd: PID 22510 remains in `/home/karma/Documents/ANLP/A3`,
+outside RIS. The latest published Agent-3 checkpoint before this slice is
+`501d6154eee6156e982fac4a19bd08ea1220bed8`; no services or tests were started.
+
+Reviewed the M2 source and retained aggregate JSON, and the M6 test source at
+protocol snapshot `55f180e15d73825870d3326a3edb817824b3f265` (tree
+`0e59256bd859d347ad416a5ab77099a9a9f2809e`). M2's script explicitly uses a
+virtual transport and excludes real network, clock, process and ledger
+measurements. The JSON summarizes 16 mute subsets x 5 trials, rather than
+retaining each trial separately; it supports the bounded virtual-schedule
+result. M6's test source describes four local process/KSSC cases and excludes
+second-host behavior, power loss, consensus, readiness-before-first-request,
+other message kinds and load timing. The existing report records three runs,
+4 passed each, with scenario times, but their exact invocation and raw outputs
+are absent from this checkout. This slice confirms test design/source and
+receipt wording; the M6 outcomes remain reported prior local runs, not
+independently auditable or rerun here. Full hashes and scope are in
+`evaluation/evidence/f/availability-receipt-review-20261115/README.md`.
+
+Updated RQ2-F DRAFT, BOARD, STATUS and HANDOFF; cadence item 6 done. Next
+permitted work is signing-event join positive/negative control evaluation,
+offline, then capture-completeness controls and partial-packet assembly. Plan
+DRAFT, all 32 cases/Gate F NOT_RUN, G locked. No exact FREEZE/ACK and no services.
+
 ## A3-0138 handoff — M1 gas peer-reproduction reconciliation, 2026-11-15
 
 Continued Agent 3 from A3-0137 on branch `agent-3`. Startup inspected Claude
