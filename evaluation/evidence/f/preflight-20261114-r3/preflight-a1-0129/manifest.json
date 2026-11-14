@@ -1,0 +1,810 @@
+{
+  "schemaVersion": "hmbc-f-preflight/v1",
+  "runId": "preflight-a1-0129",
+  "rq": "F",
+  "profile": "repaired-f",
+  "executionMode": "f-preflight-only",
+  "status": "BLOCKED",
+  "executionAuthorized": false,
+  "servicesStarted": [],
+  "planPath": "/home/karma/Documents/RIS/evaluation/evidence/f/execution-plan-draft-20261114/plan-draft.json",
+  "planSha256": "8e70aa05e3b6df7db4433fa8b96187cf09501729284c9fca9da3eefd85443205",
+  "planStatus": "DRAFT",
+  "stage1Pins": {
+    "status": "BLOCKED",
+    "caseCoverage": {
+      "status": "MATCH",
+      "expectedCount": 32,
+      "plannedCount": 32,
+      "missing": [],
+      "extra": [],
+      "duplicates": [],
+      "coverageCsvSha256": "fc090df2f565b2c3f1766f720255f77f4c3fdcc913a3d858f18bab924396985d",
+      "matrixCaseCount": 32,
+      "coverageCasesNotInMatrix": [],
+      "planCasesSha256": "1f6ffc21a2a4cb62e78a13c4a1b264ab00a6ac5d033222b7b567040c54d76b8c"
+    },
+    "pinChecks": {
+      "ledgerCommit": {
+        "requestedLength": 40,
+        "resolvedCommit": "85c59f588de58a8ff5e87b9fe6f630c9d8c43642",
+        "resolvedTree": "36a868305d67c8f546e6bde558ceb8e356962819",
+        "status": "EXACT_MATCH",
+        "exactPin": true
+      },
+      "protocolCommit": {
+        "requestedLength": 40,
+        "resolvedCommit": "55f180e15d73825870d3326a3edb817824b3f265",
+        "resolvedTree": "0e59256bd859d347ad416a5ab77099a9a9f2809e",
+        "status": "EXACT_MATCH",
+        "exactPin": true
+      },
+      "interfaceFreeze": {
+        "path": "interfaces/v2/FREEZE.json",
+        "requested": "7bb1d243d546dcc6ab76dea3edcb23a74240bd96fe274ae3ca0ff56f6aff83cd",
+        "requestedLength": 64,
+        "actualSha256": "7bb1d243d546dcc6ab76dea3edcb23a74240bd96fe274ae3ca0ff56f6aff83cd",
+        "status": "EXACT_MATCH",
+        "exactPin": true
+      },
+      "interfaceV21Freeze": {
+        "path": "interfaces/v2.1/FREEZE.json",
+        "requested": "232b84bb7f997b687a5dc671d79ab6ecdd592d17cd38e531d8460d33ed81660a",
+        "requestedLength": 64,
+        "actualSha256": "232b84bb7f997b687a5dc671d79ab6ecdd592d17cd38e531d8460d33ed81660a",
+        "status": "EXACT_MATCH",
+        "exactPin": true
+      },
+      "interfaceV21Schema": {
+        "path": "interfaces/v2.1/hmbc.schema.json",
+        "requested": "d43c3a9a4cbb10214135afb767a2adc109da462f88bd11a81a8c8955d44fd1f3",
+        "requestedLength": 64,
+        "actualSha256": "d43c3a9a4cbb10214135afb767a2adc109da462f88bd11a81a8c8955d44fd1f3",
+        "status": "EXACT_MATCH",
+        "exactPin": true
+      },
+      "fMatrix": {
+        "path": "evaluation/evidence/reviews/f0-revision8-20261104/f_matrix.json",
+        "requested": "2230daf3da1eda11e7fd51a0c84f846711c2e1f1b3b2b5a82c33d3c262411b64",
+        "requestedLength": 64,
+        "actualSha256": "2230daf3da1eda11e7fd51a0c84f846711c2e1f1b3b2b5a82c33d3c262411b64",
+        "status": "EXACT_MATCH",
+        "exactPin": true
+      },
+      "coverageMap": {
+        "path": "evaluation/evidence/f/case-coverage-map-20261114/coverage.csv",
+        "requested": "fc090df2f565b2c3f1766f720255f77f4c3fdcc913a3d858f18bab924396985d",
+        "requestedLength": 64,
+        "actualSha256": "fc090df2f565b2c3f1766f720255f77f4c3fdcc913a3d858f18bab924396985d",
+        "status": "EXACT_MATCH",
+        "exactPin": true
+      },
+      "toolchainManifest": {
+        "path": "evaluation/toolchain.json",
+        "requested": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746",
+        "requestedLength": 64,
+        "actualSha256": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746",
+        "status": "EXACT_MATCH",
+        "exactPin": true
+      },
+      "tlcJar": {
+        "status": "EXACT_MATCH",
+        "requested": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+        "requestedLength": 64,
+        "actualSha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+        "exactPin": true
+      },
+      "ledgerManifest": {
+        "path": "ledger/evidence/source-manifest.sha256",
+        "sourceCommit": "85c59f588de58a8ff5e87b9fe6f630c9d8c43642",
+        "requested": "70f541cd63bb8e8c4c0c1202dda0e5611ab15fde6d1ab4b8a0451497b6fb08dd",
+        "requestedLength": 64,
+        "actualSha256": "70f541cd63bb8e8c4c0c1202dda0e5611ab15fde6d1ab4b8a0451497b6fb08dd",
+        "status": "EXACT_MATCH",
+        "exactPin": true
+      }
+    },
+    "ownerCandidates": {
+      "ledger": {
+        "requested": "85c59f588de58a8ff5e87b9fe6f630c9d8c43642",
+        "commit": "85c59f588de58a8ff5e87b9fe6f630c9d8c43642",
+        "tree": "36a868305d67c8f546e6bde558ceb8e356962819",
+        "remoteRef": "origin/agent-1",
+        "remoteRefExists": true,
+        "isAncestorOfOwnerHead": true,
+        "available": true,
+        "finalPin": false
+      },
+      "protocol": {
+        "requested": "55f180e15d73825870d3326a3edb817824b3f265",
+        "commit": "55f180e15d73825870d3326a3edb817824b3f265",
+        "tree": "0e59256bd859d347ad416a5ab77099a9a9f2809e",
+        "remoteRef": "origin/agent-2",
+        "remoteRefExists": true,
+        "isAncestorOfOwnerHead": true,
+        "available": true,
+        "finalPin": false
+      }
+    },
+    "toolchain": {
+      "pythonVersion": "3.13.13",
+      "expectedPythonVersion": "3.13.13",
+      "pythonVersionMatches": true,
+      "rootLock": {
+        "path": "uv.lock",
+        "expectedSha256": "1fb4777a5d4078434af8e7fe4a88f2f3afbe1d8f65d30e8a182999d7a7a29cbe",
+        "observedSha256": "1fb4777a5d4078434af8e7fe4a88f2f3afbe1d8f65d30e8a182999d7a7a29cbe",
+        "hashMatches": true
+      },
+      "binaries": {
+        "forge": {
+          "path": "/home/karma/.local/share/hmbc-tools/foundry-1.8.5/forge",
+          "exists": true,
+          "expectedSha256": "06c477aee83d0996e57aa92b0841fdf06382cb172fd69bbb88920bb0054dfd7f",
+          "observedSha256": "06c477aee83d0996e57aa92b0841fdf06382cb172fd69bbb88920bb0054dfd7f",
+          "hashMatches": true,
+          "versionCommandExitCode": 0,
+          "versionOutput": "forge Version: 1.8.5\nCommit SHA: 51a52c59cffd940f76eddd0b4bb1791aa4b5ac7f\nBuild Timestamp: 2026-10-05T17:18:54.332175693Z (1791220734)\nBuild Profile: dist"
+        },
+        "anvil": {
+          "path": "/home/karma/.local/share/hmbc-tools/foundry-1.8.5/anvil",
+          "exists": true,
+          "expectedSha256": "00f97668e1ae0fcca118fd7d2d1b6d25c0496447a523ca6bc2dfd10958c99604",
+          "observedSha256": "00f97668e1ae0fcca118fd7d2d1b6d25c0496447a523ca6bc2dfd10958c99604",
+          "hashMatches": true,
+          "versionCommandExitCode": 0,
+          "versionOutput": "anvil Version: 1.8.5\nCommit SHA: 51a52c59cffd940f76eddd0b4bb1791aa4b5ac7f\nBuild Timestamp: 2026-10-05T17:18:54.332175693Z (1791220734)\nBuild Profile: dist"
+        },
+        "cast": {
+          "path": "/home/karma/.local/share/hmbc-tools/foundry-1.8.5/cast",
+          "exists": true,
+          "expectedSha256": "1eb1eecfdadaad8da2173ccf0c7c0be86fe237b0a267042a40d7ca12d0fa2af7",
+          "observedSha256": "1eb1eecfdadaad8da2173ccf0c7c0be86fe237b0a267042a40d7ca12d0fa2af7",
+          "hashMatches": true,
+          "versionCommandExitCode": 0,
+          "versionOutput": "cast Version: 1.8.5\nCommit SHA: 51a52c59cffd940f76eddd0b4bb1791aa4b5ac7f\nBuild Timestamp: 2026-10-05T17:18:54.332175693Z (1791220734)\nBuild Profile: dist"
+        },
+        "solc": {
+          "path": "/home/karma/.local/share/svm/0.8.37/solc-0.8.37",
+          "exists": true,
+          "expectedSha256": "5de843c2c93563cc66425c99a4fb13fdbf32b4c4ae07469480faaf126e14404a",
+          "observedSha256": "5de843c2c93563cc66425c99a4fb13fdbf32b4c4ae07469480faaf126e14404a",
+          "hashMatches": true,
+          "versionCommandExitCode": 0,
+          "versionOutput": "solc, the solidity compiler commandline interface\nVersion: 0.8.37+commit.f401782d.Linux.g++"
+        }
+      },
+      "tlc": {
+        "path": "/home/karma/.local/share/hmbc-tools/tlaplus-v1.7.4/tla2tools.jar",
+        "expectedSha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+        "observedSha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+        "hashMatches": true,
+        "versionClaim": "TLC 2.19 (pinned prior evidence)"
+      },
+      "tlcPlanSha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+      "tlcPlanPinMatches": true,
+      "rootToolchainTlcStatus": "NOT INSTALLED: F/G locked",
+      "tlcScopeNote": "F-only TLC is pinned separately; the frozen root/E toolchain excludes F/G tools"
+    }
+  },
+  "stage2SourceBracket": {
+    "status": "RECORDED",
+    "sourceBracket": {
+      "head": "702b3c82b154d250c86a3cbf390c15060413d602",
+      "branch": "agent-3",
+      "dirtyPaths": [
+        "M communication/BOARD.md",
+        " M communication/agent-3/HANDOFF.md",
+        " M communication/agent-3/STATUS.md",
+        " M evaluation/README.md",
+        " M evaluation/evidence/f/execution-plan-draft-20261114/README.md",
+        " M evaluation/evidence/f/execution-plan-draft-20261114/plan-draft.json",
+        " M evaluation/reports/RQ2-F-DRAFT.md",
+        " M evaluation/run.py",
+        "?? evaluation/evidence/f/preflight-20261114-r2/README.md",
+        "?? evaluation/evidence/f/preflight-20261114-r2/focused-tests.exit",
+        "?? evaluation/evidence/f/preflight-20261114-r2/focused-tests.txt",
+        "?? evaluation/evidence/f/preflight-20261114-r2/full-evaluator.exit",
+        "?? evaluation/evidence/f/preflight-20261114-r2/full-evaluator.txt",
+        "?? evaluation/evidence/f/preflight-20261114-r2/preflight-command.txt",
+        "?? evaluation/evidence/f/preflight-20261114-r2/preflight.exit",
+        "?? evaluation/evidence/f/preflight-20261114-r2/preflight/manifest.json",
+        "?? evaluation/evidence/f/preflight-20261114-r3/focused-tests.txt",
+        "?? evaluation/evidence/f/preflight-20261114-r3/full-evaluator.txt",
+        "?? evaluation/evidence/f/preflight-20261114-r3/preflight-command.txt",
+        "?? evaluation/evidence/f/preflight-20261114-r3/preflight-setup-error.txt",
+        "?? evaluation/evidence/f/preflight-20261114/README.md",
+        "?? evaluation/evidence/f/preflight-20261114/manifest.json",
+        "?? evaluation/f_preflight.py",
+        "?? evaluation/tests/test_f_preflight.py"
+      ],
+      "agent3SourceFiles": {
+        "AGENTS.md": "1b9384ce2866832bac0c37c5975a717237a7e85989305f77076ca237daac0425",
+        "PLAN.md": "1c28d510fcc893f7951cad7578370ac98d04c61958040a0e28eaab5bbb6e9c3d",
+        "README.md": "1f7c08150403a6b015740162dce50d9ab0d316c11f9d56199d56bf342e66717f",
+        "SPEC.md": "2e1a97989e6c9b0b0a4e9fc38b216d02b6d01eea51a11d737bea1ae83e82abde",
+        "communication/BOARD.md": "d948b4a712c693ba4216b004e3b65e795def6f864deb16ba79b102d8133e5fd2",
+        "communication/COMMON_AGENT_CONTEXT.md": "d3500e0de859eb7df51cd941c4aeca6aab5930eaf3d7a25622c938b16faf5fea",
+        "communication/DECISIONS.md": "f0b6fbbab4bf8b5e315980b4c30a6c0af2755a899adf34fe10e0ffb181f8747f",
+        "communication/GATES.md": "dd12e165a409bdec9af8bde6cd4b604a88a1400232eef1659d980185fcaa9b2c",
+        "communication/PROTOCOL.md": "341854e476f936d498cd0b34f95d813de0268088c2d4233df87c1672f9e84249",
+        "communication/agent-1/ROLE.md": "5b95d0f631404cdaa0aaa67646ac2544f50d7d7d41d4ce804915d78765b25e88",
+        "communication/agent-2/ROLE.md": "56083377c6b087cd3614408467779d0c7cff4dd1eb260bdee7ee0d84b742ec91",
+        "communication/agent-3/ROLE.md": "d866e4df117a044af1ccde0ee473b86dfeb62b0297bc74b1fa27e0d36c7f10c4",
+        "communication/agent-3/outbox/0001-ack-distributed-startup.md": "811985266f1e79736b3d063c1e597e9d9eeee12aa038fee1a1ef11b0c0010ffa",
+        "communication/agent-3/outbox/0002-rfc-e0-semantics-toolchain-receipt.md": "fcc22f394cdbe1492be2d01bafda161b2f0ecf80a3be92740b7e6c031ae5c9db",
+        "evaluation/README.md": "09f7046bd38e34037d49808cb0ad9567b2f19f6186090133d56024a926047133",
+        "evaluation/access_artifacts.py": "d9994a6b96c18162df6fee8765a669509554505939db2c90704b5440ad7119ed",
+        "evaluation/access_execution.py": "5f28ebd6eb991b9f082d46c62da2e4f5d9a795dfc40649588a0d902372886f6f",
+        "evaluation/audit_stress.py": "075c5face0ccb794a1eda16dfb262c2021eef24d2c93ce2809ba007a36b1912c",
+        "evaluation/barrier_stress.py": "edd619ac1e41cfd496f9565f2aba37015e84311bdd4318b4e669181eee5e9d3f",
+        "evaluation/binding_context_v2.py": "e7788c506430ca412c6fd49515ae2834c327a9b9a711349dada3a3f86c6a3f49",
+        "evaluation/bootstrap.py": "7b60f94a867f71038fdb9936282b23121fce9728789662a60b3dad4683e9c5a0",
+        "evaluation/bootstrap_execution.py": "47dd62bab9e0a8de1b949bc6eafa3b85d2e662c25394a8e22a905aee5de15947",
+        "evaluation/certificates_v2.py": "c94453a8dbd260ad20039933a663c5686a259fd0e967a3dd45eb8abb75e1e04b",
+        "evaluation/chain.py": "fad06c613b198e1080e5c79a0d5247659b5d0cc130e2139d7aa859a864167271",
+        "evaluation/check_schema_vectors.py": "4cf3ee57a6bbba8c2bc99103fa4844b788149a87b2792dfbcc5c70bd06e78e05",
+        "evaluation/checkpoint_history_v2.py": "2853233c50bb609fd9d22b6548b12c9a02dc127d2919871e407f4f78a0d1d6d0",
+        "evaluation/checkpoint_rpc_v2.py": "832195f053da11d30dbf617d20e89d504f4dcb0e99897df1c53279a03424f5ed",
+        "evaluation/checkpoint_state_v2.py": "3014c1200d2430a019abe1b374a07b57826db582c53e3b9a0346b7d0d0ef54cc",
+        "evaluation/destination_stress.py": "bc5cc0f4330b6bfe57d059945e9c7a22a59443fd15c52e0abdede8b66666b2cd",
+        "evaluation/duplicate_outcome.py": "c6171aa928bf283d309ddad02a7d269c46b818133381e074b67449a4a349e496",
+        "evaluation/e0_verify.py": "077bc6d50011b06769e4c5d26c06bd1f9327a317e4869692c86fea986116427c",
+        "evaluation/e1.py": "0a25f01f000b81bcd42bf4af9fb79e647977ade512a19008b6687f27190691c2",
+        "evaluation/e2.py": "ab37fb135a290361a4ba25cfa32b9ea39b4062cad6ef50cb4a0ddd7b49f6fae7",
+        "evaluation/e_gate.py": "1dfac110ae3664351c9d3efb1aaaf153900c437a99e5977f018eb1c807d46130",
+        "evaluation/evidence/assumptions.csv": "98047dda31877f286175cfcbe66fa0ada10bef452cfd6c15f42f0dac430ad39b",
+        "evaluation/evidence/source-map.csv": "25337ee2846b13791bf971281d885f6300a6ce1407f156ddeb4e5cb85f54a07c",
+        "evaluation/evm.py": "78189e24aae585e7bc4bfb573e9ab23bf7ec55b86df96890f2af17b7a8e157e8",
+        "evaluation/expired_retry.py": "b9c4dc44a326b136aa2f02dd9bba28037bc5f40ed2c48dbf485c1dad4dbb1246",
+        "evaluation/export_snapshot_v2.py": "cf18e89556866248177be842b1928548e29ccea3b77a2048a2e5a60374b11389",
+        "evaluation/f_preflight.py": "376c058e4a724be8f3fb5c23e3f2ddc76daa92708ca12fed0dfe6e582f03311a",
+        "evaluation/fixtures/e1/abi/ACSC.json": "d5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08dbf8ad9a568",
+        "evaluation/fixtures/e1/abi/KSSC.json": "391841544b43c967bd8004c95376f139baaa2dd8c553f13310accecd83e1c6e7",
+        "evaluation/fixtures/e1/abi/LSC.json": "3c9acabbb8978e6330f5878b9a979326ca22f1519300a5277cffeea3911d42de",
+        "evaluation/fixtures/e1/abi/PROVENANCE.json": "44101a25d34812db6e24e8117d5894699ba79fa9828828f011f44688a19a955f",
+        "evaluation/fixtures/e1/abi/PSC.json": "559d3f011fe7687b0a422e8f6f61c2e8f72a9a7a61c8795973da0d543a1c3fe1",
+        "evaluation/fixtures/e1/abi/RSC.json": "f0bc3732ee5646db945a68e06434cd46ba2637df04e4fe2260cf0d16bde1eebc",
+        "evaluation/fixtures/e1/abi/TMSC.json": "a6f6273c8dcff51bb8834c8fa0f354d5e9b6bb7b5d7d39ca89c5d7f9975a225d",
+        "evaluation/fixtures/e1/bootstrap-owner-sample.json": "e2b32811fa4e6ea39b3dcb1b56986b6247839f5895d06ce1ae8e01be4f552557",
+        "evaluation/fixtures/e1/bootstrap-owner-sample.provenance.json": "3794c0c43f03f47fab0ad04b573dfcc36c2f9cc6331e6d2c3b06acc8f21ef725",
+        "evaluation/fixtures/e1/cast-request-calldata.json": "7f44c767803b59a0badfe8a559ec93de05086fd2ef580361859c968026ad312e",
+        "evaluation/fixtures/f/abi/ACSC.json": "d5b66feb0f9fc992fd096dc02af783be164e483e16f6df9c6cc08dbf8ad9a568",
+        "evaluation/fixtures/f/abi/Governance.json": "d2b612599b52fb3d38c012c448a1c2e7aa16fe886ff6c306f637a2a752463222",
+        "evaluation/fixtures/f/abi/KSSC.json": "391841544b43c967bd8004c95376f139baaa2dd8c553f13310accecd83e1c6e7",
+        "evaluation/fixtures/f/abi/LSC.json": "3c9acabbb8978e6330f5878b9a979326ca22f1519300a5277cffeea3911d42de",
+        "evaluation/fixtures/f/abi/PROVENANCE.json": "a774d7380c59798fd376e59f604f0d18ae78b6d117754092e272404d5d1a944d",
+        "evaluation/fixtures/f/abi/PSC.json": "559d3f011fe7687b0a422e8f6f61c2e8f72a9a7a61c8795973da0d543a1c3fe1",
+        "evaluation/fixtures/f/abi/RSC.json": "f0bc3732ee5646db945a68e06434cd46ba2637df04e4fe2260cf0d16bde1eebc",
+        "evaluation/fixtures/f/abi/TMSC.json": "e6b76ff7ce2347f02aa46eba28be469d2ad407fefb31711bc1662be1757eb0ec",
+        "evaluation/gate.py": "23fbfae54decc6eb2b4bf219a4658478b705498e45a775e8c30835631cfa1970",
+        "evaluation/governance_history_v2.py": "7cb48e3817d1cc651f78d19dca183208443705dcdd7fae64bc8b9c29720b8bf5",
+        "evaluation/governance_rpc_v2.py": "1295b059e76e06b2a2bd5b70f5298ec3865a31285342a846599429a893413ab0",
+        "evaluation/governance_state_v2.py": "db7333f10608ba73e4435beba35b6462c1b7cb92bbf6f6a9796384aecdbfc0e0",
+        "evaluation/history_rpc_v2.py": "8a5e108b5f90fb50a9664ea22c27a06db176efbafc35fc6cbf6767bb08331d8d",
+        "evaluation/host-tools.json": "15e708d6733129e41351e77d1b98679f213247d5d68e6cedac37a1384acd04a3",
+        "evaluation/host_toolchain.py": "9a5b6b31a21ce1d4caaaef9c32d487acb4ff334d008b3014609ad276f1da78cf",
+        "evaluation/manifests.py": "e6fbe5569d1a301cfff17f923f051b44503e84befb36bc11e2e6ef0b04ad1c8a",
+        "evaluation/measurements/availability_sweep.py": "5e6ab7e7a8a0ba2e9d162dc7bc434b62aa577a7a2b9c3d18d072d2d168d668c4",
+        "evaluation/measurements/byzantine_sweep.py": "8676e59f39a14bc07907a2efb9aede1ed87d30f81753cbe61d6a99e70c1fcb41",
+        "evaluation/measurements/gas_compare.py": "93c524edc76591afb6d36811bb59f643f13fc325d982bd13bbb0dd5af1e106ad",
+        "evaluation/measurements/oracle_store_diff.py": "f5898540a49cf6c96d7b2d69c4b6af7969d11a2afc0a8c269fe55ac9a200e5d8",
+        "evaluation/models/e/README.md": "97040ff004613daccd0448dea34a8bf5706121a2c260cc26ccc7cf6fd4a859d6",
+        "evaluation/models/e/access.pv": "1ca655061e9eb6d5717a919f554a6071eefdcf71b155a7a08f863464d64f01f8",
+        "evaluation/models/e/access_mutant.pv": "1c6e1acc6346d9f3859180f76f2a7a5e679477d3a61c4a132eefa46da1775537",
+        "evaluation/models/e0/smoke.pv": "c6050442440545f3c39e5251eff87dd7835a974c7ce808913f19ffc5541883a6",
+        "evaluation/models/f/README.md": "6a3aff260c425bf93c30090d231d671f044c9feb5415cfc1a8b693d0e8f095e4",
+        "evaluation/native.py": "8ed02c0cca130cac2041ddbfd1110a66a397a2e34e866150a5b0a3e1bdd3c540",
+        "evaluation/oracles/access.py": "98ff036fcbbf92d8f561c52769f1acf788e2e7117b614b8ab9fd7c35608b61e5",
+        "evaluation/oracles/audit.py": "e8e6bc12a112e7777bb66dd884a13abda6e20e5884fb3b97193523626758313c",
+        "evaluation/oracles/barrier.py": "98061f88d70280c3fdf91da1f1c2e4cca62d538c503817b80c6155ffb95d0448",
+        "evaluation/oracles/destination.py": "794b03ad1fe81219ebc84b765665fb93cb590c8c5a8fcf2e2de1e4554fccfbcb",
+        "evaluation/oracles/faults.py": "e6856b703ec2e32b6090b42d49e30fa6ddb28bd3598d2d4a84b877f3763d99c3",
+        "evaluation/oracles/provenance.py": "9061cd42a67d492bd8e283ee6ba6700a228e3de0d0e08757515244a6fce320ff",
+        "evaluation/oracles/receipt.py": "899466372868e04df8952d7f2751caf61ab5bc2422819b14e5d68d662b49b943",
+        "evaluation/oracles/replay.py": "14a5da8b1c0f7eb23833cccafa11f0eb09f0cbb564b3959eaf25864fb9ce780c",
+        "evaluation/oracles/subject.py": "c5f41550524fa302dff5af6b5c59820a44762de2e968d9f7b9986bcdfa8ea39a",
+        "evaluation/oracles/trust.py": "e33945dbb948ee37b0cfaea79bee817cc1b799afb6d6134bec34bbe5a3258d33",
+        "evaluation/peers.py": "fecac4e60476fc864a43021e369a79acf0606caabe5d331c3c51e2728a13f778",
+        "evaluation/processes.py": "4a63d2a5b2443666fd9528c10ac22313ca77b9ca51ee67d121dc306eee7c6532",
+        "evaluation/public_observations_v2.py": "43f7d87e99ed2938ff857c3e4526d056707e6f3bc287782f771f0b512bca28f4",
+        "evaluation/receipt_history_v2.py": "1176ce0a8b4710b11e7cc0366c0930d5fe7ac684bc29e5b61c4451efcd224004",
+        "evaluation/receipt_state_v2.py": "6663e2c99cbc2cbe8419ee3ad41e7e81aee682841375003bf12af6af859a932a",
+        "evaluation/receipt_stress.py": "e924517988fbab1dc24b851ccec62a3c09204ec532e2776cd6fa4c6f18cf4aee",
+        "evaluation/recovery.py": "b50aadf193dc00417aeafee9e16d3775abd68097ced7ddb865689c736d84d411",
+        "evaluation/recovery_execution.py": "bb71c6ac57a990e0366fdad369df2900269b543653a909947d269dca65af1587",
+        "evaluation/relay_stress.py": "28d28834cc6d4104a2bf6869792c410667f3f0709ea566cec26f2c4909d14684",
+        "evaluation/reports/E0-progress.md": "deafa2e5dbf9906e678e5d97af9a3023214f02a6f6b6a3fc1a0defee827e6c49",
+        "evaluation/reports/PRESENTATION-OUTLINE.md": "2c2523a8424e07aa212021162f3913ccf9bec6f2f33182652358aea249f02bb9",
+        "evaluation/reports/RQ1-E.md": "69dabfbab9d9deeb0d94b448da6bf9b9674ce25c7c94e1b101f67c4804c89b8f",
+        "evaluation/reports/RQ2-F-DRAFT.md": "4ee4b5b3d0b475a533ddcd7773523ac9b5626247b79284f1e86a06bef515bc1c",
+        "evaluation/request_replay.py": "235e5f62aa3a83ca4170b7332db82d78beca1f0657ba2102563ce737263872ae",
+        "evaluation/rpc.py": "130c763e9f09e0f8e27094f533c121cf0d316948bef97b821731d0e1cb13fb94",
+        "evaluation/run.py": "6297dbe71a26fa376f08edfda93c24cd740f5534551be9c455fe52d743b1cb26",
+        "evaluation/scenarios/e0_cases.json": "438fa38ddcbd7edd0e49fb93cc580e5219ed05349fd677b2e386bc4669f5d50e",
+        "evaluation/scenarios/e0_supplement_cases.json": "9ccade362c5a8853d63f06a08be3134ae32cd99527ceb36fcd78c311a9246858",
+        "evaluation/scenarios/e_positive.json": "95e75f10cfdaf0b0bf5bd75ea25b521df30817f85a280a8552cc62243f8ccdda",
+        "evaluation/scenarios/f_matrix.json": "73b892ef2493aa49fbd879073d88fa78a58dc2b5a7bc7b51aabdd1b3dc5e019b",
+        "evaluation/schema.py": "3e29876907be197dcbe59142184d89cbe7cfb1ec8c446d3143950648d61598ad",
+        "evaluation/schema_v2.py": "1fb45499d8d709ed2bd949127f4edaae7da6633d9f3417e076473851a4638996",
+        "evaluation/signing_context_v2.py": "b725ddc7c8d4ab107c134b77f00f8851e4f6ecf9c87ee143a6801cfe8ad66c07",
+        "evaluation/store_snapshot_v2.py": "1859c8a3a7ca9a8a09f00bd44814878ee2b6da507551a2542dcc0e07d74fd18f",
+        "evaluation/subject_substitution.py": "b18f0e719bc0d3d94b343d1db6de2c44e9c191293264ac1b32a55d4078194acb",
+        "evaluation/tests/test_access_artifacts.py": "98f8ea5d7b3a189e2e8b2ba1d3fd6a0a65274a151e735ff8dfe8853bd16c1c3d",
+        "evaluation/tests/test_access_execution.py": "a3394c24a3baa197c842fcff805fb6b25faabe40f2b73f2833f9aa3dbd571e2f",
+        "evaluation/tests/test_access_oracle.py": "a5ae466018b0e34836114fe4564f0e3a008241e26b6319d4f4bb7a5965f6fbb3",
+        "evaluation/tests/test_audit_oracle.py": "1714486bc1204cfe479f1f1ce53cab201c56ddcec3d35551ad7f589b0a58ee87",
+        "evaluation/tests/test_audit_stress_collector.py": "23b15462d895de9e119d45d879238d68c3130d351a715a4b43a61be9743b1862",
+        "evaluation/tests/test_barrier_oracle.py": "809b12a301e8f6cae6498e04bd45ecc7c6fc43d47635148dd5488da68649bbc9",
+        "evaluation/tests/test_barrier_stress_collector.py": "075ca52000a97bd08bcbe48e923cf72cbf0b249f5d48503e5b89c570798bc498",
+        "evaluation/tests/test_binding_context_v2.py": "ab98c73815e2ea77cb3923c544a638ba41da80d4e22ab46c907d0b246ff8d72e",
+        "evaluation/tests/test_bootstrap.py": "119c09cc108c842c90649266afcf9af41143ea0a0cf51e61a3d4f2d4dc95113a",
+        "evaluation/tests/test_bootstrap_execution.py": "23f47757b67bea1c428607051cdef00adb47c6243fedcb82e01e81b860de2d67",
+        "evaluation/tests/test_boundary_schemas.py": "fccf5bf06b06ba23b5f961879a4ac289ba173696715ab6989b47b1ee285fbda3",
+        "evaluation/tests/test_cast_checkpoint.py": "6c058dc254c19a365e5a062ad4f614b6cc602694ba77e3f56fd2d080cf7a23e2",
+        "evaluation/tests/test_certificates_v2.py": "a034d15b27be2e60b318608b1c34f1eca48890c05a9024cb63427cf306170320",
+        "evaluation/tests/test_chain.py": "c68fd69a481cdde4d134fda17619f5e6166e3143a6f65e97eae111cd2c72dc57",
+        "evaluation/tests/test_checkpoint_history_v2.py": "4e8f3386ac0fbd99180d9ba4fa5fe73c7705c92bcebeec733ae148fb19fa9f57",
+        "evaluation/tests/test_checkpoint_rpc_v2.py": "c6ab2558aea305471988e51fe008b9a74a34b00315f811c0110cef531cf63b27",
+        "evaluation/tests/test_checkpoint_state_v2.py": "aed558cfae380789d638614a186a63d847b178a82a8bcee8469085ef32775042",
+        "evaluation/tests/test_crash_transport.py": "aacdc1b1c17eb615e5c46c0ddc7d44edf5cfca8093e53f7a8f4421d2bd764c49",
+        "evaluation/tests/test_deployments.py": "2dd4a624d7ff967ab01e69a6d18fff6ccf5e5109c3c373b7a8d5abb357939c0b",
+        "evaluation/tests/test_destination_oracle.py": "35c45de503f77ee8242195d732ed28303aadc58652aa057c2c63bff1c0779844",
+        "evaluation/tests/test_destination_stress_collector.py": "55e6a4c876e5a9545c7242b90b8164e5da0e62d6b94ac14fa85ab4c821242130",
+        "evaluation/tests/test_duplicate_outcome.py": "9571165dea7095b5e9a40a64f58cb3736723b01579b181df6fae5a43eef6e999",
+        "evaluation/tests/test_e1_freeze.py": "42a9eda42d366484418abd21d27b02252b178efedfe12f39140bfa1bd1b25a9f",
+        "evaluation/tests/test_e1_ports.py": "4849c9e2054c4e300cd8ddfa6e042c674411243185a0c3c58d3593df32289f19",
+        "evaluation/tests/test_e2_audit_plan.py": "c572ad7c11e49635ac24f7de897e6631c767d0882985e4dff9af29832ecff3b5",
+        "evaluation/tests/test_e2_barrier_plan.py": "847b510064cd7952c12c31c80d8f4c005e815f09facf3fb11850f1ca2bdc95ec",
+        "evaluation/tests/test_e2_destination_plan.py": "f02df40dccbc1534c010926c4d3ea06572e94d80541a5d11e2aceba15a07d571",
+        "evaluation/tests/test_e2_freeze.py": "7d51f40aa630f234ace0a8d6cc5abdfa911e4cff204746a26ab4bc0701a963d6",
+        "evaluation/tests/test_e2_receipt_plan.py": "7d44794e2e2f8387f5ff27042ee42379ebe2ff48d7a384ef53ec29c9a329ad57",
+        "evaluation/tests/test_e2_relay_plan.py": "dc5d18a673704dd5a0140dd05ef75c9a736836f7ed1c76b71d2390d7d5fa404b",
+        "evaluation/tests/test_e2_row_runner.py": "9761500deedf9d47900263a507d3fa4e1daaf730d9128b78b57a9625331e7427",
+        "evaluation/tests/test_e2_subject_plan.py": "779c419c0ddb63ca8f22ae29fc7919ce07ba2aad426d3533bf9dbf4b4e616af5",
+        "evaluation/tests/test_e2_trust_plan.py": "50b67465d89d15818ca1ab6534cb51431e1455874440779ba5dc4e457d1c229e",
+        "evaluation/tests/test_e_correspondence.py": "32d4091b37473443924fa15b9bbfe8819b0303075008d9aec4aae90f5de30a9a",
+        "evaluation/tests/test_e_gate.py": "21806d6da8f32c239ca84e37e130330e04caad8cdf2ac164f098facbde273e57",
+        "evaluation/tests/test_e_gate_tools.py": "841d007deea6646a858c0add4c6cf48cdbcc64e5ddf91541068efea81da32c1e",
+        "evaluation/tests/test_evm_codec.py": "ee6db9854a686ce4f728977c0d08c37c1d04e28215fb61e1968ba68c55c5919f",
+        "evaluation/tests/test_expired_retry.py": "b6d5f55e1824d3a3b1ae63a9720c16d3064f63f5d69a57bf2dde227a43548570",
+        "evaluation/tests/test_export_snapshot_v2.py": "2238db61df81017ce2fcf2b18d646ff8867cb6b84cf24a128f1203e004f52f2b",
+        "evaluation/tests/test_f_preflight.py": "8884b3b9bba0c6967c0bf53a3c4aff6fe43c32aa3718b9fa5228a7bf1bf00fd5",
+        "evaluation/tests/test_fault_oracle.py": "4fb8d05caa36198f90142317db4eaaebbd6c9616195180cd5a88d7ed403732dd",
+        "evaluation/tests/test_gate.py": "e74ed784f312cb59d986359b6943d111bd0b1548a075bb18d3ab44857cfc4d79",
+        "evaluation/tests/test_governance_history_v2.py": "dc3cd2cc8aacc81bbebedf387cb59468d90c83d5f2bf331068fd5f29a1ca7a76",
+        "evaluation/tests/test_governance_rpc_v2.py": "5fcb3a1ae4e31d296c031539c46cb45d048c4a0728cdc5058e3bcf07b1f6e0b7",
+        "evaluation/tests/test_governance_state_v2.py": "4ed924a4c9a786fff0a58f6d645bdacb89d38fa5a007655c189548d43919a289",
+        "evaluation/tests/test_history_rpc_v2.py": "fc393b72574dca94788715a9c6707ea098c9dae743c759c7d1a3d468ad677de3",
+        "evaluation/tests/test_host_toolchain.py": "440795e0075630ed88c3c15ad49e9590b5c23d255a160459197c0e30a1477691",
+        "evaluation/tests/test_manifests.py": "687ca16ef9c9851a2f8e222b83c8e1c1947c56fa167992de38b7438b72c86c1e",
+        "evaluation/tests/test_native_receipts.py": "806526e5fab56a4d14c3fd32a155a0b2c01632834f0df57be83ac48fbe19839e",
+        "evaluation/tests/test_owned_command.py": "dd180ffdfc27d8a3f0de117b5d290c5c3aebf0635f9906d1a84ab2275fd342d7",
+        "evaluation/tests/test_peers.py": "7939a9cdf398ce40e795094853b436945165717f1ac0d7ebad7b078723169c98",
+        "evaluation/tests/test_processes.py": "81d198f5607d81a328426767764eafea71bc5c26f3b7f51bbb5f05bee6f3be59",
+        "evaluation/tests/test_provenance_oracle.py": "0211a7ff73336322c9839345fa112d7f7f08ae3e24ba35483ba5703a67ae2e5e",
+        "evaluation/tests/test_public_observations_v2.py": "53de89d0d4297b0c5df1f093ef2986f2a601ec81fa46b8f4a9bc32f5e7221a01",
+        "evaluation/tests/test_read_group.py": "246dc431ed99e9133b26afe17f2a81254a62ac955dc2bd39eccd6bad3ac7eaee",
+        "evaluation/tests/test_read_group_pinned.py": "7859d71a5348c5599e13116b7481568629f084fbccfdf21d9c3ac54fb9555387",
+        "evaluation/tests/test_receipt_history_v2.py": "e526bc647e24f10219cca24464f671c9941cc44d871535075f17c226626f933e",
+        "evaluation/tests/test_receipt_oracle.py": "7a553e8bf7df77f20e2cf48b0ce034535c050ca9fac1478114ee879616398ca1",
+        "evaluation/tests/test_receipt_state_v2.py": "4181f48b70a80473da9d6e35a771c639a2675c28e15f784fcb19c8a110b23011",
+        "evaluation/tests/test_receipt_stress_collector.py": "acb684b68639274d0d27612cd58967c80468d21c58af5f8e47ba36ee0962b516",
+        "evaluation/tests/test_recovery.py": "437ec0d9eca981503d5bdbd5eba4791ad61f055fe5a7260ae0efc1d0371cb504",
+        "evaluation/tests/test_recovery_execution.py": "93109957067f65a9517a7a86ac03945b40632943166d4da4bb6ef3a3b67a8b66",
+        "evaluation/tests/test_relay_stress_collector.py": "7e527cd3e0fd5aef8b41360b945263f92f2c5acfb94ff9078e8a13567bd07f5e",
+        "evaluation/tests/test_request_replay.py": "cd93d3a1a257e8350f983742fabf2a28d50577f2500d36238fa347c218d01dbb",
+        "evaluation/tests/test_revision5_review.py": "e16bf6e21ea0fb4d29bae4a0e970da1f7d6813a6888895c4a3b2e35ca3210366",
+        "evaluation/tests/test_revision6_review.py": "041b48733c2840b38ad9700f19d96f4a7f519a01dac52e688b28d334dc6b81d1",
+        "evaluation/tests/test_rpc_cli.py": "095781412092d711c49383e4a71b0fc343f72d4932b142ec20d10b1423f4521c",
+        "evaluation/tests/test_run.py": "78eec342fe879e2a15e49291918e31a183e7cc186988450c054276b92bbcad92",
+        "evaluation/tests/test_schema_v2.py": "c8fcd3c94bc16eb05968809af1e41c01d1617c8b4cfac5c190d20090b11b344c",
+        "evaluation/tests/test_schema_v2_1.py": "f298e45939b4f0987acf7e2fac1931a19debf686f8c6a1c5440dce1ae02b87d0",
+        "evaluation/tests/test_schemas.py": "e7bcb77edc222d59fb4f82f4e9e348bf0b8a1553f292feb249d48d04a33660c8",
+        "evaluation/tests/test_service_process.py": "fa84f26af4606745ba45466bfee19245bc5ead514016d6fc759ec30d3daf48ef",
+        "evaluation/tests/test_signing_context_v2.py": "33b574d59508ca4756e7209f038c0f118e2fbf408523d67bdfae18975a7991e4",
+        "evaluation/tests/test_solo_review.py": "128fa466b3f4b1c56cef9c1918e68cd2ddfb3258b2a75208e04230e6138206d3",
+        "evaluation/tests/test_store_snapshot_v2.py": "d490ce69e3ccd95e23398a2ca04c69b9247e4b85f55cf09b52a15c47abbcb6cf",
+        "evaluation/tests/test_subject_collector.py": "6fde25c9086e6c9cea760464bce05c1af45bdc67f353515fd9ee261ebb27f3b5",
+        "evaluation/tests/test_subject_completion.py": "f3c713c7e9b6a1ed3b46ff204ed9fda37a2ffd1a0c0b3d1f6163b137be14d2e8",
+        "evaluation/tests/test_subject_completion_collector.py": "2ce3d4ec32ba14e7b5af5c0fd3317de10d3869f4a57f1f9b593a58d62085ce4f",
+        "evaluation/tests/test_subject_substitution.py": "53df7ec902cb0f484c134d559f6b5e841c9a40c0decd4ef4f0acbf8a45c68945",
+        "evaluation/tests/test_trust_oracle.py": "27d815a3ea970deea50b38d329bfafd6d25f2785b6c0ea7acf8866eb1fed2f1c",
+        "evaluation/tests/test_trust_stress_collector.py": "2c34dc14cabcf637cba84dc40183a67c5c270439c8d1dd49f5969836ba827da2",
+        "evaluation/tests/test_vectors.py": "8833a4831fa198900c82200a6bd68a9534921b2c83611a234d96f7abc0234fce",
+        "evaluation/tests/test_witness_history_v2.py": "a0442c40aacf321d20d8d20ec7fa5cc9249495333df749c84866bdd1b9440169",
+        "evaluation/tests/test_witness_native_v2.py": "6f09be8a0050b07b27e154be39f2e6297cc3daa8c254ef7a70c00d26328f117e",
+        "evaluation/tests/test_worker_evidence.py": "aede6a3855ccb56bfd2820bc146e2ba814a8dc3142115e0c1a8da34e5589f5bc",
+        "evaluation/tests/test_worker_probe.py": "1fb0605f3fea88020cc84f4a753d0705c190e0ab97f68dd7ce800e729ff710a0",
+        "evaluation/toolchain.json": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746",
+        "evaluation/trust_stress.py": "6201a5cb7e46921ec32dc37ffa0d37f9217672dd308e40d5967217b21cda1f20",
+        "evaluation/vectors.py": "e7791eb24367032b3ed2932e1d84b5135fa4af145833bb1a68fa965d2cb53266",
+        "evaluation/witness_history_v2.py": "1a2b992187e30f7240490cf7ec19b43ae6051b2f637e8cb2b2d1e374e74b459b",
+        "evaluation/witness_native_v2.py": "b5296ed455982b538ea05e768efa71a254796ac34a355278da12d6a3b06064c6",
+        "evaluation/worker_evidence.py": "13ebf84ee0073745f79241ef32c542eb588e56d28dfc2222aa9f07878147ba53",
+        "interfaces/README.md": "db9dca99a78b8c1fc316ed52d847708586c20b67fe3bbc9fb007ea4d59a1059b",
+        "interfaces/proposals/boundaries.py": "c3d2ce28c4969abf6e36b4821481dfb34723a9c1d6cf6f158f9febf1ba87e394",
+        "interfaces/proposals/build_boundary_vectors.py": "e2e0e042d0d72e0eacdc9994e4d195e979ef54de6dea3ab0377bd535dc4a0b93",
+        "interfaces/proposals/build_schemas.py": "3cfa472da1d13e547015aa724c6dae588fc21de63f8c330711a8eba27ab57514",
+        "interfaces/proposals/v1/ACCEPTANCE.md": "68e0a88afda178173037a9e2910d16958e2b1c45d2afeebdf6e0e1b3dfe560e1",
+        "interfaces/proposals/v1/BOUNDARY.md": "cb100d436aba200f7a1aae9f848218827cf1afb39e5ecf4b4e923b8de14f1235",
+        "interfaces/proposals/v1/README.md": "0de821dea5d5fa56d73cca449e225635f4c875311fbe608c91ba4a9d818e6212",
+        "interfaces/proposals/v1/hmbc.schema.json": "4c22092dead0982716d68acf0ad7f4a5a737568e8e2d0c37d06595add36d6fea",
+        "interfaces/proposals/v1/review-manifest.json": "124b95eb2830e422e79d0cee4b4b7ae28bf235239740980b984d7f9de2f9d8d0",
+        "interfaces/proposals/v1/revision6/DELTA.md": "d2275e8a23c545e60fd408110ecd1dfa0e309c70226799fdfe05f492998e6172",
+        "interfaces/proposals/v1/revision6/review-manifest.json": "df2a306fd77937572346cf5e91e9354536988af63ed660e14d51e04350161c62",
+        "interfaces/proposals/v2/BOUNDARY.md": "075feeb2e5febf9a590fc18c20848ff8c40e437bd0c1a1710f7caa4dca232e8f",
+        "interfaces/proposals/v2/MANIFEST.json": "6acceadf35b9f01833642f61ca7ae7bc05158e5499fb3e06c1d66fb2bbde3aee",
+        "interfaces/proposals/v2/README.md": "f6e6f5dfc73b8fc89596b5c7abdb78caf7acc7b02a6350570f9631507c1c1ee8",
+        "interfaces/proposals/v2/d50-owner-vectors.json": "d08f6638cb739cc83c48e187e32a2fc06eadeb6b98505136a591a70ce01a807e",
+        "interfaces/proposals/v2/hmbc.schema.json": "355199ac4f906594ffa5716378ca78bc51c7aad9c9732f94817327b1e4c288c5",
+        "interfaces/proposals/v2/reason-codes.json": "7437fc0d3abae50137c10011e82b01efb6b63f2bc3227dc320c0b1da825e7e0d",
+        "interfaces/proposals/v2/vectors/ledger-export-shape.json": "a0629382e7b14dd3cdd78b67fbd62ac9a1a410c49eb7fe2258c0c2ed1205b9ff",
+        "interfaces/proposals/v2/vectors/signing.json": "a4e099f8eb45eebb07e9a6b069f23330b312acdf67b6fe65b7bceef61e86478e",
+        "interfaces/proposals/v2/vectors/strict-json-expectations.json": "1c48b1ea31c0971aab83a0bc266ab1df97628fa803e8f0c31a292691df2c90a2",
+        "interfaces/proposals/v2/vectors/success.json": "9abdd2cefeb3db5066ebbe0031a125aedbfae9ab7b3acb8572b011ea90ec34d5",
+        "interfaces/proposals/v2/vectors/wire.json": "f8512d00d6c9f9c2ee66464b84db2580e45b0a98c23fc1f7dbfe2d5a493da39f",
+        "interfaces/proposals/v2/vectors/witnesses.json": "b3234eebf9d94fc426f7e94f1b2a91a52c825ad4719579735db2d5b2db138477",
+        "interfaces/proposals/v2-candidate2/BOUNDARY.md": "dc198866e9e993c54d7ad90c09b9db339cdefbed5d5800fb9c98544869a5f747",
+        "interfaces/proposals/v2-candidate2/MANIFEST.json": "0d1a2be44666164deccf19c8c7e942b91938d7577fd6caba569837888b4143e9",
+        "interfaces/proposals/v2-candidate2/OWNER-PINS.json": "43714a275029e1ad143bdfc31f9be893500f542827829b74c62581399b8d0eab",
+        "interfaces/proposals/v2-candidate2/README.md": "41aec3d7880937e651649b8d9d8de1e96d9d791f6e850bfde8edb629584e2d34",
+        "interfaces/proposals/v2-candidate2/SOURCE-MIGRATION.md": "4165c5c22358d97f9d1149c233dd9989d977eda0d8df301868bbeeb4428c6143",
+        "interfaces/proposals/v2-candidate2/d50-owner-vectors.json": "5dae528d157e1f5e6b7d0df99371d1d66344faca0981b59f418c1aa14faddcbe",
+        "interfaces/proposals/v2-candidate2/export-layout-owner-vectors.json": "d0fc30e79f1a25ccb09dc4f40bba5ef77a6ca8b751eb9c441a13db2e9aa1221e",
+        "interfaces/proposals/v2-candidate2/hmbc.schema.json": "79e34dbb8f9b11b310decf416d27a57aa8c1f249e0c5a6d3985e52740376c093",
+        "interfaces/proposals/v2-candidate2/reason-codes.json": "7437fc0d3abae50137c10011e82b01efb6b63f2bc3227dc320c0b1da825e7e0d",
+        "interfaces/proposals/v2-candidate2/vectors/ledger-export-shape.json": "a0629382e7b14dd3cdd78b67fbd62ac9a1a410c49eb7fe2258c0c2ed1205b9ff",
+        "interfaces/proposals/v2-candidate2/vectors/signing.json": "a4e099f8eb45eebb07e9a6b069f23330b312acdf67b6fe65b7bceef61e86478e",
+        "interfaces/proposals/v2-candidate2/vectors/strict-json-expectations.json": "c318a0f109736600483f76074dd1320523cdb47691bedb89c2dbd2fce76c7be7",
+        "interfaces/proposals/v2-candidate2/vectors/success.json": "9abdd2cefeb3db5066ebbe0031a125aedbfae9ab7b3acb8572b011ea90ec34d5",
+        "interfaces/proposals/v2-candidate2/vectors/wire.json": "f8512d00d6c9f9c2ee66464b84db2580e45b0a98c23fc1f7dbfe2d5a493da39f",
+        "interfaces/proposals/v2-candidate2/vectors/witnesses.json": "b3234eebf9d94fc426f7e94f1b2a91a52c825ad4719579735db2d5b2db138477",
+        "interfaces/proposals/v2-e-source-closure/AMENDMENT.json": "6729a0663e31fb05dfaad4cc0ca476776d80cb9de41a83311b279a52a28892a2",
+        "interfaces/proposals/v2-e-source-closure/MANIFEST.json": "7810ad105330de73920450d82f4850ebb6de0846396e5bb786818e700e49bb0a",
+        "interfaces/proposals/v2-e-source-closure/README.md": "1cca4627e941df515ec077d342e90e96fc755be9da55a9e68c7ab2fe80dc7bcb",
+        "interfaces/proposals/v2-e-source-closure/e-complete-example.json": "5ed8b0ae318b82e8b6e7a617ed7fe2f347545eaa97f8b26bc2e23beaf8f188f5",
+        "interfaces/v1/BOUNDARY.md": "cb100d436aba200f7a1aae9f848218827cf1afb39e5ecf4b4e923b8de14f1235",
+        "interfaces/v1/FREEZE.json": "f700292ec7e3b2c8f2b59c7a728a991cd7d6dea2e4a06cea71f6f6c97b9962a2",
+        "interfaces/v1/README.md": "be699a2653abf411a90f5d1ea0d091cda14c2ba7b3f43812a9c9750b095b2ee3",
+        "interfaces/v1/assumptions.csv": "98047dda31877f286175cfcbe66fa0ada10bef452cfd6c15f42f0dac430ad39b",
+        "interfaces/v1/hmbc.schema.json": "4c22092dead0982716d68acf0ad7f4a5a737568e8e2d0c37d06595add36d6fea",
+        "interfaces/v1/scenarios/e0_cases.json": "438fa38ddcbd7edd0e49fb93cc580e5219ed05349fd677b2e386bc4669f5d50e",
+        "interfaces/v1/scenarios/e0_supplement_cases.json": "9ccade362c5a8853d63f06a08be3134ae32cd99527ceb36fcd78c311a9246858",
+        "interfaces/v1/scenarios/e_positive.json": "95e75f10cfdaf0b0bf5bd75ea25b521df30817f85a280a8552cc62243f8ccdda",
+        "interfaces/v1/source-map.csv": "25337ee2846b13791bf971281d885f6300a6ce1407f156ddeb4e5cb85f54a07c",
+        "interfaces/v1/toolchain.json": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746",
+        "interfaces/v1/vectors/adapter-agent2.json": "e248fceb7455ebc3ae328da294ab7b328e2a69fc43eb4975d3b35e0016f5d0b7",
+        "interfaces/v1/vectors/boundary.json": "fce967f87cce9b453ae23d7450bcb6a199f3c0f6ad5d933b378b8f90e5a42210",
+        "interfaces/v1/vectors/deployment-agent1.json": "787ae701241167a2474215168752ecac7fbec260cb0df3a2acdf680598f53ee1",
+        "interfaces/v1/vectors/eip712-agent1.json": "f211c65fe9c0ea0d7c7ed3fe6904ab04b36224f5bfcd41d3bd140e6165f0bf61",
+        "interfaces/v1/vectors/schema.json": "49a9dc29298495513340db2f4e4f78d7611e52c7b42409531bc5ed97f421e4d8",
+        "interfaces/v2/BOUNDARY.md": "dc198866e9e993c54d7ad90c09b9db339cdefbed5d5800fb9c98544869a5f747",
+        "interfaces/v2/FREEZE.json": "7bb1d243d546dcc6ab76dea3edcb23a74240bd96fe274ae3ca0ff56f6aff83cd",
+        "interfaces/v2/OWNER-PINS.json": "43714a275029e1ad143bdfc31f9be893500f542827829b74c62581399b8d0eab",
+        "interfaces/v2/README.md": "41aec3d7880937e651649b8d9d8de1e96d9d791f6e850bfde8edb629584e2d34",
+        "interfaces/v2/SOURCE-MIGRATION.md": "4165c5c22358d97f9d1149c233dd9989d977eda0d8df301868bbeeb4428c6143",
+        "interfaces/v2/d50-owner-vectors.json": "5dae528d157e1f5e6b7d0df99371d1d66344faca0981b59f418c1aa14faddcbe",
+        "interfaces/v2/export-layout-owner-vectors.json": "d0fc30e79f1a25ccb09dc4f40bba5ef77a6ca8b751eb9c441a13db2e9aa1221e",
+        "interfaces/v2/hmbc.schema.json": "79e34dbb8f9b11b310decf416d27a57aa8c1f249e0c5a6d3985e52740376c093",
+        "interfaces/v2/reason-codes.json": "7437fc0d3abae50137c10011e82b01efb6b63f2bc3227dc320c0b1da825e7e0d",
+        "interfaces/v2/vectors/ledger-export-shape.json": "a0629382e7b14dd3cdd78b67fbd62ac9a1a410c49eb7fe2258c0c2ed1205b9ff",
+        "interfaces/v2/vectors/signing.json": "a4e099f8eb45eebb07e9a6b069f23330b312acdf67b6fe65b7bceef61e86478e",
+        "interfaces/v2/vectors/strict-json-expectations.json": "c318a0f109736600483f76074dd1320523cdb47691bedb89c2dbd2fce76c7be7",
+        "interfaces/v2/vectors/success.json": "9abdd2cefeb3db5066ebbe0031a125aedbfae9ab7b3acb8572b011ea90ec34d5",
+        "interfaces/v2/vectors/wire.json": "f8512d00d6c9f9c2ee66464b84db2580e45b0a98c23fc1f7dbfe2d5a493da39f",
+        "interfaces/v2/vectors/witnesses.json": "b3234eebf9d94fc426f7e94f1b2a91a52c825ad4719579735db2d5b2db138477",
+        "interfaces/v2.1/FREEZE.json": "232b84bb7f997b687a5dc671d79ab6ecdd592d17cd38e531d8460d33ed81660a",
+        "interfaces/v2.1/README.md": "1e3ec3f84cc9578fe2408031e4e0ab4dcf0fbfbbc8568c152abd027d8d693fd8",
+        "interfaces/v2.1/hmbc.schema.json": "d43c3a9a4cbb10214135afb767a2adc109da462f88bd11a81a8c8955d44fd1f3",
+        "interfaces/vectors/adapter-agent2-candidate.json": "e248fceb7455ebc3ae328da294ab7b328e2a69fc43eb4975d3b35e0016f5d0b7",
+        "interfaces/vectors/boundary-candidate.json": "fce967f87cce9b453ae23d7450bcb6a199f3c0f6ad5d933b378b8f90e5a42210",
+        "interfaces/vectors/deployment-agent1-candidate.json": "787ae701241167a2474215168752ecac7fbec260cb0df3a2acdf680598f53ee1",
+        "interfaces/vectors/eip712-agent1-candidate.json": "f211c65fe9c0ea0d7c7ed3fe6904ab04b36224f5bfcd41d3bd140e6165f0bf61",
+        "interfaces/vectors/schema-candidate.json": "49a9dc29298495513340db2f4e4f78d7611e52c7b42409531bc5ed97f421e4d8",
+        "pyproject.toml": "1d839e80b8acdef35d878740cb5d212b464cc30f4adfdd3f56b69b162badd0ca",
+        "uv.lock": "1fb4777a5d4078434af8e7fe4a88f2f3afbe1d8f65d30e8a182999d7a7a29cbe"
+      },
+      "ownerCandidates": {
+        "ledger": {
+          "requested": "85c59f588de58a8ff5e87b9fe6f630c9d8c43642",
+          "commit": "85c59f588de58a8ff5e87b9fe6f630c9d8c43642",
+          "tree": "36a868305d67c8f546e6bde558ceb8e356962819",
+          "remoteRef": "origin/agent-1",
+          "remoteRefExists": true,
+          "isAncestorOfOwnerHead": true,
+          "available": true,
+          "finalPin": false
+        },
+        "protocol": {
+          "requested": "55f180e15d73825870d3326a3edb817824b3f265",
+          "commit": "55f180e15d73825870d3326a3edb817824b3f265",
+          "tree": "0e59256bd859d347ad416a5ab77099a9a9f2809e",
+          "remoteRef": "origin/agent-2",
+          "remoteRefExists": true,
+          "isAncestorOfOwnerHead": true,
+          "available": true,
+          "finalPin": false
+        }
+      },
+      "pinChecks": {
+        "ledgerCommit": {
+          "requestedLength": 40,
+          "resolvedCommit": "85c59f588de58a8ff5e87b9fe6f630c9d8c43642",
+          "resolvedTree": "36a868305d67c8f546e6bde558ceb8e356962819",
+          "status": "EXACT_MATCH",
+          "exactPin": true
+        },
+        "protocolCommit": {
+          "requestedLength": 40,
+          "resolvedCommit": "55f180e15d73825870d3326a3edb817824b3f265",
+          "resolvedTree": "0e59256bd859d347ad416a5ab77099a9a9f2809e",
+          "status": "EXACT_MATCH",
+          "exactPin": true
+        },
+        "interfaceFreeze": {
+          "path": "interfaces/v2/FREEZE.json",
+          "requested": "7bb1d243d546dcc6ab76dea3edcb23a74240bd96fe274ae3ca0ff56f6aff83cd",
+          "requestedLength": 64,
+          "actualSha256": "7bb1d243d546dcc6ab76dea3edcb23a74240bd96fe274ae3ca0ff56f6aff83cd",
+          "status": "EXACT_MATCH",
+          "exactPin": true
+        },
+        "interfaceV21Freeze": {
+          "path": "interfaces/v2.1/FREEZE.json",
+          "requested": "232b84bb7f997b687a5dc671d79ab6ecdd592d17cd38e531d8460d33ed81660a",
+          "requestedLength": 64,
+          "actualSha256": "232b84bb7f997b687a5dc671d79ab6ecdd592d17cd38e531d8460d33ed81660a",
+          "status": "EXACT_MATCH",
+          "exactPin": true
+        },
+        "interfaceV21Schema": {
+          "path": "interfaces/v2.1/hmbc.schema.json",
+          "requested": "d43c3a9a4cbb10214135afb767a2adc109da462f88bd11a81a8c8955d44fd1f3",
+          "requestedLength": 64,
+          "actualSha256": "d43c3a9a4cbb10214135afb767a2adc109da462f88bd11a81a8c8955d44fd1f3",
+          "status": "EXACT_MATCH",
+          "exactPin": true
+        },
+        "fMatrix": {
+          "path": "evaluation/evidence/reviews/f0-revision8-20261104/f_matrix.json",
+          "requested": "2230daf3da1eda11e7fd51a0c84f846711c2e1f1b3b2b5a82c33d3c262411b64",
+          "requestedLength": 64,
+          "actualSha256": "2230daf3da1eda11e7fd51a0c84f846711c2e1f1b3b2b5a82c33d3c262411b64",
+          "status": "EXACT_MATCH",
+          "exactPin": true
+        },
+        "coverageMap": {
+          "path": "evaluation/evidence/f/case-coverage-map-20261114/coverage.csv",
+          "requested": "fc090df2f565b2c3f1766f720255f77f4c3fdcc913a3d858f18bab924396985d",
+          "requestedLength": 64,
+          "actualSha256": "fc090df2f565b2c3f1766f720255f77f4c3fdcc913a3d858f18bab924396985d",
+          "status": "EXACT_MATCH",
+          "exactPin": true
+        },
+        "toolchainManifest": {
+          "path": "evaluation/toolchain.json",
+          "requested": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746",
+          "requestedLength": 64,
+          "actualSha256": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746",
+          "status": "EXACT_MATCH",
+          "exactPin": true
+        },
+        "tlcJar": {
+          "status": "EXACT_MATCH",
+          "requested": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+          "requestedLength": 64,
+          "actualSha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+          "exactPin": true
+        },
+        "ledgerManifest": {
+          "path": "ledger/evidence/source-manifest.sha256",
+          "sourceCommit": "85c59f588de58a8ff5e87b9fe6f630c9d8c43642",
+          "requested": "70f541cd63bb8e8c4c0c1202dda0e5611ab15fde6d1ab4b8a0451497b6fb08dd",
+          "requestedLength": 64,
+          "actualSha256": "70f541cd63bb8e8c4c0c1202dda0e5611ab15fde6d1ab4b8a0451497b6fb08dd",
+          "status": "EXACT_MATCH",
+          "exactPin": true
+        }
+      },
+      "toolchain": {
+        "pythonVersion": "3.13.13",
+        "expectedPythonVersion": "3.13.13",
+        "pythonVersionMatches": true,
+        "rootLock": {
+          "path": "uv.lock",
+          "expectedSha256": "1fb4777a5d4078434af8e7fe4a88f2f3afbe1d8f65d30e8a182999d7a7a29cbe",
+          "observedSha256": "1fb4777a5d4078434af8e7fe4a88f2f3afbe1d8f65d30e8a182999d7a7a29cbe",
+          "hashMatches": true
+        },
+        "binaries": {
+          "forge": {
+            "path": "/home/karma/.local/share/hmbc-tools/foundry-1.8.5/forge",
+            "exists": true,
+            "expectedSha256": "06c477aee83d0996e57aa92b0841fdf06382cb172fd69bbb88920bb0054dfd7f",
+            "observedSha256": "06c477aee83d0996e57aa92b0841fdf06382cb172fd69bbb88920bb0054dfd7f",
+            "hashMatches": true,
+            "versionCommandExitCode": 0,
+            "versionOutput": "forge Version: 1.8.5\nCommit SHA: 51a52c59cffd940f76eddd0b4bb1791aa4b5ac7f\nBuild Timestamp: 2026-10-05T17:18:54.332175693Z (1791220734)\nBuild Profile: dist"
+          },
+          "anvil": {
+            "path": "/home/karma/.local/share/hmbc-tools/foundry-1.8.5/anvil",
+            "exists": true,
+            "expectedSha256": "00f97668e1ae0fcca118fd7d2d1b6d25c0496447a523ca6bc2dfd10958c99604",
+            "observedSha256": "00f97668e1ae0fcca118fd7d2d1b6d25c0496447a523ca6bc2dfd10958c99604",
+            "hashMatches": true,
+            "versionCommandExitCode": 0,
+            "versionOutput": "anvil Version: 1.8.5\nCommit SHA: 51a52c59cffd940f76eddd0b4bb1791aa4b5ac7f\nBuild Timestamp: 2026-10-05T17:18:54.332175693Z (1791220734)\nBuild Profile: dist"
+          },
+          "cast": {
+            "path": "/home/karma/.local/share/hmbc-tools/foundry-1.8.5/cast",
+            "exists": true,
+            "expectedSha256": "1eb1eecfdadaad8da2173ccf0c7c0be86fe237b0a267042a40d7ca12d0fa2af7",
+            "observedSha256": "1eb1eecfdadaad8da2173ccf0c7c0be86fe237b0a267042a40d7ca12d0fa2af7",
+            "hashMatches": true,
+            "versionCommandExitCode": 0,
+            "versionOutput": "cast Version: 1.8.5\nCommit SHA: 51a52c59cffd940f76eddd0b4bb1791aa4b5ac7f\nBuild Timestamp: 2026-10-05T17:18:54.332175693Z (1791220734)\nBuild Profile: dist"
+          },
+          "solc": {
+            "path": "/home/karma/.local/share/svm/0.8.37/solc-0.8.37",
+            "exists": true,
+            "expectedSha256": "5de843c2c93563cc66425c99a4fb13fdbf32b4c4ae07469480faaf126e14404a",
+            "observedSha256": "5de843c2c93563cc66425c99a4fb13fdbf32b4c4ae07469480faaf126e14404a",
+            "hashMatches": true,
+            "versionCommandExitCode": 0,
+            "versionOutput": "solc, the solidity compiler commandline interface\nVersion: 0.8.37+commit.f401782d.Linux.g++"
+          }
+        },
+        "tlc": {
+          "path": "/home/karma/.local/share/hmbc-tools/tlaplus-v1.7.4/tla2tools.jar",
+          "expectedSha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+          "observedSha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+          "hashMatches": true,
+          "versionClaim": "TLC 2.19 (pinned prior evidence)"
+        },
+        "tlcPlanSha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+        "tlcPlanPinMatches": true,
+        "rootToolchainTlcStatus": "NOT INSTALLED: F/G locked",
+        "tlcScopeNote": "F-only TLC is pinned separately; the frozen root/E toolchain excludes F/G tools"
+      },
+      "sha256": "73e70b16b468d8641cacdfde00914d28b6887657456574eff5d1aeacd32d65c4"
+    }
+  },
+  "caseResults": [
+    {
+      "case": "FL-1",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "FL-2",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "FL-3",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "FL-4",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "FL-5",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "FL-6",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "FL-7",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "FL-8",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "FL-9",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "FL-10",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "FL-11",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "F-12",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "F-13",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "F-14",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "F-15",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "F-16",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "F-17",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "F-18",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "F-19",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "F-20",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "F-21",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "F-22",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "F-23",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "F-24",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "F-25",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "F-26",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "F-27",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "F-28",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "F-29",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "F-30",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "F-31",
+      "status": "NOT_RUN"
+    },
+    {
+      "case": "F-32",
+      "status": "NOT_RUN"
+    }
+  ],
+  "blockers": [
+    "Execution plan is DRAFT and does not authorize execution.",
+    "Protocol source is only a candidate; K1 and the A3-0121 signing-rule question remain open.",
+    "Only preflight stages 1-2 are implemented; isolated baselines, integrated cases, post-bracket and gate execution are not available."
+  ],
+  "startedAt": "2026-11-14T08:07:40.639556+00:00",
+  "endedAt": "2026-11-14T08:07:40.639566+00:00"
+}

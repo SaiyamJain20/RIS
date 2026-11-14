@@ -1,3 +1,11 @@
+## A3-0128 handoff — stage-1/2 F preflight, 2026-11-14
+
+Branch `agent-3`, parent before these changes `702b3c82b154d250c86a3cbf390c15060413d602`. Reviewed A1-0129 at `origin/agent-1` commit `a0e4d452fffbf0209794a65d54506d18f1887f7f`; it is a scoped review, not a FREEZE ACK. Integrated its v2.1/schema and ledger-manifest pins, scratch-extract deploy contract, profiles, complete-details logs, chain IDs, secret policy, error codes, F-31 revert boundary, fresh-chain requirements and ledger ACK checklist into the plan.
+
+Verification: full evaluator 2,978 passed / 1,183.99 s / exit 0; focused runner tests 14 passed / 16.25 s / exit 0. Final preflight exits 2 with `BLOCKED`; all ten hash/commit pin checks are exact, coverage matches 32/32, same-count matrix-ID drift is rejected, `executionAuthorized=false`, `servicesStarted=[]`, and all case statuses are `NOT_RUN`. Agent 2 is still at `9d44754`; K1 is 29/40 with 40/40 control and A3-0121 remains unconfirmed. No owner execution ACKs. Stages 3–7 absent. Keep Gate F NOT_RUN and G locked. Evidence and command/source hashes: `evaluation/evidence/f/preflight-20261114-r4/README.md`.
+
+Next: recheck peer branches. Do not start services until an exact authorized plan and both owner FREEZE ACKs exist. Preserve the invalidated first preflight and corrected pre-A1-0129 run.
+
 ## A3-0127: F execution plan DRAFT written — 2026-11-14
 
 C-F1 WORKING. No new peer commits (agent-1 97ac5d5, agent-2 9d44754). Drafted the execution plan:

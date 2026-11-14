@@ -1,7 +1,8 @@
-"""E preflight or public two-chain E1 execution with an exact frozen plan/ACKs.
+"""E preflight / E1 execution, or non-executing F source preflight.
 
 The default preflight records blockers. Explicit plans use evaluation.e1;
-neither unit controls nor this entry point imply an RQ gate passed.
+neither unit controls nor this entry point imply an RQ gate passed. F only
+records plan and source state; its case runner is not implemented here.
 """
 import argparse
 import json
@@ -12,10 +13,16 @@ from evaluation.manifests import now,source_manifest
 
 ROOT=Path(__file__).resolve().parents[1]
 PROFILES=('paper-strict','paper-minimal','repaired-e')
+F_PROFILES=('repaired-f',)
 
 
 def run(rq,profile,output,*,integration_plan=None,integration_acks=None):
-    if rq!='E':raise ValueError('NOT_IMPLEMENTED_IN_PHASE: F/G remain locked')
+    if rq=='F':
+        if profile not in F_PROFILES or integration_plan is None:
+            raise ValueError('NOT_IMPLEMENTED_IN_PHASE: F supports preflight only with profile repaired-f and a plan')
+        from evaluation.f_preflight import preflight
+        return preflight(integration_plan,output,profile=profile,provided_acks=integration_acks)
+    if rq!='E':raise ValueError('NOT_IMPLEMENTED_IN_PHASE: G remains locked')
     if profile not in PROFILES:raise ValueError('Unsupported preflight profile')
     if integration_plan is not None:
         from evaluation.e1 import execute
@@ -37,7 +44,7 @@ def run(rq,profile,output,*,integration_plan=None,integration_acks=None):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--rq',choices=['E','F','G'],required=True)
-    parser.add_argument('--profile',choices=PROFILES,required=True)
+    parser.add_argument('--profile',choices=PROFILES+F_PROFILES,required=True)
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--integration-plan',type=Path)
     parser.add_argument('--integration-acks',type=Path)

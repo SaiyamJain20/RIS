@@ -1,8 +1,11 @@
 # RQ2 / F — DRAFT report (agent 3, 2026-11-14)
 
-**Status: DRAFT. Gate F NOT RUN. G locked.** All 32 planned F cases are NOT_RUN; the F runner,
-the fault oracle, the execution FREEZE and its three ACKs do not exist yet. This draft reports
-only what was measured locally on synthetic fixtures, plus the model and the review record.
+**Status: DRAFT. Gate F NOT RUN. G locked.** All 32 planned F cases are NOT_RUN. A fail-closed
+runner preflight now checks draft pins, matrix coverage and a source bracket (stages 1–2 only); it
+does not execute cases. The fault oracle exists and has synthetic tests, but it is not connected
+to captured signing-time observations. No execution FREEZE or three ACKs exist. This draft reports
+prior local measurements on synthetic fixtures, the finite model, review record and the new
+preflight result.
 Paper-derived reconstruction of HMBC2020, not the authors' implementation. All reviews are
 same-model (correlated). Evidence directories are cited per claim.
 
@@ -57,8 +60,10 @@ deterministic runs; the E column is the F commit's E profile.
 ### 2.5 Assurance process
 The kill-durability review found and drove fixes for: a hot-journal store refused after a kill in
 init (fixed), a snapshot-lock defect (fixed), the evaluator anchor-selection defect (fixed on my
-side). Open: the signing-kill mutant K1 is detected only probabilistically (2 of 3 and 3 of 5 runs
-at A3-0110; agent 2 has not answered). Mistakes of my own kept in the record: a model deadlock
+side). Open: the signing-kill mutant K1 is detected only probabilistically. A3-0122 measured 29/40
+detections (72.5%) with the control passing 40/40; agent 2's 3/3 report was not reproduced in that
+measurement. Agent 2 has not answered A3-0110 or confirmed the A3-0121 signing-rule reading.
+Mistakes of my own kept in the record: a model deadlock
 (first TLC f=0 run), a parser artifact that reported a false 52,339 B TMSC size.
 
 ## 3. Trust matrix (what still requires trust)
@@ -91,7 +96,14 @@ grant for an ALLOW) at the time the second was signed. Needs signing-time observ
 captures do not all carry; an oracle limit to state, not a finding. Agent 2 may correct this reading.
 
 ## 4. Not done / not claimed
-Gate F, the 32 F cases, execution FREEZE and ACKs, the runner and fault oracle, E regression
-reruns against the F system, certificate/latency over a real network, power-loss durability,
-Besu/QBFT consensus, ABE, any G (key lifecycle) work. Deviation from the plan sequence: the
-measurements above were taken before the runner/FREEZE on the human's instruction.
+Gate F, the 32 F cases, execution FREEZE and ACKs, runner stages 3–7, connection of the fault
+oracle to signing-time captures, E regression reruns against the F system, certificate/latency
+over a real network, power-loss durability, Besu/QBFT consensus, ABE, and any G (key lifecycle)
+work remain undone. The 2026-11-14 preflight matched all 32 planned IDs against the frozen
+revision-8 matrix, but exited 2 with `BLOCKED`; no case ran. The earlier first preflight used the
+wrong matrix path and is retained as invalidated evidence. See
+`evaluation/evidence/f/preflight-20261114-r4/README.md`. A1-0129's ledger-scope review was
+incorporated into the DRAFT. Full evaluator suite: 2,978 passed; focused runner tests: 14 passed;
+all exact draft pins match. A deliberate same-row-count matrix-ID drift is also blocked. These
+checks do not lift the owner ACK, K1/signing-rule or later-stage blockers. Deviation from the plan
+sequence: earlier measurements were taken before the runner/FREEZE on the human's instruction.

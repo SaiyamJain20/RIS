@@ -5,12 +5,50 @@
  "gateG": "LOCKED",
  "author": "agent-3 (correlated same-model)",
  "pins": {
-  "ledger": "85c59f5 (NOT e4e992f named in f_matrix.json)",
-  "protocolSourceCandidate": "origin/agent-2 55f180e; FINAL PIN BLOCKED on K1 (A3-0110) and agent 2's answers",
-  "interfaces/v2/FREEZE.json": "sha256 7bb1d243d546dcc6..",
-  "f_matrix": "2230daf3da1eda11.. (case list valid; its ledger pin superseded)",
-  "toolchain": "Foundry 1.8.5, solc 0.8.37, CPython 3.13.13, TLC 2.19 jar sha256 936a262061c91469..",
+  "ledger": "85c59f588de58a8ff5e87b9fe6f630c9d8c43642; tree 36a868305d67c8f546e6bde558ceb8e356962819; not e4e992f named in f_matrix.json",
+  "ledgerManifestSha256": "70f541cd63bb8e8c4c0c1202dda0e5611ab15fde6d1ab4b8a0451497b6fb08dd (429 entries at pinned ledger commit)",
+  "protocolSourceCandidate": "origin/agent-2 55f180e15d73825870d3326a3edb817824b3f265; tree 0e59256bd859d347ad416a5ab77099a9a9f2809e; FINAL PIN BLOCKED on K1 (A3-0110) and agent 2's answers",
+  "interfaces/v2/FREEZE.json": "sha256 7bb1d243d546dcc6ab76dea3edcb23a74240bd96fe274ae3ca0ff56f6aff83cd",
+  "interfaces/v2.1/FREEZE.json": "sha256 232b84bb7f997b687a5dc671d79ab6ecdd592d17cd38e531d8460d33ed81660a",
+  "interfaces/v2.1/hmbc.schema.json": "sha256 d43c3a9a4cbb10214135afb767a2adc109da462f88bd11a81a8c8955d44fd1f3",
+  "f_matrix": "sha256 2230daf3da1eda11e7fd51a0c84f846711c2e1f1b3b2b5a82c33d3c262411b64 (case list valid; its ledger pin superseded)",
+  "coverageMapSha256": "fc090df2f565b2c3f1766f720255f77f4c3fdcc913a3d858f18bab924396985d",
+  "toolchainManifestSha256": "7d88dffddb2d0552c97ac44fbb4decbe9e3981a09570f1712301a42080654746 (frozen root/E toolchain manifest; F-only TLC is pinned separately)",
+  "toolchain": "Foundry 1.8.5, solc 0.8.37, CPython 3.13.13, F-only TLC 2.19 jar sha256 936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+  "tlcJarSha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
   "evaluationSource": "HEAD at FREEZE time, to be recorded"
+ },
+ "deployment": {
+  "script": "ledger/tools/deploy_local.sh",
+  "argumentOrder": ["pbc-rpc", "dbc-rpc", "profile", "log-mode", "run-id"],
+  "invocationTemplate": "<scratch-ledger>/tools/deploy_local.sh <pbc-rpc> <dbc-rpc> <profile> complete-details <run-id>",
+  "fProfile": "repaired-f",
+  "f18Profile": "mutant-f-q2",
+  "eRegression": "pinned F ledger commit, profile repaired-e, SUCCESSOR_EXPORT=1; the frozen E artifact remains evidence, not a rerun",
+  "logMode": "complete-details",
+  "chainIds": {"pbc": 18545, "dbc": 28545},
+  "witnessSignedChainIds": "The PBC/DBC IDs used by witnesses must equal the IDs recorded for the Anvil pair; certificate and governance digests bind them",
+  "scratchArchive": "git archive <ledgerCommit> ledger",
+  "deployInsideWorkingTree": false,
+  "deploymentManifestReadback": "Read the deployment.json written by deploy_local.sh in the scratch extract; do not hand-edit addresses",
+  "freshChainPairPerCase": true,
+  "optionalFastDeploy": "LEDGER_DEPLOY_FAST=1; expected same addresses and state",
+  "deployerSecret": "DEPLOYER_PK is supplied only through the process environment from the local Anvil development key; omit its value from commands, logs and evidence",
+  "ledgerFreezeAckChecks": [
+   "recompute ledger commit, tree, 429-entry manifest digest, v2/v2.1 freeze and schema hashes",
+   "verify scratch-extract invocation, profile, log mode, run ID, chain IDs and deployment manifest readback",
+   "check family A/D expected ledger error codes against the cited ledger tests",
+   "scan FREEZE evidence for any DEPLOYER_PK or Anvil key value",
+   "dry-run deploy, checkpoint, decision, receipt and governance calls from the exact pinned commit on agent 1's local ports before ACK"
+  ]
+ },
+ "oracleRules": {
+  "ledgerRevert": "F-31 is outside the monotone safe-ledger assumption after evm_revert",
+  "f31RollbackScope": ["KSSC checkpoint sequence", "governance nonce", "grants and nonce consumption", "PSC request status", "LSC log"],
+  "postRevertDeaths": "Do not apply fault-oracle is_dead predicates to pre-revert observations after evm_revert",
+  "f24Poisoning": "Use a fresh chain pair; the q3 poison checkpoint can permanently block that deployment's DBC",
+  "f6StaleWitnessSet": "Submit a certificate with another witnessSetVersion; expect STALE_STATE before structure, nonce, expiry or signature checks",
+  "freshChainPairPerCase": true
  },
  "families": {
   "A-quorum-availability-and-signature-lists": {
@@ -25,7 +63,17 @@
     "F-23"
    ],
    "needs": "4 real witness processes, local Anvil pair, real KSSC/ACSC/PSC, pool collector; delay hook H6; muted/stopped witnesses; bad-list submission",
-   "oracle": "certificate accepted iff >=3 distinct sorted member signatures; FL-3 expects classified timeout; F-20 distinguishes arbitrary delay from eventual delivery"
+   "oracle": "certificate accepted iff >=3 distinct sorted member signatures; FL-3 expects classified timeout; F-20 distinguishes arbitrary delay from eventual delivery",
+   "badListFixtures": "Use Q.badLists from ledger/test/Quorum.t.sol:42-55 on KSSC, ACSC and PSC signed paths",
+   "rejectionCodes": {
+    "thresholdZeroOrAboveMemberCount": "INSUFFICIENT_QUORUM before list walk",
+    "invalidOrNonMemberSignature": "BAD_SIGNATURE",
+    "sameAsPreviousSigner": "DUPLICATE_SIGNER",
+    "lowerAndPreviouslySeenSigner": "DUPLICATE_SIGNER",
+    "lowerSignerNotPreviouslySeen": "MALFORMED",
+    "validListBelowThresholdAfterWalk": "INSUFFICIENT_QUORUM",
+    "precedence": "Return the first failure encountered by QuorumLib.verify; do not collapse failures to generic rejection"
+   }
   },
   "B-signing-rule-and-byzantine-witness": {
    "cases": [
@@ -47,7 +95,7 @@
     "F-32"
    ],
    "needs": "SIGKILL/restart of witness processes, store rollback fixture, clock/height regression via evm_revert, store reuse across deployments",
-   "oracle": "honest signer keeps pin after restart (F-13); rollback/regression is refused or faulted (F-27,F-31,F-32); K1 limit applies to kill coverage claims"
+   "oracle": "honest signer keeps pin after restart (F-13); safe rollback/regression is refused or faulted (F-27,F-32); F-31 evm_revert is outside the monotone safe-ledger assumption, so discard pre-revert death facts; K1 limit applies to kill coverage claims"
   },
   "D-trust-lists-and-governance": {
    "cases": [
@@ -61,7 +109,7 @@
     "F-30"
    ],
    "needs": "real Governance/TMSC, witness-signed governance through the pool, stale witness-set and replay fixtures, barrier timing",
-   "oracle": "existing E trust/barrier oracles plus governance history readers; FL-9 expects a grant (trust assumption)"
+   "oracle": "existing E trust/barrier oracles plus governance history readers; FL-6 uses a certificate with another witnessSetVersion and expects STALE_STATE first; FL-9 expects a grant (trust assumption)"
   },
   "E-relay-and-outcomes": {
    "cases": [
@@ -85,11 +133,11 @@
  "stages": [
   "1 verify FREEZE pins, versions and hashes",
   "2 source bracket pre (evaluation, interfaces, owner commits)",
-  "3 isolated owner baselines (ledger forge, protocol suite, TLC) as controls",
+  "3 isolated owner baselines as controls: forge test --root ledger (316 passed, 0 failed, 0 skipped); python3 -I ledger/tools/check_mutants.py (exit 0, all mutants detected); protocol suite on pinned interpreter; TLC on pinned F-only jar. Record the executing host interpreter and tool hashes.",
   "4 per-family integrated runs, positive control first in each family, one fresh chain pair per case",
   "5 oracle verdicts and result classification per case (PASS / FAIL / BLOCKED / NOT_EXECUTED), refuted hypotheses kept",
   "6 source bracket post, worktree unchanged",
-  "7 manifest and gate-evidence (RQ2 criteria), E regression rerun, report RQ2-F.md"
+  "7 manifest and gate-evidence (RQ2 criteria), rerun E suites on the pinned F ledger with profile repaired-e and SUCCESSOR_EXPORT=1, report RQ2-F.md"
  ],
  "preconditions": [
   "agent 2 resolves or documents K1 and confirms the A3-0121 signing-rule reading",

@@ -1,3 +1,13 @@
+**F preflight checkpoint (2026-11-14):** the runner now implements a fail-closed preflight for
+draft pin checks, 32-case coverage and source bracketing (stages 1–2 only). Against the frozen
+revision-8 matrix, coverage is 32/32 with no missing, extra or duplicate IDs; same-count matrix
+ID drift is also rejected. Full evaluator: 2,978 passed, exit 0; focused runner checks: 14 passed,
+exit 0. The preflight itself exits 2 with
+`BLOCKED`: the plan is DRAFT, owner execution ACKs are absent, K1 and signing-rule questions remain
+open, and later runner stages do not exist. No services started; all 32 cases `NOT_RUN`;
+Gate F NOT_RUN; G locked. The fault oracle exists but is not joined to signing-time captures.
+[Evidence and exact blockers](evidence/f/preflight-20261114-r4/README.md).
+
 **C-F1 receipt history state coverage (2026-11-07):** Internal
 `receipt_history_v2.verify_receipt_history` checks every declared live/superseded
 receipt against raw state/events, with exact digest selection and shared-fact

@@ -1,3 +1,7 @@
+## A3-0128: exact-pin preflight and A1-0129 review incorporated — 2026-11-14
+
+C-F1 WORKING. Test-first stages 1–2 preflight matches 32/32 case IDs to the frozen revision-8 matrix and verifies exact ledger/protocol candidate, v2/v2.1 freeze/schema, matrix, coverage, root toolchain, TLC and ledger-manifest pins. A deliberate same-count matrix-ID mutation is rejected. Full evaluator 2,978 PASS/exit 0; focused runner 14 PASS/exit 0. Final preflight exits 2/BLOCKED as intended: DRAFT/no authorization, protocol K1 and A3-0121 remain open, and stages 3–7 do not exist. No services; all 32 cases NOT_RUN; Gate F NOT_RUN; G locked. Reviewed A1-0129 from agent-1 `a0e4d45` and folded its deployment, error-code and rollback details into the draft; it is a review, not an ACK. Agent 2 remains at `9d44754`, no execution ACK. Evidence: `evaluation/evidence/f/preflight-20261114-r4/README.md`.
+
 ## A3-0127: F execution plan DRAFT written — 2026-11-14
 
 C-F1 WORKING. No new peer commits (agent-1 97ac5d5, agent-2 9d44754). Drafted the execution plan:
