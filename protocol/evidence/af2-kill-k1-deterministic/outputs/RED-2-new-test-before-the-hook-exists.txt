@@ -1,0 +1,52 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+________ test_kill_between_the_signing_statements_leaves_a_whole_record ________
+
+tmp_path = PosixPath('/tmp/pytest-of-saiyamjain/pytest-81/test_kill_between_the_signing_0')
+
+    def test_kill_between_the_signing_statements_leaves_a_whole_record(tmp_path):
+        """S2-0025 (A3-0110, A3-0122: the stage kill above detected K1 in 29 of 40 runs on agent 3's host): the child BLOCKS at a named point between two statements of one signing transaction
+        and is killed there. A store that commits a signing whole loses that request entirely: the replies equal the stored digests, no pin lacks a live digest, the baseline is the newest record's,
+        and a supersede in flight leaves the superseded table as it was. With one autocommit per statement (mutant K1) the pin or the digest survives alone, so every case below fails.
+        Cases: the first `after_pin` (a fresh pin), the first `after_digest` (digest written, baseline not yet), and the first `after_pin` inside a transaction that superseded a dead pin."""
+        cases = [("after_pin", 1, False), ("after_digest", 1, False), ("after_pin", 1, True)]
+        for stage, nth, supersede in cases:
+            name = "%s-%d%s" % (stage, nth, "-supersede" if supersede else "")
+            d = str(tmp_path / ("between-" + name))
+            ws.init_store(d, BIND, B, OWNER).close()
+            p = spawn_pause(d, 7, stage, nth, supersede)
+            assert p.stdout.readline().strip() == "READY", p.stderr.read()[-800:]
+>           out, sup_in_txn, sup_before = pause_and_kill(p, stage)
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_witness_state_kill.py:304: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+p = <Popen: returncode: 0 args: ['/home/saiyamjain/Desktop/RIS/Project/protocol/...>
+stage = 'after_pin'
+
+    def pause_and_kill(p, stage):
+        """Read until the child reports PAUSED at `stage` (it is then BLOCKED inside the open signing transaction, at that point), SIGKILL it, and return (its complete output, the superseded rows
+        visible inside the transaction, the superseded rows committed before it). Nothing can follow PAUSED, so the kill lands AT the point on any host (A3-0110, A3-0122)."""
+        seen = []
+        for line in p.stdout:
+            seen.append(line)
+            parts = line.split()
+            if parts[:2] == ["PAUSED", stage]:
+                p.send_signal(signal.SIGKILL)
+                rest = p.stdout.read()
+                err = p.stderr.read()
+                p.wait()
+                assert p.returncode == -signal.SIGKILL, (p.returncode, err[-800:])
+                assert err == "" and rest == "", (rest[-400:], err[-800:])            # a blocked child prints nothing after PAUSED and dies without a traceback
+                return "".join(seen), int(parts[3]), int(parts[4])
+            if parts[:1] == ["END"]:
+                break
+        p.wait()
+>       raise AssertionError("the child never reached store point %r (is the crash-hook point missing from WitnessStore._sign_in_txn?)" % stage)
+E       AssertionError: the child never reached store point 'after_pin' (is the crash-hook point missing from WitnessStore._sign_in_txn?)
+
+tests/test_witness_state_kill.py:289: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_witness_state_kill.py::test_kill_between_the_signing_statements_leaves_a_whole_record
+1 failed, 4 deselected in 0.28s

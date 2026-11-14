@@ -426,11 +426,13 @@ class WitnessStore(StoreView):
             rec = None
         if rec is None:
             con.execute("INSERT INTO conflict (type, domain, wsv, key, effect, vhash) VALUES (?,?,?,?,?,?)", (*k, canonical_json(effect), vhash))
+        self._hook("after_pin")                              # crash points BETWEEN the signing statements (TEST-ONLY, inert without a crash_hook): a kill here must leave nothing (S2-0025)
         sig = signer(digest)
         if not isinstance(sig, str) or not _SIG.fullmatch(sig):
             raise ValueError("the signer returned a malformed signature")
         con.execute("INSERT INTO digests (digest, type, domain, wsv, key, expires_at, signature, observation, sup_seq) VALUES (?,?,?,?,?,?,?,?,NULL)",
                     (digest, *k, None if expires_at is None else str(expires_at), sig, canonical_json(obs)))
+        self._hook("after_digest")
         con.execute("INSERT OR REPLACE INTO observed (chain, observation) VALUES (?, ?)", (obs["chainId"], canonical_json(obs)))
         return sig
 

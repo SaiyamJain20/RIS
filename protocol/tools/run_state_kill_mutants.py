@@ -3,7 +3,8 @@ must match exactly once and the text must change), run the UNCHANGED tests/test_
 tests ran and failed (a crash or timeout is NOT detection); the unmutated copy runs first as a control. Mutants in E are ARGUED EQUIVALENTS and are RUN: they must SURVIVE.
 
   K1 the signing transaction is removed (BEGIN, COMMIT and the read-only ROLLBACK become no-ops), so each statement of one signing autocommits separately: a kill between them leaves a pin without
-     a digest or a digest without its observation. Detected only if the kill lands between two of those commits.
+     a digest or a digest without its observation. Detected only if the kill lands between two of those commits: the random kills and the print-only stage kill did so in some
+     runs only (A3-0110; A3-0122: 29 of 40 runs), so S2-0025 added the store's `after_pin`/`after_digest` crash points and a test whose child BLOCKS there until the SIGKILL.
   K2 initialisation writes the INITIALIZED marker BEFORE the database is committed: a kill in between leaves a marker without a database, which the next init_store refuses.
   E1 `synchronous=FULL` becomes OFF at both sites. A SIGKILL does not discard the kernel's page cache, so this cannot be seen by killing a process: it needs power loss or an OS crash. This
      mutant is RUN and must SURVIVE: that is the honest statement of what this test file does not measure.

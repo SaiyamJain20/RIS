@@ -1,0 +1,18 @@
+#!/bin/bash
+# proxy-2 S2-0025 per-case probe: is K1 detected by EACH of the three between-statement cases ALONE? (the docstring claims "every case below fails")
+T=/home/saiyamjain/.claude/jobs/aed51961/tmp/p2/t2; PY=/home/saiyamjain/Desktop/RIS/Project/.venv/bin/python; export TMPDIR=$T/tmp
+N="tests/test_witness_state_kill.py::test_kill_between_the_signing_statements_leaves_a_whole_record"
+for i in 0 1 2; do
+  D=$T/probe-$i; rm -rf $D; mkdir -p $D; cp -a $T/green/protocol $D/
+  $PY - "$D/protocol/tests/test_witness_state_kill.py" "$i" <<'PYEOF'
+import sys, pathlib
+p = pathlib.Path(sys.argv[1]); t = p.read_text(); i = int(sys.argv[2])
+old = '    cases = [("after_pin", 1, False), ("after_digest", 1, False), ("after_pin", 1, True)]\n'
+assert t.count(old) == 1
+p.write_text(t.replace(old, old + "    cases = [cases[%d]]                                    # PROBE ONLY (scratch copy)\n" % i))
+PYEOF
+  $PY -I $T/bin/k1_trials.py $D/protocol k1 5 "$N" $T/out/probe-case$i-k1-5.json > $T/out/probe-case$i-k1-5.log 2>&1
+  $PY -I $T/bin/k1_trials.py $D/protocol control 5 "$N" $T/out/probe-case$i-control-5.json > $T/out/probe-case$i-control-5.log 2>&1
+  rm -rf $D
+done
+echo PROBEDONE > $T/out/percase.done

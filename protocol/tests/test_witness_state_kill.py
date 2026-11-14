@@ -260,6 +260,63 @@ def test_kill_inside_the_signing_transaction_leaves_a_whole_record(tmp_path):
     print("KILL-SIGN-STAGE-STATS stage_kills=2")
 
 
+BETWEEN_STAGES = ("after_pin", "after_digest")       # the named points of WitnessStore._sign_in_txn BETWEEN the signing statements (S2-0025): pin | after_pin | digest | after_digest | baseline
+
+
+def spawn_pause(d, seed, stage, nth, supersede=False):
+    cfg = {"anchor": ANCHOR, "pause": {"stage": stage, "nth": nth, "supersede": supersede}}
+    return subprocess.Popen([sys.executable, "-B", CHILD, d, "sign-pause", str(seed), json.dumps(cfg)], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+
+def pause_and_kill(p, stage):
+    """Read until the child reports PAUSED at `stage` (it is then BLOCKED inside the open signing transaction, at that point), SIGKILL it, and return (its complete output, the superseded rows
+    visible inside the transaction, the superseded rows committed before it). Nothing can follow PAUSED, so the kill lands AT the point on any host (A3-0110, A3-0122)."""
+    seen = []
+    for line in p.stdout:
+        seen.append(line)
+        parts = line.split()
+        if parts[:2] == ["PAUSED", stage]:
+            p.send_signal(signal.SIGKILL)
+            rest = p.stdout.read()
+            err = p.stderr.read()
+            p.wait()
+            assert p.returncode == -signal.SIGKILL, (p.returncode, err[-800:])
+            assert err == "" and rest == "", (rest[-400:], err[-800:])            # a blocked child prints nothing after PAUSED and dies without a traceback
+            return "".join(seen), int(parts[3]), int(parts[4])
+        if parts[:1] == ["END"]:
+            break
+    p.wait()
+    raise AssertionError("the child never reached store point %r (is the crash-hook point missing from WitnessStore._sign_in_txn?)" % stage)
+
+
+def test_kill_between_the_signing_statements_leaves_a_whole_record(tmp_path):
+    """S2-0025 (A3-0110, A3-0122: the stage kill above detected K1 in 29 of 40 runs on agent 3's host): the child BLOCKS at a named point between two statements of one signing transaction
+    and is killed there. A store that commits a signing whole loses that request entirely: the replies equal the stored digests, no pin lacks a live digest, the baseline is the newest record's,
+    and a supersede in flight leaves the superseded table as it was. With one autocommit per statement (mutant K1) the pin or the digest survives alone, so every case below fails.
+    Cases: the first `after_pin` (a fresh pin), the first `after_digest` (digest written, baseline not yet), and the first `after_pin` inside a transaction that superseded a dead pin."""
+    cases = [("after_pin", 1, False), ("after_digest", 1, False), ("after_pin", 1, True)]
+    for stage, nth, supersede in cases:
+        name = "%s-%d%s" % (stage, nth, "-supersede" if supersede else "")
+        d = str(tmp_path / ("between-" + name))
+        ws.init_store(d, BIND, B, OWNER).close()
+        p = spawn_pause(d, 7, stage, nth, supersede)
+        assert p.stdout.readline().strip() == "READY", p.stderr.read()[-800:]
+        out, sup_in_txn, sup_before = pause_and_kill(p, stage)
+        reps, refused = replies_of(out)
+        con = sqlite3.connect(os.path.join(d, "signing.sqlite"))
+        stored = {r[0] for r in con.execute("SELECT digest FROM digests")}
+        sup_after = con.execute("SELECT COUNT(*) FROM superseded").fetchone()[0]
+        con.close()
+        assert stored == set(reps), "%s: the request killed inside its transaction left %d record(s) (a signing committed in pieces)" % (name, len(stored - set(reps)))
+        assert sup_after == sup_before, "%s: a supersede of the killed request survived it (%d -> %d)" % (name, sup_before, sup_after)
+        if supersede:
+            assert sup_in_txn == sup_before + 1, "%s: the paused transaction superseded nothing: the case is vacuous" % name
+        answered = sum(1 for ln in out.split("\n") if ln.startswith(("REPLY ", "REFUSED ")))          # requests answered (an idempotent repeat answers again; `reps` is per digest)
+        bad = violations(d, reps, 7, answered + 1)
+        assert bad == [], "%s: %s" % (name, bad)
+    print("KILL-SIGN-BETWEEN-STATS kills=%d stages=%s supersede_cases=1" % (len(cases), ",".join(BETWEEN_STAGES)))
+
+
 def test_the_harness_flags_a_reply_that_leaves_before_the_commit(tmp_path):
     """Positive control: a child that replies from inside the transaction (a deliberately broken ordering) must be caught. If this passes without a violation the harness is blind."""
     stats = run_signing_trials(tmp_path, "sign-early-reply", 40, 3)
