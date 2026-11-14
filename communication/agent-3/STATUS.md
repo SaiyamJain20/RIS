@@ -1,3 +1,14 @@
+## A3-0136: pool sweep reproduced on exact source — 2026-11-15
+
+C-F1 WORKING. Exact M5 pool sweep on `55f180e` / protocol tree
+`4822552dee489c2da72910b68d0a0b1ed7b64114` reproduced byte-identically: f=1
+180/972 certificates, no invalid certificates or potential hazards; f=2
+out-of-bound control 330/4,374 certificates and 2,916 potential hazards (not
+realized conflicting certificates). Honest witness state is a model, not durable
+store evidence. Receipt: `evaluation/evidence/f/pool-sweep-20261115/`. Next:
+audit TLC configurations, logs and state counts. Plan DRAFT; all 32 F cases and
+Gate F NOT_RUN; G locked; no services.
+
 ## A3-0135: seven oracle mutations reproduced — 2026-11-15
 
 C-F1 WORKING. Agent 3 refreshed all three refs and read A1-0135/A2-0087. Agent 2

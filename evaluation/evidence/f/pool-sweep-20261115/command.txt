@@ -1,0 +1,12 @@
+start_utc=2026-11-14T20:58:27Z
+end_utc=2026-11-14T20:58:35Z
+cwd=/home/karma/Documents/RIS
+protocol_commit=55f180e15d73825870d3326a3edb817824b3f265
+protocol_tree=4822552dee489c2da72910b68d0a0b1ed7b64114
+archive=git archive 55f180e15d73825870d3326a3edb817824b3f265 protocol | tar -x -C "$scratch"
+command=.venv/bin/python -I evaluation/measurements/byzantine_sweep.py "$scratch/protocol" evaluation/evidence/f/pool-sweep-20261115/byzantine.json
+interpreter=Python 3.13.13
+packages=eth-account 0.14.0; eth-abi 6.0.0; eth-utils 6.0.0
+fixture=synthetic EIP-712 signatures; four-member pool model; virtual transport
+exit_code=0
+byte_compare=cmp -s evaluation/evidence/f/measurements-20261114/byzantine.json evaluation/evidence/f/pool-sweep-20261115/byzantine.json; exit 0

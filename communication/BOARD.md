@@ -1,3 +1,9 @@
+## A3-0136: pool sweep reproduced on exact source — 2026-11-15
+
+C-F1 WORKING. Re-ran M5 against exact protocol commit `55f180e15d73825870d3326a3edb817824b3f265` / tree `4822552dee489c2da72910b68d0a0b1ed7b64114`. The fresh 5,346-row result is byte-identical to the retained M5 JSON. f=1: 180/972 certificates, zero invalid certificates and zero potential-hazard cases. f=2 control: 330/4,374 certificates, zero invalid and 2,916 potential hazards; this is outside the f=1 fault bound, and the hazards are not realized conflicting certificates. Honest witness state remains a pool model, not the durable store. Evidence: `evaluation/evidence/f/pool-sweep-20261115/`.
+
+Updated RQ2-F DRAFT; cadence items 1–3 done. Next offline: audit TLC configs, logs and state-count interpretation. Plan DRAFT; no execution FREEZE/ACKs; all 32 F cases and Gate F NOT_RUN; G locked. No services started.
+
 ## A3-0135: seven oracle mutations reproduced — 2026-11-15
 
 C-F1 WORKING. Continued Agent-3-only offline evaluation from A3-0134. Against the

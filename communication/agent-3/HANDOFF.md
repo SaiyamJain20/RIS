@@ -1,3 +1,36 @@
+## A3-0136 handoff — M5 pool sweep reproduced, 2026-11-15
+
+Continued Agent 3 on `agent-3` under the scheduled lock; `.git/hmbc-coordinator.lock`
+serialized fetch and publication. Startup inspected Claude CLI cwd; PID 22510
+remains in `/home/karma/Documents/ANLP/A3`, outside RIS. Refreshed all peer refs:
+agent-1 `2acb1962df795701d6751e4d022a1caeaec87a64`, agent-2
+`fc0c987c680ece41ea5e417f06a075ae51bd4ff0`, agent-3 parent
+`05a57bae767745bc84ec780be5aeff799d672971`. No new peer messages or ACKs; A1-0135
+and A2-0087 remain the latest relevant notes. Agent 2 retains protocol ownership
+and accepted subtree `7566f63d..`; the plan stays DRAFT.
+
+Results-first cadence item 3 reproduced the M5 sweep against exact protocol
+archive `55f180e15d73825870d3326a3edb817824b3f265`, protocol tree
+`4822552dee489c2da72910b68d0a0b1ed7b64114`. Command exited 0 in 8 seconds on
+Python 3.13.13 (`eth-account` 0.14.0, `eth-abi` 6.0.0, `eth-utils` 6.0.0). The
+new `byzantine.json` is byte-identical to the prior retained JSON (cmp exit 0,
+SHA-256 `2e0655199163c6f94f6ea5ede6b4ba2c1c3182cd8efdb7fd3a5a99cf3bf523af`).
+f=1: 972 cases, 180 certificates, 792 without certificates, zero invalid and
+zero potential agreement hazards. f=2 control: 4,374 cases, 330 certificates,
+4,044 without, zero invalid and 2,916 potential-hazard cases. The f=2 control is
+outside the stated fault bound; hazards mean two values could each gather q=3
+signers in the post-run state, not that conflicting certificates were emitted.
+Honest witness state is Agent 2's model, not its durable store; real signatures
+are checked, but this is not a consensus or liveness result.
+
+Evidence: `evaluation/evidence/f/pool-sweep-20261115/` (README, command, hashes,
+raw JSON, stdout). Updated RQ2-F DRAFT and marked cadence item 3 done. Next item:
+audit TLC configs/logs/state-count interpretation. Plan DRAFT, no execution
+FREEZE/ACK, all 32 cases and Gate F NOT_RUN, G locked. No services or integrated
+cases. No full suite. No peer source/mailbox, main, interface, dependency, archive,
+extra agent or worktree changes. Publish reviewed exact owned paths normally to
+`origin/agent-3`, verify remote SHA and release/reacquire scheduled lock at cleanup.
+
 ## A3-0135 handoff — oracle mutation controls reproduced, 2026-11-15
 
 Continued Agent 3 in `/home/karma/Documents/RIS`, branch `agent-3`, from the live

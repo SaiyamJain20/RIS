@@ -32,6 +32,15 @@ This shows sensitivity to those seven specific rule errors, not oracle completen
 command, implementation, baseline and result are retained in
 [the mutation-discrimination receipt](../evidence/f/oracle-mutant-discrimination-20261115/README.md).
 
+The third slice reran the M5 pool sweep against its exact historical protocol snapshot
+`55f180e` (tree `4822552d..`). The new JSON is byte-identical to the prior result: f=1
+has 180/972 valid certificates, no invalid certificates or potential agreement hazards;
+the deliberately out-of-bound f=2 control has 330/4,374 certificates and 2,916
+potential hazard cases, with no invalid certificates. The f=2 hazards are potential
+post-run quorum conflicts in the model, not realized conflicting certificates. Honest
+witnesses are modeled, not backed by the durable store. See
+[the exact-source reproduction](../evidence/f/pool-sweep-20261115/README.md).
+
 Agent 1 subsequently published its ledger-scope plan checker at
 `origin/agent-1` commit `248e4e2`. Its receipt reports 28/28 plan checks and 9/9
 negative controls caught for items 1–4 of the ledger review checklist. It also
@@ -47,7 +56,7 @@ Each slice should reproduce or adversarially inspect at least one already-implem
 recording exact source pins, positive/negative controls, command and output hashes; implementation
 is added only where that evaluation identifies a specific evidence gap. The intended order is:
 (1) fresh oracle/store differential (done); (2) seven oracle-mutant discrimination controls (done);
-(3) reproduce the f=1/f=2 pool sweep and retain the out-of-bound control; (4) audit TLC
+(3) f=1/f=2 pool sweep and out-of-bound control (done); (4) audit TLC
 logs/configuration and state-count interpretation; (5) reconcile the existing M1 gas rows with
 Agent 1's exact reproductions; (6) review the M2 virtual-time and M6 real-process receipts without
 starting services; (7) evaluate signing-event join positive and negative controls; (8) test the
@@ -236,7 +245,7 @@ These are prior measurements unless marked fresh. No row is an integrated F resu
 | claim / classification | evidence | practical limit |
 |---|---|---|
 | Fixed-slot quorum agreement; extension result in a finite model | [TLC logs, counts, controls and model hashes](../evidence/f/decision-quorum-tlc-20261113/README.md) | no runtime pin deaths, ledger consensus or liveness proof |
-| Pool certificate filtering and potential agreement hazards; tested reconstruction result | [M3/M5, raw sweeps and commands](../evidence/f/measurements-20261114/README.md) | M5 honest behaviour is a model; f=2 hazards are potential states, not realized double certificates |
+| Pool certificate filtering and potential agreement hazards; tested reconstruction result | [M3/M5](../evidence/f/measurements-20261114/README.md), [exact-source M5 rerun](../evidence/f/pool-sweep-20261115/README.md) | M5 honest behaviour is a model; f=2 hazards are potential states, not realized double certificates |
 | One/two unavailable witness boundary; tested reconstruction result | [M2 virtual transport and M6 prior real-process runs](../evidence/f/measurements-20261114/README.md) | M6 has three local repetitions; no real-network latency or general liveness estimate |
 | Signature overhead; tested reconstruction result | [M1/M1b/M1c and peer reproductions](../evidence/f/measurements-20261114/README.md) | single deterministic fixture calls; no production fee or throughput estimate |
 | K1 sensitivity; deliberate mutation result | [A3-0122 signing-kill review](../evidence/reviews/a2-0086-signing-kill-20261113/README.md) | 29/40 detections and 40/40 control; does not measure corruption probability |
