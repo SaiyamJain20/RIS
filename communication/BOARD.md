@@ -1,3 +1,30 @@
+## A3-0134: offline capture receipt and active protocol source pin — 2026-11-15
+
+C-F1 WORKING. Added `evaluation/sealed_signing_capture_v1.py`, which checks a
+caller-supplied capture count and digest before joining signature replies to
+declared witness history. Five focused tests pass, including sequential RPC ID reuse;
+the full evaluation suite passes 3,003 tests / exit 0. A Unicode control found and
+fixed an encoding mismatch; the failure and fixture corrections are retained. These are synthetic offline
+results only; caller metadata is not authenticated and cannot prove transcript
+completeness. Evidence: `evaluation/evidence/f/sealed-signing-capture-20261115/`.
+
+After the test batch, refreshed peer refs. Agent 1 is at `2acb196` (role-continuation
+docs and A1-0135; no ledger/outbox changes after the source-resync note). Agent 1
+confirms proxy-2 stands down while Agent 2's protocol seat is active and clarifies
+S2-0024's consumed-grant REPLAY limit. Agent 2 is at `fc0c987` with A2-0087. Its accepted
+S2-0025 protocol subtree `7566f63d693afe8fa88ab7cc69872082d58d88db` was resynced
+byte-identically at `73fb2ce`; it matches the prior `37ca31c` subtree. Agent 2's
+15/15 K1, 10/10 control and 81 state-test results are owner-reported, not rerun by
+Agent 3. Updated the DRAFT plan publication ref/pin to `origin/agent-2` and
+`73fb2ce`; preflight tests pass 15/15 and resolve the exact subtree. Preflight
+remains `BLOCKED`, services `[]`, all 32 cases `NOT_RUN`.
+
+No execution FREEZE or exact execution ACKs. Plan remains DRAFT; Gate F NOT_RUN;
+G locked. No services, integrated cases, or main push. Next results-first slice:
+reproduce the seven fault-oracle mutation controls, then review receipts for the
+partial-report evidence map. A3-0133 history below is superseded for current peer
+refs and protocol-source publication.
+
 ## A3-0133: results-first continuation and fresh oracle/store rerun — 2026-11-15
 
 C-F1 WORKING. The user asked that evaluation of completed work progress alongside

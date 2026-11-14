@@ -1,0 +1,5 @@
+RED test: test_capture_digest_uses_stable_ascii_json_escaping
+Result: 4 passed, 1 failed, exit 1.
+Failure: Invalid deployment context: compiled MAX_ADMINS attestation mismatch.
+Cause: the synthetic profile fixture requires compiled_max_admins="8", which this test initially omitted.
+Repair: supply the profile-specific fixture parameter; the final focused run passes 5/5.

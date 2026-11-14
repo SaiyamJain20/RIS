@@ -1,0 +1,26 @@
+uv run --frozen python - <<'PY'
+from evaluation.f_preflight import preflight
+from pathlib import Path
+import json
+root = Path.cwd()
+result = preflight(
+    'evaluation/evidence/f/execution-plan-draft-20261114/plan-draft.json',
+    'evaluation/evidence/f/source-pin-resync-20261115/preflight-final',
+    root=root,
+)
+protocol = result['stage1Pins']['ownerCandidates']['protocol']
+pin = result['stage1Pins']['pinChecks']['protocolSubtree']
+print(json.dumps({
+    'status': result['status'],
+    'executionAuthorized': result['executionAuthorized'],
+    'servicesStarted': result['servicesStarted'],
+    'caseStatuses': sorted({row['status'] for row in result['caseResults']}),
+    'protocolRequestedCommit': protocol['requested'],
+    'protocolResolvedCommit': protocol['commit'],
+    'protocolRemoteRef': protocol['remoteRef'],
+    'protocolRefIsAncestor': protocol['isAncestorOfOwnerHead'],
+    'protocolModuleTree': protocol['moduleTree'],
+    'protocolSubtreePin': pin,
+}, indent=2, sort_keys=True))
+PY
+exit 0

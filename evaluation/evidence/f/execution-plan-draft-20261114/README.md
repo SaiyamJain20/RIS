@@ -1,15 +1,18 @@
 # F execution plan DRAFT — agent 3, 2026-11-14
 
 Latest technical review: S2-0025 candidate `37ca31c` (protocol subtree
-`7566f63d693afe8fa88ab7cc69872082d58d88db`) now reproduces 40/40 K1 detections and
-40/40 controls on agent 3's host, plus 81 state tests. Its kill-coverage result is
-accepted at isolated scope; see `../../reviews/proxy-k1-20261114/README.md`.
+`7566f63d693afe8fa88ab7cc69872082d58d88db`) reproduces 40/40 K1 detections and
+40/40 controls on agent 3's host, plus 81 state tests. Agent 2 has independently
+re-verified the same bytes (15/15 K1 detections, 10/10 controls, 81 state tests)
+and resynced them byte-identically to its active branch at `73fb2ce`; the protocol
+subtree is unchanged. The draft now cites that publication commit and
+`origin/agent-2`. The exact accepted subtree, not commit identity, binds protocol
+bytes. See `../../reviews/proxy-k1-20261114/README.md` and A2-0087 on
+`origin/agent-2`.
 D57 records the human's authorization of proxy-2 and clarification that all agent
-numbers are portable work roles. The machine-readable draft now adopts `37ca31c`,
-its exact protocol tree and actual publication ref `origin/agent-1`; S2-0024 is
-accepted as the protocol role's signing-rule answer. No original-session approval
-or duplicate branch push is needed. The preflight checks the declared publication
-ref and exact subtree; its legacy `ownerCandidates` field denotes role artifacts.
+numbers are portable work roles. S2-0024 is accepted as the protocol role's
+signing-rule answer. No original-session approval or duplicate branch push is
+needed. The preflight checks the declared publication ref and exact subtree; its legacy `ownerCandidates` field denotes role artifacts.
 The plan remains DRAFT and actual exact FREEZE ACKs are still absent. The older
 `55f180e` candidate retains its 29/40 result; it does not describe the current
 candidate. Older preflight results describe their pinned bytes and do not validate
@@ -22,8 +25,9 @@ case coverage map (`case-coverage-map-20261114`). Grouping into families is a pl
 `plan-draft.json` holds the machine-readable form: pins, six case families (8+6+4+8+3+3 = 32, each case once),
 stages, preconditions and non-goals. Key points:
 - Ledger pin is 85c59f5, not the e4e992f named in f_matrix.json (A1-0127; matrix not edited).
-- The current protocol candidate is `37ca31c` / tree `7566f63d..`, published on
-  `origin/agent-1`.
+- The accepted protocol subtree is `7566f63d..`, now published at
+  `origin/agent-2` commit `73fb2ce` after byte-identical resync; the prior
+  `37ca31c` publication remains available on `origin/agent-1`.
   D57 authorizes proxy-2 to act for the portable protocol role, including source
   approval and exact protocol FREEZE ACKs. S2-0024 is accepted as the role's
   signing-rule answer; S2-0025's K1 result was reproduced 40/40 with 40/40 controls.
@@ -68,11 +72,9 @@ integrated runner and six families are the bulk of F. Detailed final preflight o
 ## Continuation correction — A3-0131, 2026-11-14
 
 The updates above supersede the older pending-K1 and pending-signing-rule wording.
-The live candidate's publication ref is `origin/agent-1`; the preflight checks that
-declared ref and exact protocol subtree. D57 makes role continuation portable and
-does not require a duplicate push to `agent-2`. Agent 2's branch remains at
-`9d44754`, with no new publication on this refresh. S2-0026 is a protocol-role
-review, not a FREEZE ACK.
+The live candidate's publication ref was `origin/agent-1` at A3-0131; see the
+source-role handoff below for the current publication ref. S2-0026 is a
+protocol-role review, not a FREEZE ACK.
 
 The remaining join gap is now split clearly: `evaluation.signing_event_join_v2`
 joins generated/captured RPC signature replies to an exact signed-history digest,
@@ -82,3 +84,15 @@ the service validated a live proposal, or authenticate native ledger facts. The
 runner must still acquire real transcript/native captures and preserve those
 limits. No integrated cases or services are authorized by this design note; plan
 status remains DRAFT, all 32 cases and Gate F remain NOT_RUN, and G remains locked.
+
+## Source-role handoff — A2-0087, 2026-11-15
+
+Agent 2 reactivated the protocol role and published the accepted S2-0025 module
+bytes at `origin/agent-2` commit `73fb2ce`. The exact protocol subtree remains
+`7566f63d693afe8fa88ab7cc69872082d58d88db`, matching both `37ca31c` on
+`origin/agent-1` and the plan's previously accepted bytes. The plan now identifies
+`73fb2ce`, its repository tree, and the active `origin/agent-2` publication ref;
+the module-tree pin is unchanged. Agent 2's independent 15/15 K1, 10/10 control
+and 81 state-test results are owner-reported, not rerun here. This is a source-role
+handoff, not a FREEZE ACK or authorization: plan DRAFT, all 32 cases and Gate F
+NOT_RUN, no services or integrated cases.

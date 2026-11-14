@@ -1,3 +1,61 @@
+## A3-0134 handoff — offline capture receipt and protocol source resync, 2026-11-15
+
+Continued Agent 3 in `/home/karma/Documents/RIS`, branch `agent-3`, from live
+board A3-0133. No `protocol/**`, `ledger/**`, or peer mailbox writes. Current
+phase C-F1 WORKING; plan DRAFT; Gate F NOT_RUN; all 32 cases NOT_RUN; G locked.
+No service or integrated case started.
+
+Added `evaluation/sealed_signing_capture_v1.py` and five synthetic tests. RPC IDs
+may be reused across sequential messages; the module adds no uniqueness rule. A Unicode
+negative control caught a difference between raw Unicode and default ASCII-escaped
+JSON hashing; the encoding was fixed. Two test fixture setup omissions (missing
+compiled `MAX_ADMINS`) were corrected and retained. The wrapper validates a
+caller-supplied event count and canonical SHA-256, then calls the existing
+`signing_event_join_v2`, which checks per-event ID matching and contiguous sequence.
+Count and
+receipt are unauthenticated caller metadata; they cannot prove capture-source
+authenticity, transcript completeness, native truth, actual service validation,
+or signing time. Evidence: `evaluation/evidence/f/sealed-signing-capture-20261115/`.
+
+Verification (repository root, `uv run --frozen`, CPython 3.13.13, pytest 9.0.2,
+`uv.lock` sha256 `1fb4777a5d4078434af8e7fe4a88f2f3afbe1d8f65d30e8a182999d7a7a29cbe`):
+
+- RED: `uv run --frozen python -m pytest evaluation/tests/test_sealed_signing_capture_v1.py -q` -> exit 2, collection failed because the new module did not exist.
+- GREEN: same focused command -> exit 0, 5 passed; retained stdout and exit.
+- Full evaluator suite: `uv run --frozen python -m pytest evaluation/tests -q` -> exit 0, 3,003 passed in 679.32 s. Earlier 3,002/3,003-test revisions are retained as historical logs. Retained final stdout/exit.
+- Plan-pin check: `uv run --frozen python -m pytest evaluation/tests/test_f_preflight.py -q` -> exit 0, 15 passed.
+- Draft preflight -> exit 0 as a function call, status `BLOCKED`, exact protocol ref/commit/module subtree resolved, no services, all cases `NOT_RUN`. Output and manifest retained in `evaluation/evidence/f/source-pin-resync-20261115/`.
+
+Peer refresh after tests: `origin/agent-1` initially `72a995abef10c3304d0573b008c2199e8467c007`,
+`origin/agent-2` `fc0c987c680ece41ea5e417f06a075ae51bd4ff0`, `origin/agent-3`
+`09b9a5a0e8250222c03baa37976ee92494b239bb` before this checkpoint. Read A1-0135
+and A2-0087, plus updated Agent-2 STATUS/HANDOFF and Agent-1's current role entry
+point. Agent 1 says proxy-2 stands down
+while Agent 2's protocol seat is active and corrects S2-0024's summary: a consumed
+grant prevents a fresh honest ALLOW-to-DENY signing attempt via REPLAY before the
+store call. Agent 2 resynced the S2-0025 protocol bytes byte-identically to commit
+`73fb2ce42d513ad3faf384500609e76d54aedbfb`; repository tree
+`7fd51f9d81bf5a352d8db8a7f809aa5c2df003df`; protocol subtree
+`7566f63d693afe8fa88ab7cc69872082d58d88db`. This equals both old `37ca31c`'s
+subtree and current `origin/agent-2:protocol`. Updated DRAFT plan's candidate,
+tree, and `sourceRefs.protocol=origin/agent-2`; preflight confirms ancestry and
+exact subtree. Agent-2's 15/15 K1, 10/10 control and 81 state-test results are
+owner-reported, not rerun here. This is a source-role resync, not an execution ACK.
+
+The final refresh before publication advanced Agent 1 to
+`2acb1962df795701d6751e4d022a1caeaec87a64` for role-continuation documentation;
+no ledger or outbox paths changed after A1-0135. Agent 1 `A1-0134` reports 28/28 ledger checklist items 1–4 and 9/9 negative
+controls; the earlier 27/27 dev-key scan was vacuous because its directory was
+missing. Agent 3 did not rerun the checker. Runner-call item 5 remains open; not
+an execution ACK. No exact FREEZE or owner-scope execution ACK is present.
+
+Updated: `evaluation/reports/RQ2-F-DRAFT.md`, DRAFT plan and README, BOARD,
+STATUS, HANDOFF, and both evidence receipts. Next results-first slice: rerun the
+seven deliberate fault-oracle mutation controls, then audit existing receipts for
+the partial-report claim map. Exact owned paths are staged and the complete diff
+was reviewed under the coordinator lock. Normal publication to `origin/agent-3`
+and remote-SHA verification follow; no push to main.
+
 ## A3-0133 handoff — results-first continuation, 2026-11-15
 
 Continued Agent 3 on `agent-3`; refreshed `origin/agent-1`, `origin/agent-2`,

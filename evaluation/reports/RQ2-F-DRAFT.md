@@ -1,4 +1,4 @@
-# RQ2 / F — DRAFT report (agent 3, 2026-11-14)
+# RQ2 / F — DRAFT report (agent 3, 2026-11-15)
 
 **Status: DRAFT. Gate F NOT RUN. G locked.** All 32 planned F cases are NOT_RUN. A fail-closed
 runner preflight now checks draft pins, matrix coverage and a source bracket (stages 1–2 only); it
@@ -57,10 +57,12 @@ decision approval; it does not remove the key-worker trust assumption. Mechanism
 (checkpoint at KSSC, access decision at ACSC, grant receipt at PSC) carry at least q = 3 of the 4 member signatures in strictly increasing signer order (4 of 4 is
 accepted); governance (add/remove authority, set CA admins) needs a witness
 quorum with nonce and expiry; honest witnesses persist a single-signing record durably.
-Components: ledger role (`85c59f5`), protocol role (new reviewed candidate `37ca31c`,
-protocol subtree `7566f63d693afe8fa88ab7cc69872082d58d88db`) and evaluation role.
-Earlier measurements below retain their original protocol pins (`55f180e` unless
-their evidence states otherwise); they have not been rerun on the new candidate.
+Components: ledger role (`85c59f5`), protocol role (accepted S2-0025 subtree
+`7566f63d693afe8fa88ab7cc69872082d58d88db`, now published at `origin/agent-2`
+commit `73fb2ce`) and evaluation role. The protocol subtree was unchanged from its
+earlier `37ca31c` publication on `origin/agent-1`. Earlier measurements below
+retain their original protocol pins (`55f180e` unless their evidence states
+otherwise); they have not been rerun on the resynced owner branch.
 
 ## 2. Results (all local, synthetic)
 ### 2.1 Safety — finite model (TLC 2.19; `evidence/f/decision-quorum-tlc-20261113/`)
@@ -124,8 +126,11 @@ command receipts](../evidence/reviews/proxy-k1-20261114/README.md). The human ex
 authorized Claude proxy-2 for protocol-source approval and exact protocol FREEZE ACKs,
 then clarified that all agent names are portable work roles (D57). The draft now adopts
 this candidate from its actual publication ref, `origin/agent-1`, with an exact module-tree
-pin. No original-session countersignature or duplicate branch push is needed. S2-0026 is
-a plan review, not an execution ACK; the required exact FREEZE ACKs remain absent.
+pin. Agent 2 later resynced the same subtree to `origin/agent-2`/`73fb2ce` and independently
+re-verified K1 (15/15 mutant trials, 10/10 controls) plus 81 state tests. The execution draft
+now points to the active protocol owner. No original-session countersignature or duplicate
+branch push is needed. S2-0026 is a plan review, not an execution ACK; the required exact
+FREEZE ACKs remain absent. See A2-0087 and the [updated source pin receipt](../evidence/f/execution-plan-draft-20261114/README.md).
 Mistakes of my own kept in the record: a model deadlock
 (first TLC f=0 run), a parser artifact that reported a false 52,339 B TMSC size.
 
@@ -142,6 +147,18 @@ cover all four signing kinds, live and superseded generations, idempotent re-sig
 message/ID mismatches, duplicate JSON keys, invalid signatures and tampered
 history. Evidence and commands: [signing-event join](../evidence/f/signing-event-join-20261114/README.md).
 
+The offline runner now wraps that join with `sealed_signing_capture_v1`.
+Its caller-supplied receipt records a separate event count and SHA-256 of the
+canonical capture; validation rejects count mismatches, edits after sealing and
+preserves the source-reported count and relies on the existing join for contiguous
+event-sequence and reply-ID matching. Five synthetic tests cover count mismatch,
+post-seal edit, Unicode encoding, sequential RPC ID reuse and a successful join.
+A Unicode hashing negative control found and fixed an encoding mismatch; the final
+focused suite passes 5/5 and the evaluation suite passes 3,003 tests. The source-ref
+preflight suite passes 15/15 and still reports BLOCKED. Commands, output, exit
+codes, fixture/source hashes and limits:
+[sealed-capture evidence](../evidence/f/sealed-signing-capture-20261115/README.md).
+
 Classification: tested reconstruction result over synthetic records and generated
 JSON-lines, not a live-process measurement or F case. A valid signature binds the
 message to the configured test owner, but does not authenticate the capture
@@ -149,8 +166,10 @@ transcript or show that it is complete. The export's observation remains a
 store-reported value. Native fact checks still require the separate raw block/call
 checker; neither path proves SQLite/export completeness, persistence, or wall-clock
 signing time. The helper also does not prove that an honest service validated the
-proposal before returning the signature. Runner capture acquisition and its
-end-to-end controls remain unimplemented.
+proposal before returning the signature. The receipt's count is useful against
+truncation only when it comes from an independent source, and the receipt itself
+is not authenticated; runner capture acquisition and end-to-end controls remain
+unimplemented.
 
 ## 3. Trust matrix (what still requires trust)
 | component | status |
@@ -219,6 +238,8 @@ These are prior measurements unless marked fresh. No row is an integrated F resu
 | Fresh oracle/store differential; tested reconstruction result | [2026-11-15 exact-source rerun](../evidence/f/oracle-store-diff-20261115/README.md) | primary 180-case grid rerun only; seven mutation controls are from the earlier receipt |
 | Service/store distinction; fresh tested reconstruction result | [four probes, selected owner tests, exact source/output hashes](../evidence/f/report-review-20261114/README.md) | injected view and synthetic keys; no native grant/sequence transition |
 | Captured signer reply to exact store-history generation; tested reconstruction result | [15 focused join tests and source/command record](../evidence/f/signing-event-join-20261114/README.md) | generated JSON-lines; capture authenticity/completeness, native facts and honest-service validation remain unproved |
+| Offline capture receipt checks; tested reconstruction result | [count, digest and sequential RPC-ID reuse controls plus evaluation run](../evidence/f/sealed-signing-capture-20261115/README.md) | caller-supplied count/receipt; no source authentication, acquisition, or transcript completeness claim |
+| Active protocol source pin and draft preflight; provenance check only | [A2-0087 byte-identical source resync](../evidence/f/source-pin-resync-20261115/README.md) | exact module subtree and ancestry verified; source-role handoff is not an execution ACK |
 | Draft coverage and source pins; preflight check only | [A3-0128 final preflight](../evidence/f/preflight-20261114-r4/README.md) | 32/32 IDs is coverage of the plan; all case statuses remain NOT_RUN |
 
 ## 5. Not done / not claimed
@@ -235,10 +256,10 @@ all exact draft pins match. A deliberate same-row-count matrix-ID drift is also 
 checks do not lift the actual role-scope execution ACK or later-stage blockers. Deviation from the plan
 sequence: earlier measurements were taken before the runner/FREEZE on the human's instruction.
 
-Before the 2026-11-17 partial-report target, the permitted next work is to
-integrate the synthetic signing-event join into the offline runner and implement
-capture/acquisition controls, while reviewing any
-published exact protocol delta. The execution plan remains DRAFT. The new K1 candidate's
+Before the 2026-11-17 partial-report target, the permitted next work is to review
+the existing result receipts and add capture acquisition/completeness controls
+only if their source can be named and independently observed, while reviewing
+any published exact protocol delta. The execution plan remains DRAFT. The new K1 candidate's
 kill coverage is accepted at tested scope and its source is adopted in the DRAFT under D57.
 Both exact execution FREEZE ACKs and the unfinished runner stages remain open; S2-0024 and
 A1-0129 are not execution ACKs. Run services/cases only after the authorized FREEZE requirements are met. A reviewable

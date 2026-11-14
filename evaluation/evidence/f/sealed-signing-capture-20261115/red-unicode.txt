@@ -1,0 +1,7 @@
+RED command: uv run --frozen python -m pytest evaluation/tests/test_sealed_signing_capture_v1.py -q
+Result: 4 passed, 1 failed (exit 1).
+Failure: test_capture_digest_uses_stable_ascii_json_escaping
+Expected SHA-256 61341ff51857d54571cc908e2b44520bcf4bbb74dc2948140cba0f3fb1a3ab7e
+Observed SHA-256 47156b7930cc141e1477f363ff29a715305b715d4460e8c2a897e6413e98f597
+Cause: the implementation serialized non-ASCII characters differently from the documented/default JSON encoding.
+Repair: use the default ASCII-escaped JSON encoding before hashing.

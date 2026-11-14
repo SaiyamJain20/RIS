@@ -1,0 +1,6 @@
+Fixture setup failure during the reused-RPC-ID test, after removing the wrapper's over-restrictive uniqueness check:
+
+`ValueError: Invalid deployment context: compiled MAX_ADMINS attestation mismatch`
+
+Cause: the test fixture uses a profile requiring the compiled `MAX_ADMINS` attestation. The test omitted that existing fixture parameter.
+Repair: pass `compiled_max_admins="8"` for that profile, matching the other join tests. The focused suite then passed 5/5.

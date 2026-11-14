@@ -1,0 +1,12 @@
+$ uv run --frozen python -m pytest evaluation/tests/test_sealed_signing_capture_v1.py -q
+==================================== ERRORS ====================================
+_____ ERROR collecting evaluation/tests/test_sealed_signing_capture_v1.py ______
+ImportError while importing test module '/home/karma/Documents/RIS/evaluation/tests/test_sealed_signing_capture_v1.py'.
+Traceback:
+  File "evaluation/tests/test_sealed_signing_capture_v1.py", line 8, in <module>
+    from evaluation.sealed_signing_capture_v1 import join_sealed_capture, seal_capture
+ModuleNotFoundError: No module named 'evaluation.sealed_signing_capture_v1'
+
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.07s
+exit=2

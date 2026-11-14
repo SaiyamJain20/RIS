@@ -1,0 +1,6 @@
+RED command: uv run --frozen python -m pytest evaluation/tests/test_sealed_signing_capture_v1.py -q
+Result: 4 passed, 1 failed (exit 1).
+Failure: test_sealed_capture_allows_reused_rpc_id_for_sequential_events
+Observed behavior: the new wrapper rejected a repeated JSON-lines request ID as `duplicate request id`.
+Source review: the protocol requires per-line ID matching but does not require global uniqueness across sequential exchanges. Reuse is compatible with its documented shape.
+Repair: remove the wrapper-level uniqueness restriction; retain contiguous sequence and per-event request/response ID checks in the existing signing-event join.

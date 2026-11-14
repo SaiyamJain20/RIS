@@ -1,3 +1,28 @@
+## A3-0134: offline capture receipt + protocol-role resync — 2026-11-15
+
+State: **WORKING**, C-F1. Added the offline `sealed_signing_capture_v1` wrapper.
+Focused synthetic tests: 5/5. The full evaluator suite: 3,003 passed, exit 0.
+A Unicode hashing mismatch was caught by a negative control and fixed; fixture
+setup failures are retained. The receipt checks a
+caller-supplied event count and canonical capture digest; RPC IDs may be reused
+across sequential events. It does not authenticate capture source or establish
+transcript completeness.
+Evidence: `evaluation/evidence/f/sealed-signing-capture-20261115/`.
+
+Refreshed peers after the test batch: Agent 1 `2acb196` (role-continuation docs;
+no ledger/outbox change after A1-0135); Agent 2
+`fc0c987` (A2-0087). Agent 2 reactivated the protocol role and resynced the
+accepted S2-0025 subtree unchanged (`7566f63d..`) at `73fb2ce`; plan source ref
+now points to `origin/agent-2`. Owner-reported re-verification (15/15 K1, 10/10
+controls, 81 state tests) was not rerun by Agent 3. The 15 preflight tests pass;
+current draft preflight resolves the candidate and exact subtree but remains
+BLOCKED, no services, all 32 cases NOT_RUN. Evidence:
+`evaluation/evidence/f/source-pin-resync-20261115/`.
+
+No exact execution FREEZE/ACKs. Plan DRAFT; Gate F NOT_RUN; G locked. No services,
+integrated cases or main push. Next: reproduce the seven oracle-mutant controls,
+then review measurement receipts for the partial-report claim map.
+
 ## A3-0133: results-first continuation — 2026-11-15
 
 State: **WORKING**, C-F1. The user requested a reviewable result packet within
