@@ -184,3 +184,51 @@ def test_f_preflight_cli_returns_blocked_and_writes_manifest(tmp_path, monkeypat
 
     assert main() == 2
     assert json.loads((output / "manifest.json").read_text())["status"] == "BLOCKED"
+
+
+def proxy_candidate_plan(tmp_path):
+    plan = json.loads(PLAN.read_text())
+    plan["pins"]["protocolSourceCandidate"] = "37ca31c80ab9a81956647428435addb1802cb370"
+    plan["pins"]["protocolSubtree"] = "7566f63d693afe8fa88ab7cc69872082d58d88db"
+    plan["sourceRefs"] = {"ledger": "origin/agent-1", "protocol": "origin/agent-1"}
+    path = tmp_path / "proxy-plan.json"
+    path.write_text(json.dumps(plan))
+    return path
+
+
+def test_f_preflight_accepts_role_artifacts_on_another_published_branch(tmp_path):
+    result = run("F", "repaired-f", tmp_path / "out", integration_plan=proxy_candidate_plan(tmp_path))
+
+    protocol = result["stage1Pins"]["ownerCandidates"]["protocol"]
+    assert protocol["remoteRef"] == "origin/agent-1"
+    assert protocol["isAncestorOfOwnerHead"] is True
+    assert result["stage1Pins"]["pinChecks"]["protocolSubtree"]["exactPin"] is True
+    assert result["status"] == "BLOCKED"
+    assert result["executionAuthorized"] is False
+    assert result["servicesStarted"] == []
+    assert {case["status"] for case in result["caseResults"]} == {"NOT_RUN"}
+
+
+@pytest.mark.parametrize("bad_tree", ["0" * 40, "7566f63d", ""])
+def test_f_preflight_blocks_changed_or_incomplete_module_pin(tmp_path, bad_tree):
+    path = proxy_candidate_plan(tmp_path)
+    plan = json.loads(path.read_text())
+    plan["pins"]["protocolSubtree"] = bad_tree
+    path.write_text(json.dumps(plan))
+
+    result = run("F", "repaired-f", tmp_path / "out", integration_plan=path)
+
+    assert result["stage1Pins"]["pinChecks"]["protocolSubtree"]["exactPin"] is False
+    assert any("protocolSubtree" in item for item in result["blockers"])
+
+
+def test_f_preflight_does_not_use_an_unpublished_local_ref_as_provenance(tmp_path):
+    path = proxy_candidate_plan(tmp_path)
+    plan = json.loads(path.read_text())
+    plan["sourceRefs"]["protocol"] = "HEAD"
+    path.write_text(json.dumps(plan))
+
+    result = run("F", "repaired-f", tmp_path / "out", integration_plan=path)
+
+    assert result["stage1Pins"]["ownerCandidates"]["protocol"]["available"] is False
+    assert result["servicesStarted"] == []

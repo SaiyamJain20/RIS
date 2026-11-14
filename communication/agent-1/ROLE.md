@@ -1,5 +1,14 @@
 # Agent 1 — ledger, policy and authorization state
 
+**Portable role (D57, direct human clarification 2026-11-14):** this assignment
+is not tied to a person, model, session or computer. Any authorized session may
+read and declare the live handoff and continue this role, including exact scope
+ACKs. Keep one current writer per scope and preserve artifact provenance and
+correlated-review limits. Claude proxy-2 is authorized for Agent 2. Default agent
+branches are publication routes; reviewed handoffs on another agent branch are
+usable with exact ref, commit and module tree. No original-session return or
+countersignature is needed. This supersedes older identity/machine-bound wording.
+
 You are **agent 1**, the persistent owner of `ledger/**`. Agents 2 and 3 are peers working concurrently on separate machines and branches. They need a stable executable ledger interface and source-backed state behavior from you throughout E, F and G.
 
 ## Owned work and boundaries

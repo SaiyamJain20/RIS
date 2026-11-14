@@ -1,0 +1,139 @@
+[
+  {
+    "name": "trials-control",
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-I",
+      "/home/karma/Documents/RIS/evaluation/evidence/reviews/proxy-k1-20261114/k1_trials.py.txt",
+      "/home/karma/Documents/RIS/evaluation/runs/rq2-k1-review-20261114/owner/protocol",
+      "control",
+      "40",
+      "tests/test_witness_state_kill.py::test_kill_between_the_signing_statements_leaves_a_whole_record",
+      "/home/karma/Documents/RIS/evaluation/evidence/reviews/proxy-k1-20261114/trials-control.json"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "pid": 11750,
+    "startedAt": "2026-11-14T16:13:59.784104+00:00",
+    "endedAt": "2026-11-14T16:14:21.693070+00:00",
+    "elapsedSeconds": 21.909,
+    "exitCode": 0,
+    "timedOut": false,
+    "outputSha256": "f6a6d4739d96d689bc3770c67a447c64679c346477f7b60bf2df5c66c283b2e3",
+    "environmentSha256": "7c4e9ec16c26ed3db6228167ada5d014368f0257dae863e11f283a983510c278",
+    "environmentOverrides": {
+      "HOME": "/home/karma/Documents/RIS/evaluation/runs/rq2-k1-review-20261114/home",
+      "TMPDIR": "/home/karma/Documents/RIS/evaluation/runs/rq2-k1-review-20261114/tmp",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+    }
+  },
+  {
+    "name": "trials-k1",
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-I",
+      "/home/karma/Documents/RIS/evaluation/evidence/reviews/proxy-k1-20261114/k1_trials.py.txt",
+      "/home/karma/Documents/RIS/evaluation/runs/rq2-k1-review-20261114/owner/protocol",
+      "k1",
+      "40",
+      "tests/test_witness_state_kill.py::test_kill_between_the_signing_statements_leaves_a_whole_record",
+      "/home/karma/Documents/RIS/evaluation/evidence/reviews/proxy-k1-20261114/trials-k1.json"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "pid": 11971,
+    "startedAt": "2026-11-14T16:14:21.694021+00:00",
+    "endedAt": "2026-11-14T16:14:34.585882+00:00",
+    "elapsedSeconds": 12.892,
+    "exitCode": 0,
+    "timedOut": false,
+    "outputSha256": "da37678875920c105916518e795bd597917491ff6ffd89b6da9dd37c4d8a923e",
+    "environmentSha256": "7c4e9ec16c26ed3db6228167ada5d014368f0257dae863e11f283a983510c278",
+    "environmentOverrides": {
+      "HOME": "/home/karma/Documents/RIS/evaluation/runs/rq2-k1-review-20261114/home",
+      "TMPDIR": "/home/karma/Documents/RIS/evaluation/runs/rq2-k1-review-20261114/tmp",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+    }
+  },
+  {
+    "name": "state-tests",
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-B",
+      "-m",
+      "pytest",
+      "-q",
+      "-s",
+      "-p",
+      "no:cacheprovider",
+      "tests/test_witness_state.py",
+      "tests/test_witness_state_cli.py",
+      "tests/test_witness_state_lock.py",
+      "tests/test_witness_state_hot_journal.py",
+      "tests/test_witness_state_kill.py"
+    ],
+    "cwd": "/home/karma/Documents/RIS/evaluation/runs/rq2-k1-review-20261114/owner/protocol",
+    "pid": 12154,
+    "startedAt": "2026-11-14T16:14:34.586420+00:00",
+    "endedAt": "2026-11-14T16:15:00.260950+00:00",
+    "elapsedSeconds": 25.675,
+    "exitCode": 0,
+    "timedOut": false,
+    "outputSha256": "67f559b96bbf15aa90a38b916e59e1f8888398acad43bdbd603bd7c2ae923f78",
+    "environmentSha256": "7c4e9ec16c26ed3db6228167ada5d014368f0257dae863e11f283a983510c278",
+    "environmentOverrides": {
+      "HOME": "/home/karma/Documents/RIS/evaluation/runs/rq2-k1-review-20261114/home",
+      "TMPDIR": "/home/karma/Documents/RIS/evaluation/runs/rq2-k1-review-20261114/tmp",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+    }
+  },
+  {
+    "name": "kill-mutants",
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-B",
+      "-I",
+      "/home/karma/Documents/RIS/evaluation/runs/rq2-k1-review-20261114/owner/protocol/tools/run_state_kill_mutants.py"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "pid": 12519,
+    "startedAt": "2026-11-14T16:15:00.261474+00:00",
+    "endedAt": "2026-11-14T16:16:46.424464+00:00",
+    "elapsedSeconds": 106.163,
+    "exitCode": 0,
+    "timedOut": false,
+    "outputSha256": "8e44f240f1b36775cc896e5d6a324a12477ad1f649ee078fecdfbeeceba6bce5",
+    "environmentSha256": "7c4e9ec16c26ed3db6228167ada5d014368f0257dae863e11f283a983510c278",
+    "environmentOverrides": {
+      "HOME": "/home/karma/Documents/RIS/evaluation/runs/rq2-k1-review-20261114/home",
+      "TMPDIR": "/home/karma/Documents/RIS/evaluation/runs/rq2-k1-review-20261114/tmp",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+    }
+  },
+  {
+    "name": "state-mutants",
+    "argv": [
+      "/home/karma/Documents/RIS/.venv/bin/python",
+      "-B",
+      "-I",
+      "/home/karma/Documents/RIS/evaluation/runs/rq2-k1-review-20261114/owner/protocol/tools/run_state_mutants.py"
+    ],
+    "cwd": "/home/karma/Documents/RIS",
+    "pid": 14144,
+    "startedAt": "2026-11-14T16:16:46.424810+00:00",
+    "endedAt": "2026-11-14T16:19:07.709777+00:00",
+    "elapsedSeconds": 141.285,
+    "exitCode": 0,
+    "timedOut": false,
+    "outputSha256": "502be4f38b63044cf5251d60c6bed91781b0d3b151419652a67d5edf437b6e50",
+    "environmentSha256": "7c4e9ec16c26ed3db6228167ada5d014368f0257dae863e11f283a983510c278",
+    "environmentOverrides": {
+      "HOME": "/home/karma/Documents/RIS/evaluation/runs/rq2-k1-review-20261114/home",
+      "TMPDIR": "/home/karma/Documents/RIS/evaluation/runs/rq2-k1-review-20261114/tmp",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1"
+    }
+  }
+]

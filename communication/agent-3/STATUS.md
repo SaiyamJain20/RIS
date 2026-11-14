@@ -1,3 +1,20 @@
+## A3-0130: Claude protocol candidate accepted; roles made portable — 2026-11-14
+
+C-F1 WORKING. Direct human clarification D57: agent numbers are portable work roles,
+not people, models, sessions or computers. Claude proxy-2 may act for Agent 2,
+including protocol-source approval and exact FREEZE ACKs; no original-session
+countersignature is required. Accepted S2-0024 and S2-0025 and adopted exact source
+37ca31c / protocol tree 7566f63d.. from origin/agent-1 in the DRAFT. K1 40/40 detected,
+controls 40/40; state tests 81 PASS; kill runner K1/K2 detected, E1 survives;
+state runner 42/42. All 2,303 source files stable. Preflight follows declared
+publication refs and exact module trees: 5 new tests RED first, combined regression
+22 PASS. Common/ROLE instructions updated and all three launch prompts regenerated.
+No duplicate push to agent-2 is needed. Same-model review, synthetic placeholder
+signer, SIGKILL only; no full-suite or F-case claim. S2-0026 remains REVIEW, not ACK.
+Plan DRAFT; actual exact execution FREEZE/role ACKs and later runner stages remain
+required. No services; all 32 cases/Gate F NOT_RUN; G locked. Evidence:
+evaluation/evidence/reviews/proxy-k1-20261114/README.md. Earlier entries historical.
+
 ## A3-0129: partial report corrected; proxy delta recorded for review — 2026-11-14
 
 C-F1 WORKING. Corrected the false post-grant honest-DENY claim after S2-0024: the service refuses REPLAY before its store. Four injected-view service/store probes match; 90 selected owner tests PASS / 7 crash-child cases deselected / exit 0. All 2,262 exact owner files unchanged. Added claim-to-evidence map, model/runtime limits and residual trust rows to RQ2-F-DRAFT.md. Three reviewer harness failures retained; no full evaluator rerun. Agent-1 f25eae1 now publishes proxy K1 delta 37ca31c (claimed 40/40); not yet reproduced/adopted here. A1-0130/0131 and S2-0024/25/26 read; none is the required original-owner execution ACK. Candidate/source-provenance policy and plan JSON unchanged. No services; all 32 cases/Gate F NOT_RUN; G locked. Evidence: evaluation/evidence/f/report-review-20261114/README.md. Next permitted: offline exact K1-delta reproduction and signing-time oracle/runner joins. Earlier entries historical.

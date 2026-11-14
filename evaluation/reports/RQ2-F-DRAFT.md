@@ -23,8 +23,10 @@ decision approval; it does not remove the key-worker trust assumption. Mechanism
 (checkpoint at KSSC, access decision at ACSC, grant receipt at PSC) carry at least q = 3 of the 4 member signatures in strictly increasing signer order (4 of 4 is
 accepted); governance (add/remove authority, set CA admins) needs a witness
 quorum with nonce and expiry; honest witnesses persist a single-signing record durably.
-Components: ledger (agent 1, `85c59f5`), witness runtime and pool (agent 2, `55f180e`),
-evaluation (agent 3).
+Components: ledger role (`85c59f5`), protocol role (new reviewed candidate `37ca31c`,
+protocol subtree `7566f63d693afe8fa88ab7cc69872082d58d88db`) and evaluation role.
+Earlier measurements below retain their original protocol pins (`55f180e` unless
+their evidence states otherwise); they have not been rerun on the new candidate.
 
 ## 2. Results (all local, synthetic)
 ### 2.1 Safety — finite model (TLC 2.19; `evidence/f/decision-quorum-tlc-20261113/`)
@@ -71,16 +73,25 @@ deterministic runs; the E column is the F commit's E profile.
 ### 2.5 Assurance process
 The kill-durability review found and drove fixes for: a hot-journal store refused after a kill in
 init (fixed), a snapshot-lock defect (fixed), the evaluator anchor-selection defect (fixed on my
-side). Open: the signing-kill mutant K1 is detected only probabilistically. A3-0122 measured 29/40
-detections (72.5%) with the control passing 40/40; agent 2's 3/3 report was not reproduced in that
-measurement. Agent 2 has not answered A3-0110 or confirmed the A3-0121 signing-rule reading.
+side). The earlier candidate's signing-kill mutant K1 was detected only probabilistically.
+A3-0122 measured 29/40 detections (72.5%) with the control passing 40/40; agent 2's 3/3
+report was not reproduced in that measurement. S2-0024/0025 now answer those items
+for the protocol role under the human's D57 clarification.
 Proxy note S2-0024, published on agent-1 at `73fec05`, supplies a source review and corrects one
 consequence of my A3-0121 reading (below). It explicitly disclaims knowledge of agent 2's intent
 and is not an execution ACK. A later refresh to agent-1 `f25eae1` found S2-0025's proxy
 delta READY at `37ca31c` (protocol subtree `7566f63d693afe8fa88ab7cc69872082d58d88db`):
-it reports 40/40 K1 detections and 40/40 controls on that host. That delta has not been
-reproduced or adopted here; the 29/40 result still describes the old candidate. S2-0026 is a
-plan review, explicitly not an owner ACK. Neither proxy result closes the execution requirements.
+its between-statement blocking hooks now reproduce on agent 3's host: **40/40 K1 detections,
+40/40 control passes**, with no trial crash, and 81 state tests pass. This accepts the new
+candidate's kill-coverage result at isolated scope; the old candidate still has its measured
+29/40 limit. These are fault-injection tests with a synthetic placeholder signer, not evidence
+of a production corruption rate or power-loss durability. See the [exact-source review and
+command receipts](../evidence/reviews/proxy-k1-20261114/README.md). The human explicitly
+authorized Claude proxy-2 for protocol-source approval and exact protocol FREEZE ACKs,
+then clarified that all agent names are portable work roles (D57). The draft now adopts
+this candidate from its actual publication ref, `origin/agent-1`, with an exact module-tree
+pin. No original-session countersignature or duplicate branch push is needed. S2-0026 is
+a plan review, not an execution ACK; the required exact FREEZE ACKs remain absent.
 Mistakes of my own kept in the record: a model deadlock
 (first TLC f=0 run), a parser artifact that reported a false 52,339 B TMSC size.
 
@@ -145,6 +156,7 @@ These are prior measurements unless marked fresh. No row is an integrated F resu
 | One/two unavailable witness boundary; tested reconstruction result | [M2 virtual transport and M6 prior real-process runs](../evidence/f/measurements-20261114/README.md) | M6 has three local repetitions; no real-network latency or general liveness estimate |
 | Signature overhead; tested reconstruction result | [M1/M1b/M1c and peer reproductions](../evidence/f/measurements-20261114/README.md) | single deterministic fixture calls; no production fee or throughput estimate |
 | K1 sensitivity; deliberate mutation result | [A3-0122 signing-kill review](../evidence/reviews/a2-0086-signing-kill-20261113/README.md) | 29/40 detections and 40/40 control; does not measure corruption probability |
+| New K1 candidate; deliberate mutation result | [S2-0025 reproduced by agent 3](../evidence/reviews/proxy-k1-20261114/README.md) | new blocking test: 40/40 detections and 40/40 controls; isolated candidate acceptance, not an execution ACK |
 | Store death predicates; tested reconstruction result | [180-case differential and seven oracle mutations](../evidence/f/oracle-store-diff-20261114/README.md) | one earlier digest per key; grant/receipt facts caller-asserted |
 | Service/store distinction; fresh tested reconstruction result | [four probes, selected owner tests, exact source/output hashes](../evidence/f/report-review-20261114/README.md) | injected view and synthetic keys; no native grant/sequence transition |
 | Draft coverage and source pins; preflight check only | [A3-0128 final preflight](../evidence/f/preflight-20261114-r4/README.md) | 32/32 IDs is coverage of the plan; all case statuses remain NOT_RUN |
@@ -159,13 +171,14 @@ wrong matrix path and is retained as invalidated evidence. See
 `evaluation/evidence/f/preflight-20261114-r4/README.md`. A1-0129's ledger-scope review was
 incorporated into the DRAFT. Full evaluator suite: 2,978 passed; focused runner tests: 14 passed;
 all exact draft pins match. A deliberate same-row-count matrix-ID drift is also blocked. These
-checks do not lift the owner ACK, K1/signing-rule or later-stage blockers. Deviation from the plan
+checks do not lift the actual role-scope execution ACK or later-stage blockers. Deviation from the plan
 sequence: earlier measurements were taken before the runner/FREEZE on the human's instruction.
 
 Before the 2026-11-17 partial-report target, the permitted next work is to join signing-time
 observations to the oracle and implement offline runner stages/controls, while reviewing any
-published exact protocol delta. The execution plan remains DRAFT. K1 disposition, the required
-owner confirmation and both exact execution FREEZE ACKs remain open; S2-0024 and A1-0129 do not
-close them. Run services/cases only after the authorized FREEZE requirements are met. A reviewable
+published exact protocol delta. The execution plan remains DRAFT. The new K1 candidate's
+kill coverage is accepted at tested scope and its source is adopted in the DRAFT under D57.
+Both exact execution FREEZE ACKs and the unfinished runner stages remain open; S2-0024 and
+A1-0129 are not execution ACKs. Run services/cases only after the authorized FREEZE requirements are met. A reviewable
 partial report can document those blockers; it cannot substitute prior measurements for the
 32 missing case results or close Gate F.

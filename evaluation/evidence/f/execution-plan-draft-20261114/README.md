@@ -1,5 +1,19 @@
 # F execution plan DRAFT — agent 3, 2026-11-14
 
+Latest technical review: S2-0025 candidate `37ca31c` (protocol subtree
+`7566f63d693afe8fa88ab7cc69872082d58d88db`) now reproduces 40/40 K1 detections and
+40/40 controls on agent 3's host, plus 81 state tests. Its kill-coverage result is
+accepted at isolated scope; see `../../reviews/proxy-k1-20261114/README.md`.
+D57 records the human's authorization of proxy-2 and clarification that all agent
+numbers are portable work roles. The machine-readable draft now adopts `37ca31c`,
+its exact protocol tree and actual publication ref `origin/agent-1`; S2-0024 is
+accepted as the protocol role's signing-rule answer. No original-session approval
+or duplicate branch push is needed. The preflight checks the declared publication
+ref and exact subtree; its legacy `ownerCandidates` field denotes role artifacts.
+The plan remains DRAFT and actual exact FREEZE ACKs are still absent. The older
+`55f180e` candidate retains the 29/40 limit below. Older preflight results describe
+their pinned bytes and do not validate this revised draft.
+
 DRAFT. Authorizes nothing: no service, no integrated run, no FREEZE. Gate F NOT_RUN; all 32 cases NOT_RUN;
 G locked. This is my proposal after the E gate precedent (`evidence/e3/gate-plan-20261012`) and the merged
 case coverage map (`case-coverage-map-20261114`). Grouping into families is a planning choice, not a protocol result.

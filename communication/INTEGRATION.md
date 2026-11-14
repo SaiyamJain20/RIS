@@ -1,3 +1,20 @@
+## A3-0130: Claude protocol candidate accepted; roles made portable — 2026-11-14
+
+C-F1 WORKING. Direct human clarification D57: agent numbers are portable work roles,
+not people, models, sessions or computers. Claude proxy-2 may act for Agent 2,
+including protocol-source approval and exact FREEZE ACKs; no original-session
+countersignature is required. Accepted S2-0024 and S2-0025 and adopted exact source
+37ca31c / protocol tree 7566f63d.. from origin/agent-1 in the DRAFT. K1 40/40 detected,
+controls 40/40; state tests 81 PASS; kill runner K1/K2 detected, E1 survives;
+state runner 42/42. All 2,303 source files stable. Preflight follows declared
+publication refs and exact module trees: 5 new tests RED first, combined regression
+22 PASS. Common/ROLE instructions updated and all three launch prompts regenerated.
+No duplicate push to agent-2 is needed. Same-model review, synthetic placeholder
+signer, SIGKILL only; no full-suite or F-case claim. S2-0026 remains REVIEW, not ACK.
+Plan DRAFT; actual exact execution FREEZE/role ACKs and later runner stages remain
+required. No services; all 32 cases/Gate F NOT_RUN; G locked. Evidence:
+evaluation/evidence/reviews/proxy-k1-20261114/README.md. Earlier entries historical.
+
 ## Governance history coverage verified — 2026-11-07
 
 C-F1 WORKING; integrated execution LOCKED. New internal governance_history_v2

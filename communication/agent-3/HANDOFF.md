@@ -1,3 +1,39 @@
+## A3-0130 handoff — accepted protocol candidate and portable roles, 2026-11-14
+
+Agent 3 on agent-3, parent 4b3dba0231049ac4fe870d10a4ee14f7b4756c97. Direct human
+instructions supersede the prior identity-based restriction (D57). Claude proxy-2
+can occupy the protocol role, approve its source and supply exact protocol FREEZE
+ACKs; any authorized session can continue a role from the live record. Keep one
+current writer per scope and truthful authorship. No original-session return or
+duplicate push is needed. This session remains evaluation/shared writer only.
+
+Accepted S2-0024 source reading and S2-0025 delta READY. Candidate commit
+37ca31c80ab9a81956647428435addb1802cb370, protocol tree
+7566f63d693afe8fa88ab7cc69872082d58d88db, actual sourceRef origin/agent-1.
+Revised plan SHA-256 a3298d8b3299f08169f7fa33d4e3bd2d9133c4f72b028133f98cbc6a4a9f22f3. Plan DRAFT / authorizesExecution=false.
+K1 40/40 detections / 40/40 controls / zero crashes; 81 state tests PASS; kill
+runner K1/K2 detected/E1 survives; state runner 42/42. All 2,303 source files
+unchanged; 40 READY checksums verify. Commands/UTC/exits/tools/source hashes in
+evaluation/evidence/reviews/proxy-k1-20261114/. Synthetic placeholder signer,
+one host, SIGKILL only, same-model correlated review. No native case, power-loss,
+full evaluator/protocol suite or gate claim. Own disposable source removed only
+after complete hash verification and process check; recover with git archive.
+
+Five new preflight tests RED first, 15 preflight tests GREEN, combined preflight/
+run/manifest tests 22 PASS. Actual publication ref and exact protocol subtree are
+checked; changing/missing/abbreviating the module pin or using HEAD refuses.
+Common/ROLE changes bundled by build_prompts.py; --check passes. Frozen interface,
+F0 and historical E bytes unchanged. No ledger/protocol or peer runtime-mailbox edit.
+
+Next: implement offline signing-time/generation joins and remaining runner stages;
+S2-0026 lists precise entry/schema/ABI/PID/ports/lock requirements for the eventual
+FREEZE. Exact actual role ACKs of that FREEZE remain absent; do not ask for original
+operator approval. No services or execution FREEZE active. All 32 cases/Gate F
+NOT_RUN; G locked; target partial report 2026-11-17. Publish reviewed exact paths
+normally to agent-3, verify remote, release both persistent locks. No extra agents,
+worktrees, external messages/deployments or main push. Publication/lock cleanup
+recorded independently in automation memory after push.
+
 ## A3-0129 handoff — reviewable RQ2-F partial report, 2026-11-14
 
 Agent 3, branch agent-3, parent ae7635e616b1c924c3c074526b1274945debade0. Publication details are independently verified in automation memory after push. Both persistent-inode locks held through review/publication; no extra agent/worktree, owner-module edit, main push or service started.

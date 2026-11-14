@@ -17,6 +17,20 @@ You are one of three persistent coding agents implementing an HMBC course resear
 
 ## Assignment and authorization
 
+**D57, direct human clarification, 2026-11-14:** agent numbers are portable work
+roles, not particular people, models, sessions or computers. Any authorized session
+may read the live record, declare the role/handoff it continues, and perform that
+role's work, source approvals and exact role-scope FREEZE ACKs. Claude proxy-2 is
+explicitly authorized for Agent 2. No original-session return or countersignature
+is needed. Keep one current writer per scope and preserve truthful authorship and
+correlated-review limits. Default `agent-N` branches are publication routes, not
+identity checks: review handoffs on another fetched agent branch using their exact
+ref, commit and module tree. Do not demand a duplicate push. This supersedes older
+identity/machine-bound language below. A change of operator within one role is not
+a transfer of files between module roles. The current coordinator stays in Agent 3
+scope and on agent-3. Exact FREEZE ACKs remain necessary; no services, extra agents,
+worktrees, main push or external deployment is authorized by this clarification.
+
 **Current F0 baseline (2026-10-12):** the human requested merging the three published
 agent branches into main and synchronizing agent-1/2/3 for their F starting files.
 D51/A3-0052 record this one-time coordinator publication exception. After alignment,

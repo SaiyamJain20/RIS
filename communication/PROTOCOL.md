@@ -7,6 +7,14 @@ still require exact affected ACKs; F gate NOT RUN, G locked.
 
 ## 1. Single-writer ownership
 
+**D57, 2026-11-14:** agent names are portable responsibility roles, not a person,
+model, session or computer. Another authorized session may read and declare the
+live handoff, continue the role, and publish its exact role-scope ACKs. Claude
+proxy-2 is authorized for Agent 2, including protocol-source approval and FREEZE
+ACKs. No original-session return or countersignature is needed. Keep one current
+writer per scope and truthful authorship/correlation labels. Continuing a role
+does not transfer files between module responsibilities.
+
 | Writer | Owned paths | Reads |
 |---|---|---|
 | Agent 1 | `ledger/**`, its STATUS/HANDOFF and `communication/agent-1/outbox/**` | shared contracts, board, agent 2/3 outboxes and exported manifests |
@@ -79,6 +87,13 @@ Selected gate evidence is copied to a versioned `evaluation/evidence/frozen/<rq>
 - The user may change scope. Record the instruction and update board/spec before implementing the change.
 
 ## 7. Distributed Git workflow
+
+D57 supersedes identity/machine restrictions in the older workflow below. Branches
+are default publication routes. A module READY on another fetched agent branch is
+usable after exact ref/commit/module-tree and evidence review; do not require an
+original operator or duplicate cross-branch push. Immutable earlier messages retain
+their original labels; a role successor publishes a new message and names the role
+it satisfies. The current coordinator publishes only on agent-3 in this session.
 
 The human changed execution to separate machines and branches on 2026-10-07. Each agent fetches and pushes exact owned paths on `agent-N` at `SaiyamJain20/RIS`. Read the latest `communication/**` across branches, with file-changing commit provenance. Publish immutable outboxes on the sender branch; ACK in the recipient's branch. No peer mailbox edits, blanket staging, destructive resets, stashes, cleaning, rebases or force pushes.
 

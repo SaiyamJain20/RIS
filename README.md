@@ -7,6 +7,15 @@ Earlier status paragraphs below are historical.
 
 # HMBC: access security, Byzantine operators, and key lifecycle
 
+**Portable role (D57, direct human clarification 2026-11-14):** this assignment
+is not tied to a person, model, session or computer. Any authorized session may
+read and declare the live handoff and continue this role, including exact scope
+ACKs. Keep one current writer per scope and preserve artifact provenance and
+correlated-review limits. Claude proxy-2 is authorized for Agent 2. Default agent
+branches are publication routes; reviewed handoffs on another agent branch are
+usable with exact ref, commit and module tree. No original-session return or
+countersignature is needed. This supersedes older identity/machine-bound wording.
+
 **Current status (2026-10-12):** Gate E has a qualified solo-phase PASS, with56/56
 catalog rows in the published run. Agent3 has pulled the consolidated Agent1 work
 and reviewed the artifact hashes, historical source bracket, ACKs and native data.

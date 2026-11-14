@@ -594,3 +594,36 @@ No source READY, full consumer mapping, execution freeze or gate follows from
 these notes or isolated tests. Full reviewed owner handoffs and a separate exact
 source/tools/config/run FREEZE with affected ACKs still precede services. All32
 Fcases/GateF NOT_RUN; G locked; qualified historical E unchanged.
+
+## D57 — Portable work roles and Claude proxy-2 authorization, 2026-11-14
+
+Direct human instructions in the Agent 3 chat, during the scheduled continuation:
+
+> Yes, proxy-2 may act for Agent 2
+
+This answered a question explicitly covering protocol-source approval and exact
+protocol FREEZE ACKs while Agent 2 is unavailable. The human then clarified:
+
+> the agents are just a front. anyone can see what that agent has done and continue working on them. it should not be tied to a particular person, agent, or computer.
+
+Agent numbers identify portable responsibility roles. An authorized session may
+read the live board, STATUS/HANDOFF and outboxes, declare the role it continues,
+and publish that role's work, source approvals and exact scope ACKs. No return or
+countersignature from the original operator is required. Keep one current writer
+per scope to prevent concurrent edits. Changing a role's operator is not moving
+files between module responsibilities. Preserve authorship and correlated-review
+limits; a role handoff does not make the same model an independent reviewer.
+
+Accept S2-0024 as the protocol role's signing-rule answer and S2-0025 as its delta
+READY, subject to technical review. Agent 3 reproduced K1 detection 40/40 and
+controls 40/40 on exact commit 37ca31c80ab9a81956647428435addb1802cb370, protocol
+tree 7566f63d693afe8fa88ab7cc69872082d58d88db, published on agent-1. Use exact
+artifact pins and its actual publication ref, without a duplicate push to agent-2
+solely for ancestry. This supersedes older identity/machine-bound instructions
+and the original-owner reservation in A3-0129.
+
+The current session remains the Agent 3 writer on agent-3; it does not edit
+ledger/protocol or peer runtime mailboxes. This clarification does not authorize
+extra agents/worktrees, a main push, external messages/deployments or services.
+Actual role-scope ACKs of an exact future FREEZE remain required; S2-0026 is a
+review, not an ACK. Plan DRAFT; all 32 cases/Gate F NOT_RUN; G locked.

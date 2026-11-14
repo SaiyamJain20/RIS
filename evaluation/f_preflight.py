@@ -51,6 +51,11 @@ def _planned_case_ids(plan):
 
 
 def _resolve_owner_candidate(root, label, description, remote_ref):
+    # Roles are portable (D57); the plan names the actual publication branch.
+    if remote_ref not in {"origin/agent-1", "origin/agent-2", "origin/agent-3"}:
+        return {"requested": str(description), "remoteRef": remote_ref,
+                "available": False, "finalPin": False,
+                "error": "Source provenance requires a fetched project publication branch"}
     matches = re.findall(r"(?<![0-9a-f])[0-9a-f]{7,40}(?![0-9a-f])", str(description))
     if not matches:
         return {"requested": str(description), "available": False, "finalPin": False}
@@ -58,6 +63,7 @@ def _resolve_owner_candidate(root, label, description, remote_ref):
     try:
         commit = _git(root, "rev-parse", "--verify", requested + "^{commit}")
         tree = _git(root, "rev-parse", "--verify", commit + "^{tree}")
+        module_tree = _git(root, "rev-parse", "--verify", commit + ":" + label)
         branch_exists = subprocess.run(
             ["git", "rev-parse", "--verify", remote_ref],
             cwd=root,
@@ -76,6 +82,7 @@ def _resolve_owner_candidate(root, label, description, remote_ref):
             "requested": requested,
             "commit": commit,
             "tree": tree,
+            "moduleTree": module_tree,
             "remoteRef": remote_ref,
             "remoteRefExists": branch_exists,
             "isAncestorOfOwnerHead": ancestor,
@@ -121,6 +128,14 @@ def _commit_pin(description, candidate):
         "status": "PREFIX_RESOLVED" if matched and len(requested) < 40 else "EXACT_MATCH" if matched else "MISMATCH",
         "exactPin": matched and len(requested) == 40,
     }
+
+
+def _module_tree_pin(description, candidate):
+    requested = description if isinstance(description, str) else ""
+    actual = candidate.get("moduleTree")
+    exact = bool(re.fullmatch(r"[0-9a-f]{40}", requested) and requested == actual)
+    return {"requested": requested, "resolvedModuleTree": actual,
+            "status": "EXACT_MATCH" if exact else "MISMATCH", "exactPin": exact}
 
 
 def _check_owner_blob_hash(root, commit, path, description):
@@ -282,14 +297,16 @@ def preflight(plan_path, output, *, root=ROOT, profile="repaired-f", provided_ac
     matrix_cases = [item["id"] for item in matrix.get("cases", []) if isinstance(item, dict) and isinstance(item.get("id"), str)]
     coverage = _case_coverage(plan, expected_cases, matrix_cases, root / COVERAGE_PATH)
     pins = plan.get("pins", {})
+    source_refs = plan.get("sourceRefs", {})
     candidates = {
-        "ledger": _resolve_owner_candidate(root, "ledger", pins.get("ledger", ""), "origin/agent-1"),
-        "protocol": _resolve_owner_candidate(root, "protocol", pins.get("protocolSourceCandidate", ""), "origin/agent-2"),
+        "ledger": _resolve_owner_candidate(root, "ledger", pins.get("ledger", ""), source_refs.get("ledger", "origin/agent-1")),
+        "protocol": _resolve_owner_candidate(root, "protocol", pins.get("protocolSourceCandidate", ""), source_refs.get("protocol", "origin/agent-2")),
     }
     versions = _toolchain_observations(root, plan)
     pin_checks = {
         "ledgerCommit": _commit_pin(pins.get("ledger", ""), candidates["ledger"]),
         "protocolCommit": _commit_pin(pins.get("protocolSourceCandidate", ""), candidates["protocol"]),
+        "protocolSubtree": _module_tree_pin(pins.get("protocolSubtree", ""), candidates["protocol"]),
         "interfaceFreeze": _check_hash_pin(root, INTERFACE_FREEZE_PATH, pins.get(str(INTERFACE_FREEZE_PATH), "")),
         "interfaceV21Freeze": _check_hash_pin(root, Path("interfaces/v2.1/FREEZE.json"), pins.get("interfaces/v2.1/FREEZE.json", "")),
         "interfaceV21Schema": _check_hash_pin(root, Path("interfaces/v2.1/hmbc.schema.json"), pins.get("interfaces/v2.1/hmbc.schema.json", "")),
@@ -327,14 +344,15 @@ def preflight(plan_path, output, *, root=ROOT, profile="repaired-f", provided_ac
         blockers.append("The pinned F matrix case IDs differ from the 32-case coverage inventory.")
     for label, candidate in candidates.items():
         if not candidate.get("available") or not candidate.get("remoteRefExists") or not candidate.get("isAncestorOfOwnerHead"):
-            blockers.append(f"{label} candidate source commit is not verified against the fetched owner branch.")
+            blockers.append(f"{label} candidate source commit is not verified against its declared fetched publication branch.")
     if not candidates["protocol"].get("finalPin"):
-        blockers.append("Protocol source is only a candidate; K1 and the A3-0121 signing-rule question remain open.")
+        blockers.append("Protocol source remains a DRAFT candidate; exact execution FREEZE and role-scope ACKs are required.")
     if not versions["tlc"].get("hashMatches") or not versions["tlcPlanPinMatches"]:
         blockers.append("The F-only TLC jar does not match the exact artifact pinned in the draft plan.")
     for name in (
         "ledgerCommit",
         "protocolCommit",
+        "protocolSubtree",
         "interfaceFreeze",
         "interfaceV21Freeze",
         "interfaceV21Schema",

@@ -1,0 +1,112 @@
+"""Agent-3 offline review of the exact S2-0025 candidate; no service commands.
+
+Run with the root pinned interpreter, -I, from the repository root. The upstream
+trial driver is copied byte-for-byte beside this file. All generated owner copies
+and process state stay under the named disposable run directory.
+"""
+import datetime
+import gzip
+import hashlib
+import importlib.metadata
+import json
+import os
+from pathlib import Path
+import signal
+import subprocess
+import sys
+import time
+
+ROOT = Path.cwd()
+OUT = ROOT / "evaluation/evidence/reviews/proxy-k1-20261114"
+RUN = ROOT / "evaluation/runs/rq2-k1-review-20261114"
+PROTO = RUN / "owner/protocol"
+NODE = "tests/test_witness_state_kill.py::test_kill_between_the_signing_statements_leaves_a_whole_record"
+ENV = dict(os.environ, HOME=str(RUN / "home"), TMPDIR=str(RUN / "tmp"),
+           PYTHONDONTWRITEBYTECODE="1", PYTEST_DISABLE_PLUGIN_AUTOLOAD="1")
+for name in ("PYTHONPATH", "PYTHONHOME", "HMBC_KILL_TRIALS", "HMBC_FOUNDRY_DIR"):
+    ENV.pop(name, None)
+RECEIPTS = []
+
+
+def sha(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def sources():
+    return {p.relative_to(RUN / "owner").as_posix(): sha(p.read_bytes())
+            for p in PROTO.rglob("*") if p.is_file() and "__pycache__" not in p.parts}
+
+
+def save(name, value):
+    (OUT / name).write_text(json.dumps(value, indent=2) + "\n")
+
+
+def command(name, argv, cwd, timeout=1800):
+    started = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    t0 = time.monotonic()
+    log = OUT / (name + ".log")
+    with log.open("wb") as f:
+        child = subprocess.Popen(argv, cwd=cwd, env=ENV, stdout=f,
+                                 stderr=subprocess.STDOUT, start_new_session=True)
+        timed_out = False
+        try:
+            code = child.wait(timeout=timeout)
+        except subprocess.TimeoutExpired:
+            timed_out = True
+            os.killpg(child.pid, signal.SIGKILL)
+            code = child.wait()
+    receipt = {"name": name, "argv": argv, "cwd": str(cwd), "pid": child.pid,
+               "startedAt": started,
+               "endedAt": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+               "elapsedSeconds": round(time.monotonic() - t0, 3),
+               "exitCode": code, "timedOut": timed_out,
+               "outputSha256": sha(log.read_bytes()),
+               "environmentSha256": sha(json.dumps(ENV, sort_keys=True).encode()),
+               "environmentOverrides": {k: ENV[k] for k in
+                   ("HOME", "TMPDIR", "PYTHONDONTWRITEBYTECODE", "PYTEST_DISABLE_PLUGIN_AUTOLOAD")}}
+    RECEIPTS.append(receipt)
+    save("commands.json", RECEIPTS)
+    print(name, "exit", code, "seconds", receipt["elapsedSeconds"], flush=True)
+    assert not timed_out, receipt
+    return code
+
+
+before = sources()
+assert before == json.loads((RUN / "source-before.json").read_text())
+expected = {"hmbc_protocol/witness_state.py": "1a8787993df29ef379c366b181b823ca0a672f5ad7c48d7736c9c3b495d2fdbc",
+            "tests/state_kill_child.py": "ad59580ff02229eda7840f640be44dec819b5d20680dbae114b43f723d86f92b",
+            "tests/test_witness_state_kill.py": "16888a370303b333221a93f07cf7f99c35bedc800c0025344798fe7b9e30244d",
+            "tools/run_state_kill_mutants.py": "90b9f07236d8638e10794a5c93b5a5ab7931655d64eb460135b66a0b9f3eacf6"}
+assert all(before["protocol/" + p] == h for p, h in expected.items())
+for mode in ("control", "k1"):
+    assert command("trials-" + mode, [sys.executable, "-I", str(OUT / "k1_trials.py.txt"),
+                   str(PROTO), mode, "40", NODE, str(OUT / ("trials-" + mode + ".json"))], ROOT) == 0
+    result = json.loads((OUT / ("trials-" + mode + ".json")).read_text())
+    assert result["n"] == 40 and result["crash"] == 0
+    assert result["pass" if mode == "control" else "fail"] == 40, result
+
+state_files = ["tests/test_witness_state" + suffix + ".py" for suffix in
+               ("", "_cli", "_lock", "_hot_journal", "_kill")]
+assert command("state-tests", [sys.executable, "-B", "-m", "pytest", "-q", "-s", "-p",
+               "no:cacheprovider", *state_files], PROTO) == 0
+assert command("kill-mutants", [sys.executable, "-B", "-I",
+               str(PROTO / "tools/run_state_kill_mutants.py")], ROOT) == 0
+assert command("state-mutants", [sys.executable, "-B", "-I",
+               str(PROTO / "tools/run_state_mutants.py")], ROOT) == 0
+
+after = sources()
+assert before == after, "archived candidate changed"
+with gzip.GzipFile(filename=str(OUT / "source-bracket.json.gz"), mode="wb", mtime=0) as f:
+    f.write((json.dumps({"before": before, "after": after}, sort_keys=True) + "\n").encode())
+save("result.json", {"sourceCommit": "37ca31c80ab9a81956647428435addb1802cb370",
+     "sourceFiles": len(before), "sourceUnchanged": True, "python": sys.version,
+     "sqlite": __import__("sqlite3").sqlite_version,
+     "packages": {n: importlib.metadata.version(n) for n in
+                  ("pytest", "eth-account", "eth-abi", "jsonschema")},
+     "trials": {m: {k: json.loads((OUT / ("trials-" + m + ".json")).read_text())[k]
+                    for k in ("n", "pass", "fail", "crash", "witness_state_sha256")}
+                for m in ("control", "k1")},
+     "servicesStarted": [], "gateF": "NOT_RUN", "classification": "tested reconstruction and deliberate mutations",
+     "limits": ["synthetic placeholder signer", "one host", "SIGKILL, not power loss",
+                "same-model correlated review", "no integrated F case", "no owner execution ACK"]})
+print("SOURCE_BRACKET_UNCHANGED", len(before), flush=True)
