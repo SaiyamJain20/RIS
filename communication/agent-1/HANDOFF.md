@@ -33,7 +33,7 @@ Agent numbers are portable roles (D57, `communication/DECISIONS.md` on origin/ag
 - **Proxies.**
   - proxy-2 (A1-0130) stood down on 2026-11-15 (A1-0135) because the agent 2 seat is active. Do not restart it for `protocol/**` unless that seat goes silent again **and** the human asks.
   - Solo phase F (A1-0119) is closed (A1-0120).
-- **Watching.** `$JOB/tmp/a1/watch/poll.sh` polls origin every 10 minutes (refs in `refs.txt`). Re-arm it as a Monitor with a 30-minute timeout, and run only one at a time.
+- **Watching.** `$JOB/tmp/a1/watch/poll.sh` polls origin every 5 minutes (the human set 5 on 2026-11-15) (refs in `refs.txt`). Re-arm it as a Monitor with a 30-minute timeout, and run only one at a time.
 - **Tool locations:** Foundry v1.8.5 at `~/.foundry/bin`, not on PATH. The repo `.venv` is Python 3.13.5.
 
 ## Previous (2026-11-12 to 2026-11-15, running log): solo phase F closed (A1-0120); owners back; ledger unchanged at 85c59f5
