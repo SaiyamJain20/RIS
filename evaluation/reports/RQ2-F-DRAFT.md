@@ -2,8 +2,10 @@
 
 **Status: DRAFT. Gate F NOT RUN. G locked.** All 32 planned F cases are NOT_RUN. A fail-closed
 runner preflight now checks draft pins, matrix coverage and a source bracket (stages 1–2 only); it
-does not execute cases. The fault oracle exists and has synthetic tests, but it is not connected
-to captured signing-time observations. No execution FREEZE or three ACKs exist. This draft reports
+does not execute cases. A new offline helper joins captured witness JSON-line signature replies
+to verified history generations and store-reported signing observations using synthetic fixtures.
+It is not integrated into the F runner, and no real service transcript or native capture was joined.
+No execution FREEZE or exact role-scope ACKs exist. This draft reports
 prior local measurements on synthetic fixtures, the finite model, review record and the new
 preflight result.
 Paper-derived reconstruction of HMBC2020, not the authors' implementation. All reviews are
@@ -95,6 +97,29 @@ a plan review, not an execution ACK; the required exact FREEZE ACKs remain absen
 Mistakes of my own kept in the record: a model deadlock
 (first TLC f=0 run), a parser artifact that reported a false 52,339 B TMSC size.
 
+### 2.6 Captured signing-reply/history join (synthetic)
+
+The new `evaluation.signing_event_join_v2` helper consumes the published
+`hmbc-witness-rpc/v1` request/response lines and a separately verified
+`WitnessEvidence` export. For each captured signature reply it verifies the
+signature under the caller-pinned witness/deployment context, derives the typed
+digest, then requires an exact history match on digest, signature, type, domain,
+witness-set version, key and effect. It returns the matching store-reported
+observation and superseded-generation sequence. Fifteen focused synthetic tests
+cover all four signing kinds, live and superseded generations, idempotent re-signs, refusal replies,
+message/ID mismatches, duplicate JSON keys, invalid signatures and tampered
+history. Evidence and commands: [signing-event join](../evidence/f/signing-event-join-20261114/README.md).
+
+Classification: tested reconstruction result over synthetic records and generated
+JSON-lines, not a live-process measurement or F case. A valid signature binds the
+message to the configured test owner, but does not authenticate the capture
+transcript or show that it is complete. The export's observation remains a
+store-reported value. Native fact checks still require the separate raw block/call
+checker; neither path proves SQLite/export completeness, persistence, or wall-clock
+signing time. The helper also does not prove that an honest service validated the
+proposal before returning the signature. Runner capture acquisition and its
+end-to-end controls remain unimplemented.
+
 ## 3. Trust matrix (what still requires trust)
 | component | status |
 |---|---|
@@ -136,10 +161,11 @@ view, not native ledger reachability or F case results. See
 [the correction evidence](../evidence/f/report-review-20261114/README.md).
 
 Counting both DENY and ALLOW logs, or using `(requestDigest, stateSequence)` alone, is therefore
-insufficient to diagnose a signing violation. The oracle needs time-ordered, authenticated
-signing observations, all live digests in the relevant generation, and service-validation facts.
-Its current store-level grant allowance may miss a service-validation violation. No such
-end-to-end capture/validation check is implemented. Ledger submission of an already issued
+insufficient to diagnose a signing violation. The oracle needs time-ordered signing observations,
+all live digests in the relevant generation, and service-validation facts. The new helper joins a
+captured reply to one exact declared history digest and observation, but the runner does not yet
+acquire or authenticate complete process transcripts. The store-level grant allowance may still
+miss a service-validation violation. Ledger submission of an already issued
 certificate is a different event from fresh witness signing; `REPLAY` at signing does not
 establish rejection of every previously signed DENY by the ledger. Missing detail and differences
 between SPEC's shorthand and accepted F0 rules are ambiguities of this reconstruction, not HMBC
@@ -159,11 +185,13 @@ These are prior measurements unless marked fresh. No row is an integrated F resu
 | New K1 candidate; deliberate mutation result | [S2-0025 reproduced by agent 3](../evidence/reviews/proxy-k1-20261114/README.md) | new blocking test: 40/40 detections and 40/40 controls; isolated candidate acceptance, not an execution ACK |
 | Store death predicates; tested reconstruction result | [180-case differential and seven oracle mutations](../evidence/f/oracle-store-diff-20261114/README.md) | one earlier digest per key; grant/receipt facts caller-asserted |
 | Service/store distinction; fresh tested reconstruction result | [four probes, selected owner tests, exact source/output hashes](../evidence/f/report-review-20261114/README.md) | injected view and synthetic keys; no native grant/sequence transition |
+| Captured signer reply to exact store-history generation; tested reconstruction result | [15 focused join tests and source/command record](../evidence/f/signing-event-join-20261114/README.md) | generated JSON-lines; capture authenticity/completeness, native facts and honest-service validation remain unproved |
 | Draft coverage and source pins; preflight check only | [A3-0128 final preflight](../evidence/f/preflight-20261114-r4/README.md) | 32/32 IDs is coverage of the plan; all case statuses remain NOT_RUN |
 
 ## 5. Not done / not claimed
-Gate F, the 32 F cases, execution FREEZE and ACKs, runner stages 3–7, connection of the fault
-oracle to signing-time captures, E regression reruns against the F system, certificate/latency
+Gate F, the 32 F cases, execution FREEZE and ACKs, runner stages 3–7, runner
+acquisition and authentication/completeness controls for signer transcripts, E
+regression reruns against the F system, certificate/latency
 over a real network, power-loss durability, Besu/QBFT consensus, ABE, and any G (key lifecycle)
 work remain undone. The 2026-11-14 preflight matched all 32 planned IDs against the frozen
 revision-8 matrix, but exited 2 with `BLOCKED`; no case ran. The earlier first preflight used the
@@ -174,8 +202,9 @@ all exact draft pins match. A deliberate same-row-count matrix-ID drift is also 
 checks do not lift the actual role-scope execution ACK or later-stage blockers. Deviation from the plan
 sequence: earlier measurements were taken before the runner/FREEZE on the human's instruction.
 
-Before the 2026-11-17 partial-report target, the permitted next work is to join signing-time
-observations to the oracle and implement offline runner stages/controls, while reviewing any
+Before the 2026-11-17 partial-report target, the permitted next work is to
+integrate the synthetic signing-event join into the offline runner and implement
+capture/acquisition controls, while reviewing any
 published exact protocol delta. The execution plan remains DRAFT. The new K1 candidate's
 kill coverage is accepted at tested scope and its source is adopted in the DRAFT under D57.
 Both exact execution FREEZE ACKs and the unfinished runner stages remain open; S2-0024 and

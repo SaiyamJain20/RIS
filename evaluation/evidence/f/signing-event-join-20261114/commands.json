@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "hmbc-signing-event-join-review/v1",
+  "classification": "tested-reconstruction-result",
+  "recordedAt": "2026-11-14T18:42:11Z",
+  "cwd": "/home/karma/Documents/RIS",
+  "runtime": {
+    "python": "3.13.13",
+    "pytest": "9.0.2",
+    "pluggy": "1.6.0"
+  },
+  "commands": [
+    {
+      "argv": [".venv/bin/python", "-m", "pytest", "-q", "evaluation/tests/test_signing_event_join_v2.py"],
+      "phase": "test-first-red-before-helper",
+      "exitCode": 1,
+      "result": "8 expected failures; import raised ModuleNotFoundError for evaluation.signing_event_join_v2",
+      "rawOutputRetained": false
+    },
+    {
+      "argv": [".venv/bin/python", "-m", "pytest", "-q", "evaluation/tests/test_signing_event_join_v2.py"],
+      "phase": "initial-implementation-test-defect",
+      "exitCode": 1,
+      "result": "1 failed, 7 passed; malformed zero-filled signature was rejected by canonicality before the intended verifier path",
+      "rawOutputRetained": false
+    },
+    {
+      "argv": [".venv/bin/python", "-m", "pytest", "-q", "evaluation/tests/test_signing_event_join_v2.py"],
+      "phase": "continuation-focused-green",
+      "exitCode": 0,
+      "result": "15 passed in 3.80 seconds",
+      "rawOutput": "evaluation/evidence/f/signing-event-join-20261114/focused-green.txt",
+      "rawOutputSha256": "7f1282916598d8dda27337a4d4009be6a9bdee1703b7ad7ff1a94445af162498"
+    }
+  ],
+  "priorFullSuiteNotes": [
+    {
+      "reportedResult": "2,996 passed in 671.27 seconds",
+      "sourceVersion": "earlier helper source; raw output and complete hash-bound command receipt not retained",
+      "useAsVerification": false
+    },
+    {
+      "reportedResult": "2,998 passed in 669.60 seconds",
+      "sourceVersion": "mentioned in an earlier README draft; matching command receipt and raw output not retained",
+      "useAsVerification": false
+    }
+  ],
+  "sourceHashes": {
+    "evaluation/signing_event_join_v2.py": "66ba1c76297bbbbb157463f0f30ef561a08e398cce30e346096f8128acfd7a2a",
+    "evaluation/tests/test_signing_event_join_v2.py": "8839888f8c59c10e48a16cfc0555dea51c77973b1330bff7f095ac55ab0b85a8",
+    "evaluation/signing_context_v2.py": "b725ddc7c8d4ab107c134b77f00f8851e4f6ecf9c87ee143a6801cfe8ad66c07",
+    "evaluation/witness_history_v2.py": "1a2b992187e30f7240490cf7ec19b43ae6051b2f637e8cb2b2d1e374e74b459b",
+    "evaluation/witness_native_v2.py": "b5296ed455982b538ea05e768efa71a254796ac34a355278da12d6a3b06064c6",
+    "protocol/hmbc_protocol/witness_main.py at 37ca31c80ab9a81956647428435addb1802cb370": "7a66d829c4a5118a9171f159765a77d74ef6626e63a62184ddf8a3c43faa164f",
+    "protocol/hmbc_protocol/witness_state.py at 37ca31c80ab9a81956647428435addb1802cb370": "1a8787993df29ef379c366b181b823ca0a672f5ad7c48d7736c9c3b495d2fdbc",
+    "interfaces/v2.1/hmbc.schema.json at 37ca31c80ab9a81956647428435addb1802cb370": "d43c3a9a4cbb10214135afb767a2adc109da462f88bd11a81a8c8955d44fd1f3"
+  },
+  "executionLimits": {
+    "syntheticFixturesOnly": true,
+    "integratedFCasesRun": false,
+    "anvilStarted": false,
+    "nativeRpcCapturesUsed": false,
+    "captureAuthenticated": false,
+    "transcriptCompletenessEstablished": false,
+    "gateF": "NOT_RUN",
+    "plan": "DRAFT"
+  }
+}

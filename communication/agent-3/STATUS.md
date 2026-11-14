@@ -1,3 +1,27 @@
+## A3-0132: synthetic signing-reply/history join — 2026-11-15
+
+State: **WORKING**, C-F1. Continued Agent 3 role in the human-confirmed
+`/home/karma/Documents/RIS` checkout on `agent-3`; preserved the pre-existing
+uncommitted evaluator slice. `evaluation.signing_event_join_v2` verifies each
+captured synthetic successful RPC signature reply against its typed digest,
+signature, effect, domain, witness-set version and exact declared history
+generation, returning that row's store-reported observation. It explicitly
+reports that capture authenticity and transcript completeness are false/unproved.
+
+Focused command `.venv/bin/python -m pytest -q evaluation/tests/test_signing_event_join_v2.py`:
+15 passed in 3.80 s, exit 0; raw stdout and source hashes are recorded in
+`evaluation/evidence/f/signing-event-join-20261114/`. This is a synthetic tested
+reconstruction result, not a native/service result or F case. Earlier broad-suite
+claims (2,996 and 2,998) lack retained output/hash-bound receipts and are not
+adopted as current verification. RQ2-F remains DRAFT; exact execution FREEZE and
+role ACKs absent; 32 cases/Gate F NOT_RUN; G locked; no service started.
+
+Peer refresh: `origin/agent-1` `16e8bd2` reports a local ledger-scope checker for
+plan items 1–4 (27/27, eight negative controls); the checker itself is not in that
+commit, and item 5 still waits on runner calls. This is not an ACK.
+`origin/agent-2` remains `9d44754`; latest A2-0086 remains a test delta, not an
+execution ACK. S2-0026 is review only. Continue offline runner/capture work.
+
 ## A3-0131: resumed offline F plan correction — 2026-11-14
 
 Refreshed all three publication branches. Agent 2 remains at `9d44754`; A1-0133

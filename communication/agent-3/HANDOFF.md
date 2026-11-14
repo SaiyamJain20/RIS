@@ -1,3 +1,43 @@
+## A3-0132 handoff — synthetic signing-reply/history join evidence, 2026-11-15
+
+Agent 3, branch `agent-3`, parent `067b7685d9de6431ce0070b8eee3a672f115dd72`.
+Continued the existing uncommitted Agent-3 evaluator slice; no peer module or
+mailbox edits. New helper `evaluation/signing_event_join_v2.py` joins captured
+`hmbc-witness-rpc/v1` signature replies to verified history digests/generations
+and their store-reported observations. It makes no claim of transcript
+authenticity/completeness, native fact truth, process signing time, persistence,
+or honest-service proposal validation.
+
+Focused verification on the present source: `.venv/bin/python -m pytest -q
+evaluation/tests/test_signing_event_join_v2.py` — exit 0, 15 passed in 3.80 s.
+Exact stdout, command record and hashes: `evaluation/evidence/f/signing-event-join-20261114/`.
+Corrected stale command JSON hashes and replaced unsupported full-suite-as-current
+wording; prior 2,996/2,998 counts have no retained raw output and are excluded from
+current verification. Updated `RQ2-F-DRAFT.md` and the execution-plan README to
+state 15 focused tests and retain the DRAFT/NOT_RUN limits.
+
+SHA-256: helper `66ba1c76297bbbbb157463f0f30ef561a08e398cce30e346096f8128acfd7a2a`;
+tests `8839888f8c59c10e48a16cfc0555dea51c77973b1330bff7f095ac55ab0b85a8`;
+commands `07a8f1164daae58cc92f7b8bedc7b42953286a3971d9ef89b6d94c9553f91499`;
+stdout `7f1282916598d8dda27337a4d4009be6a9bdee1703b7ad7ff1a94445af162498`;
+report `3636b4aae271bc94659a9e8f12f13c7f29e78643758eae90c3ced6c62155ed71`;
+plan README `ccc651ac35b078b12dd591ce547294404b0e33ab3c97bebd81f0b5fff816e877`.
+
+Peer provenance: fetched refs explicitly under the coordinator lock. `origin/agent-1`
+is `16e8bd2ba3156748654080592383dd0a9d108d53`, containing only the new handoff
+entry. It reports a local ledger-scope checker at `$JOB/tmp/a1/freeze-ack/` with
+27/27 plan items 1–4 and eight negative controls; the checker itself is not
+published, the result was not independently reproduced here, and item 5 waits
+for runner calls. This is not a FREEZE ACK. A1-0133 records D57/no duplicate
+push. `origin/agent-2` remains `9d44754f7db364e4c39150c699b1e38bedded559`; A2-0086
+is still the latest controlled-signing-kill delta, not a FREEZE ACK. S2-0026 is
+review only. Plan DRAFT / `authorizesExecution=false`; no exact execution FREEZE
+or required owner ACKs; all 32 cases and Gate F NOT_RUN; G locked; no services.
+
+Next: continue offline capture completeness / runner call work. Do not start
+services or integrated cases without a separately authorized exact FREEZE and
+required role-scope ACKs. No full evaluator rerun was done in this continuation.
+
 ## A3-0131 handoff — corrected live protocol status; join gap remains, 2026-11-14
 
 Branch `agent-3`, parent `609842d1a3214a4fed6c7c7edd5c76e2273d673e`. Refreshed all

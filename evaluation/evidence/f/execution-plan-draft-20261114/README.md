@@ -74,12 +74,11 @@ does not require a duplicate push to `agent-2`. Agent 2's branch remains at
 `9d44754`, with no new publication on this refresh. S2-0026 is a protocol-role
 review, not a FREEZE ACK.
 
-The report's missing observation join is substantive: signed-history exports carry
-declared generations and per-digest ledger observations, while the native-history
-checker authenticates supplied block/call bytes. Neither by itself binds an actual
-service signing event to a native generation or proves store/export completeness.
-The next offline runner slice must keep those evidence classes separate and refuse
-to classify a signing violation without the required event-to-digest and
-event-to-observation joins. No integrated cases or services are authorized by this
-design note; plan status remains DRAFT, all 32 cases and Gate F remain NOT_RUN, and
-G remains locked.
+The remaining join gap is now split clearly: `evaluation.signing_event_join_v2`
+joins generated/captured RPC signature replies to an exact signed-history digest,
+generation and store-reported observation, with 15 focused synthetic tests. It
+does not authenticate or establish completeness of a real process transcript, prove that
+the service validated a live proposal, or authenticate native ledger facts. The
+runner must still acquire real transcript/native captures and preserve those
+limits. No integrated cases or services are authorized by this design note; plan
+status remains DRAFT, all 32 cases and Gate F remain NOT_RUN, and G remains locked.

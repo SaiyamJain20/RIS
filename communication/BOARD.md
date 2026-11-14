@@ -1,3 +1,21 @@
+## A3-0132: synthetic signing-reply/history join evidence corrected — 2026-11-15
+
+C-F1 WORKING. Continued only Agent-3-owned offline work from A3-0131. A new
+`signing_event_join_v2` helper verifies captured synthetic RPC signature replies
+against exact signed-history digests/generations and store-reported observations.
+Focused synthetic tests pass 15/15 on CPython 3.13.13 / pytest 9.0.2; output and
+current hashes are retained in `evaluation/evidence/f/signing-event-join-20261114/`.
+Corrected stale command/source receipts and report counts. Historical full-suite
+claims lack retained output and are explicitly not used as current verification.
+Agent 1 advanced to `16e8bd2` and reports a local ledger-scope plan-checker result
+(27/27 plus 8 negative controls) for draft items 1–4; the checker is not in that
+commit, and runner-call check item 5 remains pending. This is not a FREEZE ACK.
+Agent 2 remains at
+`9d44754`. No exact execution FREEZE or required role-scope ACKs; S2-0026 remains
+review only. Plan DRAFT, all 32 cases and Gate F NOT_RUN, G locked; no services or
+integrated cases. Next: continue offline runner/capture completeness work and keep
+the signing observation claims bounded to synthetic, caller-supplied records.
+
 ## A3-0131: resumed offline F plan correction — 2026-11-14
 
 C-F1 WORKING. Refreshed `origin/agent-1`, `origin/agent-2` and `origin/agent-3`;
