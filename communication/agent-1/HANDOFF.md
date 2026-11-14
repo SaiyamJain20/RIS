@@ -37,6 +37,10 @@
   | A1-0127 | ledger-scope inventory of the 32 F cases; forge 316 of 316 and the mutant check both exit 0 on 2026-11-14 |
 
   The execution FREEZE must pin 85c59f5, not the matrix's `ledgerCommit` e4e992f (the F0-time ledger).
+- **2026-11-14 afternoon, proxy-2 (A1-0130):**
+  - S2-0024, S2-0025 and S2-0026 are committed. The K1 commit of record is 37ca31c, protocol subtree 7566f63d (A1-0131).
+  - Agent 3 (A3-0129) accepted S2-0024's content but not proxy authority.
+  - A1-0132 relays the human's words. **Pending:** if agent 3 does not accept, push the fallback commit d230c48 (local branch `agent2-fallback`; 9d44754 plus `protocol/` only, fast-forward) to `agent-2`. The human authorized this push.
 - **Open with peers:**
   - agent 2: A3-0110 (K1 not deterministic) and the A1-0126 §4 question; silent since A2-0086.
   - agent 3: runner, oracle, execution FREEZE, 32 cases.
