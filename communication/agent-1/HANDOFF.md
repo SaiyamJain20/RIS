@@ -1,6 +1,42 @@
 # Agent 1 handoff
 
-## Current (2026-11-12, ~19:00): solo phase F closed (A1-0120); owners back; ledger unchanged at 85c59f5
+## Current (2026-11-15): role-continuation entry point (D57). Read this block first.
+
+Agent numbers are portable roles (D57, `communication/DECISIONS.md` on origin/agent-3). Any authorized session can continue **agent 1 = ledger and policy** from this block alone. The blocks below are a running log and history, kept verbatim.
+
+- **Scope.** This role writes only `ledger/**` plus `communication/agent-1/{STATUS.md,HANDOFF.md,outbox/**}`, and publishes on `agent-1`.
+  - One writer per scope: ledger is this role; protocol is the agent 2 seat (active again, A2-0087); evaluation and shared files are agent 3.
+  - Never push to `main` or to a peer branch without explicit human authorization. No history rewrite, no blanket staging, no worktrees.
+- **Pins (unchanged since 2026-11-04):**
+  - **Ledger:** commit 85c59f588de58a8ff5e87b9fe6f630c9d8c43642, root tree 36a868305d67c8f546e6bde558ceb8e356962819, manifest `ledger/evidence/source-manifest.sha256` 70f541cd63bb8e8c.. (429 entries). Reviewed by agent 3 in A3-0077 and A3-0080.
+  - **Health:** on 2026-11-14 `forge test --root ledger` gave 316/0/0 and `python3 -I ledger/tools/check_mutants.py` exited 0 (A1-0127).
+  - **Interfaces:** v2 FREEZE 7bb1d243.., v2.1 FREEZE 232b84bb.., v2.1 schema d43c3a9a...
+  - **Protocol, accepted:** subtree 7566f63d693afe8fa88ab7cc69872082d58d88db, published on origin/agent-2 73fb2ce (A2-0087) and earlier on agent-1 37ca31c (S2-0025, A3-0130).
+- **F state.**
+  - F0 was accepted (A3-0073). Ledger A-F1 is READY and reviewed. The protocol runtime is READY, and its K1 fix has been reproduced 3 times.
+  - Evaluation (agent 3) has: the TLC model, fault oracle, preflight, signing-event join, RQ2-F DRAFT, and an execution plan DRAFT (`evaluation/evidence/f/execution-plan-draft-20261114/`).
+  - **All 32 F cases and gate F are NOT_RUN, and G is locked.** No execution FREEZE exists yet. Agent 3 targets a reviewable result packet by 2026-11-17 (A3-0133).
+- **What this role owes next: the ledger-scope ACK of agent 3's exact execution FREEZE, when it is published.**
+  1. Run `python3 -I communication/agent-1/outbox/0134-attachments/check_ledger_scope.py <freeze plan.json or ref:path> --scan-dir <extracted FREEZE evidence dir>`. It must pass every check. The scan directory must really exist; the checker now fails otherwise.
+  2. Do the item 5 dry run (A1-0129 §8): deploy plus one checkpoint, decision, receipt and governance action from the FREEZE's exact commit, on this role's ports 17545-17599. Use a scratch `git archive` of the pinned ledger. Pass the deploy key only through the environment, derived at runtime, never written.
+  3. Then ACK or refuse, in ledger scope only. Refuse any FREEZE that pins ledger e4e992f (the `f_matrix.json` field).
+- **Other duties:**
+  - If a run exposes a ledger defect, fix it with a new commit plus a fresh READY. Reviewed bytes are never rewritten.
+  - At the next ledger revision (not before gate F, so the pin stays put), carry over the A1-0117 sequence paragraph and, optionally, the A1-0126 `DoubleCert` f=2 cases as module tests.
+- **Ledger facts peers rely on:**
+  - The witness set is fixed at deployment (A1-0126).
+  - DENY consumes no nonce and has no replay guard (A1-0107, A1-0126, A1-0128).
+  - A decision is accepted only at the current checkpoint sequence.
+  - The checkpoint sequence is strictly increasing and may skip (A1-0117).
+  - `QuorumLib.verify` returns the first failure in walk order (A1-0129 §3).
+  - `forge build --sizes` exits 1 only because of Forge scripts (A1-0123).
+- **Proxies.**
+  - proxy-2 (A1-0130) stood down on 2026-11-15 (A1-0135) because the agent 2 seat is active. Do not restart it for `protocol/**` unless that seat goes silent again **and** the human asks.
+  - Solo phase F (A1-0119) is closed (A1-0120).
+- **Watching.** `$JOB/tmp/a1/watch/poll.sh` polls origin every 10 minutes (refs in `refs.txt`). Re-arm it as a Monitor with a 30-minute timeout, and run only one at a time.
+- **Tool locations:** Foundry v1.8.5 at `~/.foundry/bin`, not on PATH. The repo `.venv` is Python 3.13.5.
+
+## Previous (2026-11-12 to 2026-11-15, running log): solo phase F closed (A1-0120); owners back; ledger unchanged at 85c59f5
 
 - **Owners are back.** Agent 2 returned on 2026-11-09 (A2-0081) and agent 3 on 2026-11-12 (A3-0105). Both own their scopes again. A1-0120 closes solo phase F.
 - **Proxies stood down.** Both proxies stopped on the account usage limit at about 23:00 on 2026-11-08 and wrote nothing (no S2-0024, no S3-0025). They will not be resumed.

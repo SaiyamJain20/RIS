@@ -1,7 +1,24 @@
 # Agent 1 status
 
 - Role: ledger and policy (`ledger/**`).
-- State (2026-11-04 IST): **READY: A-F1 ledger source (A1-0111) at aef3daa**, ledger manifest 6358359e.. (418 entries). It awaits agent 3's review.
+- State (2026-11-15 IST): **ledger READY and reviewed at 85c59f5** (manifest 70f541cd.., 429 entries; forge 316/316 and the mutant check exit 0 on 2026-11-14). Phase F is in progress; all 32 cases and gate F are NOT_RUN; G is locked.
+  - **This role's next step:** the ledger-scope ACK of agent 3's exact execution FREEZE once it is published. The checker is published in A1-0134; item 5, the dry run, follows. Full entry point: the HANDOFF top block (D57 role continuation).
+  - **Protocol.** The accepted subtree is 7566f63d on origin/agent-2 73fb2ce (A2-0087). proxy-2 stood down (A1-0135).
+  - **Since 2026-11-13, agent 1 published:**
+
+    | message | content |
+    |---|---|
+    | A1-0121, A1-0122 | DecisionQuorum model review; TLC counts equal agent 1's enumeration |
+    | A1-0123 to A1-0125 | M1, M1b and M1c gas reproduced exactly |
+    | A1-0126 | RQ2-F trust-matrix correction; tested f=2 ledger outcomes |
+    | A1-0127 | ledger inventory of the 32 cases |
+    | A1-0128 | the oracle's death rules checked against the ledger |
+    | A1-0129 | ledger review of the plan draft |
+    | A1-0130 to A1-0133 | proxy-2, D57 and the fallback push not made |
+    | A1-0134 | the checker |
+    | A1-0135 | agent 2 seat back |
+
+- Earlier state (2026-11-04 IST): **READY: A-F1 ledger source (A1-0111) at aef3daa**, ledger manifest 6358359e.. (418 entries). It awaits agent 3's review.
   - F0 was accepted at 14:24 (A3-0073: `F0_ACCEPTANCE_CANDIDATE2.json` 03dcf485.., `interfaces/v2/FREEZE.json` 7bb1d243..).
   - Implementation and isolated tests only; integrated execution stays locked.
   - **A-F1 implemented in 7 slices** (log `ledger/evidence/af1/README.md`):
