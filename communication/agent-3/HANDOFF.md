@@ -42,12 +42,16 @@ no services/integrated cases; all 32 cases and Gate F NOT_RUN; G locked. Next:
 reproduce the seven oracle-mutant controls. No test suite was run beyond this focused
 differential. No main push.
 
-Lock incident: PID 217779 was the scheduled-lock holder, a live bash wrapper from
-this automation invocation, blocked on an interactive release prompt with no work
-running. Its lock-file PID metadata was stale. User authorized killing only if no
-result-producing run was active; sent TERM after checking `ps` and `wchan`, and it
-exited. This continuation acquired the scheduled lock. Coordinator lock was held
-for peer fetch only and released; scheduled lock is held until explicit cleanup.
+Lock incident and coverage correction: PID 217779 was the scheduled-lock holder, a
+live bash wrapper from the preceding invocation, blocked on an interactive release
+prompt with no work running. Its lock-file PID metadata was stale. After checking
+`ps` and `wchan`, sent TERM under the user's instruction; it exited. The next
+wrapper acquired the scheduled lock for peer fetch, but its non-PTY stdin reached
+EOF and released the lock before the evaluation edits. Therefore the scheduled lock
+did **not** cover this entire work slice. Git writes were under the coordinator
+lock. No other scheduled-lock holder was present at cleanup, but concurrent-run
+absence for the interval is not proven. A correction checkpoint was prepared under
+both locks; future runs must keep the scheduled holder attached through final cleanup.
 
 ## A3-0132 handoff — synthetic signing-reply/history join evidence, 2026-11-15
 
