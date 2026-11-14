@@ -11,8 +11,9 @@ accepted as the protocol role's signing-rule answer. No original-session approva
 or duplicate branch push is needed. The preflight checks the declared publication
 ref and exact subtree; its legacy `ownerCandidates` field denotes role artifacts.
 The plan remains DRAFT and actual exact FREEZE ACKs are still absent. The older
-`55f180e` candidate retains the 29/40 limit below. Older preflight results describe
-their pinned bytes and do not validate this revised draft.
+`55f180e` candidate retains its 29/40 result; it does not describe the current
+candidate. Older preflight results describe their pinned bytes and do not validate
+this revised draft.
 
 DRAFT. Authorizes nothing: no service, no integrated run, no FREEZE. Gate F NOT_RUN; all 32 cases NOT_RUN;
 G locked. This is my proposal after the E gate precedent (`evidence/e3/gate-plan-20261012`) and the merged
@@ -21,8 +22,11 @@ case coverage map (`case-coverage-map-20261114`). Grouping into families is a pl
 `plan-draft.json` holds the machine-readable form: pins, six case families (8+6+4+8+3+3 = 32, each case once),
 stages, preconditions and non-goals. Key points:
 - Ledger pin is 85c59f5, not the e4e992f named in f_matrix.json (A1-0127; matrix not edited).
-- The protocol pin is NOT final: candidate 55f180e, blocked on K1 (A3-0110, ~72% per-run detection, not
-  deterministic) and on agent 2 confirming the signing-rule reading (A3-0121). Agent 2 has been silent since A2-0086.
+- The current protocol candidate is `37ca31c` / tree `7566f63d..`, published on
+  `origin/agent-1`.
+  D57 authorizes proxy-2 to act for the portable protocol role, including source
+  approval and exact protocol FREEZE ACKs. S2-0024 is accepted as the role's
+  signing-rule answer; S2-0025's K1 result was reproduced 40/40 with 40/40 controls.
 - Family B uses the fault oracle (`oracles/faults.py`); the oracle needs signing-time observations that current
   captures do not all carry. That gap must be closed by the runner before family B can produce verdicts.
 - F-25 and F-26 are residual-inventory analysis items and are NOT_EXECUTED by design; F-17, F-18, F-24, F-19 are
@@ -43,8 +47,9 @@ TLC separately as an F-only tool; this avoids changing the E-frozen toolchain fi
 
 The final r4 preflight exits 2 with `BLOCKED`, starts no service and records all 32 cases as
 `NOT_RUN`. Every declared source/blob hash matches exactly. The owner commits are not execution
-ACKs. Agent 1's A1-0129 review is a scoped review, not a FREEZE ACK; agent 2 has not ACKed. Protocol
-K1 and A3-0121 questions remain open.
+ACKs. Agent 1's A1-0129 review is a scoped review, not a FREEZE ACK. Protocol K1 and the signing-rule
+source reading are closed at the accepted isolated role scope; actual exact execution FREEZE ACKs,
+the runner's signing-time/native-generation joins, and stages 3–7 remain open.
 
 A1-0129's ledger-scope details are now explicit in the machine-readable plan: v2.1/schema and
 ledger-manifest pins; scratch-archive deployment; profiles, complete-details log mode and chain
@@ -53,8 +58,28 @@ witness-set result; F-24 poison deployment isolation; F-31 `evm_revert` outside 
 safe-ledger assumption; and the F-commit `repaired-e` regression choice. This is still a DRAFT,
 not an execution authorization.
 
-Next: obtain required owner ACKs before services; close the signing-time capture gap; implement
-and verify the remaining runner stages without changing this draft into authorization. Then start
-with positive controls and family A, preserving the staged gate sequence. Honest size: the
+Next: implement and verify the offline signing-time/native-generation joins and remaining runner
+stages without changing this draft into authorization. Exact role-scope execution ACKs and an
+authorized FREEZE are required before services; after those, start with positive controls and family
+A, preserving the staged gate sequence. Honest size: the
 integrated runner and six families are the bulk of F. Detailed final preflight output and limits:
 `../preflight-20261114-r4/README.md`.
+
+## Continuation correction — A3-0131, 2026-11-14
+
+The updates above supersede the older pending-K1 and pending-signing-rule wording.
+The live candidate's publication ref is `origin/agent-1`; the preflight checks that
+declared ref and exact protocol subtree. D57 makes role continuation portable and
+does not require a duplicate push to `agent-2`. Agent 2's branch remains at
+`9d44754`, with no new publication on this refresh. S2-0026 is a protocol-role
+review, not a FREEZE ACK.
+
+The report's missing observation join is substantive: signed-history exports carry
+declared generations and per-digest ledger observations, while the native-history
+checker authenticates supplied block/call bytes. Neither by itself binds an actual
+service signing event to a native generation or proves store/export completeness.
+The next offline runner slice must keep those evidence classes separate and refuse
+to classify a signing violation without the required event-to-digest and
+event-to-observation joins. No integrated cases or services are authorized by this
+design note; plan status remains DRAFT, all 32 cases and Gate F remain NOT_RUN, and
+G remains locked.

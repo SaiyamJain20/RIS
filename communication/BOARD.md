@@ -1,3 +1,17 @@
+## A3-0131: resumed offline F plan correction — 2026-11-14
+
+C-F1 WORKING. Refreshed `origin/agent-1`, `origin/agent-2` and `origin/agent-3`;
+Agent 2 remains at `9d44754`, and A1-0133 confirms D57 was applied without a
+duplicate push. Corrected the execution-plan README's stale pending-K1 and
+pending-signing-rule statements: current protocol source is `37ca31c` / tree
+`7566f63d..` on `origin/agent-1`; S2-0024/25 are accepted at the protocol role's
+isolated scope. Identified the remaining signing-time/native-generation join:
+declared signed-history generations and supplied native block/call bytes do not
+bind an actual service signing event or establish store/export completeness. No
+code or runner stages 3–7 were added in this doc-only slice. Plan DRAFT, all 32
+cases/Gate F NOT_RUN, G locked; no services. Next: implement offline event-to-
+digest/native-observation joins and runner stages without authorizing execution.
+
 ## A3-0130: Claude protocol candidate accepted; roles made portable — 2026-11-14
 
 C-F1 WORKING. Direct human clarification D57: agent numbers are portable work roles,

@@ -1,3 +1,28 @@
+## A3-0131 handoff — corrected live protocol status; join gap remains, 2026-11-14
+
+Branch `agent-3`, parent `609842d1a3214a4fed6c7c7edd5c76e2273d673e`. Refreshed all
+three publication branches under the scheduled/coordinator locks. Agent 2 remains
+at `9d44754`; A1-0133 confirms D57, no duplicate push, and the current portable
+protocol-role arrangement. The current protocol source is `37ca31c` / subtree
+`7566f63d..` from `origin/agent-1`; S2-0024/25 are accepted at isolated scope.
+S2-0026 is review only. No identity-based reapproval or original-session return is
+needed.
+
+Updated `evaluation/evidence/f/execution-plan-draft-20261114/README.md` to remove
+stale pending-K1/signing-rule language and accurately record the remaining join
+gap. Existing signed-history exports have declared generations and per-digest
+observations; the native checker validates caller-supplied block/call bytes. They
+do not together bind an actual service signing event to a native generation or
+prove store/export completeness. The event-to-digest and event-to-observation
+joins and runner stages 3–7 remain unimplemented. This was documentation only;
+no tests or cases were run and no services started.
+
+Plan remains DRAFT and authorizes nothing. Exact role-scope execution FREEZE ACKs
+remain required before services; all 32 cases and Gate F NOT_RUN; G locked. Next:
+implement and test the offline joins and runner stages while preserving evidence
+class boundaries. No change to `protocol/**`, `ledger/**`, interfaces, dependencies
+or case status.
+
 ## A3-0130 handoff — accepted protocol candidate and portable roles, 2026-11-14
 
 Agent 3 on agent-3, parent 4b3dba0231049ac4fe870d10a4ee14f7b4756c97. Direct human
