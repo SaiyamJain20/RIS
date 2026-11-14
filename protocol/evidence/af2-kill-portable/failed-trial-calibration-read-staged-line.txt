@@ -1,0 +1,62 @@
+F
+=================================== FAILURES ===================================
+_ test_kill_inside_each_stage_of_a_real_initialisation_leaves_a_recoverable_directory _
+
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-4/test_kill_inside_each_stage_of0')
+
+    def test_kill_inside_each_stage_of_a_real_initialisation_leaves_a_recoverable_directory(tmp_path):
+        """I5, deterministically: a kill at EACH named stage of a real init_store, plus random kills as a complement. The next init_store completes every interrupted directory and the completed store signs."""
+        done = interrupted = 0
+        for stage in INIT_STAGES:
+            d = str(tmp_path / ("s-%s" % stage))
+            p = spawn(d, "init", 0)
+            assert p.stdout.readline().strip() == "READY", p.stderr.read()[-800:]
+            out = kill_at_stage(p, stage)
+            interrupted += "DONE" not in out
+            try:
+                st = ws.init_store(d, BIND, B, OWNER, anchor=ANCHOR)           # the restart: completes an interrupted initialisation or opens a finished one
+            except ws.StoreError as e:
+                pytest.fail("stage %s: the next init_store refused a directory the kill left behind: %s" % (stage, e))
+            assert (st.binding_v2, st.owner, st.document, st.anchor) == (BIND, OWNER, B, ANCHOR)
+            st.sign(type="StateCheckpoint", domain=kc.DOM_S, wsv="2", key="1", effect=kc.cp_effect(138), expires_at="1791600000", digest=h("after-%s" % stage), signer=kc.signer,
+                    observe=lambda: obs(DBC, 160, kc.T0))
+            st.close()
+            done += 1
+        rng = random.Random(2)
+        for t in range(TRIALS):
+            d = str(tmp_path / ("r%d" % t))
+            p = spawn(d, "init", t)
+            assert p.stdout.readline().strip() == "READY", p.stderr.read()[-800:]
+>           delay = rng.uniform(0.05, 1.6) * init_duration(tmp_path, runs=1)
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_witness_state_kill.py:207: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-4/test_kill_inside_each_stage_of0')
+runs = 1
+
+    def init_duration(tmp_path, runs=7):
+        """The wall time of a COMPLETE initialisation on this host, from READY to DONE (the MEDIAN of `runs` runs, each in its own directory). The kill schedule is drawn from it, so the kills land inside
+        the initialisation on any host: a fixed 0-50 ms window finished before the kill on a faster host (agent 3's A3-0108 finding: all 100 trials completed, zero interruptions exercised, the test failed
+        instead of passing vacuously), and the median, not the max, because the first run on a cold process is much slower than the warm steady state (measured: max 245 ms, median 8.7 ms) and a max-based
+        window would again miss."""
+        times = []
+        for i in range(runs):
+            d = str(tmp_path / ("calib%d" % i))
+            p = spawn(d, "init", 10 ** 6 + i)
+            t0 = time.monotonic()
+            assert p.stdout.readline().strip() == "READY", p.stderr.read()[-800:]
+            line = p.stdout.readline().strip()
+            t1 = time.monotonic()
+            p.wait(timeout=60)
+>           assert (line, p.returncode) == ("DONE", 0), (line, p.returncode, p.stderr.read()[-400:])
+E           AssertionError: ('STAGE after_dir', 0, '')
+E           assert ('STAGE after_dir', 0) == ('DONE', 0)
+E             
+E             At index 0 diff: 'STAGE after_dir' != 'DONE'
+E             Use -v to get more diff
+
+protocol/tests/test_witness_state_kill.py:160: AssertionError
+1 failed, 2 deselected in 1.38s
+EXIT=1 START=2026-11-13T08:38:20Z END=2026-11-13T08:38:22Z HEAD=5e25b53

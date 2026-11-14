@@ -1,0 +1,295 @@
+sss..s.......................................................sssss.....s [  2%]
+sssssssssssssssssssssssssss............................................. [  4%]
+........................................................................ [  6%]
+...........................ssssssssssssss............................... [  8%]
+........................................................................ [ 10%]
+........................................................................ [ 12%]
+........................................................................ [ 14%]
+...............s......ssssssss.......................................... [ 16%]
+........................................................................ [ 19%]
+........................................................................ [ 21%]
+........................................sssssssssss..........sssssssssss [ 23%]
+sssssssssss..............................................sssssssssss.... [ 25%]
+......ssssssssssssssssssssss............................................ [ 27%]
+..sssssssssss..........sssssssssssssssssssssss.......................... [ 29%]
+........................................................................ [ 31%]
+........................................................................ [ 33%]
+........................................................................ [ 35%]
+....................................................................ssss [ 38%]
+sssssss..........ssssssssssssssssssssss................................. [ 40%]
+.............sssssssssss..........ssssssssssssssssssssss................ [ 42%]
+..............................sssssssssss..........sssssssssssssssssssss [ 44%]
+ss...................................................................... [ 46%]
+........................................................................ [ 48%]
+.......................ssss............................................. [ 50%]
+.......................s..............sssssss........................... [ 52%]
+.....................s...................................ss............. [ 54%]
+.............................ssssssssssssssssssssssssssF..........sss... [ 57%]
+........................................................................ [ 59%]
+............................................................ssssssss.sss [ 61%]
+sss..................................................................... [ 63%]
+..................................................sss................... [ 65%]
+.....................................................................sss [ 67%]
+ssssssssssssssssss...................................................... [ 69%]
+....ssssssssssssssssssssss.............................................. [ 71%]
+..........................................sss........................... [ 74%]
+....................sssssssssssssssssss................................. [ 76%]
+........................................................................ [ 78%]
+........................................................................ [ 80%]
+......................................................ssssssssss.sssssss [ 82%]
+s....ssssssssssssssssss................................................s [ 84%]
+ss.................................................................sssss [ 86%]
+sss..................................................................... [ 88%]
+...ssss................................................................. [ 90%]
+........................................................................ [ 93%]
+........................................................................ [ 95%]
+........................................................................ [ 97%]
+.ssssssssssssssssssssssss..........................................sssss [ 99%]
+ssss.s...............                                                    [100%]
+=================================== FAILURES ===================================
+_____________ test_zz_every_catalog_case_was_executed_exactly_once _____________
+
+    def test_zz_every_catalog_case_was_executed_exactly_once():
+        expected_ids = sorted(f"{c}-repaired-e" for c in (
+            "E01-subject-substitution", "E01-nonce-replay", "E01-expiry-boundary", "E02-signed-list-rollback", "E02-wrong-issuer",
+            "E02-pre-barrier-revocation", "E02-post-barrier-revocation", "E02-expired-duty", "E03-dropped-outcome", "E03-fabricated-outcome",
+            "E03-duplicate-outcome", "E03-crash-after-intent", "E03-crash-after-send",
+            "E01-forged-tuple", "E01-wrong-destination", "E01-new-reference-replay"))               # the last three are new in revision 5
+        import json
+        print("\nOBSERVED " + json.dumps(OBSERVED, indent=1, sort_keys=True))
+        assert e2.REPAIRED_E_IDS == expected_ids and len(expected_ids) == 16                 # the pinned catalog holds exactly these repaired-e cases
+>       assert sorted(e2.EXECUTED) == expected_ids, f"cases never concluded: {sorted(set(expected_ids) - set(e2.EXECUTED))}"
+E       AssertionError: cases never concluded: ['E01-expiry-boundary-repaired-e', 'E01-forged-tuple-repaired-e', 'E01-new-reference-replay-repaired-e', 'E01-nonce-replay-repaired-e', 'E01-subject-substitution-repaired-e', 'E01-wrong-destination-repaired-e', 'E02-expired-duty-repaired-e', 'E02-post-barrier-revocation-repaired-e', 'E02-pre-barrier-revocation-repaired-e', 'E02-signed-list-rollback-repaired-e', 'E02-wrong-issuer-repaired-e', 'E03-crash-after-intent-repaired-e', 'E03-crash-after-send-repaired-e', 'E03-dropped-outcome-repaired-e', 'E03-duplicate-outcome-repaired-e', 'E03-fabricated-outcome-repaired-e']
+E       assert [] == ['E01-expiry-...aired-e', ...]
+E         
+E         Right contains 16 more items, first extra item: 'E01-expiry-boundary-repaired-e'
+E         Use -v to get more diff
+
+protocol/tests/test_e2_repaired_e.py:665: AssertionError
+----------------------------- Captured stdout call -----------------------------
+
+OBSERVED {}
+=========================== short test summary info ============================
+SKIPPED [1] protocol/tests/test_abi.py:34: Foundry cast not installed
+SKIPPED [1] protocol/tests/test_abi.py:42: Foundry cast not installed
+SKIPPED [1] protocol/tests/test_abi.py:53: Foundry cast not installed
+SKIPPED [1] protocol/tests/test_abi.py:79: Foundry cast not installed
+SKIPPED [1] protocol/tests/test_adapter_hardening.py:30: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_adapter_hardening.py:37: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_adapter_hardening.py:69: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_adapter_hardening.py:78: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_adapter_hardening.py:85: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_adapter_hardening.py:128: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_adapter_hardening.py:137: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_adapter_live.py:47: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_adapter_live.py:55: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_adapter_live.py:61: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_adapter_live.py:76: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_adapter_live.py:82: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_adapter_live.py:91: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_adapter_live.py:100: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_adapter_live.py:115: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_adapter_live.py:122: Foundry (anvil/forge) not installed
+SKIPPED [2] protocol/tests/test_adapter_live.py:134: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_adapter_live.py:146: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_adapter_live.py:153: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_adapter_live.py:165: Foundry (anvil/forge) not installed
+SKIPPED [6] protocol/tests/test_adapter_live.py:178: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_adapter_live.py:186: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_adapter_live.py:197: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_adapter_live.py:206: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_adapter_process_live.py:51: Foundry (anvil/forge) not installed
+SKIPPED [2] protocol/tests/test_adapter_process_paper.py:26: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_adapter_v2_main_wiring_live.py:273: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_adapter_v2_main_wiring_live.py:299: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_adapter_v2_main_wiring_live.py:332: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_adapter_v2_main_wiring_live.py:361: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_adapter_v2_main_wiring_live.py:379: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_adapter_v2_main_wiring_live.py:404: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_adapter_v2_main_wiring_live.py:427: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_adapter_v2_main_wiring_live.py:452: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_adapter_v2_main_wiring_live.py:465: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_adapter_v2_main_wiring_live.py:501: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [2] protocol/tests/test_adapter_v2_main_wiring_live.py:532: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_adapter_v2_main_wiring_live.py:555: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_adapter_v2_main_wiring_live.py:567: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_bootstrap_fixture.py:210: Foundry cast not installed
+SKIPPED [3] protocol/tests/test_bootstrap_fixture.py:290: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_bootstrap_fixture.py:316: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_bootstrap_fixture.py:327: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_bootstrap_fixture.py:340: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_bootstrap_fixture.py:400: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_bootstrap_fixture.py:405: Foundry (anvil/forge) not installed
+SKIPPED [100] protocol/tests/test_boundary_review.py:32: ScenarioResult is not agent-2's scope
+SKIPPED [100] protocol/tests/test_boundary_review_r5.py:32: ScenarioResult is not agent-2's scope
+SKIPPED [1] protocol/tests/test_byzantine_witness_live.py:48: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_byzantine_witness_live.py:63: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_byzantine_witness_live.py:88: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_byzantine_witness_live.py:97: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_candidate_schema_review.py:35: FileHash is not an agent-2 wire type (agent-3 evaluation schema)
+SKIPPED [1] protocol/tests/test_chain.py:21: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_chain.py:28: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_chain.py:33: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_chain.py:42: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_chain.py:53: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_chain_hardening.py:30: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_chain_hardening.py:39: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_compromised_worker.py:256: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_delayed_witness.py:297: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_delayed_witness.py:311: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_divergent_witness_live.py:47: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_divergent_witness_live.py:56: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_divergent_witness_live.py:65: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_divergent_witness_live.py:74: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_e2_repaired_e.py:71: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_e2_repaired_e.py:91: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_e2_repaired_e.py:110: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_e2_repaired_e.py:130: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_e2_repaired_e.py:160: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_e2_repaired_e.py:180: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_e2_repaired_e.py:205: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_e2_repaired_e.py:226: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_e2_repaired_e.py:246: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_e2_repaired_e.py:282: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_e2_repaired_e.py:302: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_e2_repaired_e.py:333: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_e2_repaired_e.py:359: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_e2_repaired_e.py:381: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_e2_repaired_e.py:475: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_e2_repaired_e.py:483: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_e2_repaired_e.py:496: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_e2_repaired_e.py:515: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_e2_repaired_e.py:534: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_e2_repaired_e.py:565: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_e2_repaired_e.py:599: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_e2_repaired_e.py:617: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_e_regression_pins_live.py:26: Foundry (anvil/forge) not installed
+SKIPPED [2] protocol/tests/test_e_regression_pins_live.py:48: Foundry (anvil/forge) not installed
+SKIPPED [3] protocol/tests/test_faulty_adapter.py:69: Foundry (anvil/forge) not installed
+SKIPPED [3] protocol/tests/test_faulty_adapter.py:90: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_faulty_adapter.py:113: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_faulty_adapter.py:129: Foundry (anvil/forge) not installed
+SKIPPED [6] protocol/tests/test_faulty_adapter.py:158: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_faulty_adapter_v2_live.py:125: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_faulty_adapter_v2_live.py:162: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_faulty_adapter_v2_live.py:189: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_faulty_witness.py:288: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_faulty_witness.py:306: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_faulty_witness.py:325: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_fixture_isolation.py:7: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_flow_forward.py:12: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_flow_forward.py:19: Foundry (anvil/forge) not installed
+SKIPPED [2] protocol/tests/test_flow_forward.py:31: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_flow_forward.py:44: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_ledger.py:8: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_ledger.py:17: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_ledger.py:24: Foundry (anvil/forge) not installed
+SKIPPED [9] protocol/tests/test_ledger.py:35: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_mutant_tree_live.py:38: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_mutant_tree_live.py:61: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_paper_profile.py:47: Foundry (anvil/forge) not installed
+SKIPPED [3] protocol/tests/test_paper_profile.py:52: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_paper_profile.py:59: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_paper_release.py:24: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_paper_release.py:42: Foundry (anvil/forge) not installed
+SKIPPED [2] protocol/tests/test_paper_release.py:62: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_paper_release.py:90: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_paper_release.py:107: Foundry (anvil/forge) not installed
+SKIPPED [3] protocol/tests/test_peer_bootstrap_crosscheck.py:59: Foundry not installed
+SKIPPED [3] protocol/tests/test_peer_bootstrap_crosscheck.py:80: Foundry not installed
+SKIPPED [1] protocol/tests/test_peer_bootstrap_crosscheck.py:102: Foundry not installed
+SKIPPED [1] protocol/tests/test_peer_bootstrap_crosscheck.py:110: Foundry not installed
+SKIPPED [1] protocol/tests/test_peer_bootstrap_crosscheck.py:117: Foundry not installed
+SKIPPED [3] protocol/tests/test_recovery.py:27: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_rpc_binding_view_live.py:137: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_rpc_binding_view_live.py:151: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_rpc_binding_view_live.py:158: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_rpc_binding_view_live.py:172: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_rpc_binding_view_live.py:188: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_rpc_binding_view_live.py:197: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_rpc_binding_view_live.py:205: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_rpc_binding_view_live.py:261: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_rpc_binding_view_live.py:279: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_rpc_binding_view_live.py:286: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_rpc_binding_view_live.py:308: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_rpc_binding_view_live.py:349: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_rpc_binding_view_live.py:411: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_rpc_binding_view_live.py:518: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_rpc_binding_view_live.py:549: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_rpc_binding_view_live.py:583: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_rpc_binding_view_live.py:594: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_rpc_binding_view_live.py:641: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_rpc_binding_view_live.py:682: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_supplement_controls.py:51: Foundry (anvil/forge) not installed
+SKIPPED [3] protocol/tests/test_supplement_controls.py:58: Foundry (anvil/forge) not installed
+SKIPPED [3] protocol/tests/test_supplement_controls.py:73: Foundry (anvil/forge) not installed
+SKIPPED [3] protocol/tests/test_supplement_controls.py:84: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_supplement_controls.py:109: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_supplement_controls.py:120: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_supplement_controls.py:129: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_supplement_controls.py:161: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_supplement_controls.py:174: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_supplement_controls.py:186: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_supplement_controls.py:203: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_supplement_controls.py:212: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_witness.py:26: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_witness.py:43: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_witness.py:51: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_witness.py:76: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_witness.py:84: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_witness.py:95: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_witness.py:103: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_witness.py:115: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_witness.py:128: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_witness.py:143: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_witness.py:150: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_witness.py:157: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_witness_hardening.py:19: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_witness_hardening.py:34: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_witness_hardening.py:49: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_witness_hardening.py:60: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_witness_hardening.py:69: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_witness_hardening.py:89: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_witness_policy.py:28: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_witness_policy.py:44: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_witness_policy.py:63: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_witness_process_state_refusals.py:85: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_witness_process_state_refusals.py:94: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_witness_process_state_refusals.py:107: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_witness_process_state_refusals.py:118: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_witness_process_state_refusals.py:131: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_witness_process_state_refusals.py:145: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_witness_process_state_refusals.py:153: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_witness_process_state_refusals.py:173: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_witness_process_transport_live.py:48: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_witness_process_transport_live.py:75: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_witness_process_transport_live.py:101: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_witness_process_transport_live.py:119: Foundry (anvil/forge) not found: set HMBC_FOUNDRY_DIR, install it in ~/.local/share/hmbc-tools/foundry-1.8.5, or put it on PATH
+SKIPPED [1] protocol/tests/test_worker.py:44: Foundry (anvil/forge) not installed
+SKIPPED [3] protocol/tests/test_worker.py:52: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_worker.py:64: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_worker.py:74: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_worker.py:82: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_worker.py:91: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_worker.py:99: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_worker.py:125: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_worker.py:136: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_worker.py:145: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_worker.py:158: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_worker.py:171: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_worker.py:187: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_worker.py:215: Foundry (anvil/forge) not installed
+SKIPPED [7] protocol/tests/test_worker.py:222: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_worker.py:239: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_worker_hardening.py:15: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_worker_hardening.py:27: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_worker_hardening.py:42: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_worker_hardening.py:61: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_worker_hardening.py:80: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_worker_hardening.py:101: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_worker_hardening.py:108: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_worker_hardening.py:117: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_worker_log.py:24: Foundry (anvil/forge) not installed
+SKIPPED [1] protocol/tests/test_worker_log.py:49: Foundry (anvil/forge) not installed
+1 failed, 2933 passed, 471 skipped in 181.11s (0:03:01)
+EXIT=1 START=2026-11-13T08:43:34Z END=2026-11-13T08:46:35Z HEAD=8ffd316

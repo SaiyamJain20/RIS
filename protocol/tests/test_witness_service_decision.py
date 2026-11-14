@@ -131,6 +131,17 @@ def test_the_expiry_is_the_minimum_of_the_request_and_the_checkpoint_and_ignores
         assert derive(view)[0]["expiresAt"] == "1025"
 
 
+def test_the_expiry_has_no_local_clock_term_even_where_one_would_bind(view):
+    """Sensitivity case of mutant M7 (F plan: "decision expiry retains the local-clock term"). The test above keeps both expiries within dbc_now + 30, so a surviving local-clock term never binds and that case
+    is only a positive control. Here BOTH expiries lie beyond dbc_now + 30 for every clock value, so the E term `dbc_now + 30` would be the minimum and change the decision: found by `tools/run_mutant_tree_mutants.py`,
+    where M7 survived the earlier tests."""
+    view.request["expiresAt"] = "1100"
+    view.cp = view.current = dict(view.cp, expiresAt="1090")
+    for ts in (1000, 1010, 1020):                                                              # dbc_now + 30 = 1030, 1040, 1050, all below min(1100, 1090) = 1090
+        view.dbc_ts = ts
+        assert derive(view)[0]["expiresAt"] == "1090"
+
+
 def test_the_evaluation_is_made_at_the_checkpoints_block_with_that_blocks_own_timestamp(view):
     derive(view)
     gid, at, block = view.last_credentials_call

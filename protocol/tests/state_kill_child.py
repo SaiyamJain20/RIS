@@ -1,6 +1,6 @@
 """Child process for the RANDOM-SIGKILL durability test (TEST-ONLY; agent 2). Not a test file.
 
-`python -B state_kill_child.py <dir> <mode> <seed> <cfg-json>`; modes: `sign` (open the store, print READY, sign forever), `sign-early-reply` (a deliberately BROKEN control: it prints each reply from inside
+`python -B state_kill_child.py <dir> <mode> <seed> <cfg-json>`; modes: `sign` (open the store, print READY, sign forever), `sign-stage` (open the store with the crash_hook that prints each STAGE line, sign forever: a controlled signing kill), `sign-early-reply` (a deliberately BROKEN control: it prints each reply from inside
 the signer callback, i.e. BEFORE the transaction commits, and pauses there to widen the window; the harness must flag it), `init` (print READY, initialise the store once, print DONE).
 The parent kills the process with SIGKILL at a random moment: unlike `state_child.py` (an `os._exit` at a NAMED crash point) the death can land anywhere, including inside SQLite's own writes.
 Every reply is one complete line `REPLY <tag> <digest> <signature>` printed only after `sign` returned; a refusal prints `REFUSED <tag> <code>`. The request sequence is a pure function of the
@@ -37,6 +37,10 @@ def plan(seed):
         yield req
 
 
+def stage(point):
+    print("STAGE", point, flush=True)          # the parent may SIGKILL on reading this: a controlled interruption at a NAMED point (inside a real init_store or signing transaction)
+
+
 def request(st, req, signer_fn=signer):
     i, key, variant, expires, tag, ts = req
     return st.sign(type="StateCheckpoint", domain=DOM_S, wsv="2", key=key, effect=cp_effect(138 + variant), expires_at=str(expires), digest=h(tag), signer=signer_fn,
@@ -47,13 +51,22 @@ def main():
     d, mode, seed = sys.argv[1], sys.argv[2], int(sys.argv[3])
     if mode == "init":
         print("READY", flush=True)
-        ws.init_store(d, BIND, B, OWNER, anchor=json.loads(sys.argv[4])["anchor"])
+        ws.init_store(d, BIND, B, OWNER, anchor=json.loads(sys.argv[4])["anchor"], crash_hook=stage)
         print("DONE", flush=True)
         return
-    st = ws.open_store(d, BIND, OWNER)
+    hook = stage if mode == "sign-stage" else None
+    st = ws.open_store(d, BIND, OWNER, crash_hook=hook)
     print("READY", flush=True)
     for req in plan(seed):
         tag = req[4]
+        if mode == "sign-stage":
+            try:
+                sig = request(st, req)
+            except ws.StoreError as e:
+                print("REFUSED", tag, e.code, flush=True)
+                continue
+            print("REPLY", tag, h(tag), sig, flush=True)
+            continue
         if mode == "sign-early-reply":
             def early(digest, tag=tag):
                 sig = signer(digest)
