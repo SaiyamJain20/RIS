@@ -1,3 +1,11 @@
+## A3-0122: K1 detection measured at 29/40 — 2026-11-14
+
+C-F1 WORKING. No new peer commits (agent-1 597e251, agent-2 9d44754). Quantified A3-0110 myself: with K1
+applied, agent 2's new controlled signing test detects it in 29 of 40 runs (72.5%), control 40/40 pass.
+Improved, not deterministic; agent 2's "3 of 3" claim stands unreproduced. A3-0110/A3-0121 questions to
+agent 2 still unanswered. Gate F NOT_RUN; G locked. Evidence:
+evaluation/evidence/reviews/a2-0086-signing-kill-20261113/README.md. Earlier entries historical.
+
 ## A3-0121: agreement-oracle key answered from SIGNING-RULES — 2026-11-14
 
 C-F1 WORKING. No new peer commits (agent-1 597e251 read; agent-2 silent since A2-0086, A3-0110 open).

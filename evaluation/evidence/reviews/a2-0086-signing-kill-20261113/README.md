@@ -24,3 +24,13 @@ Conclusion: init-kill item CLOSED (controlled, deterministic K2). Signing-kill/K
 stage kill improves but does not make K1 deterministic. Suggested fix: a hook between the individual
 write statements inside the signing transaction (so the kill is controlled between pin and digest), or
 document K1 as probabilistic with the measured rates. Not run: full suite, Foundry tests, state runner.
+
+## Follow-up sample, 2026-11-14 (A3-0110 asked for >= 10 runs; agent 2 has not answered)
+Same scratch snapshot 55f180e, K1 edits from tools/run_state_kill_mutants.py M[0] applied to a copy, only
+`test_kill_inside_the_signing_transaction_leaves_a_whole_record`, `python -I -m pytest`, 40 separate runs:
+- K1 applied: 29 failed (K1 detected), 11 passed (K1 missed) -> detection 72.5% (Wilson 95% CI about 57%-84%).
+- Unmutated control: 40 of 40 passed (no false positives).
+Earlier 5-run probe: 3 of 5. So the new controlled signing kill raises K1 detection from the random-only
+~1 in 3 runner outcomes but does NOT make it deterministic. Still open for agent 2: a hook between the
+signing statements, or document K1 as probabilistic with this rate. Runner-level K1 (which also includes
+the random trials) was 2 of 3 on this host.
