@@ -1,0 +1,108 @@
+{
+ "status": "DRAFT",
+ "authorizesExecution": false,
+ "gateF": "NOT_RUN",
+ "gateG": "LOCKED",
+ "author": "agent-3 (correlated same-model)",
+ "pins": {
+  "ledger": "85c59f5 (NOT e4e992f named in f_matrix.json)",
+  "protocolSourceCandidate": "origin/agent-2 55f180e; FINAL PIN BLOCKED on K1 (A3-0110) and agent 2's answers",
+  "interfaces/v2/FREEZE.json": "sha256 7bb1d243d546dcc6..",
+  "f_matrix": "2230daf3da1eda11.. (case list valid; its ledger pin superseded)",
+  "toolchain": "Foundry 1.8.5, solc 0.8.37, CPython 3.13.13, TLC 2.19 jar sha256 936a262061c91469..",
+  "evaluationSource": "HEAD at FREEZE time, to be recorded"
+ },
+ "families": {
+  "A-quorum-availability-and-signature-lists": {
+   "cases": [
+    "FL-1",
+    "FL-2",
+    "FL-3",
+    "FL-4",
+    "FL-5",
+    "F-20",
+    "F-22",
+    "F-23"
+   ],
+   "needs": "4 real witness processes, local Anvil pair, real KSSC/ACSC/PSC, pool collector; delay hook H6; muted/stopped witnesses; bad-list submission",
+   "oracle": "certificate accepted iff >=3 distinct sorted member signatures; FL-3 expects classified timeout; F-20 distinguishes arbitrary delay from eventual delivery"
+  },
+  "B-signing-rule-and-byzantine-witness": {
+   "cases": [
+    "FL-7",
+    "F-12",
+    "F-16",
+    "F-17",
+    "F-18",
+    "F-24"
+   ],
+   "needs": "real-process Byzantine witness (G1), divergent view (G2), q2 deployment profile mutant-f-q2 (F-18), poison-checkpoint fixtures",
+   "oracle": "evaluation/oracles/faults.py (pin-death rule) over captured signing-time observations; F-17/F-24/F-18 expect violations outside the bound and are reported as such"
+  },
+  "C-durable-state-restart-and-tripwire": {
+   "cases": [
+    "F-13",
+    "F-27",
+    "F-31",
+    "F-32"
+   ],
+   "needs": "SIGKILL/restart of witness processes, store rollback fixture, clock/height regression via evm_revert, store reuse across deployments",
+   "oracle": "honest signer keeps pin after restart (F-13); rollback/regression is refused or faulted (F-27,F-31,F-32); K1 limit applies to kill coverage claims"
+  },
+  "D-trust-lists-and-governance": {
+   "cases": [
+    "FL-6",
+    "FL-8",
+    "FL-9",
+    "FL-10",
+    "F-15",
+    "F-28",
+    "F-29",
+    "F-30"
+   ],
+   "needs": "real Governance/TMSC, witness-signed governance through the pool, stale witness-set and replay fixtures, barrier timing",
+   "oracle": "existing E trust/barrier oracles plus governance history readers; FL-9 expects a grant (trust assumption)"
+  },
+  "E-relay-and-outcomes": {
+   "cases": [
+    "FL-11",
+    "F-14",
+    "F-21"
+   ],
+   "needs": "relay adversary variants, expiry boundaries, field-substitution fixtures",
+   "oracle": "existing E subject/destination/receipt oracles"
+  },
+  "F-compromise-and-residual-inventory": {
+   "cases": [
+    "F-19",
+    "F-25",
+    "F-26"
+   ],
+   "needs": "F-19 H5 compromised-worker alternate entry; F-25/F-26 are analysis-only residuals documented, not executed",
+   "oracle": "F-19 outside trusted-worker assumption, reported as such; F-25/F-26 NOT_EXECUTED by design"
+  }
+ },
+ "stages": [
+  "1 verify FREEZE pins, versions and hashes",
+  "2 source bracket pre (evaluation, interfaces, owner commits)",
+  "3 isolated owner baselines (ledger forge, protocol suite, TLC) as controls",
+  "4 per-family integrated runs, positive control first in each family, one fresh chain pair per case",
+  "5 oracle verdicts and result classification per case (PASS / FAIL / BLOCKED / NOT_EXECUTED), refuted hypotheses kept",
+  "6 source bracket post, worktree unchanged",
+  "7 manifest and gate-evidence (RQ2 criteria), E regression rerun, report RQ2-F.md"
+ ],
+ "preconditions": [
+  "agent 2 resolves or documents K1 and confirms the A3-0121 signing-rule reading",
+  "runner implemented test-first in evaluation/** with no oracle trusting captures it cannot see",
+  "oracle connected to captures that carry signing-time observations (currently a gap)",
+  "agent 1 and agent 2 exact-revision FREEZE ACKs after verifying hashes and driving runner calls against their components",
+  "host resources checked (agent 2 reported a 99% full disk earlier)",
+  "human decisions on scope cuts (PLAN section 9) if time-boxed"
+ ],
+ "nonGoals": [
+  "Besu/QBFT consensus",
+  "power-loss durability",
+  "G (key lifecycle) work before Gate F",
+  "any claim that a case passed before it ran"
+ ]
+}

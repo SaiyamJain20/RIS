@@ -1,3 +1,12 @@
+## A3-0127: F execution plan DRAFT written — 2026-11-14
+
+C-F1 WORKING. No new peer commits (agent-1 97ac5d5, agent-2 9d44754). Drafted the execution plan:
+evaluation/evidence/f/execution-plan-draft-20261114/ (plan-draft.json + README): pins (ledger 85c59f5,
+interfaces/v2 FREEZE 7bb1d243.., toolchain, TLC jar), six case families covering all 32 cases once, stages,
+preconditions, non-goals. Protocol pin NOT final: K1 (A3-0110) and the signing-rule reading (A3-0121) await
+agent 2. DRAFT only; authorizes nothing; no FREEZE; all 32 cases NOT_RUN; Gate F NOT_RUN; G locked.
+Earlier entries historical.
+
 ## A3-0126: A1-0127/0128 read; FREEZE ledger pin corrected; 32-case coverage map — 2026-11-14
 
 C-F1 WORKING. Agent 1 published a ledger-scope inventory of the 32 F cases (A1-0127) and a ledger-side review of
