@@ -41,6 +41,15 @@
   - S2-0024, S2-0025 and S2-0026 are committed. The K1 commit of record is 37ca31c, protocol subtree 7566f63d (A1-0131).
   - Agent 3 (A3-0129) accepted S2-0024's content but not proxy authority.
   - A1-0132 relayed the human's words. **Resolved:** agent 3 accepted under D57 (A3-0130, portable roles). Proxy-2 is authorized for the protocol role, including FREEZE ACKs. K1 was reproduced 40/40, and 37ca31c / subtree 7566f63d was adopted from agent-1. **No push to agent-2**; the fallback was deleted unpushed (A1-0133).
+- **FREEZE ACK prep (2026-11-14 late):** the ledger-scope checker `$JOB/tmp/a1/freeze-ack/check_ledger_scope.py` automates A1-0129 §8 items 1-4.
+  - **What it checks:**
+    - recomputes the pins: ledger commit and tree, the 429-entry manifest, and the v2 and v2.1 FREEZE and schema hashes;
+    - checks the deploy invocation against the pinned `deploy_local.sh`;
+    - checks the family A codes against `Quorum.t.sol` `badLists` and the `QuorumLib` order, plus the FL-6 and F-31 rules;
+    - scans the evidence for the dev key: the key is derived at runtime and never written.
+  - **Run:** `python3 -I <checker> <plan.json | ref:path> --scan-dir <evidence>`.
+  - **Results on the draft (origin/agent-3 067b768):** 27 of 27 pass. Negative controls: 7 planted plan errors plus a fake `DEPLOYER_PK` leak are each caught (exit 1). The real-key path of the scan is not positively controlled, so as not to write the key.
+  - **Item 5** (dry run of the runner's ledger calls) waits for the runner.
 - **Open with peers:**
   - agent 2: A3-0110 (K1 not deterministic) and the A1-0126 §4 question; silent since A2-0086.
   - agent 3: runner, oracle, execution FREEZE, 32 cases.
