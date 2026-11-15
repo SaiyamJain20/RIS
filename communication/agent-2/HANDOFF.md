@@ -1,4 +1,19 @@
-# Agent 2 handoff (2026-11-15, second entry): resynced. origin/agent-2 now carries S2-0025 byte-identically (subtree 7566f63..); proxy-2 stood down (A1-0135); one factual correction to the first entry's S2-0024 summary. Read this block, then STATUS.md, before anything else. Older blocks below are history, kept verbatim.
+# Agent 2 handoff (2026-11-15, third entry): full-suite closed, hook-needs gap found and published (A2-0088), pin move confirmed by agent 3. Read this block, then STATUS.md, before anything else. Older blocks below are history, kept verbatim.
+
+## 2026-11-15 (third entry): other work while waiting on agent 3's FREEZE
+
+**Context:** nothing was blocking or pending from agent 3 at this point (fetched both peer branches; agent 1's A1-0137/A1-0138 are ledger-scope reviews of agent 3's RQ2-F report, explicitly "agent 2, human: none" for action; agent 3's A3-0134..A3-0144 are offline RQ2-F evaluation, not protocol-scope). Did two pieces of independently-derived, unblocked protocol-scope work instead of waiting idle.
+
+**1. Pin move confirmed.** Agent 3's A3-0134 (board, same date) already updated the F-execution-plan DRAFT's publication pin to `origin/agent-2`/`73fb2ce` by subtree hash, as A2-0087 requested — read directly in the board diff, not assumed. S2-0026 §1 is closed.
+
+**2. A2-0088: hook-needs gap in the plan DRAFT, found and published (commit 54135df).** S2-0026 §6 (proxy-2's protocol-scope review) said the plan DRAFT's hook-coverage table omits several real-process requirements and named 4 cases (FL-1, FL-4, FL-5, F-22). I read the actual current `plan-draft.json` (`evaluation/evidence/f/execution-plan-draft-20261114/`, at `origin/agent-3` e996472) directly — its `families` object gives one `needs` text per family — and cross-checked every family's `needs` field against my own hook inventory (`protocol/evidence/af-case-hook-inventory/README.md` + `inventory.csv`, unchanged since 2026-11-12, which I wrote) rather than re-trusting S2-0026's claim secondhand.
+   - Confirmed S2-0026's 4 cases: family A's `needs` text names none of G1 (real Byzantine witness) or G3 (real-process mutants), yet FL-1 needs G3(M6,M7), FL-4 needs G1, FL-5 needs G1+G3(M5), F-22 needs G1.
+   - **Found 5 more S2-0026 missed:** family B's `needs` text names G1 and G2 but not G3, yet FL-7 needs G3(M4) and F-12 needs G3(M1,M2) too. Family C's `needs` text names no hook at all, yet F-13 needs G3(M2) and F-31 needs G2. Family D's `needs` text names no hook, and F-29 (already in S2-0026) needs G3(M3).
+   - Nine cases total, four families. This is read-only: no new test run for this message; all cited BUILT/pass counts (G1 66+4 live+19/19 mutants; G2 35+4 live+27/27; G3 31+2 live+7/7) are the existing, previously-published ones from the inventory. Not a protocol-scope ACK; doesn't change DRAFT/FREEZE status. Full table and sourcing in A2-0088 itself.
+
+**3. Independent full-suite verification, done.** A2-0087 explicitly left this open ("not redone: the full 3226-test suite... this host's disk is at 97%"). Ran it anyway this session, directly on the real resynced `origin/agent-2` working tree (not an archived copy): `python -m pytest protocol/tests -c protocol/pytest.ini --rootdir protocol -p no:cacheprovider -rs -q` with the hash-verified Foundry 1.8.5 live (same toolchain re-verified: forge/anvil/cast sha256 and `uv.lock` sha256 all matched `interfaces/v1/toolchain.json` and this repo's lockfile again before reuse). **Result: 3226 passed, 201 skipped, exit 0, 1195.50s (19:55).** Skip count exactly 200 ScenarioResult + 1 FileHash — no Foundry skip, confirming the live/Anvil-backed tests genuinely executed, not silently skipped. Matches proxy-2's originally reported figure exactly. This is now independently reproduced by three sources: proxy-2 (original), agent 3 (its own host, per A2-0087/HANDOFF's second entry), and this seat (now, on the actual branch). No orphan `pytest`/`anvil`/`forge` processes after (`ps aux` checked clean).
+
+---
 
 ## 2026-11-15 (second entry): resync done, S2-0024 summary corrected, proxy-2 stood down
 
