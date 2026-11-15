@@ -196,18 +196,20 @@ The kill-durability review found and drove fixes for: a hot-journal store refuse
 init (fixed), a snapshot-lock defect (fixed), the evaluator anchor-selection defect (fixed on my
 side). The earlier candidate's signing-kill mutant K1 was detected only probabilistically.
 A3-0122 measured 29/40 detections (72.5%) with the control passing 40/40; agent 2's 3/3
-report was not reproduced in that measurement. S2-0024/0025 now answer those items
-for the protocol role under the human's D57 clarification.
+report was not reproduced in that measurement. S2-0025 and the later reproduction provide stronger
+candidate test evidence, but current coordination still records **K1 OPEN** pending explicit owner
+confirmation. Do not treat the 40/40 result as closure or as an execution ACK.
 Proxy note S2-0024, published on agent-1 at `73fec05`, supplies a source review and corrects one
-consequence of my A3-0121 reading (below). It explicitly disclaims knowledge of agent 2's intent
-and is not an execution ACK. A later refresh to agent-1 `f25eae1` found S2-0025's proxy
-delta READY at `37ca31c` (protocol subtree `7566f63d693afe8fa88ab7cc69872082d58d88db`):
-its between-statement blocking hooks now reproduce on agent 3's host: **40/40 K1 detections,
-40/40 control passes**, with no trial crash, and 81 state tests pass. This accepts the new
-candidate's kill-coverage result at isolated scope; the old candidate still has its measured
-29/40 limit. These are fault-injection tests with a synthetic placeholder signer, not evidence
-of a production corruption rate or power-loss durability. See the [exact-source review and
-command receipts](../evidence/reviews/proxy-k1-20261114/README.md). The human explicitly
+consequence of my A3-0121 reading (below). It explicitly disclaims knowledge of agent 2's intent;
+the **A3-0121 signing-rule confirmation remains OPEN** under the current coordination record.
+The note is review evidence, not that confirmation or an execution ACK. A later refresh to agent-1
+`f25eae1` found S2-0025's proxy delta READY at `37ca31c` (protocol subtree
+`7566f63d693afe8fa88ab7cc69872082d58d88db`): its between-statement blocking hooks reproduced on
+agent 3's host: **40/40 K1 detections, 40/40 control passes**, with no trial crash, and 81 state
+tests passed. This demonstrates sensitivity of the candidate tests at isolated scope; the old
+candidate still has its measured 29/40 limit. These are fault-injection tests with a synthetic
+placeholder signer, not evidence of a production corruption rate or power-loss durability. See the
+[exact-source review and command receipts](../evidence/reviews/proxy-k1-20261114/README.md). The human explicitly
 authorized Claude proxy-2 for protocol-source approval and exact protocol FREEZE ACKs,
 then clarified that all agent names are portable work roles (D57). The draft now adopts
 this candidate from its actual publication ref, `origin/agent-1`, with an exact module-tree
@@ -328,8 +330,8 @@ These are prior measurements unless marked fresh. No row is an integrated F resu
 | One/two unavailable witness boundary; fresh virtual-sweep reproduction plus prior reported local process runs | [M2/M6 measurements](../evidence/f/measurements-20261114/README.md), [fresh M2 exact-source reproduction](../evidence/f/availability-reproduction-20261115/README.md), [M2 per-trial follow-up](../evidence/f/availability-trial-records-20261115/README.md), [M6 source and receipt review](../evidence/f/availability-receipt-review-20261115/README.md) | M2 now retains one record per virtual trial, but records come from the same runner; M6 run stdout and exact invocation are not retained; no real-network latency or general liveness estimate |
 | Signature and governance gas overhead; tested reconstruction result with peer reproduction reported | [M1/M1b/M1c measurements](../evidence/f/measurements-20261114/README.md), [A1-0136 reconciliation](../evidence/f/gas-peer-reconciliation-20261115/README.md), [attachment and retained-log audit](../evidence/f/gas-attachment-audit-20261115/README.md) | all 12 attachment hashes, 21 emitted rows (15 distinct) and seven sizes match retained artifacts; no fresh Agent-3 Forge run; single deterministic fixtures, no production fee or throughput estimate |
 | K1 sensitivity; deliberate mutation result | [A3-0122 signing-kill review](../evidence/reviews/a2-0086-signing-kill-20261113/README.md) | 29/40 detections and 40/40 control; does not measure corruption probability |
-| New K1 candidate; deliberate mutation result | [S2-0025 reproduced by agent 3](../evidence/reviews/proxy-k1-20261114/README.md) | new blocking test: 40/40 detections and 40/40 controls; isolated candidate acceptance, not an execution ACK |
-| Store death predicates; tested reconstruction result | [180-case differential and seven oracle mutations](../evidence/f/oracle-store-diff-20261114/README.md) | one earlier digest per key; grant/receipt facts caller-asserted |
+| New K1 candidate; deliberate mutation result | [S2-0025 reproduced by agent 3](../evidence/reviews/proxy-k1-20261114/README.md) | 40/40 detections and 40/40 controls; K1 owner confirmation remains OPEN, and this is not an execution ACK |
+| Store death predicates; tested reconstruction result | [180-case differential and seven oracle mutations](../evidence/f/oracle-store-diff-20261114/README.md) | one earlier digest per key; grant/receipt facts caller-asserted; A3-0121 signing-rule confirmation remains OPEN |
 | Compromised quorum can permanently halt one DBC deployment and obtain a grant from fabricated, policy-shaped records for an unsubmitted PBC requester; ledger-scope review plus peer-reported scratch reproduction, outside f=1 | [A1-0137 review and Agent-3 response](../evidence/f/report-review-a1-0137-20261115/README.md) | requires >=3 Byzantine witnesses; Agent 3 verified attachment checksums but did not rerun Forge; grant does not show key-worker release |
 | Saturating `authEpoch`, `sourceBlockNumber`, or `sequence` can permanently halt honest operation of the DBC deployment; ledger-scope review plus peer-reported scratch reproduction, outside f=1 | [A1-0138 follow-up review and Agent-3 response](../evidence/f/report-review-a1-0137-20261115/README.md) | authEpoch stops decisions immediately; sourceBlockNumber stops them after checkpoint expiry; sequence stops them after checkpoint expiry; Agent 3 verified attachment checksums but did not rerun Forge |
 | Fresh oracle/store differential; tested reconstruction result | [2026-11-15 exact-source rerun](../evidence/f/oracle-store-diff-20261115/README.md) | one earlier digest per key; grant/receipt facts caller-asserted |
@@ -362,10 +364,11 @@ Before the 2026-11-17 partial-report target, the partial packet is prepared and 
 questions and execution blockers; no external review request has been sent. Continue offline
 report, runner, or oracle work only when it closes a specific evidence gap. The existing capture
 checks do not authenticate acquisition or establish transcript completeness; those controls can
-be added only if an independent source is available. The execution plan remains DRAFT. The new K1 candidate's
-kill coverage is accepted at tested scope and its source is adopted in the DRAFT under D57.
-Both exact execution FREEZE ACKs and the unfinished runner stages remain open; S2-0024 and
-A1-0129 are not execution ACKs. Run services/cases only after the authorized FREEZE requirements are met. A reviewable
+be added only if an independent source is available. The execution plan remains DRAFT. The new K1 candidate's test evidence and source pin are
+recorded in the DRAFT under D57, while K1 owner confirmation and the A3-0121 signing-rule
+confirmation remain OPEN. Both exact execution FREEZE ACKs and the unfinished runner stages also
+remain open; S2-0024 and A1-0129 are not execution ACKs. Run services/cases only after the
+authorized FREEZE requirements are met. A reviewable
 partial report can document those blockers; it cannot substitute prior measurements for the
 32 missing case results or close Gate F.
 

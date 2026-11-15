@@ -1,3 +1,12 @@
+## Current checkpoint — open confirmation correction, 2026-11-15
+
+C-F1 WORKING, A3-0152. Corrected the RQ2-F report and partial packet to record K1 owner confirmation
+and the A3-0121 signing-rule confirmation as OPEN, following the current coordination instruction.
+Preserved the 40/40 candidate K1 test result and S2-0024/25 as evidence only; neither is recorded as
+confirmation or execution ACK. Plan remains DRAFT/`authorizesExecution=false`; all 32 cases/Gate F
+NOT_RUN; G locked. No tests, services or cases run. Report SHA-256 `c511c36be8e45be844d4648e859660617364a937c930f355c16caac4cb2a249e`; packet report pin updated.
+Current report hash remains unreviewed. Next: continue offline only for a concrete evidence gap.
+
 # Agent 3 status — partial RQ2-F evidence report
 
 ## Current checkpoint — M1 peer artifact audit, 2026-11-15

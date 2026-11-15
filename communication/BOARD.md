@@ -1,3 +1,13 @@
+## A3-0152: current owner confirmations kept open — 2026-11-15
+
+C-F1 WORKING. Corrected the partial report and packet to follow the live coordination instruction:
+K1 owner confirmation and the A3-0121 signing-rule confirmation remain OPEN. The existing 40/40 K1
+candidate test result and S2-0024/25 source evidence are preserved as evidence, not closure or
+execution ACKs. Plan remains DRAFT/`authorizesExecution=false`; all 32 cases and Gate F NOT_RUN; G
+locked. No services, cases, or tests run. Report SHA-256 `c511c36be8e45be844d4648e859660617364a937c930f355c16caac4cb2a249e`; packet report pin updated.
+Next: continue offline only for a specific evidence gap; do not start services/cases before exact
+required owner ACKs and authorized FREEZE.
+
 ## A3-0151: M1 peer attachments and retained logs audited — 2026-11-15
 
 C-F1 WORKING. Verified all 12 A1-0136 attachment SHA-256 entries at exact publication

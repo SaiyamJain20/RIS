@@ -3744,3 +3744,25 @@ Plan SHA-256 `1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919` 
 unreviewed. No external review request, peer-scope edit, extra agent/worktree or main push.
 Next: close a concrete offline runner/report gap or incorporate an exact-scope report review;
 actual execution still requires the exact authorized FREEZE and affected role ACKs.
+
+
+# A3-0152 handoff — open confirmation correction
+
+Continued Agent 3 from live board A3-0151 on `agent-3`. Startup checked running process command lines
+and `/proc/<pid>/cwd`; no live Claude CLI process used `/home/karma/Documents/RIS`. Acquired the
+scheduled-run lock and explicitly fetched `origin/agent-1`, `origin/agent-2`, and `origin/agent-3`
+under the coordinator lock. Refs: agent-1 `e45e25c6975bc5c201c6d986ae71b87b9b1c9a5b`, agent-2
+`81498f98aac497768b0dec35cea89ddf7466e697`, agent-3 parent `b07970b8b4a4f65c069089e1c86cf142592f714f`.
+The tracked worktree was clean; four pre-existing untracked pitch/update files were preserved.
+
+The current RQ2-F report/packet described K1 and A3-0121 confirmation as closed/accepted. Corrected
+that status to follow the current coordination instruction: both owner confirmations remain OPEN.
+The existing 40/40 K1 candidate result and S2-0024/25 source evidence remain in the report with
+bounded scope, but are not treated as confirmation or execution ACK. Updated BOARD, STATUS, report,
+and packet only; exact paths are those four plus this HANDOFF. Report SHA-256 `c511c36be8e45be844d4648e859660617364a937c930f355c16caac4cb2a249e`.
+The packet's report hash was refreshed. Plan hash remains
+`1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`.
+
+No tests, services, integrated cases or new measurements were run. Gate F remains NOT_RUN, all 32
+cases NOT_RUN, G locked, and plan DRAFT/`authorizesExecution=false`. No peer files, external messages,
+extra agents/worktrees, or main push. `git diff --check` passed. Current run time: 2026-11-15 17:45:28 UTC.

@@ -8,7 +8,7 @@ evidence packet, not an F execution result, an execution FREEZE, an owner ACK, o
 The current report text is pinned by SHA-256:
 
 ```text
-e0050b0299e68af37aee3aa27af3ca7ec2dc356e7026d3631ee01b599bdc2294  evaluation/reports/RQ2-F-DRAFT.md
+c511c36be8e45be844d4648e859660617364a937c930f355c16caac4cb2a249e  evaluation/reports/RQ2-F-DRAFT.md
 ```
 
 The current execution proposal it describes is separately pinned by SHA-256:
@@ -35,7 +35,7 @@ was applied exactly and the remaining report text was unchanged; it closed ledge
 for that revision. This report-status and packet update is not an execution ACK or FREEZE ACK. Agent 3 has not
 rerun Forge for the peer scratch tests.
 
-Prior exact report SHA-256 reviewed by A1-0139: `cf249e2ad63b24d44acdef538d09718ef1fb3ae41e683af9009fa72ca07176f2`. Current report SHA-256: `e0050b0299e68af37aee3aa27af3ca7ec2dc356e7026d3631ee01b599bdc2294`.
+Prior exact report SHA-256 reviewed by A1-0139: `cf249e2ad63b24d44acdef538d09718ef1fb3ae41e683af9009fa72ca07176f2`. Current report SHA-256: `c511c36be8e45be844d4648e859660617364a937c930f355c16caac4cb2a249e`.
 Current plan SHA-256: `1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`.
 The per-trial M2 follow-up receipt README SHA-256 is
 `37ca15e51d667091346b3ab7efd1a4e0ac28f998edca991546f2120c40deecc1`; its complete output and
@@ -114,9 +114,10 @@ are documented in [this receipt](../report-review-a1-0137-20261115/README.md).
   `NOT_RUN`, Gate G is `LOCKED`, and all 32 cases are `NOT_RUN`. The plan's exact role-scope
   execution ACKs and authorized FREEZE are still absent. No service or integrated case may start
   until those requirements apply to the exact plan and source set.
-- Protocol source approval and signing-rule interpretation are accepted at the isolated source
-  review scope under D57/S2-0024/25; this does not satisfy execution ACKs. K1 controls likewise
-  do not satisfy them.
+- Protocol source evidence and the isolated K1 candidate controls are recorded under D57/S2-0024/25,
+  but current coordination leaves K1 owner confirmation and the A3-0121 signing-rule confirmation
+  **OPEN**. The 40/40 K1 sensitivity result and source review do not close those confirmations and
+  do not satisfy execution ACKs.
 - Runner stages 3–7 and transcript acquisition/authentication/completeness evidence remain open.
   The partial report documents these blockers; it does not convert existing measurements into
   F-case results.
