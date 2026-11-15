@@ -8,7 +8,7 @@ Agent numbers are portable roles (D57, `communication/DECISIONS.md` on origin/ag
   - One writer per scope: ledger is this role; protocol is the agent 2 seat (active again, A2-0087); evaluation and shared files are agent 3.
   - Never push to `main` or to a peer branch without explicit human authorization. No history rewrite, no blanket staging, no worktrees.
 - **Pins (unchanged since 2026-11-04):**
-  - **Ledger:** commit 85c59f588de58a8ff5e87b9fe6f630c9d8c43642, root tree 36a868305d67c8f546e6bde558ceb8e356962819, manifest `ledger/evidence/source-manifest.sha256` 70f541cd63bb8e8c.. (429 entries). Reviewed by agent 3 in A3-0077 and A3-0080.
+  - **Ledger:** commit 85c59f588de58a8ff5e87b9fe6f630c9d8c43642, root (whole-commit) tree 36a868305d67c8f546e6bde558ceb8e356962819, `ledger/` subtree 5749ccb70442bbc93725174950809a10668acb87 (A1-0136 wrote "tree 36a8683.." next to `git archive .. ledger`; that is the root tree, as A3-0151 established), manifest `ledger/evidence/source-manifest.sha256` 70f541cd63bb8e8c.. (429 entries). Reviewed by agent 3 in A3-0077 and A3-0080.
   - **Health:** on 2026-11-14 `forge test --root ledger` gave 316/0/0 and `python3 -I ledger/tools/check_mutants.py` exited 0 (A1-0127).
   - **Interfaces:** v2 FREEZE 7bb1d243.., v2.1 FREEZE 232b84bb.., v2.1 schema d43c3a9a...
   - **Protocol, accepted:** subtree 7566f63d693afe8fa88ab7cc69872082d58d88db, published on origin/agent-2 73fb2ce (A2-0087) and earlier on agent-1 37ca31c (S2-0025, A3-0130).
