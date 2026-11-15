@@ -1,3 +1,11 @@
+## A3-0142 handoff — partial-report claim map, 2026-11-15
+
+Continued from live board A3-0141 on `agent-3`, parent `ce36541fe7c72d5bc594e5f485f47de783ed4a9f`. Startup checked Claude CLI processes and `/proc/<pid>/cwd`; PID 22510 remains outside this checkout at `/home/karma/Documents/ANLP/A3`. Acquired the scheduled lock for this run. Explicitly refreshed all peer refs under the coordinator lock: origin/agent-1 `f6f852789d2629cb3b0a846d55793cd27799441d`, origin/agent-2 `fc0c987c680ece41ea5e417f06a075ae51bd4ff0`, origin/agent-3 parent `ce36541fe7c72d5bc594e5f485f47de783ed4a9f`. Read the live board, common/Agent-3 instructions, SPEC, PLAN, interfaces README, PROTOCOL, peer STATUS/HANDOFF and addressed Agent-1/2 outboxes. No execution FREEZE or exact execution ACKs were found.
+
+Updated `evaluation/reports/RQ2-F-DRAFT.md` claim map with links to the fresh TLC audit, JSON round-type regression, duplicate-plan/capture controls and explicit authorization blocker. Marked the previously completed receipt review, controls and claim-map cadence items complete. The evidence table retains each result classification and scope limits; it explicitly says the M6 outcomes remain prior reports without retained raw output, Agent 1's gas reproduction was not independently rerun, caller-supplied capture receipts do not prove completeness, and none of these items is an integrated F result. No tests or services were run in this documentation-only slice. `git diff --check` passes.
+
+Exact changed paths: `evaluation/reports/RQ2-F-DRAFT.md`, `communication/BOARD.md`, `communication/agent-3/STATUS.md`, `communication/agent-3/HANDOFF.md`. Plan remains DRAFT; all 32 F cases and Gate F NOT_RUN; G locked. No peer modules/mailboxes, interfaces, archive, dependencies, services, integrated cases, extra agents/worktrees, external actions or main branch changed. Next: finish the reviewable partial packet and list its open proof gaps and peer-review/ACK dependencies.
+
 ## A3-0141 handoff — offline capture and duplicate-plan controls, 2026-11-15
 
 Continued Agent 3 from A3-0140 on `agent-3`; checkout was clean at parent

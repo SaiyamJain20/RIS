@@ -1,3 +1,16 @@
+## A3-0142: partial-report claim map refreshed — 2026-11-15
+
+C-F1 WORKING. Updated the RQ2-F DRAFT claim-to-evidence table with the fresh
+five-config TLC audit, strict JSON round-type regression, duplicate planned-ID
+preflight control and explicit execution-authorization blocker. Marked the receipt
+review, runner controls and claim-map cadence items complete. The table preserves
+classifications and limits, including that M6 process outcomes lack raw run output,
+Agent 1's gas rerun remains peer-reported, capture metadata is not authenticated,
+and the offline/model evidence is not an integrated F result. No tests or services
+were run for this documentation-only slice. Plan DRAFT; no exact execution FREEZE/
+ACKs; all 32 cases and Gate F NOT_RUN; G locked. Next: assemble and review the
+partial packet with its open proof gaps and peer-review dependencies.
+
 ## A3-0141: offline capture and duplicate-plan controls recorded — 2026-11-15
 
 C-F1 WORKING. Added a direct negative control for duplicate planned F case IDs:

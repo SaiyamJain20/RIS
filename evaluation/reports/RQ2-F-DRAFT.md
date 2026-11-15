@@ -11,7 +11,7 @@ preflight result.
 Paper-derived reconstruction of HMBC2020, not the authors' implementation. All reviews are
 same-model (correlated). Evidence directories are cited per claim.
 
-**Partial answer as of 2026-11-14:** q=3 of n=4 has the required honest overlap when f<=1,
+**Partial answer as of 2026-11-15:** q=3 of n=4 has the required honest overlap when f<=1,
 and the fixed-slot model and isolated tests support that mechanism. Prior local measurements
 show progress with one unavailable witness and timeout with two. They do not yet establish
 preservation of E's guarantees in the planned F system: the 32-case integration and E regression
@@ -58,9 +58,9 @@ is added only where that evaluation identifies a specific evidence gap. The inte
 (1) fresh oracle/store differential (done); (2) seven oracle-mutant discrimination controls (done);
 (3) f=1/f=2 pool sweep and out-of-bound control (done); (4) TLC audit/recheck done; (5) reconcile the existing M1 gas rows with
 Agent 1's exact reproductions (done); (6) review the M2 virtual-time and M6 real-process receipts without
-starting services; (7) evaluate signing-event join positive and negative controls (done); (8) test the
-offline runner's capture omissions/duplicates and fail-closed behavior; (9) assemble a claim-to-
-artifact table with unresolved evidence gaps; (10) issue the reviewable partial packet and record
+starting services (done; none were started); (7) evaluate signing-event join positive and negative controls (done); (8) test the
+offline runner's capture receipt/duplicate-plan and fail-closed behavior (done); (9) assemble a claim-to-
+artifact table with unresolved evidence gaps (done below); (10) issue the reviewable partial packet and record
 peer-review/ACK dependencies. This sequence is a work target, not a promise that a result will
 pass; failures and blocked items stay visible. No service or integrated F case may start before
 the exact authorized FREEZE and role ACKs. Gate F remains NOT_RUN and this plan remains DRAFT.
@@ -287,6 +287,7 @@ These are prior measurements unless marked fresh. No row is an integrated F resu
 | claim / classification | evidence | practical limit |
 |---|---|---|
 | Fixed-slot quorum agreement; extension result in a finite model | [TLC logs, counts, controls and model hashes](../evidence/f/decision-quorum-tlc-20261113/README.md) | no runtime pin deaths, ledger consensus or liveness proof |
+| Five-configuration finite-model rerun; tested reconstruction result | [2026-11-15 exact-source audit, full log/source hashes and stop-count interpretation](../evidence/f/tlc-audit-20261115/README.md) | reproduces a bounded one-slot model; not a runtime, consensus or liveness proof |
 | Pool certificate filtering and potential agreement hazards; tested reconstruction result | [M3/M5](../evidence/f/measurements-20261114/README.md), [exact-source M5 rerun](../evidence/f/pool-sweep-20261115/README.md) | M5 honest behaviour is a model; f=2 hazards are potential states, not realized double certificates |
 | One/two unavailable witness boundary; tested reconstruction result plus prior reported local process runs | [M2/M6 measurements](../evidence/f/measurements-20261114/README.md), [source and receipt review](../evidence/f/availability-receipt-review-20261115/README.md) | M2 stores aggregate rather than per-trial output; M6 run stdout and exact invocation are not retained; no real-network latency or general liveness estimate |
 | Signature and governance gas overhead; tested reconstruction result with peer reproduction reported | [M1/M1b/M1c measurements](../evidence/f/measurements-20261114/README.md), [A1-0136 updated reconciliation and raw-log ref](../evidence/f/gas-peer-reconciliation-20261115/README.md) | single deterministic fixture calls; Agent 1 raw logs are available on its exact ref but not independently verified here; no production fee or throughput estimate |
@@ -297,9 +298,12 @@ These are prior measurements unless marked fresh. No row is an integrated F resu
 | Seven oracle mutation sensitivities; deliberate mutation result | [2026-11-15 mutation rerun](../evidence/f/oracle-mutant-discrimination-20261115/README.md) | these seven specific rule errors only; same synthetic grid and correlated oracle/store |
 | Service/store distinction; fresh tested reconstruction result | [four probes, selected owner tests, exact source/output hashes](../evidence/f/report-review-20261114/README.md) | injected view and synthetic keys; no native grant/sequence transition |
 | Captured signer reply to exact store-history generation; tested reconstruction result | [16 focused join tests](../evidence/f/signing-event-round-validation-20261115/README.md); [source/command record](../evidence/f/signing-event-join-20261114/README.md) | generated JSON-lines; capture authenticity/completeness, native facts and honest-service validation remain unproved |
+| JSON round requires exact integer type; tested reconstruction regression | [pre-fix RED and focused/full-suite results](../evidence/f/signing-event-round-validation-20261115/README.md) | validates the offline helper only; says nothing about a live endpoint's parsing behavior |
 | Offline capture receipt checks; tested reconstruction result | [count, digest and sequential RPC-ID reuse controls plus evaluation run](../evidence/f/sealed-signing-capture-20261115/README.md) | caller-supplied count/receipt; no source authentication, acquisition, or transcript completeness claim |
+| Duplicate planned IDs fail closed; tested reconstruction result | [duplicate-ID, count/digest, JSON-key and RPC-ID controls](../evidence/f/runner-capture-controls-20261115/README.md) | preflight only; stages 3–7 and all case execution remain absent |
 | Active protocol source pin and draft preflight; provenance check only | [A2-0087 byte-identical source resync](../evidence/f/source-pin-resync-20261115/README.md) | exact module subtree and ancestry verified; source-role handoff is not an execution ACK |
 | Draft coverage and source pins; preflight check only | [A3-0128 final preflight](../evidence/f/preflight-20261114-r4/README.md) | 32/32 IDs is coverage of the plan; all case statuses remain NOT_RUN |
+| Execution authorization state; blocked, not an F result | [current draft plan and blocked preflight](../evidence/f/execution-plan-draft-20261114/README.md), [current board](../../communication/BOARD.md) | plan remains DRAFT; exact authorized FREEZE and required owner ACKs absent; Gate F NOT_RUN; no services or integrated cases |
 
 ## 5. Not done / not claimed
 Gate F, the 32 F cases, execution FREEZE and ACKs, runner stages 3–7, runner
@@ -315,10 +319,10 @@ all exact draft pins match. A deliberate same-row-count matrix-ID drift is also 
 checks do not lift the actual role-scope execution ACK or later-stage blockers. Deviation from the plan
 sequence: earlier measurements were taken before the runner/FREEZE on the human's instruction.
 
-Before the 2026-11-17 partial-report target, the permitted next work is to review
-the existing result receipts and add capture acquisition/completeness controls
-only if their source can be named and independently observed, while reviewing
-any published exact protocol delta. The execution plan remains DRAFT. The new K1 candidate's
+Before the 2026-11-17 partial-report target, the permitted next work is to issue
+the reviewable partial packet and record peer-review/ACK dependencies. The existing
+capture checks do not authenticate acquisition or establish transcript completeness;
+those controls can be added only if an independent source is available. The execution plan remains DRAFT. The new K1 candidate's
 kill coverage is accepted at tested scope and its source is adopted in the DRAFT under D57.
 Both exact execution FREEZE ACKs and the unfinished runner stages remain open; S2-0024 and
 A1-0129 are not execution ACKs. Run services/cases only after the authorized FREEZE requirements are met. A reviewable

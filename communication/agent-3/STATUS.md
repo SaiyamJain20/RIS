@@ -1,27 +1,23 @@
 # Agent 3 status — RQ2-F partial report
 
-## Current checkpoint — offline capture and runner controls, 2026-11-15
+## Current checkpoint — partial-report claim map, 2026-11-15
 
-C-F1 WORKING. Added a focused duplicate planned case-ID regression: preflight
-reports MISMATCH and leaves services empty and all cases NOT_RUN. Re-ran F
-preflight, sealed capture and signing-event join controls: 37 passed / exit 0.
-The controls cover independent-count mismatch, changed digest, sequential RPC ID
-reuse and duplicate JSON keys. Receipt:
-`evaluation/evidence/f/runner-capture-controls-20261115/README.md`.
-
-This is synthetic offline checker evidence. Caller-supplied capture counts and
-receipts are unauthenticated and do not prove source completeness. Plan DRAFT;
-no exact execution FREEZE/role ACKs; all 32 F cases and Gate F NOT_RUN; G locked;
-no services. Next: assemble the claim-to-artifact table for the partial report.
+C-F1 WORKING. Updated the report's claim-to-evidence table with the newest offline
+TLC, runner/capture, signing-round and authorization-state receipts. The report
+now identifies the evidence class and practical limit for each claim and points
+to the receipt that supports it. This is documentation only; no tests, services
+or F cases were run. Plan DRAFT; all 32 cases and Gate F NOT_RUN; G locked; no
+execution FREEZE/ACKs. Next: assemble and review the partial packet, including
+remaining proof gaps and peer-review dependencies.
 
 # Agent 3 status
 
 - Role: evaluation, formal models and integration (evaluation/**, shared/root Agent-3-owned paths).
 - State (2026-11-15): C-F1 WORKING; results-first partial RQ2-F report target 2026-11-17.
-- Latest: A3-0140 tightened offline signing-event round validation: JSON `1.0` was accepted as integer `1`; exact integer check now enforced. Synthetic regression RED then GREEN; focused join 16/16; full evaluation suite 3,004 passed. Also incorporated Agent 1 A1-0136's corrected M1 6/6 count and attached raw-log reference. Evidence: `evaluation/evidence/f/signing-event-round-validation-20261115/`.
+- Latest: A3-0142 refreshed the claim-to-evidence map in the partial RQ2-F report, adding current TLC, JSON-round, runner-control and authorization-blocker receipts with their limits. No tests or services were run in this documentation-only slice. Earlier A3-0140 tightened offline signing-event round validation: JSON `1.0` was accepted as integer `1`; exact integer check now enforced. Synthetic regression RED then GREEN; focused join 16/16; full evaluation suite 3,004 passed. Also incorporated Agent 1 A1-0136's corrected M1 6/6 count and attached raw-log reference. Evidence: `evaluation/evidence/f/signing-event-round-validation-20261115/`.
 - Plan: DRAFT; no exact execution FREEZE or required execution ACKs. All 32 F cases NOT_RUN; Gate F NOT_RUN; G locked. No services/integrated cases.
 - Protocol role remains Agent 2; accepted protocol tree 7566f63d693afe8fa88ab7cc69872082d58d88db at published 73fb2ce. Agent 1/2 status snapshots are stale relative to the current F handoff; use live board and addressed outboxes, not their old E-phase next actions.
-- Next permitted work: review offline capture omission/duplicate and fail-closed controls, then assemble the RQ2-F partial report and remaining evidence gaps.
+- Next permitted work: finish the reviewable partial packet, list unresolved proof gaps, and record peer-review/ACK dependencies.
 
 ## A3-0140: signing-event round input validation — 2026-11-15
 
