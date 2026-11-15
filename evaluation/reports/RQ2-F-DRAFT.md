@@ -337,12 +337,14 @@ A1-0129 are not execution ACKs. Run services/cases only after the authorized FRE
 partial report can document those blockers; it cannot substitute prior measurements for the
 32 missing case results or close Gate F.
 
-For this report revision, the outstanding review dependencies are recorded separately from
-execution authorization. A1-0137 reviewed the earlier report hash `cd41dcbb...` for ledger scope;
-its findings were incorporated, but the corrected hash has not yet been reviewed. A1-0129 reviewed
-ledger details in the plan; it did not review this report revision or ACK an execution FREEZE.
-S2-0026 reviewed the draft plan; it is not an execution ACK. No Agent-2 report-specific review is
-recorded in the fetched peer snapshot. See the [A1-0137 review response](../evidence/f/report-review-a1-0137-20261115/README.md)
-and [partial packet receipt](../evidence/f/partial-report-packet-20261115/README.md). The required
-execution gate remains exact owner ACKs and authorized FREEZE for the exact execution plan before
+For this report revision, review status is separate from execution authorization. A1-0137 and
+A1-0138 reviewed earlier hashes for ledger scope; their findings were incorporated. A1-0139
+confirmed the exact `cf249e2a...` report hash had no remaining ledger-scope objection. This
+revision only corrects the review-status record; its claim and evidence content is unchanged, but
+this new file hash has not itself been reviewed. A1-0129 reviewed ledger details in the plan; it
+did not review this report or ACK an execution FREEZE. S2-0026 reviewed the draft plan and A2-0088
+reviewed hook coverage; neither is an execution ACK. No Agent-2 report-specific review is recorded.
+See the [A1-0137/0138/0139 review receipt](../evidence/f/report-review-a1-0137-20261115/README.md)
+and [partial packet receipt](../evidence/f/partial-report-packet-20261115/README.md). The execution
+gate still requires exact owner ACKs and an authorized FREEZE for the exact execution plan before
 any services or cases.

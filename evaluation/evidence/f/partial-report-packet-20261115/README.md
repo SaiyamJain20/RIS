@@ -8,7 +8,7 @@ evidence packet, not an F execution result, an execution FREEZE, an owner ACK, o
 The current report text is pinned by SHA-256:
 
 ```text
-cf249e2ad63b24d44acdef538d09718ef1fb3ae41e683af9009fa72ca07176f2  evaluation/reports/RQ2-F-DRAFT.md
+8047d53e5e65020424db3469b0cc5589c7b91d793d991cec24c940a002a25b19  evaluation/reports/RQ2-F-DRAFT.md
 ```
 
 The current execution proposal it describes is separately pinned by SHA-256:
@@ -17,21 +17,21 @@ The current execution proposal it describes is separately pinned by SHA-256:
 1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919  evaluation/evidence/f/execution-plan-draft-20261114/plan-draft.json
 ```
 
-Git refs refreshed before preparing this packet:
+Git refs explicitly refreshed for this continuation:
 
 | ref | exact commit | scope / use |
 |---|---|---|
-| `origin/agent-1` | `52aa251288dd07f25335e723eac93c0d92e753d4` | current peer snapshot, including A1-0138 follow-up review |
-| `origin/agent-2` | `7a9572586501ac8f5430ae5edf56135bb19ce199` | current peer communication snapshot, including A2-0088 plan review |
-| `origin/agent-3` | `e996472880a6a50f4152bcd0d395cd518fb3654e` | prior report/packet revision reviewed by A1-0138 |
+| `origin/agent-1` | `208ed7d0415b8c1dd7d143c55e7271e71d310fcc` | includes A1-0139 confirmation of the `cf249e2a...` report hash |
+| `origin/agent-2` | `81498f98aac497768b0dec35cea89ddf7466e697` | includes A2-0088 plan hook-coverage review |
+| `origin/agent-3` | `445826a9140b49e2629f75da535e3e45b4706271` | report/packet revision reviewed by A1-0139 |
 
-A1-0137 reviewed an earlier report hash for ledger scope. Agent 3 incorporated its governance
-finding and precision fixes; A1-0138 then reviewed the corrected `184df52d...` hash, found the
-maximum authEpoch/sourceBlockNumber saturation explanation wrong in effect, and supplied a
-three-case scratch reproduction. Agent 3 corrected that claim and verified all four attachment
-hashes, but did not rerun Forge. Neither review is an execution ACK or FREEZE ACK.
+A1-0137 and A1-0138 reviewed earlier hashes for ledger scope, and their findings were
+incorporated. A1-0139 then confirmed the exact `cf249e2a...` report hash, stating its correction
+was applied exactly and the remaining report text was unchanged; it closed ledger-scope review
+for that revision. This report-status and packet update is not an execution ACK or FREEZE ACK. Agent 3 has not
+rerun Forge for the peer scratch tests.
 
-Current report SHA-256: `cf249e2ad63b24d44acdef538d09718ef1fb3ae41e683af9009fa72ca07176f2`.
+Prior exact report SHA-256 reviewed by A1-0139: `cf249e2ad63b24d44acdef538d09718ef1fb3ae41e683af9009fa72ca07176f2`. Current report SHA-256: `8047d53e5e65020424db3469b0cc5589c7b91d793d991cec24c940a002a25b19`.
 Current plan SHA-256: `1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`.
 
 The plan's module pins are ledger commit `85c59f588de58a8ff5e87b9fe6f630c9d8c43642` and protocol
@@ -87,10 +87,11 @@ are documented in [this receipt](../report-review-a1-0137-20261115/README.md).
 
 ## Review and execution dependencies
 
-- **Partial-report review:** A1-0138 reviewed the preceding report hash for ledger scope, and Agent
-  3 incorporated its correction. The current report hash above has not yet been reviewed. No
-  Agent-2 report-specific review is present; A2-0088 is a plan-only review. A1-0129 reviewed ledger
-  plan details; S2-0026 reviewed the draft plan. None is an execution ACK.
+- **Partial-report review:** A1-0139 confirmed the exact prior report hash `cf249e2a...` and closed
+  ledger-scope review for that revision. This packet's report-status wording update does not alter
+  evidence or claim text, but the new report file hash has not itself been reviewed. No Agent-2
+  report-specific review is present; A2-0088 is a plan-only review. A1-0129 reviewed ledger plan
+  details; S2-0026 reviewed the draft plan. None is an execution ACK.
 - **Execution authorization:** the plan remains `DRAFT`, `authorizesExecution=false`; Gate F is
   `NOT_RUN`, Gate G is `LOCKED`, and all 32 cases are `NOT_RUN`. The plan's exact role-scope
   execution ACKs and authorized FREEZE are still absent. No service or integrated case may start

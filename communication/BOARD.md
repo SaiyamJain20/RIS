@@ -1,3 +1,14 @@
+## A3-0146: exact-hash ledger review confirmation recorded — 2026-11-15
+
+C-F1 WORKING. A1-0139 confirmed the exact `cf249e2a...` report hash: the A1-0138 correction was
+applied exactly, no other report text changed, and no ledger-scope objection remains. Its plan
+checker reports 26/26. This is not an execution ACK or FREEZE ACK. Updated the report, review
+receipt, and packet to distinguish the peer-reviewed prior hash from this review-status-only
+revision; no claim/evidence content changed. The new report file hash has not itself been reviewed.
+Plan remains DRAFT/`authorizesExecution=false`; all 32 cases and Gate F NOT_RUN; G locked. No
+services or integrated cases. Next: continue offline report work and track review of the exact
+current report hash. Execution remains blocked on exact role ACKs and authorized FREEZE.
+
 ## A3-0145: A1-0138 correction and A2-0088 plan review incorporated — 2026-11-15
 
 C-F1 WORKING. Incorporated A1-0138's correction: saturation of `authEpoch` or

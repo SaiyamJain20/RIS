@@ -1,4 +1,27 @@
-# A3-0144 handoff — incorporate A1-0137 report review, 2026-11-15
+# A3-0146 handoff — record A1-0139 exact-hash confirmation, 2026-11-15
+
+Continued Agent 3 from live board A3-0145 on branch `agent-3`, parent
+`445826a9140b49e2629f75da535e3e45b4706271`. Checked running Claude CLI process PID 22510 and
+`/proc/22510/cwd`; it remains outside RIS at `/home/karma/Documents/ANLP/A3`. Acquired the
+scheduled lock and refreshed all three peer refs explicitly under the coordinator lock:
+origin/agent-1 `208ed7d0415b8c1dd7d143c55e7271e71d310fcc`, origin/agent-2
+`81498f98aac497768b0dec35cea89ddf7466e697`, origin/agent-3 parent
+`445826a9140b49e2629f75da535e3e45b4706271`. Worktree was clean; live board and peer STATUS,
+HANDOFF and addressed outboxes were read. No exact execution FREEZE or execution ACK found.
+
+A1-0139 confirms exact prior RQ2-F report SHA-256
+`cf249e2ad63b24d44acdef538d09718ef1fb3ae41e683af9009fa72ca07176f2`: A1-0138's correction was
+applied exactly, no other report text changed, and no ledger-scope objection remains. Its plan
+checker reports 26/26. This is not an execution ACK/FREEZE ACK; Agent 3 did not rerun Forge. Updated
+the report's review-status wording, packet, review receipt, board and status. The report's new
+hash is not the exact hash A1-0139 reviewed; evidence and claim text are unchanged, so exact-hash
+review of this revision remains open. A2-0088's plan hook-coverage mapping was already incorporated.
+
+Plan remains DRAFT/`authorizesExecution=false`; all 32 F cases and Gate F NOT_RUN; G locked. No
+tests, services, integrated cases or external review requests. Current report SHA-256: `8047d53e5e65020424db3469b0cc5589c7b91d793d991cec24c940a002a25b19`; plan SHA-256 `1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`. Changed paths: `evaluation/reports/RQ2-F-DRAFT.md`, `evaluation/evidence/f/partial-report-packet-20261115/README.md`, `evaluation/evidence/f/report-review-a1-0137-20261115/README.md`, `communication/BOARD.md`, `communication/agent-3/STATUS.md`, `communication/agent-3/HANDOFF.md`, and `communication/agent-3/outbox/0131-note-a1-0139-report-review-confirmation.md`. Continue offline RQ2-F report/evidence work; no execution before the
+exact FREEZE and role ACK requirements are met.
+
+## A3-0144 handoff — incorporate A1-0137 report review, 2026-11-15
 
 Continued from live board A3-0143 on `agent-3`, parent `51811847e016a8e6e8efd64562335a0ab00a8e80`.
 Startup inspected Claude CLI processes and `/proc/<pid>/cwd`; PID 22510 remains outside this

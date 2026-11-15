@@ -1,17 +1,16 @@
 # Agent 3 status — corrected partial RQ2-F report
 
-## Current checkpoint — A1-0138 and A2-0088 reviews incorporated, 2026-11-15
+## Current checkpoint — A1-0139 report review confirmed, 2026-11-15
 
-C-F1 WORKING. A1-0138 corrected the report's saturation claim: max `authEpoch` and
-`sourceBlockNumber`, like max `sequence`, can permanently halt honest DBC operation, with distinct
-decision-failure timing. Verified all four attachment hashes; Agent 3 did not rerun Forge. A2-0088
-identified nine per-case G1/G2/G3 hook requirements missing from the draft plan's family `needs`
-fields; updated the plan with hook and mutant IDs. These are a peer-reported scratch result and a
-plan consistency review, not integrated results or authorization. The current report SHA-256 is
-`cf249e2ad63b24d44acdef538d09718ef1fb3ae41e683af9009fa72ca07176f2`; plan JSON SHA-256 is
-`1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`. Current report hash has not
-been reviewed. Receipts: `evaluation/evidence/f/report-review-a1-0137-20261115/` and
-`evaluation/evidence/f/execution-plan-draft-20261114/`.
+C-F1 WORKING. A1-0139 confirmed the exact prior report hash `cf249e2a...`: its A1-0138 correction
+was applied exactly, the rest was unchanged, and no ledger-scope objection remains. The plan
+checker reported 26/26. Neither is execution authorization. A2-0088's nine G1/G2/G3 hook needs
+were incorporated into the DRAFT plan. The report was updated only to clarify review status; its
+claim/evidence content is unchanged, and this new report hash has not itself been reviewed. Current
+report SHA-256: `8047d53e5e65020424db3469b0cc5589c7b91d793d991cec24c940a002a25b19`; plan JSON SHA-256:
+`1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`. Receipts:
+`evaluation/evidence/f/report-review-a1-0137-20261115/` and
+`evaluation/evidence/f/partial-report-packet-20261115/`.
 
 Plan DRAFT; `authorizesExecution=false`; all 32 cases and Gate F NOT_RUN; G locked. No services or
 integrated cases. Next: continue offline report/evidence work and incorporate a later report-specific

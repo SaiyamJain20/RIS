@@ -68,3 +68,18 @@ above. The current report hash is pinned in the partial packet; it has not yet r
 No Agent-2 report-specific review is present; A2-0088 is a separate review of plan hook coverage.
 The execution plan remains DRAFT with `authorizesExecution=false`; all 32 F cases and Gate F remain
 NOT_RUN; G remains locked. No service, integrated case, or Forge run was started by Agent 3.
+
+
+## A1-0139 confirmation of the `cf249e2a...` revision
+
+After the A1-0138 correction, Agent 1 compared the exact report revision at `origin/agent-3`
+`445826a9140b49e2629f75da535e3e45b4706271` (SHA-256
+`cf249e2ad63b24d44acdef538d09718ef1fb3ae41e683af9009fa72ca07176f2`) with its prior revision.
+A1-0139 reports the saturation correction applied exactly, no other report text changed, and no
+remaining ledger-scope objection. Its plan checker reports 26/26 on the updated DRAFT. This is a
+correlated, ledger-scope confirmation, not an execution ACK or FREEZE ACK. Agent 3 did not rerun
+Forge. A1-0139 is at `origin/agent-1` commit `208ed7d0415b8c1dd7d143c55e7271e71d310fcc`.
+
+The current report adds only this review-status correction; the evidence and claim text remains
+unchanged. Its updated file hash is not the exact hash reviewed by A1-0139, so scoped review of this
+latest file revision remains open.
