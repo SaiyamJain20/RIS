@@ -1,3 +1,35 @@
+# A3-0144 handoff — incorporate A1-0137 report review, 2026-11-15
+
+Continued from live board A3-0143 on `agent-3`, parent `51811847e016a8e6e8efd64562335a0ab00a8e80`.
+Startup inspected Claude CLI processes and `/proc/<pid>/cwd`; PID 22510 remains outside this
+checkout at `/home/karma/Documents/ANLP/A3`. Acquired the scheduled lock. Refreshed
+`origin/agent-1` at `1bce2a5474836a75777b275162fd0696f5c8dad0`, `origin/agent-2` at
+`fc0c987c680ece41ea5e417f06a075ae51bd4ff0`, and `origin/agent-3` parent at
+`51811847e016a8e6e8efd64562335a0ab00a8e80`, under the coordinator lock. Read the live board,
+required project/role/spec/plan/interface/protocol documents, peer STATUS/HANDOFF and addressed
+outboxes. No exact execution FREEZE or execution ACK appeared.
+
+Agent 1's A1-0137 reviewed the exact prior RQ2-F draft hash
+`cd41dcbb75dafa05eb35b75086314a615e35e1cf5c281167f617d0a8cee9cfc8` for ledger scope. It found
+the checked gas, quorum and double-certificate details accurate, but said the governance trust
+row understated consequences of >=3 Byzantine witnesses: `sequence = uint64.max` can permanently
+halt the DBC deployment, and quorum-signed policy-shaped fabricated records can obtain a grant
+for a requester never submitted on the PBC. Incorporated both with their f>=3 boundary and stated
+limitations. Also changed “a local Anvil” to “a local Anvil pair” and clarified that TMSC's
+12,635 B size is from the E-era manifest while 16,127 B is at F ledger pin `85c59f5`.
+
+Extracted the five A1-0137 attachment files from `origin/agent-1` and verified all five SHA-256
+entries. Agent 3 did not execute Forge or reproduce the scratch tests. This is an attachment
+integrity check, not an independent result. Added
+`evaluation/evidence/f/report-review-a1-0137-20261115/README.md`, updated the partial packet and
+RQ2-F draft, and added a governance risk row to the report claim map. Current report SHA-256:
+`b47ea2c022ab931fa24bddf809dd9573de569d9c601aa7a0aebbdff1cbd14bbd`. The corrected hash has not
+yet been reviewed; the previous A1-0137 review is not an ACK or FREEZE ACK.
+
+Plan remains DRAFT / `authorizesExecution=false`; all 32 cases and Gate F NOT_RUN; G locked. No
+tests, services, integrated cases or Forge runs. No external review request sent. Next: continue
+offline evidence work or incorporate a later scoped report review if published.
+
 ## A3-0142 handoff — partial-report claim map, 2026-11-15
 
 Continued from live board A3-0141 on `agent-3`, parent `ce36541fe7c72d5bc594e5f485f47de783ed4a9f`. Startup checked Claude CLI processes and `/proc/<pid>/cwd`; PID 22510 remains outside this checkout at `/home/karma/Documents/ANLP/A3`. Acquired the scheduled lock for this run. Explicitly refreshed all peer refs under the coordinator lock: origin/agent-1 `f6f852789d2629cb3b0a846d55793cd27799441d`, origin/agent-2 `fc0c987c680ece41ea5e417f06a075ae51bd4ff0`, origin/agent-3 parent `ce36541fe7c72d5bc594e5f485f47de783ed4a9f`. Read the live board, common/Agent-3 instructions, SPEC, PLAN, interfaces README, PROTOCOL, peer STATUS/HANDOFF and addressed Agent-1/2 outboxes. No execution FREEZE or exact execution ACKs were found.

@@ -1,3 +1,19 @@
+# Agent 3 status — corrected partial RQ2-F report
+
+## Current checkpoint — A1-0137 ledger-scope review incorporated, 2026-11-15
+
+C-F1 WORKING. Agent 1 reviewed the A3-0143 report hash: ledger claims checked were accurate, but
+the governance-quorum row omitted a permanent DBC halt and fabricated-credential grant risks when
+at least three witnesses are Byzantine. Incorporated those with the f>=3 limit and corrected two
+precision issues (Anvil pair, TMSC size baseline). Verified the five peer attachment hashes; Agent
+3 did not rerun Forge. The corrected report hash is
+`184df52dc43f3c33c78d11b84bb632ca00728a69f20bc449187b7c52a18b479a`; A1-0137 has not reviewed
+that hash. Receipt: `evaluation/evidence/f/report-review-a1-0137-20261115/`.
+
+Plan DRAFT; `authorizesExecution=false`; all 32 cases and Gate F NOT_RUN; G locked. No services or
+integrated cases. Next: continue offline evidence work and incorporate a later report-specific
+review if published.
+
 # Agent 3 status — RQ2-F partial report
 
 ## Current checkpoint — partial report packet ready for scoped review, 2026-11-15

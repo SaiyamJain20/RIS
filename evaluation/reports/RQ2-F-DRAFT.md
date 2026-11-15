@@ -143,7 +143,7 @@ all with 3 distinct valid sorted signers; 0 agreement-hazard cases. f=2 control:
 ### 2.3 Availability (M2 virtual time; M6 real processes)
 All 16 muted-witness subsets over four real witnesses (virtual transport): 0 or 1 muted gives a
 3-signature certificate every run; 2, 3 or 4 muted gives none by the 10 s deadline. With real
-processes, a local Anvil and the real KSSC (agent 2's live tests, three runs, exit 0): q=3
+processes, a local Anvil pair and the real KSSC (agent 2's live tests, three runs, exit 0): q=3
 certificate accepted in ~0.7 s, one SIGKILLed witness still accepted (~0.6 s), two stopped
 witnesses give a classified timeout of ~10.5 s, a restarted witness keeps its durable pin.
 No claim about arbitrary-delay liveness: unavailability under two faults is expected and measured.
@@ -157,7 +157,8 @@ Same code, REPAIRED_E (1 signature) vs REPAIRED_F, Forge gas of one external cal
 | PSC.reportAttestedOutcome | 533,754 | 553,488 (+3.7%) | 560,290 |
 Calldata grows 548->868, 1,380->1,700, 644->964 bytes (160 B per extra signature, ~6.8k gas each).
 Governance.execute (F only, 3 sigs): AddAuthority 524,214; RemoveAuthority 424,421; SetCaAdmins 446,934.
-All product contracts stay under 24,576 B (TMSC 12,635 -> 16,127 B). Not a fee estimate; single
+All product contracts stay under 24,576 B. TMSC grew from 12,635 B in the E-era
+2026-10-08 deployment manifest to 16,127 B at ledger commit `85c59f5`. Not a fee estimate; single
 deterministic runs; the E column is the F commit's E profile.
 
 ### 2.5 Assurance process
@@ -238,7 +239,7 @@ unimplemented.
 | component | status |
 |---|---|
 | >= 3 of 4 witnesses honest and not sharing a source-view failure | required (f=1 bound) |
-| governance quorum | required. A compromised quorum (>= 3 witnesses) can add an authority it controls, remove an honest authority permanently (tombstoned, never re-addable), replace an authority's CA admins, and sign arbitrary checkpoints and decisions. It cannot change the witness set: that is fixed at deployment (constructors only; A1-0126). CORRECTED from an earlier draft row that said the quorum could change the sets |
+| governance quorum | required. A compromised quorum (>= 3 witnesses; outside the f=1 bound) can add an authority it controls, remove an honest authority permanently (tombstoned, never re-addable), replace an authority's CA admins, and obtain ledger-accepted checkpoints and decisions subject to the on-chain checks. It can permanently halt this DBC deployment by installing a quorum-signed checkpoint with `sequence = uint64.max`: later honest checkpoints are STALE_STATE, and after expiry decisions are too; no ledger function resets the checkpoint (redeployment required; A1-0117, A3-0095, A1-0137 scratch reproduction). Pinning `authEpoch` or `sourceBlockNumber` at their maximum can also block later checkpoints that need those fields to advance, but the ledger permits reuse of those values when the sequence increases. It can obtain a grant for a requester never submitted on the PBC using fabricated credential records that fit the policy's role/kind/issuer shape: the DBC rechecks that shape but binds records only through the quorum-signed digest (A1-0137 scratch reproduction). These outcomes require a compromised quorum and do not contradict the f<=1 claims. It cannot change the witness set, fixed at deployment (constructors only; A1-0126); under REPAIRED_F, policyVersion is pinned to ACSC and keyEpoch must be 0. CORRECTED from an earlier draft row that said the quorum could change the sets |
 | key custody | TEST-ONLY synthetic keys; custody not evaluated |
 | single local Anvil pair as the chain | assumed correct; consensus not evaluated |
 | relay / collector | no signing key; witnesses must derive and validate values independently. Withholding and adverse scheduling can prevent progress; eventual delivery remains a condition |
@@ -299,6 +300,7 @@ These are prior measurements unless marked fresh. No row is an integrated F resu
 | K1 sensitivity; deliberate mutation result | [A3-0122 signing-kill review](../evidence/reviews/a2-0086-signing-kill-20261113/README.md) | 29/40 detections and 40/40 control; does not measure corruption probability |
 | New K1 candidate; deliberate mutation result | [S2-0025 reproduced by agent 3](../evidence/reviews/proxy-k1-20261114/README.md) | new blocking test: 40/40 detections and 40/40 controls; isolated candidate acceptance, not an execution ACK |
 | Store death predicates; tested reconstruction result | [180-case differential and seven oracle mutations](../evidence/f/oracle-store-diff-20261114/README.md) | one earlier digest per key; grant/receipt facts caller-asserted |
+| Compromised quorum can permanently halt one DBC deployment and obtain a grant from fabricated, policy-shaped records for an unsubmitted PBC requester; ledger-scope review plus peer-reported scratch reproduction, outside f=1 | [A1-0137 review and Agent-3 response](../evidence/f/report-review-a1-0137-20261115/README.md) | requires >=3 Byzantine witnesses; Agent 3 verified attachment checksums but did not rerun Forge; grant does not show key-worker release |
 | Fresh oracle/store differential; tested reconstruction result | [2026-11-15 exact-source rerun](../evidence/f/oracle-store-diff-20261115/README.md) | one earlier digest per key; grant/receipt facts caller-asserted |
 | Seven oracle mutation sensitivities; deliberate mutation result | [2026-11-15 mutation rerun](../evidence/f/oracle-mutant-discrimination-20261115/README.md) | these seven specific rule errors only; same synthetic grid and correlated oracle/store |
 | Service/store distinction; fresh tested reconstruction result | [four probes, selected owner tests, exact source/output hashes](../evidence/f/report-review-20261114/README.md) | injected view and synthetic keys; no native grant/sequence transition |
@@ -335,9 +337,11 @@ partial report can document those blockers; it cannot substitute prior measureme
 32 missing case results or close Gate F.
 
 For this report revision, the outstanding review dependencies are recorded separately from
-execution authorization. A1-0129 reviewed ledger details in the plan; it did not review this
-report revision or ACK an execution FREEZE. S2-0026 reviewed the draft plan; it is not an
-execution ACK. No report-specific peer review is recorded in the current fetched peer snapshots.
-The packet receipt identifies the concrete claims that need scrutiny and preserves the required
-execution gate: exact owner ACKs and authorized FREEZE for the exact execution plan before any
-services or cases.
+execution authorization. A1-0137 reviewed the earlier report hash `cd41dcbb...` for ledger scope;
+its findings were incorporated, but the corrected hash has not yet been reviewed. A1-0129 reviewed
+ledger details in the plan; it did not review this report revision or ACK an execution FREEZE.
+S2-0026 reviewed the draft plan; it is not an execution ACK. No Agent-2 report-specific review is
+recorded in the fetched peer snapshot. See the [A1-0137 review response](../evidence/f/report-review-a1-0137-20261115/README.md)
+and [partial packet receipt](../evidence/f/partial-report-packet-20261115/README.md). The required
+execution gate remains exact owner ACKs and authorized FREEZE for the exact execution plan before
+any services or cases.

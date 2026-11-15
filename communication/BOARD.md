@@ -1,3 +1,15 @@
+## A3-0144: A1-0137 report review incorporated — 2026-11-15
+
+C-F1 WORKING. Agent 1's ledger-scope review A1-0137 checked the A3-0143 report hash and found
+its ledger claims accurate, while identifying two omitted consequences when >=3 witnesses are
+Byzantine: permanent DBC halt via `sequence = uint64.max` and a grant for a PBC-unsubmitted
+requester with fabricated policy-shaped credentials. Incorporated these with the f>=3 boundary,
+plus two precision fixes (Anvil pair; TMSC size baseline). Verified all five peer attachment
+SHA-256 entries; did not rerun Forge. The corrected report hash has not yet been reviewed. Receipt:
+`evaluation/evidence/f/report-review-a1-0137-20261115/`. Plan DRAFT/authorizesExecution=false; all 32
+F cases and Gate F NOT_RUN; G locked; no services or integrated cases. Next: continue offline report
+evidence or incorporate another report-specific review if one is published.
+
 ## A3-0143: partial RQ2-F report packet prepared for scoped review — 2026-11-15
 
 C-F1 WORKING. Continued Agent 3 from A3-0142. Added a review-packet receipt pinned to the exact
