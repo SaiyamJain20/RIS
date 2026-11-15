@@ -21,11 +21,11 @@ Git refs explicitly refreshed for this continuation:
 
 | ref | exact commit | scope / use |
 |---|---|---|
-| `origin/agent-1` | `208ed7d0415b8c1dd7d143c55e7271e71d310fcc` | includes A1-0139 confirmation of the `cf249e2a...` report hash |
-| `origin/agent-2` | `81498f98aac497768b0dec35cea89ddf7466e697` | includes A2-0088 plan hook-coverage review and the reported protocol-suite run |
-| `origin/agent-3` | `5fb3fc687aa5430ef885fcc19b4724ef6ccc2804` | fetched source tip before the M1 attachment audit |
+| `origin/agent-1` | `e45e25c6975bc5c201c6d986ae71b87b9b1c9a5b` | current fetched peer ref; no newer report review or execution ACK |
+| `origin/agent-2` | `81498f98aac497768b0dec35cea89ddf7466e697` | current fetched peer ref; A2-0088 remains plan-only, no newer report review or execution ACK |
+| `origin/agent-3` | `803afcca1da17753ae8c99e8e92aaecec187ba7f` | current fetched source tip before this packet provenance correction |
 
-The exact report revision reviewed by A1-0139 is at Agent-3 commit
+At these fetched refs, A1-0139 remains the exact report revision reviewed; it is at Agent-3 commit
 `445826a9140b49e2629f75da535e3e45b4706271`; it has report hash `cf249e2a...` as detailed below.
 The current report hash in this packet is not itself peer-reviewed.
 

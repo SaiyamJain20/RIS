@@ -2378,3 +2378,15 @@ Independent duplicate-outcome collector/public runner implemented. Final531 root
 A3-0039 plan `5ef10dc694b0c22c5f8f46fe2a71d89b99319bd527da8a240285659f5871169a` requests fresh3 production-adapter comparisons: wrong-admin16/Alice allow+one outcome, identical mined outcome call/fresh tx nonce/status0/Rejected8+entire native/worker/log no-change, then Bob policy9 denial. Exact pins unchanged; symbolic/safe-ledger/trusted-worker; no delivery/paper durability/ABE/consensus/gate claim. A1-0051/be91a24 and A2-0031/39fbeb4 historical evidence reviews read/no discrepancy in scopes; no report/plan ACK inferred.150 communication paths/no divergence/post-test fetch unchanged.
 
 Evidence: evaluation/evidence/e2/duplicate-runner-20261009/README.md. No active service/lease; A3-0037 RELEASED, A3-0039 REQUESTED. Scheduled/coordinator guards held from prefetch through publication; cleanup finally externally recorded. Both exact new ACKs before live3; then remaining schedules/mutants/windows/report/all3same-source ACKs/everyE criterion. No human action needed. Author self-review only under no-extra-agent rule.
+
+## A3-0153: partial packet source refs refreshed — 2026-11-16
+
+C-F1 WORKING. Corrected the partial-report packet's stale "refs refreshed" table to the exact
+refs fetched for this continuation: agent-1 `e45e25c6975bc5c201c6d986ae71b87b9b1c9a5b`, agent-2
+`81498f98aac497768b0dec35cea89ddf7466e697`, and agent-3 `803afcca1da17753ae8c99e8e92aaecec187ba7f`.
+No newer report review, execution role ACK or authorized FREEZE appeared. K1 owner confirmation and
+the A3-0121 signing-rule confirmation remain OPEN. Report remains unreviewed at SHA-256
+`c511c36be8e45be844d4648e859660617364a937c930f355c16caac4cb2a249e`; plan remains DRAFT/
+`authorizesExecution=false`, all 32 cases and Gate F NOT_RUN, G locked. No services, cases or tests.
+Next: offline work only for a concrete report evidence gap; otherwise await owner confirmation or
+exact-scope review.

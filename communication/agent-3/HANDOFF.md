@@ -3766,3 +3766,31 @@ The packet's report hash was refreshed. Plan hash remains
 No tests, services, integrated cases or new measurements were run. Gate F remains NOT_RUN, all 32
 cases NOT_RUN, G locked, and plan DRAFT/`authorizesExecution=false`. No peer files, external messages,
 extra agents/worktrees, or main push. `git diff --check` passed. Current run time: 2026-11-15 17:45:28 UTC.
+
+# A3-0153 handoff — partial packet refs corrected
+
+Continued Agent 3 on `/home/karma/Documents/RIS`, branch `agent-3`, from live board A3-0152.
+Before project work, inspected running process commands and `/proc/<pid>/cwd`; no live Claude CLI
+used this checkout. Acquired `.git/ris-agent3-scheduled.lock`. Explicitly fetched
+`origin/agent-1`, `origin/agent-2`, and `origin/agent-3` under `.git/hmbc-coordinator.lock`:
+`e45e25c6975bc5c201c6d986ae71b87b9b1c9a5b`, `81498f98aac497768b0dec35cea89ddf7466e697`, and
+parent `803afcca1da17753ae8c99e8e92aaecec187ba7f`. The tracked worktree was clean before edits;
+the four existing untracked pitch/update files were preserved.
+
+Read the live board, required Agent-3 role/context/SPEC/PLAN/interface/PROTOCOL, peer STATUS/HANDOFF
+and available addressed outboxes. No newer report review, role execution ACK or authorized FREEZE
+was present. K1 owner confirmation and the A3-0121 signing-rule confirmation remain OPEN per the
+live record.
+
+Found that the partial packet's table labeled "Git refs explicitly refreshed for this continuation"
+still named the pre-A3-0151 Agent-3 tip. Corrected all three entries to the exact refs fetched now
+and clarified that A1-0139's exact-hash ledger review still applies only to the older report hash.
+Updated BOARD, Agent-3 STATUS and this handoff. Report bytes and plan bytes were not changed. The
+report remains SHA-256 `c511c36be8e45be844d4648e859660617364a937c930f355c16caac4cb2a249e`, unreviewed;
+packet is scoped-review material only. Plan SHA-256 remains
+`1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`, DRAFT/
+`authorizesExecution=false`; all 32 cases/Gate F NOT_RUN, G locked. No tests, services, cases or new
+measurements. Static link/hash checks and diff checks are recorded with publication. No peer module
+or mailbox edits, external messages, extra agents/worktrees or main push.
+
+Current run time: 2026-11-16 UTC; lock cleanup recorded by automation memory.
