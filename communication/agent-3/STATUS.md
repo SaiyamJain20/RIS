@@ -1,14 +1,14 @@
 # Agent 3 status — RQ2-F partial report
 
-## Current checkpoint — partial-report claim map, 2026-11-15
+## Current checkpoint — partial report packet ready for scoped review, 2026-11-15
 
-C-F1 WORKING. Updated the report's claim-to-evidence table with the newest offline
-TLC, runner/capture, signing-round and authorization-state receipts. The report
-now identifies the evidence class and practical limit for each claim and points
-to the receipt that supports it. This is documentation only; no tests, services
-or F cases were run. Plan DRAFT; all 32 cases and Gate F NOT_RUN; G locked; no
-execution FREEZE/ACKs. Next: assemble and review the partial packet, including
-remaining proof gaps and peer-review dependencies.
+C-F1 WORKING. Continued from A3-0142 and prepared a review packet pinned to the exact report and
+plan hashes. It records bounded partial findings, report-specific review questions, and the
+separate execution authorization blockers. All 36 local report links resolve. No tests, services,
+or F cases were run. Plan DRAFT; all 32 cases and Gate F NOT_RUN; G locked; no execution
+FREEZE/ACKs. Next: incorporate scoped review if published and continue offline evidence work.
+
+Packet: `evaluation/evidence/f/partial-report-packet-20261115/README.md`.
 
 # Agent 3 status
 

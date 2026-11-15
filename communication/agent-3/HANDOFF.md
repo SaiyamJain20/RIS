@@ -3436,3 +3436,43 @@ or independently verify peer attachment checksums.
 Updated RQ2-F DRAFT, BOARD, Agent-3 STATUS and this HANDOFF. Plan remains DRAFT,
 all 32 F cases/Gate F NOT_RUN, G locked. Next: test offline capture omission,
 duplicate and fail-closed controls; then assemble claim-to-artifact table.
+# A3-0143 handoff — partial RQ2-F report packet, 2026-11-15
+
+Continued the Agent 3 C-F1 role from A3-0142 in `/home/karma/Documents/RIS` on
+`agent-3`. Before edits, inspected visible Claude CLI processes and each matching
+`/proc/<pid>/cwd`; PID 22510 is in `/home/karma/Documents/ANLP/A3`, outside RIS.
+Acquired the scheduled-run lock. Initial checkout was clean at
+`18a88ea8a497740da9d451993e6cc309c3d10c0c`. Explicitly fetched
+`origin/agent-1` `f6f852789d2629cb3b0a846d55793cd27799441d`,
+`origin/agent-2` `fc0c987c680ece41ea5e417f06a075ae51bd4ff0`, and
+`origin/agent-3` `18a88ea8a497740da9d451993e6cc309c3d10c0c` under the
+coordinator lock. Read the live board and the required common/Agent-3 context,
+SPEC, PLAN, interface README, protocol, peer STATUS/HANDOFF and addressed outboxes.
+No report-specific peer review or new execution FREEZE/ACK was present.
+
+Reviewed the current RQ2-F draft and its cited evidence links. Before packet edits,
+35 local Markdown links resolved with none missing. Added explicit language that
+the report is fit for scoped partial technical review only, is not an integrated
+RQ2-F answer, and does not satisfy Gate F. Added
+`evaluation/evidence/f/partial-report-packet-20261115/README.md` with exact report
+and plan hashes, refreshed refs, scoped partial findings, three review questions,
+and distinct report-review/execution dependencies. Current report SHA-256 is
+`cd41dcbb75dafa05eb35b75086314a615e35e1cf5c281167f617d0a8cee9cfc8`; plan JSON
+SHA-256 is `abef30ec9c247512e5a6380016206f96f542d5ddb3616505824009d4407164c6`.
+After edits, all 36 local report links resolve.
+
+The packet accurately records that A1-0129 was a ledger-plan review, S2-0026 was
+a draft-plan review, and neither reviewed/ACKed this report revision or authorized
+execution. Current fetched snapshots contain no report-specific review. Protocol
+source approval/signing-rule interpretation and K1 are resolved at isolated source
+review scope under D57/S2-0024/25; they do not replace exact execution ACKs. This
+supersedes the automation prompt's older Agent-2 ref and source-review status with
+the fetched live state. The plan remains DRAFT (`authorizesExecution=false`), all
+32 cases and Gate F NOT_RUN, Gate G locked. No services, tests, integrated cases,
+or external review requests.
+
+Updated report, packet receipt, BOARD, Agent-3 STATUS/HANDOFF. `git diff --check`
+and the final link check passed. Exact changed paths are those five. Next: incorporate
+scoped report review if one is published, otherwise continue offline claim review
+or runner/oracle evidence work. Do not start services/cases absent the authorized
+exact FREEZE and required role ACKs.

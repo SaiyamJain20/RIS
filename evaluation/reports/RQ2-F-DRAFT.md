@@ -11,6 +11,11 @@ preflight result.
 Paper-derived reconstruction of HMBC2020, not the authors' implementation. All reviews are
 same-model (correlated). Evidence directories are cited per claim.
 
+This revision is prepared for scoped technical review as a **partial evidence report**. It does
+not answer the complete RQ2-F question, establish that E's guarantees survive in the integrated
+F system, or satisfy Gate F. A separate packet receipt pins this report revision and lists the
+review questions and pending dependencies: [partial-report packet](../evidence/f/partial-report-packet-20261115/README.md).
+
 **Partial answer as of 2026-11-15:** q=3 of n=4 has the required honest overlap when f<=1,
 and the fixed-slot model and isolated tests support that mechanism. Prior local measurements
 show progress with one unavailable witness and timeout with two. They do not yet establish
@@ -328,3 +333,11 @@ Both exact execution FREEZE ACKs and the unfinished runner stages remain open; S
 A1-0129 are not execution ACKs. Run services/cases only after the authorized FREEZE requirements are met. A reviewable
 partial report can document those blockers; it cannot substitute prior measurements for the
 32 missing case results or close Gate F.
+
+For this report revision, the outstanding review dependencies are recorded separately from
+execution authorization. A1-0129 reviewed ledger details in the plan; it did not review this
+report revision or ACK an execution FREEZE. S2-0026 reviewed the draft plan; it is not an
+execution ACK. No report-specific peer review is recorded in the current fetched peer snapshots.
+The packet receipt identifies the concrete claims that need scrutiny and preserves the required
+execution gate: exact owner ACKs and authorized FREEZE for the exact execution plan before any
+services or cases.
