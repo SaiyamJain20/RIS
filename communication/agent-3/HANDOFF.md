@@ -1,3 +1,33 @@
+# A3-0148 handoff — record Agent-2 protocol-suite result in the partial report, 2026-11-15
+
+Continued Agent 3 from live board A3-0147 in `/home/karma/Documents/RIS` on `agent-3`, parent
+`32938f4edae076273f2f01828bfb3a147f72d381`. Startup inspected Claude CLI processes and each
+`/proc/<pid>/cwd`; PID 22510 remains outside RIS at `/home/karma/Documents/ANLP/A3`. Acquired the
+scheduled lock. Explicitly refreshed `origin/agent-1` at
+`208ed7d0415b8c1dd7d143c55e7271e71d310fcc`, `origin/agent-2` at
+`81498f98aac497768b0dec35cea89ddf7466e697`, and `origin/agent-3` at parent `32938f4...` under the
+coordinator lock. The worktree was clean. Read live BOARD, required Agent-3 context/spec/plan/
+interface/protocol docs, peer STATUS/HANDOFF and current addressed outboxes. No exact execution
+FREEZE or role-scope execution ACK was present.
+
+Agent 2's current HANDOFF reports a fresh `protocol/tests` run on its actual resynced working tree:
+3,226 passed, 201 skipped, exit 0, 1,195.50 seconds. Exact protocol subtree is
+`7566f63d693afe8fa88ab7cc69872082d58d88db`, published at `origin/agent-2`
+`81498f98aac497768b0dec35cea89ddf7466e697` (the commit changes only Agent-2 STATUS; subtree is
+unchanged). The owner records command `python -m pytest protocol/tests -c protocol/pytest.ini
+--rootdir protocol -p no:cacheprovider -rs -q`, Python 3.13, hash-verified Foundry 1.8.5, and skips
+as 200 `ScenarioResult` plus one `FileHash` with no Foundry skip. Raw output and a separately
+hashed run receipt are absent. Recorded this as peer-reported protocol-package evidence, explicitly
+not an Agent-3 rerun, integrated F result, execution ACK or Gate F evidence.
+
+Updated `evaluation/reports/RQ2-F-DRAFT.md`, partial packet, BOARD, Agent-3 STATUS and HANDOFF.
+Current report SHA-256 `1889d5a4acd93d289a43750ca913dee293891abe321b3dc575455f85ad485bbf`; plan JSON
+SHA-256 remains `1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`. Report is not
+reviewed at this hash. Report links: 41/41 resolve; packet link: 1/1; `git diff --check` passed.
+No tests/services/integrated cases were run. Plan remains DRAFT/`authorizesExecution=false`; all 32
+cases and Gate F NOT_RUN; G locked. No external messages, peer-scope edits, extra agents/worktrees
+or main push. Exact changed paths: report, partial packet, BOARD, Agent-3 STATUS and HANDOFF.
+
 # A3-0146 handoff — record A1-0139 exact-hash confirmation, 2026-11-15
 
 Continued Agent 3 from live board A3-0145 on branch `agent-3`, parent

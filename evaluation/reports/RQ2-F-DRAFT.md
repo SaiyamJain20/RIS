@@ -92,6 +92,16 @@ passed each, but their exact invocation and raw output files are not in this
 checkout. Those are prior reported runs, not rerun or independently auditable
 here. See [the M2/M6 receipt review](../evidence/f/availability-receipt-review-20261115/README.md).
 
+Agent 2 has now reported a fresh full `protocol/tests` run against the accepted protocol subtree
+`7566f63d693afe8fa88ab7cc69872082d58d88db`, published on `origin/agent-2` at
+`81498f98aac497768b0dec35cea89ddf7466e697`: 3,226 passed, 201 skipped, exit 0, in 1,195.50
+seconds. The owner reports Python 3.13 and hash-verified Foundry 1.8.5; the skipped tests were
+200 `ScenarioResult` and one `FileHash`, with no Foundry skip. The exact command is recorded in
+Agent 2's current HANDOFF, but raw run output and a separately hashed run receipt are not retained
+here. Treat this as peer-reported protocol-suite evidence, not an Agent-3 rerun, integrated F
+result, or Gate F evidence. The full suite tests the protocol package against its published
+fixtures and local Anvil setup; it does not establish the planned 32-case F system behavior.
+
 The eighth slice directly tested duplicate planned case IDs in the offline F
 preflight and reran its capture/join controls. A duplicate `FL-1` is reported as
 coverage `MISMATCH`; no services start and all 32 rows remain `NOT_RUN`. The same
@@ -305,6 +315,7 @@ These are prior measurements unless marked fresh. No row is an integrated F resu
 | Compromised quorum can permanently halt one DBC deployment and obtain a grant from fabricated, policy-shaped records for an unsubmitted PBC requester; ledger-scope review plus peer-reported scratch reproduction, outside f=1 | [A1-0137 review and Agent-3 response](../evidence/f/report-review-a1-0137-20261115/README.md) | requires >=3 Byzantine witnesses; Agent 3 verified attachment checksums but did not rerun Forge; grant does not show key-worker release |
 | Saturating `authEpoch`, `sourceBlockNumber`, or `sequence` can permanently halt honest operation of the DBC deployment; ledger-scope review plus peer-reported scratch reproduction, outside f=1 | [A1-0138 follow-up review and Agent-3 response](../evidence/f/report-review-a1-0137-20261115/README.md) | authEpoch stops decisions immediately; sourceBlockNumber stops them after checkpoint expiry; sequence stops them after checkpoint expiry; Agent 3 verified attachment checksums but did not rerun Forge |
 | Fresh oracle/store differential; tested reconstruction result | [2026-11-15 exact-source rerun](../evidence/f/oracle-store-diff-20261115/README.md) | one earlier digest per key; grant/receipt facts caller-asserted |
+| Protocol test suite; peer-reported tested reconstruction result | Agent 2's current [HANDOFF](../../communication/agent-2/HANDOFF.md) records 3,226 passed, 201 skipped, exit 0 against protocol subtree `7566f63d..` on `origin/agent-2` `81498f9`; command, toolchain verification and skip classification are stated there | owner-reported run; raw stdout and a run-specific hash receipt are not retained here; protocol package suite, not the planned integrated F system or an F case |
 | Seven oracle mutation sensitivities; deliberate mutation result | [2026-11-15 mutation rerun](../evidence/f/oracle-mutant-discrimination-20261115/README.md) | these seven specific rule errors only; same synthetic grid and correlated oracle/store |
 | Service/store distinction; fresh tested reconstruction result | [four probes, selected owner tests, exact source/output hashes](../evidence/f/report-review-20261114/README.md) | injected view and synthetic keys; no native grant/sequence transition |
 | Captured signer reply to exact store-history generation; tested reconstruction result | [16 focused join tests](../evidence/f/signing-event-round-validation-20261115/README.md); [source/command record](../evidence/f/signing-event-join-20261114/README.md) | generated JSON-lines; capture authenticity/completeness, native facts and honest-service validation remain unproved |
@@ -343,8 +354,8 @@ partial report can document those blockers; it cannot substitute prior measureme
 For this report revision, review status is separate from execution authorization. A1-0137 and
 A1-0138 reviewed earlier hashes for ledger scope; their findings were incorporated. A1-0139
 confirmed the exact `cf249e2a...` report hash had no remaining ledger-scope objection. This
-revision only corrects the review-status record; its claim and evidence content is unchanged, but
-this new file hash has not itself been reviewed. A1-0129 reviewed ledger details in the plan; it
+revision adds Agent 2's owner-reported protocol-suite result and its evidence limits; this new
+file hash has not itself been reviewed. A1-0129 reviewed ledger details in the plan; it
 did not review this report or ACK an execution FREEZE. S2-0026 reviewed the draft plan and A2-0088
 reviewed hook coverage; neither is an execution ACK. No Agent-2 report-specific review is recorded.
 See the [A1-0137/0138/0139 review receipt](../evidence/f/report-review-a1-0137-20261115/README.md)

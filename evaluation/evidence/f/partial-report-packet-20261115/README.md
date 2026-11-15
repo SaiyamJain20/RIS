@@ -8,7 +8,7 @@ evidence packet, not an F execution result, an execution FREEZE, an owner ACK, o
 The current report text is pinned by SHA-256:
 
 ```text
-8f5bc92942ec8bcc09388de80380aa282de6b5a5aca32f903e69bcd23e105ec4  evaluation/reports/RQ2-F-DRAFT.md
+1889d5a4acd93d289a43750ca913dee293891abe321b3dc575455f85ad485bbf  evaluation/reports/RQ2-F-DRAFT.md
 ```
 
 The current execution proposal it describes is separately pinned by SHA-256:
@@ -22,8 +22,8 @@ Git refs explicitly refreshed for this continuation:
 | ref | exact commit | scope / use |
 |---|---|---|
 | `origin/agent-1` | `208ed7d0415b8c1dd7d143c55e7271e71d310fcc` | includes A1-0139 confirmation of the `cf249e2a...` report hash |
-| `origin/agent-2` | `81498f98aac497768b0dec35cea89ddf7466e697` | includes A2-0088 plan hook-coverage review |
-| `origin/agent-3` | `d3fa2f3a5fb027783f3cfb4d3146ed1e9b699203` | fetched tip containing this report revision before this packet refresh |
+| `origin/agent-2` | `81498f98aac497768b0dec35cea89ddf7466e697` | includes A2-0088 plan hook-coverage review and the reported protocol-suite run |
+| `origin/agent-3` | `32938f4edae076273f2f01828bfb3a147f72d381` | fetched source tip for this report update |
 
 The exact report revision reviewed by A1-0139 is at Agent-3 commit
 `445826a9140b49e2629f75da535e3e45b4706271`; it has report hash `cf249e2a...` as detailed below.
@@ -35,7 +35,7 @@ was applied exactly and the remaining report text was unchanged; it closed ledge
 for that revision. This report-status and packet update is not an execution ACK or FREEZE ACK. Agent 3 has not
 rerun Forge for the peer scratch tests.
 
-Prior exact report SHA-256 reviewed by A1-0139: `cf249e2ad63b24d44acdef538d09718ef1fb3ae41e683af9009fa72ca07176f2`. Current report SHA-256: `8f5bc92942ec8bcc09388de80380aa282de6b5a5aca32f903e69bcd23e105ec4`.
+Prior exact report SHA-256 reviewed by A1-0139: `cf249e2ad63b24d44acdef538d09718ef1fb3ae41e683af9009fa72ca07176f2`. Current report SHA-256: `1889d5a4acd93d289a43750ca913dee293891abe321b3dc575455f85ad485bbf`.
 Current plan SHA-256: `1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`.
 
 The plan's module pins are ledger commit `85c59f588de58a8ff5e87b9fe6f630c9d8c43642` and protocol
@@ -59,6 +59,10 @@ ledger scope only; no Agent-2 report-specific review is present.
   outputs and exact invocation are missing; its 4/4 outcomes are prior reported measurements.
 - M1 gas rows have peer-reported fresh reproduction and attached raw logs; Agent 3 verified the
   attachment checksums but did not rerun Forge. No production fee or throughput estimate follows.
+- Agent 2 reports a fresh full protocol-suite run: 3,226 passed, 201 skipped, exit 0 on the
+  accepted protocol subtree. Its HANDOFF records the command, environment verification and skip
+  classification, but raw stdout and a run-specific hash receipt are not retained here. This is
+  protocol-package evidence, not an Agent-3 rerun or an integrated F result.
 - A1-0137's ledger-scope review found the reviewed draft accurate in its scope and identified the
   permanent DBC halt and fabricated-credential grant consequences of a compromised quorum. Agent
   3 added these with their f>=3 boundary and stated limitations.
@@ -75,8 +79,8 @@ ledger scope only; no Agent-2 report-specific review is present.
   the planned F system remain unrun.
 
 The exact commands, exits, versions, source/output hashes and assumptions are in the linked
-receipts in `RQ2-F-DRAFT.md`. The report's relative links were checked: 35 links, zero missing
-before adding this packet link; all report links resolve after the edit. The review and response
+receipts in `RQ2-F-DRAFT.md`. The report's relative links were checked: 41 links, zero missing.
+The review and response
 are documented in [this receipt](../report-review-a1-0137-20261115/README.md).
 
 ## Review questions
@@ -106,5 +110,7 @@ are documented in [this receipt](../report-review-a1-0137-20261115/README.md).
 - Runner stages 3–7 and transcript acquisition/authentication/completeness evidence remain open.
   The partial report documents these blockers; it does not convert existing measurements into
   F-case results.
+- Agent 2's latest protocol-suite result improves isolated package evidence only; it does not
+  close the report-review dependency, execution ACKs, FREEZE, runner stages 3–7 or Gate F.
 
 No external review request was sent as part of preparing this packet.

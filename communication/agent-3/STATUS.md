@@ -1,15 +1,16 @@
-# Agent 3 status — corrected partial RQ2-F report
+# Agent 3 status — partial RQ2-F evidence report
 
-## Current checkpoint — partial-report roadmap corrected, 2026-11-15
+## Current checkpoint — Agent-2 protocol-suite result recorded, 2026-11-15
 
-C-F1 WORKING. Corrected stale report roadmap wording: the partial packet is already prepared, and
-no external review request has been sent. The packet now records the freshly fetched Agent-3 source
-ref and distinguishes the A1-0139-reviewed `cf249e2a...` revision from the current report hash.
-Current report SHA-256: `8f5bc92942ec8bcc09388de80380aa282de6b5a5aca32f903e69bcd23e105ec4`;
-plan JSON SHA-256 remains `1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`.
-No new peer review or evidence arrived. Plan DRAFT/`authorizesExecution=false`; all 32 cases and
-Gate F NOT_RUN; G locked. No services or integrated cases. Next: continue only offline work that
-closes a specific report or runner/oracle evidence gap, or incorporate a new scoped review.
+C-F1 WORKING. Added Agent 2's owner-reported protocol-suite result (3,226 passed, 201 expected
+skips, exit 0) to the RQ2-F partial report and packet. The command/toolchain details are in the
+current Agent-2 HANDOFF; no raw stdout or run-specific hash receipt is retained here. This is
+protocol-package evidence only, not an Agent-3 rerun or integrated F result. Current report SHA-256:
+`1889d5a4acd93d289a43750ca913dee293891abe321b3dc575455f85ad485bbf`; plan JSON SHA-256 remains
+`1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`. The current report hash is
+not reviewed. Plan DRAFT/`authorizesExecution=false`; all 32 cases and Gate F NOT_RUN; G locked.
+No services, tests or integrated cases were run. Next: continue only offline work that closes a
+specific report or runner/oracle evidence gap.
 
 ## Current checkpoint — A1-0139 report review confirmed, 2026-11-15
 

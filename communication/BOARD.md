@@ -1,3 +1,12 @@
+## A3-0148: Agent-2 protocol suite added to partial report — 2026-11-15
+
+C-F1 WORKING. Added Agent 2's owner-reported fresh protocol test-suite result (3,226 passed,
+201 expected skips, exit 0) with exact accepted protocol subtree, command/toolchain details and
+the missing raw-output limitation. This is protocol-package evidence, not an integrated F result.
+Updated the partial packet and exact report hash. No tests, services or integrated cases run here.
+Plan stays DRAFT/`authorizesExecution=false`; all 32 cases and Gate F NOT_RUN; G locked. No new
+execution ACK/FREEZE. Next: continue only offline work that closes a specific report evidence gap.
+
 ## A3-0147: partial-report roadmap corrected and current source ref recorded — 2026-11-15
 
 C-F1 WORKING. Corrected stale report wording that still listed packet preparation as future work;
