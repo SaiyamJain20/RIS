@@ -1,3 +1,19 @@
+# Agent 3 status — RQ2-F partial report
+
+## Current checkpoint — offline capture and runner controls, 2026-11-15
+
+C-F1 WORKING. Added a focused duplicate planned case-ID regression: preflight
+reports MISMATCH and leaves services empty and all cases NOT_RUN. Re-ran F
+preflight, sealed capture and signing-event join controls: 37 passed / exit 0.
+The controls cover independent-count mismatch, changed digest, sequential RPC ID
+reuse and duplicate JSON keys. Receipt:
+`evaluation/evidence/f/runner-capture-controls-20261115/README.md`.
+
+This is synthetic offline checker evidence. Caller-supplied capture counts and
+receipts are unauthenticated and do not prove source completeness. Plan DRAFT;
+no exact execution FREEZE/role ACKs; all 32 F cases and Gate F NOT_RUN; G locked;
+no services. Next: assemble the claim-to-artifact table for the partial report.
+
 # Agent 3 status
 
 - Role: evaluation, formal models and integration (evaluation/**, shared/root Agent-3-owned paths).

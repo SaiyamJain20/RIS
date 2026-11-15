@@ -85,6 +85,16 @@ passed each, but their exact invocation and raw output files are not in this
 checkout. Those are prior reported runs, not rerun or independently auditable
 here. See [the M2/M6 receipt review](../evidence/f/availability-receipt-review-20261115/README.md).
 
+The eighth slice directly tested duplicate planned case IDs in the offline F
+preflight and reran its capture/join controls. A duplicate `FL-1` is reported as
+coverage `MISMATCH`; no services start and all 32 rows remain `NOT_RUN`. The same
+37-test focused run checks caller-count mismatch, post-seal digest mutation,
+sequential JSON-RPC ID reuse, and duplicate JSON object keys. Output and source
+hashes are in [the runner/capture control receipt](../evidence/f/runner-capture-controls-20261115/README.md).
+These controls validate only local checker behavior. Caller-supplied counts and
+hashes do not authenticate the source or establish a complete transcript; F stages
+3–7 and every integrated case remain unimplemented/unrun.
+
 ## 1. Question and design
 RQ2: which E guarantees survive Byzantine operators with q-of-n application witnesses
 (n=4, q=3, f=1), assuming safe ledgers and a trusted key worker? The witness layer distributes

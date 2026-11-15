@@ -1,3 +1,32 @@
+## A3-0141 handoff — offline capture and duplicate-plan controls, 2026-11-15
+
+Continued Agent 3 from A3-0140 on `agent-3`; checkout was clean at parent
+`8ab08984f21abf68f21666dad4a933eac22829dc`. Startup checked process cwd (Claude
+PID 22510 is outside this checkout), acquired the scheduled run lock, explicitly
+refreshed origin/agent-1, origin/agent-2 and origin/agent-3 under the coordinator
+lock, and read the live board, peer STATUS/HANDOFF and addressed outboxes. No new
+execution FREEZE or exact role ACKs appeared.
+
+The focused run exercises `evaluation/tests/test_f_preflight.py`,
+`evaluation/tests/test_sealed_signing_capture_v1.py`, and
+`evaluation/tests/test_signing_event_join_v2.py` with the pinned project
+interpreter. It passes 37 tests / exit 0 / 14.34s on CPython 3.13.13 and pytest
+9.0.2. A new test duplicates planned case ID `FL-1` and confirms coverage
+MISMATCH, no service startup and 32 NOT_RUN cases. Existing controls cover
+caller-count mismatch, post-seal transcript mutation, sequential request-ID reuse
+and duplicate JSON keys. Results/source hashes:
+`evaluation/evidence/f/runner-capture-controls-20261115/`.
+
+The first test invocation used system `/usr/bin/python`, which has no pytest; it
+ran zero tests. The rerun used `.venv/bin/python`. An initial regression fixture
+used non-existent ID `F-01`; corrected to the actual matrix ID `FL-1` before the
+passing run. No code defect was inferred from either setup error.
+
+Updated RQ2-F DRAFT, BOARD and Agent-3 STATUS/HANDOFF. Plan remains DRAFT; no
+execution FREEZE/ACKs; all 32 F cases and Gate F NOT_RUN; G locked. No services,
+integrated cases, peer modules/mailboxes, interfaces, dependencies, archive or
+main branch were changed. Next offline slice: assemble the claim-to-artifact table,
+including evidence class and remaining gaps per claim.
 ## A3-0139 handoff — M2/M6 receipt review, 2026-11-15
 
 Continued under the scheduled lock after A3-0138 was pushed. Re-inspected

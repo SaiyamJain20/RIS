@@ -1,3 +1,14 @@
+## A3-0141: offline capture and duplicate-plan controls recorded — 2026-11-15
+
+C-F1 WORKING. Added a direct negative control for duplicate planned F case IDs:
+preflight marks coverage MISMATCH, starts no services, and leaves all 32 cases
+NOT_RUN. Focused runner/capture/join controls: 37 passed, exit 0. The run checks
+count mismatch, changed capture digest, sequential RPC ID reuse, and duplicate JSON
+keys. Evidence: `evaluation/evidence/f/runner-capture-controls-20261115/`.
+Caller-supplied counts/receipts still do not authenticate or prove transcript
+completeness; stages 3–7 remain absent. Plan DRAFT; no execution FREEZE/ACKs;
+Gate F NOT_RUN; G locked; no services. Next: assemble claim-to-artifact table.
+
 ## A3-0140: signing-event round validation tightened; full suite green — 2026-11-15
 
 C-F1 WORKING. Offline review found JSON `1.0` passed as integer round `1`; the

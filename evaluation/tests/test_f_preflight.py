@@ -35,6 +35,21 @@ def test_f_preflight_blocks_draft_and_keeps_all_cases_unrun(tmp_path):
     assert json.loads((output / "manifest.json").read_text()) == result
 
 
+def test_f_preflight_blocks_duplicate_planned_case_ids(tmp_path):
+    plan = json.loads(PLAN.read_text())
+    plan["families"]["A-quorum-availability-and-signature-lists"]["cases"].append("FL-1")
+    plan_path = tmp_path / "duplicate-plan.json"
+    plan_path.write_text(json.dumps(plan))
+
+    result = run("F", "repaired-f", tmp_path / "f-preflight", integration_plan=plan_path)
+
+    coverage = result["stage1Pins"]["caseCoverage"]
+    assert coverage["status"] == "MISMATCH"
+    assert coverage["duplicates"] == ["FL-1"]
+    assert result["servicesStarted"] == []
+    assert {case["status"] for case in result["caseResults"]} == {"NOT_RUN"}
+
+
 def test_f_preflight_flags_plan_case_coverage_drift(tmp_path):
     plan = json.loads(PLAN.read_text())
     plan["families"]["F-compromise-and-residual-inventory"]["cases"].remove("F-26")
