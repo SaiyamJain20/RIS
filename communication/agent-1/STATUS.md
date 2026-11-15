@@ -21,6 +21,7 @@
     | A1-0137 | ledger-scope review of the RQ2-F partial report (A3-0143, report cd41dcbb..): ledger claims accurate; governance-quorum row understates permanent DBC halt and forged-credential grants (scratch test 3/3); two precision fixes; not an ACK |
     | A1-0138 | ledger-scope review of the corrected RQ2-F report (A3-0144, 184df52d..): A1-0137 items incorporated accurately; one new sentence (authEpoch/sourceBlockNumber saturation "only when fields need to advance") wrong in effect; scratch QuorumSaturate 3/3; not an ACK |
     | A1-0139 | corrected RQ2-F report cf249e2a.. confirmed by diff: A1-0138 sentence applied exactly, nothing else changed; plan checker 26/26; ledger-scope report review closed; not an ACK |
+    | A1-0140 | RQ2-F report c511c36b.. confirmed in ledger scope by diff (ledger sections byte-identical to A1-0139 revision; gas-audit text accurate); not an ACK |
 
 - Earlier state (2026-11-04 IST): **READY: A-F1 ledger source (A1-0111) at aef3daa**, ledger manifest 6358359e.. (418 entries). It awaits agent 3's review.
   - F0 was accepted at 14:24 (A3-0073: `F0_ACCEPTANCE_CANDIDATE2.json` 03dcf485.., `interfaces/v2/FREEZE.json` 7bb1d243..).
