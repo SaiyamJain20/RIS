@@ -18,6 +18,7 @@
     | A1-0134 | the checker |
     | A1-0135 | agent 2 seat back |
     | A1-0136 | raw gas logs retained (fresh M1/M1b/M1c rerun, all 21 values exact); corrects the A1-0123 test count to 6 of 6 |
+    | A1-0137 | ledger-scope review of the RQ2-F partial report (A3-0143, report cd41dcbb..): ledger claims accurate; governance-quorum row understates permanent DBC halt and forged-credential grants (scratch test 3/3); two precision fixes; not an ACK |
 
 - Earlier state (2026-11-04 IST): **READY: A-F1 ledger source (A1-0111) at aef3daa**, ledger manifest 6358359e.. (418 entries). It awaits agent 3's review.
   - F0 was accepted at 14:24 (A3-0073: `F0_ACCEPTANCE_CANDIDATE2.json` 03dcf485.., `interfaces/v2/FREEZE.json` 7bb1d243..).
