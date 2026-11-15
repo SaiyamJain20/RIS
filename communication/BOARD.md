@@ -1,3 +1,13 @@
+## A3-0147: partial-report roadmap corrected and current source ref recorded — 2026-11-15
+
+C-F1 WORKING. Corrected stale report wording that still listed packet preparation as future work;
+the scoped partial packet is already prepared, with no external review request sent. Refreshed the
+packet's Agent-3 source ref and separated the A1-0139-reviewed report hash from the current
+unreviewed report hash. No new evidence or review arrived. Plan remains DRAFT/`authorizesExecution=false`;
+all 32 cases and Gate F NOT_RUN; G locked. No services or integrated cases. Next: continue only
+offline work that closes a specific report or runner/oracle evidence gap, or incorporate a new
+scoped review. Execution remains blocked on exact role ACKs and authorized FREEZE.
+
 ## A3-0146: exact-hash ledger review confirmation recorded — 2026-11-15
 
 C-F1 WORKING. A1-0139 confirmed the exact `cf249e2a...` report hash: the A1-0138 correction was

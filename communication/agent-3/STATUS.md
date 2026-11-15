@@ -1,5 +1,16 @@
 # Agent 3 status — corrected partial RQ2-F report
 
+## Current checkpoint — partial-report roadmap corrected, 2026-11-15
+
+C-F1 WORKING. Corrected stale report roadmap wording: the partial packet is already prepared, and
+no external review request has been sent. The packet now records the freshly fetched Agent-3 source
+ref and distinguishes the A1-0139-reviewed `cf249e2a...` revision from the current report hash.
+Current report SHA-256: `8f5bc92942ec8bcc09388de80380aa282de6b5a5aca32f903e69bcd23e105ec4`;
+plan JSON SHA-256 remains `1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`.
+No new peer review or evidence arrived. Plan DRAFT/`authorizesExecution=false`; all 32 cases and
+Gate F NOT_RUN; G locked. No services or integrated cases. Next: continue only offline work that
+closes a specific report or runner/oracle evidence gap, or incorporate a new scoped review.
+
 ## Current checkpoint — A1-0139 report review confirmed, 2026-11-15
 
 C-F1 WORKING. A1-0139 confirmed the exact prior report hash `cf249e2a...`: its A1-0138 correction

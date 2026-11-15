@@ -54,20 +54,22 @@ and was vacuous. The new result is peer-reported and reviewed here, not rerun by
 Agent 3, not an execution ACK; item 5 still depends on runner calls. Preserve this
 correction in any presentation.
 
-Across this continuation plus the next nine scheduled continuations (allowing one extra if a
-result fails or needs repair), the working target is a reviewable partial results packet by
-2026-11-17, with evaluation in every slice rather than a runner-first sequence.
-Each slice should reproduce or adversarially inspect at least one already-implemented claim,
-recording exact source pins, positive/negative controls, command and output hashes; implementation
-is added only where that evaluation identifies a specific evidence gap. The intended order is:
+The working target is a reviewable partial results packet by 2026-11-17, with evaluation in every
+slice rather than a runner-first sequence. Each slice should reproduce or adversarially inspect at
+least one already-implemented claim, recording exact source pins, positive/negative controls,
+command and output hashes; implementation is added only where that evaluation identifies a
+specific evidence gap. The intended order was:
 (1) fresh oracle/store differential (done); (2) seven oracle-mutant discrimination controls (done);
 (3) f=1/f=2 pool sweep and out-of-bound control (done); (4) TLC audit/recheck done; (5) reconcile the existing M1 gas rows with
 Agent 1's exact reproductions (done); (6) review the M2 virtual-time and M6 real-process receipts without
 starting services (done; none were started); (7) evaluate signing-event join positive and negative controls (done); (8) test the
 offline runner's capture receipt/duplicate-plan and fail-closed behavior (done); (9) assemble a claim-to-
 artifact table with unresolved evidence gaps (done below); (10) issue the reviewable partial packet and record
-peer-review/ACK dependencies. This sequence is a work target, not a promise that a result will
-pass; failures and blocked items stay visible. No service or integrated F case may start before
+peer-review/ACK dependencies (packet prepared; no external review request sent). The packet is
+ready for scoped review, but no peer has reviewed the current report hash. Before the target date,
+continue offline report or runner/oracle work only when it closes a specific evidence gap, and keep
+the peer-review dependency explicit. This sequence is a work target, not a promise that a result
+will pass; failures and blocked items stay visible. No service or integrated F case may start before
 the exact authorized FREEZE and role ACKs. Gate F remains NOT_RUN and this plan remains DRAFT.
 
 The fifth slice reconciled the retained M1 tables against Agent 1's addressed
@@ -327,10 +329,11 @@ all exact draft pins match. A deliberate same-row-count matrix-ID drift is also 
 checks do not lift the actual role-scope execution ACK or later-stage blockers. Deviation from the plan
 sequence: earlier measurements were taken before the runner/FREEZE on the human's instruction.
 
-Before the 2026-11-17 partial-report target, the permitted next work is to issue
-the reviewable partial packet and record peer-review/ACK dependencies. The existing
-capture checks do not authenticate acquisition or establish transcript completeness;
-those controls can be added only if an independent source is available. The execution plan remains DRAFT. The new K1 candidate's
+Before the 2026-11-17 partial-report target, the partial packet is prepared and records its review
+questions and execution blockers; no external review request has been sent. Continue offline
+report, runner, or oracle work only when it closes a specific evidence gap. The existing capture
+checks do not authenticate acquisition or establish transcript completeness; those controls can
+be added only if an independent source is available. The execution plan remains DRAFT. The new K1 candidate's
 kill coverage is accepted at tested scope and its source is adopted in the DRAFT under D57.
 Both exact execution FREEZE ACKs and the unfinished runner stages remain open; S2-0024 and
 A1-0129 are not execution ACKs. Run services/cases only after the authorized FREEZE requirements are met. A reviewable

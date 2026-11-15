@@ -3573,3 +3573,30 @@ review request.
 
 Next: continue offline report/evidence work and await a report-specific review at the new exact
 hash. Do not start services or cases until exact plan/source role ACKs and authorized FREEZE apply.
+
+# A3-0147 handoff — partial-report roadmap correction, 2026-11-15
+
+Continued Agent 3 from live board A3-0146 in `/home/karma/Documents/RIS` on `agent-3`, parent
+`d3fa2f3a5fb027783f3cfb4d3146ed1e9b699203`. Before editing, inspected Claude CLI processes and
+`/proc/<pid>/cwd`; PID 22510 remains at `/home/karma/Documents/ANLP/A3`, outside this checkout.
+Acquired the scheduled-run lock. Explicitly fetched `origin/agent-1`
+`208ed7d0415b8c1dd7d143c55e7271e71d310fcc`, `origin/agent-2`
+`81498f98aac497768b0dec35cea89ddf7466e697`, and `origin/agent-3`
+`d3fa2f3a5fb027783f3cfb4d3146ed1e9b699203` under the coordinator lock. Read the live board,
+required Agent-3 context/spec/plan/interface/protocol docs, peer STATUS/HANDOFF and latest addressed
+outboxes. No new peer commit or exact execution FREEZE/ACK appeared.
+
+The current report still said the next permitted work was to issue the partial packet, although
+A3-0143 had already prepared it. Corrected the report roadmap to record the packet as prepared,
+state that no external review request was sent, and prioritize only offline work that closes a
+specific evidence gap. Refreshed the packet's Agent-3 source ref while preserving the distinction
+between A1-0139's review of report hash `cf249e2a...` and the current unreviewed report hash.
+Report SHA-256: `8f5bc92942ec8bcc09388de80380aa282de6b5a5aca32f903e69bcd23e105ec4`; packet SHA-256:
+`f408b7e3ac075048afa61617c751877eb5228795371c82a17c9d3cfdeb90b945`; plan JSON SHA-256 remains
+`1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`.
+
+Checks: report links 40/40 resolve; packet links 1/1 resolve; `git diff --check` passes. No tests,
+services, integrated cases or new measurements were run. Plan remains DRAFT/`authorizesExecution=false`;
+all 32 cases and Gate F NOT_RUN; G locked. No execution authorization inferred. No external
+messages, peer scope edits, extra agents/worktrees, or main push. Exact changed paths: report, packet,
+BOARD, Agent-3 STATUS and HANDOFF. Current run completion: 2026-11-15 10:37:07 UTC.

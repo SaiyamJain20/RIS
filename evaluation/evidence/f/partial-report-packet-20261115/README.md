@@ -3,12 +3,12 @@
 **Disposition:** prepared for scoped technical review; report remains DRAFT. This is a partial
 evidence packet, not an F execution result, an execution FREEZE, an owner ACK, or a Gate F decision.
 
-## Exact reviewed inputs
+## Exact inputs in this packet
 
 The current report text is pinned by SHA-256:
 
 ```text
-8047d53e5e65020424db3469b0cc5589c7b91d793d991cec24c940a002a25b19  evaluation/reports/RQ2-F-DRAFT.md
+8f5bc92942ec8bcc09388de80380aa282de6b5a5aca32f903e69bcd23e105ec4  evaluation/reports/RQ2-F-DRAFT.md
 ```
 
 The current execution proposal it describes is separately pinned by SHA-256:
@@ -23,7 +23,11 @@ Git refs explicitly refreshed for this continuation:
 |---|---|---|
 | `origin/agent-1` | `208ed7d0415b8c1dd7d143c55e7271e71d310fcc` | includes A1-0139 confirmation of the `cf249e2a...` report hash |
 | `origin/agent-2` | `81498f98aac497768b0dec35cea89ddf7466e697` | includes A2-0088 plan hook-coverage review |
-| `origin/agent-3` | `445826a9140b49e2629f75da535e3e45b4706271` | report/packet revision reviewed by A1-0139 |
+| `origin/agent-3` | `d3fa2f3a5fb027783f3cfb4d3146ed1e9b699203` | fetched tip containing this report revision before this packet refresh |
+
+The exact report revision reviewed by A1-0139 is at Agent-3 commit
+`445826a9140b49e2629f75da535e3e45b4706271`; it has report hash `cf249e2a...` as detailed below.
+The current report hash in this packet is not itself peer-reviewed.
 
 A1-0137 and A1-0138 reviewed earlier hashes for ledger scope, and their findings were
 incorporated. A1-0139 then confirmed the exact `cf249e2a...` report hash, stating its correction
@@ -31,7 +35,7 @@ was applied exactly and the remaining report text was unchanged; it closed ledge
 for that revision. This report-status and packet update is not an execution ACK or FREEZE ACK. Agent 3 has not
 rerun Forge for the peer scratch tests.
 
-Prior exact report SHA-256 reviewed by A1-0139: `cf249e2ad63b24d44acdef538d09718ef1fb3ae41e683af9009fa72ca07176f2`. Current report SHA-256: `8047d53e5e65020424db3469b0cc5589c7b91d793d991cec24c940a002a25b19`.
+Prior exact report SHA-256 reviewed by A1-0139: `cf249e2ad63b24d44acdef538d09718ef1fb3ae41e683af9009fa72ca07176f2`. Current report SHA-256: `8f5bc92942ec8bcc09388de80380aa282de6b5a5aca32f903e69bcd23e105ec4`.
 Current plan SHA-256: `1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`.
 
 The plan's module pins are ledger commit `85c59f588de58a8ff5e87b9fe6f630c9d8c43642` and protocol
