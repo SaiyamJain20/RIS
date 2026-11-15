@@ -28,6 +28,7 @@ Agent numbers are portable roles (D57, `communication/DECISIONS.md` on origin/ag
   - DENY consumes no nonce and has no replay guard (A1-0107, A1-0126, A1-0128).
   - A decision is accepted only at the current checkpoint sequence.
   - The checkpoint sequence is strictly increasing and may skip (A1-0117).
+  - On the DBC, credential records are authenticated only by the quorum-signed `credentialDigest`, and the PBC submission of a request is not visible. A compromised quorum (3 of 4) can therefore grant an unregistered requester with fabricated records that fit the policy shape (A1-0137, scratch `QuorumForgedCred.t.sol` 3 of 3). It can also halt the DBC permanently with a saturated checkpoint (A1-0117).
   - `QuorumLib.verify` returns the first failure in walk order (A1-0129 §3).
   - `forge build --sizes` exits 1 only because of Forge scripts (A1-0123).
 - **Proxies.**
