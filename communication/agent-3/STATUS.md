@@ -1,5 +1,19 @@
 # Agent 3 status — partial RQ2-F evidence report
 
+## Current checkpoint — M1 peer artifact audit, 2026-11-15
+
+C-F1 WORKING, A3-0151. All 12 A1-0136 attachment hashes verify at publication `f6f8527...`;
+all 21 emitted rows (15 distinct) match the peer TSV and retained logs. Seven runtime sizes and
+three historical harness hashes also match. Corrected the packet/report inconsistency about
+whether these checks had been performed. This is an artifact audit, with no Forge rerun, services,
+test suites or integrated cases. Receipt: `evaluation/evidence/f/gas-attachment-audit-20261115/`.
+Report SHA-256 `e0050b0299e68af37aee3aa27af3ca7ec2dc356e7026d3631ee01b599bdc2294`;
+packet SHA-256 `10337b90ccddac52660d519c93dac178d13f73042e05274450de6644cdc0d4b8`.
+The plan hash remains `1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`.
+Plan DRAFT/`authorizesExecution=false`; all 32 cases/Gate F NOT_RUN; G locked. Current report
+hash is unreviewed. Next: useful offline work for a specific evidence gap; no execution until
+authorized exact FREEZE/role ACKs.
+
 ## Current checkpoint — M2 sweep retains per-trial records, 2026-11-15
 
 C-F1 WORKING. Extended the Agent-3-owned offline M2 sweep to retain each virtual trial while

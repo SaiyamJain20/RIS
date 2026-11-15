@@ -75,9 +75,11 @@ the exact authorized FREEZE and role ACKs. Gate F remains NOT_RUN and this plan 
 The fifth slice reconciled the retained M1 tables against Agent 1's addressed
 messages A1-0123/0124/0125. A1-0136 then attached a fresh four-command rerun,
 raw logs and checksums at its exact `origin/agent-1` ref. It corrects the M1
-count from 9/9 to 6/6; all 21 gas/calldata values and seven product runtime
-sizes reportedly reproduce. Agent 3 did not run Forge or independently verify
-the peer attachment checksums, so this remains correlated peer evidence. The
+count from 9/9 to 6/6. Agent 3 has now verified all 12 attachment checksums, compared the 21
+emitted gas/calldata rows with the peer TSV and retained original logs, and checked all seven
+product runtime sizes. Those 21 rows contain 15 distinct measurements because M1b repeats six M1
+rows. Agent 3 did not rerun Forge; this remains correlated peer evidence. See the
+[attachment audit](../evidence/f/gas-attachment-audit-20261115/README.md). The
 receipt preserves the refuted cold-storage explanation and distinguishes
 source-consistent cost attribution from measured gas splits. Details and hashes are in
 [the gas reconciliation receipt](../evidence/f/gas-peer-reconciliation-20261115/README.md).
@@ -324,7 +326,7 @@ These are prior measurements unless marked fresh. No row is an integrated F resu
 | Five-configuration finite-model rerun; tested reconstruction result | [2026-11-15 exact-source audit, full log/source hashes and stop-count interpretation](../evidence/f/tlc-audit-20261115/README.md) | reproduces a bounded one-slot model; not a runtime, consensus or liveness proof |
 | Pool certificate filtering and potential agreement hazards; tested reconstruction result | [M3/M5](../evidence/f/measurements-20261114/README.md), [exact-source M5 rerun](../evidence/f/pool-sweep-20261115/README.md) | M5 honest behaviour is a model; f=2 hazards are potential states, not realized double certificates |
 | One/two unavailable witness boundary; fresh virtual-sweep reproduction plus prior reported local process runs | [M2/M6 measurements](../evidence/f/measurements-20261114/README.md), [fresh M2 exact-source reproduction](../evidence/f/availability-reproduction-20261115/README.md), [M2 per-trial follow-up](../evidence/f/availability-trial-records-20261115/README.md), [M6 source and receipt review](../evidence/f/availability-receipt-review-20261115/README.md) | M2 now retains one record per virtual trial, but records come from the same runner; M6 run stdout and exact invocation are not retained; no real-network latency or general liveness estimate |
-| Signature and governance gas overhead; tested reconstruction result with peer reproduction reported | [M1/M1b/M1c measurements](../evidence/f/measurements-20261114/README.md), [A1-0136 updated reconciliation and raw-log ref](../evidence/f/gas-peer-reconciliation-20261115/README.md) | single deterministic fixture calls; Agent 1 raw logs are available on its exact ref but not independently verified here; no production fee or throughput estimate |
+| Signature and governance gas overhead; tested reconstruction result with peer reproduction reported | [M1/M1b/M1c measurements](../evidence/f/measurements-20261114/README.md), [A1-0136 reconciliation](../evidence/f/gas-peer-reconciliation-20261115/README.md), [attachment and retained-log audit](../evidence/f/gas-attachment-audit-20261115/README.md) | all 12 attachment hashes, 21 emitted rows (15 distinct) and seven sizes match retained artifacts; no fresh Agent-3 Forge run; single deterministic fixtures, no production fee or throughput estimate |
 | K1 sensitivity; deliberate mutation result | [A3-0122 signing-kill review](../evidence/reviews/a2-0086-signing-kill-20261113/README.md) | 29/40 detections and 40/40 control; does not measure corruption probability |
 | New K1 candidate; deliberate mutation result | [S2-0025 reproduced by agent 3](../evidence/reviews/proxy-k1-20261114/README.md) | new blocking test: 40/40 detections and 40/40 controls; isolated candidate acceptance, not an execution ACK |
 | Store death predicates; tested reconstruction result | [180-case differential and seven oracle mutations](../evidence/f/oracle-store-diff-20261114/README.md) | one earlier digest per key; grant/receipt facts caller-asserted |

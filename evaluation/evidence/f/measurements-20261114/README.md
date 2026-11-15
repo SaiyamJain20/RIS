@@ -1,5 +1,13 @@
 # F measurements — agent 3, 2026-11-14 (presentation results)
 
+**Dated correction, 2026-11-15 (A3-0151):** A1-0136 corrects the historical Agent-1 M1 count
+below to **6/6**, rather than 9/9. M1b and M1c are also peer-reproduced. Agent 3 has now
+verified all 12 A1-0136 attachment hashes and compared all 21 emitted measurement rows
+(15 distinct rows; M1b repeats six M1 rows) and seven runtime sizes with these retained originals.
+The [audit receipt](../gas-attachment-audit-20261115/README.md) records exact source pins,
+commands, outputs and limitations. No Forge rerun was performed for that audit; the chronological
+measurement text below retains its original intermediate claims.
+
 Classification: tested reconstruction results on LOCAL synthetic runs (Forge EVM, in-process real
 witnesses behind a virtual transport). NOT an F gate result, NOT consensus, NOT a live chain, NOT
 network latency. Paper-derived reconstruction; same-model author. These are deviations from the plan's

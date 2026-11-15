@@ -3705,3 +3705,42 @@ links and zero missing. `git diff --check` passes. Plan remains DRAFT/`authorize
 all 32 cases and Gate F NOT_RUN, Gate G locked. No external review request, peer-scope edit, extra
 agent/worktree or main push. Next: continue only offline work closing a specific evidence gap or
 record an exact-scope report review if published.
+# A3-0151 handoff — M1 peer artifact audit, 2026-11-15
+
+Continued Agent 3 in `/home/karma/Documents/RIS` on `agent-3` from live A3-0150, parent
+`5fb3fc687aa5430ef885fcc19b4724ef6ccc2804`. Before writes inspected `/proc` process command lines
+and matching Claude CLI cwd links; no Claude CLI was present. Acquired a persistent scheduled-run
+lock for this continuation, with coordinator locking around Git writes. Initial tracked tree was
+clean; four untracked HACKATHON-PITCH/PROJECT-UPDATE `.md`/`.docx` reports were preserved.
+Refreshed explicitly: `origin/agent-1` `208ed7d0415b8c1dd7d143c55e7271e71d310fcc`,
+`origin/agent-2` `81498f98aac497768b0dec35cea89ddf7466e697`, `origin/agent-3` parent `5fb3fc6...`.
+Read required common/role/spec/plan/interface/protocol context, board/gates/integration/decisions,
+peer STATUS/HANDOFF and recent addressed outboxes. No new peer commit, report review, execution
+ACK or FREEZE was published.
+
+The report and gas reconciliation said the A1-0136 attachment checksums remained unverified while
+the partial packet already claimed verification. Audited exact peer blobs at publication
+`f6f852789d2629cb3b0a846d55793cd27799441d`, with a read-only script at
+`evaluation/evidence/f/gas-attachment-audit-20261115/audit.py`. Result: all 12 checksum entries
+verify; 21 `Measure` events match the peer TSV and retained Agent-3 compressed logs preserving
+multiplicity. M1b repeats six M1 rows: there are 15 distinct measurement rows, not 21 independent
+measurements. The seven runtime-size rows and three historical harness hashes match. Peer logs
+and recorded exits agree with M1 6/6, M1b 9/9, M1c 6/6 and size-build exit 1 caused by exactly
+three oversized local scripts. Commands, CPython 3.13.13 version, input hashes, output JSON,
+stderr, exits and receipt hashes are retained. No Forge, test suite, services or integrated cases
+were executed; these checks establish artifact consistency, not independent execution or provenance.
+
+Initial audit exited 1 because it treated `36a868305d67c8f546e6bde558ceb8e356962819` as the
+ledger subtree. Investigation confirms this is the whole commit tree; the ledger subtree is
+`5749ccb70442bbc93725174950809a10668acb87`. Corrected that audit assumption and retained the
+initial traceback/exit. Source pin and execution plan bytes are unchanged. Final audit exit 0.
+
+Updated the report, reconciliation and packet to state the performed checks; added a dated
+correction above the historical measurement README rather than silently rewriting its chronology.
+Report SHA-256 `e0050b0299e68af37aee3aa27af3ca7ec2dc356e7026d3631ee01b599bdc2294`;
+packet SHA-256 `10337b90ccddac52660d519c93dac178d13f73042e05274450de6644cdc0d4b8`.
+Plan SHA-256 `1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919` remains DRAFT,
+`authorizesExecution=false`; all 32 cases and Gate F NOT_RUN; G locked. Current report remains
+unreviewed. No external review request, peer-scope edit, extra agent/worktree or main push.
+Next: close a concrete offline runner/report gap or incorporate an exact-scope report review;
+actual execution still requires the exact authorized FREEZE and affected role ACKs.

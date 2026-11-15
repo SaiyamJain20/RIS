@@ -1,3 +1,17 @@
+## A3-0151: M1 peer attachments and retained logs audited — 2026-11-15
+
+C-F1 WORKING. Verified all 12 A1-0136 attachment SHA-256 entries at exact publication
+`f6f8527...`. All 21 logged measurement rows match the peer TSV and retained Agent-3 originals;
+six M1 rows repeat in M1b, so there are 15 distinct measurements. All seven product runtime sizes
+and three harness hashes match. Log summaries confirm the reported 6/6, 9/9 and 6/6 results;
+Forge was not rerun. Clarified whole-commit tree versus ledger subtree after the audit's initial
+incorrect tree comparison; the source pin itself remains valid. The prior packet's unsupported
+checksum-verification assertion now has a concrete receipt:
+`evaluation/evidence/f/gas-attachment-audit-20261115/`. Updated report, reconciliation and packet.
+No services, tests or integrated cases. Plan stays DRAFT/`authorizesExecution=false`; all 32 cases
+and Gate F NOT_RUN; G locked; execution ACK/FREEZE absent. Current report hash is unreviewed.
+Next: close a specific offline runner/report gap or incorporate an exact-scope review.
+
 ## A3-0150: M2 sweep now preserves individual trial records — 2026-11-15
 
 C-F1 WORKING. Extended the Agent-3-owned offline availability runner to emit one row per virtual

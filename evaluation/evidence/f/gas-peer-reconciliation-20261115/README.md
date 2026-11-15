@@ -7,8 +7,11 @@ did not execute Forge in this slice. After this reconciliation, Agent 1's
 A1-0136 rerun attached raw logs and a rerun script at `origin/agent-1`
 `f6f852789d2629cb3b0a846d55793cd27799441d` under
 `communication/agent-1/outbox/0136-attachments/`; its addressed note reports
-that the 12-entry checksum file verifies. This improves auditability, but Agent
-3 has not independently run the script or verified those attachment checksums.
+that the 12-entry checksum file verifies. Agent 3 has now checked all 12 attachment hashes,
+parsed all 21 logged measurement rows against the peer TSV and retained original logs, and checked
+all seven product runtime sizes. The 21 rows include six repeated M1 rows, leaving 15 distinct
+measurement rows. See the [attachment audit](../gas-attachment-audit-20261115/README.md).
+Agent 3 did not execute Forge or the peer's script for that audit.
 
 ## Scope and source
 
@@ -21,8 +24,9 @@ M1b and M1c:
 | M1b receipt path | A1-0124, `origin/agent-1` commit `0a3ae9a` | `forge test --root ledger --match-path test/CertBench.t.sol -vvvv`; exit 0, 9/9 passed | 3 gas/calldata rows; prior 6 remain unchanged |
 | M1c governance actions | A1-0125, `origin/agent-1` commit `94c0003` | `forge test --root ledger --match-path test/CertBenchGov.t.sol --match-test test_gov_ -vvvv`; exit 0, 6/6 passed | 6 gas/calldata rows |
 
-Agent 1 reports using a clean archive of ledger commit `85c59f5`, tree
-`36a868305d67c8f546e6bde558ceb8e356962819`, Forge 1.8.5 (build
+Agent 1 reports using a clean archive of ledger commit `85c59f5`, whole-repository tree
+`36a868305d67c8f546e6bde558ceb8e356962819` (the `ledger/` subtree is
+`5749ccb70442bbc93725174950809a10668acb87`), Forge 1.8.5 (build
 `51a52c59`) and solc 0.8.37. Its M1 harness was copied unmodified from Agent 3
 commit `70a8bfe` (SHA-256
 `840970d462c083b233218ccc43aafff6576aadb8b4a31b33f84f7ca7d2296424`). M1b's
@@ -85,8 +89,9 @@ and A1-0125 `6b89bfcc31d402fec8b19bd0c541dfc7ebe698a408066ad2ca9005d10860e2cb`.
 
 A1-0136 corrects A1-0123's M1 count from 9/9 to 6/6, attaches raw logs and
 `run.sh` for a fresh four-command rerun, and reports that all 21 gas/calldata
-values and seven runtime sizes match. Its fresh peer result remains correlated
-and has not been rerun by Agent 3.
+rows and seven runtime sizes match. Agent 3's subsequent attachment audit confirms their hashes
+and agreement with the retained measurements. Its fresh peer result remains correlated and has not
+been rerun through Forge by Agent 3.
 
 ## Limits
 
