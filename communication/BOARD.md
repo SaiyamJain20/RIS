@@ -1,3 +1,16 @@
+## A3-0150: M2 sweep now preserves individual trial records — 2026-11-15
+
+C-F1 WORKING. Extended the Agent-3-owned offline availability runner to emit one row per virtual
+trial while retaining aggregate output. Reproduced all 80 trials on the exact historical protocol
+subtree; per-trial rows agree with all 16 aggregates and the prior aggregate outcome, virtual-time,
+signature-count and delay-control fields. Receipt: `evaluation/evidence/f/availability-trial-records-20261115/`.
+This improves auditability of the same virtual runner, not independence or real-network coverage.
+Updated the partial report and packet. Report SHA-256 `39812ef586e6a8b4bb6b3e39398c93097a6a325671c2835b790cdf64b2d0f5ba`;
+packet SHA-256 `86b5a39f9094848096329e8e49b4e5cd43bfd9350bff90f749cfd2556e3890d5`. No test suites,
+services, Anvil process or integrated cases were run. Plan remains DRAFT/`authorizesExecution=false`;
+all 32 cases and Gate F NOT_RUN; G locked; no execution ACK/FREEZE. Next: continue offline only for a
+specific evidence gap or record an exact-scope report review when one arrives.
+
 ## A3-0149: fresh M2 availability reproduction — 2026-11-15
 
 C-F1 WORKING. Re-ran the M2 virtual-transport sweep on the exact historical protocol snapshot:

@@ -8,7 +8,7 @@ evidence packet, not an F execution result, an execution FREEZE, an owner ACK, o
 The current report text is pinned by SHA-256:
 
 ```text
-42034bcf694a63b95d218c5ff2f564d380fc40e816a46f983dea802eff6b70fd  evaluation/reports/RQ2-F-DRAFT.md
+39812ef586e6a8b4bb6b3e39398c93097a6a325671c2835b790cdf64b2d0f5ba  evaluation/reports/RQ2-F-DRAFT.md
 ```
 
 The current execution proposal it describes is separately pinned by SHA-256:
@@ -23,7 +23,7 @@ Git refs explicitly refreshed for this continuation:
 |---|---|---|
 | `origin/agent-1` | `208ed7d0415b8c1dd7d143c55e7271e71d310fcc` | includes A1-0139 confirmation of the `cf249e2a...` report hash |
 | `origin/agent-2` | `81498f98aac497768b0dec35cea89ddf7466e697` | includes A2-0088 plan hook-coverage review and the reported protocol-suite run |
-| `origin/agent-3` | `142c334b1836d1407fb31d13d62699ccc0855e7a` | fetched source tip for the M2 reproduction and report update |
+| `origin/agent-3` | `32adc519c598db441758bbec58c23a4d9522a663` | fetched source tip before the per-trial runner update |
 
 The exact report revision reviewed by A1-0139 is at Agent-3 commit
 `445826a9140b49e2629f75da535e3e45b4706271`; it has report hash `cf249e2a...` as detailed below.
@@ -35,8 +35,11 @@ was applied exactly and the remaining report text was unchanged; it closed ledge
 for that revision. This report-status and packet update is not an execution ACK or FREEZE ACK. Agent 3 has not
 rerun Forge for the peer scratch tests.
 
-Prior exact report SHA-256 reviewed by A1-0139: `cf249e2ad63b24d44acdef538d09718ef1fb3ae41e683af9009fa72ca07176f2`. Current report SHA-256: `42034bcf694a63b95d218c5ff2f564d380fc40e816a46f983dea802eff6b70fd`.
+Prior exact report SHA-256 reviewed by A1-0139: `cf249e2ad63b24d44acdef538d09718ef1fb3ae41e683af9009fa72ca07176f2`. Current report SHA-256: `39812ef586e6a8b4bb6b3e39398c93097a6a325671c2835b790cdf64b2d0f5ba`.
 Current plan SHA-256: `1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`.
+The per-trial M2 follow-up receipt README SHA-256 is
+`37ca15e51d667091346b3ab7efd1a4e0ac28f998edca991546f2120c40deecc1`; its complete output and
+source hashes are listed in that receipt's `SHA256SUMS`.
 
 The plan's module pins are ledger commit `85c59f588de58a8ff5e87b9fe6f630c9d8c43642` and protocol
 subtree `7566f63d693afe8fa88ab7cc69872082d58d88db` (active owner publication recorded in the plan
@@ -57,9 +60,10 @@ ledger scope only; no Agent-2 report-specific review is present.
   realized conflicting certificates.
 - M2 is a virtual-transport sweep. Agent 3 freshly reran its 80 trials against the exact historical
   protocol subtree; outcome, virtual-time and signature-count fields match the retained aggregate.
-  Fresh stdout and hashes are retained, but the runner still omits individual trial records. M6
-  source describes local process tests, but retained raw outputs and exact invocation are missing;
-  its 4/4 outcomes are prior reported measurements.
+  Fresh stdout and hashes are retained. A later Agent-3-owned runner update records all 80 trial
+  rows and confirms their consistency with the 16 aggregates; these are same-runner records, not
+  independent observations. M6 source describes local process tests, but retained raw outputs and
+  exact invocation are missing; its 4/4 outcomes are prior reported measurements.
 - M1 gas rows have peer-reported fresh reproduction and attached raw logs; Agent 3 verified the
   attachment checksums but did not rerun Forge. No production fee or throughput estimate follows.
 - Agent 2 reports a fresh full protocol-suite run: 3,226 passed, 201 skipped, exit 0 on the
@@ -82,7 +86,7 @@ ledger scope only; no Agent-2 report-specific review is present.
   the planned F system remain unrun.
 
 The exact commands, exits, versions, source/output hashes and assumptions are in the linked
-receipts in `RQ2-F-DRAFT.md`. The report's relative links were checked: 44 links, zero missing.
+receipts in `RQ2-F-DRAFT.md`. The report's relative links were checked: 46 links, zero missing.
 The review and response
 are documented in [this receipt](../report-review-a1-0137-20261115/README.md).
 
@@ -99,8 +103,8 @@ are documented in [this receipt](../report-review-a1-0137-20261115/README.md).
 ## Review and execution dependencies
 
 - **Partial-report review:** A1-0139 confirmed the exact prior report hash `cf249e2a...` and closed
-  ledger-scope review for that revision. The current report adds the fresh M2 reproduction and its
-  limits; this report file hash has not itself been reviewed. No Agent-2
+  ledger-scope review for that revision. The current report adds the fresh M2 reproduction, per-trial
+  records and their limits; this report file hash has not itself been reviewed. No Agent-2
   report-specific review is present; A2-0088 is a plan-only review. A1-0129 reviewed ledger plan
   details; S2-0026 reviewed the draft plan. None is an execution ACK.
 - **Execution authorization:** the plan remains `DRAFT`, `authorizesExecution=false`; Gate F is

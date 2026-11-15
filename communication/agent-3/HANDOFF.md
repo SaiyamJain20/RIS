@@ -3670,3 +3670,38 @@ services, integrated cases or new measurements were run. Plan remains DRAFT/`aut
 all 32 cases and Gate F NOT_RUN; G locked. No execution authorization inferred. No external
 messages, peer scope edits, extra agents/worktrees, or main push. Exact changed paths: report, packet,
 BOARD, Agent-3 STATUS and HANDOFF. Current run completion: 2026-11-15 10:37:07 UTC.
+
+# A3-0150 handoff — M2 per-trial records, 2026-11-15
+
+Continued Agent 3 from live board A3-0149 on `/home/karma/Documents/RIS`, branch `agent-3`,
+parent `32adc519c598db441758bbec58c23a4d9522a663`. Before work, checked `pgrep -x claude` and
+`/proc/<pid>/cwd`; no Claude CLI process was present. Acquired the scheduled-run lock. Working tree
+was clean. Explicitly fetched `origin/agent-1` `208ed7d0415b8c1dd7d143c55e7271e71d310fcc`,
+`origin/agent-2` `81498f98aac497768b0dec35cea89ddf7466e697`, and `origin/agent-3` parent `32adc519...`
+under the coordinator lock. Read live BOARD, Agent-3 ROLE, common context, SPEC, PLAN, interface
+README, PROTOCOL, peer STATUS/HANDOFF and recent addressed outboxes. No new peer review, exact
+execution ACK or FREEZE was published. The report-specific ledger review still applies only to its
+previous exact hash `cf249e2a...`; the present report is unreviewed.
+
+Closed a specific report-evidence gap: the existing M2 runner emitted aggregate rows, not individual
+trial records. Updated `evaluation/measurements/availability_sweep.py` to preserve the aggregate
+fields and include one record per run with subset, trial number, result, virtual finish time,
+signature count and host-duration metadata. Using the exact historical protocol commit
+`55f180e15d73825870d3326a3edb817824b3f265` / subtree `4822552dee489c2da72910b68d0a0b1ed7b64114`,
+ran 80 virtual-transport trials and the delayed-reply control. A purpose-built comparison exits 0:
+all 80 records form the 16×5 grid, each group agrees with its aggregate, all aggregate outcome,
+virtual-time, signature-count and run-count fields match the prior receipt, and the delay control
+matches. Raw stdout/stderr, command, source and lock hashes, result, comparison code/output and
+`SHA256SUMS` are retained at `evaluation/evidence/f/availability-trial-records-20261115/`.
+This is a tested reconstruction result from the same offline virtual runner, not independent
+observations, real-network timing, an integrated F case, or Gate F evidence. No test suite, service,
+Anvil process or integrated case was run.
+
+Updated `evaluation/reports/RQ2-F-DRAFT.md`, the partial packet, BOARD, STATUS and this HANDOFF.
+Report hash `39812ef586e6a8b4bb6b3e39398c93097a6a325671c2835b790cdf64b2d0f5ba`; packet hash
+`86b5a39f9094848096329e8e49b4e5cd43bfd9350bff90f749cfd2556e3890d5`; plan JSON remains
+`1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`. The report has 46 local
+links and zero missing. `git diff --check` passes. Plan remains DRAFT/`authorizesExecution=false`,
+all 32 cases and Gate F NOT_RUN, Gate G locked. No external review request, peer-scope edit, extra
+agent/worktree or main push. Next: continue only offline work closing a specific evidence gap or
+record an exact-scope report review if published.

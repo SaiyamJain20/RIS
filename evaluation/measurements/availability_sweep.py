@@ -23,13 +23,23 @@ def one(muted, delays, tmp):
     return r, coll, wall
 
 rows = []
+trial_rows = []
 for m in range(0, 5):
     for muted in itertools.combinations(range(4), m):
         res = []
         for k in range(runs):
             with tempfile.TemporaryDirectory() as tmp:
                 r, coll, wall = one(set(muted), [0, 0, 0, 0], tmp)
-            res.append((bool(r["ok"]), coll.finished_at_ms, wall, len(r.get("signatures", []))))
+            outcome = (bool(r["ok"]), coll.finished_at_ms, wall, len(r.get("signatures", [])))
+            res.append(outcome)
+            trial_rows.append({
+                "muted": list(muted),
+                "trial": k + 1,
+                "ok": outcome[0],
+                "virtual_finish_ms": outcome[1],
+                "signatures": outcome[3],
+                "wall_ms": round(outcome[2], 2),
+            })
         oks = {x[0] for x in res}
         rows.append({"muted": list(muted), "ok": sorted(oks), "virtual_finish_ms": sorted({x[1] for x in res}),
                      "signatures": sorted({x[3] for x in res}), "wall_ms_median": round(statistics.median(x[2] for x in res), 2),
@@ -39,6 +49,6 @@ delays = [400, 300, 200, 100]
 with tempfile.TemporaryDirectory() as tmp:
     r, coll, wall = one(set(), delays, tmp)
 order = {"reply_delays_ms": delays, "ok": bool(r["ok"]), "signatures": len(r["signatures"]), "virtual_finish_ms": coll.finished_at_ms}
-json.dump({"muted_sweep": rows, "delay_order": order}, open(out, "w"), indent=1)
+json.dump({"muted_sweep": rows, "muted_trials": trial_rows, "delay_order": order}, open(out, "w"), indent=1)
 for x in rows: print(x)
 print(order)

@@ -1,16 +1,19 @@
 # Agent 3 status — partial RQ2-F evidence report
 
-## Current checkpoint — M2 virtual availability sweep reproduced, 2026-11-15
+## Current checkpoint — M2 sweep retains per-trial records, 2026-11-15
 
-C-F1 WORKING. Re-ran the offline M2 virtual-transport sweep against protocol commit `55f180e`
-(tree `4822552d..`): 80 trials over 16 muted subsets plus the delayed-reply control. The fresh
-outcomes and virtual-time/signature-count fields match the prior aggregate; stdout and hashes are
-in `evaluation/evidence/f/availability-reproduction-20261115/`. The runner still omits individual
-trial records. Updated report and packet; report hash `42034bcf694a63b95d218c5ff2f564d380fc40e816a46f983dea802eff6b70fd`.
-The exact plan hash remains `1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`.
-No services, Anvil process, test suites or integrated F cases were run. Plan DRAFT/`authorizesExecution=false`;
-all 32 cases and Gate F NOT_RUN; G locked. This report hash remains unreviewed. Next: continue only
-offline work that closes a specific evidence gap.
+C-F1 WORKING. Extended the Agent-3-owned offline M2 sweep to retain each virtual trial while
+preserving its aggregate fields. Reproduced all 80 runs on protocol commit `55f180e` (tree
+`4822552d..`); each subset's five rows match its aggregate, and all aggregate result fields match
+the prior receipt. Exact source/output hashes are in
+`evaluation/evidence/f/availability-trial-records-20261115/`. These are same-runner records and
+virtual-transport evidence, not independent observations or network measurements. Report SHA-256
+`39812ef586e6a8b4bb6b3e39398c93097a6a325671c2835b790cdf64b2d0f5ba`; packet SHA-256
+`86b5a39f9094848096329e8e49b4e5cd43bfd9350bff90f749cfd2556e3890d5`. Plan hash remains
+`1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`. No test suites, services,
+Anvil process or integrated F cases were run. Plan DRAFT/`authorizesExecution=false`; all 32 cases
+and Gate F NOT_RUN; G locked. Current report hash remains unreviewed. Next: continue only offline
+work that closes a specific evidence gap.
 
 ## Current checkpoint — A1-0139 report review confirmed, 2026-11-15
 
