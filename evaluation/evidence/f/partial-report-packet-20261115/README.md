@@ -5,32 +5,34 @@ evidence packet, not an F execution result, an execution FREEZE, an owner ACK, o
 
 ## Exact reviewed inputs
 
-The packet's report text at initial assembly is pinned by SHA-256:
+The current report text is pinned by SHA-256:
 
 ```text
-cd41dcbb75dafa05eb35b75086314a615e35e1cf5c281167f617d0a8cee9cfc8  evaluation/reports/RQ2-F-DRAFT.md
+cf249e2ad63b24d44acdef538d09718ef1fb3ae41e683af9009fa72ca07176f2  evaluation/reports/RQ2-F-DRAFT.md
 ```
 
-The execution proposal it describes is separately pinned by SHA-256:
+The current execution proposal it describes is separately pinned by SHA-256:
 
 ```text
-abef30ec9c247512e5a6380016206f96f542d5ddb3616505824009d4407164c6  evaluation/evidence/f/execution-plan-draft-20261114/plan-draft.json
+1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919  evaluation/evidence/f/execution-plan-draft-20261114/plan-draft.json
 ```
 
 Git refs refreshed before preparing this packet:
 
 | ref | exact commit | scope / use |
 |---|---|---|
-| `origin/agent-1` | `1bce2a5474836a75777b275162fd0696f5c8dad0` | current peer snapshot, including A1-0137 review and handoff |
-| `origin/agent-2` | `fc0c987c680ece41ea5e417f06a075ae51bd4ff0` | current peer communication snapshot and active protocol-owner publication |
-| `origin/agent-3` | `51811847e016a8e6e8efd64562335a0ab00a8e80` | initial packet/report revision reviewed by A1-0137 |
+| `origin/agent-1` | `52aa251288dd07f25335e723eac93c0d92e753d4` | current peer snapshot, including A1-0138 follow-up review |
+| `origin/agent-2` | `7a9572586501ac8f5430ae5edf56135bb19ce199` | current peer communication snapshot, including A2-0088 plan review |
+| `origin/agent-3` | `e996472880a6a50f4152bcd0d395cd518fb3654e` | prior report/packet revision reviewed by A1-0138 |
 
-A1-0137 reviewed that initial report hash for ledger scope. Agent 3 incorporated its governance
-finding and two precision fixes. The corrected report hash is recorded below; A1-0137 has not
-reviewed it.
+A1-0137 reviewed an earlier report hash for ledger scope. Agent 3 incorporated its governance
+finding and precision fixes; A1-0138 then reviewed the corrected `184df52d...` hash, found the
+maximum authEpoch/sourceBlockNumber saturation explanation wrong in effect, and supplied a
+three-case scratch reproduction. Agent 3 corrected that claim and verified all four attachment
+hashes, but did not rerun Forge. Neither review is an execution ACK or FREEZE ACK.
 
-Current corrected report SHA-256: `184df52dc43f3c33c78d11b84bb632ca00728a69f20bc449187b7c52a18b479a`.
-The plan remains `abef30ec9c247512e5a6380016206f96f542d5ddb3616505824009d4407164c6`.
+Current report SHA-256: `cf249e2ad63b24d44acdef538d09718ef1fb3ae41e683af9009fa72ca07176f2`.
+Current plan SHA-256: `1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`.
 
 The plan's module pins are ledger commit `85c59f588de58a8ff5e87b9fe6f630c9d8c43642` and protocol
 subtree `7566f63d693afe8fa88ab7cc69872082d58d88db` (active owner publication recorded in the plan
@@ -56,6 +58,13 @@ ledger scope only; no Agent-2 report-specific review is present.
 - A1-0137's ledger-scope review found the reviewed draft accurate in its scope and identified the
   permanent DBC halt and fabricated-credential grant consequences of a compromised quorum. Agent
   3 added these with their f>=3 boundary and stated limitations.
+- A1-0138's ledger-scope follow-up corrected the saturation claim: all three saturated checkpoint
+  fields can permanently halt honest operation, with `authEpoch` stopping decisions immediately
+  and `sourceBlockNumber`/`sequence` stopping them after expiry. Agent 3 verified the four published
+  attachment hashes but did not rerun Forge.
+- A2-0088 reviewed the execution-plan family `needs` strings, not the RQ2-F report. Agent 3 added
+  the nine per-case G1/G2/G3 hook requirements and mutant IDs to the DRAFT plan; these are not new
+  hook results or execution authorization.
 - Signing-event join, sealing, duplicate-plan and fail-closed controls use synthetic inputs. The
   caller-supplied capture count/digest does not authenticate capture acquisition or completeness.
 - F preflight covers stages 1–2 only. Stages 3–7, all 32 integrated cases and an E regression on
@@ -78,10 +87,10 @@ are documented in [this receipt](../report-review-a1-0137-20261115/README.md).
 
 ## Review and execution dependencies
 
-- **Partial-report review:** A1-0137 reviewed the initial exact report hash above, for ledger
-  scope. Agent 3 incorporated its findings, but the corrected report hash is not yet reviewed. No
-  Agent-2 report-specific review is present. A1-0129 reviewed ledger plan details; S2-0026 reviewed
-  the draft plan. Neither is an execution ACK.
+- **Partial-report review:** A1-0138 reviewed the preceding report hash for ledger scope, and Agent
+  3 incorporated its correction. The current report hash above has not yet been reviewed. No
+  Agent-2 report-specific review is present; A2-0088 is a plan-only review. A1-0129 reviewed ledger
+  plan details; S2-0026 reviewed the draft plan. None is an execution ACK.
 - **Execution authorization:** the plan remains `DRAFT`, `authorizesExecution=false`; Gate F is
   `NOT_RUN`, Gate G is `LOCKED`, and all 32 cases are `NOT_RUN`. The plan's exact role-scope
   execution ACKs and authorized FREEZE are still absent. No service or integrated case may start

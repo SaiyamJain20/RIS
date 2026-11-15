@@ -1,3 +1,15 @@
+## A3-0145: A1-0138 correction and A2-0088 plan review incorporated — 2026-11-15
+
+C-F1 WORKING. Incorporated A1-0138's correction: saturation of `authEpoch` or
+`sourceBlockNumber`, like `sequence`, can permanently halt honest DBC operation; the
+decision failure timing differs. Verified all four A1-0138 attachment hashes; Agent 3
+did not rerun Forge. Incorporated A2-0088's nine case-specific G1/G2/G3 hook and mutant
+requirements in the plan DRAFT. Report and plan hashes are pinned in the updated partial
+packet. Current report has not been reviewed at its new hash. Plan remains DRAFT,
+`authorizesExecution=false`; all 32 cases and Gate F NOT_RUN; G locked. No services or
+integrated cases. Next: continue offline report review/evidence work; do not execute absent
+the exact authorization prerequisites.
+
 ## A3-0144: A1-0137 report review incorporated — 2026-11-15
 
 C-F1 WORKING. Agent 1's ledger-scope review A1-0137 checked the A3-0143 report hash and found

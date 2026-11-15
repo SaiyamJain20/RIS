@@ -3508,3 +3508,45 @@ and the final link check passed. Exact changed paths are those five. Next: incor
 scoped report review if one is published, otherwise continue offline claim review
 or runner/oracle evidence work. Do not start services/cases absent the authorized
 exact FREEZE and required role ACKs.
+
+# A3-0145 handoff — A1-0138 and A2-0088 reviews incorporated, 2026-11-15
+
+Continued Agent 3 from live board A3-0144 on `agent-3`, parent
+`e996472880a6a50f4152bcd0d395cd518fb3654e`. Startup inspected visible Claude CLI
+processes and `/proc/<pid>/cwd`; PID 22510 is at `/home/karma/Documents/ANLP/A3`, not
+this checkout. Acquired `.git/ris-agent3-scheduled.lock` (holder process 683581).
+Refreshed refs under `.git/hmbc-coordinator.lock`: `origin/agent-1`
+`52aa251288dd07f25335e723eac93c0d92e753d4`, `origin/agent-2`
+`7a9572586501ac8f5430ae5edf56135bb19ce199`, `origin/agent-3` parent
+`e996472880a6a50f4152bcd0d395cd518fb3654e`. Read the live board, required common
+and Agent-3 context, SPEC, PLAN, interface README, PROTOCOL, peer STATUS/HANDOFF and
+addressed outboxes. A1-0138 and A2-0088 are the new actionable messages. No exact
+execution FREEZE or role-scope execution ACK appeared.
+
+A1-0138 reviewed report hash `184df52dc43f3c33c78d11b84bb632ca00728a69f20bc449187b7c52a18b479a`
+and identified an error in effect: increasing the checkpoint sequence does not let honest
+operation continue after `authEpoch` or `sourceBlockNumber` saturation because honest PBC-derived
+checkpoints carry lower values and are rejected as STALE_STATE. Agent 1 reports three scratch
+Forge cases, distinguishing immediate decision refusal for saturated `authEpoch` from refusal
+after expiry for saturated `sourceBlockNumber`; sequence saturation also blocks decisions after
+expiry. Agent 3 verified the four `SHA256SUMS` attachment entries against `origin/agent-1` and
+did not rerun Forge. Updated the report, claim map, review receipt and packet to bound this as a
+peer-reported reconstruction result outside f=1. New report SHA-256:
+`cf249e2ad63b24d44acdef538d09718ef1fb3ae41e683af9009fa72ca07176f2`.
+
+A2-0088 compared plan family `needs` strings against Agent 2's G1/G2/G3 inventory and found nine
+case-level omissions. Updated plan-draft.json with each case's hook and mutant IDs and documented
+that these are requirements from the inventory, not new results. Updated draft README and partial
+packet. Plan JSON SHA-256:
+`1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`. The report-specific
+A1-0138 review did not review this new report hash; A2-0088 reviewed the plan only, not the report.
+
+Checks: `sha256sum` of four A1-0138 attachments matched its published sums; Python JSON parser
+(`python -m json.tool ...`) exit 0; `git diff --check` exit 0. No tests/services/integrated cases
+were run. Plan stays DRAFT and `authorizesExecution=false`; all 32 cases and Gate F NOT_RUN; G
+locked. Changed owned paths: report, packet, report-review receipt, plan JSON/README, BOARD,
+STATUS and HANDOFF. No peer module/mailbox/archive/interface/dependency/main edits or external
+review request.
+
+Next: continue offline report/evidence work and await a report-specific review at the new exact
+hash. Do not start services or cases until exact plan/source role ACKs and authorized FREEZE apply.

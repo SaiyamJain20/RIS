@@ -78,7 +78,7 @@
     "F-22",
     "F-23"
    ],
-   "needs": "4 real witness processes, local Anvil pair, real KSSC/ACSC/PSC, pool collector; delay hook H6; muted/stopped witnesses; bad-list submission",
+   "needs": "4 real witness processes, local Anvil pair, real KSSC/ACSC/PSC, pool collector; delay hook H6; muted/stopped witnesses; bad-list submission; per-case protocol hooks from Agent-2 inventory: FL-1 G3 mutant tree M6/M7; FL-4 G1 Byzantine witness; FL-5 G1 Byzantine witness and G3 mutant tree M5; F-22 G1 Byzantine witness",
    "oracle": "certificate accepted iff >=3 distinct sorted member signatures; FL-3 expects classified timeout; F-20 distinguishes arbitrary delay from eventual delivery",
    "badListFixtures": "Use Q.badLists from ledger/test/Quorum.t.sol:42-55 on KSSC, ACSC and PSC signed paths",
    "rejectionCodes": {
@@ -100,7 +100,7 @@
     "F-18",
     "F-24"
    ],
-   "needs": "real-process Byzantine witness (G1), divergent view (G2), q2 deployment profile mutant-f-q2 (F-18), poison-checkpoint fixtures",
+   "needs": "real-process Byzantine witness (G1), divergent view (G2), q2 deployment profile mutant-f-q2 (F-18), poison-checkpoint fixtures; per-case protocol hooks from Agent-2 inventory: FL-7 G1 and G3 mutant tree M4; F-12 G1 and G3 mutant tree M1/M2; F-16 G2; F-17 G2; F-18 q2 profile mutant-f-q2",
    "oracle": "evaluation/oracles/faults.py (pin-death rule) over captured signing-time observations; F-17/F-24/F-18 expect violations outside the bound and are reported as such"
   },
   "C-durable-state-restart-and-tripwire": {
@@ -110,7 +110,7 @@
     "F-31",
     "F-32"
    ],
-   "needs": "SIGKILL/restart of witness processes, store rollback fixture, clock/height regression via evm_revert, store reuse across deployments",
+   "needs": "SIGKILL/restart of witness processes, store rollback fixture, clock/height regression via evm_revert, store reuse across deployments; per-case protocol hooks from Agent-2 inventory: F-13 G3 mutant tree M2; F-31 G2 divergent view",
    "oracle": "honest signer keeps pin after restart (F-13); safe rollback/regression is refused or faulted (F-27,F-32); F-31 evm_revert is outside the monotone safe-ledger assumption, so discard pre-revert death facts; K1 coverage accepted for S2-0025 at isolated SIGKILL scope; no power-loss claim"
   },
   "D-trust-lists-and-governance": {
@@ -124,7 +124,7 @@
     "F-29",
     "F-30"
    ],
-   "needs": "real Governance/TMSC, witness-signed governance through the pool, stale witness-set and replay fixtures, barrier timing",
+   "needs": "real Governance/TMSC, witness-signed governance through the pool, stale witness-set and replay fixtures, barrier timing; per-case protocol hook from Agent-2 inventory: F-29 G3 mutant tree M3",
    "oracle": "existing E trust/barrier oracles plus governance history readers; FL-6 uses a certificate with another witnessSetVersion and expects STALE_STATE first; FL-9 expects a grant (trust assumption)"
   },
   "E-relay-and-outcomes": {

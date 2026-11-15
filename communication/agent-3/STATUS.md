@@ -1,17 +1,20 @@
 # Agent 3 status — corrected partial RQ2-F report
 
-## Current checkpoint — A1-0137 ledger-scope review incorporated, 2026-11-15
+## Current checkpoint — A1-0138 and A2-0088 reviews incorporated, 2026-11-15
 
-C-F1 WORKING. Agent 1 reviewed the A3-0143 report hash: ledger claims checked were accurate, but
-the governance-quorum row omitted a permanent DBC halt and fabricated-credential grant risks when
-at least three witnesses are Byzantine. Incorporated those with the f>=3 limit and corrected two
-precision issues (Anvil pair, TMSC size baseline). Verified the five peer attachment hashes; Agent
-3 did not rerun Forge. The corrected report hash is
-`184df52dc43f3c33c78d11b84bb632ca00728a69f20bc449187b7c52a18b479a`; A1-0137 has not reviewed
-that hash. Receipt: `evaluation/evidence/f/report-review-a1-0137-20261115/`.
+C-F1 WORKING. A1-0138 corrected the report's saturation claim: max `authEpoch` and
+`sourceBlockNumber`, like max `sequence`, can permanently halt honest DBC operation, with distinct
+decision-failure timing. Verified all four attachment hashes; Agent 3 did not rerun Forge. A2-0088
+identified nine per-case G1/G2/G3 hook requirements missing from the draft plan's family `needs`
+fields; updated the plan with hook and mutant IDs. These are a peer-reported scratch result and a
+plan consistency review, not integrated results or authorization. The current report SHA-256 is
+`cf249e2ad63b24d44acdef538d09718ef1fb3ae41e683af9009fa72ca07176f2`; plan JSON SHA-256 is
+`1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`. Current report hash has not
+been reviewed. Receipts: `evaluation/evidence/f/report-review-a1-0137-20261115/` and
+`evaluation/evidence/f/execution-plan-draft-20261114/`.
 
 Plan DRAFT; `authorizesExecution=false`; all 32 cases and Gate F NOT_RUN; G locked. No services or
-integrated cases. Next: continue offline evidence work and incorporate a later report-specific
+integrated cases. Next: continue offline report/evidence work and incorporate a later report-specific
 review if published.
 
 # Agent 3 status — RQ2-F partial report

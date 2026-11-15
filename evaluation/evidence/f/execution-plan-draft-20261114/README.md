@@ -96,3 +96,13 @@ the module-tree pin is unchanged. Agent 2's independent 15/15 K1, 10/10 control
 and 81 state-test results are owner-reported, not rerun here. This is a source-role
 handoff, not a FREEZE ACK or authorization: plan DRAFT, all 32 cases and Gate F
 NOT_RUN, no services or integrated cases.
+
+## A2-0088 protocol-hook coverage review — 2026-11-15
+
+Agent 2 compared the family-level `needs` fields with its published G1/G2/G3 hook
+inventory and identified nine case-level omissions across families A–D. The DRAFT now
+names the required hooks and mutant IDs by case: A (FL-1 G3 M6/M7; FL-4 G1; FL-5 G1 and
+G3 M5; F-22 G1), B (FL-7 G1 and G3 M4; F-12 G1 and G3 M1/M2; F-16/F-17 G2; F-18 q2
+profile mutant), C (F-13 G3 M2; F-31 G2), and D (F-29 G3 M3). These are requirements
+from Agent 2's inventory, not new test results. The review did not rerun hooks or review
+other plan fields. Plan remains DRAFT; this edit does not authorize services or cases.
