@@ -1,3 +1,43 @@
+# A3-0149 handoff — fresh M2 virtual availability reproduction, 2026-11-15
+
+Continued Agent 3 from live board A3-0148 on `/home/karma/Documents/RIS`, branch `agent-3`, parent
+`142c334b1836d1407fb31d13d62699ccc0855e7a`. Startup inspected Claude CLI processes and each
+`/proc/<pid>/cwd`; PID 22510 remains outside RIS at `/home/karma/Documents/ANLP/A3`. Acquired the
+scheduled lock. Explicitly fetched `origin/agent-1` `208ed7d0415b8c1dd7d143c55e7271e71d310fcc`,
+`origin/agent-2` `81498f98aac497768b0dec35cea89ddf7466e697`, and `origin/agent-3` parent
+`142c334b1836d1407fb31d13d62699ccc0855e7a` under the coordinator lock. Checkout was clean before
+evidence capture. Read the current board, Agent-3 role/common context, SPEC, PLAN, interface README,
+PROTOCOL, peer STATUS/HANDOFF and addressed messages A1-0139/A2-0088. A1-0139 closes ledger-scope
+review of the earlier `cf249e2a...` report hash only; A2-0088 reviews plan hook coverage only. No
+execution FREEZE or exact execution role ACK appeared.
+
+Closed one offline evidence gap in the partial RQ2-F report: M2's retained evidence had only an
+aggregate JSON. Extracted the exact historical M2 protocol snapshot from commit
+`55f180e15d73825870d3326a3edb817824b3f265` (protocol subtree
+`4822552dee489c2da72910b68d0a0b1ed7b64114`) and ran the existing virtual-transport sweep five
+times for each of 16 muted-witness subsets, plus the reply-delay ordering control. Command:
+`.venv/bin/python -I evaluation/measurements/availability_sweep.py <archive>/protocol <output>/availability.json --runs 5`;
+exit 0. Compared the fresh aggregate with the prior M2 JSON using `compare_aggregate.py`; exit 0,
+16 subset rows/80 trials and delayed control match for success, virtual finish time, signature count,
+and run count. Host wall times are excluded. No service, Anvil, network endpoint, test suite or
+integrated F case was run. This remains virtual-transport reconstruction evidence, not Gate F or
+any of the 32 cases; the runner still emits only group aggregates, not per-trial records.
+
+Evidence directory: `evaluation/evidence/f/availability-reproduction-20261115/`. Python 3.13.13;
+eth-account 0.14.0, eth-abi 6.0.0, eth-utils 6.0.0, eth-keys 0.8.0, eth-hash 0.8.0, hexbytes
+2.0.0, rlp 5.0.0, pycryptodome 3.24.0; root `uv.lock` SHA-256
+`1fb4777a5d4078434af8e7fe4a88f2f3afbe1d8f65d30e8a182999d7a7a29cbe`. Fresh JSON SHA-256
+`83b207ef8267144ed5d276958cb9449bb5a00dc7181208100b29b73c34ad6cbc`, stdout
+`7999c83ee14aa569418d74e21bb7507b91429a8463f1bafef96d7ab0cf5bd54c`; all retained artifacts
+verify via `SHA256SUMS`.
+
+Updated RQ2-F DRAFT and partial packet, BOARD, Agent-3 STATUS/HANDOFF. Current report SHA-256
+`42034bcf694a63b95d218c5ff2f564d380fc40e816a46f983dea802eff6b70fd`; plan JSON SHA-256 remains
+`1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`. Plan remains
+DRAFT/`authorizesExecution=false`; all 32 F cases and Gate F NOT_RUN; G locked. Current report hash
+is not reviewed. Next work remains offline and must close a specific evidence gap. No external
+review request, peer-scope edit, extra agent/worktree, or main push.
+
 # A3-0148 handoff — record Agent-2 protocol-suite result in the partial report, 2026-11-15
 
 Continued Agent 3 from live board A3-0147 in `/home/karma/Documents/RIS` on `agent-3`, parent

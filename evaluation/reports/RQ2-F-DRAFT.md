@@ -112,6 +112,13 @@ These controls validate only local checker behavior. Caller-supplied counts and
 hashes do not authenticate the source or establish a complete transcript; F stages
 3–7 and every integrated case remain unimplemented/unrun.
 
+A later offline M2 follow-up reran the 80 virtual-transport trials on the exact historical
+protocol subtree and compared every retained outcome, virtual-time and signature-count field plus
+the delayed-reply control. All fields matched. This adds fresh stdout and an exact-source receipt,
+but the runner still saves group aggregates rather than individual trial records; it does not change
+the result's virtual-only scope or make it an F case. See
+[the M2 reproduction receipt](../evidence/f/availability-reproduction-20261115/README.md).
+
 ## 1. Question and design
 RQ2: which E guarantees survive Byzantine operators with q-of-n application witnesses
 (n=4, q=3, f=1), assuming safe ledgers and a trusted key worker? The witness layer distributes
@@ -153,8 +160,13 @@ all with 3 distinct valid sorted signers; 0 agreement-hazard cases. f=2 control:
 2's model of the signing rule, not the durable store.
 
 ### 2.3 Availability (M2 virtual time; M6 real processes)
-All 16 muted-witness subsets over four real witnesses (virtual transport): 0 or 1 muted gives a
-3-signature certificate every run; 2, 3 or 4 muted gives none by the 10 s deadline. With real
+Agent 3 freshly reran M2 on the exact historical protocol snapshot (`55f180e`, subtree
+`4822552d..`) for all 16 muted-witness subsets, five times each. The 80-trial outcome fields and
+delayed-reply ordering match the retained aggregate; raw stdout and aggregate JSON are in
+[the exact-source reproduction receipt](../evidence/f/availability-reproduction-20261115/README.md).
+The runner still records aggregate rows rather than individual trial records. These are
+virtual-transport results, not network timing. Zero or one muted witness gives a 3-signature
+certificate every run; 2, 3 or 4 muted witnesses give none by the 10 s deadline. With real
 processes, a local Anvil pair and the real KSSC (agent 2's live tests, three runs, exit 0): q=3
 certificate accepted in ~0.7 s, one SIGKILLed witness still accepted (~0.6 s), two stopped
 witnesses give a classified timeout of ~10.5 s, a restarted witness keeps its durable pin.
@@ -307,7 +319,7 @@ These are prior measurements unless marked fresh. No row is an integrated F resu
 | Fixed-slot quorum agreement; extension result in a finite model | [TLC logs, counts, controls and model hashes](../evidence/f/decision-quorum-tlc-20261113/README.md) | no runtime pin deaths, ledger consensus or liveness proof |
 | Five-configuration finite-model rerun; tested reconstruction result | [2026-11-15 exact-source audit, full log/source hashes and stop-count interpretation](../evidence/f/tlc-audit-20261115/README.md) | reproduces a bounded one-slot model; not a runtime, consensus or liveness proof |
 | Pool certificate filtering and potential agreement hazards; tested reconstruction result | [M3/M5](../evidence/f/measurements-20261114/README.md), [exact-source M5 rerun](../evidence/f/pool-sweep-20261115/README.md) | M5 honest behaviour is a model; f=2 hazards are potential states, not realized double certificates |
-| One/two unavailable witness boundary; tested reconstruction result plus prior reported local process runs | [M2/M6 measurements](../evidence/f/measurements-20261114/README.md), [source and receipt review](../evidence/f/availability-receipt-review-20261115/README.md) | M2 stores aggregate rather than per-trial output; M6 run stdout and exact invocation are not retained; no real-network latency or general liveness estimate |
+| One/two unavailable witness boundary; fresh virtual-sweep reproduction plus prior reported local process runs | [M2/M6 measurements](../evidence/f/measurements-20261114/README.md), [fresh M2 exact-source reproduction](../evidence/f/availability-reproduction-20261115/README.md), [M6 source and receipt review](../evidence/f/availability-receipt-review-20261115/README.md) | M2 still stores aggregate rather than per-trial output; M6 run stdout and exact invocation are not retained; no real-network latency or general liveness estimate |
 | Signature and governance gas overhead; tested reconstruction result with peer reproduction reported | [M1/M1b/M1c measurements](../evidence/f/measurements-20261114/README.md), [A1-0136 updated reconciliation and raw-log ref](../evidence/f/gas-peer-reconciliation-20261115/README.md) | single deterministic fixture calls; Agent 1 raw logs are available on its exact ref but not independently verified here; no production fee or throughput estimate |
 | K1 sensitivity; deliberate mutation result | [A3-0122 signing-kill review](../evidence/reviews/a2-0086-signing-kill-20261113/README.md) | 29/40 detections and 40/40 control; does not measure corruption probability |
 | New K1 candidate; deliberate mutation result | [S2-0025 reproduced by agent 3](../evidence/reviews/proxy-k1-20261114/README.md) | new blocking test: 40/40 detections and 40/40 controls; isolated candidate acceptance, not an execution ACK |

@@ -1,3 +1,13 @@
+## A3-0149: fresh M2 availability reproduction — 2026-11-15
+
+C-F1 WORKING. Re-ran the M2 virtual-transport sweep on the exact historical protocol snapshot:
+80 trials across all 16 muted-witness subsets plus the delayed-reply control. Outcome, virtual-time,
+signature-count and control fields match the retained aggregate. Captured raw stdout and a
+hash-pinned receipt; the runner still emits aggregates rather than per-trial records. No services,
+Anvil process, integrated cases, or test suites were run. Updated the partial report/packet hashes.
+Plan remains DRAFT/`authorizesExecution=false`; all 32 cases and Gate F NOT_RUN; G locked. No
+execution ACK/FREEZE. Next: continue offline only for a specific report evidence gap.
+
 ## A3-0148: Agent-2 protocol suite added to partial report — 2026-11-15
 
 C-F1 WORKING. Added Agent 2's owner-reported fresh protocol test-suite result (3,226 passed,
