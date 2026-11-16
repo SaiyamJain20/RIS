@@ -1,0 +1,940 @@
+% HMBC end presentation — Team 17, Research in Information Security
+% Compile with XeLaTeX or LuaLaTeX (Metropolis uses the Fira Sans fonts), e.g.:
+%   tectonic -X compile hmbc-end-presentation.tex      (or: latexmk -xelatex hmbc-end-presentation.tex)
+% Same preamble, colours and macros as the mid-eval deck (origin/slides:hmbc-presentation.tex).
+% Figure 1 is taken from the paper (CC BY 4.0); the other diagrams are redrawn or our own.
+% Status as of 2026-11-17: gate E PASS (12 Oct); RQ2/F execution plan DRAFT, gate F NOT RUN, all 32 F cases NOT_RUN;
+% G (RQ3) LOCKED. Every number on a result slide is mapped to its source in sources-end-presentation.md.
+% Primary snapshot: origin/Code_Merge_Final fc80bf0 (RQ2-F-DRAFT.md sha256 e59a51cd.., RQ1-E.md sha256 69dabfba..).
+\documentclass[aspectratio=169,10pt]{beamer}
+\usetheme[progressbar=frametitle,numbering=fraction,block=fill]{metropolis}
+% Fira Sans Light is Metropolis' regular weight; use SemiBold so bold text stands out.
+\setsansfont[BoldFont={Fira Sans SemiBold},ItalicFont={Fira Sans Light Italic},BoldItalicFont={Fira Sans SemiBold Italic}]{Fira Sans Light}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,fit,shapes.symbols}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{booktabs}
+\usepackage{pifont}
+\usepackage{colortbl}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+% Colours: proxy chain purple and hospital chain green as in the paper's Fig. 1; Metropolis orange as accent.
+\definecolor{pbc}{HTML}{7030A0}
+\definecolor{dbc}{HTML}{548235}
+\definecolor{datagray}{HTML}{6B6B6B}
+\definecolor{accent}{HTML}{EB811B}
+\definecolor{okgreen}{HTML}{2E7D32}
+\definecolor{badred}{HTML}{C62828}
+\newcommand{\cmark}{\textcolor{okgreen}{\ding{51}}}
+\newcommand{\xmark}{\textcolor{badred!80}{\ding{55}}}
+\newcommand{\pmark}{\textcolor{okgreen!80}{(\ding{51})}}
+\newcommand{\src}[1]{{\scriptsize\color{datagray}#1}}
+% Project status shown on the title page and on the RQ/status slides.
+\newcommand{\statusstamp}{17 Nov 2026: RQ1 gate E PASS · RQ2 gate F NOT RUN (0/32 cases) · RQ3 LOCKED}
+% Result classes of the RQ1 catalog: a 4-slot categorical set; gray = undecided (BLOCKED).
+\definecolor{clsup}{HTML}{3A6FB0}
+\definecolor{clgap}{HTML}{EB811B}
+\definecolor{clrep}{HTML}{2E7D32}
+\definecolor{clblk}{HTML}{9A9A9A}
+\newcommand{\cls}[2]{\tikz[baseline=(n.base)]\node[draw=#1, fill=#1!14, rounded corners=1.5pt, inner sep=1.2pt, font=\tiny\bfseries] (n) {#2};}
+\newcommand{\cSup}{\cls{clsup}{SUPPORTED}}
+\newcommand{\cGap}{\cls{clgap}{SPEC\_GAP}}
+\newcommand{\cRep}{\cls{clrep}{REPAIR\_SUPPORTED}}
+\newcommand{\cBlk}{\cls{clblk}{BLOCKED}}
+\newcommand{\code}[1]{{\ttfamily\scriptsize #1}}
+\newcommand{\gapn}[1]{\tikz[baseline=(g.base)]\node[circle, fill=accent, text=white, font=\scriptsize\bfseries, inner sep=1.2pt, minimum size=0.42cm] (g) {#1};}
+% \wcells{group x}{first index}{y}{count}{colour}: one square per catalog row (gate E grid).
+\newcommand{\wcells}[5]{\foreach \k in {1,...,#4}{\fill[#5, rounded corners=0.5pt] ({#1+(#2+\k-1)*0.26},#3) rectangle ++(0.22,0.22);}}
+\newcommand{\seqmsg}[5]{\draw[msg, #5] (#1,#3) -- node[lbl, above] {#4} (#2,#3);}
+% New in the end deck: evidence-level tags (same scheme as the mid-eval README) and status badges.
+\newcommand{\evl}[1]{\tikz[baseline=(e.base)]\node[draw=datagray, fill=white, rounded corners=1.5pt, inner sep=1.3pt, font=\tiny\bfseries, text=datagray] (e) {[#1]};}
+\newcommand{\badge}[2]{\tikz[baseline=(b.base)]\node[fill=#1, rounded corners=2pt, inner sep=2pt, font=\scriptsize\bfseries, text=white] (b) {#2};}
+\newcommand{\stt}[2]{\tikz[baseline=(s.base)]\node[draw=#1, fill=#1!12, rounded corners=1.5pt, inner sep=1.2pt, font=\tiny\bfseries, text=black] (s) {#2};}
+
+\tikzset{
+  >={Stealth[length=2mm]},
+  box/.style={draw, rounded corners=2pt, align=center, inner sep=3pt, font=\scriptsize, execute at begin node={\hyphenpenalty=10000}},
+  lane/.style={box, minimum width=1.45cm, minimum height=0.5cm, font=\scriptsize\bfseries},
+  msg/.style={->, thick},
+  lbl/.style={font=\scriptsize, fill=white, inner sep=1pt},
+  stat/.style={draw=#1, fill=#1!7, rounded corners=3pt, text width=3.05cm, minimum height=1.6cm, align=center, inner sep=4pt, font=\scriptsize},
+  prof/.style={draw=#1, fill=#1!9, rounded corners=2pt, text width=4.95cm, align=left, inner sep=3pt, font=\scriptsize},
+  pcard/.style={draw=#1, rounded corners=3pt, align=left, inner sep=5pt, font=\scriptsize, anchor=north},
+  phead/.style={fill=#1, rounded corners=3pt, inner sep=4pt, text=white, anchor=south},
+  dv/.style={draw=#1, fill=#1!10, rounded corners=1.5pt, minimum width=0.98cm, minimum height=0.62cm, align=center, inner sep=1pt, font=\tiny},
+  tile/.style={draw=#1, fill=#1!10, rounded corners=3pt, text width=2.3cm, minimum height=1.7cm, align=center, inner sep=3pt},
+  wit/.style={circle, draw=#1, thick, fill=#1!12, minimum size=0.56cm, font=\scriptsize\bfseries, inner sep=0pt},
+}
+
+\title{A Hierarchical Multi Blockchain for Fine Grained Access to Medical Data}
+\subtitle{Malamas, Kotzanikolaou, Dasaklis \& Burmester \,·\, IEEE Access, vol.~8, 2020\\[2pt]
+  {\small a paper-derived reconstruction, not the authors' implementation}}
+\author{Saiyam \,·\, Hemang \,·\, Eashaan}
+\institute{Research in Information Security \,·\, End presentation}
+\date{{\scriptsize\statusstamp}}
+\titlegraphic{%
+  \begin{tikzpicture}[remember picture, overlay]
+    \node[anchor=south east, inner sep=0pt] at ([xshift=-0.6cm, yshift=0.55cm]current page.south east)
+      {\includegraphics[height=2.6cm]{figures/fig1-architecture.png}};
+  \end{tikzpicture}}
+\hypersetup{pdftitle={HMBC end presentation: RQ1 complete, RQ2 partial (Team 17)}}
+
+\begin{document}
+
+% ================================================================ PART I: recap (slides 1-5)
+
+% ---------------------------------------------------------------- 1. Title
+\maketitle
+
+% ---------------------------------------------------------------- 2. Recap: the paper
+\begin{frame}{Recap: HMBC in one slide}
+\begin{columns}[T,onlytextwidth]
+\column{0.50\textwidth}
+\includegraphics[width=\linewidth]{figures/fig1-architecture.png}\\[-0.1em]
+\src{Paper Fig.~1 (CC BY 4.0)}\\[0.4em]
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[sc/.style={box, minimum height=0.5cm, text width=1.05cm, font=\tiny}]
+  \node[font=\tiny\bfseries, text=pbc] at (-0.95,0) {PBC};
+  \node[sc, draw=pbc, fill=pbc!10] at (0,0)    {\textbf{RSC}\\register};
+  \node[sc, draw=pbc, fill=pbc!10] at (1.2,0)  {\textbf{TMSC}\\trust lists};
+  \node[sc, draw=pbc, fill=pbc!10] at (2.4,0)  {\textbf{PSC}\\entry};
+  \node[sc, draw=pbc, fill=pbc!10] at (3.6,0)  {\textbf{LSC}\\global log};
+  \node[sc, draw=dbc, fill=dbc!12] at (5.0,0)  {\textbf{ACSC}\\policy};
+  \node[sc, draw=dbc, fill=dbc!12] at (6.2,0)  {\textbf{KSSC}\\key store};
+  \node[font=\tiny\bfseries, text=dbc] at (7.15,0) {DBC};
+\end{tikzpicture}}
+
+\column{0.47\textwidth}
+\scriptsize
+\begin{itemize}\setlength{\itemsep}{2pt}
+  \item \textbf{Problem:} hospitals, insurers and device makers must share medical data without trusting each other or one cloud operator.
+  \item \textbf{\textcolor{pbc}{Proxy chain (PBC)}}, run by all stakeholders: registration, trust lists (CERT, CRL, TempACL), the single entry point and the global log.
+  \item \textbf{\textcolor{dbc}{Domain chains (DBC)}}, one per domain: access policy and key store. Users never talk to them.
+  \item \textbf{Split decryption:} the KSSC keeps the temporal \emph{onDuty} key and does step 1; the user finishes with a long-term key. Ending a duty is a TempACL update.
+  \item \textbf{Prototype:} 603\,ms per access \src{(paper Table~4)}.
+\end{itemize}
+\begin{alertblock}{The paper's informal argument assumes}
+\scriptsize isolation \,·\, an honest majority in every chain \,·\, secure crypto \,·\, uncompromised keys. RQ2 asks what survives when a witness is Byzantine.
+\end{alertblock}
+\end{columns}
+\note{Condensed from mid-eval slides 2-8. Paper §III (architecture, trust lists, Fig. 5/6), §V (Table 4: 527 ms contracts + 2 ms cache + 74 ms user = 603 ms).}
+\end{frame}
+
+% ---------------------------------------------------------------- 3. Recap: JANUS and our stack
+\begin{frame}{Recap: JANUS, and the stack we built}
+\scriptsize
+\renewcommand{\arraystretch}{1.08}
+\begin{tabular}{@{}>{\bfseries}L{0.12\textwidth} L{0.22\textwidth} L{0.22\textwidth} >{\columncolor{accent!10}}L{0.39\textwidth}@{}}
+\toprule
+ & \textbf{HMBC paper (2020)} & \textbf{JANUS (2023)} & \textbf{Ours (RQ1 + RQ2)} \\
+\midrule
+Chains & 2 private Ethereum chains (Ganache, Truffle), Proof-of-Stake & Hyperledger Fabric 2.4, Raft (crash faults only) & 2 local Anvil chains, PBC (id 18545) and DBC (id 28545); no consensus claims \\
+Contracts & 6, in Solidity & 5, in JavaScript & the 6 contracts in Solidity 0.8.37 + DecisionVerifier; RQ2 adds Governance; Foundry 1.8.5 \\
+Chain to chain & inter-blockchain API + cache & RabbitMQ queues & untrusted relay; EIP-712-signed requests, decisions and receipts checked on chain; RQ2: 3-of-4 witness certificates \\
+Witnesses, keys & temporal keys inside the KSSC & HashiCorp Vault & Python witnesses (RQ1: one; RQ2: four, each with a durable SQLite store); off-chain key worker; TEST-ONLY keys \\
+ABE & Charm MA-CP-ABE & Go MA-ABE + AES & symbolic in RQ1 and RQ2; real Charm / Lewko–Waters only in RQ3, after its G0 gate \\
+Evaluation & latency, attribute scaling & attack trees, cloud load tests & Forge tests + mutants, an independent Python oracle, ProVerif 2.05 (RQ1), TLA+/TLC 2.19 (RQ2) \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.4em}
+\begin{columns}[T,onlytextwidth]
+\column{0.49\textwidth}
+\begin{block}{What JANUS (same authors, 2023) changed}
+\scriptsize Fabric + Raft, Vault, a domain key in the KSSC, voting for governance. It names Byzantine tolerance as future work.
+\end{block}
+\column{0.49\textwidth}
+\begin{alertblock}{Scope}
+\scriptsize We implement HMBC2020 only. JANUS is a related system here: no JANUS code, design or bug claims are used.
+\end{alertblock}
+\end{columns}
+\note{Condensed from mid-eval slides 9, 10, 13 and 14. RQ2 additions: Governance contract (F ledger 85c59f5), durable SQLite witness stores, TLC 2.19 (RQ2-F-DRAFT.md §2.1).}
+\end{frame}
+
+% ---------------------------------------------------------------- 4. RQs and status
+\begin{frame}{Three research questions, answered in order: where each stands}
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm,
+    card/.style={rounded corners=3pt, text width=4.0cm, align=left, inner sep=5pt, font=\scriptsize, anchor=north},
+    head/.style={rounded corners=3pt, text width=4.0cm, inner sep=5pt, font=\footnotesize\bfseries, text=white, anchor=south},
+    stn/.style={rounded corners=2pt, text width=4.0cm, inner sep=3pt, font=\scriptsize\bfseries, align=center, anchor=north}]
+  \foreach \x/\col/\h/\t/\body in {
+      0/accent/{RQ1}/{Authorisation, freshness \& audit}/{Which properties follow from HMBC's access flow, which depend on details the paper leaves out, and which explicit repairs enforce them?},
+      4.6/pbc/{RQ2}/{Byzantine witnesses}/{With Byzantine witnesses, which RQ1 guarantees survive, and what quorum and state rules are enough (4 witnesses, quorum 3, at most 1 faulty)?},
+      9.2/dbc/{RQ3}/{Key lifecycle}/{What confidentiality remains after revocation, joining and later key compromise, with an explicit epoch lifecycle and real ABE?}} {
+    \node[card] (c\h) at (\x,0) {\textbf{\t}\\[2pt]\body};
+    \node[head, fill=\col] at (\x,0) {\h};
+    \draw[\col, rounded corners=3pt] (c\h.north west) rectangle ($(c\h.north east)+(0,-2.45)$);
+  }
+  \node[stn, draw=okgreen, fill=okgreen!12] at (0,-2.6) {DONE: gate E PASS, 12 Oct 2026};
+  \node[stn, draw=accent, fill=accent!12] at (4.6,-2.6) {IN PROGRESS: gate F NOT RUN};
+  \node[stn, draw=datagray, fill=gray!12] at (9.2,-2.6) {LOCKED: not started};
+\end{tikzpicture}
+
+\vspace{0.6em}
+\begin{tikzpicture}[x=1cm, y=1cm, ev/.style={text width=2.2cm, align=center, font=\scriptsize, anchor=north, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}]
+  \draw[thick, gray] (0,0) -- (13.4,0);
+  \foreach \x/\d/\t/\col in {
+      0.9/{8 Oct}/{interface v1 and the 56-row RQ1 catalog frozen}/okgreen,
+      3.2/{12 Oct}/{gate E PASS; F0 planning authorised}/okgreen,
+      5.5/{4 Nov}/{F0 fault-model design accepted by all roles}/pbc,
+      7.8/{13--15 Nov}/{TLC model, offline measurements, K1 fix}/pbc,
+      10.1/{16 Nov}/{partial RQ2 report reviewed at its exact hash}/pbc,
+      12.4/{17 Nov}/{today: F plan DRAFT, 0 of 32 F cases run}/accent} {
+    \fill[\col] (\x,0) circle (0.09);
+    \node[font=\scriptsize\bfseries, text=\col, anchor=south] at (\x,0.1) {\d};
+    \node[ev] at (\x,-0.15) {\t};
+  }
+\end{tikzpicture}\\[0.3em]
+\src{SPEC.md §1; GATES.md (E decision 2026-10-12, F/G ``NOT RUN''); DECISIONS.md D38, D51, D53; BOARD.md A3-0160, A3-0163}
+\end{frame}
+
+% ---------------------------------------------------------------- 5. Method and evidence labels
+\begin{frame}{Method: one discipline, and every result labelled}
+\begin{columns}[T,onlytextwidth]
+\column{0.53\textwidth}
+\footnotesize\textbf{How we work}
+\begin{itemize}\scriptsize\setlength{\itemsep}{2pt}
+  \item \textbf{Reconstruction:} the authors' code is not available. Every missing detail is a recorded choice (41 completions, A01--A41, in RQ1), never a ``discovered vulnerability''.
+  \item \textbf{Profiles of one ledger:} \emph{paper-strict}, \emph{paper-minimal} and \emph{repaired-e} for RQ1; \emph{repaired-f} (quorum 3) and the weakened \emph{mutant-f-q2} for RQ2. Each mutant removes one check.
+  \item \textbf{Discipline:} freeze the expected results and the plan hash $\rightarrow$ the module owners ACK that exact hash $\rightarrow$ run $\rightarrow$ review. Failed trials are kept.
+  \item \textbf{Three roles} (ledger, protocol, evaluation), one machine each, synchronised through Git and hash-pinned interfaces. Roles are portable; all three are the same model family.
+\end{itemize}
+
+\column{0.44\textwidth}
+\footnotesize\textbf{Evidence labels on result slides}\\[0.3em]
+\scriptsize
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{}l L{0.80\linewidth}@{}}
+\evl{I} & integrated run by the independent evaluator \\
+\evl{R} & cross-run by the module owners \\
+\evl{U} & unit tests, or offline runs over real module code with synthetic fixtures \\
+\evl{F} & formal model run by the evaluator \\
+\end{tabular}
+
+\vspace{0.5em}
+\textbf{Each finding is one of:} paper-supported behaviour \,·\, ambiguity \,·\, tested reconstruction result \,·\, deliberate mutation \,·\, extension result.
+
+\vspace{0.5em}
+\begin{alertblock}{Read part 3 with this in mind}
+\scriptsize There is \textbf{no [I] result for RQ2 yet}. Every RQ2 number is an isolated, offline or formal result.
+\end{alertblock}
+\end{columns}
+\note{RQ1-E.md lines 35 (A01-A41), 240-253 (catalog and discipline); A1-0143 (repaired-f / mutant-f-q2 profiles); DECISIONS.md D57 (portable roles); AGENTS.md (finding classes).}
+\end{frame}
+
+% ================================================================ PART II: RQ1 complete (slides 6-8)
+% Every number: evaluation/reports/RQ1-E.md (69dabfba..) and communication/GATES.md (E section).
+
+% ---------------------------------------------------------------- 6. RQ1 gaps and repair
+\begin{frame}{RQ1 recap: three gaps in the paper's flow, one repair profile}
+\scriptsize
+\renewcommand{\arraystretch}{1.28}
+\begin{tabular}{@{}c L{0.16\textwidth} L{0.37\textwidth} L{0.38\textwidth}@{}}
+\toprule
+ & \textbf{Gap} & \textbf{What HMBC leaves open} & \textbf{What repaired-e adds (our extension, not HMBC)} \\
+\midrule
+\gapn{1} & \textbf{RQ1-01} decision provenance & The DBC receives a forwarded tuple. Nothing says \emph{who} it is for, \emph{which chain} it targets, \emph{when} it expires, or that it is \emph{new}. & Typed EIP-712 signatures from user and witness, bound to the KSSC and the DBC chain; a single-use \code{(gid, nonce)}; request lifetime $\le$ 30\,s. \\
+\gapn{2} & \textbf{RQ1-02} trust-anchor freshness & Trust lists are ``the latest'', with no version or expiry; no rule for when a revocation must reach the DBC. & Versioned, expiring trust lists; signed state checkpoints (sequence + auth epoch) act as a revocation barrier. \\
+\gapn{3} & \textbf{RQ1-03} audit correspondence & An outcome can be logged without DBC evidence; the paper is silent on a crash between key release and logging. & An outcome needs a witness-signed GrantReceipt; the worker logs its intent durably before sending. \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.7em}
+\centering
+{\scriptsize\textbf{DecisionVerifier on the DBC: 13 checks in a fixed order} (step 12 is reserved for RQ3)}\\[0.25em]
+\begin{tikzpicture}[x=1cm, y=1cm]
+  \foreach \i/\t/\col in {1/source/accent, 2/destination/accent, 3/action/accent, 4/request/accent, 5/witness set/pbc, 6/signatures/accent, 7/result/accent, 8/credential/accent, 9/expiry/accent, 10/checkpoint/pbc, 11/auth epoch/pbc, 12/key epoch/datagray, 13/record valid/pbc} {
+    \node[dv=\col, minimum width=0.96cm] at (\i*1.02,0) {\textbf{\i}\\\t};
+  }
+\end{tikzpicture}\\[0.2em]
+\raggedright\src{RQ1-E.md §0, §3; mid-eval slides 15 and 17. In RQ1 the witness is one trusted party: RQ2 starts there.}
+\end{frame}
+
+% ---------------------------------------------------------------- 7. RQ1 results
+\begin{frame}{RQ1 results: the paper profiles vs.\ repaired-e \;\evl{I}}
+\scriptsize
+\renewcommand{\arraystretch}{1.02}
+\begin{tabular}{@{}L{0.32\textwidth} L{0.29\textwidth} L{0.36\textwidth}@{}}
+\toprule
+\textbf{Case (the relay or an admin\ldots)} & \textbf{paper-strict / paper-minimal} & \textbf{repaired-e} \\
+\midrule
+replays an identical accepted request & \cSup\ \code{REPLAY}\textsuperscript{$*$} & \cRep\ \code{REPLAY} \\
+swaps the subject (GID) & \cGap\ wrong subject granted & \cRep\ \code{WRONG\_SUBJECT} \\
+forges a tuple with no PBC request & \cGap\ granted & \cRep\ \code{BAD\_SIGNATURE} \\
+replays it under a new reference & \cGap\ a second grant & \cRep\ \code{REPLAY} \\
+delivers deployment B's tuple to A & \cGap\ granted & \cRep\ \code{WRONG\_DESTINATION} \\
+re-installs an older signed CRL & \cGap\ \textbf{un-revokes} a credential & \cRep\ \code{STALE\_ANCHOR} \\
+uses an old decision after the barrier & \cGap\ still accepted & \cRep\ \code{STALE\_STATE} \\
+delivers just as the duty ends & \cGap\ granted at that instant & \cRep\ \code{EXPIRED} \\
+reports an outcome with no grant & \cGap\ recorded & \cRep\ \code{WRONG\_PROFILE} (no receipt) \\
+crashes the key worker mid-release & \cBlk\ the paper is silent & \cRep\ cached response re-sent \\
+\bottomrule
+\end{tabular}\\[0.1em]
+{\tiny\color{datagray}\textsuperscript{$*$}only because our grant id is deterministic (a recorded completion), not because the paper has a nonce.}
+
+\vspace{0.3em}
+\begin{columns}[T,onlytextwidth]
+\column{0.60\textwidth}
+\begin{alertblock}{Revocation window \;\evl{R}}
+\scriptsize repaired-e: $W = \min(\text{checkpoint delay}, \text{lifetime left}) \le 30$\,s. Owner measurement: $W$ = 2 / 6 / 11 / 21\,s for delays 0 / 5 / 10 / 20\,s; 26\,s with no barrier. Paper-strict: the old tuple is still grantable 65\,s later.
+\end{alertblock}
+\column{0.37\textwidth}
+\scriptsize\color{datagray}
+Relay attacks assume a misbehaving relay, which HMBC's isolation assumption excludes: specification dependencies, not exploits. Alice's legitimate access succeeds in every row. The window is an owner measurement (one trial per delay), not the gate run.\\[2pt]
+\src{RQ1-E.md §0 (lines 34--75), §8.5 (lines 817--833)}
+\end{columns}
+\end{frame}
+
+% ---------------------------------------------------------------- 8. Gate E
+\begin{frame}{RQ1 closed: gate E, 12 October 2026}
+\begin{columns}[T,onlytextwidth]
+\column{0.50\textwidth}
+\centering
+\footnotesize\textbf{All 56 catalog rows, coloured by result} \evl{I}\\[0.4em]
+\begin{tikzpicture}[x=1cm, y=1cm]
+  \node[font=\scriptsize\bfseries, text=pbc, anchor=south west] at (0.85,0.4) {paper-strict + paper-minimal};
+  \node[font=\scriptsize\bfseries, text=dbc, anchor=south west] at (4.35,0.4) {repaired-e};
+  \node[font=\scriptsize\bfseries, anchor=east] at (0.7,0.11)  {E01};
+  \node[font=\scriptsize\bfseries, anchor=east] at (0.7,-0.49) {E02};
+  \node[font=\scriptsize\bfseries, anchor=east] at (0.7,-1.09) {E03};
+  \wcells{0.85}{0}{0}{2}{clsup}  \wcells{0.85}{2}{0}{10}{clgap}
+  \wcells{4.35}{0}{0}{7}{clrep}
+  \wcells{0.85}{0}{-0.6}{2}{clsup}  \wcells{0.85}{2}{-0.6}{8}{clgap}
+  \wcells{4.35}{0}{-0.6}{4}{clrep}   \wcells{4.35}{4}{-0.6}{1}{clsup}
+  \wcells{0.85}{0}{-1.2}{4}{clsup}  \wcells{0.85}{4}{-1.2}{2}{clgap}  \wcells{0.85}{6}{-1.2}{4}{clblk}
+  \wcells{4.35}{0}{-1.2}{8}{clrep}   \wcells{4.35}{8}{-1.2}{4}{clsup}
+  \node[font=\tiny, anchor=north west, align=left] at (0.85,-1.5) {32 rows: \textbf{8} supported\\\textbf{20} spec gap · \textbf{4} blocked};
+  \node[font=\tiny, anchor=north west, align=left] at (4.35,-1.5) {24 rows: \textbf{19} repair supported\\\textbf{5} supported (controls)};
+\end{tikzpicture}\\[0.4em]
+\scriptsize
+\cSup\ \ \cGap\ \ \cRep\ \ \cBlk\\[0.5em]
+\raggedright\scriptsize In all 56 rows the observed class and error code equal the expectation frozen on 8 Oct: 56 PASS, 0 FAILED, 0 NOT\_RUN.
+
+\column{0.47\textwidth}
+\footnotesize
+\textbf{The run}
+\begin{itemize}\scriptsize\setlength{\itemsep}{1pt}
+  \item One command, each row on a fresh pair of chains, then the ProVerif re-run (matched); 4,749\,s.
+  \item Sources and Git HEAD identical before and after.
+\end{itemize}
+\textbf{Are the checks real?}
+\begin{itemize}\scriptsize\setlength{\itemsep}{1pt}
+  \item 6 ledger mutants, each detected by its expected tests \evl{U}; 8 gate rows hit exactly the guard a mutant removes.
+  \item ProVerif \evl{F}: a grant agrees with user and witness on all 8 fields; drop the destination and it finds an attack.
+\end{itemize}
+\textbf{The verdict}
+\begin{itemize}\scriptsize\setlength{\itemsep}{1pt}
+  \item Three matching sign-offs on the same report and hashes: \textbf{gate E PASS}.
+\end{itemize}
+\begin{alertblock}{Recorded with the verdict}
+\scriptsize Integrated mutant matrix and integrated window not run; solo phase, correlated (same-model) review.
+\end{alertblock}
+\end{columns}
+\src{RQ1-E.md §5 (lines 351--370), §6 tally, §11, §12; GATES.md lines 637--648 (ACKs A1-0085, S2-0023, S3-0024)}
+\end{frame}
+
+% ================================================================ PART III: RQ2 (slides 9-20)
+% Primary source: evaluation/reports/RQ2-F-DRAFT.md on origin/Code_Merge_Final (sha256 e59a51cd..) and the
+% receipts it links under evaluation/evidence/f/. Nothing here is an integrated F case.
+
+% ---------------------------------------------------------------- 9. RQ2 question and fault model
+\begin{frame}{RQ2: what survives Byzantine witnesses?}
+\begin{center}
+\footnotesize\itshape Which RQ1 guarantees survive Byzantine operators with q-of-n application witnesses\\(n = 4, q = 3, f = 1), assuming safe ledgers and a trusted key worker?
+\end{center}
+\begin{columns}[T,onlytextwidth]
+\column{0.50\textwidth}
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm]
+  \node[wit=dbc] (e) at (0,0) {W};
+  \node[font=\tiny, text=datagray, align=center, below=2pt of e] {RQ1: one\\trusted witness};
+  \draw[->, thick, gray] (0.55,0) -- (1.35,0);
+  \node[wit=pbc] (w1) at (2.0,0) {W1};
+  \node[wit=pbc] (w2) at (3.1,0) {W2};
+  \node[wit=pbc] (w3) at (4.2,0) {W3};
+  \node[wit=badred] (w4) at (5.3,0) {W4};
+  \draw[accent, thick, rounded corners] ($(w1.north west)+(-0.12,0.18)$) rectangle ($(w3.south east)+(0.12,-0.12)$);
+  \draw[dbc, thick, dashed, rounded corners] ($(w2.north west)+(-0.2,0.3)$) rectangle ($(w4.south east)+(0.2,-0.24)$);
+  \node[font=\tiny, text=accent, anchor=south] at ($(w1.north)!0.5!(w3.north)+(0,0.18)$) {quorum A};
+  \node[font=\tiny, text=dbc, anchor=north] at ($(w2.south)!0.5!(w4.south)+(0,-0.24)$) {quorum B};
+\end{tikzpicture}\\[0.3em]
+\raggedright\scriptsize Any two 3-of-4 quorums share $\ge$ 2 witnesses, so with $f = 1$ they share an honest one. An honest witness never signs two conflicting decisions, so two conflicting certificates cannot both form.\\[0.4em]
+\begin{alertblock}{Not a consensus protocol}
+\scriptsize The witness layer authenticates decisions. It is not a new consensus, and Anvil is not Byzantine fault tolerant.
+\end{alertblock}
+
+\column{0.47\textwidth}
+\footnotesize
+\textbf{One witness per logical hospital.} Each checks the same accepted PBC decision and state \emph{itself}, then signs with its own off-chain key. The relay holds no witness key.\\[0.4em]
+\textbf{Kept as stated assumptions, not proved}
+\begin{itemize}\scriptsize\setlength{\itemsep}{1pt}
+  \item safe ledgers: one local Anvil pair, no consensus;
+  \item a trusted key worker: quorums do not remove it;
+  \item eventual delivery, for progress.
+\end{itemize}
+\textbf{Deliberately outside the bound} (controls)
+\begin{itemize}\scriptsize\setlength{\itemsep}{1pt}
+  \item two Byzantine witnesses ($f = 2$);
+  \item a weakened threshold ($q = 2$);
+  \item a compromised quorum ($\ge$ 3 witnesses).
+\end{itemize}
+\end{columns}
+\src{RQ2-F-DRAFT.md lines 127--132, 149, §3; SPEC.md §5}
+\end{frame}
+
+% ---------------------------------------------------------------- 10. RQ2 design
+\begin{frame}{RQ2 design: three signed paths, governance, single-signing witnesses}
+\begin{columns}[T,onlytextwidth]
+\column{0.45\textwidth}
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm]
+  \foreach \i/\x in {1/1.5, 2/2.5, 3/3.5, 4/4.5} \node[wit=pbc] (w\i) at (\x,3.0) {W\i};
+  \node[font=\tiny, text=datagray, anchor=south, align=center] at (3.0,3.32) {one per hospital: own key, own durable store;\\each reads and checks the PBC itself};
+  \node[box, fill=gray!8, text width=3.9cm] (col) at (3.0,1.9) {\textbf{Collector / relay}: holds no key; submits $\ge$ 3 sorted signatures};
+  \foreach \i in {1,...,4} \draw[->, gray, thick] (w\i.south) -- (w\i.south |- col.north);
+  \node[box, draw=pbc, fill=pbc!8, text width=2.25cm] (pbc) at (1.35,0.15) {\textbf{\textcolor{pbc}{PBC}}\\PSC · TMSC\\Governance (new)};
+  \node[box, draw=dbc, fill=dbc!10, text width=2.25cm] (dbc) at (4.65,0.15) {\textbf{\textcolor{dbc}{DBC}}\\KSSC · ACSC\\DecisionVerifier};
+  \draw[->, thick, pbc] ($(col.south)+(-0.9,0)$) -- node[lbl, left, align=right, font=\tiny] {receipt,\\governance} ($(pbc.north)+(0.3,0)$);
+  \draw[->, thick, dbc] ($(col.south)+(0.9,0)$) -- node[lbl, right, align=left, font=\tiny] {checkpoint,\\decision} ($(dbc.north)+(-0.3,0)$);
+  \draw[->, dashed, thick, pbc!70] (pbc.west) -- ++(-0.3,0) |- (w1.west);
+\end{tikzpicture}\\[0.4em]
+\raggedright
+\begin{itemize}\scriptsize\setlength{\itemsep}{1pt}
+  \item \textbf{Governance:} add or remove a credential authority, set CA admins. A removed authority is tombstoned. The \textbf{witness set itself is fixed at deployment}.
+\end{itemize}
+
+\column{0.52\textwidth}
+\scriptsize
+\renewcommand{\arraystretch}{1.18}
+\begin{tabular}{@{}L{0.19\linewidth} L{0.42\linewidth} L{0.33\linewidth}@{}}
+\toprule
+\textbf{Certificate} & \textbf{verified by} & \textbf{also rejected when} \\
+\midrule
+state checkpoint & {\ttfamily\fontsize{6}{7}\selectfont KSSC.acceptState} & sequence not strictly greater; auth epoch or source block lower \\
+access decision & {\ttfamily\fontsize{6}{7}\selectfont ACSC.consumeDecision} & any of the 13 RQ1 checks fails \\
+grant receipt & {\ttfamily\fontsize{6}{7}\selectfont PSC.reportAttestedOutcome} & it names another request, GID or record \\
+governance action & {\ttfamily\fontsize{6}{7}\selectfont Governance.execute} & wrong nonce, or expired \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.4em}
+\begin{itemize}\scriptsize\setlength{\itemsep}{1pt}
+  \item Every path needs \textbf{$\ge$ q = 3 of the 4} member signatures, in strictly increasing signer order (4 of 4 is accepted).
+  \item An honest witness \textbf{persists its one signature per decision key} before replying. After a grant has used the nonce, it refuses a fresh decision with \code{REPLAY}.
+\end{itemize}
+\end{columns}
+\src{RQ2-F-DRAFT.md §1 (lines 127--132), §3 (line 269); A1-0137 §1 (SigLib.sol:37, Governance.sol:83--86, TMSC.sol:144--159), §2.1 (KSSC.sol:160--163); A2-0089 §2; SPEC.md §5}
+\end{frame}
+
+% ---------------------------------------------------------------- 11. How RQ2 will be judged
+\begin{frame}{How RQ2 will be judged, and what exists today}
+\begin{columns}[T,onlytextwidth]
+\column{0.48\textwidth}
+\footnotesize\textbf{The planned F gate: 32 cases in six families}\\[0.3em]
+\scriptsize
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{@{}L{0.72\linewidth} r@{}}
+\toprule
+\textbf{Family} & \textbf{cases} \\
+\midrule
+A\; quorum, availability, signature lists & 8 \\
+B\; signing rule and Byzantine witness & 6 \\
+C\; durable state, restart, tripwires & 4 \\
+D\; trust lists and governance & 8 \\
+E\; relay and outcomes & 3 \\
+F\; compromise and residual inventory & 3 \\
+\midrule
+\textbf{integrated runs so far} & \textbf{0 of 32} \\
+\bottomrule
+\end{tabular}\\[0.4em]
+Runner stages: 1--2 (pins, source bracket) implemented and fail closed (\code{BLOCKED}); 3--7 (owner baselines, family runs, verdicts, post bracket, manifest + E regression) in progress.\\[0.3em]
+\src{plan-draft.json (families, stages; status DRAFT, authorizesExecution false); case-coverage-map-20261114}
+
+\column{0.49\textwidth}
+\footnotesize\textbf{Evidence collected so far (offline, synthetic fixtures)}\\[0.3em]
+\scriptsize
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{@{}L{0.58\linewidth} c c@{}}
+\toprule
+\textbf{Evidence} & \textbf{label} & \textbf{slide} \\
+\midrule
+TLC finite model, five configurations & \evl{F} & 12 \\
+oracle/store differential + 7 mutations & \evl{U} & 13 \\
+M5 Byzantine pool sweep & \evl{U} & 14 \\
+M2 virtual availability sweep & \evl{U} & 15 \\
+M6 real-process availability & \evl{R} & 15 \\
+M1 gas and calldata & \evl{R} & 16 \\
+K1 kill-durability test & \evl{R} & 17 \\
+out-of-bound ledger tests & \evl{U} & 19 \\
+\bottomrule
+\end{tabular}\\[0.4em]
+None of these is an F case. They are measurements made before the runner and FREEZE exist, on the human's instruction to measure what exists.\\[0.2em]
+\src{RQ2-F-DRAFT.md lines 3--10, §4; measurements-20261114/README.md lines 11--15}
+\end{columns}
+\end{frame}
+
+% ---------------------------------------------------------------- 12. TLC
+\begin{frame}{Safety 1: a finite model of one decision slot (TLC) \;\evl{F}}
+\begin{columns}[T,onlytextwidth]
+\column{0.60\textwidth}
+\scriptsize
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}L{0.36\linewidth} L{0.22\linewidth} L{0.32\linewidth}@{}}
+\toprule
+\textbf{Configuration} & \textbf{role} & \textbf{Agreement} \\
+\midrule
+$f = 1$, $q = 3$, persistent single-signing & the claim & \textcolor{okgreen}{\textbf{holds}}: 433 states generated, 108 distinct, complete \\
+$f = 0$, $q = 3$, persistent & positive control & \textcolor{okgreen}{\textbf{holds}}: 217 / 81, complete \\
+$f = 1$, weak $q = 2$ & weakened mutant & \textcolor{badred}{\textbf{violated}} \\
+$f = 2$, $q = 3$ & out-of-bound control & \textcolor{badred}{\textbf{violated}} (needs two Byzantine witnesses) \\
+$f = 0$, honest witnesses may double-sign & no-persistence mutant & \textcolor{badred}{\textbf{violated}} \\
+\bottomrule
+\end{tabular}\\[0.4em]
+\src{RQ2-F-DRAFT.md §2.1 (lines 141--158); tlc-audit-20261115/README.md lines 14--20}
+
+\column{0.37\textwidth}
+\footnotesize
+\textbf{What it shows}
+\begin{itemize}\scriptsize\setlength{\itemsep}{1pt}
+  \item The quorum argument needs both halves: $q = 3$ \emph{and} honest witnesses that persist their one signature. Drop either, and TLC finds a violation.
+  \item A fresh rerun on 15 Nov matched all five verdicts and state counts; agent 1's separate enumeration matches the complete counts.
+\end{itemize}
+\textbf{What it does not}
+\begin{itemize}\scriptsize\setlength{\itemsep}{1pt}
+  \item One slot, a fixed witness set: no expiry, checkpoint advance or superseded pins.
+  \item Not a proof of the implementation, of consensus or of liveness.
+\end{itemize}
+\scriptsize\color{datagray} Our first $f = 0$ run deadlocked (a model error of ours); it is kept in the record.
+\end{columns}
+\end{frame}
+
+% ---------------------------------------------------------------- 13. Oracle/store differential + mutations
+\begin{frame}{Safety 2: does our oracle agree with the witness store? \;\evl{U}}
+\begin{columns}[T,onlytextwidth]
+\column{0.40\textwidth}
+\footnotesize
+\scriptsize
+The evaluator's fault oracle (independent rules) and agent 2's durable \code{WitnessStore} (SQLite) decide the same 180 synthetic signing requests, across the four signing kinds.\\[0.5em]
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, every node/.append style={font=\scriptsize}]
+  \node[tile=okgreen, text width=4.4cm, minimum height=1.1cm] at (0,0) {{\Large\bfseries 180 / 180}\\[1pt]decisions agree; 0 disagreements};
+  \node[tile=clsup, text width=1.95cm, minimum height=0.95cm] at (-1.23,-1.3) {{\large\bfseries 142}\\sign};
+  \node[tile=accent, text width=1.95cm, minimum height=0.95cm] at (1.23,-1.3) {{\large\bfseries 38}\\refuse \code{CONFLICT\_PINNED}};
+\end{tikzpicture}\\[0.3em]
+\raggedright\scriptsize Rerun on 15 Nov against the adopted protocol source (subtree \code{7566f63d..}).
+
+\column{0.57\textwidth}
+\centering
+\footnotesize\textbf{Seven deliberate oracle bugs: each one is caught}\\[0.1em]
+\begin{tikzpicture}
+\begin{axis}[
+    xbar, bar width=6pt, scale only axis, width=3.5cm, height=3.0cm,
+    xmin=0, xmax=24, axis x line*=bottom, axis y line*=left,
+    ytick={1,...,7}, y dir=reverse,
+    yticklabels={{expiry $\ge$ becomes $>$}, {executed receipt never dies}, {decision sequence $>$ becomes $\ge$}, {drop ALLOW grant death}, {grant kills a DENY}, {checkpoint sequence $\ge$ becomes $>$}, {governance nonce $\ge$ becomes $>$}},
+    tick label style={font=\scriptsize}, xlabel style={font=\scriptsize},
+    xlabel={disagreements with the unchanged store, of 180},
+    nodes near coords, nodes near coords style={font=\scriptsize},
+    enlarge y limits=0.1, xmajorgrids, grid style={gray!20},
+  ]
+  \addplot[fill=accent!75, draw=accent] coordinates {(20,1) (18,2) (6,3) (4,4) (4,5) (4,6) (4,7)};
+\end{axis}
+\end{tikzpicture}\\[0.2em]
+\raggedright\scriptsize Baseline stays 180/180; all seven counts reproduce the 14 Nov receipt.
+\end{columns}
+
+\vspace{0.2em}
+\begin{alertblock}{Scope}
+\scriptsize Sensitivity to these seven rule errors, not completeness of the oracle. It tests what the \emph{store} can do, not what the service or the ledger lets happen. Our earlier claim that an honest DENY can follow a used ALLOW was wrong and is corrected: the honest service answers \code{REPLAY} first (confirmed by agent 2).
+\end{alertblock}
+\src{oracle-store-diff-20261115/README.md lines 9--16; oracle-mutant-discrimination-20261115/README.md lines 9--24; RQ2-F-DRAFT.md lines 293--301; A2-0089 §2}
+\end{frame}
+
+% ---------------------------------------------------------------- 14. M5 pool sweep
+\begin{frame}{Safety 3: a Byzantine sweep over the real witness pool (M5) \;\evl{U}}
+\begin{columns}[T,onlytextwidth]
+\column{0.55\textwidth}
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, every node/.append style={font=\scriptsize}]
+  \node[font=\footnotesize\bfseries, text=okgreen] at (-1.85,1.15) {$f = 1$ (the claim)};
+  \node[font=\footnotesize\bfseries, text=badred] at (1.85,1.15) {$f = 2$ (control, outside)};
+  \node[tile=okgreen, text width=3.2cm, minimum height=1.45cm] at (-1.85,0.15) {{\Large\bfseries 0}\\[1pt]agreement-hazard cases\\of 972};
+  \node[tile=badred, text width=3.2cm, minimum height=1.45cm] at (1.85,0.15) {{\Large\bfseries 2,916}\\[1pt]agreement-hazard cases\\of 4,374};
+\end{tikzpicture}\\[0.5em]
+\scriptsize
+\renewcommand{\arraystretch}{1.18}
+\begin{tabular}{@{}l r r r r@{}}
+\toprule
+Bound & cases & certificates & no certificate & invalid certificates \\
+\midrule
+$f = 1$ & 972 & 180 & 792 & 0 \\
+$f = 2$ & 4,374 & 330 & 4,044 & 0 \\
+\bottomrule
+\end{tabular}\\[0.3em]
+\raggedright\scriptsize Every accepted certificate has 3 distinct, sorted, valid signers. ``No certificate'' comes from honest pin splits: unavailable, not unsafe.
+
+\column{0.42\textwidth}
+\footnotesize
+\textbf{Setup}
+\begin{itemize}\scriptsize\setlength{\itemsep}{1pt}
+  \item Agent 2's pool state machine, real EIP-712 signatures.
+  \item 9 Byzantine behaviours: silent; a valid signature over value A, B or C; a recorded report over A, B or C; garbage; a wrong-key signature.
+  \item $f = 1$: 4 positions $\times$ 9 behaviours $\times$ 27 honest pin patterns.
+  \item $f = 2$: 6 position pairs $\times$ 81 behaviour pairs $\times$ 9 pin patterns.
+\end{itemize}
+\textbf{Hazard} (our definition): after the run, two different values could each gather $\ge$ 3 signers. A \emph{potential} conflict, not two realised certificates.\\[0.3em]
+\textbf{Limits:} honest witnesses are a model of the signing rule, not the durable store; virtual transport. Rerun on 15 Nov from the exact source: byte-identical output.
+\end{columns}
+\src{pool-sweep-20261115/README.md lines 15--30; measurements-20261114/README.md lines 69--83; RQ2-F-DRAFT.md §2.2}
+\end{frame}
+
+% ---------------------------------------------------------------- 15. Availability
+\begin{frame}{Availability: one witness down still certifies; two do not}
+\begin{columns}[T,onlytextwidth]
+\column{0.47\textwidth}
+\footnotesize\textbf{M2: all 16 muted subsets, 5 runs each (virtual time)} \evl{U}\\[0.5em]
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, c/.style={draw, rounded corners=2pt, minimum width=1.05cm, minimum height=1.2cm, align=center, font=\scriptsize}]
+  \foreach \i/\n/\ok in {0/1/1, 1/4/1, 2/6/0, 3/4/0, 4/1/0} {
+    \ifnum\ok=1
+      \node[c, draw=okgreen, fill=okgreen!10] at (\i*1.2,0) {\textbf{\i} muted\\[1pt]{\tiny \n{} subset\ifnum\n>1 s\fi}\\[1pt]\cmark};
+    \else
+      \node[c, draw=badred, fill=badred!8] at (\i*1.2,0) {\textbf{\i} muted\\[1pt]{\tiny \n{} subset\ifnum\n>1 s\fi}\\[1pt]\xmark};
+    \fi
+  }
+\end{tikzpicture}\\[0.4em]
+\raggedright\scriptsize
+\cmark\ a 3-signature certificate in every run \quad \xmark\ none by the 10\,s deadline\\[0.3em]
+Replies delayed 400 / 300 / 200 / 100\,ms: the certificate forms from the three fastest at 300\,ms; the slowest witness is not waited for.\\[0.3em]
+Four real witnesses (durable SQLite stores, real signatures) behind a virtual transport; rerun on 15 Nov on the exact source: all 80 trials match.
+
+\column{0.50\textwidth}
+\footnotesize\textbf{M6: real processes, local Anvil pair, real KSSC} \evl{R}\\[0.4em]
+\scriptsize
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{}L{0.50\linewidth} r r r@{}}
+\toprule
+\textbf{Scenario (test-body time)} & \textbf{run 1} & \textbf{run 2} & \textbf{run 3} \\
+\midrule
+4 live witnesses, q = 3 certificate accepted & 0.69\,s & 0.69\,s & 0.78\,s \\
+1 witness SIGKILLed: 3 signers, accepted & 0.63\,s & 0.55\,s & 0.60\,s \\
+2 witnesses stopped: classified timeout & 10.54\,s & 10.54\,s & 10.55\,s \\
+killed witness restarted keeps its durable pin & 0.96\,s & 0.87\,s & 0.88\,s \\
+\bottomrule
+\end{tabular}\\[0.4em]
+Agent 2's live tests, run unmodified on the evaluator's host: 4 passed in each of three runs. The 10.5\,s is the pool's 10\,s deadline plus overhead.\\[0.3em]
+\scriptsize\color{datagray} The raw stdout and exact invocation of these three runs were not retained: they are prior reported runs. No network, no block time, one host. No liveness claim under arbitrary delay.
+\end{columns}
+\src{measurements-20261114/README.md lines 41--52, 118--134; availability-reproduction-20261115; availability-receipt-review-20261115/README.md lines 1--6; RQ2-F-DRAFT.md §2.3}
+\end{frame}
+
+% ---------------------------------------------------------------- 16. Gas
+\begin{frame}{Cost: what three signatures cost on chain (M1, M1b, M1c) \;\evl{R}}
+\begin{columns}[T,onlytextwidth]
+\column{0.55\textwidth}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar, bar width=9pt, scale only axis, width=6.0cm, height=3.6cm,
+    ymin=0, ymax=620, axis x line*=bottom, axis y line*=left,
+    symbolic x coords={checkpoint,decision,receipt},
+    xtick=data, enlarge x limits=0.25,
+    xticklabels={{checkpoint (KSSC)}, {decision (ACSC)}, {receipt (PSC)}},
+    xticklabel style={font=\scriptsize},
+    ylabel={gas per call (thousands)}, ylabel style={font=\scriptsize},
+    yticklabel style={font=\scriptsize},
+    ymajorgrids, grid style={gray!20},
+    legend style={font=\tiny, at={(0.5,-0.16)}, anchor=north, draw=none, fill=white, legend columns=3, /tikz/every even column/.append style={column sep=6pt}},
+    legend cell align=left,
+  ]
+  \addplot[fill=pbc!25, draw=pbc] coordinates {(checkpoint,208.290) (decision,324.323) (receipt,533.754)};
+  \addplot[fill=pbc!70, draw=pbc, nodes near coords, point meta=explicit symbolic, nodes near coords style={font=\tiny\bfseries, text=black}]
+    coordinates {(checkpoint,231.260)[+11.0\%] (decision,342.261)[+5.5\%] (receipt,553.488)[+3.7\%]};
+  \addplot[fill=pbc, draw=pbc] coordinates {(checkpoint,238.046) (decision,349.053) (receipt,560.290)};
+  \legend{{1 signature (repaired-e)}, {3 (repaired-f, q = 3)}, {4}}
+\end{axis}
+\end{tikzpicture}\\
+\src{Forge 1.8.5 gas of one external call; same F commit, E profile vs F profile}
+
+\column{0.42\textwidth}
+\scriptsize
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}l r r r@{}}
+\toprule
+\textbf{call} & \textbf{1 sig} & \textbf{3 sigs} & \textbf{4 sigs} \\
+\midrule
+checkpoint & 208,290 & 231,260 & 238,046 \\
+decision & 324,323 & 342,261 & 349,053 \\
+receipt & 533,754 & 553,488 & 560,290 \\
+\bottomrule
+\end{tabular}\\[0.4em]
+\begin{itemize}\scriptsize\setlength{\itemsep}{1pt}
+  \item Each extra signature: $\approx$ 6.8k gas and 160 bytes of calldata.
+  \item \code{Governance.execute} (F only, 3 signatures): add authority 524,214; remove 424,421; set CA admins 446,934.
+  \item All product contracts stay under the 24,576\,B limit; TMSC grew from 12,635\,B (E-era) to 16,127\,B.
+  \item Measured by the evaluator; agent 1 reproduced all 21 emitted rows (15 distinct) exactly, raw logs retained.
+\end{itemize}
+\scriptsize\color{datagray} Single deterministic runs; not a fee estimate. A cold-storage explanation of the fixed F overhead was tested and refuted (231,261 vs 231,260 gas).
+\end{columns}
+\src{measurements-20261114/README.md lines 23--39, 85--111; RQ2-F-DRAFT.md §2.4; A1-0123, A1-0124, A1-0125, A1-0136}
+\end{frame}
+
+% ---------------------------------------------------------------- 17. K1
+\begin{frame}{Durability: making a kill test deterministic (K1) \;\evl{R}}
+\begin{columns}[T,onlytextwidth]
+\column{0.37\textwidth}
+\footnotesize\textbf{The mutant K1}\\[0.3em]
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, st/.style={box, text width=3.2cm, minimum height=0.42cm, fill=white, font=\tiny}]
+  \node[st, draw=gray] (b) at (0,0) {\code{BEGIN}};
+  \node[st, draw=pbc] (p) at (0,-0.6) {write the signing pin};
+  \node[st, draw=pbc] (d) at (0,-1.2) {write the digest};
+  \node[st, draw=pbc] (o) at (0,-1.8) {write the observation};
+  \node[st, draw=gray] (c) at (0,-2.4) {\code{COMMIT}};
+  \draw[badred, thick] ($(b.west)+(0.15,0)$) -- ($(b.east)+(-0.15,0)$);
+  \draw[badred, thick] ($(c.west)+(0.15,0)$) -- ($(c.east)+(-0.15,0)$);
+  \node[text=badred, font=\scriptsize\bfseries] at (2.05,-0.9) {\ding{55}};
+  \node[font=\tiny, text=badred, anchor=west] at (2.15,-0.9) {kill};
+\end{tikzpicture}\\[0.3em]
+\raggedright\scriptsize K1 removes the signing transaction, so each write commits alone. A kill between two writes leaves a pin without its digest: a torn record that the test must catch.
+
+\column{0.30\textwidth}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    ybar, bar width=10pt, scale only axis, width=3.0cm, height=3.0cm,
+    ymin=0, ymax=46, axis x line*=bottom, axis y line*=left,
+    symbolic x coords={before,after}, xtick=data, enlarge x limits=0.5,
+    xticklabels={{before:\\kill timing\\uncontrolled}, {after: hook\\between\\the writes}},
+    xticklabel style={align=center, font=\tiny},
+    ylabel={runs out of 40}, ylabel style={font=\scriptsize}, yticklabel style={font=\scriptsize},
+    nodes near coords, nodes near coords style={font=\tiny},
+    legend style={font=\tiny, at={(0.5,1.02)}, anchor=south, draw=none, legend columns=1},
+    legend cell align=left,
+  ]
+  \addplot[fill=pbc!70, draw=pbc] coordinates {(before,29) (after,40)};
+  \addplot[fill=gray!30, draw=datagray] coordinates {(before,40) (after,40)};
+  \legend{K1 detected, unmutated control passes}
+\end{axis}
+\end{tikzpicture}
+
+\column{0.31\textwidth}
+\scriptsize
+\begin{itemize}\setlength{\itemsep}{2pt}
+  \item The earlier ``K1 detected 3 of 3'' did not reproduce: we measured \textbf{29 of 40} (72.5\%).
+  \item Fix: a test hook \emph{between} the signing writes. Then \textbf{40 of 40} detected, controls 40 of 40.
+  \item Agent 2's own rerun: 15 of 15 detected, 10 of 10 controls, 81 state tests; full protocol suite 3,226 passed, 201 skipped.
+  \item The same review also found and fixed: a store refused after a kill during init; a snapshot-lock defect; an anchor-selection bug in our evaluator.
+\end{itemize}
+\end{columns}
+
+\vspace{0.4em}
+{\scriptsize\textbf{\textcolor{accent}{Scope:}} SIGKILL only. The mutant that turns off \code{synchronous=FULL} survives, because only power loss could show it: no power-loss claim, and no production corruption rate.}\\[0.1em]
+\src{reviews/a2-0086-signing-kill-20261113/README.md lines 14--36; reviews/proxy-k1-20261114/README.md lines 46--55; A2-0089 §1; protocol/tools/run\_state\_kill\_mutants.py lines 5--9; RQ2-F-DRAFT.md §2.5}
+\end{frame}
+
+% ---------------------------------------------------------------- 18. Trust matrix
+\begin{frame}{The trust matrix: what RQ2 still has to trust}
+\scriptsize
+\renewcommand{\arraystretch}{1.17}
+\begin{tabular}{@{}L{0.27\textwidth} c L{0.53\textwidth}@{}}
+\toprule
+\textbf{Component} & \textbf{status} & \textbf{What that means} \\
+\midrule
+$\ge$ 3 of 4 witnesses honest & \stt{accent}{REQUIRED} & the $f = 1$ bound; also no shared source-view failure \\
+governance quorum & \stt{accent}{REQUIRED} & a compromised quorum ($\ge$ 3) can halt a DBC or grant to a fabricated requester (next slide) \\
+key worker and its host & \stt{datagray}{TRUSTED} & quorums do not stop a compromised worker using its own keys; that F case is NOT\_RUN \\
+credential authority & \stt{datagray}{TRUSTED} & trusted for what it issues; a quorum does not make a credential true \\
+relay / collector & \stt{clsup}{NO KEY} & cannot forge; can withhold or delay, so progress needs eventual delivery \\
+the local Anvil pair & \stt{datagray}{ASSUMED} & assumed correct; consensus not evaluated \\
+witness processes & \stt{clsup}{SEPARATE} & own stores, keys and processes, but one host: no independence from a shared OS or operator \\
+durable witness store & \stt{clsup}{TESTED} & SIGKILL only; no power-loss claim \\
+key custody & \stt{badred}{NOT EVALUATED} & TEST-ONLY synthetic keys \\
+client and data store & \stt{badred}{NOT EVALUATED} & retention, availability and real confidentiality are not established by F \\
+authors of code and reviews & \stt{badred}{CORRELATED} & one model family wrote and reviewed everything \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.4em}
+\src{RQ2-F-DRAFT.md §3 (lines 265--278); SPEC.md §5 (the trust matrix must cover ledgers, relay, witness keys, authority, key worker, client and store)}
+\end{frame}
+
+% ---------------------------------------------------------------- 19. Outside the bound
+\begin{frame}{Outside the bound: what too many Byzantine witnesses can do}
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, cw/.style={text width=4.2cm, draw=none, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}, hw/.style={text width=4.2cm, font=\scriptsize\bfseries}]
+  \node[pcard=badred, cw] (k1) at (0,0) {%
+    A quorum-signed checkpoint with a saturated \code{sequence}, \code{authEpoch} or \code{sourceBlockNumber} is accepted.\\[3pt]
+    Every later honest checkpoint is \code{STALE\_STATE}. Decisions stop at once (auth epoch) or when the poisoned checkpoint expires.\\[3pt]
+    No ledger function resets it: \textbf{redeploy}.\\[3pt]
+    Control: fewer than 3 signers cannot poison.\\[3pt]
+    {\color{datagray}[U] scratch Forge tests, 3/3 and 3/3}};
+  \node[phead=badred, hw] at (0,0) {$\ge$ 3 Byzantine: the DBC halts};
+  \node[pcard=badred, cw] (k2) at (4.6,0) {%
+    Nothing submitted on the PBC; requester and issuer never registered.\\[3pt]
+    3 witnesses sign a checkpoint and an ALLOW whose fabricated records fit the policy's \emph{shape} (doctor + on duty). \textbf{The DBC grants.}\\[3pt]
+    Why: records are bound only through the quorum-signed digest.\\[3pt]
+    Controls: 2 signers \code{INSUFFICIENT\_QUORUM}; non-fitting records \code{POLICY\_DENIED}.\\[3pt]
+    {\color{datagray}[U] scratch 3/3; key release not shown}};
+  \node[phead=badred, hw] at (4.6,0) {$\ge$ 3 Byzantine: a forged grant};
+  \node[pcard=accent, cw] (k3) at (9.2,0) {%
+    \textbf{Ledger:} a second checkpoint for one sequence is \code{STALE\_STATE}; a second ALLOW is \code{REPLAY}.\\[3pt]
+    A DENY/ALLOW pair for one request: \textbf{both accepted, in either order}, even at one sequence and with the DENY after the grant. A DENY uses no nonce (our E0 choice).\\[3pt]
+    \textbf{Signing:} after the grant, an honest witness refuses a fresh decision (\code{REPLAY}). That stops new signatures, not an already signed DENY.\\[3pt]
+    {\color{datagray}[U] scratch 4/4, rerun by the evaluator}};
+  \node[phead=accent, hw] at (9.2,0) {$f = 2$: double certificates};
+  \foreach \k/\c in {1/badred, 2/badred, 3/accent} \draw[\c, rounded corners=3pt] (k\k.north west) rectangle ($(k\k.north east)+(0,-5.15)$);
+\end{tikzpicture}
+
+\vspace{0.1em}
+\scriptsize These need a compromised quorum or two Byzantine witnesses: they do \textbf{not} contradict the $f \le 1$ claims. Tested reconstruction results, not HMBC vulnerabilities.\\[0.1em]
+\src{RQ2-F-DRAFT.md §3 (lines 269, 279--291); A1-0137 §2; A1-0138 §1--2; A1-0141 §2--3; A1-0126 / measurements-20261114 line 141--144}
+\end{frame}
+
+% ---------------------------------------------------------------- 20. Assurance process
+\begin{frame}{Assurance: how the evidence was checked, and what we got wrong}
+\begin{columns}[T,onlytextwidth]
+\column{0.45\textwidth}
+\footnotesize\textbf{Exact-hash, scoped reviews}
+\begin{itemize}\scriptsize\setlength{\itemsep}{2pt}
+  \item The partial RQ2 report is pinned by SHA-256 (\code{e59a51cd..}). The ledger role (A1-0142) and protocol role (A2-0091) each read the full diff and found no objection \emph{in their scope}.
+  \item Excluded: evaluation-tool correctness. A review is not an execution ACK and does not cover any later revision.
+  \item Every receipt records commands, exit codes, source pins and output hashes; peers re-run where they can (gas, K1, TLC counts).
+\end{itemize}
+\begin{alertblock}{Correlated, not independent}
+\scriptsize All three roles are the same model family. These are scoped re-checks, not independent review.
+\end{alertblock}
+
+\column{0.52\textwidth}
+\footnotesize\textbf{Errors caught, and kept in the record}\\[0.2em]
+\scriptsize
+\renewcommand{\arraystretch}{1.18}
+\begin{tabular}{@{}L{0.47\linewidth} L{0.47\linewidth}@{}}
+\toprule
+\textbf{Claimed} & \textbf{Corrected to} \\
+\midrule
+an honest DENY can follow a used ALLOW & wrong: the honest service says \code{REPLAY} first \\
+report §3 mixed ledger acceptance with honest signing & split into two statements (A1-0141) \\
+M1 gas test count 9/9 & 6/6 (A1-0136) \\
+ledger plan checker 27/27 & its dev-key scan read a missing directory; now 28/28 + 9/9 negative controls \\
+TMSC size 52,339\,B & a parser artifact; real size 16,127\,B \\
+K1 detected 3/3 & 29/40; then fixed to 40/40 \\
+a report section was ``byte-identical'' & only its first line was hashed; now whole paragraphs \\
+\bottomrule
+\end{tabular}
+\end{columns}
+\src{BOARD.md A3-0160; partial-report-packet-20261115/README.md lines 3--43; RQ2-F-DRAFT.md lines 49--55, 216--217, 293--301; A1-0136 §2; A1-0141 §5}
+\end{frame}
+
+% ================================================================ PART IV: status, limits, conclusion (slides 21-24)
+
+% ---------------------------------------------------------------- 21. Honest status
+\begin{frame}{Honest status of RQ2 on 17 November}
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, every node/.append style={minimum height=1.55cm, font=\scriptsize, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}]
+  \node[stat=accent]   at (0,0)     {{\Large\bfseries DRAFT}\\[2pt]F execution plan; it authorises no execution};
+  \node[stat=badred]   at (3.55,0)  {{\Large\bfseries NOT RUN}\\[2pt]gate F: 0 of its 8 checklist boxes ticked};
+  \node[stat=badred]   at (7.1,0)   {{\Large\bfseries 0 / 32}\\[2pt]F cases run; all 32 are NOT\_RUN};
+  \node[stat=datagray] at (10.65,0) {{\Large\bfseries LOCKED}\\[2pt]G (RQ3): not started; needs gate F PASS};
+\end{tikzpicture}
+
+\vspace{0.5em}
+\begin{columns}[T,onlytextwidth]
+\column{0.49\textwidth}
+\footnotesize\textbf{Done (offline)}
+\begin{itemize}\scriptsize\setlength{\itemsep}{1pt}
+  \item F0 fault model accepted by all roles (4 Nov); ledger and protocol code built and owner-tested.
+  \item Partial RQ2 report, reviewed in ledger and protocol scope at its exact hash (16 Nov).
+  \item Runner stages 1--2; parts of stage 3 (baseline executor, snapshot materialiser, witness-RPC capture), tested on synthetic inputs.
+  \item Merged snapshot \code{Code\_Merge\_Final}: ledger 316 passed; protocol 3,226 passed, 201 skipped; evaluation 3,097 passed, 4 failed (host-specific; the same 4 on the agent-3 tip).
+\end{itemize}
+
+\column{0.48\textwidth}
+\footnotesize\textbf{Still needed before gate F}
+\begin{enumerate}\scriptsize\setlength{\itemsep}{1pt}
+  \item an exact execution FREEZE, with the ACK of each role on that plan hash;
+  \item runner stages 3--7 finished, including authenticated, complete signer capture;
+  \item the 32 integrated cases, positive controls first;
+  \item RQ1's suites re-run on the F ledger (E regression);
+  \item \code{RQ2-F.md}, then three matching sign-offs.
+\end{enumerate}
+\end{columns}
+\src{plan-draft.json; GATES.md lines 650--661; BOARD.md A3-0161, A3-0162, A3-0163; partial-report-packet-20261115/README.md lines 124--141; A1-0145 §2 (origin/agent-1)}
+\end{frame}
+
+% ---------------------------------------------------------------- 22. Limitations and lessons
+\begin{frame}{Limitations and lessons}
+\begin{columns}[T,onlytextwidth]
+\column{0.48\textwidth}
+\footnotesize\textbf{Limitations}
+\begin{itemize}\scriptsize\setlength{\itemsep}{1pt}
+  \item \textbf{Correlated review:} one model family wrote and reviewed every module.
+  \item \textbf{Synthetic fixtures:} TEST-ONLY keys, one fixed policy, one host, local Anvil.
+  \item \textbf{Model $\neq$ implementation:} TLC checks one decision slot; ProVerif is symbolic.
+  \item \textbf{Offline $\neq$ integrated:} no RQ2 number is an F case yet.
+  \item \textbf{Symbolic crypto:} no ABE, so no secrecy or performance claim (that is RQ3).
+\end{itemize}
+\textbf{What F does not prove, even when it passes}
+\begin{itemize}\scriptsize\setlength{\itemsep}{1pt}
+  \item consensus, or safety with $\ge$ 2 Byzantine witnesses;
+  \item liveness under arbitrary delay, or real-network latency;
+  \item power-loss durability, or protection from a compromised key worker.
+\end{itemize}
+
+\column{0.49\textwidth}
+\footnotesize\textbf{Lessons}
+\begin{enumerate}\scriptsize\setlength{\itemsep}{3pt}
+  \item \textbf{A random fault point can look green.} K1 was reported detected 3 of 3; in 40 runs we saw 29. Put the fault point where the bug lives.
+  \item \textbf{Check your checks for vacuity.} A secret scan of a missing directory ``passes''.
+  \item \textbf{Bind by value, not by label.} The $q = 2$ mutant's manifest says \code{repaired-f}; only the threshold (2 vs.\ 3, read back on chain) tells them apart.
+  \item \textbf{Hash the whole artifact.} A first-line hash missed an edited sentence.
+  \item \textbf{Keep signing rules and ledger rules apart.} An honest witness's \code{REPLAY} does not stop an already signed DENY.
+\end{enumerate}
+\end{columns}
+\src{RQ2-F-DRAFT.md §5; RQ1-E.md §15; A1-0143 §2.1; A1-0141 §5; RQ2-F-DRAFT.md lines 49--55}
+\end{frame}
+
+% ---------------------------------------------------------------- 23. Conclusion
+\begin{frame}{Conclusion}
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, cw/.style={text width=4.1cm, draw=none, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}, hw/.style={text width=4.1cm, font=\footnotesize\bfseries}]
+  \node[pcard=accent, cw] (k1) at (0,0) {%
+    In the paper profiles, 8 of 32 rows hold as specified, 20 depend on details the paper leaves open, and 4 are blocked.\\[3pt]
+    repaired-e closes each gap with a named check (19 rows); legitimate access keeps working.\\[3pt]
+    Revocation gets a bound ($\le$ 30\,s).\\[3pt]
+    \textbf{Gate E PASS}, 12 Oct 2026.};
+  \node[phead=accent, hw] at (0,0) {RQ1: answered};
+  \node[pcard=pbc, cw] (k2) at (4.6,0) {%
+    With at most one faulty witness, any two 3-of-4 quorums share an honest one; the model, the pool sweep and isolated tests support this.\\[3pt]
+    One unavailable witness: still certifies. Two: time out.\\[3pt]
+    Cost: +3.7\% to +11.0\% gas per signed path.\\[3pt]
+    \textbf{Not yet shown:} that RQ1's guarantees survive in the integrated F system.};
+  \node[phead=pbc, hw] at (4.6,0) {RQ2: partial answer};
+  \node[pcard=datagray, cw] (k3) at (9.2,0) {%
+    1.\ an exact F FREEZE and role ACKs;\\
+    2.\ runner stages 3--7;\\
+    3.\ the 32 cases + E regression, then gate F.\\[4pt]
+    Only then RQ3: a real MA-CP-ABE adapter (Charm, Lewko--Waters) with the KSSC/user split, key epochs, and what stays secret after revocation or compromise.};
+  \node[phead=datagray, hw] at (9.2,0) {Next};
+  \foreach \k/\c in {1/accent, 2/pbc, 3/datagray} \draw[\c, rounded corners=3pt] (k\k.north west) rectangle ($(k\k.north east)+(0,-4.2)$);
+\end{tikzpicture}
+
+\vspace{0.3em}
+\begin{tikzpicture}
+  \node[draw=accent, fill=accent!10, rounded corners=3pt, text width=13.2cm, align=center, inner sep=5pt, font=\footnotesize]
+    {A paper-derived reconstruction: the results describe \emph{our} executable reading of HMBC,\\not the authors' implementation. The gaps are specification dependencies, not exploits.};
+\end{tikzpicture}
+\src{RQ1-E.md §0, §6; RQ2-F-DRAFT.md lines 19--24, §2.3, §2.4; PLAN.md §6 F2, §7 G0}
+\end{frame}
+
+% ---------------------------------------------------------------- 24. Close
+\begin{frame}[standout]
+Thank you\\[0.5em]
+{\normalsize Questions?}
+\end{frame}
+
+\end{document}
