@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "hmbc-f-baseline-result/v1",
+  "startedAt": "2026-11-16T17:23:44.349655+00:00",
+  "recipeSha256": "8bc05a4551cd67b59dbc6316dc68de94d20a5d163b971b7648853842cb2e96a8",
+  "status": "FAIL",
+  "executionAuthorized": false,
+  "gateF": "NOT_RUN",
+  "commands": [
+    {
+      "id": "control",
+      "status": "FAIL",
+      "argv": [
+        "/home/karma/Documents/RIS/.venv/bin/python",
+        "-c",
+        "import sys; print(\"CONTROL\"); sys.exit(7)"
+      ],
+      "cwd": "/tmp/ris-baseline-synthetic-9neu4g6w",
+      "startedAt": "2026-11-16T17:23:44.349834+00:00",
+      "environmentSha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "reaped": true,
+      "pid": 1224078,
+      "processGroup": 1224078,
+      "exitCode": 7,
+      "endedAt": "2026-11-16T17:23:44.410377+00:00",
+      "elapsedSeconds": 0.0605475070187822,
+      "stdoutSha256": "3d807d7b29f30149ccb23adcfe6511a7d202c2e105aa25371b008685063e9b4a",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "missingOutput": []
+    },
+    {
+      "id": "counterexample",
+      "status": "NOT_RUN"
+    }
+  ],
+  "blockers": [],
+  "inputPins": {
+    "workspace": "/tmp/ris-baseline-synthetic-9neu4g6w",
+    "sourceRoots": [
+      "fixture.txt"
+    ],
+    "sourceFiles": {
+      "fixture.txt": "286a39009c6c3b6fc816391bc0d193337263b85f318aa81e2fb56ae0b45e4920"
+    },
+    "runtimeFiles": {},
+    "tools": {
+      "python": {
+        "path": "/home/karma/Documents/RIS/.venv/bin/python",
+        "sha256": "5b3558f01096bc87e25ed042314a235f8f36b87e4678927281dd65abf6dfb92a"
+      }
+    }
+  },
+  "expectedCommands": [
+    {
+      "id": "control",
+      "tool": "python",
+      "args": [
+        "-c",
+        "import sys; print(\"CONTROL\"); sys.exit(7)"
+      ],
+      "cwd": ".",
+      "timeoutSeconds": 2,
+      "maxOutputBytes": 1048576,
+      "expectedExitCode": 0,
+      "requiredOutput": [
+        "CONTROL"
+      ]
+    },
+    {
+      "id": "counterexample",
+      "tool": "python",
+      "args": [
+        "-c",
+        "import sys; print(\"SYNTHETIC COUNTEREXAMPLE\"); sys.exit(12)"
+      ],
+      "cwd": ".",
+      "timeoutSeconds": 2,
+      "maxOutputBytes": 1048576,
+      "expectedExitCode": 12,
+      "requiredOutput": [
+        "SYNTHETIC COUNTEREXAMPLE"
+      ]
+    }
+  ],
+  "environmentSha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+  "endedAt": "2026-11-16T17:23:44.410615+00:00"
+}

@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "hmbc-f-baseline-result/v1",
+  "startedAt": "2026-11-16T17:23:44.349269+00:00",
+  "recipeSha256": "718cbd9391752fe8585245f50bd2961f9a081e5ba5187dc2115c6d52ee9a02be",
+  "status": "BLOCKED",
+  "executionAuthorized": false,
+  "gateF": "NOT_RUN",
+  "commands": [],
+  "blockers": [
+    "Source inventory pin mismatch"
+  ],
+  "inputPins": {
+    "workspace": "/tmp/ris-baseline-synthetic-9neu4g6w",
+    "sourceRoots": [
+      "fixture.txt"
+    ],
+    "sourceFiles": {
+      "fixture.txt": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "runtimeFiles": {},
+    "tools": {
+      "python": {
+        "path": "/home/karma/Documents/RIS/.venv/bin/python",
+        "sha256": "5b3558f01096bc87e25ed042314a235f8f36b87e4678927281dd65abf6dfb92a"
+      }
+    }
+  },
+  "expectedCommands": [
+    {
+      "id": "control",
+      "tool": "python",
+      "args": [
+        "-c",
+        "import sys; print(\"CONTROL\"); print(\"STDERR\",file=sys.stderr)"
+      ],
+      "cwd": ".",
+      "timeoutSeconds": 2,
+      "maxOutputBytes": 1048576,
+      "expectedExitCode": 0,
+      "requiredOutput": [
+        "CONTROL"
+      ]
+    },
+    {
+      "id": "counterexample",
+      "tool": "python",
+      "args": [
+        "-c",
+        "import sys; print(\"SYNTHETIC COUNTEREXAMPLE\"); sys.exit(12)"
+      ],
+      "cwd": ".",
+      "timeoutSeconds": 2,
+      "maxOutputBytes": 1048576,
+      "expectedExitCode": 12,
+      "requiredOutput": [
+        "SYNTHETIC COUNTEREXAMPLE"
+      ]
+    }
+  ],
+  "environmentSha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+  "endedAt": "2026-11-16T17:23:44.349363+00:00"
+}

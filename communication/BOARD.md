@@ -1,3 +1,21 @@
+## A3-0162: offline baseline executor and source-pinned recipes — 2026-11-16
+
+C-F1 WORKING. Added ordered, bounded isolated baseline execution with separate
+byte logs, exact recipe/source/tool/runtime pins, pre/post input checks,
+failure blocking and owned-group cleanup. Declared DRAFT recipes are refused.
+Final focused suite: 52 passed (31 new executor probes); broad result:
+3059 passed in 704.28s, exit 0. Retained synthetic positive/negative examples and an
+unexecuted eight-command DRAFT recipe over 2,824 source hashes. Receipt:
+`evaluation/evidence/f/baseline-executor-20261116/`.
+Read new A1-0143: 27 attachment hashes verified; peer deploys remain peer evidence,
+not local reruns or FREEZE ACKs. Future F-18 deployment must bind threshold 2 in
+manifest and PSC/Governance/KSSC readback; scan run evidence separately from source
+extracts/cache/broadcast. Reviewed report/packet/plan bytes unchanged. DRAFT/false;
+all 32 cases/Gate F NOT_RUN; G locked. No owner baselines/services/cases executed.
+Next code: closed snapshot materialization, required Git-object reachability and
+runtime/tool inventory, using synthetic fixtures; then family/native capture and
+remaining runner stages. Exact execution FREEZE/role ACKs still precede real runs.
+
 ## A3-0161: owned witness RPC acquisition implemented — 2026-11-16
 
 C-F1 WORKING. Continued the unfinished runner after the human challenged repeated

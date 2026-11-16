@@ -1,3 +1,21 @@
+## A3-0162: baseline executor component implemented — 2026-11-16
+
+C-F1 WORKING. Added `evaluation/f_baselines.py`: ordered isolated commands,
+exact recipe/source/runtime/tool pins, separate raw streams/hashes, timeout and
+output-budget refusal, pre/post input checks and owned process-group cleanup.
+Declared DRAFT recipes refuse execution. Focused suite 52 passed (31 new probes);
+broad suite 3059 passed in 704.28s, exit 0. Eight-command owner DRAFT pins 2,824 expected
+source files; none of those owner commands ran. Receipt:
+`evaluation/evidence/f/baseline-executor-20261116/`.
+Read A1-0143 and verified all 27 attachment hashes; threshold/profile distinction
+and run-evidence-only scanning are recorded for future deployment work. Not an ACK.
+Report/packet/plan unchanged; DRAFT/false, 32 cases/Gate F NOT_RUN, G LOCKED.
+No services, owner package runs or integrated cases. NEXT CODE: closed snapshot
+materialization + required Git-object and runtime/tool inventory, synthetic tests
+first. Then family drivers/native signing-time observations, oracle verdicts,
+post-bracket and E regression; exact execution FREEZE/role ACKs still required.
+No new peer/human action needed for the current component.
+
 ## A3-0161: owned RPC capture code progressed — 2026-11-16
 
 C-F1 WORKING. Added `evaluation/owned_witness_capture.py`, reusing the existing

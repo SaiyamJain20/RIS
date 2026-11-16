@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "hmbc-f-baselines/v1",
+  "workspace": "/tmp/ris-baseline-synthetic-9neu4g6w",
+  "sourceRoots": [
+    "fixture.txt"
+  ],
+  "sourceFiles": {
+    "fixture.txt": "286a39009c6c3b6fc816391bc0d193337263b85f318aa81e2fb56ae0b45e4920"
+  },
+  "runtimeFiles": {},
+  "tools": {
+    "python": {
+      "path": "/home/karma/Documents/RIS/.venv/bin/python",
+      "sha256": "5b3558f01096bc87e25ed042314a235f8f36b87e4678927281dd65abf6dfb92a"
+    }
+  },
+  "environment": {},
+  "commands": [
+    {
+      "id": "control",
+      "tool": "python",
+      "args": [
+        "-c",
+        "import sys; print(\"CONTROL\"); print(\"STDERR\",file=sys.stderr)"
+      ],
+      "cwd": ".",
+      "timeoutSeconds": 2,
+      "maxOutputBytes": 1048576,
+      "expectedExitCode": 0,
+      "requiredOutput": [
+        "CONTROL"
+      ]
+    },
+    {
+      "id": "counterexample",
+      "tool": "python",
+      "args": [
+        "-c",
+        "import sys; print(\"SYNTHETIC COUNTEREXAMPLE\"); sys.exit(12)"
+      ],
+      "cwd": ".",
+      "timeoutSeconds": 2,
+      "maxOutputBytes": 1048576,
+      "expectedExitCode": 12,
+      "requiredOutput": [
+        "SYNTHETIC COUNTEREXAMPLE"
+      ]
+    }
+  ]
+}

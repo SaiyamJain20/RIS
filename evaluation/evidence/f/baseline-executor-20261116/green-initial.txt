@@ -1,0 +1,33 @@
+.....................F.                                                  [100%]
+=================================== FAILURES ===================================
+___ test_owner_recipe_uses_explicit_pytest_config_toolchain_and_tlc_controls ___
+
+api = <module 'evaluation.f_baselines' from '/home/karma/Documents/RIS/evaluation/f_baselines.py'>
+recipe = {'commands': [{'args': ['-c', 'import sys; print("ok"); print("err", file=sys.stderr)'], 'cwd': '.', 'expectedExitCode..., ...}], 'environment': {'CONTROL': 'public-fixture'}, 'runtimeFiles': {}, 'schemaVersion': 'hmbc-f-baselines/v1', ...}
+tmp_path = PosixPath('/tmp/pytest-of-karma/pytest-21/test_owner_recipe_uses_explici0')
+
+    def test_owner_recipe_uses_explicit_pytest_config_toolchain_and_tlc_controls(api, recipe, tmp_path):
+        tools = {name: recipe["tools"]["python"] for name in ("python", "forge", "solc", "java")}
+        jar = tmp_path / "tlc.jar"
+        jar.write_bytes(b"synthetic jar; never executed")
+        built = api.build_owner_recipe(workspace=Path(recipe["workspace"]),
+            source_roots=["fixture.txt"], source_files=recipe["sourceFiles"],
+            tools=tools, runtime_files={str(jar): sha256(jar)},
+            environment={}, tlc_jar=jar)
+        commands = built["commands"]
+        assert [row["id"] for row in commands[:3]] == ["ledger-tests", "ledger-mutants", "protocol-tests"]
+        assert commands[0]["args"][:3] == ["test", "--root", "ledger"]
+        assert "--use" in commands[0]["args"] and "--offline" in commands[0]["args"]
+        assert commands[1]["args"] == ["-I", "ledger/tools/check_mutants.py"]
+        assert commands[2]["args"] == ["-m", "pytest", "protocol/tests", "-c", "protocol/pytest.ini", "--rootdir", "protocol", "-p", "no:cacheprovider", "-rs", "-q"]
+        assert [row["expectedExitCode"] for row in commands[3:]] == [0, 0, 12, 12, 12]
+        assert all(row["args"][0:3] == ["-cp", str(jar), "tlc2.TLC"] for row in commands[3:])
+        assert all("-metadir" in row["args"] for row in commands[3:])
+>       assert all("Agreement is violated" in row["requiredOutput"] for row in commands[5:])
+E       assert False
+E        +  where False = all(<generator object test_owner_recipe_uses_explicit_pytest_config_toolchain_and_tlc_controls.<locals>.<genexpr> at 0x7f7fa9a6a330>)
+
+evaluation/tests/test_f_baselines.py:184: AssertionError
+=========================== short test summary info ============================
+FAILED evaluation/tests/test_f_baselines.py::test_owner_recipe_uses_explicit_pytest_config_toolchain_and_tlc_controls
+1 failed, 22 passed in 1.23s

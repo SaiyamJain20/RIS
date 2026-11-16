@@ -1,0 +1,107 @@
+{
+  "schemaVersion": "hmbc-f-baseline-result/v1",
+  "startedAt": "2026-11-16T17:23:44.216488+00:00",
+  "recipeSha256": "6a7018a6b309ed60f2e056d3d42160cb74d34adfed8b53413a07192f474ad726",
+  "status": "PASS",
+  "executionAuthorized": false,
+  "gateF": "NOT_RUN",
+  "commands": [
+    {
+      "id": "control",
+      "status": "PASS",
+      "argv": [
+        "/home/karma/Documents/RIS/.venv/bin/python",
+        "-c",
+        "import sys; print(\"CONTROL\"); print(\"STDERR\",file=sys.stderr)"
+      ],
+      "cwd": "/tmp/ris-baseline-synthetic-9neu4g6w",
+      "startedAt": "2026-11-16T17:23:44.216689+00:00",
+      "environmentSha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "reaped": true,
+      "pid": 1224076,
+      "processGroup": 1224076,
+      "exitCode": 0,
+      "endedAt": "2026-11-16T17:23:44.277434+00:00",
+      "elapsedSeconds": 0.060749405005481094,
+      "stdoutSha256": "3d807d7b29f30149ccb23adcfe6511a7d202c2e105aa25371b008685063e9b4a",
+      "stderrSha256": "3367e29bf770c1bf41f43275fc1d2ff681a725aa41fa4a40a35be611ed21aeef",
+      "missingOutput": []
+    },
+    {
+      "id": "counterexample",
+      "status": "PASS",
+      "argv": [
+        "/home/karma/Documents/RIS/.venv/bin/python",
+        "-c",
+        "import sys; print(\"SYNTHETIC COUNTEREXAMPLE\"); sys.exit(12)"
+      ],
+      "cwd": "/tmp/ris-baseline-synthetic-9neu4g6w",
+      "startedAt": "2026-11-16T17:23:44.277797+00:00",
+      "environmentSha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "timedOut": false,
+      "outputLimitExceeded": false,
+      "reaped": true,
+      "pid": 1224077,
+      "processGroup": 1224077,
+      "exitCode": 12,
+      "endedAt": "2026-11-16T17:23:44.348564+00:00",
+      "elapsedSeconds": 0.07075785999768414,
+      "stdoutSha256": "84229089fd4d8d13526708b838046d8bfd99f992b5555f7f1a1630ce4c0fc382",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "missingOutput": []
+    }
+  ],
+  "blockers": [],
+  "inputPins": {
+    "workspace": "/tmp/ris-baseline-synthetic-9neu4g6w",
+    "sourceRoots": [
+      "fixture.txt"
+    ],
+    "sourceFiles": {
+      "fixture.txt": "286a39009c6c3b6fc816391bc0d193337263b85f318aa81e2fb56ae0b45e4920"
+    },
+    "runtimeFiles": {},
+    "tools": {
+      "python": {
+        "path": "/home/karma/Documents/RIS/.venv/bin/python",
+        "sha256": "5b3558f01096bc87e25ed042314a235f8f36b87e4678927281dd65abf6dfb92a"
+      }
+    }
+  },
+  "expectedCommands": [
+    {
+      "id": "control",
+      "tool": "python",
+      "args": [
+        "-c",
+        "import sys; print(\"CONTROL\"); print(\"STDERR\",file=sys.stderr)"
+      ],
+      "cwd": ".",
+      "timeoutSeconds": 2,
+      "maxOutputBytes": 1048576,
+      "expectedExitCode": 0,
+      "requiredOutput": [
+        "CONTROL"
+      ]
+    },
+    {
+      "id": "counterexample",
+      "tool": "python",
+      "args": [
+        "-c",
+        "import sys; print(\"SYNTHETIC COUNTEREXAMPLE\"); sys.exit(12)"
+      ],
+      "cwd": ".",
+      "timeoutSeconds": 2,
+      "maxOutputBytes": 1048576,
+      "expectedExitCode": 12,
+      "requiredOutput": [
+        "SYNTHETIC COUNTEREXAMPLE"
+      ]
+    }
+  ],
+  "environmentSha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+  "endedAt": "2026-11-16T17:23:44.348819+00:00"
+}

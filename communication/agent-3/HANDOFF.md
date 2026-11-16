@@ -1,3 +1,74 @@
+# A3-0162 handoff — pinned baseline executor component, 2026-11-16
+
+Continued Agent 3 / C-F1 from A3-0161, parent
+`0aac1cc0eb5000efa097e26195b0759f814f3060`, branch agent-3, same confirmed checkout.
+Startup executable/argv and `/proc/<pid>/cwd` check found no live Claude CLI in
+RIS. Held scheduled/coordinator flocks with own holders 1181398/1181433; both
+confirmed alive before writes/publication. Initial explicit three-ref fetch exited
+0: A1 `8dec55e657afd5df189d025cca03795d71108f28`, A2
+`faa4e63333eb3b68dea2bc5cc68dae0a47d8bb30`, A3 parent. Mid-run fetch exited 0
+and advanced A1 to `26e523572b5f8b7204f3a3900fdde795eea415c1`. Read live
+BOARD/common/role/SPEC/PLAN/interfaces/protocol, peer STATUS/HANDOFFs and addressed
+A1-0142/A2-0091/A2-0089/S2-0026, then new A1-0143/peer handoff.
+
+Implemented `evaluation/f_baselines.py`, an internal ordered command executor and
+owner baseline recipe builder. Exact recipe hash, closed selected source-root
+inventory, absolute lexical tool paths and runtime pins are checked before and
+after each command. It retains separate byte streams/hashes, actual exit/signal,
+timeouts and output-limit refusal; later commands stay NOT_RUN after failure.
+Linux waitid/WNOWAIT leaves the direct child unreaped until TERM/KILL of its owned
+group, protecting against PID reuse and cleaning inherited-group descendants.
+No existing E process/manifests code or frozen interfaces changed.
+
+31 new synthetic probes cover good controls, expected nonzero exits, pin drift,
+extra files, path rejection, launch errors, timeout/output budgets, descendant and
+unrelated-process behavior, lexical venv paths, environment and recipe content.
+Initial RED: 23 absent-component fixture setup errors, exit1. Initial GREEN attempt
+22pass/1 marker mismatch, exit1; recipe review 2RED failures, corrected; 24pass.
+Self-review found a DRAFT recipe could execute with a matching hash: reproduced
+2 failing probes, corrected with explicit DRAFT/blocker refusal. Final focused
+command `.venv/bin/python -m pytest -q evaluation/tests/test_f_baselines.py evaluation/tests/test_owned_command.py evaluation/tests/test_manifests.py evaluation/tests/test_f_preflight.py`:
+52 passed in 12.41s, exit0. First broad suite intentionally interrupted for that
+code correction: 1030 passed/no test failures, exit2, 261.03s. Final broad result:
+3059 passed in 704.28s, exit 0. No interrupted or preflight count is an F-case result.
+
+Receipt `evaluation/evidence/f/baseline-executor-20261116/` retains raw/gzipped
+RED/GREEN logs, reproducible synthetic examples (positive, pin refusal, bad exit,
+timeout), audit/tool versions/hashes, source/receipt SHA manifests, and an
+unexecuted owner DRAFT: 8 proposed commands, 2,824 expected source-file hashes from
+the accepted Git snapshots. Draft canonical recipe SHA
+`e2a3e12d268d188f9e21ead2464f0c88de62857341e9ee206be4cb9e6504c344`.
+Python3.13.13/pytest9.0.2; full tools/commands/exits in receipt. Self-review only,
+correlated/same author. The snapshot is not materialized, runtime/transitive tool
+closure is incomplete and the API does not parse FREEZE/ACKs. Ordinary process
+groups are not a sandbox; polled output limits can overshoot. This is component
+implementation, not completed stage-3 execution or native service validation.
+
+A1-0143 attachment audit: 27/27 hashes match exact fetched Git bytes; manifests
+and threshold readback inspected. Agent 1 reports four deploys exit0. I did not
+rerun deploys. Future F-18 requires manifest threshold2 plus PSC/Governance/KSSC
+on-chain threshold2, because its manifest profile is also repaired-f. Other F
+deployments use threshold3. Keep source extracts/Forge cache/broadcast outside
+the FREEZE run-evidence scan directory. Remaining item5 calls through the actual
+runner and exact FREEZE ACKs are still open. No peer source changed.
+
+Report e59a51cd.. / packet562f2047.. / plan1a2d5e4f.. unchanged. Plan DRAFT,
+authorizesExecution=false, 32 cases and Gate F NOT_RUN, G LOCKED. No owner package
+execution, services, integrated cases, external messages/deployments, extra
+agents/worktrees, peer/module/archive edits or main push. Four untracked user
+pitch/update files preserved. Exact-path review and normal origin/agent-3
+publication/remote verification/lock cleanup will be recorded in automation memory.
+
+**NEXT CODE:** closed snapshot materialization and runtime/tool inventory for the
+new recipe, synthetic Git/input fixtures first. Preserve pinned Git-object
+reachability needed by protocol tests; separate input snapshots from run evidence.
+Then family/native capture wiring, signing-time observations/completeness,
+oracle verdicts/post-bracket/E regression and exact executable FREEZE. Continue
+independent implementation even if refs/ACK status remain unchanged. Real service
+or integrated baseline execution still requires exact execution FREEZE/role ACKs.
+
+---
+
 # A3-0161 handoff — resume implementation, owned RPC acquisition, 2026-11-16
 
 Continued Agent 3 / C-F1 from A3-0160, parent

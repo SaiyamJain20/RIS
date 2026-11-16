@@ -1,0 +1,141 @@
+{
+  "cwd": "/home/karma/Documents/RIS",
+  "commands": [
+    {
+      "argv": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "evaluation/tests/test_f_baselines.py"
+      ],
+      "exitCode": 1,
+      "output": "red.txt.gz",
+      "result": "23 intentional absent-component fixture setup errors"
+    },
+    {
+      "argv": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "evaluation/tests/test_f_baselines.py"
+      ],
+      "exitCode": 1,
+      "output": "green-initial.txt",
+      "result": "22 passed, 1 failed recipe output-marker assertion"
+    },
+    {
+      "argv": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "evaluation/tests/test_f_baselines.py",
+        "-k",
+        "owner_recipe"
+      ],
+      "exitCode": 1,
+      "output": "recipe-review-red.txt.gz",
+      "result": "2 failed, 22 deselected; environment and marker recipe checks"
+    },
+    {
+      "argv": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "evaluation/tests/test_f_baselines.py"
+      ],
+      "exitCode": 0,
+      "output": "green.txt",
+      "result": "24 passed in 1.23s"
+    },
+    {
+      "argv": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "evaluation/tests/test_f_baselines.py",
+        "evaluation/tests/test_owned_command.py",
+        "evaluation/tests/test_manifests.py",
+        "evaluation/tests/test_f_preflight.py"
+      ],
+      "exitCode": 0,
+      "output": "focused-final.txt",
+      "result": "51 passed in 12.36s; superseded"
+    },
+    {
+      "argv": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "evaluation/tests/test_f_baselines.py",
+        "-k",
+        "declared_draft or owner_recipe_uses"
+      ],
+      "exitCode": 1,
+      "output": "draft-review-red.txt.gz",
+      "result": "2 failed, 29 deselected; draft refusal gap"
+    },
+    {
+      "argv": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-q"
+      ],
+      "exitCode": 2,
+      "output": "evaluation-suite.txt",
+      "result": "1030 passed in 261.03s; intentionally interrupted for draft guard fix; incomplete"
+    },
+    {
+      "argv": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "evaluation/tests/test_f_baselines.py",
+        "evaluation/tests/test_owned_command.py",
+        "evaluation/tests/test_manifests.py",
+        "evaluation/tests/test_f_preflight.py"
+      ],
+      "exitCode": 0,
+      "output": "focused-final-v2.txt",
+      "result": "52 passed in 12.41s; 31 executor probes plus21 compatibility"
+    },
+    {
+      "argv": [
+        ".venv/bin/python",
+        "-m",
+        "evaluation.evidence.f.baseline-executor-20261116.probe"
+      ],
+      "exitCode": 0,
+      "output": "sample/summary.json",
+      "result": "synthetic controls PASS, wrong-source BLOCKED, failed-command/timeout FAIL with later NOT_RUN"
+    },
+    {
+      "argv": [
+        ".venv/bin/python",
+        "-m",
+        "evaluation.evidence.f.baseline-executor-20261116.build_draft"
+      ],
+      "exitCode": 0,
+      "output": "owner-recipe-draft.json",
+      "result": "8 commands, 2824 source hashes; DRAFT; zero owner commands executed"
+    },
+    {
+      "argv": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-q"
+      ],
+      "exitCode": 0,
+      "output": "evaluation-suite-final.txt",
+      "result": "3059 passed in 704.28s; completed fresh full evaluator suite"
+    }
+  ]
+}
