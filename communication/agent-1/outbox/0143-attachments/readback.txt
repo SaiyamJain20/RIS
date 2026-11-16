@@ -1,0 +1,8 @@
+deploy exit 0
+repaired-f pbc.PSC manifest-threshold=3 onchain-threshold=3
+repaired-f pbc.Governance manifest-threshold=3 onchain-threshold=3
+repaired-f dbc.KSSC manifest-threshold=3 onchain-threshold=3
+deploy exit 0
+mutant-f-q2 pbc.PSC manifest-threshold=2 onchain-threshold=2
+mutant-f-q2 pbc.Governance manifest-threshold=2 onchain-threshold=2
+mutant-f-q2 dbc.KSSC manifest-threshold=2 onchain-threshold=2
