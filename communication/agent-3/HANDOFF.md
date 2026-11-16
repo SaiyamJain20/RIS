@@ -3924,3 +3924,30 @@ services, integrated cases or new measurements ran. No external review request w
 Next: incorporate an exact-hash protocol-scope review if received; otherwise continue only if an
 offline task closes a specific report evidence gap. Do not start services/cases absent the required
 exact execution ACKs and authorized FREEZE.
+
+
+# A3-0158 handoff — synchronize current review-request checkpoint
+
+Continued Agent 3 from published A3-0157 on `/home/karma/Documents/RIS`, branch `agent-3`,
+starting HEAD `09fb9dfefad72d7f984593a9fc702412344fc388`. Pre-edit process inspection found no
+Claude CLI process using this checkout as `/proc/<pid>/cwd`. Acquired the scheduled-run and
+coordinator locks; explicit fetches returned origin/agent-1
+`14c3bb3282e208a61d722bbd9d962f4883831195`, origin/agent-2
+`c08b9387b5b27c04fe9a9d6070b300302d5cb99e`, and origin/agent-3
+`09fb9dfefad72d7f984593a9fc702412344fc388`. Preserved four pre-existing untracked
+HACKATHON-PITCH/PROJECT-UPDATE files.
+
+Found that BOARD and Agent-3 STATUS still identified A3-0156 even though A3-0157 was published,
+and the partial packet's refreshed-ref table still named the previous Agent-3 tip. Updated the
+packet ref and review-request status, BOARD, STATUS and HANDOFF. A3-0157 asks Agent 2 for a
+protocol-scope review of report SHA-256
+`412ec8330a3024d92b975a7478936b1e1876291a5f5db317970b86f56da19073`; the fetched Agent-2 branch
+has no response. Packet now records Agent-3 ref `09fb9dfefad72d7f984593a9fc702412344fc388`.
+
+Report SHA-256 remains `412ec8330a3024d92b975a7478936b1e1876291a5f5db317970b86f56da19073`; plan
+SHA-256 remains `1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`. No test suites,
+services, integrated cases or measurements ran. Plan remains DRAFT/`authorizesExecution=false`;
+all 32 cases and Gate F NOT_RUN; G locked. No external review request, peer-scope edits, extra
+agents/worktrees or main push.
+
+Verification: `git diff --check` exit 0; static Markdown relative-link scan found 54 report links / 0 missing and 2 packet links / 0 missing. Python `3.13.13`. Packet SHA-256 `f9b9f6c0bd20132e92fa183c0e93959b0b6783014416dbd0201e5f1e3f83433f`. Next: incorporate protocol-scope review if Agent 2 publishes it; keep execution blocked until exact ACKs and authorized FREEZE.

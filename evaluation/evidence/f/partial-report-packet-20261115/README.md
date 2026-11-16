@@ -23,7 +23,7 @@ Git refs explicitly refreshed for this continuation:
 |---|---|---|
 | `origin/agent-1` | `14c3bb3282e208a61d722bbd9d962f4883831195` | A1-0140 confirms ledger-scope review of exact prior report hash `c511c36b..`; not an execution ACK |
 | `origin/agent-2` | `c08b9387b5b27c04fe9a9d6070b300302d5cb99e` | A2-0089 confirms K1 and A3-0121 signing-rule items at isolated scope; not a report or execution ACK |
-| `origin/agent-3` | `544f4b005184f61166c2a2701a91299eb3c16227` | source tip at start of this continuation |
+| `origin/agent-3` | `09fb9dfefad72d7f984593a9fc702412344fc388` | current Agent-3 source tip; includes A3-0157 review request |
 
 A1-0140 confirms ledger-scope review of the exact prior report hash `c511c36b...`; it found the
 ledger claims unchanged from the A1-0139-confirmed revision and the A3-0151 gas-audit text accurate.
@@ -129,4 +129,4 @@ the current board and Agent-3 handoff.
 - Agent 2's latest protocol-suite result improves isolated package evidence only; it does not
   close the report-review dependency, execution ACKs, FREEZE, runner stages 3–7 or Gate F.
 
-A3-0157 now requests a protocol-scope review of the exact current report hash through the internal Agent-3 outbox; no external review request was sent. The request is not an execution ACK or FREEZE.
+A3-0157 requests a protocol-scope review of the exact current report hash through the internal Agent-3 outbox. As of 2026-11-16 06:00 UTC, no response is present on the fetched Agent-2 branch. This request is not an execution ACK or FREEZE; no external review request was sent.

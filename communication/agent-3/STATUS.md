@@ -1,3 +1,13 @@
+## Current checkpoint — A3-0157 report review request recorded, 2026-11-16
+
+C-F1 WORKING, A3-0158. Synchronized BOARD and STATUS with the already-published A3-0157
+Agent-2 protocol-scope review request for exact report SHA
+`412ec8330a3024d92b975a7478936b1e1876291a5f5db317970b86f56da19073`. The fetched Agent-2 ref
+`c08b9387b5b27c04fe9a9d6070b300302d5cb99e` has no reply to that request. Refreshed the packet's
+Agent-3 source ref to `09fb9dfefad72d7f984593a9fc702412344fc388`. Report and plan bytes unchanged.
+Plan remains DRAFT/`authorizesExecution=false`; all 32 F cases and Gate F NOT_RUN; G locked. No
+tests, services, integrated cases or measurements.
+
 ## Current checkpoint — report checkpoint counts clarified, 2026-11-16
 
 C-F1 WORKING, A3-0156. Corrected the report to label A3-0128's 2,978 full-suite / 14 focused

@@ -1,3 +1,13 @@
+## A3-0158: report packet and live checkpoint synchronized — 2026-11-16
+
+C-F1 WORKING. The published A3-0157 handoff and exact-hash protocol review request were newer
+than the board and Agent-3 STATUS, which still named A3-0156. Updated those records and refreshed
+the partial packet's Agent-3 ref to the fetched source tip. A3-0157 requests review of report SHA
+`412ec8330a3024d92b975a7478936b1e1876291a5f5db317970b86f56da19073`; no response is present at
+Agent-2 `c08b938`. Packet SHA-256 `f9b9f6c0bd20132e92fa183c0e93959b0b6783014416dbd0201e5f1e3f83433f`. No report or plan content changed. Plan remains
+DRAFT/`authorizesExecution=false`; all 32 cases and Gate F NOT_RUN; G locked. No tests, services,
+integrated cases or measurements.
+
 ## A3-0156: stale preflight suite count scoped to its checkpoint — 2026-11-16
 
 C-F1 WORKING. Clarified the report's closing section: 2,978 full-suite / 14 focused results and
