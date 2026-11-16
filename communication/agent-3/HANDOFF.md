@@ -1,3 +1,49 @@
+# A3-0159 handoff — correct ledger submission/signing conflation, 2026-11-16
+
+Continued Agent 3 / C-F1 from live A3-0158, parent
+`3717ab7515a3a96094d0012748071cb189ca7f31`, branch `agent-3`, checkout `/home/karma/Documents/RIS`.
+Startup inspected processes and `/proc/<pid>/cwd`; no live Claude CLI used this checkout.
+Held scheduled flock and coordinator flock. Explicit three-ref fetch exit 0: Agent 1
+`b0b91f4a68f92eac9b99d6f3e50cd8b7f51f34f1`; Agent 2
+`0f2faf20761ef4be18716cd15b542b138b45001d`; Agent 3 parent above. Read required context/role,
+SPEC/PLAN/interfaces/protocol, live board, peer STATUS/HANDOFF and addressed outboxes.
+Preserved four existing untracked HACKATHON-PITCH/PROJECT-UPDATE files.
+
+A2-0090 answers A3-0157 with no protocol-scope objection to report SHA-256
+`412ec8330a3024d92b975a7478936b1e1876291a5f5db317970b86f56da19073`. A1-0141 reviews that
+same hash and identifies the ledger sentence incorrectly restricted at A3-0154. The corrected
+paragraph now states same-checkpoint DENY/ALLOW ledger acceptance in both submission orders,
+including a DENY submitted after the ALLOW grant consumes the nonce. Honest-service REPLAY for
+fresh signing is retained separately. This is a tested reconstruction result outside f<=1,
+not an HMBC-paper vulnerability. Agent 3 inspected ACSC/DecisionVerifier at exact F ledger
+`85c59f588de58a8ff5e87b9fe6f630c9d8c43642`, not the E ledger source in this checkout, and
+witness_service at accepted protocol `73fb2ce42d513ad3faf384500609e76d54aedbfb`.
+
+Peer snapshots, raw scratch test/log/tool versions, three checksum comparisons, full source
+hashes, fetched refs, last-changing commits and commands are retained in
+`evaluation/evidence/f/report-review-20261116/`. Attachment audit: 3/3, exit 0. Peer log: 4 passed,
+0 failed, 0 skipped, Forge 1.8.5 / solc 0.8.37. Agent 3 did not rerun Forge or any tests, services,
+integrated cases or measurements. Python 3.13.13, Git 2.54.0. Prior exact-hash reviews are
+correlated and scoped; the corrected current hash has no fresh peer confirmation. A3-0159 asks
+both roles for exact-hash scoped review internally. No external message was sent.
+
+Report SHA-256 `e59a51cd8c92a38780aa820191286887d9dc92deb1a0cdefe8c699f34a6e3b40`; packet SHA-256
+`0e6305a14eda8afbb3c0151f4f1f1eeae591afc765897cd599280c8972b27ecc`; plan SHA-256 `1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919` unchanged.
+Plan DRAFT/`authorizesExecution=false`; all 32 cases and Gate F NOT_RUN; G locked. K1 and A3-0121
+confirmations stay closed at isolated scope via A2-0089. Execution ACKs/authorized FREEZE, runner
+stages 3–7, complete/authenticated transcript capture and integrated E regression remain open.
+No peer module/mailbox/archive/frozen-interface changes, extra agents/worktrees or main push.
+Next: incorporate exact-hash report confirmations or close a specific permitted offline evidence
+gap; services/cases remain gated. Static verification: `git diff --check` exit 0; 54 report links, 3 packet links and 2
+receipt links resolve; report/plan pins match the packet; all six peer snapshots equal exact
+fetched Git blobs; all retained receipt hashes verify. The plan has 32 unique case IDs. The
+first staging validator ran from the wrong directory and failed before edits (Python exit 1;
+outer shell exit 0 after checksum success); repeated from the root with set -e, all checks pass.
+The checkpoint is prepared for a normal push to origin/agent-3; final publication is recorded
+in automation memory after remote verification. Run time: 2026-11-16T11:08:20Z.
+
+---
+
 # A3-0155 handoff — correct partial packet link-audit count, 2026-11-16
 
 Continued Agent 3 from live board A3-0154 on `/home/karma/Documents/RIS`, branch `agent-3`, parent

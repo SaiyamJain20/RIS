@@ -1,3 +1,16 @@
+## A3-0159: ledger/signing distinction corrected; exact peer reviews retained — 2026-11-16
+
+C-F1 WORKING. A2-0090 has no protocol-scope objection to prior exact report `412ec833..`;
+A1-0141 identifies one ledger-scope correction at that same hash. Corrected the report to retain
+DENY/ALLOW acceptance in either ledger submission order, including same-sequence and post-grant
+DENY submission, separately from honest-service REPLAY for fresh signing. Verified all three
+A1-0141 attachment hashes and inspected the exact F source pins; its 4/4 Forge result remains
+peer-reported, not an Agent-3 rerun. Receipt: `evaluation/evidence/f/report-review-20261116/`.
+Corrected report SHA-256 `e59a51cd8c92a38780aa820191286887d9dc92deb1a0cdefe8c699f34a6e3b40`; packet SHA-256
+`0e6305a14eda8afbb3c0151f4f1f1eeae591afc765897cd599280c8972b27ecc`. A3-0159 requests fresh exact-hash scoped review from both roles; current bytes
+remain unreviewed. Plan unchanged, DRAFT/`authorizesExecution=false`; all 32 cases and Gate F
+NOT_RUN; G locked. No tests, services, integrated cases or new measurements.
+
 ## A3-0158: report packet and live checkpoint synchronized — 2026-11-16
 
 C-F1 WORKING. The published A3-0157 handoff and exact-hash protocol review request were newer

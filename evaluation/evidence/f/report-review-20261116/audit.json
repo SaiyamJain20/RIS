@@ -1,0 +1,108 @@
+{
+  "timestampUtc": "2026-11-16T11:07:16.151077+00:00",
+  "python": "Python 3.13.13",
+  "git": "git version 2.54.0",
+  "refs": {
+    "agent-1": "b0b91f4a68f92eac9b99d6f3e50cd8b7f51f34f1",
+    "agent-2": "0f2faf20761ef4be18716cd15b542b138b45001d",
+    "agent-3": "3717ab7515a3a96094d0012748071cb189ca7f31"
+  },
+  "reviewedReportSha256": "412ec8330a3024d92b975a7478936b1e1876291a5f5db317970b86f56da19073",
+  "snapshots": [
+    {
+      "ref": "origin/agent-1",
+      "fetchedCommit": "b0b91f4a68f92eac9b99d6f3e50cd8b7f51f34f1",
+      "path": "communication/agent-1/outbox/0141-review-rq2-f-report-412ec833-ledger-scope.md",
+      "lastChangingCommit": "b0b91f4a68f92eac9b99d6f3e50cd8b7f51f34f1",
+      "snapshot": "A1-0141.md",
+      "sha256": "9bc5c081e855c5d8e3b8aa3ae9e775e7d83e58e1b30fec09233832ec48e29b3a"
+    },
+    {
+      "ref": "origin/agent-2",
+      "fetchedCommit": "0f2faf20761ef4be18716cd15b542b138b45001d",
+      "path": "communication/agent-2/outbox/0090-review-rq2-partial-report-protocol-scope-no-objection.md",
+      "lastChangingCommit": "0f2faf20761ef4be18716cd15b542b138b45001d",
+      "snapshot": "A2-0090.md",
+      "sha256": "bc34ffd64bb01b4ceda48d5dea003da884eb61fa3d8d51ecf240eb45be69a1d7"
+    },
+    {
+      "ref": "origin/agent-1",
+      "fetchedCommit": "b0b91f4a68f92eac9b99d6f3e50cd8b7f51f34f1",
+      "path": "communication/agent-1/outbox/0141-attachments/DoubleCert.t.sol",
+      "lastChangingCommit": "b0b91f4a68f92eac9b99d6f3e50cd8b7f51f34f1",
+      "snapshot": "A1-0141-DoubleCert.t.sol",
+      "sha256": "5c0f3fb6b96fee2dfc27138573a94ed481e9c8aee7aa43c246f40a5029739dea"
+    },
+    {
+      "ref": "origin/agent-1",
+      "fetchedCommit": "b0b91f4a68f92eac9b99d6f3e50cd8b7f51f34f1",
+      "path": "communication/agent-1/outbox/0141-attachments/doublecert-forge-log.txt",
+      "lastChangingCommit": "b0b91f4a68f92eac9b99d6f3e50cd8b7f51f34f1",
+      "snapshot": "A1-0141-doublecert-forge-log.txt",
+      "sha256": "c4be362c761647a8dd828e7064dae1df244c61ecd0e41c9f89fa8b3b6437a3d4"
+    },
+    {
+      "ref": "origin/agent-1",
+      "fetchedCommit": "b0b91f4a68f92eac9b99d6f3e50cd8b7f51f34f1",
+      "path": "communication/agent-1/outbox/0141-attachments/versions.txt",
+      "lastChangingCommit": "b0b91f4a68f92eac9b99d6f3e50cd8b7f51f34f1",
+      "snapshot": "A1-0141-versions.txt",
+      "sha256": "34eabfa52c66cfcc37d3a481d4b922a4802f9761242cbb8c1491e9e220b20776"
+    },
+    {
+      "ref": "origin/agent-1",
+      "fetchedCommit": "b0b91f4a68f92eac9b99d6f3e50cd8b7f51f34f1",
+      "path": "communication/agent-1/outbox/0141-attachments/SHA256SUMS",
+      "lastChangingCommit": "b0b91f4a68f92eac9b99d6f3e50cd8b7f51f34f1",
+      "snapshot": "A1-0141-SHA256SUMS",
+      "sha256": "856873ce1181853ac80af0092901ebc665eebad061603c3657ddbe4f956387e5"
+    }
+  ],
+  "inspectedSources": [
+    {
+      "commit": "85c59f588de58a8ff5e87b9fe6f630c9d8c43642",
+      "path": "ledger/src/ACSC.sol",
+      "sha256": "c1f6b1631593c0fc163ded84df36ea618f91a98e4a2468315321e32a5439d546"
+    },
+    {
+      "commit": "85c59f588de58a8ff5e87b9fe6f630c9d8c43642",
+      "path": "ledger/src/DecisionVerifier.sol",
+      "sha256": "b5c92a6bf2fbe8a504adfbf05a07675af1569d45ecdd7cc869f9d825e19ff114"
+    },
+    {
+      "commit": "73fb2ce42d513ad3faf384500609e76d54aedbfb",
+      "path": "protocol/hmbc_protocol/witness_service.py",
+      "sha256": "0012ce6d83b7193d87353cae71c077671fc58b5c99dc8b53b3875b95ab81afa8"
+    }
+  ],
+  "attachmentChecks": {
+    "checked": 3,
+    "matched": 3,
+    "exitCode": 0
+  },
+  "commands": [
+    "git fetch origin refs/heads/agent-1:refs/remotes/origin/agent-1 refs/heads/agent-2:refs/remotes/origin/agent-2 refs/heads/agent-3:refs/remotes/origin/agent-3",
+    "git show <fetchedCommit>:<path>",
+    "git log -1 --format=%H <fetchedCommit> -- <path>",
+    "hashlib.sha256(snapshot bytes) compared with A1-0141 SHA256SUMS",
+    "git show <sourceCommit>:<sourcePath>"
+  ],
+  "classification": "peer-reported tested reconstruction result outside f<=1; artifact verification and source inspection by Agent 3",
+  "forgeRerun": false,
+  "servicesStarted": false,
+  "integratedCasesRun": false,
+  "verificationAttempts": [
+    {
+      "attempt": 1,
+      "result": "Python validator failed before edits because invoked from evidence directory instead of repository root",
+      "pythonExitCode": 1,
+      "shellExitCode": 0,
+      "reasonForShellZero": "subsequent sha256sum command passed; no validation success inferred"
+    },
+    {
+      "attempt": 2,
+      "result": "Repeated from repository root with set -e; successful checks recorded in verification.json",
+      "exitCode": 0
+    }
+  ]
+}

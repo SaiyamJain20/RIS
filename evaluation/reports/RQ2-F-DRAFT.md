@@ -281,10 +281,14 @@ unavailable witnesses stop certificates (availability, not safety). What conflic
 certificates do on the ledger (agent 1's scratch test, reproduced by me, hash 5c0f3fb6.., 4/4
 pass): two checkpoints for one sequence cannot both install (second STALE_STATE); two ALLOW
 certificates for one request cannot both grant (second REPLAY). A DENY/ALLOW pair for one request
-across checkpoint sequences and before a grant consumes the nonce is accepted in either order,
-because a denial consumes no nonce (an E0 reconstruction choice), so both outcomes are logged.
-After a grant consumes the nonce, an honest witness refuses a fresh decision as REPLAY. Tested
-reconstruction results outside the fault bound.
+is accepted by the ledger in either order, including at the same checkpoint sequence and including
+a DENY certificate submitted after the grant consumed the nonce. A denial consumes no nonce and
+has no replay guard (`ACSC.sol:186-188`; an E0 reconstruction choice), so both outcomes are logged.
+A1-0141's peer rerun reports 4/4; Agent 3 verified its three attachment hashes and inspected the
+pinned source, but did not rerun Forge. Separately, after a grant consumes the nonce an honest
+witness refuses to sign a fresh decision (REPLAY, A2-0089). That limits new signatures, not the
+ledger's acceptance of an already signed DENY certificate. These are tested reconstruction
+results outside the fault bound. See [the A1-0141 correction and A2-0090 review receipt](../evidence/f/report-review-20261116/README.md).
 
 Oracle correction (A3-0129; S2-0024 reviewed): the AccessDecision key includes type, domain,
 witness-set version and `requestDigest`; `stateSequence` is part of its effect. The accepted
@@ -372,16 +376,16 @@ Run services/cases only after the authorized FREEZE requirements are met. A revi
 report can document those blockers; it cannot substitute prior measurements for the 32 missing
 case results or close Gate F.
 
-For this report revision, review status is separate from execution authorization. A1-0137,
-A1-0138 and A1-0139 reviewed earlier hashes in ledger scope. A1-0140 then confirmed ledger scope
-for exact report hash `c511c36b...`: the gas audit text was accurate and the ledger claims were
-unchanged. The present revision changes protocol/evaluation status and wording; A1-0140 says such
-later changes do not require another Agent-1 review. A2-0089 confirms only K1 and the corrected
-A3-0121 signing-rule reading; it is not a report review. The present report revision has no
-Agent-2 report review. A1-0129 reviewed ledger details in the plan, not this report, and is not an
-execution ACK. S2-0026 reviewed the draft plan and A2-0088 reviewed hook coverage; neither is an
-execution ACK. See the [A1-0137–0140 review receipt](../evidence/f/report-review-a1-0137-20261115/README.md),
-[A1-0140 message](../evidence/f/owner-confirmations-20261116/A1-0140.md),
-and [partial packet receipt](../evidence/f/partial-report-packet-20261115/README.md). The execution
-gate still requires exact owner ACKs and an authorized FREEZE for the exact execution plan before
-any services or cases.
+For this report revision, review status is separate from execution authorization. A1-0137
+through A1-0140 reviewed earlier hashes in ledger scope. A2-0090 reports no protocol-scope objection
+to exact prior report SHA-256 `412ec8330a3024d92b975a7478936b1e1876291a5f5db317970b86f56da19073`;
+it excludes ledger claims and evaluation-tool correctness. A1-0141 reviewed that same hash and
+identified the ledger/signing conflation corrected in §3 above; it found no other ledger-scope
+objection. A1-0140's earlier allowance for status/protocol-only revisions did not cover that ledger
+sentence. The corrected report hash still requires fresh scoped review; neither prior review is
+an endorsement of these new bytes. Both reviews are correlated. A2-0089 remains an isolated-scope
+confirmation of K1 and the corrected A3-0121 signing rule. A1-0129, S2-0026 and A2-0088 reviewed
+plan details, not execution. See the [A1-0141/A2-0090 receipt](../evidence/f/report-review-20261116/README.md)
+and [partial packet receipt](../evidence/f/partial-report-packet-20261115/README.md). No review is an
+execution ACK or FREEZE ACK. The execution gate still requires exact owner ACKs and an authorized
+FREEZE for the exact execution plan before any services or cases.
