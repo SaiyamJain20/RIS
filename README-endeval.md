@@ -2,29 +2,29 @@
 
 **Open [`hmbc-end-presentation.pdf`](hmbc-end-presentation.pdf) to view the deck.** It is LaTeX Beamer with the
 Metropolis theme, 16:9, and uses the same preamble, colours and macros as the mid-eval deck
-(`origin/slides:hmbc-presentation.tex`), so the two read as one series. 24 pages, about 18 minutes spoken (20 with transitions).
+(`origin/slides:hmbc-presentation.tex`), so the two read as one series. 29 pages, about 22½ minutes spoken
+(about 25 with transitions).
 
 **Status on these slides (17 Nov 2026):** RQ1 gate E **PASS** (12 Oct 2026). RQ2: the F execution plan is a
 **DRAFT**, gate F is **NOT RUN**, and all **32 F cases are NOT_RUN**; runner stages 3–7 are in progress; the
-partial RQ2-F report is peer-reviewed in ledger and protocol scope at its exact hash (`e59a51cd..`). RQ3 (G) is
-**LOCKED** and not started. Everything shown is a **paper-derived reconstruction**, not the authors'
-implementation.
+partial RQ2-F report is peer-reviewed in ledger and protocol scope at its exact hash (`e59a51cd..`). Everything
+shown is a **paper-derived reconstruction**, not the authors' implementation.
 
 | Slides | Content |
 |---|---|
 | 1 | Title, with the status line |
-| 2–3 | Recap: the paper in one slide; JANUS (related system only) and the stack we built |
-| 4–5 | Our three RQs and where each stands (timeline); method, evidence labels and finding classes |
-| 6–8 | RQ1, complete: the three gaps and the repaired-e profile; results, paper vs repaired, with the revocation window; gate E (56-row grid, mutants, ProVerif, verdict) |
-| 9–11 | RQ2: the question and fault model (n = 4, q = 3, f = 1); the design (three signed paths, governance, single-signing witnesses); how RQ2 will be judged (32 cases, six families, seven stages) vs the offline evidence that exists |
-| 12–14 | RQ2 safety: TLC finite model (five configurations); oracle/store differential and seven mutation controls; M5 pool sweep (f = 1 vs the f = 2 control) |
-| 15–17 | RQ2 availability (M2 virtual, M6 real-process); cost (M1/M1b/M1c gas chart); durability (the K1 kill-test story, 29/40 then 40/40) |
-| 18–20 | RQ2 trust matrix; out-of-bound results (permanent DBC halt, forged-credential grant, DENY/ALLOW double certificates); assurance process and the errors we kept |
-| 21–23 | Honest status of RQ2; limitations and lessons; conclusion |
-| 24 | Questions |
+| 2–3 | The paper: the problem and HMBC's architecture (actors, proxy and domain chains, six contracts); how access works end to end, split decryption, and the assumptions our RQs probe |
+| 4 | Our project: the two research questions and their status, how we work, evidence labels, what we built |
+| 5–13 | RQ1 in full: the question and the three gaps; method (profiles, frozen 56-row catalog, result classes); the repaired-e design; results for gap 1, gap 2 (with the revocation window) and gap 3; mutants and ProVerif; gate E (56-row grid and verdict); what RQ1 shows |
+| 14–16 | RQ2: the question and fault model (n = 4, q = 3, f = 1); the design (three signed paths, governance, single-signing witnesses); how RQ2 will be judged (32 cases, six families, seven stages) vs the offline evidence that exists |
+| 17–19 | RQ2 safety: TLC finite model (five configurations); oracle/store differential and seven mutation controls; M5 pool sweep (f = 1 vs the f = 2 control) |
+| 20–22 | RQ2 availability (M2 virtual, M6 real-process); cost (M1/M1b/M1c gas chart); durability (the K1 kill-test story, 29/40 then 40/40) |
+| 23–26 | RQ2 trust matrix; out-of-bound results (permanent DBC halt, forged-credential grant, DENY/ALLOW double certificates); assurance process and the errors we kept; honest status (plan DRAFT, gate F NOT RUN, 0/32 cases) |
+| 27–28 | Limitations and lessons; conclusion |
+| 29 | Questions |
 
 Speaker script with per-slide timing and Q&A backups: [`script-hmbc-end-presentation.md`](script-hmbc-end-presentation.md)
-(about 18 minutes spoken; suggested three-way split 1–8 / 9–16 / 17–24).
+(about 22½ minutes spoken; suggested three-way split 1–9 / 10–19 / 20–29).
 
 Source map for every number on every slide: [`sources-end-presentation.md`](sources-end-presentation.md).
 
@@ -55,16 +55,22 @@ as in the mid-eval deck.
 ## Sources
 
 - Primary snapshot: `origin/Code_Merge_Final` (`fc80bf0`), the ownership merge of the three agent branches.
-  RQ1 numbers come from `evaluation/reports/RQ1-E.md` (`69dabfba..`) and `communication/GATES.md`; RQ2 numbers
-  from `evaluation/reports/RQ2-F-DRAFT.md` (`e59a51cd..`), its receipts under `evaluation/evidence/f/`, and the
+  RQ1 numbers come from `evaluation/reports/RQ1-E.md` (`69dabfba..`), `communication/GATES.md`,
+  `interfaces/v1/source-map.csv` and `assumptions.csv`, and the owner window measurements A1-0046 / A2-0026; RQ1
+  slides 5–13 are adapted from mid-eval slides 15–22 and keep their numbers. RQ2 numbers come from
+  `evaluation/reports/RQ2-F-DRAFT.md` (`e59a51cd..`), its receipts under `evaluation/evidence/f/`, and the
   agents' outbox messages (A1-0123..0126, A1-0136..0144, A2-0087..0091). The merged-snapshot test counts on
-  slide 21 come from A1-0145 on `origin/agent-1`.
-- Paper figure 1 is taken from HMBC2020 (CC BY 4.0). The other diagrams and charts are our own.
-- JANUS appears only as a related system, as in the mid-eval deck: no JANUS code, design or bug claims are used.
+  slide 26 come from A1-0145 on `origin/agent-1`.
+- Paper figure 1 is taken from HMBC2020 (CC BY 4.0). The other diagrams and charts are redrawn from the paper or
+  our own.
+- JANUS appears in one line only, as related work: no JANUS code, design or bug claims are used.
 
 ## Changelog
 
-- 2026-11-17: first version of the end-evaluation deck, built from the mid-eval deck's template. Recap
-  condensed from mid-eval slides 1–14; RQ1 condensed from mid-eval slides 15–22 with the same numbers; RQ2
-  slides new. Source heads: `origin/Code_Merge_Final` fc80bf0 (agent-1 d7bac30, agent-2 faa4e63,
-  agent-3 ca82b7f); A1-0145 at agent-1 03cbf39.
+- 2026-11-17: first version of the end-evaluation deck (24 pages), built from the mid-eval deck's template.
+  Source heads: `origin/Code_Merge_Final` fc80bf0 (agent-1 d7bac30, agent-2 faa4e63, agent-3 ca82b7f);
+  A1-0145 at agent-1 03cbf39.
+- 2026-11-17, later: restructured on the human's request into a complete account of the project so far: the
+  paper in two slides, a project slide, RQ1 in full (nine slides adapted from mid-eval slides 15–22, same
+  numbers) and RQ2 in full (thirteen slides). The project is presented as two research questions. 29 pages;
+  script retimed to about 22½ minutes. Same source heads.
