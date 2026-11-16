@@ -3,7 +3,7 @@
 %   tectonic -X compile hmbc-end-presentation.tex      (or: latexmk -xelatex hmbc-end-presentation.tex)
 % Same preamble, colours and macros as the mid-eval deck (origin/slides:hmbc-presentation.tex).
 % Figure 1 is taken from the paper (CC BY 4.0); the other diagrams are redrawn or our own.
-% Structure: the paper (slides 2-3), our project (4), RQ1 in full (5-13), RQ2 in full (14-26), limits, conclusion.
+% Structure: the paper (slides 2-3), JANUS (4), our project (5), RQ1 in full (6-14), RQ2 in full (15-27), limits, conclusion.
 % Status as of 2026-11-17: RQ1 gate E PASS (12 Oct); RQ2/F execution plan DRAFT, gate F NOT RUN, all 32 F cases NOT_RUN.
 % Every number on a result slide is mapped to its source in sources-end-presentation.md.
 % Primary snapshot: origin/Code_Merge_Final fc80bf0 (RQ2-F-DRAFT.md sha256 e59a51cd.., RQ1-E.md sha256 69dabfba..).
@@ -84,7 +84,7 @@
 
 \begin{document}
 
-% ================================================================ PART I: the paper (slides 1-3)
+% ================================================================ PART I: the paper (slides 1-3) and JANUS (slide 4)
 
 % ---------------------------------------------------------------- 1. Title
 \maketitle
@@ -124,35 +124,28 @@
 \note{Paper §I, §III (Fig. 1, Fig. 3/4); condensed from mid-eval slides 2-5.}
 \end{frame}
 
-% ---------------------------------------------------------------- 3. The paper (B): access end to end + assumptions
+% ---------------------------------------------------------------- 3. The paper (B): access overview + assumptions
 \begin{frame}{The paper (2/2): how access works, and what it assumes}
 \centering
-\begin{tikzpicture}[x=1cm, y=1cm, st/.style={box, text width=1.6cm, minimum height=2.05cm, fill=white, font=\scriptsize, inner sep=2pt, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}]
-  \foreach \i/\t/\col in {
-      0/{\textbf{(1)} user sends cert + \textit{data\_id} to the PSC; the LSC opens a log record}/pbc,
-      1/{\textbf{(2--3)} TMSC checks CERT, CRL and TempACL}/pbc,
-      2/{\textbf{(4)} forwarded to the DBC: GID, verified attributes, \textit{data\_id}}/accent,
-      3/{\textbf{(5)} ACSC checks the access policy}/dbc,
-      4/{\textbf{(6--8)} KSSC fetches $C$ and does decryption step 1}/dbc,
-      5/{\textbf{(9)} $C_1$ + tx hash returned; the ACSC logs on the DBC}/dbc,
-      6/{\textbf{(10)} PSC returns $C_1$; the LSC stores the record; the user finishes decryption}/pbc} {
-    \node[st, draw=\col, thick] (s\i) at (\i*1.98,0) {\t};
-  }
-  \foreach \i [evaluate=\i as \j using int(\i+1)] in {0,...,5} \draw[->, thick, gray] (s\i) -- (s\j);
-  \node[font=\tiny\bfseries, text=pbc] at ($(s0.north)!0.5!(s1.north)+(0,0.2)$) {PROXY CHAIN};
-  \node[font=\tiny\bfseries, text=dbc] at ($(s3.north)!0.5!(s5.north)+(0,0.2)$) {DOMAIN CHAIN};
-\end{tikzpicture}\\[0.1em]
-\src{Redrawn from paper Fig.~6 (numbers are the paper's steps)}
+\begin{tikzpicture}[x=1cm, y=1cm,
+    stg/.style={draw, thick, rounded corners=3pt, text width=2.0cm, minimum height=1.25cm, align=center, inner sep=3pt, font=\footnotesize, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}},
+    sub/.style={font=\scriptsize, text=datagray}]
+  \node[stg, draw=black!70, fill=gray!8]  (a) at (0,0)    {\textbf{Request}\\{\scriptsize user sends credentials}};
+  \node[stg, draw=pbc, fill=pbc!10]       (b) at (2.75,0) {\textbf{\textcolor{pbc}{Proxy chain}}\\{\scriptsize verifies credentials}};
+  \node[stg, draw=dbc, fill=dbc!12]       (c) at (5.5,0)  {\textbf{\textcolor{dbc}{Domain chain}}\\{\scriptsize checks the policy}};
+  \node[stg, draw=dbc, fill=dbc!12]       (d) at (8.25,0) {\textbf{Key release}\\{\scriptsize two-step decryption}};
+  \node[stg, draw=accent, fill=accent!10] (e) at (11.0,0) {\textbf{Audit log}\\{\scriptsize on both chains}};
+  \foreach \x/\y in {a/b, b/c, c/d, d/e} \draw[->, very thick, gray] (\x) -- (\y);
+\end{tikzpicture}\\[0.15em]
+\src{Overview, simplified from paper Fig.~6}
 
-\vspace{0.3em}
+\vspace{0.6em}
 \begin{columns}[T,onlytextwidth]
 \column{0.48\textwidth}
-\footnotesize\textbf{Key idea: split the decryption}\\[0.2em]
-\scriptsize Record policy, e.g.\ (isDoctorAt$(X)$ \textbf{AND} isTreating$(\beta)$) \textbf{OR} (isDoctorAt$(*)$ \textbf{AND} onDuty$(*)$).
-\begin{itemize}\setlength{\itemsep}{1pt}
-  \item The KSSC keeps the temporal \emph{onDuty} key and never gives it to users; the user holds the long-term \emph{Doctor} key. Neither decrypts alone.
+\footnotesize\textbf{Key idea: split the decryption}
+\begin{itemize}\scriptsize\setlength{\itemsep}{2pt}
+  \item The key store (KSSC) keeps the temporal \emph{onDuty} key; the user holds the long-term \emph{Doctor} key. Neither decrypts alone.
   \item \textbf{Revocation is a list update:} ending a duty removes a TempACL entry; no key is re-issued.
-  \item A ``System'' role ANDed into every policy forces all access through the KSSC.
 \end{itemize}
 
 \column{0.49\textwidth}
@@ -160,13 +153,51 @@
 \scriptsize isolation \,·\, an honest majority in every chain \,·\, secure crypto \,·\, uncompromised keys
 \end{alertblock}
 \scriptsize
-\textbf{\textcolor{accent}{RQ1}} asks what the specified flow guarantees, and what depends on details it leaves open: step~(4), trust-list freshness, the logging.\\[0.2em]
-\textbf{\textcolor{pbc}{RQ2}} asks what survives when the honest majority fails for the parties that vouch for each decision.
+\textbf{\textcolor{accent}{RQ1}}: what does the flow guarantee, and what depends on details it leaves open?\\[0.2em]
+\textbf{\textcolor{pbc}{RQ2}}: what survives when the honest majority fails?
 \end{columns}
-\note{Paper Fig. 5 and 6, §III-E2, §V; mid-eval slides 6-8. The paper's prototype: 603 ms per access (Table 4).}
+\note{Paper Fig. 5 and 6, §III-E2, §V; mid-eval slides 6-8. Steps of Fig. 6: request and log record at the PSC/LSC; TMSC checks CERT, CRL, TempACL; ACSC checks the policy; KSSC does decryption step 1; ACSC logs on the DBC, LSC stores the record on the PBC; the user finishes decryption. The paper's prototype: 603 ms per access (Table 4).}
 \end{frame}
 
-% ---------------------------------------------------------------- 4. Our project
+% ---------------------------------------------------------------- 4. JANUS
+\begin{frame}{JANUS: the authors' extension of HMBC}
+\begin{columns}[T,onlytextwidth]
+\column{0.41\textwidth}
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, jl/.style={box, text width=5.25cm, minimum height=0.5cm}]
+  \node[jl, fill=blue!6]                    (fe) at (0,0)     {\textbf{Electron app} (React UI) + user's Vault};
+  \node[jl, fill=gray!8]                    (fa) at (0,-0.85) {\textbf{Frontend API} (Node.js) · Fabric CA per stakeholder};
+  \node[jl, draw=pbc, fill=pbc!8]           (pc) at (0,-1.72) {\textbf{Proxy chain} (Fabric, Raft): PSC · TMSC · LSC};
+  \node[jl, fill=gray!8]                    (ib) at (0,-2.5) {\textbf{Inter-BC API}: RabbitMQ queues · voting};
+  \node[jl, draw=dbc, fill=dbc!10]          (dc) at (0,-3.28) {\textbf{Domain chain} (Fabric, Raft): ACSC · KSSC};
+  \node[jl, draw=accent, fill=accent!10]    (va) at (0,-4.06)  {\textbf{Domain Vault + Go ABE plugin} (domain key)};
+  \node[jl, fill=gray!8]                    (db) at (0,-4.84) {\textbf{Database API}: AES data, ABE-wrapped keys};
+  \foreach \a/\b in {fe/fa,fa/pc,pc/ib,ib/dc,dc/va,va/db} \draw[<->, thick, gray] (\a.south) -- (\b.north);
+  \node[draw, dashed, gray, rounded corners, fit=(fe)(db), inner sep=4pt] (k8s) {};
+  \node[font=\tiny, text=gray, anchor=north] at (k8s.south) {every component runs in its own Kubernetes pod};
+\end{tikzpicture}\\[0.1em]
+\src{Simplified from JANUS Fig.~5}
+
+\column{0.56\textwidth}
+\footnotesize
+\textbf{JANUS} extends HMBC. It is by HMBC's authors (Malamas, Kotzanikolaou, Burmester) with CENSUS S.A., \emph{Applied Sciences} 13(1):566, 2023.\\[0.4em]
+\textbf{Main extensions}
+\begin{itemize}\scriptsize\setlength{\itemsep}{2pt}
+  \item \textbf{A formal access model (HMBAC):} attribute verification on the PBC; authorisation and decryption on the DBC.
+  \item \textbf{An open-source system:} Hyperledger Fabric 2.4 + Raft, JavaScript contracts, Kubernetes pods.
+  \item \textbf{Single access point enforced by crypto:} a \emph{domain key} that only the KSSC can derive (in Vault) is ANDed into every policy.
+  \item \textbf{Hybrid encryption:} AES for records, MA-ABE only for the AES keys.
+  \item \textbf{Engineering:} RabbitMQ queues with throttling; voting for domains, stakeholders and policies.
+  \item \textbf{Evaluation:} attack trees; 2--300 concurrent requests, no failed requests.
+\end{itemize}
+\vspace{0.3em}
+\scriptsize\textbf{\textcolor{accent}{Left open:}} Raft tolerates crashes only; Byzantine tolerance is named as future work.\\[0.3em]
+{\color{datagray}Related work only: we implement HMBC and use no JANUS code.}
+\end{columns}
+\note{JANUS = Malamas, Palaiologos, Kotzanikolaou, Burmester, Glynos, Appl. Sci. 13(1):566, 2023, doi 10.3390/app13010566. Facts from mid-eval slides 9-10 (origin/slides d292576, hmbc-presentation.tex lines 331-386).}
+\end{frame}
+
+% ---------------------------------------------------------------- 5. Our project
 \begin{frame}{Our project: two research questions, one reconstruction}
 \centering
 \begin{tikzpicture}[x=1cm, y=1cm,
@@ -211,16 +242,13 @@
   \item Forge tests + mutants, an independent oracle, ProVerif 2.05, TLA+/TLC 2.19.
 \end{itemize}
 \end{columns}
-
-\vspace{0.1em}
-\raggedright\scriptsize\color{datagray} JANUS (same authors, 2023; Fabric/Raft, crash faults only) is related work, not our baseline: no JANUS code or claims are used.
 \end{frame}
 
-% ================================================================ PART II: RQ1 (slides 5-13), adapted from mid-eval slides 15-22
+% ================================================================ PART II: RQ1 (slides 6-14), adapted from mid-eval slides 15-22
 % Source of every number below: evaluation/reports/RQ1-E.md (69dabfba..), communication/GATES.md (E section),
 % interfaces/v1/source-map.csv and assumptions.csv, and the owner window measurements A1-0046 / A2-0026.
 
-% ---------------------------------------------------------------- 5. RQ1 question and gaps
+% ---------------------------------------------------------------- 6. RQ1 question and gaps
 \begin{frame}{RQ1: the question, and what HMBC's flow leaves unspecified}
 \begin{center}
 \vspace{-0.3em}
@@ -263,7 +291,7 @@
 \note{Source map: 37 paper passages (S01-S37) and 41 recorded completions (A01-A41) in interfaces/v1. Gap 1 is A02/A14/A19/A25, gap 2 A09/A17/A20/A22, gap 3 A03/A11/A12/A26.}
 \end{frame}
 
-% ---------------------------------------------------------------- 6. RQ1 method
+% ---------------------------------------------------------------- 7. RQ1 method
 \begin{frame}{RQ1 method: the paper and our repair on one frozen catalog}
 \begin{columns}[T,onlytextwidth]
 \column{0.40\textwidth}
@@ -308,7 +336,7 @@
 \note{Catalog: interfaces/v1/scenarios/e0_cases.json (48 rows = 16 schedules x 3 profiles) plus e0_supplement_cases.json (8 repaired-e rows). Positive controls: e_positive.json. Interface v1 FREEZE f700292e.. on 2026-10-08.}
 \end{frame}
 
-% ---------------------------------------------------------------- 7. What repaired-e adds
+% ---------------------------------------------------------------- 8. What repaired-e adds
 \begin{frame}{RQ1: what we built, the repaired-e profile}
 \centering
 \begin{tikzpicture}[x=1cm, y=1cm, st/.style={box, text width=1.55cm, minimum height=0.95cm, fill=white}]
@@ -345,7 +373,7 @@
 \note{repaired-e is a project extension, not HMBC. Six mutants each remove one check: destination binding (1), state barrier (2), record freshness (4), nonce (8), version monotonicity (16), receipt binding (32).}
 \end{frame}
 
-% ---------------------------------------------------------------- 8. E01 results
+% ---------------------------------------------------------------- 9. E01 results
 \begin{frame}{RQ1 results, gap 1: decision provenance and replay \;\evl{I}}
 \scriptsize
 \renewcommand{\arraystretch}{1.22}
@@ -377,7 +405,7 @@ The relay attacks use a misbehaving relay, which HMBC's isolation assumption exc
 \end{columns}
 \end{frame}
 
-% ---------------------------------------------------------------- 9. E02 results + window
+% ---------------------------------------------------------------- 10. E02 results + window
 \begin{frame}{RQ1 results, gap 2: trust-anchor freshness and the revocation window}
 \begin{columns}[T,onlytextwidth]
 \column{0.56\textwidth}
@@ -424,7 +452,7 @@ duty ended at delivery & \cGap\ granted at that instant & \cRep\ \code{EXPIRED} 
 \end{columns}
 \end{frame}
 
-% ---------------------------------------------------------------- 10. E03 results
+% ---------------------------------------------------------------- 11. E03 results
 \begin{frame}{RQ1 results, gap 3: audit correspondence and crash recovery \;\evl{I}}
 \begin{columns}[T,onlytextwidth]
 \column{0.60\textwidth}
@@ -470,7 +498,7 @@ worker crashes after intent / after send & \cBlk\ the paper is silent on durabil
 The four paper crash rows are recorded as ``BLOCKED / decided SPEC\_GAP, unproved'': never a pass, never a finding. Crash points are logical process deaths, not power loss. The receipt-substitution rows use a deliberately deviating test witness. \src{RQ1-E.md §9; gate rows 1--9, 23--35}
 \end{frame}
 
-% ---------------------------------------------------------------- 11. Mutants + ProVerif
+% ---------------------------------------------------------------- 12. Mutants + ProVerif
 \begin{frame}{RQ1: are the checks real? Mutants and a formal model}
 \begin{columns}[T,onlytextwidth]
 \column{0.53\textwidth}
@@ -519,7 +547,7 @@ policy-denied grant & \textcolor{okgreen}{unreachable} & \textcolor{okgreen}{unr
 \end{columns}
 \end{frame}
 
-% ---------------------------------------------------------------- 12. Gate E
+% ---------------------------------------------------------------- 13. Gate E
 \begin{frame}{RQ1 gate E: one command, 56 rows, a recorded verdict}
 \begin{columns}[T,onlytextwidth]
 \column{0.56\textwidth}
@@ -563,7 +591,7 @@ policy-denied grant & \textcolor{okgreen}{unreachable} & \textcolor{okgreen}{unr
 \src{RQ1-E.md lines 13, 351--370, §6 tally; GATES.md lines 637--648 (ACKs A1-0085, S2-0023, S3-0024)}
 \end{frame}
 
-% ---------------------------------------------------------------- 13. What RQ1 shows
+% ---------------------------------------------------------------- 14. What RQ1 shows
 \begin{frame}{What RQ1 shows, and why it matters}
 \centering
 \begin{tikzpicture}[x=1cm, y=1cm, cw/.style={text width=4.1cm, draw=none, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}, hw/.style={text width=4.1cm, font=\footnotesize\bfseries}]
@@ -593,11 +621,11 @@ policy-denied grant & \textcolor{okgreen}{unreachable} & \textcolor{okgreen}{unr
 \end{tikzpicture}
 \end{frame}
 
-% ================================================================ PART III: RQ2 (slides 14-26)
+% ================================================================ PART III: RQ2 (slides 15-27)
 % Primary source: evaluation/reports/RQ2-F-DRAFT.md on origin/Code_Merge_Final (sha256 e59a51cd..) and the
 % receipts it links under evaluation/evidence/f/. Nothing here is an integrated F case.
 
-% ---------------------------------------------------------------- 14. RQ2 question and fault model
+% ---------------------------------------------------------------- 15. RQ2 question and fault model
 \begin{frame}{RQ2: what survives Byzantine witnesses?}
 \begin{center}
 \footnotesize\itshape Which RQ1 guarantees survive Byzantine operators with q-of-n application witnesses\\(n = 4, q = 3, f = 1), assuming safe ledgers and a trusted key worker?
@@ -642,7 +670,7 @@ policy-denied grant & \textcolor{okgreen}{unreachable} & \textcolor{okgreen}{unr
 \src{RQ2-F-DRAFT.md lines 127--132, 149, §3; SPEC.md §5}
 \end{frame}
 
-% ---------------------------------------------------------------- 15. RQ2 design
+% ---------------------------------------------------------------- 16. RQ2 design
 \begin{frame}{RQ2 design: three signed paths, governance, single-signing witnesses}
 \begin{columns}[T,onlytextwidth]
 \column{0.45\textwidth}
@@ -686,7 +714,7 @@ governance action & {\ttfamily\fontsize{6}{7}\selectfont Governance.execute} & w
 \src{RQ2-F-DRAFT.md §1 (lines 127--132), §3 (line 269); A1-0137 §1 (SigLib.sol:37, Governance.sol:83--86, TMSC.sol:144--159), §2.1 (KSSC.sol:160--163); A2-0089 §2; SPEC.md §5}
 \end{frame}
 
-% ---------------------------------------------------------------- 16. How RQ2 will be judged
+% ---------------------------------------------------------------- 17. How RQ2 will be judged
 \begin{frame}{How RQ2 will be judged, and what exists today}
 \begin{columns}[T,onlytextwidth]
 \column{0.48\textwidth}
@@ -733,7 +761,7 @@ None of these is an F case. We measured what already existed, on purpose, before
 \end{columns}
 \end{frame}
 
-% ---------------------------------------------------------------- 17. TLC
+% ---------------------------------------------------------------- 18. TLC
 \begin{frame}{Safety 1: a finite model of one decision slot (TLC) \;\evl{F}}
 \begin{columns}[T,onlytextwidth]
 \column{0.60\textwidth}
@@ -768,7 +796,7 @@ $f = 0$, honest witnesses may double-sign & no-persistence mutant & \textcolor{b
 \end{columns}
 \end{frame}
 
-% ---------------------------------------------------------------- 18. Oracle/store differential + mutations
+% ---------------------------------------------------------------- 19. Oracle/store differential + mutations
 \begin{frame}{Safety 2: does our oracle agree with the witness store? \;\evl{U}}
 \begin{columns}[T,onlytextwidth]
 \column{0.40\textwidth}
@@ -810,7 +838,7 @@ The evaluator's fault oracle (independent rules) and agent 2's durable \code{Wit
 \src{oracle-store-diff-20261115/README.md lines 9--16; oracle-mutant-discrimination-20261115/README.md lines 9--24; RQ2-F-DRAFT.md lines 293--301; A2-0089 §2}
 \end{frame}
 
-% ---------------------------------------------------------------- 19. M5 pool sweep
+% ---------------------------------------------------------------- 20. M5 pool sweep
 \begin{frame}{Safety 3: a Byzantine sweep over the real witness pool (M5) \;\evl{U}}
 \begin{columns}[T,onlytextwidth]
 \column{0.55\textwidth}
@@ -848,7 +876,7 @@ $f = 2$ & 4,374 & 330 & 4,044 & 0 \\
 \src{pool-sweep-20261115/README.md lines 15--30; measurements-20261114/README.md lines 69--83; RQ2-F-DRAFT.md §2.2}
 \end{frame}
 
-% ---------------------------------------------------------------- 20. Availability
+% ---------------------------------------------------------------- 21. Availability
 \begin{frame}{Availability: one witness down still certifies; two do not}
 \begin{columns}[T,onlytextwidth]
 \column{0.47\textwidth}
@@ -888,7 +916,7 @@ Agent 2's live tests, run unmodified on the evaluator's host: 4 passed in each o
 \src{measurements-20261114/README.md lines 41--52, 118--134; availability-reproduction-20261115; availability-receipt-review-20261115/README.md lines 1--6; RQ2-F-DRAFT.md §2.3}
 \end{frame}
 
-% ---------------------------------------------------------------- 21. Gas
+% ---------------------------------------------------------------- 22. Gas
 \begin{frame}{Cost: what three signatures cost on chain (M1, M1b, M1c) \;\evl{R}}
 \begin{columns}[T,onlytextwidth]
 \column{0.55\textwidth}
@@ -939,7 +967,7 @@ receipt & 533,754 & 553,488 & 560,290 \\
 \src{measurements-20261114/README.md lines 23--39, 85--111; RQ2-F-DRAFT.md §2.4; A1-0123, A1-0124, A1-0125, A1-0136}
 \end{frame}
 
-% ---------------------------------------------------------------- 22. K1
+% ---------------------------------------------------------------- 23. K1
 \begin{frame}{Durability: making a kill test deterministic (K1) \;\evl{R}}
 \begin{columns}[T,onlytextwidth]
 \column{0.37\textwidth}
@@ -993,7 +1021,7 @@ receipt & 533,754 & 553,488 & 560,290 \\
 \src{reviews/a2-0086-signing-kill-20261113/README.md lines 14--36; reviews/proxy-k1-20261114/README.md lines 46--55; A2-0089 §1; protocol/tools/run\_state\_kill\_mutants.py lines 5--9; RQ2-F-DRAFT.md §2.5}
 \end{frame}
 
-% ---------------------------------------------------------------- 23. Trust matrix
+% ---------------------------------------------------------------- 24. Trust matrix
 \begin{frame}{The trust matrix: what RQ2 still has to trust}
 \scriptsize
 \renewcommand{\arraystretch}{1.17}
@@ -1019,7 +1047,7 @@ authors of code and reviews & \stt{badred}{CORRELATED} & one model family wrote 
 \src{RQ2-F-DRAFT.md §3 (lines 265--278); SPEC.md §5 (the trust matrix must cover ledgers, relay, witness keys, authority, key worker, client and store)}
 \end{frame}
 
-% ---------------------------------------------------------------- 24. Outside the bound
+% ---------------------------------------------------------------- 25. Outside the bound
 \begin{frame}{Outside the bound: what too many Byzantine witnesses can do}
 \centering
 \begin{tikzpicture}[x=1cm, y=1cm, cw/.style={text width=4.2cm, draw=none, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}, hw/.style={text width=4.2cm, font=\scriptsize\bfseries}]
@@ -1051,7 +1079,7 @@ authors of code and reviews & \stt{badred}{CORRELATED} & one model family wrote 
 \src{RQ2-F-DRAFT.md §3 (lines 269, 279--291); A1-0137 §2; A1-0138 §1--2; A1-0141 §2--3; A1-0126 / measurements-20261114 line 141--144}
 \end{frame}
 
-% ---------------------------------------------------------------- 25. Assurance process
+% ---------------------------------------------------------------- 26. Assurance process
 \begin{frame}{Assurance: how the evidence was checked, and what we got wrong}
 \begin{columns}[T,onlytextwidth]
 \column{0.45\textwidth}
@@ -1086,9 +1114,9 @@ a report section was ``byte-identical'' & only its first line was hashed; now wh
 \src{BOARD.md A3-0160; partial-report-packet-20261115/README.md lines 3--43; RQ2-F-DRAFT.md lines 49--55, 216--217, 293--301; A1-0136 §2; A1-0141 §5}
 \end{frame}
 
-% ================================================================ PART IV: status, limits, conclusion (slides 26-29)
+% ================================================================ PART IV: status, limits, conclusion (slides 27-30)
 
-% ---------------------------------------------------------------- 26. Honest status
+% ---------------------------------------------------------------- 27. Honest status
 \begin{frame}{Honest status of RQ2 on 17 November}
 \centering
 \begin{tikzpicture}[x=1cm, y=1cm, every node/.append style={minimum height=1.55cm, font=\scriptsize, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}]
@@ -1122,7 +1150,7 @@ a report section was ``byte-identical'' & only its first line was hashed; now wh
 \src{plan-draft.json; GATES.md lines 650--661; BOARD.md A3-0161, A3-0162, A3-0163; partial-report-packet-20261115/README.md lines 124--141; A1-0145 §2 (origin/agent-1)}
 \end{frame}
 
-% ---------------------------------------------------------------- 27. Limitations and lessons
+% ---------------------------------------------------------------- 28. Limitations and lessons
 \begin{frame}{Limitations and lessons}
 \begin{columns}[T,onlytextwidth]
 \column{0.48\textwidth}
@@ -1154,7 +1182,7 @@ a report section was ``byte-identical'' & only its first line was hashed; now wh
 \src{RQ2-F-DRAFT.md §5; RQ1-E.md §15; A1-0143 §2.1; A1-0141 §5; RQ2-F-DRAFT.md lines 49--55}
 \end{frame}
 
-% ---------------------------------------------------------------- 28. Conclusion
+% ---------------------------------------------------------------- 29. Conclusion
 \begin{frame}{Conclusion}
 \centering
 \begin{tikzpicture}[x=1cm, y=1cm, cw/.style={text width=4.1cm, draw=none, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}, hw/.style={text width=4.1cm, font=\footnotesize\bfseries}]
@@ -1189,7 +1217,7 @@ a report section was ``byte-identical'' & only its first line was hashed; now wh
 \src{RQ1-E.md §0, §6; RQ2-F-DRAFT.md lines 19--24, §2.3, §2.4; GATES.md lines 650--661; packet README lines 131--141}
 \end{frame}
 
-% ---------------------------------------------------------------- 29. Close
+% ---------------------------------------------------------------- 30. Close
 \begin{frame}[standout]
 Thank you\\[0.5em]
 {\normalsize Questions?}

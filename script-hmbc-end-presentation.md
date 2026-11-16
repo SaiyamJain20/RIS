@@ -1,8 +1,8 @@
 # Speaker script: the HMBC end-evaluation deck in about 23 minutes
 
-About **22½ minutes** spoken (about 3,200 words at a brisk pace; the per-slide timings below sum to
-22 min 35 s). Plain text is what you say. *[Brackets]* are pointing cues. This script matches the
-29-page deck `hmbc-end-presentation.pdf`.
+About **23 minutes** spoken (about 3,300 words at a brisk pace; the per-slide timings below sum to
+23 min 0 s). Plain text is what you say. *[Brackets]* are pointing cues. This script matches the
+30-page deck `hmbc-end-presentation.pdf`.
 
 - **Slide numbers** are PDF page numbers. The counter in the slide corner is one lower (the title page
   is not counted).
@@ -13,11 +13,11 @@ About **22½ minutes** spoken (about 3,200 words at a brisk pace; the per-slide 
 
   | Speaker | Slides | Content |
   |---|---|---|
-  | A | 1–9 | the paper, our project, RQ1 question, method, repair, results for gaps 1 and 2 |
-  | B | 10–19 | RQ1 gap 3, mutants, gate E and what RQ1 shows; RQ2 question, design, how it is judged, TLC, oracle, pool sweep |
-  | C | 20–29 | RQ2 availability, cost, durability, trust matrix, out-of-bound results, assurance, status; limits, conclusion |
+  | A | 1–9 | the paper, JANUS, our project, RQ1 question, method, repair, results for gap 1 |
+  | B | 10–19 | RQ1 gap 2 and 3, mutants, gate E and what RQ1 shows; RQ2 question, design, how it is judged, TLC, oracle |
+  | C | 20–30 | RQ2 pool sweep, availability, cost, durability, trust matrix, out-of-bound results, assurance, status; limits, conclusion |
 
-- **If you run long:** say one sentence each on slides 6, 16 and 19. That saves about a minute and a half.
+- **If you run long:** say one sentence each on slides 7, 17 and 20. That saves about a minute and a half.
 
 ---
 
@@ -54,30 +54,44 @@ only while on duty. The access must be revocable and logged.
 - **The records** stay off chain, encrypted with attribute-based encryption: you encrypt for a policy,
   like "doctor AND on duty", not for a person.
 
-## 3. The paper (2/2): how access works, and what it assumes (75 s)
+## 3. The paper (2/2): how access works, and what it assumes (55 s)
 
-*[Follow the boxes]* One access, end to end:
-- **(1)** The doctor sends credentials and a record ID to the proxy contract, and a log record opens.
-- **(2–3)** The trust contract checks the certificate, the revocation list and the duty list.
-- **(4)** The request is forwarded to the domain chain: the global ID, the verified attributes and the
-  record ID.
-- **(5)** The access contract checks the policy.
-- **(6–8)** The key store fetches the encrypted record and does **step one** of the decryption.
-- **(9–10)** The result comes back, logged on both chains, and the user finishes the decryption.
+*[Follow the boxes]* One access, at a high level:
+- The user sends a **request** with their credentials.
+- The **proxy chain verifies** those credentials against the trust lists.
+- The **domain chain checks** the access policy.
+- The **key release** happens in two steps: the key store does the first half of the decryption, and
+  the user finishes it.
+- Every request and access is **logged on both chains**.
 
-*[Left]* The key idea is split decryption. The key store keeps the "on duty" key and never gives it to
-users; the user holds the long-term "doctor" key. Neither can decrypt alone. So **revocation is just a
+*[Left]* That split is the key idea. The key store keeps the "on duty" key and never gives it to
+users; the user holds the long-term "doctor" key. Neither can decrypt alone, so **revocation is just a
 list update**: ending a duty removes an entry, and no key is re-issued.
 
 *[Orange box]* The security argument is informal. It assumes isolation, an honest majority in every
 chain, secure crypto and uncompromised keys.
 
-*[Bottom right]* Our two questions probe exactly this:
-- **RQ1:** what the specified flow itself guarantees, and what depends on details it leaves open,
-  especially step 4.
-- **RQ2:** what survives when the honest majority fails for the parties that vouch for each decision.
+*[Bottom right]* Our two questions probe exactly this. RQ1: what the flow itself guarantees, and what
+depends on details it leaves open, such as what binds the domain chain's grant to the proxy chain's
+decision. RQ2: what survives when the honest majority fails.
 
-## 4. Our project (60 s)
+## 4. JANUS: the authors' extension (45 s)
+
+Before our own work, one slide on **JANUS**. It is the extension of HMBC by the same authors, with the
+company CENSUS, published in Applied Sciences in 2023. *[Right, bullets]* The main extensions:
+- **a formal access model**, with attribute checks on the proxy chain and authorisation and decryption
+  on the domain chain;
+- **an open-source system** on Hyperledger Fabric with Raft, in Kubernetes pods *[left: the stack]*;
+- **the single access point enforced by cryptography**: a domain key that only the key store can
+  derive is ANDed into every policy;
+- **hybrid encryption**: records under AES, attribute-based encryption only for the AES keys;
+- message queues, voting for governance, and load tests up to 300 concurrent requests.
+
+*[Orange line]* What it leaves open: Raft tolerates crashes, not malicious nodes; Byzantine tolerance is
+named as future work. That is close to our RQ2. JANUS is related work only: we implement HMBC 2020 and
+use none of its code.
+
+## 5. Our project (60 s)
 
 *[Cards]* Two research questions, answered in order.
 - **RQ1**, authorisation, freshness and audit, is **done**: gate E passed on 12 October.
@@ -98,11 +112,9 @@ cross-run by module owners, **U** for unit or offline tests, **F** for a formal 
 verifier, Python services, and an **untrusted** relay, so everything important is signed and checked on
 chain. Crypto is symbolic, so we make no secrecy claims.
 
-*[Footnote]* JANUS, the authors' 2023 follow-up, is related work only; we use none of its code.
-
 ---
 
-## 5. RQ1: the question and the gaps (55 s)
+## 6. RQ1: the question and the gaps (55 s)
 
 RQ1 asks what **follows** from the paper, what **depends** on its gaps, and what **repairs** fix them.
 We found three gaps.
@@ -121,7 +133,7 @@ We found three gaps.
 
 The paper assumes isolated components, so these are gaps in the specification, not attacks on HMBC.
 
-## 6. RQ1 method (55 s)
+## 7. RQ1 method (55 s)
 
 The same six contracts run in four profiles:
 - **paper-strict** follows the paper and fills the gaps the safest way;
@@ -140,7 +152,7 @@ The same six contracts run in four profiles:
 *[Labels]* Four classes: **SUPPORTED** follows from the paper; **SPEC_GAP** depends on a gap;
 **REPAIR_SUPPORTED** our fix enforces it; **BLOCKED** can't be decided from the paper.
 
-## 7. RQ1: the repaired-e profile (50 s)
+## 8. RQ1: the repaired-e profile (50 s)
 
 *[Top row]* The repaired flow:
 1. The user signs the request.
@@ -160,7 +172,7 @@ The same six contracts run in four profiles:
 
 Note that in RQ1 the witness is **one trusted party**. RQ2 removes that.
 
-## 8. RQ1 results, gap 1 (50 s)
+## 9. RQ1 results, gap 1 (50 s)
 
 Each row is something a misbehaving relay does.
 - **Identical replay** is rejected even by the paper profiles, but only because our grant ID is
@@ -173,7 +185,7 @@ Each row is something a misbehaving relay does.
 
 And Alice's legitimate access still works in every row.
 
-## 9. RQ1 results, gap 2, and the revocation window (60 s)
+## 10. RQ1 results, gap 2, and the revocation window (60 s)
 
 - **A CA admin updating another hospital's list** is rejected in every profile. The paper itself
   specifies that rule.
@@ -189,7 +201,7 @@ And Alice's legitimate access still works in every row.
 was still usable 65 seconds later. This chart is the owners' measurement on two machines, not part of
 the gate run.
 
-## 10. RQ1 results, gap 3 (50 s)
+## 11. RQ1 results, gap 3 (50 s)
 
 - **A duplicate outcome** is rejected everywhere.
 - **A dropped outcome** leaves the request visibly pending.
@@ -203,7 +215,7 @@ the gate run.
 A grant is permission to release, **not proof of delivery**. So delivery stays "unknown", and we report
 it that way.
 
-## 11. Mutants and ProVerif (45 s)
+## 12. Mutants and ProVerif (45 s)
 
 Are the checks real? We tested that two ways.
 - **Mutants.** Each one removes one check. The ledger's tests catch all six, and in the 56-row run
@@ -214,7 +226,7 @@ Are the checks real? We tested that two ways.
   approved, on all 8 fields. Drop the destination, and it finds an attack. It's symbolic, so replay and
   expiry are covered by the live tests instead.
 
-## 12. Gate E (45 s)
+## 13. Gate E (45 s)
 
 *[Grid]* All 56 catalog rows. In the paper profiles: 8 hold as specified, 20 depend on a gap, 4 are
 blocked. In repaired-e: 19 enforced by our checks, 5 controls.
@@ -225,7 +237,7 @@ blocked. In repaired-e: 19 enforced by our checks, 5 controls.
 *[Caveat]* Recorded with it: the integrated mutant matrix and the integrated window were not run, and
 the review is correlated, because one model family did all of it.
 
-## 13. What RQ1 shows (45 s)
+## 14. What RQ1 shows (45 s)
 
 *[Orange card]* The answer to RQ1:
 - **Holds as specified:** HMBC already rejects identical replays and duplicate outcomes, and restricts
@@ -244,7 +256,7 @@ row.
 
 ---
 
-## 14. RQ2: the question (50 s)
+## 15. RQ2: the question (50 s)
 
 *[Italic line]* RQ2: which RQ1 guarantees survive Byzantine witnesses, with **four** witnesses, a
 quorum of **three**, and at most **one** faulty?
@@ -260,7 +272,7 @@ two, a fully compromised quorum.
 
 *[Orange box]* This is not a consensus protocol. It authenticates decisions.
 
-## 15. RQ2 design (55 s)
+## 16. RQ2 design (55 s)
 
 Three signed paths, plus governance.
 - *[Table]* A **checkpoint** of proxy-chain state goes to the key store, which needs a strictly newer
@@ -275,7 +287,7 @@ order. The witness set itself is fixed at deployment. An honest witness **persis
 per decision before it replies, and after a grant has used the nonce it refuses a fresh decision with
 REPLAY.
 
-## 16. How RQ2 will be judged (40 s)
+## 17. How RQ2 will be judged (40 s)
 
 *[Left]* The real test is the F gate: **32 integrated cases in six families**, from quorum and
 availability to governance and compromise. Integrated runs so far: **zero of 32**. The runner's first
@@ -285,7 +297,7 @@ two stages exist and correctly report BLOCKED; stages three to seven are in prog
 availability measurements, gas, a durability test, and some out-of-bound ledger tests. Each has its
 label. **None of them is an F case.**
 
-## 17. Safety 1: TLC (45 s)
+## 18. Safety 1: TLC (45 s)
 
 A finite model of one decision slot, checked exhaustively with TLC.
 - *[Top rows]* Four witnesses, one faulty, quorum three, persistent single signing: agreement
@@ -297,7 +309,7 @@ So the argument needs **both** halves: quorum three **and** witnesses that remem
 A fresh rerun matched every verdict and state count. Limits: one slot, no expiry; not a proof of the
 implementation or of liveness. Our own first run deadlocked: a model error we kept in the record.
 
-## 18. Safety 2: oracle vs. store (45 s)
+## 19. Safety 2: oracle vs. store (45 s)
 
 Is our independent checker consistent with the real witness store?
 - *[Tiles]* The evaluator's oracle and agent 2's SQLite store decided the same **180** synthetic
@@ -309,7 +321,7 @@ Is our independent checker consistent with the real witness store?
 store **can** do, not what the service lets happen. We once claimed an honest DENY could follow a used
 ALLOW; that was wrong, and it's corrected.
 
-## 19. Safety 3: pool sweep (40 s)
+## 20. Safety 3: pool sweep (40 s)
 
 A sweep over the real witness pool code, with real signatures.
 - *[Green tile]* With one Byzantine witness: 972 cases, every behaviour in every position. **Zero**
@@ -320,7 +332,7 @@ A sweep over the real witness pool code, with real signatures.
 A "hazard" is a potential conflict, not two real certificates, and the honest witnesses here are a
 model of the signing rule.
 
-## 20. Availability (45 s)
+## 21. Availability (45 s)
 
 - *[Left strip]* All 16 ways of muting witnesses, five runs each, in virtual time. Zero or one muted:
   a certificate every time. Two or more: none by the 10-second deadline. With delayed replies it takes
@@ -332,7 +344,7 @@ model of the signing rule.
 Caveat on screen: the raw output of those three process runs wasn't retained, so they're prior
 reported runs. One host, no network, no liveness claim under arbitrary delay.
 
-## 21. Cost (40 s)
+## 22. Cost (40 s)
 
 *[Chart]* For the checkpoint, the decision and the receipt, going from one signature to three costs
 **+11.0%, +5.5% and +3.7%** gas. Each extra signature adds about 6.8 thousand gas and 160 bytes of
@@ -342,7 +354,7 @@ limit.
 The evaluator measured these and the ledger owner reproduced all 21 rows exactly. Single deterministic
 runs: not a fee estimate.
 
-## 22. Durability: K1 (50 s)
+## 23. Durability: K1 (50 s)
 
 This one is a story about a test.
 - *[Left]* The mutant K1 removes the database transaction around signing, so each write commits alone.
@@ -354,7 +366,7 @@ This one is a story about a test.
 
 *[Scope line]* Process kill only. It says nothing about power loss.
 
-## 23. Trust matrix (35 s)
+## 24. Trust matrix (35 s)
 
 What does RQ2 still have to trust?
 - **Required:** three of four honest witnesses, and an honest governance quorum.
@@ -364,7 +376,7 @@ What does RQ2 still have to trust?
 - **Not evaluated:** key custody, the client and the data store. And all code and reviews come from one
   model family.
 
-## 24. Outside the bound (55 s)
+## 25. Outside the bound (55 s)
 
 What happens when the bound is broken? All three are scratch tests on the ledger.
 - *[First card]* **Three or more Byzantine witnesses can halt a domain chain permanently.** They sign a
@@ -379,7 +391,7 @@ What happens when the bound is broken? All three are scratch tests on the ledger
 
 None of this contradicts the one-fault claims, and none of it is an HMBC vulnerability.
 
-## 25. Assurance (40 s)
+## 26. Assurance (40 s)
 
 - *[Left]* The partial report is pinned by its hash. The ledger role and the protocol role each read
   the full diff and found no objection in their scope. A review isn't permission to run anything.
@@ -390,7 +402,7 @@ None of this contradicts the one-fault claims, and none of it is an HMBC vulnera
 *[Orange box]* All three roles are the same model family, so these are scoped re-checks, not
 independent review.
 
-## 26. Honest status of RQ2 (45 s)
+## 27. Honest status of RQ2 (45 s)
 
 - *[Tiles]* The execution plan is a **draft** and authorises nothing. Gate F: **not run**, none of its
   eight checklist boxes ticked. F cases: **zero of 32** run. What **is** done: the partial report was
@@ -402,7 +414,7 @@ independent review.
   the remaining runner stages, the 32 integrated cases, RQ1's suites re-run on the new ledger, then the
   report and three sign-offs.
 
-## 27. Limitations and lessons (45 s)
+## 28. Limitations and lessons (45 s)
 
 *[Left]* Limits: correlated review; synthetic fixtures; a model is not the implementation; offline is
 not integrated; symbolic crypto. Even when F passes, it won't prove consensus, safety with two
@@ -416,7 +428,7 @@ Byzantine witnesses, liveness under any delay, or power-loss durability.
 4. Hash the whole artifact.
 5. Keep signing rules and ledger rules apart.
 
-## 28. Conclusion (40 s)
+## 29. Conclusion (40 s)
 
 - **RQ1 is answered:** in the paper's flow, 20 of 32 rows depend on unspecified details; our repair
   closes each with a named check; gate E passed.
@@ -428,7 +440,7 @@ Byzantine witnesses, liveness under any delay, or power-loss durability.
 
 *[Banner]* Everything here is about our reconstruction of HMBC, not the authors' code.
 
-## 29. Thank you (5 s)
+## 30. Thank you (5 s)
 
 Thank you. Questions?
 

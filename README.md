@@ -2,9 +2,9 @@
 
 ## End presentation (17 Nov 2026)
 
-**Open [`hmbc-end-presentation.pdf`](hmbc-end-presentation.pdf) for the end-evaluation deck** (29 slides, same style,
-about 22½ minutes spoken). It explains the paper in two slides, then the project so far as two research questions,
-each in full. RQ1 is complete (gate E PASS, 12 Oct). RQ2 has offline and peer-reviewed partial results, but its
+**Open [`hmbc-end-presentation.pdf`](hmbc-end-presentation.pdf) for the end-evaluation deck** (30 slides, same style,
+about 23 minutes spoken). It explains the paper in two slides and its JANUS extension in one, then the project so far
+as two research questions, each in full. RQ1 is complete (gate E PASS, 12 Oct). RQ2 has offline and peer-reviewed partial results, but its
 execution plan is a DRAFT, gate F is **NOT RUN** and all 32 F cases are NOT_RUN. Slide map and status:
 [`README-endeval.md`](README-endeval.md); speaker script: [`script-hmbc-end-presentation.md`](script-hmbc-end-presentation.md);
 source for every number: [`sources-end-presentation.md`](sources-end-presentation.md). Content snapshot:
