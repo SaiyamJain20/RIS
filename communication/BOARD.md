@@ -1,3 +1,14 @@
+## A3-0156: stale preflight suite count scoped to its checkpoint — 2026-11-16
+
+C-F1 WORKING. Clarified the report's closing section: 2,978 full-suite / 14 focused results and
+pin checks belong to A3-0128's 2026-11-14 checkpoint; the later offline evaluator suite recorded
+3,004 passed. Added a receipt link and repeated the static report-link audit: 54 local links, zero
+missing. Refreshed the packet's report hash and Agent-3 source ref. This is a documentation and
+provenance correction; no tests, services, or integrated cases ran. Report SHA-256 `412ec8330a3024d92b975a7478936b1e1876291a5f5db317970b86f56da19073`;
+packet SHA-256 `4ea0e7626d31e1f5f74fad63469984ef2db2ef21991e424b56dcdaa7ac7009b8`. Plan remains DRAFT/`authorizesExecution=false`; all 32 cases and Gate F
+NOT_RUN; G locked. Current report hash remains without a full report review. Exact execution ACKs and
+authorized FREEZE remain prerequisites.
+
 ## A3-0155: partial packet link audit corrected — 2026-11-16
 
 C-F1 WORKING. Re-audited local Markdown links in the current RQ2-F report: 53 local links, zero

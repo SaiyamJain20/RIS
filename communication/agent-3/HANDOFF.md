@@ -3869,3 +3869,31 @@ measurements. Static link/hash checks and diff checks are recorded with publicat
 or mailbox edits, external messages, extra agents/worktrees or main push.
 
 Current run time: 2026-11-16 UTC; lock cleanup recorded by automation memory.
+
+# A3-0156 handoff — report checkpoint counts clarified
+
+Continued Agent 3 on `/home/karma/Documents/RIS`, branch `agent-3`, from live board A3-0155.
+Before edits, inspected process command lines and `/proc/<pid>/cwd`; no live Claude CLI process used
+this checkout. Acquired `.git/ris-agent3-scheduled.lock`; refreshed all three explicit remote refs
+under `.git/hmbc-coordinator.lock`: `origin/agent-1` `14c3bb3282e208a61d722bbd9d962f4883831195`,
+`origin/agent-2` `c08b9387b5b27c04fe9a9d6070b300302d5cb99e`, `origin/agent-3`
+`544f4b005184f61166c2a2701a91299eb3c16227`. The only pre-existing worktree items are four
+untracked HACKATHON-PITCH / PROJECT-UPDATE Markdown and DOCX files; they were preserved.
+
+Static report review found that the closing section listed the A3-0128 preflight's full-suite 2,978
+and focused 14 counts without clearly labeling them as that checkpoint's results, despite a later
+evaluation run recording 3,004 passed. Rewrote the paragraph to identify both checkpoint-scoped
+results, link the later receipt, and clarify that the preflight pin checks applied to its recorded
+candidates. The fresh static Markdown-link audit found 54 local links and zero missing targets.
+Updated the partial packet's report hash, current Agent-3 source ref and link-audit count.
+
+No test suites, services, integrated cases, or new measurements ran. Report SHA-256 `412ec8330a3024d92b975a7478936b1e1876291a5f5db317970b86f56da19073`;
+packet SHA-256 `4ea0e7626d31e1f5f74fad63469984ef2db2ef21991e424b56dcdaa7ac7009b8`. Plan SHA-256 remains
+`1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`, DRAFT /
+`authorizesExecution=false`; all 32 cases and Gate F NOT_RUN; G locked. A2-0089 confirms K1 and the
+A3-0121 signing-rule reading only at the stated protocol scope. Exact execution ACKs, authorized
+FREEZE and runner stages 3–7 remain open. Current report hash has no full report review. No external
+review request, peer-scope edits, extra agents/worktrees, or main push.
+
+Static validation: 54 local Markdown links resolve; `git diff --check` checked before publication.
+The report now links the 3,004-suite receipt; this does not make the result an integrated F case.

@@ -8,7 +8,7 @@ evidence packet, not an F execution result, an execution FREEZE, an owner ACK, o
 The current report text is pinned by SHA-256:
 
 ```text
-7edf220e74b0f8cc5996fdf3812a57bcbf50f3406cf06d1579bf2ccf7161985e  evaluation/reports/RQ2-F-DRAFT.md
+412ec8330a3024d92b975a7478936b1e1876291a5f5db317970b86f56da19073  evaluation/reports/RQ2-F-DRAFT.md
 ```
 
 The current execution proposal it describes is separately pinned by SHA-256:
@@ -23,7 +23,7 @@ Git refs explicitly refreshed for this continuation:
 |---|---|---|
 | `origin/agent-1` | `14c3bb3282e208a61d722bbd9d962f4883831195` | A1-0140 confirms ledger-scope review of exact prior report hash `c511c36b..`; not an execution ACK |
 | `origin/agent-2` | `c08b9387b5b27c04fe9a9d6070b300302d5cb99e` | A2-0089 confirms K1 and A3-0121 signing-rule items at isolated scope; not a report or execution ACK |
-| `origin/agent-3` | `c01e354d3e3c0b66fadbc4c1fae489228e2acb75` | source tip at start of this continuation |
+| `origin/agent-3` | `544f4b005184f61166c2a2701a91299eb3c16227` | source tip at start of this continuation |
 
 A1-0140 confirms ledger-scope review of the exact prior report hash `c511c36b...`; it found the
 ledger claims unchanged from the A1-0139-confirmed revision and the A3-0151 gas-audit text accurate.
@@ -37,7 +37,7 @@ signing-rule reading at their isolated scope. Exact peer messages, STATUS, HANDO
 are preserved in [the owner-confirmation receipt](../owner-confirmations-20261116/README.md). It is
 neither a report review nor an execution ACK.
 
-Prior exact report SHA-256 reviewed by A1-0139: `cf249e2ad63b24d44acdef538d09718ef1fb3ae41e683af9009fa72ca07176f2`. A1-0140 ledger-scope review SHA-256: `c511c36be8e45be844d4648e859660617364a937c930f355c16caac4cb2a249e`. Current report SHA-256: `7edf220e74b0f8cc5996fdf3812a57bcbf50f3406cf06d1579bf2ccf7161985e`.
+Prior exact report SHA-256 reviewed by A1-0139: `cf249e2ad63b24d44acdef538d09718ef1fb3ae41e683af9009fa72ca07176f2`. A1-0140 ledger-scope review SHA-256: `c511c36be8e45be844d4648e859660617364a937c930f355c16caac4cb2a249e`. Current report SHA-256: `412ec8330a3024d92b975a7478936b1e1876291a5f5db317970b86f56da19073`.
 Current plan SHA-256: `1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`.
 The per-trial M2 follow-up receipt README SHA-256 is
 `37ca15e51d667091346b3ab7efd1a4e0ac28f998edca991546f2120c40deecc1`; its complete output and
@@ -93,10 +93,10 @@ ledger scope only; no Agent-2 report-specific review is present.
 
 The exact commands, exits, versions, source/output hashes and assumptions are in the linked
 receipts in `RQ2-F-DRAFT.md`. The packet's initial 2026-11-15 audit checked 48 report links. On
-2026-11-16, a fresh static Markdown-link audit of the current report found 53 local links and zero
-missing targets. The audit resolved relative targets from the report's directory; it did not
-execute report code or verify linked evidence contents. The review and response are documented in
-[this receipt](../report-review-a1-0137-20261115/README.md).
+2026-11-16, the static link audit was repeated after a report wording correction: 54 local links,
+zero missing targets. The audit resolved relative targets from the report's directory; it did not
+execute report code or verify linked evidence contents. The correction and audit are recorded in
+the current board and Agent-3 handoff.
 
 ## Review questions
 

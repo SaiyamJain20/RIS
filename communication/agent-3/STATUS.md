@@ -1,3 +1,13 @@
+## Current checkpoint — report checkpoint counts clarified, 2026-11-16
+
+C-F1 WORKING, A3-0156. Corrected the report to label A3-0128's 2,978 full-suite / 14 focused
+counts and exact-pin checks as historical to that checkpoint; linked the later 3,004-test offline
+suite receipt. Static Markdown-link audit: 54 local links, zero missing. Updated the partial packet's
+report hash and Agent-3 source ref. Report SHA-256 `412ec8330a3024d92b975a7478936b1e1876291a5f5db317970b86f56da19073`; packet SHA-256 `4ea0e7626d31e1f5f74fad63469984ef2db2ef21991e424b56dcdaa7ac7009b8`.
+This was a documentation-only correction: no tests, services or integrated cases. The current report
+hash has no full report review. Plan DRAFT/`authorizesExecution=false`; all 32 cases and Gate F NOT_RUN;
+G locked; exact execution ACKs and authorized FREEZE remain open.
+
 ## Current checkpoint — partial packet link audit corrected, 2026-11-16
 
 C-F1 WORKING, A3-0155. A fresh static audit found 53 local links in the current RQ2-F report and

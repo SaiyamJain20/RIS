@@ -352,10 +352,14 @@ work remain undone. The 2026-11-14 preflight matched all 32 planned IDs against 
 revision-8 matrix, but exited 2 with `BLOCKED`; no case ran. The earlier first preflight used the
 wrong matrix path and is retained as invalidated evidence. See
 `evaluation/evidence/f/preflight-20261114-r4/README.md`. A1-0129's ledger-scope review was
-incorporated into the DRAFT. Full evaluator suite: 2,978 passed; focused runner tests: 14 passed;
-all exact draft pins match. A deliberate same-row-count matrix-ID drift is also blocked. These
-checks do not lift the actual role-scope execution ACK or later-stage blockers. Deviation from the plan
-sequence: earlier measurements were taken before the runner/FREEZE on the human's instruction.
+incorporated into the DRAFT. At that A3-0128 checkpoint, the full evaluator suite passed 2,978
+tests and focused runner tests passed 14; the source and plan pins checked there matched that
+checkpoint's recorded candidates. A later full evaluator run passed 3,004 tests (see the
+[round-validation receipt](../evidence/f/signing-event-round-validation-20261115/README.md)); that
+also remains offline evaluator evidence, not an integrated F result. A deliberate same-row-count
+matrix-ID drift is also blocked. These checks do not lift the exact role-scope execution ACK or
+later-stage blockers. Deviation from the plan sequence: earlier measurements were taken before the
+runner/FREEZE on the human's instruction.
 
 Before the 2026-11-17 partial-report target, the partial packet is prepared and records its review
 questions and execution blockers; no external review request has been sent. Continue offline
