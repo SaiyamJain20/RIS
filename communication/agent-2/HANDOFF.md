@@ -1,4 +1,18 @@
-# Agent 2 handoff (2026-11-16, fourth entry): owner confirmations (A2-0089) closed by agent 3; protocol-scope review of the RQ2-F partial report (A2-0090) published, no objection. Read this block, then STATUS.md, before anything else. Older blocks below are history, kept verbatim.
+# Agent 2 handoff (2026-11-16, fifth entry): A2-0090/A2-0091 — two rounds of protocol-scope review of the RQ2-F partial report (prior and corrected hash), no objection either time; a recurring 20-min cron check is now running this session autonomously. Read this block, then STATUS.md, before anything else. Older blocks below are history, kept verbatim.
+
+## 2026-11-16 (fifth entry): A2-0091 — corrected report hash reviewed, still no protocol-scope objection
+
+**Context:** this entry was produced by a 20-minute recurring cron check (job `10b36bf7`, set up this session so the role keeps responding while the human is away and asked not to be asked questions). Fetch found two new peer commits.
+
+**Agent 1's A1-0141** (ledger-scope): the §3 "what conflicting f=2 certificates do on the ledger" paragraph had been silently edited by agent 3's A3-0154 in a way that mixed the honest-witness signing rule into a ledger-acceptance claim and narrowed the ledger result to conditions its own test didn't need. A1-0141 reran the A1-0126 scratch Forge test fresh (4/4, hash attached) and supplied corrected wording. It explicitly says: "Agent 2's protocol-scope review [A2-0090] stands on its own. This is a ledger-scope point that protocol review would not be expected to catch," and requests no action from agent 2. I read this fully and agree it does not touch anything I reviewed — my A2-0090 explicitly scoped itself away from ledger claims.
+
+**Agent 3's A3-0159** incorporated A1-0141's fix and produced a corrected report (hash `e59a51cd8c92a38780aa820191286887d9dc92deb1a0cdefe8c699f34a6e3b40`), then explicitly asked agent-2 to review the corrected hash in protocol scope, "especially the separation of submission from fresh signing."
+
+**A2-0091: still no protocol-scope objection.** `git diff 3717ab7 3d24754 -- evaluation/reports/RQ2-F-DRAFT.md` shows exactly two hunks changed from the hash A2-0090 already cleared: the §3 ledger paragraph, and a §5 review-lineage bookkeeping paragraph. Of the §3 paragraph, only one sentence is protocol-scope at all: "after a grant consumes the nonce an honest witness refuses to sign a fresh decision (REPLAY, A2-0089). That limits new signatures, not the ledger's acceptance of an already signed DENY certificate." Re-read `witness_service.py:146-147` again (same lines checked in A2-0087/A2-0089/A2-0090) — the distinction is exact: REPLAY is a signing-time guard in the witness service, and says nothing about what the ledger contract does with an already-signed certificate it receives. This is a correct fix, not an overclaim. Checked the §5 paragraph's citations of my own A2-0089/A2-0090 — both are accurate. Published A2-0091, no objection. Did not re-verify the ledger/Solidity side (`ACSC.sol:186-188`) myself — out of scope, already done by agent 1.
+
+**Next:** keep watching (the cron job re-checks every 20 minutes on its own); nothing else is currently blocked on this seat.
+
+---
 
 ## 2026-11-16 (fourth entry): A2-0089 landed; A2-0090 reviews the partial report, no protocol-scope objection
 
