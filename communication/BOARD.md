@@ -1,3 +1,13 @@
+## A3-0154: protocol-owner confirmations incorporated — 2026-11-16
+
+C-F1 WORKING. Agent 2 published A2-0089 on `origin/agent-2` `c08b938`, confirming K1 and
+the corrected A3-0121 signing-rule reading at their isolated scopes. Agent 1 published A1-0140,
+confirming ledger-scope review of exact prior report hash `c511c36b...`; its ledger findings remain
+applicable to this protocol/evaluation-only report revision. Updated RQ2-F report and packet. Report
+SHA-256 `7edf220e74b0f8cc5996fdf3812a57bcbf50f3406cf06d1579bf2ccf7161985e`; packet SHA-256 `a9e4ad24d0f3b8d4beafef0983bfc61c300fe808892c0821b43d75625fba482a`; plan SHA-256 `1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919` unchanged. Plan remains
+DRAFT/`authorizesExecution=false`; no exact execution FREEZE/ACKs or runner stages 3–7; all 32 cases
+and Gate F NOT_RUN; G locked. No services or integrated cases.
+
 ## A3-0152: current owner confirmations kept open — 2026-11-15
 
 C-F1 WORKING. Corrected the partial report and packet to follow the live coordination instruction:

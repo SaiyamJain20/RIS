@@ -8,7 +8,7 @@ evidence packet, not an F execution result, an execution FREEZE, an owner ACK, o
 The current report text is pinned by SHA-256:
 
 ```text
-c511c36be8e45be844d4648e859660617364a937c930f355c16caac4cb2a249e  evaluation/reports/RQ2-F-DRAFT.md
+7edf220e74b0f8cc5996fdf3812a57bcbf50f3406cf06d1579bf2ccf7161985e  evaluation/reports/RQ2-F-DRAFT.md
 ```
 
 The current execution proposal it describes is separately pinned by SHA-256:
@@ -21,21 +21,23 @@ Git refs explicitly refreshed for this continuation:
 
 | ref | exact commit | scope / use |
 |---|---|---|
-| `origin/agent-1` | `e45e25c6975bc5c201c6d986ae71b87b9b1c9a5b` | current fetched peer ref; no newer report review or execution ACK |
-| `origin/agent-2` | `81498f98aac497768b0dec35cea89ddf7466e697` | current fetched peer ref; A2-0088 remains plan-only, no newer report review or execution ACK |
-| `origin/agent-3` | `803afcca1da17753ae8c99e8e92aaecec187ba7f` | current fetched source tip before this packet provenance correction |
+| `origin/agent-1` | `14c3bb3282e208a61d722bbd9d962f4883831195` | A1-0140 confirms ledger-scope review of exact prior report hash `c511c36b..`; not an execution ACK |
+| `origin/agent-2` | `c08b9387b5b27c04fe9a9d6070b300302d5cb99e` | A2-0089 confirms K1 and A3-0121 signing-rule items at isolated scope; not a report or execution ACK |
+| `origin/agent-3` | `c01e354d3e3c0b66fadbc4c1fae489228e2acb75` | source tip at start of this continuation |
 
-At these fetched refs, A1-0139 remains the exact report revision reviewed; it is at Agent-3 commit
-`445826a9140b49e2629f75da535e3e45b4706271`; it has report hash `cf249e2a...` as detailed below.
-The current report hash in this packet is not itself peer-reviewed.
+A1-0140 confirms ledger-scope review of the exact prior report hash `c511c36b...`; it found the
+ledger claims unchanged from the A1-0139-confirmed revision and the A3-0151 gas-audit text accurate.
+This continuation changes protocol/evaluation status only. A1-0140 states that later status or
+protocol/evaluation-only revisions need no new Agent-1 review. The current report hash is not a
+full report review, and no Agent-2 report review is present.
 
-A1-0137 and A1-0138 reviewed earlier hashes for ledger scope, and their findings were
-incorporated. A1-0139 then confirmed the exact `cf249e2a...` report hash, stating its correction
-was applied exactly and the remaining report text was unchanged; it closed ledger-scope review
-for that revision. This report-status and packet update is not an execution ACK or FREEZE ACK. Agent 3 has not
-rerun Forge for the peer scratch tests.
+A1-0137 through A1-0140 review ledger scope only; Agent 3 has not rerun Forge for peer scratch
+tests. A2-0089 confirms the protocol owner's K1 candidate test result and corrected A3-0121
+signing-rule reading at their isolated scope. Exact peer messages, STATUS, HANDOFF and source hashes
+are preserved in [the owner-confirmation receipt](../owner-confirmations-20261116/README.md). It is
+neither a report review nor an execution ACK.
 
-Prior exact report SHA-256 reviewed by A1-0139: `cf249e2ad63b24d44acdef538d09718ef1fb3ae41e683af9009fa72ca07176f2`. Current report SHA-256: `c511c36be8e45be844d4648e859660617364a937c930f355c16caac4cb2a249e`.
+Prior exact report SHA-256 reviewed by A1-0139: `cf249e2ad63b24d44acdef538d09718ef1fb3ae41e683af9009fa72ca07176f2`. A1-0140 ledger-scope review SHA-256: `c511c36be8e45be844d4648e859660617364a937c930f355c16caac4cb2a249e`. Current report SHA-256: `7edf220e74b0f8cc5996fdf3812a57bcbf50f3406cf06d1579bf2ccf7161985e`.
 Current plan SHA-256: `1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`.
 The per-trial M2 follow-up receipt README SHA-256 is
 `37ca15e51d667091346b3ab7efd1a4e0ac28f998edca991546f2120c40deecc1`; its complete output and
@@ -69,10 +71,11 @@ ledger scope only; no Agent-2 report-specific review is present.
   against retained originals in the new artifact audit. The previous packet's checksum claim
   lacked a supporting audit receipt; that gap is now closed. Agent 3 did not rerun Forge.
   No production fee or throughput estimate follows.
-- Agent 2 reports a fresh full protocol-suite run: 3,226 passed, 201 skipped, exit 0 on the
-  accepted protocol subtree. Its HANDOFF records the command, environment verification and skip
-  classification, but raw stdout and a run-specific hash receipt are not retained here. This is
-  protocol-package evidence, not an Agent-3 rerun or an integrated F result.
+- Agent 2's A2-0089 explicitly confirms the K1 candidate and corrected signing-rule reading. Its
+  owner-reported fresh full protocol-suite run gives 3,226 passed, 201 skipped, exit 0 on the
+  accepted subtree; the command, environment and skip classification are recorded in its HANDOFF.
+  Raw stdout and a run-specific hash receipt are not retained here. This is protocol-package
+  evidence, not a report review, Agent-3 rerun or integrated F result.
 - A1-0137's ledger-scope review found the reviewed draft accurate in its scope and identified the
   permanent DBC halt and fabricated-credential grant consequences of a compromised quorum. Agent
   3 added these with their f>=3 boundary and stated limitations.
@@ -105,19 +108,19 @@ are documented in [this receipt](../report-review-a1-0137-20261115/README.md).
 
 ## Review and execution dependencies
 
-- **Partial-report review:** A1-0139 confirmed the exact prior report hash `cf249e2a...` and closed
-  ledger-scope review for that revision. The current report adds the fresh M2 reproduction, per-trial
-  records, the M1 attachment audit and their limits; this report file hash has not itself been reviewed. No Agent-2
-  report-specific review is present; A2-0088 is a plan-only review. A1-0129 reviewed ledger plan
+- **Partial-report review:** A1-0140 confirmed ledger-scope review of exact report hash `c511c36b...`;
+  this revision changes only protocol/evaluation status and wording. A1-0140 says such later changes
+  do not require a new ledger review. The current report hash has no full report review. A2-0089
+  confirms only two protocol-owner items; it is not a report review. A1-0129 reviewed ledger plan
   details; S2-0026 reviewed the draft plan. None is an execution ACK.
 - **Execution authorization:** the plan remains `DRAFT`, `authorizesExecution=false`; Gate F is
   `NOT_RUN`, Gate G is `LOCKED`, and all 32 cases are `NOT_RUN`. The plan's exact role-scope
   execution ACKs and authorized FREEZE are still absent. No service or integrated case may start
   until those requirements apply to the exact plan and source set.
-- Protocol source evidence and the isolated K1 candidate controls are recorded under D57/S2-0024/25,
-  but current coordination leaves K1 owner confirmation and the A3-0121 signing-rule confirmation
-  **OPEN**. The 40/40 K1 sensitivity result and source review do not close those confirmations and
-  do not satisfy execution ACKs.
+- A2-0089 closes K1 and A3-0121 owner confirmations at their stated isolated scope. Exact peer
+  messages, STATUS, HANDOFF and source hashes are in the [receipt](../owner-confirmations-20261116/README.md). The K1
+  result remains a deliberate-mutation sensitivity test, not a production corruption-rate or
+  power-loss claim; neither confirmation is an execution ACK.
 - Runner stages 3–7 and transcript acquisition/authentication/completeness evidence remain open.
   The partial report documents these blockers; it does not convert existing measurements into
   F-case results.

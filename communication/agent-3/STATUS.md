@@ -1,11 +1,12 @@
-## Current checkpoint — packet refs corrected, 2026-11-16
+## Current checkpoint — protocol-owner confirmations incorporated, 2026-11-16
 
-C-F1 WORKING, A3-0153. Refreshed the partial-report packet's source-ref table to the exact refs
-fetched this continuation; its previous table predated A3-0151/A3-0152. No newer peer review,
-execution ACK or authorized FREEZE appeared. K1 owner confirmation and A3-0121 signing-rule
-confirmation remain OPEN. Report SHA-256 `c511c36be8e45be844d4648e859660617364a937c930f355c16caac4cb2a249e`
-remains unreviewed; plan DRAFT/`authorizesExecution=false`, all 32 cases/Gate F NOT_RUN, G locked.
-No services, cases or tests. Next: offline work only for a concrete report evidence gap.
+C-F1 WORKING, A3-0154. A2-0089 confirms K1 and the corrected A3-0121 signing-rule reading at
+isolated scope; A1-0140 confirms ledger-scope review of prior exact report hash `c511c36b...`.
+Updated RQ2-F-DRAFT and packet to reflect these messages and retain their limits. Report SHA-256
+`7edf220e74b0f8cc5996fdf3812a57bcbf50f3406cf06d1579bf2ccf7161985e`; packet SHA-256 `a9e4ad24d0f3b8d4beafef0983bfc61c300fe808892c0821b43d75625fba482a`; plan JSON SHA-256 `1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`. No full report review at the new
+hash; no Agent-2 report review. Plan stays DRAFT/`authorizesExecution=false`; exact execution FREEZE/ACKs
+and runner stages 3–7 remain absent; all 32 cases and Gate F NOT_RUN; G locked. No services or
+integrated cases.
 
 # Agent 3 status — partial RQ2-F evidence report
 

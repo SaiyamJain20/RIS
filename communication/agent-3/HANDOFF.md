@@ -1,3 +1,39 @@
+# A3-0154 handoff — incorporate protocol-owner confirmations and A1-0140 review, 2026-11-16
+
+Continued Agent 3 on `/home/karma/Documents/RIS`, branch `agent-3`, from live board A3-0153 and
+parent `c01e354d3e3c0b66fadbc4c1fae489228e2acb75`. Before file edits, inspected process executables,
+command lines and `/proc/<pid>/cwd`; no live Claude CLI process used this checkout. Acquired the
+scheduled-run lock and coordinator lock. Explicitly fetched all three refs: Agent 1
+`14c3bb3282e208a61d722bbd9d962f4883831195`, Agent 2
+`c08b9387b5b27c04fe9a9d6070b300302d5cb99e`, and Agent 3 parent
+`c01e354d3e3c0b66fadbc4c1fae489228e2acb75`. Four pre-existing untracked HACKATHON-PITCH and
+PROJECT-UPDATE `.md`/`.docx` files remain untouched.
+
+Read the live BOARD, required Agent-3 context/ROLE/SPEC/PLAN/interface/PROTOCOL, peer STATUS/HANDOFF,
+and addressed latest messages. A1-0140 reviewed the exact prior report hash
+`c511c36be8e45be844d4648e859660617364a937c930f355c16caac4cb2a249e` in ledger scope, found the
+A3-0151 gas audit text accurate, and states status or protocol/evaluation-only later edits need no
+new Agent-1 review. A2-0089 is an explicit protocol-owner ACK of K1 and the corrected A3-0121
+signing-rule reading, each at isolated scope. Its full suite is owner-reported: 3,226 passed, 201
+expected skips, exit 0 on protocol subtree `7566f63d693afe8fa88ab7cc69872082d58d88db`; raw stdout
+and a run-specific hash receipt are not retained in this checkout. It is not an execution ACK/FREEZE
+or report review. Exact peer messages plus Agent-2 STATUS/HANDOFF source snapshots and hashes are
+preserved at `evaluation/evidence/f/owner-confirmations-20261116/`.
+
+Updated `evaluation/reports/RQ2-F-DRAFT.md`, the partial packet, historical preflight README with a
+dated continuation correction, owner-confirmation source receipt, BOARD, STATUS and this HANDOFF.
+Report SHA-256 `7edf220e74b0f8cc5996fdf3812a57bcbf50f3406cf06d1579bf2ccf7161985e`; packet SHA-256 `a9e4ad24d0f3b8d4beafef0983bfc61c300fe808892c0821b43d75625fba482a`; plan JSON SHA-256 `1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919` unchanged. The report now
+closes the two owner confirmation items at their stated scope, corrects the table's post-grant DENY
+wording, and records A1-0140's ledger-scope review lineage. No full report review exists at the new
+hash; no Agent-2 report-specific review. Plan remains DRAFT/`authorizesExecution=false`; all 32 cases
+and Gate F NOT_RUN; G locked. Exact execution FREEZE ACKs and authorized FREEZE remain absent; stages
+3–7 remain incomplete. No services, tests, integrated cases, new measurements or external review
+requests.
+
+Run time: 2026-11-15 23:55:51 UTC (2026-11-16 05:25:51 IST).
+
+---
+
 # A3-0149 handoff — fresh M2 virtual availability reproduction, 2026-11-15
 
 Continued Agent 3 from live board A3-0148 on `/home/karma/Documents/RIS`, branch `agent-3`, parent

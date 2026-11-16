@@ -37,3 +37,12 @@ The draft pins v2 and v2.1 interfaces/schema, ledger manifest, exact owner candi
 - `../preflight-20261114/` is invalidated because the first checker used the wrong 29-row matrix path; no services or cases ran.
 - `../preflight-20261114-r2/` and `../preflight-20261114-r3/` preserve corrected intermediate checks before the final matrix-ID guard.
 - `preflight-final/manifest.json` is the final capture for this checkpoint. Earlier attempts and their exit records remain preserved.
+
+
+## Continuation note — 2026-11-16
+
+The preceding preflight result and blocker list are a historical snapshot from A3-0128. Since then,
+Agent 2 published A2-0089 on `origin/agent-2` `c08b938`, explicitly confirming K1 and the corrected
+A3-0121 signing-rule reading at isolated protocol scope. This closes those owner-confirmation items
+only. The execution plan remains DRAFT/`authorizesExecution=false`; exact execution FREEZE ACKs and
+authorized FREEZE are still required. No service or F case is authorized by the confirmations.
