@@ -3,7 +3,7 @@
 %   tectonic -X compile hmbc-end-presentation.tex      (or: latexmk -xelatex hmbc-end-presentation.tex)
 % Same preamble, colours and macros as the mid-eval deck (origin/slides:hmbc-presentation.tex).
 % Figure 1 is taken from the paper (CC BY 4.0); the other diagrams are redrawn or our own.
-% Structure: the paper (slides 2-3), JANUS (4), our project (5), RQ1 in full (6-14), RQ2 in full (15-27), limits, conclusion.
+% Structure: the paper (slides 2-3), JANUS (4), our two research questions (5), RQ1 in full (6-14), RQ2 in full (15-27), limits, conclusion.
 % Status as of 2026-11-17: RQ1 gate E PASS (12 Oct); RQ2/F execution plan DRAFT, gate F NOT RUN, all 32 F cases NOT_RUN.
 % Every number on a result slide is mapped to its source in sources-end-presentation.md.
 % Primary snapshot: origin/Code_Merge_Final fc80bf0 (RQ2-F-DRAFT.md sha256 e59a51cd.., RQ1-E.md sha256 69dabfba..).
@@ -197,51 +197,35 @@
 \note{JANUS = Malamas, Palaiologos, Kotzanikolaou, Burmester, Glynos, Appl. Sci. 13(1):566, 2023, doi 10.3390/app13010566. Facts from mid-eval slides 9-10 (origin/slides d292576, hmbc-presentation.tex lines 331-386).}
 \end{frame}
 
-% ---------------------------------------------------------------- 5. Our project
-\begin{frame}{Our project: two research questions, one reconstruction}
+% ---------------------------------------------------------------- 5. Our research questions
+\begin{frame}{What we set out to answer: two research questions}
 \centering
 \begin{tikzpicture}[x=1cm, y=1cm,
-    card/.style={rounded corners=3pt, text width=6.15cm, align=left, inner sep=5pt, font=\scriptsize, anchor=north},
-    head/.style={rounded corners=3pt, text width=6.15cm, inner sep=4pt, font=\footnotesize\bfseries, text=white, anchor=south}]
-  \node[card] (c1) at (0,0) {\textbf{Authorisation, freshness and audit.} Which properties follow from HMBC's access flow, which depend on details it leaves out, and which explicit repairs enforce them?};
-  \node[head, fill=accent] at (0,0) {RQ1 \hfill DONE: gate E PASS, 12 Oct 2026};
-  \node[card] (c2) at (6.9,0) {\textbf{Byzantine witnesses.} Which RQ1 guarantees survive Byzantine witnesses (4 witnesses, quorum 3, at most 1 faulty), and what quorum and state rules are enough?};
-  \node[head, fill=pbc] at (6.9,0) {RQ2 \hfill IN PROGRESS: gate F NOT RUN};
-  \draw[accent, rounded corners=3pt] (c1.north west) rectangle ($(c1.north east)+(0,-1.48)$);
-  \draw[pbc, rounded corners=3pt] (c2.north west) rectangle ($(c2.north east)+(0,-1.48)$);
+    card/.style={text width=6.4cm, align=left, inner sep=6pt, font=\scriptsize, anchor=north, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}},
+    head/.style={rounded corners=3pt, text width=6.4cm, inner sep=5pt, font=\small\bfseries, text=white, anchor=south},
+    stn/.style={rounded corners=2pt, text width=6.4cm, inner sep=4pt, font=\footnotesize\bfseries, align=center, anchor=north}]
+  \node[card] (c1) at (0,0) {%
+    {\footnotesize\color{accent}\textbf{The question}}\\[2pt]
+    Which authorisation, freshness and audit properties \emph{follow} from HMBC's flow, which \emph{depend} on missing details, and which \emph{repairs} enforce them?\\[8pt]
+    {\footnotesize\color{accent}\textbf{Why it matters}}\\[2pt]
+    The paper never says what binds the domain chain's grant to the proxy chain's decision, how fresh trust lists must be, or what evidence an outcome log needs.\\[8pt]
+    {\footnotesize\color{accent}\textbf{How we answer it}}\\[2pt]
+    The paper's flow against our repaired-e profile, on a frozen 56-row catalog run on two local chains.};
+  \node[head, fill=accent] at (0,0) {RQ1 \;·\; Authorisation, freshness and audit};
+  \node[card] (c2) at (7.05,0) {%
+    {\footnotesize\color{pbc}\textbf{The question}}\\[2pt]
+    If some of the witnesses that vouch for each decision are \emph{Byzantine}, which RQ1 guarantees survive, and which quorum and state rules are enough?\\[8pt]
+    {\footnotesize\color{pbc}\textbf{Why it matters}}\\[2pt]
+    HMBC assumes an honest majority in every chain, and RQ1's repair trusts a single witness.\\[8pt]
+    {\footnotesize\color{pbc}\textbf{How we answer it}}\\[2pt]
+    $n = 4$ witnesses, quorum $q = 3$, at most $f = 1$ faulty, assuming safe ledgers and a trusted key worker; judged on 32 integrated F cases.};
+  \node[head, fill=pbc] at (7.05,0) {RQ2 \;·\; Byzantine witnesses};
+  \draw[accent, rounded corners=3pt] (c1.north west) rectangle ($(c1.north east)+(0,-4.65)$);
+  \draw[pbc, rounded corners=3pt] (c2.north west) rectangle ($(c2.north east)+(0,-4.65)$);
+  \node[stn, draw=okgreen, fill=okgreen!12] at (0,-4.85) {DONE: gate E PASS, 12 Oct 2026};
+  \node[stn, draw=accent, fill=accent!12] at (7.05,-4.85) {IN PROGRESS: gate F NOT RUN (0 of 32 cases)};
 \end{tikzpicture}
-
-\vspace{0.2em}
-\begin{columns}[T,onlytextwidth]
-\column{0.33\textwidth}
-\footnotesize\textbf{How we work}
-\begin{itemize}\scriptsize\setlength{\itemsep}{1pt}
-  \item A \textbf{paper-derived reconstruction}: the authors' code is not available; every missing detail is a recorded choice, not a ``discovered vulnerability''.
-  \item Freeze the expected results $\rightarrow$ owners ACK the plan hash $\rightarrow$ run $\rightarrow$ review; failed trials kept.
-  \item Three roles (ledger, protocol, evaluation), one machine each, one model family.
-\end{itemize}
-
-\column{0.28\textwidth}
-\footnotesize\textbf{Evidence labels}\\[0.2em]
-\scriptsize
-\renewcommand{\arraystretch}{1.1}
-\begin{tabular}{@{}l L{0.78\linewidth}@{}}
-\evl{I} & integrated run by the evaluator \\
-\evl{R} & cross-run by module owners \\
-\evl{U} & unit or offline tests on real module code, synthetic fixtures \\
-\evl{F} & formal model run by the evaluator \\
-\end{tabular}
-
-\column{0.36\textwidth}
-\footnotesize\textbf{What we built}
-\begin{itemize}\scriptsize\setlength{\itemsep}{1pt}
-  \item 2 local Anvil chains: PBC (id 18545), DBC (id 28545).
-  \item The paper's 6 contracts + a DecisionVerifier (Solidity 0.8.37, Foundry 1.8.5); RQ2 adds Governance.
-  \item Python client, untrusted relay, key worker, witnesses (RQ2: four, each with a durable SQLite store).
-  \item Symbolic crypto: no ABE, no secrecy claim.
-  \item Forge tests + mutants, an independent oracle, ProVerif 2.05, TLA+/TLC 2.19.
-\end{itemize}
-\end{columns}
+\note{RQ wording: SPEC.md §1, RQ1-E.md §1, RQ2-F-DRAFT.md §1. Gaps: RQ1-E.md §0. Assumptions: paper §V. One trusted witness: RQ1-E.md §15. Catalog: RQ1-E.md §3.3. Fault model: RQ2-F-DRAFT.md §1; 32 cases: plan-draft.json.}
 \end{frame}
 
 % ================================================================ PART II: RQ1 (slides 6-14), adapted from mid-eval slides 15-22
@@ -376,7 +360,7 @@
 % ---------------------------------------------------------------- 9. E01 results
 \begin{frame}{RQ1 results, gap 1: decision provenance and replay \;\evl{I}}
 \scriptsize
-\renewcommand{\arraystretch}{1.22}
+\renewcommand{\arraystretch}{1.12}
 \begin{tabular}{@{}L{0.27\textwidth} L{0.33\textwidth} L{0.37\textwidth}@{}}
 \toprule
 \textbf{The relay\ldots} & \textbf{paper-strict / paper-minimal} & \textbf{repaired-e} \\
@@ -389,9 +373,10 @@ reuses a nonce on a different request & -- (the paper has no nonce) & \cRep\ \co
 delivers deployment B's tuple to A & \cGap\ A grants it & \cRep\ \code{WRONG\_DESTINATION}, step 1 \\
 delivers it exactly at the request's expiry & \cGap\ granted at that instant & \cRep\ \code{EXPIRED}, step 9 (at equality) \\
 \bottomrule
-\end{tabular}
+\end{tabular}\\[0.15em]
+{\scriptsize\color{datagray}\textbf{Evidence labels:} [I] integrated evaluator run \,·\, [R] owners' cross-run \,·\, [U] unit or offline test \,·\, [F] formal model}
 
-\vspace{0.6em}
+\vspace{0.35em}
 \begin{columns}[T,onlytextwidth]
 \column{0.62\textwidth}
 \begin{alertblock}{What it means}

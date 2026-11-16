@@ -1,7 +1,7 @@
 # Speaker script: the HMBC end-evaluation deck in about 23 minutes
 
-About **23 minutes** spoken (about 3,300 words at a brisk pace; the per-slide timings below sum to
-23 min 0 s). Plain text is what you say. *[Brackets]* are pointing cues. This script matches the
+About **23 minutes** spoken (about 3,400 words at a brisk pace; the per-slide timings below sum to
+23 min 5 s). Plain text is what you say. *[Brackets]* are pointing cues. This script matches the
 30-page deck `hmbc-end-presentation.pdf`.
 
 - **Slide numbers** are PDF page numbers. The counter in the slide corner is one lower (the title page
@@ -13,7 +13,7 @@ About **23 minutes** spoken (about 3,300 words at a brisk pace; the per-slide ti
 
   | Speaker | Slides | Content |
   |---|---|---|
-  | A | 1–9 | the paper, JANUS, our project, RQ1 question, method, repair, results for gap 1 |
+  | A | 1–9 | the paper, JANUS, our two research questions, RQ1 question, method, repair, results for gap 1 |
   | B | 10–19 | RQ1 gap 2 and 3, mutants, gate E and what RQ1 shows; RQ2 question, design, how it is judged, TLC, oracle |
   | C | 20–30 | RQ2 pool sweep, availability, cost, durability, trust matrix, out-of-bound results, assurance, status; limits, conclusion |
 
@@ -91,26 +91,24 @@ company CENSUS, published in Applied Sciences in 2023. *[Right, bullets]* The ma
 named as future work. That is close to our RQ2. JANUS is related work only: we implement HMBC 2020 and
 use none of its code.
 
-## 5. Our project (60 s)
+## 5. What we set out to answer (60 s)
 
-*[Cards]* Two research questions, answered in order.
-- **RQ1**, authorisation, freshness and audit, is **done**: gate E passed on 12 October.
-- **RQ2**, Byzantine witnesses, is **in progress**: its gate has not been run.
+Two research questions, answered in order. *[Left card]*
+- **RQ1, authorisation, freshness and audit.** Which properties follow from HMBC's flow, which depend
+  on details it leaves out, and which repairs enforce them?
+- **Why it matters:** the paper never says what binds the domain chain's grant to the proxy chain's
+  decision, how fresh the trust lists must be, or what evidence an outcome log needs.
+- **How we answer it:** we run the paper's flow against our repaired profile on a frozen 56-row
+  catalog, on two local chains. *[Badge]* It is **done**: gate E passed on 12 October.
 
-*[Left]* How we work:
-- **A reconstruction.** The authors' code isn't available. Every missing detail is a recorded choice,
-  never a "discovered vulnerability".
-- **Discipline:** we freeze the expected results, the module owners acknowledge that exact plan hash,
-  then we run, then we review. Failed trials are kept.
-- **Three roles**, ledger, protocol and evaluation, on three machines. All the same model family, which
-  matters for how independent our reviews are.
-
-*[Middle]* Every result carries a label: **I** for an integrated run by the evaluator, **R** for a
-cross-run by module owners, **U** for unit or offline tests, **F** for a formal model.
-
-*[Right]* What we built: two local Anvil chains, the paper's six contracts in Solidity plus our own
-verifier, Python services, and an **untrusted** relay, so everything important is signed and checked on
-chain. Crypto is symbolic, so we make no secrecy claims.
+*[Right card]*
+- **RQ2, Byzantine witnesses.** If some of the witnesses that vouch for each decision are Byzantine,
+  which RQ1 guarantees survive, and which quorum and state rules are enough?
+- **Why it matters:** HMBC assumes an honest majority in every chain, and RQ1's repair trusts a single
+  witness.
+- **How we answer it:** four witnesses, a quorum of three, at most one faulty, assuming safe ledgers
+  and a trusted key worker; the verdict comes from 32 integrated F cases. *[Badge]* It is **in
+  progress**: that gate has not been run.
 
 ---
 
@@ -172,7 +170,11 @@ The same six contracts run in four profiles:
 
 Note that in RQ1 the witness is **one trusted party**. RQ2 removes that.
 
-## 9. RQ1 results, gap 1 (50 s)
+## 9. RQ1 results, gap 1 (55 s)
+
+*[Grey line under the table]* From here on, result slides carry a label: **I** for an integrated run
+by the evaluator, **R** for a cross-run by the module owners, **U** for unit or offline tests, **F**
+for a formal model.
 
 Each row is something a misbehaving relay does.
 - **Identical replay** is rejected even by the paper profiles, but only because our grant ID is

@@ -60,22 +60,18 @@ the HMBC authors' implementation.
 | Stack diagram (simplified from JANUS Fig. 5) | mid lines 335–347 |
 | Left open: Raft tolerates crashes only; Byzantine tolerance named as future work | mid line 383 |
 
-## Slide 5 — Our project
+## Slide 5 — What we set out to answer: two research questions
 
 | Item | Source |
 |---|---|
-| RQ1 / RQ2 wording | `SPEC.md:22–23` |
+| RQ1 question (follow / depend on missing details / repairs) | `SPEC.md:22`; RQ1:91–93 |
+| RQ1 why: nothing binds the DBC grant to the PBC decision; lists have no freshness; outcomes logged without DBC evidence | RQ1:44–54; mid line 420 |
+| RQ1 how: paper flow vs repaired-e on a frozen 56-row catalog, two local chains | RQ1:240–245 |
 | RQ1 DONE, gate E PASS 12 Oct 2026 | `communication/GATES.md:621, 648` |
-| RQ2 gate F NOT RUN | `communication/GATES.md:661`; RQ2:3 |
-| Missing details as recorded choices | RQ1:35, 106 |
-| Freeze → ACK → run → review; failed trials kept | RQ1:250–253 |
-| Three portable roles; same model family | `communication/DECISIONS.md:598–615` (D57) |
-| Labels [I]/[R]/[U]/[F] | `origin/slides:README.md` (mid-eval "Results are labelled by evidence level") |
-| Anvil ids 18545 / 28545; Solidity 0.8.37; Foundry 1.8.5; ProVerif 2.05 | RQ1:244–245; mid lines 438–445 |
-| Governance added in RQ2 | MEAS:38–39 |
-| Four witnesses with durable SQLite stores | MEAS:42–43; RQ2:132 |
-| Symbolic crypto, no ABE | RQ1:1150 |
-| TLA+/TLC 2.19 | RQ2:141 |
+| RQ2 question | `SPEC.md:23`; RQ2:127–129 |
+| RQ2 why: honest majority assumed in every chain; RQ1's repair trusts one witness | paper §V (mid lines 322–324); RQ1:1156 |
+| RQ2 how: n = 4, q = 3, f = 1; safe ledgers and a trusted key worker; 32 integrated F cases | RQ2:127–129; `EV/execution-plan-draft-20261114/plan-draft.json` (`families`) |
+| RQ2 in progress, gate F NOT RUN, 0 of 32 cases | `communication/GATES.md:661`; RQ2:3 |
 
 ## Slide 6 — RQ1: question and gaps
 
@@ -111,6 +107,7 @@ the HMBC authors' implementation.
 |---|---|
 | Every row and code (REPLAY, WRONG_SUBJECT step 4, BAD_SIGNATURE step 6, WRONG_DESTINATION step 1, EXPIRED step 9 at equality) | RQ1:36–37, 45–47, 59–61; RQ1 §7 (lines 612–734); gate rows 10–22, 51–56 in RQ1 §6 |
 | Identical replay rests on deterministic grant id (A25) | RQ1:36–37 |
+| Evidence-label legend [I]/[R]/[U]/[F] (first slide that uses a label) | `origin/slides:README.md` (mid-eval "Results are labelled by evidence level") |
 
 ## Slide 10 — RQ1 results, gap 2, and the window
 

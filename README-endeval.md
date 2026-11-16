@@ -15,7 +15,7 @@ shown is a **paper-derived reconstruction**, not the authors' implementation.
 | 1 | Title, with the status line |
 | 2–3 | The paper: the problem and HMBC's architecture (actors, proxy and domain chains, six contracts); a five-stage overview of how access works, split decryption, and the assumptions our RQs probe |
 | 4 | JANUS: the extension of HMBC by the same authors (Appl. Sci. 2023), its main extensions, and what it leaves open |
-| 5 | Our project: the two research questions and their status, how we work, evidence labels, what we built |
+| 5 | What we set out to answer: RQ1 and RQ2, each with the question, why it matters, how we answer it, and its status |
 | 6–14 | RQ1 in full: the question and the three gaps; method (profiles, frozen 56-row catalog, result classes); the repaired-e design; results for gap 1, gap 2 (with the revocation window) and gap 3; mutants and ProVerif; gate E (56-row grid and verdict); what RQ1 shows |
 | 15–17 | RQ2: the question and fault model (n = 4, q = 3, f = 1); the design (three signed paths, governance, single-signing witnesses); how RQ2 will be judged (32 cases, six families, seven stages) vs the offline evidence that exists |
 | 18–20 | RQ2 safety: TLC finite model (five configurations); oracle/store differential and seven mutation controls; M5 pool sweep (f = 1 vs the f = 2 control) |
@@ -79,3 +79,7 @@ as in the mid-eval deck.
 - 2026-11-17, later still: on the human's request, slide 3's access flow redrawn as a five-stage overview
   (simplified from paper Fig. 6), and one JANUS slide added after the paper slides (its footnote on the project
   slide removed). 30 pages; script retimed to about 23 minutes.
+- 2026-11-17, last: on the human's request, slide 5 now explains only the two research questions (question, why
+  it matters, how we answer it, status) under the heading "What we set out to answer: two research questions";
+  the evidence-label legend moved to a one-line legend on slide 9, the first slide that uses a label.
+  30 pages; about 23 minutes spoken.
