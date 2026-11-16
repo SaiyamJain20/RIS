@@ -1,3 +1,76 @@
+# A3-0163 handoff — offline snapshot/runtime preparation, 2026-11-16
+
+Continued Agent 3 / C-F1 from A3-0162, parent
+`34794ef76314f13ed3dbfced1123c9a2bbda9272`, same confirmed checkout and agent-3.
+Before writes, inspected executable/argv and /proc/PID/cwd: Claude PID1123000
+uses the ANLP checkout, outside RIS. Scheduled/coordinator lock holder PID1297771
+retains original inodes9878121/7431826. First heredoc-based holder ended on EOF
+before any project/Git writes; reacquired persistently via PTY. Both refs fetches
+exit0; A1 advanced to `d7bac307cda8eaa566c4d284ca00a78ad086eacb`; A2
+`faa4e63333eb3b68dea2bc5cc68dae0a47d8bb30`; A3 parent. Read live board,
+common/role/SPEC/PLAN/interfaces/protocol, peer STATUS/HANDOFF and addressed
+A1-0144/A2-0089/A2-0091. K1/signing-rule confirmations remain closed at isolated
+scope; no exact execution FREEZE/ACK is inferred from any review.
+
+New `evaluation/f_snapshot.py`: exact plan/archive/source bytes and modes;
+selected nonoverlapping paths; reject traversal/symlink/hardlink/special input;
+never overwrite destination; fail with retained BLOCKED acquisition manifest.
+New separate bare Git store copies listed source/historical commits and trees
+without alternates, remote or hooks; verify copied full archive/tree identity.
+Tool Git uses explicit configuration/environment and pre/post executable hash.
+Selected runtime inventory pins files/modes, directories, file links/targets and
+lexical tool paths; transitive closure remains explicitly false. No existing
+runtime/interface code changed. Snapshot destination must be outside original
+source repository; explicit GIT_DIR must point to the separate store in future
+recipes. This adapts the earlier DRAFT path proposal, not an execution change.
+
+Tests first:31RED missing-module errors; initial30PASS/1test defect (assumed pack
+objects). Expanded review36PASS/2FAIL: actual copied objects were read-only and
+tool symlink spelling was not pinned. Corrected fixture permissions and inventory.
+First focused87PASS/1fixture error, then88PASS. Additional self-review reproduced
+2root-symlink failures; fixed root validation. Final focused command:
+`.venv/bin/python -m pytest -q evaluation/tests/test_f_snapshot.py evaluation/tests/test_f_baselines.py evaluation/tests/test_f_preflight.py evaluation/tests/test_manifests.py`:
+**92 passed in15.35s/exit0**,42new controls. Broad suite not rerun because module
+is isolated and existing runtime files unchanged. Synthetic probe exit0 verifies
+PREPARED, independent historical archive after original source move, wrong-source
+BLOCKED and runtime drift refusal. Commands/output/source/tool hashes and all
+failed outputs retained (losslessgzip). Python3.13.13/pytest9.0.2/Git2.54.0.
+235 selected source hashes are post-verification identities, not an integrated
+pre/post bracket. Review is same-author/correlated; no extra agents/worktrees.
+
+Evidence `evaluation/evidence/f/snapshot-materializer-20261116/` includes a new
+unmaterialized real source plan (2824 file hashes) and separately names
+historical protocol test archive commits91add8cc.. and9d6911d9.. from exact pinned
+protocol source blobs. Plan canonicalSHA `8696c90856bf01775ca230e586e6c6ec87e08fdeac844900134e0cbfb1421f5f`.
+No real owner source snapshot/runtime was materialized or executed. Runtime
+inventory does not discover/establish closure or installed compatibility. Git
+commands timeout direct child only and capture archives in memory; no sandbox,
+atomic inventory or hostile-process-group/resource guarantee is claimed.
+
+A1-0144 at exact fetched publication:6/6attachment hashes verify, last-changing
+note commit recorded. Peer reports316/0/0 and allmutants detected, source430files
+unchanged, new82files only in ledger/out and ledger/cache. Both already excluded
+by existing executor. Not locally rerun, no peer source or FREEZE ACK changes.
+
+Reviewed report e59a51cd../packet562f2047../plan1a2d5e4f.. byte-identical. DRAFT,
+authorizesExecution=false, all32cases/Gate F NOT_RUN/G LOCKED. No owner suites,
+services, integrated cases, deployments, external messages, peer module/runtime
+mailbox/archive/frozen changes or main push. Four preexisting untracked user
+pitch/update files preserved. Exact-path commit/push/remote verification and lock
+release are recorded in automation memory after publication.
+
+**NEXT CODE:** wire snapshot and historical-object manifests plus selected runtime
+inventory into stage-3 recipe validation. Establish reviewed runtime closure,
+explicit lexical tools/environment and GIT_DIR rather than using original repo
+objects or an incomplete venv/JRE inventory. Then remaining family/native capture,
+signing-time observations/authenticated completeness, verdicts/post-bracket,
+integrated E regression and executable FREEZE. Real owner baselines/services/cases
+remain gated on exact execution FREEZE/role ACKs. Continue independent code when
+peer refs are unchanged; no new human/peer action is needed for this component.
+Current UTC record time:2026-11-16T18:22:00.815743+00:00.
+
+---
+
 # A3-0162 handoff — pinned baseline executor component, 2026-11-16
 
 Continued Agent 3 / C-F1 from A3-0161, parent

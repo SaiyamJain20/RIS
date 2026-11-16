@@ -1,3 +1,21 @@
+## A3-0163: offline snapshot materializer and runtime inventory — 2026-11-16
+
+C-F1 WORKING. Added exact Git-archive/file/mode source preparation, separate
+self-contained shallow historical object store, independent revalidation and
+selected runtime/tool inventory with drift refusal. Synthetic focused checks:
+92 passed/exit0 (42 new). Probe retains historical archives after original repo
+move; wrong source BLOCKED, runtime drift refused. Receipt:
+`evaluation/evidence/f/snapshot-materializer-20261116/`.
+Audited new A1-0144: all six attachment hashes verify; its ledger command results
+remain peer evidence, not execution ACKs. Existing executor already excludes its
+reported ledger/out and ledger/cache outputs. Real 2,824-file snapshot plan is
+DRAFT/unmaterialized; runtime closure explicitly false; no owner commands ran.
+Report/packet/plan preserved. DRAFT/false; all32 cases/Gate F NOT_RUN/G LOCKED.
+Next code: wire prepared snapshot/object/runtime manifests into stage-3 recipes,
+establish reviewed runtime closure and explicit GIT_DIR, then remaining native
+capture/oracles/post-bracket/E regression and executable FREEZE. Keep implementing
+independent owned work; real services/cases still require exact FREEZE/role ACKs.
+
 ## A3-0162: offline baseline executor and source-pinned recipes — 2026-11-16
 
 C-F1 WORKING. Added ordered, bounded isolated baseline execution with separate

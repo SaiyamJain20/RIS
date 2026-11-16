@@ -1,0 +1,115 @@
+[
+  {
+    "argv": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "-q",
+      "evaluation/tests/test_f_snapshot.py"
+    ],
+    "exitCode": 1,
+    "output": "red.txt.gz",
+    "result": "31 errors"
+  },
+  {
+    "argv": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "-q",
+      "evaluation/tests/test_f_snapshot.py"
+    ],
+    "exitCode": 1,
+    "output": "green-initial.txt.gz",
+    "result": "30 passed, 1 failed"
+  },
+  {
+    "argv": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "-q",
+      "evaluation/tests/test_f_snapshot.py"
+    ],
+    "exitCode": 1,
+    "output": "review-red.txt.gz",
+    "result": "36 passed, 2 failed"
+  },
+  {
+    "argv": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "-q",
+      "evaluation/tests/test_f_snapshot.py",
+      "evaluation/tests/test_f_baselines.py",
+      "evaluation/tests/test_f_preflight.py",
+      "evaluation/tests/test_manifests.py"
+    ],
+    "exitCode": 1,
+    "output": "focused-final.txt.gz",
+    "result": "87 passed, 1 failed"
+  },
+  {
+    "argv": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "-q",
+      "evaluation/tests/test_f_snapshot.py",
+      "evaluation/tests/test_f_baselines.py",
+      "evaluation/tests/test_f_preflight.py",
+      "evaluation/tests/test_manifests.py"
+    ],
+    "exitCode": 0,
+    "output": "focused-final-v2.txt",
+    "result": "88 passed"
+  },
+  {
+    "argv": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "-q",
+      "evaluation/tests/test_f_snapshot.py",
+      "-k",
+      "root_symlink"
+    ],
+    "exitCode": 1,
+    "output": "root-review-red.txt.gz",
+    "result": "2 failed, 40 deselected"
+  },
+  {
+    "argv": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "-q",
+      "evaluation/tests/test_f_snapshot.py",
+      "evaluation/tests/test_f_baselines.py",
+      "evaluation/tests/test_f_preflight.py",
+      "evaluation/tests/test_manifests.py"
+    ],
+    "exitCode": 0,
+    "output": "focused-final-v3.txt",
+    "result": "92 passed"
+  },
+  {
+    "argv": [
+      ".venv/bin/python",
+      "-m",
+      "evaluation.evidence.f.snapshot-materializer-20261116.probe"
+    ],
+    "exitCode": 0,
+    "output": "sample-summary.json"
+  },
+  {
+    "argv": [
+      ".venv/bin/python",
+      "-m",
+      "evaluation.evidence.f.snapshot-materializer-20261116.collect"
+    ],
+    "exitCode": 0,
+    "output": "collect.stdout"
+  }
+]
