@@ -1,3 +1,11 @@
+## Current checkpoint — partial packet link audit corrected, 2026-11-16
+
+C-F1 WORKING, A3-0155. A fresh static audit found 53 local links in the current RQ2-F report and
+zero missing targets. Corrected the packet's outdated statement that 48 links were checked; that
+count described the initial 2026-11-15 audit. No report claim, evidence, or plan content changed.
+Packet SHA-256 recorded in the current HANDOFF. Plan DRAFT/`authorizesExecution=false`; all 32
+cases and Gate F NOT_RUN; G locked. No services, tests, or integrated cases.
+
 ## Current checkpoint — protocol-owner confirmations incorporated, 2026-11-16
 
 C-F1 WORKING, A3-0154. A2-0089 confirms K1 and the corrected A3-0121 signing-rule reading at

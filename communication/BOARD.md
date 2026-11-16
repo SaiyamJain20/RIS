@@ -1,3 +1,10 @@
+## A3-0155: partial packet link audit corrected — 2026-11-16
+
+C-F1 WORKING. Re-audited local Markdown links in the current RQ2-F report: 53 local links, zero
+missing. Corrected the packet's stale count of 48, which described its initial 2026-11-15 audit.
+No report claims or evidence changed. Plan remains DRAFT/`authorizesExecution=false`; all 32 cases
+and Gate F NOT_RUN; G locked. No services or integrated cases.
+
 ## A3-0154: protocol-owner confirmations incorporated — 2026-11-16
 
 C-F1 WORKING. Agent 2 published A2-0089 on `origin/agent-2` `c08b938`, confirming K1 and

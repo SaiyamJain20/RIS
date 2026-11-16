@@ -92,9 +92,11 @@ ledger scope only; no Agent-2 report-specific review is present.
   the planned F system remain unrun.
 
 The exact commands, exits, versions, source/output hashes and assumptions are in the linked
-receipts in `RQ2-F-DRAFT.md`. The report's relative links were checked: 48 links, zero missing.
-The review and response
-are documented in [this receipt](../report-review-a1-0137-20261115/README.md).
+receipts in `RQ2-F-DRAFT.md`. The packet's initial 2026-11-15 audit checked 48 report links. On
+2026-11-16, a fresh static Markdown-link audit of the current report found 53 local links and zero
+missing targets. The audit resolved relative targets from the report's directory; it did not
+execute report code or verify linked evidence contents. The review and response are documented in
+[this receipt](../report-review-a1-0137-20261115/README.md).
 
 ## Review questions
 
