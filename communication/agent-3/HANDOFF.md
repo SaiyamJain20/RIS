@@ -1,3 +1,77 @@
+# A3-0161 handoff — resume implementation, owned RPC acquisition, 2026-11-16
+
+Continued Agent 3 / C-F1 from A3-0160, parent
+`2e971bb9f5e042f4dada3654f467d725fc0f0a21`, on `/home/karma/Documents/RIS`,
+branch `agent-3`. Pre-edit executable/argv and `/proc/<pid>/cwd` inspection found
+no live Claude CLI using this checkout. Held scheduled/coordinator flocks via
+own shell PID 1175146. Explicit three-ref fetch before edits and after tests
+exited 0: Agent 1 `8dec55e657afd5df189d025cca03795d71108f28`, Agent 2
+`faa4e63333eb3b68dea2bc5cc68dae0a47d8bb30`, Agent 3 parent above. Read live
+BOARD, context/role/SPEC/PLAN/interfaces/protocol and both peer STATUS/HANDOFFs,
+including A1-0142, A2-0091, A2-0089 and remaining S2-0026 recipe requirements.
+
+**Human correction:** repeated branch-only monitoring was not continuing the
+unfinished coordinator work. Agent 1's ledger and Agent 2's protocol are READY;
+both reviewed the exact partial report. They await Agent 3's complete execution
+recipe/FREEZE. Missing execution ACKs forbid services/cases, not already-authorized
+offline runner implementation. Continue the earliest independent code task when
+refs are unchanged. Global observer 39 records this correction.
+
+Implemented `evaluation/owned_witness_capture.py`, reusing `JsonLinesProcess`
+without changing the E transport. It admits four public witness operations,
+checks their published typed schemas before send/journaling, counts attempts in
+the parent, records wire bytes, correlates response envelopes/IDs, and refuses
+completed captures on failures, missing/extra stdout, stderr, nonzero or forced
+exit. EOF/tail collection is bounded; only the owned child is reaped. Existing
+capture/seal/join APIs are reused. The collector is single-flight and is not yet
+wired into the integrated runner or concurrent pool.
+
+Tests-first: initial 17 absent-component failures (pytest exit 1), initial 17
+passed (exit 0); review found unknown secret fields could be journaled, reproduced
+by a failing test (1 failed, 2 passed, 17 deselected, exit 1), fixed using existing
+v2 validation. Expanded final command:
+`.venv/bin/python -m pytest -q evaluation/tests/test_owned_witness_capture.py evaluation/tests/test_processes.py evaluation/tests/test_sealed_signing_capture_v1.py evaluation/tests/test_signing_event_join_v2.py evaluation/tests/test_f_preflight.py`
+exited 0: **83 passed in 23.14s**, including 23 acquisition probes. Prior 64-check
+run also passed; final expanded output supersedes its log. Synthetic four-kind
+probe exit 0: 4 pipe-captured fixture signature replies, 4 exact history joins,
+child reaped. All commands/output/source/tool hashes, raw outputs and sample
+artifacts: `evaluation/evidence/f/owned-rpc-capture-20261116/`. Python 3.13.13, pytest 9.0.2, Git 2.54.0; other versions in
+audit.json. Initial administrative receipt-generation command used system Python
+without pytest metadata and failed (exit 1); rerun under .venv succeeded. No code
+or test failure follows from that metadata error.
+
+Source-input manifest: 221 selected Python/interface/project/probe inputs,
+SHA-256 `ee0c1fd455159f0160905d277d3042a503d651627fe6eab395e0bae2435f9da1` (post-verification identity, not an integrated pre/post
+source bracket). Collector SHA `a35a135baf60338e430651d497af4c0dbe1ac8c5fc1008d1a0748bca9b6b0007`; tests SHA `21492a0a2d5772fcaa1c41f44a934b1f9ef666bfa21e2612beb2b14e97f29e59`.
+Existing transport hash remains `4a63d2a5b2443666fd9528c10ac22313ca77b9ca51ee67d121dc306eee7c6532`.
+Self-review only, same author/correlated; no extra agents/worktrees.
+
+Classification: tested reconstruction result with synthetic children and public
+fixture signatures. `transportComplete` establishes only this observed pipe
+session; authentication/global completeness remain false. No honest service,
+real signing, native ledger observation, history completeness, persistence,
+consensus or integrated-case result is established. Failed roundtrips may omit
+raw partial frames; no complete capture is accepted after those failures.
+
+Report/packet/plan bytes remain unchanged at e59a51cd.. / 562f2047.. / 1a2d5e4f..
+(full hashes in audit). Plan DRAFT/authorizesExecution=false, all 32 cases and Gate
+F NOT_RUN, G LOCKED. No services, protocol/ledger package execution, integrated
+cases, external messages, peer-scope/archive/frozen edits, main push or new worktree.
+Four preexisting untracked pitch/update files preserved. A3-0161 publishes the
+component READY only, not execution authorization. Exact-path review, commit,
+normal origin/agent-3 push, remote verification and lock release are recorded in
+automation memory after completion.
+
+**NEXT CODE, not another monitoring-only stop:** implement source-pinned stage-3
+baseline command recipes and bounded isolated execution under `evaluation/**`.
+Use synthetic-command tests for sequencing, exact source/interpreter/tool pins,
+stdout/stderr/exit/timeout recording and failure blocking; no real services/cases
+before the separate exact execution FREEZE/role ACKs. Then family/native capture
+wiring, verdicts/post-bracket/E regression and exact executable FREEZE remain.
+Current UTC run time: 2026-11-16T17:02:46.752084+00:00.
+
+---
+
 # A3-0160 handoff — retain both exact-hash scoped confirmations, 2026-11-16
 
 Continued Agent 3 / C-F1 from A3-0159 on `/home/karma/Documents/RIS`, branch `agent-3`,

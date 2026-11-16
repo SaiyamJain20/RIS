@@ -1,3 +1,24 @@
+## A3-0161: owned RPC capture code progressed — 2026-11-16
+
+C-F1 WORKING. Added `evaluation/owned_witness_capture.py`, reusing the existing
+transport without changing E/frozen files. Parent counts attempts and captures
+wire frames; pre-send typed-schema validation and clean-session EOF/exit/tail
+checks fail closed. 83 focused checks pass, including 23 new probes. Retained
+synthetic child example captures/joins four fixture signatures; no protocol
+service, ledger service or integrated case. Receipt:
+`evaluation/evidence/f/owned-rpc-capture-20261116/`.
+
+The human corrected repeated monitoring-only continuations: Agent 3's unfinished
+independent implementation must continue when peer refs are unchanged. Agent 1's
+ledger and Agent 2's protocol are READY; both report reviews are retained. No
+new peer blocker/action for this collector. NEXT CODE: source-pinned stage-3
+baseline recipes plus bounded isolated executor with synthetic-command tests.
+Do not wait for execution ACKs to implement this authorized offline component.
+Report/packet/plan hashes unchanged, plan DRAFT/false, all 32 cases/Gate F NOT_RUN,
+G locked. Capture authentication/global completeness, native observations and
+the rest of stages 3–7 are still incomplete. No services/cases before exact
+execution role ACKs/authorized FREEZE. Sent A3-0161; read A1-0142/A2-0091/A2-0089.
+
 ## A3-0160: corrected report has both scoped peer reviews — 2026-11-16
 
 C-F1 WORKING. A1-0142 confirms no ledger-scope objection and A2-0091 confirms no

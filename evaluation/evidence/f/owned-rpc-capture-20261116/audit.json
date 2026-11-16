@@ -1,0 +1,83 @@
+{
+  "runTimeUtc": "2026-11-16T17:02:00.483651+00:00",
+  "role": "agent-3 / C-F1",
+  "refs": {
+    "HEAD": "2e971bb9f5e042f4dada3654f467d725fc0f0a21",
+    "origin/agent-1": "8dec55e657afd5df189d025cca03795d71108f28",
+    "origin/agent-2": "faa4e63333eb3b68dea2bc5cc68dae0a47d8bb30",
+    "origin/agent-3": "2e971bb9f5e042f4dada3654f467d725fc0f0a21"
+  },
+  "classification": "tested reconstruction result; synthetic child probes only",
+  "toolchain": {
+    "python": "3.13.13",
+    "pythonExecutable": "/usr/bin/python3.13",
+    "pythonExecutableSha256": "5b3558f01096bc87e25ed042314a235f8f36b87e4678927281dd65abf6dfb92a",
+    "git": "git version 2.54.0",
+    "pytest": "9.0.2",
+    "eth-account": "0.14.0",
+    "jsonschema": "4.26.0"
+  },
+  "commands": [
+    {
+      "command": "git fetch origin refs/heads/agent-1:refs/remotes/origin/agent-1 refs/heads/agent-2:refs/remotes/origin/agent-2 refs/heads/agent-3:refs/remotes/origin/agent-3",
+      "exitCode": 0
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q evaluation/tests/test_owned_witness_capture.py",
+      "log": "red.txt.gz",
+      "exitCode": 1,
+      "result": "17 expected missing-implementation failures"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q evaluation/tests/test_owned_witness_capture.py",
+      "log": "green-initial.txt",
+      "exitCode": 0,
+      "result": "17 passed"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q evaluation/tests/test_owned_witness_capture.py -k \"secret_field or returned_documents or caller_failure\"",
+      "log": "review-red.txt.gz",
+      "exitCode": 1,
+      "result": "1 expected secret-field rejection failure, 2 passed, 17 deselected"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q evaluation/tests/test_owned_witness_capture.py evaluation/tests/test_processes.py evaluation/tests/test_sealed_signing_capture_v1.py evaluation/tests/test_signing_event_join_v2.py",
+      "exitCode": 0,
+      "result": "64 passed; log superseded by expanded final check"
+    },
+    {
+      "command": ".venv/bin/python -m pytest -q evaluation/tests/test_owned_witness_capture.py evaluation/tests/test_processes.py evaluation/tests/test_sealed_signing_capture_v1.py evaluation/tests/test_signing_event_join_v2.py evaluation/tests/test_f_preflight.py",
+      "log": "green.txt",
+      "exitCode": 0,
+      "result": "83 passed in 23.14s (23 new acquisition probes)"
+    },
+    {
+      "command": ".venv/bin/python -m evaluation.evidence.f.owned-rpc-capture-20261116.probe evaluation/evidence/f/owned-rpc-capture-20261116/sample",
+      "exitCode": 0,
+      "result": "4 captured/4 joined; transportComplete true; authentication/global completeness false"
+    }
+  ],
+  "sourceHashScope": "post-verification hashes of evaluation Python, interfaces JSON, root project/lock and probe; not a whole-repository pre/post execution bracket",
+  "sourceInputCount": 221,
+  "selfReview": "same author/correlated; no extra agent",
+  "unchangedPins": {
+    "evaluation/processes.py": "4a63d2a5b2443666fd9528c10ac22313ca77b9ca51ee67d121dc306eee7c6532",
+    "evaluation/reports/RQ2-F-DRAFT.md": "e59a51cd8c92a38780aa820191286887d9dc92deb1a0cdefe8c699f34a6e3b40",
+    "evaluation/evidence/f/partial-report-packet-20261115/README.md": "562f2047e2c45dfb677b3ba1439122d91196f9d614f88b8604a0add0dcc05aaf",
+    "evaluation/evidence/f/execution-plan-draft-20261114/plan-draft.json": "1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919"
+  },
+  "executionAuthorization": false,
+  "planStatus": "DRAFT",
+  "gateF": "NOT_RUN",
+  "gateG": "LOCKED",
+  "integratedCasesRun": 0,
+  "administrativeFailures": [
+    "Initial audit-generation command used system python3 without pytest distribution metadata and exited 1 after writing source-inputs.sha256 and compressing empty stderr; rerun under .venv/bin/python succeeded. No product code/test failure.",
+    "First staged diff --check exited 2 on verbatim pytest RED-log trailing spaces; both RED logs were gzip-compressed losslessly and raw SHA-256 values retained. No test/code change."
+  ],
+  "remaining": "source-pinned stage-3 recipe/executor next; stages 3-7, native acquisition, integrated joins, E regression and exact execution FREEZE/ACKs incomplete",
+  "rawLogSha256": {
+    "red.txt": "4154048b15d209f2bbad2e698d4f40934e6bebb9044b8e72b59ec7e602c4fbc8",
+    "review-red.txt": "1441fa2438243dcc4fe5806cab97c42abb03e5483309e216e050ff61f7936223"
+  }
+}

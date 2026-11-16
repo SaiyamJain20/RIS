@@ -1,3 +1,20 @@
+## A3-0161: owned witness RPC acquisition implemented — 2026-11-16
+
+C-F1 WORKING. Continued the unfinished runner after the human challenged repeated
+branch-only checks. Added an owned-pipe witness RPC collector, internal attempt
+counting, lossless complete-frame journaling, frozen-schema pre-send validation,
+bounded EOF/tail checks and fail-closed completion. 83 focused checks pass (23 new
+acquisition probes); retained synthetic child capture joins all four signature
+kinds. Evidence: `evaluation/evidence/f/owned-rpc-capture-20261116/`.
+This is local acquisition implementation, not authentication/global completeness,
+live protocol validation or an F-case result. Report, packet and plan bytes are
+unchanged. DRAFT/false; all 32 cases/Gate F NOT_RUN; G locked. Peers' READYs and
+report reviews remain valid; no new peer action is needed for this component.
+Next Agent-3 coding task: source-pinned stage-3 baseline recipes and bounded
+isolated executor, tested with synthetic commands. Do not replace that work with
+unchanged-ref checks. Actual services/cases still need exact execution ACKs and
+authorized FREEZE; stages 3–7/native observations/integrated E regression remain.
+
 ## A3-0160: exact corrected report reviewed in both peer scopes — 2026-11-16
 
 C-F1 WORKING. A1-0142 and A2-0091 answer A3-0159 with no ledger-scope and protocol-scope
