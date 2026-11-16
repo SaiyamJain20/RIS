@@ -1,6 +1,8 @@
 # RQ2-F partial report packet — 2026-11-15
 
-**Disposition:** prepared for scoped technical review; report remains DRAFT. This is a partial
+**Disposition (2026-11-16, A3-0160):** ledger and protocol scoped reviews report no objection to
+the exact current report hash below; report remains DRAFT. Evaluation-tool correctness is outside
+those peer reviews. This is a partial
 evidence packet, not an F execution result, an execution FREEZE, an owner ACK, or a Gate F decision.
 
 ## Exact inputs in this packet
@@ -21,9 +23,9 @@ Git refs explicitly refreshed for this continuation:
 
 | ref | exact commit | scope / use |
 |---|---|---|
-| `origin/agent-1` | `b0b91f4a68f92eac9b99d6f3e50cd8b7f51f34f1` | A1-0141 reviews prior report hash `412ec833..`; one ledger correction, not an execution ACK |
-| `origin/agent-2` | `0f2faf20761ef4be18716cd15b542b138b45001d` | A2-0090 has no protocol-scope objection to prior report hash `412ec833..`; not an execution ACK |
-| `origin/agent-3` | `3717ab7515a3a96094d0012748071cb189ca7f31` | fetched Agent-3 source tip before the A3-0159 correction |
+| `origin/agent-1` | `8dec55e657afd5df189d025cca03795d71108f28` | A1-0142 confirms no ledger-scope objection to current report hash `e59a51cd..`; not an execution ACK |
+| `origin/agent-2` | `faa4e63333eb3b68dea2bc5cc68dae0a47d8bb30` | A2-0091 confirms no protocol-scope objection to current report hash `e59a51cd..`; not an execution ACK |
+| `origin/agent-3` | `3d247547721757477ac6cbe204df0026d667bb64` | fetched Agent-3 source tip containing the corrected report reviewed by both peers |
 
 A2-0090 reviews exact prior report SHA-256
 `412ec8330a3024d92b975a7478936b1e1876291a5f5db317970b86f56da19073` with no protocol-scope
@@ -32,8 +34,13 @@ corrects one ledger sentence: DENY/ALLOW certificates can be accepted in either 
 checkpoint, including DENY submission after an ALLOW grant consumes the nonce. Honest-service
 REPLAY for fresh signing does not prevent submission of an already signed DENY. The corrected
 report records this distinction. It changes a ledger claim, so A1-0140's exception for later
-status/protocol-only revisions does not apply. The current corrected hash has not received fresh
-peer confirmation. Both prior exact-hash reviews remain valid at their stated scopes and bytes.
+status/protocol-only revisions does not apply. A1-0142 and A2-0091 now confirm no objection to the
+corrected current hash in ledger and protocol scopes respectively. Both read the full two-hunk
+diff; neither reviews evaluation-tool correctness or grants execution authorization. Their exact
+messages, publication refs, hashes and scope are retained in [the confirmation receipt](../report-confirmations-20261116/README.md).
+The reviewed report bytes are unchanged: its closing pending-review paragraph describes its
+A3-0159 publication state, superseded for review status by this packet and confirmation receipt.
+Prior exact-hash reviews remain valid at their stated scopes and bytes.
 
 Agent 3 verified all three A1-0141 attachment checksums and inspected the exact pinned F ledger
 and protocol source; no Forge rerun was performed. The log reports 4/4 scratch tests outside the
@@ -52,8 +59,8 @@ The plan's module pins are ledger commit `85c59f588de58a8ff5e87b9fe6f630c9d8c436
 subtree `7566f63d693afe8fa88ab7cc69872082d58d88db` (active owner publication recorded in the plan
 as `origin/agent-2` / `73fb2ce42d513ad3faf384500609e76d54aedbfb`). They are candidate source pins,
 not execution authorization. A1-0137 is a report-specific review of the initial revision, for
-ledger scope only. A2-0090 is a protocol-scope review of the prior `412ec833..` report hash. Neither
-review confirms the corrected current hash.
+ledger scope only. A2-0090 reviewed the prior `412ec833..` report hash; A1-0142 and A2-0091 review
+the current `e59a51cd..` hash at their respective ledger and protocol scopes.
 
 ## Partial findings in scope
 
@@ -116,11 +123,11 @@ the current board and Agent-3 handoff.
 
 ## Review and execution dependencies
 
-- **Partial-report review:** A2-0090 has no protocol-scope objection to exact prior report hash
-  `412ec833..`; A1-0141 identifies the ledger/signing distinction corrected in this revision and
-  has no other ledger-scope objection to that prior hash. A3-0159 requests review/confirmation
-  of the exact corrected hash from both roles. Current bytes remain unreviewed. Reviews are
-  correlated and neither is an execution ACK or FREEZE ACK.
+- **Partial-report review:** A1-0142 and A2-0091 answer A3-0159 with no ledger-scope and
+  protocol-scope objection, respectively, to exact current report hash `e59a51cd..`. Both are
+  correlated scoped reviews; evaluation-tool correctness is excluded. The report bytes are
+  preserved. Neither review is an execution ACK or FREEZE ACK, and neither pre-approves a later
+  report revision.
 - **Execution authorization:** the plan remains `DRAFT`, `authorizesExecution=false`; Gate F is
   `NOT_RUN`, Gate G is `LOCKED`, and all 32 cases are `NOT_RUN`. The plan's exact role-scope
   execution ACKs and authorized FREEZE are still absent. No service or integrated case may start
@@ -136,6 +143,7 @@ the current board and Agent-3 handoff.
   close execution ACKs, FREEZE, runner stages 3–7 or Gate F. Report review remains separately scoped
   to the exact file hash.
 
-A2-0090 answers A3-0157 for its exact prior hash. A3-0159 records the A1-0141 correction and
-requests scoped review of the corrected hash through the internal Agent-3 outbox. No external
-review request was sent. No service or integrated case was started.
+A2-0090 answered A3-0157 for its exact prior hash. A1-0142 and A2-0091 answer A3-0159 for the
+corrected current hash. A3-0160 records those confirmations through the internal Agent-3 outbox;
+no additional report review is requested for the unchanged bytes. No external review request
+was sent. No service or integrated case was started.

@@ -1,0 +1,65 @@
+{
+  "timestampUtc": "2026-11-16T12:02:50.557249+00:00",
+  "python": "3.13.13",
+  "git": "git version 2.54.0",
+  "refs": {
+    "agent-1": "8dec55e657afd5df189d025cca03795d71108f28",
+    "agent-2": "faa4e63333eb3b68dea2bc5cc68dae0a47d8bb30",
+    "agent-3": "3d247547721757477ac6cbe204df0026d667bb64"
+  },
+  "reportSha256": "e59a51cd8c92a38780aa820191286887d9dc92deb1a0cdefe8c699f34a6e3b40",
+  "planSha256": "1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919",
+  "snapshots": [
+    {
+      "ref": "origin/agent-1",
+      "fetchedCommit": "8dec55e657afd5df189d025cca03795d71108f28",
+      "path": "communication/agent-1/outbox/0142-note-rq2-f-report-e59a51cd-ledger-scope-confirmed.md",
+      "lastChangingCommit": "8dec55e657afd5df189d025cca03795d71108f28",
+      "snapshot": "A1-0142.md",
+      "sha256": "1adfef00b085564b634d3c2311a1c4fa7d8c067bdd6a3476335d47168a784478"
+    },
+    {
+      "ref": "origin/agent-2",
+      "fetchedCommit": "faa4e63333eb3b68dea2bc5cc68dae0a47d8bb30",
+      "path": "communication/agent-2/outbox/0091-review-rq2-partial-report-corrected-hash-no-objection.md",
+      "lastChangingCommit": "faa4e63333eb3b68dea2bc5cc68dae0a47d8bb30",
+      "snapshot": "A2-0091.md",
+      "sha256": "7cb4f6f0121deba85b39ed69badb371f77593a62e82ee98303b53ea6e1697b73"
+    }
+  ],
+  "peerRecords": [
+    {
+      "fetchedCommit": "8dec55e657afd5df189d025cca03795d71108f28",
+      "path": "communication/agent-1/STATUS.md",
+      "sha256": "e80fc9c51393e966bdda2a98b202c5c4eba39dab21158c4504aa9f0925d6d468"
+    },
+    {
+      "fetchedCommit": "8dec55e657afd5df189d025cca03795d71108f28",
+      "path": "communication/agent-1/HANDOFF.md",
+      "sha256": "1d54dbf03533838a6e6c8d7f1df33d0704bf83ca1da7d83ca61261137482b573"
+    },
+    {
+      "fetchedCommit": "faa4e63333eb3b68dea2bc5cc68dae0a47d8bb30",
+      "path": "communication/agent-2/STATUS.md",
+      "sha256": "e3f6c90f30a0423920ada0efd22e5ab1297f1b7bffb4a9913368adab854853f0"
+    },
+    {
+      "fetchedCommit": "faa4e63333eb3b68dea2bc5cc68dae0a47d8bb30",
+      "path": "communication/agent-2/HANDOFF.md",
+      "sha256": "7d6036593baf19662d886bd8f0ad346dafa1ce5cb27e408aa35a238d5d7f0ac3"
+    }
+  ],
+  "commands": {
+    "fetch": "git fetch origin refs/heads/agent-1:refs/remotes/origin/agent-1 refs/heads/agent-2:refs/remotes/origin/agent-2 refs/heads/agent-3:refs/remotes/origin/agent-3",
+    "snapshot": "git show <fetchedCommit>:<path>",
+    "provenance": "git log -1 --format=%H <fetchedCommit> -- <path>",
+    "reportDiff": "git diff 3717ab7515a3a96094d0012748071cb189ca7f31 3d247547721757477ac6cbe204df0026d667bb64 -- evaluation/reports/RQ2-F-DRAFT.md"
+  },
+  "commandExits": {
+    "fetch": 0,
+    "snapshots": 0,
+    "provenance": 0,
+    "reportDiff": 0
+  },
+  "scope": "peer report confirmations only; no test suite, Forge, services, integrated cases or new measurements"
+}

@@ -1,3 +1,19 @@
+## A3-0160: exact corrected report reviewed in both peer scopes — 2026-11-16
+
+C-F1 WORKING. A1-0142 and A2-0091 answer A3-0159 with no ledger-scope and protocol-scope
+objection, respectively, to exact report SHA-256
+`e59a51cd8c92a38780aa820191286887d9dc92deb1a0cdefe8c699f34a6e3b40`. Both reviews are retained
+with exact publication provenance in `evaluation/evidence/f/report-confirmations-20261116/`.
+The report bytes are preserved; its A3-0159 pending-review paragraph is superseded for review
+status by this receipt and the partial packet. Packet SHA-256
+`562f2047e2c45dfb677b3ba1439122d91196f9d614f88b8604a0add0dcc05aaf`. These are correlated
+scoped reviews, excluding evaluation-tool correctness, not execution ACKs or FREEZE ACKs.
+Plan unchanged, DRAFT/`authorizesExecution=false`; all 32 cases/Gate F NOT_RUN; G locked.
+Execution FREEZE/ACKs, runner stages 3–7, authenticated complete capture and integrated E
+regression remain open. K1/signing-rule owner confirmations remain closed at isolated scope
+via A2-0089. No tests, services, integrated cases or new measurements. Next: close a concrete
+permitted offline evidence gap; no additional review is requested for unchanged report bytes.
+
 ## A3-0159: ledger/signing distinction corrected; exact peer reviews retained — 2026-11-16
 
 C-F1 WORKING. A2-0090 has no protocol-scope objection to prior exact report `412ec833..`;

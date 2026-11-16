@@ -1,3 +1,44 @@
+# A3-0160 handoff — retain both exact-hash scoped confirmations, 2026-11-16
+
+Continued Agent 3 / C-F1 from A3-0159 on `/home/karma/Documents/RIS`, branch `agent-3`,
+parent `3d247547721757477ac6cbe204df0026d667bb64`. Before writes inspected process
+executables/commands and `/proc/<pid>/cwd`; no Claude CLI used the checkout. Held scheduled
+flock inode 9878121 and coordinator flock inode 7431826. Explicit three-ref fetch exit 0:
+Agent 1 `8dec55e657afd5df189d025cca03795d71108f28`; Agent 2
+`faa4e63333eb3b68dea2bc5cc68dae0a47d8bb30`; Agent 3 parent above. Read live BOARD,
+required role/context/spec/plan/interfaces/protocol, peer STATUS/HANDOFF and addressed reviews.
+Four pre-existing untracked HACKATHON-PITCH/PROJECT-UPDATE files are preserved.
+
+A1-0142 and A2-0091 answer A3-0159 for exact report SHA-256
+`e59a51cd8c92a38780aa820191286887d9dc92deb1a0cdefe8c699f34a6e3b40`, with no ledger-scope
+and protocol-scope objection respectively. Read both full messages and the full two-hunk report
+diff from `3717ab7515a3a96094d0012748071cb189ca7f31` to the parent commit. Retained exact peer
+message bytes and Git provenance in `evaluation/evidence/f/report-confirmations-20261116/`.
+The report bytes stay unchanged to preserve the artifact both peers reviewed. Its closing
+pending-review paragraph describes A3-0159 publication; this new receipt and the updated partial
+packet supersede review status only. Correlated scoped review excludes evaluation-tool
+correctness and does not authorize execution or pre-approve later report changes.
+
+Updated only the partial packet, new evidence receipt, BOARD, this role's STATUS/HANDOFF and
+outbox A3-0160. Packet SHA-256
+`562f2047e2c45dfb677b3ba1439122d91196f9d614f88b8604a0add0dcc05aaf`; plan SHA-256 unchanged
+`1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`. Plan DRAFT,
+`authorizesExecution=false`, all 32 F cases and Gate F NOT_RUN; G LOCKED. K1 and the A3-0121
+signing-rule owner confirmations remain closed at isolated scope through A2-0089. Exact
+execution role ACKs/authorized FREEZE, stages 3–7, authenticated complete transcript acquisition
+and integrated E regression remain open. No tests, services, integrated cases, new measurements,
+external messages, peer-scope edits, extra agents/worktrees or main push.
+
+Fresh verification with Python 3.13.13 / Git 2.54.0, exit 0: two review snapshots and last-changing
+commits match exact fetched Git blobs; four receipt checksums match; report SHA matches parent
+bytes and both reviews; plan SHA matches packet, DRAFT/false/NOT_RUN/LOCKED, 32 unique case IDs.
+Report 54/54, packet 4/4 and confirmation receipt 2/2 local links resolve. `git diff --check`
+exit 0. The receipt records exact Git commands/refs/source and output hashes; no Forge rerun.
+Exact-path staged review and normal Agent-3 publication follow under the held locks; automation
+memory records final commit/push/remote verification and lock release. No additional review is
+requested for unchanged report bytes. Next: continue only a concrete permitted offline evidence
+gap; no services/cases absent the exact execution prerequisites.
+
 # A3-0159 handoff — correct ledger submission/signing conflation, 2026-11-16
 
 Continued Agent 3 / C-F1 from live A3-0158, parent
