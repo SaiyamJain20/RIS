@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/karma/Documents/RIS-agent-2/protocol/f0/vectors/test_export_layouts.py", line 25, in <module>
+    L = _load("export_layouts_reference")          # does not exist yet: this file fails at import (the red)
+  File "/home/karma/Documents/RIS-agent-2/protocol/f0/vectors/test_export_layouts.py", line 20, in _load
+    spec.loader.exec_module(m)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "<frozen importlib._bootstrap_external>", line 1019, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1156, in get_code
+  File "<frozen importlib._bootstrap_external>", line 1214, in get_data
+FileNotFoundError: [Errno 2] No such file or directory: '/home/karma/Documents/RIS-agent-2/protocol/f0/vectors/export_layouts_reference.py'

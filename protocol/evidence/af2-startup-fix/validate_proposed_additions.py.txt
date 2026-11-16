@@ -1,0 +1,89 @@
+"""Validation of proposed-additions-test_startup_refusals.py.txt (fork D, Step 1 evidence). Standard library only.
+
+For the proposed test file: it must PASS on the unmutated tree and FAIL on every survivor mutant it claims to kill. The mutants are taken verbatim from the two runners (no second copy of an anchor).
+Usage (repository root; copy this file to a .py name first or run it with `python3 -B -I - < file`):  python3 -B -I validate_proposed_additions.py
+Exit 0 only when the control passes and every claimed mutant is killed.
+"""
+import importlib.util
+import os
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+
+REPO = os.getcwd()
+PROTO = os.path.join(REPO, "protocol")
+EVID = os.path.join(PROTO, "evidence", "af2-startup-fix")
+PROPOSED = os.path.join(EVID, "proposed-additions-test_startup_refusals.py.txt")
+
+
+def load(name):
+    spec = importlib.util.spec_from_file_location(name, os.path.join(PROTO, "tools", name + ".py"))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+SC, AM = load("run_startup_config_mutants"), load("run_adapter_v2_main_mutants")
+CLAIMS = [(SC, "S5"), (SC, "S6"), (SC, "S10"), (SC, "A3"), (SC, "A7"), (SC, "A8"), (AM, "C27")]
+
+
+def mutant(mod, tag):
+    for entry in mod.M:
+        if entry[0].startswith(tag + " "):
+            if len(entry) == 3:                                   # (name, target, edits): the new runner
+                name, target, edits = entry
+                src = mod.SRC[target]
+            else:                                                  # (name, edits): the CLI runners mutate one file
+                name, edits = entry
+                target, src = "adapter_v2_main.py", mod.SRC
+            for old, new in edits:
+                assert src.count(old) == 1, (tag, old[:50])
+                src = src.replace(old, new, 1)
+            return name, target, src
+    raise KeyError(tag)
+
+
+def run(target, text):
+    d = tempfile.mkdtemp(prefix="fd-validate-", dir=os.environ.get("TMPDIR"))
+    try:
+        p = os.path.join(d, "protocol")
+        for sub in ("testtools", os.path.join("f0", "vectors")):
+            shutil.copytree(os.path.join(PROTO, sub), os.path.join(p, sub), ignore=shutil.ignore_patterns("__pycache__"))
+        shutil.copytree(os.path.join(PROTO, "tests", "fixtures"), os.path.join(p, "tests", "fixtures"))
+        shutil.copytree(os.path.join(PROTO, "abi"), os.path.join(p, "abi"))
+        shutil.copytree(os.path.join(PROTO, "hmbc_protocol"), os.path.join(p, "hmbc_protocol"), ignore=shutil.ignore_patterns("__pycache__"))
+        for rel in ("pytest.ini", os.path.join("tests", "conftest.py"), os.path.join("tests", "support.py"), os.path.join("tests", "test_startup_refusals.py")):
+            os.makedirs(os.path.dirname(os.path.join(p, rel)), exist_ok=True)
+            shutil.copy(os.path.join(PROTO, rel), os.path.join(p, rel))
+        shutil.copy(PROPOSED, os.path.join(p, "tests", "test_proposed_additions.py"))
+        if text is not None:
+            with open(os.path.join(p, "hmbc_protocol", target), "w") as f:
+                f.write(text)
+        r = subprocess.run([sys.executable, "-B", "-m", "pytest", "-q", "-p", "no:cacheprovider", "tests/test_proposed_additions.py"], cwd=p, capture_output=True, text=True, timeout=600,
+                           env=dict(os.environ, PYTHONDONTWRITEBYTECODE="1"))
+        m = re.search(r"(\d+) failed", r.stdout)
+        return r.returncode, (int(m.group(1)) if m else 0), r.stdout.strip().splitlines()[-1] if r.stdout.strip() else ""
+    finally:
+        shutil.rmtree(d, ignore_errors=True)
+
+
+def main():
+    rc, n, tail = run("startup_config.py", None)
+    print("control (unmutated):", "PASS" if rc == 0 else "FAIL", "|", tail)
+    if rc != 0:
+        return 2
+    killed = 0
+    for mod, tag in CLAIMS:
+        name, target, text = mutant(mod, tag)
+        rc, n, tail = run(target, text)
+        ok = rc == 1 and n > 0
+        killed += ok
+        print(("KILLED   " if ok else "SURVIVED ") + name + " | " + tail)
+    print("killed %d of %d" % (killed, len(CLAIMS)))
+    return 0 if killed == len(CLAIMS) else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

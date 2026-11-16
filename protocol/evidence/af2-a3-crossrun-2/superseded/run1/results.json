@@ -1,0 +1,542 @@
+[
+ {
+  "stage": "S0 deploy the real F ledger on two real Anvil nodes",
+  "ok": true,
+  "seconds": 36.8,
+  "result": {
+   "profile": "repaired-f",
+   "profileEnum": "3",
+   "urls": [
+    "http://127.0.0.1:56861",
+    "http://127.0.0.1:50525"
+   ]
+  }
+ },
+ {
+  "stage": "S1 fixtures (users, credentials, CRLs) and the REAL adapter with four supervised witnesses and --allow-governance",
+  "ok": true,
+  "seconds": 1.36,
+  "result": {
+   "pids": {
+    "0": 737285,
+    "1": 737286,
+    "2": 737287,
+    "3": 737288
+   },
+   "stateDir": "adapter state",
+   "files": [
+    "witness-0",
+    "witness-0.pid",
+    "witness-0.stderr",
+    "witness-1",
+    "witness-1.pid",
+    "witness-1.stderr",
+    "witness-2",
+    "witness-2.pid",
+    "witness-2.stderr",
+    "witness-3",
+    "witness-3.pid",
+    "witness-3.stderr",
+    "worker"
+   ]
+  }
+ },
+ {
+  "stage": "S2 two real user requests forwarded by the real relay, then a pool checkpoint (sequence 1) accepted by the real KSSC",
+  "ok": false,
+  "seconds": 0.12,
+  "error": "AssertionError: MALFORMED",
+  "traceback": "Traceback (most recent call last):\n  File \"/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/crossrun2/crossrun2.py\", line 54, in deco\n    result = fn()\n  File \"/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/crossrun2/crossrun2.py\", line 152, in _\n    assert code == \"NONE\", code\n           ^^^^^^^^^^^^^^\nAssertionError: MALFORMED\n"
+ },
+ {
+  "stage": "S3 decision D1 through the adapter, consumed by the real ACSC; receipt through the adapter, reported to the real PSC",
+  "ok": false,
+  "seconds": 0.0,
+  "error": "IndexError: list index out of range",
+  "traceback": "Traceback (most recent call last):\n  File \"/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/crossrun2/crossrun2.py\", line 54, in deco\n    result = fn()\n  File \"/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/crossrun2/crossrun2.py\", line 165, in _\n    signed1 = S[\"signed\"][0]\n              ~~~~~~~~~~~^^^\nIndexError: list index out of range\n"
+ },
+ {
+  "stage": "S4 decision D2 at sequence 1 (signed, NOT consumed), and the executed-receipt attempt: the same receipt requested again after the real PSC executed it",
+  "ok": false,
+  "seconds": 0.0,
+  "error": "IndexError: list index out of range",
+  "traceback": "Traceback (most recent call last):\n  File \"/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/crossrun2/crossrun2.py\", line 54, in deco\n    result = fn()\n  File \"/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/crossrun2/crossrun2.py\", line 187, in _\n    d2 = S[\"signed\"][1][\"requestDigest\"]\n         ~~~~~~~~~~~^^^\nIndexError: list index out of range\n"
+ },
+ {
+  "stage": "S5 governance through the adapter (allow-listed root) executed by the real Governance; then the stale-nonce attempt",
+  "ok": true,
+  "seconds": 0.18,
+  "result": {
+   "executed": {
+    "action": "1",
+    "root": "0xe5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5",
+    "admins": [
+     "0xf6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6"
+    ],
+    "nonce": "1",
+    "witnessSetVersion": "2",
+    "expiresAt": "1794122501"
+   },
+   "reply": {
+    "ok": true,
+    "outcomes": [
+     [
+      "0",
+      "signed",
+      "1"
+     ],
+     [
+      "1",
+      "signed",
+      "1"
+     ],
+     [
+      "2",
+      "signed",
+      "1"
+     ],
+     [
+      "3",
+      "silent",
+      "0"
+     ]
+    ],
+    "keys": [
+     "adapterMode",
+     "collection",
+     "governanceAction",
+     "schemaVersion",
+     "signatures"
+    ]
+   },
+   "staleNonceDifferentEffect": {
+    "ok": false,
+    "code": "ADAPTER_UNAVAILABLE",
+    "reason": "QUORUM_UNAVAILABLE",
+    "message": "0 of 3 required distinct valid signatures before the deadline",
+    "outcomes": [
+     [
+      "0",
+      "refused",
+      "STALE_STATE"
+     ],
+     [
+      "1",
+      "refused",
+      "STALE_STATE"
+     ],
+     [
+      "2",
+      "refused",
+      "STALE_STATE"
+     ],
+     [
+      "3",
+      "refused",
+      "STALE_STATE"
+     ]
+    ]
+   },
+   "staleNonceSameEffectAfterExecution": {
+    "ok": false,
+    "code": "ADAPTER_UNAVAILABLE",
+    "reason": "QUORUM_UNAVAILABLE",
+    "message": "0 of 3 required distinct valid signatures before the deadline",
+    "outcomes": [
+     [
+      "0",
+      "refused",
+      "STALE_STATE"
+     ],
+     [
+      "1",
+      "refused",
+      "STALE_STATE"
+     ],
+     [
+      "2",
+      "refused",
+      "STALE_STATE"
+     ],
+     [
+      "3",
+      "refused",
+      "STALE_STATE"
+     ]
+    ]
+   }
+  }
+ },
+ {
+  "stage": "S6 a second checkpoint (sequence 2) accepted, then D2 requested AGAIN: the old decision is bound to sequence 1 (the numeric death overtaken-decision-sequence)",
+  "ok": false,
+  "seconds": 0.18,
+  "error": "IndexError: list index out of range",
+  "traceback": "Traceback (most recent call last):\n  File \"/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/crossrun2/crossrun2.py\", line 54, in deco\n    result = fn()\n  File \"/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/crossrun2/crossrun2.py\", line 225, in _\n    d2 = S[\"signed\"][1][\"requestDigest\"]\n         ~~~~~~~~~~~^^^\nIndexError: list index out of range\n"
+ },
+ {
+  "stage": "S7 the real exporters under agent 3's locked_store for all four witnesses; verify_export_snapshot(WitnessEvidence) for every record type",
+  "ok": true,
+  "seconds": 4.59,
+  "result": [
+   {
+    "witness": 0,
+    "exit": 0,
+    "stderrBytes": 0,
+    "stdoutBytes": 7563,
+    "conflicts": [
+     [
+      "GovernanceAction",
+      1
+     ],
+     [
+      "StateCheckpoint",
+      1
+     ]
+    ],
+    "superseded": [],
+    "faulted": false,
+    "verify_export_snapshot": {
+     "verdict": "ACCEPTED",
+     "history": {
+      "recordsChecked": 2,
+      "signaturesChecked": 2,
+      "declaredSafeLedgerInterval": true,
+      "excludedDeathSeqs": []
+     }
+    }
+   },
+   {
+    "witness": 1,
+    "exit": 0,
+    "stderrBytes": 0,
+    "stdoutBytes": 7563,
+    "conflicts": [
+     [
+      "GovernanceAction",
+      1
+     ],
+     [
+      "StateCheckpoint",
+      1
+     ]
+    ],
+    "superseded": [],
+    "faulted": false,
+    "verify_export_snapshot": {
+     "verdict": "ACCEPTED",
+     "history": {
+      "recordsChecked": 2,
+      "signaturesChecked": 2,
+      "declaredSafeLedgerInterval": true,
+      "excludedDeathSeqs": []
+     }
+    }
+   },
+   {
+    "witness": 2,
+    "exit": 0,
+    "stderrBytes": 0,
+    "stdoutBytes": 7563,
+    "conflicts": [
+     [
+      "GovernanceAction",
+      1
+     ],
+     [
+      "StateCheckpoint",
+      1
+     ]
+    ],
+    "superseded": [],
+    "faulted": false,
+    "verify_export_snapshot": {
+     "verdict": "ACCEPTED",
+     "history": {
+      "recordsChecked": 2,
+      "signaturesChecked": 2,
+      "declaredSafeLedgerInterval": true,
+      "excludedDeathSeqs": []
+     }
+    }
+   },
+   {
+    "witness": 3,
+    "exit": 0,
+    "stderrBytes": 0,
+    "stdoutBytes": 7563,
+    "conflicts": [
+     [
+      "GovernanceAction",
+      1
+     ],
+     [
+      "StateCheckpoint",
+      1
+     ]
+    ],
+    "superseded": [],
+    "faulted": false,
+    "verify_export_snapshot": {
+     "verdict": "ACCEPTED",
+     "history": {
+      "recordsChecked": 2,
+      "signaturesChecked": 2,
+      "declaredSafeLedgerInterval": true,
+      "excludedDeathSeqs": []
+     }
+    }
+   }
+  ]
+ },
+ {
+  "stage": "S8 history_rpc_v2.collect on the real evidence of every witness (native death getters via eth_call, EIP-1898)",
+  "ok": true,
+  "seconds": 5.86,
+  "result": [
+   {
+    "witness": 0,
+    "verdict": "ACCEPTED",
+    "blocks": 3,
+    "calls": 0,
+    "verification": {
+     "recordsChecked": 2,
+     "signaturesChecked": 2,
+     "declaredSafeLedgerInterval": true,
+     "excludedDeathSeqs": [],
+     "nativeBlocksChecked": 3,
+     "nativeCallsChecked": 0,
+     "nativeDeathsChecked": 0
+    }
+   },
+   {
+    "witness": 1,
+    "verdict": "ACCEPTED",
+    "blocks": 3,
+    "calls": 0,
+    "verification": {
+     "recordsChecked": 2,
+     "signaturesChecked": 2,
+     "declaredSafeLedgerInterval": true,
+     "excludedDeathSeqs": [],
+     "nativeBlocksChecked": 3,
+     "nativeCallsChecked": 0,
+     "nativeDeathsChecked": 0
+    }
+   },
+   {
+    "witness": 2,
+    "verdict": "ACCEPTED",
+    "blocks": 3,
+    "calls": 0,
+    "verification": {
+     "recordsChecked": 2,
+     "signaturesChecked": 2,
+     "declaredSafeLedgerInterval": true,
+     "excludedDeathSeqs": [],
+     "nativeBlocksChecked": 3,
+     "nativeCallsChecked": 0,
+     "nativeDeathsChecked": 0
+    }
+   },
+   {
+    "witness": 3,
+    "verdict": "ACCEPTED",
+    "blocks": 3,
+    "calls": 0,
+    "verification": {
+     "recordsChecked": 2,
+     "signaturesChecked": 2,
+     "declaredSafeLedgerInterval": true,
+     "excludedDeathSeqs": [],
+     "nativeBlocksChecked": 3,
+     "nativeCallsChecked": 0,
+     "nativeDeathsChecked": 0
+    }
+   }
+  ]
+ },
+ {
+  "stage": "S9 checkpoint_rpc_v2.collect on the real checkpoint digests (sequences 1 and 2)",
+  "ok": true,
+  "seconds": 6.25,
+  "result": [
+   {
+    "witness": 0,
+    "verdict": "ACCEPTED",
+    "digests": 1,
+    "keys": [
+     "captures",
+     "latestHeadEstablished",
+     "provenance",
+     "signTimeEstablished",
+     "verification"
+    ]
+   },
+   {
+    "witness": 1,
+    "verdict": "ACCEPTED",
+    "digests": 1,
+    "keys": [
+     "captures",
+     "latestHeadEstablished",
+     "provenance",
+     "signTimeEstablished",
+     "verification"
+    ]
+   },
+   {
+    "witness": 2,
+    "verdict": "ACCEPTED",
+    "digests": 1,
+    "keys": [
+     "captures",
+     "latestHeadEstablished",
+     "provenance",
+     "signTimeEstablished",
+     "verification"
+    ]
+   },
+   {
+    "witness": 3,
+    "verdict": "ACCEPTED",
+    "digests": 1,
+    "keys": [
+     "captures",
+     "latestHeadEstablished",
+     "provenance",
+     "signTimeEstablished",
+     "verification"
+    ]
+   }
+  ]
+ },
+ {
+  "stage": "S10 governance_rpc_v2.collect on the real governance evidence (caller TEST-ONLY approvals = the --allow-governance tuple)",
+  "ok": true,
+  "seconds": 5.64,
+  "result": [
+   {
+    "witness": 0,
+    "verdict": "ACCEPTED",
+    "captures": 1,
+    "verification": {
+     "recordsChecked": 2,
+     "signaturesChecked": 2,
+     "declaredSafeLedgerInterval": true,
+     "excludedDeathSeqs": [],
+     "governanceStateSignaturesChecked": 1,
+     "signTimeEstablished": false,
+     "latestHeadEstablished": false,
+     "approvalPolicyEstablished": false
+    }
+   },
+   {
+    "witness": 1,
+    "verdict": "ACCEPTED",
+    "captures": 1,
+    "verification": {
+     "recordsChecked": 2,
+     "signaturesChecked": 2,
+     "declaredSafeLedgerInterval": true,
+     "excludedDeathSeqs": [],
+     "governanceStateSignaturesChecked": 1,
+     "signTimeEstablished": false,
+     "latestHeadEstablished": false,
+     "approvalPolicyEstablished": false
+    }
+   },
+   {
+    "witness": 2,
+    "verdict": "ACCEPTED",
+    "captures": 1,
+    "verification": {
+     "recordsChecked": 2,
+     "signaturesChecked": 2,
+     "declaredSafeLedgerInterval": true,
+     "excludedDeathSeqs": [],
+     "governanceStateSignaturesChecked": 1,
+     "signTimeEstablished": false,
+     "latestHeadEstablished": false,
+     "approvalPolicyEstablished": false
+    }
+   },
+   {
+    "witness": 3,
+    "verdict": "ACCEPTED",
+    "captures": 1,
+    "verification": {
+     "recordsChecked": 2,
+     "signaturesChecked": 2,
+     "declaredSafeLedgerInterval": true,
+     "excludedDeathSeqs": [],
+     "governanceStateSignaturesChecked": 1,
+     "signTimeEstablished": false,
+     "latestHeadEstablished": false,
+     "approvalPolicyEstablished": false
+    }
+   }
+  ]
+ },
+ {
+  "stage": "S11 receipt_history_v2.verify_receipt_history on the real receipt evidence (no receipt RPC collector exists: captures built by the DRIVER from raw RPC)",
+  "ok": true,
+  "seconds": 0.0,
+  "result": [
+   {
+    "witness": 0,
+    "verdict": "NOT PRODUCED",
+    "reason": "this witness's store holds no GrantReceipt record"
+   },
+   {
+    "witness": 1,
+    "verdict": "NOT PRODUCED",
+    "reason": "this witness's store holds no GrantReceipt record"
+   },
+   {
+    "witness": 2,
+    "verdict": "NOT PRODUCED",
+    "reason": "this witness's store holds no GrantReceipt record"
+   },
+   {
+    "witness": 3,
+    "verdict": "NOT PRODUCED",
+    "reason": "this witness's store holds no GrantReceipt record"
+   }
+  ]
+ },
+ {
+  "stage": "S12 stop the adapter: exit code and stderr; every witness child must be gone",
+  "ok": true,
+  "seconds": 0.12,
+  "result": {
+   "exit": 0,
+   "stderr": "",
+   "witnessProcsLeft": []
+  }
+ },
+ {
+  "stage": "S13 overtaken-checkpoint attempt on REAL witness processes: a proposal for a sequence the ledger has already accepted",
+  "ok": true,
+  "seconds": 0.78,
+  "result": {
+   "acceptedSequence": "2",
+   "staleDifferentEffect": {
+    "type": "error",
+    "code": "STALE_STATE",
+    "reason": "PROPOSAL_MISMATCH"
+   },
+   "sameProposalAgain": {
+    "type": "error",
+    "code": "STALE_STATE",
+    "reason": "PROPOSAL_MISMATCH"
+   }
+  }
+ },
+ {
+  "stage": "S14 teardown: stop the Anvil nodes",
+  "ok": true,
+  "seconds": 0.01,
+  "result": "closed"
+ }
+]

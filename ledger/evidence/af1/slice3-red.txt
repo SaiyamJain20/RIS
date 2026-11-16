@@ -1,0 +1,26 @@
+Compiling 17 files with Solc 0.8.37
+Solc 0.8.37 finished in 2.04s
+Compiler run successful!
+
+Ran 9 tests for test/Quorum.t.sol:QuorumTest
+[PASS] test_AF1Q_CheckpointAnyThreeOfFourAndFourOfFour() (gas: 824755)
+[PASS] test_AF1Q_CheckpointRejectsBadQuorumLists() (gas: 303930)
+[PASS] test_AF1Q_CheckpointWithTheEWitnessSetVersionIsStaleState() (gas: 93999)
+[PASS] test_AF1Q_DecisionRejectsBadQuorumLists() (gas: 3102482)
+[PASS] test_AF1Q_DecisionThreeOfFourGrants() (gas: 3034957)
+[FAIL: next call did not revert as expected] test_AF1Q_PolicyPinRejectsAForeignPolicyVersion() (gas: 285664)
+[PASS] test_AF1Q_ReceiptRejectsBadQuorumLists() (gas: 3384149)
+[PASS] test_AF1Q_ReceiptThreeOfFourRecordsTheOutcome() (gas: 3627190)
+[PASS] test_AF1Q_SingleWitnessCannotPoisonTheDbc() (gas: 97490)
+Suite result: FAILED. 8 passed; 1 failed; 0 skipped; finished in 7.23ms (21.51ms CPU time)
+
+Ran 1 test suite in 7.73ms (7.23ms CPU time): 8 tests passed, 1 failed, 0 skipped (9 total tests)
+
+Failing tests:
+Encountered 1 failing test in test/Quorum.t.sol:QuorumTest
+[FAIL: next call did not revert as expected] test_AF1Q_PolicyPinRejectsAForeignPolicyVersion() (gas: 285664)
+
+Encountered a total of 1 failing tests, 8 tests succeeded
+
+Tip: Run `forge test --rerun` to retry only the 1 failed test
+Tip: Run `forge test --debug --match-test <TEST_NAME>` to inspect one failing test in the debugger

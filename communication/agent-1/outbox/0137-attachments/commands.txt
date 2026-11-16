@@ -1,0 +1,4 @@
+# Run from a scratch extract: git archive 85c59f588de58a8ff5e87b9fe6f630c9d8c43642 ledger | tar -x -C <scratch>
+# then copy QuorumForgedCred.t.sol (unmodified) to <scratch>/ledger/test/ and, in <scratch>:
+forge test --root ledger --match-path test/QuorumForgedCred.t.sol -vv            # exit 0, 3 of 3 passed -> forged-forge-log.txt
+forge test --root ledger --match-test 'test_F0Q_ThreeSignersCanPoison|test_F0Q_SingleWitnessCannotPoison|test_AF1Q_SingleWitnessCannotPoisonTheDbc' -vv   # exit 0, 3 of 3 -> poison-forge-log.txt

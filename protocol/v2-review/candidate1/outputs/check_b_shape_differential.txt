@@ -1,0 +1,24 @@
+candidate manifest 6acceadf35b9f018 verified (11 files)
+cases: 997
+  SCHEMA LOOSER  2
+  both accept    17
+  both reject    978
+verdicts that differ:
+  SCHEMA LOOSER | repaired-e | profile.enum=4
+  SCHEMA LOOSER | repaired-f | profile.enum=4
+both accept (excluding BASE and decimal leaf truncations that stay valid):
+  repaired-e | profile name/enum disagree
+  repaired-e | interfaceVersion=v2
+  repaired-e | drop immutableRefsSha256 on ALL contracts
+  repaired-e | kssc witnesses: duplicate member
+  repaired-e | kssc witnesses: order reversed (must stay valid)
+  repaired-e | psc witnesses: duplicate member
+  repaired-e | psc witnesses: order reversed (must stay valid)
+  repaired-f | profile name/enum disagree
+  repaired-f | interfaceVersion=v2
+  repaired-f | governance witnesses: duplicate member
+  repaired-f | governance witnesses: order reversed (must stay valid)
+  repaired-f | kssc witnesses: duplicate member
+  repaired-f | kssc witnesses: order reversed (must stay valid)
+  repaired-f | psc witnesses: duplicate member
+  repaired-f | psc witnesses: order reversed (must stay valid)

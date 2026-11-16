@@ -1,0 +1,53 @@
+Compiling 11 files with Solc 0.8.37
+Solc 0.8.37 finished in 1.12s
+Compiler run successful with warnings:
+Warning (5667): Unused function parameter. Remove or comment out the variable name to silence this warning.
+  --> test/V2VectorsCheck.t.sol:31:86:
+   |
+31 |     function _digest0() internal pure returns (bytes32 dig, bytes32 dom, bytes32 sh, bytes32 th) {
+   |                                                                                      ^^^^^^^^^^
+
+Warning (5667): Unused function parameter. Remove or comment out the variable name to silence this warning.
+  --> test/V2VectorsCheck.t.sol:67:86:
+   |
+67 |     function _digest1() internal pure returns (bytes32 dig, bytes32 dom, bytes32 sh, bytes32 th) {
+   |                                                                                      ^^^^^^^^^^
+
+Warning (5667): Unused function parameter. Remove or comment out the variable name to silence this warning.
+   --> test/V2VectorsCheck.t.sol:103:86:
+    |
+103 |     function _digest2() internal pure returns (bytes32 dig, bytes32 dom, bytes32 sh, bytes32 th) {
+    |                                                                                      ^^^^^^^^^^
+
+
+Ran 26 tests for test/V2VectorsCheck.t.sol:V2VectorsCheck
+[PASS] test_V2_AccessDecision1_HashesMatchTheVector() (gas: 3146)
+[PASS] test_V2_AccessDecision1_OtherDigestIsBadSignature() (gas: 8776)
+[PASS] test_V2_AccessDecision1_QuorumLibAcceptsAtQ3() (gas: 17540)
+[PASS] test_V2_AccessDecision1_TwoSignaturesInsufficientAtQ3() (gas: 23171)
+[PASS] test_V2_GovernanceAction3_HashesMatchTheVector() (gas: 2711)
+[PASS] test_V2_GovernanceAction3_OtherDigestIsBadSignature() (gas: 8224)
+[PASS] test_V2_GovernanceAction3_QuorumLibAcceptsAtQ3() (gas: 16832)
+[PASS] test_V2_GovernanceAction3_TwoSignaturesInsufficientAtQ3() (gas: 22509)
+[PASS] test_V2_GovernanceAction4_HashesMatchTheVector() (gas: 2133)
+[PASS] test_V2_GovernanceAction4_OtherDigestIsBadSignature() (gas: 7690)
+[PASS] test_V2_GovernanceAction4_QuorumLibAcceptsAtQ3() (gas: 16302)
+[PASS] test_V2_GovernanceAction4_TwoSignaturesInsufficientAtQ3() (gas: 22020)
+[PASS] test_V2_GovernanceAction5_HashesMatchTheVector() (gas: 2178)
+[PASS] test_V2_GovernanceAction5_OtherDigestIsBadSignature() (gas: 7711)
+[PASS] test_V2_GovernanceAction5_QuorumLibAcceptsAtQ3() (gas: 16341)
+[PASS] test_V2_GovernanceAction5_TwoSignaturesInsufficientAtQ3() (gas: 22038)
+[PASS] test_V2_GrantReceipt2_HashesMatchTheVector() (gas: 4303)
+[PASS] test_V2_GrantReceipt2_OtherDigestIsBadSignature() (gas: 9939)
+[PASS] test_V2_GrantReceipt2_QuorumLibAcceptsAtQ3() (gas: 18637)
+[PASS] test_V2_GrantReceipt2_TwoSignaturesInsufficientAtQ3() (gas: 24316)
+[PASS] test_V2_SetSignaturesDoNotAuthorizeRemove() (gas: 7596)
+[PASS] test_V2_StateCheckpoint0_HashesMatchTheVector() (gas: 4120)
+[PASS] test_V2_StateCheckpoint0_OtherDigestIsBadSignature() (gas: 9842)
+[PASS] test_V2_StateCheckpoint0_QuorumLibAcceptsAtQ3() (gas: 18538)
+[PASS] test_V2_StateCheckpoint0_TwoSignaturesInsufficientAtQ3() (gas: 24259)
+[PASS] test_V2_WitnessAddressesFollowTheSyntheticDerivation() (gas: 5706)
+Suite result: ok. 26 passed; 0 failed; 0 skipped; finished in 1.54ms (10.23ms CPU time)
+
+Ran 1 test suite in 6.61ms (1.54ms CPU time): 26 tests passed, 0 failed, 0 skipped (26 total tests)
+forge exit 0

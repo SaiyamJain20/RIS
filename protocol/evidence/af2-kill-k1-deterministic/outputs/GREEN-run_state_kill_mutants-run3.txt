@@ -1,0 +1,6 @@
+control: unmutated store passes all kill tests
+DETECTED K1 the signing transaction is removed: every statement autocommits on its own | failed tests: 2
+DETECTED K2 the INITIALIZED marker is written before the database exists | failed tests: 1
+EQUIVALENT E1 synchronous=FULL becomes OFF (only power loss can show it; SIGKILL cannot) | survived: True (status pass)
+detected 2 of 2; equivalent survivors 1 of 1
+exit=0 secs=135

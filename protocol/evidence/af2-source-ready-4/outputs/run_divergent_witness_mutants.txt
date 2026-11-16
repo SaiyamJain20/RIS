@@ -1,0 +1,29 @@
+control: the unmutated module passes all tests with no skip
+DETECTED D1 the read divergence adds nothing | failed tests: 4
+DETECTED D2 the read divergence adds one | failed tests: 4
+DETECTED D3 the read divergence subtracts | failed tests: 4
+DETECTED D4 every read field diverges | failed tests: 4
+DETECTED D5 a non-decimal real read is guessed at | failed tests: 1
+DETECTED D6 the head lag subtracts nothing | failed tests: 2
+DETECTED D7 the head lag may go below genesis | failed tests: 1
+DETECTED D8 the lagged head is not reported by observe | failed tests: 2
+DETECTED D9 the lag applies to the DBC too | failed tests: 1
+DETECTED D10 the lagged block reports the real chain id of the other chain | failed tests: 1
+DETECTED D11 newer blocks stay visible under a lag | failed tests: 2
+DETECTED D12 the lagged head itself is hidden | failed tests: 2
+DETECTED D13 a read-divergence view also hides blocks | failed tests: 3
+DETECTED D14 a read lag changes no read (lag affects reads_at) | failed tests: 1
+DETECTED D15 other methods are not delegated | failed tests: 1
+DETECTED D16 the spec accepts N = 0 | failed tests: 1
+DETECTED D17 the spec accepts a leading zero | failed tests: 1
+DETECTED D18 the spec accepts N above the maximum | failed tests: 1
+DETECTED D19 the spec accepts keyEpoch | failed tests: 1
+DETECTED D20 the spec is matched by prefix only | failed tests: 1
+DETECTED D21 install wraps nothing | failed tests: 1
+DETECTED D22 install accepts a malformed spec | failed tests: 1
+DETECTED D23 a missing --view is accepted | failed tests: 1
+DETECTED D24 a deployment without a TEST-ONLY derivation is accepted | failed tests: 1
+DETECTED D25 a missing deployment is accepted | failed tests: 1
+DETECTED D26 the deployment argument is not passed on | failed tests: 1
+DETECTED D27 the view is installed after the witness started | failed tests: 1
+detected 27 of 27; equivalent survivors 0 of 0

@@ -1,0 +1,46 @@
+control: the unmutated entry passes all tests (no skips)
+DETECTED P1 the index range is 0..9 | failed tests: 2
+DETECTED P2 the delay bound is not enforced | failed tests: 3
+DETECTED P3 a leading zero is a valid delay | failed tests: 1
+DETECTED P4 any crash point is accepted | failed tests: 2
+DETECTED P5 a crash with extra fields is accepted | failed tests: 1
+DETECTED P6 the delay kind is not checked | failed tests: 2
+DETECTED P7 the delay position is not checked | failed tests: 1
+DETECTED P8 up to five delay fields are accepted | failed tests: 1
+DETECTED P9 a repeated index is allowed | failed tests: 1
+DETECTED P10 an unknown variant name becomes a zero delay | failed tests: 4
+DETECTED S1 abbreviated flags are accepted | failed tests: 1
+DETECTED S2 an argparse error is swallowed | failed tests: 3
+DETECTED S3 a flag error is reported as a variant syntax error | failed tests: 3
+DETECTED C1 every other index is substituted too | failed tests: 2
+DETECTED C2 the production module name stays in the command | failed tests: 5
+DETECTED C3 the crash point is always after_commit | failed tests: 1
+DETECTED C4 the crash variant runs the delay hook | failed tests: 2
+DETECTED C5 the delay flag carries a zero | failed tests: 5
+DETECTED C6 the only-kind flag is dropped | failed tests: 3
+DETECTED C7 the when flag is dropped | failed tests: 2
+DETECTED C8 the table is keyed one off | failed tests: 6
+DETECTED C9 a dict argument is iterated as a list | failed tests: 8
+DETECTED L1 the claims are parsed without the strict parser | failed tests: 1
+DETECTED L2 the claims are not validated | failed tests: 8
+DETECTED L3 an unreadable claims file escapes | failed tests: 1
+DETECTED I1 the supervisor seam is installed for every run | failed tests: 3
+DETECTED I2 the worker is patched for every run | failed tests: 3
+DETECTED I3 an explicit supervisor factory is overridden | failed tests: 1
+DETECTED I4 the installed factory has no command seam | failed tests: 1
+DETECTED I5 the compromised worker gets no claims | failed tests: 1
+DETECTED M1 a refusal exits 1 | failed tests: 30
+DETECTED M2 a refusal goes to stdout | failed tests: 30
+DETECTED M3 an unknown worker variant is accepted | failed tests: 1
+DETECTED M4 a worker variant without claims is accepted | failed tests: 1
+DETECTED M5 claims without a worker variant are ignored | failed tests: 1
+DETECTED M6 the TEST-ONLY check is skipped | failed tests: 2
+DETECTED M7 the deployment is parsed with the lenient parser | failed tests: 1
+DETECTED M8 the whole command line is handed to the production main | failed tests: 2
+DETECTED M9 nothing is installed | failed tests: 2
+DETECTED M10 the claims are not installed | failed tests: 1
+DETECTED M11 the witness variants are not installed | failed tests: 1
+EQUIVALENT E1 the '=' guard of parse_variant is dropped | without an '=' the right-hand side is empty, parts == [''] and the final 'variant must be crash or delay' check refuses  | survived: True
+EQUIVALENT E2 UnicodeDecodeError is not listed in load_claims | UnicodeDecodeError is a ValueError, so main's `except ValueError` around load_claims refuses it with the same MSG_CLAIMS | survived: True
+detected 41 of 41
+EXIT=0 START=2026-11-07T22:24:11Z END=2026-11-07T22:34:28Z HEAD=8751cf8

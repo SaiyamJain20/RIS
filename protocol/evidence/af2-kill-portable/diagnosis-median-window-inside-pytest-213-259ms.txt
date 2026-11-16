@@ -1,0 +1,32 @@
+CALIB-MS ['237.2', '229.9', '228.9', '228.6', '227.4', '235.5', '225.9']
+KILL-INIT-STATS trials=25 finished_before_kill=25 interrupted=0 calibrated_window_ms=228.9
+F
+=================================== FAILURES ===================================
+___ test_random_sigkill_during_initialisation_leaves_a_recoverable_directory ___
+
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-3/test_random_sigkill_during_ini0')
+
+    def test_random_sigkill_during_initialisation_leaves_a_recoverable_directory(tmp_path):
+        rng, done, interrupted = random.Random(2), 0, 0
+        window = init_duration(tmp_path)                                   # host-calibrated kill schedule: delays are fractions of a measured real initialisation
+        for t in range(TRIALS):
+            d = str(tmp_path / ("i%d" % t))
+            out = kill_after(spawn(d, "init", t), rng.uniform(0.05, 1.6) * window, may_finish=True)
+            done += "DONE" in out
+            interrupted += "DONE" not in out
+            try:
+                st = ws.init_store(d, BIND, B, OWNER, anchor=ANCHOR)           # the restart: completes an interrupted initialisation or opens a finished one
+            except ws.StoreError as e:
+                pytest.fail("trial %d: the next init_store refused a directory the kill left behind: %s" % (t, e))
+            assert (st.binding_v2, st.owner, st.document, st.anchor) == (BIND, OWNER, B, ANCHOR)
+            st.sign(type="StateCheckpoint", domain=kc.DOM_S, wsv="2", key="1", effect=kc.cp_effect(138), expires_at="1791600000", digest=h("after-init-%d" % t), signer=kc.signer,
+                    observe=lambda: obs(DBC, 160, kc.T0))
+            st.close()
+        print("KILL-INIT-STATS trials=%d finished_before_kill=%d interrupted=%d calibrated_window_ms=%.1f" % (TRIALS, done, interrupted, window * 1000))
+>       assert interrupted >= 1, "no kill landed inside initialisation (host-calibrated window %.1f ms): the harness did not test I5 (finished before the kill: %d of %d)" % (window * 1000, done, TRIALS)
+E       AssertionError: no kill landed inside initialisation (host-calibrated window 228.9 ms): the harness did not test I5 (finished before the kill: 25 of 25)
+E       assert 0 >= 1
+
+protocol/tests/test_witness_state_kill.py:184: AssertionError
+1 failed, 2 deselected in 12.62s
+EXIT=1 START=2026-11-13T08:28:03Z END=2026-11-13T08:28:16Z HEAD=5e25b53

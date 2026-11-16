@@ -1,0 +1,76 @@
+.F.                                                                      [100%]
+=================================== FAILURES ===================================
+___ test_random_sigkill_during_initialisation_leaves_a_recoverable_directory ___
+
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-2260/test_random_sigkill_during_ini0')
+
+    def test_random_sigkill_during_initialisation_leaves_a_recoverable_directory(tmp_path):
+        rng, done, interrupted = random.Random(2), 0, 0
+        for t in range(TRIALS):
+            d = str(tmp_path / ("i%d" % t))
+            out = kill_after(spawn(d, "init", t), rng.uniform(0.0, 0.05), may_finish=True)
+            done += "DONE" in out
+            interrupted += "DONE" not in out
+            try:
+>               st = ws.init_store(d, BIND, B, OWNER, anchor=ANCHOR)           # the restart: completes an interrupted initialisation or opens a finished one
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_witness_state_kill.py:144: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+protocol/hmbc_protocol/witness_state.py:179: in init_store
+    state, meta = _classify(directory)
+                  ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+directory = '/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-2260/test_random_sigkill_during_ini0/i3'
+
+    def _classify(directory: str):
+        """Read-only inspection of an existing directory. Returns ("fresh", None), ("interrupted", meta) or ("open", meta); raises the stage-9 refusals (SUCCESSOR-WIRE section 1) and writes nothing."""
+        db, marker, _tmp = _paths(directory)
+        has_db, has_marker = os.path.exists(db), os.path.exists(marker)
+        if not has_db and not has_marker:
+            return "fresh", None
+        if has_marker and not has_db:
+            raise StoreError("STORE_MISSING", "the INITIALIZED marker exists but the database does not")
+        try:
+            con = _ro(db)
+            try:
+                if con.execute("PRAGMA integrity_check").fetchone()[0] != "ok":
+                    raise StoreError("STORE_CORRUPT", "integrity_check failed")
+                tables = {r[0] for r in con.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'")}
+                meta = dict(con.execute("SELECT key, value FROM meta")) if "meta" in tables else {}
+                if not all(k in meta for k in ("binding_v2", "binding_v2_doc", "owner", "schema")):
+                    if has_marker:
+                        raise StoreError("STORE_CORRUPT", "the INITIALIZED marker exists but the binding rows are missing")
+                    if any(con.execute(f'SELECT COUNT(*) FROM "{t}"').fetchone()[0] for t in tables):
+                        raise StoreError("LEGACY_STATE", "a database with rows and no binding rows (an unbound legacy store)")
+                    return "fresh", None                                   # an empty database without binding rows: nothing was ever recorded
+                rows = sum(con.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0] for t in _RECORD_TABLES if t in tables)
+            finally:
+                con.close()
+        except sqlite3.DatabaseError as e:
+>           raise StoreError("STORE_CORRUPT", f"the database cannot be read: {e}") from None
+E           hmbc_protocol.witness_state.StoreError: STORE_CORRUPT: the database cannot be read: attempt to write a readonly database
+
+protocol/hmbc_protocol/witness_state.py:118: StoreError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-2260/test_random_sigkill_during_ini0')
+
+    def test_random_sigkill_during_initialisation_leaves_a_recoverable_directory(tmp_path):
+        rng, done, interrupted = random.Random(2), 0, 0
+        for t in range(TRIALS):
+            d = str(tmp_path / ("i%d" % t))
+            out = kill_after(spawn(d, "init", t), rng.uniform(0.0, 0.05), may_finish=True)
+            done += "DONE" in out
+            interrupted += "DONE" not in out
+            try:
+                st = ws.init_store(d, BIND, B, OWNER, anchor=ANCHOR)           # the restart: completes an interrupted initialisation or opens a finished one
+            except ws.StoreError as e:
+>               pytest.fail("trial %d: the next init_store refused a directory the kill left behind: %s" % (t, e))
+E               Failed: trial 3: the next init_store refused a directory the kill left behind: STORE_CORRUPT: the database cannot be read: attempt to write a readonly database
+
+protocol/tests/test_witness_state_kill.py:146: Failed
+1 failed, 2 passed in 21.51s
+EXIT=1 START=2026-11-08T07:17:37Z END=2026-11-08T07:17:58Z HEAD=fec8ea0

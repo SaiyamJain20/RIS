@@ -1,0 +1,61 @@
+control: unmutated module passes all tests
+DETECTED A1 the line limit is 2 MiB | failed tests: 1
+DETECTED A2 extra request members are accepted | failed tests: 1
+DETECTED A3 the request schemaVersion is not checked | failed tests: 1
+DETECTED A4 the pinned-manifest equality is not enforced | failed tests: 1
+DETECTED A5 the structural minimum of the request manifest is not checked | failed tests: 1
+DETECTED A6 the input is not validated before dispatch | failed tests: 6
+DETECTED A7 rotate_epoch may be enabled by a handler | failed tests: 2
+DETECTED A8 a non-object handler result is passed through | failed tests: 1
+DETECTED A9 the generic failure message differs | failed tests: 15
+DETECTED A10 an operation error becomes a generic failure | failed tests: 38
+DETECTED A11 the reason is not put into the response | failed tests: 2
+DETECTED A12 the collection is not put into the response | failed tests: 1
+DETECTED A13 the recorded value is not put into the response | failed tests: 2
+DETECTED A14 an unknown error code is accepted | failed tests: 1
+DETECTED A15 an empty error message is accepted | failed tests: 1
+DETECTED A16 a reason of another code is accepted | failed tests: 19
+DETECTED A17 recorded is accepted without CONFLICT_PINNED | failed tests: 1
+DETECTED A18 a collection is accepted without QUORUM_UNAVAILABLE | failed tests: 1
+DETECTED A19 PROFILE_MISMATCH maps to WRONG_DESTINATION | failed tests: 2
+DETECTED A20 a code is missing from the closed list | failed tests: 2
+DETECTED A21 any schema revision string is accepted | failed tests: 1
+DETECTED A22 a non-object pinned manifest is accepted | failed tests: 1
+DETECTED A23 an unknown carrier marker can be pinned | failed tests: 5
+DETECTED A24 the v2.1 marker is allowed under revision v2 | failed tests: 1
+DETECTED A25 the pinned manifest need not bind a request | failed tests: 1
+DETECTED A26 the supplied schema is not used | failed tests: 1
+DETECTED A27 a schema without the revision's carrier branch is accepted | failed tests: 1
+DETECTED A28 the handlers are not validated | failed tests: 1
+DETECTED A29 the pinned manifest is aliased, not copied | failed tests: 1
+DETECTED A30 the output is not compact | failed tests: 1
+DETECTED A31 invalid UTF-8 is replaced instead of refused | failed tests: 1
+DETECTED A32 a blank line is not recognised as empty | failed tests: 1
+DETECTED A33 an oversized line is not discarded | failed tests: 1
+DETECTED A34 governance accepts another witnessSetVersion | failed tests: 1
+DETECTED A35 the selector accepts index 4 | failed tests: 5
+DETECTED A36 the set version accepts 3 | failed tests: 3
+DETECTED A37 finish_decryption takes the v1 release result | failed tests: 2
+DETECTED A38 the v2 release result accepts schemaVersion v1 | failed tests: 2
+DETECTED A39 every optional member becomes required | failed tests: 8
+DETECTED A40 a witnessIndex is accepted on governance without being checked | failed tests: 1
+DETECTED A41 collect_checkpoint requires a request digest | failed tests: 4
+DETECTED A42 the attest_grant input accepts a witnessSetVersion | failed tests: 2
+DETECTED A44 a response is never checked | failed tests: 13
+DETECTED A45 an invalid response is emitted anyway | failed tests: 13
+DETECTED A46 a validator that cannot decide lets the response through | failed tests: 1
+DETECTED A47 every response is checked against the generic type only | failed tests: 1
+DETECTED A48 the operation is never recorded for the check | failed tests: 1
+DETECTED A49 the published formats are not enforced | failed tests: 2
+DETECTED A50 a schema without response types is accepted | failed tests: 1
+DETECTED A51 the check_responses flag is ignored | failed tests: 8
+DETECTED A52 check_responses may be any value | failed tests: 1
+DETECTED A53 the generic type is not built | failed tests: 3
+DETECTED A54 the response of a rotate_epoch refusal is not checked against its own type | failed tests: 2
+DETECTED A55 the published custom formats are not registered | failed tests: 2
+DETECTED A56 uint64 is checked at 256 bits | failed tests: 1
+DETECTED A57 the width check accepts anything | failed tests: 1
+DETECTED A58 canonical-signature is not enforced | failed tests: 1
+NOT-DETECTED(pass) A59 a non-string is judged by the format, not the type
+DETECTED A43 a bare TypeError from a validator escapes | failed tests: 4
+detected 58 of 59

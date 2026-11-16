@@ -1,0 +1,62 @@
+F................F..                                                     [100%]
+=================================== FAILURES ===================================
+______________ test_reference_file_exists_and_lists_every_variant ______________
+
+    def test_reference_file_exists_and_lists_every_variant():
+        path = os.path.join(PROTO, "evidence", "af-case-hook-reference", "README.md")
+        text = open(path, encoding="utf-8").read()
+        for token in ("--witness-variant", "I=crash:", "I=delay:", "I=mutant:", "I=byz:", "I=view:", "--mutant-tree", "--worker-variant compromised", "failure-free"):
+>           assert token in text, token
+E           AssertionError: failure-free
+E           assert 'failure-free' in "# Executable hook reference for agent 3's F runner (agent 2, 2026-11-13)\n\nPAPER-DERIVED RECONSTRUCTION; TEST-ONLY h...entory/README.md`. The live forms are one start each on one host; a heavily loaded host can still make a start slow.\n"
+
+protocol/tests/test_hook_reference.py:64: AssertionError
+____________________ test_documented_mutant_forms_start[M5] ____________________
+
+live_f = namespace(dep={'schemaVersion': 'hmbc-ledger-deployment/v2', 'interfaceVersion': 'v2', 'producer': 'agent-1 ledger/too...659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-55/live-repaired-f0/src/ledger/exports/abi')
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-55/test_documented_mutant_forms_s2')
+mid = 'M5', extra = ['--witness-variant', '0=mutant:M5']
+
+    @pytest.mark.parametrize("mid,extra", [("M1", ["--witness-variant", "1=mutant:M1"]), ("M2", ["--witness-variant", "1=mutant:M2"]), ("M5", ["--witness-variant", "0=mutant:M5"])], ids=["M1", "M2", "M5"])
+    def test_documented_mutant_forms_start(live_f, tmp_path, mid, extra):
+        tree = str(tmp_path / ("tree-" + mid))
+        mt().build(mid, tree)
+        dep_file = tmp_path / "dep.json"
+        dep_file.write_text(json.dumps(live_f.dep))
+        p = launch(tmp_path, extra + ["--mutant-tree", mid + "=" + tree], dep_file)
+        try:
+>           r = first_response(p, live_f)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_hook_reference.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+protocol/tests/test_hook_reference.py:43: in first_response
+    return json.loads(p.stdout.readline())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../../.local/share/uv/python/cpython-3.13.12-linux-x86_64-gnu/lib/python3.13/json/__init__.py:352: in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+../../../../.local/share/uv/python/cpython-3.13.12-linux-x86_64-gnu/lib/python3.13/json/decoder.py:345: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.decoder.JSONDecoder object at 0x7318c812f0e0>, s = '', idx = 0
+
+    def raw_decode(self, s, idx=0):
+        """Decode a JSON document from ``s`` (a ``str`` beginning with
+        a JSON document) and return a 2-tuple of the Python
+        representation and the index in ``s`` where the document ended.
+    
+        This can be used to decode a JSON document from a string that may
+        have extraneous data at the end.
+    
+        """
+        try:
+            obj, end = self.scan_once(s, idx)
+        except StopIteration as err:
+>           raise JSONDecodeError("Expecting value", s, err.value) from None
+E           json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+../../../../.local/share/uv/python/cpython-3.13.12-linux-x86_64-gnu/lib/python3.13/json/decoder.py:363: JSONDecodeError
+EXIT=1 START=2026-11-13T13:31:58Z END=2026-11-13T13:32:52Z HEAD=f574fb3

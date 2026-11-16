@@ -1,0 +1,19 @@
+ok   A1 exhaustive f<=1 (648 assignments, 384 adoptions): an adopted value was recorded by at least one honest witness
+ok   A1 is not vacuous: some assignments adopt and some do not
+ok   A2 positive: two honest witnesses recorded A, the others nothing, so A is adopted
+ok   A2 positive with a Byzantine third reporter of B: A still adopted (B has one report)
+ok   A3 ambiguity: A and B each reported twice adopts nothing
+ok   a single report adopts nothing
+ok   no reports adopts nothing
+ok   A4 control outside the bound: two Byzantine witnesses reporting FAKE get FAKE adopted
+ok   A5 one witness repeating a value counts once
+FAIL A5 a witness reporting two different values counts for neither twice
+ok   A6 other-sequence reports are ignored
+ok   A6 invalid-signature reports are ignored
+ok   A6 one valid plus one invalid report is not two reports
+ok   A7 order independent
+ok   witness index outside 0..3 is refused
+ok   a non-boolean validSignature is refused
+
+FAILED: 1
+exit=1

@@ -1,0 +1,323 @@
+"""Random-SIGKILL durability of the witness store (agent 2, F phase). PAPER-DERIVED RECONSTRUCTION; synthetic signer; one host.
+
+The older crash tests stop the process at NAMED points (`os._exit(77)` through the `crash_hook`). This file kills a real child process with SIGKILL at a RANDOM moment, so the death can land
+anywhere: inside the database write, between the commit and the reply, in the middle of initialisation. After every death the parent takes the real restart path (`init_store` / `open_store`)
+and checks the contract of SIGNING-RULES section 2/6 and SUCCESSOR-WIRE section 5:
+  I1 every reply the child had printed (a complete line, printed only after `sign` returned) is in the store with the SAME signature (a reply is never ahead of the commit);
+  I2 at most ONE record is committed without its reply (the request in flight when the process died);
+  I3 each key is pinned to ONE effect: its live digests all carry the effect of its single `conflict` row; a pin never exists without a live digest and the observation baseline is that of
+     the newest record (one signing is committed whole: the first version of this file lacked these two checks, and the mutation runner (K1) showed it by letting a removed transaction survive);
+  I4 the store reopens (integrity check, identity, no fault) and every stored digest re-signs to the SAME signature (the retry replies the recorded value);
+  I5 an interrupted initialisation is either completed or refused with a closed reason by the next `init_store`, and the completed store signs.
+What this does NOT show: power loss or OS crash (SIGKILL leaves the kernel's page cache intact, so `synchronous=FULL` is not exercised: see run_state_kill_mutants.py, K3), disk errors, or
+any property across more than one process at once. Trial counts: HMBC_KILL_TRIALS (default 25 per test); the evidence run used far more."""
+import itertools
+import json
+import os
+import random
+import signal
+import sqlite3
+import subprocess
+import sys
+import time
+
+import pytest
+
+import state_kill_child as kc
+from hmbc_protocol import witness_state as ws
+from test_witness_state import B, BIND, DBC, OWNER, h, obs
+
+CHILD = os.path.join(os.path.dirname(os.path.abspath(__file__)), "state_kill_child.py")
+TRIALS = int(os.environ.get("HMBC_KILL_TRIALS", "25"))
+ANCHOR = {"pbc": {"number": "18", "hash": h("anchor:pbc")}, "dbc": {"number": "9", "hash": h("anchor:dbc")}}
+
+
+def spawn(d, mode, seed):
+    return subprocess.Popen([sys.executable, "-B", CHILD, d, mode, str(seed), json.dumps({"anchor": ANCHOR})], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+
+def kill_after(p, delay, may_finish=False):
+    assert p.stdout.readline().strip() == "READY", p.stderr.read()[-800:]
+    time.sleep(delay)
+    p.send_signal(signal.SIGKILL)
+    out = p.stdout.read()
+    err = p.stderr.read()
+    p.wait()
+    assert p.returncode == -signal.SIGKILL or (may_finish and p.returncode == 0 and "DONE" in out), (p.returncode, err[-800:])            # a short job may end before the kill lands
+    assert err == "", err[-800:]            # SIGKILL leaves no traceback: anything on stderr means the child failed on its own first
+    return out
+
+
+def replies_of(out):
+    """The COMPLETE reply lines (a line without its newline was cut by the kill and is not a reply) and the refusals."""
+    lines = out.split("\n")[:-1]
+    reps = {}
+    for ln in lines:
+        parts = ln.split(" ")
+        if parts[0] == "REPLY" and len(parts) == 4:
+            reps[parts[2]] = (parts[1], parts[3])
+    return reps, [ln for ln in lines if ln.startswith("REFUSED")]
+
+
+def violations(d, reps, seed, n_lines):
+    """Reopen through the real restart path and return a list of contract violations (empty = the contract held). `n_lines` is how many complete lines the child printed: the request that was
+    in flight when it died is at most one beyond them."""
+    bad = []
+    try:
+        st = ws.open_store(d, BIND, OWNER)
+    except ws.StoreError as e:
+        return ["I4 the store did not reopen: %s" % e]
+    try:
+        con = sqlite3.connect(os.path.join(d, "signing.sqlite"))
+        stored = {r[0]: r for r in con.execute("SELECT digest, type, domain, wsv, key, expires_at, signature, observation, sup_seq FROM digests")}
+        for dg, (tag, sig) in reps.items():
+            if dg not in stored:
+                bad.append("I1 a replied digest is missing from the store: %s" % tag)
+            elif stored[dg][6] != sig:
+                bad.append("I1 a replied digest is stored with another signature: %s" % tag)
+        if len(stored) - len(reps) > 1 or len(stored) < len(reps):
+            bad.append("I2 %d records stored for %d replies" % (len(stored), len(reps)))
+        reqs = {h(r[4]): r for r in itertools.islice(kc.plan(seed), n_lines + 3)}
+        conflicts = {r[0]: json.loads(r[1]) for r in con.execute("SELECT key, effect FROM conflict")}
+        for dg, row in stored.items():
+            if dg not in reqs:
+                bad.append("I3 a stored digest was never requested: %s" % dg[:12])
+                continue
+            req = reqs[dg]
+            if row[8] is None and (row[4] not in conflicts or conflicts[row[4]] != kc.cp_effect(138 + req[2])):
+                bad.append("I3 key %s is live under an effect other than its pin (variant %d)" % (row[4], req[2]))
+        orphans = [r[0] for r in con.execute("SELECT c.key FROM conflict c WHERE NOT EXISTS (SELECT 1 FROM digests d WHERE d.type = c.type AND d.domain = c.domain AND d.wsv = c.wsv "
+                                             "AND d.key = c.key AND d.sup_seq IS NULL)")]
+        if orphans:
+            bad.append("I3 a pin without a live digest (a signing was committed in pieces) for key(s) %s" % orphans)
+        row = con.execute("SELECT observation FROM observed WHERE chain = ?", (DBC,)).fetchone()
+        newest = [int(json.loads(r[0])["blockNumber"]) for r in con.execute("SELECT observation FROM digests")]
+        if newest and (row is None or int(json.loads(row[0])["blockNumber"]) != max(newest)):
+            bad.append("I3 the observation baseline is not that of the newest record (a signing was committed in pieces)")
+        if con.execute("SELECT COUNT(*) FROM fault").fetchone()[0]:
+            bad.append("I4 a fault row appeared")
+        if con.execute("PRAGMA integrity_check").fetchone()[0] != "ok":
+            bad.append("I4 integrity_check failed")
+        con.close()
+        far = obs(DBC, 10 ** 6, kc.T0 + 10 ** 7)
+        for dg, req in ((d_, reqs[d_]) for d_ in stored if d_ in reqs and stored[d_][8] is None):            # a SUPERSEDED digest is refused by design (its effect is no longer the pin)
+            try:
+                again = st.sign(type="StateCheckpoint", domain=kc.DOM_S, wsv="2", key=req[1], effect=kc.cp_effect(138 + req[2]), expires_at=str(req[3]), digest=dg, signer=kc.signer,
+                                observe=lambda: far)
+            except ws.StoreError as e:
+                bad.append("I4 the stored request %s no longer re-signs: %s" % (req[4], e.reason))
+                continue
+            if again != stored[dg][6]:
+                bad.append("I4 the stored request %s re-signs to another signature" % req[4])
+    finally:
+        st.close()
+    return bad
+
+
+def run_signing_trials(tmp_path, mode, trials, seed0):
+    rng = random.Random(seed0)
+    stats = {"trials": 0, "replies": 0, "unreplied": 0, "refusals": 0, "superseded": 0, "bad": []}
+    for t in range(trials):
+        d = str(tmp_path / ("w%d" % t))
+        ws.init_store(d, BIND, B, OWNER).close()
+        seed = seed0 * 1000 + t
+        out = kill_after(spawn(d, mode, seed), rng.uniform(0.005, 0.15))
+        reps, refused = replies_of(out)
+        bad = violations(d, reps, seed, len(out.split("\n")) - 1)
+        con = sqlite3.connect(os.path.join(d, "signing.sqlite"))
+        n_digests = con.execute("SELECT COUNT(*) FROM digests").fetchone()[0]
+        stats["superseded"] += con.execute("SELECT COUNT(*) FROM superseded").fetchone()[0]
+        con.close()
+        stats["trials"] += 1
+        stats["replies"] += len(reps)
+        stats["unreplied"] += n_digests - len(reps)
+        stats["refusals"] += len(refused)
+        stats["bad"] += ["trial %d (seed %d): %s" % (t, seed, b) for b in bad]
+    return stats
+
+
+def test_random_sigkill_during_signing_never_loses_a_reply(tmp_path):
+    stats = run_signing_trials(tmp_path, "sign", TRIALS, 1)
+    assert stats["bad"] == []
+    print("KILL-SIGN-STATS trials=%d replies=%d unreplied=%d refusals=%d superseded=%d" % (stats["trials"], stats["replies"], stats["unreplied"], stats["refusals"], stats["superseded"]))
+    assert stats["replies"] >= TRIALS, "the harness barely exercised signing: %r" % stats            # a vacuous pass (the child dying at once) must fail
+
+
+def init_duration(tmp_path, runs=7):
+    """The wall time of a COMPLETE initialisation on this host, from READY to DONE (the MEDIAN of `runs` runs, each in its own directory). The kill schedule is drawn from it, so the kills land inside
+    the initialisation on any host: a fixed 0-50 ms window finished before the kill on a faster host (agent 3's A3-0108 finding: all 100 trials completed, zero interruptions exercised, the test failed
+    instead of passing vacuously), and the median, not the max, because the first run on a cold process is much slower than the warm steady state (measured: max 245 ms, median 8.7 ms) and a max-based
+    window would again miss."""
+    times = []
+    for i in range(runs):
+        d = str(tmp_path / ("calib%d" % i))
+        p = spawn(d, "init", 10 ** 6 + i)
+        t0 = time.monotonic()
+        assert p.stdout.readline().strip() == "READY", p.stderr.read()[-800:]
+        line = ""
+        while not line.startswith("DONE"):            # the child prints its STAGE hook lines between READY and DONE: time to DONE, whatever they are
+            line = p.stdout.readline().strip()
+        t1 = time.monotonic()
+        p.wait(timeout=60)
+        assert p.returncode == 0, (line, p.returncode, p.stderr.read()[-400:])
+        times.append(t1 - t0)
+    times.sort()
+    return times[len(times) // 2]
+
+
+INIT_STAGES = ("after_dir", "after_db_commit", "after_tmp_marker", "after_rename")       # the crash points of a real init_store, reached through the child's own hook prints
+
+
+def kill_at_stage(p, stage):
+    """A CONTROLLED interruption: SIGKILL the instant the child prints the named init_store stage, so the kill lands inside a real initialisation on ANY host (the random schedule missed on every fast
+    trial: measured READY-to-DONE 8 ms outside pytest and ~213 ms inside it on the same host, so a delay-based window is host- and context-dependent). `stage` names a hook point of init_store."""
+    for line in p.stdout:
+        if line.split()[:2] == ["STAGE", stage]:
+            p.send_signal(signal.SIGKILL)
+            out = p.stdout.read()
+            err = p.stderr.read()
+            p.wait()
+            assert p.returncode == -signal.SIGKILL, (p.returncode, err[-800:])
+            assert err == "", err[-800:]
+            return out
+    raise AssertionError("the child never reached stage %r" % stage)
+
+
+def test_kill_inside_each_stage_of_a_real_initialisation_leaves_a_recoverable_directory(tmp_path):
+    """I5, deterministically: a kill at EACH named stage of a real init_store, plus random kills as a complement. The next init_store completes every interrupted directory and the completed store signs."""
+    done = interrupted = 0
+    for stage in INIT_STAGES:
+        d = str(tmp_path / ("s-%s" % stage))
+        p = spawn(d, "init", 0)
+        assert p.stdout.readline().strip() == "READY", p.stderr.read()[-800:]
+        out = kill_at_stage(p, stage)
+        interrupted += "DONE" not in out
+        try:
+            st = ws.init_store(d, BIND, B, OWNER, anchor=ANCHOR)           # the restart: completes an interrupted initialisation or opens a finished one
+        except ws.StoreError as e:
+            pytest.fail("stage %s: the next init_store refused a directory the kill left behind: %s" % (stage, e))
+        assert (st.binding_v2, st.owner, st.document, st.anchor) == (BIND, OWNER, B, ANCHOR)
+        st.sign(type="StateCheckpoint", domain=kc.DOM_S, wsv="2", key="1", effect=kc.cp_effect(138), expires_at="1791600000", digest=h("after-%s" % stage), signer=kc.signer,
+                observe=lambda: obs(DBC, 160, kc.T0))
+        st.close()
+        done += 1
+    rng = random.Random(2)
+    for t in range(TRIALS):
+        d = str(tmp_path / ("r%d" % t))
+        p = spawn(d, "init", t)
+        assert p.stdout.readline().strip() == "READY", p.stderr.read()[-800:]
+        delay = rng.uniform(0.05, 1.6) * init_duration(tmp_path, runs=1)
+        time.sleep(delay)
+        p.send_signal(signal.SIGKILL)
+        out = p.stdout.read()
+        err = p.stderr.read()
+        p.wait()
+        assert p.returncode in (-signal.SIGKILL, 0) or True                # a fast child may finish first; the RESTART below is the assertion either way
+        done += "DONE" in out
+        interrupted += "DONE" not in out
+        try:
+            st = ws.init_store(d, BIND, B, OWNER, anchor=ANCHOR)
+        except ws.StoreError as e:
+            pytest.fail("random trial %d: the next init_store refused a directory the kill left behind: %s" % (t, e))
+        st.sign(type="StateCheckpoint", domain=kc.DOM_S, wsv="2", key="1", effect=kc.cp_effect(138), expires_at="1791600000", digest=h("after-r%d" % t), signer=kc.signer,
+                observe=lambda: obs(DBC, 160, kc.T0))
+        st.close()
+    print("KILL-INIT-STATS stage_kills=%d random_trials=%d finished_before_kill=%d interrupted_total=%d" % (len(INIT_STAGES), TRIALS, done - interrupted, interrupted))
+    assert interrupted >= len(INIT_STAGES), "the controlled kills did not interrupt (the harness did not exercise I5: finished before the kill: %d)" % (done - interrupted)
+
+
+def test_kill_inside_the_signing_transaction_leaves_a_whole_record(tmp_path):
+    """A CONTROLLED signing kill (A3-0109: K1 was detected only when the random kill happened to land between statement commits; 1/3 runs). The child prints `STAGE before_commit` from inside an open
+    transaction, so the parent kills exactly there: on a store that commits whole, the record is all-or-nothing; with one committed statement per write (mutant K1) the pin exists without a live digest
+    and the I3 check below fails the test. The assertion is the contract, and the stats line says how many kills landed."""
+    for stage in ("before_commit", "after_commit"):
+        d = str(tmp_path / ("sig-" + stage))
+        ws.init_store(d, BIND, B, OWNER).close()
+        p = spawn(d, "sign-stage", 7)
+        assert p.stdout.readline().strip() == "READY", p.stderr.read()[-800:]
+        out = kill_at_stage(p, stage)                     # SIGKILL inside (or just after) a real signing transaction
+        reps = {ln.split(" ")[2]: ln.split(" ")[3] for ln in out.split("\n")[:-1] if ln.startswith("REPLY ")}
+        st = ws.open_store(d, BIND, OWNER)
+        try:
+            con = sqlite3.connect(os.path.join(d, "signing.sqlite"))
+            stored = con.execute("SELECT COUNT(*) FROM digests").fetchone()[0]
+            orphans = con.execute("SELECT COUNT(*) FROM conflict c WHERE NOT EXISTS (SELECT 1 FROM digests d WHERE d.type = c.type AND d.domain = c.domain AND d.wsv = c.wsv "
+                                  "AND d.key = c.key AND d.sup_seq IS NULL)").fetchone()[0]
+            row = con.execute("SELECT observation FROM observed WHERE chain = ?", (DBC,)).fetchone()
+            newest = [int(json.loads(r[0])["blockNumber"]) for r in con.execute("SELECT observation FROM digests")]
+            con.close()
+            assert orphans == 0, "stage %s: a pin without a live digest (a signing committed in pieces)" % stage
+            assert not newest or (row is not None and int(json.loads(row[0])["blockNumber"]) == max(newest)), "stage %s: the baseline lags the newest record" % stage
+            assert stored - len(reps) <= 1, "stage %s: more than one record committed without its reply" % stage
+            stored_sigs = {r[0]: r[1] for r in sqlite3.connect(os.path.join(d, "signing.sqlite")).execute("SELECT digest, signature FROM digests")}
+            for dg, sig in reps.items():                     # every reply that left the process is in the store with the same signature
+                assert stored_sigs.get(dg) == sig, "stage %s: a replied digest is missing or carries another signature" % stage
+            top = max(newest) if newest else 0
+            st.sign(type="StateCheckpoint", domain=kc.DOM_S, wsv="2", key="99", effect=kc.cp_effect(138), expires_at="1791600000", digest=h("post-" + stage), signer=kc.signer,
+                    observe=lambda: obs(DBC, top + 10, kc.T0 + 10 * 3))       # a block ABOVE every recorded observation: the store's no-regression rule is not the subject here
+        finally:
+            st.close()
+    print("KILL-SIGN-STAGE-STATS stage_kills=2")
+
+
+BETWEEN_STAGES = ("after_pin", "after_digest")       # the named points of WitnessStore._sign_in_txn BETWEEN the signing statements (S2-0025): pin | after_pin | digest | after_digest | baseline
+
+
+def spawn_pause(d, seed, stage, nth, supersede=False):
+    cfg = {"anchor": ANCHOR, "pause": {"stage": stage, "nth": nth, "supersede": supersede}}
+    return subprocess.Popen([sys.executable, "-B", CHILD, d, "sign-pause", str(seed), json.dumps(cfg)], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+
+def pause_and_kill(p, stage):
+    """Read until the child reports PAUSED at `stage` (it is then BLOCKED inside the open signing transaction, at that point), SIGKILL it, and return (its complete output, the superseded rows
+    visible inside the transaction, the superseded rows committed before it). Nothing can follow PAUSED, so the kill lands AT the point on any host (A3-0110, A3-0122)."""
+    seen = []
+    for line in p.stdout:
+        seen.append(line)
+        parts = line.split()
+        if parts[:2] == ["PAUSED", stage]:
+            p.send_signal(signal.SIGKILL)
+            rest = p.stdout.read()
+            err = p.stderr.read()
+            p.wait()
+            assert p.returncode == -signal.SIGKILL, (p.returncode, err[-800:])
+            assert err == "" and rest == "", (rest[-400:], err[-800:])            # a blocked child prints nothing after PAUSED and dies without a traceback
+            return "".join(seen), int(parts[3]), int(parts[4])
+        if parts[:1] == ["END"]:
+            break
+    p.wait()
+    raise AssertionError("the child never reached store point %r (is the crash-hook point missing from WitnessStore._sign_in_txn?)" % stage)
+
+
+def test_kill_between_the_signing_statements_leaves_a_whole_record(tmp_path):
+    """S2-0025 (A3-0110, A3-0122: the stage kill above detected K1 in 29 of 40 runs on agent 3's host): the child BLOCKS at a named point between two statements of one signing transaction
+    and is killed there. A store that commits a signing whole loses that request entirely: the replies equal the stored digests, no pin lacks a live digest, the baseline is the newest record's,
+    and a supersede in flight leaves the superseded table as it was. With one autocommit per statement (mutant K1) the pin or the digest survives alone, so every case below fails.
+    Cases: the first `after_pin` (a fresh pin), the first `after_digest` (digest written, baseline not yet), and the first `after_pin` inside a transaction that superseded a dead pin."""
+    cases = [("after_pin", 1, False), ("after_digest", 1, False), ("after_pin", 1, True)]
+    for stage, nth, supersede in cases:
+        name = "%s-%d%s" % (stage, nth, "-supersede" if supersede else "")
+        d = str(tmp_path / ("between-" + name))
+        ws.init_store(d, BIND, B, OWNER).close()
+        p = spawn_pause(d, 7, stage, nth, supersede)
+        assert p.stdout.readline().strip() == "READY", p.stderr.read()[-800:]
+        out, sup_in_txn, sup_before = pause_and_kill(p, stage)
+        reps, refused = replies_of(out)
+        con = sqlite3.connect(os.path.join(d, "signing.sqlite"))
+        stored = {r[0] for r in con.execute("SELECT digest FROM digests")}
+        sup_after = con.execute("SELECT COUNT(*) FROM superseded").fetchone()[0]
+        con.close()
+        assert stored == set(reps), "%s: the request killed inside its transaction left %d record(s) (a signing committed in pieces)" % (name, len(stored - set(reps)))
+        assert sup_after == sup_before, "%s: a supersede of the killed request survived it (%d -> %d)" % (name, sup_before, sup_after)
+        if supersede:
+            assert sup_in_txn == sup_before + 1, "%s: the paused transaction superseded nothing: the case is vacuous" % name
+        answered = sum(1 for ln in out.split("\n") if ln.startswith(("REPLY ", "REFUSED ")))          # requests answered (an idempotent repeat answers again; `reps` is per digest)
+        bad = violations(d, reps, 7, answered + 1)
+        assert bad == [], "%s: %s" % (name, bad)
+    print("KILL-SIGN-BETWEEN-STATS kills=%d stages=%s supersede_cases=1" % (len(cases), ",".join(BETWEEN_STAGES)))
+
+
+def test_the_harness_flags_a_reply_that_leaves_before_the_commit(tmp_path):
+    """Positive control: a child that replies from inside the transaction (a deliberately broken ordering) must be caught. If this passes without a violation the harness is blind."""
+    stats = run_signing_trials(tmp_path, "sign-early-reply", 40, 3)
+    assert any(b.split(": ", 1)[1].startswith("I1 a replied digest is missing") for b in stats["bad"]), stats

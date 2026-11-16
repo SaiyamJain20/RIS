@@ -1,0 +1,27 @@
+# Evidence: the witness operations wired into the successor command line (A2-0074 proposals P1 and P2)
+
+Code: `hmbc_protocol/adapter_v2_main.py` (`build_runtime`, the supervisor lifecycle in `main`, the optional TEST-ONLY `--allow-governance`), tests `tests/test_adapter_v2_main_wiring.py`, runner `tools/run_adapter_v2_main_mutants.py` (extended). `build_context` is byte-for-byte unchanged. PAPER-DERIVED RECONSTRUCTION; symbolic; TEST-ONLY keys; CPython 3.13.12, pytest 9.0.2 (frozen root `uv.lock`); one host; correlated review.
+All results below are runs I made myself.
+
+| Check | Result | File |
+|---|---|---|
+| RED, wiring tests on the unwired CLI | **18 failed, 1 passed**; every failure is a missing `build_runtime` or `allow_governance` (the 1 pass is the control that `build_context` is unchanged) | `RED-wiring-tests-18failed-1passed.txt` |
+| GREEN, wiring tests with the three existing CLI test files (`test_adapter_v2_main.py`, `test_startup_refusals.py`, `test_witness_main.py`) | **276 passed**, 0 skipped, exit 0 | `GREEN-wiring-plus-CLI-tests-276passed.txt` |
+| `run_adapter_v2_main_mutants.py` (43 mutants, 1 argued equivalent) | control passes; **43 / 43 detected**, exit 0, 10 min; the 12 new wiring mutants W1..W12 are all detected | `runner-adapter-cli-43of43.txt` |
+
+**A real bug the first GREEN run found (kept):** `SupervisorError` is a `RuntimeError`, not a `ValueError`, so a manifest with the wrong number of witness labels escaped `build_context`'s `except ValueError` and would have reached `main`'s last-resort guard under the WRONG closed code (`ADAPTER_UNAVAILABLE` instead of `MALFORMED`). Fixed in the wiring (the factory call maps it to `Refusal("MALFORMED")`); the test that found it stays.
+**A mistake of mine in the runner (kept):** my first insertion of the new mutants landed in the equivalents list `E` (mutants that must SURVIVE) instead of `M`; the "31 mutants" count instead of 43 exposed it before any run. Two older anchors (C12, C30) and the equivalent C25 went stale or ambiguous because `main()` and the new `wired_start` repeat their text; all re-pointed, every anchor is validated to match exactly once before anything runs.
+**Not established here:** real processes behind ONE adapter command (the live tests are separate), a completed F case, the alternate TEST-ONLY adapter entry (proposal P3).
+
+## Live results and three findings (added after the live tests of fork G, re-run by me)
+| Check | Result | File |
+|---|---|---|
+| Live wiring tests, `tests/test_adapter_v2_main_wiring_live.py` (real Anvil pair, agent 1's F ledger 85c59f5, the real CLI as a long-running subprocess, four real supervised `witness_main` children; every response validated against the published schema), after the fixes below | **15 passed, 0 skipped**, exit 0, 164 s; no `witness_main` process left behind | `PARENT-live-wiring-15passed-0skipped.txt` |
+| The same file against a clone of the PRE-wiring commit 4d3462e (fork-recorded) | 10 failed / 3 passed (eight "pid files did not appear", an unknown flag, a usage error) | `FORK-G-live-RED-on-prewiring-clone-10failed-3passed.txt` |
+| Full protocol suite on a clone of exactly `9332ff5` (wiring + transport + hooks + E pins) | **2841 passed, 201 skipped, 0 failed**, exit 0, 837 s (the 201 skips are only the documented ScenarioResult/FileHash cases) | `PARENT-full-suite-on-clone-of-9332ff5-2841passed.txt` |
+
+**F1, a real bug in my wiring that no offline test could see (fixed):** run as `python -m hmbc_protocol.adapter_v2_main` the module is `__main__`; the lazy `from . import witness_main` imports a SECOND copy of it as `hmbc_protocol.adapter_v2_main`, so the `Refusal` raised by the allow-list check was a different class from the one `main()` catches, and a corrupt `--allow-governance` file ended as `ADAPTER_UNAVAILABLE "internal startup failure"` instead of `MALFORMED`. Fixed by defining `Refusal` once in `startup_config` (never run as `__main__`) and aliasing it. RED (a real subprocess test) reproduced the wrong code; GREEN 278 passed (`RED-F1-...`, `GREEN-F1-278passed.txt`).
+**F2, a characterization the RFC must carry:** the pool returns as soon as three matching signatures arrive, and a witness not heard by then is reported `silent`. Five consecutive collections with four healthy witnesses and no fault each had a `silent` outcome (the index varied). So `silent` in an early-success result means "not heard before quorum", NOT "stopped"; the converse (a stopped witness is `silent`) holds. A runner's fault oracle must decide whether a witness is dead from its pid and `/proc`, never from `silent` in a success result. Pinned by `test_silent_in_a_pool_result_means_not_heard_before_quorum_and_occurs_in_healthy_runs_too`.
+**F3, a documentation error (fixed):** for the carried E successor deployment the answer is `ADAPTER_UNAVAILABLE "<op> is not wired in this process"` (no witness handler is installed); the "not wired for this deployment profile" text belongs to the F handlers meeting a non-F manifest. The code was right; the module docstring was wrong and is corrected, and the fork's strict xfail became a plain assertion.
+
+Observed timings (one host, single samples; real-time bounds in the tests are generous): pool checkpoint 0.04 s; decision + receipt flow 0.5 s; two witnesses SIGSTOPped or killed -> classified `QUORUM_UNAVAILABLE` at 10.01 s (the cap); adapter SIGKILL -> all four children gone in 0.1 s.

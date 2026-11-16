@@ -1,0 +1,10 @@
+{"test": "pool-checkpoint", "seconds": 0.04, "statuses": ["signed", "signed", "silent", "signed"]}
+{"test": "decision-flow", "seconds_from_request_to_consume": 0.5}
+{"test": "healthy-statuses", "runs": [["silent", "signed", "signed", "signed"], ["signed", "silent", "signed", "signed"], ["signed", "signed", "silent", "signed"], ["signed", "signed", "silent", "signed"], ["signed", "signed", "silent", "signed"]], "silent_without_any_fault": true}
+{"test": "fl2-one-stopped", "seconds": 0.04, "statuses": ["signed", "silent", "signed", "signed"]}
+{"test": "fl3-two-stopped", "seconds": 10.01, "cap_s": 10, "statuses": ["silent", "signed", "signed", "silent"], "message": "2 of 3 required distinct valid signatures before the deadline"}
+{"test": "fl3-two-killed", "seconds": 10.02, "statuses": ["silent", "signed", "silent", "signed"]}
+{"test": "adapter-sigkill", "seconds_until_all_children_gone": 0.1}
+{"test": "restart-pool", "statuses": ["signed", "refused", "signed", "signed"], "pinned_witness_signed": false}
+{"test": "child-cannot-start", "stderr_line": "{\"error\":{\"code\":\"ADAPTER_UNAVAILABLE\",\"message\":\"the database cannot be read: file is not a database\",\"reason\":\"STORE_CORRUPT\"}}"}
+{"test": "e-profile-witness-op", "ok": false, "code": "ADAPTER_UNAVAILABLE", "message": "collect_checkpoint is not wired in this process"}

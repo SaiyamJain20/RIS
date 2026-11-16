@@ -15,6 +15,17 @@ library FixtureConfig {
     uint64 internal constant GRANT_TTL = 30; // paper-profile grant bound (project fill)
     uint64 internal constant WITNESS_SET_VERSION = 1;
 
+    // REPAIRED_F (A-F1, interfaces/v2): four witnesses `witness-1..4`, q = 3 (q = 2 in mutant-f-q2),
+    // witness-set version 2, and the governance bounds of `fixture.governance`.
+    uint64 internal constant F_WITNESS_SET_VERSION = 2;
+    uint256 internal constant F_WITNESS_COUNT = 4;
+    uint256 internal constant F_THRESHOLD = 3;
+    uint64 internal constant GOVERNANCE_MAX_TTL = 120;
+
+    function witnessLabel(uint256 index) internal pure returns (string memory) {
+        return string.concat("witness-", string(abi.encodePacked(bytes1(uint8(49 + index)))));
+    }
+
     bytes32 internal constant ROLE_DOCTOR = keccak256("HMBC.role.Doctor");
     bytes32 internal constant ROLE_ON_DUTY = keccak256("HMBC.role.OnDuty");
     bytes32 internal constant ROLE_RESEARCHER = keccak256("HMBC.role.Researcher");

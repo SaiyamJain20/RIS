@@ -1,0 +1,47 @@
+control: unmutated module passes all tests
+DETECTED C1 the schema hash is not checked | failed tests: 1
+DETECTED C2 the deployment is parsed with plain json.loads | failed tests: 1
+DETECTED C3 a non-UTF-8 deployment escapes as a traceback | failed tests: 1
+DETECTED C4 a parse error of the deployment escapes | failed tests: 3
+DETECTED C5 an unreadable file escapes as a traceback | failed tests: 2
+DETECTED C6 a schema that is not JSON escapes | failed tests: 2
+DETECTED C7 a state path that is not a directory is accepted | failed tests: 1
+DETECTED C8 a state directory open to group or other is accepted | failed tests: 1
+DETECTED C9 a URL or ABI problem escapes as a traceback | failed tests: 1
+DETECTED C10 a stage refusal maps to MALFORMED | failed tests: 2
+DETECTED C11 the stage reason is dropped | failed tests: 2
+DETECTED C12 a LAST-RESORT startup failure exits 1 (its anchor moved when the guard was added; C31 covers the refusal branch) | failed tests: 1
+DETECTED C13 the refusal goes to stdout | failed tests: 19
+DETECTED C14 a startup ValueError escapes | failed tests: 1
+DETECTED C15 the schema file is read before it is hashed, from the wrong path | failed tests: 14
+DETECTED C16 the explicit revision is not passed on | failed tests: 1
+DETECTED C17 the revision may be defaulted | failed tests: 2
+DETECTED C18 the state directory may be defaulted | failed tests: 2
+DETECTED C19 the abi directory may be defaulted | failed tests: 2
+DETECTED C20 the schema hash may be defaulted | failed tests: 2
+DETECTED C21 the schema shape check is dropped | failed tests: 12
+DETECTED C22 the manifest numbers are read with plain int() | failed tests: 73
+DETECTED C23 a rejected manifest number escapes as a ConfigError | failed tests: 73
+DETECTED C24 a rejected manifest number is not MALFORMED | failed tests: 73
+DETECTED C26 the schema is parsed with plain json.loads (nesting escapes) | failed tests: 2
+DETECTED C27 the schema shape check is made against the wrong revision | failed tests: 1
+DETECTED C28 the last-resort guard is gone | failed tests: 1
+DETECTED C29 the last-resort refusal has the wrong code | failed tests: 1
+DETECTED C30 the last-resort refusal goes to stdout | failed tests: 1
+DETECTED C31 a refused startup exits 1 (the refusal branch) | failed tests: 19
+DETECTED C32 the last-resort leaks the exception text | failed tests: 1
+DETECTED W1 the profile gate is inverted: the E profile gets the witness wiring | failed tests: 6
+DETECTED W2 the allow-list is not validated before the supervisor | failed tests: 8
+DETECTED W3 --allow-governance is silently ignored on a non-F deployment | failed tests: 1
+DETECTED W4 the witness addresses are taken in the wrong order | failed tests: 1
+DETECTED W5 the transport factory is not the supervisor's | failed tests: 1
+DETECTED W6 a SupervisorError escapes the wiring unmapped | failed tests: 1
+DETECTED W7 the allow-list path is not handed to the supervisor | failed tests: 1
+DETECTED W8 the supervisor is never closed | failed tests: 3
+DETECTED W9 a supervisor that failed to start still lets the adapter serve | failed tests: 1
+DETECTED W10 the supervisor start failure exits 1 | failed tests: 1
+DETECTED W11 the supervisor is started before the context exists is not possible; start is skipped instead | failed tests: 3
+DETECTED W12 the supervisor is built for every profile | failed tests: 2
+SURVIVED-EQUIVALENT C25 the chain id is re-read with int() after the number check | manifest_numbers has already refused every non-canonical chainId, and int() of a canonical decimal string is the same value, so no input distinguishes the two
+detected 43 of 43; equivalent survivors 1 (claims checked by running them)
+EXIT=0 START=2026-11-07T21:03:58Z END=2026-11-07T21:14:08Z HEAD=4d3462e

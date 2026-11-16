@@ -1,0 +1,53 @@
+F..                                                                      [100%]
+=================================== FAILURES ===================================
+_ test_init_store_completes_a_directory_a_kill_left_with_a_hot_rollback_journal _
+
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-2263/test_init_store_completes_a_di0')
+
+    def test_init_store_completes_a_directory_a_kill_left_with_a_hot_rollback_journal(tmp_path):
+        d = str(tmp_path / "witness-0")
+        os.makedirs(d, mode=0o700)
+        hot_journal(os.path.join(d, "signing.sqlite"), "empty")
+>       st = ws.init_store(d, BIND, B, OWNER)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+protocol/tests/test_witness_state_hot_journal.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+protocol/hmbc_protocol/witness_state.py:179: in init_store
+    state, meta = _classify(directory)
+                  ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+directory = '/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-2263/test_init_store_completes_a_di0/witness-0'
+
+    def _classify(directory: str):
+        """Read-only inspection of an existing directory. Returns ("fresh", None), ("interrupted", meta) or ("open", meta); raises the stage-9 refusals (SUCCESSOR-WIRE section 1) and writes nothing."""
+        db, marker, _tmp = _paths(directory)
+        has_db, has_marker = os.path.exists(db), os.path.exists(marker)
+        if not has_db and not has_marker:
+            return "fresh", None
+        if has_marker and not has_db:
+            raise StoreError("STORE_MISSING", "the INITIALIZED marker exists but the database does not")
+        try:
+            con = _ro(db)
+            try:
+                if con.execute("PRAGMA integrity_check").fetchone()[0] != "ok":
+                    raise StoreError("STORE_CORRUPT", "integrity_check failed")
+                tables = {r[0] for r in con.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'")}
+                meta = dict(con.execute("SELECT key, value FROM meta")) if "meta" in tables else {}
+                if not all(k in meta for k in ("binding_v2", "binding_v2_doc", "owner", "schema")):
+                    if has_marker:
+                        raise StoreError("STORE_CORRUPT", "the INITIALIZED marker exists but the binding rows are missing")
+                    if any(con.execute(f'SELECT COUNT(*) FROM "{t}"').fetchone()[0] for t in tables):
+                        raise StoreError("LEGACY_STATE", "a database with rows and no binding rows (an unbound legacy store)")
+                    return "fresh", None                                   # an empty database without binding rows: nothing was ever recorded
+                rows = sum(con.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0] for t in _RECORD_TABLES if t in tables)
+            finally:
+                con.close()
+        except sqlite3.DatabaseError as e:
+>           raise StoreError("STORE_CORRUPT", f"the database cannot be read: {e}") from None
+E           hmbc_protocol.witness_state.StoreError: STORE_CORRUPT: the database cannot be read: attempt to write a readonly database
+
+protocol/hmbc_protocol/witness_state.py:118: StoreError
+1 failed, 2 passed in 0.12s
+EXIT=1 START=2026-11-08T07:22:49Z END=2026-11-08T07:22:49Z HEAD=fec8ea0

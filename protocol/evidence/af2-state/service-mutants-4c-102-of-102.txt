@@ -1,0 +1,104 @@
+control: unmutated module passes all tests
+DETECTED V1 the psc is not compared with the deployment's | failed tests: 2
+DETECTED V2 the source chain id is not compared | failed tests: 2
+DETECTED V3 the next sequence is current plus two | failed tests: 2
+DETECTED V4 a gap in the sequence is accepted | failed tests: 3
+DETECTED V5 a block after the observed head is accepted when the read succeeds | failed tests: 1
+DETECTED V6 the block hash is not compared | failed tests: 2
+DETECTED V7 a block equal to the DBC current block is refused | failed tests: 1
+DETECTED V8 the DBC current block is not a lower bound | failed tests: 1
+DETECTED V9 keyEpoch is not checked | failed tests: 2
+DETECTED V10 the configured witnessSetVersion is not compared | failed tests: 1
+DETECTED V11 the witnessSetVersion read at the block is not compared | failed tests: 1
+DETECTED V12 the epochs at the proposal's block are not compared | failed tests: 1
+DETECTED V13 the epochs at the witness's own head are not compared (no stale-view refusal) | failed tests: 1
+DETECTED V14 the epochs are read at the head instead of at the proposal's block | failed tests: 1
+DETECTED V15 the freshness read repeats the block read | failed tests: 1
+DETECTED V16 an expiry equal to the observation is accepted | failed tests: 2
+DETECTED V17 an expiry exactly at the window edge is refused | failed tests: 2
+DETECTED V18 the window has no upper bound | failed tests: 3
+DETECTED V19 the window observes the PBC instead of the DBC | failed tests: 12
+DETECTED V20 the store is told no expiry | failed tests: 11
+DETECTED V21 the store observes the PBC (checkpoint) | failed tests: 11
+DETECTED V22 the store gets another domain | failed tests: 1
+DETECTED V23 an unreadable ledger escapes as a raw exception | failed tests: 3
+DETECTED V24 the recorded value is dropped from a pinned refusal | failed tests: 1
+DETECTED V25 the proposal's shape is not validated | failed tests: 15
+DETECTED V26 the proposer's sequence is current plus two | failed tests: 2
+DETECTED V27 the proposer's expiry is twice the ttl | failed tests: 2
+DETECTED V28 the overtaken evidence claims a far sequence | failed tests: 2
+DETECTED V29 the maximum window default is 61 s | failed tests: 3
+DETECTED V30 the proposer's default ttl is 31 s | failed tests: 2
+DETECTED V31 the effect carries the sequence key instead of the source block hash | failed tests: 11
+DETECTED V32 the conflict key is the block number instead of the sequence | failed tests: 3
+DETECTED V33 the proposer reads the epochs at block 0 | failed tests: 1
+DETECTED V34 a non-positive max ttl is accepted | failed tests: 2
+DETECTED D1 an outcome already recorded (status 2) is not refused | failed tests: 1
+DETECTED D2 a request the PSC has not forwarded is not refused | failed tests: 1
+DETECTED D3 two forwarding logs are accepted | failed tests: 1
+DETECTED D4 no forwarding log escapes as a raw exception | failed tests: 1
+DETECTED D5 the forwarding transaction need not go to the PSC | failed tests: 1
+DETECTED D6 the forwarding call need not be requestAccess | failed tests: 1
+DETECTED D7 the recovered request need not hash to the digest | failed tests: 3
+DETECTED D8 the PSC record is not compared with the request | failed tests: 5
+DETECTED D9 a checkpoint expiring exactly now is fresh | failed tests: 1
+DETECTED D10 a missing checkpoint escapes as a raw exception | failed tests: 1
+DETECTED D11 the checkpoint's block hash is not compared | failed tests: 1
+DETECTED D12 the checkpoint's authEpoch is not compared with the block's | failed tests: 1
+DETECTED D13 the checkpoint's witnessSetVersion is not compared | failed tests: 1
+DETECTED D14 a request forwarded in the checkpoint's own block is refused | failed tests: 1
+DETECTED D15 a request forwarded after the checkpoint's block is accepted | failed tests: 2
+DETECTED D16 the request's authEpoch is not compared with the checkpoint's | failed tests: 1
+DETECTED D17 the request's policyVersion is not compared | failed tests: 1
+DETECTED D18 the request's keyEpoch is not compared | failed tests: 1
+DETECTED D19 the destination chain is not compared | failed tests: 1
+DETECTED D20 the KSSC is not compared | failed tests: 1
+DETECTED D21 a consumed nonce is not refused | failed tests: 1
+DETECTED D22 only the DBC clock decides request expiry | failed tests: 1
+DETECTED D23 a request expiring exactly now is live | failed tests: 1
+DETECTED D24 a credential valid until exactly now is not lapsed | failed tests: 1
+DETECTED D25 the policy is evaluated even when the credentials failed | failed tests: 2
+DETECTED D26 the decision expiry is the later of request and checkpoint | failed tests: 4
+DETECTED D27 the decision expiry ignores the request's | failed tests: 4
+DETECTED D28 lapsed records are still attested | failed tests: 1
+DETECTED D29 the credentials are evaluated at the witness's own now | failed tests: 1
+DETECTED D30 the expiry is not compared with the proposal | failed tests: 4
+DETECTED D31 the stateSequence is not compared with the proposal | failed tests: 2
+DETECTED D32 the credentialDigest is not compared with the proposal | failed tests: 2
+DETECTED D33 the decision is recorded under the checkpoint domain | failed tests: 1
+DETECTED D34 the decision's key is the state sequence | failed tests: 7
+DETECTED D35 the overtaken evidence is always zero | failed tests: 1
+DETECTED D36 the decision effect lacks a field | failed tests: 7
+DETECTED D37 the request digest's shape is not checked | failed tests: 1
+DETECTED D38 the decision proposal's shape is not checked | failed tests: 4
+DETECTED D39 the proposer-side derivation does not map an unreadable view | failed tests: 1
+DETECTED D40 the PBC clock is not read | failed tests: 2
+DETECTED D41 the decision store observes the PBC | failed tests: 7
+DETECTED R1 a grant that is not allowed gives a receipt | failed tests: 1
+DETECTED R2 the grant id is not recomputed from the grant | failed tests: 2
+DETECTED R3 a GrantIssued log after the witness's head counts | failed tests: 1
+DETECTED R4 no GrantIssued log escapes as a raw exception | failed tests: 2
+DETECTED R5 two GrantIssued logs are accepted | failed tests: 1
+DETECTED R6 the PSC record's status is not checked | failed tests: 2
+DETECTED R7 the PSC record's gid and dataId are not compared with the grant's | failed tests: 2
+DETECTED R8 the receipt names the DBC head, not the GrantIssued block (E behaviour) | failed tests: 5
+DETECTED R9 the receipt's block hash is the head's | failed tests: 3
+DETECTED R10 the receipt's witnessSetVersion is fixed to 1 | failed tests: 2
+DETECTED R11 the receipt's DBC chain id is wrong | failed tests: 2
+DETECTED R12 the receipt's grantExpiresAt is not the grant's | failed tests: 28
+DETECTED R13 the receipt's keyEpoch is fixed to 0 | failed tests: 1
+DETECTED R14 the receipt's kssc is wrong | failed tests: 1
+DETECTED R15 the last effect field is not compared with the proposal | failed tests: 28
+DETECTED R16 the receipt is recorded under the grant id | failed tests: 1
+DETECTED R17 the store is given an expiry for a receipt | failed tests: 4
+DETECTED R18 the store observes the DBC for a receipt | failed tests: 4
+DETECTED R19 the receipt is recorded under the decision domain | failed tests: 1
+DETECTED R20 the grant id's shape is not checked | failed tests: 1
+DETECTED R21 the proposer-side receipt derivation does not map an unreadable view | failed tests: 1
+DETECTED R22 the receipt proposal's field set is not checked | failed tests: 2
+DETECTED R23 a zero grantExpiresAt is accepted | failed tests: 1
+DETECTED R24 the receipt digest uses the decision domain | failed tests: 1
+DETECTED R25 the proposal's shape is validated with the E validator | failed tests: 22
+DETECTED D42 a decision value out of range escapes as a raw exception | failed tests: 1
+DETECTED R26 a receipt value out of range escapes as a raw exception | failed tests: 1
+detected 102 of 102

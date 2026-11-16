@@ -1,0 +1,22 @@
+control: unmutated modules pass all tests
+DETECTED S1 a nested file escapes as RecursionError | failed tests: 5
+DETECTED S2 a JSON failure is returned as None instead of refused | failed tests: 2
+DETECTED S3 a manifest number is read with plain int() | failed tests: 106
+DETECTED S4 a rejected number escapes as a WireError | failed tests: 129
+NOT-DETECTED(pass) S5 the chainId width is narrowed to 64 bits
+NOT-DETECTED(pass) S6 the deployBlock width is widened to 256 bits
+DETECTED S7 only the PBC numbers are checked | failed tests: 5
+DETECTED S8 the deployBlock is not checked | failed tests: 64
+DETECTED S9 the chainId is read with plain int() | failed tests: 33
+NOT-DETECTED(pass) S10 a manifest whose chains are not objects escapes as TypeError
+DETECTED S11 a ConfigError is no longer a ValueError | failed tests: 2
+DETECTED A1 a non-object schema is not recognised | failed tests: 8
+DETECTED A2 a schema whose $defs is not an object is not recognised | failed tests: 3
+NOT-DETECTED(pass) A3 the response types are never required
+DETECTED A4 the missing-definition test is inverted | failed tests: 68
+DETECTED A5 a schema with missing definitions is accepted | failed tests: 1
+DETECTED A6 Context ignores the schema problem | failed tests: 1
+NOT-DETECTED(pass) A7 Context always requires the response types
+NOT-DETECTED(pass) A8 the carrier branches of v2 are required for every revision
+detected 13 of 19; equivalent survivors 0; test-gap survivors 6
+EXIT=1 START=2026-11-07T15:43:03Z END=2026-11-07T15:52:17Z HEAD=67111f5

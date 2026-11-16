@@ -1,0 +1,35 @@
+control: unmutated modules pass all tests
+DETECTED W1 a worker store with rows and no binding rows is not refused | failed tests: 4
+DETECTED W2 only the events table counts as rows | failed tests: 2
+DETECTED W3 a marker next to missing binding rows is not corrupt | failed tests: 4
+DETECTED W4 a marker without a database is not refused | failed tests: 1
+DETECTED W5 the integrity check is skipped | failed tests: 1
+DETECTED W6 record rows without a marker are accepted | failed tests: 1
+DETECTED W7 the marker is not compared with the identity rows | failed tests: 2
+DETECTED W8 an interrupted initialisation of another identity is completed | failed tests: 1
+DETECTED W9 an open store is not compared with the binding | failed tests: 2
+DETECTED W10 the owner constant is not worker | failed tests: 3
+DETECTED W11 the anchor is not stored | failed tests: 3
+DETECTED W12 the binding document is stored as non-canonical JSON | failed tests: 1
+DETECTED W13 the directory is not made private | failed tests: 1
+DETECTED W14 the database is not made private | failed tests: 1
+DETECTED W15 the init lock is not taken | failed tests: 1
+DETECTED W16 the state is not re-read under the lock | failed tests: 1
+DETECTED W17 no crash point after the directory | failed tests: 1
+DETECTED W18 no crash point after the database commit | failed tests: 4
+DETECTED W19 the marker is never written | failed tests: 17
+DETECTED W20 the E schema is not created | failed tests: 31
+DETECTED W21 the export accepts rows without an anchor | failed tests: 1
+DETECTED W22 the export does not hash the stored document | failed tests: 1
+DETECTED W23 the export of a store that was never initialised succeeds | failed tests: 2
+DETECTED W24 a refused export exits 1 | failed tests: 9
+DETECTED W25 the export reads the state directory itself, not its worker subdirectory | failed tests: 9
+DETECTED W26 the binding is not validated | failed tests: 1
+DETECTED W27 the anchor is not validated | failed tests: 1
+DETECTED W28 the export is not one canonical line | failed tests: 1
+DETECTED W29 the error line is not canonical | failed tests: 5
+DETECTED L1 the --binding flag is ignored | failed tests: 10
+DETECTED L2 the flag takes a value | failed tests: 11
+DETECTED L3 the default export changes its indent | failed tests: 1
+detected 32 of 32
+EXIT=0 START=2026-11-08T06:37:21Z END=2026-11-08T06:39:15Z HEAD=d375dda

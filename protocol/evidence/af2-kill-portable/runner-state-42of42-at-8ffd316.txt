@@ -1,0 +1,45 @@
+control: unmutated store passes all tests
+DETECTED S1 no durable record: the digest row is never inserted | failed tests: 16
+DETECTED S2 commit AFTER the crash point of the reply (the record is written after the signature could have left): hook and COMMIT swapped | failed tests: 1
+DETECTED S3 wall-clock death: the expiry predicate reads the host clock instead of the observation | failed tests: 7
+DETECTED S4 only the EARLIEST digest has to be dead | failed tests: 1
+DETECTED S5 a different effect for a live key is never pinned | failed tests: 7
+DETECTED S6 supersession leaves the old digests live | failed tests: 4
+DETECTED S7 the tripwire never fires | failed tests: 7
+DETECTED S8 the fault is not persisted before the refusal | failed tests: 7
+DETECTED S9 a clear deletes the signing history | failed tests: 1
+DETECTED S10 a clear needs no note | failed tests: 1
+DETECTED S11 the observation need not be of the target ledger | failed tests: 1
+DETECTED S12 record rows without the marker are tolerated | failed tests: 1
+DETECTED S13 the binding is not compared at open | failed tests: 2
+DETECTED S14 the owner is not compared at open | failed tests: 1
+DETECTED S15 the integrity check is skipped | failed tests: 1
+DETECTED S16 the recorded value is the EARLIEST digest, not the latest-expiry one | failed tests: 1
+DETECTED S17 overtaken-decision-sequence accepts observed equal to the stateSequence | failed tests: 1
+DETECTED S18 a DENY may die by grant | failed tests: 1
+DETECTED S19 the owner is compared before the binding (precedence swapped) | failed tests: 1
+DETECTED S20 a faulted store still opens for signing | failed tests: 3
+DETECTED S21 an idempotent re-sign asks the signer again instead of returning the stored signature | failed tests: 1
+DETECTED S22 the effect fields of V are not enforced | failed tests: 1
+DETECTED S23 a regression of the hash at the same number is not a fault | failed tests: 1
+DETECTED S24 the directory is not made private | failed tests: 1
+DETECTED S25 a marker next to missing binding rows is not corrupt | failed tests: 6
+DETECTED C1 the exporter refusal exits 1 instead of 3 | failed tests: 4
+DETECTED C2 the exporter success prints two newlines | failed tests: 2
+DETECTED C3 the exporter refusal line is not canonical JSON | failed tests: 3
+DETECTED C4 a binding export without an anchor is printed anyway | failed tests: 1
+DETECTED C5 init does not persist the anchor | failed tests: 2
+DETECTED C6 the anchor shape is not checked | failed tests: 8
+DETECTED C7 the witness index range is not enforced | failed tests: 2
+DETECTED C8 the exporter always reads witness-0 | failed tests: 3
+DETECTED L1 the cooperative-writer lock is never released | failed tests: 7
+DETECTED L2 the cooperative-writer lock is never taken | failed tests: 3
+DETECTED L3 the writer takes the lock exclusively instead of shared | failed tests: 1
+DETECTED L4 exclusive() does not release the lock on exit | failed tests: 1
+DETECTED L5 signing does not take the cooperative lock | failed tests: 2
+DETECTED L6 clear_fault does not take the cooperative lock | failed tests: 1
+DETECTED L7 exclusive() takes a shared lock instead of an exclusive one | failed tests: 1
+DETECTED R1 the recovery of a hot rollback journal in an uninitialised directory is never attempted | failed tests: 1
+DETECTED R2 an INITIALISED store (marker present) is also repaired by the inspection | failed tests: 1
+detected 42 of 42
+EXIT=0 START=2026-11-13T08:46:35Z END=2026-11-13T08:49:04Z HEAD=8ffd316

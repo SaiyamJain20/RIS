@@ -1,0 +1,33 @@
+control: unmutated module passes all tests
+DETECTED H1 a request is parsed with plain json.loads | failed tests: 1
+DETECTED H2 a request may carry extra members | failed tests: 1
+DETECTED H3 the schema version is not checked | failed tests: 1
+DETECTED H4 a boolean id is accepted | failed tests: 1
+DETECTED H5 a negative id is accepted | failed tests: 1
+DETECTED H6 any round is accepted | failed tests: 3
+DETECTED H7 any kind is accepted | failed tests: 2
+DETECTED H8 a message that is not an object is accepted | failed tests: 2
+DETECTED H9 a refusal is not mapped | failed tests: 1
+DETECTED H10 the recorded value is dropped | failed tests: 1
+DETECTED H11 the reason is dropped | failed tests: 1
+DETECTED H12 every refusal is MALFORMED | failed tests: 1
+DETECTED H13 an unexpected exception escapes | failed tests: 1
+DETECTED H14 the signed message is not echoed | failed tests: 1
+DETECTED H15 decision requests go to the receipt signer | failed tests: 1
+DETECTED H16 the id of a refused well-formed envelope is lost | failed tests: 10
+DETECTED H17 an oversized line is not skipped | failed tests: 1
+DETECTED H18 invalid UTF-8 kills the server | failed tests: 1
+DETECTED H19 a key derivation that is not TEST-ONLY is accepted | failed tests: 1
+DETECTED H20 the key address is not compared with the witness set | failed tests: 2
+DETECTED H21 an index beyond the witness set is accepted | failed tests: 1
+DETECTED H22 an index may have a leading zero or sign | failed tests: 1
+DETECTED H23 the allow-list action is not checked | failed tests: 1
+DETECTED H24 the allow-list root is not checked | failed tests: 3
+DETECTED H25 the allow-list admins are not checked | failed tests: 2
+DETECTED H26 a malformed allow-list escapes | failed tests: 7
+DETECTED H27 a stage refusal maps to MALFORMED | failed tests: 1
+DETECTED H28 a refused startup exits 1 | failed tests: 19
+DETECTED H29 the refusal goes to stdout | failed tests: 19
+DETECTED H30 a missing deployment fixture escapes | failed tests: 1
+detected 30 of 30
+EXIT=0 START=2026-11-07T13:48:28Z END=2026-11-07T13:54:38Z HEAD=67111f5

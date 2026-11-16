@@ -19,7 +19,11 @@ import {
     ANCHOR_CRL,
     ANCHOR_TEMP_ACL,
     MUT_NO_VERSION_MONOTONE,
-    MUT_ALL
+    GOV_ADD_AUTHORITY,
+    GOV_REMOVE_AUTHORITY,
+    GOV_SET_CA_ADMINS,
+    mutationsAllowed,
+    isRepaired
 } from "./types/ProtocolTypes.sol";
 import {SigLib} from "./lib/SigLib.sol";
 import {Bootstrapped} from "./lib/Bootstrapped.sol";
@@ -78,6 +82,16 @@ contract TMSC is Bootstrapped {
     /// Incremented by every accepted trust-anchor update; witnesses copy it into checkpoints.
     uint64 public authEpoch;
 
+    /// A-F1 (design 2.2 section 3): the quorum governance actuator (REPAIRED_F only), the
+    /// tombstone of removed roots and the enumerable CA-Admin list of each root (all profiles).
+    address public governance;
+    mapping(address => bool) public removedAuthority;
+    mapping(address => address[]) internal _caAdminList;
+
+    event AuthorityAdded(uint64 indexed governanceNonce, address indexed root, address[] admins, uint64 authEpoch);
+    event AuthorityRemoved(uint64 indexed governanceNonce, address indexed root, uint64 authEpoch);
+    event CaAdminsSet(uint64 indexed governanceNonce, address indexed root, address[] admins, uint64 authEpoch);
+
     event TrustAnchorUpdated(
         address indexed authority,
         uint8 indexed kind,
@@ -92,7 +106,7 @@ contract TMSC is Bootstrapped {
 
     /// The PBC chain id is the chain this contract is deployed on.
     constructor(Profile profile_, uint256 mutations_, LSC lsc_, AuthorityConfig[] memory authorities_) {
-        if (mutations_ & ~MUT_ALL != 0 || (mutations_ != 0 && profile_ != Profile.REPAIRED_E)) {
+        if (!mutationsAllowed(profile_, mutations_)) {
             revert Rejected(ErrorCode.MALFORMED);
         }
         profile = profile_;
@@ -104,9 +118,7 @@ contract TMSC is Bootstrapped {
             if (a == address(0) || isAuthority[a]) revert Rejected(ErrorCode.MALFORMED);
             isAuthority[a] = true;
             _authorities.push(a);
-            for (uint256 j = 0; j < authorities_[i].admins.length; j++) {
-                isCaAdmin[a][authorities_[i].admins[j]] = true;
-            }
+            _setAdmins(a, authorities_[i].admins);
         }
     }
 
@@ -115,8 +127,86 @@ contract TMSC is Bootstrapped {
         rsc = rsc_;
     }
 
+    /// REPAIRED_F only: the Governance contract that may change the authority set after sealing.
+    function wireGovernance(address governance_) external onlyBootstrap {
+        if (profile != Profile.REPAIRED_F) revert Rejected(ErrorCode.WRONG_PROFILE);
+        governance = governance_;
+    }
+
     function _checkWiring() internal view override {
         if (psc == address(0) || rsc == address(0)) revert Rejected(ErrorCode.MALFORMED);
+        if (profile == Profile.REPAIRED_F && governance == address(0)) revert Rejected(ErrorCode.MALFORMED);
+    }
+
+    // ------------------------------------------------------------------ governance (REPAIRED_F)
+
+    /// Design 2.2 section 3. Each mutator carries the signed action's nonce and is callable only by
+    /// the wired Governance after sealing. A removed root is tombstoned and can never be re-added.
+    function govAddAuthority(uint64 nonce, address root, address[] calldata admins) external whenSealed {
+        _onlyGovernance();
+        if (isAuthority[root] || removedAuthority[root]) revert Rejected(ErrorCode.MALFORMED);
+        isAuthority[root] = true;
+        _authorities.push(root);
+        _setAdmins(root, admins);
+        _governanceUpdate(GOV_ADD_AUTHORITY, nonce, root, admins);
+        emit AuthorityAdded(nonce, root, admins, authEpoch);
+    }
+
+    function govRemoveAuthority(uint64 nonce, address root) external whenSealed {
+        _onlyGovernance();
+        if (!isAuthority[root]) revert Rejected(ErrorCode.UNKNOWN_AUTHORITY);
+        isAuthority[root] = false;
+        removedAuthority[root] = true;
+        uint256 last = _authorities.length - 1;
+        for (uint256 i = 0; i <= last; i++) {
+            if (_authorities[i] == root) {
+                _authorities[i] = _authorities[last];
+                _authorities.pop();
+                break;
+            }
+        }
+        _clearAdmins(root);
+        _governanceUpdate(GOV_REMOVE_AUTHORITY, nonce, root, new address[](0));
+        emit AuthorityRemoved(nonce, root, authEpoch);
+    }
+
+    function govSetCaAdmins(uint64 nonce, address root, address[] calldata admins) external whenSealed {
+        _onlyGovernance();
+        if (!isAuthority[root]) revert Rejected(ErrorCode.UNKNOWN_AUTHORITY);
+        _clearAdmins(root);
+        _setAdmins(root, admins);
+        _governanceUpdate(GOV_SET_CA_ADMINS, nonce, root, admins);
+        emit CaAdminsSet(nonce, root, admins, authEpoch);
+    }
+
+    function _onlyGovernance() internal view {
+        if (profile != Profile.REPAIRED_F) revert Rejected(ErrorCode.WRONG_PROFILE);
+        if (msg.sender != governance) revert Rejected(ErrorCode.UNAUTHORIZED_CALLER);
+    }
+
+    function _setAdmins(address root, address[] memory admins) internal {
+        for (uint256 i = 0; i < admins.length; i++) {
+            if (isCaAdmin[root][admins[i]]) continue;
+            isCaAdmin[root][admins[i]] = true;
+            _caAdminList[root].push(admins[i]);
+        }
+    }
+
+    function _clearAdmins(address root) internal {
+        address[] storage list = _caAdminList[root];
+        for (uint256 i = 0; i < list.length; i++) {
+            isCaAdmin[root][list[i]] = false;
+        }
+        delete _caAdminList[root];
+    }
+
+    /// Every governance change is a trust-anchor update: it advances authEpoch (the DBC barrier)
+    /// and appends an LSC entry binding the action, the signed nonce, the root and the admins.
+    function _governanceUpdate(uint8 action, uint64 nonce, address root, address[] memory admins) internal {
+        authEpoch += 1;
+        lsc.updateLog(
+            keccak256(abi.encode(root, action, "HMBC.governance")), abi.encode(action, nonce, root, admins, msg.sender)
+        );
     }
 
     // ------------------------------------------------------------------ updateTrustAnchors
@@ -185,7 +275,7 @@ contract TMSC is Bootstrapped {
     }
 
     function _checkFreshness(AnchorState storage st, uint64 version, uint64 validUntil) internal view {
-        if (profile != Profile.REPAIRED_E) return;
+        if (!isRepaired(profile)) return;
         if (st.published && version <= st.version && mutations & MUT_NO_VERSION_MONOTONE == 0) {
             revert Rejected(ErrorCode.STALE_ANCHOR);
         }
@@ -298,7 +388,7 @@ contract TMSC is Bootstrapped {
         if (atTime < c.validFrom || atTime >= c.validUntil) return (ErrorCode.EXPIRED, 0, 0);
         AnchorState storage st = _crl[c.issuer];
         validUntil = c.validUntil;
-        if (profile == Profile.REPAIRED_E) {
+        if (isRepaired(profile)) {
             if (!st.published || atTime >= st.validUntil) return (ErrorCode.STALE_ANCHOR, 0, 0);
             if (st.validUntil < validUntil) validUntil = st.validUntil;
         }
@@ -316,7 +406,7 @@ contract TMSC is Bootstrapped {
     {
         if (!isAuthority[t.authority]) return (ErrorCode.UNKNOWN_AUTHORITY, 0, 0);
         AnchorState storage st = _acl[t.authority];
-        if (profile == Profile.REPAIRED_E && (!st.published || atTime >= st.validUntil)) {
+        if (isRepaired(profile) && (!st.published || atTime >= st.validUntil)) {
             return (ErrorCode.STALE_ANCHOR, 0, 0);
         }
         if (!st.published) return (ErrorCode.REVOKED, 0, 0);
@@ -324,7 +414,7 @@ contract TMSC is Bootstrapped {
         if (!w.present) return (ErrorCode.REVOKED, 0, 0);
         if (atTime < w.validFrom || atTime >= w.validUntil) return (ErrorCode.EXPIRED, 0, 0);
         validUntil = w.validUntil;
-        if (profile == Profile.REPAIRED_E && st.validUntil < validUntil) validUntil = st.validUntil;
+        if (isRepaired(profile) && st.validUntil < validUntil) validUntil = st.validUntil;
         return (ErrorCode.NONE, st.version, validUntil);
     }
 
@@ -332,6 +422,10 @@ contract TMSC is Bootstrapped {
 
     function authorities() external view returns (address[] memory) {
         return _authorities;
+    }
+
+    function caAdmins(address root) external view returns (address[] memory) {
+        return _caAdminList[root];
     }
 
     function revocationListState(address authority) external view returns (AnchorState memory) {

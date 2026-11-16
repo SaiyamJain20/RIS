@@ -1,0 +1,16 @@
+"""proxy-2 S2-0025: every witness_state.py anchor of the OTHER runners still matches exactly once in the final bytes (run_witness_hooks_mutants W*, live-only; mutant_tree M*). usage: python -I anchors.py <repo>"""
+import importlib.util, os, sys
+R = sys.argv[1]; P = os.path.join(R, "protocol"); sys.path.insert(0, P)
+ws = open(os.path.join(P, "hmbc_protocol", "witness_state.py")).read()
+spec = importlib.util.spec_from_file_location("rwh", os.path.join(P, "tools", "run_witness_hooks_mutants.py")); m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+bad = 0; n = 0
+for row in list(m.M) + list(getattr(m, "M_LIVE", [])):
+    if row[1] == m.WS:
+        for old, new in row[4]:
+            c = ws.count(old); n += 1; print("hooks", row[0][:3], c); bad += c != 1
+from testtools import mutant_tree as mt
+for mid, mu in mt.MUTANTS.items():
+    for path, old, new in mu.edits:
+        if path == "hmbc_protocol/witness_state.py":
+            c = ws.count(old); n += 1; print("tree", mid, c); bad += c != 1
+print("ANCHORS", n, "checked,", bad, "not exactly once"); sys.exit(1 if bad else 0)

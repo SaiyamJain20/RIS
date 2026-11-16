@@ -1,0 +1,34 @@
+control: unmutated module passes all tests
+DETECTED R1 a transport failure is not a ledger fault | failed tests: 4
+NOT-DETECTED(pass) R2 any chain name is accepted
+DETECTED R3 any reply is a hex quantity | failed tests: 2
+DETECTED R4 a block at another height than asked is accepted | failed tests: 1
+DETECTED R5 a block hash of any shape is accepted | failed tests: 2
+DETECTED R6 a missing block is a ledger fault | failed tests: 2
+DETECTED R7 a boolean block number is accepted | failed tests: 1
+DETECTED R8 a negative block number is accepted | failed tests: 1
+DETECTED R9 a call is not pinned to the block | failed tests: 1
+DETECTED R10 the selector ignores the argument types | failed tests: 6
+DETECTED R11 a uint argument may exceed its width | failed tests: 1
+DETECTED R12 an address argument may be of any shape | failed tests: 1
+DETECTED R13 a decoding failure escapes as another exception | failed tests: 2
+DETECTED R14 a uint comes back as an int | failed tests: 5
+NOT-DETECTED(pass) R15 an address is not lowercased
+NOT-DETECTED(pass) R16 an address list is not lowercased
+DETECTED R17 an ambiguous overload is accepted | failed tests: 1
+NOT-DETECTED(pass) R18 a state-changing function is callable
+DETECTED R19 a function with several outputs is callable | failed tests: 1
+DETECTED R20 an unsupported output type is callable | failed tests: 1
+NOT-DETECTED(pass) R21 an unsupported input type is callable
+DETECTED R22 the contract key ignores the chain | failed tests: 5
+DETECTED R23 code of an unknown address is sent to the node | failed tests: 1
+DETECTED R24 a code reply of any shape is accepted | failed tests: 2
+NOT-DETECTED(pass) R25 a call reply of any shape is accepted
+DETECTED R26 the ABI file hash is not checked | failed tests: 1
+DETECTED R27 the chain client's id is not checked against the manifest | failed tests: 1
+NOT-DETECTED(pass) R28 an unreadable ABI file is not refused
+DETECTED R29 chain clients for one chain only are accepted | failed tests: 1
+DETECTED R30 a contract address of any shape is accepted | failed tests: 1
+DETECTED R31 a contract without an ABI is accepted | failed tests: 1
+DETECTED R32 the chain id is read through the checked client path | failed tests: 7
+detected 25 of 32

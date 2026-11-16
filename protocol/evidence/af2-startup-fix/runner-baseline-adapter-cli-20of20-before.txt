@@ -1,0 +1,23 @@
+control: unmutated module passes all tests
+DETECTED C1 the schema hash is not checked | failed tests: 1
+DETECTED C2 the deployment is parsed with plain json.loads | failed tests: 1
+DETECTED C3 a non-UTF-8 deployment escapes as a traceback | failed tests: 1
+DETECTED C4 a parse error of the deployment escapes | failed tests: 3
+DETECTED C5 an unreadable file escapes as a traceback | failed tests: 1
+DETECTED C6 a schema that is not JSON escapes | failed tests: 1
+DETECTED C7 a state path that is not a directory is accepted | failed tests: 1
+DETECTED C8 a state directory open to group or other is accepted | failed tests: 1
+DETECTED C9 a URL or ABI problem escapes as a traceback | failed tests: 1
+DETECTED C10 a stage refusal maps to MALFORMED | failed tests: 2
+DETECTED C11 the stage reason is dropped | failed tests: 2
+DETECTED C12 a refused startup exits 1 | failed tests: 16
+DETECTED C13 the refusal goes to stdout | failed tests: 16
+DETECTED C14 a startup ValueError escapes | failed tests: 1
+DETECTED C15 the schema file is read before it is hashed, from the wrong path | failed tests: 6
+DETECTED C16 the explicit revision is not passed on | failed tests: 1
+DETECTED C17 the revision may be defaulted | failed tests: 1
+DETECTED C18 the state directory may be defaulted | failed tests: 1
+DETECTED C19 the abi directory may be defaulted | failed tests: 1
+DETECTED C20 the schema hash may be defaulted | failed tests: 1
+detected 20 of 20
+EXIT=0 START=2026-11-07T13:44:35Z END=2026-11-07T13:48:28Z HEAD=67111f5

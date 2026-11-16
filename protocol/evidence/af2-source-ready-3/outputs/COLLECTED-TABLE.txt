@@ -1,0 +1,29 @@
+| runner | detected | exit | argued equivalents (run, survived) | control | window (UTC) / HEAD |
+|---|---|---|---|---|---|
+| adapter_v2 | 56 / 56 | 0 | A27,A50 | unmutated module passes all tests | 22:57:54..22:59:50 7d97b90 |
+| adapter_v2_main | 43 / 43 | 0 | C25 | unmutated module passes all tests | 22:13:24..22:24:11 8751cf8 |
+| adapter_v2_ops | 14 / 14 | 0 | - | unmutated module passes all tests | 22:59:50..23:00:08 7d97b90 |
+| adapter_v2_start | 15 / 15 | 0 | - | unmutated module passes all tests | 22:40:42..22:40:55 8751cf8 |
+| adapter_v2_witness | 57 / 57 | 0 | - | unmutated module passes all tests | 22:48:13..22:52:34 8751cf8 |
+| binding | 23 / 23 | 0 | - | unmutated module passes all tests | 22:34:29..22:34:41 8751cf8 |
+| binding_open | 52 / 52 | 0 | - | unmutated module passes all tests | 22:34:41..22:35:21 8751cf8 |
+| byzantine | 20 / 20 | 0 | - | unmutated module passes all tests | 22:38:50..22:40:42 8751cf8 |
+| e_regression_pins | 23 / 23 | 0 | - | the unmutated tree passes all pins | 22:29:58..22:30:59 8751cf8 |
+| faulty_adapter_v2 | 41 / 41 | 0 | - | the unmutated entry passes all tests (no skips) | 22:24:11..22:34:28 8751cf8 |
+| pool | 58 / 58 | 0 | - | unmutated module passes all tests | 22:44:58..22:47:55 8751cf8 |
+| pool_core | 47 / 47 | 0 | - | unmutated module passes all tests | 22:35:21..22:36:17 8751cf8 |
+| pool_driver | 15 / 15 | 0 | - | unmutated modules pass all tests | 22:47:55..22:48:13 8751cf8 |
+| rpc_binding_view | 32 / 32 | 0 | - | unmutated module passes all tests | 22:48:49..22:56:21 9181d4f |
+| rpc_witness_view | 45 / 45 | 0 | - | unmutated module passes all tests | 23:00:08..23:00:39 7d97b90 |
+| service | 137 / 137 | 0 | - | unmutated module passes all tests | 22:30:59..22:44:04 8751cf8 |
+| startup_config | 19 / 19 | 0 | - | unmutated modules pass all tests | 22:20:40..22:29:58 8751cf8 |
+| state | 33 / 33 | 0 | - | unmutated store passes all tests | 22:44:04..22:44:58 8751cf8 |
+| witness_hooks | 46 / 46 | 0 | - | every selection passes unmutated (no skips) | 21:56:24..22:10:32 8751cf8 |
+| witness_main | 39 / 39 | 0 | H35 | unmutated module passes all tests | 22:10:32..22:20:40 8751cf8 |
+| witness_process_transport | 92 / 92 | 0 | - | the unmutated module passes all tests | 21:56:24..22:13:24 8751cf8 |
+| worker_binding | 32 / 32 | 0 | - | unmutated modules pass all tests | 22:36:17..22:38:50 8751cf8 |
+
+full suite: 2946 passed, 201 skipped in 1078.14s | EXIT=0 START=2026-11-07T21:56:47Z END=2026-11-07T22:14:46Z HEAD=8751cf8 | failures: 0
+skips: {"ScenarioResult is not agent-2's scope": 200, 'FileHash is not an agent-2 wire type (agent-3 evaluation schema)': 1}
+
+runners found: 22 | problems: none

@@ -5,6 +5,7 @@ import {HMBCFixture} from "./utils/Fixture.sol";
 import {Vm} from "./utils/Vm.sol";
 import {
     Profile,
+    isRepaired,
     LogDetailMode,
     ErrorCode,
     HMBCHash,
@@ -51,10 +52,10 @@ abstract contract AuditBase is HMBCFixture {
         (,,,,, bool allowed) = kssc.getGrant(g);
         assertFalse(allowed, "no DBC grant exists");
         vm.prank(relay);
-        if (profile() == Profile.REPAIRED_E) expectRejected(ErrorCode.WRONG_PROFILE);
+        if (isRepaired(profile())) expectRejected(ErrorCode.WRONG_PROFILE);
         psc.reportOutcome(digest, g, keccak256("synthetic-outcome:released"));
         assertTrue(
-            (lsc.outcomeLogId(digest) != 0) != (profile() == Profile.REPAIRED_E),
+            (lsc.outcomeLogId(digest) != 0) != (isRepaired(profile())),
             "outcome without DBC authorization: recorded in paper profiles only"
         );
     }
@@ -129,7 +130,7 @@ contract AuditPaperMinimalTest is AuditBase {
 }
 
 contract AuditRepairedTest is AuditBase {
-    function profile() internal pure override returns (Profile) {
+    function profile() internal pure virtual override returns (Profile) {
         return Profile.REPAIRED_E;
     }
 
@@ -152,7 +153,7 @@ contract AuditRepairedTest is AuditBase {
 }
 
 contract AuditRepairedHashOnlyTest is AuditBase {
-    function profile() internal pure override returns (Profile) {
+    function profile() internal pure virtual override returns (Profile) {
         return Profile.REPAIRED_E;
     }
 

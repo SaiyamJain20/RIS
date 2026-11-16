@@ -1,0 +1,32 @@
+origin/agent-3 222cdf244eab376199ccbd02fa43bedef0d084d3 | accepted v2 publication 2f2af3ca7fd9b9808a8926589b07a6715323e033 | origin/agent-1 2b3d389278ecd83d67a10a5d7e4610da90fcae95
+ok   MANIFEST.json sha256 is 7810ad105330de73920450d82f4850ebb6de0846396e5bb786818e700e49bb0a
+ok   MANIFEST lists exactly AMENDMENT.json, README.md and e-complete-example.json
+ok   every listed file hashes as the manifest says
+ok   the manifest states PROPOSED_NO_ACK, implementationAuthorized false, executionAuthorized false
+ok   baseSha256 equals the published interfaces/v2/hmbc.schema.json at the proposal commit
+ok   the published schema and FREEZE.json are byte-identical at the proposal commit and at the accepted publication 2f2af3c
+ok   FREEZE.json hashes to 7bb1d243d546dcc6ab76dea3edcb23a74240bd96fe274ae3ca0ff56f6aff83cd (the freeze the amendment leaves unchanged)
+ok   AMENDMENT pins the same base hash and carries exactly two operations, both `add`
+ok   add never overwrites: /$defs/LedgerDeploymentEComplete
+ok   exactly one existing definition changes (LedgerDeployment) and exactly one is added (LedgerDeploymentEComplete)
+ok   LedgerDeployment gains one oneOf branch, the new carrier, at the end
+ok   LedgerDeploymentEComplete differs from LedgerDeploymentE only in the properties schemaVersion and sources
+ok   the new marker is hmbc-ledger-deployment/v2.1 and its sources are the closed twelve-entry LedgerSourceHashesF
+   (example marker 'hmbc-ledger-deployment/v2.1', owner E carrier marker 'hmbc-ledger-deployment/v2', owner F marker 'hmbc-ledger-deployment/v2')
+ok   owner v2 E carrier (ten sources): valid under the base schema and under the amended schema
+ok   owner F base carrier: valid under the base schema and under the amended schema
+ok   the example: invalid under the base schema, valid under the amended schema
+ok   negative controls under the amended schema: old marker with twelve sources, new marker with ten sources and an extra key are all refused
+ok   the example differs from the owner's v2 E carrier ONLY in schemaVersion and sources (every other member, abi, chains, fixture, compiler, profile, mutations, equal)
+ok   D50 profile mapping (binding.profile_from_manifest) gives the same result for the example and for the v2 E carrier
+ok   D50 never names the deployment's source map or its marker: no `sources`/`hmbc-ledger-deployment` token in the D50 document, its reference or my production module
+ok   the closed shape of B refuses a `sources` member: the source map cannot enter the binding preimage (B for the pinned repaired-e vector still hashes to its pinned value)
+ok   the pinned D50 vector hashes are unchanged by this proposal (repaired-e 242f7ca6.., repaired-f 798f7d72..)
+ok   the existing adapter's structural minimum accepts the example (it reads only chains, contracts and fixture, never the marker or the source map)
+   Ledger.from_deployment: v2 E carrier -> LedgerError: TMSC: deployment abiSha256 differs from the bundled ABI (different ledger build) | example -> LedgerError: TMSC: deployment abiSha256 differs from the bundled ABI (different ledger build)
+ok   the E ledger loader gives the SAME verdict for the example and for the v2 E carrier (the marker and the source map play no part)
+ok   whole-manifest equality (adapter.py handle_line: `dep != _PINNED`) distinguishes the two carriers: they are different manifests, so an adapter pinned to one refuses the other as WRONG_DESTINATION
+ok   no module of mine reads the deployment's marker or its `sources` member (literal search over the eleven production modules)
+ok   my F0 pins are untouched by this check: protocol/f0/MANIFEST.sha256 still verifies
+
+all checks hold

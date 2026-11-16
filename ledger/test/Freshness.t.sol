@@ -4,6 +4,7 @@ pragma solidity 0.8.37;
 import {HMBCFixture} from "./utils/Fixture.sol";
 import {
     Profile,
+    isRepaired,
     ErrorCode,
     HMBCHash,
     RevocationList,
@@ -24,7 +25,7 @@ import {TMSC} from "../src/TMSC.sol";
 /// gap is a recorded result, not a red build); repaired-e = REPAIR_SUPPORTED property.
 abstract contract FreshnessBase is HMBCFixture {
     function repaired() internal pure returns (bool) {
-        return profile() == Profile.REPAIRED_E;
+        return isRepaired(profile());
     }
 
     /// Alice is on duty in H1 TempACL v1, removed in v2; then the issuer's CA-Admin re-submits the
@@ -173,7 +174,7 @@ contract FreshnessPaperMinimalTest is FreshnessBase {
 
 /// Repaired-e only: the checkpoint is the revocation barrier and must be monotone and fresh.
 contract FreshnessRepairedTest is FreshnessBase {
-    function profile() internal pure override returns (Profile) {
+    function profile() internal pure virtual override returns (Profile) {
         return Profile.REPAIRED_E;
     }
 

@@ -1,0 +1,51 @@
+control: every selection passes unmutated (no skips)
+DETECTED F1 the hook fires at every store point | failed tests: 3
+DETECTED F2 the hook never fires | failed tests: 2
+DETECTED F3 the crash exits 0 | failed tests: 2
+DETECTED F4 the crash exits 87 | failed tests: 2
+DETECTED F5 the hook always names the first point | failed tests: 1
+DETECTED F6 neither store function carries the hook | failed tests: 2
+DETECTED F7 the store functions are not replaced | failed tests: 2
+DETECTED F8 the TEST-ONLY check is dropped | failed tests: 4
+DETECTED F9 an unknown crash point is accepted | failed tests: 7
+DETECTED F10 a duplicate-key deployment escapes as a traceback | failed tests: 2
+DETECTED F11 a missing deployment argument is not refused | failed tests: 1
+DETECTED F12 the deployment is not passed on to the production process | failed tests: 1
+DETECTED D1 no delay is ever applied | failed tests: 4
+DETECTED D2 every line is delayed, parsable or not | failed tests: 2
+DETECTED D3 the two hold positions are swapped | failed tests: 2
+DETECTED D4 the hold before is a hundred times too short | failed tests: 1
+DETECTED D5 the hold after is a hundred times too short | failed tests: 3
+DETECTED D6 a leading-zero delay is accepted | failed tests: 1
+DETECTED D7 a delay above sixty seconds is accepted | failed tests: 1
+DETECTED D8 --only-kind selects nothing | failed tests: 1
+DETECTED D9 the production reply is altered | failed tests: 2
+DETECTED D10 the TEST-ONLY check is dropped | failed tests: 1
+DETECTED D11 an unknown hold position is accepted | failed tests: 3
+DETECTED D12 an unknown kind is accepted | failed tests: 4
+DETECTED D13 the default hold position is before | failed tests: 1
+DETECTED D14 an unparsable line escapes the serve loop | failed tests: 7
+DETECTED D15 a missing deployment argument is not refused | failed tests: 1
+DETECTED C1 claims are never honoured | failed tests: 5
+DETECTED C2 an unclaimed grant is not released honestly | failed tests: 2
+DETECTED C3 the real ledger is not restored | failed tests: 1
+DETECTED C4 the recipient is always forged | failed tests: 4
+DETECTED C5 the TEST-ONLY check is dropped | failed tests: 1
+DETECTED C6 a claim may carry extra or miss fields | failed tests: 2
+DETECTED C7 duplicate claims are accepted | failed tests: 1
+DETECTED C8 the forged grant is already expired | failed tests: 5
+DETECTED C9 the forged grant is not allowed | failed tests: 5
+DETECTED C10 the claimed data id is not validated | failed tests: 1
+DETECTED C11 the recipient key reference is not validated | failed tests: 2
+DETECTED C12 claims need not be a list | failed tests: 3
+DETECTED C13 the claimed release is bound to the wrong recipient | failed tests: 2
+DETECTED W1 a missing database behind a marker is not refused as missing | failed tests: 1
+DETECTED W2 record rows without a marker are accepted | failed tests: 1
+DETECTED W3 a marker that disagrees with the database is accepted | failed tests: 1
+DETECTED W4 a store bound to another deployment is accepted | failed tests: 1
+DETECTED W5 a store of another witness key is accepted | failed tests: 1
+DETECTED W6 the store is not in write-ahead-log mode | failed tests: 1
+EQUIVALENT F13 init_store does not carry the hook itself | witness_main opens its store through init_store, which delegates to the (wrapped) open_store: the hook still r | survived: True
+EQUIVALENT F14 open_store does not carry the hook itself | every store in this process is created or opened through init_store (which injects the hook and passes it on t | survived: True
+detected 46 of 46
+EXIT=0 START=2026-11-08T06:12:08Z END=2026-11-08T06:25:11Z HEAD=d375dda

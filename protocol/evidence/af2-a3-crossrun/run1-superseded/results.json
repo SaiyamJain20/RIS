@@ -1,0 +1,457 @@
+[
+ {
+  "stage": "S0 deploy the real F ledger on two real Anvil nodes",
+  "ok": true,
+  "seconds": 34.38,
+  "result": {
+   "schemaVersion": "hmbc-ledger-deployment/v2",
+   "profile": "repaired-f",
+   "profileEnum": "3",
+   "chainKeys": [
+    "chainId",
+    "contracts",
+    "deployBlock",
+    "rpcUrl"
+   ],
+   "rpcUrlInManifest": [
+    "http://127.0.0.1:43385",
+    "http://127.0.0.1:57071"
+   ],
+   "urls": [
+    "http://127.0.0.1:43385",
+    "http://127.0.0.1:57071"
+   ],
+   "abiNames": [
+    "ACSC",
+    "Governance",
+    "KSSC",
+    "LSC",
+    "PSC",
+    "RSC",
+    "TMSC"
+   ]
+  }
+ },
+ {
+  "stage": "S1 start four real witness_main processes (kept alive) and wait for INITIALIZED",
+  "ok": true,
+  "seconds": 0.6,
+  "result": {
+   "files": [
+    ".init.lock",
+    ".lock",
+    "INITIALIZED",
+    "signing.sqlite",
+    "signing.sqlite-shm",
+    "signing.sqlite-wal"
+   ],
+   "markerBytes": "{\"binding_v2\":\"2df2958431cf80f7447996f87661ca9ea6065ceb491b6ab6940d8cd30be222bc\",\"owner\":\"witness:0x0bc496f1d8b2e553fa9288de2fd2e4db2583dd42\",\"schema\":\"2\"}"
+  }
+ },
+ {
+  "stage": "S2 agent 3 locked_store + snapshot on four LIVE witness stores that have NEVER signed",
+  "ok": true,
+  "seconds": 0.0,
+  "result": [
+   {
+    "witness": 0,
+    "markerBytes": 155,
+    "markerSha256": "522eadca1d1db572",
+    "logicalSha256": "2f6a48b6b38ba7df",
+    "walPresent": true
+   },
+   {
+    "witness": 1,
+    "markerBytes": 155,
+    "markerSha256": "b5dd68c83cddb6f9",
+    "logicalSha256": "8759a98a1da5e4da",
+    "walPresent": true
+   },
+   {
+    "witness": 2,
+    "markerBytes": 155,
+    "markerSha256": "09e1709d56e9806e",
+    "logicalSha256": "9427b5b1872941e7",
+    "walPresent": true
+   },
+   {
+    "witness": 3,
+    "markerBytes": 155,
+    "markerSha256": "70613946271eb91e",
+    "logicalSha256": "50e39cdb79b2ca9d",
+    "walPresent": true
+   }
+  ]
+ },
+ {
+  "stage": "S3 three live witnesses sign a checkpoint the real KSSC accepts",
+  "ok": true,
+  "seconds": 0.19,
+  "result": {
+   "sequence": "1",
+   "signers": 3
+  }
+ },
+ {
+  "stage": "S4 agent 3 locked_store + snapshot on the same stores while the processes are ALIVE and three have signed (the A2 lock finding, re-measured with agent 3's real code)",
+  "ok": true,
+  "seconds": 0.0,
+  "result": [
+   {
+    "witness": 0,
+    "markerBytes": 155,
+    "markerSha256": "522eadca1d1db572",
+    "logicalSha256": "9d6cc3d3e370614d",
+    "walPresent": true,
+    "logicalChangedSinceS2": true
+   },
+   {
+    "witness": 1,
+    "markerBytes": 155,
+    "markerSha256": "b5dd68c83cddb6f9",
+    "logicalSha256": "a34db68de127c90d",
+    "walPresent": true,
+    "logicalChangedSinceS2": true
+   },
+   {
+    "witness": 2,
+    "markerBytes": 155,
+    "markerSha256": "09e1709d56e9806e",
+    "logicalSha256": "0bf6c049d4fb2c56",
+    "walPresent": true,
+    "logicalChangedSinceS2": true
+   },
+   {
+    "witness": 3,
+    "markerBytes": 155,
+    "markerSha256": "70613946271eb91e",
+    "logicalSha256": "50e39cdb79b2ca9d",
+    "walPresent": true,
+    "logicalChangedSinceS2": false
+   }
+  ]
+ },
+ {
+  "stage": "S5 agent 3 public_observations_v2.collect against the live ledger (latest anchor), then the exporter choreography under locked_store for each witness",
+  "ok": true,
+  "seconds": 1.9,
+  "result": {
+   "observationAnchors": {
+    "pbc": {
+     "number": "18",
+     "hash": "0x1c05d690d271335367a3d2d3decc7b3251d50960e1919086d42157bf0701dcfa"
+    },
+    "dbc": {
+     "number": "11",
+     "hash": "0x3000235889c7860ea3614f6c5998bd75343a9a4c98ec879d540b18b0e435b7ed"
+    }
+   },
+   "exports": [
+    {
+     "witness": 0,
+     "bindingExit": 0,
+     "bindingStderrBytes": 0,
+     "bindingStdoutBytes": 5367,
+     "evidenceExit": 0,
+     "evidenceStderrBytes": 0,
+     "evidenceStdoutBytes": 6610
+    },
+    {
+     "witness": 1,
+     "bindingExit": 0,
+     "bindingStderrBytes": 0,
+     "bindingStdoutBytes": 5367,
+     "evidenceExit": 0,
+     "evidenceStderrBytes": 0,
+     "evidenceStdoutBytes": 6610
+    },
+    {
+     "witness": 2,
+     "bindingExit": 0,
+     "bindingStderrBytes": 0,
+     "bindingStdoutBytes": 5367,
+     "evidenceExit": 0,
+     "evidenceStderrBytes": 0,
+     "evidenceStdoutBytes": 6610
+    },
+    {
+     "witness": 3,
+     "bindingExit": 0,
+     "bindingStderrBytes": 0,
+     "bindingStdoutBytes": 5367,
+     "evidenceExit": 0,
+     "evidenceStderrBytes": 0,
+     "evidenceStdoutBytes": 5543
+    }
+   ]
+  }
+ },
+ {
+  "stage": "S6a verify_export_snapshot, WitnessEvidence, latest-anchor observations, all four witnesses",
+  "ok": true,
+  "seconds": 0.31,
+  "result": [
+   {
+    "witness": 0,
+    "verdict": "ACCEPTED",
+    "history": {
+     "recordsChecked": 1,
+     "signaturesChecked": 1,
+     "declaredSafeLedgerInterval": true,
+     "excludedDeathSeqs": []
+    }
+   },
+   {
+    "witness": 1,
+    "verdict": "ACCEPTED",
+    "history": {
+     "recordsChecked": 1,
+     "signaturesChecked": 1,
+     "declaredSafeLedgerInterval": true,
+     "excludedDeathSeqs": []
+    }
+   },
+   {
+    "witness": 2,
+    "verdict": "ACCEPTED",
+    "history": {
+     "recordsChecked": 1,
+     "signaturesChecked": 1,
+     "declaredSafeLedgerInterval": true,
+     "excludedDeathSeqs": []
+    }
+   },
+   {
+    "witness": 3,
+    "verdict": "ACCEPTED",
+    "history": {
+     "recordsChecked": 0,
+     "signaturesChecked": 0,
+     "declaredSafeLedgerInterval": true,
+     "excludedDeathSeqs": []
+    }
+   }
+  ]
+ },
+ {
+  "stage": "S6b verify_export_snapshot, BindingExport, latest-anchor observations, all four witnesses",
+  "ok": false,
+  "seconds": 0.19,
+  "error": "AssertionError: [{'witness': 0, 'verdict': 'REFUSED', 'error': 'ValueError: Invalid deployment context: export anchor mismatch', 'exportAnchor': {'dbc': {'hash': '0x269bc6b7ffe11f13df887882d72d171e9d1f67a0d93420f505997b61210f4e94', 'number': '9'}, 'pbc': {'hash': '0x1c05d690d271335367a3d2d3decc7b3251d50960e1919086d42157bf0701dcfa', 'number': '18'}}, 'observationAnchor': {'pbc': {'number': '18', 'hash': '0x1c05d690d271335367a3d2d3decc7b3251d50960e1919086d42157bf0701dcfa'}, 'dbc': {'number': '11', 'hash': '0x3000235889c7860ea3614f6c5998bd75343a9a4c98ec879d540b18b0e435b7ed'}}}, {'witness': 1, 'verdict': 'REFUSED",
+  "traceback": "'dbc': {'number': '11', 'hash': '0x3000235889c7860ea3614f6c5998bd75343a9a4c98ec879d540b18b0e435b7ed'}}}, {'witness': 1, 'verdict': 'REFUSED', 'error': 'ValueError: Invalid deployment context: export anchor mismatch', 'exportAnchor': {'dbc': {'hash': '0x269bc6b7ffe11f13df887882d72d171e9d1f67a0d93420f505997b61210f4e94', 'number': '9'}, 'pbc': {'hash': '0x1c05d690d271335367a3d2d3decc7b3251d50960e1919086d42157bf0701dcfa', 'number': '18'}}, 'observationAnchor': {'pbc': {'number': '18', 'hash': '0x1c05d690d271335367a3d2d3decc7b3251d50960e1919086d42157bf0701dcfa'}, 'dbc': {'number': '11', 'hash': '0x3000235889c7860ea3614f6c5998bd75343a9a4c98ec879d540b18b0e435b7ed'}}}, {'witness': 2, 'verdict': 'REFUSED', 'error': 'ValueError: Invalid deployment context: export anchor mismatch', 'exportAnchor': {'dbc': {'hash': '0x269bc6b7ffe11f13df887882d72d171e9d1f67a0d93420f505997b61210f4e94', 'number': '9'}, 'pbc': {'hash': '0x1c05d690d271335367a3d2d3decc7b3251d50960e1919086d42157bf0701dcfa', 'number': '18'}}, 'observationAnchor': {'pbc': {'number': '18', 'hash': '0x1c05d690d271335367a3d2d3decc7b3251d50960e1919086d42157bf0701dcfa'}, 'dbc': {'number': '11', 'hash': '0x3000235889c7860ea3614f6c5998bd75343a9a4c98ec879d540b18b0e435b7ed'}}}, {'witness': 3, 'verdict': 'REFUSED', 'error': 'ValueError: Invalid deployment context: export anchor mismatch', 'exportAnchor': {'dbc': {'hash': '0x269bc6b7ffe11f13df887882d72d171e9d1f67a0d93420f505997b61210f4e94', 'number': '9'}, 'pbc': {'hash': '0x1c05d690d271335367a3d2d3decc7b3251d50960e1919086d42157bf0701dcfa', 'number': '18'}}, 'observationAnchor': {'pbc': {'number': '18', 'hash': '0x1c05d690d271335367a3d2d3decc7b3251d50960e1919086d42157bf0701dcfa'}, 'dbc': {'number': '11', 'hash': '0x3000235889c7860ea3614f6c5998bd75343a9a4c98ec879d540b18b0e435b7ed'}}}]\n"
+ },
+ {
+  "stage": "S6c CONTROL: observations collected at the export's OWN anchor (transport shim answers `latest` with the anchor block), then BindingExport",
+  "ok": true,
+  "seconds": 1.72,
+  "result": {
+   "anchorUsed": {
+    "dbc": {
+     "hash": "0x269bc6b7ffe11f13df887882d72d171e9d1f67a0d93420f505997b61210f4e94",
+     "number": "9"
+    },
+    "pbc": {
+     "hash": "0x1c05d690d271335367a3d2d3decc7b3251d50960e1919086d42157bf0701dcfa",
+     "number": "18"
+    }
+   },
+   "pinnedObservationAnchors": {
+    "pbc": {
+     "number": "18",
+     "hash": "0x1c05d690d271335367a3d2d3decc7b3251d50960e1919086d42157bf0701dcfa"
+    },
+    "dbc": {
+     "number": "9",
+     "hash": "0x269bc6b7ffe11f13df887882d72d171e9d1f67a0d93420f505997b61210f4e94"
+    }
+   },
+   "verdicts": [
+    {
+     "witness": 0,
+     "verdict": "ACCEPTED"
+    },
+    {
+     "witness": 1,
+     "verdict": "ACCEPTED"
+    },
+    {
+     "witness": 2,
+     "verdict": "ACCEPTED"
+    },
+    {
+     "witness": 3,
+     "verdict": "ACCEPTED"
+    }
+   ]
+  }
+ },
+ {
+  "stage": "S7 history_rpc_v2.collect (declared witness history through the real RpcClient, hash-selected calls) for every witness's real evidence",
+  "ok": true,
+  "seconds": 3.9,
+  "result": [
+   {
+    "witness": 0,
+    "verdict": "ACCEPTED",
+    "blocks": 2,
+    "calls": 0,
+    "verification": {
+     "recordsChecked": 1,
+     "signaturesChecked": 1,
+     "declaredSafeLedgerInterval": true,
+     "excludedDeathSeqs": [],
+     "nativeBlocksChecked": 2,
+     "nativeCallsChecked": 0,
+     "nativeDeathsChecked": 0
+    }
+   },
+   {
+    "witness": 1,
+    "verdict": "ACCEPTED",
+    "blocks": 2,
+    "calls": 0,
+    "verification": {
+     "recordsChecked": 1,
+     "signaturesChecked": 1,
+     "declaredSafeLedgerInterval": true,
+     "excludedDeathSeqs": [],
+     "nativeBlocksChecked": 2,
+     "nativeCallsChecked": 0,
+     "nativeDeathsChecked": 0
+    }
+   },
+   {
+    "witness": 2,
+    "verdict": "ACCEPTED",
+    "blocks": 2,
+    "calls": 0,
+    "verification": {
+     "recordsChecked": 1,
+     "signaturesChecked": 1,
+     "declaredSafeLedgerInterval": true,
+     "excludedDeathSeqs": [],
+     "nativeBlocksChecked": 2,
+     "nativeCallsChecked": 0,
+     "nativeDeathsChecked": 0
+    }
+   },
+   {
+    "witness": 3,
+    "verdict": "ACCEPTED",
+    "blocks": 0,
+    "calls": 0,
+    "verification": {
+     "recordsChecked": 0,
+     "signaturesChecked": 0,
+     "declaredSafeLedgerInterval": true,
+     "excludedDeathSeqs": [],
+     "nativeBlocksChecked": 0,
+     "nativeCallsChecked": 0,
+     "nativeDeathsChecked": 0
+    }
+   }
+  ]
+ },
+ {
+  "stage": "S8 checkpoint_rpc_v2.collect (state behind every declared checkpoint) for the signing witnesses",
+  "ok": false,
+  "seconds": 0.0,
+  "error": "IndexError: list index out of range",
+  "traceback": "Traceback (most recent call last):\n  File \"/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/crossrun/crossrun.py\", line 44, in deco\n    result = fn()\n  File \"/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/crossrun/crossrun.py\", line 290, in _\n    head = [o for o in evidence[\"observations\"] if o[\"chainId\"] == pbc_id][-1]\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^\nIndexError: list index out of range\n"
+ },
+ {
+  "stage": "S9 a signing request that arrives while agent 3 holds the exclusive snapshot lock: does the live witness wait (cooperative), refuse, or sign?",
+  "ok": true,
+  "seconds": 4.04,
+  "result": {
+   "holdSeconds": 4.0,
+   "replyType": "signature",
+   "askReturnedAfterSeconds": 4.01,
+   "askReturnedAfterRelease": true
+  }
+ },
+ {
+  "stage": "S10 worker side: a real adapter-startup worker directory, then `worker_log --binding` real output into agent 3's checkers",
+  "ok": true,
+  "seconds": 1.94,
+  "result": {
+   "files": [
+    ".init.lock",
+    "INITIALIZED",
+    "worker.sqlite",
+    "worker.sqlite-shm",
+    "worker.sqlite-wal"
+   ],
+   "exit": 0,
+   "stderrBytes": 0,
+   "locked_store_with_.lock": "REFUSED ValueError: Store lock/file unavailable: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scrat",
+   "locked_store_with_.init.lock": {
+    "verdict": "TAKEN",
+    "markerBytes": 111,
+    "markerSha256": "a77058220c0d916d",
+    "logicalSha256": "55e76f3512060df3",
+    "walPresent": true
+   },
+   "verify_export_snapshot": {
+    "verdict": "ACCEPTED",
+    "markerSha256": "a77058220c0d916d"
+   },
+   "markerBytes": "{\"binding_v2\":\"2df2958431cf80f7447996f87661ca9ea6065ceb491b6ab6940d8cd30be222bc\",\"owner\":\"worker\",\"schema\":\"2\"}"
+  }
+ },
+ {
+  "stage": "S9b stop the four witness processes: clean exit and empty stderr",
+  "ok": true,
+  "seconds": 0.19,
+  "result": [
+   {
+    "witness": 0,
+    "exit": 0,
+    "stderrBytes": 0,
+    "stderrTail": ""
+   },
+   {
+    "witness": 1,
+    "exit": 0,
+    "stderrBytes": 0,
+    "stderrTail": ""
+   },
+   {
+    "witness": 2,
+    "exit": 0,
+    "stderrBytes": 0,
+    "stderrTail": ""
+   },
+   {
+    "witness": 3,
+    "exit": 0,
+    "stderrBytes": 0,
+    "stderrTail": ""
+   }
+  ]
+ },
+ {
+  "stage": "S11 worker lock honouring: with agent 3 holding `.init.lock` exclusively, (a) a Worker being constructed, (b) an already running Worker's record write",
+  "ok": true,
+  "seconds": 3.44,
+  "result": {
+   "preConstructed": "CONSTRUCTED 0.00",
+   "runningWorker": {
+    "writeWhileLocked": "WROTE 0.00",
+    "beforeAfterCheck": "agent 3 detects it: Store logical state changed"
+   },
+   "constructWhileLocked": {
+    "line": "CONSTRUCTED 2.67",
+    "returnedAfterSeconds": 2.98,
+    "lockHeldSeconds": 3.0,
+    "waitedForRelease": true
+   }
+  }
+ },
+ {
+  "stage": "S12 teardown: stop the Anvil nodes",
+  "ok": true,
+  "seconds": 0.0,
+  "result": "closed"
+ }
+]

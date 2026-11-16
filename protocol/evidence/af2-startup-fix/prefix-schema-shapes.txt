@@ -1,0 +1,7 @@
+# PRE-FIX behaviour of adapter_v2_main on five schema shapes (git archive of HEAD 67111f5 in a scratch dir; hash-matching schema file; nothing listening on the manifest's RPC ports)
+# columns: schema content | real process exit code | stderr (first 220 chars, one line)
+{}               exit=2  stdout_bytes=0  stderr: {"error":{"code":"MALFORMED","message":"startup refused: the supplied schema does not define ['LedgerDeploymentE', 'LedgerDeploymentF']: it cannot serve revision v2"}}
+{"$defs": []}    exit=2  stdout_bytes=0  stderr: {"error":{"code":"MALFORMED","message":"startup refused: the supplied schema does not define ['LedgerDeploymentE', 'LedgerDeploymentF']: it cannot serve revision v2"}}
+{"$defs": {}}    exit=2  stdout_bytes=0  stderr: {"error":{"code":"MALFORMED","message":"startup refused: the supplied schema does not define ['LedgerDeploymentE', 'LedgerDeploymentF']: it cannot serve revision v2"}}
+null             exit=2  stdout_bytes=0  stderr: {"error":{"code":"ADAPTER_UNAVAILABLE","message":"LEDGER_UNREACHABLE: the chain could not be read: pbc eth_chainId: eth_chainId: transport failure (URLError)","reason":"LEDGER_UNREACHABLE"}}
+[]               exit=1  stdout_bytes=0  stderr: AttributeError: 'list' object has no attribute 'get'

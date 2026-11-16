@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Fresh chain pair per profile; deploy; masked-runtime check; stop only the anvils this script started.
+set -u
+SP=$1; ROOT=/home/saiyamjain/Desktop/RIS/Project
+export PATH="$HOME/.foundry/bin:$PATH"
+export DEPLOYER_PK=<anvil default dev key 0, redacted>
+cd "$ROOT"
+mkdir -p "$SP/masked/fresh"
+for p in repaired-e paper-strict mutant-no-nonce; do
+  anvil --port 38545 --chain-id 18545 --block-time 1 --silent >/dev/null 2>&1 & A1=$!
+  anvil --port 48545 --chain-id 28545 --block-time 1 --silent >/dev/null 2>&1 & A2=$!
+  for i in $(seq 1 40); do
+    cast chain-id --rpc-url http://127.0.0.1:38545 >/dev/null 2>&1 && cast chain-id --rpc-url http://127.0.0.1:48545 >/dev/null 2>&1 && break
+    sleep 0.25
+  done
+  rid=f0-masked-fresh-$p-tmp
+  LEDGER_DEPLOY_FAST=1 ledger/tools/deploy_local.sh http://127.0.0.1:38545 http://127.0.0.1:48545 $p complete-details $rid > "$SP/masked/fresh/deploy-$p.log" 2>&1
+  echo "$p deploy exit=$?"
+  python3 -I ledger/tools/check_masked_runtime.py ledger/exports/deployments/$rid/deployment.json > "$SP/masked/fresh/check-$p.json"
+  echo "  masked check exit=$?"
+  mv ledger/exports/deployments/$rid "$SP/masked/fresh/"
+  kill $A1 $A2; wait $A1 $A2 2>/dev/null
+done

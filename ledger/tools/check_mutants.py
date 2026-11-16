@@ -3,7 +3,8 @@
 
 Usage (repository root): python3 -I ledger/tools/check_mutants.py [report.json]
 
-Each `test-mutants/` suite deploys REPAIRED_E with exactly one check removed. Detection means the
+Each `test-mutants/` suite deploys REPAIRED_E or REPAIRED_F with exactly one check removed (or, for
+mutant-f-q2, threshold 2 instead of 3). Detection means the
 listed repaired-e property tests FAIL against that mutant. Every other test in the suite should still
 pass (otherwise the mutant breaks something unrelated). Unmutated base suites, compiled in the same
 run, must have no failures. Exit 0 only if all of that holds. Standard library only; needs forge.
@@ -28,6 +29,17 @@ EXPECTED = {
     "MutantNoVersionMonotoneTest": {"test_E02_StaleSignedTempAclReplay", "test_E02_StaleSignedCrlReplay",
                                     "test_E02_EqualVersionDifferentContent"},
     "MutantNoReceiptBindingTest": {"test_E03_ReceiptFieldSubstitution"},
+    # A-F1 (design 2.2 section 6), REPAIRED_F. Pre-registered before the first mutant run.
+    "MutantNoGovActionBindingTest": {"test_AF1G_SetCertificateSubmittedAsRemoveIsBadSignature"},
+    "MutantNoGovNonceTest": {"test_AF1G_ReplayedSetIsReplayWithNoSecondEffect", "test_AF1G_NonceReplayAndGap",
+                             "test_AF1G_CheckOrderStructureNonceExpirySignatures",
+                             "test_AF1G_AddAuthorityByQuorum", "test_AF1G_RemovedRootCannotBeReAdded",
+                             "test_AF1G_ExpiryBounds"},
+    "MutantNoPolicyPinTest": {"test_AF1Q_PolicyPinRejectsAForeignPolicyVersion"},
+    # mutant-f-q2 (F-18): a configuration, threshold 2 in PSC, KSSC and Governance, mask 0, no code bit.
+    "MutantFQ2QuorumTest": {"test_AF1Q_CheckpointRejectsBadQuorumLists", "test_AF1Q_DecisionRejectsBadQuorumLists",
+                            "test_AF1Q_ReceiptRejectsBadQuorumLists"},
+    "MutantFQ2GovernanceTest": {"test_AF1G_QuorumFailures"},
 }
 
 

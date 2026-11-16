@@ -4,6 +4,7 @@ pragma solidity 0.8.37;
 import {HMBCFixture} from "./utils/Fixture.sol";
 import {
     Profile,
+    isRepaired,
     ErrorCode,
     HMBCHash,
     Registration,
@@ -107,7 +108,7 @@ abstract contract TrustAnchorsBase is HMBCFixture {
         serials[0] = ALICE_SERIAL;
         publishCrl(h1, h1Pk, h1Admin, 2, serials);
         assertTrue(tmsc.isRevoked(h1, ALICE_SERIAL), "serial revoked in latest CRL");
-        if (profile() == Profile.REPAIRED_E) {
+        if (isRepaired(profile())) {
             (, ErrorCode stale) = submit(r, s, aliceBundle());
             assertCode(stale, ErrorCode.STALE_STATE, "repaired: request signed under an older authEpoch");
             r = aliceRequest(2);
@@ -174,7 +175,7 @@ contract TrustAnchorsPaperMinimalTest is TrustAnchorsBase {
 }
 
 contract TrustAnchorsRepairedTest is TrustAnchorsBase {
-    function profile() internal pure override returns (Profile) {
+    function profile() internal pure virtual override returns (Profile) {
         return Profile.REPAIRED_E;
     }
 

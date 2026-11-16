@@ -1,0 +1,35 @@
+control: unmutated module passes all tests
+DETECTED C1 the schema hash is not checked | failed tests: 1
+DETECTED C2 the deployment is parsed with plain json.loads | failed tests: 1
+DETECTED C3 a non-UTF-8 deployment escapes as a traceback | failed tests: 1
+DETECTED C4 a parse error of the deployment escapes | failed tests: 3
+DETECTED C5 an unreadable file escapes as a traceback | failed tests: 1
+DETECTED C6 a schema that is not JSON escapes | failed tests: 2
+DETECTED C7 a state path that is not a directory is accepted | failed tests: 1
+DETECTED C8 a state directory open to group or other is accepted | failed tests: 1
+DETECTED C9 a URL or ABI problem escapes as a traceback | failed tests: 1
+DETECTED C10 a stage refusal maps to MALFORMED | failed tests: 2
+DETECTED C11 the stage reason is dropped | failed tests: 2
+DETECTED C12 a LAST-RESORT startup failure exits 1 (its anchor moved when the guard was added; C31 covers the refusal branch) | failed tests: 1
+DETECTED C13 the refusal goes to stdout | failed tests: 19
+DETECTED C14 a startup ValueError escapes | failed tests: 1
+DETECTED C15 the schema file is read before it is hashed, from the wrong path | failed tests: 7
+DETECTED C16 the explicit revision is not passed on | failed tests: 1
+DETECTED C17 the revision may be defaulted | failed tests: 1
+DETECTED C18 the state directory may be defaulted | failed tests: 1
+DETECTED C19 the abi directory may be defaulted | failed tests: 1
+DETECTED C20 the schema hash may be defaulted | failed tests: 1
+DETECTED C21 the schema shape check is dropped | failed tests: 10
+DETECTED C22 the manifest numbers are read with plain int() | failed tests: 66
+DETECTED C23 a rejected manifest number escapes as a ConfigError | failed tests: 66
+DETECTED C24 a rejected manifest number is not MALFORMED | failed tests: 66
+DETECTED C26 the schema is parsed with plain json.loads (nesting escapes) | failed tests: 2
+NOT-DETECTED(pass) C27 the schema shape check is made against the wrong revision
+DETECTED C28 the last-resort guard is gone | failed tests: 1
+DETECTED C29 the last-resort refusal has the wrong code | failed tests: 1
+DETECTED C30 the last-resort refusal goes to stdout | failed tests: 1
+DETECTED C31 a refused startup exits 1 (the refusal branch) | failed tests: 19
+DETECTED C32 the last-resort leaks the exception text | failed tests: 1
+SURVIVED-EQUIVALENT C25 the chain id is re-read with int() after the number check | manifest_numbers has already refused every non-canonical chainId, and int() of a canonical decimal string is the same value, so no input distinguishes the two
+detected 30 of 31; equivalent survivors 1 (claims checked by running them)
+EXIT=1 START=2026-11-07T15:31:22Z END=2026-11-07T15:39:20Z HEAD=67111f5

@@ -1,0 +1,736 @@
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ ledger/src/PSC.sol:117:51
+    │
+117 │                 if (c.witnesses[i] == address(0)) revert Rejected(ErrorCode.MALFORMED);
+    │                                                   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[missing-events-access-control]: `pscRelay` is changed without an event but is used for access control
+    ╭▸ ledger/src/ACSC.sol:106:9
+    │
+106 │         pscRelay = pscRelay_;
+    │         ━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/missing-events-access-control
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ ledger/src/Governance.sol:56:47
+   │
+56 │             if (c.witnesses[i] == address(0)) revert Rejected(ErrorCode.MALFORMED);
+   │                                               ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+   ╭▸ ledger/src/Governance.sol:58:55
+   │
+58 │                 if (c.witnesses[j] == c.witnesses[i]) revert Rejected(ErrorCode.DUPLICATE_SIGNER);
+   │                                                       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ ledger/src/PSC.sol:119:59
+    │
+119 │                     if (c.witnesses[j] == c.witnesses[i]) revert Rejected(ErrorCode.DUPLICATE_SIGNER);
+    │                                                           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[missing-events-access-control]: `psc` is changed without an event but is used for access control
+    ╭▸ ledger/src/TMSC.sol:126:9
+    │
+126 │         psc = psc_;
+    │         ━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/missing-events-access-control
+
+warning[missing-events-access-control]: `governance` is changed without an event but is used for access control
+    ╭▸ ledger/src/TMSC.sol:133:9
+    │
+133 │         governance = governance_;
+    │         ━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/missing-events-access-control
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+   ╭▸ ledger/src/Governance.sol:86:13
+   │
+86 │         if (block.timestamp >= m.expiresAt) revert Rejected(ErrorCode.EXPIRED);
+   │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+   ╭▸ ledger/src/Governance.sol:87:13
+   │
+87 │         if (m.expiresAt > block.timestamp + maxGovernanceTtl) revert Rejected(ErrorCode.MALFORMED);
+   │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ ledger/src/Governance.sol:107:9
+    │
+107 │         emit GovernanceApplied(m.nonce, dispatched, m.root, structHash, msg.sender);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ ledger/src/Governance.sol:122:17
+    │
+122 │                 revert Rejected(ErrorCode.MALFORMED);
+    │                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[empty-block]: empty function body
+   ╭▸ ledger/src/RSC.sol:47:52
+   │
+47 │     function _checkWiring() internal view override {}
+   │                                                    ━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/empty-block
+
+warning[missing-events-access-control]: `isAuthority` is changed without an event but is used for access control
+    ╭▸ ledger/src/TMSC.sol:148:9
+    │
+148 │         isAuthority[root] = true;
+    │         ━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/missing-events-access-control
+
+warning[missing-events-access-control]: `isAuthority` is changed without an event but is used for access control
+    ╭▸ ledger/src/TMSC.sol:158:9
+    │
+158 │         isAuthority[root] = false;
+    │         ━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/missing-events-access-control
+
+warning[missing-events-access-control]: `isCaAdmin` is changed without an event but is used for access control
+    ╭▸ ledger/src/TMSC.sol:198:13
+    │
+198 │             isCaAdmin[root][list[i]] = false;
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/missing-events-access-control
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+   ╭▸ ledger/src/RSC.sol:56:13
+   │
+56 │         if (block.timestamp >= reg.expiresAt) revert Rejected(ErrorCode.EXPIRED);
+   │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+   ╭▸ ledger/src/RSC.sol:75:9
+   │
+75 │         emit Registered(reg.gid, cert.cert.issuer, certDigest, reg.recipientKeyHash, logId);
+   │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[unsafe-typecast]: typecast can truncate values
+   ╭▸ ledger/src/RSC.sol:60:79
+   │
+60 │         (ErrorCode code, bytes32 certDigest) = tmsc.validateCertificate(cert, uint64(block.timestamp));
+   │                                                                               ━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ├ note: consider disabling this lint if you're certain the cast is safe
+   │       
+   │       // casting to 'uint64' is safe because [explain why]
+   │       // forge-lint: disable-next-line(unsafe-typecast)
+   │       
+   │       
+   ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[unsafe-typecast]: typecast can truncate values
+   ╭▸ ledger/src/RSC.sol:69:30
+   │
+69 │         entry.registeredAt = uint64(block.timestamp);
+   │                              ━━━━━━━━━━━━━━━━━━━━━━━
+   │
+   ├ note: consider disabling this lint if you're certain the cast is safe
+   │       
+   │       // casting to 'uint64' is safe because [explain why]
+   │       // forge-lint: disable-next-line(unsafe-typecast)
+   │       
+   │       
+   ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ ledger/src/TMSC.sol:118:52
+    │
+118 │             if (a == address(0) || isAuthority[a]) revert Rejected(ErrorCode.MALFORMED);
+    │                                                    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[missing-zero-check]: address parameter is used in a state write or value transfer without a zero-address check
+    ╭▸ ledger/src/ACSC.sol:104:31
+    │
+104 │     function wire(KSSC kssc_, address pscRelay_) external onlyBootstrap {
+    │                               ━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/missing-zero-check
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ ledger/src/PSC.sol:166:13
+    │
+166 │             emit AccessDenied(requestDigest, r.gid, code, logId);
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ ledger/src/PSC.sol:183:9
+    │
+183 │ ┏         emit AccessForwarded(
+184 │ ┃             requestDigest, r.gid, r.dataId, r.destinationChainId, r.kssc, credentialDigest, records, r.expiresAt, logId
+185 │ ┃         );
+    │ ┗━━━━━━━━━━┛
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[unsafe-typecast]: typecast can truncate values
+    ╭▸ ledger/src/PSC.sol:178:13
+    │
+178 │             uint64(block.timestamp),
+    │             ━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ├ note: consider disabling this lint if you're certain the cast is safe
+    │       
+    │       // casting to 'uint64' is safe because [explain why]
+    │       // forge-lint: disable-next-line(unsafe-typecast)
+    │       
+    │       
+    ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ ledger/src/PSC.sol:198:13
+    │
+198 │         if (block.timestamp >= r.expiresAt) return ErrorCode.EXPIRED;
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ ledger/src/PSC.sol:199:13
+    │
+199 │         if (r.expiresAt > block.timestamp + maxRequestTtl) return ErrorCode.MALFORMED;
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ ledger/src/PSC.sol:234:9
+    │
+234 │         emit OutcomeRecorded(requestDigest, grantId, outcomeDigest, logId);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ ledger/src/PSC.sol:258:9
+    │
+258 │         emit AttestedOutcomeRecorded(requestDigest, g.grantId, outcomeDigest, g.dbcBlockNumber, logId);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[missing-events-access-control]: `acsc` is changed without an event but is used for access control
+    ╭▸ ledger/src/KSSC.sol:129:9
+    │
+129 │         acsc = acsc_;
+    │         ━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/missing-events-access-control
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ ledger/src/KSSC.sol:111:51
+    │
+111 │                 if (c.witnesses[i] == address(0)) revert Rejected(ErrorCode.MALFORMED);
+    │                                                   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ ledger/src/KSSC.sol:113:59
+    │
+113 │                     if (c.witnesses[j] == c.witnesses[i]) revert Rejected(ErrorCode.DUPLICATE_SIGNER);
+    │                                                           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ ledger/src/ACSC.sol:115:41
+    │
+115 │             if (clauses[i].length == 0) revert Rejected(ErrorCode.MALFORMED);
+    │                                         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ ledger/src/ACSC.sol:117:71
+    │
+117 │             if (clauses[i][0].issuerMode == IssuerMode.SAME_AS_FIRST) revert Rejected(ErrorCode.MALFORMED);
+    │                                                                       ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[missing-zero-check]: address parameter is used in a state write or value transfer without a zero-address check
+    ╭▸ ledger/src/TMSC.sol:125:33
+    │
+125 │     function wire(address psc_, address rsc_) external onlyBootstrap {
+    │                                 ━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/missing-zero-check
+
+warning[missing-zero-check]: address parameter is used in a state write or value transfer without a zero-address check
+    ╭▸ ledger/src/TMSC.sol:125:19
+    │
+125 │     function wire(address psc_, address rsc_) external onlyBootstrap {
+    │                   ━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/missing-zero-check
+
+warning[missing-zero-check]: address parameter is used in a state write or value transfer without a zero-address check
+    ╭▸ ledger/src/KSSC.sol:128:19
+    │
+128 │     function wire(address acsc_) external onlyBootstrap {
+    │                   ━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/missing-zero-check
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ ledger/src/KSSC.sol:149:13
+    │
+149 │         if (block.timestamp >= c.expiresAt) revert Rejected(ErrorCode.EXPIRED);
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ ledger/src/KSSC.sol:150:13
+    │
+150 │         if (c.expiresAt > block.timestamp + maxCheckpointTtl) revert Rejected(ErrorCode.MALFORMED);
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ ledger/src/KSSC.sol:168:9
+    │
+168 │ ┏         emit StateAccepted(
+169 │ ┃             c.sequence,
+170 │ ┃             c.authEpoch,
+171 │ ┃             c.policyVersion,
+    ‡ ┃
+176 │ ┃             c.expiresAt
+177 │ ┃         );
+    │ ┗━━━━━━━━━━┛
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[unsafe-typecast]: typecast can truncate values
+    ╭▸ ledger/src/KSSC.sol:201:13
+    │
+201 │             uint64(block.timestamp)
+    │             ━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ├ note: consider disabling this lint if you're certain the cast is safe
+    │       
+    │       // casting to 'uint64' is safe because [explain why]
+    │       // forge-lint: disable-next-line(unsafe-typecast)
+    │       
+    │       
+    ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[missing-zero-check]: address parameter is used in a state write or value transfer without a zero-address check
+    ╭▸ ledger/src/TMSC.sol:131:29
+    │
+131 │     function wireGovernance(address governance_) external onlyBootstrap {
+    │                             ━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/missing-zero-check
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ ledger/src/ACSC.sol:273:9
+    │
+273 │         emit AccessLog(accessLogCount, requestRef, gid, dataId, allowed, code, credentialDigest, grantId, msg.sender);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[unsafe-typecast]: typecast can truncate values
+    ╭▸ ledger/src/ACSC.sol:155:63
+    │
+155 │                     fwd.pbcRequestId, fwd.dataId, fwd.gid, 0, uint64(block.timestamp) + grantTtl, bytes32(0), false, 0
+    │                                                               ━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ├ note: consider disabling this lint if you're certain the cast is safe
+    │       
+    │       // casting to 'uint64' is safe because [explain why]
+    │       // forge-lint: disable-next-line(unsafe-typecast)
+    │       
+    │       
+    ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ ledger/src/TMSC.sol:152:9
+    │
+152 │         emit AuthorityAdded(nonce, root, admins, authEpoch);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ ledger/src/TMSC.sol:170:9
+    │
+170 │         emit AuthorityRemoved(nonce, root, authEpoch);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ ledger/src/TMSC.sol:179:9
+    │
+179 │         emit CaAdminsSet(nonce, root, admins, authEpoch);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[unsafe-typecast]: typecast can truncate values
+    ╭▸ ledger/src/ACSC.sol:211:13
+    │
+211 │             uint64(block.timestamp),
+    │             ━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ├ note: consider disabling this lint if you're certain the cast is safe
+    │       
+    │       // casting to 'uint64' is safe because [explain why]
+    │       // forge-lint: disable-next-line(unsafe-typecast)
+    │       
+    │       
+    ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[unused-return]: return value of an external call is not used
+    ╭▸ ledger/src/TMSC.sol:207:9
+    │
+207 │ ┏         lsc.updateLog(
+208 │ ┃             keccak256(abi.encode(root, action, "HMBC.governance")), abi.encode(action, nonce, root, admins, msg.sender)
+209 │ ┃         );
+    │ ┗━━━━━━━━━┛
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/unused-return
+
+warning[reentrancy-events]: event emitted after an external call; reentrancy can reorder or fabricate logs that off-chain consumers rely on
+    ╭▸ ledger/src/TMSC.sol:307:9
+    │
+307 │         emit TrustAnchorUpdated(authority, kind, version, validUntil, generation, digest, prev, authEpoch, msg.sender);
+    │         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/reentrancy-events
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ ledger/src/TMSC.sol:224:65
+    │
+224 │             if (m.revokedSerials[i] <= m.revokedSerials[i - 1]) revert Rejected(ErrorCode.MALFORMED);
+    │                                                                 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ ledger/src/TMSC.sol:251:76
+    │
+251 │                 if (e.gid < p.gid || (e.gid == p.gid && e.role <= p.role)) revert Rejected(ErrorCode.MALFORMED);
+    │                                                                            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[require-revert-in-loop]: `require` or `revert` inside a loop
+    ╭▸ ledger/src/TMSC.sol:253:69
+    │
+253 │             if (e.gid == address(0) || e.validFrom >= e.validUntil) revert Rejected(ErrorCode.MALFORMED);
+    │                                                                     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/require-revert-in-loop
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ ledger/src/TMSC.sol:282:13
+    │
+282 │         if (block.timestamp >= validUntil) revert Rejected(ErrorCode.STALE_ANCHOR);
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/block-timestamp
+
+warning[unsafe-typecast]: typecast can truncate values
+    ╭▸ ledger/src/TMSC.sol:301:26
+    │
+301 │         st.blockNumber = uint64(block.number);
+    │                          ━━━━━━━━━━━━━━━━━━━━
+    │
+    ├ note: consider disabling this lint if you're certain the cast is safe
+    │       
+    │       // casting to 'uint64' is safe because [explain why]
+    │       // forge-lint: disable-next-line(unsafe-typecast)
+    │       
+    │       
+    ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[unused-return]: return value of an external call is not used
+    ╭▸ ledger/src/TMSC.sol:303:9
+    │
+303 │ ┏         lsc.updateLog(
+304 │ ┃             keccak256(abi.encode(authority, kind)),
+305 │ ┃             abi.encode(authority, kind, version, validUntil, generation, digest, msg.sender)
+306 │ ┃         );
+    │ ┗━━━━━━━━━┛
+    │
+    ╰ help: https://getfoundry.sh/forge/linting/unused-return
+
+warning[unsafe-typecast]: typecast can truncate values
+    ╭▸ ledger/src/TMSC.sol:320:46
+    │
+320 │         return checkCredentials(gid, bundle, uint64(block.timestamp));
+    │                                              ━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ├ note: consider disabling this lint if you're certain the cast is safe
+    │       
+    │       // casting to 'uint64' is safe because [explain why]
+    │       // forge-lint: disable-next-line(unsafe-typecast)
+    │       
+    │       
+    ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[missing-zero-check]: address parameter is used in a state write or value transfer without a zero-address check
+   ╭▸ ledger/src/LSC.sol:48:19
+   │
+48 │     function wire(address rsc_, address tmsc_, address psc_) external onlyBootstrap {
+   │                   ━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/missing-zero-check
+
+warning[missing-zero-check]: address parameter is used in a state write or value transfer without a zero-address check
+   ╭▸ ledger/src/LSC.sol:48:33
+   │
+48 │     function wire(address rsc_, address tmsc_, address psc_) external onlyBootstrap {
+   │                                 ━━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/missing-zero-check
+
+warning[missing-zero-check]: address parameter is used in a state write or value transfer without a zero-address check
+   ╭▸ ledger/src/LSC.sol:48:48
+   │
+48 │     function wire(address rsc_, address tmsc_, address psc_) external onlyBootstrap {
+   │                                                ━━━━━━━━━━━━
+   │
+   ╰ help: https://getfoundry.sh/forge/linting/missing-zero-check
+
+warning[unsafe-typecast]: typecast can truncate values
+    ╭▸ ledger/src/LSC.sol:121:60
+    │
+121 │         _entries.push(LogEntry(kind, subject, detailsHash, uint64(block.number), uint64(block.timestamp)));
+    │                                                            ━━━━━━━━━━━━━━━━━━━━
+    │
+    ├ note: consider disabling this lint if you're certain the cast is safe
+    │       
+    │       // casting to 'uint64' is safe because [explain why]
+    │       // forge-lint: disable-next-line(unsafe-typecast)
+    │       
+    │       
+    ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[unsafe-typecast]: typecast can truncate values
+    ╭▸ ledger/src/LSC.sol:121:82
+    │
+121 │         _entries.push(LogEntry(kind, subject, detailsHash, uint64(block.number), uint64(block.timestamp)));
+    │                                                                                  ━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ├ note: consider disabling this lint if you're certain the cast is safe
+    │       
+    │       // casting to 'uint64' is safe because [explain why]
+    │       // forge-lint: disable-next-line(unsafe-typecast)
+    │       
+    │       
+    ╰ help: https://getfoundry.sh/forge/linting/unsafe-typecast
+
+warning[environment-read-across-mutation]: `block.timestamp` may be reused across `vm.warp`
+    ╭▸ ledger/test/DecisionBinding.t.sol:239:17
+    │
+239 │         vm.warp(block.timestamp + 1);
+    │         ────────━━━━━━━━━━━━━━━───── `vm.warp` changes this environment here
+    │
+    ├ help: capture it with `vm.getBlockTimestamp()` instead
+    ╰ help: https://getfoundry.sh/forge/linting/environment-read-across-mutation
+
+warning[environment-read-across-mutation]: `block.timestamp` may be reused across `vm.warp`
+    ╭▸ ledger/test/utils/Fixture.sol:448:20
+    │
+448 │             uint64(block.timestamp) + CHECKPOINT_TTL
+    │                    ━━━━━━━━━━━━━━━
+    │
+    ⸬  ledger/test/F0Powers.t.sol:223:9
+    │
+223 │         vm.warp(poison.expiresAt);
+    │         ───────────────────────── `vm.warp` changes this environment here
+    │
+    ├ help: capture it with `vm.getBlockTimestamp()` instead
+    ╰ help: https://getfoundry.sh/forge/linting/environment-read-across-mutation
+
+warning[environment-read-across-mutation]: `block.timestamp` may be reused across `vm.warp`
+    ╭▸ ledger/test/utils/Fixture.sol:359:20
+    │
+359 │             uint64(block.timestamp) + REQUEST_TTL,
+    │                    ━━━━━━━━━━━━━━━
+    │
+    ⸬  ledger/test/Freshness.t.sol:190:9
+    │
+190 │         vm.warp(block.timestamp + 1);
+    │         ──────────────────────────── `vm.warp` changes this environment here
+    │
+    ├ help: capture it with `vm.getBlockTimestamp()` instead
+    ╰ help: https://getfoundry.sh/forge/linting/environment-read-across-mutation
+
+warning[environment-read-across-mutation]: `block.timestamp` may be reused across `vm.warp`
+    ╭▸ ledger/test/utils/Fixture.sol:395:97
+    │
+395 │         (ErrorCode code, CredentialRecord[] memory recs) = tmsc.checkCredentials(gid, b, uint64(block.timestamp));
+    │                                                                                                 ━━━━━━━━━━━━━━━
+    │
+    ⸬  ledger/test/Freshness.t.sol:190:9
+    │
+190 │         vm.warp(block.timestamp + 1);
+    │         ──────────────────────────── `vm.warp` changes this environment here
+    │
+    ├ help: capture it with `vm.getBlockTimestamp()` instead
+    ╰ help: https://getfoundry.sh/forge/linting/environment-read-across-mutation
+
+warning[environment-read-across-mutation]: `block.timestamp` may be reused across `vm.warp`
+    ╭▸ ledger/test/utils/Fixture.sol:448:20
+    │
+448 │             uint64(block.timestamp) + CHECKPOINT_TTL
+    │                    ━━━━━━━━━━━━━━━
+    │
+    ⸬  ledger/test/Freshness.t.sol:190:9
+    │
+190 │         vm.warp(block.timestamp + 1);
+    │         ──────────────────────────── `vm.warp` changes this environment here
+    │
+    ├ help: capture it with `vm.getBlockTimestamp()` instead
+    ╰ help: https://getfoundry.sh/forge/linting/environment-read-across-mutation
+
+warning[environment-read-across-mutation]: `block.timestamp` may be reused across `vm.warp`
+    ╭▸ ledger/test/utils/Fixture.sol:474:20
+    │
+474 │             uint64(block.timestamp) + REQUEST_TTL
+    │                    ━━━━━━━━━━━━━━━
+    │
+    ⸬  ledger/test/Freshness.t.sol:190:9
+    │
+190 │         vm.warp(block.timestamp + 1);
+    │         ──────────────────────────── `vm.warp` changes this environment here
+    │
+    ├ help: capture it with `vm.getBlockTimestamp()` instead
+    ╰ help: https://getfoundry.sh/forge/linting/environment-read-across-mutation
+
+warning[environment-read-across-mutation]: `block.timestamp` may be reused across `vm.warp`
+    ╭▸ ledger/test/Freshness.t.sol:190:17
+    │
+190 │         vm.warp(block.timestamp + 1);
+    │         ────────━━━━━━━━━━━━━━━───── `vm.warp` changes this environment here
+    │
+    ├ help: capture it with `vm.getBlockTimestamp()` instead
+    ╰ help: https://getfoundry.sh/forge/linting/environment-read-across-mutation
+
+note: compile inputs outside the closed v1 source map: ['src/Governance.sol', 'src/interfaces/IPolicyVersion.sol']
+note: compile inputs outside the closed v1 source map: ['src/Governance.sol', 'src/interfaces/IPolicyVersion.sol']
+No files changed, compilation skipped
+Script ran successfully.
+
+## Setting up 1 EVM.
+
+==========================
+
+Chain 18545
+
+Estimated max fee per gas: 2.000000001 gwei
+Estimated base fee per gas: 1 gwei
+Estimated max priority fee per gas: 0.000000001 gwei
+
+Estimated total gas used for script: 13412679
+
+Estimated amount required: 0.026825358013412679 ETH
+
+==========================
+
+
+==========================
+
+ONCHAIN EXECUTION COMPLETE & SUCCESSFUL.
+
+Transactions saved to: /home/saiyamjain/.claude/jobs/aed51961/tmp/a1/deploy-dryrun-20261116/dry-repaired-f/ledger/broadcast/Deploy.s.sol/18545/run-latest.json
+
+Sensitive values saved to: /home/saiyamjain/.claude/jobs/aed51961/tmp/a1/deploy-dryrun-20261116/dry-repaired-f/ledger/cache/Deploy.s.sol/18545/run-latest.json
+
+No files changed, compilation skipped
+Script ran successfully.
+
+## Setting up 1 EVM.
+
+==========================
+
+Chain 28545
+
+Estimated max fee per gas: 2.000000001 gwei
+Estimated base fee per gas: 1 gwei
+Estimated max priority fee per gas: 0.000000001 gwei
+
+Estimated total gas used for script: 6635929
+
+Estimated amount required: 0.013271858006635929 ETH
+
+==========================
+
+
+==========================
+
+ONCHAIN EXECUTION COMPLETE & SUCCESSFUL.
+
+Transactions saved to: /home/saiyamjain/.claude/jobs/aed51961/tmp/a1/deploy-dryrun-20261116/dry-repaired-f/ledger/broadcast/Deploy.s.sol/28545/run-latest.json
+
+Sensitive values saved to: /home/saiyamjain/.claude/jobs/aed51961/tmp/a1/deploy-dryrun-20261116/dry-repaired-f/ledger/cache/Deploy.s.sol/28545/run-latest.json
+
+No files changed, compilation skipped
+Script ran successfully.
+
+## Setting up 1 EVM.
+
+==========================
+
+Chain 18545
+
+Estimated max fee per gas: 0.443706749 gwei
+Estimated base fee per gas: 0.221853374 gwei
+Estimated max priority fee per gas: 0.000000001 gwei
+
+Estimated total gas used for script: 322168
+
+Estimated amount required: 0.000142948115911832 ETH
+
+==========================
+
+
+==========================
+
+ONCHAIN EXECUTION COMPLETE & SUCCESSFUL.
+
+Transactions saved to: /home/saiyamjain/.claude/jobs/aed51961/tmp/a1/deploy-dryrun-20261116/dry-repaired-f/ledger/broadcast/Deploy.s.sol/18545/run-latest.json
+
+Sensitive values saved to: /home/saiyamjain/.claude/jobs/aed51961/tmp/a1/deploy-dryrun-20261116/dry-repaired-f/ledger/cache/Deploy.s.sol/18545/run-latest.json
+
+/home/saiyamjain/.claude/jobs/aed51961/tmp/a1/deploy-dryrun-20261116/dry-repaired-f/ledger/exports/deployments/dry-repaired-f/deployment.json sha256=836b60aa016bf82a9a3a7d6a222892c6c307537f55b644a8effff291be4975d5

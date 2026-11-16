@@ -1,0 +1,33 @@
+case,fault,protocol_side_need,status,gap_or_note
+FL-1,No faulty witnesses,baseline pool collection with four real witnesses; M6/M7 sensitivity variants; H6 delay for the M7 skewed-clock fixture,BUILT (real processes; live wiring tests; cross-runs) / M6 M7 integrated variants NOT BUILT,G3 mutant variants; H6 is built (delayed_witness)
+FL-2,One witness withholds,stop or kill one supervised witness,BUILT (live: SIGSTOP leaves three signatures),none
+FL-3,Two witnesses unavailable,classified QUORUM_UNAVAILABLE at the 10 s cap with no respawn,BUILT (live),none
+FL-4,Repeated signer,one witness's reply delivered more than once,H1 Repeater BUILT virtual transport only / real process NOT BUILT,G1 real-process H1
+FL-5,Unknown or invalid signature mixed with a valid quorum (M5),a Byzantine reply first; M5 collector forwards without recovery,H1 Impersonator/Garbage virtual only / real process NOT BUILT / M5 integrated variant NOT BUILT,G1 and G3 (collector recovery itself is BUILT)
+FL-6,Stale witness set,governance changes the witness set; a certificate for the old set,real governance through the adapter BUILT (cross-run 2 S6); certificate construction is evaluator scope,outside hooks; fixture only
+FL-7,One witness signs a poisoned checkpoint (M4),a Byzantine key signing a poison checkpoint; M4 skip-validation variant,H1 Poisoner virtual only / real process NOT BUILT / M4 integrated variant NOT BUILT,G1 and G3
+FL-8,Authority repeatedly changes its trust lists,ledger and relay behaviour,outside protocol hooks (ledger + evaluator); protocol supplies the real adapter and worker,none from agent 2
+FL-9,Faulty authority issues to a controlled GID,ledger and worker behaviour,outside protocol hooks; worker is the carried E code,none from agent 2
+FL-10,Governance SET([]) to REMOVE substitution and repeatable SET replay,witness governance service and adapter operation,BUILT (service; adapter operation; cross-run 2 produced a real ADD); REMOVE and SET schedules are runner scope,none from agent 2 beyond schedules
+FL-11,Relay suppresses outcomes,relay behaviour (carried E relay),outside protocol hooks (relay fixture),none from agent 2
+F-12,One equivocating witness proposes conflicting values (M1 M2),H1 Equivocator; M1 no durable conflict record; M2 emit before commit,H1 virtual only / M1 M2 integrated variants NOT BUILT; store-level and H4 crash points BUILT,G1 and G3
+F-13,Honest signer restarts after first signature (M2),H4 crash before/after commit and a cold restart on the same state,BUILT (real process; faulty_witness; live F-13 test; random SIGKILL store tests); M2 integrated variant NOT BUILT,G3 (M2)
+F-14,Expired or stale-view certificate,certificate and expiry facts from real witnesses,real signatures BUILT; the judgement is evaluator and ledger scope,none from agent 2
+F-15,Reordered issuer trust updates,ledger and relay behaviour,outside protocol hooks,none from agent 2
+F-16,Replayed or split decision view at one faulty witness,stale or replayed proposals (BUILT: STALE_STATE and PROPOSAL_MISMATCH observed live); a split view needs per-witness ledger views,replay BUILT / H3 split view in-process only (view_override) / real process NOT BUILT,G2 real-process H3
+F-17,Two Byzantine witnesses with divergent honest views,two Byzantine keys plus per-witness divergent views,H1 and H3 both virtual only / real process NOT BUILT,G1 and G2
+F-18,Weakened q2 threshold negative control,ledger mutant mutant-f-q2 (agent 1) plus divergent views,ledger scope plus H3 (real process NOT BUILT),G2 (the ledger mutant is agent 1's)
+F-19,Compromised worker host,H5 symbolic compromised worker,BUILT (alternate entry; live test; symbolic only),none
+F-20,Arbitrary message delay,H6 per-operation real-time delay,BUILT (delayed_witness; alternate entry; live tests),none
+F-21,Relay forges request or credential contents,carried E relay,outside protocol hooks (relay fixture),none from agent 2
+F-22,One unknown signature filtered before submission,a Byzantine reply the collector must filter,H1 virtual only / real process NOT BUILT; collector filtering BUILT,G1
+F-23,Unsorted distinct signatures,signature ordering at submission,BUILT (the adapter sorts by recovered address; live),none
+F-24,Three signatures on a poison checkpoint,three Byzantine keys sign a poison checkpoint (crafted by the evaluator),BUILT as a helper (testtools.byzantine.sign_message with TEST-ONLY keys); no process hook needed,none from agent 2
+F-25,Common host compromise,analysis only,NONE (analysis),none
+F-26,Storage withholds or corrupts synthetic data,analysis only,NONE (analysis),none
+F-27,Adversarial durable database rollback,H7 stopped or locked state copy and restore; main-file-only copy is an undetectable rollback,BUILT at store and process-refusal level (state_oracle; H7 tests); a runner procedure (stop; restore; restart) uses the supervisor only,none from agent 2
+F-28,Authority removal across the checkpoint barrier,ledger removal and barrier phases with real checkpoints from the pool,real checkpoint pool BUILT; the barrier and removal refusals are ledger and runner scope (separate fresh-state branches),outside protocol hooks,none from agent 2
+F-29,Expired unexecuted governance nonce or checkpoint sequence (M3),host clock versus mined ledger time; M3 wall-clock death variant,store death rules BUILT; M3 integrated variant NOT BUILT,G3
+F-30,Doomed governance action and transaction rollback,witness refusal of a doomed action plus ledger rollback,witness governance validation BUILT; the crafted invalid action is evaluator scope,none from agent 2
+F-31,Witness observes ledger clock height or hash regression,tripwire persistence; refusal; restart; explicit clear,BUILT at store level; process level BUILT for NUMBER regression via evm_revert (cross-run S14: WITNESS_FAULTED then a real clear); a same-height hash change and a timestamp regression need H3 NOT BUILT in a real process,G2
+F-32,Store reuse across fresh deployments at identical addresses,D50 binding refusals with state unchanged,BUILT (store and open tests; witness_main refusals),none

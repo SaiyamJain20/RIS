@@ -22,6 +22,8 @@ import {
     StateCheckpoint,
     ForwardedRequest,
     GrantReceipt,
+    GovernanceAction,
+    isRepaired,
     ACTION_READ,
     CREDENTIAL_LONG_TERM,
     CREDENTIAL_TEMPORAL
@@ -32,6 +34,7 @@ import {RSC} from "../../src/RSC.sol";
 import {PSC} from "../../src/PSC.sol";
 import {KSSC} from "../../src/KSSC.sol";
 import {ACSC} from "../../src/ACSC.sol";
+import {Governance} from "../../src/Governance.sol";
 import {FixtureConfig} from "../../script/FixtureConfig.sol";
 
 /// Synthetic E fixture. All keys are derived from public labels and are TEST-ONLY.
@@ -91,6 +94,8 @@ abstract contract HMBCFixture is TestBase {
     PSC internal psc;
     KSSC internal kssc;
     ACSC internal acsc;
+    Governance internal gov; // REPAIRED_F only
+    uint256[] internal witnessPks; // REPAIRED_F: witness-1..4 (witness-1 is witnessPk)
 
     uint64 internal checkpointSequence;
 
@@ -103,6 +108,24 @@ abstract contract HMBCFixture is TestBase {
 
     function logDetailMode() internal pure virtual returns (LogDetailMode) {
         return LogDetailMode.COMPLETE_DETAILS;
+    }
+
+    /// Witness-set parameters (A-F1 design 2.2 section 7.3): E has one witness, version 1, q = 1;
+    /// REPAIRED_F has witness-1..4, version 2, q = 3 (mutant-f-q2 overrides threshold to 2).
+    function witnessSetVersion() internal pure virtual returns (uint64) {
+        return profile() == Profile.REPAIRED_F ? FixtureConfig.F_WITNESS_SET_VERSION : WITNESS_SET_VERSION;
+    }
+
+    function threshold() internal pure virtual returns (uint256) {
+        return profile() == Profile.REPAIRED_F ? FixtureConfig.F_THRESHOLD : 1;
+    }
+
+    function witnessAddresses() internal view virtual returns (address[] memory ws) {
+        if (profile() != Profile.REPAIRED_F) return one(witness);
+        ws = new address[](witnessPks.length);
+        for (uint256 i = 0; i < ws.length; i++) {
+            ws[i] = vm.addr(witnessPks[i]);
+        }
     }
 
     function setUp() public virtual {
@@ -132,6 +155,10 @@ abstract contract HMBCFixture is TestBase {
         malloryPk = syntheticKey("mallory");
         witnessPk = syntheticKey("witness-1");
         relayPk = syntheticKey("relay");
+        delete witnessPks;
+        for (uint256 i = 0; i < FixtureConfig.F_WITNESS_COUNT; i++) {
+            witnessPks.push(syntheticKey(FixtureConfig.witnessLabel(i)));
+        }
         h1 = vm.addr(h1Pk);
         h2 = vm.addr(h2Pk);
         h3 = vm.addr(h3Pk);
@@ -154,15 +181,25 @@ abstract contract HMBCFixture is TestBase {
         lsc = new LSC(mode);
         tmsc = new TMSC(p, mutations(), lsc, _authorityConfig());
         rsc = new RSC(PBC_CHAIN_ID, tmsc, lsc);
-        address[] memory ws = new address[](1);
-        ws[0] = witness;
+        address[] memory ws = witnessAddresses();
         psc = new PSC(
-            PSC.Config(p, mutations(), rsc, tmsc, lsc, relay, POLICY_VERSION, REQUEST_TTL, WITNESS_SET_VERSION, ws, 1)
+            PSC.Config(
+                p, mutations(), rsc, tmsc, lsc, relay, POLICY_VERSION, REQUEST_TTL, witnessSetVersion(), ws, threshold()
+            )
         );
+        if (p == Profile.REPAIRED_F) {
+            gov = new Governance(
+                Governance.Config(
+                    address(tmsc), witnessSetVersion(), ws, threshold(), FixtureConfig.GOVERNANCE_MAX_TTL, mutations()
+                )
+            );
+        }
 
         vm.chainId(DBC_CHAIN_ID);
         kssc = new KSSC(
-            KSSC.Config(p, mutations(), DBC_CHAIN_ID, PBC_CHAIN_ID, address(psc), WITNESS_SET_VERSION, ws, 1, CHECKPOINT_TTL)
+            KSSC.Config(
+                p, mutations(), DBC_CHAIN_ID, PBC_CHAIN_ID, address(psc), witnessSetVersion(), ws, threshold(), CHECKPOINT_TTL
+            )
         );
         acsc = new ACSC(p, mutations(), DBC_CHAIN_ID, PBC_CHAIN_ID, address(psc), POLICY_VERSION, GRANT_TTL);
         kssc.wire(address(acsc));
@@ -175,6 +212,7 @@ abstract contract HMBCFixture is TestBase {
         vm.chainId(PBC_CHAIN_ID);
         lsc.wire(address(rsc), address(tmsc), address(psc));
         tmsc.wire(address(psc), address(rsc));
+        if (p == Profile.REPAIRED_F) tmsc.wireGovernance(address(gov));
         psc.configureDestination(DBC_CHAIN_ID, address(kssc));
         lsc.seal();
         tmsc.seal();
@@ -359,7 +397,41 @@ abstract contract HMBCFixture is TestBase {
         return recs;
     }
 
-    // ------------------------------------------------------------------ witness (REPAIRED_E)
+    // ------------------------------------------------------------------ witness (repaired profiles)
+
+    /// Under REPAIRED_F, signing as `witnessPk` means the quorum: the first `threshold()` of
+    /// witness-1..4, sorted by address (design 2.2 section 7.4). Any other key signs alone, which
+    /// keeps the E non-witness negative tests valid.
+    function witnessSigs(uint256 pk, bytes32 digest) internal view returns (bytes[] memory sigs) {
+        if (profile() != Profile.REPAIRED_F || pk != witnessPk) {
+            sigs = new bytes[](1);
+            sigs[0] = sig(pk, digest);
+            return sigs;
+        }
+        uint256[] memory pks = new uint256[](threshold());
+        for (uint256 i = 0; i < pks.length; i++) {
+            pks[i] = witnessPks[i];
+        }
+        return sortedSigs(pks, digest);
+    }
+
+    /// Signatures by `pks` over `digest`, ordered by ascending signer address (QuorumLib order).
+    function sortedSigs(uint256[] memory pks, bytes32 digest) internal pure returns (bytes[] memory sigs) {
+        uint256 n = pks.length;
+        uint256[] memory order = new uint256[](n);
+        for (uint256 i = 0; i < n; i++) {
+            order[i] = pks[i];
+        }
+        for (uint256 i = 1; i < n; i++) {
+            for (uint256 j = i; j > 0 && vm.addr(order[j]) < vm.addr(order[j - 1]); j--) {
+                (order[j], order[j - 1]) = (order[j - 1], order[j]);
+            }
+        }
+        sigs = new bytes[](n);
+        for (uint256 i = 0; i < n; i++) {
+            sigs[i] = sig(order[i], digest);
+        }
+    }
 
     function checkpointNow() internal returns (StateCheckpoint memory cp) {
         checkpointSequence += 1;
@@ -368,7 +440,7 @@ abstract contract HMBCFixture is TestBase {
             tmsc.authEpoch(),
             POLICY_VERSION,
             0,
-            WITNESS_SET_VERSION,
+            witnessSetVersion(),
             PBC_CHAIN_ID,
             address(psc),
             block.number,
@@ -378,8 +450,7 @@ abstract contract HMBCFixture is TestBase {
     }
 
     function signCheckpoint(StateCheckpoint memory cp, uint256 pk) internal view returns (bytes[] memory sigs) {
-        sigs = new bytes[](1);
-        sigs[0] = sig(pk, HMBCHash.stateCheckpointDigest(cp, DBC_CHAIN_ID, address(kssc)));
+        return witnessSigs(pk, HMBCHash.stateCheckpointDigest(cp, DBC_CHAIN_ID, address(kssc)));
     }
 
     function acceptCheckpoint() internal returns (StateCheckpoint memory cp) {
@@ -397,7 +468,7 @@ abstract contract HMBCFixture is TestBase {
             result,
             HMBCHash.hashCredentialRecords(recs),
             cp.sequence,
-            WITNESS_SET_VERSION,
+            witnessSetVersion(),
             cp.sourceBlockNumber,
             cp.sourceBlockHash,
             uint64(block.timestamp) + REQUEST_TTL
@@ -406,8 +477,7 @@ abstract contract HMBCFixture is TestBase {
 
     function certify(AccessDecision memory d, uint256 pk) internal view returns (DecisionCertificate memory c) {
         c.decision = d;
-        c.signatures = new bytes[](1);
-        c.signatures[0] = sig(pk, HMBCHash.accessDecisionDigest(d, DBC_CHAIN_ID, address(kssc)));
+        c.signatures = witnessSigs(pk, HMBCHash.accessDecisionDigest(d, DBC_CHAIN_ID, address(kssc)));
     }
 
     // -------------------------------------------------------------- delivery (profile-specific)
@@ -418,7 +488,7 @@ abstract contract HMBCFixture is TestBase {
         internal
         returns (bytes32 grantId)
     {
-        if (profile() == Profile.REPAIRED_E) {
+        if (isRepaired(profile())) {
             StateCheckpoint memory cp = acceptCheckpoint();
             DecisionCertificate memory c = certify(decisionFor(r, witnessResult, recs, cp), witnessPk);
             vm.prank(relay);
@@ -452,7 +522,7 @@ abstract contract HMBCFixture is TestBase {
             dataId,
             keyEpoch,
             expiresAt,
-            WITNESS_SET_VERSION,
+            witnessSetVersion(),
             DBC_CHAIN_ID,
             address(kssc),
             block.number,
@@ -461,14 +531,13 @@ abstract contract HMBCFixture is TestBase {
     }
 
     function signReceipt(GrantReceipt memory g, uint256 pk) internal view returns (bytes[] memory sigs) {
-        sigs = new bytes[](1);
-        sigs[0] = sig(pk, HMBCHash.grantReceiptDigest(g, PBC_CHAIN_ID, address(psc)));
+        return witnessSigs(pk, HMBCHash.grantReceiptDigest(g, PBC_CHAIN_ID, address(psc)));
     }
 
     /// Records the outcome the way this profile does: paper = unattested relay report;
     /// repaired-e = relay report carrying the witness-signed GrantReceipt.
     function reportOutcomeFor(bytes32 digest, bytes32 grantId, bytes32 outcome) internal returns (uint256 logId) {
-        if (profile() == Profile.REPAIRED_E) {
+        if (isRepaired(profile())) {
             GrantReceipt memory g = receiptFor(grantId);
             bytes[] memory sigs = signReceipt(g, witnessPk);
             vm.prank(relay);

@@ -1,0 +1,15 @@
+control M1: the unmutated tree passes test_witness_state.py,test_witness_state_cli.py,test_witness_state_lock.py (0 argued skip)
+control M2: the unmutated tree passes test_witness_state.py,test_witness_state_cli.py,test_witness_state_lock.py (0 argued skip)
+control M3: the unmutated tree passes test_witness_state.py,test_witness_state_cli.py,test_witness_state_lock.py (0 argued skip)
+control M4: the unmutated tree passes test_witness_service.py,test_witness_service_decision.py,test_witness_service_receipt.py,test_witness_service_governance.py (1 argued skip)
+control M5: the unmutated tree passes test_witness_pool.py,test_witness_pool_driver.py,test_pool_core.py (0 argued skip)
+control M6: the unmutated tree passes test_witness_service.py,test_witness_service_decision.py,test_witness_service_receipt.py,test_witness_service_governance.py (1 argued skip)
+control M7: the unmutated tree passes test_witness_service.py,test_witness_service_decision.py,test_witness_service_receipt.py,test_witness_service_governance.py (1 argued skip)
+DETECTED M1 (F-12) no durable conflict record: the pin of a key is never written | failed tests: 12
+DETECTED M2 (F-12,F-13) emit the signature before the durable commit: the transaction stays open until the next request | failed tests: 19
+DETECTED M3 (F-29) death of a digest by expiry is decided from the host wall clock | failed tests: 7
+DETECTED M4 (FL-7,F-24) the checkpoint is not compared with the witness's own reads | failed tests: 8
+DETECTED M5 (FL-5,F-22) a reply is not checked to recover to the replying witness | failed tests: 3
+DETECTED M6 (FL-1) the receipt names the DBC head instead of the block that contains the GrantIssued log | failed tests: 5
+DETECTED M7 (FL-1) decision expiry keeps a local-clock term | failed tests: 1
+detected 7 of 7

@@ -1,0 +1,10 @@
+$ python3 -I ledger/tools/check_f0_powers.py   # negative control: S20 row deleted, E26 line shifted, A01 cites a missing test
+[
+ "state PSC.denialCount missing from ledger-state.csv",
+ "src/KSSC.sol:140 does not declare function 'acceptState': 'if (profile != Profile.REPAIRED_E) revert Rejected(ErrorCode.WRONG_PROFILE);'",
+ "E20: writes unknown state id S20",
+ "A01: cited test test_F0_DoesNotExist not found in ledger/test",
+ "A04: unknown state id S20",
+ "A08: unknown state id S20"
+]
+exit=1

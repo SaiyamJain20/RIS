@@ -1,0 +1,21 @@
+PASS S0 deploy the real F ledger on two real Anvil nodes
+PASS S1 start four real witness_main processes (kept alive) and wait for INITIALIZED
+PASS S2 agent 3 locked_store + snapshot on four LIVE witness stores that have NEVER signed
+PASS S3 three live witnesses sign a checkpoint the real KSSC accepts
+PASS S4 agent 3 locked_store + snapshot on the same stores while the processes are ALIVE and three have signed (the A2 lock finding, re-measured with agent 3's real code)
+PASS S5 agent 3 public_observations_v2.collect against the live ledger (latest anchor), then the exporter choreography under locked_store for each witness
+PASS S6a verify_export_snapshot, WitnessEvidence, latest-anchor observations, all four witnesses
+PASS S6b verify_export_snapshot, BindingExport, latest-anchor observations, all four witnesses
+PASS S6c CONTROL: observations collected at the export's OWN anchor (transport shim answers `latest` with the anchor block), then BindingExport
+PASS S7 history_rpc_v2.collect (declared witness history through the real RpcClient, hash-selected calls) for every witness's real evidence
+PASS S8 checkpoint_rpc_v2.collect (state behind every declared checkpoint) for the signing witnesses
+PASS S9 a signing request that arrives while agent 3 holds the exclusive snapshot lock: does the live witness wait (cooperative), refuse, or sign?
+PASS S10 worker side: a real adapter-startup worker directory, then `worker_log --binding` real output into agent 3's checkers
+PASS S7b node support probe: EIP-1898 {blockHash, requireCanonical} eth_call on the real Anvil against the real KSSC (history_rpc_v2 uses it for every death getter and has NO fallback)
+PASS S13 REAL superseded+death evidence: witness 0 signs A for sequence 2, the DBC time passes A's expiry, a DIFFERENT valid proposal for sequence 2 is signed (death kind expiry)
+PASS S14 REAL fault: witness 1 signs, the DBC is reverted (evm_revert) below its last observation, the next request is refused and the store carries the fault; evidence, then a clear
+PASS S9b stop the four witness processes: clean exit and empty stderr
+PASS S11 worker lock honouring: with agent 3 holding `.init.lock` exclusively, (a) a Worker being constructed, (b) an already running Worker's record write
+PASS S12 teardown: stop the Anvil nodes
+DONE 19 passed, 0 failed
+EXIT=0 END=2026-11-08T05:43:22Z

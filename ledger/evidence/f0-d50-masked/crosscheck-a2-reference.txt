@@ -1,0 +1,10 @@
+# Cross-check: agent 2's reference immutable_refs_sha256 (protocol/f0/vectors/d50_reference.py sha256 92609fdb.., origin/agent-2 c3a0538, run from a scratch copy) against ledger/tools/immutable_refs_digest.py output (immutable-refs-digests.txt), plus agent 1's independent encoder on agent 2's object-list vector. CPython 3.14.7.
+A2 object-list vector: reference 69b614b065d3e9ec8100b66bec932788be2bc97b927cb563add9fb5432fc9a85 | my independent encoder 69b614b065d3e9ec8100b66bec932788be2bc97b927cb563add9fb5432fc9a85
+ACSC  agent2 reference == agent1 tool: True  5e9865001da68590
+KSSC  agent2 reference == agent1 tool: True  fc1f9c55a5cd956f
+LSC   agent2 reference == agent1 tool: True  55508a7430aea8a9
+PSC   agent2 reference == agent1 tool: True  9811cdc5a3cafece
+RSC   agent2 reference == agent1 tool: True  0ef8af372dd9b411
+TMSC  agent2 reference == agent1 tool: True  0453414568d29f3a
+all six agree: True
+exit=0

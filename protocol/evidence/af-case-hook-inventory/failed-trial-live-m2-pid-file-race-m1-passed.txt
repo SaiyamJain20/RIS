@@ -1,0 +1,28 @@
+.F                                                                       [100%]
+=================================== FAILURES ===================================
+_ test_m2_a_witness_that_replies_before_its_commit_has_no_pin_after_being_killed_and_then_signs_a_conflicting_checkpoint _
+
+live_f = namespace(dep={'schemaVersion': 'hmbc-ledger-deployment/v2', 'interfaceVersion': 'v2', 'producer': 'agent-1 ledger/too...9155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-2403/live-repaired-f0/src/ledger/exports/abi')
+tmp_path = PosixPath('/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-2403/test_m2_a_witness_that_replies0')
+
+    def test_m2_a_witness_that_replies_before_its_commit_has_no_pin_after_being_killed_and_then_signs_a_conflicting_checkpoint(live_f, tmp_path):
+        fresh_blocks(live_f)
+        a = Adapter(live_f, tmp_path, FAULTY, ["--witness-variant", "1=mutant:M2", "--mutant-tree", "M2=" + built(tmp_path, "M2")])
+        pid0 = None
+        try:
+>           pid0 = a.pid(0)
+                   ^^^^^^^^
+
+protocol/tests/test_mutant_tree_live.py:54: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_faulty_adapter_v2_live.Adapter object at 0x74ea8bf98cd0>, index = 0
+
+    def pid(self, index):
+>       text = open(os.path.join(self.state_dir, f"witness-{index}.pid")).read()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-th4kur-Desktop-sem5-RIS-RIS/6e659155-b430-4207-a4e7-a38c05468aeb/scratchpad/tmpd/pytest-of-th4kur/pytest-2403/test_m2_a_witness_that_replies0/state/witness-0.pid'
+
+protocol/tests/test_faulty_adapter_v2_live.py:70: FileNotFoundError
+1 failed, 1 passed in 37.31s
+EXIT=1 START=2026-11-09T11:17:11Z END=2026-11-09T11:17:49Z HEAD=3e9a801

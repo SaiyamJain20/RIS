@@ -1,28 +1,233 @@
 # Agent 1 status
 
-- Role: ledger and policy (`ledger/**`); in the solo phase also orchestrator of the agent-2/agent-3 proxies (human directive A1-0059, 2026-10-09).
-- State (2026-10-12 ~13:00 IST): **gate E PASS (solo phase) recorded; board at F0.**
-  - Recorded in `communication/GATES.md`. Decision: "gate E PASS: solo phase, correlated review, criterion 4 human-scoped (A1-0080), window cited from owner evidence (A1-0081), integrated mutants and window not run".
-  - **F is not started.** F needs its own plan and the human's go-ahead.
-- Active RQ/task: none. E is complete in the solo phase. The next step is F planning, when the human asks for it.
-- Interface version: v1 FROZEN (FREEZE.json f700292e..), unchanged. Agent 1 mapping ACK A1-0027.
-- Git: branch `agent-1` on origin (latest 4a68082 plus this snapshot). `main` (5f71184) has not been updated. Pushing `main` is a human decision.
-- Ledger pin for every E2/gate run: 933d2a7 (`ledger/evidence/source-manifest.sha256` c7b7dd51.., 195 entries). `ledger/src`, `ledger/test` and `foundry.toml` are unchanged since then.
-- Gate run evidence: `evaluation/evidence/e3/gate-run-20261012/`.
-  - FREEZE S3-0021, plan c0086019...
-  - Exit 0; 56/56 rows; ProVerif matched; result S3-0022.
-- Agent 1's reviews and ACKs of the gate:
-  - A1-0083: FREEZE ACK; eight review tools pre-registered.
-  - A1-0084: review. 56/56 on the raw and the published copy; outputs in `ledger/evidence/gate-e-review/`.
-  - A1-0085: P4-3 same-source ACK of the RESULT S3-0023, naming manifest 908fd615.., gate-evidence 47e38dd3.., RQ1-E.md 69dabfba.. and HEAD 871e218.
-- Report: `evaluation/reports/RQ1-E.md` (69dabfba..). The ledger sections are `communication/agent-1/solo/rq1-ledger-sections.md` (1db7246).
-- Limits that stay true:
-  - every solo review and ACK is correlated self-review (same model). The original agents 2 and 3 may overturn it;
-  - the integrated live mutant matrix and the integrated revocation window were **not run** (safety-classifier stops, A1-0079; human decisions A1-0080/A1-0081);
-  - paper crash rows are D47 (frozen BLOCKED / decided SPEC_GAP, UNPROVED);
-  - single host, one trial per row, symbolic adapter, Anvil without consensus.
-- Blocker: none for E. F work needs a human go-ahead and a plan.
-- Last message sent: A1-0085 ACK (P4-3). Before that: A1-0084 REVIEW, A1-0083 ACK, A1-0082 DECISION (P4).
-- Next action: none until the human decides on F, or on pushing `main`, or the original agents 2/3 return and re-review.
+- Role: ledger and policy (`ledger/**`).
+- State (2026-11-15 IST): **ledger READY and reviewed at 85c59f5** (manifest 70f541cd.., 429 entries; forge 316/316 and the mutant check exit 0 on 2026-11-14). Phase F is in progress; all 32 cases and gate F are NOT_RUN; G is locked.
+  - **This role's next step:** the ledger-scope ACK of agent 3's exact execution FREEZE once it is published. The checker is published in A1-0134; item 5, the dry run, follows. Full entry point: the HANDOFF top block (D57 role continuation).
+  - **Protocol.** The accepted subtree is 7566f63d on origin/agent-2 73fb2ce (A2-0087). proxy-2 stood down (A1-0135).
+  - **Since 2026-11-13, agent 1 published:**
+
+    | message | content |
+    |---|---|
+    | A1-0121, A1-0122 | DecisionQuorum model review; TLC counts equal agent 1's enumeration |
+    | A1-0123 to A1-0125 | M1, M1b and M1c gas reproduced exactly |
+    | A1-0126 | RQ2-F trust-matrix correction; tested f=2 ledger outcomes |
+    | A1-0127 | ledger inventory of the 32 cases |
+    | A1-0128 | the oracle's death rules checked against the ledger |
+    | A1-0129 | ledger review of the plan draft |
+    | A1-0130 to A1-0133 | proxy-2, D57 and the fallback push not made |
+    | A1-0134 | the checker |
+    | A1-0135 | agent 2 seat back |
+    | A1-0136 | raw gas logs retained (fresh M1/M1b/M1c rerun, all 21 values exact); corrects the A1-0123 test count to 6 of 6 |
+    | A1-0137 | ledger-scope review of the RQ2-F partial report (A3-0143, report cd41dcbb..): ledger claims accurate; governance-quorum row understates permanent DBC halt and forged-credential grants (scratch test 3/3); two precision fixes; not an ACK |
+    | A1-0138 | ledger-scope review of the corrected RQ2-F report (A3-0144, 184df52d..): A1-0137 items incorporated accurately; one new sentence (authEpoch/sourceBlockNumber saturation "only when fields need to advance") wrong in effect; scratch QuorumSaturate 3/3; not an ACK |
+    | A1-0139 | corrected RQ2-F report cf249e2a.. confirmed by diff: A1-0138 sentence applied exactly, nothing else changed; plan checker 26/26; ledger-scope report review closed; not an ACK |
+    | A1-0140 | RQ2-F report c511c36b.. confirmed in ledger scope by diff (ledger sections byte-identical to A1-0139 revision; gas-audit text accurate); not an ACK |
+    | A1-0141 | RQ2-F report 412ec833..: one ledger sentence (f=2 DENY/ALLOW paragraph, changed at A3-0154) narrowed wrongly; DoubleCert rerun 4/4; discloses my first-line-only check that missed it; not an ACK |
+    | A1-0142 | RQ2-F report e59a51cd.. confirmed in ledger scope (full diff from 3717ab7: corrected f=2 paragraph accurate, rest status text); ledger review closed at that hash; not an ACK |
+    | A1-0143 | deploy portion of FREEZE item 5 (4/4 deploys exit 0 on agent-1 ports; fast = same addresses); for stage 3: bind F-18 by threshold (manifest + on-chain), keep source extracts out of FREEZE evidence (pinned source holds the public Anvil key literal); not an ACK |
+    | A1-0144 | A3-0162 DRAFT recipe ledger commands checked on clean 85c59f5: forge test 316/0/0 exit 0, check_mutants all detected exit 0; no pinned file changed, only ledger/out + ledger/cache created; not an ACK |
+
+- Earlier state (2026-11-04 IST): **READY: A-F1 ledger source (A1-0111) at aef3daa**, ledger manifest 6358359e.. (418 entries). It awaits agent 3's review.
+  - F0 was accepted at 14:24 (A3-0073: `F0_ACCEPTANCE_CANDIDATE2.json` 03dcf485.., `interfaces/v2/FREEZE.json` 7bb1d243..).
+  - Implementation and isolated tests only; integrated execution stays locked.
+  - **A-F1 implemented in 7 slices** (log `ledger/evidence/af1/README.md`):
+    - Profile carrier, Governance, TMSC hooks and the KSSC policy pin.
+    - E reruns under F: 71 tests, identical to E.
+    - F mutants: 12 of 12 detected, against predictions pre-registered first.
+    - The F deploy, the v2 successor exports and the governance vectors.
+    - Controls: 13 of 13.
+    - Full suite 316 of 316, with every baseline test passing.
+    - Mapping receipt: 26 of 26 on the published interfaces/v2.
+    - Isolated Anvil smoke: all v2 manifests pass the schema and the live M4 equalities; masked check 27 of 27.
+  - **A1-0112** RFC: the closed E source map cannot list `src/interfaces/IPolicyVersion.sol` (a KSSC import).
+  - A2-0059: agent 2 has no dependency on the E source map.
+  - A3-0074/0075 (agent 3, evaluator work) reviewed the cached aef3daa before A1-0111 arrived (its SSH fetch was failing). A1-0113 points to the READY.
+  - **A3-0077 (17:29):** agent 3 reviewed my READY (A1-0111) for isolated consumption and reran my evidence with the same results. The log header needs no new READY.
+  - **A3-0078:** amendment proposal adding `LedgerDeploymentEComplete` (v2.1, twelve-file map). **A1-0114:** ledger ACK of 7810ad10... I migrate the E successor export only after publication.
+  - **A2-0060 / A3-0079 (17:59–18:38):** both amendment ACKs; agent 3 published `interfaces/v2.1` (FREEZE 232b84bb.., schema d43c3a9a..).
+  - **A1-0115:** receipt plus migration READY at 85c59f5 (manifest 70f541cd.., 429 entries). The E successor export is now v2.1 with twelve sources. Red: the completeness rule refuses the old carrier. Green: the Anvil smoke passes against v2.1. 316 of 316.
+  - **A3-0080 (19:35):** agent 3 reviewed the A1-0115 delta for isolated consumption. With A3-0077 this covers the exact 85c59f5. Nothing is owed by agent 1.
+  - Agent 2: task 2 (store, binding, the checkpoint, decision and receipt witnesses) and task 3 (the pool core) are in progress, NOT READY. Its v2.1 receipt is A2-0061.
+  - **2026-11-05..08 (read 2026-11-08):** agent 2 sent A2-0063..0074: isolated successor READY/deltas and live runs against my real F ledger (85c59f5); A2-0074 is the F start-contract RFC. Agent 3 sent A3-0083..0104: evaluator joins and reviews of agent 2.
+  - **A2-0070** asked whether KSSC's "sequence strictly greater" rule is intended (a quorum can skip sequences). **A1-0117:** yes, by design §9; current + 1 is witness-side; uint64-max saturation needs a q = 3 compromise (outside f = 1); no patch. No ledger byte changed.
+  - **A2-0076 (2026-11-08 04:56):** agent 2's complete runtime source READY (commit of record 7d97b90, manifest 7de8f334..). It asks nothing of agent 1. **A1-0118:** ledger-facing check. Its ledger fixtures are byte copies of 85c59f5, and its profile-3 worker change and witness layout match the ledger. Waiting for agent 3's review and the execution FREEZE.
+  - **Solo phase F (2026-11-08 ~22:50):** human directive. Agents 2 and 3 were at their limits, so agent 1 was to run F as all three with proxy-2 and proxy-3 (A1-0119, `communication/agent-1/solo/F-PLAN.md`). Peers were merged into agent-1 (agent-3 6358f7c, agent-2 9d56d2c). Both proxies stopped on the usage limit before writing anything.
+  - **Solo phase F closed (2026-11-12, A1-0120):** agent 2 is back (A2-0081..0083: hook gaps G1/G2/G3 built, delta READY at 4893db1) and agent 3 is back (A3-0105 ACKs A2-0074 and decides A2-0077/0080; A3-0106). Proxies stood down. The 2026-11-08 baseline on ca5a8e4 is all exit 0 (forge 316; protocol 2962 passed, 201 skipped; root 2944). The ledger is unchanged at 85c59f5. Waiting for agent 3's execution FREEZE to ACK in ledger scope.
+  - History of the earlier states follows.
+  - Agent 3 reviewed and accepted the ledger F0 input (A3-0053: Forge 188 PASS, checker clean).
+  - It asked for a grouped RFC on D-a..D-f. That is published as **A1-0088**, with every choice UNRESOLVED.
+  - No peer push since 2026-10-13. Waiting for agent 3's F0 plan and choices, and for agent 2's key-control enumeration and D50 RFC.
+  - **A1-0089 (2026-11-03):** closed two "read, not tested" items.
+    - QuorumLib measured at n=4, q=3 with a test-only KSSC (FL-2..FL-7).
+    - `sourceBlockNumber` poison tested.
+    - README decision summary corrected to match A1-0088.
+    - Suite: 198 passed; controls: 12/12.
+  - **A3-0054 (2026-11-03 18:04):** agent 3 published the F0 matrix draft: 14 components and 27 scenarios, all NOT_RUN, not frozen.
+  - **A1-0090:** my review asks for 7 exact changes (evidence for F-14, F-15 and F-21; F-18 as a configuration mutant; F-24 split; new rows F-28 and F-29).
+    - It ships the requested design `ledger/f0/A-F1-DESIGN.md`, for review only and not implemented.
+    - It withdraws my `(chainId, nonce)` conflict-key shorthand.
+  - **A3-0055 (19:00):** matrix revision 2 (29 scenarios, all NOT_RUN) with my 7 changes, and design review R1–R6.
+    - **A1-0091:** scoped ACK of revision 2, ledger scope only (manifest aded280a..). Not a freeze ACK.
+    - **A1-0092:** `ledger/f0/A-F1-DESIGN.md` revision 2 (dda3914b..) answers R1–R5:
+      - assertion-preserving E test edits listed exactly;
+      - tombstone remove/re-add rule;
+      - exact ABI and log binding with the signed nonce;
+      - a typed GovernanceAction struct with no bytes payload;
+      - an interface v2 successor.
+  - **A3-0056 (20:03):** agent 3 recorded A1-0091 as a scoped ACK, and found R1/R2/R3/R5 addressed at design level with the R4 core resolved. It asked for two clarifications; **A1-0093** answers both with design revision 2.1:
+    - the calldata claim is corrected;
+    - the bit 7 control now uses a repeatable SET_CA_ADMINS action.
+  - **A2-0040/A2-0041 (23:33, origin/agent-2 39af20f):** agent 2's F0 key/state inventory, R6 signing rules and D50 RFC (seven runtimes).
+    - **A1-0094:** every ledger-facing claim confirmed against the code, with corrections C1–C4 (decision-expiry wording, timestamp scope, storage wiring views, sealed state).
+    - D50's immutable premise was measured (`ledger/evidence/f0-d50-masked/`): masked live code equals the compiled runtime 18/18; on fresh chains the addresses repeat but raw code differs for TMSC/PSC/ACSC/KSSC.
+    - `immutableReferences` export agreed for the successor schema.
+  - **A2-0042 (00:05, origin/agent-2 09dbb5b):** agent 2's revision 2 takes C1–C4.
+    - **A1-0095:** scoped ACK in ledger-facing scope, manifest b606a335... Not a freeze ACK.
+    - All three inputs are now in: matrix rev 2 (ACKed A1-0091), A-F1 design 2.1, A2 F0 rev 2 (ACKed A1-0095).
+    - Next: agent 3's final source/interface plan.
+  - **A3-0058 (00:15):** agent 3 reviewed agent 2's input; amendments go back to agent 2. It asked agent 1 for immutable ranges and byte length in the export design.
+    - **A1-0096:** design revision 2.2 §8 adds the exact export rule (sorted, non-overlapping 32-byte ranges, live length equal to `runtimeBytes`) and the attestation scope.
+    - The masked check can now be replayed offline from the published raw code: 18/18 match, and a negative control is detected.
+  - **A2-0043 (00:35, origin/agent-2 d4d5ff0):** agent 2's revision 3 (manifest 22e88c23..) adopts my export rule and replays my bytes 18/18 with a strict implementation.
+    - **A1-0097:** scoped ledger-facing ACK of revision 3.
+    - The masked tool is hardened (concatenation after validation; replay identical).
+    - Design §8 clarified: decimal strings in the successor export.
+  - **A3-0059 (01:07, origin/agent-3 05c239e):** F0 candidate-3 source/interface plan, matrix with 30 cases, and numeric candidate.
+    - **A1-0098:** ledger-scope review. Everything accepted except **K1**: pin the number form (decimal strings recommended) inside the hashed `immutableReferences` list.
+    - Reference digests are published for the six E contracts.
+    - Feasibility note: worst case about 25 s of the 30 s request TTL under the proposed bounds.
+  - **A2-0044/0045 (01:17, origin/agent-2 c3a0538):** agent 2's revision 4 (manifest 30051bc5..), which adopts decimal-string object-list hashing; plus agent 2's scoped ACK of candidate 3 with E-1..E-5.
+    - **A1-0099:** scoped ledger ACK of revision 4.
+    - Agent 2's reference and my digest tool agree on all six E contracts; its object-list vector is reproduced.
+  - **A3-0060 (02:09, origin/agent-3 096a9f3):** candidate 4 (plan 7852b7a0.., matrix 673ef239.., CSV e06280c1..). K1 is pinned.
+    - **A1-0100:** whole-document ledger review, not an ACK yet.
+    - **K2:** FL-10 must pre-register the bit 6/7 mutant controls and the before/after state evidence.
+    - **K3:** F-28 must require both barrier phases.
+    - Everything else is accepted.
+  - **A3-0061 (03:10, origin/agent-3 00588a7):** candidate 5 (plan cd174284.., matrix 582f8739.., CSV fed0d757..).
+    - It adopts K2/K3 exactly and has 32 cases.
+    - **A1-0101:** not an ACK yet. The only item is **K4**: the plan's task 1 names a non-existent `src/lib/QuorumLib.sol`; the library is in `src/lib/SigLib.sol`.
+    - The M7 skewed-clock fixture is ledger-feasible (checked against `PSC.sol:198`, `KSSC.sol:149`, `DecisionVerifier.sol:74/87`, `ACSC.sol:190`).
+  - **A3-0062 (04:11, origin/agent-3 6fd26d3):** candidate 6 (plan df510108.., matrix 5c917c2d.., CSV e3cf2a1e..). It fixes K4 and keeps agent 2's revision 4 pins; revision 5 pool-retry is not adopted, pending R4/R5.
+    - **A1-0102:** ACK of the exact candidate-6 hashes in ledger scope (not a freeze or mapping ACK).
+    - Observation for F-32: concurrent A/B with the same chain ids and addresses share EIP-712 domains, so artifacts verify on both.
+  - **A2-0049..0051 / A3-0063..0064 (04:31–07:32):** agent 2's revisions 6 and 7 (pool-retry R4/R5/R6) were reviewed. Agent 3 published candidate 7 (plan 04d6c67f.., matrix 114dfa06.., CSV 5bf01f05..) with revision 7 adopted.
+    - **A1-0103:** ACK of the exact candidate-7 hashes in ledger scope. K4 is retained; ledger rows are unchanged; revision 7 has no ledger effect.
+    - Next: the full successor v2 schema/vectors, which needs my mapping ACK, then the F0 freeze.
+  - **A2-0052 / A3-0065 / A2-0053 (08:01–08:20):** agent 2 withheld its candidate-7 ACK pending C-1..C-3 (all protocol rows). Agent 3 published candidate 8 (plan 76069506.., matrix 2230daf3.., CSV 5bf01f05.. unchanged), and agent 2 ACKed it in protocol scope.
+    - **A1-0104:** ACK of the exact candidate-8 hashes in ledger scope. Only F-12 and F-29 changed, with no ledger expectation changed. `F0Quorum` was re-run: 9 passed, exit 0.
+    - Note for the freeze: record `A-F1-DESIGN.md` sha256 7eed1b29.. explicitly, because "design 2.2" alone also names 45004b72...
+    - Both owners' exact candidate-8 design ACKs now exist. Next: the full successor v2 schema/vectors (my mapping ACK), then the F0 freeze.
+  - **A3-0066 (09:30, origin/agent-3 4de6274):** interface-v2 candidate 1 (MANIFEST 6acceadf..), with both candidate-8 ACKs recorded and my design pinned as 7eed1b29...
+    - **A1-0105:** ledger mapping REVIEW, not an ACK yet.
+    - All six signing vectors were checked in Solidity with the ledger's own hashing and QuorumLib: 26/26, plus 2 sensitivity controls (`ledger/evidence/f0-v2-c1-vectors/`, new tool `gen_v2_vector_test.py`).
+    - Corrections:
+      - **M1:** `fixture.governance` is missing;
+      - **M2:** the v2 E carrier reuses schemaVersion v0 for a new shape;
+      - **M3:** `mutantNote` is not an identifier;
+      - **M4:** state the per-contract mask and witness-set equalities. This includes my clarification that Governance stores the full mask.
+    - Items 1 and 2 are accepted (item 1 subject to M3/M4; item 2 needs sorted signatures).
+    - Next: candidate 2, then my exact mapping ACK, then the F0 freeze.
+  - **A2-0054 / A3-0067 / A2-0055 (10:09–10:35):**
+    - Agent 2 agrees with M1–M4.
+    - Agent 3 prepared a corrected schema (not candidate 2) and waits for agent 2's revision 8.
+    - Agent 2 published revision 8 (manifest 19220e0f..): D50 revision 5 8ed6f1a4.., SUCCESSOR-WIRE 3f1db2ca.., the new EXPORT-LAYOUTS b0b801ba...
+    - **A1-0106:** ledger-facing ACK of those exact files.
+      - The name → (enum, mask) table equals `make_manifest.py`.
+      - The reporting set (TMSC, PSC, KSSC, ACSC + Governance) and the threshold and uniqueness rules match the code.
+      - The 3 bindings were recomputed independently and are equal.
+      - Every death kind was checked against the ledger code.
+      - Note: two death kinds are false on bit-1 and bit-5 E mutants; label that evidence as mutant.
+    - Next: agent 3's candidate 2, then my exact mapping ACK, then the F0 freeze.
+  - **A3-0068 / A3-0069 (11:20, origin/agent-3 8b510ff):** agent 3 ACKs D50 r5 and the SUCCESSOR-WIRE r8 rules, and withholds the EXPORT-LAYOUTS ACK over L1 (A→B→A rejected) and L2 (DENY accepted for the grant death).
+    - **A1-0107:** ledger facts for agent 2's fix.
+      - A valid DENY is logged with no replay guard (ACSC:185–187), so it is never dead by grant. The `overtaken-decision-grant` kind must require result "1".
+      - A→B→A on an unexecuted governance nonce is legal on the ledger.
+    - My A1-0106 ACK does not transfer to amended EXPORT-LAYOUTS bytes; I re-check them when published.
+  - **A2-0056 (12:01, origin/agent-2 52f3943):** revision 9 (manifest 8496c7f3..). Only EXPORT-LAYOUTS changed (53bbf7e0..): per-generation supersession, ALLOW-only grant death, and a new generation-order rule.
+    - **A1-0108:** ledger-facing re-ACK of 53bbf7e0... The DENY fact also holds in F (design §1 changes only the ACSC gates), and the generation-order premise is the same chain with monotone blocks.
+    - The A1-0106 scope for D50 r5 and SUCCESSOR-WIRE r8 stands.
+    - Next: agent 3's candidate 2, then my mapping ACK, then the F0 freeze.
+  - **A3-0070 / A3-0071 (12:28, origin/agent-3 5b6bb9d):** agent 3 ACKs EXPORT-LAYOUTS r9 and keeps the generation-order rule. It published the complete v2 candidate 2 (`interfaces/proposals/v2-candidate2/`, MANIFEST 0d1a2be4.., 136 definitions, OWNER-PINS with my design 7eed1b29..).
+    - **A1-0109:** exact mapping/layout ACK of 0d1a2be4.. in ledger producer/consumer scope.
+      - M1–M4 and N1/N2/N4 are carried.
+      - The v1-named ledger definitions are identical to v1, except the `LedgerDeployment` union (note A).
+      - The E mappings equal `make_manifest.py`.
+      - Solidity vector check on the candidate-2 bytes: 26/26.
+      - The death kinds and effects are ledger-true, with the ALLOW guard in the schema.
+    - Not a freeze, READY or execution ACK. I accepted the A-F1 implementation obligations (listed in A1-0109) for after the freeze.
+    - Next: agent 2's protocol mapping ACK, then agent 3's separate F0 freeze record (my ACK), then A-F1.
+  - **A2-0057 (13:18):** agent 2's exact protocol mapping/layout ACK of candidate 2. Both mapping ACKs now exist.
+  - **A3-0072 (13:25, origin/agent-3 f1fe7e7):** F0 freeze request, `communication/F0_FREEZE_CANDIDATE2.json` f9f0906f...
+    - **A1-0110:** ledger-scope F0 design freeze ACK of f9f0906f...
+      - Every pin was verified against the blobs: 14 candidate files, 4 ACK messages, 52 protocol files and design 7eed1b29...
+      - The numeric plan matches KSSC/FixtureConfig and design 2.2.
+    - Not READY or execution.
+    - Next: agent 2's freeze ACK, then agent 3's acceptance record, then A-F1 test-first.
+  - No F implementation has started.
+- Active RQ/task: F, the A-F1 ledger implementation (accepted F0 plan, design 2.2, A1-0109). Source READY is A1-0111. F0 (PLAN.md section 6) is complete.
+- Interface version: v1 FROZEN (FREEZE.json f700292e..), unchanged.
+- Git: branch `agent-1`.
+  - Base is the common F0 baseline 376347d. Main and agent-1/2/3 were all at that commit on 2026-10-12, under D51.
+  - My local branch was fast-forwarded to it with no divergence.
+- Ledger source manifest: `ledger/evidence/source-manifest.sha256`, 350 entries at A1-0105 (52e20552..), regenerated as `sha256sum` of the tracked ledger files except itself, in C-locale order.
+  - It succeeds 186e28fb.., which succeeded 5b32e2c4..; production entries are unchanged throughout.
+  - Production `ledger/src`, `ledger/script` and `foundry.toml` are unchanged since the E pin 933d2a7. Gate E evidence still describes that pin.
+- F0 output (A1-0087):
+  - `ledger/f0/{README.md,ledger-state.csv,entry-points.csv,actor-powers.csv}`;
+  - 22 characterization tests in `ledger/test/F0Powers.t.sol`;
+  - tools `check_f0_powers.py` and `f0_controls.sh`;
+  - evidence in `ledger/evidence/f0-powers/`.
+- Results:
+  - `forge test --root ledger`: 188 passed, exit 0;
+  - controls: 7/7 sensitive;
+  - checker: `problems: []`.
+- Key findings for the F0 freeze:
+  - **L3:** one authority alone authorizes its own GIDs for another hospital's record;
+  - **L5:** the global authEpoch is an availability lever for any one authority;
+  - **L7:** the DBC trusts the witness quorum for request authenticity and credential content;
+  - **L8:** a poison checkpoint blocks the DBC permanently, and nothing can reset it.
+- Limits:
+  - single-EVM tests with the E fixture (one witness);
+  - deployer pre-seal powers and operator powers are read, not tested;
+  - all review is correlated (same model).
+- Blocker: none.
+- Next action:
+  - answer agent 3's review of A1-0111 (fixes are made by new commits and a fresh READY; reviewed bytes are never rewritten);
+  - follow up RFC A1-0112;
+  - ACK the later execution FREEZE on its exact bytes. No integrated run before that.
+- Last messages sent:
+  - A1-0117 NOTE (the KSSC sequence rule is intended: strictly greater; current + 1 is witness-side; out-of-bound saturation; no patch);
+  - A1-0116 NOTE (Governance getters at D50 open: both are immutables bound via codeSha256; a wrong value fails closed or is out of bound; no revision needed for safety);
+  - A1-0115 READY (v2.1 receipt and E successor migration at 85c59f5, manifest 70f541cd..);
+  - A1-0114 ACK (E source-closure amendment 7810ad10.., ledger scope);
+  - A1-0113 NOTE (READY pointer for A3-0074/0075; agent 2's binding.py matches my exports 7/7);
+  - A1-0112 RFC (E source map closure gap);
+  - A1-0111 READY (A-F1 ledger source at aef3daa, manifest 6358359e..);
+  - A1-0110 ACK (F0 freeze request f9f0906f.., ledger scope);
+  - A1-0109 ACK (interface-v2 candidate 2, exact mapping/layout, ledger scope);
+  - A1-0108 ACK (EXPORT-LAYOUTS revision 9, ledger-facing scope);
+  - A1-0107 REVIEW (ledger facts behind A3-0069 L1/L2);
+  - A1-0106 ACK (agent 2's F0 revision 8: D50 r5, SUCCESSOR-WIRE r8 and EXPORT-LAYOUTS, ledger-facing scope);
+  - A1-0105 REVIEW (interface-v2 candidate 1, ledger mappings, M1–M4);
+  - A1-0104 ACK (F0 candidate 8, ledger scope);
+  - A1-0103 ACK (F0 candidate 7, ledger scope);
+  - A1-0102 ACK (F0 candidate 6, ledger scope);
+  - A1-0101 REVIEW (F0 candidate 5, K4 path);
+  - A1-0100 REVIEW (F0 candidate 4, K2/K3);
+  - A1-0099 ACK (A2 F0 revision 4, ledger scope);
+  - A1-0098 REVIEW (F0 candidate 3, ledger scope, K1);
+  - A1-0097 ACK (A2 F0 revision 3, ledger scope);
+  - A1-0096 RFC (design 2.2 export rule, offline replay);
+  - A1-0095 ACK (A2 F0 revision 2, ledger scope);
+  - A1-0094 REVIEW (A2-0040/0041, masked runtime check);
+  - A1-0093 RFC (A-F1 design revision 2.1);
+  - A1-0092 RFC (A-F1 design revision 2);
+  - A1-0091 ACK (matrix revision 2, ledger scope);
+  - A1-0090 REVIEW (F0 matrix draft, A-F1 design);
+  - A1-0089 READY (F0 quorum characterization addendum);
+  - A1-0088 RFC (grouped F0 ledger decisions, all unresolved);
+  - A1-0087 READY (F0 ledger powers);
+  - A1-0086 STATUS (catch-up for the returning agents).
 
 Writer: agent 1 only. Update this snapshot; preserve durable history in immutable outbox messages.

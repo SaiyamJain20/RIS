@@ -1,0 +1,12 @@
+#!/bin/bash
+# proxy-2 S2-0025 step 4: ONE full protocol suite on the final working-tree bytes (repo root). Explicit ports 19545-19599; test_rpc_binding_view_live.py binds OS-chosen ephemeral ports (kernel range 32768-60999; A1 ruling 2026-11-14).
+R=/home/saiyamjain/Desktop/RIS/Project; T=/home/saiyamjain/.claude/jobs/aed51961/tmp/p2/t2; O=$T/out/full; mkdir -p $O
+cd $R
+export PATH="$HOME/.foundry/bin:$PATH" HMBC_FOUNDRY_DIR="$HOME/.foundry/bin" HMBC_TEST_PORT_RANGE=19545-19599 PYTHONDONTWRITEBYTECODE=1 TMPDIR=$T/tmp
+cat /proc/sys/net/ipv4/ip_local_port_range > $O/ephemeral-range.txt
+sha256sum protocol/hmbc_protocol/witness_state.py protocol/tests/state_kill_child.py protocol/tests/test_witness_state_kill.py protocol/tools/run_state_kill_mutants.py > $O/hashes-at-start.txt
+{ .venv/bin/python --version; forge --version | head -1; anvil --version | head -1; } > $O/versions.txt 2>&1
+s=$(date +%s)
+.venv/bin/python -m pytest protocol/tests -c protocol/pytest.ini --rootdir protocol -p no:cacheprovider -rs -q > $O/full-suite.txt 2>&1; echo "full-suite exit=$? secs=$(( $(date +%s)-s ))" > $O/exit.txt
+sha256sum protocol/hmbc_protocol/witness_state.py protocol/tests/state_kill_child.py protocol/tests/test_witness_state_kill.py protocol/tools/run_state_kill_mutants.py > $O/hashes-at-end.txt
+echo FULLDONE >> $O/exit.txt

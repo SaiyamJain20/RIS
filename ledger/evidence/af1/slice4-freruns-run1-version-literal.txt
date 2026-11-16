@@ -1,0 +1,109 @@
+Compiling 24 files with Solc 0.8.37
+Solc 0.8.37 finished in 21.57s
+Compiler run successful!
+
+Ran 2 tests for test/RepairedF.t.sol:PolicyRepairedFTest
+[PASS] test_RegisteredPolicyDigestMatchesBoundaryEncoding() (gas: 37095)
+[PASS] test_SameAsFirstInFirstPositionIsMalformed() (gas: 210704)
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 3.06ms (549.04µs CPU time)
+
+Ran 5 tests for test/RepairedF.t.sol:AuditRepairedFTest
+[PASS] test_E03_DroppedOutcomeStaysVisiblyPending() (gas: 3076643)
+[PASS] test_E03_EventsCorrelateWithPbcRequest() (gas: 3050619)
+[PASS] test_E03_LogDetailMode() (gas: 2384034)
+[PASS] test_E03_OutcomeWithoutDbcGrant() (gas: 2441359)
+[PASS] test_E03_TrustedWitnessBoundaryUnloggedRequest() (gas: 2438878)
+Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 11.99ms (16.13ms CPU time)
+
+Ran 4 tests for test/RepairedF.t.sol:AuditRepairedHashOnlyFTest
+[PASS] test_E03_DroppedOutcomeStaysVisiblyPending() (gas: 2199836)
+[PASS] test_E03_EventsCorrelateWithPbcRequest() (gas: 2173834)
+[PASS] test_E03_LogDetailMode() (gas: 1489597)
+[PASS] test_E03_OutcomeWithoutDbcGrant() (gas: 1564574)
+Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 13.51ms (12.65ms CPU time)
+
+Ran 10 tests for test/RepairedF.t.sol:FreshnessRepairedFTest
+[PASS] test_E02_CheckpointMonotonicityAndFreshness() (gas: 1018304)
+[PASS] test_E02_DecisionMayNotOutliveCheckpoint() (gas: 2805562)
+[PASS] test_E02_DelayedDeliveryAcrossPbcRevocationBeforeBarrier() (gas: 3428137)
+[PASS] test_E02_DeliveryAfterOnDutyEntryEnds() (gas: 2805697)
+[PASS] test_E02_EqualVersionDifferentContent() (gas: 523924)
+[PASS] test_E02_ExpiredListInstall() (gas: 75345)
+[PASS] test_E02_ListExpiryAtUse() (gas: 2190758)
+[PASS] test_E02_RevocationBarrierBlocksOlderDecision() (gas: 3314923)
+[PASS] test_E02_StaleSignedCrlReplay() (gas: 2638829)
+[PASS] test_E02_StaleSignedTempAclReplay() (gas: 2597276)
+Suite result: ok. 10 passed; 0 failed; 0 skipped; finished in 13.99ms (39.36ms CPU time)
+
+Ran 10 tests for test/RepairedF.t.sol:DecisionBindingRepairedFTest
+[PASS] test_E01_DecisionDomainBinding() (gas: 370407)
+[PASS] test_E01_DecisionExpiryBoundary() (gas: 668614)
+[PASS] test_E01_DecisionFieldSubstitution() (gas: 1710646)
+[PASS] test_E01_NonceReuseAcrossDifferentRequests() (gas: 1300275)
+[PASS] test_E01_PositiveControl() (gas: 439612)
+[PASS] test_E01_RecordSubstitution() (gas: 434570)
+[PASS] test_E01_RequestExpiryAtDbc() (gas: 216900)
+[PASS] test_E01_RequestFieldSubstitution() (gas: 3177918)
+[PASS] test_E01_RequestForOtherDestinationCertifiedHere() (gas: 206061)
+[PASS] test_E01_SignatureEncodings() (gas: 675240)
+Suite result: ok. 10 passed; 0 failed; 0 skipped; finished in 13.99ms (14.24ms CPU time)
+
+Ran 21 tests for test/RepairedF.t.sol:AccessFlowRepairedFTest
+[PASS] test_AliceRegisteredDoctorOnDutyGetsGrant() (gas: 3748944)
+[PASS] test_BobWithoutDoctorRoleIsDeniedAndGetsNoGrant() (gas: 2825872)
+[PASS] test_ConfigurationIsSealed() (gas: 97348)
+[PASS] test_DuplicateForwardedRequestIsReplayAndBothAreLogged() (gas: 2767337)
+[PASS] test_DuplicateRegistrationFails() (gas: 1754633)
+[PASS] test_OmittedFunctionsFailExplicitly() (gas: 38306)
+[PASS] test_OutcomeRequiresRelayForwardedRequestAndMatchingGrant() (gas: 355)
+[PASS] test_PaperRelayEntryIsDisabled() (gas: 39237)
+[PASS] test_RecipientKeyMustMatchRegistration() (gas: 2152546)
+[PASS] test_RegistrationWithAnotherUsersCertificateFails() (gas: 69076)
+[PASS] test_RegistrationWithUnknownIssuerFails() (gas: 77479)
+[PASS] test_RegistrationWithoutGidPossessionFails() (gas: 92166)
+[PASS] test_RejectedCertificateChangesNoState() (gas: 2805498)
+[PASS] test_ReplayedCertificateIsRejected() (gas: 3186252)
+[PASS] test_RequestAtExactExpiryIsDenied() (gas: 2144125)
+[PASS] test_RequestSignedByAnotherKeyIsDenied() (gas: 2163535)
+[PASS] test_TableActuatorRestrictions() (gas: 159310)
+[PASS] test_TemporalRoleWithoutLongTermDoctorIsDenied() (gas: 2817166)
+[PASS] test_UnregisteredUserIsDeniedAtPbcButRequestIsLogged() (gas: 1774448)
+[PASS] test_WitnessAllowForPolicyDeniedSubjectIsRejected() (gas: 2788348)
+[PASS] test_WrongDestinationRequestIsDenied() (gas: 2139612)
+Suite result: ok. 21 passed; 0 failed; 0 skipped; finished in 14.07ms (41.86ms CPU time)
+
+Ran 12 tests for test/RepairedF.t.sol:TrustAnchorsRepairedFTest
+[PASS] test_CertificateWithEmptyIntervalIsMalformed() (gas: 1291310)
+[PASS] test_CrlRevocationTakesEffectAtPbc() (gas: 3034792)
+[PASS] test_H1AdminCannotReplaceH2RevocationList() (gas: 62867)
+[PASS] test_H1AdminCannotReplaceH2TemporalAcl() (gas: 587242)
+[PASS] test_ListNotSignedByIssuerRootKey() (gas: 72451)
+[PASS] test_NonAdminCannotUpdateEvenWithIssuerSignature() (gas: 51972)
+[PASS] test_OnDutyOutsideEffectivePeriodIsExpired() (gas: 2193542)
+[PASS] test_RepairedRequiresPublishedFreshCrl() (gas: 1833079)
+[PASS] test_TempAclRemovalRevokesOnDuty() (gas: 2545357)
+[PASS] test_UnknownAuthorityIsRejected() (gas: 49715)
+[PASS] test_UpdateAdvancesFig4PointerEpochAndLog() (gas: 884584)
+[PASS] test_VerifiedRecordsAreCanonical() (gas: 1319403)
+Suite result: ok. 12 passed; 0 failed; 0 skipped; finished in 13.90ms (16.35ms CPU time)
+
+Ran 7 tests for test/RepairedF.t.sol:OutcomeEvidenceRepairedFTest
+[PASS] test_E03_AttestedOutcomeRecorded() (gas: 644817)
+[PASS] test_E03_LateReconciliationAfterGrantExpiry() (gas: 609171)
+[PASS] test_E03_NoOutcomeWithoutDbcGrantEvidence() (gas: 776991)
+[PASS] test_E03_ReceiptCallerStateAndReplay() (gas: 763239)
+[FAIL: next call did not revert as expected] test_E03_ReceiptFieldSubstitution() (gas: 1526210)
+[PASS] test_E03_ReceiptSignatureChecks() (gas: 615843)
+[PASS] test_E03_UnattestedOutcomeDisabled() (gas: 49223)
+Suite result: FAILED. 6 passed; 1 failed; 0 skipped; finished in 19.10ms (9.27ms CPU time)
+
+Ran 8 test suites in 19.85ms (103.61ms CPU time): 70 tests passed, 1 failed, 0 skipped (71 total tests)
+
+Failing tests:
+Encountered 1 failing test in test/RepairedF.t.sol:OutcomeEvidenceRepairedFTest
+[FAIL: next call did not revert as expected] test_E03_ReceiptFieldSubstitution() (gas: 1526210)
+
+Encountered a total of 1 failing tests, 70 tests succeeded
+
+Tip: Run `forge test --rerun` to retry only the 1 failed test
+Tip: Run `forge test --debug --match-test <TEST_NAME>` to inspect one failing test in the debugger

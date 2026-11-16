@@ -1,0 +1,22 @@
+            ("address[]", "a length that overruns the data"): word(32).hex() + word(3).hex() + ("00" * 12 + OWNER),
+            ("uint256", "short"): word(3).hex()[:-2],
+            ("uint256", "empty"): "",
+        }
+        for (t, why), raw in bad.items():
+>           with pytest.raises(bo.LedgerUnreachable):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE <class 'hmbc_protocol.binding_open.LedgerUnreachable'>
+
+protocol/tests/test_rpc_binding_view.py:478: Failed
+=========================== short test summary info ============================
+FAILED protocol/tests/test_rpc_binding_view.py::test_a_hex_quantity_with_a_separator_a_leading_zero_upper_case_or_any_other_non_minimal_form_is_refused[0x1_0]
+FAILED protocol/tests/test_rpc_binding_view.py::test_a_hex_quantity_with_a_separator_a_leading_zero_upper_case_or_any_other_non_minimal_form_is_refused[0x_1]
+FAILED protocol/tests/test_rpc_binding_view.py::test_a_hex_quantity_with_a_separator_a_leading_zero_upper_case_or_any_other_non_minimal_form_is_refused[0x01]
+FAILED protocol/tests/test_rpc_binding_view.py::test_a_hex_quantity_with_a_separator_a_leading_zero_upper_case_or_any_other_non_minimal_form_is_refused[0x00]
+FAILED protocol/tests/test_rpc_binding_view.py::test_a_hex_quantity_with_a_separator_a_leading_zero_upper_case_or_any_other_non_minimal_form_is_refused[0xA]
+FAILED protocol/tests/test_rpc_binding_view.py::test_a_hex_quantity_with_a_separator_a_leading_zero_upper_case_or_any_other_non_minimal_form_is_refused[0xAB]
+FAILED protocol/tests/test_rpc_binding_view.py::test_a_hex_quantity_with_a_separator_a_leading_zero_upper_case_or_any_other_non_minimal_form_is_refused[0x1 ]
+FAILED protocol/tests/test_rpc_binding_view.py::test_a_hex_quantity_with_a_separator_a_leading_zero_upper_case_or_any_other_non_minimal_form_is_refused[0x000]
+FAILED protocol/tests/test_rpc_binding_view.py::test_minimal_lowercase_hex_quantities_are_accepted
+FAILED protocol/tests/test_rpc_binding_view.py::test_canonical_replies_decode_and_every_non_canonical_encoding_is_ledger_unreachable
+10 failed, 37 passed in 12.26s

@@ -1,5 +1,16 @@
 # agent-2 (proxy-2) status
 
+## Current (2026-11-14): proxy-2 for absent agent 2 (A1-0130)
+
+- **Updated:** 2026-11-14 IST, at HEAD 8efc291 (merge 563fbc7 = agent-1 a0e4d45 + origin/agent-2 9d44754). origin/agent-2 = 9d44754f7db364e4c39150c699b1e38bedded559 at start.
+- **Directive:** human 2026-11-14 ~14:15 IST, recorded in A1-0130. proxy-2 does agent 2's open F work: S2-0024 (signing-rule reading, A3-0121), S2-0025 (deterministic K1 delta READY, A3-0110/A3-0122), S2-0026 (protocol-scope review of the plan draft A3-0127). Correlated self-review (same model as agents 1 and 3).
+- **State (proxy-2 #2, 2026-11-14):** T0 done. **T1 done** (committed 73fec05): S2-0024 NOTE (262eef21..c398). **T2 written:** S2-0025 READY `outbox/0025-ready-delta-k1-deterministic.md`: K1 detected 40/40 on this host (existing stage test 1/40), control 40/40, each case alone 5/5, run_state_kill_mutants 6/6 exit 0, state 81 + witness/pool 459 passed 0 skipped, run_state_mutants 42/42, run_mutant_tree_mutants 7/7; evidence `protocol/evidence/af2-kill-k1-deterministic/`; 4 protocol files + evidence UNCOMMITTED (agent 1 commits). Full suite: see HANDOFF. **T3 written:** S2-0026 REVIEW `outbox/0026-review-f-execution-plan-draft-protocol-scope.md` (not an ACK; §1 preflight requires origin/agent-2 ancestry, which a proxy commit on agent-1 never has).
+- **Stop rule:** if `git ls-remote origin refs/heads/agent-2` is no longer 9d44754.., stop and return "AGENT 2 RETURNED".
+
+## History (solo Phase E, 2026-10-12 and earlier)
+
+## agent-2 (proxy-2) status
+
 - **Updated:** 2026-10-12 IST, at HEAD 9d3e904 (S2-0023 uncommitted in the tree).
 - **State:** P4-3 ACK DONE. S2-0001..S2-0022 are sent and committed (S2-0022 and its review directory in 35ae6c3). The gate run E-gate-20261012 finished (S3-0022, published in c2c81d5). The gate RESULT S3-0023 (1906a3c0..) was committed in 871e218.
   - **S2-0023 sent (uncommitted):** P4-3 same-source **ACK** of S3-0023 for the protocol and key claims (`outbox/0023-ack-gate-result-e.md`, sha256 9b5869f8..). **No blocker.**

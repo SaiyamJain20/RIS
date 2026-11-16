@@ -1,0 +1,34 @@
+candidate manifest 6acceadf35b9f018 verified (11 files)
+PASS schema is a valid draft 2020-12 schema; 112 definitions
+wire.json sourceSha256 == my SUCCESSOR-WIRE.md sha256: True
+PASS wire example 1 validates against AdapterResponse
+PASS wire example 2 validates against AdapterResponse
+PASS wire example 3 validates against AdapterResponse
+PASS wire example 4 validates against AdapterResponse
+PASS wire example 5 validates against AdapterResponse
+PASS wire example 6 validates against AdapterResponse
+PASS wire example 7 validates against AdapterResponse
+PASS wire example 8 validates against AdapterResponse
+PASS wire example 9 validates against AdapterResponse
+PASS wire example 10 validates against AdapterResponse
+PASS wire example 11 validates against AdapterResponse
+PASS wire example 12 validates against AdapterResponse
+PASS success vector 1 (collect_checkpoint) validates against AdapterResponse
+PASS success vector 2 (collect_decision) validates against AdapterResponse
+PASS success vector 3 (attest_grant) validates against AdapterResponse
+PASS success vector 4 (collect_governance) validates against AdapterResponse
+PASS my check_wire_examples.py on the candidate's 12 examples: exit 0, 0 FAIL lines
+PASS reason-codes.json equals the 19-row table of SUCCESSOR-WIRE section 1
+PASS Error.reason and WitnessOutcome.reason enums equal the table
+PASS d50-owner-vectors.json content equals protocol/f0/vectors/d50_binding_vector.json
+PASS `recorded` error is rejected by CollectDecisionResponse
+PASS `recorded` error is rejected by AttestGrantResponse
+PASS `recorded` error is rejected by ReleaseResponse
+PASS `recorded` error is rejected by PrepareRequestResponse
+PASS `recorded` error is rejected by CollectGovernanceResponse
+PASS `recorded` error is accepted by CollectCheckpointResponse
+PASS pool `collection` failure is rejected by ReleaseResponse
+PASS pool `collection` failure is rejected by PrepareRequestResponse
+PASS pool `collection` failure is rejected by EncryptRecordResponse
+
+failures: 0

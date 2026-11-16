@@ -1,0 +1,1196 @@
+[
+  {
+    "type": "constructor",
+    "inputs": [
+      {
+        "name": "profile_",
+        "type": "uint8",
+        "internalType": "enum Profile"
+      },
+      {
+        "name": "mutations_",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "lsc_",
+        "type": "address",
+        "internalType": "contract LSC"
+      },
+      {
+        "name": "authorities_",
+        "type": "tuple[]",
+        "internalType": "struct TMSC.AuthorityConfig[]",
+        "components": [
+          {
+            "name": "authority",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "admins",
+            "type": "address[]",
+            "internalType": "address[]"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "addCA",
+    "inputs": [
+      {
+        "name": "",
+        "type": "bytes",
+        "internalType": "bytes"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "pure"
+  },
+  {
+    "type": "function",
+    "name": "authEpoch",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint64",
+        "internalType": "uint64"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "authorities",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address[]",
+        "internalType": "address[]"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "caAdmins",
+    "inputs": [
+      {
+        "name": "root",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address[]",
+        "internalType": "address[]"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "checkCredentials",
+    "inputs": [
+      {
+        "name": "gid",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "bundle",
+        "type": "tuple",
+        "internalType": "struct CredentialBundle",
+        "components": [
+          {
+            "name": "certificates",
+            "type": "tuple[]",
+            "internalType": "struct SignedRoleCertificate[]",
+            "components": [
+              {
+                "name": "cert",
+                "type": "tuple",
+                "internalType": "struct RoleCertificate",
+                "components": [
+                  {
+                    "name": "issuer",
+                    "type": "address",
+                    "internalType": "address"
+                  },
+                  {
+                    "name": "gid",
+                    "type": "address",
+                    "internalType": "address"
+                  },
+                  {
+                    "name": "roles",
+                    "type": "bytes32[]",
+                    "internalType": "bytes32[]"
+                  },
+                  {
+                    "name": "serial",
+                    "type": "uint64",
+                    "internalType": "uint64"
+                  },
+                  {
+                    "name": "validFrom",
+                    "type": "uint64",
+                    "internalType": "uint64"
+                  },
+                  {
+                    "name": "validUntil",
+                    "type": "uint64",
+                    "internalType": "uint64"
+                  }
+                ]
+              },
+              {
+                "name": "signature",
+                "type": "bytes",
+                "internalType": "bytes"
+              }
+            ]
+          },
+          {
+            "name": "temporalClaims",
+            "type": "tuple[]",
+            "internalType": "struct TemporalClaim[]",
+            "components": [
+              {
+                "name": "authority",
+                "type": "address",
+                "internalType": "address"
+              },
+              {
+                "name": "role",
+                "type": "bytes32",
+                "internalType": "bytes32"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "atTime",
+        "type": "uint64",
+        "internalType": "uint64"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "code",
+        "type": "uint8",
+        "internalType": "enum ErrorCode"
+      },
+      {
+        "name": "records",
+        "type": "tuple[]",
+        "internalType": "struct CredentialRecord[]",
+        "components": [
+          {
+            "name": "issuer",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "role",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "kind",
+            "type": "uint8",
+            "internalType": "uint8"
+          },
+          {
+            "name": "serial",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "anchorVersion",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "validUntil",
+            "type": "uint64",
+            "internalType": "uint64"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "configured",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "deployer",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getUserValidation",
+    "inputs": [
+      {
+        "name": "gid",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "bundle",
+        "type": "tuple",
+        "internalType": "struct CredentialBundle",
+        "components": [
+          {
+            "name": "certificates",
+            "type": "tuple[]",
+            "internalType": "struct SignedRoleCertificate[]",
+            "components": [
+              {
+                "name": "cert",
+                "type": "tuple",
+                "internalType": "struct RoleCertificate",
+                "components": [
+                  {
+                    "name": "issuer",
+                    "type": "address",
+                    "internalType": "address"
+                  },
+                  {
+                    "name": "gid",
+                    "type": "address",
+                    "internalType": "address"
+                  },
+                  {
+                    "name": "roles",
+                    "type": "bytes32[]",
+                    "internalType": "bytes32[]"
+                  },
+                  {
+                    "name": "serial",
+                    "type": "uint64",
+                    "internalType": "uint64"
+                  },
+                  {
+                    "name": "validFrom",
+                    "type": "uint64",
+                    "internalType": "uint64"
+                  },
+                  {
+                    "name": "validUntil",
+                    "type": "uint64",
+                    "internalType": "uint64"
+                  }
+                ]
+              },
+              {
+                "name": "signature",
+                "type": "bytes",
+                "internalType": "bytes"
+              }
+            ]
+          },
+          {
+            "name": "temporalClaims",
+            "type": "tuple[]",
+            "internalType": "struct TemporalClaim[]",
+            "components": [
+              {
+                "name": "authority",
+                "type": "address",
+                "internalType": "address"
+              },
+              {
+                "name": "role",
+                "type": "bytes32",
+                "internalType": "bytes32"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "code",
+        "type": "uint8",
+        "internalType": "enum ErrorCode"
+      },
+      {
+        "name": "records",
+        "type": "tuple[]",
+        "internalType": "struct CredentialRecord[]",
+        "components": [
+          {
+            "name": "issuer",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "role",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "kind",
+            "type": "uint8",
+            "internalType": "uint8"
+          },
+          {
+            "name": "serial",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "anchorVersion",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "validUntil",
+            "type": "uint64",
+            "internalType": "uint64"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "govAddAuthority",
+    "inputs": [
+      {
+        "name": "nonce",
+        "type": "uint64",
+        "internalType": "uint64"
+      },
+      {
+        "name": "root",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "admins",
+        "type": "address[]",
+        "internalType": "address[]"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "govRemoveAuthority",
+    "inputs": [
+      {
+        "name": "nonce",
+        "type": "uint64",
+        "internalType": "uint64"
+      },
+      {
+        "name": "root",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "govSetCaAdmins",
+    "inputs": [
+      {
+        "name": "nonce",
+        "type": "uint64",
+        "internalType": "uint64"
+      },
+      {
+        "name": "root",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "admins",
+        "type": "address[]",
+        "internalType": "address[]"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "governance",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "isAuthority",
+    "inputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "isCaAdmin",
+    "inputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "isRevoked",
+    "inputs": [
+      {
+        "name": "authority",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "serial",
+        "type": "uint64",
+        "internalType": "uint64"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "lsc",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "contract LSC"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "mutations",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "pbcChainId",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "profile",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint8",
+        "internalType": "enum Profile"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "psc",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "removeCA",
+    "inputs": [
+      {
+        "name": "",
+        "type": "bytes",
+        "internalType": "bytes"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "pure"
+  },
+  {
+    "type": "function",
+    "name": "removedAuthority",
+    "inputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "revocationListState",
+    "inputs": [
+      {
+        "name": "authority",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple",
+        "internalType": "struct TMSC.AnchorState",
+        "components": [
+          {
+            "name": "published",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "version",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "validUntil",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "generation",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "contentDigest",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "blockNumber",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "prevBlockNumber",
+            "type": "uint64",
+            "internalType": "uint64"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "rsc",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "seal",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "temporalAclState",
+    "inputs": [
+      {
+        "name": "authority",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple",
+        "internalType": "struct TMSC.AnchorState",
+        "components": [
+          {
+            "name": "published",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "version",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "validUntil",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "generation",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "contentDigest",
+            "type": "bytes32",
+            "internalType": "bytes32"
+          },
+          {
+            "name": "blockNumber",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "prevBlockNumber",
+            "type": "uint64",
+            "internalType": "uint64"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "temporalWindow",
+    "inputs": [
+      {
+        "name": "authority",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "gid",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "role",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple",
+        "internalType": "struct TMSC.TempWindow",
+        "components": [
+          {
+            "name": "present",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "validFrom",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "validUntil",
+            "type": "uint64",
+            "internalType": "uint64"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "updateRevocationList",
+    "inputs": [
+      {
+        "name": "list",
+        "type": "tuple",
+        "internalType": "struct RevocationList",
+        "components": [
+          {
+            "name": "authority",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "version",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "validUntil",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "revokedSerials",
+            "type": "uint64[]",
+            "internalType": "uint64[]"
+          }
+        ]
+      },
+      {
+        "name": "issuerSignature",
+        "type": "bytes",
+        "internalType": "bytes"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "generation",
+        "type": "uint64",
+        "internalType": "uint64"
+      }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "updateTemporalAcl",
+    "inputs": [
+      {
+        "name": "acl",
+        "type": "tuple",
+        "internalType": "struct TemporalAcl",
+        "components": [
+          {
+            "name": "authority",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "version",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "validUntil",
+            "type": "uint64",
+            "internalType": "uint64"
+          },
+          {
+            "name": "entries",
+            "type": "tuple[]",
+            "internalType": "struct TempAclEntry[]",
+            "components": [
+              {
+                "name": "gid",
+                "type": "address",
+                "internalType": "address"
+              },
+              {
+                "name": "role",
+                "type": "bytes32",
+                "internalType": "bytes32"
+              },
+              {
+                "name": "validFrom",
+                "type": "uint64",
+                "internalType": "uint64"
+              },
+              {
+                "name": "validUntil",
+                "type": "uint64",
+                "internalType": "uint64"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "issuerSignature",
+        "type": "bytes",
+        "internalType": "bytes"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "generation",
+        "type": "uint64",
+        "internalType": "uint64"
+      }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "validateCertificate",
+    "inputs": [
+      {
+        "name": "signed",
+        "type": "tuple",
+        "internalType": "struct SignedRoleCertificate",
+        "components": [
+          {
+            "name": "cert",
+            "type": "tuple",
+            "internalType": "struct RoleCertificate",
+            "components": [
+              {
+                "name": "issuer",
+                "type": "address",
+                "internalType": "address"
+              },
+              {
+                "name": "gid",
+                "type": "address",
+                "internalType": "address"
+              },
+              {
+                "name": "roles",
+                "type": "bytes32[]",
+                "internalType": "bytes32[]"
+              },
+              {
+                "name": "serial",
+                "type": "uint64",
+                "internalType": "uint64"
+              },
+              {
+                "name": "validFrom",
+                "type": "uint64",
+                "internalType": "uint64"
+              },
+              {
+                "name": "validUntil",
+                "type": "uint64",
+                "internalType": "uint64"
+              }
+            ]
+          },
+          {
+            "name": "signature",
+            "type": "bytes",
+            "internalType": "bytes"
+          }
+        ]
+      },
+      {
+        "name": "atTime",
+        "type": "uint64",
+        "internalType": "uint64"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "code",
+        "type": "uint8",
+        "internalType": "enum ErrorCode"
+      },
+      {
+        "name": "certDigest",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "wire",
+    "inputs": [
+      {
+        "name": "psc_",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "rsc_",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "wireGovernance",
+    "inputs": [
+      {
+        "name": "governance_",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "event",
+    "name": "AuthorityAdded",
+    "inputs": [
+      {
+        "name": "governanceNonce",
+        "type": "uint64",
+        "indexed": true,
+        "internalType": "uint64"
+      },
+      {
+        "name": "root",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "admins",
+        "type": "address[]",
+        "indexed": false,
+        "internalType": "address[]"
+      },
+      {
+        "name": "authEpoch",
+        "type": "uint64",
+        "indexed": false,
+        "internalType": "uint64"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "AuthorityRemoved",
+    "inputs": [
+      {
+        "name": "governanceNonce",
+        "type": "uint64",
+        "indexed": true,
+        "internalType": "uint64"
+      },
+      {
+        "name": "root",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "authEpoch",
+        "type": "uint64",
+        "indexed": false,
+        "internalType": "uint64"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "CaAdminsSet",
+    "inputs": [
+      {
+        "name": "governanceNonce",
+        "type": "uint64",
+        "indexed": true,
+        "internalType": "uint64"
+      },
+      {
+        "name": "root",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "admins",
+        "type": "address[]",
+        "indexed": false,
+        "internalType": "address[]"
+      },
+      {
+        "name": "authEpoch",
+        "type": "uint64",
+        "indexed": false,
+        "internalType": "uint64"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "Sealed",
+    "inputs": [
+      {
+        "name": "by",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "TrustAnchorUpdated",
+    "inputs": [
+      {
+        "name": "authority",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "kind",
+        "type": "uint8",
+        "indexed": true,
+        "internalType": "uint8"
+      },
+      {
+        "name": "version",
+        "type": "uint64",
+        "indexed": false,
+        "internalType": "uint64"
+      },
+      {
+        "name": "validUntil",
+        "type": "uint64",
+        "indexed": false,
+        "internalType": "uint64"
+      },
+      {
+        "name": "generation",
+        "type": "uint64",
+        "indexed": false,
+        "internalType": "uint64"
+      },
+      {
+        "name": "contentDigest",
+        "type": "bytes32",
+        "indexed": false,
+        "internalType": "bytes32"
+      },
+      {
+        "name": "prevBlockNumber",
+        "type": "uint64",
+        "indexed": false,
+        "internalType": "uint64"
+      },
+      {
+        "name": "authEpoch",
+        "type": "uint64",
+        "indexed": false,
+        "internalType": "uint64"
+      },
+      {
+        "name": "submitter",
+        "type": "address",
+        "indexed": false,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "error",
+    "name": "Rejected",
+    "inputs": [
+      {
+        "name": "code",
+        "type": "uint8",
+        "internalType": "enum ErrorCode"
+      }
+    ]
+  }
+]

@@ -1,0 +1,32 @@
+command: python3 -I check_ledger_scope.py origin/agent-3:evaluation/evidence/f/execution-plan-draft-20261114/plan-draft.json --scan-dir <git archive origin/agent-3 evaluation/evidence/f/execution-plan-draft-20261114>
+origin/agent-3: 9ea9514056861a3f258d6bbeab1082989f8e79cf
+PASS  ledger commit pinned in full                            85c59f588de58a8ff5e87b9fe6f630c9d8c43642; tree 36a868305d67c
+PASS  ledger commit published on origin/agent-1               
+PASS  ledger/ unchanged from pin to origin/agent-1            
+PASS  ledger commit tree                                      36a868305d67c8f546e6bde558ceb8e356962819
+PASS  ledger manifest sha256 and entries                      70f541cd63bb8e8c.. 429 entries
+PASS  interfaces/v2/FREEZE.json sha256                        7bb1d243d546dcc6..
+PASS  interfaces/v2.1/FREEZE.json sha256                      232b84bb7f997b68..
+PASS  interfaces/v2.1/hmbc.schema.json sha256                 d43c3a9a4cbb1021..
+PASS  deploy script path                                      
+PASS  argument order                                          
+PASS  fProfile is a deploy_local profile                      repaired-f
+PASS  f18Profile is a deploy_local profile                    mutant-f-q2
+PASS  fProfile is repaired-f / f18Profile is mutant-f-q2      
+PASS  log mode valid                                          complete-details
+PASS  chain ids recorded (defaults 18545/28545 or explicit)   {'pbc': 18545, 'dbc': 28545}
+PASS  deploy from a scratch git-archive extract               
+PASS  deployment manifest read back, not hand-edited          
+PASS  deployer key from environment only                      
+PASS  E regression names repaired-e + SUCCESSOR_EXPORT=1      
+PASS  fresh chain pair per case                               
+PASS  family A rejection codes                                all six
+PASS  Quorum.t.sol badLists codes are the four the plan uses  
+PASS  QuorumLib check order                                   INSUFFICIENT_QUORUM,BAD_SIGNATURE,DUPLICATE_SIGNER,DUPLICATE_SIGNER,MALFORMED,NONE
+PASS  FL-6 expects STALE_STATE first                          
+PASS  ledger test for FL-6 governance-first exists            
+PASS  F-31 rollback scope covers all ledger state             
+PASS  dev-key scan directory is non-empty                     2 files
+PASS  no dev key or DEPLOYER_PK value in evidence             0 file(s): []
+28/28 passed
+exit=0

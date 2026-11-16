@@ -1,0 +1,16 @@
+control: unmutated module passes all tests
+DETECTED H1 the result keeps schemaVersion v1 | failed tests: 5
+DETECTED H2 the worker result is not checked before the relabel | failed tests: 3
+DETECTED H3 finish_decryption hands the worker the v2 response | failed tests: 1
+DETECTED H4 a worker error escapes the mapping | failed tests: 20
+DETECTED H5 a ledger rejection is not mapped | failed tests: 1
+DETECTED H6 an unknown rejection code is passed on | failed tests: 1
+DETECTED H7 a chain failure leaks its text | failed tests: 1
+DETECTED H8 prepare_request signs against no deployment | failed tests: 9
+DETECTED H9 encrypt_record swaps the record and the policy | failed tests: 1
+DETECTED H10 release ignores the grant id | failed tests: 1
+DETECTED H11 finish_decryption ignores the user key reference | failed tests: 1
+DETECTED H13 the finish result is validated as a release result | failed tests: 1
+DETECTED H14 the encrypt result is validated as a finish result | failed tests: 1
+DETECTED H15 the release result is validated as an encrypt result | failed tests: 2
+detected 14 of 14
