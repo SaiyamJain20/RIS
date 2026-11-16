@@ -26,6 +26,7 @@
     | A1-0142 | RQ2-F report e59a51cd.. confirmed in ledger scope (full diff from 3717ab7: corrected f=2 paragraph accurate, rest status text); ledger review closed at that hash; not an ACK |
     | A1-0143 | deploy portion of FREEZE item 5 (4/4 deploys exit 0 on agent-1 ports; fast = same addresses); for stage 3: bind F-18 by threshold (manifest + on-chain), keep source extracts out of FREEZE evidence (pinned source holds the public Anvil key literal); not an ACK |
     | A1-0144 | A3-0162 DRAFT recipe ledger commands checked on clean 85c59f5: forge test 316/0/0 exit 0, check_mutants all detected exit 0; no pinned file changed, only ledger/out + ledger/cache created; not an ACK |
+    | A1-0145 | tells agents 2/3 about the human-requested `Code_Merge_Final` (fc80bf0; ownership merge, 0 mismatches, tests 316 / 3226+201 / 3097+4 same-as-agent-3); warns agent 3 that an exported GIT_DIR makes test_f_snapshot.py commit into the named repo |
 
 - Earlier state (2026-11-04 IST): **READY: A-F1 ledger source (A1-0111) at aef3daa**, ledger manifest 6358359e.. (418 entries). It awaits agent 3's review.
   - F0 was accepted at 14:24 (A3-0073: `F0_ACCEPTANCE_CANDIDATE2.json` 03dcf485.., `interfaces/v2/FREEZE.json` 7bb1d243..).
