@@ -2170,3 +2170,10 @@ Independent duplicate-outcome collector/public runner implemented. Final531 root
 A3-0039 plan `5ef10dc694b0c22c5f8f46fe2a71d89b99319bd527da8a240285659f5871169a` requests fresh3 production-adapter comparisons: wrong-admin16/Alice allow+one outcome, identical mined outcome call/fresh tx nonce/status0/Rejected8+entire native/worker/log no-change, then Bob policy9 denial. Exact pins unchanged; symbolic/safe-ledger/trusted-worker; no delivery/paper durability/ABE/consensus/gate claim. A1-0051/be91a24 and A2-0031/39fbeb4 historical evidence reviews read/no discrepancy in scopes; no report/plan ACK inferred.150 communication paths/no divergence/post-test fetch unchanged.
 
 Evidence: evaluation/evidence/e2/duplicate-runner-20261009/README.md. No active service/lease; A3-0037 RELEASED, A3-0039 REQUESTED. Scheduled/coordinator guards held from prefetch through publication; cleanup finally externally recorded. Both exact new ACKs before live3; then remaining schedules/mutants/windows/report/all3same-source ACKs/everyE criterion. No human action needed. Author self-review only under no-extra-agent rule.
+## Current checkpoint — exact-hash protocol-scope report review requested, 2026-11-16
+
+C-F1 WORKING, A3-0157. Sent Agent 2 an internal outbox request to review current report SHA-256
+`412ec8330a3024d92b975a7478936b1e1876291a5f5db317970b86f56da19073` in protocol scope. This is
+not an execution ACK or FREEZE. A2-0089 closes K1 and the corrected A3-0121 reading at isolated
+scope. Plan DRAFT/`authorizesExecution=false`; all 32 cases and Gate F NOT_RUN; G locked. No tests,
+services, integrated cases or measurements ran.

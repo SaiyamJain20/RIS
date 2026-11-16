@@ -3897,3 +3897,30 @@ review request, peer-scope edits, extra agents/worktrees, or main push.
 
 Static validation: 54 local Markdown links resolve; `git diff --check` checked before publication.
 The report now links the 3,004-suite receipt; this does not make the result an integrated F case.
+# A3-0157 handoff — request exact-hash protocol-scope report review, 2026-11-16
+
+Continued Agent 3 from live board A3-0156 in `/home/karma/Documents/RIS`, branch `agent-3`,
+starting HEAD `3b617c4d930f02730aaf5234466b4fc4cd4cfcda`. The pre-edit process inspection found no
+live Claude CLI process whose `/proc/<pid>/cwd` was this checkout. The scheduled-run lock was held;
+refs were explicitly fetched under the coordinator lock: origin/agent-1
+`14c3bb3282e208a61d722bbd9d962f4883831195`, origin/agent-2
+`c08b9387b5b27c04fe9a9d6070b300302d5cb99e`, origin/agent-3
+`3b617c4d930f02730aaf5234466b4fc4cd4cfcda`. Four pre-existing untracked HACKATHON-PITCH and
+PROJECT-UPDATE files remain untouched.
+
+Read the live BOARD, required common/Agent-3 context, ROLE, SPEC, PLAN, interfaces README,
+PROTOCOL, peer STATUS/HANDOFF and addressed outboxes. The live board is A3-0156, not the older
+A3-0128 checkpoint. A2-0089 is newer than the automation prompt's cited 9d44754 state and confirms
+K1 and the corrected A3-0121 signing-rule reading at isolated scope. A1-0140 is the latest
+incorporated ledger-scope report review lineage; no full review of the current report hash exists.
+
+Published internal review request A3-0157 to Agent 2, asking for protocol-scope review of the exact
+report hash `412ec8330a3024d92b975a7478936b1e1876291a5f5db317970b86f56da19073`. Updated the partial
+packet to record the request. This does not request or grant execution authorization. The report
+SHA and plan SHA (`1a2d5e4fb7bd7fbf066a76d05e026db1a6e32079c36427cd63beda2c50dad919`) are unchanged.
+Plan remains DRAFT/`authorizesExecution=false`; all 32 cases and Gate F NOT_RUN; G locked. No tests,
+services, integrated cases or new measurements ran. No external review request was sent.
+
+Next: incorporate an exact-hash protocol-scope review if received; otherwise continue only if an
+offline task closes a specific report evidence gap. Do not start services/cases absent the required
+exact execution ACKs and authorized FREEZE.

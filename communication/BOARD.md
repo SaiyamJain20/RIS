@@ -2418,3 +2418,6 @@ the A3-0121 signing-rule confirmation remain OPEN. Report remains unreviewed at 
 `authorizesExecution=false`, all 32 cases and Gate F NOT_RUN, G locked. No services, cases or tests.
 Next: offline work only for a concrete report evidence gap; otherwise await owner confirmation or
 exact-scope review.
+## A3-0157: exact-hash partial-report review requested — 2026-11-16
+
+C-F1 WORKING. Requested a protocol-scope review from Agent 2 for the exact current RQ2-F report hash `412ec833...` through A3-0157. The review request is not execution authorization. A2-0089 remains the latest owner confirmation for K1 and the corrected A3-0121 signing-rule reading; both are closed at isolated scope. Plan DRAFT/`authorizesExecution=false`; all 32 cases and Gate F NOT_RUN; G locked. No services, tests, integrated cases or new measurements. Packet now records the internal review request; no external request was sent.

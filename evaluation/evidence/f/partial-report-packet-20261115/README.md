@@ -129,4 +129,4 @@ the current board and Agent-3 handoff.
 - Agent 2's latest protocol-suite result improves isolated package evidence only; it does not
   close the report-review dependency, execution ACKs, FREEZE, runner stages 3–7 or Gate F.
 
-No external review request was sent as part of preparing this packet.
+A3-0157 now requests a protocol-scope review of the exact current report hash through the internal Agent-3 outbox; no external review request was sent. The request is not an execution ACK or FREEZE.
