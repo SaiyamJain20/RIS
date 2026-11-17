@@ -284,29 +284,20 @@ the HMBC authors' implementation.
 | What stays trusted: credential issuers, key worker, ledgers | RQ2:265–278 (trust matrix in the report) |
 | Gate F: NOT RUN; the integrated 32-case study still to run | `communication/GATES.md:661`; RQ2:3; packet README:131–134 |
 
-## Slide 23 — Limitations and lessons
+## Slide 23 — Conclusion
 
 | Item | Source |
 |---|---|
-| Limitations | RQ2 §5 (lines 350–356), §3 (lines 265–278); RQ1 §15 (lines 1146–1183) |
-| What F does not prove | RQ2:179, 277, 350–356; `SPEC.md:75, 83` |
-| Lesson 1 (K1) | slide 18 sources |
-| Lesson 2 (vacuous scan) | RQ2:49–55 |
-| Lesson 3 (q2 manifest says repaired-f; threshold 2 vs 3 read back) | A1-0143 §2.1 (lines 27–41) |
-| Lesson 4 (first-line hash) | A1-0141 §5 |
-| Lesson 5 (signing vs ledger) | RQ2:288–291, 316–319 |
-| Still trusted: key worker, credential issuers, ledgers | RQ2:265–278 |
-
-## Slide 24 — Conclusion
-
-| Item | Source |
-|---|---|
-| 8 / 20 / 4 of 32; 19 repaired rows | tally of the GATE column of RQ1 §6 (lines 410–555) |
-| ≤ 30 s | RQ1:832–833 |
-| RQ2 partial answer | RQ2:19–24 |
-| One unavailable certifies, two time out | RQ2:173–179 |
-| +3.7% to +11.0% | RQ2:185–187 |
-| Next steps before a gate F decision | packet README:131–141; `communication/GATES.md:650–661` |
+| Gaps 1–3 closed by Fix 1–3 | slides 6–7 sources (RQ1:44–67) |
+| Paper's flow accepts what the RQ1 repair rejects (Gap 1–3 result tables) | slides 8–10 sources (RQ1 §7–§9) |
+| Revocation bounded at ≤ 30 s | RQ1:832–833 |
+| Gate E PASS, 12 Oct 2026 | `communication/GATES.md:637–648` |
+| RQ2 items (Exp. 1–6, beyond the bound) | slides 15–21 sources; RQ2:19–24 |
+| Crash test caught 40/40 | proxy-k1-20261114 README:48–49 |
+| Still to run: the integrated 32-case gate-F study | `communication/GATES.md:661`; RQ2:3; packet README:131–134 |
+| Next, try on JANUS: the authors' Fabric/Raft extension; JANUS integration needs a separate project decision | mid lines 351–354, 383; `AGENTS.md:8` ("A later JANUS integration requires a separate decision") |
+| Next, planned RQ3: key lifecycle with real ABE; what stays secret after revocation, joining or later key compromise | mid lines 397, 941–955; `SPEC.md:24`, §6 (lines 85–102); `PLAN.md:224` |
+| Only after gate F passes | `communication/GATES.md:659, 665` |
 
 ---
 

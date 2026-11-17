@@ -2,8 +2,8 @@
 
 **Open [`hmbc-end-presentation.pdf`](hmbc-end-presentation.pdf) to view the deck.** It is LaTeX Beamer with the
 Metropolis theme, 16:9, and uses the same preamble, colours and macros as the mid-eval deck
-(`origin/slides:hmbc-presentation.tex`), so the two read as one series. 25 pages, about 20 minutes spoken
-(about 22 with transitions).
+(`origin/slides:hmbc-presentation.tex`), so the two read as one series. 24 pages, about 19 minutes spoken
+(about 21 with transitions).
 
 **Status on these slides (17 Nov 2026):** RQ1 gate E **PASS** (12 Oct 2026). RQ2: the F execution plan is a
 **DRAFT**, gate F is **NOT RUN**, and all **32 F cases are NOT_RUN**; runner stages 3–7 are in progress; the
@@ -20,11 +20,11 @@ shown is a **paper-derived reconstruction**, not the authors' implementation.
 | 12–14 | RQ2: the question and fault model (n = 4, q = 3, f = 1); the design in plain words (what is certified, what the witnesses attest, where it is checked); how RQ2 is judged (six case families, the gate's requirements) |
 | 15–20 | RQ2 experiment results, styled like the RQ1 gap results (a ✓/✗ table, an orange "What it means" box, small side notes): 1 why three approvals are needed (TLC); 2 certificate collection with real signatures; 3 the availability boundary; 4 can a crash split a signing record (29/40 → 40/40); 5 when a different signature becomes legal (180 cases, seven rule mutations); 6 cost (gas table and chart) |
 | 21–22 | Security findings beyond the fault bound (three calm cards); what RQ2 shows, and why it matters (mirrors the RQ1 slide; states gate F NOT RUN and that the 32-case study is still to run) |
-| 23–24 | Limitations and lessons; conclusion |
-| 25 | Questions |
+| 23 | Conclusion: RQ1 answered, RQ2 partial answer (the integrated 32-case gate-F study still to run), and Next: try the analysis on JANUS; the planned key-lifecycle question |
+| 24 | Questions |
 
 Speaker script with per-slide timing and Q&A backups: [`script-hmbc-end-presentation.md`](script-hmbc-end-presentation.md)
-(about 20 minutes spoken; suggested three-way split 1–8 / 9–16 / 17–25).
+(about 19 minutes spoken; suggested three-way split 1–8 / 9–16 / 17–24).
 
 Source map for every number on every slide: [`sources-end-presentation.md`](sources-end-presentation.md).
 
@@ -102,3 +102,7 @@ as in the mid-eval deck.
   are one limitations bullet and the "What RQ2 shows" gate line); new "What RQ2 shows, and why it matters"
   slide mirroring the RQ1 one, which states gate F NOT RUN and that the integrated 32-case study is still to
   run. 25 pages; about 20 minutes spoken.
+- 2026-11-17, on the human's request: "Limitations and lessons" removed; the conclusion now summarises the slides
+  (RQ1 answered; RQ2 partial, with "Still to run: the integrated 32-case gate-F study") and its Next card has two
+  short items, trying the analysis on JANUS and the planned key-lifecycle question. 24 pages; about 19 minutes
+  spoken.

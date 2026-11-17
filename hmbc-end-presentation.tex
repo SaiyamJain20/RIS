@@ -3,7 +3,7 @@
 %   tectonic -X compile hmbc-end-presentation.tex      (or: latexmk -xelatex hmbc-end-presentation.tex)
 % Same preamble, colours and macros as the mid-eval deck (origin/slides:hmbc-presentation.tex).
 % Figure 1 is taken from the paper (CC BY 4.0); the other diagrams are redrawn or our own.
-% Structure: the paper (2-3), JANUS (4), our two research questions (5), RQ1 (6-11), RQ2: design, judging, Experiments 1-6, findings, what RQ2 shows (12-22), limits, conclusion.
+% Structure: the paper (2-3), JANUS (4), our two research questions (5), RQ1 (6-11), RQ2: design, judging, Experiments 1-6, findings, what RQ2 shows (12-22), conclusion.
 % Status as of 2026-11-17: RQ1 gate E PASS (12 Oct); RQ2/F execution plan DRAFT, gate F NOT RUN, all 32 F cases NOT_RUN.
 % Every number on a result slide is mapped to its source in sources-end-presentation.md.
 % Primary snapshot: origin/Code_Merge_Final fc80bf0 (RQ2-F-DRAFT.md sha256 e59a51cd.., RQ1-E.md sha256 69dabfba..).
@@ -874,77 +874,42 @@ Governance (3 signatures): add 524,214; remove 424,421; change admins 446,934. A
 \note{Sources: Exp. 1-6 and the security findings (slides 15-21); RQ2-F-DRAFT.md lines 19-24, §3; GATES.md lines 650-661; plan-draft.json (32 cases, E regression in stage 7).}
 \end{frame}
 
-% ================================================================ PART IV: limits and conclusion (slides 23-25)
+% ================================================================ PART IV: conclusion (slides 23-24)
 
-% ---------------------------------------------------------------- 23. Limitations and lessons
-\begin{frame}{Limitations and lessons}
-\begin{columns}[T,onlytextwidth]
-\column{0.48\textwidth}
-\footnotesize\textbf{Limitations}
-\begin{itemize}\scriptsize\setlength{\itemsep}{1pt}
-  \item \textbf{Correlated review:} one model family wrote and reviewed every module.
-  \item \textbf{Synthetic fixtures:} TEST-ONLY keys, one fixed policy, one host, local Anvil.
-  \item \textbf{Model $\neq$ implementation:} TLC checks one decision slot; ProVerif is symbolic.
-  \item \textbf{Offline $\neq$ integrated:} no RQ2 number is an F case yet.
-  \item \textbf{Still trusted:} the key worker, the credential issuers and the ledgers; quorums do not protect against them.
-  \item \textbf{Symbolic crypto:} no ABE, so no secrecy or performance claim.
-\end{itemize}
-\textbf{What F does not prove, even when it passes}
-\begin{itemize}\scriptsize\setlength{\itemsep}{1pt}
-  \item consensus, or safety with $\ge$ 2 Byzantine witnesses;
-  \item liveness under arbitrary delay, or real-network latency;
-  \item power-loss durability, or protection from a compromised key worker.
-\end{itemize}
-
-\column{0.49\textwidth}
-\footnotesize\textbf{Lessons}
-\begin{enumerate}\scriptsize\setlength{\itemsep}{3pt}
-  \item \textbf{A random fault point can look green.} K1 was reported detected 3 of 3; in 40 runs we saw 29. Put the fault point where the bug lives.
-  \item \textbf{Check your checks for vacuity.} A secret scan of a missing directory ``passes''.
-  \item \textbf{Bind by value, not by label.} The $q = 2$ mutant's manifest says \code{repaired-f}; only the threshold (2 vs.\ 3, read back on chain) tells them apart.
-  \item \textbf{Hash the whole artifact.} A first-line hash missed an edited sentence.
-  \item \textbf{Keep signing rules and ledger rules apart.} An honest witness's \code{REPLAY} does not stop an already signed DENY.
-\end{enumerate}
-\end{columns}
-\src{RQ2-F-DRAFT.md §3, §5; RQ1-E.md §15; A1-0143 §2.1; A1-0141 §5; RQ2-F-DRAFT.md lines 49--55}
-\end{frame}
-
-% ---------------------------------------------------------------- 24. Conclusion
+% ---------------------------------------------------------------- 23. Conclusion
 \begin{frame}{Conclusion}
 \centering
 \begin{tikzpicture}[x=1cm, y=1cm, cw/.style={text width=4.1cm, draw=none, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}, hw/.style={text width=4.1cm, font=\footnotesize\bfseries}]
   \node[pcard=accent, cw] (k1) at (0,0) {%
-    In the paper profiles, 8 of 32 rows hold as specified, 20 depend on details the paper leaves open, and 4 are blocked.\\[3pt]
-    Our RQ1 repair closes each gap with a named check (19 rows); legitimate access keeps working.\\[3pt]
-    Revocation gets a bound ($\le$ 30\,s).\\[3pt]
+    Gaps 1--3 (decision provenance, trust-list freshness, audit evidence), each closed by Fix 1--3.\\[3pt]
+    In the result tables, the paper's flow accepts what our RQ1 repair rejects.\\[3pt]
+    Revocation is bounded at $\le$ 30\,s.\\[3pt]
     \textbf{Gate E PASS}, 12 Oct 2026.};
   \node[phead=accent, hw] at (0,0) {RQ1: answered};
   \node[pcard=pbc, cw] (k2) at (4.6,0) {%
-    With at most one faulty witness, any two 3-of-4 quorums share an honest one; the model, the pool sweep and isolated tests support this.\\[3pt]
-    One unavailable witness: still certifies. Two: time out.\\[3pt]
-    Cost: +3.7\% to +11.0\% gas per signed path.\\[3pt]
-    \textbf{Not yet shown:} that RQ1's guarantees survive in the integrated F system.};
+    3 of 4 approvals + persistent single-signing give agreement within $f = 1$ (Exp.~1--2).\\[3pt]
+    One witness down still certifies; two stop it (Exp.~3).\\[3pt]
+    Crash-consistent memory, caught 40/40 (Exp.~4); replacement rules checked (Exp.~5); +3.7--11.0\% gas (Exp.~6).\\[3pt]
+    Beyond the bound, a compromised quorum can fake credentials or halt.\\[3pt]
+    \textbf{Still to run:} the integrated 32-case gate-F study.};
   \node[phead=pbc, hw] at (4.6,0) {RQ2: partial answer};
   \node[pcard=datagray, cw] (k3) at (9.2,0) {%
-    1.\ an exact F execution FREEZE, with each role's ACK;\\[2pt]
-    2.\ runner stages 3--7;\\[2pt]
-    3.\ the 32 integrated cases, controls first;\\[2pt]
-    4.\ RQ1's suites re-run on the F ledger;\\[2pt]
-    5.\ \code{RQ2-F.md} and three sign-offs.\\[4pt]
-    Only then can gate F be decided.};
+    \textbf{Try on JANUS:} apply our gap analysis and test harness to the authors' Fabric/Raft extension (a separate project decision).\\[6pt]
+    \textbf{Planned RQ3:} the key lifecycle with real ABE: what stays secret after revocation, joining or a later key compromise; only after gate F passes.};
   \node[phead=datagray, hw] at (9.2,0) {Next};
-  \foreach \k/\c in {1/accent, 2/pbc, 3/datagray} \draw[\c, rounded corners=3pt] (k\k.north west) rectangle ($(k\k.north east)+(0,-4.2)$);
+  \path let \p1=(k1.south), \p2=(k2.south), \p3=(k3.south), \n1={min(\y1,\y2,\y3)} in coordinate (cbot) at (0,\n1);
+  \foreach \k/\c in {1/accent, 2/pbc, 3/datagray} \draw[\c, rounded corners=3pt] (k\k.north west) rectangle (k\k.north east |- cbot);
 \end{tikzpicture}
 
-\vspace{0.3em}
+\vspace{0.5em}
 \begin{tikzpicture}
   \node[draw=accent, fill=accent!10, rounded corners=3pt, text width=13.2cm, align=center, inner sep=5pt, font=\footnotesize]
     {A paper-derived reconstruction: the results describe \emph{our} executable reading of HMBC,\\not the authors' implementation. The gaps are specification dependencies, not exploits.};
 \end{tikzpicture}
-\src{RQ1-E.md §0, §6; RQ2-F-DRAFT.md lines 19--24, §2.3, §2.4; GATES.md lines 650--661; packet README lines 131--141}
+\src{RQ1-E.md §0; RQ2-F-DRAFT.md §2--3; GATES.md 648, 659--665; SPEC.md §1, §6; mid-eval lines 397, 941--955; AGENTS.md}
 \end{frame}
 
-% ---------------------------------------------------------------- 25. Close
+% ---------------------------------------------------------------- 24. Close
 \begin{frame}[standout]
 Thank you\\[0.5em]
 {\normalsize Questions?}

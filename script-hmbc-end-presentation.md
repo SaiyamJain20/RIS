@@ -1,8 +1,8 @@
-# Speaker script: the HMBC end-evaluation deck in about 20 minutes
+# Speaker script: the HMBC end-evaluation deck in about 19 minutes
 
-About **20 minutes** spoken (about 3,050 words at a brisk pace; the per-slide timings below sum to
-19 min 45 s). Plain text is what you say. *[Brackets]* are pointing cues. This script matches the
-25-page deck `hmbc-end-presentation.pdf`.
+About **19 minutes** spoken (about 3,000 words at a brisk pace; the per-slide timings below sum to
+19 min 10 s). Plain text is what you say. *[Brackets]* are pointing cues. This script matches the
+24-page deck `hmbc-end-presentation.pdf`.
 
 - **Slide numbers** are PDF page numbers. The counter in the slide corner is one lower (the title page
   is not counted).
@@ -15,7 +15,7 @@ About **20 minutes** spoken (about 3,050 words at a brisk pace; the per-slide ti
   |---|---|---|
   | A | 1–8 | the paper, JANUS, our two research questions, RQ1 gaps, Fix 1–3, the Gap 1 result |
   | B | 9–16 | Gap 2 and Gap 3 results, what RQ1 shows; RQ2 question, design, how it is judged; Experiments 1 and 2 |
-  | C | 17–25 | Experiments 3–6, the security findings beyond the bound, what RQ2 shows; limits, conclusion |
+  | C | 17–24 | Experiments 3–6, the security findings beyond the bound, what RQ2 shows; conclusion |
 
 - **If you run long:** say one sentence each on slides 11, 14 and 20. That saves about a minute.
 
@@ -367,34 +367,24 @@ availability end. What stays trusted: the credential issuers, the key worker and
 *[Gate line]* As with RQ1's verdict line: **gate F has not been run.** The integrated 32-case study is
 still to run; until then these are model, isolated and local results.
 
-## 23. Limitations and lessons (45 s)
+## 23. Conclusion (50 s)
 
-*[Left]* Limits: correlated review; synthetic fixtures; a model is not the implementation; offline is
-not integrated; the key worker, credential issuers and ledgers are still trusted; symbolic crypto. Even
-when F passes, it won't prove consensus, safety with two Byzantine witnesses, liveness under any delay,
-or power-loss durability.
-
-*[Right]* Five lessons:
-1. A random fault point can look green: put the fault where the bug lives.
-2. Check your checks: a scan of a missing directory "passes".
-3. Bind by value, not label: the weakened mutant's manifest names the normal profile; only the
-   threshold read back on chain tells them apart.
-4. Hash the whole artifact.
-5. Keep signing rules and ledger rules apart.
-
-## 24. Conclusion (40 s)
-
-- **RQ1 is answered:** in the paper's flow, 20 of 32 rows depend on unspecified details; our repair
-  closes each with a named check; gate E passed.
-- **RQ2 has a partial answer:** with at most one faulty witness, three-of-four quorums overlap in an
-  honest witness; the model, the sweep and isolated tests support it; one witness down still
-  certifies, two don't; the cost is 3.7 to 11 percent more gas per signed path. What we **have not
-  shown yet** is that RQ1's guarantees survive in the integrated system.
-- **Next:** the freeze, the remaining runner stages, the 32 cases, and only then a gate F decision.
+- *[Orange card]* **RQ1 is answered.** We found three gaps, decision provenance, trust-list freshness
+  and audit evidence, and closed each with a fix. In every result table the paper's flow accepts what
+  our repair rejects; revocation is bounded at 30 seconds; and gate E passed on 12 October.
+- *[Purple card]* **RQ2 has a partial answer.** Three of four approvals plus witnesses that remember
+  what they signed give agreement with one malicious witness; one witness down still certifies, two
+  stop it; the crash test catches a split record 40 of 40 times; the replacement rules are checked; and
+  the cost is 3.7 to 11 percent more gas. Beyond the bound, a compromised quorum can fake credentials or
+  halt the system. **Still to run: the integrated 32-case gate-F study.**
+- *[Grey card]* **Next, two directions.** First, **try our gap analysis and test harness on JANUS**,
+  the authors' Fabric and Raft extension; that needs its own project decision. Second, the **planned
+  RQ3: the key lifecycle with real attribute-based encryption**, asking what stays secret after
+  revocation, joining or a later key compromise, and only once gate F has passed.
 
 *[Banner]* Everything here is about our reconstruction of HMBC, not the authors' code.
 
-## 25. Thank you (5 s)
+## 24. Thank you (5 s)
 
 Thank you. Questions?
 
