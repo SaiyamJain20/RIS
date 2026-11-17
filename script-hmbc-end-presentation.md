@@ -1,8 +1,8 @@
-# Speaker script: the HMBC end-evaluation deck in about 22 minutes
+# Speaker script: the HMBC end-evaluation deck in about 21 minutes
 
-About **22 minutes** spoken (about 3,350 words at a brisk pace; the per-slide timings below sum to
-21 min 45 s). Plain text is what you say. *[Brackets]* are pointing cues. This script matches the
-28-page deck `hmbc-end-presentation.pdf`.
+About **21 minutes** spoken (about 3,200 words at a brisk pace; the per-slide timings below sum to
+21 min 5 s). Plain text is what you say. *[Brackets]* are pointing cues. This script matches the
+27-page deck `hmbc-end-presentation.pdf`.
 
 - **Slide numbers** are PDF page numbers. The counter in the slide corner is one lower (the title page
   is not counted).
@@ -14,10 +14,10 @@ About **22 minutes** spoken (about 3,350 words at a brisk pace; the per-slide ti
   | Speaker | Slides | Content |
   |---|---|---|
   | A | 1–8 | the paper, JANUS, our two research questions, RQ1 gaps, Fix 1–3, the Gap 1 result |
-  | B | 9–17 | Gap 2 and Gap 3 results, gate E, what RQ1 shows; RQ2 question, design, how it is judged; Experiments 1 and 2 |
-  | C | 18–28 | Experiments 3–6 and the security findings beyond the bound, trust matrix, assurance, status; limits, conclusion |
+  | B | 9–16 | Gap 2 and Gap 3 results, what RQ1 shows; RQ2 question, design, how it is judged; Experiments 1 and 2 |
+  | C | 17–27 | Experiments 3–6 and the security findings beyond the bound, trust matrix, assurance, status; limits, conclusion |
 
-- **If you run long:** say one sentence each on slides 12, 15 and 22. That saves about a minute.
+- **If you run long:** say one sentence each on slides 11, 14 and 21. That saves about a minute.
 
 ---
 
@@ -193,20 +193,7 @@ part of the gate run.
 A grant is permission to release, **not proof of delivery**. So delivery stays "unknown", and we report
 it that way.
 
-## 11. Gate E (40 s)
-
-*[Three tiles]* The whole RQ1 catalog in one command: **56 of 56** rows matched the expectation we froze
-on 8 October; the run took 4,749 seconds, on a fresh pair of chains per row; and three matching
-sign-offs recorded **gate E PASS** on 12 October.
-
-*[Grid]* One square per row. In the paper's flow, 8 hold as specified, 20 depend on a gap, 4 are
-blocked; in our repair, 19 are enforced by a fix and 5 are controls.
-
-*[Grey line]* The checks are real: six mutants, each removing one check, are all caught by their tests,
-and ProVerif finds an attack once the destination is dropped. Recorded with the verdict: the
-integrated mutant matrix and window were not run, and the review is correlated.
-
-## 12. What RQ1 shows (40 s)
+## 11. What RQ1 shows (45 s)
 
 *[Orange card]* The answer to RQ1:
 - **Holds as specified:** HMBC already rejects identical replays and duplicate outcomes, and restricts
@@ -219,11 +206,15 @@ integrated mutant matrix and window were not run, and the review is correlated.
 each with a test; revocation gets a bound of at most 30 seconds; and the 56-row run is a harness RQ2
 must keep passing.
 
+*[Line above the banner]* The verdict: **gate E passed** on 12 October; all 56 catalog rows matched
+their frozen expectation, and the checks are real: six ledger mutants are each caught by their tests, and
+ProVerif finds an attack once the destination check is dropped.
+
 *[Banner]* And our RQ1 repair puts all decision trust on one witness. That is exactly where RQ2 begins.
 
 ---
 
-## 13. RQ2: the question (50 s)
+## 12. RQ2: the question (50 s)
 
 *[Italic line]* RQ2: which RQ1 guarantees survive Byzantine witnesses, with **four** witnesses, a
 quorum of **three**, and at most **one** faulty?
@@ -239,7 +230,7 @@ two, a fully compromised quorum.
 
 *[Orange box]* This is not a consensus protocol. It authenticates decisions.
 
-## 14. RQ2 design (50 s)
+## 13. RQ2 design (50 s)
 
 *[Diagram]* Four witnesses, one per hospital, each with its own key and its own durable store. A
 collector gathers their signatures; it holds no key itself.
@@ -257,7 +248,7 @@ Each needs at least three of the four signatures, and the witness set is fixed a
 **Signatures alone are not enough:** an honest witness remembers what it signed, across restarts, and
 replaces an old approval only once it is provably obsolete.
 
-## 15. How RQ2 is judged (40 s)
+## 14. How RQ2 is judged (40 s)
 
 *[Left]* RQ2 is judged by its gate on integrated cases in six families: quorum and availability; the
 signing rule and Byzantine witnesses; durable state and restart; trust lists and governance; relay and
@@ -269,80 +260,73 @@ TLC model; and one frozen integrated run with three sign-offs.
 
 *[Grey line]* Whether those integrated runs have happened is on the status slide. They have not yet.
 
-## 16. Experiment 1: why three approvals are needed (50 s)
+## 15. Experiment 1 result: why three approvals are needed (50 s)
 
-*[Question]* Can two conflicting values both obtain enough approvals?
+*[Grey question]* Can two conflicting values both obtain enough approvals? We modeled one decision slot
+in TLA+ and let TLC explore every reachable state.
 
-*[Left]* We modeled one decision slot in TLA+ and let TLC explore every reachable state. With four
-witnesses and a quorum of three, any two signing groups share at least two witnesses; with one
-malicious witness, that overlap contains an honest one, which must refuse the conflicting value.
+*[Table, top two rows]* With a quorum of three and at most one malicious witness, agreement **holds**:
+108 distinct states, the complete graph. With no malicious witness, it holds too.
+*[Red rows]* A quorum of two, two malicious witnesses, or honest witnesses that may double-sign: each
+one breaks agreement, with a counterexample trace.
 
-*[Table]* With quorum three and one malicious witness, agreement holds: 108 distinct states, complete.
-With none, it holds too. A quorum of two, two malicious witnesses, or honest witnesses that may
-double-sign: each breaks agreement. A fresh rerun reproduced all five verdicts.
+*[Orange box]* So both halves are needed: the quorum of three, and each witness's persistent refusal to
+sign a conflicting value. The model covers one slot; a fresh rerun reproduced all five verdicts.
 
-*[Finding]* Both the threshold and the persistent refusal are necessary. The model covers one slot.
+## 16. Experiment 2 result: certificate collection with real signatures (45 s)
 
-## 17. Experiment 2: certificate collection with real signatures (50 s)
+*[Grey question]* Does the collector filter bad replies while respecting the quorum boundary? Real
+signatures, scripted witnesses, and nine malicious behaviours, from staying silent to using a wrong key.
 
-*[Question]* Does the collector filter bad replies while respecting the quorum boundary?
+*[Table]* With one malicious witness: 972 scenarios, 180 certificates, **zero** invalid and **zero**
+potential agreement hazards. With two, outside the bound: 4,374 scenarios, 330 certificates, still none
+invalid, but **2,916** runs end where two values could each collect three approvals.
 
-*[Left]* Real signatures, scripted witnesses. A malicious witness has nine behaviours: silent, signing
-one of three values, reporting one of three recorded values, garbage, or a wrong key. With one
-malicious witness that is 972 scenarios; with two, beyond the bound, 4,374.
-
-*[Result]* With one malicious witness, the collector produced 180 certificates, none invalid, and
-**zero** potential agreement hazards. With two: 330 certificates, still none malformed, but **2,916**
-states where two different values could each collect three approvals.
-
-*[Finding]* Valid signatures alone do not give agreement; signer overlap does. The 2,916 are modeled
+*[Orange box]* Valid signatures alone don't give agreement; signer overlap does. The 2,916 are modeled
 possibilities, not observed double grants.
 
-## 18. Experiment 3: the availability boundary (50 s)
+## 17. Experiment 3 result: the availability boundary (50 s)
 
-*[Question]* How many witnesses can stop responding before collection stops?
+*[Grey question]* How many witnesses can stop responding before collection stops?
 
-*[Left]* All 16 ways of silencing witnesses, five runs each: 80 trials. Zero or one silent: three
-signatures every time. Two or more: no certificate by the 10-second deadline.
+*[Table, virtual rows]* Over 80 virtual trials: with none or one witness silent, a three-signature
+certificate every time; with two or more, none by the 10-second deadline. With delayed replies it
+finished at 300 milliseconds, using the three fastest.
+*[Process rows]* With real processes: accepted in about 0.7 seconds, still about 0.6 with one witness
+killed, and a timeout at about 10.5 seconds with two stopped. The restarted witness kept its record.
 
-*[Right]* With delayed replies, collection finished at 300 virtual milliseconds, using the three fastest.
-With real processes: accepted in about 0.7 seconds with all four running, about 0.6 with one killed,
-and a timeout at about 10.5 seconds with two stopped. A restarted witness kept its signing record.
-
-*[Finding]* One unavailable witness is tolerated, two are not: the intended boundary. These are local
+*[Orange box]* One unavailable witness is tolerated, two are not: the intended boundary. These are local
 timings, and the process runs are weaker evidence because their raw output was not kept.
 
-## 19. Experiment 4: can a crash split a signing record? (50 s)
+## 18. Experiment 4 result: can a crash split a signing record? (50 s)
 
-*[Question]* If a witness dies mid-signing, can it come back with a half-written memory?
+*[Grey question]* If a witness dies mid-signing, can it come back with a half-written memory? Its
+remembered approval and the signed hash must commit together, so we removed the database transaction
+on purpose and killed the process mid-signing.
 
-*[Left]* A witness's remembered approval, the pin, and the message hash, the digest, must commit
-together. We broke that on purpose by removing the database transaction, killed the process mid-signing
-and reopened the store.
+*[Table]* The correct store passes 40 of 40 runs. The broken store was caught in only 29 of 40 with
+timing-based kills. With pauses placed between the signing statements, it is caught 40 of 40 times, and
+agent 2 reproduced that: 15 of 15.
 
-*[Chart]* With timing-based kills, the broken store was caught in only 29 of 40 runs. With pauses placed
-between the statements, after a fresh pin, after a digest, and after replacing an obsolete pin, it was
-caught 40 of 40 times, and the correct store passed 40 of 40. Agent 2 reproduced it: 15 of 15.
-
-*[Finding]* Controlled interruption reliably exposes the defect. Process death only, no power-loss
+*[Orange box]* Controlled interruption reliably exposes the defect. Process death only: no power-loss
 claim.
 
-## 20. Experiment 5: when does a different signature become legal? (50 s)
+## 19. Experiment 5 result: when does a different signature become legal? (50 s)
 
-*[Question]* When may a witness replace an old approval with a different value?
+*[Grey question]* When may a witness replace an old approval with a different value? Too strict blocks
+progress; too loose allows two live values. We compared a separate rule checker with the real store on
+180 cases.
 
-*[Left]* Too strict blocks progress; too loose allows two conflicting live values. We built a separate
-rule checker and compared it with the real store on 180 cases, crossing expiry, sequence, grant and
-outcome.
+*[Table, first row]* With the correct rules they agree on all 180: 142 replacements allowed, 38
+conflicts refused.
+*[Other rows]* Then we broke seven checker rules on purpose, for example treating the exact expiry
+instant as still valid, or never retiring an executed receipt. Every one is detected, between 4 and 20
+disagreements.
 
-*[Result]* They agree in all 180: 142 replacements allowed, 38 conflicts refused. Then we broke seven
-checker rules on purpose, for example treating the exact expiry instant as still valid, or never
-retiring an executed receipt. Every broken rule disagreed with the store, between 4 and 20 times.
+*[Orange box]* The checker matches the store and catches these seven errors. It is store-level evidence;
+what callers assert still needs separate checks.
 
-*[Finding]* The checker matches the store on this grid and catches these seven errors. It is
-store-level evidence; what callers assert still needs separate checks.
-
-## 21. Security findings beyond the fault bound (55 s)
+## 20. Security findings beyond the fault bound (55 s)
 
 What happens beyond the bound? Three findings, from scratch tests on the ledger.
 - *[First card]* **Two malicious witnesses:** the contracts still refuse a second checkpoint for one
@@ -356,18 +340,18 @@ What happens beyond the bound? Three findings, from scratch tests on the ledger.
 *[Finding]* Distributing approval helps, but a compromised quorum can corrupt facts or halt the system.
 None of this contradicts the one-fault claims, and none of it is an HMBC vulnerability.
 
-## 22. Experiment 6: the cost of distributed approval (40 s)
+## 21. Experiment 6 result: cost (40 s)
 
-*[Question]* What does going from one attester to three approvals cost?
+*[Grey question]* What does going from one attester to three approvals cost on chain?
 
 *[Table and chart]* The same contract code under one and three signatures: **+11.0%** gas to accept a
-checkpoint, **+5.5%** for a decision, **+3.7%** for an outcome. Each extra signature adds about 6.8
-thousand gas and 160 bytes. Governance actions cost 424 to 524 thousand gas. All contracts stay under
-the 24-kilobyte limit.
+checkpoint, **+5.5%** for a decision, **+3.7%** for an outcome.
 
-*[Finding]* A modest, measured cost; peer runs reproduced every row. Not a fee or throughput estimate.
+*[Orange box]* Each extra signature adds about 6.8 thousand gas and 160 bytes. Peers reproduced every
+row; this is not a fee or throughput estimate. *[Side note]* Governance actions cost 424 to 524 thousand
+gas, and all contracts stay under the 24-kilobyte limit.
 
-## 23. Trust matrix (35 s)
+## 22. Trust matrix (35 s)
 
 What does RQ2 still have to trust?
 - **Required:** three of four honest witnesses, and an honest governance quorum.
@@ -377,7 +361,7 @@ What does RQ2 still have to trust?
 - **Not evaluated:** key custody, the client and the data store. And all code and reviews come from one
   model family.
 
-## 24. Assurance (40 s)
+## 23. Assurance (40 s)
 
 - *[Left]* The partial report is pinned by its hash. The ledger role and the protocol role each read
   the full diff and found no objection in their scope. A review isn't permission to run anything.
@@ -388,7 +372,7 @@ What does RQ2 still have to trust?
 *[Orange box]* All three roles are the same model family, so these are scoped re-checks, not
 independent review.
 
-## 25. Honest status of RQ2 (45 s)
+## 24. Honest status of RQ2 (45 s)
 
 - *[Tiles]* The execution plan is a **draft** and authorises nothing. Gate F: **not run**, none of its
   eight checklist boxes ticked. F cases: **zero of 32** run. What **is** done: the partial report was
@@ -400,7 +384,7 @@ independent review.
   the remaining runner stages, the 32 integrated cases, RQ1's suites re-run on the new ledger, then the
   report and three sign-offs.
 
-## 26. Limitations and lessons (45 s)
+## 25. Limitations and lessons (45 s)
 
 *[Left]* Limits: correlated review; synthetic fixtures; a model is not the implementation; offline is
 not integrated; symbolic crypto. Even when F passes, it won't prove consensus, safety with two
@@ -414,7 +398,7 @@ Byzantine witnesses, liveness under any delay, or power-loss durability.
 4. Hash the whole artifact.
 5. Keep signing rules and ledger rules apart.
 
-## 27. Conclusion (40 s)
+## 26. Conclusion (40 s)
 
 - **RQ1 is answered:** in the paper's flow, 20 of 32 rows depend on unspecified details; our repair
   closes each with a named check; gate E passed.
@@ -426,7 +410,7 @@ Byzantine witnesses, liveness under any delay, or power-loss durability.
 
 *[Banner]* Everything here is about our reconstruction of HMBC, not the authors' code.
 
-## 28. Thank you (5 s)
+## 27. Thank you (5 s)
 
 Thank you. Questions?
 

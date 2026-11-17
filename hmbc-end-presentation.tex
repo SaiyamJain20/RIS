@@ -3,7 +3,7 @@
 %   tectonic -X compile hmbc-end-presentation.tex      (or: latexmk -xelatex hmbc-end-presentation.tex)
 % Same preamble, colours and macros as the mid-eval deck (origin/slides:hmbc-presentation.tex).
 % Figure 1 is taken from the paper (CC BY 4.0); the other diagrams are redrawn or our own.
-% Structure: the paper (2-3), JANUS (4), our two research questions (5), RQ1 (6-12), RQ2: design, judging, Experiments 1-6 and findings (13-25), limits, conclusion.
+% Structure: the paper (2-3), JANUS (4), our two research questions (5), RQ1 (6-11), RQ2: design, judging, Experiments 1-6 and findings (12-24), limits, conclusion.
 % Status as of 2026-11-17: RQ1 gate E PASS (12 Oct); RQ2/F execution plan DRAFT, gate F NOT RUN, all 32 F cases NOT_RUN.
 % Every number on a result slide is mapped to its source in sources-end-presentation.md.
 % Primary snapshot: origin/Code_Merge_Final fc80bf0 (RQ2-F-DRAFT.md sha256 e59a51cd.., RQ1-E.md sha256 69dabfba..).
@@ -235,7 +235,7 @@
 \note{RQ wording: SPEC.md §1, RQ1-E.md §1, RQ2-F-DRAFT.md §1. Gaps: RQ1-E.md §0. Assumptions: paper §V. One trusted witness: RQ1-E.md §15. Catalog: RQ1-E.md §3.3. Fault model: RQ2-F-DRAFT.md §1; 32 cases: plan-draft.json.}
 \end{frame}
 
-% ================================================================ PART II: RQ1 (slides 6-12), adapted from mid-eval slides 15-22
+% ================================================================ PART II: RQ1 (slides 6-11), adapted from mid-eval slides 15-22
 % Source of every number below: evaluation/reports/RQ1-E.md (69dabfba..), communication/GATES.md (E section)
 % and the owner window measurements A1-0046 / A2-0026. Gaps and fixes share numbers and colours:
 % Gap/Fix 1 = accent (decision provenance), 2 = pbc (trust-list freshness), 3 = dbc (audit evidence).
@@ -454,70 +454,39 @@ the worker crashes after intent or after send & blocked: the paper is silent on 
 Crash points are logical process deaths, not power loss. The receipt-substitution rows use a deliberately deviating test witness. \src{RQ1-E.md §9; gate rows 1--9, 23--35}
 \end{frame}
 
-% ---------------------------------------------------------------- 11. Gate E
-\begin{frame}{RQ1 gate E: one command, 56 rows, a recorded verdict}
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, every node/.append style={minimum height=1.45cm, font=\scriptsize, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}]
-  \node[stat=clsup, text width=3.6cm] at (0,0)    {{\LARGE\bfseries 56 / 56}\\[3pt]rows matched the expectation frozen on 8 Oct};
-  \node[stat=datagray, text width=3.6cm] at (4.5,0) {{\LARGE\bfseries 4,749\,s}\\[3pt]one command; a fresh pair of chains per row};
-  \node[stat=okgreen, text width=3.6cm, very thick] at (9.0,0) {{\LARGE\bfseries\textcolor{okgreen}{PASS}}\\[3pt]gate E, 12 Oct 2026: three matching sign-offs};
-\end{tikzpicture}
-
-\vspace{0.7em}
-\begin{tikzpicture}[x=1cm, y=1cm]
-  \node[font=\scriptsize\bfseries, text=pbc, anchor=south west] at (0.85,0.4) {the paper's flow: 32 rows};
-  \node[font=\scriptsize\bfseries, text=dbc, anchor=south west] at (4.35,0.4) {our RQ1 repair: 24 rows};
-  \node[font=\scriptsize\bfseries, anchor=east] at (0.7,0.11)  {Gap 1};
-  \node[font=\scriptsize\bfseries, anchor=east] at (0.7,-0.49) {Gap 2};
-  \node[font=\scriptsize\bfseries, anchor=east] at (0.7,-1.09) {Gap 3};
-  \wcells{0.85}{0}{0}{2}{clsup}  \wcells{0.85}{2}{0}{10}{clgap}
-  \wcells{4.35}{0}{0}{7}{clrep}
-  \wcells{0.85}{0}{-0.6}{2}{clsup}  \wcells{0.85}{2}{-0.6}{8}{clgap}
-  \wcells{4.35}{0}{-0.6}{4}{clrep}   \wcells{4.35}{4}{-0.6}{1}{clsup}
-  \wcells{0.85}{0}{-1.2}{4}{clsup}  \wcells{0.85}{4}{-1.2}{2}{clgap}  \wcells{0.85}{6}{-1.2}{4}{clblk}
-  \wcells{4.35}{0}{-1.2}{8}{clrep}   \wcells{4.35}{8}{-1.2}{4}{clsup}
-  \node[anchor=west, font=\scriptsize, align=left] at (8.0,-0.45) {%
-    \tikz\fill[clsup] (0,0) rectangle (0.22,0.22); \;holds as specified: \textbf{8} + \textbf{5} controls\\[3pt]
-    \tikz\fill[clgap] (0,0) rectangle (0.22,0.22); \;depends on a gap the paper leaves open: \textbf{20}\\[3pt]
-    \tikz\fill[clrep] (0,0) rectangle (0.22,0.22); \;enforced by a fix: \textbf{19}\\[3pt]
-    \tikz\fill[clblk] (0,0) rectangle (0.22,0.22); \;blocked, unproved: \textbf{4}};
-\end{tikzpicture}
-
-\vspace{0.6em}
-\raggedright{\scriptsize\color{datagray} Each square is one catalog row \evl{I}. The checks are real: 6 ledger mutants are each caught by their tests \evl{U}, and ProVerif finds an attack once the destination is dropped \evl{F}. Not run: the integrated mutant matrix and window; the review is correlated (same model).}\\[0.1em]
-\src{RQ1-E.md lines 13, 351--370, §6 tally, §11, §12; GATES.md lines 637--648 (ACKs A1-0085, S2-0023, S3-0024)}
-\end{frame}
-
-% ---------------------------------------------------------------- 12. What RQ1 shows
+% ---------------------------------------------------------------- 11. What RQ1 shows
 \begin{frame}{What RQ1 shows, and why it matters}
 \centering
-\begin{tikzpicture}[x=1cm, y=1cm, cw/.style={text width=6.1cm, draw=none, font=\footnotesize, inner sep=7pt, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}, hw/.style={text width=6.1cm, font=\small\bfseries, inner sep=6pt}]
+\begin{tikzpicture}[x=1cm, y=1cm, cw/.style={text width=6.1cm, draw=none, font=\scriptsize, inner sep=6pt, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}, hw/.style={text width=6.1cm, font=\small\bfseries, inner sep=6pt}]
   \node[pcard=accent, cw] (k1) at (0,0) {%
-    \textbf{Holds as specified:} identical replay, duplicate outcome, issuer-scoped list updates; a dropped outcome stays visible.\\[6pt]
-    \textbf{Depends on the paper's gaps:} 10 case schedules (subject, forged tuple, new reference, destination, expiry, list rollback, revocation before and after the barrier, expired duty, fabricated outcome) plus crash recovery.\\[6pt]
+    \textbf{Holds as specified:} identical replay, duplicate outcome, issuer-scoped list updates; a dropped outcome stays visible.\\[3pt]
+    \textbf{Depends on the paper's gaps:} 10 case schedules (subject, forged tuple, new reference, destination, expiry, list rollback, revocation before and after the barrier, expired duty, fabricated outcome) plus crash recovery.\\[3pt]
     \textbf{Repairable:} each gets a named, explicit check, and legitimate access keeps working.};
   \node[phead=accent, hw] at (0,0) {Answer to RQ1};
   \node[pcard=dbc, cw] (k2) at (7.0,0) {%
-    \textbf{For implementers of HMBC:} a concrete list of the decisions the paper leaves open, each with a test that shows the consequence.\\[6pt]
-    \textbf{Revocation gets a bound:} $\le$ 30\,s in our RQ1 repair, where the paper's flow has none.\\[6pt]
-    \textbf{A reusable harness:} one frozen, one-command 56-row run that RQ2 must keep passing.\\[6pt]
+    \textbf{For implementers of HMBC:} a concrete list of the decisions the paper leaves open, each with a test that shows the consequence.\\[3pt]
+    \textbf{Revocation gets a bound:} $\le$ 30\,s in our RQ1 repair, where the paper's flow has none.\\[3pt]
+    \textbf{A reusable harness:} one frozen, one-command 56-row run that RQ2 must keep passing.\\[3pt]
     To our knowledge (non-exhaustive search), the first executable, instance-level analysis of HMBC.};
   \node[phead=dbc, hw] at (7.0,0) {Why it matters};
-  \foreach \k/\c in {1/accent, 2/dbc} \draw[\c, rounded corners=3pt] (k\k.north west) rectangle ($(k\k.north east)+(0,-4.75)$);
+  \foreach \k/\c in {1/accent, 2/dbc} \draw[\c, rounded corners=3pt] (k\k.north west) rectangle ($(k\k.north east)+(0,-4.15)$);
 \end{tikzpicture}
 
-\vspace{0.6em}
+\vspace{0.3em}
+{\scriptsize\textbf{Gate E: PASS} on 12 Oct 2026; all 56 catalog rows matched their frozen expectation \evl{I}. The checks are real: 6 ledger mutants are each caught by their tests \evl{U}, and ProVerif finds an attack once the destination check is dropped \evl{F}.}
+
+\vspace{0.4em}
 \begin{tikzpicture}
   \node[draw=accent, fill=accent!10, rounded corners=3pt, text width=13.2cm, align=center, inner sep=5pt, font=\footnotesize]
     {Our RQ1 repair puts all decision trust on \textbf{one witness}.\\RQ2 asks what survives when witnesses are Byzantine.};
 \end{tikzpicture}
 \end{frame}
 
-% ================================================================ PART III: RQ2 (slides 13-25)
+% ================================================================ PART III: RQ2 (slides 12-24)
 % Primary source: evaluation/reports/RQ2-F-DRAFT.md on origin/Code_Merge_Final (sha256 e59a51cd..) and the
 % receipts it links under evaluation/evidence/f/. Nothing here is an integrated F case.
 
-% ---------------------------------------------------------------- 13. RQ2 question and fault model
+% ---------------------------------------------------------------- 12. RQ2 question and fault model
 \begin{frame}{RQ2: what survives Byzantine witnesses?}
 \begin{center}
 \footnotesize\itshape Which RQ1 guarantees survive Byzantine operators with q-of-n application witnesses\\(n = 4, q = 3, f = 1), assuming safe ledgers and a trusted key worker?
@@ -562,7 +531,7 @@ Crash points are logical process deaths, not power loss. The receipt-substitutio
 \src{RQ2-F-DRAFT.md lines 127--132, 149, §3; SPEC.md §5}
 \end{frame}
 
-% ---------------------------------------------------------------- 14. RQ2 design
+% ---------------------------------------------------------------- 13. RQ2 design
 \begin{frame}{RQ2 design: three certified paths, governance, witnesses that remember}
 \begin{columns}[T,onlytextwidth]
 \column{0.40\textwidth}
@@ -602,7 +571,7 @@ governance action & adding or removing a credential authority, or changing its a
 \src{RQ2-F-DRAFT.md §1 (lines 127--132), §3 (line 269); A1-0137 §1, §2.1--2.2; RQ1-E.md lines 64--65; SPEC.md §5; witness\_state.py (store)}
 \end{frame}
 
-% ---------------------------------------------------------------- 15. How RQ2 is judged
+% ---------------------------------------------------------------- 14. How RQ2 is judged
 \begin{frame}{How RQ2 is judged}
 \begin{columns}[T,onlytextwidth]
 \column{0.50\textwidth}
@@ -636,188 +605,158 @@ governance action & adding or removing a credential authority, or changing its a
 \raggedright{\scriptsize\color{datagray} Each case runs on a fresh chain pair, positive controls first. Integrated gate-F runs: see the status slide.}
 \end{frame}
 
-% ---------------------------------------------------------------- 16. Experiment 1: TLC
-\begin{frame}{Experiment 1: why three approvals are needed \;\evl{F}}
-\expq{Can two conflicting values both obtain enough approvals?}
-
-\vspace{0.4em}
-\begin{columns}[T,onlytextwidth]
-\column{0.42\textwidth}
-\xlab{What we did}
-\scriptsize We modeled one decision slot in TLA+ and let the TLC model checker explore every reachable state ($n$ witnesses, $q$ approvals needed, $f$ malicious). With $n = 4$ and $q = 3$, any two signing groups overlap in at least two witnesses; with $f = 1$ that overlap contains an honest witness, which must refuse the conflicting value.\\[0.6em]
-\finding{both the threshold \emph{and} the persistent refusal to sign a conflicting value are necessary. The model covers one slot; changing checkpoints, expiry and production consensus need separate reasoning.}
-
-\column{0.55\textwidth}
-\xlab{Result}
-\scriptsize
-\renewcommand{\arraystretch}{1.25}
-\begin{tabular}{@{}L{0.42\linewidth} L{0.52\linewidth}@{}}
-\toprule
-\textbf{Configuration} & \textbf{Agreement} \\
-\midrule
-$q = 3$, $f = 1$, persistent single-signing & \textcolor{okgreen}{\textbf{holds}}: 108 distinct states, complete \\
-$q = 3$, $f = 0$, persistent & \textcolor{okgreen}{\textbf{holds}}: 81 distinct states, complete \\
-$q = 2$, $f = 1$ & \textcolor{badred}{\textbf{violated}} \\
-$q = 3$, $f = 2$ & \textcolor{badred}{\textbf{violated}} (two malicious witnesses) \\
-$q = 3$, $f = 0$, double-signing allowed & \textcolor{badred}{\textbf{violated}} without a malicious witness \\
-\bottomrule
-\end{tabular}\\[0.4em]
-The positive counts are complete reachable graphs; the violations come with counterexample traces. A fresh rerun reproduced all five verdicts.
-\end{columns}
-\src{RQ2-F-DRAFT.md §2.1 (lines 141--158); tlc-audit-20261115/README.md lines 14--24}
-\end{frame}
-
-% ---------------------------------------------------------------- 17. Experiment 2: certificate collection
-\begin{frame}{Experiment 2: certificate collection with real signatures \;\evl{U}}
-\expq{Does the collector filter adversarial replies while respecting the quorum boundary?}
-
-\vspace{0.4em}
-\begin{columns}[T,onlytextwidth]
-\column{0.45\textwidth}
-\xlab{What we did}
-\scriptsize Real EIP-712 signatures, scripted witnesses. Each honest witness starts uncommitted or committed to one of two values. A malicious witness stays silent, signs one of three values, reports one of three recorded values, returns garbage, or uses the wrong key: 9 behaviours.
-\begin{itemize}\setlength{\itemsep}{1pt}
-  \item One malicious: 4 positions $\times$ 9 behaviours $\times$ $3^3$ honest states $=$ \textbf{972} scenarios.
-  \item Two malicious (beyond the bound): 6 pairs $\times$ $9^2$ $\times$ $3^2$ $=$ \textbf{4,374}.
-\end{itemize}
-\vspace{0.3em}
-\finding{valid signatures alone do not establish agreement; signer overlap matters. The hazards are modeled possibilities, not observed double grants; honest signing state here is scripted, not the durable store.}
-
-\column{0.52\textwidth}
-\xlab{Result}
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, every node/.append style={font=\scriptsize, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}]
-  \node[font=\footnotesize\bfseries, text=okgreen] at (-1.75,1.05) {one malicious};
-  \node[font=\footnotesize\bfseries, text=badred] at (1.75,1.05) {two malicious};
-  \node[tile=okgreen, text width=3.0cm, minimum height=1.3cm] at (-1.75,0.15) {{\Large\bfseries 0}\\[1pt]potential agreement hazards};
-  \node[tile=badred, text width=3.0cm, minimum height=1.3cm] at (1.75,0.15) {{\Large\bfseries 2,916}\\[1pt]potential agreement hazards};
-\end{tikzpicture}\\[0.4em]
-\scriptsize
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{@{}l r r r r@{}}
-\toprule
- & scenarios & certificates & none & invalid \\
-\midrule
-one malicious & 972 & 180 & 792 & 0 \\
-two malicious & 4,374 & 330 & 4,044 & 0 \\
-\bottomrule
-\end{tabular}\\[0.3em]
-\raggedright Every certificate has three distinct, valid, sorted signers. Some honest starting states already disagree, so ``no certificate'' is an expected safe outcome.
-\end{columns}
-\src{pool-sweep-20261115/README.md lines 15--38; measurements-20261114/README.md lines 69--83; evaluation/measurements/byzantine\_sweep.py:46}
-\end{frame}
-
-% ---------------------------------------------------------------- 18. Experiment 3: availability
-\begin{frame}{Experiment 3: the availability boundary}
-\expq{How many witnesses can stop responding before certificate collection stops?}
-
-\vspace{0.4em}
-\begin{columns}[T,onlytextwidth]
-\column{0.47\textwidth}
-\xlab{What we did}
-\scriptsize All 16 silent-witness subsets of four, five runs each: \textbf{80} virtual-transport trials, every record retained \evl{U}. A delay control with replies at 400, 300, 200 and 100\,ms. Three repetitions of four real-process tests: four witness processes, two local chains, the real key-service contract \evl{R}.\\[0.5em]
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, c/.style={draw, rounded corners=2pt, minimum width=1.05cm, minimum height=1.05cm, align=center, font=\scriptsize}]
-  \foreach \i/\n/\ok in {0/1/1, 1/4/1, 2/6/0, 3/4/0, 4/1/0} {
-    \ifnum\ok=1
-      \node[c, draw=okgreen, fill=okgreen!10] at (\i*1.2,0) {\textbf{\i} silent\\[1pt]{\tiny \n{} subset\ifnum\n>1 s\fi}\\[1pt]\cmark};
-    \else
-      \node[c, draw=badred, fill=badred!8] at (\i*1.2,0) {\textbf{\i} silent\\[1pt]{\tiny \n{} subset\ifnum\n>1 s\fi}\\[1pt]\xmark};
-    \fi
-  }
-\end{tikzpicture}\\[0.2em]
-\raggedright\scriptsize\cmark\ three signatures every run \quad \xmark\ no certificate by the 10\,s deadline
-
-\column{0.50\textwidth}
-\xlab{Result}
-\scriptsize Delay control: collection finished at \textbf{300 virtual ms}, using the three fastest replies instead of waiting for the fourth.\\[0.3em]
+% ---------------------------------------------------------------- 15. Experiment 1 result: TLC
+\begin{frame}{Experiment 1 result: why three approvals are needed \;\evl{F}}
+\noindent{\scriptsize\itshape\color{datagray} Question: can two conflicting values both obtain enough approvals?\par}\vspace{0.3em}
+\footnotesize
 \renewcommand{\arraystretch}{1.2}
-\begin{tabular}{@{}L{0.62\linewidth} r@{}}
+\begin{tabular}{@{}L{0.42\textwidth} L{0.55\textwidth}@{}}
 \toprule
-\textbf{Real processes, three repetitions} & \textbf{time} \\
+\textbf{Configuration (one decision slot, 4 witnesses)} & \textbf{Agreement} \\
 \midrule
-all four witnesses running: accepted & 0.69--0.78\,s \\
-one witness killed: still accepted & 0.55--0.63\,s \\
-two witnesses stopped: timeout & 10.54--10.55\,s \\
+quorum 3, one malicious witness, persistent single-signing & \cmark\ holds: 108 distinct states, complete \\
+quorum 3, no malicious witness, persistent & \cmark\ holds: 81 distinct states, complete \\
+quorum 2, one malicious witness & \xmark\ violated: counterexample trace \\
+quorum 3, two malicious witnesses (outside the bound) & \xmark\ violated \\
+quorum 3, no malicious witness, double-signing allowed & \xmark\ violated, with no malicious witness at all \\
 \bottomrule
-\end{tabular}\\[0.2em]
-A restarted witness kept its signing record.\\[0.5em]
-\finding{the design continues with one unavailable witness and stops with two: the intended threshold boundary. Local results, not wide-area timings; the process runs lack retained raw output, so their timings are weaker evidence.}
-\end{columns}
-\src{measurements-20261114/README.md lines 41--52, 118--134; availability-reproduction-20261115; availability-trial-records-20261115; availability-receipt-review-20261115/README.md lines 1--6}
-\end{frame}
+\end{tabular}
 
-% ---------------------------------------------------------------- 19. Experiment 4: crash-split signing record
-\begin{frame}{Experiment 4: can a crash split a signing record? \;\evl{R}}
-\expq{If a witness dies in the middle of signing, can it come back with a half-written memory?}
-
-\vspace{0.4em}
+\vspace{0.5em}
 \begin{columns}[T,onlytextwidth]
-\column{0.50\textwidth}
-\xlab{What we did}
-\scriptsize A witness's memory is part of its security: its remembered approval (the \emph{pin}) and the signed message's hash (the \emph{digest}) must commit together. We deliberately removed the store's enclosing database transaction, killed a child process mid-signing, reopened the store through the normal restart path, and checked for inconsistent records.\\[0.3em]
-First with timing-based kills; then with pauses between the statements: after a fresh pin, after a digest, and after replacing an obsolete pin.\\[0.5em]
-\finding{controlled interruption reliably exposes the partial-commit defect that timing-based kills sometimes missed. Initialisation-recovery, snapshot-locking and evaluator defects were also fixed. Process death with a placeholder signer: no power-loss claim.}
-
-\column{0.47\textwidth}
-\xlab{Result}
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-    ybar, bar width=10pt, scale only axis, width=3.6cm, height=2.6cm,
-    ymin=0, ymax=46, axis x line*=bottom, axis y line*=left,
-    symbolic x coords={before,after}, xtick=data, enlarge x limits=0.5,
-    xticklabels={{timing-based\\kills}, {pauses between\\the statements}},
-    xticklabel style={align=center, font=\tiny},
-    ylabel={runs out of 40}, ylabel style={font=\scriptsize}, yticklabel style={font=\scriptsize},
-    nodes near coords, nodes near coords style={font=\tiny},
-    legend style={font=\tiny, at={(0.5,1.03)}, anchor=south, draw=none, legend columns=2},
-    legend cell align=left,
-  ]
-  \addplot[fill=pbc!70, draw=pbc] coordinates {(before,29) (after,40)};
-  \addplot[fill=gray!30, draw=datagray] coordinates {(before,40) (after,40)};
-  \legend{broken store caught, correct store passes}
-\end{axis}
-\end{tikzpicture}\\[0.2em]
-\raggedright\scriptsize Agent 2 reproduced it independently: 15 of 15 caught, 10 of 10 controls; the state regression passes 81 tests.
+\column{0.62\textwidth}
+\begin{alertblock}{What it means}
+\scriptsize Both the quorum of three \emph{and} each witness's persistent refusal to sign a conflicting value are needed: drop either, and agreement fails. The model covers one decision slot; changing checkpoints, expiry and consensus need separate reasoning.
+\end{alertblock}
+\column{0.35\textwidth}
+\scriptsize\color{datagray}
+A TLA+ model of one decision slot; TLC explored every reachable state. A fresh rerun reproduced all five verdicts.\\[3pt]
+\src{RQ2-F-DRAFT.md §2.1; tlc-audit-20261115 README lines 14--24}
 \end{columns}
-\src{reviews/a2-0086-signing-kill-20261113/README.md lines 28--36; reviews/proxy-k1-20261114/README.md lines 46--66; A2-0089 §1; witness\_state.py:416--435; RQ2-F-DRAFT.md §2.5}
 \end{frame}
 
-% ---------------------------------------------------------------- 20. Experiment 5: rule checker vs store
-\begin{frame}{Experiment 5: when does a different signature become legal? \;\evl{U}}
-\expq{When may a witness replace an old approval with a different value?}
+% ---------------------------------------------------------------- 16. Experiment 2 result: certificate collection
+\begin{frame}{Experiment 2 result: certificate collection with real signatures \;\evl{U}}
+\noindent{\scriptsize\itshape\color{datagray} Question: does the collector filter adversarial replies while respecting the quorum boundary?\par}\vspace{0.3em}
+\footnotesize
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}L{0.33\textwidth} r r r L{0.23\textwidth}@{}}
+\toprule
+\textbf{Fault setting} & \textbf{Scenarios} & \textbf{Certificates} & \textbf{Invalid} & \textbf{Potential agreement hazards} \\
+\midrule
+one malicious witness ($f = 1$) & 972 & 180 & \cmark\ 0 & \cmark\ 0 \\
+two malicious ($f = 2$, outside the bound) & 4,374 & 330 & \cmark\ 0 & \xmark\ 2,916 \\
+\bottomrule
+\end{tabular}
 
-\vspace{0.4em}
+\vspace{0.6em}
 \begin{columns}[T,onlytextwidth]
-\column{0.42\textwidth}
-\xlab{What we did}
-\scriptsize Rejecting every later value blocks progress; replacing an approval too early permits conflicting live values. We built a separate rule checker and compared it with the real SQLite store on \textbf{180 cases}: 3 expiry positions $\times$ 3 sequence or nonce positions $\times$ grant yes/no $\times$ outcome yes/no, i.e.\ 36 each for checkpoints, governance and receipts, plus 72 for decisions (earlier ALLOW or DENY). Then we broke seven checker rules on purpose, leaving the store unchanged.\\[0.5em]
-\finding{the checker matches the store on this grid and detects seven specific rule errors. Store-level evidence: caller-asserted grant and outcome facts, and the service's own validation, need separate checks.}
-
-\column{0.55\textwidth}
-\xlab{Result}
-\scriptsize Checker and store agree in \textbf{all 180} cases: \textbf{142} permit a replacement, \textbf{38} refuse a live conflict.\\[0.2em]
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-    xbar, bar width=5.5pt, scale only axis, width=2.3cm, height=3.0cm,
-    xmin=0, xmax=24, axis x line*=bottom, axis y line*=left,
-    ytick={1,...,7}, y dir=reverse,
-    yticklabels={{treat exact expiry as still valid}, {never retire an executed receipt}, {retire a decision at an equal sequence}, {drop grant-based retirement of an ALLOW}, {let a grant retire a DENY}, {checkpoint: require a greater sequence}, {governance: require a greater nonce}},
-    yticklabel style={font=\scriptsize}, xticklabel style={font=\tiny}, xlabel style={font=\scriptsize},
-    xlabel={disagreements, of 180},
-    nodes near coords, nodes near coords style={font=\tiny},
-    enlarge y limits=0.1, xmajorgrids, grid style={gray!20},
-  ]
-  \addplot[fill=accent!75, draw=accent] coordinates {(20,1) (18,2) (6,3) (4,4) (4,5) (4,6) (4,7)};
-\end{axis}
-\end{tikzpicture}
+\column{0.62\textwidth}
+\begin{alertblock}{What it means}
+\scriptsize Valid signatures alone do not give agreement; signer overlap does. With one malicious witness no conflicting pair can form. With two, 2,916 runs end where two values could each collect three approvals: modeled possibilities, not observed double grants.
+\end{alertblock}
+\column{0.35\textwidth}
+\scriptsize\color{datagray}
+Real signatures, scripted witnesses, 9 malicious behaviours. ``No certificate'' (792; 4,044) is a safe outcome; every certificate has 3 valid signers.\\[3pt]
+\src{pool-sweep-20261115 README lines 15--38; measurements-20261114 README lines 69--83}
 \end{columns}
-\src{oracle-store-diff-20261114/README.md lines 9--21; oracle-store-diff-20261115/README.md lines 9--16; oracle-mutant-discrimination-20261115/README.md lines 16--24; oracle\_mutant\_discrimination.py lines 27--51}
 \end{frame}
 
-% ---------------------------------------------------------------- 21. Security findings beyond the bound
+% ---------------------------------------------------------------- 17. Experiment 3 result: availability
+\begin{frame}{Experiment 3 result: the availability boundary \;\evl{U}\,\evl{R}}
+\noindent{\scriptsize\itshape\color{datagray} Question: how many witnesses can stop responding before certificate collection stops?\par}\vspace{0.3em}
+\scriptsize
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{@{}L{0.42\textwidth} L{0.55\textwidth}@{}}
+\toprule
+\textbf{Witnesses silent (of 4)} & \textbf{Outcome} \\
+\midrule
+none (1 subset), virtual time \evl{U} & \cmark\ a 3-signature certificate in every run \\
+one (4 subsets), virtual time \evl{U} & \cmark\ a 3-signature certificate in every run \\
+two, three or four (11 subsets), virtual time \evl{U} & \xmark\ no certificate by the 10\,s deadline \\
+none, replies delayed 400 / 300 / 200 / 100\,ms \evl{U} & \cmark\ finished at 300 virtual ms, using the three fastest replies \\
+none, real processes \evl{R} & \cmark\ accepted in 0.69--0.78\,s \\
+one killed, real processes \evl{R} & \cmark\ still accepted in 0.55--0.63\,s; the restarted witness kept its signing record \\
+two stopped, real processes \evl{R} & \xmark\ classified timeout at 10.54--10.55\,s \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.5em}
+\begin{columns}[T,onlytextwidth]
+\column{0.62\textwidth}
+\begin{alertblock}{What it means}
+\scriptsize One unavailable witness is tolerated; two stop certification: the intended threshold boundary. Local timings, not wide-area; the process runs' raw output was not retained, so those timings are weaker evidence.
+\end{alertblock}
+\column{0.35\textwidth}
+\scriptsize\color{datagray}
+80 virtual trials (16 subsets $\times$ 5). Process tests: 3 repetitions on two local chains with the real key-service contract.\\[3pt]
+\src{measurements-20261114 README lines 41--52, 118--134; availability receipts 20261115}
+\end{columns}
+\end{frame}
+
+% ---------------------------------------------------------------- 18. Experiment 4 result: crash-split signing record
+\begin{frame}{Experiment 4 result: can a crash split a signing record? \;\evl{R}}
+\noindent{\scriptsize\itshape\color{datagray} Question: if a witness dies in the middle of signing, can it come back with a half-written memory?\par}\vspace{0.3em}
+\footnotesize
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}L{0.47\textwidth} L{0.50\textwidth}@{}}
+\toprule
+\textbf{Store and test} & \textbf{Result} \\
+\midrule
+correct store, either test & \cmark\ passes 40 of 40 runs \\
+broken store (no transaction), timing-based kill & \xmark\ caught only 29 of 40 (72.5\%) \\
+broken store, pauses between the signing statements & \cmark\ caught 40 of 40 \\
+agent 2's independent rerun of the fixed test & \cmark\ 15 of 15 caught; 10 of 10 controls pass \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.6em}
+\begin{columns}[T,onlytextwidth]
+\column{0.62\textwidth}
+\begin{alertblock}{What it means}
+\scriptsize Controlled interruption reliably exposes the partial-commit defect that timing-based kills sometimes missed. Process death with a placeholder signer: no power-loss claim.
+\end{alertblock}
+\column{0.35\textwidth}
+\scriptsize\color{datagray}
+Pauses after a fresh pin, after a digest, and after replacing an obsolete pin. 81 state tests pass.\\[3pt]
+\src{a2-0086 review README lines 28--36; proxy-k1 README lines 46--66; A2-0089 §1}
+\end{columns}
+\end{frame}
+
+% ---------------------------------------------------------------- 19. Experiment 5 result: rule checker vs store
+\begin{frame}{Experiment 5 result: when does a different signature become legal? \;\evl{U}}
+\noindent{\scriptsize\itshape\color{datagray} Question: when may a witness replace an old approval with a different value?\par}\vspace{0.3em}
+\scriptsize
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{@{}L{0.50\textwidth} L{0.47\textwidth}@{}}
+\toprule
+\textbf{Checker rule} & \textbf{Disagreements with the store (of 180)} \\
+\midrule
+correct rules (baseline) & \cmark\ 0: they agree on all 180 (142 replace, 38 refuse) \\
+treat the exact expiry instant as still valid & \cmark\ detected: 20 \\
+never retire an executed receipt & \cmark\ detected: 18 \\
+retire a decision at an equal sequence & \cmark\ detected: 6 \\
+drop grant-based retirement of an ALLOW & \cmark\ detected: 4 \\
+let a grant retire a DENY & \cmark\ detected: 4 \\
+checkpoint: require a greater sequence & \cmark\ detected: 4 \\
+governance: require a greater nonce & \cmark\ detected: 4 \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.5em}
+\begin{columns}[T,onlytextwidth]
+\column{0.62\textwidth}
+\begin{alertblock}{What it means}
+\scriptsize The checker matches the store on this grid and catches seven specific rule errors. Store-level evidence: caller-asserted grant and outcome facts, and the service's own validation, need separate checks.
+\end{alertblock}
+\column{0.35\textwidth}
+\scriptsize\color{datagray}
+180 cases cross expiry, sequence or nonce, grant and outcome for each signing type. Each mutation changes one checker rule.\\[3pt]
+\src{oracle-store-diff READMEs; oracle-mutant-discrimination-20261115 README lines 16--24}
+\end{columns}
+\end{frame}
+
+% ---------------------------------------------------------------- 20. Security findings beyond the bound
 \begin{frame}{Security findings beyond the fault bound}
 \centering
 \begin{tikzpicture}[x=1cm, y=1cm, cw/.style={text width=4.2cm, draw=none, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}, hw/.style={text width=4.2cm, font=\scriptsize\bfseries, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}]
@@ -846,42 +785,37 @@ First with timing-based kills; then with pauses between the statements: after a 
 \src{RQ2-F-DRAFT.md §3 (lines 269, 279--291); A1-0137 §2; A1-0138 §1--2; A1-0141 §2--3; measurements-20261114/README.md lines 141--144}
 \end{frame}
 
-% ---------------------------------------------------------------- 22. Experiment 6: cost
-\begin{frame}{Experiment 6: the cost of distributed approval \;\evl{R}}
-\expq{What does moving from one attester to three approvals cost on chain?}
-
-\vspace{0.4em}
+% ---------------------------------------------------------------- 21. Experiment 6 result: cost
+\begin{frame}{Experiment 6 result: cost \;\evl{R}}
+\noindent{\scriptsize\itshape\color{datagray} Question: what does moving from one attester to three approvals cost on chain?\par}\vspace{0.3em}
 \begin{columns}[T,onlytextwidth]
-\column{0.44\textwidth}
-\xlab{What we did}
-\scriptsize We benchmarked the same contract code under its one-signature and three-signature profiles. Gas measures EVM execution work, so we can compare without guessing fees.\\[0.3em]
-\renewcommand{\arraystretch}{1.15}
-\begin{tabular}{@{}l r r r@{}}
+\column{0.46\textwidth}
+\footnotesize
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}L{0.42\linewidth} r r r@{}}
 \toprule
-\textbf{operation} & \textbf{1 sig} & \textbf{3 sigs} & \textbf{increase} \\
+\textbf{Operation} & \textbf{1 sig} & \textbf{3 sigs} & \textbf{increase} \\
 \midrule
 accept state checkpoint & 208,290 & 231,260 & 11.0\% \\
 consume access decision & 324,323 & 342,261 & 5.5\% \\
 record attested outcome & 533,754 & 553,488 & 3.7\% \\
 \bottomrule
-\end{tabular}\\[0.5em]
-\finding{3.7--11.0\% more execution gas across the certificate paths. Each extra signature adds about 6.8k gas and 160 bytes of calldata. Peer runs reproduced every row; deterministic synthetic calls, not fee or throughput estimates.}
+\end{tabular}
 
-\column{0.53\textwidth}
-\xlab{Result}
+\column{0.51\textwidth}
 \centering
 \begin{tikzpicture}
 \begin{axis}[
-    ybar, bar width=9pt, scale only axis, width=5.6cm, height=3.0cm,
+    ybar, bar width=8pt, scale only axis, width=5.3cm, height=2.5cm,
     ymin=0, ymax=620, axis x line*=bottom, axis y line*=left,
     symbolic x coords={checkpoint,decision,receipt},
     xtick=data, enlarge x limits=0.25,
     xticklabels={{checkpoint}, {decision}, {outcome}},
     xticklabel style={font=\scriptsize},
-    ylabel={gas per call (thousands)}, ylabel style={font=\scriptsize},
+    ylabel={gas (thousands)}, ylabel style={font=\scriptsize},
     yticklabel style={font=\scriptsize},
     ymajorgrids, grid style={gray!20},
-    legend style={font=\tiny, at={(0.5,-0.2)}, anchor=north, draw=none, fill=white, legend columns=3, /tikz/every even column/.append style={column sep=6pt}},
+    legend style={font=\tiny, at={(0.5,-0.25)}, anchor=north, draw=none, fill=white, legend columns=3, /tikz/every even column/.append style={column sep=6pt}},
     legend cell align=left,
   ]
   \addplot[fill=pbc!25, draw=pbc] coordinates {(checkpoint,208.290) (decision,324.323) (receipt,533.754)};
@@ -890,13 +824,23 @@ record attested outcome & 533,754 & 553,488 & 3.7\% \\
   \addplot[fill=pbc, draw=pbc] coordinates {(checkpoint,238.046) (decision,349.053) (receipt,560.290)};
   \legend{{1 signature (RQ1)}, {3 signatures (RQ2)}, {4 signatures}}
 \end{axis}
-\end{tikzpicture}\\[0.2em]
-\raggedright\scriptsize Three-signature governance: 524,214 gas to add an authority, 424,421 to remove one, 446,934 to change its admins. All seven product contracts stay under the 24,576-byte EVM limit.
+\end{tikzpicture}
 \end{columns}
-\src{measurements-20261114/README.md lines 23--39, 85--111; RQ2-F-DRAFT.md §2.4; A1-0123..0125, A1-0136}
+
+\vspace{0.5em}
+\begin{columns}[T,onlytextwidth]
+\column{0.62\textwidth}
+\begin{alertblock}{What it means}
+\scriptsize Three approvals cost 3.7--11.0\% more execution gas across the certificate paths; each extra signature adds about 6.8k gas and 160 bytes of calldata. Deterministic synthetic calls, reproduced by peers: not a fee or throughput estimate.
+\end{alertblock}
+\column{0.35\textwidth}
+\scriptsize\color{datagray}
+Governance (3 signatures): add 524,214; remove 424,421; change admins 446,934. All contracts stay under 24,576 bytes.\\[3pt]
+\src{measurements-20261114 README lines 23--39, 85--111; A1-0136}
+\end{columns}
 \end{frame}
 
-% ---------------------------------------------------------------- 23. Trust matrix
+% ---------------------------------------------------------------- 22. Trust matrix
 \begin{frame}{The trust matrix: what RQ2 still has to trust}
 \scriptsize
 \renewcommand{\arraystretch}{1.17}
@@ -922,7 +866,7 @@ authors of code and reviews & \stt{badred}{CORRELATED} & one model family wrote 
 \src{RQ2-F-DRAFT.md §3 (lines 265--278); SPEC.md §5 (the trust matrix must cover ledgers, relay, witness keys, authority, key worker, client and store)}
 \end{frame}
 
-% ---------------------------------------------------------------- 24. Assurance process
+% ---------------------------------------------------------------- 23. Assurance process
 \begin{frame}{Assurance: how the evidence was checked, and what we got wrong}
 \begin{columns}[T,onlytextwidth]
 \column{0.45\textwidth}
@@ -957,9 +901,9 @@ a report section was ``byte-identical'' & only its first line was hashed; now wh
 \src{BOARD.md A3-0160; partial-report-packet-20261115/README.md lines 3--43; RQ2-F-DRAFT.md lines 49--55, 216--217, 293--301; A1-0136 §2; A1-0141 §5}
 \end{frame}
 
-% ================================================================ PART IV: status, limits, conclusion (slides 25-28)
+% ================================================================ PART IV: status, limits, conclusion (slides 24-27)
 
-% ---------------------------------------------------------------- 25. Honest status
+% ---------------------------------------------------------------- 24. Honest status
 \begin{frame}{Honest status of RQ2 on 17 November}
 \centering
 \begin{tikzpicture}[x=1cm, y=1cm, every node/.append style={minimum height=1.55cm, font=\scriptsize, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}]
@@ -993,7 +937,7 @@ a report section was ``byte-identical'' & only its first line was hashed; now wh
 \src{plan-draft.json; GATES.md lines 650--661; BOARD.md A3-0161, A3-0162, A3-0163; partial-report-packet-20261115/README.md lines 124--141; A1-0145 §2 (origin/agent-1)}
 \end{frame}
 
-% ---------------------------------------------------------------- 26. Limitations and lessons
+% ---------------------------------------------------------------- 25. Limitations and lessons
 \begin{frame}{Limitations and lessons}
 \begin{columns}[T,onlytextwidth]
 \column{0.48\textwidth}
@@ -1025,7 +969,7 @@ a report section was ``byte-identical'' & only its first line was hashed; now wh
 \src{RQ2-F-DRAFT.md §5; RQ1-E.md §15; A1-0143 §2.1; A1-0141 §5; RQ2-F-DRAFT.md lines 49--55}
 \end{frame}
 
-% ---------------------------------------------------------------- 27. Conclusion
+% ---------------------------------------------------------------- 26. Conclusion
 \begin{frame}{Conclusion}
 \centering
 \begin{tikzpicture}[x=1cm, y=1cm, cw/.style={text width=4.1cm, draw=none, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}, hw/.style={text width=4.1cm, font=\footnotesize\bfseries}]
@@ -1060,7 +1004,7 @@ a report section was ``byte-identical'' & only its first line was hashed; now wh
 \src{RQ1-E.md §0, §6; RQ2-F-DRAFT.md lines 19--24, §2.3, §2.4; GATES.md lines 650--661; packet README lines 131--141}
 \end{frame}
 
-% ---------------------------------------------------------------- 28. Close
+% ---------------------------------------------------------------- 27. Close
 \begin{frame}[standout]
 Thank you\\[0.5em]
 {\normalsize Questions?}

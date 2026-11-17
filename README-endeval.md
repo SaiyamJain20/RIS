@@ -2,7 +2,7 @@
 
 **Open [`hmbc-end-presentation.pdf`](hmbc-end-presentation.pdf) to view the deck.** It is LaTeX Beamer with the
 Metropolis theme, 16:9, and uses the same preamble, colours and macros as the mid-eval deck
-(`origin/slides:hmbc-presentation.tex`), so the two read as one series. 28 pages, about 22 minutes spoken
+(`origin/slides:hmbc-presentation.tex`), so the two read as one series. 27 pages, about 21 minutes spoken
 (about 23 with transitions).
 
 **Status on these slides (17 Nov 2026):** RQ1 gate E **PASS** (12 Oct 2026). RQ2: the F execution plan is a
@@ -16,16 +16,16 @@ shown is a **paper-derived reconstruction**, not the authors' implementation.
 | 2–3 | The paper: the problem and HMBC's architecture (actors, proxy and domain chains, six contracts); a five-stage overview of how access works, split decryption, and the assumptions our RQs probe |
 | 4 | JANUS: the extension of HMBC by the same authors (Appl. Sci. 2023), its main extensions, and what it leaves open |
 | 5 | What we set out to answer: RQ1 and RQ2, each with the question, why it matters, how we answer it, and its status |
-| 6–12 | RQ1 in full, as one story: the question and Gap 1–3 (decision provenance, trust-list freshness, audit evidence); the RQ1 repair's flow and Fix 1–3, numbered and coloured like the gaps; Gap 1, Gap 2 (with the revocation window) and Gap 3 results in plain ✓/✗ words; gate E (three stat tiles, the 56-row grid in plain words, the verdict); what RQ1 shows |
-| 13–15 | RQ2: the question and fault model (n = 4, q = 3, f = 1); the design in plain words (what is certified, what the witnesses attest, where it is checked); how RQ2 is judged (six case families, the gate's requirements) |
-| 16–20 | RQ2 experiments, each as Question → What we did → Result → Finding: 1 why three approvals are needed (TLC); 2 certificate collection with real signatures (972 and 4,374 scenarios); 3 the availability boundary; 4 can a crash split a signing record (29/40 → 40/40); 5 when a different signature becomes legal (180 cases, seven rule mutations) |
-| 21–22 | Security findings beyond the fault bound (conflicting certificates, fabricated credentials, permanent halt); Experiment 6, the cost of distributed approval |
-| 23–25 | Trust matrix; assurance process and the errors we kept; honest status (plan DRAFT, gate F NOT RUN, 0/32 cases) |
-| 26–27 | Limitations and lessons; conclusion |
-| 28 | Questions |
+| 6–11 | RQ1 in full, as one story: the question and Gap 1–3 (decision provenance, trust-list freshness, audit evidence); the RQ1 repair's flow and Fix 1–3, numbered and coloured like the gaps; Gap 1, Gap 2 (with the revocation window) and Gap 3 results in plain ✓/✗ words; what RQ1 shows, with the gate E verdict (PASS, 56/56) and the mutants/ProVerif check in one line |
+| 12–14 | RQ2: the question and fault model (n = 4, q = 3, f = 1); the design in plain words (what is certified, what the witnesses attest, where it is checked); how RQ2 is judged (six case families, the gate's requirements) |
+| 15–19 | RQ2 experiment results, styled like the RQ1 gap results (a ✓/✗ table, an orange "What it means" box, small side notes): 1 why three approvals are needed (TLC); 2 certificate collection with real signatures; 3 the availability boundary; 4 can a crash split a signing record (29/40 → 40/40); 5 when a different signature becomes legal (180 cases, seven rule mutations) |
+| 20–21 | Security findings beyond the fault bound; Experiment 6 result: cost (gas table and chart) |
+| 22–24 | Trust matrix; assurance process and the errors we kept; honest status (plan DRAFT, gate F NOT RUN, 0/32 cases) |
+| 25–26 | Limitations and lessons; conclusion |
+| 27 | Questions |
 
 Speaker script with per-slide timing and Q&A backups: [`script-hmbc-end-presentation.md`](script-hmbc-end-presentation.md)
-(about 22 minutes spoken; suggested three-way split 1–8 / 9–17 / 18–28).
+(about 21 minutes spoken; suggested three-way split 1–8 / 9–16 / 17–27).
 
 Source map for every number on every slide: [`sources-end-presentation.md`](sources-end-presentation.md).
 
@@ -61,7 +61,7 @@ as in the mid-eval deck.
   slides 6–12 are adapted from mid-eval slides 15–22 and keep their numbers. RQ2 numbers come from
   `evaluation/reports/RQ2-F-DRAFT.md` (`e59a51cd..`), its receipts under `evaluation/evidence/f/`, and the
   agents' outbox messages (A1-0123..0126, A1-0136..0144, A2-0087..0091). The merged-snapshot test counts on
-  slide 25 come from A1-0145 on `origin/agent-1`.
+  slide 24 come from A1-0145 on `origin/agent-1`.
 - Paper figure 1 is taken from HMBC2020 (CC BY 4.0). The other diagrams and charts are redrawn from the paper or
   our own.
 - JANUS appears on one slide (slide 4) as related work, with facts from mid-eval slides 9–10 and the JANUS paper
@@ -95,3 +95,7 @@ as in the mid-eval deck.
   the RQ2 results re-cut as Experiments 1–6 plus the security findings, following the team's short report, with
   each report claim checked against the repository (see `sources-end-presentation.md`). Gate F is still NOT RUN
   (status slide). 28 pages; about 22 minutes spoken.
+- 2026-11-17, on the human's request: the gate E slide is removed (its verdict, the 56/56 match and the
+  mutants/ProVerif point are one line on "What RQ1 shows"); Experiments 1–6 restyled like the RQ1 gap results:
+  "Experiment N result" titles, a ✓/✗ table, an orange "What it means" box and short side notes. 27 pages; about
+  21 minutes spoken.
