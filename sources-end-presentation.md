@@ -14,7 +14,7 @@ Pinned report hashes (recomputed from that ref on 2026-11-17):
 Short names used below: **RQ2** = `evaluation/reports/RQ2-F-DRAFT.md`; **RQ1** = `evaluation/reports/RQ1-E.md`;
 **EV** = `evaluation/evidence/f/`; **MEAS** = `EV/measurements-20261114/README.md`;
 **A1-nnnn** = `communication/agent-1/outbox/nnnn-*.md`; **A2-nnnn** = `communication/agent-2/outbox/nnnn-*.md`;
-**mid** = `origin/slides:hmbc-presentation.tex` at d292576 (the mid-eval deck; slides 6–14 of this deck are
+**mid** = `origin/slides:hmbc-presentation.tex` at d292576 (the mid-eval deck; slides 6–12 of this deck are
 adapted from its slides 15–22 and keep its numbers; slide 4 takes its JANUS facts from mid slides 9–10).
 
 Every result in the deck is a paper-derived reconstruction result on synthetic fixtures, not a result about
@@ -73,89 +73,72 @@ the HMBC authors' implementation.
 | RQ2 how: n = 4, q = 3, f = 1; safe ledgers and a trusted key worker; 32 integrated F cases | RQ2:127–129; `EV/execution-plan-draft-20261114/plan-draft.json` (`families`) |
 | RQ2 in progress, gate F NOT RUN, 0 of 32 cases | `communication/GATES.md:661`; RQ2:3 |
 
-## Slide 6 — RQ1: question and gaps
+## Slide 6 — RQ1: question and gaps (Gap 1, 2, 3)
 
 | Item | Source |
 |---|---|
 | RQ1 wording | RQ1:91–93; `SPEC.md:22` |
-| Gaps RQ1-01 / 02 / 03 | RQ1:44–57; mid lines 564–566 |
-| Relay stress outside the isolation assumption (A01) | RQ1:55–57 |
+| Gap 1 decision provenance, Gap 2 trust-list freshness, Gap 3 audit evidence (the mid-eval's RQ1-01 / 02 / 03) | RQ1:44–57; mid lines 564–566 |
+| Relay stress outside the isolation assumption (A01); gaps are specification gaps, not attacks | RQ1:55–57 |
 
-## Slide 7 — RQ1 method
-
-| Item | Source |
-|---|---|
-| 37 paper passages | `interfaces/v1/source-map.csv` (37 rows, S01–S37) |
-| 41 recorded completions | `interfaces/v1/assumptions.csv` (41 rows, A01–A41); RQ1:35 |
-| 16 schedules × 3 profiles + 8 repaired-only rows = 56 | RQ1:240–242 |
-| Frozen on 8 Oct, before any run | RQ1:242–243; `communication/DECISIONS.md:107` (D38, `E0-v1-r6-20261008`) |
-| Fresh chain pair per row; controls first (wrong admin, Alice allow, Bob deny) | RQ1:244–249 |
-| Six mutants | RQ1:1037–1044 |
-| Four classes | RQ1:112–122 (§2.1) |
-
-## Slide 8 — repaired-e
+## Slide 7 — repaired-e: Fix 1, 2, 3
 
 | Item | Source |
 |---|---|
-| Typed EIP-712 signatures, single-use (gid, nonce), request lifetime ≤ 30 s | RQ1:58–68; mid lines 630–641 |
-| Versioned lists, checkpoints as barrier; receipt per outcome; durable intent | RQ1:58–67; mid lines 634–641 |
-| 13 DecisionVerifier steps in fixed order; step 12 reserved | mid lines 645–652; RQ2:269 (key epoch must be 0 under REPAIRED_F) |
+| Five-stage repaired flow (user signs; PBC logs and checks; witness signs checkpoint and decision; DBC verifies, nonce once, grants; worker releases, signed receipt closes the log) | mid lines 622–625 (repaired-e flow strip); RQ1:58–67 |
+| Fix 1: typed EIP-712 signatures bound to the KSSC and the DBC chain; single-use (gid, nonce); request lifetime ≤ 30 s | RQ1:58–68; mid lines 630–633 |
+| Fix 2: versioned, expiring lists; signed checkpoints as revocation barrier; duty validity at use | RQ1:58–67; mid lines 634–637 |
+| Fix 3: witness-signed receipt per outcome; durable intent; cached response on retry | RQ1:58–67; mid lines 638–641 |
+| Paper's flow (two readings) and repaired-e on one frozen 56-row catalog | RQ1:240–243; `communication/DECISIONS.md:107` (D38) |
+| One trusted witness in RQ1 | RQ1:1156 |
 
-## Slide 9 — RQ1 results, gap 1 [I]
+## Slide 8 — Gap 1 result [I]
 
 | Item | Source |
 |---|---|
-| Every row and code (REPLAY, WRONG_SUBJECT step 4, BAD_SIGNATURE step 6, WRONG_DESTINATION step 1, EXPIRED step 9 at equality) | RQ1:36–37, 45–47, 59–61; RQ1 §7 (lines 612–734); gate rows 10–22, 51–56 in RQ1 §6 |
+| Every row and code (REPLAY, WRONG_SUBJECT, BAD_SIGNATURE, WRONG_DESTINATION, EXPIRED at equality); same in both paper readings | RQ1:36–37, 45–47, 59–61; RQ1 §7 (lines 612–734); gate rows 10–22, 51–56 in RQ1 §6 |
 | Identical replay rests on deterministic grant id (A25) | RQ1:36–37 |
+| Nonce reuse row (speaker note only) | RQ1:59–60; RQ1 §7.4 (lines 688–701) |
 | Evidence-label legend [I]/[R]/[U]/[F] (first slide that uses a label) | `origin/slides:README.md` (mid-eval "Results are labelled by evidence level") |
 
-## Slide 10 — RQ1 results, gap 2, and the window
+## Slide 9 — Gap 2 result and the window
 
 | Item | Source |
 |---|---|
-| UNAUTHORIZED_CALLER baseline (code 16) | RQ1:40–41 |
+| UNAUTHORIZED_CALLER baseline (code 16), specified by the paper | RQ1:40–41 |
 | Rollback un-revokes; STALE_ANCHOR (TMSC.sol:190) | RQ1:48, 62 |
 | Pre/post-barrier rows; STALE_STATE | RQ1:48–50, 62–63, 72–73; RQ1 §8.3 (lines 771–789) |
-| Expired duty; EXPIRED step 13 | RQ1:49–50, 63; RQ1 §8.4 (lines 790–809) |
+| Expired duty; EXPIRED | RQ1:49–50, 63; RQ1 §8.4 (lines 790–809) |
 | Window, machine A: 2 / 6 / 11 / 21 s (delays 0 / 5 / 10 / 20 s), 26 s no barrier | A1-0046 lines 22–28; RQ1:820–823 |
 | Window, machine B: 2 / 6 / 11 / 21 s, 27 s no barrier | A2-0026 lines 16–23 |
-| Paper-strict still grantable 65 s later | A1-0046 lines 17, 33; RQ1:825 |
+| Paper's flow still grantable 65 s later | A1-0046 lines 17, 33; RQ1:825 |
 | W = min(...) ≤ 30 s; 30 s cap | RQ1:832–833 |
 | One trial per delay; not the gate run | RQ1:837–839 |
 
-## Slide 11 — RQ1 results, gap 3 [I]
+## Slide 10 — Gap 3 result [I]
 
 | Item | Source |
 |---|---|
-| Duplicate REPLAY; dropped outcome PENDING | RQ1:38–43; RQ1 §9.1–9.2 (lines 866–900) |
+| Duplicate REPLAY; dropped outcome stays PENDING | RQ1:38–43; RQ1 §9.1–9.2 (lines 866–900) |
 | Fabricated outcome; WRONG_PROFILE | RQ1:51, 63–64 |
 | Receipt binding WRONG_SUBJECT; deviating test witness (A40) | RQ1:64–65; RQ1 §9.3 (lines 901–926) |
-| Crash rows BLOCKED / decided SPEC_GAP, unproved (D47); cached response; EXPIRED after expiry | RQ1:51–53, 66–67; RQ1 §9.4 (lines 927–979) |
+| Paper crash rows blocked and unproved, never a pass or a finding (D47); cached response; EXPIRED after expiry | RQ1:51–53, 66–67; RQ1 §9.4 (lines 927–979) |
 | Logical process deaths only; delivery unknown | RQ1:1161 |
 
-## Slide 12 — Mutants and ProVerif
+## Slide 11 — Gate E
 
 | Item | Source |
 |---|---|
-| Six mutants and the tests that detect them | RQ1:1031–1044 |
-| 8 guard rows; destination mutant not killable by the catalog recipe | RQ1:1048–1059 |
-| ProVerif queries and verdicts | RQ1:999–1013 |
-| Model limits | RQ1:1016–1020 |
-
-## Slide 13 — Gate E
-
-| Item | Source |
-|---|---|
-| 32 paper rows: 8 SUPPORTED, 20 SPEC_GAP, 4 BLOCKED; 24 repaired-e rows: 19 REPAIR_SUPPORTED, 5 SUPPORTED | tally of the GATE column of RQ1 §6 (lines 410–555); same grid as mid lines 842–853 |
+| Paper's flow, 32 rows: 8 hold as specified, 20 depend on a gap, 4 blocked; repaired-e, 24 rows: 19 enforced by a fix, 5 controls | tally of the GATE column of RQ1 §6 (lines 410–555); same grid as mid lines 842–853 |
 | 56 PASS, 0 FAILED, 0 NOT_RUN | RQ1:356 |
 | 4,749 s (1.32 h), exit 0 | RQ1:327–328, 361 |
 | Sources and HEAD unchanged; inputs/outputs hashed | RQ1:358–359; `communication/GATES.md:634` |
-| 7 criteria verified in the run, report and ACKs adjudicated after | RQ1:13, 397–407 |
-| Mutant criterion on scoped evidence | RQ1:1024–1027; GATES.md:630 |
-| Three ACKs; decision text | `communication/GATES.md:637–648` |
+| 6 ledger mutants, each caught by its expected tests | RQ1:1031–1044 |
+| ProVerif: attack trace once the destination is dropped | RQ1:999–1013 |
+| Three ACKs; gate E PASS 12 Oct 2026 | `communication/GATES.md:637–648` |
 | Integrated mutants and window not run; correlated review | RQ1:16–21, 76–81 |
 
-## Slide 14 — What RQ1 shows
+## Slide 12 — What RQ1 shows
 
 | Item | Source |
 |---|---|
@@ -164,7 +147,7 @@ the HMBC authors' implementation.
 | Limits: symbolic crypto, one trusted witness and worker, local chains, one trial per row | RQ1:1150, 1152, 1156, 1173 |
 | "First executable instance-level analysis" (non-exhaustive search) | mid lines 427, 893, 908 |
 
-## Slide 15 — RQ2 question
+## Slide 13 — RQ2 question
 
 | Item | Source |
 |---|---|
@@ -175,7 +158,7 @@ the HMBC authors' implementation.
 | Not consensus; Anvil not BFT | `SPEC.md:75`; GATES.md:658 |
 | Out-of-bound controls f=2, q=2, ≥3 | RQ2:146–147, 269 |
 
-## Slide 16 — RQ2 design
+## Slide 14 — RQ2 design
 
 | Item | Source |
 |---|---|
@@ -188,7 +171,7 @@ the HMBC authors' implementation.
 | Receipt names another request/GID/record | RQ1:64–65 |
 | Honest witness REPLAY after grant | A2-0089 §2 (witness_service.py:146–147) |
 
-## Slide 17 — How RQ2 will be judged
+## Slide 15 — How RQ2 will be judged
 
 | Item | Source |
 |---|---|
@@ -197,10 +180,10 @@ the HMBC authors' implementation.
 | Status DRAFT, authorizesExecution false | `plan-draft.json` (`status`, `authorizesExecution`) |
 | 0 of 32 integrated | `EV/case-coverage-map-20261114/README.md:7`; RQ2:3 |
 | Stages 1–2 fail closed (BLOCKED); 3–7 open | RQ2:3–4, 113–115, 355–357 |
-| Evidence labels per item | as slides 18–25 |
+| Evidence labels per item | as slides 16–23 |
 | Measured before runner and FREEZE | MEAS:13–14; RQ2:365–366 |
 
-## Slide 18 — TLC [F]
+## Slide 16 — TLC [F]
 
 | Item | Source |
 |---|---|
@@ -212,7 +195,7 @@ the HMBC authors' implementation.
 | Limits | RQ2:149–154; tlc-audit README:29–33 |
 | First f=0 run deadlocked | RQ2:216–217; `EV/decision-quorum-tlc-20261113/first-run-with-deadlock/` |
 
-## Slide 19 — Oracle/store differential [U]
+## Slide 17 — Oracle/store differential [U]
 
 | Item | Source |
 |---|---|
@@ -222,7 +205,7 @@ the HMBC authors' implementation.
 | Not completeness | oracle-mutant README:36–38 |
 | Store capability vs service reachability; earlier DENY claim wrong | RQ2:293–301; A2-0089 §2 |
 
-## Slide 20 — M5 pool sweep [U]
+## Slide 18 — M5 pool sweep [U]
 
 | Item | Source |
 |---|---|
@@ -232,7 +215,7 @@ the HMBC authors' implementation.
 | 9 behaviours; 4×9×27 and 6×81×9 | MEAS:72–79 |
 | Hazard definition (potential); honest witnesses modelled; byte-identical rerun | pool-sweep README:15–17, 25–28, 34–38; MEAS:80–83 |
 
-## Slide 21 — Availability
+## Slide 19 — Availability
 
 | Item | Source |
 |---|---|
@@ -244,7 +227,7 @@ the HMBC authors' implementation.
 | 10.5 s = 10 s deadline + overhead | MEAS:130 |
 | M6 raw stdout and invocation not retained | availability-receipt-review README:1–6; RQ2:93–95 |
 
-## Slide 22 — Gas [R]
+## Slide 20 — Gas [R]
 
 | Item | Source |
 |---|---|
@@ -259,7 +242,7 @@ the HMBC authors' implementation.
 | Cold-storage hypothesis refuted (231,261 vs 231,260) | MEAS:94–96 (A1-0123) |
 | Single deterministic runs; not a fee estimate | MEAS:18–21, 65; RQ2:191–192 |
 
-## Slide 23 — K1 [R]
+## Slide 21 — K1 [R]
 
 | Item | Source |
 |---|---|
@@ -271,13 +254,13 @@ the HMBC authors' implementation.
 | Agent 2: 15/15, 10/10, 81 state tests, 3,226 passed / 201 skipped | A2-0089 lines 22–23; RQ2:201–203 |
 | Three defects found and fixed | RQ2:195–197 |
 
-## Slide 24 — Trust matrix
+## Slide 22 — Trust matrix
 
 | Item | Source |
 |---|---|
 | Every row; the compromised-worker case NOT_RUN | RQ2:265–278 (274) |
 
-## Slide 25 — Outside the bound
+## Slide 23 — Outside the bound
 
 | Item | Source |
 |---|---|
@@ -290,7 +273,7 @@ the HMBC authors' implementation.
 | Honest witness REPLAY at signing | A2-0089 §2; RQ2:288–290 |
 | Scratch 4/4 rerun by the evaluator | MEAS:141–144; RQ2:281–282 |
 
-## Slide 26 — Assurance
+## Slide 24 — Assurance
 
 | Item | Source |
 |---|---|
@@ -300,11 +283,11 @@ the HMBC authors' implementation.
 | M1 count 9/9 → 6/6 | A1-0136 §2 (lines 37–43) |
 | Plan checker 27/27 vacuous dev-key scan → 28/28 + 9/9 | RQ2:49–55 |
 | TMSC 52,339 B parser artifact | MEAS:64; RQ2:217 |
-| K1 3/3 → 29/40 → 40/40 | as slide 23 |
+| K1 3/3 → 29/40 → 40/40 | as slide 21 |
 | First-line hash missed an edit | A1-0141 §5 (lines 61–67) |
 | Same model family; correlated | RQ2:12, 278; D57 |
 
-## Slide 27 — Honest status of RQ2
+## Slide 25 — Honest status of RQ2
 
 | Item | Source |
 |---|---|
@@ -317,23 +300,23 @@ the HMBC authors' implementation.
 | Merged snapshot: ledger 316 passed; protocol 3,226 passed / 201 skipped; evaluation 3,097 passed / 4 failed (host-specific, same on agent-3 ca82b7f) | **`origin/agent-1`** `communication/agent-1/outbox/0145-note-code-merge-final-branch.md:39–46` (A1-0145) |
 | Still-needed list | packet README:131–141; GATES.md:652–659; RQ2:350–356 |
 
-## Slide 28 — Limitations and lessons
+## Slide 26 — Limitations and lessons
 
 | Item | Source |
 |---|---|
 | Limitations | RQ2 §5 (lines 350–356), §3 (lines 265–278); RQ1 §15 (lines 1146–1183) |
 | What F does not prove | RQ2:179, 277, 350–356; `SPEC.md:75, 83` |
-| Lesson 1 (K1) | slide 23 sources |
+| Lesson 1 (K1) | slide 21 sources |
 | Lesson 2 (vacuous scan) | RQ2:49–55 |
 | Lesson 3 (q2 manifest says repaired-f; threshold 2 vs 3 read back) | A1-0143 §2.1 (lines 27–41) |
 | Lesson 4 (first-line hash) | A1-0141 §5 |
 | Lesson 5 (signing vs ledger) | RQ2:288–291, 316–319 |
 
-## Slide 29 — Conclusion
+## Slide 27 — Conclusion
 
 | Item | Source |
 |---|---|
-| 8 / 20 / 4 of 32; 19 repaired rows | slide 13 tally |
+| 8 / 20 / 4 of 32; 19 repaired rows | slide 11 tally |
 | ≤ 30 s | RQ1:832–833 |
 | RQ2 partial answer | RQ2:19–24 |
 | One unavailable certifies, two time out | RQ2:173–179 |
