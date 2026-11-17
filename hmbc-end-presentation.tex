@@ -831,8 +831,9 @@ Governance (3 signatures): add 524,214; remove 424,421; change admins 446,934. A
     A compromised quorum installs a checkpoint with a maximum counter value. Every honest checkpoint after it is rejected as stale.\\[5pt]
     Nothing on the ledger can reset it: only redeployment recovers.\\[8pt]
     {\color{datagray}Fewer than three signers cannot do it. Scratch 3/3 and 3/3 [U].}};
+  \path let \p1=(f1.south), \p2=(f2.south), \p3=(f3.south), \n1={min(\y1,\y2,\y3)} in coordinate (fbot) at (0,\n1);
   \foreach \k/\c in {1/accent, 2/badred, 3/badred} {
-    \draw[\c!55, rounded corners=4pt] (f\k.north west) rectangle ($(f\k.north east)+(0,-4.85)$);
+    \draw[\c!55, rounded corners=4pt] (f\k.north west) rectangle (f\k.north east |- fbot);
     \fill[\c, rounded corners=2pt] ($(f\k.north west)+(0,-0.1)$) rectangle ($(f\k.north east)+(0,0)$);
   }
 \end{tikzpicture}
@@ -858,7 +859,8 @@ Governance (3 signatures): add 524,214; remove 424,421; change admins 446,934. A
     \textbf{Limits measured, not assumed:} we know where safety ends (two malicious witnesses) and where availability ends (two witnesses down).\\[3pt]
     \textbf{What stays trusted:} the credential issuers, the key worker and the ledgers; a compromised quorum is a real risk.};
   \node[phead=dbc, hw] at (7.0,0) {Why it matters};
-  \foreach \k/\c in {1/pbc, 2/dbc} \draw[\c, rounded corners=3pt] (k\k.north west) rectangle ($(k\k.north east)+(0,-4.5)$);
+  \path let \p1=(k1.south), \p2=(k2.south), \n1={min(\y1,\y2)} in coordinate (kbot) at (0,\n1);
+  \foreach \k/\c in {1/pbc, 2/dbc} \draw[\c, rounded corners=3pt] (k\k.north west) rectangle (k\k.north east |- kbot);
 \end{tikzpicture}
 
 \vspace{0.3em}
