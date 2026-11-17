@@ -2,8 +2,8 @@
 
 **Open [`hmbc-end-presentation.pdf`](hmbc-end-presentation.pdf) to view the deck.** It is LaTeX Beamer with the
 Metropolis theme, 16:9, and uses the same preamble, colours and macros as the mid-eval deck
-(`origin/slides:hmbc-presentation.tex`), so the two read as one series. 27 pages, about 21 minutes spoken
-(about 23 with transitions).
+(`origin/slides:hmbc-presentation.tex`), so the two read as one series. 25 pages, about 20 minutes spoken
+(about 22 with transitions).
 
 **Status on these slides (17 Nov 2026):** RQ1 gate E **PASS** (12 Oct 2026). RQ2: the F execution plan is a
 **DRAFT**, gate F is **NOT RUN**, and all **32 F cases are NOT_RUN**; runner stages 3–7 are in progress; the
@@ -18,14 +18,13 @@ shown is a **paper-derived reconstruction**, not the authors' implementation.
 | 5 | What we set out to answer: RQ1 and RQ2, each with the question, why it matters, how we answer it, and its status |
 | 6–11 | RQ1 in full, as one story: the question and Gap 1–3 (decision provenance, trust-list freshness, audit evidence); the RQ1 repair's flow and Fix 1–3, numbered and coloured like the gaps; Gap 1, Gap 2 (with the revocation window) and Gap 3 results in plain ✓/✗ words; what RQ1 shows, with the gate E verdict (PASS, 56/56) and the mutants/ProVerif check in one line |
 | 12–14 | RQ2: the question and fault model (n = 4, q = 3, f = 1); the design in plain words (what is certified, what the witnesses attest, where it is checked); how RQ2 is judged (six case families, the gate's requirements) |
-| 15–19 | RQ2 experiment results, styled like the RQ1 gap results (a ✓/✗ table, an orange "What it means" box, small side notes): 1 why three approvals are needed (TLC); 2 certificate collection with real signatures; 3 the availability boundary; 4 can a crash split a signing record (29/40 → 40/40); 5 when a different signature becomes legal (180 cases, seven rule mutations) |
-| 20–21 | Security findings beyond the fault bound; Experiment 6 result: cost (gas table and chart) |
-| 22–24 | Trust matrix; assurance process and the errors we kept; honest status (plan DRAFT, gate F NOT RUN, 0/32 cases) |
-| 25–26 | Limitations and lessons; conclusion |
-| 27 | Questions |
+| 15–20 | RQ2 experiment results, styled like the RQ1 gap results (a ✓/✗ table, an orange "What it means" box, small side notes): 1 why three approvals are needed (TLC); 2 certificate collection with real signatures; 3 the availability boundary; 4 can a crash split a signing record (29/40 → 40/40); 5 when a different signature becomes legal (180 cases, seven rule mutations); 6 cost (gas table and chart) |
+| 21–22 | Security findings beyond the fault bound (three calm cards); what RQ2 shows, and why it matters (mirrors the RQ1 slide; states gate F NOT RUN and that the 32-case study is still to run) |
+| 23–24 | Limitations and lessons; conclusion |
+| 25 | Questions |
 
 Speaker script with per-slide timing and Q&A backups: [`script-hmbc-end-presentation.md`](script-hmbc-end-presentation.md)
-(about 21 minutes spoken; suggested three-way split 1–8 / 9–16 / 17–27).
+(about 20 minutes spoken; suggested three-way split 1–8 / 9–16 / 17–25).
 
 Source map for every number on every slide: [`sources-end-presentation.md`](sources-end-presentation.md).
 
@@ -58,10 +57,9 @@ as in the mid-eval deck.
 - Primary snapshot: `origin/Code_Merge_Final` (`fc80bf0`), the ownership merge of the three agent branches.
   RQ1 numbers come from `evaluation/reports/RQ1-E.md` (`69dabfba..`), `communication/GATES.md`,
   `interfaces/v1/source-map.csv` and `assumptions.csv`, and the owner window measurements A1-0046 / A2-0026; RQ1
-  slides 6–12 are adapted from mid-eval slides 15–22 and keep their numbers. RQ2 numbers come from
+  slides 6–11 are adapted from mid-eval slides 15–22 and keep their numbers. RQ2 numbers come from
   `evaluation/reports/RQ2-F-DRAFT.md` (`e59a51cd..`), its receipts under `evaluation/evidence/f/`, and the
-  agents' outbox messages (A1-0123..0126, A1-0136..0144, A2-0087..0091). The merged-snapshot test counts on
-  slide 24 come from A1-0145 on `origin/agent-1`.
+  agents' outbox messages (A1-0123..0126, A1-0136..0144, A2-0087..0091).
 - Paper figure 1 is taken from HMBC2020 (CC BY 4.0). The other diagrams and charts are redrawn from the paper or
   our own.
 - JANUS appears on one slide (slide 4) as related work, with facts from mid-eval slides 9–10 and the JANUS paper
@@ -99,3 +97,8 @@ as in the mid-eval deck.
   mutants/ProVerif point are one line on "What RQ1 shows"); Experiments 1–6 restyled like the RQ1 gap results:
   "Experiment N result" titles, a ✓/✗ table, an orange "What it means" box and short side notes. 27 pages; about
   21 minutes spoken.
+- 2026-11-17, on the human's request: Experiment 6 moved before the security findings; the security findings
+  redrawn as three calm cards; the trust-matrix, assurance and honest-status slides removed (their key points
+  are one limitations bullet and the "What RQ2 shows" gate line); new "What RQ2 shows, and why it matters"
+  slide mirroring the RQ1 one, which states gate F NOT RUN and that the integrated 32-case study is still to
+  run. 25 pages; about 20 minutes spoken.

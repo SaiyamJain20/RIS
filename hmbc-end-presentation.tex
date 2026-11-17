@@ -3,7 +3,7 @@
 %   tectonic -X compile hmbc-end-presentation.tex      (or: latexmk -xelatex hmbc-end-presentation.tex)
 % Same preamble, colours and macros as the mid-eval deck (origin/slides:hmbc-presentation.tex).
 % Figure 1 is taken from the paper (CC BY 4.0); the other diagrams are redrawn or our own.
-% Structure: the paper (2-3), JANUS (4), our two research questions (5), RQ1 (6-11), RQ2: design, judging, Experiments 1-6 and findings (12-24), limits, conclusion.
+% Structure: the paper (2-3), JANUS (4), our two research questions (5), RQ1 (6-11), RQ2: design, judging, Experiments 1-6, findings, what RQ2 shows (12-22), limits, conclusion.
 % Status as of 2026-11-17: RQ1 gate E PASS (12 Oct); RQ2/F execution plan DRAFT, gate F NOT RUN, all 32 F cases NOT_RUN.
 % Every number on a result slide is mapped to its source in sources-end-presentation.md.
 % Primary snapshot: origin/Code_Merge_Final fc80bf0 (RQ2-F-DRAFT.md sha256 e59a51cd.., RQ1-E.md sha256 69dabfba..).
@@ -482,7 +482,7 @@ Crash points are logical process deaths, not power loss. The receipt-substitutio
 \end{tikzpicture}
 \end{frame}
 
-% ================================================================ PART III: RQ2 (slides 12-24)
+% ================================================================ PART III: RQ2 (slides 12-22)
 % Primary source: evaluation/reports/RQ2-F-DRAFT.md on origin/Code_Merge_Final (sha256 e59a51cd..) and the
 % receipts it links under evaluation/evidence/f/. Nothing here is an integrated F case.
 
@@ -602,7 +602,7 @@ governance action & adding or removing a credential authority, or changing its a
 \end{columns}
 
 \vspace{0.4em}
-\raggedright{\scriptsize\color{datagray} Each case runs on a fresh chain pair, positive controls first. Integrated gate-F runs: see the status slide.}
+\raggedright{\scriptsize\color{datagray} Each case runs on a fresh chain pair, positive controls first. Status of the integrated runs: see ``What RQ2 shows''.}
 \end{frame}
 
 % ---------------------------------------------------------------- 15. Experiment 1 result: TLC
@@ -756,36 +756,7 @@ governance: require a greater nonce & \cmark\ detected: 4 \\
 \end{columns}
 \end{frame}
 
-% ---------------------------------------------------------------- 20. Security findings beyond the bound
-\begin{frame}{Security findings beyond the fault bound}
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, cw/.style={text width=4.2cm, draw=none, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}, hw/.style={text width=4.2cm, font=\scriptsize\bfseries, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}]
-  \node[pcard=accent, cw] (k1) at (0,0) {%
-    Two checkpoints for one sequence cannot both install: the second is \code{STALE\_STATE}. Two ALLOWs cannot both grant: the second is \code{REPLAY}.\\[3pt]
-    An ALLOW and a DENY are \textbf{both accepted, in either order}, and both logged: a DENY uses no nonce (our E0 choice). So two log entries alone do not prove a signing violation.\\[3pt]
-    {\color{datagray}[U] scratch 4/4, rerun by the evaluator}};
-  \node[phead=accent, hw] at (0,0) {Two malicious: conflicting certificates};
-  \node[pcard=badred, cw] (k2) at (4.6,0) {%
-    At least 3 malicious signers certify policy-shaped credential records for a requester never submitted on the shared chain. \textbf{The hospital contract grants.}\\[3pt]
-    Controls: 2 signers \code{INSUFFICIENT\_QUORUM}; non-fitting records \code{POLICY\_DENIED}.\\[3pt]
-    Trust in quorum-certified facts; key release or decryption not shown.\\[3pt]
-    {\color{datagray}[U] scratch 3/3}};
-  \node[phead=badred, hw] at (4.6,0) {Compromised quorum: fabricated credentials};
-  \node[pcard=badred, cw] (k3) at (9.2,0) {%
-    A quorum installs a checkpoint with a maximum sequence, auth epoch or source block number. Honest checkpoints carry lower real values and are rejected.\\[3pt]
-    Decisions stop at once (auth epoch) or after the checkpoint expires. No reset path: \textbf{redeploy}.\\[3pt]
-    Control: fewer than 3 signers cannot do it.\\[3pt]
-    {\color{datagray}[U] scratch 3/3 and 3/3}};
-  \node[phead=badred, hw] at (9.2,0) {Compromised quorum: permanent halt};
-  \foreach \k/\c in {1/accent, 2/badred, 3/badred} \draw[\c, rounded corners=3pt] (k\k.north west) rectangle ($(k\k.north east)+(0,-4.3)$);
-\end{tikzpicture}
-
-\vspace{0.4em}
-\finding{the extension distributes approval, but a compromised quorum can corrupt certified facts or halt the deployment; credential issuers, the key worker and the ledgers remain trust dependencies. None of this contradicts the $f \le 1$ claims, and none is an HMBC vulnerability.}\\[0.1em]
-\src{RQ2-F-DRAFT.md §3 (lines 269, 279--291); A1-0137 §2; A1-0138 §1--2; A1-0141 §2--3; measurements-20261114/README.md lines 141--144}
-\end{frame}
-
-% ---------------------------------------------------------------- 21. Experiment 6 result: cost
+% ---------------------------------------------------------------- 20. Experiment 6 result: cost
 \begin{frame}{Experiment 6 result: cost \;\evl{R}}
 \noindent{\scriptsize\itshape\color{datagray} Question: what does moving from one attester to three approvals cost on chain?\par}\vspace{0.3em}
 \begin{columns}[T,onlytextwidth]
@@ -840,104 +811,70 @@ Governance (3 signatures): add 524,214; remove 424,421; change admins 446,934. A
 \end{columns}
 \end{frame}
 
-% ---------------------------------------------------------------- 22. Trust matrix
-\begin{frame}{The trust matrix: what RQ2 still has to trust}
-\scriptsize
-\renewcommand{\arraystretch}{1.17}
-\begin{tabular}{@{}L{0.27\textwidth} c L{0.53\textwidth}@{}}
-\toprule
-\textbf{Component} & \textbf{status} & \textbf{What that means} \\
-\midrule
-$\ge$ 3 of 4 witnesses honest & \stt{accent}{REQUIRED} & the $f = 1$ bound; also no shared source-view failure \\
-governance quorum & \stt{accent}{REQUIRED} & a compromised quorum ($\ge$ 3) can halt a DBC or grant to a fabricated requester (next slide) \\
-key worker and its host & \stt{datagray}{TRUSTED} & quorums do not stop a compromised worker using its own keys; that F case is NOT\_RUN \\
-credential authority & \stt{datagray}{TRUSTED} & trusted for what it issues; a quorum does not make a credential true \\
-relay / collector & \stt{clsup}{NO KEY} & cannot forge; can withhold or delay, so progress needs eventual delivery \\
-the local Anvil pair & \stt{datagray}{ASSUMED} & assumed correct; consensus not evaluated \\
-witness processes & \stt{clsup}{SEPARATE} & own stores, keys and processes, but one host: no independence from a shared OS or operator \\
-durable witness store & \stt{clsup}{TESTED} & SIGKILL only; no power-loss claim \\
-key custody & \stt{badred}{NOT EVALUATED} & TEST-ONLY synthetic keys \\
-client and data store & \stt{badred}{NOT EVALUATED} & retention, availability and real confidentiality are not established by F \\
-authors of code and reviews & \stt{badred}{CORRELATED} & one model family wrote and reviewed everything \\
-\bottomrule
-\end{tabular}
-
-\vspace{0.4em}
-\src{RQ2-F-DRAFT.md §3 (lines 265--278); SPEC.md §5 (the trust matrix must cover ledgers, relay, witness keys, authority, key worker, client and store)}
-\end{frame}
-
-% ---------------------------------------------------------------- 23. Assurance process
-\begin{frame}{Assurance: how the evidence was checked, and what we got wrong}
-\begin{columns}[T,onlytextwidth]
-\column{0.45\textwidth}
-\footnotesize\textbf{Exact-hash, scoped reviews}
-\begin{itemize}\scriptsize\setlength{\itemsep}{2pt}
-  \item The partial RQ2 report is pinned by SHA-256 (\code{e59a51cd..}). The ledger role (A1-0142) and protocol role (A2-0091) each read the full diff and found no objection \emph{in their scope}.
-  \item Excluded: evaluation-tool correctness. A review is not an execution ACK and does not cover any later revision.
-  \item Every receipt records commands, exit codes, source pins and output hashes; peers re-run where they can (gas, K1, TLC counts).
-\end{itemize}
-\begin{alertblock}{Correlated, not independent}
-\scriptsize All three roles are the same model family. These are scoped re-checks, not independent review.
-\end{alertblock}
-
-\column{0.52\textwidth}
-\footnotesize\textbf{Errors caught, and kept in the record}\\[0.2em]
-\scriptsize
-\renewcommand{\arraystretch}{1.18}
-\begin{tabular}{@{}L{0.47\linewidth} L{0.47\linewidth}@{}}
-\toprule
-\textbf{Claimed} & \textbf{Corrected to} \\
-\midrule
-an honest DENY can follow a used ALLOW & wrong: the honest service says \code{REPLAY} first \\
-report §3 mixed ledger acceptance with honest signing & split into two statements (A1-0141) \\
-M1 gas test count 9/9 & 6/6 (A1-0136) \\
-ledger plan checker 27/27 & its dev-key scan read a missing directory; now 28/28 + 9/9 negative controls \\
-TMSC size 52,339\,B & a parser artifact; real size 16,127\,B \\
-K1 detected 3/3 & 29/40; then fixed to 40/40 \\
-a report section was ``byte-identical'' & only its first line was hashed; now whole paragraphs \\
-\bottomrule
-\end{tabular}
-\end{columns}
-\src{BOARD.md A3-0160; partial-report-packet-20261115/README.md lines 3--43; RQ2-F-DRAFT.md lines 49--55, 216--217, 293--301; A1-0136 §2; A1-0141 §5}
-\end{frame}
-
-% ================================================================ PART IV: status, limits, conclusion (slides 24-27)
-
-% ---------------------------------------------------------------- 24. Honest status
-\begin{frame}{Honest status of RQ2 on 17 November}
+% ---------------------------------------------------------------- 21. Security findings beyond the bound
+\begin{frame}{Security findings beyond the fault bound}
+\noindent{\scriptsize\itshape\color{datagray} All three need at least two malicious witnesses (a compromised quorum of three for the last two): outside the $f = 1$ bound.\par}\vspace{0.9em}
 \centering
-\begin{tikzpicture}[x=1cm, y=1cm, every node/.append style={minimum height=1.55cm, font=\scriptsize, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}]
-  \node[stat=accent]   at (0,0)     {{\Large\bfseries DRAFT}\\[2pt]F execution plan; it authorises no execution};
-  \node[stat=badred]   at (3.55,0)  {{\Large\bfseries NOT RUN}\\[2pt]gate F: 0 of its 8 checklist boxes ticked};
-  \node[stat=badred]   at (7.1,0)   {{\Large\bfseries 0 / 32}\\[2pt]F cases run; all 32 are NOT\_RUN};
-  \node[stat=okgreen]  at (10.65,0) {{\Large\bfseries REVIEWED}\\[2pt]partial RQ2 report, ledger + protocol scope, at its exact hash};
+\begin{tikzpicture}[x=1cm, y=1cm, fc/.style={text width=3.85cm, align=left, inner sep=8pt, font=\scriptsize, anchor=north, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}]
+  \node[fc] (f1) at (0,0) {%
+    {\footnotesize\bfseries\color{accent} Conflicting certificates are partly stopped by the contracts}\\[8pt]
+    A second checkpoint for one sequence, or a second ALLOW for one request, is refused.\\[5pt]
+    But an ALLOW and a DENY for one request are both accepted and logged: a denial uses no nonce in our design.\\[8pt]
+    {\color{datagray}So two log entries do not prove a violation. Two malicious witnesses; scratch 4/4 [U].}};
+  \node[fc] (f2) at (4.6,0) {%
+    {\footnotesize\bfseries\color{badred} A compromised quorum can certify fake credentials}\\[8pt]
+    Three malicious witnesses certify made-up credential records that fit the policy, for a requester who never asked on the shared chain.\\[5pt]
+    The hospital contract grants access.\\[8pt]
+    {\color{datagray}Not shown: key release or decryption. Fewer signers, or records that do not fit, are refused. Scratch 3/3 [U].}};
+  \node[fc] (f3) at (9.2,0) {%
+    {\footnotesize\bfseries\color{badred} Counters can be pushed to a permanent halt}\\[8pt]
+    A compromised quorum installs a checkpoint with a maximum counter value. Every honest checkpoint after it is rejected as stale.\\[5pt]
+    Nothing on the ledger can reset it: only redeployment recovers.\\[8pt]
+    {\color{datagray}Fewer than three signers cannot do it. Scratch 3/3 and 3/3 [U].}};
+  \foreach \k/\c in {1/accent, 2/badred, 3/badred} {
+    \draw[\c!55, rounded corners=4pt] (f\k.north west) rectangle ($(f\k.north east)+(0,-4.85)$);
+    \fill[\c, rounded corners=2pt] ($(f\k.north west)+(0,-0.1)$) rectangle ($(f\k.north east)+(0,0)$);
+  }
 \end{tikzpicture}
 
 \vspace{0.5em}
-\begin{columns}[T,onlytextwidth]
-\column{0.49\textwidth}
-\footnotesize\textbf{Done (offline)}
-\begin{itemize}\scriptsize\setlength{\itemsep}{1pt}
-  \item F0 fault model accepted by all roles (4 Nov); ledger and protocol code built and owner-tested.
-  \item Partial RQ2 report, reviewed in ledger and protocol scope at its exact hash (16 Nov).
-  \item Runner stages 1--2; parts of stage 3 (baseline executor, snapshot materialiser, witness-RPC capture), tested on synthetic inputs.
-  \item Merged snapshot \code{Code\_Merge\_Final}: ledger 316 passed; protocol 3,226 passed, 201 skipped; evaluation 3,097 passed, 4 failed (host-specific; the same 4 on the agent-3 tip).
-\end{itemize}
-
-\column{0.48\textwidth}
-\footnotesize\textbf{Still needed before gate F}
-\begin{enumerate}\scriptsize\setlength{\itemsep}{1pt}
-  \item an exact execution FREEZE, with the ACK of each role on that plan hash;
-  \item runner stages 3--7 finished, including authenticated, complete signer capture;
-  \item the 32 integrated cases, positive controls first;
-  \item RQ1's suites re-run on the F ledger (E regression);
-  \item \code{RQ2-F.md}, then three matching sign-offs.
-\end{enumerate}
-\end{columns}
-\src{plan-draft.json; GATES.md lines 650--661; BOARD.md A3-0161, A3-0162, A3-0163; partial-report-packet-20261115/README.md lines 124--141; A1-0145 §2 (origin/agent-1)}
+\raggedright\src{RQ2-F-DRAFT.md §3 (lines 269, 279--291); A1-0137 §2; A1-0138 §1--2; A1-0141 §2--3; measurements README 141--144}
 \end{frame}
 
-% ---------------------------------------------------------------- 25. Limitations and lessons
+% ---------------------------------------------------------------- 22. What RQ2 shows
+\begin{frame}{What RQ2 shows, and why it matters}
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, cw/.style={text width=6.1cm, draw=none, font=\scriptsize, inner sep=6pt, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}, hw/.style={text width=6.1cm, font=\small\bfseries, inner sep=6pt}]
+  \node[pcard=pbc, cw] (k1) at (0,0) {%
+    \textbf{Agreement within the bound:} 3 of 4 approvals \emph{and} persistent single-signing give agreement with at most one malicious witness; both are needed (Exp.~1, 2).\\[3pt]
+    \textbf{Availability:} one witness down still works; two stop it, as intended (Exp.~3).\\[3pt]
+    \textbf{Crash-consistent memory:} controlled kills prove the test catches a split signing record (Exp.~4).\\[3pt]
+    \textbf{Replacement rules:} match the store and catch rule errors (Exp.~5).\\[3pt]
+    \textbf{Cost:} +3.7 to +11.0\% gas per certified path (Exp.~6).\\[3pt]
+    \textbf{Beyond the bound:} a compromised quorum can fake credentials or halt the deployment.};
+  \node[phead=pbc, hw] at (0,0) {Answer to RQ2};
+  \node[pcard=dbc, cw] (k2) at (7.0,0) {%
+    \textbf{No single trusted witness:} each decision needs three of four independent approvals, so one malicious or failed witness can neither forge nor block access.\\[3pt]
+    \textbf{Limits measured, not assumed:} we know where safety ends (two malicious witnesses) and where availability ends (two witnesses down).\\[3pt]
+    \textbf{What stays trusted:} the credential issuers, the key worker and the ledgers; a compromised quorum is a real risk.};
+  \node[phead=dbc, hw] at (7.0,0) {Why it matters};
+  \foreach \k/\c in {1/pbc, 2/dbc} \draw[\c, rounded corners=3pt] (k\k.north west) rectangle ($(k\k.north east)+(0,-4.5)$);
+\end{tikzpicture}
+
+\vspace{0.3em}
+{\scriptsize\textbf{Gate F: NOT RUN.} Still to run: the integrated 32-case gate-F study; until then these are model, isolated and local results.}
+
+\vspace{0.4em}
+\begin{tikzpicture}
+  \node[draw=pbc, fill=pbc!8, rounded corners=3pt, text width=13.2cm, align=center, inner sep=5pt, font=\footnotesize]
+    {RQ2 replaces RQ1's \textbf{one trusted witness} with three of four approvals,\\within the stated one-fault bound and its remaining trust assumptions.};
+\end{tikzpicture}
+\note{Sources: Exp. 1-6 and the security findings (slides 15-21); RQ2-F-DRAFT.md lines 19-24, §3; GATES.md lines 650-661; plan-draft.json (32 cases, E regression in stage 7).}
+\end{frame}
+
+% ================================================================ PART IV: limits and conclusion (slides 23-25)
+
+% ---------------------------------------------------------------- 23. Limitations and lessons
 \begin{frame}{Limitations and lessons}
 \begin{columns}[T,onlytextwidth]
 \column{0.48\textwidth}
@@ -947,6 +884,7 @@ a report section was ``byte-identical'' & only its first line was hashed; now wh
   \item \textbf{Synthetic fixtures:} TEST-ONLY keys, one fixed policy, one host, local Anvil.
   \item \textbf{Model $\neq$ implementation:} TLC checks one decision slot; ProVerif is symbolic.
   \item \textbf{Offline $\neq$ integrated:} no RQ2 number is an F case yet.
+  \item \textbf{Still trusted:} the key worker, the credential issuers and the ledgers; quorums do not protect against them.
   \item \textbf{Symbolic crypto:} no ABE, so no secrecy or performance claim.
 \end{itemize}
 \textbf{What F does not prove, even when it passes}
@@ -966,10 +904,10 @@ a report section was ``byte-identical'' & only its first line was hashed; now wh
   \item \textbf{Keep signing rules and ledger rules apart.} An honest witness's \code{REPLAY} does not stop an already signed DENY.
 \end{enumerate}
 \end{columns}
-\src{RQ2-F-DRAFT.md §5; RQ1-E.md §15; A1-0143 §2.1; A1-0141 §5; RQ2-F-DRAFT.md lines 49--55}
+\src{RQ2-F-DRAFT.md §3, §5; RQ1-E.md §15; A1-0143 §2.1; A1-0141 §5; RQ2-F-DRAFT.md lines 49--55}
 \end{frame}
 
-% ---------------------------------------------------------------- 26. Conclusion
+% ---------------------------------------------------------------- 24. Conclusion
 \begin{frame}{Conclusion}
 \centering
 \begin{tikzpicture}[x=1cm, y=1cm, cw/.style={text width=4.1cm, draw=none, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}, hw/.style={text width=4.1cm, font=\footnotesize\bfseries}]
@@ -1004,7 +942,7 @@ a report section was ``byte-identical'' & only its first line was hashed; now wh
 \src{RQ1-E.md §0, §6; RQ2-F-DRAFT.md lines 19--24, §2.3, §2.4; GATES.md lines 650--661; packet README lines 131--141}
 \end{frame}
 
-% ---------------------------------------------------------------- 27. Close
+% ---------------------------------------------------------------- 25. Close
 \begin{frame}[standout]
 Thank you\\[0.5em]
 {\normalsize Questions?}

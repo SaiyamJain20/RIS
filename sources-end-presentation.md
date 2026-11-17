@@ -171,7 +171,7 @@ the HMBC authors' implementation.
 | Family purposes (case titles: e.g. FL-2 one witness withholds, F-12 equivocating witness, F-13 signer restarts, F-27 database rollback, F-31 clock/height regression, F-32 store reuse, FL-6 stale witness set, FL-10 governance replay, FL-11 relay suppresses outcomes, F-21 relay forges request contents, F-19 compromised worker host, F-25 common host compromise, F-26 storage faults) | `EV/case-coverage-map-20261114/coverage.csv` |
 | What the gate requires (six bullets) | `communication/GATES.md:652–659` |
 | Fresh chain pair per case, positive controls first | `plan-draft.json` (`stages`, stage 4) |
-| No integrated run claimed on this slide; status on slide 24 | `communication/GATES.md:661`; RQ2:3 |
+| No integrated run claimed on this slide; status on slide 22 | `communication/GATES.md:661`; RQ2:3 |
 
 ## Slide 15 — Experiment 1 result: why three approvals are needed [F]
 
@@ -242,20 +242,7 @@ the HMBC authors' implementation.
 | Plain rule names: expiry `>=`→`>` = treat exact expiry as still valid; receipt never dead; decision sequence `>`→`>=` = retire at an equal sequence; drop grant death; grant kills DENY; checkpoint `>=`→`>` = require a greater sequence; governance `>=`→`>` = require a greater nonce | `evaluation/measurements/oracle_mutant_discrimination.py:27–51` |
 | Baseline row: correct rules, 0 disagreements (180/180; 142 replace, 38 refuse) | oracle-mutant-discrimination-20261115 README:9–14 |
 
-## Slide 20 — Security findings beyond the fault bound
-
-| Item | Source |
-|---|---|
-| Saturated sequence / authEpoch / sourceBlockNumber halt; no reset; redeploy | RQ2:269; A1-0137 §2.1 (lines 45–58); A1-0138 §1 (lines 31–49) |
-| Decisions stop at once (authEpoch) or after expiry | A1-0138 lines 40–49 |
-| < 3 signers cannot poison; 3/3 and 3/3 | A1-0137 lines 54–57; A1-0138 lines 53–61 |
-| Forged-credential grant; controls INSUFFICIENT_QUORUM / POLICY_DENIED; 3/3; key release not shown | A1-0137 §2.2 (lines 60–72); RQ2:269 |
-| f=2: second checkpoint STALE_STATE; second ALLOW REPLAY; DENY/ALLOW both accepted either order, incl. same sequence and after grant | RQ2:279–291; A1-0141 §2–3 (lines 28–43) |
-| DENY consumes no nonce (E0 choice, ACSC.sol:186–188) | RQ2:285–286 |
-| Honest witness REPLAY at signing | A2-0089 §2; RQ2:288–290 |
-| Scratch 4/4 rerun by the evaluator | MEAS:141–144; RQ2:281–282 |
-
-## Slide 21 — Experiment 6 result: cost [R]
+## Slide 20 — Experiment 6 result: cost [R]
 
 | Item | Source |
 |---|---|
@@ -270,40 +257,34 @@ the HMBC authors' implementation.
 | Cold-storage hypothesis refuted (231,261 vs 231,260) | MEAS:94–96 (A1-0123) |
 | Single deterministic runs; not a fee estimate | MEAS:18–21, 65; RQ2:191–192 |
 
-## Slide 22 — Trust matrix
+## Slide 21 — Security findings beyond the fault bound
 
 | Item | Source |
 |---|---|
-| Every row; the compromised-worker case NOT_RUN | RQ2:265–278 (274) |
+| Saturated sequence / authEpoch / sourceBlockNumber halt; no reset; redeploy | RQ2:269; A1-0137 §2.1 (lines 45–58); A1-0138 §1 (lines 31–49) |
+| Decisions stop at once (authEpoch) or after expiry | A1-0138 lines 40–49 |
+| < 3 signers cannot poison; 3/3 and 3/3 | A1-0137 lines 54–57; A1-0138 lines 53–61 |
+| Forged-credential grant; controls INSUFFICIENT_QUORUM / POLICY_DENIED; 3/3; key release not shown | A1-0137 §2.2 (lines 60–72); RQ2:269 |
+| f=2: second checkpoint STALE_STATE; second ALLOW REPLAY; DENY/ALLOW both accepted either order, incl. same sequence and after grant | RQ2:279–291; A1-0141 §2–3 (lines 28–43) |
+| DENY consumes no nonce (E0 choice, ACSC.sol:186–188) | RQ2:285–286 |
+| Honest witness REPLAY at signing | A2-0089 §2; RQ2:288–290 |
+| Scratch 4/4 rerun by the evaluator | MEAS:141–144; RQ2:281–282 |
+| Headline wording ("partly stopped by the contracts", "certify fake credentials", "permanent halt"); all three outside the f = 1 bound | RQ2:269, 279–291 |
 
-## Slide 23 — Assurance
-
-| Item | Source |
-|---|---|
-| Report SHA-256 e59a51cd..; A1-0142 / A2-0091 no objection in scope; evaluation-tool correctness excluded; not an ACK | `communication/BOARD.md:54–68` (A3-0160); `EV/partial-report-packet-20261115/README.md:3–6, 37–43, 126–130` |
-| Honest DENY after used ALLOW: wrong, corrected | RQ2:293–301 |
-| Ledger/signing conflation corrected | A1-0141; RQ2:379–386 |
-| M1 count 9/9 → 6/6 | A1-0136 §2 (lines 37–43) |
-| Plan checker 27/27 vacuous dev-key scan → 28/28 + 9/9 | RQ2:49–55 |
-| TMSC 52,339 B parser artifact | MEAS:64; RQ2:217 |
-| K1 3/3 → 29/40 → 40/40 | as slide 18 |
-| First-line hash missed an edit | A1-0141 §5 (lines 61–67) |
-| Same model family; correlated | RQ2:12, 278; D57 |
-
-## Slide 24 — Honest status of RQ2
+## Slide 22 — What RQ2 shows
 
 | Item | Source |
 |---|---|
-| Plan DRAFT, authorises no execution | `plan-draft.json`; packet README:131 |
-| Gate F NOT RUN; 0 of its 8 checklist boxes ticked | `communication/GATES.md:650–661` |
-| 0/32 cases NOT_RUN | packet README:131–134 |
-| REVIEWED: partial report, ledger + protocol scope, exact hash | `communication/BOARD.md:54–68` (A3-0160); packet README:3–6 |
-| F0 accepted 4 Nov | `communication/DECISIONS.md:516–540` (D53) |
-| Stages 1–2; stage-3 executor, snapshot materialiser, RPC capture (synthetic) | `communication/BOARD.md:1–52` (A3-0161..0163); RQ2:3–4 |
-| Merged snapshot: ledger 316 passed; protocol 3,226 passed / 201 skipped; evaluation 3,097 passed / 4 failed (host-specific, same on agent-3 ca82b7f) | **`origin/agent-1`** `communication/agent-1/outbox/0145-note-code-merge-final-branch.md:39–46` (A1-0145) |
-| Still-needed list | packet README:131–141; GATES.md:652–659; RQ2:350–356 |
+| Agreement within the bound; both quorum and persistent single-signing needed | slides 15–16 sources (RQ2 §2.1; tlc-audit; pool-sweep) |
+| One witness down works, two stop it | slide 17 sources (MEAS:45–48, 118–134) |
+| Controlled kills catch a split signing record | slide 18 sources |
+| Replacement rules match the store and catch rule errors | slide 19 sources |
+| +3.7 to +11.0% gas | slide 20 sources (RQ2:185–187) |
+| Compromised quorum can fake credentials or halt the deployment | slide 21 sources |
+| What stays trusted: credential issuers, key worker, ledgers | RQ2:265–278 (trust matrix in the report) |
+| Gate F: NOT RUN; the integrated 32-case study still to run | `communication/GATES.md:661`; RQ2:3; packet README:131–134 |
 
-## Slide 25 — Limitations and lessons
+## Slide 23 — Limitations and lessons
 
 | Item | Source |
 |---|---|
@@ -314,8 +295,9 @@ the HMBC authors' implementation.
 | Lesson 3 (q2 manifest says repaired-f; threshold 2 vs 3 read back) | A1-0143 §2.1 (lines 27–41) |
 | Lesson 4 (first-line hash) | A1-0141 §5 |
 | Lesson 5 (signing vs ledger) | RQ2:288–291, 316–319 |
+| Still trusted: key worker, credential issuers, ledgers | RQ2:265–278 |
 
-## Slide 26 — Conclusion
+## Slide 24 — Conclusion
 
 | Item | Source |
 |---|---|
@@ -355,4 +337,4 @@ so every claim used on a slide is backed above by repository evidence.
   changes in `oracle_mutant_discrimination.py`.
 - **Not used:** the "≤ 30 seconds residual acceptance" sentence (RQ1 material, already covered by RQ1's own
   sourced window slide); the regression-count table (3,004 evaluation tests, 37 focused controls), which
-  belongs to the honest-status/assurance story and is not needed on the experiment slides.
+  is regression evidence, not an experiment, and is not on the slides.

@@ -1,23 +1,23 @@
-# Speaker script: the HMBC end-evaluation deck in about 21 minutes
+# Speaker script: the HMBC end-evaluation deck in about 20 minutes
 
-About **21 minutes** spoken (about 3,200 words at a brisk pace; the per-slide timings below sum to
-21 min 5 s). Plain text is what you say. *[Brackets]* are pointing cues. This script matches the
-27-page deck `hmbc-end-presentation.pdf`.
+About **20 minutes** spoken (about 3,050 words at a brisk pace; the per-slide timings below sum to
+19 min 45 s). Plain text is what you say. *[Brackets]* are pointing cues. This script matches the
+25-page deck `hmbc-end-presentation.pdf`.
 
 - **Slide numbers** are PDF page numbers. The counter in the slide corner is one lower (the title page
   is not counted).
 - **Status to keep straight on every slide:** RQ1 is done (gate E PASS, 12 Oct). RQ2 is in progress:
   the F execution plan is a DRAFT, **gate F has not been run, and none of the 32 F cases has been
   run**. Never say or imply that RQ2 is finished.
-- **Suggested split for three speakers, about 7 minutes each:**
+- **Suggested split for three speakers, about 6½ minutes each:**
 
   | Speaker | Slides | Content |
   |---|---|---|
   | A | 1–8 | the paper, JANUS, our two research questions, RQ1 gaps, Fix 1–3, the Gap 1 result |
   | B | 9–16 | Gap 2 and Gap 3 results, what RQ1 shows; RQ2 question, design, how it is judged; Experiments 1 and 2 |
-  | C | 17–27 | Experiments 3–6 and the security findings beyond the bound, trust matrix, assurance, status; limits, conclusion |
+  | C | 17–25 | Experiments 3–6, the security findings beyond the bound, what RQ2 shows; limits, conclusion |
 
-- **If you run long:** say one sentence each on slides 11, 14 and 21. That saves about a minute.
+- **If you run long:** say one sentence each on slides 11, 14 and 20. That saves about a minute.
 
 ---
 
@@ -258,7 +258,7 @@ outcomes; and compromise and residual trust.
 unique, bound and durable; safety with at most one faulty witness; the advertised limit with two; a
 TLC model; and one frozen integrated run with three sign-offs.
 
-*[Grey line]* Whether those integrated runs have happened is on the status slide. They have not yet.
+*[Grey line]* Whether those integrated runs have happened is stated on "What RQ2 shows". They have not yet.
 
 ## 15. Experiment 1 result: why three approvals are needed (50 s)
 
@@ -326,21 +326,7 @@ disagreements.
 *[Orange box]* The checker matches the store and catches these seven errors. It is store-level evidence;
 what callers assert still needs separate checks.
 
-## 20. Security findings beyond the fault bound (55 s)
-
-What happens beyond the bound? Three findings, from scratch tests on the ledger.
-- *[First card]* **Two malicious witnesses:** the contracts still refuse a second checkpoint for one
-  sequence and a second ALLOW. But an ALLOW and a DENY are **both accepted**, because a DENY uses no
-  nonce in our design, so two log entries alone do not prove a signing violation.
-- *[Second card]* **A compromised quorum** can certify fabricated, policy-shaped credentials for a
-  requester who never submitted anything, and the hospital contract grants.
-- *[Third card]* **A compromised quorum can halt a deployment for good**, by installing a checkpoint
-  with a maxed-out counter. Honest checkpoints are then rejected, and only redeployment recovers.
-
-*[Finding]* Distributing approval helps, but a compromised quorum can corrupt facts or halt the system.
-None of this contradicts the one-fault claims, and none of it is an HMBC vulnerability.
-
-## 21. Experiment 6 result: cost (40 s)
+## 20. Experiment 6 result: cost (40 s)
 
 *[Grey question]* What does going from one attester to three approvals cost on chain?
 
@@ -351,44 +337,42 @@ checkpoint, **+5.5%** for a decision, **+3.7%** for an outcome.
 row; this is not a fee or throughput estimate. *[Side note]* Governance actions cost 424 to 524 thousand
 gas, and all contracts stay under the 24-kilobyte limit.
 
-## 22. Trust matrix (35 s)
+## 21. Security findings beyond the fault bound (50 s)
 
-What does RQ2 still have to trust?
-- **Required:** three of four honest witnesses, and an honest governance quorum.
-- **Trusted:** the key worker, which a quorum doesn't protect against; the credential authorities; the
-  local chains.
-- The relay has no key; the witnesses are separate processes, but on one host.
-- **Not evaluated:** key custody, the client and the data store. And all code and reviews come from one
-  model family.
+*[Grey line]* All three need at least two malicious witnesses, outside the one-fault bound.
+- *[First card]* **Conflicting certificates are partly stopped by the contracts.** A second checkpoint
+  or a second ALLOW is refused. But an ALLOW and a DENY for one request are both accepted, because a
+  denial uses no nonce in our design, so two log entries alone do not prove a violation.
+- *[Second card]* **A compromised quorum can certify fake credentials** for a requester who never asked,
+  and the hospital contract grants. We did not show key release.
+- *[Third card]* **Counters can be pushed to a permanent halt:** a checkpoint with a maximum counter
+  makes every honest checkpoint stale, and only redeployment recovers.
 
-## 23. Assurance (40 s)
+None of this contradicts the one-fault claims, and none of it is an HMBC vulnerability.
 
-- *[Left]* The partial report is pinned by its hash. The ledger role and the protocol role each read
-  the full diff and found no objection in their scope. A review isn't permission to run anything.
-- *[Table]* We keep our mistakes: a wrong claim about honest DENYs; a sentence that mixed up signing and
-  acceptance; a test count of 9 that was really 6; a scan that read a missing directory; a size that was
-  a parser artefact; the K1 rate; a check that hashed only a paragraph's first line.
+## 22. What RQ2 shows (45 s)
 
-*[Orange box]* All three roles are the same model family, so these are scoped re-checks, not
-independent review.
+*[Purple card]* The answer to RQ2:
+- three of four approvals **and** witnesses that remember what they signed give agreement with at most
+  one malicious witness; both parts are needed;
+- one witness down still works, two stop it, as intended;
+- controlled kills prove the crash test catches a split signing record;
+- the replacement rules match the store and catch rule errors;
+- the cost is 3.7 to 11 percent more gas;
+- and beyond the bound, a compromised quorum can fake credentials or halt the deployment.
 
-## 24. Honest status of RQ2 (45 s)
+*[Green card]* Why it matters: there is no longer a single trusted witness, and we know where safety and
+availability end. What stays trusted: the credential issuers, the key worker and the ledgers.
 
-- *[Tiles]* The execution plan is a **draft** and authorises nothing. Gate F: **not run**, none of its
-  eight checklist boxes ticked. F cases: **zero of 32** run. What **is** done: the partial report was
-  reviewed by the other two roles at its exact hash.
-- *[Left]* Also done: the agreed fault model, the ledger and protocol code with their tests, the first
-  runner stages. A merged snapshot of all three modules passes the ledger and protocol suites; the
-  evaluation suite has four failures specific to the test host.
-- *[Right]* Still needed before gate F: an exact execution freeze with every role's acknowledgement,
-  the remaining runner stages, the 32 integrated cases, RQ1's suites re-run on the new ledger, then the
-  report and three sign-offs.
+*[Gate line]* As with RQ1's verdict line: **gate F has not been run.** The integrated 32-case study is
+still to run; until then these are model, isolated and local results.
 
-## 25. Limitations and lessons (45 s)
+## 23. Limitations and lessons (45 s)
 
 *[Left]* Limits: correlated review; synthetic fixtures; a model is not the implementation; offline is
-not integrated; symbolic crypto. Even when F passes, it won't prove consensus, safety with two
-Byzantine witnesses, liveness under any delay, or power-loss durability.
+not integrated; the key worker, credential issuers and ledgers are still trusted; symbolic crypto. Even
+when F passes, it won't prove consensus, safety with two Byzantine witnesses, liveness under any delay,
+or power-loss durability.
 
 *[Right]* Five lessons:
 1. A random fault point can look green: put the fault where the bug lives.
@@ -398,7 +382,7 @@ Byzantine witnesses, liveness under any delay, or power-loss durability.
 4. Hash the whole artifact.
 5. Keep signing rules and ledger rules apart.
 
-## 26. Conclusion (40 s)
+## 24. Conclusion (40 s)
 
 - **RQ1 is answered:** in the paper's flow, 20 of 32 rows depend on unspecified details; our repair
   closes each with a named check; gate E passed.
@@ -410,7 +394,7 @@ Byzantine witnesses, liveness under any delay, or power-loss durability.
 
 *[Banner]* Everything here is about our reconstruction of HMBC, not the authors' code.
 
-## 27. Thank you (5 s)
+## 25. Thank you (5 s)
 
 Thank you. Questions?
 
@@ -441,8 +425,8 @@ Thank you. Questions?
     one is faulty. The TLC model shows a quorum of two breaks agreement.
 - **"Isn't the forged-credential grant a serious bug?"**
   - It needs three of the four witnesses compromised, which is outside the bound we claim. It shows
-    what "governance quorum: required" costs if that trust fails. We recorded it in the trust matrix;
-    we have not designed or tested a mitigation, and it is not a finding about HMBC.
+    what trusting the quorum costs if that trust fails. We recorded it as a security finding; we have
+    not designed or tested a mitigation, and it is not a finding about HMBC.
 - **"Why doesn't a DENY use a nonce?"**
   - That was an RQ1 reconstruction choice (a denial only writes a log entry). In RQ2 it means two
     Byzantine witnesses can get both a DENY and an ALLOW logged for one request. The ledger still
