@@ -129,23 +129,22 @@ the HMBC authors' implementation.
 
 | Item | Source |
 |---|---|
-| Paper's flow, 32 rows: 8 hold as specified, 20 depend on a gap, 4 blocked; repaired-e, 24 rows: 19 enforced by a fix, 5 controls | tally of the GATE column of RQ1 §6 (lines 410–555); same grid as mid lines 842–853 |
-| 56 PASS, 0 FAILED, 0 NOT_RUN | RQ1:356 |
-| 4,749 s (1.32 h), exit 0 | RQ1:327–328, 361 |
-| Sources and HEAD unchanged; inputs/outputs hashed | RQ1:358–359; `communication/GATES.md:634` |
-| 6 ledger mutants, each caught by its expected tests | RQ1:1031–1044 |
-| ProVerif: attack trace once the destination is dropped | RQ1:999–1013 |
-| Three ACKs; gate E PASS 12 Oct 2026 | `communication/GATES.md:637–648` |
-| Integrated mutants and window not run; correlated review | RQ1:16–21, 76–81 |
+| 56 / 56 rows matched the expectation frozen on 8 Oct | RQ1:356; RQ1:240–243; `communication/DECISIONS.md:107` (D38) |
+| 4,749 s, one command, fresh chain pair per row | RQ1:327–328, 361; RQ1:244–246 |
+| PASS, gate E, 12 Oct 2026, three matching sign-offs | `communication/GATES.md:637–648` (ACKs A1-0085, S2-0023, S3-0024) |
+| Grid: paper's flow 32 rows (8 hold as specified, 20 depend on a gap, 4 blocked); RQ1 repair 24 rows (19 enforced by a fix, 5 controls) | tally of the GATE column of RQ1 §6 (lines 410–555); mid lines 842–853 |
+| 6 ledger mutants each caught by their tests | RQ1:1031–1044 |
+| ProVerif attack once the destination is dropped | RQ1:999–1013 |
+| Not run: integrated mutant matrix and window; correlated review | RQ1:16–21, 76–81 |
 
 ## Slide 12 — What RQ1 shows
 
 | Item | Source |
 |---|---|
 | Holds / depends / repairable | RQ1:34–67 |
-| ≤ 30 s | RQ1:68, 832–833 |
-| Limits: symbolic crypto, one trusted witness and worker, local chains, one trial per row | RQ1:1150, 1152, 1156, 1173 |
+| ≤ 30 s bound in the RQ1 repair | RQ1:68, 832–833 |
 | "First executable instance-level analysis" (non-exhaustive search) | mid lines 427, 893, 908 |
+| One trusted witness | RQ1:1156 |
 
 ## Slide 13 — RQ2 question
 
@@ -158,32 +157,31 @@ the HMBC authors' implementation.
 | Not consensus; Anvil not BFT | `SPEC.md:75`; GATES.md:658 |
 | Out-of-bound controls f=2, q=2, ≥3 | RQ2:146–147, 269 |
 
-## Slide 14 — RQ2 design
+## Slide 14 — RQ2 design (plain explanation)
 
 | Item | Source |
 |---|---|
-| Three signed paths (checkpoint→KSSC, decision→ACSC, receipt→PSC) | RQ2:129–131 |
-| ≥ q = 3 of 4 signatures, strictly increasing; 4 of 4 accepted | RQ2:130; A1-0137 §1 table (SigLib.sol:37) |
-| Governance: add/remove authority, set CA admins; nonce + expiry | RQ2:131; A1-0137 §1 (Governance.sol:83–86) |
-| Removed authority tombstoned | A1-0137 §1 (TMSC.sol:144–147, 159) |
-| Witness set fixed at deployment | RQ2:269; A1-0137 §1 (A1-0126) |
-| Checkpoint: strictly greater sequence; authEpoch / sourceBlockNumber non-decreasing | A1-0137 §2.1 (KSSC.sol:160–163) |
-| Receipt names another request/GID/record | RQ1:64–65 |
-| Honest witness REPLAY after grant | A2-0089 §2 (witness_service.py:146–147) |
+| Three certified paths: checkpoint checked at the key-service contract (KSSC), decision at the policy contract (ACSC), receipt on the shared request and audit path (PSC) | RQ2:129–131 |
+| Checkpoint = snapshot of proxy-chain trust and authorisation state (sequence, auth epoch, source block) | A1-0137 §2.1 (KSSC.sol:160–163); A1-0138 §1 |
+| Decision = outcome and credential binding for one request (quorum-signed credential digest) | A1-0137 §2.2 (DecisionVerifier.sol:73) |
+| Receipt binds an outcome to a committed grant | RQ1:64–65 (receipt binding) |
+| Governance: add/remove a credential authority, change its admins; nonce and expiry; applied to the shared trust lists | RQ2:131; A1-0137 §1 (Governance.sol:83–86, TMSC.sol:144–159) |
+| At least 3 of 4 distinct member signatures | RQ2:130; A1-0137 §1 (SigLib.sol:37) |
+| Witness membership fixed at deployment | RQ2:269; A1-0137 §1 (A1-0126) |
+| Honest witness persists its signature (durable SQLite store, survives restart) and replaces an approval only once it is observed dead | `SPEC.md:79`; RQ2:132, 293–301; `protocol/hmbc_protocol/witness_state.py:408–427` |
+| Collector / relay holds no key | `SPEC.md:73`; RQ2:272 |
 
-## Slide 15 — How RQ2 will be judged
+## Slide 15 — How RQ2 is judged
 
 | Item | Source |
 |---|---|
-| 32 cases, six families 8+6+4+8+3+3 | `EV/execution-plan-draft-20261114/plan-draft.json` (`families`); its README line 25 |
-| Stages 1–7 | `plan-draft.json` (`stages`) |
-| Status DRAFT, authorizesExecution false | `plan-draft.json` (`status`, `authorizesExecution`) |
-| 0 of 32 integrated | `EV/case-coverage-map-20261114/README.md:7`; RQ2:3 |
-| Stages 1–2 fail closed (BLOCKED); 3–7 open | RQ2:3–4, 113–115, 355–357 |
-| Evidence labels per item | as slides 16–23 |
-| Measured before runner and FREEZE | MEAS:13–14; RQ2:365–366 |
+| Six families A–F (names) | `EV/execution-plan-draft-20261114/plan-draft.json` (`families`) |
+| Family purposes (case titles: e.g. FL-2 one witness withholds, F-12 equivocating witness, F-13 signer restarts, F-27 database rollback, F-31 clock/height regression, F-32 store reuse, FL-6 stale witness set, FL-10 governance replay, FL-11 relay suppresses outcomes, F-21 relay forges request contents, F-19 compromised worker host, F-25 common host compromise, F-26 storage faults) | `EV/case-coverage-map-20261114/coverage.csv` |
+| What the gate requires (six bullets) | `communication/GATES.md:652–659` |
+| Fresh chain pair per case, positive controls first | `plan-draft.json` (`stages`, stage 4) |
+| No integrated run claimed on this slide; status on slide 25 | `communication/GATES.md:661`; RQ2:3 |
 
-## Slide 16 — TLC [F]
+## Slide 16 — Experiment 1: why three approvals are needed [F]
 
 | Item | Source |
 |---|---|
@@ -193,19 +191,10 @@ the HMBC authors' implementation.
 | Fresh rerun matched | RQ2:154–158; tlc-audit README:22–24 |
 | Agent 1's enumeration matches | RQ2:150–151; A1-0137 §1 ("A1-0122: 108 and 81") |
 | Limits | RQ2:149–154; tlc-audit README:29–33 |
-| First f=0 run deadlocked | RQ2:216–217; `EV/decision-quorum-tlc-20261113/first-run-with-deadlock/` |
+| Negative configurations stop at a counterexample trace | tlc-audit README:18–20, 22–24 |
+| First f=0 run deadlocked (speaker note / history) | RQ2:216–217; `EV/decision-quorum-tlc-20261113/first-run-with-deadlock/` |
 
-## Slide 17 — Oracle/store differential [U]
-
-| Item | Source |
-|---|---|
-| 180/180 agree, 142 accepts, 38 CONFLICT_PINNED, 0 disagreements | `EV/oracle-store-diff-20261115/README.md:9–14`; RQ2:27–29 |
-| Four signing kinds; subtree 7566f63d.. | oracle-store-diff-20261115 README:10–14 |
-| Seven mutations 20, 18, 6, 4, 4, 4, 4 | `EV/oracle-mutant-discrimination-20261115/README.md:16–24`; RQ2:33–35 |
-| Not completeness | oracle-mutant README:36–38 |
-| Store capability vs service reachability; earlier DENY claim wrong | RQ2:293–301; A2-0089 §2 |
-
-## Slide 18 — M5 pool sweep [U]
+## Slide 17 — Experiment 2: certificate collection with real signatures [U]
 
 | Item | Source |
 |---|---|
@@ -214,8 +203,10 @@ the HMBC authors' implementation.
 | 3 distinct sorted valid signers | pool-sweep README:29–30 |
 | 9 behaviours; 4×9×27 and 6×81×9 | MEAS:72–79 |
 | Hazard definition (potential); honest witnesses modelled; byte-identical rerun | pool-sweep README:15–17, 25–28, 34–38; MEAS:80–83 |
+| Honest witness starts uncommitted or committed to one of two values (3 states) | `evaluation/measurements/byzantine_sweep.py:46, 55` |
+| Nine malicious behaviours (silent; sign A/B/C; report A/B/C; garbage; wrong key) | MEAS:72–73 |
 
-## Slide 19 — Availability
+## Slide 18 — Experiment 3: the availability boundary [U]/[R]
 
 | Item | Source |
 |---|---|
@@ -226,8 +217,49 @@ the HMBC authors' implementation.
 | M6 table (0.69/0.69/0.78; 0.63/0.55/0.60; 10.54/10.54/10.55; 0.96/0.87/0.88 s); 4 passed × 3 runs | MEAS:122–129 |
 | 10.5 s = 10 s deadline + overhead | MEAS:130 |
 | M6 raw stdout and invocation not retained | availability-receipt-review README:1–6; RQ2:93–95 |
+| Ranges 0.69–0.78 s, 0.55–0.63 s, 10.54–10.55 s (min–max of the three runs) | MEAS:126–128 |
+| Every trial record retained (80 rows) | RQ2:117–124; `EV/availability-trial-records-20261115/README.md` |
 
-## Slide 20 — Gas [R]
+## Slide 19 — Experiment 4: can a crash split a signing record? [R]
+
+| Item | Source |
+|---|---|
+| K1 definition | `protocol/tools/run_state_kill_mutants.py:5–6, 25–27` |
+| The synchronous=FULL → OFF mutant survives (power loss only) | run_state_kill_mutants.py:9, 34; `evaluation/evidence/reviews/proxy-k1-20261114/README.md:65–66` |
+| Earlier 3/3 not reproduced | `evaluation/evidence/reviews/a2-0086-signing-kill-20261113/README.md:14–16`; RQ2:197–199 |
+| 29/40 (72.5%), control 40/40 | a2-0086 review README:28–32; RQ2:197–198 |
+| After the hook: 40/40, controls 40/40 | proxy-k1 README:48–49; RQ2:199–201 |
+| Agent 2: 15/15, 10/10, 81 state tests, 3,226 passed / 201 skipped | A2-0089 lines 22–23; RQ2:201–203 |
+| Three defects found and fixed | RQ2:195–197 |
+| Three pause points: after a fresh pin, after a digest, after replacing an obsolete pin | `evaluation/evidence/reviews/proxy-k1-20261114/README.md:57` ("all three pauses (fresh pin, digest, superseding pin)"); `protocol/hmbc_protocol/witness_state.py:416–435` (`after_pin` follows the supersede path; `after_digest`) |
+| Placeholder signer; process death only | proxy-k1 README:3–4, 65–66 |
+
+## Slide 20 — Experiment 5: when does a different signature become legal? [U]
+
+| Item | Source |
+|---|---|
+| 180/180 agree, 142 accepts, 38 CONFLICT_PINNED, 0 disagreements | `EV/oracle-store-diff-20261115/README.md:9–14`; RQ2:27–29 |
+| Four signing kinds; subtree 7566f63d.. | oracle-store-diff-20261115 README:10–14 |
+| Seven mutations 20, 18, 6, 4, 4, 4, 4 | `EV/oracle-mutant-discrimination-20261115/README.md:16–24`; RQ2:33–35 |
+| Not completeness | oracle-mutant README:36–38 |
+| Store capability vs service reachability; earlier DENY claim wrong | RQ2:293–301; A2-0089 §2 |
+| Grid: 3 expiry × 3 sequence/nonce × grant × outcome (= 36 per type) for checkpoints, governance, receipts; × earlier ALLOW/DENY for decisions (72): 180 | `EV/oracle-store-diff-20261114/README.md:9–14` |
+| Plain rule names: expiry `>=`→`>` = treat exact expiry as still valid; receipt never dead; decision sequence `>`→`>=` = retire at an equal sequence; drop grant death; grant kills DENY; checkpoint `>=`→`>` = require a greater sequence; governance `>=`→`>` = require a greater nonce | `evaluation/measurements/oracle_mutant_discrimination.py:27–51` |
+
+## Slide 21 — Security findings beyond the fault bound
+
+| Item | Source |
+|---|---|
+| Saturated sequence / authEpoch / sourceBlockNumber halt; no reset; redeploy | RQ2:269; A1-0137 §2.1 (lines 45–58); A1-0138 §1 (lines 31–49) |
+| Decisions stop at once (authEpoch) or after expiry | A1-0138 lines 40–49 |
+| < 3 signers cannot poison; 3/3 and 3/3 | A1-0137 lines 54–57; A1-0138 lines 53–61 |
+| Forged-credential grant; controls INSUFFICIENT_QUORUM / POLICY_DENIED; 3/3; key release not shown | A1-0137 §2.2 (lines 60–72); RQ2:269 |
+| f=2: second checkpoint STALE_STATE; second ALLOW REPLAY; DENY/ALLOW both accepted either order, incl. same sequence and after grant | RQ2:279–291; A1-0141 §2–3 (lines 28–43) |
+| DENY consumes no nonce (E0 choice, ACSC.sol:186–188) | RQ2:285–286 |
+| Honest witness REPLAY at signing | A2-0089 §2; RQ2:288–290 |
+| Scratch 4/4 rerun by the evaluator | MEAS:141–144; RQ2:281–282 |
+
+## Slide 22 — Experiment 6: the cost of distributed approval [R]
 
 | Item | Source |
 |---|---|
@@ -242,36 +274,11 @@ the HMBC authors' implementation.
 | Cold-storage hypothesis refuted (231,261 vs 231,260) | MEAS:94–96 (A1-0123) |
 | Single deterministic runs; not a fee estimate | MEAS:18–21, 65; RQ2:191–192 |
 
-## Slide 21 — K1 [R]
-
-| Item | Source |
-|---|---|
-| K1 definition | `protocol/tools/run_state_kill_mutants.py:5–6, 25–27` |
-| The synchronous=FULL → OFF mutant survives (power loss only) | run_state_kill_mutants.py:9, 34; `evaluation/evidence/reviews/proxy-k1-20261114/README.md:65–66` |
-| Earlier 3/3 not reproduced | `evaluation/evidence/reviews/a2-0086-signing-kill-20261113/README.md:14–16`; RQ2:197–199 |
-| 29/40 (72.5%), control 40/40 | a2-0086 review README:28–32; RQ2:197–198 |
-| After the hook: 40/40, controls 40/40 | proxy-k1 README:48–49; RQ2:199–201 |
-| Agent 2: 15/15, 10/10, 81 state tests, 3,226 passed / 201 skipped | A2-0089 lines 22–23; RQ2:201–203 |
-| Three defects found and fixed | RQ2:195–197 |
-
-## Slide 22 — Trust matrix
+## Slide 23 — Trust matrix
 
 | Item | Source |
 |---|---|
 | Every row; the compromised-worker case NOT_RUN | RQ2:265–278 (274) |
-
-## Slide 23 — Outside the bound
-
-| Item | Source |
-|---|---|
-| Saturated sequence / authEpoch / sourceBlockNumber halt; no reset; redeploy | RQ2:269; A1-0137 §2.1 (lines 45–58); A1-0138 §1 (lines 31–49) |
-| Decisions stop at once (authEpoch) or after expiry | A1-0138 lines 40–49 |
-| < 3 signers cannot poison; 3/3 and 3/3 | A1-0137 lines 54–57; A1-0138 lines 53–61 |
-| Forged-credential grant; controls INSUFFICIENT_QUORUM / POLICY_DENIED; 3/3; key release not shown | A1-0137 §2.2 (lines 60–72); RQ2:269 |
-| f=2: second checkpoint STALE_STATE; second ALLOW REPLAY; DENY/ALLOW both accepted either order, incl. same sequence and after grant | RQ2:279–291; A1-0141 §2–3 (lines 28–43) |
-| DENY consumes no nonce (E0 choice, ACSC.sol:186–188) | RQ2:285–286 |
-| Honest witness REPLAY at signing | A2-0089 §2; RQ2:288–290 |
-| Scratch 4/4 rerun by the evaluator | MEAS:141–144; RQ2:281–282 |
 
 ## Slide 24 — Assurance
 
@@ -283,7 +290,7 @@ the HMBC authors' implementation.
 | M1 count 9/9 → 6/6 | A1-0136 §2 (lines 37–43) |
 | Plan checker 27/27 vacuous dev-key scan → 28/28 + 9/9 | RQ2:49–55 |
 | TMSC 52,339 B parser artifact | MEAS:64; RQ2:217 |
-| K1 3/3 → 29/40 → 40/40 | as slide 21 |
+| K1 3/3 → 29/40 → 40/40 | as slide 19 |
 | First-line hash missed an edit | A1-0141 §5 (lines 61–67) |
 | Same model family; correlated | RQ2:12, 278; D57 |
 
@@ -306,7 +313,7 @@ the HMBC authors' implementation.
 |---|---|
 | Limitations | RQ2 §5 (lines 350–356), §3 (lines 265–278); RQ1 §15 (lines 1146–1183) |
 | What F does not prove | RQ2:179, 277, 350–356; `SPEC.md:75, 83` |
-| Lesson 1 (K1) | slide 21 sources |
+| Lesson 1 (K1) | slide 19 sources |
 | Lesson 2 (vacuous scan) | RQ2:49–55 |
 | Lesson 3 (q2 manifest says repaired-f; threshold 2 vs 3 read back) | A1-0143 §2.1 (lines 27–41) |
 | Lesson 4 (first-line hash) | A1-0141 §5 |
@@ -334,3 +341,22 @@ the HMBC authors' implementation.
 - **The paper's prototype performance** (603 ms per access, Fig. 11): kept out of the two paper slides to fit;
   it is only in a speaker note (paper Table 4; mid lines 303, 310).
 - By instruction, the deck presents the project as RQ1 and RQ2 only.
+
+## Short report (`presentation-hmbc/short-report.docx`, 15 Nov 2026): how its claims were used
+
+The RQ2 experiment slides follow the report's structure and plain wording. The report is not a repository file,
+so every claim used on a slide is backed above by repository evidence.
+
+- **Used as is (verified):** Experiment 1 configurations and the 108/81 state counts; Experiment 2 scenario
+  arithmetic (4 × 9 × 3³ = 972, 6 × 9² × 3² = 4,374), 180/792/0 and 330/2,916; Experiment 3's 80 trials,
+  the 400/300/200/100 ms delay control finishing at 300 virtual ms, and the real-process ranges
+  0.69–0.78 s, 0.55–0.63 s, 10.54–10.55 s; Experiment 4's 29/40 → 40/40 and the 81 state tests; Experiment 5's
+  180-case grid, 142/38, and the seven rule mutations with their counts; the three security findings;
+  Experiment 6's gas, calldata and size figures.
+- **Reworded:** the third K1 hook is "after replacing an obsolete pin" (the store has two hook calls,
+  `after_pin` and `after_digest`; `after_pin` runs after the supersede path, and the review receipt names
+  three pauses), not "during replacement"; mutation names are plain-language renderings of the operator
+  changes in `oracle_mutant_discrimination.py`.
+- **Not used:** the "≤ 30 seconds residual acceptance" sentence (RQ1 material, already covered by RQ1's own
+  sourced window slide); the regression-count table (3,004 evaluation tests, 37 focused controls), which
+  belongs to the honest-status/assurance story and is not needed on the experiment slides.

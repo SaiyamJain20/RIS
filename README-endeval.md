@@ -2,7 +2,7 @@
 
 **Open [`hmbc-end-presentation.pdf`](hmbc-end-presentation.pdf) to view the deck.** It is LaTeX Beamer with the
 Metropolis theme, 16:9, and uses the same preamble, colours and macros as the mid-eval deck
-(`origin/slides:hmbc-presentation.tex`), so the two read as one series. 28 pages, about 21½ minutes spoken
+(`origin/slides:hmbc-presentation.tex`), so the two read as one series. 28 pages, about 22 minutes spoken
 (about 23 with transitions).
 
 **Status on these slides (17 Nov 2026):** RQ1 gate E **PASS** (12 Oct 2026). RQ2: the F execution plan is a
@@ -16,16 +16,16 @@ shown is a **paper-derived reconstruction**, not the authors' implementation.
 | 2–3 | The paper: the problem and HMBC's architecture (actors, proxy and domain chains, six contracts); a five-stage overview of how access works, split decryption, and the assumptions our RQs probe |
 | 4 | JANUS: the extension of HMBC by the same authors (Appl. Sci. 2023), its main extensions, and what it leaves open |
 | 5 | What we set out to answer: RQ1 and RQ2, each with the question, why it matters, how we answer it, and its status |
-| 6–12 | RQ1 in full, as one story: the question and Gap 1–3 (decision provenance, trust-list freshness, audit evidence); the repaired-e flow and Fix 1–3, numbered and coloured like the gaps; Gap 1, Gap 2 (with the revocation window) and Gap 3 results in plain ✓/✗ words; gate E (56-row grid, mutants and ProVerif in one line, verdict); what RQ1 shows |
-| 13–15 | RQ2: the question and fault model (n = 4, q = 3, f = 1); the design (three signed paths, governance, single-signing witnesses); how RQ2 will be judged (32 cases, six families, seven stages) vs the offline evidence that exists |
-| 16–18 | RQ2 safety: TLC finite model (five configurations); oracle/store differential and seven mutation controls; M5 pool sweep (f = 1 vs the f = 2 control) |
-| 19–21 | RQ2 availability (M2 virtual, M6 real-process); cost (M1/M1b/M1c gas chart); durability (the K1 kill-test story, 29/40 then 40/40) |
-| 22–25 | RQ2 trust matrix; out-of-bound results (permanent DBC halt, forged-credential grant, DENY/ALLOW double certificates); assurance process and the errors we kept; honest status (plan DRAFT, gate F NOT RUN, 0/32 cases) |
+| 6–12 | RQ1 in full, as one story: the question and Gap 1–3 (decision provenance, trust-list freshness, audit evidence); the RQ1 repair's flow and Fix 1–3, numbered and coloured like the gaps; Gap 1, Gap 2 (with the revocation window) and Gap 3 results in plain ✓/✗ words; gate E (three stat tiles, the 56-row grid in plain words, the verdict); what RQ1 shows |
+| 13–15 | RQ2: the question and fault model (n = 4, q = 3, f = 1); the design in plain words (what is certified, what the witnesses attest, where it is checked); how RQ2 is judged (six case families, the gate's requirements) |
+| 16–20 | RQ2 experiments, each as Question → What we did → Result → Finding: 1 why three approvals are needed (TLC); 2 certificate collection with real signatures (972 and 4,374 scenarios); 3 the availability boundary; 4 can a crash split a signing record (29/40 → 40/40); 5 when a different signature becomes legal (180 cases, seven rule mutations) |
+| 21–22 | Security findings beyond the fault bound (conflicting certificates, fabricated credentials, permanent halt); Experiment 6, the cost of distributed approval |
+| 23–25 | Trust matrix; assurance process and the errors we kept; honest status (plan DRAFT, gate F NOT RUN, 0/32 cases) |
 | 26–27 | Limitations and lessons; conclusion |
 | 28 | Questions |
 
 Speaker script with per-slide timing and Q&A backups: [`script-hmbc-end-presentation.md`](script-hmbc-end-presentation.md)
-(about 21½ minutes spoken; suggested three-way split 1–8 / 9–17 / 18–28).
+(about 22 minutes spoken; suggested three-way split 1–8 / 9–17 / 18–28).
 
 Source map for every number on every slide: [`sources-end-presentation.md`](sources-end-presentation.md).
 
@@ -88,3 +88,10 @@ as in the mid-eval deck.
   now numbered and coloured alike (Gap/Fix 1 decision provenance, 2 trust-list freshness, 3 audit evidence);
   the repaired-e flow is redrawn as five stages with fix badges, and its 13-check strip removed; results slides
   use plain ✓/✗ words instead of class chips, here and on the gate E slide. 28 pages; about 21½ minutes spoken.
+- 2026-11-17, RQ2 presentation round on the human's request: gate E slide redrawn (three stat tiles, plain-word
+  grid legend); "Limits we state" removed from "What RQ1 shows"; the internal profile name replaced by "our RQ1
+  repair" in visible text (kept once, in small print on slide 7); the RQ2 design table rewritten in plain words;
+  "How RQ2 is judged" lists the six families and the gate's requirements (no case counts, no evidence inventory);
+  the RQ2 results re-cut as Experiments 1–6 plus the security findings, following the team's short report, with
+  each report claim checked against the repository (see `sources-end-presentation.md`). Gate F is still NOT RUN
+  (status slide). 28 pages; about 22 minutes spoken.
