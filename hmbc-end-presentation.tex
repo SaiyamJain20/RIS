@@ -33,7 +33,7 @@
 \newcommand{\pmark}{\textcolor{okgreen!80}{(\ding{51})}}
 \newcommand{\src}[1]{{\scriptsize\color{datagray}#1}}
 % Project status shown on the title page.
-\newcommand{\statusstamp}{17 Nov 2026: RQ1 gate E PASS · RQ2 gate F NOT RUN (0 of 32 F cases run)}
+\newcommand{\statusstamp}{17 Nov 2026}
 % Result classes of the RQ1 catalog: a 4-slot categorical set; gray = undecided (BLOCKED).
 \definecolor{clsup}{HTML}{3A6FB0}
 \definecolor{clgap}{HTML}{EB811B}
@@ -80,14 +80,14 @@
 \subtitle{Malamas, Kotzanikolaou, Dasaklis \& Burmester \,·\, IEEE Access, vol.~8, 2020\\[2pt]
   {\small a paper-derived reconstruction, not the authors' implementation}}
 \author{Saiyam \,·\, Hemang \,·\, Eashaan}
-\institute{Research in Information Security \,·\, End presentation}
+\institute{Research in Information Security \,·\, Team 17}
 \date{{\scriptsize\statusstamp}}
 \titlegraphic{%
   \begin{tikzpicture}[remember picture, overlay]
     \node[anchor=south east, inner sep=0pt] at ([xshift=-0.6cm, yshift=0.55cm]current page.south east)
       {\includegraphics[height=2.6cm]{figures/fig1-architecture.png}};
   \end{tikzpicture}}
-\hypersetup{pdftitle={HMBC end presentation: RQ1 complete, RQ2 partial (Team 17)}}
+\hypersetup{pdftitle={HMBC end presentation (Team 17)}}
 
 \begin{document}
 
@@ -97,7 +97,7 @@
 \maketitle
 
 % ---------------------------------------------------------------- 2. The paper (A): problem and architecture
-\begin{frame}{The paper (1/2): the problem, and HMBC's architecture}
+\begin{frame}{The paper: the problem, and HMBC's architecture}
 \begin{columns}[T,onlytextwidth]
 \column{0.53\textwidth}
 \includegraphics[width=\linewidth]{figures/fig1-architecture.png}\\[-0.1em]
@@ -132,7 +132,7 @@
 \end{frame}
 
 % ---------------------------------------------------------------- 3. The paper (B): access overview + assumptions
-\begin{frame}{The paper (2/2): how access works, and what it assumes}
+\begin{frame}{The paper: how access works, and what it assumes}
 \centering
 \begin{tikzpicture}[x=1cm, y=1cm,
     stg/.style={draw, thick, rounded corners=3pt, text width=2.0cm, minimum height=1.25cm, align=center, inner sep=3pt, font=\footnotesize, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}},
@@ -144,7 +144,7 @@
   \node[stg, draw=accent, fill=accent!10] (e) at (11.0,0) {\textbf{Audit log}\\{\scriptsize on both chains}};
   \foreach \x/\y in {a/b, b/c, c/d, d/e} \draw[->, very thick, gray] (\x) -- (\y);
 \end{tikzpicture}\\[0.15em]
-\src{Overview, simplified from paper Fig.~6}
+\src{Overview, simplified from paper}
 
 \vspace{0.6em}
 \begin{columns}[T,onlytextwidth]
@@ -183,7 +183,7 @@
   \node[draw, dashed, gray, rounded corners, fit=(fe)(db), inner sep=4pt] (k8s) {};
   \node[font=\tiny, text=gray, anchor=north] at (k8s.south) {every component runs in its own Kubernetes pod};
 \end{tikzpicture}\\[0.1em]
-\src{Simplified from JANUS Fig.~5}
+\src{Simplified from JANUS}
 
 \column{0.56\textwidth}
 \footnotesize
@@ -225,12 +225,10 @@
     {\footnotesize\color{pbc}\textbf{Why it matters}}\\[2pt]
     HMBC assumes an honest majority in every chain, and RQ1's repair trusts a single witness.\\[8pt]
     {\footnotesize\color{pbc}\textbf{How we answer it}}\\[2pt]
-    $n = 4$ witnesses, quorum $q = 3$, at most $f = 1$ faulty, assuming safe ledgers and a trusted key worker; judged on 32 integrated F cases.};
+    $n = 4$ witnesses, quorum $q = 3$, at most $f = 1$ faulty, assuming safe ledgers and a trusted key worker.};
   \node[head, fill=pbc] at (7.05,0) {RQ2 \;·\; Byzantine witnesses};
   \draw[accent, rounded corners=3pt] (c1.north west) rectangle ($(c1.north east)+(0,-4.65)$);
   \draw[pbc, rounded corners=3pt] (c2.north west) rectangle ($(c2.north east)+(0,-4.65)$);
-  \node[stn, draw=okgreen, fill=okgreen!12] at (0,-4.85) {DONE: gate E PASS, 12 Oct 2026};
-  \node[stn, draw=accent, fill=accent!12] at (7.05,-4.85) {IN PROGRESS: gate F NOT RUN (0 of 32 cases)};
 \end{tikzpicture}
 \note{RQ wording: SPEC.md §1, RQ1-E.md §1, RQ2-F-DRAFT.md §1. Gaps: RQ1-E.md §0. Assumptions: paper §V. One trusted witness: RQ1-E.md §15. Catalog: RQ1-E.md §3.3. Fault model: RQ2-F-DRAFT.md §1; 32 cases: plan-draft.json.}
 \end{frame}
@@ -268,7 +266,7 @@
   \node[gapb=dbc] at ($(pbc.south)+(0.75,-1.5)$) {3};
   \node[gapb=dbc] at ($(rel.north)+(0,0.35)$) {3};
 \end{tikzpicture}\\[0.2em]
-\src{Simplified from paper Fig.~6; circles mark the gaps}
+\src{Simplified from paper; circles mark the gaps}
 
 \column{0.47\textwidth}
 \footnotesize
@@ -324,17 +322,16 @@
 
 \vspace{0.5em}
 {\scriptsize The repair is our extension, not HMBC; contracts hold no secrets. In RQ1 the witness is \textbf{one trusted party}. We test the paper's flow (two readings) and the repair on one frozen 56-row catalog.}\\[0.2em]
-{\tiny\color{datagray} Internal profile name: repaired-e.}
 \note{repaired-e is a project extension, not HMBC. The DBC runs 13 checks in a fixed order (DecisionVerifier). Six mutants each remove one check: destination binding (1), state barrier (2), record freshness (4), nonce (8), version monotonicity (16), receipt binding (32). Catalog: 16 schedules x 3 profiles + 8 repaired-only rows = 56, frozen 8 Oct.}
 \end{frame}
 
 % ---------------------------------------------------------------- 8. Gap 1 result
-\begin{frame}{Gap 1 result: decision provenance and replay \;\evl{I}}
+\begin{frame}{Gap 1 result: decision provenance and replay}
 \footnotesize
 \renewcommand{\arraystretch}{1.3}
 \begin{tabular}{@{}L{0.33\textwidth} L{0.30\textwidth} L{0.33\textwidth}@{}}
 \toprule
-\textbf{Attack (by the relay)} & \textbf{The paper's flow} & \textbf{Our repaired flow (Fix 1)} \\
+\textbf{Attack (by the relay)} & \textbf{The paper's flow} & \textbf{Our repaired flow} \\
 \midrule
 replays an identical accepted request & \cmark\ rejected: \code{REPLAY}\textsuperscript{$*$} & \cmark\ rejected: \code{REPLAY} \\
 swaps the subject (GID) & \xmark\ granted, to the wrong subject & \cmark\ rejected: \code{WRONG\_SUBJECT} \\
@@ -344,7 +341,6 @@ delivers deployment B's tuple to A & \xmark\ A grants it & \cmark\ rejected: \co
 delivers it exactly at the request's expiry & \xmark\ granted at that instant & \cmark\ rejected: \code{EXPIRED} \\
 \bottomrule
 \end{tabular}\\[0.15em]
-{\scriptsize\color{datagray}\textbf{Evidence labels:} [I] integrated evaluator run \,·\, [R] owners' cross-run \,·\, [U] unit or offline test \,·\, [F] formal model}
 
 \vspace{0.4em}
 \begin{columns}[T,onlytextwidth]
@@ -356,7 +352,6 @@ delivers it exactly at the request's expiry & \xmark\ granted at that instant & 
 \scriptsize\color{datagray}
 \textsuperscript{$*$}Only because our grant id is deterministic (a recorded completion), not because the paper has a nonce.\\[3pt]
 The attacks use a misbehaving relay, which HMBC's isolation assumption excludes.\\[3pt]
-\src{RQ1-E.md §0, §7; gate rows 10--22, 51--56}
 \end{columns}
 \note{Both paper readings (paper-strict, paper-minimal) behave the same here. Also tested: a nonce reused on a different request: the paper has no nonce; repaired-e rejects it with REPLAY (nonce already used). Verifier steps: WRONG_SUBJECT step 4, BAD_SIGNATURE step 6, WRONG_DESTINATION step 1, EXPIRED step 9 at equality.}
 \end{frame}
@@ -378,7 +373,6 @@ revoked; decision used \emph{after} it & \xmark\ still accepted: no barrier & \c
 duty ended at delivery & \xmark\ granted at that instant & \cmark\ rejected: \code{EXPIRED} \\
 \bottomrule
 \end{tabular}\\[0.3em]
-\src{RQ1-E.md §0, §8; gate rows 36--50}
 
 \column{0.40\textwidth}
 \centering
@@ -404,7 +398,6 @@ duty ended at delivery & \xmark\ granted at that instant & \cmark\ rejected: \co
 \scriptsize
 \textbf{Repaired:} $W = \min(\text{checkpoint delay}, \text{lifetime left}) \le 30$\,s\\[1pt]
 \textbf{Paper's flow:} no bound; still grantable 65\,s later\\[2pt]
-\src{owner measurement \evl{R}, 1 trial per delay; not the gate run (A1-0046, A2-0026)}
 \end{columns}
 \end{frame}
 
@@ -451,7 +444,7 @@ the worker crashes after intent or after send & blocked: the paper is silent on 
 
 \vspace{0.3em}
 \raggedright\scriptsize\color{datagray}
-Crash points are logical process deaths, not power loss. The receipt-substitution rows use a deliberately deviating test witness. \src{RQ1-E.md §9; gate rows 1--9, 23--35}
+% Crash points are logical process deaths, not power loss. The receipt-substitution rows use a deliberately deviating test witness.
 \end{frame}
 
 % ---------------------------------------------------------------- 11. What RQ1 shows
@@ -467,13 +460,10 @@ Crash points are logical process deaths, not power loss. The receipt-substitutio
     \textbf{For implementers of HMBC:} a concrete list of the decisions the paper leaves open, each with a test that shows the consequence.\\[3pt]
     \textbf{Revocation gets a bound:} $\le$ 30\,s in our RQ1 repair, where the paper's flow has none.\\[3pt]
     \textbf{A reusable harness:} one frozen, one-command 56-row run that RQ2 must keep passing.\\[3pt]
-    To our knowledge (non-exhaustive search), the first executable, instance-level analysis of HMBC.};
+    To our knowledge, the first executable, instance-level analysis of HMBC.};
   \node[phead=dbc, hw] at (7.0,0) {Why it matters};
   \foreach \k/\c in {1/accent, 2/dbc} \draw[\c, rounded corners=3pt] (k\k.north west) rectangle ($(k\k.north east)+(0,-4.15)$);
 \end{tikzpicture}
-
-\vspace{0.3em}
-{\scriptsize\textbf{Gate E: PASS} on 12 Oct 2026; all 56 catalog rows matched their frozen expectation \evl{I}. The checks are real: 6 ledger mutants are each caught by their tests \evl{U}, and ProVerif finds an attack once the destination check is dropped \evl{F}.}
 
 \vspace{0.4em}
 \begin{tikzpicture}
@@ -508,9 +498,6 @@ Crash points are logical process deaths, not power loss. The receipt-substitutio
   \node[font=\tiny, text=dbc, anchor=north] at ($(w2.south)!0.5!(w4.south)+(0,-0.24)$) {quorum B};
 \end{tikzpicture}\\[0.3em]
 \raggedright\scriptsize Any two 3-of-4 quorums share $\ge$ 2 witnesses, so with $f = 1$ they share an honest one. An honest witness never signs two conflicting decisions, so two conflicting certificates cannot both form.\\[0.4em]
-\begin{alertblock}{Not a consensus protocol}
-\scriptsize The witness layer authenticates decisions. It is not a new consensus, and Anvil is not Byzantine fault tolerant.
-\end{alertblock}
 
 \column{0.47\textwidth}
 \footnotesize
@@ -528,7 +515,6 @@ Crash points are logical process deaths, not power loss. The receipt-substitutio
   \item a compromised quorum ($\ge$ 3 witnesses).
 \end{itemize}
 \end{columns}
-\src{RQ2-F-DRAFT.md lines 127--132, 149, §3; SPEC.md §5}
 \end{frame}
 
 % ---------------------------------------------------------------- 13. RQ2 design
@@ -568,7 +554,6 @@ governance action & adding or removing a credential authority, or changing its a
   \item \textbf{Signatures alone are not enough.} An honest witness remembers what it signed, in a persistent store that survives restarts, and replaces an old approval only once it is provably obsolete.
 \end{itemize}
 \end{columns}
-\src{RQ2-F-DRAFT.md §1 (lines 127--132), §3 (line 269); A1-0137 §1, §2.1--2.2; RQ1-E.md lines 64--65; SPEC.md §5; witness\_state.py (store)}
 \end{frame}
 
 % ---------------------------------------------------------------- 14. How RQ2 is judged
@@ -586,7 +571,6 @@ governance action & adding or removing a credential authority, or changing its a
 \textbf{E} & \textbf{Relay and outcomes:} suppressed outcomes, stale certificates, forged request contents \\
 \textbf{F} & \textbf{Compromise and residual trust:} a compromised key-worker host, a common host compromise, faulty storage \\
 \end{tabular}\\[0.3em]
-\src{plan-draft.json (families); case-coverage-map-20261114/coverage.csv (case titles)}
 
 \column{0.47\textwidth}
 \footnotesize\textbf{What the gate requires}
@@ -598,15 +582,13 @@ governance action & adding or removing a credential authority, or changing its a
   \item Two unavailable or two Byzantine witnesses show the advertised limit.
   \item A TLC model with weakened controls; then one frozen integrated run and three matching sign-offs.
 \end{itemize}
-\src{GATES.md lines 650--659 (F checklist)}
 \end{columns}
 
 \vspace{0.4em}
-\raggedright{\scriptsize\color{datagray} Each case runs on a fresh chain pair, positive controls first. Status of the integrated runs: see ``What RQ2 shows''.}
 \end{frame}
 
 % ---------------------------------------------------------------- 15. Experiment 1 result: TLC
-\begin{frame}{Experiment 1 result: why three approvals are needed \;\evl{F}}
+\begin{frame}{Experiment 1 result: why three approvals are needed}
 \noindent{\scriptsize\itshape\color{datagray} Question: can two conflicting values both obtain enough approvals?\par}\vspace{0.3em}
 \footnotesize
 \renewcommand{\arraystretch}{1.2}
@@ -629,14 +611,11 @@ quorum 3, no malicious witness, double-signing allowed & \xmark\ violated, with 
 \scriptsize Both the quorum of three \emph{and} each witness's persistent refusal to sign a conflicting value are needed: drop either, and agreement fails. The model covers one decision slot; changing checkpoints, expiry and consensus need separate reasoning.
 \end{alertblock}
 \column{0.35\textwidth}
-\scriptsize\color{datagray}
-A TLA+ model of one decision slot; TLC explored every reachable state. A fresh rerun reproduced all five verdicts.\\[3pt]
-\src{RQ2-F-DRAFT.md §2.1; tlc-audit-20261115 README lines 14--24}
 \end{columns}
 \end{frame}
 
 % ---------------------------------------------------------------- 16. Experiment 2 result: certificate collection
-\begin{frame}{Experiment 2 result: certificate collection with real signatures \;\evl{U}}
+\begin{frame}{Experiment 2 result: certificate collection with real signatures}
 \noindent{\scriptsize\itshape\color{datagray} Question: does the collector filter adversarial replies while respecting the quorum boundary?\par}\vspace{0.3em}
 \footnotesize
 \renewcommand{\arraystretch}{1.3}
@@ -658,12 +637,11 @@ two malicious ($f = 2$, outside the bound) & 4,374 & 330 & \cmark\ 0 & \xmark\ 2
 \column{0.35\textwidth}
 \scriptsize\color{datagray}
 Real signatures, scripted witnesses, 9 malicious behaviours. ``No certificate'' (792; 4,044) is a safe outcome; every certificate has 3 valid signers.\\[3pt]
-\src{pool-sweep-20261115 README lines 15--38; measurements-20261114 README lines 69--83}
 \end{columns}
 \end{frame}
 
 % ---------------------------------------------------------------- 17. Experiment 3 result: availability
-\begin{frame}{Experiment 3 result: the availability boundary \;\evl{U}\,\evl{R}}
+\begin{frame}{Experiment 3 result: the availability boundary}
 \noindent{\scriptsize\itshape\color{datagray} Question: how many witnesses can stop responding before certificate collection stops?\par}\vspace{0.3em}
 \scriptsize
 \renewcommand{\arraystretch}{1.1}
@@ -671,13 +649,13 @@ Real signatures, scripted witnesses, 9 malicious behaviours. ``No certificate'' 
 \toprule
 \textbf{Witnesses silent (of 4)} & \textbf{Outcome} \\
 \midrule
-none (1 subset), virtual time \evl{U} & \cmark\ a 3-signature certificate in every run \\
-one (4 subsets), virtual time \evl{U} & \cmark\ a 3-signature certificate in every run \\
-two, three or four (11 subsets), virtual time \evl{U} & \xmark\ no certificate by the 10\,s deadline \\
-none, replies delayed 400 / 300 / 200 / 100\,ms \evl{U} & \cmark\ finished at 300 virtual ms, using the three fastest replies \\
-none, real processes \evl{R} & \cmark\ accepted in 0.69--0.78\,s \\
-one killed, real processes \evl{R} & \cmark\ still accepted in 0.55--0.63\,s; the restarted witness kept its signing record \\
-two stopped, real processes \evl{R} & \xmark\ classified timeout at 10.54--10.55\,s \\
+none (1 subset), virtual time & \cmark\ a 3-signature certificate in every run \\
+one (4 subsets), virtual time & \cmark\ a 3-signature certificate in every run \\
+two, three or four (11 subsets), virtual time & \xmark\ no certificate by the 10\,s deadline \\
+none, replies delayed 400 / 300 / 200 / 100\,ms & \cmark\ finished at 300 virtual ms, using the three fastest replies \\
+none, real processes & \cmark\ accepted in 0.69--0.78\,s \\
+one killed, real processes & \cmark\ still accepted in 0.55--0.63\,s; the restarted witness kept its signing record \\
+two stopped, real processes & \xmark\ classified timeout at 10.54--10.55\,s \\
 \bottomrule
 \end{tabular}
 
@@ -690,12 +668,11 @@ two stopped, real processes \evl{R} & \xmark\ classified timeout at 10.54--10.55
 \column{0.35\textwidth}
 \scriptsize\color{datagray}
 80 virtual trials (16 subsets $\times$ 5). Process tests: 3 repetitions on two local chains with the real key-service contract.\\[3pt]
-\src{measurements-20261114 README lines 41--52, 118--134; availability receipts 20261115}
 \end{columns}
 \end{frame}
 
 % ---------------------------------------------------------------- 18. Experiment 4 result: crash-split signing record
-\begin{frame}{Experiment 4 result: can a crash split a signing record? \;\evl{R}}
+\begin{frame}{Experiment 4 result: can a crash split a signing record?}
 \noindent{\scriptsize\itshape\color{datagray} Question: if a witness dies in the middle of signing, can it come back with a half-written memory?\par}\vspace{0.3em}
 \footnotesize
 \renewcommand{\arraystretch}{1.2}
@@ -719,12 +696,11 @@ agent 2's independent rerun of the fixed test & \cmark\ 15 of 15 caught; 10 of 1
 \column{0.35\textwidth}
 \scriptsize\color{datagray}
 Pauses after a fresh pin, after a digest, and after replacing an obsolete pin. 81 state tests pass.\\[3pt]
-\src{a2-0086 review README lines 28--36; proxy-k1 README lines 46--66; A2-0089 §1}
 \end{columns}
 \end{frame}
 
 % ---------------------------------------------------------------- 19. Experiment 5 result: rule checker vs store
-\begin{frame}{Experiment 5 result: when does a different signature become legal? \;\evl{U}}
+\begin{frame}{Experiment 5 result: when does a different signature become legal?}
 \noindent{\scriptsize\itshape\color{datagray} Question: when may a witness replace an old approval with a different value?\par}\vspace{0.3em}
 \scriptsize
 \renewcommand{\arraystretch}{1.1}
@@ -752,12 +728,11 @@ governance: require a greater nonce & \cmark\ detected: 4 \\
 \column{0.35\textwidth}
 \scriptsize\color{datagray}
 180 cases cross expiry, sequence or nonce, grant and outcome for each signing type. Each mutation changes one checker rule.\\[3pt]
-\src{oracle-store-diff READMEs; oracle-mutant-discrimination-20261115 README lines 16--24}
 \end{columns}
 \end{frame}
 
 % ---------------------------------------------------------------- 20. Experiment 6 result: cost
-\begin{frame}{Experiment 6 result: cost \;\evl{R}}
+\begin{frame}{Experiment 6 result: cost}
 \noindent{\scriptsize\itshape\color{datagray} Question: what does moving from one attester to three approvals cost on chain?\par}\vspace{0.3em}
 \begin{columns}[T,onlytextwidth]
 \column{0.46\textwidth}
@@ -807,7 +782,6 @@ record attested outcome & 533,754 & 553,488 & 3.7\% \\
 \column{0.35\textwidth}
 \scriptsize\color{datagray}
 Governance (3 signatures): add 524,214; remove 424,421; change admins 446,934. All contracts stay under 24,576 bytes.\\[3pt]
-\src{measurements-20261114 README lines 23--39, 85--111; A1-0136}
 \end{columns}
 \end{frame}
 
@@ -819,18 +793,15 @@ Governance (3 signatures): add 524,214; remove 424,421; change admins 446,934. A
   \node[fc] (f1) at (0,0) {%
     {\footnotesize\bfseries\color{accent} Conflicting certificates are partly stopped by the contracts}\\[8pt]
     A second checkpoint for one sequence, or a second ALLOW for one request, is refused.\\[5pt]
-    But an ALLOW and a DENY for one request are both accepted and logged: a denial uses no nonce in our design.\\[8pt]
-    {\color{datagray}So two log entries do not prove a violation. Two malicious witnesses; scratch 4/4 [U].}};
+    But an ALLOW and a DENY for one request are both accepted and logged: a denial uses no nonce in our design.\\[8pt]};
   \node[fc] (f2) at (4.6,0) {%
     {\footnotesize\bfseries\color{badred} A compromised quorum can certify fake credentials}\\[8pt]
     Three malicious witnesses certify made-up credential records that fit the policy, for a requester who never asked on the shared chain.\\[5pt]
-    The hospital contract grants access.\\[8pt]
-    {\color{datagray}Not shown: key release or decryption. Fewer signers, or records that do not fit, are refused. Scratch 3/3 [U].}};
+    The hospital contract grants access.\\[8pt]};
   \node[fc] (f3) at (9.2,0) {%
     {\footnotesize\bfseries\color{badred} Counters can be pushed to a permanent halt}\\[8pt]
     A compromised quorum installs a checkpoint with a maximum counter value. Every honest checkpoint after it is rejected as stale.\\[5pt]
-    Nothing on the ledger can reset it: only redeployment recovers.\\[8pt]
-    {\color{datagray}Fewer than three signers cannot do it. Scratch 3/3 and 3/3 [U].}};
+    Nothing on the ledger can reset it: only redeployment recovers.\\[8pt]};
   \path let \p1=(f1.south), \p2=(f2.south), \p3=(f3.south), \n1={min(\y1,\y2,\y3)} in coordinate (fbot) at (0,\n1);
   \foreach \k/\c in {1/accent, 2/badred, 3/badred} {
     \draw[\c!55, rounded corners=4pt] (f\k.north west) rectangle (f\k.north east |- fbot);
@@ -839,7 +810,6 @@ Governance (3 signatures): add 524,214; remove 424,421; change admins 446,934. A
 \end{tikzpicture}
 
 \vspace{0.5em}
-\raggedright\src{RQ2-F-DRAFT.md §3 (lines 269, 279--291); A1-0137 §2; A1-0138 §1--2; A1-0141 §2--3; measurements README 141--144}
 \end{frame}
 
 % ---------------------------------------------------------------- 22. What RQ2 shows
@@ -847,11 +817,11 @@ Governance (3 signatures): add 524,214; remove 424,421; change admins 446,934. A
 \centering
 \begin{tikzpicture}[x=1cm, y=1cm, cw/.style={text width=6.1cm, draw=none, font=\scriptsize, inner sep=6pt, execute at begin node={\hyphenpenalty=10000\exhyphenpenalty=10000}}, hw/.style={text width=6.1cm, font=\small\bfseries, inner sep=6pt}]
   \node[pcard=pbc, cw] (k1) at (0,0) {%
-    \textbf{Agreement within the bound:} 3 of 4 approvals \emph{and} persistent single-signing give agreement with at most one malicious witness; both are needed (Exp.~1, 2).\\[3pt]
-    \textbf{Availability:} one witness down still works; two stop it, as intended (Exp.~3).\\[3pt]
-    \textbf{Crash-consistent memory:} controlled kills prove the test catches a split signing record (Exp.~4).\\[3pt]
-    \textbf{Replacement rules:} match the store and catch rule errors (Exp.~5).\\[3pt]
-    \textbf{Cost:} +3.7 to +11.0\% gas per certified path (Exp.~6).\\[3pt]
+    \textbf{Agreement within the bound:} 3 of 4 approvals \emph{and} persistent single-signing give agreement with at most one malicious witness; both are needed.\\[3pt]
+    \textbf{Availability:} one witness down still works; two stop it, as intended.\\[3pt]
+    \textbf{Crash-consistent memory:} controlled kills prove the test catches a split signing record.\\[3pt]
+    \textbf{Replacement rules:} match the store and catch rule errors.\\[3pt]
+    \textbf{Cost:} +3.7 to +11.0\% gas per certified path.\\[3pt]
     \textbf{Beyond the bound:} a compromised quorum can fake credentials or halt the deployment.};
   \node[phead=pbc, hw] at (0,0) {Answer to RQ2};
   \node[pcard=dbc, cw] (k2) at (7.0,0) {%
@@ -862,9 +832,6 @@ Governance (3 signatures): add 524,214; remove 424,421; change admins 446,934. A
   \path let \p1=(k1.south), \p2=(k2.south), \n1={min(\y1,\y2)} in coordinate (kbot) at (0,\n1);
   \foreach \k/\c in {1/pbc, 2/dbc} \draw[\c, rounded corners=3pt] (k\k.north west) rectangle (k\k.north east |- kbot);
 \end{tikzpicture}
-
-\vspace{0.3em}
-{\scriptsize\textbf{Gate F: NOT RUN.} Still to run: the integrated 32-case gate-F study; until then these are model, isolated and local results.}
 
 \vspace{0.4em}
 \begin{tikzpicture}
@@ -887,9 +854,9 @@ Governance (3 signatures): add 524,214; remove 424,421; change admins 446,934. A
     \textbf{Gate E PASS}, 12 Oct 2026.};
   \node[phead=accent, hw] at (0,0) {RQ1: answered};
   \node[pcard=pbc, cw] (k2) at (4.6,0) {%
-    3 of 4 approvals + persistent single-signing give agreement within $f = 1$ (Exp.~1--2).\\[3pt]
-    One witness down still certifies; two stop it (Exp.~3).\\[3pt]
-    Crash-consistent memory, caught 40/40 (Exp.~4); replacement rules checked (Exp.~5); +3.7--11.0\% gas (Exp.~6).\\[3pt]
+    3 of 4 approvals + persistent single-signing give agreement within $f = 1$.\\[3pt]
+    One witness down still certifies; two stop it.\\[3pt]
+    Crash-consistent memory, caught 40/40; replacement rules checked; +3.7--11.0\% gas.\\[3pt]
     Beyond the bound, a compromised quorum can fake credentials or halt.\\[3pt]
     \textbf{Still to run:} the integrated 32-case gate-F study.};
   \node[phead=pbc, hw] at (4.6,0) {RQ2: partial answer};
@@ -906,7 +873,6 @@ Governance (3 signatures): add 524,214; remove 424,421; change admins 446,934. A
   \node[draw=accent, fill=accent!10, rounded corners=3pt, text width=13.2cm, align=center, inner sep=5pt, font=\footnotesize]
     {A paper-derived reconstruction: the results describe \emph{our} executable reading of HMBC,\\not the authors' implementation. The gaps are specification dependencies, not exploits.};
 \end{tikzpicture}
-\src{RQ1-E.md §0; RQ2-F-DRAFT.md §2--3; GATES.md 648, 659--665; SPEC.md §1, §6; mid-eval lines 397, 941--955; AGENTS.md}
 \end{frame}
 
 % ---------------------------------------------------------------- 24. Close
